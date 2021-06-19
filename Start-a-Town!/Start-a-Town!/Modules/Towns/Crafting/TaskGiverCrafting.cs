@@ -1,0 +1,278 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Start_a_Town_.AI;
+using Start_a_Town_.AI.Behaviors;
+using Start_a_Town_.Towns.Crafting;
+using Start_a_Town_.Crafting;
+using Start_a_Town_.Modules.Crafting;
+
+namespace Start_a_Town_
+{
+    class TaskGiverCrafting : TaskGiver
+    {
+        protected override AITask TryAssignTask(Actor actor)
+        {
+            if (!actor.HasLabor(JobDefOf.Craftsman))
+                return null;
+            var map = actor.Map;
+
+            var manager = actor.Map.Town.CraftingManager;
+            //var allStations = manager.GetWorkstations()
+            //    .Where(actor.CanReserve)// && actor.CanOperate)
+            //    .OrderByReachableRegionDistance(actor);
+
+
+            //var allOrders = manager.ByWorkstation();
+            var allOrders = manager.ByWorkstationNew();
+            //var allBenches = actor.Map.GetBlockEntities<BlockEntityWorkstation>().zip(e => e.Orders);
+
+
+            var allObjects = map.GetEntities().OfType<Entity>().ToArray();
+
+            var itemAmounts = new List<Dictionary<TargetArgs, int>>();
+            var materialsUsed = new Dictionary<string, Entity>();
+            foreach (var bench in allOrders)
+            {
+                var benchglobal = bench.Key;
+                if (map.Town.ShopManager.GetShop(benchglobal) != null)
+                    continue;
+                /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
+                //var cell = map.GetCell(benchglobal);
+                //var operatingPositions = cell.Block.GetOperatingPositions(cell);
+                //Vector3? opPos = null;
+                //foreach (var pos in operatingPositions)
+                //{
+                //    var posGlobal = benchglobal + pos;
+                //    if (actor.CanReserve(posGlobal)
+                //        && map.IsStandableIn(posGlobal) 
+                //        && actor.CanReach(posGlobal))
+                //    {
+                //        opPos = posGlobal;
+                //        break;
+                //    }
+                //}
+                //if (!opPos.HasValue)
+                //    continue;
+                /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
+
+                var opPos = map.GetFrontOfBlock(benchglobal);
+                if (!actor.CanReserve(opPos)
+                    || !map.IsStandableIn(opPos)
+                    || !actor.CanReach(opPos))
+                    continue;
+
+                /// DO SOMETHING IF ITEMS ON TOP OF WORKSTATION???
+                //var ingredientDestination = benchglobal.Above();
+                //if (!map.IsEmptyNew(ingredientDestination) || 
+                //    !actor.CanReserve(ingredientDestination))
+                //{
+                //    continue;
+                //}
+
+                foreach (var order in bench.Value)
+                {
+                    if (!actor.HasLabor(order.Reaction.Labor))
+                        continue;
+                    if (!actor.CanReserve(benchglobal))
+                        continue;
+                    if (!actor.CanReserve(benchglobal.Above()))
+                        continue;
+                    var operatingPos = map.GetFrontOfBlock(benchglobal);
+                    if (!actor.CanReserve(operatingPos))
+                        continue;
+                    if (!actor.CanReserve(operatingPos.Below()))
+                        continue;
+                    if (order.IsActive() && order.IsCompletable())//actor.Map.GetBlockEntity(benchglobal)))
+                        if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))
+                        {
+                            
+                            var workstationTarget = new TargetArgs(map, benchglobal);
+                            var task = new AITask(TaskDefOf.Crafting);
+                            foreach (var i in itemAmounts)
+                                foreach (var k in i)
+                                    task.AddTarget(TaskBehaviorCrafting.IngredientIndex, k.Key, k.Value);
+                            task.SetTarget(TaskBehaviorCrafting.WorkstationIndex, workstationTarget);
+                            //task.SetTarget(TaskBehaviorCrafting.AuxiliaryIndex, new TargetArgs(map, ingredientDestination));
+                            //task.AddTarget(TaskBehaviorCrafting.AuxiliaryIndex, new TargetArgs(map, opPos.Value));
+                            //task.IngredientsUsed = materialsUsed;
+                            task.Order = order;
+                            return task;
+
+                            //var task = new AITask(typeof(TaskBehaviorCrafting), new TargetArgs(map, benchglobal));
+
+                            //foreach (var i in itemAmounts)
+                            //    foreach (var k in i)
+                            //        task.AddTarget(TaskBehaviorCrafting.IngredientIndex, k.Key, k.Value);
+                            //task.MaterialsUsed = materialsUsed;
+                            //task.Order = order;
+                            //return task;
+                        }
+                }
+            }
+            return null;
+        }
+        public override AITask TryTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
+        {
+            if (target.Type != TargetType.Position)
+                return null;
+            var benchglobal = target.Global;
+            var map = actor.Map;
+
+            var orders = map.GetBlockEntity(benchglobal)?.GetComp<BlockEntityCompWorkstation>()?.Orders;
+            if (orders == null)
+                return null;
+
+            /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
+            //var cell = map.GetCell(benchglobal);
+            //var operatingPositions = cell.Block.GetOperatingPositions(cell);
+            //Vector3? opPos = null;
+            //foreach (var pos in operatingPositions)
+            //{
+            //    var posGlobal = benchglobal + pos;
+            //    if (actor.CanReserve(posGlobal)
+            //        && map.IsStandableIn(posGlobal) 
+            //        && actor.CanReach(posGlobal))
+            //    {
+            //        opPos = posGlobal;
+            //        break;
+            //    }
+            //}
+            //if (!opPos.HasValue)
+            //    continue;
+            /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
+
+            var opPos = map.GetFrontOfBlock(benchglobal);
+            if (!actor.CanReserve(opPos)
+                || !map.IsStandableIn(opPos)
+                || !actor.CanReach(opPos))
+                return null;
+
+            /// DO SOMETHING IF ITEMS ON TOP OF WORKSTATION???
+            //var ingredientDestination = benchglobal.Above();
+            //if (!map.IsEmptyNew(ingredientDestination) || 
+            //    !actor.CanReserve(ingredientDestination))
+            //{
+            //    continue;
+            //}
+            var allObjects = map.GetEntities().OfType<Entity>();
+            List<Dictionary<TargetArgs, int>> itemAmounts = new List<Dictionary<TargetArgs, int>>();
+            var materialsUsed = new Dictionary<string, Entity>();
+            foreach (var order in orders)
+            {
+                if (!actor.HasLabor(order.Reaction.Labor))
+                    continue;
+                if (!actor.CanReserve(benchglobal))
+                    continue;
+                if (order.IsActive() && order.IsCompletable())
+                    if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))
+                    {
+                        var workstationTarget = new TargetArgs(map, benchglobal);
+                        var task = new AITask(TaskDefOf.Crafting);
+                        foreach (var i in itemAmounts)
+                            foreach (var k in i)
+                                task.AddTarget(TaskBehaviorCrafting.IngredientIndex, k.Key, k.Value);
+                        task.SetTarget(TaskBehaviorCrafting.WorkstationIndex, workstationTarget);
+                        //task.IngredientsUsed = materialsUsed;
+                        task.Order = order;
+                        return task;
+                    }
+            }
+            return null;
+        }
+        private static bool AllReagentsAvailable(GameObject actor, List<GameObject> allObjects, ref List<Dictionary<TargetArgs, int>> itemAmounts, Dictionary<string, int> materialsUsed, CraftOrderNew order)
+        {
+            return AllReagentsAvailable(actor, allObjects, ref itemAmounts, materialsUsed, order);
+        }
+        private static bool TryFindAllIngredients(Actor actor, IEnumerable<Entity> allObjects, ref List<Dictionary<TargetArgs, int>> itemAmounts, Dictionary<string, Entity> materialsUsed, CraftOrderNew order)
+        {
+            //var handled = new HashSet<GameObject>();
+            Dictionary<Entity, int> alreadyFound = new();
+            List<Dictionary<Entity, int>> trips = new();
+
+            foreach (var reagent in order.Reaction.Reagents)
+            {
+                var handled = new HashSet<GameObject>();
+
+                var validStacks = (from stack in allObjects
+                                       //where st is Entity
+                                       //let stack = st as Entity
+                                   where stack.IsHaulable
+                                   where !handled.Contains(stack)
+                                   //where !handledStacks.Contains(stack)
+                                   //where order.IsReagentAllowed(reagent.Name, (int)stack.IDType)
+                                   //where reagent.Filter(stack)
+                                   where order.IsItemAllowed(reagent.Name, stack)
+                                   select stack).OrderByReachableRegionDistance(actor); // closest to actor or workstation?
+                var reqAmount = reagent.Quantity; 
+                //var remaining = reqAmount;
+                var totalfound = 0;
+                var currentStack = 0;
+                //int materialID = -1;
+                Entity materialID = null;
+                //ItemDef materialID = null;
+                Dictionary<TargetArgs, int> targetsAmounts = new();
+                var currentTrip = new Dictionary<GameObject, int>();
+                foreach (var stack in validStacks)
+                {
+                    handled.Add(stack);
+                    var unreservedAmount = actor.GetUnreservedAmount(stack);
+                    if (alreadyFound.ContainsKey(stack))
+                        unreservedAmount -= alreadyFound[stack];
+                    if (unreservedAmount == 0)
+                        continue;
+                    reqAmount = reagent.Quantity * stack.Def.StackDimension;
+                    var amountToPick = Math.Min(unreservedAmount, reqAmount - totalfound);
+                    totalfound += amountToPick;
+                    targetsAmounts.Add(new TargetArgs(stack), amountToPick);
+
+                    if (alreadyFound.ContainsKey(stack))
+                        alreadyFound[stack] += amountToPick;
+                    else
+                        alreadyFound[stack] = amountToPick;
+                    var newAmount = alreadyFound[stack] + amountToPick;
+                    if (newAmount == stack.StackMax)
+                    {
+                        trips.Add(alreadyFound);
+                        alreadyFound = new Dictionary<Entity, int>();
+                    }
+                    if (currentStack > stack.StackMax)
+                        throw new Exception();
+                    //materialID = stack.ID;
+                    materialID = stack;
+                    if (totalfound == reqAmount)
+                        break;
+
+                    if (totalfound > reqAmount)
+                        throw new Exception();
+                    currentStack += amountToPick;
+                    if (currentStack == stack.StackMax)
+                    {
+                        itemAmounts.Add(targetsAmounts);
+                        targetsAmounts = new Dictionary<TargetArgs, int>();
+                    }
+                }
+                if (totalfound < reqAmount)
+                    return false;
+                //var materialID = validStacks.First().ID;
+                materialsUsed.Add(reagent.Name, materialID);
+                itemAmounts.Add(targetsAmounts);
+                //if (currentTrip.Any())
+                //    trips.Add(currentTrip);
+            }
+            //itemAmounts.Clear();
+            //itemAmounts.Add(new Dictionary<TargetArgs, int>(alreadyFound.ToDictionary(i => new TargetArgs(i.Key), i => i.Value)));
+            if (alreadyFound.Any())
+                trips.Add(alreadyFound);
+            itemAmounts.Clear();
+            foreach (var i in trips)
+                itemAmounts.Add(i.ToDictionary(o => new TargetArgs(o.Key), o => o.Value));
+            //itemAmounts = CombineStacks(itemAmounts);
+
+            return true;
+        }
+    }
+}

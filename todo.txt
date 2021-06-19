@@ -1,0 +1,229 @@
+///2020 
+///major features
+-minify structures
+-containers (chests, crates)
+-labor priorities
+
+///engine
+-definitions on xml (recipes entities etc)
+-combine both sunlight and blocklight in a struct and use only 1 array for both?
+-room boundaries as a separate collection in the room class
+-beds & sleep (more interruption conditions)
+-optimize larger maps
+-TURN CELLS INTO STRUCTS?
+-store chunk gradients inside their class?
+-selection panel of unknown blocks & select unknown blocks that are air
+-put selectionpanel at bottomleft corner and chat window just below screen center?
+-make pausing a separate state instead of speed 0?
+-stop current task when taking control
+-more error logging when task fails
+-targetargs make to struct?
+-material defs (they are already essentially defs)
+-deliver ingerdients from the operating position of the workstation
+-refuel campfire
+-2-block-wide workstations that use 2 ingredients for recipes
+-put current equipped equipment in npcui
+-attributes defs (strength etc)
+-make blockentity a sealed class?
+-shader borders are drawn in front of selection texture
+-entities are drawn in front of non opaque block selection texture ( like campfires)
+-replace vector3 on grid cells with intvec3
+-make actors gracefully put down hauled item instead of throwing, when task fails?
+-blockentity defs with all the immutable properties?
+-add components to blocks instead of blockentities and use blockentities only as mutable properties?
+-carbon fuel def
+-remove resting frame from bone class, since bones are now immutable (not immutable anymore)
+-text parser for colors
+-merge refueling and haultostockpile to a single generic haul task
+-maybe only have one operating position for every workstation (including campfire)
+-maybe put map and global fields in blockentities?
+-randomblockupdate <= fix that. replace it with maprandomcellsinorder or move grass spawning to terrainmanager
+-store tasks and retry them? have a counter stored inside task class to track retry count
+-check stamina in behaviorfindtask, or let taskgivers check it?
+-instead of having haulcomponent, put somewhere a fail condition (maybe in the personalinventorycomponent) to drop carried item. or make the stamina resource push a signal to other components. or a behavior
+-a stamina modifier for when sprinting? instead of subtracting in the mobilecomponent tick
+-instead of applying new weights to walk animation whenever movement state changes, put funcs in the walk animations pointint to the current state's values
+-redundant checks in tryhaul in taskgiverhaul
+-when drophaultotarget in an air block, check contents of cell and merge dropped item with any existing stackable unreserved item
+-stamina max getter from stat?
+-put components to blockdesignation?
+-separate designation shader?
+-check taskgiver when constructing multiblock designations
+-block designation adds itself to a designation list (in the map class?) when placed
+-iconstructible or constructible component?
+-keep only blockdesignation and just switch the blockentity at the position, instead of having separate blockdesignation and blockconstruction?
+-gameobject.objects will only have defs and not actual object instances
+-use only one instance of body for similar items, and have the textures in their def
+-convert more old packets in server and client classes
+-make system and ui to prototype items with selected combination of materials. have a factory class for each itemfactory that provides a ui according to the number of ingerdients required?
+-make sprites defs so i can save them along with bones?
+-make animationclip change scale and sprite?
+-bones: mutable or immutable?? if at some point i want to have for example missing limbs, they have to be mutable
+-do i really need materials to be embedded in bones?
+-deprecate componentname and use type name
+-having derived itemdefs is making things harder
+-calculate body bounds on creation instead of having the fullsprite
+-change root bone and/or resting keyframe for poses such as sleeping in bed or lying on ground
+-flatten bone tree and cache it at object creation?
+-durability/condition resource on tools and food (degrade when outdoors?)
+-make defs register themselves in the base ctor
+-throw haulables when cleaningup with velocity according to mood?
+-have funcs instead of actual instances of objects as templates?
+-labels on quickbuttons
+-interaction defs
+-set growingzone growth threshold for harvesting
+-times stepped on in grass blockdata to determine removal instead of random
+-deprecate block.type enum and use only the references? NO!!! i need a small data value to store inside cells
+-store taskgivers inside labor def?
+-indication that you can cycle selected targets
+-recheck eating surfaces behavior
+-use normal npc sprite (get rid of fullsprite and use getminimumrectangle())
+-how to handle custom sprite colors in relation to materials and bones?
+-make inventory a list instead of slots
+-create separate classes or structs for chunkcoords and globalcoords? to avoid mistakes
+-make traits range -10,10? -50,50?
+-remove originfromground from bones and add an extra root bone with a joint at the old originfromground position
+-merge needs and mood components, inventory and gear components
+-seperate togglable debug window which displays selected item info such as cell regions etc
+-assignable containers
+-disallow building/mining on edges of map
+-end sleep after x time passes
+-allowed zones
+-fix chat messages not disappearing (block entity replace attempt message)
+-trait prefixes (slightly, extremely)
+-tool parts shouldnt be nodes in the collapsible list, but separate tabs that show their own collapsible list when selected?
+-only use one of these: ingredient, reaction.reagent
+-storagemanager: has an indexed list of IStorage, which can be stockpiles or containers
+-maybe instead of instantiating all storagefilters for each storage, have only one instance per storage type, and only store active filter indices?
+-deprecate inventorycomponent and add inventory as a list in gearcomponent
+-reimplement camera rotation
+-might have to make designations into classes
+-dont haulaside tool
+-when hauling aside, dont drop them on top or inside other designations?
+-fix perpetually falling from and jumping on blocks
+-tool assignment interface
+
+/// ui
+-collapsible list => table
+-campfire fuel tab togglable fix
+-collapsible arrows clickable
+-options menu
+-replace create new savegame button with a textbox straight away?
+-make scrollbars always visible but without a thumb if they're inactive
+-make scrollable boxes and scrollbars use funcs instead of shit. make clientlocation a func that reads the value from the scrollbar
+-textbox default text as a seperate label that is visible when inactive and the actual text is empty
+
+///longterm
+-zzz particles when sleeping?
+-grass as a separate nonopaque block above soil block?
+-rename npc interface
+-crafting quality
+-beds have more than one operating position
+-hasty/leisurely
+-methodical/thorough/sloppy/impulsive? https://www.wordhippo.com/what-is/the-opposite-of/methodical.html
+-each actor learns recipes
+-right click force tasks (trytaskontarget)
+-check if enough strength to lift heavy object in taskgiver
+-persistent/unmotivated
+
+///optimization
+-orderbyreachableregiondistance
+
+///long term
+-ladders: being within a ladder block transforms horizontal velocity to vertical. walking towards the ladder adds positive velocity to z while moving away adds negative. that way the ai can just continue moving without having to handle (almost) anything 
+-let multiple actors build same structure but have a personality trait (helpful) to help decide
+-fix reloading graphics after minimize
+-UNFIXABLE: roof tool with correct orientations
+-did i need visibleoutercells afterall???
+-maybe draw stacksize labels with depth-reading during the same call as the drawparticles call?
+-seperate base ui classes to separate namespace? impossible because they have drawonworld methods. unless i derive from them?
+
+seed: test
+size: micro
+chunks initialized in 281 ms
+Normal finished in in 108 ms
+Minerals finished in in 116 ms
+Grass finished in in 99 ms
+Flowers finished in in 110 ms
+Trees finished in in 141 ms
+PerlinWorms finished in in 240 ms
+visible cells initialized in 389 ms
+chunk edges reset in 1356 ms
+regions initialized in 272 ms
+light updated in 897 ms
+plants generated in 17 ms
+regions initialized in 213 ms
+undiscovered areas initialized in 185 ms
+
+
+///OLD
+-height function for sloped blocks and stairs
+
+23/2/2014
+-slower camera follow especially when jumping
+21/2/2014
+-make head sprite direction depend on mouse
+-idle animation (breathing)
+20/2/2014
+-reorder CHUNK draw list (Map.ActiveChunks) when rotating camera 
+
+
+draw layers sta tiles (oi thamnoi brosta apo to anthrwpaki, ta torches pisw, klp)
+pinakides me etiketes h tooltips (px etiketa me sfyri gia construction sites)
+fadein fadeout sta windows
+settings - chat timestamps
+atsivmends
+behind the scenes light initialization
+chat commands
+update window locations meta apo resolution change (sto main screen)
+lighting enoeitai
+na syndiasw ta ui graphics se ena file
+build mono ta chunks pou einai dipla stin arxh
+na ftiaxw to text input
+ladders
+na kolisw to item browser se mia plevra kai na valw offset stin camera
+na valw na vgainoun errors sto loading me showdialog kai exceptions
+na kanw jagged array to map height
+import custom graphics
+notification icons pou ta clickareis kai diavazeis ena minima (gia tutorial / did you know)
+tutorial stin arxh me slideshow gia tis vasikes leitourgies
+keybindings
+allaksa gnwmh gia ta exceptions sta tasks
+save ta settings se config file
+save/load
+to tile na exei ksexwristo field se kathe cell (afou mono ena borei na yparxei, ektos an valw kai ta overlays opote tha einai list)
+na allaksw ton tropo pou to kathe cell kserei an einai solid (gia walls kyriws)
+na kanw aneksartito to player class apo character
+na ftiaksw ta window location meta apo resolution change
+na boreis na perpatas sta psila ypsometra
+NA MIN BOREIS NA PATHSEIS POLLES FORES TA ITEMS
+skill experience
+na dialegeis skills, character creation
+aftognosia
+interruptible task
+na allaksw koubi gia rotation
+tooltip changed xwris event?
+NA MIN BOREIS NA FYTEPSEIS SE HDH FYTEVMENO FARMLAND (ektos an apla antikathista to prohgoumeno)
+ta tooltip na emfanizontai ligo ligo me timer
+mipos to context sta inventory slots na ta emfanizei to inventory window?
+na kanw class TileSprite ta opoia mona tous tha kanoun draw to outline tous
+mipos xreiazomai inherited interactions? diladi na emfanizontai kai ta interactions tou base class
+PATHFINDING KSANA
+TA TASK XWRIS EXCEPTION OMG EINAI ARGA
+na afaireis constructions me to control - XALASE
+ta windows kollane stin katw plevra otan ta kounas (stin deksia oxi durr)
+show/hide roof
+mipos adi gia cells kateftheian bitvectors?
+23/8: ta paths na einai mono directions
+25/8: non-grid movement
+
+farming skill:
+mikro den emfanizetai bara
+mesaio emfanizetai bara xwris xrono
+megalo bara me xrono
+
+common sense
+computer-
+drm post
+suggest dislike button
+

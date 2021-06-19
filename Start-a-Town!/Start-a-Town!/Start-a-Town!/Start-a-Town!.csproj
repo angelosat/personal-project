@@ -1,0 +1,1186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{7DC310F1-4D79-4C04-9312-7E50EECD9920}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Start_a_Town_</RootNamespace>
+    <AssemblyName>Start-a-Town!</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaProfile>HiDef</XnaProfile>
+    <XnaCrossPlatformGroupID>27d87c17-65a0-4ca9-b018-550db8caa95b</XnaCrossPlatformGroupID>
+    <XnaOutputType>Game</XnaOutputType>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>false</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>true</XnaCompressContent>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BlockMesh.cs" />
+    <Compile Include="Blocks\BlockAir.cs" />
+    <Compile Include="Blocks\BlockBed.cs" />
+    <Compile Include="Blocks\BlockBedrock.cs" />
+    <Compile Include="Blocks\BlockBricks.cs" />
+    <Compile Include="Blocks\BlockCampfire.cs" />
+    <Compile Include="Blocks\BlockCounter.cs" />
+    <Compile Include="Blocks\BlockFlowers.cs" />
+    <Compile Include="Blocks\BlockSlab.cs" />
+    <Compile Include="Blocks\BlockStairs.cs" />
+    <Compile Include="Blocks\BlockRoof.cs" />
+    <Compile Include="Blocks\BlockStool.cs" />
+    <Compile Include="Blocks\BlockChair.cs" />
+    <Compile Include="Blocks\BlockWater.cs" />
+    <Compile Include="Blocks\BlockWindow.cs" />
+    <Compile Include="Blocks\Construction\BlockDesignation.cs" />
+    <Compile Include="Blocks\Construction\Entity.cs" />
+    <Compile Include="Blocks\Crafting\Carpentry\BlockCarpentryBench.cs" />
+    <Compile Include="Blocks\Crafting\Carpentry\Entity.cs" />
+    <Compile Include="Blocks\Crafting\ReactionsInterface.cs" />
+    <Compile Include="Components\AI\AILog.cs" />
+    <Compile Include="Components\AI\Personality\Trait.cs" />
+    <Compile Include="Components\AI\Personality\TraitAttention.cs" />
+    <Compile Include="Components\AI\Personality\TraitComposure.cs" />
+    <Compile Include="Components\AI\Personality\TraitPatience.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionBreakBlock.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionObserve.cs" />
+    <Compile Include="Components\Items\FurnitureParts.cs" />
+    <Compile Include="Components\Items\ItemManager.cs" />
+    <Compile Include="Components\Needs\NeedCuriosity.cs" />
+    <Compile Include="Components\Needs\NeedsUI.cs" />
+    <Compile Include="Components\Needs\NeedsWork.cs" />
+    <Compile Include="GameEvents\EventEntityDespawned.cs" />
+    <Compile Include="GameEvents\EventBlockChanged.cs" />
+    <Compile Include="Helpers\MeasurePositiveNegative.cs" />
+    <Compile Include="Helpers\PriorityListQueue.cs" />
+    <Compile Include="Modules\AI\LaborsManager.cs" />
+    <Compile Include="Modules\AI\Labors\AILabor.cs" />
+    <Compile Include="Modules\AI\Labors\AILaborsUITable.cs" />
+    <Compile Include="Modules\AI\Labors\AILaborsUI.cs" />
+    <Compile Include="Modules\AI\Labors\NpcUI.cs" />
+    <Compile Include="Modules\AI\NpcLogUINew.cs" />
+    <Compile Include="Modules\AI\NpcLogUI.cs" />
+    <Compile Include="Modules\Crafting\WorkstationInterface.cs" />
+    <Compile Include="Blocks\Smeltery\SmeltingInterfaceNewNew.cs" />
+    <Compile Include="Blocks\Workbench\Entity.cs" />
+    <Compile Include="Blocks\Workbench\BlockWorkbench.cs" />
+    <Compile Include="Blocks\Chest\BlockChest.cs" />
+    <Compile Include="Blocks\Chest\ContainerUI.cs" />
+    <Compile Include="Blocks\Chest\Entity.cs" />
+    <Compile Include="Blocks\Sapling\BlockSapling.cs" />
+    <Compile Include="Blocks\Smeltery\BlockSmeltery.cs" />
+    <Compile Include="Blocks\BlockWoodPaneling.cs" />
+    <Compile Include="Blocks\Smeltery\Entity.cs" />
+    <Compile Include="Blocks\Smeltery\SmeltingInterface.cs" />
+    <Compile Include="Modules\Crafting\WorkstationOrdersUI.cs" />
+    <Compile Include="Blocks\Workbench\WorkbenchInterface.cs" />
+    <Compile Include="Components\AI\AICombat.cs" />
+    <Compile Include="Components\Combat\AttackComponent.cs" />
+    <Compile Include="Components\BloodComponent.cs" />
+    <Compile Include="Components\BombComponent.cs" />
+    <Compile Include="Components\Combat\BlockingComponent.cs" />
+    <Compile Include="Components\Consumables\Consumable.cs" />
+    <Compile Include="Components\Consumables\Effects\ConsumableEffect.cs" />
+    <Compile Include="Components\Consumables\NeedEffect.cs" />
+    <Compile Include="Components\Containers\ContainerUI.cs" />
+    <Compile Include="Components\Crafting\CanBeCraftedAt.cs" />
+    <Compile Include="Components\Crafting\InteractionCraftingPerson.cs" />
+    <Compile Include="Components\Crafting\InteractionCraftingWorkbench.cs" />
+    <Compile Include="Components\Crafting\Modifiers\Quantity.cs" />
+    <Compile Include="Components\Crafting\ReagentFilters\IsFuel.cs" />
+    <Compile Include="Components\Crafting\Smelting\SmeltingInterface.cs" />
+    <Compile Include="Components\HandsComponent.cs" />
+    <Compile Include="Components\HaulComponentNew.cs" />
+    <Compile Include="Components\Interactions\InteractionCustom.cs" />
+    <Compile Include="Components\Interactions\InteractionPerpetual.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\IsBlockType.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\BlockMaterialCheck.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\Exists.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\IsHauling.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Chopping.cs" />
+    <Compile Include="Components\Interactions\NewScripts\DropCarriedSnap.cs" />
+    <Compile Include="Components\Interactions\NewScripts\StoreHauled.cs" />
+    <Compile Include="Components\Inventory\InventoryInterface.cs" />
+    <Compile Include="Components\Skills\SkillArgiculture.cs" />
+    <Compile Include="Components\Vegetation\FertilizerComponent.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\BlockCheck.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionConsume.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionConsumeEquipped.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionFertilizing.cs" />
+    <Compile Include="Components\Items\ItemTypes\Rock.cs" />
+    <Compile Include="Components\Items\Pickaxe.cs" />
+    <Compile Include="Components\Items\Sapling.cs" />
+    <Compile Include="Components\Items\Chair.cs" />
+    <Compile Include="Components\Items\Stool.cs" />
+    <Compile Include="Components\Items\Sword.cs" />
+    <Compile Include="Components\Particles\Particle.cs" />
+    <Compile Include="Components\Particles\ParticleDensityLevel.cs" />
+    <Compile Include="Components\Particles\ParticleEmitterSphere.cs" />
+    <Compile Include="Components\Particles\ParticlesComponent.cs" />
+    <Compile Include="Components\Particles\ParticleEmitter.cs" />
+    <Compile Include="Components\Particles\ParticleSystem.cs" />
+    <Compile Include="Components\Particles\VelocityGetter.cs" />
+    <Compile Include="Components\Particles\VelocityGetterSphere.cs" />
+    <Compile Include="Components\Physics\Physics.cs" />
+    <Compile Include="Components\SkillComponentNew.cs" />
+    <Compile Include="Components\Skills\New\Skill.cs" />
+    <Compile Include="Components\Skills\New\SkillDigging.cs" />
+    <Compile Include="Components\Skills\New\SkillsNewComponent.cs" />
+    <Compile Include="Components\Skills\New\SkillsUI.cs" />
+    <Compile Include="Components\Vegetation\SaplingComponent.cs" />
+    <Compile Include="Components\Vegetation\TreeComponent.cs" />
+    <Compile Include="Control\MoveTool.cs" />
+    <Compile Include="GameModes\StaticMaps\CommandParser.cs" />
+    <Compile Include="Graphics\Animations\AnimationJump.cs" />
+    <Compile Include="Graphics\Animations\AnimationDeliverAttack.cs" />
+    <Compile Include="Graphics\Animations\AnimationPlaceItem.cs" />
+    <Compile Include="Graphics\Animations\AnimationTool.cs" />
+    <Compile Include="Graphics\Animations\AnimationWork.cs" />
+    <Compile Include="Graphics\AtlasDepthNormals.cs" />
+    <Compile Include="Graphics\IAtlas.cs" />
+    <Compile Include="Graphics\IAtlasNodeToken.cs" />
+    <Compile Include="Graphics\Joint.cs" />
+    <Compile Include="Graphics\AnimationManager.cs" />
+    <Compile Include="Graphics\NodeDepthNormals.cs" />
+    <Compile Include="Graphics\Animations\AnimationWalk.cs" />
+    <Compile Include="Line.cs" />
+    <Compile Include="Modules\AI\AIManager.cs" />
+    <Compile Include="Modules\AI\AITarget.cs" />
+    <Compile Include="Modules\AI\Behaviors\AIMoveTo.cs" />
+    <Compile Include="Modules\AI\Behaviors\AIPerformInteraction.cs" />
+    <Compile Include="Modules\AI\Behaviors\AIMove.cs" />
+    <Compile Include="Modules\AI\Behaviors\AINextJobStep.cs" />
+    <Compile Include="Modules\AI\Behaviors\BehaviorEvaluateJob.cs" />
+    <Compile Include="Modules\AI\Behaviors\BehaviorFindJobNew.cs" />
+    <Compile Include="Modules\AI\Behaviors\Commands\AICommands.cs" />
+    <Compile Include="Modules\AI\Behaviors\Commands\AINextCommand.cs" />
+    <Compile Include="Modules\AI\Behaviors\Commands\AIPerformCommand.cs" />
+    <Compile Include="Modules\AI\Behaviors\Dialogue\AIDialogue.cs" />
+    <Compile Include="Modules\AI\Behaviors\Dialogue\DialogOption.cs" />
+    <Compile Include="Modules\AI\Behaviors\Follow\AIFollow.cs" />
+    <Compile Include="Modules\AI\Control\ToolNpcControlNew.cs" />
+    <Compile Include="Modules\AI\Control\ToolNpcControl.cs" />
+    <Compile Include="Modules\AI\Jobs\GoalStates\AIGoalState.cs" />
+    <Compile Include="Modules\AI\Net\Packets\PacketDialogueOptions.cs" />
+    <Compile Include="Modules\AI\Net\Packets\PacketEntityInteractionTarget.cs" />
+    <Compile Include="Modules\AI\Net\Packets\PacketEntityJob.cs" />
+    <Compile Include="Blocks\BlockEntity.cs" />
+    <Compile Include="Blocks\BlockEntityPacked.cs" />
+    <Compile Include="Blocks\BlockMineral.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Blocks\BlockSand.cs" />
+    <Compile Include="Blocks\BlockSoil.cs" />
+    <Compile Include="Blocks\BlockState.cs" />
+    <Compile Include="Blocks\BlockStone.cs" />
+    <Compile Include="Blocks\BlockWoodenDeck.cs" />
+    <Compile Include="Blocks\BlockGrass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Blocks\Factory.cs" />
+    <Compile Include="Blocks\Farmland\BlockFarmland.cs" />
+    <Compile Include="Blocks\Farmland\Entity.cs" />
+    <Compile Include="Blocks\IBlockMaterial.cs" />
+    <Compile Include="Blocks\IBlockState.cs" />
+    <Compile Include="BoundingCylinder.cs" />
+    <Compile Include="Components\AbilitiesComponent.cs" />
+    <Compile Include="Components\Abilities\Abilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\Abilities\AbilityArgs.cs" />
+    <Compile Include="Components\AI\AIAwareness.cs" />
+    <Compile Include="Components\AI\AIAggro.cs" />
+    <Compile Include="Modules\AI\Behaviors\AIDoInteraction.cs" />
+    <Compile Include="Components\AI\AIExecuteScript.cs" />
+    <Compile Include="Components\AI\AIPlanStep.cs" />
+    <Compile Include="Components\AI\AIPrecondition.cs" />
+    <Compile Include="Components\AI\AIMemory.cs" />
+    <Compile Include="Components\AI\AIMovement.cs" />
+    <Compile Include="Components\AI\BehaviorFindGoal.cs" />
+    <Compile Include="Components\AdvertiseNeedComponent.cs" />
+    <Compile Include="Components\AI\AIZombie.cs" />
+    <Compile Include="Components\AI\BehaviorFindJob.cs" />
+    <Compile Include="Components\AI\BehaviorSelector.cs" />
+    <Compile Include="Components\AI\BehaviorSequence.cs" />
+    <Compile Include="Components\AI\AIState.cs" />
+    <Compile Include="Modules\AI\Jobs\AIInstruction.cs" />
+    <Compile Include="Modules\AI\Jobs\AIJob.cs" />
+    <Compile Include="Components\Animations\AnimationComponent.cs" />
+    <Compile Include="Components\Animations\AnimationLayer.cs" />
+    <Compile Include="Components\Attributes\AttributesInterface.cs" />
+    <Compile Include="Components\BlockableComponent.cs" />
+    <Compile Include="Components\BlockObject.cs" />
+    <Compile Include="Components\ClimbingComponent.cs" />
+    <Compile Include="Components\ConditionComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\BuildingComponent.cs" />
+    <Compile Include="Components\ConstructionComponent.cs" />
+    <Compile Include="Components\ConstructionFootprint.cs" />
+    <Compile Include="Components\Construction\Spawner.cs" />
+    <Compile Include="Components\Construction\SpawnerBlock.cs" />
+    <Compile Include="Components\Construction\SpawnerEntity.cs" />
+    <Compile Include="Components\Crafting\Blocks\BlockConstruction.cs" />
+    <Compile Include="Components\Crafting\Blocks\Modifier.cs" />
+    <Compile Include="Components\Crafting\Blocks\Modifiers\ApplyState.cs" />
+    <Compile Include="Components\Crafting\Blocks\Modifiers\GetMaterialFromReagent.cs" />
+    <Compile Include="Components\Crafting\Blocks\Product.cs" />
+    <Compile Include="Components\Crafting\Blocks\ProductMaterialPair.cs" />
+    <Compile Include="Components\Crafting\BlueprintMemory.cs" />
+    <Compile Include="Components\Crafting\Building.cs" />
+    <Compile Include="Components\Crafting\CraftOperation.cs" />
+    <Compile Include="Components\Crafting\MemorizedBlueprints.cs" />
+    <Compile Include="Components\Crafting\Modifiers\GetDurabilityFromTool.cs" />
+    <Compile Include="Components\Crafting\Modifiers\GetPartMaterialFromReagent.cs" />
+    <Compile Include="Components\Crafting\Modifiers\GetMaterialFromReagent.cs" />
+    <Compile Include="Components\Crafting\Modifiers\FlimsyIfNoBench.cs" />
+    <Compile Include="Components\Crafting\Modifiers\TokenMadeWithTools.cs" />
+    <Compile Include="Components\Crafting\Product.cs" />
+    <Compile Include="Components\Crafting\Reaction.cs" />
+    <Compile Include="Blocks\BlockDoor.cs" />
+    <Compile Include="Components\Crafting\Reagent.cs" />
+    <Compile Include="Components\Crafting\ReagentFilters\HasHardness.cs" />
+    <Compile Include="Components\Crafting\ReagentFilters\IsOfSubType.cs" />
+    <Compile Include="Components\Crafting\ReagentFilters\ToolHasUse.cs" />
+    <Compile Include="Components\Crafting\ReagentFilters\IsOfType.cs" />
+    <Compile Include="Components\Crafting\ReagentFilters\IsOfMaterialType.cs" />
+    <Compile Include="Components\Crafting\ReagentFilters\IsOfMaterial.cs" />
+    <Compile Include="Components\Crafting\ReagentFilters\CanProduce.cs" />
+    <Compile Include="Components\Crafting\Site.cs" />
+    <Compile Include="Components\Crafting\Structures\Product.cs" />
+    <Compile Include="Components\Crafting\Structures\StructureConstruction.cs" />
+    <Compile Include="Components\Crafting\Templates.cs" />
+    <Compile Include="Components\GearComponent.cs" />
+    <Compile Include="Components\GrassComponent.cs" />
+    <Compile Include="Components\HaulComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\Interactions\NewScripts\Build.cs" />
+    <Compile Include="Components\Interactions\NewScripts\EquipFromWorld.cs" />
+    <Compile Include="Components\Interactions\NewScripts\UseItem.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Throw.cs" />
+    <Compile Include="Components\Interactions\NewScripts\DropCarried.cs" />
+    <Compile Include="Components\Interactions\NewScripts\DropItem.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Carry.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Insert.cs" />
+    <Compile Include="Components\Interactions\NewScripts\MoveTo.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Equip.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Lift.cs" />
+    <Compile Include="Modules\Base\GameManager.cs" />
+    <Compile Include="Modules\Construction\ConstructionManager.cs" />
+    <Compile Include="Modules\Construction\ConstructionPacketHandler.cs" />
+    <Compile Include="Modules\Construction\IConstructionProduct.cs" />
+    <Compile Include="Modules\Construction\InteractionConstruct.cs" />
+    <Compile Include="Components\Inventory\Container.cs" />
+    <Compile Include="Components\Items\Axe.cs" />
+    <Compile Include="Components\Items\Bars.cs" />
+    <Compile Include="Components\Items\Hammer.cs" />
+    <Compile Include="Components\Items\Handsaw.cs" />
+    <Compile Include="Components\Items\Workbench.cs" />
+    <Compile Include="Components\Items\Hoe.cs" />
+    <Compile Include="Components\Items\IItemFactory.cs" />
+    <Compile Include="Components\Items\ItemCategory.cs" />
+    <Compile Include="Components\Items\Shovel.cs" />
+    <Compile Include="Components\Items\Templates.cs" />
+    <Compile Include="Components\Items\Tools\ToolComponent.cs" />
+    <Compile Include="Components\LadderComponent.cs" />
+    <Compile Include="Components\MaterialsComponent.cs" />
+    <Compile Include="Components\Materials\RawMaterials\Bags.cs" />
+    <Compile Include="Components\Materials\RawMaterials\Bars.cs" />
+    <Compile Include="Components\Materials\RawMaterials\Logs.cs" />
+    <Compile Include="Components\Materials\RawMaterials\Rock.cs" />
+    <Compile Include="Components\Materials\RawMaterials\Ore.cs" />
+    <Compile Include="Components\ReagentComponent.cs" />
+    <Compile Include="Components\Materials\RawMaterials\Planks.cs" />
+    <Compile Include="Components\Materials\CanBeMadeInto.cs" />
+    <Compile Include="Components\Materials\Material.cs" />
+    <Compile Include="Components\Materials\MaterialType.cs" />
+    <Compile Include="Components\MobileComponent.cs" />
+    <Compile Include="Components\Inventory\PersonalInventoryComponent.cs" />
+    <Compile Include="Components\ReactionComponent.cs" />
+    <Compile Include="Components\RawMaterialComponent.cs" />
+    <Compile Include="Components\Resources\Stamina.cs" />
+    <Compile Include="Components\ScribeComponent.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\All.cs" />
+    <Compile Include="Components\Interactions\NewScripts\BuildStructure.cs" />
+    <Compile Include="Components\Interactions\NewScripts\BuildBlock.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\GearCheck.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\DurabilityCheck.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Mining.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionGrassClear.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionDigging.cs" />
+    <Compile Include="Components\Interactions\NewScripts\EquipFromInventory.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Planting.cs" />
+    <Compile Include="Components\Interactions\NewScripts\ProcessMaterial.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Tilling.cs" />
+    <Compile Include="Components\Interactions\NewScripts\PickUp.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\Any.cs" />
+    <Compile Include="Components\Interactions\NewScripts\PlaceBlock.cs" />
+    <Compile Include="Components\Interactions\NewScripts\TargetTypeCheck.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\RangeCheck.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\SkillCheck.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Tasks.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptBuild.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptBuildFrame.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptCallback.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptTargetTypeFilter.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Interaction.cs" />
+    <Compile Include="Components\Interactions\NewScripts\Checks\ScriptTaskCondition.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptDropOnTarget.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptDrop.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptHauling.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptDigging.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptPickUpSlot.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptPickUp.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptReaction.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptToken.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptUnpack.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptUseHeldItem.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptBench.cs" />
+    <Compile Include="Components\SkillComponent.cs" />
+    <Compile Include="Components\SkillComponentOld.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\Skills\Skill.cs" />
+    <Compile Include="Components\Skills\SkillBuilding.cs" />
+    <Compile Include="Components\SoilComponent.cs" />
+    <Compile Include="Components\StackableComponent.cs" />
+    <Compile Include="Components\Stats\StatMaxWeight.cs" />
+    <Compile Include="Components\Stats\StatModifier.cs" />
+    <Compile Include="Components\Stats\StatsComponentNew.cs" />
+    <Compile Include="Components\Stats\StatsInterface.cs" />
+    <Compile Include="Components\Containers\StorageComponent.cs" />
+    <Compile Include="Components\ItemContainerComponent.cs" />
+    <Compile Include="Components\Factory.cs" />
+    <Compile Include="Components\Inventory\ItemContainer.cs" />
+    <Compile Include="Components\Message.cs" />
+    <Compile Include="Components\Needs\NeedHunger.cs" />
+    <Compile Include="Components\NetworkComponent.cs" />
+    <Compile Include="Components\Resources\Durability.cs" />
+    <Compile Include="Components\Resources\Health.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptActivate.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptAttack.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptBlock.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptCollection.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptAnimation.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptComponent.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptEvaluations.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptEvaluation.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptCondition.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptConsumeHeldItem.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptMatch.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptModifyDurability.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptRangeCheck.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptTargetFilter.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptTimer.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptCrafting.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptDefault.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptEquip.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptFraming.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptInsertItem.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptBuildFootprint.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptSawing.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptPlaceBlock.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptPlanting.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptTest.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptThreat.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptTilling.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptMining.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptThrow.cs" />
+    <Compile Include="Components\Interactions\ScriptComponents\ScriptTimer2.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptWalking.cs" />
+    <Compile Include="Components\Interactions\Old\ScriptWorkbench.cs" />
+    <Compile Include="Components\Shadow.cs" />
+    <Compile Include="Components\Skills\SkillArgicultureOld.cs" />
+    <Compile Include="Components\StructureComponent.cs" />
+    <Compile Include="Components\Tokens\Token.cs" />
+    <Compile Include="Components\Tokens\TokensComponent.cs" />
+    <Compile Include="Components\ToolComponentOld.cs" />
+    <Compile Include="Components\UseComponent.cs" />
+    <Compile Include="Components\Workbench\WorkbenchInterface.cs" />
+    <Compile Include="Components\Workbench\WorkbenchReactionComponent.cs" />
+    <Compile Include="Components\Workbench\WorkbenchWindow.cs" />
+    <Compile Include="Components\WorkComponent.cs" />
+    <Compile Include="Components\WorkerComponent.cs" />
+    <Compile Include="Control\BlockPainter.cs" />
+    <Compile Include="Control\BuildingPlacer.cs" />
+    <Compile Include="Control\JobToolNew.cs" />
+    <Compile Include="Control\KeyBinding.cs" />
+    <Compile Include="Control\KeyControl.cs" />
+    <Compile Include="Control\ObjectPlaceTool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Control\Schemes\Mouse.cs" />
+    <Compile Include="Control\Schemes\Scheme.cs" />
+    <Compile Include="Control\Schemes\Wasd.cs" />
+    <Compile Include="Control\StructureTool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Control\TileGrid.cs" />
+    <Compile Include="GameModes\GameMode.cs" />
+    <Compile Include="GameModes\IMap.cs" />
+    <Compile Include="GameModes\IWorld.cs" />
+    <Compile Include="GameModes\MapRules.cs" />
+    <Compile Include="GameModes\PacketHandler.cs" />
+    <Compile Include="GameModes\Sandbox\Packets\Player\Jump.cs" />
+    <Compile Include="GameModes\Sandbox\Packets\Player\PlayerPacketHandler.cs" />
+    <Compile Include="GameModes\Sandbox\Packets\Player\StartMoving.cs" />
+    <Compile Include="GameModes\Sandbox\Packets\Player\StopMoving.cs" />
+    <Compile Include="GameModes\Sandbox\SandboxClientEventHandler.cs" />
+    <Compile Include="GameModes\Sandbox\SandboxServerEventHandler.cs" />
+    <Compile Include="GameModes\ClientEventHandler.cs" />
+    <Compile Include="GameModes\ServerEventHandler.cs" />
+    <Compile Include="GameModes\ClientPacketHandler.cs" />
+    <Compile Include="GameModes\ServerPacketHandler.cs" />
+    <Compile Include="GameModes\StaticMaps\ClientSession.cs" />
+    <Compile Include="GameModes\StaticMaps\GameModeStaticMaps.cs" />
+    <Compile Include="GameModes\StaticMaps\Packets\StaticMapsClientPacketHandler.cs" />
+    <Compile Include="GameModes\StaticMaps\Packets\StaticMapsPacketHandler.cs" />
+    <Compile Include="GameModes\StaticMaps\Packets\StaticMapsServerPacketHandler.cs" />
+    <Compile Include="GameModes\StaticMaps\StaticMapsClientEventHandler.cs" />
+    <Compile Include="GameModes\StaticMaps\StaticMapsServerEventHandler.cs" />
+    <Compile Include="GameModes\StaticMaps\Screens\ScreenMapLoading.cs" />
+    <Compile Include="GameModes\StaticMaps\StaticMap.cs" />
+    <Compile Include="GameModes\StaticMaps\Screens\StaticWorldScreen.cs" />
+    <Compile Include="GameModes\StaticMaps\StaticMapLoader.cs" />
+    <Compile Include="GameModes\StaticMaps\StaticWorld.cs" />
+    <Compile Include="GameModes\StaticMaps\UI\PanelMapSizes.cs" />
+    <Compile Include="GameModes\StaticMaps\UI\StaticMapBrowser.cs" />
+    <Compile Include="GameModes\StaticMaps\UI\WindowSelectedWorld.cs" />
+    <Compile Include="Modules\Construction\Packets\PacketPlaceBlockConstruction.cs" />
+    <Compile Include="Modules\Construction\PlaceBlockConstructionTool.cs" />
+    <Compile Include="Modules\Crafting\ConditionMaterialsPresent.cs" />
+    <Compile Include="Blocks\Crafting\BlockWorkstation.cs" />
+    <Compile Include="Blocks\Crafting\BlockEntityWorkstation.cs" />
+    <Compile Include="Modules\Crafting\IBlockWorkstation.cs" />
+    <Compile Include="Modules\Crafting\IBlockEntityWorkstation.cs" />
+    <Compile Include="Modules\Crafting\InteractionAddMaterial.cs" />
+    <Compile Include="Modules\Crafting\InteractionCraft.cs" />
+    <Compile Include="Modules\Crafting\UI\CraftInterface.cs" />
+    <Compile Include="Modules\Crafting\UI\WindowCrafting.cs" />
+    <Compile Include="Modules\Crafting\WorkstationControlsUI.cs" />
+    <Compile Include="Modules\Crafting\WorkstationUI.cs" />
+    <Compile Include="Modules\Towns\Constructions\ConstructionsManager.cs" />
+    <Compile Include="Modules\Towns\Crafting\CraftingManager.cs" />
+    <Compile Include="Modules\Towns\Crafting\CraftOrder.cs" />
+    <Compile Include="Modules\Towns\Crafting\PacketCraftingPlaceOrder.cs" />
+    <Compile Include="Modules\Towns\Designation.cs" />
+    <Compile Include="Modules\Towns\Digging\DiggingManager.cs" />
+    <Compile Include="Modules\Towns\Digging\DiggingManagerUI.cs" />
+    <Compile Include="Modules\Towns\Digging\PacketDiggingDesignate.cs" />
+    <Compile Include="Modules\Towns\Farming\FarmingManager.cs" />
+    <Compile Include="Modules\Towns\Farming\FarmingManagerUI.cs" />
+    <Compile Include="Modules\Towns\Farming\Farmland.cs" />
+    <Compile Include="Modules\Towns\Farming\InteractionPlantSeed.cs" />
+    <Compile Include="Modules\Towns\Farming\InteractionPlantTree.cs" />
+    <Compile Include="Modules\Towns\Farming\PacketCreateFarmland.cs" />
+    <Compile Include="Modules\Towns\Farming\PacketFarmSetSeed.cs" />
+    <Compile Include="Modules\Towns\Farming\PacketFarmSync.cs" />
+    <Compile Include="Modules\Towns\Farming\FarmlandUI.cs" />
+    <Compile Include="Modules\Towns\Forestry\Grove.cs" />
+    <Compile Include="Modules\Towns\Forestry\GroveUI.cs" />
+    <Compile Include="Modules\Towns\Forestry\PacketGroveEdit.cs" />
+    <Compile Include="Modules\Towns\Housing\HouseManager.cs" />
+    <Compile Include="Modules\Towns\Housing\UIHouses.cs" />
+    <Compile Include="Modules\Towns\Housing\HouseTool.cs" />
+    <Compile Include="Modules\Towns\Forestry\ChoppingManager.cs" />
+    <Compile Include="Modules\Towns\Forestry\ChoppingManagerUI.cs" />
+    <Compile Include="Modules\Towns\Forestry\PacketChoppingDesignation.cs" />
+    <Compile Include="Modules\Towns\Forestry\PacketCreateChoppingZone.cs" />
+    <Compile Include="Modules\Towns\PacketZone.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Interface\StockpileFiltersUIBasic.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Interface\StockpileFiltersUIAdvanced.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Interface\StockpileFiltersUI.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Interface\StockpileUI.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Interface\StockpilesListInterface.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Interface\StockpileSlotsUI.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Interface\StockpileUIOld.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Interface\StockpilesManagerUI.cs" />
+    <Compile Include="Modules\Towns\PacketDesignate.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\PacketStockpileDelete.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\PacketStockpileEdit.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\PacketStockpileFiltersToggleCategories.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\PacketStockpileFiltersNew.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\PacketStockpileFilters.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\PacketStockpileRename.cs" />
+    <Compile Include="Modules\Towns\ToolDesignatePositions.cs" />
+    <Compile Include="Modules\Towns\ToolZoningPositions.cs" />
+    <Compile Include="Modules\Towns\ToolZoning.cs" />
+    <Compile Include="Modules\Towns\ToolDesignate.cs" />
+    <Compile Include="Modules\Towns\ToolDesignateSingle.cs" />
+    <Compile Include="Modules\Towns\TownComponent.cs" />
+    <Compile Include="Modules\Towns\TownManagerUI.cs" />
+    <Compile Include="Modules\Towns\TownUIOld.cs" />
+    <Compile Include="Modules\Towns\Zone.cs" />
+    <Compile Include="Net\CommandParser.cs" />
+    <Compile Include="Net\Packets\PacketMergeEntities.cs" />
+    <Compile Include="Net\RPCargs.cs" />
+    <Compile Include="PathFinding\Node.cs" />
+    <Compile Include="PathFinding\Path.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PathFinding\PathingNew.cs" />
+    <Compile Include="PathFinding\PathingWORKING.cs" />
+    <Compile Include="PathFinding\PathingSync.cs" />
+    <Compile Include="PathFinding\Pathing.cs" />
+    <Compile Include="Terraforming\Mutators\PerlinWorm.cs" />
+    <Compile Include="Tokens\IsWorkstation.cs" />
+    <Compile Include="Tokens\Token.cs" />
+    <Compile Include="Tokens\TokenCollection.cs" />
+    <Compile Include="UI\Bars\BarSigned.cs" />
+    <Compile Include="UI\CheckBoxNew.cs" />
+    <Compile Include="UI\ConsoleBox.cs" />
+    <Compile Include="UI\Context\ContextAction.cs" />
+    <Compile Include="UI\DialogInput.cs" />
+    <Compile Include="UI\FloatingTextEx.cs" />
+    <Compile Include="UI\Hud\ChatWindow.cs" />
+    <Compile Include="UI\Hud\HotbarSlot.cs" />
+    <Compile Include="UI\Inventory\UIQuickSlots.cs" />
+    <Compile Include="UI\ListBoxCollapsible.cs" />
+    <Compile Include="UI\SliderNew.cs" />
+    <Compile Include="UI\SlotEquipment.cs" />
+    <Compile Include="UI\LoadingWidget.cs" />
+    <Compile Include="GameModes\StaticMaps\UI\StaticMapLoadingWidget.cs" />
+    <Compile Include="GameModes\StaticMaps\UI\StaticWorldCreateWindow.cs" />
+    <Compile Include="GameModes\StaticMaps\UI\StaticWorldScreenUI.cs" />
+    <Compile Include="GameModes\StaticMaps\UI\StaticWorldBrowser.cs" />
+    <Compile Include="Graphics\AtlasWithDepth.cs" />
+    <Compile Include="Graphics\Atlas.cs" />
+    <Compile Include="Graphics\BodyTemplates.cs" />
+    <Compile Include="Graphics\Borders.cs" />
+    <Compile Include="Graphics\Blur.cs" />
+    <Compile Include="Graphics\NodeWithDepth.cs" />
+    <Compile Include="Graphics\Node.cs" />
+    <Compile Include="IDebuggable.cs" />
+    <Compile Include="IGameComponent.cs" />
+    <Compile Include="IProgressBar.cs" />
+    <Compile Include="MySpriteBatch.cs" />
+    <Compile Include="MyVertex.cs" />
+    <Compile Include="Net\ChunkTransfer.cs" />
+    <Compile Include="Net\EventSnapshot.cs" />
+    <Compile Include="Net\GameEvent.cs" />
+    <Compile Include="GameModes\Sandbox\GameModeSandbox.cs" />
+    <Compile Include="Net\IEventHandler.cs" />
+    <Compile Include="Net\ObjectSnapshot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Net\Packets\PacketInventoryOperation.cs" />
+    <Compile Include="Net\PacketWrapper.cs" />
+    <Compile Include="Net\Packets\IServerPacketHandler.cs" />
+    <Compile Include="Net\Packets\IClientPacketHandler.cs" />
+    <Compile Include="Net\Packets\IPacketHandler.cs" />
+    <Compile Include="Net\Packets\PacketEntityBoolean.cs" />
+    <Compile Include="Net\Packets\PacketEntityVector3.cs" />
+    <Compile Include="Net\Packets\PacketEntity.cs" />
+    <Compile Include="Net\Packets\PacketChunk.cs" />
+    <Compile Include="Net\Packets\PacketHandling.cs" />
+    <Compile Include="Net\Packets\PacketSnapshot.cs" />
+    <Compile Include="Net\Packets\Player\PacketPlayerChangeDirection.cs" />
+    <Compile Include="Net\Packets\Player\PacketPlayerJump.cs" />
+    <Compile Include="Net\Packets\Player\PlayerPacketHandler.cs" />
+    <Compile Include="Net\Packets\Player\PacketPlayerStopMoving.cs" />
+    <Compile Include="Net\Packets\Player\PacketPlayerStartMoving.cs" />
+    <Compile Include="Net\PacketTransfer.cs" />
+    <Compile Include="Net\PlayerServerToken.cs" />
+    <Compile Include="Net\RandomThreaded.cs" />
+    <Compile Include="Net\Server\AI.cs" />
+    <Compile Include="Modules\AI\AIPacketHandler.cs" />
+    <Compile Include="Net\Server\ServerCommandParser.cs" />
+    <Compile Include="Net\Server\ServerConsole.cs" />
+    <Compile Include="Net\UdpConnection.cs" />
+    <Compile Include="Net\UIPlayerList.cs" />
+    <Compile Include="Net\WorldSnapshot.cs" />
+    <Compile Include="Objects\ObjectEventArgs.cs" />
+    <Compile Include="Objects\PlayerEntity.cs" />
+    <Compile Include="Objects\TargetArgs.cs" />
+    <Compile Include="Helpers\Progress.cs" />
+    <Compile Include="Rooms\Editor\BlockPainter.cs" />
+    <Compile Include="Rooms\Editor\EditorMap.cs" />
+    <Compile Include="Rooms\Editor\EditorScreen.cs" />
+    <Compile Include="Rooms\Editor\GridTool.cs" />
+    <Compile Include="Rooms\Editor\UI\TerrainWindow.cs" />
+    <Compile Include="Rooms\Editor\UI\ControlsWindow.cs" />
+    <Compile Include="SceneState.cs" />
+    <Compile Include="Net\IObjectProvider.cs" />
+    <Compile Include="Net\PacketTranslation.cs" />
+    <Compile Include="Net\Client.cs" />
+    <Compile Include="Components\Abilities\Ability.cs" />
+    <Compile Include="Components\AI\AICommunication.cs" />
+    <Compile Include="Components\AI\Thoughts.cs" />
+    <Compile Include="Components\Attack.cs" />
+    <Compile Include="Components\Attributes\Attribute.cs" />
+    <Compile Include="Components\Attributes\AttributesComponent.cs" />
+    <Compile Include="Components\BuildingPlanComponent.cs" />
+    <Compile Include="Components\CombatComponent.cs" />
+    <Compile Include="Components\ConstructionFrame.cs" />
+    <Compile Include="Components\Crafting\Recipe.cs" />
+    <Compile Include="Components\Crafting\Template.cs" />
+    <Compile Include="Components\FuelComponent.cs" />
+    <Compile Include="Components\FurnaceComponent.cs" />
+    <Compile Include="Components\Crafting\Smelting\SmelteryComponent.cs" />
+    <Compile Include="Components\ItemComponent.cs" />
+    <Compile Include="Components\InteractiveComponent.cs" />
+    <Compile Include="Components\ObjectFilter2.cs" />
+    <Compile Include="Components\Resources\ResourcesComponent.cs" />
+    <Compile Include="Components\Resources\Resource.cs" />
+    <Compile Include="Components\Skills\Formula.cs" />
+    <Compile Include="Components\Skills\SkillOld.cs" />
+    <Compile Include="Components\SpellBookComponent.cs" />
+    <Compile Include="Components\Spells\Spell.cs" />
+    <Compile Include="Components\Spells\SpellComponent.cs" />
+    <Compile Include="Components\Stats\Stat.cs" />
+    <Compile Include="Components\UseComponentOld.cs" />
+    <Compile Include="Components\WeaponComponent.cs" />
+    <Compile Include="Components\WorkshopComponent.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Components\Jobs\JobEntry.cs" />
+    <Compile Include="Components\Jobs\JobEntryCollection.cs" />
+    <Compile Include="Components\Needs\Need.cs" />
+    <Compile Include="Components\Needs\AIAdvertisement.cs" />
+    <Compile Include="Components\Needs\NeedEffectCollection.cs" />
+    <Compile Include="Components\Needs\NeedsCollection.cs" />
+    <Compile Include="Components\Needs\NeedsHierarchy.cs" />
+    <Compile Include="Components\Physics\PhysicsComponentNew.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\SpeechComponent.cs" />
+    <Compile Include="Control\CameraTool.cs" />
+    <Compile Include="Control\ConstructionTool.cs" />
+    <Compile Include="Control\DesignTool.cs" />
+    <Compile Include="Control\EmptyTool.cs" />
+    <Compile Include="Control\InputHandler.cs" />
+    <Compile Include="Graphics\AnimationCollection.cs" />
+    <Compile Include="Graphics\Interpolation.cs" />
+    <Compile Include="Graphics\Keyframe.cs" />
+    <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Graphics\Bone.cs" />
+    <Compile Include="Graphics\Transition.cs" />
+    <Compile Include="Components\Interactions\Old\Script.cs" />
+    <Compile Include="Components\AI\AIComponent.cs" />
+    <Compile Include="Components\AI\AIAttack.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\AI\AIFindTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\AI\AIIdle.cs" />
+    <Compile Include="Components\AI\AIAutonomy.cs" />
+    <Compile Include="Components\AI\AICombatOld.cs" />
+    <Compile Include="Components\AI\AICoop.cs" />
+    <Compile Include="Components\AI\AIWait.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\AI\AIWander.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\AI\AIJobOld.cs" />
+    <Compile Include="Components\AI\Knowledge.cs" />
+    <Compile Include="Components\AI\Personality\Personality.cs" />
+    <Compile Include="Components\BedComponent.cs" />
+    <Compile Include="Components\AI\Behavior.cs" />
+    <Compile Include="Components\BonusesComponent.cs" />
+    <Compile Include="Components\SpriteComponent.cs" />
+    <Compile Include="Components\JobBoardComponent.cs" />
+    <Compile Include="Components\JobComponent.cs" />
+    <Compile Include="Components\KnowledgeComponent.cs" />
+    <Compile Include="Components\OwnershipComponent.cs" />
+    <Compile Include="Components\ProductionComponent.cs" />
+    <Compile Include="Components\FunctionComponent.cs" />
+    <Compile Include="Components\InteractionOld.cs" />
+    <Compile Include="Components\Needs\NeedsComponent.cs" />
+    <Compile Include="Components\NpcComponent.cs" />
+    <Compile Include="Components\PackableComponent.cs" />
+    <Compile Include="Components\BodyPart.cs" />
+    <Compile Include="Components\BoxComponent.cs" />
+    <Compile Include="Components\ComponentParameterCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\ConstructionOldComponent.cs" />
+    <Compile Include="Components\Consumables\ConsumableComponent.cs" />
+    <Compile Include="Components\ContainerComponent.cs" />
+    <Compile Include="Components\ControlComponent.cs" />
+    <Compile Include="Components\BlueprintComponent.cs" />
+    <Compile Include="Components\BodyComponent.cs" />
+    <Compile Include="Components\BodypartComponent.cs" />
+    <Compile Include="Components\PackageComponent.cs" />
+    <Compile Include="Components\PartyComponent.cs" />
+    <Compile Include="Components\ProjectComponent.cs" />
+    <Compile Include="Components\PropertyComponent.cs" />
+    <Compile Include="Components\MultiTile2Component.cs" />
+    <Compile Include="Components\DoorComponent.cs" />
+    <Compile Include="Components\LightComponent.cs" />
+    <Compile Include="Components\MaterialComponent.cs" />
+    <Compile Include="Components\WallComponent.cs" />
+    <Compile Include="Components\FluidComponent.cs" />
+    <Compile Include="Components\FarmlandComponent.cs" />
+    <Compile Include="Components\FarmingComponent.cs" />
+    <Compile Include="Components\DiggableComponent.cs" />
+    <Compile Include="Components\Vegetation\PlantComponent.cs" />
+    <Compile Include="Components\Vegetation\SeedComponent.cs" />
+    <Compile Include="Components\SkillsComponent.cs" />
+    <Compile Include="Components\StatusComponent.cs" />
+    <Compile Include="Components\StatsComponent.cs" />
+    <Compile Include="Components\WorkbenchComponent.cs" />
+    <Compile Include="Components\GeneralComponent.cs" />
+    <Compile Include="Components\ComponentCollection.cs" />
+    <Compile Include="Components\CraftableComponent.cs" />
+    <Compile Include="Components\EquipComponent.cs" />
+    <Compile Include="Components\GuiComponent.cs" />
+    <Compile Include="Components\InventoryComponent.cs" />
+    <Compile Include="Components\LootComponent.cs" />
+    <Compile Include="Components\PositionComponent.cs" />
+    <Compile Include="Components\BlockComponent.cs" />
+    <Compile Include="Control\ControlTool.cs" />
+    <Compile Include="Control\BlueprintTool.cs" />
+    <Compile Include="Control\ObjectOrientationTool.cs" />
+    <Compile Include="Control\JobTool.cs" />
+    <Compile Include="Control\ObjectOrientationTool2.cs" />
+    <Compile Include="Control\InteractTool.cs" />
+    <Compile Include="Control\Hotbar.cs" />
+    <Compile Include="Control\InputBlock.cs" />
+    <Compile Include="Control\InteractionTool.cs" />
+    <Compile Include="Control\PlanningTool.cs" />
+    <Compile Include="Control\ProjectTool.cs" />
+    <Compile Include="Control\TargetTool.cs" />
+    <Compile Include="Components\Crafting\Blueprint.cs" />
+    <Compile Include="Engine.cs" />
+    <Compile Include="IUndoable.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Net\Network.cs" />
+    <Compile Include="Net\Packet.cs" />
+    <Compile Include="Net\PlayerData.cs" />
+    <Compile Include="Profile.cs" />
+    <Compile Include="Rooms\Editor\EditorRoom.cs" />
+    <Compile Include="Rooms\DesignRoom.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Net\Server\Server.cs" />
+    <Compile Include="Terraforming\CellOperation.cs" />
+    <Compile Include="Terraforming\ChunkCollection.cs" />
+    <Compile Include="Terraforming\ChunkLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Terraforming\LightingEngine.cs" />
+    <Compile Include="Terraforming\MapCollection.cs" />
+    <Compile Include="Terraforming\Mutators\Caves.cs" />
+    <Compile Include="Terraforming\Mutators\Empty.cs" />
+    <Compile Include="Terraforming\Mutators\Gradient.cs" />
+    <Compile Include="Terraforming\Mutators\MineralsSlow.cs" />
+    <Compile Include="Terraforming\Mutators\Terrain.cs" />
+    <Compile Include="Terraforming\Mutators\Trees.cs" />
+    <Compile Include="Terraforming\Mutators\Flowers.cs" />
+    <Compile Include="Terraforming\Mutators\Land.cs" />
+    <Compile Include="Terraforming\Mutators\Minerals.cs" />
+    <Compile Include="Terraforming\Mutators\Sea.cs" />
+    <Compile Include="Terraforming\Mutators\Grass.cs" />
+    <Compile Include="Terraforming\Mutators\Normal.cs" />
+    <Compile Include="Terraforming\Mutators\Test.cs" />
+    <Compile Include="Terraforming\Mutators\Terraformer.cs" />
+    <Compile Include="Terraforming\LightSpread.cs" />
+    <Compile Include="Terraforming\MapThumb.cs" />
+    <Compile Include="Terraforming\World.cs" />
+    <Compile Include="Objects\GameObject.cs" />
+    <Compile Include="KeyboardMap.cs" />
+    <Compile Include="Terraforming\Position.cs" />
+    <Compile Include="Objects\GameObjectDb.cs" />
+    <Compile Include="Objects\GameObjectSlot.cs" />
+    <Compile Include="Rooms\WorldScreen.cs" />
+    <Compile Include="SaveTag.cs" />
+    <Compile Include="Terraforming\WorldArgs.cs" />
+    <Compile Include="TextInput.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Modules\Towns\Control\ControlTown.cs" />
+    <Compile Include="Modules\Towns\Network\Packets\PacketAddJob.cs" />
+    <Compile Include="Modules\Towns\Network\Packets\PacketDeleteStockpile.cs" />
+    <Compile Include="Modules\Towns\Network\Packets\PacketCreateStockpile.cs" />
+    <Compile Include="Modules\Towns\Network\TownsPacketHandler.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\HaulingJob.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\Stockpile.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\StockpileManager.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\StockpileTool.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\UIStockpiles.cs" />
+    <Compile Include="Modules\Towns\Town.cs" />
+    <Compile Include="Modules\Towns\TownJob.cs" />
+    <Compile Include="Modules\Towns\TownJobManager.cs" />
+    <Compile Include="Modules\Towns\TownJobStep.cs" />
+    <Compile Include="Modules\Towns\TownsManager.cs" />
+    <Compile Include="Modules\Towns\TownUI.cs" />
+    <Compile Include="Modules\Towns\UI\UIHudPanel.cs" />
+    <Compile Include="Modules\Towns\UI\UITowns.cs" />
+    <Compile Include="UI\ActionBar.cs" />
+    <Compile Include="UI\Bars\Bar.cs" />
+    <Compile Include="UI\CharacterCreation\ButtonColor.cs" />
+    <Compile Include="UI\CharacterCreation\CharacterColors.cs" />
+    <Compile Include="UI\CharacterCreation\CharacterCustomization.cs" />
+    <Compile Include="UI\CharacterCreation\ColoredRectangle.cs" />
+    <Compile Include="UI\CharacterCreation\ColorPickerWindow.cs" />
+    <Compile Include="UI\CharacterCreation\ColorPicker.cs" />
+    <Compile Include="Modules\Crafting\UI\CraftInterfaceNew.cs" />
+    <Compile Include="UI\Crafting\ItemPicker.cs" />
+    <Compile Include="UI\Crafting\ReactionInterface.cs" />
+    <Compile Include="UI\Crafting\MaterialPicker.cs" />
+    <Compile Include="UI\Crafting\CraftWindow.cs" />
+    <Compile Include="UI\Crafting\ReagentPanel.cs" />
+    <Compile Include="UI\Crafting\Smeltery\SmelteryInterface.cs" />
+    <Compile Include="UI\Crafting\Smeltery\SmeltingWindow.cs" />
+    <Compile Include="Modules\Construction\UI\StructureWindow.cs" />
+    <Compile Include="Modules\Construction\UI\ConstructionsWindow.cs" />
+    <Compile Include="UI\BuildingsWindow.cs" />
+    <Compile Include="UI\CameraWidget.cs" />
+    <Compile Include="UI\ConsoleBoxAsync.cs" />
+    <Compile Include="UI\ConstructionWindow.cs" />
+    <Compile Include="UI\Construction2Window.cs" />
+    <Compile Include="UI\Construction3Window.cs" />
+    <Compile Include="UI\ContainerWindow.cs" />
+    <Compile Include="UI\CraftingTooltip.cs" />
+    <Compile Include="UI\DialogLoading.cs" />
+    <Compile Include="UI\Editor\ObjectSpawnTool.cs" />
+    <Compile Include="UI\Editor\TerrainWindow.cs" />
+    <Compile Include="UI\Hud\ChatOld.cs" />
+    <Compile Include="UI\Context\UIContextActions.cs" />
+    <Compile Include="UI\MainMenu\GameModeWindow.cs" />
+    <Compile Include="UI\Online\CharacterPanel.cs" />
+    <Compile Include="UI\PanelLabeled.cs" />
+    <Compile Include="UI\RandomizeButton.cs" />
+    <Compile Include="UI\Settings\CameraSettings.cs" />
+    <Compile Include="UI\Settings\ControlsSettings.cs" />
+    <Compile Include="UI\Settings\InterfaceSettings.cs" />
+    <Compile Include="UI\Settings\VideoSettings.cs" />
+    <Compile Include="UI\Settings\GraphicsSettings.cs" />
+    <Compile Include="UI\SlotCustom.cs" />
+    <Compile Include="UI\SlotGeneric.cs" />
+    <Compile Include="UI\SlotDefault.cs" />
+    <Compile Include="UI\Popup.cs" />
+    <Compile Include="UI\Context\ContextMenuManager.cs" />
+    <Compile Include="UI\BuildWindow.cs" />
+    <Compile Include="UI\Context\ContextMenu2.cs" />
+    <Compile Include="UI\CraftingEx.cs" />
+    <Compile Include="UI\CraftingWindow2.cs" />
+    <Compile Include="UI\CraftingWindow.cs" />
+    <Compile Include="Rooms\Editor\UI\EditorUI.cs" />
+    <Compile Include="UI\Editor\Bldg.cs" />
+    <Compile Include="UI\Editor\ControlBlocksWindow.cs" />
+    <Compile Include="UI\Editor\BldgLoadWindow.cs" />
+    <Compile Include="UI\Editor\EditorOperation.cs" />
+    <Compile Include="UI\Editor\ObjectsWindow.cs" />
+    <Compile Include="UI\Hud\HotBar.cs" />
+    <Compile Include="UI\HScrollbar.cs" />
+    <Compile Include="UI\DesignUI.cs" />
+    <Compile Include="UI\FpsCounter.cs" />
+    <Compile Include="UI\IInterfaceable.cs" />
+    <Compile Include="UI\INameplateable.cs" />
+    <Compile Include="UI\Inventory\InventorySlot.cs" />
+    <Compile Include="UI\JobBoardWindow.cs" />
+    <Compile Include="UI\LoadingBox.cs" />
+    <Compile Include="UI\LobbyWindow.cs" />
+    <Compile Include="UI\MenuStrip.cs" />
+    <Compile Include="UI\MenuStripItem.cs" />
+    <Compile Include="UI\Online\MultiplayerWindow.cs" />
+    <Compile Include="UI\NpcJobsWindow.cs" />
+    <Compile Include="UI\ListBox.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\Nameplate.cs" />
+    <Compile Include="UI\NeedsWindow.cs" />
+    <Compile Include="UI\SlotGridNew.cs" />
+    <Compile Include="UI\SpeechBubble.cs" />
+    <Compile Include="UI\TableScrollable.cs" />
+    <Compile Include="UI\TableNew.cs" />
+    <Compile Include="UI\Table.cs" />
+    <Compile Include="UI\WindowCamera.cs" />
+    <Compile Include="UI\WindowEntityInterface.cs" />
+    <Compile Include="UI\WorldSelection\CharacterBrowser.cs" />
+    <Compile Include="UI\WorldSelection\MapPopUp.cs" />
+    <Compile Include="UI\WorldSelection\MutatorBrowser.cs" />
+    <Compile Include="UI\WorldSelection\NewWorldWindow.cs" />
+    <Compile Include="UI\JobWindow.cs" />
+    <Compile Include="UI\NpcInfoWindow.cs" />
+    <Compile Include="UI\OwnershipWindow.cs" />
+    <Compile Include="UI\PanelList.cs" />
+    <Compile Include="UI\PanelSkills.cs" />
+    <Compile Include="UI\PopupManager.cs" />
+    <Compile Include="UI\ProjectsWindow.cs" />
+    <Compile Include="UI\QuickBar.cs" />
+    <Compile Include="UI\RenameWorldWindow.cs" />
+    <Compile Include="UI\ScrollableBox.cs" />
+    <Compile Include="UI\Slider.cs" />
+    <Compile Include="UI\ScrollableList.cs" />
+    <Compile Include="UI\SlotGrid.cs" />
+    <Compile Include="UI\TestWindow.cs" />
+    <Compile Include="Modules\Towns\UI\TownJobEditWindow.cs" />
+    <Compile Include="Modules\Towns\UI\UIFinishedJobs.cs" />
+    <Compile Include="Modules\Towns\UI\UITownJobs.cs" />
+    <Compile Include="Modules\Towns\UI\TownJobsWindow.cs" />
+    <Compile Include="UI\UIConstructionFrame.cs" />
+    <Compile Include="UI\UIInventory.cs" />
+    <Compile Include="Net\Server\ServerUI.cs" />
+    <Compile Include="UI\Hud\UnitFrame.cs" />
+    <Compile Include="UI\VScrollbar.cs" />
+    <Compile Include="UI\SelectCharacterWindow.cs" />
+    <Compile Include="UI\LogWindow.cs" />
+    <Compile Include="UI\FloatingBar.cs" />
+    <Compile Include="UI\FloatingText.cs" />
+    <Compile Include="UI\CharacterCreation\NewCharacterWindow.cs" />
+    <Compile Include="UI\LandscapingWindow.cs" />
+    <Compile Include="UI\ElevationWidget.cs" />
+    <Compile Include="UI\Inventory\InvWindow.cs" />
+    <Compile Include="UI\DebugQueryWindow.cs" />
+    <Compile Include="UI\DrawListViewItemEventArgs.cs" />
+    <Compile Include="UI\ListViewGroup.cs" />
+    <Compile Include="UI\ListViewGroupCollection.cs" />
+    <Compile Include="UI\ListViewItem.cs" />
+    <Compile Include="UI\ListView.cs" />
+    <Compile Include="UI\ListViewItemCollection.cs" />
+    <Compile Include="UI\SlotWithText.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\SpeechBubbleOld.cs" />
+    <Compile Include="UI\SplitStackWindow.cs" />
+    <Compile Include="UI\StructuresWindowOld.cs" />
+    <Compile Include="UI\SuperDataView.cs" />
+    <Compile Include="UI\ThoughtsWindow.cs" />
+    <Compile Include="UI\WorldSelection\WorldScreenUI.cs" />
+    <Compile Include="UI\WorldSelection\WorldBrowser.cs" />
+    <Compile Include="UndoableCollection.cs" />
+    <Compile Include="Visualizations\BlockCacheEntry.cs" />
+    <Compile Include="Visualizations\Isometric.cs" />
+    <Compile Include="WindowsHook.cs" />
+    <Compile Include="Timer2.cs" />
+    <Compile Include="Terraforming\Cell.cs" />
+    <Compile Include="Rooms\LoadingScreen.cs" />
+    <Compile Include="Operand.cs" />
+    <Compile Include="ISlottable.cs" />
+    <Compile Include="ProgressOld.cs" />
+    <Compile Include="Sprite.cs" />
+    <Compile Include="UI\AboutWindow.cs" />
+    <Compile Include="UI\ShortcutMenu.cs" />
+    <Compile Include="UI\ControlCollection.cs" />
+    <Compile Include="UI\IconButton.cs" />
+    <Compile Include="UI\DialogBlock.cs" />
+    <Compile Include="UI\DrawMode.cs" />
+    <Compile Include="UI\GroupBox.cs" />
+    <Compile Include="UI\Hud\Hud.cs" />
+    <Compile Include="UI\HelpWindow.cs" />
+    <Compile Include="UI\ListItem.cs" />
+    <Compile Include="UI\TextBox.cs" />
+    <Compile Include="UI\ToolstripItemCollection.cs" />
+    <Compile Include="UI\Toolstrip.cs" />
+    <Compile Include="UI\RadioButton.cs" />
+    <Compile Include="UI\ListControl.cs" />
+    <Compile Include="UI\MouseEventArgs.cs" />
+    <Compile Include="UI\ObjectCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\ToolstripButton.cs" />
+    <Compile Include="UI\ToolstripItem.cs" />
+    <Compile Include="UI\Tooltip.cs" />
+    <Compile Include="UI\TrackBar.cs" />
+    <Compile Include="UI\DebugWindow.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="Control\IKeyEventHandler.cs" />
+    <Compile Include="Control\DefaultTool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Control\ToolManager.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="TimerArgs.cs" />
+    <Compile Include="Timer.cs" />
+    <Compile Include="ISingleton.cs" />
+    <Compile Include="Rooms\MainScreen.cs" />
+    <Compile Include="Rooms\ScreenManager.cs" />
+    <Compile Include="Terraforming\PerlinArgs.cs" />
+    <Compile Include="UI\InteractionBar.cs" />
+    <Compile Include="UI\BorderStyle.cs" />
+    <Compile Include="UI\ButtonBase.cs" />
+    <Compile Include="UI\CheckBox.cs" />
+    <Compile Include="UI\Icon.cs" />
+    <Compile Include="UI\DragDropManager.cs" />
+    <Compile Include="UI\CharacterWindow.cs" />
+    <Compile Include="UI\IActivatable.cs" />
+    <Compile Include="UI\ICloseable.cs" />
+    <Compile Include="UI\IDropTarget.cs" />
+    <Compile Include="UI\PictureBox.cs" />
+    <Compile Include="UI\ITooltippable.cs" />
+    <Compile Include="UI\Label.cs" />
+    <Compile Include="UI\IScrollable.cs" />
+    <Compile Include="UI\Control.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\MainMenu\MainMenuWindow.cs" />
+    <Compile Include="UI\MessageBox.cs" />
+    <Compile Include="UI\Notification.cs" />
+    <Compile Include="UI\NotificationArea.cs" />
+    <Compile Include="UI\Panel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\ScrollEventArgs.cs" />
+    <Compile Include="UI\Settings\SettingsWindow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Size.cs" />
+    <Compile Include="UI\SkillsWindow.cs" />
+    <Compile Include="UI\Slot.cs" />
+    <Compile Include="UI\TooltipManager.cs" />
+    <Compile Include="UI\IngameMenu.cs" />
+    <Compile Include="Camera.cs" />
+    <Compile Include="CameraGlobal.cs" />
+    <Compile Include="Terraforming\Chunk.cs" />
+    <Compile Include="Control\Controller.cs" />
+    <Compile Include="Coords.cs" />
+    <Compile Include="IClickable.cs" />
+    <Compile Include="IMouseoverable.cs" />
+    <Compile Include="Terraforming\Generator.cs" />
+    <Compile Include="Terraforming\Map.cs" />
+    <Compile Include="UI\WindowManager.cs" />
+    <Compile Include="Components\Component.cs" />
+    <Compile Include="Control\Player.cs" />
+    <Compile Include="Helpers\PriorityQueue.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Game1.cs" />
+    <Compile Include="Rooms\Ingame.cs" />
+    <Compile Include="Rooms\GameScreen.cs" />
+    <Compile Include="Blocks\Block.cs" />
+    <Compile Include="UI\Button.cs" />
+    <Compile Include="UI\ComboBox.cs" />
+    <Compile Include="UI\Element.cs" />
+    <Compile Include="UI\UIEventArgs.cs" />
+    <Compile Include="UI\FpsCounterOld.cs" />
+    <Compile Include="UI\UIManager.cs" />
+    <Compile Include="UI\UIMessage.cs" />
+    <Compile Include="UI\Window.cs" />
+    <Compile Include="UI\UICloseButton.cs" />
+    <Compile Include="WorldPosition.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game.ico" />
+    <Content Include="GameThumbnail.png" />
+    <Compile Include="UI\DrawableInterfaceElement.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Start-a-Town!Content\Start-a-Town!Content.contentproj">
+      <Name>Start_a_Town_Content</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Xna.Framework.4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft XNA Framework Redistributable 4.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <Compile Include="Modules\Towns\Housing\House.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Components\Crafting\ToolFilters\" />
+    <Folder Include="UI\Town\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>

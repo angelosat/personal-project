@@ -1,0 +1,680 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Start_a_Town_.Components.Crafting;
+using Start_a_Town_.Graphics;
+using Start_a_Town_.UI;
+using Start_a_Town_.Net;
+using Start_a_Town_.Blocks;
+
+namespace Start_a_Town_
+{
+    class BlockBed : Block
+    {
+        //public enum Part { Bottom = 0x0, Top = 0x1 }
+        public enum Part { Top = 0x0, Bottom = 0x1 }
+
+        public override Material GetMaterial(byte blockdata)
+        {
+            return MaterialDefOf.LightWood;
+        }
+        AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
+        AtlasDepthNormals.Node.Token[][] Parts;
+        public BlockBed():base(Block.Types.Bed, 0f, 1f, false, true)
+        {
+            //this.AssetNames = "bed/bedslimbottom, bed/bedslimtop";
+            //this.Material = Material.LightWood;
+            //this.MaterialType = MaterialType.Wood;
+            this.Furniture = FurnitureDefOf.Bed;
+            //this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
+            this.BuildProperties = new BuildProperties(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
+            this.Recipe = new BlockRecipe(
+                Reaction.Reagent.Create(
+                    new Reaction.Reagent(
+                        "Base",
+                        Reaction.Reagent.IsOfSubType(ItemSubType.Planks),
+                        Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
+                    new BlockRecipe.Product(this),
+                    ToolAbilityDef.Building);
+            Towns.Constructions.ConstructionsManager.Furniture.Add(this.Recipe);
+            this.TopParts = new AtlasDepthNormals.Node.Token[] {
+                Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
+                Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
+                Block.Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
+                Block.Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal")
+            };
+            this.BottomParts = new AtlasDepthNormals.Node.Token[] {
+                Block.Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
+                Block.Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
+                Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
+                Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal")
+            };
+            //this.TopParts = new AtlasDepthNormals.Node.Token[] {
+
+            //    Block.Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
+            //    Block.Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
+            //    Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
+            //    Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
+            //};
+            //this.BottomParts = new AtlasDepthNormals.Node.Token[] {
+            //    Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
+            //    Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
+            //    Block.Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
+            //    Block.Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
+            //};
+            this.Variations.Add(this.BottomParts.First());
+           
+
+            this.Parts = new AtlasDepthNormals.Node.Token[2][];
+            //this.Parts[0] = this.BottomParts;
+            //this.Parts[1] = this.TopParts;
+            this.Parts[0] = this.TopParts;
+            this.Parts[1] = this.BottomParts;
+            this.UtilitiesProvided.Add(Utility.Types.Sleeping);
+        }
+        //public override bool IsDeconstructable => true;
+        public override bool IsRoomBorder => false;
+        public override bool IsStandableOn => false;
+        public override float GetHeight(byte data, float x, float y)
+        {
+            return 0.5f;
+        }
+
+        public override bool Multi
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public override LootTable GetLootTable(byte data)
+        {
+            var table =
+                new LootTable(
+                    //new Loot(() => Components.Materials.Planks.CreateFrom(this.GetMaterial(data)))
+                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Planks, this.GetMaterial(data)))
+
+                    );
+            return table;
+        }
+        public override Dictionary<Vector3, byte> GetParts(Vector3 global, int orientation) // TODO: depend on orientation
+        {
+            var dic = new Dictionary<Vector3, byte>();
+            //var bottom = global;
+            //Vector3 top;
+            //switch (orientation)
+            //{
+            //    case 1:
+            //        top = global - Vector3.UnitY;
+            //        break;
+
+            //    case 2:
+            //        top = global + Vector3.UnitX;
+            //        break;
+
+            //    case 3:
+            //        top = global + Vector3.UnitY;
+            //        break;
+
+            //    default: 
+            //        top = global - Vector3.UnitX;
+            //        break;
+            //}
+            var top = global;
+            var bottom = orientation switch
+            {
+                0 => global + Vector3.UnitX,
+                1 => global + Vector3.UnitY,
+                2 => global - Vector3.UnitX,
+                3 => global - Vector3.UnitY,
+                _ => throw new Exception(),
+            };
+        var bottomdata = GetData(Part.Bottom, orientation);
+            var topdata = GetData(Part.Top, orientation);
+            dic[bottom] = bottomdata;
+            dic[top] = topdata;
+            return dic;
+        }
+        public override List<Vector3> GetParts(IMap map, Vector3 global)
+        {
+            var data = map.GetData(global);
+            Part part;
+            int ori;
+            GetState(data, out part, out ori);
+            //var bottom = global;
+            Vector3 top, bottom;
+            switch (ori)
+            {
+                case 1:
+                    bottom = part == Part.Bottom ? global : global + Vector3.UnitY;
+                    top = bottom - Vector3.UnitY;
+                    break;
+
+                case 2:
+                    bottom = part == Part.Bottom ? global : global - Vector3.UnitX;
+                    top = bottom + Vector3.UnitX;
+                    break;
+
+                case 3:
+                    bottom = part == Part.Bottom ? global : global - Vector3.UnitY;
+                    top = bottom + Vector3.UnitY;
+                    break;
+
+                default:
+                    bottom = part == Part.Bottom ? global : global + Vector3.UnitX;
+                    top = bottom - Vector3.UnitX;
+                    break;
+            }
+            return new List<Vector3>() { top, bottom };
+        }
+        public override List<Vector3> GetParts(byte data)
+        {
+            GetState(data, out var part, out var ori);
+            Vector3 top, bottom;
+            Vector3 global = Vector3.Zero;
+            switch (ori)
+            {
+                case 1:
+                    bottom = part == Part.Bottom ? global : global + Vector3.UnitY;
+                    top = bottom - Vector3.UnitY;
+                    break;
+
+                case 2:
+                    bottom = part == Part.Bottom ? global : global - Vector3.UnitX;
+                    top = bottom + Vector3.UnitX;
+                    break;
+
+                case 3:
+                    bottom = part == Part.Bottom ? global : global - Vector3.UnitY;
+                    top = bottom + Vector3.UnitY;
+                    break;
+
+                default:
+                    bottom = part == Part.Bottom ? global : global + Vector3.UnitX;
+                    top = bottom - Vector3.UnitX;
+                    break;
+            }
+            return new List<Vector3>() { top, bottom };
+        }
+        public override IEnumerable<IntVec3> GetParts(byte data, IntVec3 global)
+        {
+            foreach (var p in this.GetParts(data))
+                yield return global + (IntVec3)p;
+        }
+        public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
+        {
+            GetState(data, out var part, out var ori);
+            var token = this.Parts[(int)part][(ori + cameraRotation) % 4];
+            return token;
+        }
+        static public void GetState(byte data, out Part part, out int orientation)
+        {
+            part = (Part)(data & 0x1);
+            orientation = (int)(data & 0x6) >> 1;
+        }
+        static public int GetOrientation(byte data)
+        {
+            return (int)(data & 0x6) >> 1;
+        }
+        static public void GetState(Cell cell, out Part part, out int orientation)
+        {
+            GetState(cell.BlockData, out part, out orientation);
+        }
+        static public void GetState(IMap map, Vector3 global, out Part part, out int orientation)
+        {
+            GetState(map.GetCell(global), out part, out orientation);
+        }
+        static public byte GetData(Part part, int orientation)
+        {
+            byte data = 0;
+            data = (byte)(data | (byte)part);
+            data = (byte)(data | ((byte)orientation << 1));
+            return data;
+        }
+        
+        static public Dictionary<Part, Vector3> GetPartsDic(IMap map, Vector3 global)
+        {
+            var parts = new Dictionary<Part, Vector3>();
+            var partslist = BlockDefOf.Bed.GetParts(map, global);
+            parts[Part.Top] = partslist[0];
+            parts[Part.Bottom] = partslist[1];
+            return parts;
+        }
+        public Dictionary<Part, Vector3> GetPartsDic(byte data)
+        {
+            var parts = new Dictionary<Part, Vector3>();
+            var partslist = this.GetParts(data);
+            parts[Part.Top] = partslist[0];
+            parts[Part.Bottom] = partslist[1];
+            return parts;
+        }
+        public override FurnitureDef GetFurnitureRole(IMap map, IntVec3 global)
+        {
+            return IsTop(map, global) ? this.Furniture : null;
+        }
+
+        private bool IsTop(IMap map, IntVec3 global)
+        {
+            return map.GetBlockEntity(global) is BlockBedEntity;
+        }
+
+        public override void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        {
+            if (!IsValidPosition(map, global, orientation))
+                return;
+            var top = global;
+            //Vector3 bottom = default;
+            //orientation switch
+            //{
+            //    == 0 => bottom = top + Vector3.UnitX
+            //};
+            var bottom = orientation switch
+            {
+                0 => top + Vector3.UnitX,
+                1 => top + Vector3.UnitY,
+                2 => top - Vector3.UnitX,
+                3 => top - Vector3.UnitY,
+                _ => throw new NotImplementedException()
+            };
+            //switch (orientation)
+            //{
+            //    case 0:
+            //        bottom = top + Vector3.UnitX;
+            //        break;
+            //    case 1:
+            //        bottom = top + Vector3.UnitY;
+            //        break;
+            //    case 2:
+            //        bottom = top - Vector3.UnitX;
+            //        break;
+            //    case 3:
+            //        bottom = top - Vector3.UnitY;
+            //        break;
+            //    default: break;
+            //}
+            map.SetBlock(bottom, Block.Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
+            map.SetBlock(top, Block.Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
+            var entity = new BlockBedEntity();
+            map.AddBlockEntity(top, entity);
+            map.Town.AddUtility(Utility.Types.Sleeping, top);
+
+
+
+            //if (!IsValidPosition(map, global, orientation))
+            //    return;
+            //var bottom = global;
+            //var top = new Vector3(0,0,-1);
+            //switch (orientation)
+            //{
+            //    case 0:
+            //        top = bottom - Vector3.UnitX;
+            //        break;
+            //    case 1:
+            //        top = bottom - Vector3.UnitY;
+            //        break;
+            //    case 2:
+            //        top = bottom + Vector3.UnitX;
+            //        break;
+            //    case 3:
+            //        top = bottom + Vector3.UnitY;
+            //        break;
+            //    default: break;
+            //}
+            //map.SetBlock(bottom, Block.Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
+            //map.SetBlock(top, Block.Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
+            //var entity = new BlockBedEntity();
+            //map.AddBlockEntity(top, entity);
+            //// added the below stuff
+            ////entity.Spawn(map, bottom, top);
+            //map.Town.AddUtility(Utility.Types.Sleeping, top);
+
+        }
+        public override void Remove(IMap map, Vector3 global, bool notify = true)
+        {
+            // todo: why call this below? i already have the part vectors
+            // i have replaced that data during the switch section so the getparts isn't working obviously
+            var parts = GetPartsDic(map, global);
+            var top = parts[Part.Top];
+            var bottom = parts[Part.Bottom];
+            map.SetBlock(top, Types.Air, 0, raiseEvent: notify); 
+            map.SetBlock(bottom, Types.Air, 0, raiseEvent: notify);
+            map.RemoveBlockEntity(top);
+            map.RemoveBlockEntity(bottom);
+            //var entity = map.GetBlockEntity(global) as BlockBedEntity;
+            //entity.Despawn();
+            map.Town.RemoveUtility(Utility.Types.Sleeping, top);
+        }
+        protected override void OnRemove(IMap map, Vector3 global)
+        {
+            map.Town.RemoveUtility(Utility.Types.Sleeping, this.GetCenter(map, global));
+        }
+        public override IntVec3 GetCenter(byte data, Vector3 global)
+        {
+            return global + GetPartsDic(data)[Part.Top];
+        }
+        static bool IsValidPositionOld(IMap map, Vector3 global, int orientation)
+        {
+            var positions = new List<Vector3> { global };
+            switch (orientation)
+            {
+                case 0:
+                    positions.Add(global - Vector3.UnitX);
+                    break;
+                case 1:
+                    positions.Add(global - Vector3.UnitY);
+                    break;
+                case 2:
+                    positions.Add(global + Vector3.UnitX);
+                    break;
+                case 3:
+                    positions.Add(global + Vector3.UnitX);
+                    break;
+                default: break;
+            }
+            foreach(var pos in positions)
+                if(map.GetBlock(pos).Type != Types.Air)
+                return false;
+            return true;
+        }
+        public override bool IsValidPosition(IMap map, IntVec3 global, int orientation)
+        {
+            var positions = new List<IntVec3> { global };
+            //switch (orientation)
+            //{
+            //    case 0:
+            //        positions.Add(global - IntVec3.UnitX);
+            //        break;
+            //    case 1:
+            //        positions.Add(global - IntVec3.UnitY);
+            //        break;
+            //    case 2:
+            //        positions.Add(global + IntVec3.UnitX);
+            //        break;
+            //    case 3:
+            //        positions.Add(global + IntVec3.UnitX);
+            //        break;
+            //    default: break;
+            //}
+            positions.Add(orientation switch
+            {
+                0 => global + IntVec3.UnitX,
+                1 => global + IntVec3.UnitY,
+                2 => global - IntVec3.UnitX,
+                3 => global - IntVec3.UnitY,
+                _ => throw new Exception()
+            });
+            foreach (var pos in positions)
+                if (map.GetBlock(pos).Type != Types.Air)
+                    return false;
+            return true;
+        }
+        //[Obsolete]
+        //public override void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
+        //{
+        //    throw new Exception();
+        //    GetState(cell, out var part, out var ori);
+        //    var token = this.Parts[(int)part][ori];
+        //    sb.DrawBlock(Block.Atlas.Texture, screenBounds, token, zoom, fog, Color.White, sunlight, blocklight, depth, this);
+        //}
+        //[Obsolete]
+        //public override void Draw(Vector3 blockcoords, Camera cam, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, Cell cell)
+        //{
+        //    throw new Exception();
+        //    GetState(cell, out var part, out var ori);
+        //    var token = this.Parts[(int)part][ori];
+        //    cam.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, token, cam.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
+        //}
+        //[Obsolete]
+        //public override MyVertex[] Draw(Chunk chunk, Vector3 blockcoords, Camera cam, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, Cell cell)
+        //{
+        //    throw new Exception();
+        //    GetState(cell, out var part, out var ori);
+        //    var token = this.Parts[(int)part][ori];
+        //    return chunk.Canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, cam.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
+        //}
+        //[Obsolete]
+        //public override MyVertex[] Draw(Chunk chunk, Vector3 blockcoords, Camera cam, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        //{
+        //    throw new Exception();
+        //    GetState(data, out var part, out var ori);
+        //    var token = this.Parts[(int)part][(ori + (int)cam.Rotation) % 4];
+        //    return chunk.Canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, cam.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
+        //}
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        {
+            GetState(data, out var part, out var ori);
+            var entity = GetEntity(chunk.Map, blockCoordinates);
+            var col = entity.GetColorFromType();
+            var token = this.Parts[(int)part][(ori + (int)camera.Rotation) % 4];
+            return canvas.NonOpaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, col /*Color.White*/, sunlight, blocklight, depth, this, blockCoordinates);
+        }
+        public override void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
+        {
+            var top = global;
+            var bottom = global + Vector3.UnitX;
+            var bottomSecIndex = (int)cam.Rotation;
+            var topSrcIndex = (int)cam.Rotation;
+
+            switch (orientation)
+            {
+                case 1:
+                    bottom = global + Vector3.UnitY;
+                    bottomSecIndex += 1; //= this.BottomParts[1];
+                    topSrcIndex += 1; //= this.TopParts[1];
+                    break;
+
+                case 2:
+                    bottom = global - Vector3.UnitX;
+                    bottomSecIndex += 2; //= this.BottomParts[2];
+                    topSrcIndex += 2; //= this.TopParts[2];
+                    break;
+
+                case 3:
+                    bottom = global - Vector3.UnitY;
+                    bottomSecIndex += 3; //= this.BottomParts[3];
+                    topSrcIndex += 3; //= this.TopParts[3];
+                    break;
+
+                default: break;
+            }
+            bottomSecIndex %= 4;
+            topSrcIndex %= 4;
+            var topSrc = this.Parts[0][topSrcIndex];
+            var bottomSrc = this.Parts[1][bottomSecIndex];
+
+            var topd = top.GetDrawDepth(map, cam);
+            var bottomd = bottom.GetDrawDepth(map, cam);
+            if (topd > bottomd)
+            {
+                sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+                sb.DrawBlock(Block.Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+            }
+            else
+            {
+                sb.DrawBlock(Block.Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+                sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+            }
+        }
+        public void DrawPreviewOld(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
+        {
+            var bottom = global;
+            var top = global - Vector3.UnitX;
+            var bottomSecIndex = (int)cam.Rotation;
+            var topSrcIndex = (int)cam.Rotation;
+
+            //var bottomSrc = this.BottomParts[0];
+            //var topSrc = this.TopParts[0];
+
+            switch (orientation)
+            {
+                case 1:
+                    top = global - Vector3.UnitY;
+                    bottomSecIndex += 1; //= this.BottomParts[1];
+                    topSrcIndex += 1; //= this.TopParts[1];
+                    break;
+
+                case 2:
+                    top = global + Vector3.UnitX;
+                    bottomSecIndex += 2; //= this.BottomParts[2];
+                    topSrcIndex += 2; //= this.TopParts[2];
+                    break;
+
+                case 3:
+                    top = global + Vector3.UnitY;
+                    bottomSecIndex += 3; //= this.BottomParts[3];
+                    topSrcIndex += 3; //= this.TopParts[3];
+                    break;
+
+                default: break;
+            }
+            bottomSecIndex %= 4;
+            topSrcIndex %= 4;
+            var bottomSrc = this.Parts[0][bottomSecIndex];
+            var topSrc = this.Parts[1][topSrcIndex];
+
+            var topd = top.GetDrawDepth(map, cam);
+            var bottomd = bottom.GetDrawDepth(map, cam);
+            if (topd > bottomd)
+            {
+                sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+                sb.DrawBlock(Block.Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+            }
+            else
+            {
+                sb.DrawBlock(Block.Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+                sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+            }
+        }
+        public override BlockEntity CreateBlockEntity()
+        {
+            return new BlockBedEntity();
+        }
+        public override BlockEntity GetBlockEntity(IMap map, Vector3 global)
+        {
+            var parts = GetPartsDic(map, global);
+            var entity = map.GetBlockEntity(parts[Part.Top]);
+            return entity;
+        }
+       
+        static public BlockBedEntity GetEntity(IMap map, Vector3 global)
+        {
+            var parts = GetPartsDic(map, global);
+            var entity = map.GetBlockEntity<BlockBedEntity>(parts[Part.Top]);
+            return entity;
+        }
+        public override List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
+        {
+            var list = new List<Interaction>();
+            list.Add(new Blocks.Bed.InteractionStartSleep()); // commented out until i figure out how to seperate ai planting job on farmlands and player planting anywher
+            return list;
+        }
+
+        internal override IEnumerable<Vector3> GetOperatingPositions(Cell cell)
+        {
+            //var o = cell.Orientation;
+            byte blockData = cell.BlockData;
+            var parts = this.GetParts(blockData);
+            var o = GetOrientation(blockData);
+            switch (o)
+            {
+                case 2:
+                case 0:
+                    foreach (var pos in parts)
+                    {
+                        yield return pos + Vector3.UnitY;//.Below();
+                        yield return pos - Vector3.UnitY;//.Below();
+                    }
+                    break;
+
+                case 1:
+                case 3:
+                    foreach (var pos in parts)
+                    {
+                        yield return pos + Vector3.UnitX;//.Below();
+                        yield return pos - Vector3.UnitX;//.Below();
+                    }
+                    break;
+
+                default:
+                    throw new Exception();
+            }
+        }
+        readonly static IconButton ButtonSetVisitor = new(Icon.Construction) { HoverText = "Set to visitor bed" };
+        readonly static IconButton ButtonUnsetVisitor = new(Icon.Construction, Icon.Cross) { HoverText = "Set to citizen bed" };
+        internal override void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3)
+        {
+            var entity = GetEntity(map, vector3);
+            entity.GetSelectionInfo(info, map, vector3);
+            return;
+
+            var room = map.Town.RoomManager.GetRoomAt(vector3);
+            var t = entity.Type;
+            //UpdateQuickButtons(map, vector3, t);
+
+            //info.AddInfo(
+            //    new GroupBox().AddControlsVertically(
+            //        new Label(() => $"Type: {entity.Type}"),
+            //        new Label(() => $"Owner: {room.Owner?.Name ?? "none"}") { AutoSize = true }// { Width = 256 }
+            //        ));
+            info.AddInfo(new Label(() => $"Type: {entity.Type}"));
+            info.AddInfo(new Label(() => $"Owner: {room.Owner?.Name ?? "none"}") { AutoSize = true });
+        }
+
+        private static void UpdateQuickButtons(IMap map, Vector3 vector3, BlockBedEntity.Types t)
+        {
+            switch (t)
+            {
+                case BlockBedEntity.Types.Citizen:
+                    UISelectedInfo.RemoveButton(ButtonUnsetVisitor);
+                    UISelectedInfo.AddButton(ButtonSetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Visitor), (map, vector3));
+                    return;
+
+                case BlockBedEntity.Types.Visitor:
+                    UISelectedInfo.RemoveButton(ButtonSetVisitor);
+                    UISelectedInfo.AddButton(ButtonUnsetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Citizen), (map, vector3));
+                    return;
+
+                default:
+                    throw new Exception();
+            }
+        }
+        public static void SetType(IMap map, IntVec3 vector3, BlockBedEntity.Types type)
+        {
+            GetEntity(map, vector3).Type = type;
+            map.InvalidateCell(vector3);
+            if (map.IsActive)
+                if (UISelectedInfo.GetSelected().SingleOrDefault() is TargetArgs target && target.Type == TargetType.Position && (IntVec3)target.Global == vector3)
+                    UpdateQuickButtons(map, vector3, type);
+        }
+        static class Packets
+        {
+            static readonly int PacketChangeType;
+            static Packets()
+            {
+                PacketChangeType = Network.RegisterPacketHandler(SetType);
+            }
+
+            internal static void SetType(IObjectProvider net, PlayerData playerData, IntVec3 vector3, BlockBedEntity.Types type)
+            {
+                if (net is Server)
+                    BlockBed.SetType(net.Map, vector3, type);
+                net.GetOutgoingStream().Write(PacketChangeType, playerData.ID, vector3, (int)type);
+            }
+           
+            private static void SetType(IObjectProvider net, BinaryReader r)
+            {
+                var player = net.GetPlayer(r.ReadInt32());
+                var vec = r.ReadIntVec3();
+                var type = (BlockBedEntity.Types)r.ReadInt32();
+                if (net is Client)
+                    BlockBed.SetType(net.Map, vec, type);
+                else
+                    SetType(net, player, vec, type);
+            }
+        }
+    }
+}

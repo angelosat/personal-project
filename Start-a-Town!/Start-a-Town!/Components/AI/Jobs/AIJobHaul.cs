@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Start_a_Town_.AI
+{
+    class AIJobHaul : AIJob
+    {
+        public override void Reserve(GameObject actor)
+        {
+            //var prereqs = actor.Map.Town.ConstructionsManager.FindJob(actor);
+
+        }
+
+        public override object Clone()
+        {
+            return new AIJobHaul();
+        }
+    }
+}

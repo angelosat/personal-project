@@ -1,0 +1,191 @@
+﻿using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace Start_a_Town_.Components
+{
+    class AttributesComponent : EntityComponent
+    {
+        public override string ComponentName
+        {
+            get
+            {
+                return "Attributes";
+            }
+        }
+
+        //public AttributeCollection Attributes { get { return (AttributeCollection)this["Attributes"]; } set { this["Attributes"] = new AttributeCollection(); } }
+        public AttributeStat[] Attributes;
+
+
+        public AttributesComponent(ItemDef def)
+        {
+            var atts = def.ActorProperties.Attributes;
+            var count = atts.Length;
+            this.Attributes = new AttributeStat[count];
+            for (int i = 0; i < count; i++)
+            {
+                this.Attributes[i] = new AttributeStat(atts[i]);
+            }
+        }
+        public AttributesComponent()
+        {
+            //this.Attributes = new AttributeCollection();
+        }
+
+        public AttributesComponent(params AttributeStat[] atts)
+            : this()
+        {
+            var count = atts.Length;
+            this.Attributes = new AttributeStat[count];
+            for (int i = 0; i < count; i++)
+            {
+                this.Attributes[i] = atts[i].Clone();
+            }
+        }
+        public AttributesComponent(params AttributeDef[] atts)
+            : this()
+        {
+            this.Attributes = new AttributeStat[atts.Length];
+            for (int i = 0; i < atts.Length; i++)
+            {
+                this.Attributes[i] = new AttributeStat(atts[i]);
+            }
+        }
+        
+        public override void Tick(GameObject parent)
+        {
+            //this.Attributes.Update(parent);
+            for (int i = 0; i < this.Attributes.Length; i++)
+            {
+                this.Attributes[i].Update(parent);
+            }
+        }
+
+        public override object Clone()
+        {
+            return new AttributesComponent(this.Attributes);
+
+            //IEnumerable<AttributeStat> newAtts = this.Attributes.Select(foo => foo.Clone() as AttributeStat);
+            //AttributeStat[] atts = newAtts.ToArray();
+            //AttributesComponent c = new AttributesComponent()
+            //{
+            //    Properties = new ComponentPropertyCollection() { { "Attributes", new AttributeCollection(atts) } }
+            //};
+            //return c;
+        }
+
+        public override string GetStats()
+        {
+            return this.Attributes.ToString();
+        }
+
+        //public AttributeDef GetAttribute(AttributeDef.Types type)
+        //{
+        //    return this.Attributes.FirstOrDefault(att => att.ID == type);
+        //}
+        public AttributeStat GetAttribute(AttributeDef def)
+        {
+            return this.Attributes.FirstOrDefault(att => att.Def == def);
+        }
+
+        static public AttributeStat GetAttribute(GameObject parent, AttributeDef type)
+        {
+            var comp = parent.GetComponent<AttributesComponent>();
+            if (comp == null)
+                return null;
+            return comp.Attributes.FirstOrDefault(att => att.Def == type);
+        }
+        static public float GetValueOrDefault(GameObject parent, AttributeDef type, float dflt)
+        {
+            var comp = parent.GetComponent<AttributesComponent>();
+            if (comp == null)
+                return dflt;
+            var found = comp.Attributes.FirstOrDefault(att => att.Def == type);
+            return found != null ? found.Level : dflt;
+        }
+        TableScrollableCompactNewNew<AttributeStat> GUITableAttributes = new TableScrollableCompactNewNew<AttributeStat>(8)
+                .AddColumn("name", "", 64, a => new Label(a.Def.Label)
+                {
+                    TooltipFunc = (t) =>
+                    {
+                        t.AddControlsBottomLeft(
+                            new Label(a.Def.Description),
+                            a.Progress.GetControl());
+                    }
+                })
+                .AddColumn("value", "", (int) UIManager.Font.MeasureString("###").X, a => new Label(() => a.Level.ToString()));
+        public override GroupBox GetGUI()
+        {
+            GUITableAttributes.ClearItems();
+            GUITableAttributes.AddItems(this.Attributes);
+            return GUITableAttributes;
+        }
+        internal override void GetInterface(GameObject gameObject, Control box)
+        {
+            GUITableAttributes.ClearItems();
+            GUITableAttributes.AddItems(this.Attributes);
+            box.AddControlsBottomLeft(GUITableAttributes);
+            return;
+            foreach (var a in this.Attributes)
+                box.AddControlsBottomLeft(a.GetControl());
+        }
+        
+        internal Control GetUI()
+        {
+            throw new Exception();
+            var table = new TableScrollableCompactNew<AttributeStat>(this.Attributes.Length)
+               .AddColumn(null, "name", 80, s => new Label(s.Def.Name), 0)
+               .AddColumn(null, "value", 16, s => new Label() { TextFunc = () => s.Level.ToString() }, 0);
+
+            table.AddItems(this.Attributes);
+            return table;
+
+            var container = new GroupBox();
+            foreach (var a in this.Attributes)
+                container.AddControlsBottomLeft(a.GetControl());
+            return container;
+        }
+        public AttributesComponent Randomize()
+        {
+            var range = 20;
+            var average = range / 2;
+            var values = RandomHelper.NextNormalsBalanced(this.Attributes.Length);
+            for (int i = 0; i < this.Attributes.Length; i++)
+            {
+                var item = this.Attributes[i];
+                item.Level = (int)(average * (1 + values[i]));
+            }
+            return this;
+        }
+        internal override void AddSaveData(SaveTag tag)
+        {
+            this.Attributes.SaveNewBEST(tag, "Attributes");
+        }
+        internal override void Load(GameObject parent, SaveTag tag)
+        {
+            //this.Attributes.TryLoadMutable(tag, "Attributes");
+            this.Attributes.Sync(tag, "Attributes");
+        }
+        public override void Write(BinaryWriter w)
+        {
+            this.Attributes.Write(w);
+        }
+        public override void Read(BinaryReader r)
+        {
+            this.Attributes.Read(r);
+        }
+        public class Props : ComponentProps
+        {
+            public override Type CompType => typeof(AttributesComponent);
+            public AttributeDef[] Items;
+            public Props(params AttributeDef[] defs)
+            {
+                this.Items = defs;
+            }
+        }
+    }
+}

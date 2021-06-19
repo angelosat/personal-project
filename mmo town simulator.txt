@@ -1,0 +1,8 @@
+heroes spawn in from edge, activate waypoint if built
+heroes set their hearthstone in the inn if they like the town(?)
+equipment, alchemist, repair vendor
+heroes respawn as ghosts in graveyard and go to buy ressurection at healer
+healer also sells healing and buffs
+vendors can send heroes for quests to bring back materials
+junk sold to vendors can be recycled (metal is smelted, wood is used as fuel)
+vendors can be pickpocketed, recruit guards to help prevent that

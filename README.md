@@ -1,7 +1,7 @@
 # personal-project
 * Start-a-town! (working title)
-* Angelo Tsimidakis personal project preview code
 * 2d isometric pixel-art voxel colony sim
+* Angelo Tsimidakis personal project preview code
 * Work in progress
 
 # History

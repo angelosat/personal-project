@@ -9,3 +9,5 @@ Intrigued by game concepts like The Sims and Dwarf Fortress, began playing aroun
 
 * Systems being iterated upon as needs arise
 * Being worked on on and off as a hobby project
+* Still a lot of legacy code from early iterations that is slowly phased out/refactored, in order to not break everything at once
+

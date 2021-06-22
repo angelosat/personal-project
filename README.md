@@ -50,4 +50,8 @@ Realizing how overscoped this project is for one person, I rationalized continui
 * Graphical elements
 * Implemented most basic controls such as buttons, tick boxes, sliders, progress bars, scroll bars, scrollable/collapsible lists/tables
 
-
+# Rendering
+* Mesh building by chunk and by horizontal slice
+* Custom HLSL shader with custom vertex declarations
+* Pseudo-3D effects using depth textures and z-buffer manipulation
+* Effects like per-side cell illumination, fog, water

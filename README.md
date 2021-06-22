@@ -38,7 +38,8 @@ Realizing how overscoped this project is for one person, I rationalized continui
 * 2D skeletal animation system (bone system, layers, weights, events)
 * Gameplay (jobs, crafting, inventory, gear, stats, interactions, materials, definition driven)
 
-# Voxel world structure
-## Bounded map divided by chunks
-## Perlin noise terrain generation
-## Cell based light diffusion
+* Voxel world structure
+** Bounded map divided by chunks
+** Perlin noise terrain generation
+** Cell based light diffusion
+** Area/room detection, pathable regions

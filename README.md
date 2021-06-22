@@ -22,3 +22,18 @@ Realizing how overscoped this project is for one person, I rationalized continui
 
 # Current state
 * Still a lot of legacy code from early iterations that is slowly phased out/refactored, in order to not break everything at once
+
+# Highlights
+* Voxel-based Isometric pixel art Colony Sim (Rimworld + Minecraft)
+* Component based (scalable design)
+* Custom engine (every system built in C# from the ground up with just Microsoft XNA)
+* Networking (custom built UDP framework, server side, lockstep, client prediction)
+* UI Framework (window manager system inspired by Transport Tycoon / OpenTTD)
+* Procedural Generation (terrain, perlin noise)
+* Voxel grid (3D, chunk based, light diffusion, room/area detection)
+* Shaders (HLSL, cell illumination, fog, water, palette swapping, z-buffer manipulation)
+* Pathfinding (Rimworld’s regions implemented for a 3D graph, gridless traversal)
+* AI (behavior trees, data driven by personality, needs, assigned jobs)
+* Physics engine (gridless entity movement, hitboxes, collisions, particles)
+* 2D skeletal animation system (bone system, layers, weights, events)
+* Gameplay (jobs, crafting, inventory, gear, stats, interactions, materials, definition driven)

@@ -55,3 +55,9 @@ Realizing how overscoped this project is for one person, I rationalized continui
 * Custom HLSL shader with custom vertex declarations
 * Pseudo-3D effects using depth textures and z-buffer manipulation
 * Effects like per-side cell illumination, fog, water
+
+# Networking
+* Custom UDP networking framework
+* Server-side game logic
+* Lockstep
+* Client prediction

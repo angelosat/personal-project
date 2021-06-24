@@ -61,3 +61,7 @@ Realizing how overscoped this project is for one person, I rationalized continui
 * Server-side game logic
 * Lockstep
 * Client prediction
+
+# AI
+* Pathfinding using Rimworld-inspired regions system, implemented for a 3D graph
+* Behavior trees using IEnumerable coroutines

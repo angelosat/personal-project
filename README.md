@@ -68,6 +68,19 @@ Realizing how overscoped this project is for one person, I rationalized continui
 
 # Physics
 * Gridless entity movement
-* Terrain material physics properties (friction)
+* Terrain material physics properties (ie. friction)
 * Bounding boxes collision detection
 * Particle system
+
+# Animations
+* 2D skeletal animations
+* Bone system 
+* Weighted animations, layered
+* Events
+
+# Gameplay systems
+* Crafting system (inspired by Dwarf Fortress reactions)
+* Inventory/gear system
+* Stats/attributes
+* Needs, mood, personality
+* Experienced based skill system

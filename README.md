@@ -65,3 +65,9 @@ Realizing how overscoped this project is for one person, I rationalized continui
 # AI
 * Pathfinding using Rimworld-inspired regions system, implemented for a 3D graph
 * Behavior trees using IEnumerable coroutines
+
+# Physics
+* Gridless entity movement
+* Terrain material physics properties (friction)
+* Bounding boxes collision detection
+* Particle system

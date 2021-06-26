@@ -14,14 +14,8 @@ Despite being overscoped, continued working on this project as a hobby while dri
 2. Develop scalable and modular components that can be reused for a smaller game, should an idea come up
 3. Develop skills to be utilized for finding a job as a game (ideally) developer, in case a career change was in order
 
-#
-* Systems being iterated upon as needs arise
-* Being worked on on and off as a hobby project
-
-# Workflow
-* Iterating on different systems in a rotation in order to prevent burn-out
-
 # Current state
+* Iterating on different systems in a rotation in order to prevent burn-out
 * Still a lot of legacy code from early iterations that is slowly phased out/refactored, in order to not break everything at once
 
 # Highlights

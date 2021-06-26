@@ -24,61 +24,49 @@ Realizing how overscoped this project is for one person, I rationalized continui
 * Still a lot of legacy code from early iterations that is slowly phased out/refactored, in order to not break everything at once
 
 # Highlights
-* Voxel-based Isometric pixel art Colony Sim (Rimworld + Minecraft)
-* Component based (scalable design)
-* Custom engine (every system built in C# from the ground up with just Microsoft XNA)
-* Networking (custom built UDP framework, server side, lockstep, client prediction)
-* UI Framework (window manager system inspired by Transport Tycoon / OpenTTD)
-* Procedural Generation (terrain, perlin noise)
-* Voxel grid (3D, chunk based, light diffusion, room/area detection)
-* Shaders (HLSL, cell illumination, fog, water, palette swapping, z-buffer manipulation)
-* Pathfinding (Rimworld’s regions implemented for a 3D graph, gridless traversal)
-* AI (behavior trees, data driven by personality, needs, assigned jobs)
-* Physics engine (gridless entity movement, hitboxes, collisions, particles)
-* 2D skeletal animation system (bone system, layers, weights, events)
-* Gameplay (jobs, crafting, inventory, gear, stats, interactions, materials, definition driven)
+Εvery system built in C# from the ground up with just Microsoft XNA.
 
-# Voxel world structure
+## Voxel world structure
 * Bounded map divided by chunks
 * Perlin noise terrain generation
 * Cell based light diffusion
 * Area/room detection, pathable regions
 
-# User interface
+## User interface
 * Custom built ui framework
 * Window manager system
 * Graphical elements
 * Implemented most basic controls such as buttons, tick boxes, sliders, progress bars, scroll bars, scrollable/collapsible lists/tables
 
-# Rendering
+## Rendering
 * Mesh building by chunk and by horizontal slice
 * Custom HLSL shader with custom vertex declarations
 * Pseudo-3D effects using depth textures and z-buffer manipulation
 * Effects like per-side cell illumination, fog, water
 
-# Networking
+## Networking
 * Custom UDP networking framework
 * Server-side game logic
 * Lockstep
 * Client prediction
 
-# AI
+## AI
 * Pathfinding using Rimworld-inspired regions system, implemented for a 3D graph
 * Behavior trees using IEnumerable coroutines
 
-# Physics
+## Physics
 * Gridless entity movement
 * Terrain material physics properties (ie. friction)
 * Bounding boxes collision detection
 * Particle system
 
-# Animations
+## Animations
 * 2D skeletal animations
 * Bone system 
 * Weighted animations, layered
 * Events
 
-# Gameplay systems
+## Gameplay systems
 * Crafting system (inspired by Dwarf Fortress reactions)
 * Inventory/gear system
 * Stats/attributes

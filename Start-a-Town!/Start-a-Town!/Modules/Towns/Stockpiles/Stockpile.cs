@@ -782,6 +782,10 @@ namespace Start_a_Town_
         public Stockpile(ZoneManager manager):base(manager)
         {
         }
+        public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions) : base(manager)
+        {
+            this.Positions = new HashSet<IntVec3>(positions);
+        }
         public void GetContextActions(ContextArgs a)
         {
             a.Actions.Add(new ContextAction("Edit stockpile", ToggleInterface));
@@ -905,38 +909,42 @@ namespace Start_a_Town_
         static Window WindowFilters;
         private void ToggleFiltersUI()
         {
+            // TODO: update controls when selecting another stockpile
+            if(WindowFilters is not null && WindowFilters.Tag != this && WindowFilters.IsOpen)
+            {
+                WindowFilters.Client.ClearControls();
+                WindowFilters.Client.AddControls(getGUI());
+                WindowFilters.SetTitle($"{this.UniqueName} settings");
+                WindowFilters.SetTag(this);
+                return;
+            }
             if (WindowFilters == null)
             {
-              
-                WindowFilters = 
-                    GetGUI()
+
+                WindowFilters =
+                    getGUI()
                     .ToWindow("Stockpile settings");
             }
+            WindowFilters.SetTitle($"{this.UniqueName} settings");
+            WindowFilters.SetTag(this);
             WindowFilters.Toggle();
-            //return;
 
-            //UIStockpileFiltersNew.Refresh(this);
-        }
-
-        GroupBox GetGUI()
-        {
-            var box = new GroupBox();
-            box.AddControlsVertically(
-                new GroupBox().AddControlsHorizontally(
-                    //new Label("Priority: "),
-                    //new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 96, p => p.ToString(), syncPriority, () => this.Settings.Priority)),
-                    new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
-                DefaultFilters.GetControl((n, l) => PacketStorageFiltersNew.Send(this, n, l))
-                    .ToPanelLabeled("Fitlers"));
-            return box;
-
-            void syncPriority(StoragePriority p)
+            GroupBox getGUI()
             {
-                Packets.SyncPriority(this, p);
+                var box = new GroupBox();
+                box.AddControlsVertically(
+                    new GroupBox().AddControlsHorizontally(
+                        new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
+                    DefaultFilters.GetControl((n, l) => PacketStorageFiltersNew.Send(this, n, l))
+                        .ToPanelLabeled("Fitlers"));
+                return box;
+                
+                void syncPriority(StoragePriority p)
+                {
+                    Packets.SyncPriority(this, p);
+                }
             }
         }
-        
-       
 
         StorageSettings IStorage.Settings => this.Settings;
 

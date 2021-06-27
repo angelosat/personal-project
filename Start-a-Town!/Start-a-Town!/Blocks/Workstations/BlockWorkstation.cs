@@ -33,7 +33,9 @@ namespace Start_a_Town_
                         Reaction.Reagent.IsOfMaterialType(MaterialType.Wood),
                         Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
                     new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
+                    ToolAbilityDef.Building)
+            { WorkAmount = 20 };
+
             Towns.Constructions.ConstructionsManager.Production.Add(this.Recipe);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }

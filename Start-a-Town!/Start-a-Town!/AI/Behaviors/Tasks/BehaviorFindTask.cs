@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_.AI.Behaviors.Tasks
 {
@@ -11,11 +6,7 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
     {
         static readonly int TimerMax = Engine.TicksPerSecond;
         int Timer = TimerMax;
-        //BehaviorPerformTask CurrentBehavior
-        //{
-        //    get { return AIComponent.GetState(this.Actor).CurrentTaskBehavior; }
-        //    set { AIComponent.GetState(this.Actor).CurrentTaskBehavior = value; }
-        //}
+        
         TaskGiver CurrentTaskGiver;
        
 
@@ -31,13 +22,9 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                 this.CleanUp(parent);
                 this.TryForceTask(parent, task, state);
             }
-            //if(state.Task?.IsCancelled ?? false)
-            //{
-            //    this.CleanUp(parent);
-            //}
+           
             if (state.CurrentTaskBehavior != null)
             {
-                //var result = state.CurrentTaskBehavior.Execute(parent, state);
                 var (result, source) = state.CurrentTaskBehavior.Tick(parent, state);
                 switch (result)
                 {
@@ -49,7 +36,7 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                         parent.MoveToggle(false);
 
                         /// LATEST FINDINGS:
-                        /// the problem ended up not being that his call was canceling the interaction at the client, 
+                        /// the problem ended up not being that this call was canceling the interaction at the client, 
                         /// but that the interaction wasn't being serialized properly. its state wasnt synced to the client, and was left as unstarted
                         /// which resulted in the the intearction starting again and re-adding its animation to the entity
                         /// after fixing that, the cancelinteraction now seem to work even after a success
@@ -84,9 +71,7 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                 var stamina = parent.GetResource(ResourceDef.Stamina);
                 var staminaTaskThreshold = 20;
                 var tired = stamina.Value <= staminaTaskThreshold;
-                //if (tired)
-                //    return BehaviorState.Fail;// Success;
-
+               
                 if (this.CurrentTaskGiver != null)
                 {
                     if (tired)
@@ -101,7 +86,6 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                         var bhav = next.Task.CreateBehavior(parent);
                         if (bhav.InitBaseReservations())
                         {
-                            //throw new Exception();
                             string.Format("found followup task from same taskgiver {0}", this.CurrentTaskGiver).ToConsole();
                             //this.CleanUp(parent, state);
                             state.CurrentTaskBehavior = bhav;
@@ -129,12 +113,10 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                     {
                         this.Timer = 0;
 
-                        //var task = this.FindNewTask(parent, state); // TODO: needs optimization
                         var task = this.FindNewTaskNew(parent, state); // TODO: needs optimization
 
                         if (task != null)
                         {
-                            //state.CurrentTask = task;
                             //Start_a_Town_.Modules.AI.Net.PacketTaskUpdate.Send(parent.Net as Net.Server, parent.InstanceID, state.CurrentTaskBehavior.Name);
                             return BehaviorState.Success;
                         }
@@ -152,7 +134,6 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
             if (!bhav.InitBaseReservations())
                 return false;
 
-            //throw new Exception();
             string.Format("found followup task from same taskgiver {0}", this.CurrentTaskGiver).ToConsole();
             //this.CleanUp(parent, state);
             state.CurrentTaskBehavior = bhav;
@@ -169,21 +150,10 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
         }
         private void CleanUp(GameObject parent, AIState state)
         {
-            //AIManager.AIStopMoveNew(parent);
-
-            // TODO: fully stop moving before throwing carried item
-            //var equippedSlot = GearComponent.GetSlot(parent, GearType.Mainhand);
-            //if (equippedSlot.Object != null)
-            //AIManager.Interact(parent, new Components.Interactions.DropEquippedTarget(new TargetArgs(equippedSlot.Object)), TargetArgs.Null);
-
-            //AIManager.Interact(parent, new Components.Interactions.Throw(true), TargetArgs.Null);
-            //AIManager.Interact(parent, new Components.Interactions.DropEquipped(GearType.Mainhand), TargetArgs.Null);
             var actor = parent as Actor;
             if(parent.Carried != null)
                 parent.Interact(new InteractionThrow(true));
-            //if(parent.GetEquipmentSlot(GearType.Mainhand).Object != null)
-            //    parent.Interact(new InteractionDropEquipped(GearType.Mainhand));
-
+           
             if (actor.GetEquipmentSlot(GearType.Mainhand) is Entity item)
             {
                 if (actor.ItemPreferences.IsPreference(item))
@@ -192,9 +162,6 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                     parent.Interact(new InteractionDropEquipped(GearType.Mainhand));
             }
 
-            // todo: drop hauled too
-            //state.CurrentTask.CleanUp(parent);
-            /*state.CurrentTaskBehavior.CleanUp();*/ // pay attention for any problems after commenting this out
             parent.Unreserve();
             state.CurrentTask = null;
             state.LastBehavior = null;
@@ -205,9 +172,6 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
 
         AITask FindNewTaskNew(Actor parent, AIState state)
         {
-            //var givers = parent.GetComponent<NeedsComponent>().NeedsNew.Select(n => n.TaskGiver);
-            //givers = givers.Concat(TaskGiver.EssentialTaskGivers);
-            //givers = parent.IsCitizen ? givers.Concat(TaskGiver.CitizenTaskGivers) : givers.Concat(TaskGiver.VisitorTaskGivers);
             var givers = parent.GetTaskGivers();
 
             foreach (var giver in givers)
@@ -224,13 +188,11 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                     parent.Unreserve();
                     continue;
                 }
-                //state.CurrentTasktask.CreateBehavior(parent); = task;
-                //bhav.GenerateBehaviors();
+
                 state.CurrentTaskBehavior = bhav;
                 this.CurrentTaskGiver = giver;
                 state.CurrentTask = task;
-                //if (CurrentBehavior.Execute(parent, state) == BehaviorState.Running)
-                    return task;
+                return task;
             }
 
             return null;
@@ -244,37 +206,16 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
         public override void Write(System.IO.BinaryWriter w)
         {
             w.Write(this.Timer);
-            //var hasBehav = this.CurrentBehavior != null;
-            //w.Write(hasBehav);
-            //if (!hasBehav)
-            //    return;
-            //w.Write(this.CurrentBehavior.GetType().FullName);
-            //this.CurrentBehavior.Write(w);
-
         }
         public override void Read(System.IO.BinaryReader r)
         {
             this.Timer = r.ReadInt32();
-            //var hasBehav = r.ReadBoolean();
-            //if (!hasBehav)
-            //    return;
-            //var bhavtype = r.ReadString();
-            //this.CurrentBehavior = Activator.CreateInstance(Type.GetType(bhavtype)) as BehaviorPerformTask;
-            //this.CurrentBehavior.Read(r);
         }
         protected override void AddSaveData(SaveTag tag)
         {
             base.AddSaveData(tag);
             tag.Add(this.Timer.Save("Timer"));
-            //if (this.CurrentBehavior != null)
-            //{
-            //    //var bhavtag = new SaveTag(SaveTag.Types.Compound, "Behavior");
-            //    //tag.Add(this.CurrentBehavior.GetType().FullName.Save("TypeName"));
-            //    //tag.Add(this.CurrentBehavior.Save("Behavior"));
-            //    var bhavtag = this.CurrentBehavior.Save("Behavior");
-            //    bhavtag.Add(this.CurrentBehavior.GetType().FullName.Save("TypeName"));
-            //    tag.Add(bhavtag);
-            //}
+            
             if (this.CurrentTaskGiver != null)
             {
                 tag.Add(this.CurrentTaskGiver.GetType().FullName.Save("CurrentTaskGiver")); ;
@@ -285,12 +226,7 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
             base.Load(tag);
 
             tag.TryGetTagValue<int>("Timer", out this.Timer);
-            //tag.TryGetTag("Behavior", t =>
-            //{
-            //    var bhavtype = (string)t["TypeName"].Value;
-            //    this.CurrentBehavior = Activator.CreateInstance(Type.GetType(bhavtype)) as BehaviorPerformTask;
-            //    this.CurrentBehavior.Load(t);
-            //});
+           
             tag.TryGetTagValue<string>("CurrentTaskGiver", t =>
             {
                 this.CurrentTaskGiver = Activator.CreateInstance(Type.GetType(t)) as TaskGiver;
@@ -299,25 +235,11 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
         internal override void MapLoaded(Actor parent)
         {
             this.Actor = parent;
-            //if (this.CurrentBehavior == null)
-            //    return;
-            //this.CurrentBehavior.MapLoaded(parent);
         }
 
         internal void EndCurrentTask(Actor actor)
         {
             this.CleanUp(actor);
         }
-        //internal override void ObjectLoaded(GameObject parent)
-        //{
-        //    var state = AIState.GetState(parent);
-        //    if (state.CurrentTask != null)
-        //        state.CurrentTask.Behavior.ObjectLoaded(parent);
-        //}
-        //internal void EndCurrentTask()
-        //{
-
-        //    //throw new NotImplementedException();
-        //}
     }
 }

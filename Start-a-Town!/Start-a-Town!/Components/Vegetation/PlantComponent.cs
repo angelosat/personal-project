@@ -179,6 +179,8 @@ namespace Start_a_Town_.Components
             var plant = parent as Plant;
             //var props = plant.Def.PlantProperties;
             var props = plant.PlantComponent.PlantProperties;
+            if (props.Growth is null)
+                return false;
             var yield = (int)(this.FruitGrowth.Percentage * props.Growth.MaxYieldHarvest);
             if (yield == 0)
                 return false;

@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Components;
 using Start_a_Town_.Towns.Farming;
 using Start_a_Town_.Graphics;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Blocks
 {
@@ -24,7 +18,6 @@ namespace Start_a_Town_.Blocks
         public BlockFarmland()
             : base(Types.Farmland, GameObject.Types.Farmland)
         {
-            //AssetNames = "farmland1, farmland2";
             this.Textures = new AtlasDepthNormals.Node.Token[2];
             this.Textures[0] = Block.Atlas.Load("blocks/farmland", Map.BlockDepthMap, Block.NormalMap);
             this.Textures[1] = Block.Atlas.Load("blocks/farmlandSowed", Map.BlockDepthMap, Block.NormalMap);
@@ -57,11 +50,6 @@ namespace Start_a_Town_.Blocks
                 Plant(actor.Map, target.Global, dropped);
             else
                 base.OnDrop(actor, dropped, target, amount);
-            return;
-            dropped.GetComponent<Components.Vegetation.PlantableComponent>().PlantAction(actor, target);
-
-            //return;
-            //Plant(actor.Map, target.Global, dropped);
         }
         static public void Plant(IMap map, Vector3 global, GameObject obj)
         {
@@ -70,47 +58,12 @@ namespace Start_a_Town_.Blocks
                 plant.SyncInstantiate(map.Net);
                 plant.SyncSpawn(map, global.Above());
 
-
-            //BlockDefOf.Soil.Place(map, global, 0, map.GetCell(global).Variation, 0);
             var placer = new BlockSoil.Placer();
             placer.Place(map, global);
             map.Town.ZoneManager.GetZoneAt(global)?.Invalidate();
             obj.StackSize--;
-            //return;
-
-            //if (obj == null)
-            //    throw new ArgumentNullException();
-            //if (!obj.TryGetComponent<SeedComponent>(out var seed))
-            //    throw new ArgumentException();
-            //var plantID = seed.PlantDef; //(int)obj.ID;
-            //var entity = new BlockFarmlandEntity(plantID, seed.Level);
-            //map.AddBlockEntity(global, entity);
-            //map.SetCellData(global, 1);
-            //obj.StackSize--;
-            //map.EventOccured(Message.Types.FarmSeedSowed, global);
         }
-        //static public void Plant(IMap map, Vector3 global, GameObject obj)
-        //{
-        //    //var comp = obj.GetComponent<Components.Vegetation.PlantableComponent>();
-
-        //    if (obj == null)
-        //        throw new ArgumentNullException();
-        //    SeedComponent seed;
-        //    if (!obj.TryGetComponent<SeedComponent>(out seed))
-        //        throw new ArgumentException();
-        //    var plantID = (int)seed.Product; //(int)obj.ID;
-        //    //var sproutMax = seed.Level * Engine.TicksPerSecond * 2;// *200; //2;
-        //    var entity = new BlockFarmlandEntity(plantID, seed.Level);
-        //    map.AddBlockEntity(global, entity);
-        //    // change block texure
-        //    //map.GetCell(global).Variation = 1;
-
-        //    map.SetCellData(global, 1);
-        //    //map.GetCell(global).BlockData = 1;
-        //    //map.GetChunk(global).Valid = false;
-        //    obj.StackSize--;
-        //    map.EventOccured(Message.Types.FarmSeedSowed, global);
-        //}
+        
         static public void Fertilize(IMap map, Vector3 global, float potency)
         {
             var entity = map.GetBlockEntity(global) as BlockFarmland.BlockFarmlandEntity;

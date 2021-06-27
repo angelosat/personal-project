@@ -176,7 +176,7 @@ namespace Start_a_Town_
         }
         public TargetArgs(IObjectProvider network, int entityID)
         {
-            throw new Exception();
+            //throw new Exception();
             this.Type = TargetType.Entity;
             this.EntityID = entityID;
             //this.Network = network;

@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using Start_a_Town_.AI;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_
 {
@@ -21,14 +17,8 @@ namespace Start_a_Town_
 
         }
 
-
-        //public override float Height => base.Height * (this.Mobile.Crouching ? .5f : 1);
         public override float Height => this.Physics.Height - (this.Mobile.Crouching ? 1 : 0);
 
-        //internal Workplace GetShop()
-        //{
-        //    return this.Town.ShopManager.GetShop(this);
-        //}
         internal Workplace Workplace => this.Town.ShopManager.GetShop(this);
         internal T GetWorkplace<T>() where T : Workplace
         {
@@ -50,19 +40,11 @@ namespace Start_a_Town_
             var net = this.NetNew;
             if (net is Server server)
             {
-                //server.SyncInstantiate(loot);
                 loot.SyncInstantiate(server);
                 PacketInventoryInsertItem.Send(server, this, loot, area);
             }
-            //else
-            //    throw new Exception();
-            //this.Log.Write($"[{this.InstanceID}] has looted [{loot.InstanceID}] while exploring {area.Name}"); // call this before inserting because the item might be absorbed/disposed
-            //this.Log.Write($"[{this.Name}] has looted [{loot.Name},{loot.PrimaryMaterial.Color}] while exploring [{area.Name}]"); // call this before inserting because the item might be absorbed/disposed
             this.Log.Write($"Looted [{loot.Name},{loot.PrimaryMaterial.Color}] while exploring [{area.Name}]"); // call this before inserting because the item might be absorbed/disposed
-
             this.Inventory.Insert(loot);
-            //net.SyncReport();
-            //this.Log.Write($"{this.Name} has looted {loot.Name} while exploring {area.Name}");
         }
         internal bool InitiateTrade(Actor actor, Entity item, int itemcost)
         {
@@ -70,8 +52,6 @@ namespace Start_a_Town_
             var state = this.GetState();
             if (state.TradingPartner != null)
                 return false;
-            //if (!this.HasMoney(itemcost))
-            //    return false;
             state.TradingPartner = actor;
             return true;
         }
@@ -166,7 +146,6 @@ namespace Start_a_Town_
 
         internal void TalkTo(Actor target, ConversationTopic topic)
         {
-            //topic.ApplyNew(this, this.GetState().ConversationPartner);
             topic.ApplyNew(this, target);
         }
 
@@ -255,23 +234,7 @@ namespace Start_a_Town_
             };
             obj.Physics.Height = def.Height;
             obj.Physics.Weight = def.Weight;
-            //obj.GetInfo().CustomName = true;
-            //obj.AddComponent(new GearComponent(
-            //    //GearType.Hauling,
-            //    GearType.Mainhand,
-            //    GearType.Offhand,
-            //    GearType.Head,
-            //    GearType.Chest,
-            //    GearType.Feet,
-            //    GearType.Hands,
-            //    GearType.Legs
-            //    ));
-            //obj.AddComponent(new ResourcesComponent(ResourceDef.Health, ResourceDef.Stamina));
-            //obj.AddComponent(new AttributesComponent(AttributeDef.Strength, AttributeDef.Intelligence, AttributeDef.Dexterity));
-            //obj.AddComponent(new NeedsComponent(NeedDef.Energy, NeedDef.Hunger, NeedDef.Social, NeedDef.Work));
-            //obj.AddComponent(new ComponentNpcSkills(SkillDef.Digging, SkillDef.Construction));// new NpcSkillDigging()));
-            //obj.AddComponent(new PersonalityComponent(TraitDef.Attention, TraitDef.Composure, TraitDef.Patience, TraitDef.Activity, TraitDef.Planning));
-
+            
 
             obj.AddComponent(new AttributesComponent(def).Randomize());
             obj.AddComponent(new NpcSkillsComponent(def).Randomize());
@@ -279,7 +242,6 @@ namespace Start_a_Town_
 
             obj.AddComponent(new GearComponent(def));
             obj.AddComponent(new ResourcesComponent(def));
-            //obj.AddComponent(new NeedsComponent(def));
             obj.AddComponent(new NeedsComponent(obj));
             obj.AddComponent(new PossessionsComponent());
             obj.AddComponent(new HaulComponent());
@@ -290,67 +252,31 @@ namespace Start_a_Town_
             obj.AddComponent(new MobileComponent());
             obj.AddComponent(new WorkComponent());
             obj.AddComponent(new MoodComp());
-            obj.AddComponent(new AIComponent().Initialize(//new Personality(TraitDef.Attention, TraitDef.Composure, TraitDef.Patience),// reaction: ReactionType.Friendly),
+            obj.AddComponent(new AIComponent().Initialize(
                new BehaviorQueue(
-                   //new AIAwareness(),
                    new AIMemory(),
                    new BehaviorCombat(),
                    new BehaviorHandleResources(),
-                   //new AIDialogue(),
-                   //new AIFollow(),
-                   //new BehaviorMoodlets(),
                    new BehaviorHandleOrders(),
                    new AI.Behaviors.Tasks.BehaviorFindTask(),
-
-                   //new BehaviorSatisfyNeed(),
-                   //new BehaviorFindJobNew(),
-                   //new BehaviorAct(),
-
                    new BehaviorIdle()
                    )));
-            //Sprite sprite = def.DefaultSprite;
             obj.AddComponent(new SpriteComponent(def.Body));//, sprite));
             foreach (var b in obj.Body.GetAllBones())
                 b.Material = def.DefaultMaterial;
 
             obj.Sprite.Customization = new CharacterColors(obj.Body).Randomize();
 
-            //Sprite sprite = new Sprite("mobs/skeleton/full", new Vector2(17 / 2, 38));
-            //sprite.OriginGround = new Vector2(sprite.AtlasToken.Texture.Bounds.Width / 2, sprite.AtlasToken.Texture.Bounds.Height);
-            //sprite.OriginGround = new Vector2(sprite.AtlasToken.Texture.Bounds.Width / 2, sprite.AtlasToken.Texture.Bounds.Height);
-
-            //obj.AddComponent<SpriteComponent>().Initialize(BodyDef.Skeleton, sprite);
-            //foreach (var b in obj.Body.GetAllBones())
-            //    b.Material = Start_a_Town_.Components.Materials.Material.Flesh;
-            //obj.InitComps();
             obj.ObjectCreated();
             return obj;
         }
-        //protected override Color NameColorFunc => this.IsCitizen ? Color.White : Color.Cyan;
         public override Color GetNameplateColor()
         {
             return this.IsCitizen ? Color.White : Color.Cyan;
         }
-        //protected override void NameplateCreated(Nameplate plate)
-        //{
-        //    var defcomp = this.DefComponent;
-        //    plate.Controls.Add(new Label()
-        //    {
-        //        //Width = 100,
-        //        Font = UIManager.FontBold,
-        //        //TextFunc = GetName,// this.GetNameplateText,
-        //        TextFunc = () => this.Name,
-        //        TextColorFunc = ()=>this.IsCitizen ? Color.White : Color.Cyan,
-        //        MouseThrough = true,
-        //        TextBackgroundFunc = () => this.HasFocus() ? defcomp.Quality.Color * .5f : Color.Black * .5f
-        //        //TextBackgroundFunc = () => Color.Red,//parent.HasFocus() ? this.Quality.Color * .5f : Color.Black * .5f
-        //        //BackgroundColorFunc = () => parent.HasFocus() ? this.Quality.Color * .5f : Color.Black * .5f
-        //    });
-        //}
+       
         internal void EndCurrentTask()
         {
-            //this.GetState().CurrentTaskBehavior = null;
-
             this.GetComponent<AIComponent>().FindBehavior<global::Start_a_Town_.AI.Behaviors.Tasks.BehaviorFindTask>().EndCurrentTask(this);
         }
         internal void MoveToggle(bool toggle)
@@ -359,10 +285,6 @@ namespace Start_a_Town_
                 PacketEntityMoveToggle.Send(this.Net, this.RefID, toggle);
 
             this.Mobile.Toggle(this, toggle);
-            //if (toggle)
-            //    this.Mobile.Start(this);
-            //else
-            //    this.Mobile.Stop(this);
         }
         public void AddMoodlet(Moodlet m)
         {
@@ -376,10 +298,7 @@ namespace Start_a_Town_
         {
             return this.GetComponent<MoodComp>().Contains(mdef);
         }
-        //public bool GetMoodlet(MoodletDef mdef)
-        //{
-        //    return this.GetComponent<MoodComp>().(mdef);
-        //}
+        
         public float GetMood()
         {
             return this.GetComponent<MoodComp>().Mood;
@@ -390,18 +309,7 @@ namespace Start_a_Town_
             var manager = this.Map.Town.RoomManager;
             return manager.FindRoom(this.RefID) != null;
         }
-        //public Room GetRoom()
-        //{
-        //    var manager = this.Map.Town.RoomManager;
-        //    return manager.FindRoom(this.InstanceID);
-        //}
-
-
-        //public override void Select(UISelectedInfo info)
-        //{
-        //    base.Select(info);
-        //    info.AddTabAction("Skills", () => WindowTargetManagementStatic.Refresh(this));
-        //}
+        
         protected override IEnumerable<(string name, Action action)> GetInfoTabsExtra()
         {
             yield return ("Log", () => NpcLogUINew.GetUI(this).Toggle());
@@ -413,20 +321,7 @@ namespace Start_a_Town_
             if (!this.IsCitizen)
                 yield return ("Visitor", this.GetVisitorProperties().ShowGUI);
         }
-        public override void TabGetter(Action<string, Action> getter)
-        {
-            throw new Exception();
-            base.TabGetter(getter);
-            //getter("Details", () => WindowTargetManagementStatic.Refresh(this));
-            getter("Log", () => NpcLogUINew.GetUI(this).Toggle());
-            getter("Skills", () => NpcSkillsComponent.GetUI(this).Toggle());
-            getter("Gear", () => InventoryUI.GetUI(this).Toggle());
-            getter("Personality", () => PersonalityComponent.GetGUI(this).Toggle());
-            getter("Needs", () => NeedsUI.GetUI(this).Toggle());
-            getter("Stats", () => StatsInterface.GetUI(this).Toggle());
-            if (!this.IsCitizen)
-                getter("Visitor", this.GetVisitorProperties().ShowGUI);
-        }
+        
         public bool CanOperate(TargetArgs target)
         {
             if (target.Type != TargetType.Position)
@@ -437,30 +332,12 @@ namespace Start_a_Town_
         public bool CanOperate(Vector3 global)
         {
             return this.FindOperatablePosition(global).HasValue;
-            var operatingPositions = this.Map.GetCell(global).GetOperatingPositions();
-            if (!operatingPositions.Any())
-                return true;
-            foreach (var pos in operatingPositions)
-            {
-                if (this.CanReach(global + pos) && this.Map.GetBlock(global + pos).IsStandableIn)
-                    return true;
-            }
-            return false;
         }
         public bool CanOperate(Vector3 global, out IntVec3 operatingPos)
         {
             var poos = this.FindOperatablePosition(global);
             operatingPos = poos.Value;
             return poos.HasValue;
-            var operatingPositions = this.Map.GetCell(global).GetOperatingPositions();
-            if (!operatingPositions.Any())
-                return true;
-            foreach (var pos in operatingPositions)
-            {
-                if (this.CanReach(global + pos) && this.Map.GetBlock(global + pos).IsStandableIn)
-                    return true;
-            }
-            return false;
         }
         public IntVec3? FindOperatablePosition(Vector3 facilityGlobal)
         {
@@ -489,12 +366,6 @@ namespace Start_a_Town_
         internal int GetHaulStackLimitFromEndurance(GameObject haulable)
         {
             return this.GetHaulStackLimitFromEndurance(haulable.Def);
-            //var maxHaulWeight = StatDefOf.MaxHaulWeight.GetValue(this);
-            //var activityLevel = this.GetTrait(TraitDefOf.Activity)?.Normalized ?? 0;
-            //var maxDesiredEncumberance = maxHaulWeight + maxHaulWeight * activityLevel * .5f;
-            //var unitWeight = haulable.Physics.Weight;
-            //int stackEnduranceLimit = (int)Math.Floor(maxDesiredEncumberance / unitWeight);
-            //return stackEnduranceLimit;
         }
         
         internal float GetOpportunisticHaulSearchRange(int baseSearchRange)
@@ -502,7 +373,6 @@ namespace Start_a_Town_
             var organizationValue = this.GetTrait(TraitDefOf.Planning)?.Normalized ?? 0;
             var num = baseSearchRange * organizationValue * .5f;
             return baseSearchRange + num;
-            //return (float)Math.Round(baseSearchRange + num);
         }
 
         public bool IsTooTiredToWork
@@ -511,10 +381,6 @@ namespace Start_a_Town_
             {
                 var stamina = this.GetResource(ResourceDef.Stamina);
                 var staminaPercentage = stamina.Percentage;
-                //var staminaBaseThreshold = .2f;
-                //var activity1 = this.GetTrait(TraitDef.Activity).Normalized;
-                //var num = activity1 * staminaBaseThreshold  *.5f;
-                //var threshold = staminaBaseThreshold - num;
                 var threshold = StatDefOf.StaminaThresholdForWork.GetValue(this);
                 var tired = staminaPercentage < threshold;
                 return tired;
@@ -524,8 +390,6 @@ namespace Start_a_Town_
         {
             var givers = this.GetComponent<NeedsComponent>().NeedsNew.Select(n => n.TaskGiver);
             givers = givers.Concat(TaskGiver.EssentialTaskGivers);
-            //if(parent.IsCitizen)
-            //    givers = givers.Concat(TaskGiver.CitizenTaskGivers);
             var jobs = this.State.GetJobs().Where(j => j.Enabled);
             jobs.OrderBy(j => j.Priority);
             var jobTaskGivers = jobs.SelectMany(j => j.Def.GetTaskGivers());
@@ -609,7 +473,6 @@ namespace Start_a_Town_
                 yield break;
             var givers = TaskGiver.CitizenTaskGivers.Concat(TaskGiver.EssentialTaskGivers);
             foreach (var giver in givers)
-                //foreach (var giver in TaskGiver.CitizenTaskGivers)
                 {
                     var task = giver.TryTaskOn(this, target);
                 if (task != null) yield return new TaskGiverResult(task, giver);// task;
@@ -670,7 +533,6 @@ namespace Start_a_Town_
         }
         public ButtonNew GetButton(int width, Func<string> bottomText, Action onLeftClick)
         {
-            //return ButtonNew.CreateBig(onLeftClick, width, this.RenderIcon(), () => this.Npc.FullName, bottomText);
             return ButtonNew.CreateBig(onLeftClick, width, this.RenderIcon(), () => this.Name, bottomText);
         }
 
@@ -687,7 +549,6 @@ namespace Start_a_Town_
         }
         internal void AcceptQuest(int questID)
         {
-            //this.Town.QuestManager.GetQuest(questID).AcceptBy(this);
             this.GetVisitorProperties().AcceptQuest(this.Town.QuestManager.GetQuest(questID));
         }
         internal bool AcceptQuest(QuestDef quest)
@@ -704,9 +565,6 @@ namespace Start_a_Town_
         public IItemPreferencesManager GetItemPreferences()
         {
             return this.GetState().ItemPreferences;
-            //var props = actor.Map.World.Population.GetVisitorProperties(actor);
-            //var prefs = props.ItemPreferences;
-            //return prefs;
         }
         internal void AwardSkillXP(SkillDef skill, float v)
         {

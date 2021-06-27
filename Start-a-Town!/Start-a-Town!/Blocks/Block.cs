@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
-using System.Collections;
-using Start_a_Town_.Net;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.Components;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.Particles;
 using Start_a_Town_.Blocks;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Tokens;
 using Start_a_Town_.UI;
-using UI;
 
 namespace Start_a_Town_
 {
@@ -54,11 +47,6 @@ namespace Start_a_Town_
                 return "";
             }
         }
-
-       
-
-        //static public AtlasWithDepth Atlas = Sprite.Atlas;//
-        //static public AtlasWithDepth Atlas = new AtlasWithDepth("Blocks"); ///Sprite.Atlas;//
 
         static readonly Dictionary<Block, GameObject> BlockObjects = new();
 
@@ -180,14 +168,6 @@ namespace Start_a_Town_
                 LoadTexture("counter2grayscale", "/counters/counter2")};
 
 
-        //public static void LoadContent()
-        //{
-        //    MouseMapSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube");
-        //    NormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsFilled"); //"Graphics/mousemap - Cube");
-        //    HalfBlockNormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfNormalsFilled"); //"Graphics/mousemap - Cube");
-        //    HalfBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfDepth09"); //"Graphics/mousemap - Cube");
-        //    MouseMapSpriteOpposite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube - back");
-        //}
 
         #region Interfaces
         public string GetName()
@@ -197,7 +177,6 @@ namespace Start_a_Town_
         public virtual Icon GetIcon()
         {
             return new Icon(this.GetDefault());
-            //return new Icon(this.Variations.First());
         }
         public string GetCornerText()
         {
@@ -209,33 +188,15 @@ namespace Start_a_Town_
         }
         public void GetTooltipInfo(UI.Tooltip tooltip)
         {
-            //return;
-            //this.GetTooltip(tooltip as UI.Control);
-
         }
-        //public void GetTooltip(UI.Control tooltip)
-        //{
-        //    return;
-
-        //    //tooltip.Controls.Add(new UI.Label(this.Type.ToString()) { Location = tooltip.Controls.BottomLeft });
-        //    //var tasks = this.GetAvailableTasks();
-        //    //if (tasks.Count > 0)
-        //    //    tasks.First().GetTooltip(tooltip);
-
-        //    //var entity = this.GetBlockEntity();
-        //    //if (entity != null)
-        //    //    entity.GetTooltipInfo(tooltip as UI.Tooltip);
-        //}
+        
         public virtual void GetTooltip(Control tooltip, IMap map, Vector3 global)
         {
-            //if (this == Block.Air) // create tooltip even if air, in case of undiscovered area
-            //    return;
             var cell = map.GetCell(global);
             tooltip.Controls.Add(new Label($"Global: {global}") { Location = tooltip.Controls.BottomLeft });
             tooltip.Controls.Add(new Label($"Local: {global.ToLocal()}") { Location = tooltip.Controls.BottomLeft });
             tooltip.Controls.Add(new Label("Chunk: " + map.GetChunk(global).MapCoords.ToString()) { Location = tooltip.Controls.BottomLeft });
             if (map.Camera.HideUnknownBlocks && (cell.IsHidden() || map.IsUndiscovered(global)))
-            //if (map.Camera.HideUnknownBlocks && !cell.Discovered)// (cell.IsHidden() || map.IsUndiscovered(global)))
             {
                     tooltip.AddControlsBottomLeft(new Label("Undiscovered area") { Font = UI.UIManager.FontBold, TextColor = Color.Goldenrod });
                 return;
@@ -245,7 +206,7 @@ namespace Start_a_Town_
             if(mat!=null)
                 tooltip.Controls.Add(new UI.Label(mat.ToString()) { TextColorFunc = () => mat.Color, Location = tooltip.Controls.BottomLeft });
 
-            var data = cell.BlockData;// map.GetData(global);
+            var data = cell.BlockData;
             var binary = Convert.ToString(data, 2);
             var datastring = Int32.Parse(binary).ToString("00000000");
             tooltip.Controls.Add(new UI.Label("BlockData: " + datastring + " (" + data.ToString() + ")") { Location = tooltip.Controls.BottomLeft });
@@ -257,29 +218,21 @@ namespace Start_a_Town_
                 blockentity.GetTooltip(tooltip);
         }
 
-        //internal virtual string GetLabel(IMap map, Vector3 global)
-        //{
-        //    return this.Name;
-        //}
-
         public virtual void DrawUI(SpriteBatch sb, Vector2 pos)
         {
-            //this.Draw(sb, pos, Color.White, Vector4.One, 1, 0, new Cell());
             var token = GetDefault();
             sb.Draw(token.Atlas.Texture, pos - new Vector2(token.Rectangle.Width, token.Rectangle.Height) * 0.5f, token.Rectangle, this.BlockState.GetTint(0));
         }
 
         public virtual AtlasDepthNormals.Node.Token GetDefault()
         {
-            //var token = this.Variations.First();
             var token = this.GetToken(0, 0, 0, 0);
             return token;
         }
 
         public virtual void DrawUI(SpriteBatch sb, Vector2 pos, byte state)
         {
-            var token = this.GetToken(0, 0, 0, 0);// this.Variations.First();
-            //var c = this.GetColor(state);
+            var token = this.GetToken(0, 0, 0, 0);
             var c = this.BlockState.GetTint(state);
             c.A = 255;
             sb.Draw(token.Atlas.Texture, pos - new Vector2(token.Rectangle.Width, token.Rectangle.Height) * 0.5f, token.Rectangle, c);
@@ -292,17 +245,15 @@ namespace Start_a_Town_
         }
 
         public virtual string Name { get { return this.Type.ToString(); } }
-        static public int Width = 32, Depth = 16, Height = 40, BlockHeight = 20;//19;// 16;
-        //static public int Width = 32 + 2 * Borders.Thickness, Depth = 16, Height = 40 + 2 * Borders.Thickness, BlockHeight = 16;
-        static public int HeightQuarter = Height / 4;
+        static public readonly int Width = 32, Depth = 16, Height = 40, BlockHeight = 20;
+        static public readonly int HeightQuarter = Height / 4;
 
         public TokenCollection Tokens = new();
 
-        static public Vector2 OriginCenter = new(Width / 2f, Height - Depth / 2f);//16, Height - BlockHeight);//16);
+        static public readonly Vector2 OriginCenter = new(Width / 2f, Height - Depth / 2f);
         static public readonly Vector2 Joint = new(Block.Width / 2, Block.Height);
         public enum Types : byte
         {
-            //Empty,
             Air,
             Soil,
             Farmland,
@@ -310,13 +261,11 @@ namespace Start_a_Town_
             Sand,
             Stone,
             Coal,
-
             Wall,
             Cobblestone,
             Grass,
             Flowers,
             WoodenDeck,
-            //Light
             WallSlice,
             Iron,
             Scaffolding,
@@ -355,31 +304,25 @@ namespace Start_a_Town_
             ShopCounter
         }
         static public Rectangle Bounds = new(-(int)Block.OriginCenter.X, -(int)Block.OriginCenter.Y, Block.Width, Block.Height);
-        //static public Rectangle Bounds = new Rectangle(-(int)Block.OriginCenter.X, -(int)Block.OriginCenter.Y, Block.Width + 2 * Borders.Thickness, Block.Height + 2 * Borders.Thickness);
 
         static public Rectangle[][] Create(int x, int y, int vars)
         {
             Rectangle[][] rects = new Rectangle[][] { new Rectangle[vars] };
-            //{
-
-            //}};
             for (int i = 0; i < vars; i++)
                 rects[0][i] = new Rectangle((x + i) * Block.Width, y * Block.Height, Block.Width, Block.Height);
             return rects;
         }
 
         static public Rectangle[][] TileHighlights;
-        //static public readonly MouseMap BlockMouseMap = new MouseMap(MouseMapSprite, MouseMapSpriteOpposite, MouseMapSprite.Bounds, true);
 
         static public MouseMap WallMouseMap, WallHalfMouseMap, WallQuarterMouseMap;
 
         static public SortedList<Types, Rectangle[][]> SourceRects;
 
 
-        static public void DrawHighlight(SpriteBatch sb, Rectangle bounds)//Camera camera, )
+        static public void DrawHighlight(SpriteBatch sb, Rectangle bounds)
         {
             sb.Draw(UI.UIManager.Highlight, bounds, null, Color.Lerp(Color.White, Color.Transparent, 0.5f), 0, Vector2.Zero, SpriteEffects.None, 0);
-            //camera.SpriteBatch.Draw(UI.UIManager.Highlight, new Vector2(bounds.X, bounds.Y), null, Color.Lerp(Color.White, Color.Transparent, 0.5f), 0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
         static public bool HitTest(Sprite tileSprite, Rectangle bounds, Camera camera, Controller controller, out Vector3 face)
         {
@@ -396,12 +339,8 @@ namespace Start_a_Town_
         static public void Build(IObjectProvider net, GameObject builder, TargetArgs target, GameObject.Types consumeType, GameObject.Types blockType, Action<GameObject> onFinish)
         {
             if (InventoryComponent.ConsumeEquipped(builder, slot => slot.Object.IDType == consumeType))
-            //onFinish(GameObject.Create(blockType).Spawn(net.GetMap(), target.Object.Global + target.Face));
-            //onFinish(net.Spawn(GameObject.Create(blockType).SetGlobal(target.Object.Global + target.Face)));
             {
-                GameObject objBlock = GameObject.Create(blockType);//.SetGlobal(target.Object.Global + target.Face);
-                //net.Spawn(objBlock, target.Object.Global + target.Face);
-                //objBlock.Chunk.AddBlockObject(net.Map, objBlock, target.Object.Global + target.Face);
+                GameObject objBlock = GameObject.Create(blockType);
                 objBlock.Global = target.Object.Global + target.Face;
                 objBlock.Spawn(net);
                 onFinish(objBlock);
@@ -425,13 +364,9 @@ namespace Start_a_Town_
         { 
             return map.GetBlockEntity<T>(global); 
         }
-        //public readonly GameObject Entity;
         public GameObject GetEntity()
         {
             return BlockObjects[this];
-            //GameObject obj;
-            //GameObject.Objects.TryGetValue(this.EntityID, out obj);
-            //return obj;
         }
         public virtual Dictionary<Vector3, byte> GetParts(Vector3 global, int orientation) // TODO: depend on orientation
         {
@@ -445,8 +380,7 @@ namespace Start_a_Town_
         public virtual IntVec3 GetCenter(byte blockData, Vector3 global) { return global; }
 
         public virtual bool Multi { get { return false; } }
-        //public readonly GameObject.Types Entity;
-        //     public readonly Sprite Sprite;
+      
         public readonly Block.Types Type;
         /// <summary>
         /// Defines the alpha channel of the block's sprite during drawing.
@@ -498,7 +432,7 @@ namespace Start_a_Town_
         }
         protected virtual ParticleEmitterSphere GetDustEmitter()
         {
-            var emitter = new ParticleEmitterSphere() //DustEmitter.Clone() as ParticleEmitterSphere;
+            var emitter = new ParticleEmitterSphere() 
             {
                 Lifetime = Engine.TicksPerSecond / 2f,
                 Offset = Vector3.Zero,
@@ -515,9 +449,8 @@ namespace Start_a_Town_
         }
         protected virtual ParticleEmitterSphere GetDirtEmitter()
         {
-            //var block = parent.Map.GetBlock(parent.Global - Vector3.UnitZ * 0.1f);
             var dustcolor = this.DirtColor;
-            var emitter = new ParticleEmitterSphere() //DustEmitter.Clone() as ParticleEmitterSphere;
+            var emitter = new ParticleEmitterSphere() 
             {
                 Lifetime = Engine.TicksPerSecond / 2f,
                 Offset = Vector3.Zero,
@@ -548,43 +481,10 @@ namespace Start_a_Town_
 
         public virtual BlockRecipe GetRecipe()
         {
-            //return null;
             return this.Recipe;
         }
-
-        //Reaction GetPrefabRecipe()
-        //{
-        //    var recipe = this.GetRecipe();
-        //    if (recipe == null)
-        //        return null;
-        //    var reaction = new Reaction(
-        //        "Prefab: " + this.Name,
-        //        Reaction.CanBeMadeAt(IsWorkstation.Types.Carpentry),
-        //        recipe.Reagents,
-        //        Reaction.Product.Create(new Reaction.Product(new EntityPrefabBlock.Factory())
-        //        ));
-        //    return reaction;
-        //}
-
-        //static public List<Reaction> GetPrefabRecipeList()
-        //{
-        //    List<Reaction> list = new List<Reaction>();
-        //    foreach (var b in Registry)
-        //        list.Add(b.Value.GetPrefabRecipe());
-        //    return list;
-        //}
-
-        //MaterialType _MaterialType;
-        //public MaterialType MaterialType
-        //{
-        //    get { return this._MaterialType ?? this.Material.Type; }
-        //    set { this._MaterialType = value; }
-        //}
-
-        //Material Material { get; set; }
+        
         public LootTable LootTable { get; set; }
-
-
 
         public virtual byte ParseData(string data)
         {
@@ -592,9 +492,8 @@ namespace Start_a_Town_
         }
 
         public BlockRecipe Recipe;
-        public List<Components.Crafting.Reaction.Reagent> Reagents = new();
+        public List<Reaction.Reagent> Reagents = new();
         
-        //public Ingredient Ingredient;
         public BuildProperties BuildProperties;
         public Ingredient Ingredient { 
             get => this.BuildProperties?.Ingredient;
@@ -632,8 +531,6 @@ namespace Start_a_Town_
         
         public virtual void Removed(IMap map, Vector3 global)
         {
-            //global.TrySetCell(net, Block.Types.Air); 
-
         }
         public virtual bool IsValidPosition(IMap map, IntVec3 global, int orientation) { return true; }
         [Obsolete]
@@ -645,19 +542,9 @@ namespace Start_a_Town_
             if (notify)
                 map.NotifyBlocksChanged(positions);
         }
-        //[Obsolete]
         public virtual void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
-            //map.SetBlock(global, this.Type, data, variation);
-            // TODO: change this method so it returns true or false depending if the block was placed succesfully? (if the cell was empty of any entities)
-            // or keep it as it is and just only check if the cell is empty if the block is solid, otherwise don't check?
-            //if (!map.IsEmpty(global))
-            //    return;
-
-            // TODO: ONLY CALL SETBLOCK ONCE WHEN PLACING BLOCKS
-            //throw new Exception();
             map.SetBlock(global, this.Type, data, variation, orientation, notify);
-            //map.GetCell(global).Orientation = orientation; // dont i set orientation in the setblock method? YES I DO
             var entity = this.CreateBlockEntity();
             if (entity != null)
             {
@@ -666,51 +553,11 @@ namespace Start_a_Town_
             }
             map.SetBlockLuminance(global, this.Luminance);
         }
-        [Obsolete]
-        public virtual void Placed(IObjectProvider net, Vector3 global)
-        {
-            //global.TrySetCell(net, this.Type); 
-            throw new Exception();
-            net.Map.SetBlock(global, this.Type);
-        }
-        //public virtual void OnRemove(IMap map, Vector3 global) { }
-
+        
         [Obsolete]
         public virtual void Remove(IMap map, Vector3 global, bool notify = true)
         {
             map.RemoveBlockNew(global, notify);
-            return;
-            //this.OnRemove(map, global);
-            // TODO: ONLY CALL SETBLOCK ONCE WHEN PLACING BLOCKS
-
-            ///moved this after blockentityremoval
-            //map.SetBlock(global, Block.Types.Air, 0, 0, 0, notify); 
-            throw new Exception();
-
-            var blockentity = map.RemoveBlockEntity(global);
-            if (blockentity != null)
-            {
-                blockentity.OnRemove(map, global);
-                blockentity.Dispose();
-                if(notify)
-                    map.Net.EventOccured(Message.Types.BlockEntityRemoved, blockentity, global);
-            }
-
-            /// moved this after the removal of the block entity 
-            /// because when handling the block change event, another block might be immediately added,
-            /// and that block would immediately get its blockentity removed
-            map.SetBlock(global, Block.Types.Air, 0, 0, 0, notify);
-            map.SetBlockLuminance(global, 0);
-
-
-            // reenable physics of entities resting on block
-            foreach (var entity in map.GetObjects(global - new Vector3(1, 1, 0), global + new Vector3(1, 1, 2)))
-            {
-                PhysicsComponent.Enable(entity);
-            }
-            var above = global.Above();
-            map.GetBlock(above)?.BlockBelowChanged(map, above);
-            this.OnRemove(map, global);
         }
         protected virtual void OnRemove(IMap map, Vector3 global) { }
         
@@ -728,17 +575,6 @@ namespace Start_a_Town_
         {
             var net = map.Net;
             net.PopLoot(this.GetLootTable(net.Map.GetData(global)), global, Vector3.Zero);
-
-            /// 
-            //var blockentity = map.RemoveBlockEntity(global);
-            //if (blockentity != null)
-            //{
-            //    blockentity.Break(map, global);
-            //    blockentity.Dispose();
-            //    net.EventOccured(Message.Types.BlockEntityRemoved, blockentity, global);
-            //}
-            /// commented this out because i'm also doing it in the remove method
-
             this.Remove(map, global);
         }
         public virtual void Break(GameObject actor, Vector3 global)
@@ -758,19 +594,17 @@ namespace Start_a_Town_
             e.Friction = .5f;
             e.AlphaBegin = 1;
             e.AlphaEnd = 0;
-            var color = mat.Color;// this.Material.Color;
+            var color = mat.Color;
             e.ColorBegin = color;
             e.ColorEnd = color;
 
             e.Lifetime = Engine.TicksPerSecond * 2;
             var pieces = this.GetParticleRects(25);
             e.Emit(Block.Atlas.Texture, pieces, Vector3.Zero);
-            //actor.Map.EventOccured(Message.Types.ParticleEmitterAdd, e);
             actor.Map.ParticleManager.AddEmitter(e);
         }
         public virtual bool IsSolid(IMap map, Vector3 global, byte data)
         {
-            //return this.Solid;
             var offset = global + 0.5f * new Vector3(1, 1, 0);
             offset -= offset.RoundXY();
             var h = this.GetHeight(data, offset.X, offset.Y);
@@ -778,15 +612,13 @@ namespace Start_a_Town_
         }
         public virtual bool IsSolid(IMap map, Vector3 global)
         {
-            //return this.Solid;
             var offset = global + 0.5f * new Vector3(1, 1, 0);
-            offset = offset - offset.RoundXY();
+            offset -= offset.RoundXY();
             var h = this.GetHeight(offset.X, offset.Y);
             return this.Solid && offset.Z < h;
         }
         public virtual float GetDensity(IMap map, Vector3 global)
         {
-            //return this.Solid;
             var offset = global + 0.5f * new Vector3(1, 1, 0);
             offset -= offset.RoundXY();
             var data = map.GetData(global);
@@ -795,8 +627,6 @@ namespace Start_a_Town_
         }
         public virtual float GetDensity(byte data, Vector3 global)
         {
-            //var offset = global + 0.5f * new Vector3(1, 1, 0);
-            //offset = offset - offset.FloorXY();// offset.RoundXY();
             var offset = global.ToBlock();
             var h = this.GetHeight(data, offset.X, offset.Y);
             return offset.Z < h ? this.Density : 0;
@@ -808,44 +638,32 @@ namespace Start_a_Town_
         }
         public virtual bool IsSolid(Cell cell, Vector3 withinBlock)
         {
-            //var h = this.GetHeight(withinBlock.X, withinBlock.Y);
             var h = this.GetHeight(cell.BlockData, withinBlock.X, withinBlock.Y);
             return this.Solid && withinBlock.Z < h;
         }
-        public virtual bool IsOpaque(IObjectProvider net, Vector3 global) { return this.Opaque; }// return true; }
-        public virtual bool IsOpaque(Cell cell) { return this.Opaque; }// return true; }
+        public virtual bool IsOpaque(IObjectProvider net, Vector3 global) { return this.Opaque; }
+        public virtual bool IsOpaque(Cell cell) { return this.Opaque; }
         public virtual Material GetMaterial(IMap map, Vector3 global)
         {
             return this.GetMaterial(map.GetData(global));
-            //return null; 
         }
-        //public virtual Material GetMaterial(byte blockdata) { return this.Material; }
         public abstract Material GetMaterial(byte blockdata);
 
         public virtual float GetTransparency(IObjectProvider net, Vector3 global) { return 0; }
         public virtual float GetDensity(IObjectProvider net, Vector3 global) { return 0; }
         public virtual void OnMessage(GameObject parent, ObjectEventArgs args) { }
         public virtual void RandomBlockUpdate(IObjectProvider net, IntVec3 global, Cell cell) { }
-        //public virtual void OnMessage(GameObject parent, ObjectEventArgs args) { }
         protected virtual void HandleMessage(Vector3 global, ObjectEventArgs e) { }
 
         public static void HandleMessage(IObjectProvider net, Vector3 global, ObjectEventArgs e)
         {
-            //global.GetBlock(net.Map).HandleMessage(global, e);
             net.Map.GetBlock(global).HandleMessage(global, e);
 
         }
         internal virtual void RemoteProcedureCall(IObjectProvider net, Vector3 vector3, Message.Types type, System.IO.BinaryReader r) { }
 
-        //static Dictionary<Block.Types, Block> _Registry;
         static public Dictionary<Block.Types, Block> Registry = new();
-        //{ get { if (_Registry.IsNull()) _Registry = new Dictionary<Types, Block>(); return _Registry; } }
-
-        //static public void Initialize()
-        //{
-        //    BlockAtlas.Initialize();
-        //}
-
+        
         /// <summary>
         /// The index to the block's variation is stored within a cell. Add variations to this list so they can be picked at random whenever a block is placed.
         /// </summary>
@@ -861,20 +679,14 @@ namespace Start_a_Town_
                 {
                     var token = Block.Atlas.Load("blocks/" + name.Trim(), Map.BlockDepthMap, Block.NormalMap);
                     this.Variations.Add(token);
-
-                    //Sprite sprite = new Sprite(token);
-                    //this.Sprites.Add(sprite);
-                    //this.Variations.Add(sprite.AtlasToken);
                 }
                 this.AssetName = value.Split(',').First().Trim();
             }
         }
-        //Atlas.Node.Token SpriteToken;
 
         protected Block(Block.Types type, GameObject.Types entityType, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
             : this(type, transparency, density, opaque, solid)
         {
-            //this.Entity = entityType;
         }
         protected Block(Block.Types type, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
         {
@@ -883,66 +695,37 @@ namespace Start_a_Town_
             this.Density = density;
             this.Opaque = opaque;
             this.Solid = solid;
-            //this.Sprite = Block.TileSprites[type];
-            //this.Entity = GameObject.Types.Default;
-            //this.Entity = null;// GameObject.Types.Default;
             this.LootTable = new LootTable();
             Registry[type] = this;
-
-            //if(type != Types.Air)
-            //GameObject.Objects.Add(this.ToObject());
         }
 
         public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, float zoom, float depth, Cell cell)
         {
-            //if (cell.Type == Types.Air)
-            //    return;
-            //sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[cell.Variation], zoom, Color.White, sunlight, blocklight, depth);
             this.Draw(sb, screenBounds, sunlight, blocklight, Color.White, zoom, depth, cell);
         }
         public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
                 return;
-            //sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, tint, sunlight, blocklight, depth);
-
         }
         public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
                 return;
-            //sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth);
         }
         public virtual void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
                 return;
-            //tint.A = (byte)((1-this.Transparency) * 255);// *= this.Transparency;
-            //tint *= (1 - this.Transparency);
-
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth, this);
         }
         public virtual void Draw(Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, Cell cell)
         {
             this.Draw(blockCoordinates, camera, screenBounds, sunlight, blocklight, fog, tint, depth, cell.Variation, cell.Orientation, cell.BlockData);
-            //if (cell.Block.Type == Types.Air)
-            //    return;
-            ////tint.A = (byte)((1-this.Transparency) * 255);// *= this.Transparency;
-            ////tint *= (1 - this.Transparency);
-            //var material = this.GetColor(cell.BlockData);
-            ////camera.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], camera.Zoom, fog, color.Multiply(tint), sunlight, blocklight, depth);
-
-            //camera.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, 
-            //    this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], 
-            //    camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth);
-
         }
-        //public virtual void Draw(Camera camera, Vector4 screenBounds, int x, int y, int z, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
-        //{
-        //    this.Draw(camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data);
-        //}
+        
         public virtual MyVertex[] Draw(Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             return this.Draw(camera.SpriteBatch, blockCoordinates, camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data);
@@ -951,15 +734,11 @@ namespace Start_a_Town_
         {
             if (this == BlockDefOf.Air)
                 return null;
-            //tint.A = (byte)((1-this.Transparency) * 255);// *= this.Transparency;
-            //tint *= (1 - this.Transparency);
-            //var material = this.GetColor(data);
+            
             var material = this.GetColorVector(data);
 
-            //camera.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], camera.Zoom, fog, color.Multiply(tint), sunlight, blocklight, depth);
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return sb.DrawBlock(Block.Atlas.Texture, screenBounds,
-                //this.Variations[Math.Min(variation, this.Variations.Count - 1)],
                 token,
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
 
@@ -973,15 +752,11 @@ namespace Start_a_Town_
         {
             if (this == BlockDefOf.Air)
                 return null;
-            //tint.A = (byte)((1-this.Transparency) * 255);// *= this.Transparency;
-            //tint *= (1 - this.Transparency);
-            //var material = this.GetColor(data);
+         
             var material = this.GetColorVector(data);
 
-            //camera.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], camera.Zoom, fog, color.Multiply(tint), sunlight, blocklight, depth);
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return chunk.Canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds,
-                //this.Variations[Math.Min(variation, this.Variations.Count - 1)],
                 token,
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
         }
@@ -989,15 +764,11 @@ namespace Start_a_Town_
         {
             if (this == BlockDefOf.Air)
                 return null;
-            //tint.A = (byte)((1-this.Transparency) * 255);// *= this.Transparency;
-            //tint *= (1 - this.Transparency);
-            //var material = this.GetColor(data);
+           
             var material = this.GetColorVector(data);
             MySpriteBatch mesh = this.Opaque ? canvas.Opaque : canvas.NonOpaque;
-            //camera.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], camera.Zoom, fog, color.Multiply(tint), sunlight, blocklight, depth);
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return mesh.DrawBlock(Block.Atlas.Texture, screenBounds,
-                //this.Variations[Math.Min(variation, this.Variations.Count - 1)],
                 token,
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
         }
@@ -1015,10 +786,6 @@ namespace Start_a_Town_
         }
         public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, float zoom, float depth, Cell cell)
         {
-            //if (cell.Type == Types.Air)
-            //    return;
-            //Rectangle sourceRect = this.Variations[cell.Variation].Rectangle;
-            //sb.DrawBlock(Block.Atlas.Texture, screenPos, sourceRect, zoom, Color.White, light, depth);
             this.Draw(sb, screenPos, sunlight, blocklight, Color.White, zoom, depth, cell);
         }
         public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
@@ -1026,8 +793,6 @@ namespace Start_a_Town_
             if (cell.Block.Type == Types.Air)
                 return;
             sb.DrawBlock(Block.Atlas.Texture, screenPos, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
-            //Rectangle sourceRect = this.Variations[cell.Variation].Rectangle;
-            //sb.DrawBlock(Block.Atlas.Texture, screenPos, sourceRect, zoom, tint, sunlight, blocklight, depth);
         }
         public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, Color fog, float zoom, float depth, byte data)
         {
@@ -1041,11 +806,8 @@ namespace Start_a_Town_
         }
         public virtual void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
         {
-            //var pos = cam.GetScreenPosition(global);
             var depth = global.GetDrawDepth(map, cam);
-            //var screenPos = pos - Block.OriginCenter * cam.Zoom;
             var materialcolor = this.GetColor(data);
-            //var tint = Color.White *.5f;
             var token = this.GetPreviewToken(variation, orientation, (int)cam.Rotation, data); // change the method to accept double so i don't have to cast the camera rotation to int?
             var bounds = cam.GetScreenBoundsVector4(global.X, global.Y, global.Z, Block.Bounds, Vector2.Zero);
             sb.DrawBlock(Block.Atlas.Texture, bounds, token, cam.Zoom, Color.Transparent, tint, materialcolor, Color.White, Vector4.One, Vector4.Zero, depth, this);
@@ -1086,11 +848,6 @@ namespace Start_a_Town_
         public virtual byte GetDataFromMaterial(GameObject craftingReagent)
         {
             return (byte)craftingReagent.Body.Material.ID;
-            //byte data = 0;
-            //IBlockState state = this.BlockState;
-            //state.FromCraftingReagent(craftingReagent);
-            //state.Apply(ref data);
-            //return data;
         }
         public virtual byte GetDataFromMaterial(Material mat)
         {
@@ -1137,28 +894,10 @@ namespace Start_a_Town_
         {
             var list = new Dictionary<PlayerInput, Interaction>();
             this.GetPlayerActionsWorld(player, global, list);
-            //var t = new TargetArgs(global);
             foreach (var i in list)
-                //if (i.Value.InRange(Player.Actor, t))
-                //a.Actions.Add(new ContextAction(i.Key.ToString() + ": " + i.Value.Name, null, () => i.Value.Conditions.Evaluate(Player.Actor, t)));// () => true));
                 a.Actions.Add(new ContextAction(i.Value) { Shortcut = i.Key });// () => true));
-
-            return;
-
-
-
-            //var actions = new List<ContextAction>();
-            //actions.AddRange(from action in this.GetAvailableTasks(player.Map, global)
-            //                 select new ContextAction(() => action.Name, () =>
-            //                 {
-            //                     Client.Instance.Send(PacketType.Towns, new Towns.PacketAddJob(Player.Actor.InstanceID, new TargetArgs(global), action.Name).Write());
-            //                     //Client.PlayerRemoteCall(this, )
-            //                 }));
-
-            //a.Actions = actions;
         }
 
-        //public virtual Dictionary<PlayerInput, Interaction> GetPlayerActionsWorld()
         public virtual void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
         {
             var hauled = Components.PersonalInventoryComponent.GetHauling(PlayerOld.Actor);
@@ -1167,23 +906,11 @@ namespace Start_a_Town_
                 list[PlayerInput.RButton] = new DropCarriedSnap();
                 return;
             }
-            //var mat = Block.GetBlockMaterial(player.Map, global);
-            ////if (this.MaterialType == null)
-            //if (mat.Type == null)
-            //    return;
-            //var skill = mat.Type.SkillToExtract;// this.MaterialType.SkillToExtract;
-            //if (skill == null)
-            //    return;
-            //var interaction = skill.GetWork(Player.Actor, new TargetArgs());
-            //list[PlayerInput.RButton] = interaction;
         }
         public virtual void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, ContextAction> list)
         {
             var dic = new Dictionary<PlayerInput, Interaction>();
             this.GetPlayerActionsWorld(player, global, dic);
-            //var newdic = dic.ToDictionary(i => i.Key, i => new ContextAction(i.Value));
-            //foreach (var c in newdic)
-            //    list.Add(c.Key, c.Value);
             foreach (var c in dic)
                 list.Add(c.Key, new ContextAction(c.Value));
         }
@@ -1198,7 +925,6 @@ namespace Start_a_Town_
             return 1;
         }
 
-        //protected const int EntityIDRange = 50000;
         public const int EntityIDRange = 50000;
         public int EntityID { get { return EntityIDRange + (int)this.Type; } }
 
@@ -1207,8 +933,6 @@ namespace Start_a_Town_
             get
             {
                 return this.GetAllValidConstructionMaterials().First();
-                //return this.Ingredient.GetAllValidMaterials().First();
-                //return this.Reagent.Def.PreferredMaterialType.SubTypes.First();
             }
         }
 
@@ -1233,37 +957,17 @@ namespace Start_a_Town_
         {
             return this.Ingredient.GetLabel();
         }
-        protected virtual GameObject ToObject()
-        {
-            var obj = new GameObject();
-            obj.AddComponent<DefComponent>().Initialize(EntityIDRange + (int)this.Type, ObjectType.Block, this.GetName());
-            obj.AddComponent<PhysicsComponent>().Initialize(size: 1);
-            //obj.AddComponent<BlockComponent>().Initialize(this);
-            //obj.AddComponent<SpriteComponent>().Initialize(new Sprite(this.Variations.First().Name, Map.BlockDepthMap) { Origin = Block.OriginCenter, MouseMap = BlockMouseMap });
-            //obj.AddComponent<GuiComponent>().Initialize(new Icon(obj.GetSprite()));
-            return obj;
-        }
+        
         public virtual GameObject Create(List<GameObjectSlot> reagents)
         {
             return this.GetEntity().Clone();
         }
-        //static public GameObject CreateFromReagents(List<GameObjectSlot> reagents)
-        //{
-        //    GameObject obj = this.GetObject().Clone();
-        //    //IBlockState state = new State(reagents.First().Object.GetComponent<MaterialsComponent>().Parts["Body"].Material);
-        //    IBlockState state = this.BlockState;
-        //    state.FromMaterial(reagents.First().Object);
-        //    byte data = 0;
-        //    state.Apply(ref data);
-        //    obj.GetComponent<BlockComponent>().Data = data;
-        //    return obj;
-        //}
+        
 
         public virtual void OnSteppedOn(GameObject actor, Vector3 global) { }
 
         public virtual void OnDrop(GameObject actor, GameObject dropped, TargetArgs target, int amount = -1)
         {
-            //dropped.SetGlobal(target.Global + target.Face + target.Precise);
             dropped.Global = target.Global + target.Face + target.Precise;
             if (dropped.Slot != null)
                 dropped.Slot.Clear(); // ugly
@@ -1272,12 +976,10 @@ namespace Start_a_Town_
 
             // WARNING spawning the item locally by calling its own method because we dont want the server to syncspawn, as is the case my calling server.spawn at the moment
             dropped.Spawn(actor.Map, target.Global + target.Face + target.Precise); 
-            //actor.Net.Spawn(dropped);
         }
 
         static public Material GetBlockMaterial(IMap map, Vector3 global)
         {
-            //return map.GetBlock(global).GetMaterial(map, global);
             var cell = map.GetCell(global);
             var mat = cell.Block.GetMaterial(cell.BlockData);
             return mat;
@@ -1286,8 +988,6 @@ namespace Start_a_Town_
         {
             var offset = global.ToBlock();
             var cell = map.GetCell(global);
-            //var block = map.GetBlock(global);
-            //var data = map.GetData(global);
             var h = cell.Block.GetHeight(cell.BlockData, offset.X, offset.Y);
             return h;
         }
@@ -1295,56 +995,13 @@ namespace Start_a_Town_
         public virtual float GetHeight(byte data, float x, float y)
         {
             return this.GetHeight(x, y);
-            //return this.GetHeight(data, x, y);
-
-            // return this.Solid ? 1f : 0f; }
         }
         public virtual float GetHeight(float x, float y) { return this.Solid ? 1f : 0f; }
         public virtual Vector3 GetVelocityTransform(byte data, Vector3 blockcoords) { return Vector3.Zero; }
         public float GetHeight(Vector3 blockcoords) { return this.GetHeight(blockcoords.X, blockcoords.Y); }
         public float GetHeight(byte data, Vector3 blockcoords) { return this.GetHeight(data, blockcoords.X, blockcoords.Y); }
-        //public bool HasUsage(BlockUsageDef usage)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        
         static public readonly AtlasDepthNormals.Node.Token ParticlePixel = Block.Atlas.Load(UI.UIManager.Highlight, "particle");
-
-        //static public readonly Block Air = //new Block(Block.Types.Air, GameObject.Types.Air, opaque: false, solid: false, density: 0);
-        //    new BlockAir();
-        //static public readonly Block Grass = new BlockGrass();
-        //static public readonly Block Stone = new BlockBedrock();
-        //static public readonly Block Farmland = new BlockFarmland();
-        //static public readonly Block Cobblestone = new BlockStone();
-        //static public readonly Block Mineral = new BlockMineral();
-        //static public readonly Block Sand = new BlockSand();
-        //static public readonly Block WoodenDeck = new BlockWoodenDeck();
-        //static public readonly Block Soil = new BlockSoil();
-        //static public readonly Block Door = new BlockDoor(); // TODO: different door materials???
-        //static public readonly Block Bed = new BlockBed();
-        //static public readonly Block WoodPaneling = new BlockWoodPaneling();
-        //static public readonly Block Smeltery = new Blocks.Smeltery.BlockSmeltery();
-        //static public readonly Block Chest = new Blocks.Chest.BlockChest();
-        //static public readonly Block Bin = new BlockBin();
-        //static public readonly Block Sapling = new Blocks.Sapling.BlockSapling();
-        //static public readonly Block Water = new BlockWater();
-        //static public readonly Block Stool = new BlockStool();
-        //static public readonly Block Chair = new BlockChair();
-        //static public readonly Block Bricks = new BlockBricks();
-        //static public readonly Block Campfire = new BlockCampfire();
-        //static public readonly Block Window = new BlockWindow();
-        //static public readonly Block Roof = new BlockRoof();
-        //static public readonly Block Stairs = new BlockStairs();
-        //static public readonly Block Counter = new BlockCounter();
-        //static public readonly Block Workbench = new BlockWorkbench();
-        //static public readonly Block Kitchen = new BlockKitchen();
-        //static public readonly Block PlantProcessingBench = new BlockPlantProcessing();
-        //static public readonly Block Designation = new BlockDesignation();
-        //static public readonly Block CarpentryBench = new BlockCarpentryBench();
-        //static public readonly Block Slab = new BlockSlab();
-        //static public readonly Block Conveyor = new BlockConveyor();
-        //static public readonly Block Prefab = new BlockPrefab();
-        //static public readonly Block Construction = new BlockConstruction();
-        //static public readonly Block ShopCounter = new BlockShopCounter();
 
         static readonly AtlasDepthNormals.Node.Token Token = Block.Atlas.Load("blocks/blockunknown", Map.BlockDepthMap, Block.NormalMap);
 
@@ -1357,36 +1014,21 @@ namespace Start_a_Town_
 
         internal static bool IsBlockSolid(IMap map, Vector3 global)
         {
-            //return map.GetBlock(global).IsSolid(map, global);
             var cell = map.GetCell(global);
-            //return cell == null ? true : cell.Block.IsSolid(map, global);
             return cell == null || cell.Block.IsSolid(map, global, cell.BlockData);
         }
-
 
         internal virtual bool IsPathable(Cell cell, Vector3 blockCoords)
         {
             return !this.IsSolid(cell, blockCoords);
         }
 
-        //public virtual WindowTargetInterface GetInterface(Vector3 global) { return null; }
         public virtual void GetInterface(Vector3 global) { WindowTargetInterface.Instance.Client.ClearControls(); }
         public virtual void GetInterface(IMap map, Vector3 global, WindowTargetManagement window) { }
         public virtual void ShowUI(Vector3 global)
         {
 
         }
-
-        //void PlayerConstructNew(PlaceWallTool.Args args)// Vector3 start, Vector3 end)
-        //{
-        //    var data = Network.Serialize(w =>
-        //    {
-        //        w.Write(Player.Actor.InstanceID);
-        //        this.SelectedItem.Write(w);
-        //        args.Write(w);
-        //    });
-        //    Client.Instance.Send(PacketType.PlaceWallConstruction, data);
-        //}
 
         public void PaintIcon(int width, int height, byte data)
         {
@@ -1399,7 +1041,6 @@ namespace Start_a_Town_
             gd.Textures[0] = Block.Atlas.Texture;
             gd.Textures[1] = Block.Atlas.DepthTexture;
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            //var material = tag.Block.GetColor(tag.BlockData);// tag.Block.GetMaterial(tag.BlockData);
             var bounds = new Vector4((width - Block.Width) / 2, (height - Block.Height) / 2, token.Texture.Bounds.Width, token.Texture.Bounds.Height);
             var cam = new Camera
             {
@@ -1424,7 +1065,6 @@ namespace Start_a_Town_
             gd.Textures[0] = Block.Atlas.Texture;
             gd.Textures[1] = Block.Atlas.DepthTexture;
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            //var material = tag.Block.GetColor(tag.BlockData);// tag.Block.GetMaterial(tag.BlockData);
             var bounds = new Vector4(0,0, w, h);
             var cam = new Camera
             {
@@ -1537,7 +1177,6 @@ namespace Start_a_Town_
             e?.GetQuickButtons(uISelectedInfo, map, vector3);
             if (this.Furniture is not null)
             {
-                //if (this.Furniture.Rooms.Any())
                 uISelectedInfo.AddTabAction("Room", () => { });
             }
         }

@@ -30,7 +30,9 @@ namespace Start_a_Town_
             var stockpileID = r.ReadInt32();
             var nodes = r.ReadIntArray();
             var items = r.ReadIntArray();
-            var stockpile = net.Map.Town.StockpileManager.Stockpiles[stockpileID];
+            //var stockpile = net.Map.Town.StockpileManager.Stockpiles[stockpileID];
+            var stockpile = net.Map.Town.ZoneManager.GetZone<Stockpile>(stockpileID);
+
             stockpile.ToggleItemFiltersCategories(nodes);
             stockpile.ToggleItemFilters(items);
             if (net is Server)

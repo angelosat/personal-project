@@ -50,11 +50,11 @@ namespace Start_a_Town_
         {
             //PlantEntity = PlantDefOf.Tree,
             //ProductHarvest = ItemDefOf.Fruit,
-            //TextureGrowing = ItemContent.BerryBushGrowing,
-            //TextureGrown = ItemContent.BerryBushGrown,
+            TextureGrowing = ItemContent.TreeFull,
+            TextureGrown = ItemContent.TreeFull,
             Tree = new TreeProperties(MaterialDefOf.LightWood, 5),
-            //ProductCutDown = RawMaterialDef.Logs,
-            //MaxYieldCutDown = 5,
+            ProductCutDown = RawMaterialDef.Logs,
+            MaxYieldCutDown = 5,
             GrowTicks = 6 * Engine.TicksPerSecond,
         };
 

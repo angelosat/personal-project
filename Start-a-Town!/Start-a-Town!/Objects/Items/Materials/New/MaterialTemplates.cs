@@ -9,9 +9,7 @@ namespace Start_a_Town_
 {
     static class MaterialTemplates
     {
-        static public readonly Material Fruit =
-            //new(MaterialToken.Fruit)
-            new Material()
+        static public readonly Material Fruit = new Material()
             { 
                 EdibleRaw = true,
                 EdibleCooked = true,
@@ -20,47 +18,33 @@ namespace Start_a_Town_
             }.SetType(MaterialType.Fruit)
             ;
 
-        static public readonly Material Wood =
-            new Material(
-                //MaterialToken.Wood
-                )
+        static public readonly Material Wood = new Material()
+            { Fuel = new Fuel(FuelDef.Organic, 20f) }
             .SetState(MaterialState.Solid)
             .SetDensity(50)
             .SetType(MaterialType.Wood)
             ;
 
-        static public readonly Material Metal =
-            new Material(
-                //MaterialToken.Metal
-                )
+        static public readonly Material Metal = new Material()
             .SetState(MaterialState.Solid)
             .SetDensity(200)
             .SetReflectiveness(1)
             .SetType(MaterialType.Metal)
             ;
 
-        static public readonly Material Stone =
-            new Material(
-                //MaterialToken.Stone
-                )
+        static public readonly Material Stone = new Material()
             .SetState(MaterialState.Solid)
             .SetDensity(100)
             .SetType(MaterialType.Stone)
             ;
 
-        static public readonly Material Soil =
-          new Material(
-              //MaterialToken.Soil
-              )
+        static public readonly Material Soil = new Material()
           .SetState(MaterialState.Solid)
           .SetDensity(100)
           .SetType(MaterialType.Soil)
           ;
 
-        static public readonly Material Meat =
-          new Material(
-              //MaterialToken.Meat
-              )
+        static public readonly Material Meat = new Material()
           {
               EdibleRaw = true,
               EdibleCooked = true

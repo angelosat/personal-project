@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
     static public class StatDefOf
     {
-        static public readonly StatNewDef MaxHaulWeight = new StatNewDef("MaxHaulWeight", a => (a.GetAttribute(AttributeDef.Strength)?.Level ?? 0))// / 2)
+        static public readonly StatNewDef MaxHaulWeight = new("MaxHaulWeight", a => a.GetAttribute(AttributeDef.Strength)?.Level ?? 0)
         {
             Description = "Exceeding the limit will drain stamina",
             Label = "Haul weight limit",
-            //Builder = new ValueBuilderFromAttribute(AttributeDef.Strength).DivideBy(2)
         };
-        static public readonly StatNewDef Encumberance = new StatNewDef(
+        static public readonly StatNewDef Encumberance = new(
             "Encumberance",
             a =>
             {
@@ -23,28 +19,26 @@ namespace Start_a_Town_
                 if (haulWeight == 0)
                     return 0;
                 var maxWeight = StatDefOf.MaxHaulWeight.GetValue(a);
-                var ratio = haulWeight / maxWeight;// (maxWeight - haulWeight) / haulWeight;
+                var ratio = haulWeight / maxWeight;
                 ratio = MathHelper.Clamp(ratio, 0, 1);
-                return ratio;// 1 - ratio;
+                return ratio;
             })
         {
             Description = "Being encumbered affects walking speed.",
             Label = "Encumberance",
         };
 
-        static public readonly StatNewDef WalkSpeed = new StatNewDef("WalkSpeed")
+        static public readonly StatNewDef WalkSpeed = new("WalkSpeed")
         {
             Description = "Speed of walking",
             Label = "Walk speed",
             Type = StatNewDef.Types.Percentile
         };
 
-        static public readonly StatNewDef StaminaThresholdForWork = new StatNewDef("StaminaThresholdForWork",
+        static public readonly StatNewDef StaminaThresholdForWork = new("StaminaThresholdForWork",
             a =>
             {
                 var actor = a as Actor;
-                //var stamina = actor.GetResource(ResourceDef.Stamina);
-                //var staminaPercentage = stamina.Percentage;
                 var staminaBaseThreshold = .25f; //placeholder?
                 var stamina = actor.GetResource(ResourceDef.Stamina);
                 staminaBaseThreshold = stamina.GetThresholdValue(0);
@@ -52,16 +46,13 @@ namespace Start_a_Town_
                 var num = activity1 * staminaBaseThreshold * .5f;
                 var threshold = staminaBaseThreshold - num;
                 return threshold;
-                //var tired = staminaPercentage < threshold;
-                //return tired;
             })
         {
             Description = "Won't start new tasks if stamina below this percentage.",
             Label = "Work Stamina Threshold",
-            //Type = Types.Percentile
         };
 
-        static public readonly StatNewDef MoodChangeRate = new StatNewDef("MoodChangeRate",
+        static public readonly StatNewDef MoodChangeRate = new("MoodChangeRate",
             a =>
             {
                 var actor = a as Actor;
@@ -72,10 +63,9 @@ namespace Start_a_Town_
         {
             Description = "The speed at which mood changes to reach target value.",
             Label = "Mood change rate",
-            //Type = Types.Percentile
         };
 
-        static public readonly StatNewDef Armor = new StatNewDef("Armor",
+        static public readonly StatNewDef Armor = new("Armor",
               a =>
               {
                   var actor = a as Actor;
@@ -132,7 +122,6 @@ namespace Start_a_Town_
               a =>
               {
                   var actor = a as Actor;
-                  //var toolspeed = StatDefOf.ToolSpeed.GetValue(actor.GetEquipmentSlot(Components.GearType.Mainhand));
                   var toolspeed = actor.GetEquipmentSlot(GearType.Mainhand)?.GetStat(StatDefOf.ToolSpeed) ?? 0;
                   var speed = 1 + toolspeed;
                   return speed;

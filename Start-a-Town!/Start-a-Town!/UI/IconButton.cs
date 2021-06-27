@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,9 +9,9 @@ namespace Start_a_Town_.UI
     {
         static public readonly Texture2D Small = UIManager.Icon16Background;
         static public readonly Texture2D Large = UIManager.DefaultIconButtonSprite;
-        //SpriteFont Font = UIManager.Symbols;
         protected virtual void OnIconChanged() { }
-        string Character;
+
+        readonly string Character;
         protected Icon _Icon;
         public Icon Icon
         {
@@ -25,7 +23,8 @@ namespace Start_a_Town_.UI
                 this.Invalidate();
             }
         }
-        Icon[] IconStack = new Icon[] { };
+
+        readonly Icon[] IconStack = new Icon[] { };
 
         public override int Width
         {
@@ -75,7 +74,6 @@ namespace Start_a_Town_.UI
             if (!string.IsNullOrEmpty(this.Character))
             {
                 UIManager.DrawStringOutlined(sb, this.Character.ToString(), this.Center, new Vector2(.5f), this.Font);
-                //sb.DrawString(UIManager.Symbols, this.Character.ToString(), this.Center, Color.White, 0, new Vector2(0), 1, SpriteEffects.None, 0);
                 return;
             }
             if (this.IconStack.Any())
@@ -92,8 +90,6 @@ namespace Start_a_Town_.UI
         public IconButton(string character)
             : this()
         {
-            //this.BackgroundTexture = UIManager.Icon16Background;
-            //this.BackgroundTexture = UIManager.button;
             this.Font = UIManager.Symbols;
             this.Character = character;
         }
@@ -107,7 +103,6 @@ namespace Start_a_Town_.UI
         public IconButton(Texture2D backgroundText) : this() { BackgroundTexture = backgroundText; }
         public IconButton() : this(Vector2.Zero)
         {
-            //this.LocationFunc = () => new Vector2(0, (Pressed ? 1 : 0));
         }
         public IconButton(Vector2 location) : base(location)
         {
@@ -116,7 +111,6 @@ namespace Start_a_Town_.UI
 
         public IconButton(params Icon[] icons) : this()
         {
-            // TODO: Complete member initialization
             this.IconStack = icons;
         }
         public override Vector2 ScreenLocation { get => base.ScreenLocation + new Vector2(0, (Pressed ? 1 : 0)); }
@@ -127,7 +121,6 @@ namespace Start_a_Town_.UI
 
         public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
         {
-            //sb.Draw(this.BackgroundTexture, destRect, sourceRect, color * opacity, 0, Vector2.Zero, Pressed ? SpriteEffects.FlipVertically : SpriteEffects.None, Depth);
             sb.Draw(this.BackgroundTexture, destRect, sourceRect, color * opacity, 0, Vector2.Zero, SpriteEffects.None, Depth);
         }
         static public IconButton CreateCloseButton()
@@ -140,7 +133,7 @@ namespace Start_a_Town_.UI
             {
                 BackgroundTexture = UIManager.Icon16Background,
                 HoverText = "Randomize",
-                LeftClickAction = action != null ? action : () => { }// ?? ()=>{ }
+                LeftClickAction = action ?? (() => { })
             };
         }
         static public IconButton CreateSmall(Icon icon, Action leftClickAction, string hoverText = "")
@@ -149,7 +142,7 @@ namespace Start_a_Town_.UI
             {
                 BackgroundTexture = UIManager.Icon16Background,
                 HoverText = "hoverText",
-                LeftClickAction = leftClickAction ?? (() => { })// ?? ()=>{ }
+                LeftClickAction = leftClickAction ?? (() => { })
             };
         }
         static public IconButton CreateSmall(char symbol, Action leftClickAction, string hoverText = "")
@@ -159,7 +152,7 @@ namespace Start_a_Town_.UI
                 Font = UIManager.Font,
                 BackgroundTexture = UIManager.Icon16Background,
                 HoverText = "hoverText",
-                LeftClickAction = leftClickAction ?? (() => { })// ?? ()=>{ }
+                LeftClickAction = leftClickAction ?? (() => { })
             };
         }
     }

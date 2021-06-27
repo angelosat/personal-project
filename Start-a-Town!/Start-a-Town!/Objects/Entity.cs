@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
@@ -63,11 +58,7 @@ namespace Start_a_Town_
             {
                 c.OnObjectCreated(this);
             }
-            //foreach(var props in this.Def.CompProps)
-            //{
-            //    var comp = props.CreateComponent();
-            //    this.AddComponent(comp);
-            //}
+           
         }
 
         internal Material GetMaterial(BoneDef def)
@@ -86,10 +77,8 @@ namespace Start_a_Town_
         }
         internal Entity SetMaterial(Material mat)
         {
-            //this.Sprite.InitMaterials(mat);
             foreach (var c in this.Components.Values)
                 c.SetMaterial(mat);
-            //obj.Name = mat.Name + " " + obj.Name;
             this.Name = $"{mat.Prefix} {this.Def.Label}";
             mat.Apply(this);
             return this;
@@ -107,16 +96,6 @@ namespace Start_a_Town_
                     c.Initialize(this, quality);
             return this;
         }
-        
-        //internal Entity GetNameFromReagent(Entity material)
-        //{
-        //    this.Name = $"{material.Label} {this.Name}";
-        //    return this;
-        //}
-        //internal Entity GetNameFromReagentMaterial(Entity material)
-        //{
-        //    this.Name = $"{material.DominantMaterial.Label} {this.Name}";
-        //    return this;
-        //}
+       
     }
 }

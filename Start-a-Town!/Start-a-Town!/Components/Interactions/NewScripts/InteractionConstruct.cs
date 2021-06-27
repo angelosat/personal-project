@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Blocks;
-using Start_a_Town_.AI;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.Components;
 
 namespace Start_a_Town_.Interactions
 {
@@ -21,11 +13,12 @@ namespace Start_a_Town_.Interactions
         public override void Start(GameObject a, TargetArgs t)
         {
             base.Start(a, t);
-            var entity = a.Map.GetBlockEntity(t.Global) as IConstructible;// BlockDesignation.BlockDesignationEntity;
+            var entity = a.Map.GetBlockEntity(t.Global) as IConstructible;
             this.BuildProgress = entity.BuildProgress;
             var speed = a.GetStat(Stat.Types.Building);
             var actor = a as Actor;
-            var toolspeed = StatDefOf.ToolSpeed.GetValue(actor.GetEquipmentSlot(GearType.Mainhand));
+            var tool = actor.GetEquipmentSlot(GearType.Mainhand);
+            var toolspeed = tool is null ? 0 : StatDefOf.ToolSpeed.GetValue(tool);
             speed *= (1 + toolspeed);
             this.Animation.Speed = speed;
         }
@@ -35,9 +28,8 @@ namespace Start_a_Town_.Interactions
         }
         public override void OnUpdate(GameObject a, TargetArgs t)
         {
-            //var workAmount = a.GetToolWorkAmount(Components.GearType.Types.Mainhand, ToolAbilityDef.Building.ID);
             var workAmount = a.GetToolWorkAmount(ToolAbilityDef.Building.ID);
-            this.BuildProgress.Value += workAmount;// 1;// 100;// 25;
+            this.BuildProgress.Value += workAmount;
             if (SuccessCondition())
             {
                 this.Done(a, t);

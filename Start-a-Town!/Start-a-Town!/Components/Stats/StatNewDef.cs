@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Start_a_Town_.UI;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
@@ -11,7 +10,6 @@ namespace Start_a_Town_
         {
             public ValueBuilder(string name) : base(name)
             {
-                //this.Name = name;
             }
             protected abstract float BaseGet(GameObject parent);
             protected List<Expression> Expressions = new List<Expression>();
@@ -53,9 +51,6 @@ namespace Start_a_Town_
                 }
 
             }
-
-
-            //static public readonly BaseGetter AttributeGetter = new BaseGetter("Attribute", AttributeDef att);
         }
         class ValueBuilderFromAttribute : ValueBuilder
         {
@@ -82,7 +77,6 @@ namespace Start_a_Town_
         public string Label;
         public string Description;
         Func<GameObject, float> Formula;
-        //public ValueBuilder Builder;
         public Types Type = Types.Scalar;
         public string StringFormat = "";
 
@@ -108,7 +102,6 @@ namespace Start_a_Town_
             if (this.Type == Types.Scalar)
             {
                 var value = this.Formula(parent);
-                //value = this.Builder.Get(parent);
                 var modified = this.ApplyModifiers(parent, value);
                 return this.BaseValue + modified;
             }
@@ -122,76 +115,7 @@ namespace Start_a_Town_
         {
             return new Label() {
                 TextFunc = () => string.Format("{0}: {1}", this.Name, this.GetValue(parent)),
-                //HoverFunc = () => string.Format("Base: {0} ({1} / 2)", this.GetValue(parent), AttributeDef.Strength.Name)
             };
         }
-        //static public readonly StatNewDef MaxHaulWeight = new StatNewDef("MaxHaulWeight", a => (a.GetAttribute(AttributeDef.Strength)?.Level ?? 0))// / 2)
-        //{
-        //    Description = "Exceeding the limit will drain stamina",
-        //    Label = "Haul weight limit",
-        //    //Builder = new ValueBuilderFromAttribute(AttributeDef.Strength).DivideBy(2)
-        //};
-        //static public readonly StatNewDef Encumberance = new StatNewDef(
-        //    "Encumberance",
-        //    a =>
-        //    {
-        //        var haulWeight = a.GetHauled()?.TotalWeight ?? 0;
-        //        if (haulWeight == 0)
-        //            return 0;
-        //        var maxWeight = StatNewDef.MaxHaulWeight.GetValue(a);
-        //        var ratio = haulWeight / maxWeight;// (maxWeight - haulWeight) / haulWeight;
-        //        ratio = MathHelper.Clamp(ratio, 0, 1);
-        //        return ratio;// 1 - ratio;
-        //    })
-        //{
-        //    Description = "Being encumbered affects walking speed.",
-        //    Label = "Encumberance",
-        //};
-
-        //static public readonly StatNewDef WalkSpeed = new StatNewDef("WalkSpeed")
-        //{
-        //    Description = "Speed of walking",
-        //    Label = "Walk speed",
-        //    Type = Types.Percentile
-        //};
-
-        //static public readonly StatNewDef StaminaThresholdForWork = new StatNewDef("StaminaThresholdForWork",
-        //    a =>
-        //    {
-        //        var actor = a as Actor;
-        //        //var stamina = actor.GetResource(ResourceDef.Stamina);
-        //        //var staminaPercentage = stamina.Percentage;
-        //        var staminaBaseThreshold = .25f; //placeholder?
-        //        var stamina = actor.GetResource(ResourceDef.Stamina);
-        //        staminaBaseThreshold = stamina.GetThresholdValue(0);
-        //        var activity1 = actor.GetTrait(TraitDef.Activity).Normalized;
-        //        var num = activity1 * staminaBaseThreshold * .5f;
-        //        var threshold = staminaBaseThreshold - num;
-        //        return threshold;
-        //        //var tired = staminaPercentage < threshold;
-        //        //return tired;
-        //    })
-        //{
-        //    Description = "Won't start new tasks if stamina below this percentage.",
-        //    Label = "Work Stamina Threshold",
-        //    //Type = Types.Percentile
-        //};
-
-        //static public readonly StatNewDef MoodChangeRate = new StatNewDef("MoodChangeRate",
-        //    a =>
-        //    {
-        //        var actor = a as Actor;
-        //        var resilience = actor.GetTrait(TraitDef.Resilience).Normalized;
-        //        var value = 1 + resilience * .5f;
-        //        return value;
-        //    })
-        //{
-        //    Description = "The speed at which mood changes to reach target value.",
-        //    Label = "Mood change rate",
-        //    //Type = Types.Percentile
-        //};
-
-        //static public readonly StatNewDef[] NpcStatPackage = new StatNewDef[] { MaxHaulWeight, Encumberance, WalkSpeed };
-
     }
 }

@@ -12,7 +12,7 @@ Intrigued by game concepts like The Sims and Dwarf Fortress, began playing aroun
 Despite being overscoped, continued working on this project as a hobby while driven by these goals: 
 1. Finish this project and release as a commercial game given enough time
 2. Develop scalable and modular components that can be reused for a smaller game, should an idea come up
-3. Develop skills to be utilized for finding a job as a game (ideally) developer, in case a career change was in order
+3. Develop skills to be utilized for the possibility of a job as a C# developer
 
 # Current state
 * Iterating on different systems in a rotation in order to prevent burn-out

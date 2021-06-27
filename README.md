@@ -17,6 +17,7 @@ Despite being overscoped, continued working on this project as a hobby while dri
 # Current state
 * Iterating on different systems in a rotation in order to prevent burn-out
 * Still a lot of legacy code from early iterations that is slowly phased out/refactored, in order to not break everything at once
+* A lot of leftover code and comments that are being cleaned up to make the project more readable, since the decision to upload to github was hurried.
 
 # Highlights
 Εvery system built in C# from the ground up with just Microsoft XNA. Rediscovering the wheel in some cases but eliminating unnecessary overhead and gaining valuable exercise and insight.

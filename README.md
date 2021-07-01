@@ -23,7 +23,7 @@ Despite being overscoped, continued working on this project as a hobby while dri
 # Highlights
 Εvery system built in C# from the ground up with just Microsoft XNA. Rediscovering the wheel in some cases but eliminating unnecessary overhead and gaining valuable exercise and insight.
 
-## Voxel world structure
+## Voxel system
 * Bounded map divided by chunks
 * Perlin noise terrain generation
 * Cell based light diffusion

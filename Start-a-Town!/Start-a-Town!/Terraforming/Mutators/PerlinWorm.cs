@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
@@ -19,34 +14,23 @@ namespace Start_a_Town_.Terraforming.Mutators
         public override void Finally(Chunk chunk)
         {
             var s = chunk.World.Seed;
-            var n = chunk.NeighborsDiag;
             var worms = GetWorms(chunk.MapCoords, s, 3);
-            //Stopwatch w = Stopwatch.StartNew();
             var size = Chunk.Size;
             var chunkglobal = chunk.MapCoords * size;
             var maxz = Map.MaxHeight;
             foreach (var worm in worms)
             {
-                //while (worm.Life > 0)
-                //{
-                //    var current = worm.GetNextStep(s);
-                //    worm.CarveWithin(current, chunk);
-                //}
-
                 var segments = worm.GetBoxes();
                 foreach (var segment in segments)
                 {
                     var minvec3 = new Vector3(chunkglobal, 0);
                     var maxvec3 = new Vector3(chunkglobal + (Chunk.Size - 1) * Vector2.One, maxz - 1);
                     var chunkbox = new BoundingBox(minvec3, maxvec3);
-                    //var intersection = chunkbox.Intersects(segment);
-                    if (chunkbox.Intersects(segment)) //intersection != ContainmentType.Disjoint)
+                    if (chunkbox.Intersects(segment))
                         this.Carve(segment, chunkbox, chunk);
                 }
                 
             }
-            //("perlin worm finished in " + w.Elapsed).ToConsole();
-            //w.Stop();
         }
 
         public void Carve(BoundingBox bbox, BoundingBox chunkbox, Chunk chunk)
@@ -69,10 +53,8 @@ namespace Start_a_Town_.Terraforming.Mutators
                         var contains = chunkbox.Contains(current);
                         if (contains == ContainmentType.Disjoint)
                             continue;
-                        //if (Vector3.Distance(current, global) > radius)
-                        //    continue;
                         var local = current.ToLocal();
-                        var c = chunk.GetCellLocal(local);// chunk.CellGrid2[Chunk.GetCellHash(local)];
+                        var c = chunk.GetCellLocal(local);
                         if (c.Block == BlockDefOf.Air ||
                             c.Block == BlockDefOf.Water ||
                             c.Block == BlockDefOf.Sand)
@@ -122,18 +104,16 @@ namespace Start_a_Town_.Terraforming.Mutators
             Vector3 CurrentPosition;
             int CurrentStep, MaxLength;
             public float Life { get { return (MaxLength - CurrentStep) / (float)MaxLength; } }
-            byte[] SeedArray;
-            Random Random;
+
+            readonly Random Random;
             float LastRadius;
             Vector3 Origin;
-            int Seed;
+            readonly int Seed;
             public PerlinWorm(Vector3 origin, int maxLength, int seed)
             {
                 this.CurrentPosition = origin;
                 this.MaxLength = maxLength;
-                //this.Seed = Seed;
                 this.Random = new Random(seed);
-                this.SeedArray = BitConverter.GetBytes(seed);
                 this.LastRadius = GetRadius(3, 5, this.Life);
                 this.Origin = origin;
                 this.Seed = seed;
@@ -141,7 +121,6 @@ namespace Start_a_Town_.Terraforming.Mutators
             public Vector3 GetNextStep(int seed)
             {
                 var current = this.CurrentPosition;
-                //this.CurrentPosition += GetNextPosition(this.CurrentStep++, seed);
                 var nextdir = GetNextDirectionSpherical(CurrentPosition, seed);
                 this.CurrentPosition += nextdir;
                 this.CurrentStep += 1;
@@ -156,25 +135,17 @@ namespace Start_a_Town_.Terraforming.Mutators
             {
                 return this.GetNextDirectionSpherical((int)global.X, (int)global.Y, (int)global.Z, seed, this.LastRadius);
             }
-            Vector3 GetNextDirectionSpherical(int x, int y, int z, int seed, int radius)
-            {
-                return this.GetNextDirectionSpherical(x, y, z, seed, this.LastRadius);
-            }
+            
             Vector3 GetNextDirectionSpherical(int x, int y, int z, int seed, float radius)
             {
                 var f = 16;
-                //var x = (int)current.X;
-                //var y = (int)current.Y;
-                //var z = (int)current.Z;
+                
                 var s = BitConverter.GetBytes(seed);
                 var s2 = BitConverter.GetBytes(seed * seed);
 
                 var rtheta = Generator.Perlin3D(x, y, z, f, s);
                 var rphi = Generator.Perlin3D(x, y, z, f, s2);
-                //rtheta /= 4;
-
-                //var atheta = Math.PI * rtheta;
-                //var atheta = (Math.PI / 2) + (Math.PI / 2) * rtheta;
+                
                 var atheta = (Math.PI / 2) * (1 + rtheta);
                 var aphi = pipi * rphi;
 
@@ -182,46 +153,14 @@ namespace Start_a_Town_.Terraforming.Mutators
                 var ry = (Math.Sin(atheta) * Math.Sin(aphi));
                 var rz = Math.Cos(atheta);
 
-                //var dx = (int)rx;
-                //var dy = (int)ry;
-                //var dz = (int)rz;
-
                 var dir = new Vector3((float)rx, (float)ry, (float)rz);
-                //dir.Normalize();
-                //dir *= 2;
-                //var rx = Generator.Perlin3D(currenstep, 0, 0, f, s);
-                //var ry = Generator.Perlin3D(0, currenstep, 0, f, s);
-                //var rz = Generator.Perlin3D(0, 0, currenstep, f, s);
-
-                //var dx = (int)Math.Round(rx * 2); // normalize with *2 because noise is within (-.5,.5)
-                //var dy = (int)Math.Round(ry * 2);
-                //var dz = (int)Math.Round(rz * 2);
-
-                //var dx = this.Random.Next(-1, 1);
-                //var dy = this.Random.Next(-1, 1);
-                //var dz = this.Random.Next(-1, 1);
-                dir *= radius;// GetRadius(3, 5, this.Life);
-                return dir;// new Vector3(dx, dy, dz);
+               
+                dir *= radius;
+                return dir;
             }
             Vector3 GetNextPosition(int currenstep, int seed)
             {
-                var f = 16;
-                //var x = (int)current.X;
-                //var y = (int)current.Y;
-                //var z = (int)current.Z;
-                var s = BitConverter.GetBytes(seed);
-                //int dx = (int)Math.Round(Generator.Perlin3D(currenstep, 0, 0, f, s) * 2); // normalize with *2 because noise is within (-.5,.5)
-                //int dy = (int)Math.Round(Generator.Perlin3D(0, currenstep, 0, f, s) * 2);
-                //int dz = (int)Math.Round(Generator.Perlin3D(0, 0, currenstep, f, s) * 2);
-
-                //var rx = Generator.Perlin3D(currenstep, 0, 0, f, s);
-                //var ry = Generator.Perlin3D(0, currenstep, 0, f, s);
-                //var rz = Generator.Perlin3D(0, 0, currenstep, f, s);
-
-                //var dx = (int)Math.Round(rx * 2); // normalize with *2 because noise is within (-.5,.5)
-                //var dy = (int)Math.Round(ry * 2);
-                //var dz = (int)Math.Round(rz * 2);
-
+               
                 var dx = this.Random.Next(-1, 1);
                 var dy = this.Random.Next(-1, 1);
                 var dz = this.Random.Next(-1, 1);
@@ -230,8 +169,6 @@ namespace Start_a_Town_.Terraforming.Mutators
             }
             public float GetRadius(float minRadius, float maxRadius, float life)
             {
-                //var maxRadius = 5;
-                //var minRadius = 3;
                 maxRadius = 1;
                 minRadius = 1;
                 var perc = 1 - Math.Abs(life * 2 - 1);
@@ -243,18 +180,8 @@ namespace Start_a_Town_.Terraforming.Mutators
                 var chunkglobal = chunk.MapCoords * Chunk.Size;
                 var box = new BoundingBox(new Vector3(chunkglobal, 0), new Vector3(chunkglobal + (Chunk.Size - 1) * Vector2.One, Map.MaxHeight - 1));
 
-                //var maxRadius = 5;
-                //var minRadius = 3;
-                //var perc = 1 - Math.Abs(this.Life* 2 - 1);
-                //var radius = minRadius + perc * (maxRadius - minRadius);
                 var radius = GetRadius(3, 5, this.Life);
 
-                //int x = (int)(global.X - radius);
-                //int y = (int)(global.Y - radius);
-                //int z = (int)(global.Z - radius);
-                //int xx = (int)(global.X + radius);
-                //int yy = (int)(global.Y + radius);
-                //int zz = (int)(global.Z + radius);
                 int x = (int)Math.Round(global.X - radius);
                 int y = (int)Math.Round(global.Y - radius);
                 int z = (int)Math.Round(global.Z - radius);
@@ -273,8 +200,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                             var contains = box.Contains(current);
                             if (contains == ContainmentType.Disjoint)
                                 continue;
-                            //if (Vector3.Distance(current, global) > radius)
-                            //    continue;
                             var local = current.ToLocal();
                             var c = chunk.CellGrid2[Chunk.GetCellIndex(local)];
                             if (c.Block == BlockDefOf.Air ||
@@ -285,36 +210,20 @@ namespace Start_a_Town_.Terraforming.Mutators
                         }
                 this.LastRadius = radius;
             }
-            List<Vector3> GetSegments()
-            {
-                List<Vector3> list = new List<Vector3>() { this.Origin };
-                var maxlife = this.MaxLength;
-                var current = this.Origin;
-                for (int i = 0; i < maxlife; i++)
-                {
-                    var r = GetRadius(1,2, i/(float)maxlife);
-                    current = GetNextDirectionSpherical(current, this.Seed, r);
-                    list.Add(current);
-                }
-                return list;
-            }
+            
             public IEnumerable<BoundingBox> GetBoxes()
             {
-                //List<BoundingBox> list = new List<BoundingBox>();
                 var r = GetRadius(1, 2, 0);
                 var maxlife = this.MaxLength;
                 var current = this.Origin;
-                //list.Add(GetBox(current, r));
                 yield return GetBox(current, r);
                 for (int i = 0; i < maxlife; i++)
                 {
                     r = GetRadius(1, 2, i / (float)maxlife);
                     current += GetNextDirectionSpherical(current, this.Seed, r);
                     var box = GetBox(current, r);
-                    //list.Add(box);
                     yield return box;
                 }
-                //return list;
             }
             BoundingBox GetBox(Vector3 global, float radius)
             {

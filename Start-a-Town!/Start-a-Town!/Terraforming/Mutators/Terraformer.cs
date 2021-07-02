@@ -65,19 +65,13 @@ namespace Start_a_Town_
 
         public Action<RandomThreaded, IWorld, Cell, int, int, int>
             Finalize = (r, w, c, x, y, z) => { };
-        //public Action<World, Cell, int, int, int>
-        //    Finalize = (w, c, x, y, z) => { };
-        //public Action<World, Cell, int, int, int>
-        //    InitializeFunc = (w, c, x, y, z) => { };
+
         public virtual Block.Types Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r) { return c.Block.Type; }
         public virtual void Initialize(IWorld w, Cell c, int x, int y, int z, double g) { }
         public virtual void Finally(Chunk chunk) { }
         internal virtual void Finally(Chunk newChunk, Dictionary<Vector3, double> gradients)
         {
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
             this.Finally(newChunk);
-            //watch.Stop();
-            //string.Format("{0} generated in {1} ms", this.Name, watch.ElapsedMilliseconds).ToConsole();
         }
 
         public override string ToString()
@@ -90,7 +84,6 @@ namespace Start_a_Town_
         {
             get
             {
-                //return new List<Terraformer>() { Sea, Land, Normal, Test, Grass, Caves };
                 return Dictionary.Values.ToList();
             }
         }
@@ -98,10 +91,7 @@ namespace Start_a_Town_
         {
             get
             {
-                //return new List<Terraformer>() { Normal, Caves, Minerals, Grass, Flowers, Trees };
                 return new List<Terraformer>() { Normal, PerlinWorms, Minerals, Grass, Flowers, Trees };
-                //return new List<Terraformer>() { Normal, Minerals, Grass, Flowers, Trees };
-
             }
         }
 
@@ -121,19 +111,13 @@ namespace Start_a_Town_
                     {
                         Cell cell = new Cell();
 
-                        //cell.Type = this.Initialize(world, cell, x, y, z, Server.Random);
                         cell.SetBlockType(this.Initialize(world, cell, x, y, z, Server.Random));
                         if (cell.Block.Type != Block.Types.Air && cell.Block.Type != Block.Types.Water)
                         {
-                            //float c = z / (float)(Map.MaxHeight - 1);
-                            //float r = z == world.SeaLevel ? (1 - (world.SeaLevel - z) / (float)(Map.MaxHeight - 1)) : 0;
-                            //float g = z > world.SeaLevel ? (1 - (z - world.SeaLevel) / (float)(Map.MaxHeight - 1)) : (z == world.SeaLevel ? 1 : 0);
-                            //float b = z < world.SeaLevel ? c : 0;
-                            //data[y * size + x] = new Color(r, g, b, 1);
+
                             break;
                         }
                     }
-                    // progress += 1;
                     progress = (p++ / maxProgress);
                 }
             tex.SetData(data);
@@ -152,7 +136,6 @@ namespace Start_a_Town_
         }
         static protected int GetRandom(int seed, int min, int max)
         {
-            //Random random = new Random(seed + (x + y + z).GetHashCode());
             Random random = new Random(seed);
             double r = random.NextDouble();
             int val = min + (int)Math.Floor((max - min) * r);
@@ -171,7 +154,7 @@ namespace Start_a_Town_
                 var name = new Label(item.Name) { Location = box.Controls.BottomLeft };
                 box.Controls.Add(name);
                 TextBox input;
-                var slider = new Slider(box.Controls.BottomLeft, 100, item.Min, item.Max, item.Step, item.Value) ;//{ ValueChangedAction = value => input.Text = value.ToString() };
+                var slider = new Slider(box.Controls.BottomLeft, 100, item.Min, item.Max, item.Step, item.Value);
                 input = new TextBox(50) { Location = slider.TopRight, Text = item.Value.ToString() };
                 slider.ValueChangedAction = value => input.Text = value.ToString();
                 input.InputFunc = (txt, ch) =>
@@ -211,13 +194,12 @@ namespace Start_a_Town_
         }
 
         public abstract object Clone();
-        //public abstract object Clone(World w);
         public virtual Terraformer SetWorld(IWorld w) { return this; }
         static public Terraformer Create(Terraformer.Types id, IWorld world)
         {
             return (Dictionary[id].Clone() as Terraformer).SetWorld(world);
         }
 
-        
+
     }
 }

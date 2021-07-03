@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -18,7 +13,7 @@ namespace Start_a_Town_
         internal static void Send(IObjectProvider net)
         {
             if (net is Server)
-                throw new NotImplementedException();
+                throw new Exception();
             var w = net.GetOutgoingStream();
             w.Write(PacketType.PlayerNpcControlJump);
             w.Write(net.GetPlayer().ID);
@@ -26,7 +21,7 @@ namespace Start_a_Town_
         private static void Receive(IObjectProvider net, BinaryReader r)
         {
             if (net is Client)
-                throw new NotImplementedException();
+                throw new Exception();
             var pl = net.GetPlayer(r.ReadInt32());
             pl.ControllingEntity.Jump();
         }

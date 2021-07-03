@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI.Behaviors;
+﻿using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_
 {
+    // TODO: load from external file?
     public static class TaskDefOf
     {
         static public TaskDef Crafting = new("Crafting", typeof(TaskBehaviorCrafting))
         {
-            Format = "Force crafting at {0}", //PrimaryTargetIndex = TaskBehaviorCrafting.WorkstationIndex };
+            Format = "Force crafting at {0}", 
             GetPrimaryTarget = t => t.GetTarget(TaskBehaviorCrafting.WorkstationIndex)
         };
 
         static public TaskDef Hauling = new("Hauling", typeof(TaskBehaviorHaulToStockpileNew))
         {
-            Format = "Force haul {0}", //PrimaryTargetIndex = TargetIndex.A };
-            //GetPrimaryTarget = t => t.GetTargetQueue(TaskBehaviorHaulToStockpileNew.ItemInd).First()
+            Format = "Force haul {0}",
             GetPrimaryTarget = t => t.GetTarget(TaskBehaviorHaulToStockpileNew.ItemInd)
         };
 
@@ -40,7 +35,7 @@ namespace Start_a_Town_
             GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
         };
 
-        static public TaskDef Sowing = new("Sowing", typeof(TaskBehaviorDeliverMaterials))//typeof(TaskBehaviorSowingNewNew))
+        static public TaskDef Sowing = new("Sowing", typeof(TaskBehaviorDeliverMaterials))
         {
             Format = "Sow {0}",
             GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)

@@ -1,100 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using Start_a_Town_.Towns;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.AI
 {
-    public class ReservationManager : TownComponent
+    public partial class ReservationManager : TownComponent
     {
-        class Reservation
-        {
-            public int Actor;
-            public TargetArgs Target;
-            int _Amount;
-            public int Amount
-            {
-                get { return this._Amount; }
-                set
-                {
-                    //if (this.Target.HasObject && value > this.Target.Object.StackSize)
-                    //    throw new Exception();
-                    this._Amount = value;
-                }
-
-            }
-
-            public int TaskID;
-            public AITask Task { set { this.TaskID = value.ID; } }
-            //public override string ToString()
-            //{
-            //    return string.Format("Actor: {0} Target: {1} Amount: {2} Task: {3}", this.Actor, this.Target, this.Amount, this.Task);
-            //}
-            public override string ToString()
-            {
-                return string.Format("Actor: {0} Target: {1} Amount: {2}", this.Actor, this.Target, this.Amount);
-            }
-            //public Reservation(GameObject actor, AITask task, TargetArgs target, int stackcount)
-            //{
-            //    this.Actor = actor.InstanceID;
-            //    this.Target = target;
-            //    this.Amount = stackcount;
-            //    this.Task = task;
-            //}
-            public Reservation(GameObject actor, TargetArgs target, int stackcount)
-            {
-                if (stackcount == -1)
-                    throw new Exception();
-                //this.Actor = actor;
-                this.Actor = actor.RefID;
-                this.Target = target;
-                this.Amount = stackcount;
-                if (target.HasObject && stackcount > target.Object.StackSize)
-                    throw new Exception();
-            }
-            public void Write(BinaryWriter w)
-            {
-                //w.Write(this.Actor.InstanceID);
-                w.Write(this.Actor);
-                this.Target.Write(w);
-                w.Write(this.Amount);
-                w.Write(this.TaskID);
-            }
-            public Reservation(IMap map, BinaryReader r)
-            {
-                this.Actor = r.ReadInt32();// map.Net.GetNetworkObject(r.ReadInt32());
-                this.Target =  TargetArgs.Read(map, r);
-                this.Amount = r.ReadInt32();
-                this.TaskID = r.ReadInt32();
-            }
-            public SaveTag Save()
-            {
-                var tag = new SaveTag(SaveTag.Types.Compound);
-                //tag.Add(this.Actor.InstanceID.Save("ActorID"));
-                tag.Add(this.Actor.Save("ActorID"));
-                tag.Add(this.Target.Save("Target"));
-                tag.Add(this.Amount.Save("Amount"));
-                return tag;
-            }
-            public Reservation(IMap map, SaveTag tag)
-            {
-                this.Actor = tag.GetValue<int>("ActorID");
-                this.Target = new TargetArgs(map, tag["Target"]);
-
-                //this.Target = new TargetArgs(map, tag["Target"]);
-
-                this.Amount = tag.GetValue<int>("Amount");
-            }
-
-            
-        }
-
-        
-
         public override string Name
         {
             get { return "Reservations"; }
@@ -110,44 +23,13 @@ namespace Start_a_Town_.AI
             return TaskIDSequence++;
         }
 
-        public override void Tick()
-        {
-            /// THIS IS FOR TESTING.
-            //foreach (var r in this.Reservations)
-            //{
-            //    if (r.Target.HasObject && r.Amount > r.Target.Object.StackSize)
-            //        "reservation amount more than actual object stacksize".ToConsole();
-
-            //    //if (!r.Target.HasObject)
-            //    //    continue;
-            //    //var stack = r.Target.Object.StackSize;
-            //    ///// reserved items can be reduced in stacksize during a behavior (such as when delivering hauled object to multiple targets)
-            //    //if (stack > 0 && r.Amount > stack)
-            //    //    "reservation amount more than actual object stacksize".ToConsole();
-            //}
-        }
 
         public bool Reserve(GameObject actor, TargetArgs target, int stackCount = -1)
         {
-            //return this.Reserve(actor, null, target, stackCount);
             return this.Reserve(actor, actor.CurrentTask, target, stackCount);
-
-            //if (!actor.CanReserve(target, stackCount))
-            //    throw new Exception();
-            //if (target.Type == TargetType.Null)
-            //    return true;
-            //if (target.Type == TargetType.Position)
-            //    stackCount = 1;
-            //else if (target.Type == TargetType.Entity)
-            //    stackCount = (stackCount == -1) ? target.Object.StackMax : stackCount;
-            //var vation = new Reservation(actor, target, stackCount);
-            //Reservations.Add(vation);
-            //return true;
         }
         internal bool Reserve(GameObject actor, AITask task, TargetArgs target, int stackCount)
         {
-            //if (stackCount == -1)
-            //    throw new Exception();
             if (target.Type == TargetType.Null)
                 throw new Exception();
 
@@ -155,7 +37,7 @@ namespace Start_a_Town_.AI
             if (target.Type == TargetType.Position)
                 stackCount = 1;
             else if (target.Type == TargetType.Entity)
-                stackCount = (stackCount != -1) ? stackCount : target.Object.StackSize;//.StackMax; // UNDONE was there a reason i put stackmax?
+                stackCount = (stackCount != -1) ? stackCount : target.Object.StackSize;
 
             // update existing reservation if it exists
             var existing = this.Reservations.FirstOrDefault(r => r.Target.IsEqual(target) && r.Actor == actor.RefID);
@@ -217,18 +99,10 @@ namespace Start_a_Town_.AI
                     continue;
                 else if (r.Target.Type == TargetType.Position && r.Target.Global == target.Global)
                 {
-                    //var actor = this.Map.Net.GetNetworkObject(r.Actor);
-                    //var task = actor.CurrentTask;
-                    //if (task.ID != r.TaskID)
-                    //    throw new Exception();
-                    //actor.Net.Log.Write("cancelling " + actor.Name + "'s task's reservations ");
-                    //task.Cancel();
                     CancelReservation(r);
                 }
                 else if (r.Target.Type == TargetType.Entity && r.Target.Object != null && r.Target.Object == target.Object)
                 {
-                    //if (stackCount > r.Target.Object.StackSize - r.Amount)
-                    //    return true;
                     foundStacks.Add(r);
                     foundAmount += r.Amount;
                 }
@@ -244,20 +118,6 @@ namespace Start_a_Town_.AI
                     }
                 }
             }
-
-            //var existing = Reservations.FirstOrDefault(r =>
-            //{
-            //    if (r.Target.Type != target.Type)
-            //        return false;
-            //    if (r.Target.Type == TargetType.Entity && r.Target.Object != null && r.Target.Object == target.Object)
-            //    {
-            //        if (stackCount > r.Target.Object.StackSize - r.Amount)
-            //            return true;
-            //    }
-            //    else if (r.Target.Type == TargetType.Position && r.Target.Global == target.Global)
-            //        return true;
-            //    return false;
-            //});
         }
 
         private void CancelReservation(Reservation r)
@@ -296,10 +156,7 @@ namespace Start_a_Town_.AI
                 throw new Exception();
             if (target.IsForbidden)
                 return false;
-            //var maxPossibleStackCount = target.HasObject ? target.Object.StackSize : 1;
-            //stackcount = stackcount != -1 ? stackcount : maxPossibleStackCount;
-            //if (stackcount > maxPossibleStackCount)
-            //    throw new Exception();
+            
             if (ignoreOtherReservations)
                 return true;
 
@@ -307,21 +164,6 @@ namespace Start_a_Town_.AI
             stackcount = stackcount == -1 ? (target.HasObject ? target.Object.StackSize : 1) : stackcount;
             return stackcount <= unreservedAmount;
 
-            //var existing = Reservations.FirstOrDefault(r =>
-            //    {
-            //        if (r.Target.Type != target.Type)
-            //            return false;
-            //        if (r.Target.Type == TargetType.Entity && r.Target.Object != null && r.Target.Object == target.Object)
-            //        {
-            //            if (stackcount > r.Target.Object.StackSize - r.Amount)
-            //                return true;
-            //        }
-            //        else if (r.Target.Type == TargetType.Position && r.Target.Global == target.Global)
-            //            return true;
-            //        return false;
-            //    });
-            //var can = existing == null;
-            //return can;
         }
         internal bool CanReserve(TargetArgs target)
         {
@@ -380,21 +222,7 @@ namespace Start_a_Town_.AI
         {
             return this.Reservations.Any(t => t.Target.Global == (Vector3)global);
         }
-        public override void Write(BinaryWriter w)
-        {
-            /// i dont want to sync reservations to client
-            //w.Write(this.Reservations.Count);
-            //foreach (var r in this.Reservations)
-            //    r.Write(w);
-        }
-        public override void Read(BinaryReader r)
-        {
-            /// i dont want to sync reservations to client
-            //this.Reservations.Clear();
-            //var count = r.ReadInt32();
-            //for (int i = 0; i < count; i++)
-            //    this.Reservations.Add(new Reservation(this.Town.Map, r));
-        }
+        
         protected override void AddSaveData(SaveTag tag)
         {
             var reservationsTag = new SaveTag(SaveTag.Types.List, "Reservations", SaveTag.Types.Compound);
@@ -406,18 +234,13 @@ namespace Start_a_Town_.AI
         public override void Load(SaveTag tag)
         {
             this.Reservations.Clear();
-            //var list = tag["Reservations"].Value as List<SaveTag>;
-            //foreach (var t in list)
-            //    this.Reservations.Add(new Reservation(this.Town.Map, t));
             tag.TryGetTag("Reservations", v =>
             {
                 var list = v.Value as List<SaveTag>;
                 foreach (var t in list)
                     this.Reservations.Add(new Reservation(this.Town.Map, t));
             });
-            tag.TryGetTagValue<int>("TaskIDSequence", out TaskIDSequence);// t => TaskIDSequence = t);
+            tag.TryGetTagValue<int>("TaskIDSequence", out TaskIDSequence);
         }
-
-        
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
 
@@ -13,6 +9,7 @@ namespace Start_a_Town_
         static readonly PacketType PType = PacketType.NpcControl;
         internal static void Init()
         {
+            // TODO: update
             Server.RegisterPacketHandler(PType, Receive);
             Client.RegisterPacketHandler(PType, Receive);
         }
@@ -37,7 +34,6 @@ namespace Start_a_Town_
             var entity = entityid != -1 ? net.GetNetworkObject(entityid) as Actor : null;
             if (entity?.IsPlayerControlled ?? false)
                 return;
-            //net.PlayerControlEntity(player, entity);
             var lastEntity = player.ControllingEntity;
             player.ControllingEntity = entity;
             net.EventOccured(Components.Message.Types.PlayerControlNpc, player, entity, lastEntity);
@@ -49,7 +45,6 @@ namespace Start_a_Town_
 
             if (net is Server)
             {
-                //AI.AIState.GetState(entity).Autonomy = false;
                 if (lastEntity != null)
                     lastEntity.GetComponent<AIComponent>().Enabled = true;
                 if (entity != null)

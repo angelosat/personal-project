@@ -1,9 +1,4 @@
-﻿using Start_a_Town_.AI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Start_a_Town_
 {
@@ -19,7 +14,6 @@ namespace Start_a_Town_
         }
         public string GetForceText(AITask task)
         {
-            //return string.Format(this.Format, task.GetTarget(this.PrimaryTargetIndex).Label);
             return string.Format(this.Format, this.GetPrimaryTarget(task).Label);
         }
     }

@@ -329,10 +329,9 @@
     <Compile Include="Blocks\Bed\InteractionSleepOnGround.cs" />
     <Compile Include="Blocks\Bed\InteractionSleepInBed.cs" />
     <Compile Include="Blocks\Bed\InteractionToggleSleep.cs" />
-    <Compile Include="Blocks\Bed\InteractionGetOutOfBed.cs" />
-    <Compile Include="Blocks\Bin\BlockBin.cs" />
-    <Compile Include="Blocks\Bin\BlockBinEntity.cs" />
-    <Compile Include="Blocks\Bin\StorageContentsUI.cs" />
+    <Compile Include="Blocks\Storage\BlockStorage.cs" />
+    <Compile Include="Blocks\Storage\BlockStorageEntity.cs" />
+    <Compile Include="Blocks\Storage\StorageContentsUI.cs" />
     <Compile Include="Blocks\BlockAir.cs" />
     <Compile Include="Blocks\Bed\BlockBed.cs" />
     <Compile Include="Blocks\BlockBedrock.cs" />
@@ -682,7 +681,6 @@
     <Compile Include="Modules\Crafting\CraftOrderNew.cs" />
     <Compile Include="Blocks\Workstations\Smeltery\SmeltingInterfaceNewNew.cs" />
     <Compile Include="Blocks\Workstations\Workbench\BlockWorkbenchEntity.cs" />
-    <Compile Include="Blocks\Workstations\Workbench\BlockWorkbench.cs" />
     <Compile Include="Blocks\Chest\BlockChest.cs" />
     <Compile Include="Blocks\Chest\ContainerUI.cs" />
     <Compile Include="Blocks\Chest\BlockChestEntity.cs" />
@@ -690,7 +688,6 @@
     <Compile Include="Blocks\Workstations\Smeltery\BlockSmeltery.cs" />
     <Compile Include="Blocks\BlockWoodPaneling.cs" />
     <Compile Include="Blocks\Workstations\Smeltery\BlockSmelteryEntity.cs" />
-    <Compile Include="Blocks\Workstations\Smeltery\SmeltingInterface.cs" />
     <Compile Include="Components\AI\AICombat.cs" />
     <Compile Include="Components\Combat\AttackComponent.cs" />
     <Compile Include="Components\BloodComponent.cs" />
@@ -951,11 +948,9 @@
     <Compile Include="GameModes\StaticMaps\UI\StaticMapBrowser.cs" />
     <Compile Include="GameModes\StaticMaps\UI\WindowSelectedWorld.cs" />
     <Compile Include="Modules\Construction\PlaceBlockConstructionTool.cs" />
-    <Compile Include="Blocks\Workstations\ConditionMaterialsPresent.cs" />
     <Compile Include="Blocks\Workstations\BlockWorkstation.cs" />
     <Compile Include="Blocks\Workstations\BlockEntityWorkstation.cs" />
     <Compile Include="Modules\Crafting\IBlockEntityWorkstation.cs" />
-    <Compile Include="Blocks\Workstations\InteractionAddMaterial.cs" />
     <Compile Include="Modules\Crafting\UI\CraftInterface.cs" />
     <Compile Include="Modules\Crafting\UI\WindowCrafting.cs" />
     <Compile Include="Modules\Crafting\WorkstationControlsUI.cs" />

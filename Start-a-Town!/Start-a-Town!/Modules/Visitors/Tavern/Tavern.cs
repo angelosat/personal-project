@@ -342,7 +342,7 @@ namespace Start_a_Town_
         }
         public override bool IsAllowed(Block block)
         {
-            return block is BlockKitchen || block is BlockStool || block is BlockShopCounter;
+            return (block.Type == Block.Types.Kitchen) || block is BlockStool || block is BlockShopCounter;
         }
         internal override void AddFacility(IntVec3 global)
         {

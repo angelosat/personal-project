@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.Blocks;
@@ -26,10 +22,7 @@ namespace Start_a_Town_
             var block = entity.Product.Block;
             
             AtlasDepthNormals.Node.Token token;
-            //if (entity.Materials.First().AmountCurrent > 0)
-                token = block.GetToken(variation, orientation, (int)camera.Rotation, data);// block.Variations.First();
-            //else
-            //    token = this.Variations[0];// Block.Atlas.Load("blocks/blockblueprint");
+                token = block.GetToken(variation, orientation, (int)camera.Rotation, data);
 
             var color = Color.White;
             return canvas.Designations.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, color, sunlight, blocklight, depth, this, blockCoordinates);
@@ -46,7 +39,7 @@ namespace Start_a_Town_
                 var remaining = mat.Amount;
                 while(remaining>0)
                 {
-                    var obj = this.Ingredient.ItemDef.Create();// GameObject.Create(mat.ObjectID);
+                    var obj = this.Ingredient.ItemDef.Create();
                     obj.StackSize = Math.Min(obj.StackMax, remaining);
                     remaining -= obj.StackSize;
                     map.Net.PopLoot(obj, global, Vector3.Zero);
@@ -55,9 +48,8 @@ namespace Start_a_Town_
             foreach (var g in entity.Children)
             {
                 map.RemoveBlockEntity(g);
-                map.SetBlock(g, Block.Types.Air, 0, raiseEvent: false);// raiseEvent: true);
+                map.SetBlock(g, Block.Types.Air, 0, raiseEvent: false);
             }
-            //map.EventOccured(Message.Types.ConstructionRemoved, entity.Children);
         }
         internal override string GetName(IMap map, Vector3 global)
         {

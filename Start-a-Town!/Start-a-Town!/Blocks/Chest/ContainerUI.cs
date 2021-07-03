@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Blocks.Chest
 {
     class ContainerUI : GroupBox
     {
         Vector3 Global;
-        BlockChest.BlockChestEntity Entity;
 
         public ContainerUI()
         {
@@ -23,22 +16,8 @@ namespace Start_a_Town_.Blocks.Chest
         public ContainerUI Refresh(Vector3 global, BlockChest.BlockChestEntity entity)
         {
             this.Global = global;
-            this.Entity = entity;
             var grid = new SlotGrid(entity.Container.Slots, 4, this.SlotInitializer);
-            //    s =>
-            //{
-            //    s.DragDropAction = (args) =>
-            //    {
-            //        var a = args as DragDropSlot;
-            //        Client.PlayerInventoryOperationNew(a.Source, s.Tag, a.Slot.Object.StackSize);
-            //        return DragDropEffects.Move;
-            //    };
-            //    s.RightClickAction = () =>
-            //    {
-            //        if (s.Tag.HasValue)
-            //            Client.PlayerSlotInteraction(s.Tag);
-            //    };
-            //});
+            
             this.Controls.Clear();
             this.Controls.Add(grid);
             return this;

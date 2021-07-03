@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Start_a_Town_
 {
     class InteractionAssignVisitorRoom : Interaction
     {
         int RoomID;
-        int v = 0;
         public InteractionAssignVisitorRoom()
         {
 
@@ -21,13 +15,9 @@ namespace Start_a_Town_
         }
         public override void Perform(GameObject a, TargetArgs t)
         {
-            var actor = a as Actor;
             var roomOwner = t.Object as Actor;
             var room = a.Map.Town.RoomManager.GetRoom(this.RoomID);
-            //room.OwnerRef = roomOwner.InstanceID;
             roomOwner.Ownership.Claim(room);
-            v++;
-            //this.State = States.Finished;
         }
         public override object Clone()
         {

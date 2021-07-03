@@ -4,18 +4,19 @@ using Microsoft.Xna.Framework;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.Blocks;
 
-namespace Start_a_Town_.Blocks.Chest
+namespace Start_a_Town_
 {
-    partial class BlockChest : Block
+    partial class BlockStorage : Block
     {
         static Texture2D ChestNormalMap = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chestnormal");
         public override Material GetMaterial(byte blockdata)
         {
             return Material.Database[blockdata];
         }
-        public BlockChest()
-            : base(Block.Types.Chest, opaque: false)
+        public BlockStorage()
+            : base(Block.Types.Bin, opaque: false)
         {
             var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chest").ToGrayscale();
             this.Variations.Add(Block.Atlas.Load("chestgrayscale", tex, Map.BlockDepthMap, ChestNormalMap));
@@ -43,7 +44,7 @@ namespace Start_a_Town_.Blocks.Chest
         }
         public override BlockEntity CreateBlockEntity()
         {
-            return new BlockChestEntity(16);
+            return new BlockStorageEntity();
         }
         public override Vector4 GetColorVector(byte data)
         {
@@ -51,18 +52,29 @@ namespace Start_a_Town_.Blocks.Chest
             var c = mat.ColorVector;
             return c;
         }
-       
-        public override void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
+
+        public override void OnDrop(GameObject actor, GameObject dropped, TargetArgs target, int amount = -1)
         {
-            BlockChestEntity.GetPlayerActionsWorld(list);
+            var binEntity = actor.Map.GetBlockEntity(target.Global) as BlockStorageEntity;
+            binEntity.Insert(dropped);
+            actor.ClearCarried();
         }
-        public override void ShowUI(Vector3 global)
+
+        StorageContentsUI ContentsUI = new StorageContentsUI();
+        internal override void Select(UISelectedInfo uISelectedInfo, IMap map, Vector3 vector3)
         {
-            var entity = Net.Client.Instance.Map.GetBlockEntity(global) as BlockChestEntity;
-            var window = new WindowEntityInterface(entity, "Chest", () => global);
-            var ui = new ContainerUI().Refresh(global, entity);
-            window.Client.Controls.Add(ui);
-            window.Show();
+            uISelectedInfo.AddTabAction("Contents", () => ShowContents(map, vector3));
+        }
+
+        private void ShowContents(IMap map, Vector3 vector3)
+        {
+            var ent = map.GetBlockEntity(vector3) as BlockStorageEntity;
+            this.ContentsUI.Refresh(ent);
+            var win = this.ContentsUI.GetWindow();
+            if (win == null)
+                this.ContentsUI.ToWindow("Contents").Show();
+            else if (!ContentsUI.IsOpen)
+                win.Show();
         }
     }
 }

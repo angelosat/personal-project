@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
@@ -30,7 +25,6 @@ namespace Start_a_Town_
 
         public virtual void Tick(IObjectProvider net, IEntityCompContainer entity)
         {
-            //throw new NotImplementedException();
         }
 
         internal virtual void DrawSelected(MySpriteBatch sb, Camera cam, IMap map, Vector3 global)

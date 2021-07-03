@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Graphics;
@@ -15,22 +13,18 @@ namespace Start_a_Town_
 {
     class BlockBed : Block
     {
-        //public enum Part { Bottom = 0x0, Top = 0x1 }
         public enum Part { Top = 0x0, Bottom = 0x1 }
 
         public override Material GetMaterial(byte blockdata)
         {
+            // TODO: implement
             return MaterialDefOf.LightWood;
         }
         AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
         AtlasDepthNormals.Node.Token[][] Parts;
         public BlockBed():base(Block.Types.Bed, 0f, 1f, false, true)
         {
-            //this.AssetNames = "bed/bedslimbottom, bed/bedslimtop";
-            //this.Material = Material.LightWood;
-            //this.MaterialType = MaterialType.Wood;
             this.Furniture = FurnitureDefOf.Bed;
-            //this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.BuildProperties = new BuildProperties(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(
@@ -53,30 +47,14 @@ namespace Start_a_Town_
                 Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
                 Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal")
             };
-            //this.TopParts = new AtlasDepthNormals.Node.Token[] {
-
-            //    Block.Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
-            //    Block.Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
-            //    Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
-            //    Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
-            //};
-            //this.BottomParts = new AtlasDepthNormals.Node.Token[] {
-            //    Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
-            //    Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
-            //    Block.Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
-            //    Block.Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
-            //};
+            
             this.Variations.Add(this.BottomParts.First());
-           
 
             this.Parts = new AtlasDepthNormals.Node.Token[2][];
-            //this.Parts[0] = this.BottomParts;
-            //this.Parts[1] = this.TopParts;
             this.Parts[0] = this.TopParts;
             this.Parts[1] = this.BottomParts;
             this.UtilitiesProvided.Add(Utility.Types.Sleeping);
         }
-        //public override bool IsDeconstructable => true;
         public override bool IsRoomBorder => false;
         public override bool IsStandableOn => false;
         public override float GetHeight(byte data, float x, float y)
@@ -95,35 +73,14 @@ namespace Start_a_Town_
         {
             var table =
                 new LootTable(
-                    //new Loot(() => Components.Materials.Planks.CreateFrom(this.GetMaterial(data)))
                     new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Planks, this.GetMaterial(data)))
-
                     );
             return table;
         }
         public override Dictionary<Vector3, byte> GetParts(Vector3 global, int orientation) // TODO: depend on orientation
         {
             var dic = new Dictionary<Vector3, byte>();
-            //var bottom = global;
-            //Vector3 top;
-            //switch (orientation)
-            //{
-            //    case 1:
-            //        top = global - Vector3.UnitY;
-            //        break;
-
-            //    case 2:
-            //        top = global + Vector3.UnitX;
-            //        break;
-
-            //    case 3:
-            //        top = global + Vector3.UnitY;
-            //        break;
-
-            //    default: 
-            //        top = global - Vector3.UnitX;
-            //        break;
-            //}
+            
             var top = global;
             var bottom = orientation switch
             {
@@ -145,7 +102,6 @@ namespace Start_a_Town_
             Part part;
             int ori;
             GetState(data, out part, out ori);
-            //var bottom = global;
             Vector3 top, bottom;
             switch (ori)
             {
@@ -280,58 +236,12 @@ namespace Start_a_Town_
                 3 => top - Vector3.UnitY,
                 _ => throw new NotImplementedException()
             };
-            //switch (orientation)
-            //{
-            //    case 0:
-            //        bottom = top + Vector3.UnitX;
-            //        break;
-            //    case 1:
-            //        bottom = top + Vector3.UnitY;
-            //        break;
-            //    case 2:
-            //        bottom = top - Vector3.UnitX;
-            //        break;
-            //    case 3:
-            //        bottom = top - Vector3.UnitY;
-            //        break;
-            //    default: break;
-            //}
+            
             map.SetBlock(bottom, Block.Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
             map.SetBlock(top, Block.Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
             var entity = new BlockBedEntity();
             map.AddBlockEntity(top, entity);
             map.Town.AddUtility(Utility.Types.Sleeping, top);
-
-
-
-            //if (!IsValidPosition(map, global, orientation))
-            //    return;
-            //var bottom = global;
-            //var top = new Vector3(0,0,-1);
-            //switch (orientation)
-            //{
-            //    case 0:
-            //        top = bottom - Vector3.UnitX;
-            //        break;
-            //    case 1:
-            //        top = bottom - Vector3.UnitY;
-            //        break;
-            //    case 2:
-            //        top = bottom + Vector3.UnitX;
-            //        break;
-            //    case 3:
-            //        top = bottom + Vector3.UnitY;
-            //        break;
-            //    default: break;
-            //}
-            //map.SetBlock(bottom, Block.Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
-            //map.SetBlock(top, Block.Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
-            //var entity = new BlockBedEntity();
-            //map.AddBlockEntity(top, entity);
-            //// added the below stuff
-            ////entity.Spawn(map, bottom, top);
-            //map.Town.AddUtility(Utility.Types.Sleeping, top);
-
         }
         public override void Remove(IMap map, Vector3 global, bool notify = true)
         {
@@ -344,8 +254,6 @@ namespace Start_a_Town_
             map.SetBlock(bottom, Types.Air, 0, raiseEvent: notify);
             map.RemoveBlockEntity(top);
             map.RemoveBlockEntity(bottom);
-            //var entity = map.GetBlockEntity(global) as BlockBedEntity;
-            //entity.Despawn();
             map.Town.RemoveUtility(Utility.Types.Sleeping, top);
         }
         protected override void OnRemove(IMap map, Vector3 global)
@@ -356,49 +264,10 @@ namespace Start_a_Town_
         {
             return global + GetPartsDic(data)[Part.Top];
         }
-        static bool IsValidPositionOld(IMap map, Vector3 global, int orientation)
-        {
-            var positions = new List<Vector3> { global };
-            switch (orientation)
-            {
-                case 0:
-                    positions.Add(global - Vector3.UnitX);
-                    break;
-                case 1:
-                    positions.Add(global - Vector3.UnitY);
-                    break;
-                case 2:
-                    positions.Add(global + Vector3.UnitX);
-                    break;
-                case 3:
-                    positions.Add(global + Vector3.UnitX);
-                    break;
-                default: break;
-            }
-            foreach(var pos in positions)
-                if(map.GetBlock(pos).Type != Types.Air)
-                return false;
-            return true;
-        }
         public override bool IsValidPosition(IMap map, IntVec3 global, int orientation)
         {
             var positions = new List<IntVec3> { global };
-            //switch (orientation)
-            //{
-            //    case 0:
-            //        positions.Add(global - IntVec3.UnitX);
-            //        break;
-            //    case 1:
-            //        positions.Add(global - IntVec3.UnitY);
-            //        break;
-            //    case 2:
-            //        positions.Add(global + IntVec3.UnitX);
-            //        break;
-            //    case 3:
-            //        positions.Add(global + IntVec3.UnitX);
-            //        break;
-            //    default: break;
-            //}
+            
             positions.Add(orientation switch
             {
                 0 => global + IntVec3.UnitX,
@@ -412,38 +281,7 @@ namespace Start_a_Town_
                     return false;
             return true;
         }
-        //[Obsolete]
-        //public override void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
-        //{
-        //    throw new Exception();
-        //    GetState(cell, out var part, out var ori);
-        //    var token = this.Parts[(int)part][ori];
-        //    sb.DrawBlock(Block.Atlas.Texture, screenBounds, token, zoom, fog, Color.White, sunlight, blocklight, depth, this);
-        //}
-        //[Obsolete]
-        //public override void Draw(Vector3 blockcoords, Camera cam, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, Cell cell)
-        //{
-        //    throw new Exception();
-        //    GetState(cell, out var part, out var ori);
-        //    var token = this.Parts[(int)part][ori];
-        //    cam.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, token, cam.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
-        //}
-        //[Obsolete]
-        //public override MyVertex[] Draw(Chunk chunk, Vector3 blockcoords, Camera cam, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, Cell cell)
-        //{
-        //    throw new Exception();
-        //    GetState(cell, out var part, out var ori);
-        //    var token = this.Parts[(int)part][ori];
-        //    return chunk.Canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, cam.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
-        //}
-        //[Obsolete]
-        //public override MyVertex[] Draw(Chunk chunk, Vector3 blockcoords, Camera cam, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
-        //{
-        //    throw new Exception();
-        //    GetState(data, out var part, out var ori);
-        //    var token = this.Parts[(int)part][(ori + (int)cam.Rotation) % 4];
-        //    return chunk.Canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, cam.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
-        //}
+        
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             GetState(data, out var part, out var ori);
@@ -463,20 +301,20 @@ namespace Start_a_Town_
             {
                 case 1:
                     bottom = global + Vector3.UnitY;
-                    bottomSecIndex += 1; //= this.BottomParts[1];
-                    topSrcIndex += 1; //= this.TopParts[1];
+                    bottomSecIndex += 1; 
+                    topSrcIndex += 1; 
                     break;
 
                 case 2:
                     bottom = global - Vector3.UnitX;
-                    bottomSecIndex += 2; //= this.BottomParts[2];
-                    topSrcIndex += 2; //= this.TopParts[2];
+                    bottomSecIndex += 2;
+                    topSrcIndex += 2; 
                     break;
 
                 case 3:
                     bottom = global - Vector3.UnitY;
-                    bottomSecIndex += 3; //= this.BottomParts[3];
-                    topSrcIndex += 3; //= this.TopParts[3];
+                    bottomSecIndex += 3;
+                    topSrcIndex += 3;
                     break;
 
                 default: break;
@@ -485,56 +323,6 @@ namespace Start_a_Town_
             topSrcIndex %= 4;
             var topSrc = this.Parts[0][topSrcIndex];
             var bottomSrc = this.Parts[1][bottomSecIndex];
-
-            var topd = top.GetDrawDepth(map, cam);
-            var bottomd = bottom.GetDrawDepth(map, cam);
-            if (topd > bottomd)
-            {
-                sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
-                sb.DrawBlock(Block.Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
-            }
-            else
-            {
-                sb.DrawBlock(Block.Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
-                sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
-            }
-        }
-        public void DrawPreviewOld(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
-        {
-            var bottom = global;
-            var top = global - Vector3.UnitX;
-            var bottomSecIndex = (int)cam.Rotation;
-            var topSrcIndex = (int)cam.Rotation;
-
-            //var bottomSrc = this.BottomParts[0];
-            //var topSrc = this.TopParts[0];
-
-            switch (orientation)
-            {
-                case 1:
-                    top = global - Vector3.UnitY;
-                    bottomSecIndex += 1; //= this.BottomParts[1];
-                    topSrcIndex += 1; //= this.TopParts[1];
-                    break;
-
-                case 2:
-                    top = global + Vector3.UnitX;
-                    bottomSecIndex += 2; //= this.BottomParts[2];
-                    topSrcIndex += 2; //= this.TopParts[2];
-                    break;
-
-                case 3:
-                    top = global + Vector3.UnitY;
-                    bottomSecIndex += 3; //= this.BottomParts[3];
-                    topSrcIndex += 3; //= this.TopParts[3];
-                    break;
-
-                default: break;
-            }
-            bottomSecIndex %= 4;
-            topSrcIndex %= 4;
-            var bottomSrc = this.Parts[0][bottomSecIndex];
-            var topSrc = this.Parts[1][topSrcIndex];
 
             var topd = top.GetDrawDepth(map, cam);
             var bottomd = bottom.GetDrawDepth(map, cam);
@@ -575,7 +363,6 @@ namespace Start_a_Town_
 
         internal override IEnumerable<Vector3> GetOperatingPositions(Cell cell)
         {
-            //var o = cell.Orientation;
             byte blockData = cell.BlockData;
             var parts = this.GetParts(blockData);
             var o = GetOrientation(blockData);
@@ -585,8 +372,8 @@ namespace Start_a_Town_
                 case 0:
                     foreach (var pos in parts)
                     {
-                        yield return pos + Vector3.UnitY;//.Below();
-                        yield return pos - Vector3.UnitY;//.Below();
+                        yield return pos + Vector3.UnitY;
+                        yield return pos - Vector3.UnitY;
                     }
                     break;
 
@@ -594,8 +381,8 @@ namespace Start_a_Town_
                 case 3:
                     foreach (var pos in parts)
                     {
-                        yield return pos + Vector3.UnitX;//.Below();
-                        yield return pos - Vector3.UnitX;//.Below();
+                        yield return pos + Vector3.UnitX;
+                        yield return pos - Vector3.UnitX;
                     }
                     break;
 
@@ -609,19 +396,6 @@ namespace Start_a_Town_
         {
             var entity = GetEntity(map, vector3);
             entity.GetSelectionInfo(info, map, vector3);
-            return;
-
-            var room = map.Town.RoomManager.GetRoomAt(vector3);
-            var t = entity.Type;
-            //UpdateQuickButtons(map, vector3, t);
-
-            //info.AddInfo(
-            //    new GroupBox().AddControlsVertically(
-            //        new Label(() => $"Type: {entity.Type}"),
-            //        new Label(() => $"Owner: {room.Owner?.Name ?? "none"}") { AutoSize = true }// { Width = 256 }
-            //        ));
-            info.AddInfo(new Label(() => $"Type: {entity.Type}"));
-            info.AddInfo(new Label(() => $"Owner: {room.Owner?.Name ?? "none"}") { AutoSize = true });
         }
 
         private static void UpdateQuickButtons(IMap map, Vector3 vector3, BlockBedEntity.Types t)

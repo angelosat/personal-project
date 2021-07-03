@@ -1,27 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Items;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Net;
-using Start_a_Town_.Blocks;
-using Start_a_Town_.Tokens;
 using Start_a_Town_.Crafting;
-using Start_a_Town_.Towns.Crafting;
 
 namespace Start_a_Town_.Blocks.Smeltery
 {
     class SmeltingInterfaceNewNew : GroupBox
     {
-        //WorkstationInterface Interface;
         ReactionsInterface Interface;
-        //ReagentPanel Panel_Reagents;
-        //Button Btn_Build;
         SlotGrid SlotsInput, SlotsOutput, SlotsFuel;
         PanelLabeled PanelInput, PanelOutput, PanelFuel;
         Bar BarPower, BarProgress;
@@ -29,7 +20,6 @@ namespace Start_a_Town_.Blocks.Smeltery
         Vector3 Global;
         BlockSmelteryEntity Entity;
         Panel PanelButtons;
-        //WorkstationOrdersUI QueuedOrdersUI;
         public Label LabelCurrentOrder;
         CheckBoxNew ChkOrdersEnabled;
 
@@ -38,30 +28,10 @@ namespace Start_a_Town_.Blocks.Smeltery
 
         }
 
-        //void RefreshRecipes()
-        //{
-        //    var reagentSlots = this.Entity.Input.Slots;//
-        //    //this.List_Recipes.Build(GetAvailableBlueprints(), foo => foo.Name, (r, btn) =>
-        //    this.List_Recipes.Build(Reaction.GetAvailableRecipes(Block.Smeltery), foo => foo.Name, (r, btn) =>
-        //    {
-        //        btn.LeftClickAction = () =>
-        //        {
-        //            this.SelectedReaction = r;
-        //            this.Panel_Reagents.Refresh(r, reagentSlots);
-        //            //RefreshReagents(r, this.Slots_Reagents);
-        //            this.Panel_Selected.Controls.Clear();
-        //        };
-        //    });
-        //}
-
         public SmeltingInterfaceNewNew Refresh(Vector3 global, BlockSmelteryEntity entity)
         {
-            //SmelteryComponent comp = parent.GetComponent<SmelteryComponent>();
-            //this.Smeltery = comp;
-            //this.Entity = parent;
             this.Controls.Clear();
 
-            //this.Interface = new WorkstationInterface(entity, IsWorkstation.Types.Smeltery, global, entity.Input.Slots) { CraftCallback = this.Craft };
             this.Interface = new ReactionsInterface(entity, IsWorkstation.Types.Smeltery, global, entity.Storage.Slots);
 
             this.Entity = entity;
@@ -77,7 +47,6 @@ namespace Start_a_Town_.Blocks.Smeltery
 
             this.PanelOutput = new PanelLabeled("Output") { Location = this.PanelInput.BottomLeft };
             this.SlotsOutput = new SlotGrid(entity.Output.Slots, 4, 
-                //this.OutputSlotInitializer
                 this.SlotInitializer
                 ) { Location = this.PanelOutput.Controls.BottomLeft };
             this.PanelOutput.Controls.Add(this.SlotsOutput);
@@ -102,24 +71,18 @@ namespace Start_a_Town_.Blocks.Smeltery
             var btnCraft = new Button("Craft");
             var btnOrder = new Button("Order") { Location = btnCraft.TopRight };
             var btnViewOrders = new Button("View Orders") { Location = btnOrder.TopRight };
-            //var btnToggle = new Button("Toggle") { Location = btnViewOrders.TopRight };
-
-            //this.QueuedOrdersUI = new WorkstationOrdersUI(this.Global, this.Entity);
             var window = new Window
             {
                 Title = "Orders",
                 AutoSize = true,
                 Movable = true
             };
-            //window.Client.AddControls(this.QueuedOrdersUI);
 
             btnCraft.LeftClickAction = Craft;
             btnOrder.LeftClickAction = PlaceOrder;
             btnViewOrders.LeftClickAction = ViewOrders;
-            //btnToggle.LeftClickAction = ToggleOrders;
-            //var panelCurrentProject = new Panel() { AutoSize = true, Location = this.Interface.BottomLeft };
 
-            this.PanelButtons.Controls.Add(btnOrder, btnCraft, btnViewOrders);//, btnToggle);
+            this.PanelButtons.Controls.Add(btnOrder, btnCraft, btnViewOrders);
 
             var panelchkbox = new Panel() { AutoSize = true, Location = this.PanelButtons.TopRight };
             this.ChkOrdersEnabled = new CheckBoxNew("Orders enabled")
@@ -144,15 +107,9 @@ namespace Start_a_Town_.Blocks.Smeltery
             });
             Client.Instance.Send(PacketType.WorkstationToggle, data);
         }
-
-
         private void ViewOrders()
         {
-            //this.QueuedOrdersUI.Refresh(this.Global, this.Entity);
-            //var win = this.QueuedOrdersUI.GetWindow();
-            ////win.Location = this.GetWindow().TopRight;
-            //win.SmartPosition();
-            //win.Show();// Toggle();
+           
         }
 
         private void Craft()
@@ -163,13 +120,9 @@ namespace Start_a_Town_.Blocks.Smeltery
                 {
                     w.Write(PlayerOld.Actor.RefID);
                     craft.Write(w);
-                    //w.Write(this.Global);
-                    //product.Write(w);
                 });
             Client.Instance.Send(PacketType.WorkstationSetCurrent, data);
             throw new Exception();
-            //Client.PlayerUseInteraction(new TargetArgs(this.Global), new InteractionCraft());
-
         }
 
 
@@ -179,19 +132,8 @@ namespace Start_a_Town_.Blocks.Smeltery
             if (product == null)
                 return;
             PlayerOld.Actor.Map.GetTown().CraftingManager.PlaceOrder(this.Interface.SelectedReaction.ID, product.Requirements, this.Global);
-
-            //Client.Instance.Send(PacketType.CraftingOrderPlace, )
         }
 
-        //private void Craft(CraftOperation obj)
-        //{
-        //    Client.PlayerRemoteCall(new TargetArgs(this.Global), Message.Types.Craft, w =>
-        //    {
-        //        w.Write(Player.Actor.InstanceID);
-        //        w.Write(this.Global);
-        //        obj.WriteOld(w);
-        //    });
-        //}
 
         void SlotInitializer(InventorySlot s)
         {
@@ -199,21 +141,17 @@ namespace Start_a_Town_.Blocks.Smeltery
             {
                 if (InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey) && s.Tag.StackSize > 1)
                 {
-                    //SplitStackWindow.Instance.Show(invSlot, parent);
                     SplitStackWindow.Instance.Refresh(new TargetArgs(this.Global, s.Tag)).Show();
-
                     return;
                 }
                 if (s.Tag.HasValue)
                 {
-                    //DragDropManager.Create(new DragDropSlot(parent, this.Tag, this.Tag, DragDropEffects.Move | DragDropEffects.Link));
                     DragDropManager.Create(new DragDropSlot(null, new TargetArgs(this.Global, s.Tag), new TargetArgs(this.Global, s.Tag), DragDropEffects.Move | DragDropEffects.Link));
                 }
             };
             s.DragDropAction = (args) =>
             {
                 var a = args as DragDropSlot;
-                //Client.PlayerInventoryOperationNew(a.Source, s.Tag, a.Slot.Object.StackSize);
                 Client.PlayerInventoryOperationNew(a.SourceTarget, new TargetArgs(this.Global, s.Tag), a.DraggedTarget.Slot.Object.StackSize);
                 return DragDropEffects.Move;
             };
@@ -221,27 +159,14 @@ namespace Start_a_Town_.Blocks.Smeltery
             {
                 if (s.Tag.HasValue)
                     Client.PlayerSlotRightClick(new TargetArgs(this.Global), s.Tag.Object);
-                    //Client.PlayerSlotInteraction(s.Tag);
             };
         }
-        //void OutputSlotInitializer(InventorySlot s)
-        //{
-        //    s.RightClickAction = () =>
-        //    {
-        //        if (s.Tag.HasValue)
-        //            Client.PlayerSlotRightClick(new TargetArgs(this.Global), s.Tag.Object);
-        //            //Client.PlayerSlotInteraction(s.Tag);
-        //    };
-        //}
+        
         internal override void OnGameEvent(GameEvent e)
         {
             switch(e.Type)
             {
-                //case Message.Types.ObjectStateChanged:
                 case Message.Types.BlockEntityStateChanged:
-                    //var entity = e.Parameters[0] as GameObject;
-                    //if (entity != this.Entity)
-                    //    return;
                     var entity = e.Parameters[0] as BlockEntityWorkstation;
                     if (entity != this.Entity)
                         return;
@@ -250,22 +175,11 @@ namespace Start_a_Town_.Blocks.Smeltery
 
                 case Message.Types.OrdersUpdated:
                 case Message.Types.WorkstationOrderSet:
-                    //entity = e.Parameters[0] as BlockEntityWorkstation;
-                    //if (entity != this.Entity)
-                    //    break;
-                    var order = this.Entity.GetCurrentOrder();// entity.GetCurrentOrder();
+                    var order = this.Entity.GetCurrentOrder();
                     this.LabelCurrentOrder.Text = this.Entity.ExecutingOrders.ToString() + (order != null ? order.ReactionID.ToString() : "none");
                     this.ChkOrdersEnabled.Value = this.Entity.ExecutingOrders;
                     this.ViewOrders();
                     break;
-
-                //case Message.Types.OrdersUpdated:
-                //    var global = (Vector3)e.Parameters[0];
-                //    if (global != this.Global)
-                //        break;
-                //    var order = entity.GetCurrentOrder();
-                //    this.LabelCurrentOrder.Text = this.Entity.ExecutingOrders.ToString() + (order != null ? order.ReactionID.ToString() : "none");
-                //    break;
 
                 default:
                     break;
@@ -274,7 +188,6 @@ namespace Start_a_Town_.Blocks.Smeltery
 
         void BurnFuel(Vector3 entityGlobal)
         {
-            //Client.PlayerRemoteCall(parent, Message.Types.Start);
             Client.PlayerRemoteCall(new TargetArgs(entityGlobal), Message.Types.Start);
         }
 
@@ -283,91 +196,19 @@ namespace Start_a_Town_.Blocks.Smeltery
             switch (e.Type)
             {
                 case Message.Types.InventoryChanged:
-                    //this.RefreshSelectedPanel();
                     break;
-
 
                 default:
                     break;
             }
         }
 
-
-
         protected virtual List<Reaction> GetAvailableBlueprints()
         {
             return (from reaction in Reaction.Dictionary.Values
-                    //where reaction.Building == parent.ID
-                    //where reaction.ValidWorkshops.Contains(ItemTemplate.Smeltery.ID)
                     where reaction.ValidWorkshops.Contains(IsWorkstation.Types.Smeltery)
 
                     select reaction).ToList();
         }
-        //private Action<Reaction, Button> RecipeListControlInitializer(Panel panel_Selected)
-        //{
-        //    return (foo, btn) =>
-        //    {
-        //        btn.LeftClickAction = () =>
-        //        {
-        //            Reaction obj = foo;
-        //            return;
-        //        };
-        //    };
-        //}
-
-
-
-        //private void RefreshSelectedPanel()
-        //{
-        //    var product = this.Panel_Selected.Tag as Reaction.Product.ProductMaterialPair;
-        //    if (product.IsNull())
-        //        return;
-        //    this.RefreshSelectedPanel(product);
-        //}
-        //private void RefreshSelectedPanel(Reaction.Product.ProductMaterialPair product)
-        //{
-        //    var container = Player.Actor.GetComponent<PersonalInventoryComponent>().Slots.Slots;
-        //    foreach (var item in product.Requirements)
-        //    {
-        //        int amountFound = 0;
-        //        foreach (var found in from found in container where found.HasValue where (int)found.Object.ID == item.ObjectID select found.Object)
-        //            amountFound += found.StackSize;
-        //        item.Amount = amountFound;
-        //    }
-
-        //    this.Panel_Selected.Controls.Clear();
-        //    this.Panel_Selected.Tag = product;//.Product;
-        //    if (product.IsNull())
-        //        return;
-
-        //    //CraftingTooltip tip = new CraftingTooltip(product.Product.ToSlot(), product.Req);
-        //    CraftingTooltip tip = new CraftingTooltip(product.Product.ToSlot(), product.Requirements);
-        //    this.Panel_Selected.Controls.Add(tip);
-        //    return;
-        //}
-
-        //private void CreateItemRequirements(Reaction reaction, List<GameObjectSlot> materials, List<GameObjectSlot> container)// Reaction reaction)
-        //{
-        //    if (reaction.IsNull())
-        //        return;
-        //    var matList = (from s in materials where s.HasValue select s.Object).ToList();
-        //    if (matList.Count < materials.Count)
-        //    {
-        //        this.Panel_Selected.Controls.Clear();
-        //        return;
-        //    }
-        //    List<ItemRequirement> reqs = new List<ItemRequirement>();
-        //    foreach (var mat in matList)
-        //    {
-        //        int amount = container.GetAmount(obj => obj.ID == mat.ID);
-        //        reqs.Add(new ItemRequirement(mat.ID, 1, amount));
-        //    }
-        //    //RefreshSelectedPanel(panel_Selected, reaction.Products.First().Create(reaction, matList), reqs);// (from s in materials select new ItemRequirement(s.Object.ID, 1)).ToList());
-        //    //RefreshSelectedPanel(reaction.Products.First().Create(reaction, materials), reqs);// (from s in materials select new ItemRequirement(s.Object.ID, 1)).ToList());
-        //    RefreshSelectedPanel(reaction.Products.First().GetProduct(reaction, materials));
-        //}
-
-
-
     }
 }

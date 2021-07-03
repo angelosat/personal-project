@@ -542,7 +542,7 @@ namespace Start_a_Town_.Towns
             var list = new List<GameObject>();
             foreach(var position in this.Storages)
             {
-                var storage = (this.Map.GetBlockEntity(position) as BlockBin.BlockBinEntity).Contents;
+                var storage = (this.Map.GetBlockEntity(position) as BlockStorage.BlockStorageEntity).Contents;
                 list.AddRange(storage);
             }
             return list;

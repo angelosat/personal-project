@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
 
@@ -14,7 +10,7 @@ namespace Start_a_Town_
         readonly IPowerSource PowerSource;
         readonly byte Intensity;
         readonly int Consumption;
-        readonly static int ConsumptionRate = Engine.TicksPerSecond;// * 10;
+        readonly static int ConsumptionRate = Engine.TicksPerSecond;
         readonly Func<bool> IsSwitchedOn;
 
         public bool Powered;
@@ -55,27 +51,8 @@ namespace Start_a_Town_
                 if(this.Powered)
                     this.TurnOff(net.Map, global);
             }
-
-            //if (this.ConsumptionTick >= ConsumptionRate)
-            //{
-            //    this.ConsumptionTick = 0;
-            //    if (this.Powered)
-            //    {
-            //        this.PowerSource.ConsumePower(net.Map, this.Consumption);
-            //        if (!this.PowerSource.HasAvailablePower(this.Consumption))
-            //            this.TurnOff(net.Map, global);
-            //    }
-            //    else
-            //    {
-            //        if (this.PowerSource.HasAvailablePower(this.Consumption))
-            //            this.TurnOn(net.Map, global);
-            //    }
-            //}
         }
-        void Toggle(IMap map, Vector3 global)
-        {
-            map.SetBlockLuminance(global, this.Powered ? (byte)0 : this.Intensity);
-        }
+        
         void TurnOn(IMap map, Vector3 global)
         {
             this.Powered = true;

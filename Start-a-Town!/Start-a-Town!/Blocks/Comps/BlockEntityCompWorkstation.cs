@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Tokens;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public class BlockEntityCompWorkstation : BlockEntityComp//, ICraftingOrderContainer
+    public class BlockEntityCompWorkstation : BlockEntityComp
     {
         readonly List<CraftOrderNew> _Orders = new List<CraftOrderNew>();
         public List<CraftOrderNew> Orders => this._Orders;
@@ -49,7 +48,6 @@ namespace Start_a_Town_
 
         public void ShowUI(IMap map, Vector3 global)
         {
-            //var entity = Client.Instance.Map.GetBlockEntity(global) as BlockEntityWorkstation;
             if (CraftingWindow != null)
                 CraftingWindow.Hide();
 

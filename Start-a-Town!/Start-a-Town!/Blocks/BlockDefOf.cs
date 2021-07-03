@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Blocks;
+﻿using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_
 {
     static class BlockDefOf
     {
         internal static void Init() { }
-        static public readonly Block Air = new BlockAir();//new Block(Block.Types.Air, GameObject.Types.Air, opaque: false, solid: false, density: 0);
+        static public readonly Block Air = new BlockAir();
         static public readonly Block Grass = new BlockGrass();
         static public readonly Block Stone = new BlockBedrock();
         static public readonly Block Farmland = new BlockFarmland();
@@ -24,7 +19,7 @@ namespace Start_a_Town_
         static public readonly Block WoodPaneling = new BlockWoodPaneling();
         static public readonly Block Smeltery = new Blocks.Smeltery.BlockSmeltery();
         static public readonly Block Chest = new Blocks.Chest.BlockChest();
-        static public readonly Block Bin = new BlockBin();
+        static public readonly Block Bin = new BlockStorage();
         static public readonly Block Sapling = new Blocks.Sapling.BlockSapling();
         static public readonly Block Water = new BlockWater();
         static public readonly Block Stool = new BlockStool();
@@ -41,12 +36,6 @@ namespace Start_a_Town_
         static public readonly Block Prefab = new BlockPrefab();
         static public readonly Block Construction = new BlockConstruction();
         static public readonly Block ShopCounter = new BlockShopCounter();
-
-        //static public readonly Block Workbench = new BlockWorkbench();
-        //static public readonly Block Kitchen = new BlockKitchen();
-        //static public readonly Block PlantProcessingBench = new BlockPlantProcessing();
-        //static public readonly Block CarpentryBench = new BlockCarpentryBench();
-
         static public readonly Block Workbench = new BlockWorkstation(Block.Types.Workbench, typeof(BlockWorkbenchEntity));
         static public readonly Block Kitchen = new BlockWorkstation(Block.Types.Kitchen, typeof(BlockKitchenEntity));
         static public readonly Block PlantProcessingBench = new BlockWorkstation(Block.Types.PlantProcessing, typeof(BlockPlantProcessingEntity));

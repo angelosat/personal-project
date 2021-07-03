@@ -78,7 +78,7 @@ namespace Start_a_Town_
                     PersonalInventoryComponent.PickUpNewNew(actor, target.Object, this.Amount == -1 ? target.Object.StackSize : this.Amount);
 
                     // if target was in container, remove it from its contents
-                    if (this.Amount == prevStackSize && actor.Map.GetBlockEntity(containerGlobal) is BlockBin.BlockBinEntity container)
+                    if (this.Amount == prevStackSize && actor.Map.GetBlockEntity(containerGlobal) is BlockStorage.BlockStorageEntity container)
                         container.Remove(target.Object);
 
                     break;

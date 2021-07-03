@@ -19,7 +19,6 @@ namespace Start_a_Town_.Blocks.Bed
             this.PreviousStandingPosition = a.Global;
             var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
             a.ChangePosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(a.Map, bedPos)));
-            //a.GetNeed(NeedDef.Energy).Mod += 1;
             a.GetNeed(NeedDef.Energy).AddMod(NeedLetDefOf.Sleeping, 0, 1);
             a.GetNeed(NeedDef.Comfort).AddMod(NeedLetDefOf.Sleeping, 20, 0);
 
@@ -46,7 +45,6 @@ namespace Start_a_Town_.Blocks.Bed
         }
         internal override void FinishAction(GameObject a, TargetArgs t)
         {
-            //a.GetNeed(NeedDef.Energy).Mod -= 1;
             a.GetNeed(NeedDef.Energy).RemoveMod(NeedLetDefOf.Sleeping);
             a.GetNeed(NeedDef.Comfort).RemoveMod(NeedLetDefOf.Sleeping);
 

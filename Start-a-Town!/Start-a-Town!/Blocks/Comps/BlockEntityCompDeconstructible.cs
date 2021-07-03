@@ -1,11 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -20,13 +14,10 @@ namespace Start_a_Town_
         {
             // DO I NEED TO DO THIS HERE? or can i do this at the block base class?
             var map = actor.Map;
-            //var block = map.GetBlock(global);
-            //var material = map.GetBlockMaterial(global);
             var cell = map.GetCell(global);
             var block = cell.Block;
             var material = block.GetMaterial(cell.BlockData);
             var scraps = RawMaterialDef.Scraps;
-            //var materialQuantity = (scraps.StackDimension / 2) * block.Ingredient.Amount;
             var materialQuantity = block.Ingredient.Amount;
             var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
             actor.Net.PopLoot(obj, global, Vector3.Zero);
@@ -41,22 +32,5 @@ namespace Start_a_Town_
             foreach (var mat in this.Materials)
                 info.AddInfo(new Label(mat));
         }
-        //public override void AddSaveData(SaveTag tag)
-        //{
-        //    this.Materials.SaveNewBEST(tag, "Materials");
-        //}
-        //public override void Load(SaveTag tag)
-        //{
-        //    this.Materials.Load(tag, "Materials");
-        //}
-        //public override void Write(BinaryWriter w)
-        //{
-        //    this.Materials.Write(w);
-        //}
-        //public override ISerializable Read(BinaryReader r)
-        //{
-        //    this.Materials.InitializeNew(r);
-        //    return this;
-        //}
     }
 }

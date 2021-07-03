@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Blocks;
-using Start_a_Town_.Crafting;
-using Start_a_Town_.Tokens;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_
 {
-    public class BlockKitchenEntity : BlockEntity//Workstation
+    public class BlockKitchenEntity : BlockEntity
     {
         public BlockKitchenEntity()
         {

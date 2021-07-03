@@ -7,7 +7,6 @@ namespace Start_a_Town_.Animations
     {
         public float Angle;
         public Bone Parent;
-        //public Bone Bone;
         Bone _Bone;
         public Bone Bone
         {
@@ -49,7 +48,7 @@ namespace Start_a_Town_.Animations
             this.Position = joint.Position;
             if (joint._Bone != null)
             {
-                this._Bone = joint._Bone.Clone();// Bone.Clone(joint._Bone);
+                this._Bone = joint._Bone.Clone();
                 this._Bone.Parent = joint.Parent;
                 this._Bone.Joint = this;
             }
@@ -88,27 +87,7 @@ namespace Start_a_Town_.Animations
         {
             return this.AttachmentFunc?.Invoke(parent);
         }
-        [Obsolete]
-        internal bool TryGetBone(out Bone next, ref GameObject parent)
-        {
-            if (this.Bone != null)
-            {
-                next = this.Bone;
-                return true;
-            }
-            else
-            {
-                var attachment = this.AttachmentFunc?.Invoke(parent);
-                if(attachment != null)
-                {
-                    parent = attachment;
-                    next = attachment.Body;
-                    return true;
-                }
-            }
-            next = null;
-            return false;
-        }
+        
         internal bool TryGetBone(out Bone next, GameObject parent)
         {
             if (this.Bone != null)
@@ -121,7 +100,6 @@ namespace Start_a_Town_.Animations
                 var attachment = this.AttachmentFunc?.Invoke(parent);
                 if (attachment != null)
                 {
-                    //parent = attachment;
                     next = attachment.Body;
                     return true;
                 }

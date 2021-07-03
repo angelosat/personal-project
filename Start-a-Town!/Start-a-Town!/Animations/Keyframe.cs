@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Animations
@@ -12,16 +9,14 @@ namespace Start_a_Town_.Animations
         public float Angle;
         public Vector2 Offset;
         public Func<float, float, float, float> Interpolation;
-        public Action<GameObject> Event;// = () => { };
-       // public Animation.Types Type;
-        public Keyframe(int time, Vector2 offset, float angle, Func<float, float, float, float> interpolation)//, Animation.Types type = Animation.Types.Absolute)
+        public Action<GameObject> Event;
+        public Keyframe(int time, Vector2 offset, float angle, Func<float, float, float, float> interpolation)
         {
             this.Time = time;
             this.Offset = offset;
             this.Angle = angle;
             this.Interpolation = interpolation;
             this.Event = e => { };
-      //      this.Type = type;
         }
         public Keyframe(int time, Vector2 offset, float angle)
         {
@@ -30,12 +25,10 @@ namespace Start_a_Town_.Animations
             this.Angle = angle;
             this.Interpolation = Start_a_Town_.Interpolation.Lerp;
             this.Event = e => { };
-
-            //   this.Type = Animation.Types.Absolute;
         }
         public override string ToString()
         {
-            return Time.ToString() + " " + Offset.ToString() + " " + this.Angle.ToString();// +" " + Interpolation;
+            return Time.ToString() + " " + Offset.ToString() + " " + this.Angle.ToString();
         }
         public Keyframe AddEvent(Action<GameObject> action)
         {

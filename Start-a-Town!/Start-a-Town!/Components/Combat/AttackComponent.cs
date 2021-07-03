@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Animations;
-using Start_a_Town_.GameModes;
-using Start_a_Town_.Graphics.Animations;
 
 namespace Start_a_Town_.Components
 {
@@ -17,8 +12,8 @@ namespace Start_a_Town_.Components
             get { return "Attack"; }
         }
 
-        Bone Hand;// { get; set; }
-        Bone Body;// { get; set; }
+        Bone Hand;
+        Bone Body;
         public static float DefaultRange = Interaction.DefaultRange;
         public static double DefaultArc = Math.PI / 6d;
         public static float LungeMax = 0.2f;
@@ -75,12 +70,8 @@ namespace Start_a_Town_.Components
             this.Body = parent.GetComponent<SpriteComponent>().Body;
             this.AttackAnimation = Animation.RaiseRHand(parent);
             throw new Exception();
-            //this.ChargeFunc =
-            //    () => this.AttackAnimation[BoneDef.RightHand].Fade;
             this.Charge = 0;
             this.ChargeMax = 80;
-            //this.Body.CrossFade(AttackAnimation, true, this.ChargeMax,
-            //    (a, b, t) => Interpolation.Sine(a, b, (float)Math.Sqrt(t)));
             parent.CrossFade(AttackAnimation, true, this.ChargeMax,
                 (a, b, t) => Interpolation.Sine(a, b, (float)Math.Sqrt(t)));
             // TODO: maybe pass a startattack event to the parent object and let components handle it?
@@ -101,45 +92,6 @@ namespace Start_a_Town_.Components
             this.Finish(parent, dir);
             return;
 
-            //if (this.State != Attack.States.Charging)// == Attack.States.Delivering)
-            //    return;
-            //this.State = Attack.States.Delivering;
-
-            ////Vector3 dir;
-            ////DirectionEventArgs.Translate(args.Args, out dir);
-            //Animation hand = this.AttackAnimation[BoneDef.RightHand];
-            ////var 
-            //    dir = (this.Target == null) ? parent.Direction : (Vector3.Normalize(this.Target.Global - parent.Global) * new Vector3(1, 1, 0));
-
-            //Attack attack = Attack.Create(parent, dir, Attack.Ray, this.ChargeFunc);
-            //float lunge = parent.Velocity.Z == 0 ? this.Lunge(this.ChargeFunc()) : 0;
-
-            ////var closestEnemy = FindClosestEnemy(parent);
-            ////this.NearestEnemy = closestEnemy;
-            ////parent.Direction = dir;
-
-            //parent.Direction = dir;
-            //parent.Velocity += dir * lunge;
-
-
-            ////var coll = AnimationCollection.DeliverAttack;
-            ////if (attack.Value < 0)
-            ////    attack.Value.ToConsole();
-            ////parent.Body.AddAnimation(coll);
-            ////Animation.Start(parent, coll, 1f, onFinish: new Dictionary<BoneDef, Action>() { { BoneDef.Torso, () =>
-            ////{
-            ////    FinishDelivering(parent, attack);
-            ////} } });
-            ////coll.Speed = .1f;
-
-            //this.AniAttack = new AnimationDeliverAttack();//() => FinishDelivering(parent, attack)); //
-            //this.AniAttack.OnWeaponContact = () => Perform(parent, parent.Direction, attack); //FinishDelivering(parent, attack);
-            //this.AniAttack.OnFinish = () => FinishDelivering(parent, attack);
-
-            //if (attack.Value < 0)
-            //    attack.Value.ToConsole();
-            //parent.Body.AddAnimation(this.AniAttack);
-            ////this.AniAttack.Speed = .1f;
         }
         public void Finish(GameObject parent, Vector3 dir)
         {
@@ -170,30 +122,20 @@ namespace Start_a_Town_.Components
             //coll.Speed = .1f;
 
             this.AniAttack = AnimationDeliverAttack.Create(parent, () => Perform(parent, parent.Direction, attack), () => FinishDelivering(parent, attack));//() => FinishDelivering(parent, attack)); //
-            //this.AniAttack.OnWeaponContact = () => Perform(parent, parent.Direction, attack); //FinishDelivering(parent, attack);
-            //this.AniAttack.OnFinish = () => FinishDelivering(parent, attack);
-
-            //this.AniAttack = new AnimationDeliverAttack();//() => FinishDelivering(parent, attack)); //
-            //this.AniAttack.OnWeaponContact = () => Perform(parent, parent.Direction, attack); //FinishDelivering(parent, attack);
-            //this.AniAttack.OnFinish = () => FinishDelivering(parent, attack);
-
+            
             if (attack.Value < 0)
                 attack.Value.ToConsole();
             parent.AddAnimation(this.AniAttack);
-            //this.AniAttack.Speed = .1f;
 
             // telegraph attack to potential targets
             // TODO: all target in range and in direction of attack?
             if (this.Target != null)
                 this.Target.PostMessage(new ObjectEventArgs(Message.Types.AttackTelegraph, parent, parent));
         }
-        //AnimationDeliverAttack AniAttack;
         Animation AniAttack;
 
         private void FinishDelivering(GameObject parent, Attack attack)
         {
-            //this.Body.FadeOutAnimation(this.AniAttack);
-            //this.Body.StopAnimation(this.AttackAnimation);
             this.AttackAnimation.FadeOut();
             this.AttackAnimation.Stop();
             this.State = Attack.States.Ready;
@@ -214,7 +156,7 @@ namespace Start_a_Town_.Components
             foreach (var obj in nearbies)
                 if (attack.CollisionType(attackOrigin, direction, obj))//actor, obj, direction))
                 //if (LineOfSight(actor.Map, actor.Global, obj.Global))
-                // check line of sight between actor attack origin (half his height), and the END POINT OF HIS ATTACK!!! NOT WORLD POSITION OF COLLIDING ENTITY!!!! FFS
+                // check line of sight between actor attack origin (half his height), and the END POINT OF HIS ATTACK!!! NOT WORLD POSITION OF COLLIDING ENTITY!!!!
                     // BUT WHY NOT?
                 {
                     attackEndPoint = obj.Global + obj.Physics.Height * .5f * Vector3.UnitZ;
@@ -230,7 +172,6 @@ namespace Start_a_Town_.Components
             var direction = difference;
             direction.Normalize();
             var precision = .5f;
-            //var step = direction * precision;
             var step = difference * precision;
 
             var stepLength = step.LengthSquared();
@@ -294,8 +235,6 @@ namespace Start_a_Town_.Components
         static GameObject FindClosestEnemy(GameObject parent)
         {
             var list = parent.GetNearbyObjects(r => r <= 5, foo => foo != parent);
-            //list = list.Where(foo => ResourcesComponent.HasResource(foo, ResourceDef.ResourceTypes.Health)).ToList();
-
             list = list.Where(foo => foo.HasResource(ResourceDef.Health)).ToList();
             list.Sort((foo1, foo2) => Vector3.DistanceSquared(parent.Global, foo1.Global) <= Vector3.DistanceSquared(parent.Global, foo2.Global) ? -1 :1);
             return list.FirstOrDefault();
@@ -305,16 +244,5 @@ namespace Start_a_Town_.Components
         {
             return new AttackComponent();
         }
-
-        //public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent)
-        //{
-        //    base.DrawUI(sb, camera, parent);
-        //    // TODO: draw something like a highlight for the closest enemy
-        //    if (this.NearestEnemy == null)
-        //        return;
-        //    if (!this.NearestEnemy.Exists)
-        //        return;
-        //    //this.NearestEnemy.DrawNameplate(sb, camera.ViewPort, new UI.Nameplate());
-        //}
     }
 }

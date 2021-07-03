@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Graphics.Animations;
-using Start_a_Town_.Components.Items;
 
 namespace Start_a_Town_.Blocks.Sapling
 {
@@ -19,8 +12,6 @@ namespace Start_a_Town_.Blocks.Sapling
         public BlockSapling():base(Block.Types.Sapling, opaque: false, solid: false)
         {
             this.AssetNames = "sapling";
-            //this.Material = Material.Twig;
-
         }
         public override void Break(Start_a_Town_.GameObject actor, Microsoft.Xna.Framework.Vector3 global)
         {
@@ -28,12 +19,7 @@ namespace Start_a_Town_.Blocks.Sapling
             var sapling = ItemTemplate.Sapling.Factory.Create();
             actor.Net.PopLoot(sapling, global, Vector3.Zero);
         }
-        //public override void Remove(GameModes.IMap map, Vector3 global)
-        //{
-        //    base.Remove(map, global);
-        //    var sapling = ItemTemplate.Sapling.Factory.Create();
-        //    map.Net.PopLoot(sapling, global, Vector3.Zero);
-        //}
+        
         public override void RandomBlockUpdate(IObjectProvider net, IntVec3 global, Cell cell)
         {
             net.Map.GetBlock(global).Remove(net.Map, global);
@@ -71,11 +57,7 @@ namespace Start_a_Town_.Blocks.Sapling
 
             public override void OnUpdate(GameObject a, TargetArgs t)
             {
-                //a.Map.RemoveBlock(t.Global);
                 a.Map.GetBlock(t.Global).Break(a, t.Global);
-                //var sapling = ItemTemplate.Sapling.Factory.Create();
-                //a.Net.PopLoot(sapling, t.Global, Vector3.Zero);
-                //this.State = States.Finished;
                 this.Finish(a, t);
             }
             public override object Clone()
@@ -83,41 +65,6 @@ namespace Start_a_Town_.Blocks.Sapling
                 return new InteractionRemove();
             }
         }
-        //public class InteractionRemoveOld : Interaction
-        //{
-        //    public InteractionRemoveOld()
-        //        :base("Remove", .4f)
-        //    {
-        //        this.RunningType = RunningTypes.Continuous;
-        //        //this.Animation = new AnimationTool(() => this.Done = true);
-        //        this.Animation = AnimationTool.Create(() => this.Done = true);
-        //    }
-        //    static readonly TaskConditions conds = new TaskConditions(
-        //            new AllCheck(
-        //                RangeCheck.Sqrt2
-        //                ));
-        //    public override TaskConditions Conditions
-        //    {
-        //        get
-        //        {
-        //            return conds;
-        //        }
-        //    }
-        //    public override void Perform(GameObject a, TargetArgs t)
-        //    {
-        //        if (!Done)
-        //            return;
-        //        //a.Map.RemoveBlock(t.Global);
-        //        a.Map.GetBlock(t.Global).Break(a, t.Global);
-        //        //var sapling = ItemTemplate.Sapling.Factory.Create();
-        //        //a.Net.PopLoot(sapling, t.Global, Vector3.Zero);
-        //        this.State = States.Finished;
-        //    }
-        //    bool Done;
-        //    public override object Clone()
-        //    {
-        //        return new InteractionRemoveOld();
-        //    }
-        //}
+        
     }
 }

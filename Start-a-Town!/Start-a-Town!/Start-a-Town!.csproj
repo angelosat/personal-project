@@ -199,6 +199,7 @@
     <Compile Include="AI\Behaviors\Tasks\TaskGiverResult.cs" />
     <Compile Include="AI\Behaviors\Tasks\TaskHelper.cs" />
     <Compile Include="AI\Reservations\Reservation.cs" />
+    <Compile Include="Animations\Bone.Props.cs" />
     <Compile Include="Blocks\Bed\InteractionAssignVisitorRoom.cs" />
     <Compile Include="Blocks\BlockDefOf.cs" />
     <Compile Include="Blocks\BlockPlacer.cs" />
@@ -324,7 +325,6 @@
     <Compile Include="AI\Tools\ToolCommandNpc.cs" />
     <Compile Include="Modules\Visitors\Shops\TaskGiverSell.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\TaskGiverTownArrival.cs" />
-    <Compile Include="Animations\BoneProps.cs" />
     <Compile Include="Blocks\Bed\BlockBedEntity.cs" />
     <Compile Include="Blocks\Bed\InteractionSleepOnGround.cs" />
     <Compile Include="Blocks\Bed\InteractionSleepInBed.cs" />
@@ -746,16 +746,11 @@
     <Compile Include="Components\Vegetation\TreeComponent.cs" />
     <Compile Include="GameModes\StaticMaps\CommandParser.cs" />
     <Compile Include="Animations\AnimationDeliverAttack.cs" />
-    <Compile Include="Animations\AnimationPlaceItem.cs" />
-    <Compile Include="Animations\AnimationTool.cs" />
-    <Compile Include="Animations\AnimationWork.cs" />
     <Compile Include="Graphics\AtlasDepthNormals.cs" />
     <Compile Include="Graphics\AtlasBase.cs" />
     <Compile Include="Graphics\IAtlasNodeToken.cs" />
     <Compile Include="Animations\Joint.cs" />
-    <Compile Include="Animations\AnimationManager.cs" />
     <Compile Include="Graphics\NodeDepthNormals.cs" />
-    <Compile Include="Animations\AnimationMovement.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Modules\AI\AIManager.cs" />
     <Compile Include="Modules\AI\AITarget.cs" />

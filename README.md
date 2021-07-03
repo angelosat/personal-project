@@ -1,9 +1,10 @@
 # personal-project
  Start-a-town! (working title)
+* Dream game being worked on on and off throughout the years as a hobby
 * 2d isometric pixel-art voxel co-op colony sim
 * Angelo Tsimidakis personal project preview code
-* Work in progress
 * Short proof-of-concept video: https://www.youtube.com/watch?v=INYfHrmtfmY
+* Work in progress
 
 # Brief History
 Intrigued by game concepts like The Sims and Dwarf Fortress, began playing around with Game Maker in 2008 with only some basic coding knowledge. A few years later started from scratch in C# with Microsoft XNA. Game concept went from farming sim, to "pixel-art isometric minecraft", to colony sim.
@@ -15,7 +16,6 @@ Despite being overscoped, continued working on this project as a hobby while dri
 3. Develop skills to be utilized for the possibility of a job as a C# developer
 
 # Current state
-* Dream game being worked on on and off throughout the years as a hobby
 * Iterating on different systems in a rotation in order to prevent burn-out
 * Still a lot of legacy code from early iterations that is slowly phased out/refactored, in order to not break everything at once.
 * A lot of leftover code and comments that are being cleaned up to make the project more readable, since the decision to upload to github was fairly recent.

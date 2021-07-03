@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.Components.Interactions;
@@ -116,23 +115,6 @@ namespace Start_a_Town_
                         list.Add(PlayerInput.RButton, new InteractionTilling());
                 }
             }
-        }
-       
-        GameObject Create(Material mat)
-        {
-            GameObject obj = new GameObject();
-            obj.AddComponent<DefComponent>().Initialize(Block.EntityIDRange + (int)this.Type, ObjectType.Block, this.GetName());
-            obj.AddComponent<PhysicsComponent>().Initialize(size: 1);
-            obj.AddComponent<SpriteComponent>().Initialize(new Sprite(this.Variations.First().Name, Map.BlockDepthMap)
-            {
-                OriginGround = Block.OriginCenter,
-                Joint = Block.Joint,
-                MouseMap = BlockMouseMap,
-                Overlays = new Dictionary<string, Sprite>() { { "Body", new Sprite(this.Variations.First().Name, Map.BlockDepthMap) { Tint = mat.Color } } }
-            });
-            obj.AddComponent<GuiComponent>().Initialize(new UI.Icon(obj.GetSprite()));
-            obj.AddComponent<MaterialsComponent>().Initialize(new PartMaterialPair("Body", mat));
-            return obj;
         }
     }
 }

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Graphics;
+﻿using System.Collections.Generic;
 using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_.Blocks
 {
     class BlockSlab : Block
     {
-        //AtlasDepthNormals.Node.Token Sprite = Block.LoadTexture("counter1grayscale", "/counters/counter1");
-
         public BlockSlab()
             : base(Block.Types.Slab, opaque: false)
         {
@@ -31,7 +24,7 @@ namespace Start_a_Town_.Blocks
         }
         public override float GetPathingCost(byte data)
         {
-            return 0;// .1f;
+            return 0;
         }
         public override Microsoft.Xna.Framework.Color[] UV
         {
@@ -58,7 +51,6 @@ namespace Start_a_Town_.Blocks
         public override IEnumerable<byte> GetCraftingVariations()
         {
             yield return (byte)MaterialDefOf.Stone.ID;
-            //return new List<byte>() {  };
         }
         public override Material GetMaterial(byte blockdata)
         {

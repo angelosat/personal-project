@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Net;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.Components;
-using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_
 {
@@ -29,7 +24,6 @@ namespace Start_a_Town_
             }
             public State(IObjectProvider net, Vector3 global)
             {
-                //Cell cell = global.GetCell(net.Map);
                 Cell cell = net.Map.GetCell(global);
 
                 this.Open = (cell.BlockData & 0x4) == 0x4;
@@ -37,33 +31,27 @@ namespace Start_a_Town_
             }
             public State(byte data)
             {
-                this.Open = (data & 0x4) == 0x4;//!= 0x4;
+                this.Open = (data & 0x4) == 0x4;
                 this.Part = data & 0x3;
             }
             public void Apply(IMap map, Vector3 global)
             {
-                //Cell cell = global.GetCell(map);
                 Cell cell = map.GetCell(global);
 
                 if (cell.Block.Type != Types.Door)
                     throw new Exception("Block type mismatch");
 
                 int baseZ = (int)global.Z - this.Part;
-                //   int ori = cell.Orientation + (this.Closed ? 1 : -1);
                 for (int i = 0; i < 3; i++)
                 {
-                    Vector3 g = new Vector3(global.X, global.Y, baseZ + i);// global + Vector3.UnitZ * i;
-                    //cell = g.GetCell(map);
+                    var g = new Vector3(global.X, global.Y, baseZ + i);
                     cell = map.GetCell(g);
 
-                    //    cell.Orientation = ori;// += this.Closed ? 1 : -1;
                     cell.BlockData = (byte)i;
 
                     if (this.Open)
                         cell.BlockData |= 0x4;
                     else
-                        //cell.BlockData &= ~(2 << 3);
-                        //cell.BlockData = (byte)(cell.BlockData & ~0x4);
                         cell.BlockData = (byte)(cell.BlockData ^= 0x4);
                 }
             }
@@ -113,9 +101,9 @@ namespace Start_a_Town_
         }
         static public void Read(byte data, out bool locked, out bool open, out int part)
         {
-            locked = IsLocked(data);// (data & 0x8) == 0x8;
-            open = IsOpen(data);// (data & 0x4) == 0x4;// != 0x4;
-            part = GetPart(data);// data & 0x3;
+            locked = IsLocked(data);
+            open = IsOpen(data);
+            part = GetPart(data);
         }
         static public byte WriteOpen(byte data, bool open)
         {
@@ -174,22 +162,6 @@ namespace Start_a_Town_
 
         static AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
 
-        List<Vector3> GetChildren(GameObject parent)
-        {
-            return new List<Vector3>() { parent.Global,
-                        parent.Global + new Vector3(0, 0, 1), parent.Global + new Vector3(0, 0, 2) };
-        }
-
-        void SetState(Map map, Vector3 bottom, bool closed)
-        {
-            throw new NotImplementedException();
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    Vector3 g = bottom + Vector3.UnitZ * i;
-            //    Cell cell = g.GetCell(map);
-
-            //}
-        }
         public override bool IsOpaque(Cell cell)
         {
             return !IsOpen(cell.BlockData);
@@ -223,23 +195,19 @@ namespace Start_a_Town_
             if (backIsInside)
             {
                 //flood fill to find all enterior
-
             }
         }
         public override void Remove(IMap map, Vector3 global, bool notify = true)
         {
             var positions = GetChildren(map, global);
             foreach (var g in positions)
-                map.SetBlock(g, Block.Types.Air, 0, 0, 0, false);// raiseEvent: notify);
+                map.SetBlock(g, Block.Types.Air, 0, 0, 0, false);
             if (notify)
                 map.NotifyBlocksChanged(positions);
         }
         private static Vector3 GetBase(IMap map, Vector3 global)
         {
-            //byte data = global.GetData(net.Map);
             byte data = map.GetData(global);
-
-            //Vector3 doorBase = parent.Global - Vector3.UnitZ * data;
             byte masked = data &= 0x1;// 0x3;
             int baseZ = (int)(global.Z - masked);
             Vector3 baseLoc = new Vector3(global.X, global.Y, baseZ);
@@ -247,36 +215,22 @@ namespace Start_a_Town_
         }
         public static IEnumerable<Vector3> GetChildren(IMap map, Vector3 global)
         {
-            //List<Vector3> list = new List<Vector3>();
             Vector3 baseLoc = GetBase(map, global);
             for (int i = 0; i < 2; i++)
             {
                 Vector3 g = baseLoc + new Vector3(0, 0, i);
-                //list.Add(g);
                 yield return g;
             }
-            //return list;
         }
 
         public override bool IsSolid(IMap map, Vector3 global)
         {
-            //byte data = global.GetData(map);
-            //return (data & 0x4) != 0x4;
-
-
-            //State.Get(global.GetCell(map).BlockData, out closed, out part);
-
             var cell = map.GetCell(global);
             return this.IsSolid(cell);
         }
         public override bool IsSolid(Cell cell)
         {
-            //return false;
-            bool locked;
-            int part;
-            bool open;
-            Read(cell.BlockData, out locked, out open, out part);
-
+            Read(cell.BlockData, out var locked, out var open, out var part);
             return !open;
         }
         public override bool IsSolid(Cell cell, Vector3 withinBlock)
@@ -285,11 +239,7 @@ namespace Start_a_Town_
         }
         public override float GetDensity(byte data, Vector3 global)
         {
-            //return 0;
-            bool locked;
-            int part;
-            bool open;
-            Read(data, out locked, out open, out part);
+            Read(data, out var locked, out var open, out var part);
             return open ? 0 : 1;
         }
         public override Material GetMaterial(byte blockdata)
@@ -301,16 +251,11 @@ namespace Start_a_Town_
             : base(Block.Types.Door, GameObject.Types.Door, 0, 1, false, true)
         {
             this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks), Reaction.Reagent.IsOfMaterial(MaterialDefOf.LightWood)));
-            //this.AssetNames = "doors/doors, doors/doore, doors/doorn, doors/doorw";
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
 
             var ndepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorndepth");
             var wdepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwdepth");
 
-            //Orientations[0] = Block.Atlas.Load("blocks/doors/doors", Map.BlockDepthMap, Block.NormalMap);
-            //Orientations[1] = Block.Atlas.Load("blocks/doors/doore", Map.BlockDepthMap, Block.NormalMap);
-            //Orientations[2] = Block.Atlas.Load("blocks/doors/doorn", ndepth, Block.NormalMap);
-            //Orientations[3] = Block.Atlas.Load("blocks/doors/doorw", wdepth, Block.NormalMap);
             Orientations[0] = Block.Atlas.Load("blocks/doors/doors", Map.BlockDepthMap, Block.NormalMap);
             Orientations[1] = Block.Atlas.Load("blocks/doors/doorw", wdepth, Block.NormalMap);
             Orientations[2] = Block.Atlas.Load("blocks/doors/doorn", ndepth, Block.NormalMap);
@@ -329,29 +274,11 @@ namespace Start_a_Town_
         public override IEnumerable<byte> GetCraftingVariations()
         {
             yield return 0;
-            //return new List<byte>() { 0 };
         }
-
-        //protected override void HandleMessage(Vector3 global, ObjectEventArgs e)
-        //{
-        //    switch (e.Type)
-        //    {
-        //        case Message.Types.Activate:
-        //            BlockDoor.State state = new BlockDoor.State(e.Network, global);
-        //            state.Open = !state.Open;
-        //            state.Apply(e.Network.Map, global);
-        //            return;
-
-        //        default:
-        //            break;
-        //    }
-        //    return;
-        //}
 
         public override void GetTooltip(UI.Control tooltip, IMap map, Vector3 global)
         {
             base.GetTooltip(tooltip, map, global);
-            //var state = new State(map.GetNetwork(), global);
             var cell = map.GetCell(global);
             var data = cell.BlockData;// map.GetData(global); //
             var open = (data & 0x4) == 0x4;
@@ -378,7 +305,6 @@ namespace Start_a_Town_
             var chunk = map.GetChunk(global);
             foreach (var g in children)
             {
-                //Cell cell = g.GetCell(net.Map);
                 Cell cell = map.GetCell(g);
                 if (map.GetBlock(global).Type != Types.Door)
                     throw new Exception();
@@ -390,7 +316,6 @@ namespace Start_a_Town_
                     cell.BlockData ^= 0x4;
                 chunk.InvalidateSlice(g.Z);
             }
-            //map.GetChunk(global).Valid = false;
         }
         private static void ToggleLock(IMap map, Vector3 global)
         {
@@ -421,23 +346,7 @@ namespace Start_a_Town_
         {
             return new List<Interaction>() { new InteractionToggleDoor() };
         }
-        void GetState(GameObject parent, out bool open)
-        {
-            States data = (States)parent.Global.GetData(parent.Map);
-            open = (data & States.Closed) == States.Closed ? false : true;
-        }
 
-        public override void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, float zoom, float depth, Cell cell)
-        {
-            //base.Draw(sb, screenPos, light, zoom, depth, cell);
-            //int ori = (cell.Orientation + (new State(cell.BlockData).Closed ? 1 : 0) )% 4; // SLOW???
-            bool locked;
-            int part;
-            bool open;
-            Read(cell.BlockData, out locked, out open, out part);
-            int ori = (cell.Orientation + (open ? 1 : 0)) % 4; // FASTER???
-            sb.DrawBlock(Block.Atlas.Texture, screenPos, this.Variations[ori].Rectangle, zoom, Color.White, sunlight, blocklight, depth);
-        }
         public override void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             bool locked;
@@ -455,36 +364,14 @@ namespace Start_a_Town_
             Read(cell.BlockData, out locked, out open, out part);
             int ori = (cell.Orientation + (open ? 1 : 0)) % 4; // FASTER???
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth);
-            //sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[cell.Orientation], zoom, Color.White, sunlight, blocklight, depth);
         }
-        public override void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, float zoom, float depth, Cell cell)
-        {
-            bool locked;
-            int part;
-            bool open;
-            Read(cell.BlockData, out locked, out open, out part);
-            //int ori = (cell.Orientation + (closed ? 1 : 0)) % 4; // FASTER???
-            //sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], zoom, Color.White, sunlight, blocklight, depth);
-            sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[cell.Orientation], zoom, Color.White, sunlight, blocklight, depth);
-
-        }
-        public override MyVertex[] Draw(Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
-        {
-            throw new NotImplementedException();
-            bool locked;
-            int part;
-            bool open;
-            Read(data, out locked, out open, out part);
-            int ori = (orientation + (open ? 1 : 0)) % 4; // FASTER???
-            return camera.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
-        }
+        
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             bool locked;
             int part;
             bool open;
             Read(data, out locked, out open, out part);
-            //int ori = (orientation + (open ? 1 : 0)) % 4; // FASTER???
             int ori = (orientation - (int)camera.Rotation + (open ? 1 : 0)); // FASTER???
             if (ori < 0)
                 ori += 4;
@@ -505,8 +392,6 @@ namespace Start_a_Town_
             public InteractionToggleDoorLock()
                 : base("Lock/Unlock", .4f)
             {
-                //this.Name = "Open/close";
-                //this.Seconds = 0;
             }
             static readonly TaskConditions conds = new TaskConditions(new AllCheck(new RangeCheck()));
             public override TaskConditions Conditions
@@ -520,7 +405,6 @@ namespace Start_a_Town_
             public override void Perform(GameObject a, TargetArgs t)
             {
                 base.Perform(a, t);
-                //var state = new BlockDoor.State(a.Net, t.FinalGlobal);
                 ToggleLock(a.Map, t.Global);
             }
 

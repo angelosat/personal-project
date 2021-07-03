@@ -201,10 +201,12 @@
     <Compile Include="AI\Reservations\Reservation.cs" />
     <Compile Include="Animations\Bone.Props.cs" />
     <Compile Include="Blocks\Bed\InteractionAssignVisitorRoom.cs" />
+    <Compile Include="Blocks\Block.DefaultState.cs" />
     <Compile Include="Blocks\BlockDefOf.cs" />
     <Compile Include="Blocks\BlockPlacer.cs" />
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />
+    <Compile Include="Blocks\LiduidFlowProcess.cs" />
     <Compile Include="Components\AI\Personality\TraitDefOf.cs" />
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />
     <Compile Include="Components\Stats\Stats\StatsHelper.cs" />
@@ -335,10 +337,9 @@
     <Compile Include="Blocks\BlockAir.cs" />
     <Compile Include="Blocks\Bed\BlockBed.cs" />
     <Compile Include="Blocks\BlockBedrock.cs" />
-    <Compile Include="Blocks\BlockBlueprint.cs" />
     <Compile Include="Blocks\BlockBricks.cs" />
-    <Compile Include="Blocks\BlockCampfire.cs" />
-    <Compile Include="Blocks\BlockCampfireEntity.cs" />
+    <Compile Include="Blocks\Campfire\BlockCampfire.cs" />
+    <Compile Include="Blocks\Campfire\BlockCampfireEntity.cs" />
     <Compile Include="Blocks\BlockConveyor.cs" />
     <Compile Include="Blocks\BlockCounter.cs" />
     <Compile Include="Blocks\BlockFlowers.cs" />

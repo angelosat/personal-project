@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Blocks
 {
@@ -33,16 +27,15 @@ namespace Start_a_Town_.Blocks
 
         public void Apply(IMap map, Vector3 global)
         {
-            //global.GetCell(map).BlockData = this.Data;// GetData();
-            map.GetCell(global).BlockData = this.Data;// GetData();
+            map.GetCell(global).BlockData = this.Data;
         }
         public void Apply(ref byte blockdata)
         {
-            blockdata = this.Data;//GetData();
+            blockdata = this.Data;
         }
         public void Apply(Block.Data data)
         {
-            data.Value = this.Data;//GetData();
+            data.Value = this.Data;
         }
     }
 }

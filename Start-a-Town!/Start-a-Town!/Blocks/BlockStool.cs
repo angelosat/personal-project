@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Blocks;
+﻿using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
 {
@@ -18,21 +12,9 @@ namespace Start_a_Town_
         public BlockStool()
             : base(Block.Types.Stool, opaque: false)
         {
-            //this.MaterialType = MaterialType.Wood;
-            //this.AssetNames = "furniture/stool";
             this.Variations.Add(Block.Atlas.Load("blocks/furniture/stool", Map.BlockDepthMap, Block.NormalMap));
-            //this.Material = Material.LightWood;
             this.Furniture = FurnitureDefOf.Table;
-            //this.Recipe = new BlockRecipe(
-            //    Reaction.Reagent.Create(
-            //        new Reaction.Reagent(
-            //            "Base",
-            //    //Reaction.Reagent.IsOfMaterialType(MaterialType.Wood), 
-            //            Reaction.Reagent.IsOfSubType(ItemSubType.Planks),
-            //            Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks)) { Quantity = 2 }),
-            //        new BlockRecipe.Product(this),
-            //        Components.Skills.Skill.Building);
-
+            
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(
                     new Reaction.Reagent(
@@ -45,10 +27,7 @@ namespace Start_a_Town_
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
 
         }
-        //public override float GetHeight(float x, float y)
-        //{
-        //    return 0.5f;
-        //}
+        
         public override void Place(IMap map, Microsoft.Xna.Framework.Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, data, variation, orientation, notify);

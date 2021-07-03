@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Graphics;
@@ -30,8 +27,6 @@ namespace Start_a_Town_.Blocks
         public BlockStairs()
             : base(Block.Types.Stairs, opaque: false)
         {
-            //this.MaterialType = MaterialType.Wood;
-            //this.Material = Material.LightWood;
             this.Parts[0] = Block.Atlas.Load("blocks/stairs/stairs1", Depth1, Normal1);
             this.Parts[1] = Block.Atlas.Load("blocks/stairs/stairs2", Depth2, Normal2);
             this.Parts[2] = Block.Atlas.Load("blocks/stairs/stairs3", Depth3, Normal3);
@@ -51,7 +46,6 @@ namespace Start_a_Town_.Blocks
         }
         public override float GetHeight(byte data, float x, float y)
         {
-            //return (1 - y);
             switch(data)
             {
                 case 0:
@@ -65,18 +59,7 @@ namespace Start_a_Town_.Blocks
 
                 case 3:
                     return y > .5f ? 1 : .5f;
-                //case 0:
-                //    return x < .5f ? 1 : .5f;
-
-                //case 1:
-                //    return y < .5f ? 1 : .5f;
-
-                //case 2:
-                //    return x >= .5f ? 1 : .5f;
-                    
-                //case 3:
-                //    return y >= .5f ? 1 : .5f;
-
+               
                 default:
                     break;
             }
@@ -90,10 +73,7 @@ namespace Start_a_Town_.Blocks
         {
             return (byte)rotation;
         }
-        //public override List<byte> GetVariations()
-        //{
-        //    return new List<byte>() { 0, 1, 2, 3 };
-        //}
+       
         public override AtlasDepthNormals.Node.Token GetPreviewToken(int variation, int orientation, int cameraRotation, byte data)
         {
             var o = (orientation + cameraRotation) % 4;

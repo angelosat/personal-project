@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_.Blocks
 {
     class BlockWindow : Block
     {
-        AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
-        AtlasDepthNormals.Node.Token[][] Parts;
         AtlasDepthNormals.Node.Token[][][] PartsSeparate;
         public override Material GetMaterial(byte blockdata)
         {
@@ -22,9 +16,6 @@ namespace Start_a_Town_.Blocks
         public BlockWindow()
             : base(Types.Window, opaque: false)
         {
-            //this.MaterialType = MaterialType.Glass;
-            //this.Material = Material.Glass;
-
             this.PartsSeparate = 
                 new AtlasDepthNormals.Node.Token[][][] { 
                     new AtlasDepthNormals.Node.Token[][]{
@@ -45,35 +36,14 @@ namespace Start_a_Town_.Blocks
             
             };
 
-            //this.Parts = new AtlasDepthNormals.Node.Token[2][];
-            //this.Parts[0] = this.BottomParts;
-            //this.Parts[1] = this.TopParts;
-
             this.Variations.Add(this.PartsSeparate.First().First().First());
 
-            //this.BottomParts = new AtlasDepthNormals.Node.Token[] { 
-            //    Block.Atlas.Load("blocks/house/windowbottom", Map.BlockDepthMap, Block.NormalMap),
-            //    Block.Atlas.Load("blocks/house/windowbottom2", Map.BlockDepthMap, Block.NormalMap)
-            //};
-            //this.TopParts = new AtlasDepthNormals.Node.Token[] { 
-            //    Block.Atlas.Load("blocks/house/windowtop", Map.BlockDepthMap, Block.NormalMap),
-            //    Block.Atlas.Load("blocks/house/windowtop2", Map.BlockDepthMap, Block.NormalMap)
-            //};
-
-            //this.Parts = new AtlasDepthNormals.Node.Token[2][];
-            //this.Parts[0] = this.BottomParts;
-            //this.Parts[1] = this.TopParts;
-
-            //this.Variations.Add(this.BottomParts.First());
 
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(
                     new Reaction.Reagent(
                         "Base",
                         Reaction.Reagent.IsOfSubType(ItemSubType.Planks, ItemSubType.Ingots)
-                //,
-                //Reaction.Reagent.IsOfMaterialType(MaterialType.Wood, MaterialType.Metal),
-                //Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
                         )),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building);
@@ -133,27 +103,6 @@ namespace Start_a_Town_.Blocks
                 return false;
             return true;
         }
-        //public override MyVertex[] Draw(Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
-        //{
-        //    var partindex = GetPartIndex(data);
-        //    var orientationindex = (int)(orientation + camera.Rotation) % 2;
-        //    var parts = this.PartsSeparate[partindex][orientationindex];
-        //    var frame = parts[0];
-        //    var glass = parts[1];
-        //    //camera.WaterSpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, Color.White, sunlight, blocklight, depth);
-        //    camera.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, frame, camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this);
-        //    return camera.TransparentBlocksSpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, glass, camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
-        //}
-
-        //public override MyVertex[] Draw(MySpriteBatch sb, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
-        //{
-        //    var partindex = GetPartIndex(data);
-        //    var orientationindex = (int)(orientation + camera.Rotation) % 2;
-        //    var token = this.PartsSeparate[partindex][orientationindex][0];
-        //    //camera.WaterSpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, Color.White, sunlight, blocklight, depth);
-        //    return sb.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockcoords);
-
-        //}
 
         public override void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
         {
@@ -190,14 +139,5 @@ namespace Start_a_Town_.Blocks
             canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, frame, camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockCoordinates);
             return canvas.Transparent.DrawBlock(Block.Atlas.Texture, screenBounds, glass, camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockCoordinates);
         }
-
-        //public override void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, byte data, int orientation = 0)
-        //{
-        //    var orientationindex = (int)(orientation + cam.Rotation) % 2;
-        //    var bottom = this.Parts[0][orientationindex];
-        //    var top = this.Parts[1][orientationindex];
-        //    sb.DrawBlock(Block.Atlas.Texture, map, global, bottom, cam, Color.Transparent, Color.White * 0.5f, Color.White, Vector4.One);
-        //    sb.DrawBlock(Block.Atlas.Texture, map, global + Vector3.UnitZ, top, cam, Color.Transparent, Color.White * 0.5f, Color.White, Vector4.One);
-        //}
     }
 }

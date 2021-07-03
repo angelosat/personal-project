@@ -1,32 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
-using Start_a_Town_.Net;
-using Start_a_Town_.Components;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Blocks
 {
-    //public abstract class BlockEntity : Component, ICloneable
     public abstract class BlockEntity : ICloneable, IDisposable, IEntityCompContainer<BlockEntityComp>//, IHasChildren
     {
-        //public List<EntityComp> Comps = new List<EntityComp>();
-        //public Vector3 Global;
         public HashSet<IntVec3> CellsOccupied = new();
         public IMap Map;
         public bool Exists => this.Map is not null;
         public IntVec3 OriginGlobal;
         EntityCompCollection<BlockEntityComp> _Comps = new();
-        //public EntityCompCollection Comps { get { return this._Comps; } private set { this._Comps = value; } }
         public ICollection<BlockEntityComp> Comps { get {
                 return this._Comps;
-                //as ICollection<BlockEntityComp>;
             } private set { this._Comps = value as EntityCompCollection<BlockEntityComp>; } }
         
         public virtual void Tick(IObjectProvider net, Vector3 global)
@@ -34,24 +23,9 @@ namespace Start_a_Town_.Blocks
             foreach (var comp in this.Comps)
                 comp.Tick(net, this, global);
         }
-        public virtual void GetTooltip(UI.Control tooltip) { }
-        public abstract object Clone();//{throw new Exception();}
-        //internal void Spawn(IMap map, params IntVec3[] cellsOccupied)
-        //{
-        //    foreach (var g in cellsOccupied)
-        //    {
-        //        map.AddBlockEntity(g, this);
-        //        this.CellsOccupied.Add(g);
-        //    }
-        //    this.Map = map;
-        //}
-        //internal void Despawn()
-        //{
-        //    foreach(var global in this.CellsOccupied)
-        //        Map.RemoveBlockEntity(global);
-        //    this.CellsOccupied.Clear();
-        //    this.Map = null;
-        //}
+        public virtual void GetTooltip(Control tooltip) { }
+        public abstract object Clone();
+        
         /// <summary>
         /// Dipose any children GameObjects here.
         /// </summary>
@@ -63,12 +37,10 @@ namespace Start_a_Town_.Blocks
         public virtual void Break(IMap map, Vector3 global) { }
         public virtual void Place(IMap map, Vector3 global) 
         {
-            //this.Global = global;
             foreach (var comp in this.Comps)
                 comp.OnEntitySpawn(this, map, global);
         }
 
-        //public Vector3 Global { get; }
         public virtual GameObjectSlot GetChild(string containerName, int slotID) {
             throw new NotImplementedException();
         }
@@ -109,7 +81,6 @@ namespace Start_a_Town_.Blocks
 
         protected virtual void AddSaveData(SaveTag tag)
         {
-            //tag.Add(this._Comps.Save("Components"));
         }
         public SaveTag Save(string name)
         {
@@ -123,7 +94,6 @@ namespace Start_a_Town_.Blocks
 
         public void Load(SaveTag tag)
         {
-            //this.Comps.Load(tag["Components"]);
             tag.TryGetTag("Components", this._Comps.Load);
             tag.TryGetTagValue<Vector3>("OriginGlobal", v => this.OriginGlobal = v);
             this.CellsOccupied.Load(tag, "CellsOccupied");
@@ -160,8 +130,6 @@ namespace Start_a_Town_.Blocks
             foreach (var entity in this.GetChildren())
             {
                 entity.Instantiate(instantiator);
-                //if (entity.Object != null)
-                //    entity.Object.ParentTarget = new TargetArgs(global);
             }
         }
 
@@ -200,6 +168,5 @@ namespace Start_a_Town_.Blocks
         protected virtual void OnMapLoaded(IMap map, Vector3 global)
         {
         }
-        
     }
 }

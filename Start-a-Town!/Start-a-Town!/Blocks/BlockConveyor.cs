@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Graphics;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Blocks
@@ -24,7 +19,7 @@ namespace Start_a_Town_.Blocks
         {
             return 0;
         }
-        public override Microsoft.Xna.Framework.Color[] UV
+        public override Color[] UV
         {
             get
             {
@@ -49,7 +44,6 @@ namespace Start_a_Town_.Blocks
         public override IEnumerable<byte> GetCraftingVariations()
         {
             yield return (byte)MaterialDefOf.Stone.ID;
-            //return new List<byte>() { (byte)MaterialDefOf.Stone.ID };
         }
         public override Material GetMaterial(byte blockdata)
         {

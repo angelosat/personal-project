@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Graphics;
@@ -22,8 +19,6 @@ namespace Start_a_Town_.Blocks
         public BlockRoof():base(Block.Types.Roof, opaque: false)
         {
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
-            //this.MaterialType = MaterialType.Wood;
-            //this.Material = Material.LightWood;
             this.Parts[0] = Block.Atlas.Load("blocks/roof/roof1height19", Depth1, Block.NormalMap);
             this.Parts[3] = Block.Atlas.Load("blocks/roof/roof2height19", Depth2, Block.NormalMap);
             this.Parts[2] = Block.Atlas.Load("blocks/roof/roof3height19", Map.BlockDepthMap, Block.NormalMap);
@@ -42,7 +37,6 @@ namespace Start_a_Town_.Blocks
         }
         public override float GetHeight(byte data, float x, float y)
         {
-            //return (1 - y);
             switch(data)
             {
                 case 0:
@@ -70,10 +64,7 @@ namespace Start_a_Town_.Blocks
         {
             return (byte)rotation;
         }
-        //public override List<byte> GetVariations()
-        //{
-        //    return new List<byte>() { 0, 1, 2, 3 };
-        //}
+        
         public override AtlasDepthNormals.Node.Token GetPreviewToken(int variation, int orientation, int cameraRotation, byte data)
         {
             var o = (orientation + cameraRotation) % 4;

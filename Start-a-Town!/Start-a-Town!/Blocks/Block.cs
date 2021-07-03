@@ -29,25 +29,6 @@ namespace Start_a_Town_
             }
         }
 
-        public class DefaultState : IBlockState
-        {
-            public void Apply(IMap map, Vector3 global)
-            { }
-            public void Apply(ref byte data)
-            {
-            }
-            public void Apply(Block.Data data)
-            {
-            }
-            public void FromCraftingReagent(GameObject item) { }
-            public Color GetTint(byte d)
-            { return Color.White; }
-            public string GetName(byte d)
-            {
-                return "";
-            }
-        }
-
         static readonly Dictionary<Block, GameObject> BlockObjects = new();
 
         static public Color[] BlockCoordinatesFull,
@@ -55,8 +36,6 @@ namespace Start_a_Town_
             BlockCoordinatesQuarter;
 
         static public AtlasDepthNormals.Node.Token BlockShadow;
-
-
         static public AtlasDepthNormals.Node.Token BlockBlueprint;
         static public AtlasDepthNormals.Node.Token BlockHighlight;
         static public AtlasDepthNormals.Node.Token BlockBlueprintGrayscale;
@@ -70,7 +49,7 @@ namespace Start_a_Town_
             BlockCoordinatesQuarter = new Color[32 * 40];
             Game1.Instance.Content.Load<Texture2D>("Graphics/goodUVquarter").GetData<Color>(BlockCoordinatesQuarter, 0, 32 * 40);
 
-            BlockShadow = Block.Atlas.Load("blocks/block shadow smaller", Block.SliceBlockDepthMap, Block.NormalMap);// LoadTexture("blockshadow", "block shadow");
+            BlockShadow = Block.Atlas.Load("blocks/block shadow smaller", Block.SliceBlockDepthMap, Block.NormalMap);
             BlockBlueprint = Block.Atlas.Load("blocks/blockblueprint");
             BlockBlueprintGrayscale = Block.Atlas.Load(Game1.Instance.Content.Load<Texture2D>("Graphics/items/blocks/blockblueprint").ToGrayscale(), "blocks/blockblueprint-grayscale");
 
@@ -88,7 +67,6 @@ namespace Start_a_Town_
             var materialQuantity = this.Ingredient.Amount;
             var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
             actor.Net.PopLoot(obj, global, Vector3.Zero);
-
 
             this.OnDeconstruct(actor, global);
             actor.Map.GetBlockEntity(global)?.Deconstruct(actor, global);
@@ -637,8 +615,10 @@ namespace Start_a_Town_
         /// </summary>
         public List<AtlasDepthNormals.Node.Token> Variations = new();
         public List<Sprite> Sprites = new();
-        string AssetName { get; set; }
-        // TODO: turn this into a method SetAssetNames(param string[] names) ???
+
+        /// <summary>
+        /// TODO: turn this into a method SetVariations(param string[] names)
+        /// </summary>
         protected string AssetNames
         {
             set
@@ -648,7 +628,6 @@ namespace Start_a_Town_
                     var token = Block.Atlas.Load("blocks/" + name.Trim(), Map.BlockDepthMap, Block.NormalMap);
                     this.Variations.Add(token);
                 }
-                this.AssetName = value.Split(',').First().Trim();
             }
         }
 
@@ -667,10 +646,6 @@ namespace Start_a_Town_
             Registry[type] = this;
         }
 
-        public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, float zoom, float depth, Cell cell)
-        {
-            this.Draw(sb, screenBounds, sunlight, blocklight, Color.White, zoom, depth, cell);
-        }
         public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
@@ -689,15 +664,6 @@ namespace Start_a_Town_
                 return;
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth, this);
         }
-        public virtual void Draw(Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, Cell cell)
-        {
-            this.Draw(blockCoordinates, camera, screenBounds, sunlight, blocklight, fog, tint, depth, cell.Variation, cell.Orientation, cell.BlockData);
-        }
-        
-        public virtual MyVertex[] Draw(Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
-        {
-            return this.Draw(camera.SpriteBatch, blockCoordinates, camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data);
-        }
         public virtual MyVertex[] Draw(MySpriteBatch sb, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             if (this == BlockDefOf.Air)
@@ -711,11 +677,6 @@ namespace Start_a_Town_
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
 
         }
-        public virtual MyVertex[] Draw(Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, Cell cell)
-        {
-            return this.Draw(chunk, blockCoordinates, camera, screenBounds, sunlight, blocklight, fog, tint, depth, cell.Variation, cell.Orientation, cell.BlockData);
-        }
-
         public virtual MyVertex[] Draw(Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             if (this == BlockDefOf.Air)
@@ -740,33 +701,11 @@ namespace Start_a_Town_
                 token,
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
         }
-
-        public virtual void Draw(Camera camera, Vector3 global, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation)
-        {
-            var screenBounds = camera.GetScreenBoundsVector4(global.X, global.Y, global.Z, Block.Bounds, Vector2.Zero);// Block.OriginCenter);
-            camera.SpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(variation, this.Variations.Count - 1)], camera.Zoom, fog, tint, sunlight, blocklight, depth, this);
-        }
-        public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, byte data)
-        {
-            if (this.Type == Types.Air)
-                return;
-            sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[0], zoom, fog, tint, sunlight, blocklight, depth);
-        }
-        public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, float zoom, float depth, Cell cell)
-        {
-            this.Draw(sb, screenPos, sunlight, blocklight, Color.White, zoom, depth, cell);
-        }
         public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
                 return;
             sb.DrawBlock(Block.Atlas.Texture, screenPos, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
-        }
-        public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, Color fog, float zoom, float depth, byte data)
-        {
-            if (this.Type == Types.Air)
-                return;
-            sb.DrawBlock(Block.Atlas.Texture, screenPos, this.Variations[0], zoom, tint, sunlight, blocklight, depth);
         }
         public virtual void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
         {
@@ -780,7 +719,6 @@ namespace Start_a_Town_
             var bounds = cam.GetScreenBoundsVector4(global.X, global.Y, global.Z, Block.Bounds, Vector2.Zero);
             sb.DrawBlock(Block.Atlas.Texture, bounds, token, cam.Zoom, Color.Transparent, tint, materialcolor, Color.White, Vector4.One, Vector4.Zero, depth, this);
         }
-
         protected static void DrawShadow(MySpriteBatch nonopaquemesh, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth)
         {
             nonopaquemesh.DrawBlock(Block.Atlas.Texture, screenBounds, Block.BlockShadow, camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Vector4.Zero, depth, null, blockCoordinates);
@@ -852,6 +790,7 @@ namespace Start_a_Town_
             return null;
         }
 
+        [Obsolete]
         public virtual List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
         {
             return new List<Interaction>();

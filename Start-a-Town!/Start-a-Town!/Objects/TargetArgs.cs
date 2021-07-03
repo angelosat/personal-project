@@ -668,16 +668,14 @@ namespace Start_a_Town_
                     var list = new Dictionary<string, Interaction>();
                     var dropinvitem = new DropInventoryItem();
                     var dropeq = new InteractionDropEquipped();
-                    //var dropeqt = new DropEquippedTarget();
 
-                    var unequip = new Unequip();
+                    //var unequip = new Unequip();
                     var throwInter = new InteractionThrow();
                     list.Add(dropinvitem.Name, dropinvitem);
                     list.Add(dropeq.Name, dropeq);
-                    //list.Add(dropeqt.Name, dropeqt);
 
                     list.Add(throwInter.Name, throwInter);
-                    list.Add(unequip.Name, unequip);
+                    //list.Add(unequip.Name, unequip);
                     return list;
             }
         }

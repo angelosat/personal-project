@@ -776,12 +776,7 @@ namespace Start_a_Town_
         }
         internal virtual ContextAction GetContextRB(GameObject player, Vector3 global)
         {
-            var list = new Dictionary<PlayerInput, Interaction>();
-            this.GetPlayerActionsWorld(player, global, list);
-            var action = list.Values.FirstOrDefault();
-            if (action != null)
-                return new ContextAction(action) { Shortcut = PlayerInput.RButton };
-            return null;
+            throw new NotImplementedException();
         }
         internal virtual ContextAction GetContextActivate(GameObject player, Vector3 global)
         {
@@ -797,29 +792,17 @@ namespace Start_a_Town_
 
         public virtual void GetContextActions(GameObject player, Vector3 global, ContextArgs a)
         {
-            var list = new Dictionary<PlayerInput, Interaction>();
-            this.GetPlayerActionsWorld(player, global, list);
-            foreach (var i in list)
-                a.Actions.Add(new ContextAction(i.Value) { Shortcut = i.Key });// () => true));
+            throw new NotImplementedException();
         }
-
-        public virtual void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
-        {
-            var hauled = Components.PersonalInventoryComponent.GetHauling(PlayerOld.Actor);
-            if (hauled.Object != null)
-            {
-                list[PlayerInput.RButton] = new DropCarriedSnap();
-                return;
-            }
-        }
+        
         public virtual void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, ContextAction> list)
         {
-            var dic = new Dictionary<PlayerInput, Interaction>();
-            this.GetPlayerActionsWorld(player, global, dic);
-            foreach (var c in dic)
-                list.Add(c.Key, new ContextAction(c.Value));
+            throw new NotImplementedException();
         }
-
+        public virtual void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
+        {
+            throw new NotImplementedException();
+        }
         static public float GetPathingCost(IMap map, Vector3 global)
         {
             var cell = map.GetCell(global);

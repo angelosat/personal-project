@@ -71,17 +71,7 @@ namespace Start_a_Town_.Blocks
                 throw new Exception();
             entity.Sprout.Value -= entity.Sprout.Max * potency;
         }
-        public override void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
-        {
-            var hauled = PersonalInventoryComponent.GetHauling(player).Object;
-            if (hauled != null)
-                if (hauled.HasComponent<SeedComponent>())
-                {
-                    list.Add(PlayerInput.RButton, new InteractionPlantSeed());// commented out until i figure out how to seperate ai planting job on farmlands and player planting anywhere
-                    return;
-                }
-            base.GetPlayerActionsWorld(player, global, list);
-        }
+        
         internal override ContextAction GetContextRB(GameObject player, Vector3 global)
         {
             var hauled = PersonalInventoryComponent.GetHauling(player).Object;

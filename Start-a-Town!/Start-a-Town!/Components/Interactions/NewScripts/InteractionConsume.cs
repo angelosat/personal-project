@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-
-namespace Start_a_Town_.Components.Interactions
+﻿namespace Start_a_Town_.Components.Interactions
 {
     public class InteractionConsume : Interaction
     {
-        ConsumableComponent Comp;
+        readonly ConsumableComponent Comp;
         public InteractionConsume(ConsumableComponent comp)
             : base(
                 "Consume",
@@ -25,36 +18,15 @@ namespace Start_a_Town_.Components.Interactions
                 return;
             if (slot.Object == null)
                 return;
-            //var cnsmblCmpnt = slot.Object.GetComponent<ConsumableComponent>();
-            //if (cnsmblCmpnt == null)
-            //    return;
-            //cnsmblCmpnt.OnConsume(actor);
-            //var consumableSlot = target.Slot;
-            //consumableSlot.Consume(1);
+            
             this.Comp.Consume(actor);
             target.Slot.Consume(1);
 
-            //if(consumableSlot.Object == null)
-            //    throw new Exception();
-            //if(consumableSlot.StackSize > 1)
-            //{
-            //    consumableSlot.Object.StackSize--;
-            //}
-            //else
-            //{
-            //    actor.Net.DisposeObject(consumableSlot.Object);
-            //    consumableSlot.Clear();
-            //}
         }
 
         public override object Clone()
         {
             return new InteractionConsume(this.Comp);
         }
-
-        //public override string ToString()
-        //{
-        //    return this.Comp.Verb;
-        //}
     }
 }

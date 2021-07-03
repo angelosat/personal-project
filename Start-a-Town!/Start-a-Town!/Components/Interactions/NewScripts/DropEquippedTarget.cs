@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components.Interactions
@@ -20,18 +17,9 @@ namespace Start_a_Town_.Components.Interactions
         public DropEquippedTarget(TargetArgs targetArgs)
             : base("DropEquippedTarget")
         {
-            // TODO: Complete member initialization
             this.TargetEquipment = targetArgs;
         }
         
-        //public override void Perform(GameObject a, TargetArgs t)
-        //{
-        //    var slot = a.GetComponent<GearComponent>().Equipment.Slots.First(s => s.Object == this.TargetEquipment.Object);
-        //    if (slot == null)
-        //        throw new Exception();
-        //    a.Net.Spawn(slot.Object, a.Global + new Vector3(0, 0, a.Physics.Height));
-        //    slot.Clear();
-        //}
         internal override void InitAction(GameObject a, TargetArgs t)
         {
             var slot = a.GetComponent<GearComponent>().Equipment.Slots.First(s => s.Object == this.TargetEquipment.Object);

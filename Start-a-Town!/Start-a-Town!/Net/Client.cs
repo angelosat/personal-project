@@ -967,39 +967,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.PlayerCarry:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        //GameObject obj = Instance.NetworkObjects[netid];
-                        GameObject obj;
-                        if (!Instance.TryGetNetworkObject(netid, out obj))
-                        {
-                            Instance.RequestEntityFromServer(netid);
-                            return;
-                        }
-                        //obj.GetComponent<ControlComponent>().StartScript(Script.Types.Hauling, new ScriptArgs(Instance, obj, target));
-                        obj.GetComponent<WorkComponent>().Perform(obj, new Components.Interactions.Carry(), target);
-                    });
-                    return;
-
-                //case PacketType.PlayerEquip:
-                //    msg.Payload.Deserialize(r =>
-                //    {
-                //        int netid = r.ReadInt32();
-                //        TargetArgs target = TargetArgs.Read(Instance, r);
-                //        //GameObject obj = Instance.NetworkObjects[netid];
-                //        GameObject obj;
-                //        if (!Instance.TryGetNetworkObject(netid, out obj))
-                //        {
-                //            Instance.RequestEntityFromServer(netid);
-                //            return;
-                //        }
-                //        obj.GetComponent<ControlComponent>().StartScript(Script.Types.Equipping, new ScriptArgs(Instance, obj, target));
-                //    });
-                //    return;
-
                 case PacketType.PlayerUnequip:
                     msg.Payload.Deserialize(r =>
                     {

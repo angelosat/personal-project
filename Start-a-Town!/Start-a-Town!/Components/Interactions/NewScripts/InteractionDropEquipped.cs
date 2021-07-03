@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
@@ -22,21 +16,11 @@ namespace Start_a_Town_
             this.Type = type;
         }
         
-        //public override void Perform(GameObject a, TargetArgs t)
-        //{
-        //    var slot = GearComponent.GetSlot(a, this.Type);
-        //    if (slot.Object == null)
-        //        return;
-        //        //throw new Exception();
-        //    a.Net.Spawn(slot.Object, a.Global + new Vector3(0, 0, a.Physics.Height));
-        //    slot.Clear();
-        //}
         internal override void InitAction(GameObject a, TargetArgs t)
         {
             var slot = GearComponent.GetSlot(a, this.Type);
             if (slot.Object == null)
                 return;
-            //a.Net.Spawn(slot.Object, a.Global + new Vector3(0, 0, a.Physics.Height));
             slot.Object.Spawn(a.Map, a.Global + new Vector3(0, 0, a.Physics.Height));
             slot.Clear();
         }

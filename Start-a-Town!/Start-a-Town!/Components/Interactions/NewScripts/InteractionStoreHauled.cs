@@ -1,10 +1,4 @@
-﻿using Start_a_Town_.AI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -17,19 +11,13 @@ namespace Start_a_Town_
             )
         {
         }
-        static readonly TaskConditions conds = new TaskConditions(new AllCheck(
-                new ScriptTaskCondition("Is Hauling", (a, t) => a.GetComponent<HaulComponent>().GetObject() != null)//.Slot.Object != null)
+        static readonly TaskConditions conds = new(new AllCheck(
+                new ScriptTaskCondition("Is Hauling", (a, t) => a.GetComponent<HaulComponent>().GetObject() != null)
             ));
-        public override TaskConditions Conditions
-        {
-            get
-            {
-                return conds;
-            }
-        }
+
+        public override TaskConditions Conditions => conds;
         public override void Perform(GameObject actor, TargetArgs target)
         {
-            //PersonalInventoryComponent.StoreHauled(actor);
             var cachedObject = target.Object;
             actor.StoreCarried();
             (actor as Actor).Log.Write(string.Format("Stored {0} in inventory", cachedObject));

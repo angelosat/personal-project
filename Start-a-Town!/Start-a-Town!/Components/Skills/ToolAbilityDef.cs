@@ -57,7 +57,7 @@ namespace Start_a_Town_
         static public readonly ToolAbilityDef Mining = new("Mining", "Dig up stone blocks", (t) => new InteractionMining());
         static public readonly ToolAbilityDef Chopping = new("Chopping", "Chop down trees and enemies with axes", (t) => new InteractionChopping());
         static public readonly ToolAbilityDef Argiculture = new("Argiculture", "Helps determine type and growth time of plants.");
-        static public readonly ToolAbilityDef Planting = new("Planting", "Planting plants", (t) => new Planting());
+        static public readonly ToolAbilityDef Planting = new("Planting", "Planting plants");
         static public readonly ToolAbilityDef Carpentry = new("Carpentry", "The craft of converting wood to useful equipment");
 
         internal static ToolAbilityDef GetSkill(int skillID)

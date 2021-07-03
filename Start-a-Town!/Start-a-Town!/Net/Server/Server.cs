@@ -1274,17 +1274,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.PlayerCarry:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        msg.Player.ControllingEntity.GetComponent<WorkComponent>().Perform(msg.Player.ControllingEntity, new Components.Interactions.Carry(), target);
-                        Instance.Enqueue(PacketType.PlayerCarry, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-          
                 case PacketType.PlayerUnequip:
                     msg.Payload.Deserialize(r =>
                     {

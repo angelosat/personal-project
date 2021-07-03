@@ -375,7 +375,6 @@
     <Compile Include="Components\Crafting\New\Ingredient.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\ReagentFilterItem.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\ReagentFilterMaterial.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionConversation.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionCraftNew.cs" />
     <Compile Include="Blocks\Workstations\Kitchen\BlockKitchenEntity.cs" />
     <Compile Include="Blocks\Workstations\Processing\BlockPlantProcessing.cs" />
@@ -407,13 +406,10 @@
     <Compile Include="Components\Interactions\NewScripts\DropEquippedTarget.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionDropEquipped.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropInventoryItem.cs" />
-    <Compile Include="Components\Interactions\NewScripts\HaulFromInventory.cs" />
     <Compile Include="Components\Interactions\NewScripts\HaulNew.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionSwitch.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionToggleDoor.cs" />
     <Compile Include="Components\Interactions\NewScripts\UnequipItem.cs" />
-    <Compile Include="Components\Interactions\NewScripts\Unequip.cs" />
-    <Compile Include="Components\Interactions\NewScripts\PickUp.cs" />
     <Compile Include="Components\Interactions\NewScripts\UseHauledOnTargetNew.cs" />
     <Compile Include="Components\Inventory\InventoryUI.cs" />
     <Compile Include="Components\Inventory\PacketInventoryDrop.cs" />
@@ -648,7 +644,6 @@
     <Compile Include="Components\AI\Personality\Trait.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConstruct.cs" />
     <Compile Include="Components\Interactions\NewScripts\UseHauledOnTarget.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionBreakBlock.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionObserve.cs" />
     <Compile Include="Objects\Items\FurnitureParts.cs" />
     <Compile Include="Objects\Items\ItemManager.cs" />
@@ -695,12 +690,10 @@
     <Compile Include="Components\Interactions\NewScripts\Checks\BlockMaterialCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\Exists.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionChopping.cs" />
-    <Compile Include="Components\Interactions\NewScripts\DropCarriedSnap.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionStoreHauled.cs" />
     <Compile Include="Components\Vegetation\FertilizerComponent.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\BlockCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConsume.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionConsumeEquipped.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionFertilizing.cs" />
     <Compile Include="Objects\Items\ItemTypes\Rock.cs" />
     <Compile Include="Objects\Items\Tools\Pickaxe.cs" />
@@ -789,13 +782,9 @@
     <Compile Include="Components\HaulComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\Interactions\NewScripts\EquipFromWorld.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionThrow.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropCarried.cs" />
-    <Compile Include="Components\Interactions\NewScripts\DropItem.cs" />
-    <Compile Include="Components\Interactions\NewScripts\Carry.cs" />
     <Compile Include="Components\Interactions\NewScripts\Equip.cs" />
-    <Compile Include="Components\Interactions\NewScripts\Lift.cs" />
     <Compile Include="Modules\Base\GameManager.cs" />
     <Compile Include="Modules\Construction\IConstructionProduct.cs" />
     <Compile Include="Modules\Construction\InteractionConstructOld.cs" />
@@ -825,13 +814,11 @@
     <Compile Include="Components\Interactions\NewScripts\InteractionGrassClear.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionDigging.cs" />
     <Compile Include="Components\Interactions\NewScripts\EquipFromInventory.cs" />
-    <Compile Include="Components\Interactions\NewScripts\Planting.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionTilling.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionHaul.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\Any.cs" />
     <Compile Include="Components\Interactions\NewScripts\TargetTypeCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\RangeCheck.cs" />
-    <Compile Include="Components\Interactions\NewScripts\Tasks.cs" />
     <Compile Include="Components\Interactions\NewScripts\Interaction.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\ScriptTaskCondition.cs" />
     <Compile Include="Components\Skills\ToolAbilityComponent.cs" />

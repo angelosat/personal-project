@@ -450,17 +450,6 @@ namespace Start_a_Town_.Components
             }
         }
 
-        public override void GetInteractions(GameObject parent, List<Interaction> actions)
-        {
-            actions.Add(new InteractionHaul());
-            actions.Add(new InteractionStoreHauled());
-            actions.Add(new DropCarriedSnap());
-            actions.Add(new InteractionObserve());
-            actions.Add(new UseHauledOnTarget());
-            actions.Add(new PickUp());
-            actions.Add(new DropInventoryItem());
-        }
-
         public override object Clone()
         {
             PhysicsComponent phys = new PhysicsComponent(this);

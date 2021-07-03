@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_.Components.Interactions
+﻿namespace Start_a_Town_.Components.Interactions
 {
     class DropInventoryItem : Interaction
     {
-        //GameObject Item;
         public DropInventoryItem()
             : base(
             "DropInventoryItem",
@@ -17,12 +10,7 @@ namespace Start_a_Town_.Components.Interactions
         {
 
         }
-        //public DropInventoryItem(GameObject item)
-        //    : base(
-        //    "DropInventoryItem",
-        //    0
-        //    )
-        //{ this.Item = item; }
+       
         static readonly TaskConditions conds = new TaskConditions(new AllCheck(
                 new RangeCheck(t => t.Global, Interaction.DefaultRange),
                 new AnyCheck(
@@ -43,7 +31,7 @@ namespace Start_a_Town_.Components.Interactions
 
         public override object Clone()
         {
-            return new DropInventoryItem();//this.Item);
+            return new DropInventoryItem();
         }
     }
 }

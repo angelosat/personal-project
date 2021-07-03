@@ -75,26 +75,9 @@ namespace Start_a_Town_
             BlockBlueprintGrayscale = Block.Atlas.Load(Game1.Instance.Content.Load<Texture2D>("Graphics/items/blocks/blockblueprint").ToGrayscale(), "blocks/blockblueprint-grayscale");
 
             BlockHighlight = Block.Atlas.Load("blocks/highlightfull");
-            //BlockBlueprint = Block.Atlas.Load(Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/blockblueprint").ToGrayscale(), "blueprint-grayscale"); 
 
             Atlas.Initialize();
-            LoadMouseMap();
-
-
-            //foreach (var item in Registry.Values)
-            //    if (item.Type != Types.Air)
-            //    {
-            //        BlockObjects[item] = item.ToObject();
-            //    }
-            //EntityPrefabBlock.Initialize();
         }
-        //static void InitPrefabs()
-        //{
-        //    foreach (var b in Registry.Values)
-        //    {
-        //        var r = b.GetPrefabRecipe();
-        //    }
-        //}
 
         public void Deconstruct(GameObject actor, Vector3 global)
         {
@@ -112,12 +95,6 @@ namespace Start_a_Town_
             actor.Map.RemoveBlock(global);
         }
         protected virtual void OnDeconstruct(GameObject actor, Vector3 global) { }
-        private static void LoadMouseMap()
-        {
-            //MouseMapSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube");
-            //MouseMapSpriteOpposite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube - back"); //UpsideDown"); //
-            //BlockMouseMap = new MouseMap(MouseMapSprite, MouseMapSpriteOpposite, MouseMapSprite.Bounds, true);
-        }
 
         protected static AtlasDepthNormals.Node.Token LoadTexture(string name, string localfilepath)
         {
@@ -128,29 +105,20 @@ namespace Start_a_Town_
             return Block.Atlas.Load("graphics/items/blocks/" + localfilepath, Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/" + localfilepath).ToGrayscale(), Block.BlockDepthMap, Block.NormalMap);
         }
 
-        //static public Texture2D MouseMapSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube");
-        //static public Texture2D NormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsFilled"); //"Graphics/mousemap - Cube");
-        //static public Texture2D HalfBlockNormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfNormalsFilled"); //"Graphics/mousemap - Cube");
-        //static public Texture2D HalfBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfDepth09"); //"Graphics/mousemap - Cube");
-        //static public Texture2D MouseMapSpriteOpposite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube - back");
-
-
         static public readonly Texture2D MouseMapSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube");
         static public readonly Texture2D HalfBlockMouseMapTexture = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube half");
         static public readonly Texture2D QuarterBlockMouseMapTexture = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube quarter");
 
-        static public readonly Texture2D NormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsFilled19");//blockNormalsFilled"); //"Graphics/mousemap - Cube");
-        static public readonly Texture2D BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19"); //blockDepth09");
+        static public readonly Texture2D NormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsFilled19");
+        static public readonly Texture2D BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19");
 
-        static public readonly Texture2D HalfBlockNormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfNormalsFilled"); //"Graphics/mousemap - Cube");
-        static public readonly Texture2D HalfBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfDepth09"); //"Graphics/mousemap - Cube");
+        static public readonly Texture2D HalfBlockNormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfNormalsFilled");
+        static public readonly Texture2D HalfBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfDepth09");
 
-        static public readonly Texture2D QuarterBlockMapNormal = Game1.Instance.Content.Load<Texture2D>("Graphics/blockQuarterNormalsFilled"); //"Graphics/mousemap - Cube");
-        static public readonly Texture2D QuarterBlockMapDepth = Game1.Instance.Content.Load<Texture2D>("Graphics/blockQuarterDepth09"); //"Graphics/mousemap - Cube");
+        static public readonly Texture2D QuarterBlockMapNormal = Game1.Instance.Content.Load<Texture2D>("Graphics/blockQuarterNormalsFilled");
+        static public readonly Texture2D QuarterBlockMapDepth = Game1.Instance.Content.Load<Texture2D>("Graphics/blockQuarterDepth09");
 
-
-        static public readonly Texture2D SliceBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockOneDepth09"); //"Graphics/mousemap - Cube");
-        //static public readonly Texture2D BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19"); //blockDepth09");
+        static public readonly Texture2D SliceBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockOneDepth09");
 
         static public readonly Texture2D MouseMapSpriteOpposite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube - back");
 
@@ -1210,12 +1178,12 @@ namespace Start_a_Town_
         {
             if (this.Ingredient.Material != null)
             {
-                yield return new BlockRecipe.ProductMaterialPair(this, this.Ingredient.Material);//.Recipe.GetVariants();
+                yield return new BlockRecipe.ProductMaterialPair(this, this.Ingredient.Material);
             }
             else if (this.Ingredient.MaterialType != null)
             {
                 foreach(var m in this.Ingredient.MaterialType.SubTypes)
-                    yield return new BlockRecipe.ProductMaterialPair(this, m);//.Recipe.GetVariants();
+                    yield return new BlockRecipe.ProductMaterialPair(this, m);
             }
             else if (this.Ingredient.ItemDef != null)
             {
@@ -1225,7 +1193,7 @@ namespace Start_a_Town_
                 {
                     if(!this.Ingredient.ItemDef.DefaultMaterialType.SubTypes.Contains(this.Ingredient.Material))
                         throw new Exception();
-                    yield return new BlockRecipe.ProductMaterialPair(this, this.Ingredient.Material);//.Recipe.GetVariants();
+                    yield return new BlockRecipe.ProductMaterialPair(this, this.Ingredient.Material);
                 }
                 else
                 {

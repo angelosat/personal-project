@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_.AI.Behaviors.Chatting
+﻿namespace Start_a_Town_.AI.Behaviors.Chatting
 {
     class AITaskChatNew : AITask
     {
@@ -19,17 +13,14 @@ namespace Start_a_Town_.AI.Behaviors.Chatting
         public AITaskChatNew(AIConversationManager.Conversation convo)
         {
             this.Convo = convo;
-            //this.Behavior = new TaskBehaviorChat(this);
         }
         public AITaskChatNew()
         {
 
         }
-        //AIConversationManager.Conversation Conversation;
-        static readonly BehaviorChattingNew Behav = new BehaviorChattingNew();
         public override Behavior GetBehavior(GameObject actor)
         {
-            return new BehaviorChattingNew(); // Behav;
+            return new BehaviorChattingNew();
         }
     }
 }

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 
@@ -37,8 +32,8 @@ namespace Start_a_Town_.AI.Behaviors
             var net = parent.Net;
 
 
-            TargetArgs target = this.Target;// ?? (string.IsNullOrWhiteSpace(this.TargetVariableName) ? TargetArgs.Empty : state.Blackboard[this.TargetVariableName] as TargetArgs);
-            Interaction goal = this.Interaction;// ?? state.Blackboard[this.InteractionKey] as Interaction;
+            TargetArgs target = this.Target;
+            Interaction goal = this.Interaction;
 
             switch (goal.State)
             {

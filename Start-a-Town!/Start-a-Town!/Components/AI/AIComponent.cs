@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Start_a_Town_.Components.AI;
-using Start_a_Town_.Components.Needs;
-using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.Net;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
@@ -14,78 +10,6 @@ using Start_a_Town_.AI;
 
 namespace Start_a_Town_
 {
-    public class Memory
-    {
-        public enum States { Invalid, Valid }
-
-        public States State;
-       // public bool Valid;
-        public GameObject Object;
-        public List<string> Needs;
-        public float Score, Decay, Interest;
-        Memory(GameObject obj, float interest, float score, float decay)
-        {
-            this.Interest = interest;
-            this.Object = obj;
-            this.Score = score;
-            this.Decay = decay;
-            //  this.Needs = new List<string>();// new NeedCollection();// new List<Need>(needs);
-            this.State = States.Invalid;
-        }
-        public Memory(GameObject obj, float interest, float score, float decay, GameObject actor)
-        {
-            this.Interest = interest;
-            this.Object = obj;
-            this.Score = score;
-            this.Decay = decay;
-          //  this.Needs = new List<string>();// new NeedCollection();// new List<Need>(needs);
-            this.State = States.Invalid;
-            Validate(actor);
-            //foreach (var need in needs)
-            //    this.Needs.Add(need);
-
-            //foreach (Need need in needs)
-            //    if (need != null)
-            //    {
-            //        //this.Needs.Add(need.Name, need);
-            //        Need existingNeed;
-            //        if (this.Needs.TryGetValue(need.Name, out existingNeed))
-            //        {
-            //            if (need.Value >= existingNeed.Value)
-            //                this.Needs[need.Name] = need;
-            //        }
-            //        else
-            //            this.Needs[need.Name] = need;
-            //    }
-        }
-        public Memory Refresh(GameObject parent)
-        {
-            this.Score = 100;
-            if (State == States.Invalid)
-                Validate(parent);
-            return this;
-        }
-        public bool Update()
-        {
-            Score -= Decay;
-            if (Score <= 0)
-                return true;
-            return false;
-        }
-        public override string ToString()
-        {
-            return Object.Name + " - Interest: " + Interest + " - Score: " + Score;
-        }
-        public void Validate(GameObject actor)
-        {
-            this.State = Memory.States.Valid;
-            this.Needs = new List<string>();
-            //this.Object.Query(actor).ForEach(i => i.NeedEffects.ForEach(n=>this.Needs.Add(n.Name)));//.ToList();
-        }
-        
-    }
-
-
     class AIComponent : EntityComponent
     {
         public override string ComponentName
@@ -124,12 +48,11 @@ namespace Start_a_Town_
         ThoughtCollection Thoughts { get { return (ThoughtCollection)this["Thoughts"]; } set { this["Thoughts"] = value; } }
         public AIState State;
         public bool Enabled = true;
-        public AIComponent()//Actor actor) : base(actor)
+        public AIComponent()
         {
             this.Running = true;
             this.Thoughts = new ThoughtCollection();
             this.Knowledge = new Knowledge();
-            //this.State = new AIState(actor) { Knowledge = this.Knowledge };//, Personality);
             this.Root = null;
         }
         public override void Initialize(GameObject parent, RandomThreaded random)
@@ -144,8 +67,7 @@ namespace Start_a_Town_
 
         public override void MakeChildOf(GameObject parent)
         {
-            //this.State.Parent = parent;
-            this.State = new AIState(parent as Actor) { Knowledge = this.Knowledge };//, Personality);
+            this.State = new AIState(parent as Actor) { Knowledge = this.Knowledge };
         }
 
         public AIComponent Initialize(Behavior root)
@@ -168,50 +90,16 @@ namespace Start_a_Town_
             if(this.Enabled)
                 Root.Execute(parent as Actor, this.State);
             return;
-            //if (!this.State.InSync)
-            //    if (net is Server)
-            //        (net as Server).SyncAI(parent);
-
         }
-
-        //static public List<GameObject> Agents = new List<GameObject>();
 
         public override void OnSpawn(IObjectProvider net, GameObject parent)
         {
             this.State.Leash = parent.Global;
-            //this.Root.OnSpawn(parent, this.State);
-            //this.Tick(net, parent);
         }
         public override void OnDespawn(GameObject parent)
         {
-            //Agents.Remove(parent);
             base.OnDespawn(parent);
         }
-
-        /// <summary>
-        /// TODO: only add entities in memory if there's LOS ?
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        //List<GameObject> UpdateNearbyObjects(GameObject parent)
-        //{
-        //    return parent.GetNearbyObjects( 
-        //    range: range => range < 16,
-        //    action: obj =>
-        //        {
-
-        //            Memory mem;
-        //            if (!Knowledge.Objects.TryGetValue(obj, out mem))
-        //            {
-        //                List<InteractionOld> interactions = new List<InteractionOld>();
-        //                obj.Query(parent, interactions);
-        //                Knowledge.Objects[obj] = obj.ToMemory(parent);
-        //            }
-        //            else
-        //                mem.Refresh(parent);
-        //        });
-
-        //}
 
         public override bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
         {
@@ -236,7 +124,6 @@ namespace Start_a_Town_
 
                 case Message.Types.ManageEquipment:
                     throw new NotImplementedException();
-                    //e.Sender.PostMessage(Message.Types.ManageEquipmentOk, parent);
 
                 case Message.Types.AIStart:
                     Running = true;
@@ -249,17 +136,13 @@ namespace Start_a_Town_
                     return true;
 
                 case Message.Types.ObjectStateChanged:
-                    GameObject obj = e.Sender;//e.Parameters[0] as GameObject;
-                    //foreach (var memory in this.Knowledge.Objects)
-                    //{
-                    //}
+                    GameObject obj = e.Sender;
                     Memory mem;
                     if (this.Knowledge.Objects.TryGetValue(obj, out mem))
                     {
 
                         mem.State = Memory.States.Invalid;
                         throw new NotImplementedException();
-                        //parent.PostMessage(Message.Types.Think, parent, obj.Name + "'s state has changed.", "It seems " + obj.Name + "'s state has changed since the last time I checked it out...");
                     }
                     return true;
 
@@ -274,14 +157,10 @@ namespace Start_a_Town_
                     a(m);
                     return true;
 
-              
-
                 default:
                     bool result = false;
-                    //this.Root.HandleMessage(parent, e);
                     return result;
             }
-            //return false;
             return false;
         }
         internal override void OnGameEvent(GameObject gameObject, GameEvent e)
@@ -292,82 +171,10 @@ namespace Start_a_Town_
                     this.State.Path = null;
             }
         }
-        //internal override void HandleRemoteCall(GameObject gameObject, ObjectEventArgs e)
-        //{
-        //    this.Root.HandleRPC(gameObject, e);
-        //    //switch(e.Type)
-        //    //{
-        //    //    case Message.Types.AssignJob:
-        //    //        "ole2".ToConsole();
-        //    //        break;
-
-        //    //    default:
-        //    //        break;
-        //    //}
-        //}
-        //internal override void HandleRemoteCall(GameObject gameObject, Message.Types type, System.IO.BinaryReader r)
-        //{
-        //    this.Root.HandleRPC(gameObject, type, r);
-
-        //}
-        //public override void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> actions)
-        //{
-        //    //foreach (var child in this.Behaviors)
-        //    //    child.GetRightClickAction(parent, actions);
-        //    this.Root.GetRightClickAction(parent, actions);
-        //}
-
-        //internal override void GetAvailableTasks(GameObject parent, List<Interaction> list)
-        //{
-        //    this.Root.GetInteractions(parent, list);
-        //}
-
-        //public override void Query(GameObject parent, List<InteractionOld> list)// GameObjectEventArgs e)
-        //{
-
-        //    foreach (Behavior bhav in Behaviors)
-        //        bhav.Query(parent, list);
-
-        //}
-
-        //public override void GetDialogueOptions(GameObject parent, GameObject speaker, DialogueOptionCollection options)
-        //{
-        //    this.Behaviors.ForEach(foo => foo.GetDialogueOptions(parent, speaker, options));
-
-        //    options.AddRange(new DialogueOption[]{
-        //        "Thoughts".ToDialogueOption(HandleConversation)
-        //    });
-        //}
-        //public override void GetDialogOptions(GameObject parent, GameObject speaker, List<DialogOption> options)
-        //{
-        //    this.Root.GetDialogOptions(parent, speaker, options);
-        //}
-        public Conversation.States HandleConversation(GameObject parent, GameObject speaker, string option, out string speech, out DialogueOptionCollection options)
-        {
-            switch (option)
-            {
-                case "Thoughts":
-                    speech = "Here's what I was thinking about...";
-                    Log.Command(Log.EntryTypes.Thoughts, parent);
-                    break;
-                default:
-                    speech = "I don't know about " + option + ".";
-                    break;
-            }
-            speech += "\n\nAnything else?";// I can help you with?";
-            options = parent.GetDialogueOptions(speaker);
-            return Conversation.States.InProgress;
-        }
-
+        
         public override object Clone()
         {
-            //AIComponent ai = new AIComponent();
-            //ai.Personality = Personality.Clone() as Personality;
-            //foreach (Behavior bh in Behaviors)
-            //    ai.Behaviors.Add(bh.Clone() as Behavior);
-
             AIComponent ai = new AIComponent().Initialize(
-                //this.Personality.Clone() as Personality, 
                 this.Root.Clone() as Behavior);
             return ai;
         }
@@ -383,8 +190,7 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return //"Depth: " + Depth + 
-               // "\nDeepest: " +GetDeepest().ToString() +
+            return
                (Current != null ? "Current: " + Current.ToString() : "<null>") +
                 "\n" + base.ToString();
         }
@@ -425,8 +231,6 @@ namespace Start_a_Town_
         internal override void GetInterface(GameObject gameObject, Control box)
         {
             base.GetInterface(gameObject, box);
-            //var label = new Label("Behavior: ") { TextFunc = () => "Behavior: " + (this.State.Job != null ? this.State.Job.ToString() : "none") };
-            //box.AddControls(label);
             box.AddControls(new Interface(gameObject.RefID));
         }
         internal override void MapLoaded(GameObject parent)
@@ -446,9 +250,7 @@ namespace Start_a_Town_
             int EntityID;
             string GetText()
             {
-                //get { 
                 return "Behavior: " + (this.State.Job != null ? this.State.Job.ToString() : "none");
-                //}
             }
             public Interface(AIState state)
             {
@@ -458,9 +260,6 @@ namespace Start_a_Town_
             }
             public Interface(int entity)
             {
-                //this.Label = new Label("Behavior: none");
-                //this.Label = new Label(300);
-                //this.Label.Text = "Behavior: ";
                 this.Label = new Label("Behavior: ") { Width = 300 };
                 this.AddControls(this.Label);
                 this.EntityID = entity;
@@ -470,7 +269,6 @@ namespace Start_a_Town_
                 switch (e.Type)
                 {
                     case Message.Types.JobAccepted:
-                        //this.Label.Text = this.Text;
                         if ((int)e.Parameters[0] == this.EntityID)
                             this.Label.Text = "Behavior: " + (string)e.Parameters[1];
                         break;
@@ -490,18 +288,18 @@ namespace Start_a_Town_
         internal void MoveOrder(TargetArgs target, bool enqueue)
         {
             this.State.AddMoveOrder(target, enqueue);
-            //this.State.MoveOrder = target;
         }
         public override void DrawAfter(MySpriteBatch sb, Camera cam, GameObject parent)
         {
-            var serverentity = parent;// Server.Instance.GetNetworkObject(parent.InstanceID);
+            var serverentity = parent;
             var state = AIState.GetState(serverentity);
-            if (state == null) return; // we are in client
-            var path = state.Path;// this.State.Path;
+            if (state is null)
+                return; // we are in client
+            var path = state.Path;
             if (!UISelectedInfo.IsSelected(parent))
                 return;
             var first = true;
-            if (path != null)
+            if (path is not null)
             {
                 cam.DrawBlockMouseover(sb, parent.Map, path.Current, Color.Lime);
 

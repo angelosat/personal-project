@@ -10,7 +10,6 @@ namespace Start_a_Town_.AI
     {
         public override void Reserve(GameObject actor)
         {
-            //var prereqs = actor.Map.Town.ConstructionsManager.FindJob(actor);
 
         }
 

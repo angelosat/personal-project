@@ -1,13 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI;
-using Start_a_Town_.Net;
-using Start_a_Town_.PathFinding;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_.AI.Behaviors
 {

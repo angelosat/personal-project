@@ -58,8 +58,8 @@ namespace Start_a_Town_.Components
                     2,
                     (a, t) => this.Process(t.Object, a),
                     new TaskConditions(new AllCheck(
-                        new RangeCheck(t => t.Global, Interaction.DefaultRange),
-                        new SkillCheck(this.SkillToProcess))),
+                        new RangeCheck(t => t.Global, Interaction.DefaultRange)
+                        )),
                     this.SkillToProcess
                     )
             );
@@ -89,8 +89,8 @@ namespace Start_a_Town_.Components
                             2,
                             (a, t) => this.Process(t.Object, a),
                             new TaskConditions(new AllCheck(
-                                new RangeCheck(t => t.Global, Interaction.DefaultRange),
-                                new SkillCheck(this.SkillToProcess))),
+                                new RangeCheck(t => t.Global, Interaction.DefaultRange)
+                                )),
                             this.SkillToProcess
                             );
             //}
@@ -139,17 +139,12 @@ namespace Start_a_Town_.Components
                     return new TaskConditions(
                         new AllCheck(
                             new TargetTypeCheck(TargetType.Entity),
-                            new SkillCheck(this.Skill),
                             new RangeCheck(t => t.Global, Interaction.DefaultRange),
                             new ScriptTaskCondition("IsRawMaterial", (a, t) => t.Object.HasComponent<RawMaterialComponent>()))
                     );
                 }
             }
-            public override bool AvailabilityCondition(GameObject actor, TargetArgs target)
-            {
-                return new SkillCheck(this.Skill).Condition(actor, target);
-            }
-
+            
             public override void Perform(GameObject a, TargetArgs t)
             {
                 // TODO: destroy target here and spawn extracted raw materials

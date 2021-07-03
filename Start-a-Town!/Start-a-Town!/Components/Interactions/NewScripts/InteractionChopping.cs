@@ -158,7 +158,6 @@ namespace Start_a_Town_
         static readonly TaskConditions conds = new TaskConditions(
                     new AllCheck(
                         new RangeCheck(),
-                        new SkillCheck(ToolAbilityDef.Chopping),
                 new AnyCheck(
                             new AllCheck(
                                 new TargetTypeCheck(TargetType.Position),

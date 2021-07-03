@@ -35,7 +35,7 @@ namespace Start_a_Town_.Modules.Construction
                 return new TaskConditions(
                     new AllCheck(
                     //new SkillCheck(Components.Skills.Skill.Building),
-                        new SkillCheck(this.Construction.GetSkill()),
+                        
                     //new ScriptTaskCondition("Materials", this.DetectMaterialsOld, Message.Types.InteractionFailed))
                         new ScriptTaskCondition("Materials", this.DetectMaterials, Message.Types.InteractionFailed))
                         );

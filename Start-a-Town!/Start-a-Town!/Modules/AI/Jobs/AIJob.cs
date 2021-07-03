@@ -65,9 +65,9 @@ namespace Start_a_Town_.AI
 
         internal void AddStep(AIInstruction i)
         {
-            if (i.Target.Type == TargetType.Entity)
-                if (AIState.IsItemReserved(i.Target.Object))
-                    throw new Exception();
+            //if (i.Target.Type == TargetType.Entity)
+            //    if (AIState.IsItemReserved(i.Target.Object))
+            //        throw new Exception();
             this.Instructions.Add(i);
         }
         internal void NextStep()
@@ -108,9 +108,7 @@ namespace Start_a_Town_.AI
             if (this.ReservedBy == null)
                 return;
             var state = AIState.GetState(this.ReservedBy);
-            state.OnJobCancelled("");//this.Description); //??
             this.Dispose(this.ReservedBy); // if this throws then GOOD! the reservedby should be set if we ever need call Cancel
-            //state.StopJob();
         }
         public virtual void Dispose(GameObject actor)
         {
@@ -197,23 +195,6 @@ namespace Start_a_Town_.AI
         }
 
         
-        //public void Write(BinaryWriter w)
-        //{
-        //    var goal = this.Instructions.First();
-        //    goal.Target.Write(w);
-        //    w.Write(goal.Interaction.Name);
-        //}
-        //public void Read(BinaryReader r)
-        //{
-        //    AIInstruction 
-        //}
-        public void ReserveOld(GameObject actor)
-        {
-            // TODO: maybe reserve items straight away in the AIInstruction constructor?
-            foreach (var i in this.Instructions)
-                if (i.Target.Type == TargetType.Entity)
-                    AIState.ReserveItem(i.Target.Object, actor);
-        }
         public virtual object Clone()
         {
             return new AIJob();

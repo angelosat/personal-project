@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public sealed class Trait : ISaveable, ISerializable, IProgressBar, INamed //MeasurePositiveNegative, 
+    public sealed class Trait : ISaveable, ISerializable, IProgressBar, INamed 
     {
-        
-
         public float Percentage
         {
             get
             {
                 return this.Value / MaxDefault;
-                //return (this.Value - this.Min) / (this.Max - this.Min); 
-                return this.Value > 0 ? this.Value / MaxDefault : this.Value / -MaxDefault;// (this.Value - this.Min) / (this.Max - this.Min); 
             }
             set { this.Value = (MaxDefault - MinDefault) * value; }
         }
@@ -29,23 +20,15 @@ namespace Start_a_Town_
         public const float MinDefault = -100;
         public const float MaxDefault = 100;
         public const float ValueRange = 100;
-
         public float Value;
-        
-
 
         public float Normalized
         {
             get { return this.Value / ValueRange; } //unsigned. do i want this?
-
-            //get { return (this.Value - MinDefault) / (MaxDefault - MinDefault); } //unsigned. do i want this?
         }
 
         public float Min => MinDefault;
-
         public float Max => MaxDefault;
-
-        //float IProgressBar.Value => this.Value;
 
         public Trait(TraitDef def)
         {
@@ -87,16 +70,5 @@ namespace Start_a_Town_
             this.Value = r.ReadSingle();
             return this;
         }
-
-
-        //public SaveTag Save()
-        //{
-        //    var tag = new SaveTag(SaveTag.Types.Compound, "Trait");
-        //    return tag;
-        //}
-        //public void Load(SaveTag tag)
-        //{
-
-        //}
     }
 }

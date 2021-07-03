@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Start_a_Town_.AI;
 
 namespace Start_a_Town_.AI.Behaviors
 {
@@ -22,8 +18,6 @@ namespace Start_a_Town_.AI.Behaviors
         int BaseWaitTime = 5;
         public AIWait(TimeSpan timer)
         {
-            //this.Timer = timer;
-            //this.T = timer;
         }
         public override BehaviorState Execute(Actor parent, AIState state)
         {
@@ -36,18 +30,6 @@ namespace Start_a_Town_.AI.Behaviors
             }
             return BehaviorState.Running;
         }
-        //public override BehaviorState Execute(Entity parent, AIState state)
-        //{
-        //    if (this.TimerNew  > 0)
-        //    {
-        //        this.TimerNew--;
-        //        return BehaviorState.Running;
-        //    }
-        //    //this.TimerNew = (int)(10 * state.Personality.GetTrait(TraitDef.Composure).Normalized * Engine.TicksPerSecond);
-        //    this.TimerNew = (int)(10 * parent.GetTrait(TraitDef.Composure).Normalized * Engine.TicksPerSecond);
-
-        //    return BehaviorState.Success;
-        //}
         public override object Clone()
         {
             return new AIWait();

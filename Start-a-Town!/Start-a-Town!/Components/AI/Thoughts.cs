@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Start_a_Town_.AI
 {
-    class ThoughtCollection : List<Thought> { }// SortedList<DateTime, Thought> { }
+    class ThoughtCollection : List<Thought> { }
 
     class Thought
     {

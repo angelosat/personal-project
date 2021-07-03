@@ -13,8 +13,7 @@ namespace Start_a_Town_.Towns.Forestry
 
         static readonly TaskConditions conds = new TaskConditions(new AllCheck(
                 RangeCheck.One,
-                new BlockCheck(b => b == BlockDefOf.Soil || b == BlockDefOf.Grass),
-                new IsHauling(foo => { if (foo != null)return foo.HasComponent<SaplingComponent>(); else return false; })
+                new BlockCheck(b => b == BlockDefOf.Soil || b == BlockDefOf.Grass)
                 ));
         public override TaskConditions Conditions
         {

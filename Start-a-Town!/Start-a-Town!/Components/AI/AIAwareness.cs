@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.AI;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_.AI.Behaviors
 {
@@ -23,7 +19,7 @@ namespace Start_a_Town_.AI.Behaviors
             {
                 this.Timer++;
                 // return fail so we don't block parent selector
-                return BehaviorState.Fail;//.Running;
+                return BehaviorState.Fail;
             }
             this.Timer = 0;
 
@@ -38,21 +34,19 @@ namespace Start_a_Town_.AI.Behaviors
                 select obj).ToList();
 
             // return fail so we don't block parent selector
-            return BehaviorState.Fail;//.Running;
+            return BehaviorState.Fail;
         }
 
         List<GameObject> UpdateNearbyObjects(GameObject parent, Knowledge knowledge)
         {
             return parent.GetNearbyObjects(
-            range: range => range < Chunk.Size,// 16,
+            range: range => range < Chunk.Size,
             action: obj =>
             {
                 Memory mem;
                 if (!knowledge.Objects.TryGetValue(obj, out mem))
                 {
-                    //List<InteractionOld> interactions = new List<InteractionOld>();
-                    //obj.Query(parent, interactions);
-                    knowledge.Objects[obj] = obj.ToMemory(parent);// new Memory(obj, 100, 100, 1, interactions.Select(i => i.Need).ToArray());
+                    knowledge.Objects[obj] = obj.ToMemory(parent);
                 }
                 else
                     mem.Refresh(parent);

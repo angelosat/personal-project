@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Start_a_Town_.AI
 {
@@ -12,7 +10,6 @@ namespace Start_a_Town_.AI
         public void Update()
         {
             // TODO: maybe create a new list and add only continuing memories instead of removing them
-            //foreach (MemoryEntry memory in this.Objects.ToList())
             foreach (KeyValuePair<GameObject, Memory> memory in this.Objects.ToDictionary(foo => foo.Key, foo => foo.Value))
             {
                 if (memory.Value.Update())

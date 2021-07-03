@@ -143,18 +143,6 @@ namespace Start_a_Town_.AI
                     }
                     break;
 
-                case Message.Types.EntityDespawned:
-                    GameObject entity;
-                    EventEntityDespawned.Read(e.Parameters, out entity);
-                    //var state = AIState.GetState(entity);
-                    //if (state == null)
-                    //    break;
-                    //state.OnDespawn();
-                    AIState state;
-                    if (AIState.TryGetState(entity, out state))
-                        state.OnDespawn(); // TODO: MAKE THIS STATIC?
-                    break;
-
                 default:
                     break;
             }

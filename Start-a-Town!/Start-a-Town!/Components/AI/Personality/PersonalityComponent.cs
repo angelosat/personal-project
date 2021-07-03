@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Start_a_Town_.AI;
 using Start_a_Town_.UI;
-using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
     public enum ReactionType { Friendly, Hostile }
-    public class PersonalityComponent : EntityComponent //: ICloneable
+    public class PersonalityComponent : EntityComponent
     {
         static readonly Random Randomizer = new Random();
         
@@ -41,7 +38,7 @@ namespace Start_a_Town_
         {
 
         }
-        public PersonalityComponent(ReactionType reaction = ReactionType.Friendly, params string[] hatedTypes)//, params Need[] needs)
+        public PersonalityComponent(ReactionType reaction = ReactionType.Friendly, params string[] hatedTypes)
         {
             this.Hatelist = new List<string>(hatedTypes);
             this.Reaction = reaction;
@@ -85,7 +82,7 @@ namespace Start_a_Town_
             var count = this.Traits.Length;
             double sum = 0;
             double [] values = new double[count];
-            double min = -1, max = 1;// Trait.MinDefault, max = Trait.MaxDefault;
+            double min = -1, max = 1;
             for (int i = 0; i < count - 1; i++)
             {
                 var rest = count - (i + 1);
@@ -100,17 +97,12 @@ namespace Start_a_Town_
                 sum -= v;
                 values[i] = v;
             }
-            //values[count - 1] = random.Next((int)Trait.MinDefault, (int)Trait.MaxDefault) - sum;
-            values[count - 1] = budget + sum;// GetV() - sum;
+            values[count - 1] = budget + sum;
 
             var totalSum = values.Sum();
             if (totalSum != budget)
                 throw new Exception();
-            //for (int i = 0; i < values.Length; i++)
-            //{
-            //    values[i] *= Trait.ValueRange;
-            //}
-
+            
 
             for (int i = 0; i < count; i++)
             {
@@ -123,22 +115,17 @@ namespace Start_a_Town_
             static double getV(double minimum, double maximum)
             {
                 return RandomHelper.NextNormal(minimum, maximum);
-                //return (int)(g * Trait.ValueRange);
             }
             return this;
         }
 
         public override void Write(System.IO.BinaryWriter w)
         {
-            //foreach (var trait in this.Traits)
-            //    trait.Write(w);
             this.Traits.Write(w);
             this.Favorites.WriteDefs(w);
         }
         public override void Read(System.IO.BinaryReader r)
         {
-            //foreach (var trait in this.Traits)
-            //    trait.Read(r);
             this.Traits.Read(r);
             this.Favorites.ReadDefs(r);
         }
@@ -152,13 +139,6 @@ namespace Start_a_Town_
             this.Traits.TryLoadImmutable(tag, "Traits");
             if(!this.Favorites.TryLoadDefs(tag, "Favorites"))
                 this.Favorites = GenerateMaterialPreferences();
-
-            //this.Randomize();
-            //SaveTag save;
-            //if (!tag.TryGetTag("Personality", out save))
-            //    return;
-            //foreach (var trait in this.Traits)
-            //    trait.Value.Load(save[trait.Key.ToString()]);
         }
         static Control GUI;
         internal static Window GetGUI(Actor actor)
@@ -182,7 +162,6 @@ namespace Start_a_Town_
             var boxtraits = new GroupBox();
             foreach (var t in p.Traits)
             {
-                //UI.AddControlsBottomLeft(t.GetUI());
                 boxtraits.AddControlsBottomLeft(t.GetUI());
             }
             GUI.AddControlsVertically(boxtraits.ToPanelLabeled("Traits"), getFavoritesUI(boxtraits.Width));
@@ -191,11 +170,7 @@ namespace Start_a_Town_
             Control getFavoritesUI(int width)
             {
                 var box = UIHelper.Wrap(p.Favorites.Select(m => new Button(m.Label) { TextColorFunc = () => m.Color }), width);
-            //var list = new ListBoxNewNoBtnBase<Material, Label>(200, 200, m => { return new Label(m.Label) { TextColorFunc = () => m.Color }; });
-            //list.AddItems(p.Favorites);
                 return box.ToPanelLabeled("Favorite Materials");
-
-            //return box.AddControls(list.ToPanelLabeled("Favorite Materials"));
         }
     }
         

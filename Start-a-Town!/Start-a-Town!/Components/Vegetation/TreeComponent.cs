@@ -193,9 +193,8 @@ namespace Start_a_Town_.Components
         }
         static readonly TaskConditions conds = new TaskConditions(
                     new AllCheck(
-                        new RangeCheck(),
-                        new SkillCheck(ToolAbilityDef.Chopping)
-                ));
+                        new RangeCheck())
+                );
         public override TaskConditions Conditions
         {
             get
@@ -227,8 +226,7 @@ namespace Start_a_Town_.Components
         static readonly TaskConditions conds = new TaskConditions(
                     new AllCheck(
                         new Exists(),
-                        new RangeCheck(),
-                        new SkillCheck(ToolAbilityDef.Chopping)
+                        new RangeCheck()
                 ));
         public override ScriptTaskCondition CancelState
         {

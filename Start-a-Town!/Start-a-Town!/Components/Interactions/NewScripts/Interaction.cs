@@ -361,49 +361,7 @@ namespace Start_a_Town_//.Components.Interactions
             this.DrawUI(sb, camera, parent);
         }
         public abstract object Clone();
-        //{
-        //    return new Interaction(this.Name, this.Seconds, this.Callback, this.Conditions, this.Skill);
-        //}
-
-        public void AIInit(GameObject agent, TargetArgs target, AIState state)
-        {
-            var job = new AIJob();
-            //state.Job = job;
-            state.StartJob(job);
-            foreach (var cond in this.Conditions.GetConditions())
-                cond.AIInit(agent, target, state);
-        }
-
-        //public AIJob GetJob(GameObject agent, TargetArgs target, AI.AIState state)
-        //{
-        //    AIJob job = new AIJob();
-        //    var conditions = this.Conditions.GetConditions();
-        //    foreach(var cond in conditions)
-        //    {
-        //        //if (cond is RangeCheck)
-        //        //    continue;
-          
-        //        // if condition evaluates, continue, otherwise try to get instruction and if it's null, return
-        //        if (cond.Condition(agent, target))// == null)
-        //            continue;
-        //        //var instruction = cond.AIGetPreviousStep(agent, target, state);
-        //        AIInstruction instruction;
-        //        if (cond.AITrySolve(agent, target, state, out instruction))
-        //            continue;
-
-        //        // if the condition didn't evaluate and it did output null, it didn't find a solution so return null
-        //        if (instruction == null)
-        //            return null;
-        //        //job.Instructions.Add(instruction);
-        //        //job.Instructions.Enqueue(instruction);
-        //        job.AddStep(instruction);
-
-        //    }
-        //    //job.Instructions.Add(new AIInstruction(target, this));
-        //    //job.Instructions.Enqueue(new AIInstruction(target, this));
-        //    job.AddStep(new AIInstruction(target, this));
-        //    return job;
-        //}
+        
 
         public bool IsValid(GameObject actor, TargetArgs target)
         {

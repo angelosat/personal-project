@@ -207,6 +207,7 @@
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />
     <Compile Include="Blocks\LiduidFlowProcess.cs" />
+    <Compile Include="Components\AI\Memory.cs" />
     <Compile Include="Components\AI\Personality\TraitDefOf.cs" />
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />
     <Compile Include="Components\Stats\Stats\StatsHelper.cs" />
@@ -386,9 +387,7 @@
     <Compile Include="Components\Stats\StatDefOf.cs" />
     <Compile Include="GameModes\StaticMaps\UI\UIActorCreation.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
-    <Compile Include="Components\Abilities\AbilityArgs.cs" />
     <Compile Include="Components\AI\AIConversationManager.cs" />
-    <Compile Include="Components\AI\Jobs\AIJobCraft.cs" />
     <Compile Include="Components\AI\Personality\PersonalityUI.cs" />
     <Compile Include="Components\AI\Personality\TraitDef.cs" />
     <Compile Include="Components\Attributes\AttributeDef.cs" />
@@ -654,8 +653,6 @@
     <Compile Include="Modules\Crafting\UI\CraftOrderDetailsInterface.cs" />
     <Compile Include="Modules\Crafting\UI\WorkstationInterfaceNew.cs" />
     <Compile Include="Components\AI\AILog.cs" />
-    <Compile Include="Components\AI\Jobs\AIJobHaul.cs" />
-    <Compile Include="Components\AI\Jobs\AIJobConstruction.cs" />
     <Compile Include="Components\AI\Personality\Trait.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConstruct.cs" />
     <Compile Include="Components\Interactions\NewScripts\UseHauledOnTarget.cs" />
@@ -689,7 +686,6 @@
     <Compile Include="Blocks\Workstations\Smeltery\BlockSmeltery.cs" />
     <Compile Include="Blocks\BlockWoodPaneling.cs" />
     <Compile Include="Blocks\Workstations\Smeltery\BlockSmelteryEntity.cs" />
-    <Compile Include="Components\AI\AICombat.cs" />
     <Compile Include="Components\Combat\AttackComponent.cs" />
     <Compile Include="Components\BloodComponent.cs" />
     <Compile Include="Components\BombComponent.cs" />
@@ -710,7 +706,6 @@
     <Compile Include="Components\Interactions\NewScripts\Checks\IsBlockType.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\BlockMaterialCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\Exists.cs" />
-    <Compile Include="Components\Interactions\NewScripts\Checks\IsHauling.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionChopping.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropCarriedSnap.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionStoreHauled.cs" />
@@ -752,8 +747,6 @@
     <Compile Include="Line.cs" />
     <Compile Include="Modules\AI\AIManager.cs" />
     <Compile Include="Modules\AI\AITarget.cs" />
-    <Compile Include="Modules\AI\Behaviors\AIPerformInteraction.cs" />
-    <Compile Include="Modules\AI\Behaviors\AINextJobStep.cs" />
     <Compile Include="Modules\AI\Behaviors\Commands\AINextCommand.cs" />
     <Compile Include="Modules\AI\Behaviors\Commands\AIPerformCommand.cs" />
     <Compile Include="Modules\AI\Behaviors\Dialogue\DialogOption.cs" />
@@ -782,7 +775,6 @@
     <Compile Include="Components\AI\AIAwareness.cs" />
     <Compile Include="Components\AI\AIMemory.cs" />
     <Compile Include="Components\AI\AIZombie.cs" />
-    <Compile Include="Components\AI\BehaviorFindJob.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorQueue.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorSequence.cs" />
     <Compile Include="Components\AI\AIState.cs" />
@@ -880,13 +872,9 @@
     <Compile Include="Components\Interactions\NewScripts\Checks\Any.cs" />
     <Compile Include="Components\Interactions\NewScripts\TargetTypeCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\RangeCheck.cs" />
-    <Compile Include="Components\Interactions\NewScripts\Checks\SkillCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\Tasks.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptCallback.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptTargetTypeFilter.cs" />
     <Compile Include="Components\Interactions\NewScripts\Interaction.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\ScriptTaskCondition.cs" />
-    <Compile Include="Components\Interactions\Old\ScriptToken.cs" />
     <Compile Include="Components\Skills\ToolAbilityComponent.cs" />
     <Compile Include="Components\Skills\SkillComponentOld.cs">
       <SubType>Code</SubType>
@@ -906,14 +894,6 @@
     <Compile Include="Components\Message.cs" />
     <Compile Include="Components\Resources\Durability.cs" />
     <Compile Include="Components\Resources\Health.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptComponent.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptEvaluations.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptEvaluation.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptCondition.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptConsumeHeldItem.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptRangeCheck.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptTargetFilter.cs" />
-    <Compile Include="Components\Interactions\ScriptComponents\ScriptTimer2.cs" />
     <Compile Include="Components\Shadow.cs" />
     <Compile Include="Components\Skills\SkillArgicultureOld.cs" />
     <Compile Include="Components\Tokens\Token.cs" />
@@ -1275,14 +1255,6 @@
     <Compile Include="Animations\Bone.cs" />
     <Compile Include="Animations\Transition.cs" />
     <Compile Include="Components\AI\AIComponent.cs" />
-    <Compile Include="Components\AI\AIAttack.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Components\AI\AIFindTarget.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Components\AI\AIIdle.cs" />
-    <Compile Include="Components\AI\AICoop.cs" />
     <Compile Include="Components\AI\AIWait.cs">
       <SubType>Code</SubType>
     </Compile>

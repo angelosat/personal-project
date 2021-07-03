@@ -313,22 +313,6 @@ namespace Start_a_Town_
             }
         }
         
-        private void CancelForageOrder(GameObject tree)
-        {
-            ChopOrder order;
-            if (this.PendingForageOrders.TryGetValue(tree, out order))
-            {
-                order.Job.Cancel();
-                this.PendingForageOrders.Remove(tree);
-            }
-        }
-        public override void Update()
-        {
-            base.Update();
-            //if (this.Map.Net != null)
-            //    IconOffset = (float)Math.Sin(this.Map.Net.Clock.TotalMilliseconds / Engine.TicksPerSecond);// DateTime.Now.Second);
-        }
-
         class ChopOrder
         {
             public GameObject Tree;

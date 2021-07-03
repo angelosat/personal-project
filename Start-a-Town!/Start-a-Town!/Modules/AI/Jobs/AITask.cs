@@ -213,38 +213,6 @@ namespace Start_a_Town_
         {
             this.ID = ReservationManager.GetNextTaskID();
         }
-        static Dictionary<GameObject, AIItemReservation> ReservedItems = new Dictionary<GameObject, AIItemReservation>();
-        static public void Reserve(GameObject parent, GameObject item, int quantity)
-        {
-            var existing = ReservedItems.GetValueOrDefault(item);
-            if (existing == null)
-            {
-                existing = new AIItemReservation(item);
-                ReservedItems.Add(item, existing);
-            }
-            existing.Add(parent, quantity);
-        }
-        static public int GetUnreservedAmount(GameObject item)
-        {
-            var existing = ReservedItems.GetValueOrDefault(item);
-            if (existing == null)
-                return item.StackSize;
-            var sum = existing.OwnersQuantities.Values.Sum();
-            return item.StackSize - sum;
-        }
-        static public void UnreserveAll(GameObject actor)
-        {
-            foreach(var item in ReservedItems.Keys.ToList())
-            {
-                var existing = ReservedItems[item];
-                existing.OwnersQuantities.Remove(actor);
-                if (existing.OwnersQuantities.Count == 0)
-                    ReservedItems.Remove(item);
-            }
-        }
-
-        
-
         public virtual string Name
         {
             get { return "unnamed task"; }
@@ -266,18 +234,14 @@ namespace Start_a_Town_
         public List<ObjectAmount> PlacedObjects = new();
         public List<Entity> CraftedItems = new();
 
-        //public Dictionary<ReactionIngredientIndex, ItemDef> CraftingIngredients = new Dictionary<ReactionIngredientIndex, ItemDef>();
         public List<Func<bool>> FailConditions = new();
         public CraftOrderNew Order;
-        //public Dictionary<string, ObjectAmount> ReactionReagents = new Dictionary<string, ObjectAmount>();
-        //public Dictionary<string, Entity> IngredientsUsed = new();
         public Dictionary<string, ObjectRefIDsAmount> IngredientsUsed = new();
 
         public TargetArgs Product = TargetArgs.Null;
         public bool Forced;
         public bool Urgent = true; // TODO default should be false
         int ReservedBy = -1;
-        //int Retries = 0;
         public int TicksWaited = 0;
         public int Quest;
         public int ShopID; // TODO store shopid instead of shop object
@@ -321,19 +285,6 @@ namespace Start_a_Town_
         public TaskDef Def;
         public int ID { get; internal set; }
 
-        //public AITask(Type behaviorType, params TargetArgs[] targets) : this()
-        //{
-        //    this.BehaviorType = behaviorType;
-        //    if (targets.Any())
-        //    {
-        //        //this.Targets.Add(targets[0]);
-        //        this.TargetA = targets[0];
-        //        for (int i = 0; i < targets.Length; i++)
-        //        {
-        //            this.TargetsA.Add(targets[i]);
-        //        }
-        //    }
-        //}
         public AITask(TaskDef taskDef)
         {
             this.Def = taskDef;
@@ -342,15 +293,7 @@ namespace Start_a_Town_
         public AITask(Type behaviorType) : this()
         {
             this.BehaviorType = behaviorType;
-            //if (targets.Any())
-            //{
-            //    //this.Targets.Add(targets[0]);
-            //    this.TargetA = targets[0];
-            //    for (int i = 0; i < targets.Length; i++)
-            //    {
-            //        this.TargetsA.Add(targets[i]);
-            //    }
-            //}
+            
         }
         public AITask(Type behaviorType, TargetArgs targetA) : this()
         {
@@ -381,34 +324,20 @@ namespace Start_a_Town_
             this.SetTarget(TargetIndex.B, targetB);
             this.SetTarget(TargetIndex.C, targetC);
         }
-        //public void AddTarget(int queueIndex, TargetArgs target)
-        //{
-
-        //}
-        //public AITask(Type behaviorType, List<Queue<TargetArgs>> targets, List<Queue<int>> counts)
-        //{
-        //    this.BehaviorType = behaviorType;
-        //    this.TargetQueues = targets;
-        //    this.CountQueues = counts;
-        //}
-        //public abstract AIJob Create(GameObject actor);
+        
         public override string ToString()
         {
             return this.Def?.Name ?? base.ToString();
         }
         public Control GetControl()
         {
-            //return new Button("Force " + this.Def?.Name ?? this.BehaviorType.Name);
             return new Button(this.Def?.GetForceText(this) ?? this.BehaviorType.Name);
         }
         public string GetForceTaskText()
         {
             return this.Def?.GetForceText(this) ?? this.BehaviorType.Name;
         }
-        //public virtual AIJob Create(GameObject actor)
-        //{
-        //    return new AIJob() { Task = this };
-        //}
+        
         Type _BehaviorType;
         public Type BehaviorType
         {
@@ -418,28 +347,19 @@ namespace Start_a_Town_
 
 
         public virtual Behavior GetBehavior(GameObject actor) { return null; }
-        //public Behavior Behavior;
         public BehaviorPerformTask CreateBehavior(Actor actor)
         {
             var behav = Activator.CreateInstance(this.BehaviorType) as BehaviorPerformTask;
             behav.Actor = actor;
             behav.Task = this;
-            //if (this.Behavior != null)
-            //    throw new Exception();
-            //this.Behavior = behav;
             return behav;
         }
         public virtual bool IsAvailable()
         {
             return true;
         }
-        //public virtual bool IsValid()
-        //{
-        //    return true;
-        //}
-        public virtual void CleanUp(GameObject actor) { UnreserveAll(actor); }
+        
         public virtual void Succeeded(GameObject actor) { }
-        //public virtual SaveTag Save(string name = "") { return null; }
         public SaveTag Save(string name = "") 
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
@@ -463,7 +383,6 @@ namespace Start_a_Town_
             tag.Add(this.AmountsB.Save("AmountsC"));
 
             tag.Add(this.PlacedObjects.SaveOld("PlacedItems"));
-            //tag.Add(this.IngredientsUsed.Save("IngredientsUsed"));
             tag.Add(this.Count.Save("Count"));
             tag.TrySaveRef(this.Order, "Order");
             tag.Add(this.Product.Save("Product"));
@@ -491,7 +410,6 @@ namespace Start_a_Town_
             this.Quest.Save(tag, "QuestToAccept");
             this.Transaction.Save(tag, "Transaction");
 
-            //tag.Add(this.Behavior.Save("Behavior"));
             this.AddSaveData(tag);
             return tag;
         }
@@ -502,7 +420,6 @@ namespace Start_a_Town_
         public virtual void LoadData(SaveTag tag)
         {
             tag.TryGetTagValue<int>("ID", t => this.ID = t);
-            //this.TargetA = new TargetArgs(null, tag["Target"]);
             tag.TryGetTag("TargetA", t => this.TargetA = new TargetArgs(null, t));
             tag.TryGetTag("TargetB", t => this.TargetB = new TargetArgs(null, t));
             tag.TryGetTag("TargetC", t => this.TargetC = new TargetArgs(null, t));
@@ -522,13 +439,11 @@ namespace Start_a_Town_
             tag.TryGetTag("AmountsC", t => this.AmountsC.Load(t));
 
             tag.TryGetTag("PlacedItems", t => this.PlacedObjects.Load(t));
-            //tag.TryGetTag("IngredientsUsed", t => this.IngredientsUsed.Load(t));
 
             tag.TryLoadRef("Order", out this.Order);
             tag.TryGetTagValue("Count", out this.Count);
             tag.TryGetTag("Product", t => this.Product = new TargetArgs(null, t));
             tag.TryGetTagValue("Forced", out this.Forced);
-            //var queuestag = tag["Queues"].Value as List<SaveTag>;
             List<SaveTag> queuestag;
             if (tag.TryGetTagValue<List<SaveTag>>("Queues", out queuestag))
             {
@@ -549,7 +464,6 @@ namespace Start_a_Town_
                     this.AmountQueues.Add(clist);
                 }
             }
-            //this.Behavior.Load(tag["Behavior"]);
             tag.TryGetTagValue("ShopID", out this.ShopID);
             tag.TryGetTagValue("QuestToAccept", out this.Quest);
             tag.TryGetTag("Transaction", v => this.Transaction = new Transaction(v));
@@ -570,7 +484,6 @@ namespace Start_a_Town_
             w.Write(this.AmountQueues.Count);
             foreach (var i in AmountQueues)
                 w.Write(i);
-            //this.Behavior.Write(w);
             w.Write(this.Count);
             w.Write(this.Quest);
             w.Write(this.ShopID);
@@ -594,8 +507,6 @@ namespace Start_a_Town_
             {
                 this.AmountQueues.Add(r.ReadListInt());
             }
-            //this.Behavior.Read(r);
-            //throw new NotImplementedException();
             this.Count = r.ReadInt32();
             this.Quest = r.ReadInt32();
             this.ShopID = r.ReadInt32();
@@ -604,25 +515,20 @@ namespace Start_a_Town_
         
         internal virtual void WriteBlackboard(BinaryWriter w, Dictionary<string, object> blackboard) 
         {
-            //this.Behavior.WriteBlackboard(w, blackboard);
         }
         internal virtual void ReadBlackboard(BinaryReader r, Dictionary<string, object> blackboard)
         {
-            //this.Behavior.ReadBlackboard(r, blackboard);
         }
         internal virtual SaveTag SaveBlackboard(string name, Dictionary<string, object> blackboard)
         {
             return null;
-            //return this.Behavior.SaveBlackboard(name, blackboard);
         }
         internal virtual void LoadBlackboard(SaveTag tag, Dictionary<string, object> blackboard) 
         {
-            //this.Behavior.LoadBlackboard(tag, blackboard);
         }
 
         public void ObjectLoaded(GameObject parent)
         {
-            //this.Behavior.ObjectLoaded(parent);
         }
 
         internal void MapLoaded(GameObject parent)
@@ -644,21 +550,9 @@ namespace Start_a_Town_
                     t.Map = parent.Map;
             foreach (var t in this.GetCustomTargets())
                 t.Map = parent.Map;
-
-            //this.Tool.Network = parent.Net;
-            //this.Target.Network = parent.Net;
-            //foreach (var tar in this.Targets)
-            //    tar.Network = parent.Net;
-            //foreach (var q in this.TargetQueues)
-            //    foreach (var t in q)
-            //        t.Network = parent.Net;
-            //foreach (var t in this.GetCustomTargets())
-            //    t.Network = parent.Net;
         }
         internal void AddTargets(TargetIndex index, params TargetArgs[] targets)
         {
-            //if (targets.Distinct().Count() != targets.Length)
-            //    throw new Exception();
             var list = this.GetTargetQueue(index);
             foreach (var t in targets)
                 list.Add(t);
@@ -745,66 +639,6 @@ namespace Start_a_Town_
         {
             this.FailConditions.Add(condition);
         }
-
-        //internal virtual bool ReserveTargets(GameObject actor)
-        //{
-        //    throw new Exception();
-        //    ////return true;
-        //    ////foreach (var t in this.Task.Targets)
-        //    ////    if (!this.Actor.Reserve(t))
-        //    ////        return false;
-        //    //if (!actor.Reserve(this, this.Tool))
-        //    //    return false;
-        //    //if (!actor.Reserve(this, this.TargetA, this.AmountA))
-        //    //    return false;
-
-        //    //for (int i = 0; i < this.TargetsA.Count; i++)
-        //    //{
-        //    //    if (!actor.Reserve(this, this.TargetsA[i], this.AmountsA[i]))
-        //    //        return false;
-        //    //}
-
-        //    //for (int i = 0; i < this.TargetQueues.Count; i++)
-        //    //{
-        //    //    var list = this.TargetQueues[i];
-        //    //    for (int j = 0; j < list.Count; j++)
-        //    //    {
-        //    //        if (!actor.Reserve(this, list[j], this.AmountQueues[i][j]))
-        //    //            return false;
-        //    //    }
-        //    //}
-
-        //    //return true;
-        //}
-        //internal virtual bool ReserveTargetsNoTask(GameObject actor)
-        //{
-        //    //return true;
-        //    //foreach (var t in this.Task.Targets)
-        //    //    if (!this.Actor.Reserve(t))
-        //    //        return false;
-        //    if (!actor.Reserve(this.Tool))
-        //        return false;
-        //    if (!actor.Reserve(this.TargetA, this.AmountA))
-        //        return false;
-
-        //    for (int i = 0; i < this.TargetsA.Count; i++)
-        //    {
-        //        if (!actor.Reserve(this.TargetsA[i], this.AmountsA[i]))
-        //            return false;
-        //    }
-
-        //    for (int i = 0; i < this.TargetQueues.Count; i++)
-        //    {
-        //        var list = this.TargetQueues[i];
-        //        for (int j = 0; j < list.Count; j++)
-        //        {
-        //            if (!actor.Reserve(list[j], this.AmountQueues[i][j]))
-        //                return false;
-        //        }
-        //    }
-
-        //    return true;
-        //}
 
         protected virtual IEnumerable<TargetArgs> GetCustomTargets() { yield break; }
     }

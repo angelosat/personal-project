@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Start_a_Town_.Components.AI;
-
-namespace Start_a_Town_.AI.Behaviors
+﻿namespace Start_a_Town_.AI.Behaviors
 {
     class AIMemory : Behavior
     {
@@ -26,7 +20,7 @@ namespace Start_a_Town_.AI.Behaviors
             this.Timer = 0;
             state.Knowledge.Update();
             // return fail so we don't block parent selector
-            return BehaviorState.Fail;//.Running;Running;
+            return BehaviorState.Fail;
         }
 
         public override object Clone()

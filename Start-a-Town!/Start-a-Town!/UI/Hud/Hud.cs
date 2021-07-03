@@ -592,23 +592,17 @@ new Vector2(UIManager.Width, 0),
 
 
 
-            PartyComponent partyComp;
-            if (!obj.TryGetComponent<PartyComponent>("Party", out partyComp))
-                return;
-            foreach (GameObjectSlot memberSlot in partyComp.Members)
-                if (memberSlot.HasValue)
-                    PartyFrame.Controls.Add(new UnitFrame() { Location = PartyFrame.Controls.Last().BottomLeft }.Track(memberSlot.Object));
+            //PartyComponent partyComp;
+            //if (!obj.TryGetComponent<PartyComponent>("Party", out partyComp))
+            //    return;
+            //foreach (GameObjectSlot memberSlot in partyComp.Members)
+            //    if (memberSlot.HasValue)
+            //        PartyFrame.Controls.Add(new UnitFrame() { Location = PartyFrame.Controls.Last().BottomLeft }.Track(memberSlot.Object));
 
             Controls.Add(PartyFrame);
             PartyFrame.Invalidate(true);
-            //var btn = new Button("test", 100);
-            //var panel = new Panel() { AutoSize = true, Location = PartyFrame.BottomLeft };
-            //panel.AddControls(btn);
-            //Controls.Add(panel);
-
+            
             PlayerOld.Instance.HotBar.Initialize(PlayerOld.Actor);
-
-            //InitializeQuickslots(obj);
         }
 
         private void InitializeQuickslots(GameObject obj)

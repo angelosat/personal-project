@@ -218,6 +218,11 @@
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />
     <Compile Include="Components\Stats\Stats\StatsHelper.cs" />
     <Compile Include="Components\WindowSetStackSize.cs" />
+    <Compile Include="Control\InputState.cs" />
+    <Compile Include="Control\KeyEventArgs2.cs" />
+    <Compile Include="Control\KeyPressEventArgs2.cs" />
+    <Compile Include="Control\Mouseover.cs" />
+    <Compile Include="Control\MouseoverEventArgs.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
     <Compile Include="Modules\AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDef.cs" />
@@ -516,7 +521,6 @@
     <Compile Include="Components\Stats\Stats\StatWalkSpeed.cs" />
     <Compile Include="Components\Vegetation\Growth.cs" />
     <Compile Include="Components\Vegetation\PlantableComponent.cs" />
-    <Compile Include="Control\Camera\CameraMover.cs" />
     <Compile Include="Control\Tools\ToolControlActor.cs" />
     <Compile Include="Control\Tools\ToolSelect.cs" />
     <Compile Include="Control\Tools\ToolSelectRectangle.cs" />
@@ -649,7 +653,6 @@
     <Compile Include="Objects\Items\ItemManager.cs" />
     <Compile Include="Components\Needs\NeedsUI.cs" />
     <Compile Include="Control\Tools\ToolManagement.cs" />
-    <Compile Include="Control\HaulingTool.cs" />
     <Compile Include="Engine\Canvas.cs" />
     <Compile Include="GameEvents\EventEntityDespawned.cs" />
     <Compile Include="GameEvents\EventBlockChanged.cs" />
@@ -838,10 +841,6 @@
     <Compile Include="Control\BuildingPlacer.cs" />
     <Compile Include="Control\KeyBinding.cs" />
     <Compile Include="Control\KeyControl.cs" />
-    <Compile Include="Control\Schemes\Mouse.cs" />
-    <Compile Include="Control\Schemes\Scheme.cs" />
-    <Compile Include="Control\Schemes\Wasd.cs" />
-    <Compile Include="Control\TileGrid.cs" />
     <Compile Include="GameModes\GameMode.cs" />
     <Compile Include="GameModes\IMap.cs" />
     <Compile Include="GameModes\IWorld.cs" />
@@ -1161,8 +1160,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Components\SpeechComponent.cs" />
-    <Compile Include="Control\CameraTool.cs" />
-    <Compile Include="Control\DesignTool.cs" />
     <Compile Include="Control\EmptyTool.cs" />
     <Compile Include="Control\InputHandler.cs" />
     <Compile Include="Animations\Animation.cs" />
@@ -1202,8 +1199,6 @@
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Control\ControlTool.cs" />
     <Compile Include="Control\Hotbar.cs" />
-    <Compile Include="Control\InputBlock.cs" />
-    <Compile Include="Control\PlanningTool.cs" />
     <Compile Include="Components\Crafting\Blueprint.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Interfaces\IUndoable.cs" />
@@ -1307,7 +1302,6 @@
     <Compile Include="UI\Editor\ObjectsWindow.cs" />
     <Compile Include="UI\Hud\HotBar.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarH.cs" />
-    <Compile Include="UI\DesignUI.cs" />
     <Compile Include="UI\FpsCounter.cs" />
     <Compile Include="UI\IInterfaceable.cs" />
     <Compile Include="UI\INameplateable.cs" />

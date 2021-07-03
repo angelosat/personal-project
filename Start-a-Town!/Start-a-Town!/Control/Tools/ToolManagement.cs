@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
@@ -11,48 +8,29 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_
 {
-    public class ToolManagement : DefaultTool// ControlTool
+    public class ToolManagement : DefaultTool
     {
-        //bool KeyDown = false;
         bool Up, Down, Left, Right;
         private DateTime MouseMiddleTimestamp;
-        //bool MouseScrolling;
         Vector2 MouseScrollOrigin;
         Vector2 CameraCoordinatesOrigin;
-        //Camera Camera { get { return Rooms.Ingame.Instance.Camera; } }
-        //TargetArgs Selected;
         Action ScrollingMode;
 
         public ToolManagement()
         {
-            //this.ScrollingMode = this.MouseScroll;
-            //this.ScrollingMode = this.MouseDrag;
         }
         public override Icon GetIcon()
         {
-            return null;// UI.Icon.Cursor;
+            return null;
         }
         TargetArgs Origin;
         Vector2? SelectionRectangleOrigin;
-        //protected override void SwitchTool()
-        //{
-        //    return;
-        //    Client.PlayerStopMoving();
-        //    this.StopWalking();
-        //    ToolManager.Instance.ActiveTool = null;
-        //    ContextActionBar.Remove();
-        //    Client.Console.Write("Switched to movement mode");
-        //}
 
         public override void Update()
         {
-            //var cam = ScreenManager.CurrentScreen.Camera;
-            //var map = Rooms.Ingame.DrawServer ? Server.Instance.Map : Client.Instance.Map;
             var map = Rooms.Ingame.GetMap();
             var cam = map.Camera;
-            //if(map != null)
-                cam.MousePicking(map);
-            //this.UpdateTarget();
+            cam.MousePicking(map);
             this.UpdateTargetNew();
 
             if (this.Origin != null && this.Target != null && this.Origin.Global != this.Target.Global)
@@ -61,25 +39,20 @@ namespace Start_a_Town_
                 this.Origin = null;
                 return;
             }
-            if (this.SelectionRectangleOrigin.HasValue && //this.OriginRectangleSelection.Value != UIManager.Mouse)
+            if (this.SelectionRectangleOrigin.HasValue &&
                 Vector2.DistanceSquared(this.SelectionRectangleOrigin.Value, UIManager.Mouse) > 50)
             {
                 ToolManager.SetTool(new ToolSelectRectangle(this.SelectionRectangleOrigin.Value));
-                //ToolManager.SetTool(new ToolSelectRectangle(this.SelectionRectangleOrigin.Value));
-
                 this.SelectionRectangleOrigin = null;
                 return;
             }
-            if (this.ScrollingMode != null) //this.MouseScrolling)
+            if (this.ScrollingMode != null)
             {
                 this.ScrollingMode();
-                //MouseScroll();
-                //this.MouseDrag();
             }
             else
                 this.MoveKeys();
-            
-            //this.Camera.Update(Rooms.Ingame.DrawServer ? Server.Instance.Map : Client.Instance.Map);
+
             this.OnUpdate();
         }
         protected virtual void OnUpdate() { }
@@ -87,11 +60,6 @@ namespace Start_a_Town_
         int LastSpeed = 1;
         internal override void Jump()
         {
-            //var prevSpeed = Client.Instance.Speed;
-            //if (this.LastSpeed == 0 && Client.Instance.Speed == 0)
-            //    this.LastSpeed = 1;
-            //PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, this.LastSpeed);
-            //this.LastSpeed = prevSpeed;
             int nextSpeed = Client.Instance.Speed == 0 ? this.LastSpeed : 0;
             if (Client.Instance.Speed != 0)
                 this.LastSpeed = Client.Instance.Speed;
@@ -102,17 +70,10 @@ namespace Start_a_Town_
         {
             var currentMouse = UIManager.Mouse;
             var delta = currentMouse - this.MouseScrollOrigin;
-            //double x, y;
-            //ScreenManager.CurrentScreen.Camera.Transform((int)delta.X, (int)delta.Y, out x, out y);
-            //int roundx, roundy;
-            //roundx = (int)Math.Round(x);
-            //roundy = (int)Math.Round(y);
-            //Vector2 nextStep = new Vector2(roundx, roundy);
             var l = delta.Length();
             if (l < 5)
                 return;
             l -= 5;
-            //l = (float)Math.Pow(l, 2);
 
             delta.Normalize();
             var minL = Math.Min(Math.Max(l, 1), 500);
@@ -120,7 +81,6 @@ namespace Start_a_Town_
 
             delta *= .01f;
             var cam = Engine.Map.Camera;
-            //this.Camera.Move(this.Camera.Coordinates += delta * 4);
             cam.Move(cam.Coordinates += delta * 4);
 
         }
@@ -129,43 +89,32 @@ namespace Start_a_Town_
             var currentMouse = UIManager.Mouse;
             var delta = currentMouse - this.MouseScrollOrigin;
             var map = Rooms.Ingame.GetMap();
-            //var cam = Rooms.Ingame.CurrentMap.Camera;
             var cam = map.Camera;
-            //this.Camera.Move(this.CameraCoordinatesOrigin - delta / this.Camera.Zoom);
             cam.Move(this.CameraCoordinatesOrigin - delta / cam.Zoom);
-
         }
 
         public override void MoveKeys()
         {
-            //    if (e.KeyHandled)
-            //if (e.Handled)
-            //    return;
             int xx = 0, yy = 0;
-            //if (input.IsKeyDown(GlobalVars.KeyBindings.North))
 
             if (Up)
             {
                 yy -= 1;
             }
-            else if (Down) ///GlobalVars.KeyBindings.South))
+            else if (Down)
             {
                 yy += 1;
             }
-            if (Left)//GlobalVars.KeyBindings.East))
+            if (Left)
             {
                 xx -= 1;
             }
-            else if (Right)//GlobalVars.KeyBindings.West))
+            else if (Right)
             {
                 xx += 1;
             }
-            // Walking.ToConsole();
             if (xx != 0 || yy != 0)
             {
-                //PhysicsComponent physComp = Player.Actor.GetPhysics();
-                //var cam = ScreenManager.CurrentScreen.Camera;
-                //var cam = Net.Client.Instance.Map.Camera;
                 var cam = Rooms.Ingame.CurrentMap.Camera;
 
                 double rx, ry;
@@ -180,12 +129,8 @@ namespace Start_a_Town_
                 Vector2 NextStep = new Vector2(roundx, roundy);
                 NextStep.Normalize();
 
-                //var global = Player.Actor == null ? Vector3.Zero : Player.Actor.Global;
                 var speed = InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey) ? 3 : 1;
-                //this.Camera.Move(this.Camera.Coordinates += new Vector2(xx, yy) * 4 * speed);
                 cam.Move(cam.Coordinates += new Vector2(xx, yy) * 4 * speed);
-
-                //Vector3 direction = new Vector3(NextStep.X, NextStep.Y, Player.Actor.Velocity.Z);// posComp.GetProperty<Vector3>("Speed").Z);
             }
             else
             {
@@ -199,20 +144,17 @@ namespace Start_a_Town_
             switch (e.KeyCode)
             {
                 case System.Windows.Forms.Keys.D1:
-                    //Client.PlayerSetSpeed(1);
                     PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 1);
                     e.Handled = true;
                     break;
 
                 case System.Windows.Forms.Keys.D2:
-                    //Client.PlayerSetSpeed(2);
                     PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 2);
                     e.Handled = true;
                     break;
 
                 case System.Windows.Forms.Keys.D3:
                     PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 3);
-                    //Client.PlayerSetSpeed(3);
                     e.Handled = true;
                     break;
 
@@ -255,7 +197,6 @@ namespace Start_a_Town_
         }
         public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
-            //KeyDown = false;
             if (e.Handled)
                 return;
             switch (e.KeyCode)
@@ -279,12 +220,6 @@ namespace Start_a_Town_
                 default:
                     break;
             }
-
-            //return;
-            ////base.HandleKeyUp(e);
-            //KeyControl key;
-            //if (this.KeyControls.TryGetValue(e.KeyCode, out key))
-            //    key.Up();
         }
         public override void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -312,33 +247,23 @@ namespace Start_a_Town_
         {
             if (e.Handled)
                 return Messages.Default;
-            //this.SelectEntity(this.Target ?? TargetArgs.Null);
-
             if (this.Target == null)
                 return Messages.Default;
             this.LeftPressed = true;
-            //return Messages.Default;
-            //if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
-            //    this.Origin = this.Target;
-            //else
-                this.SelectionRectangleOrigin = UIManager.Mouse;
+            this.SelectionRectangleOrigin = UIManager.Mouse;
             return Messages.Default;
         }
         bool DblClicked;
         public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if(DblClicked)
+            if (DblClicked)
             {
                 DblClicked = false;
                 return base.MouseLeftUp(e);
             }
-
-            //if (!this.SelectionRectangleOrigin.HasValue)
-            //{
             if (!e.Handled && this.LeftPressed)
                 if (this.Target.Type != TargetType.Null)
-                    this.SelectEntity(this.Target);// ?? TargetArgs.Null);
-            //}
+                    this.SelectEntity(this.Target);
             this.Origin = null;
             this.SelectionRectangleOrigin = null;
             this.LeftPressed = false;
@@ -348,24 +273,18 @@ namespace Start_a_Town_
         {
             if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
                 UISelectedInfo.AddToSelection(target);
-                //Hud.AddToSelection(target);
             else
                 UISelectedInfo.Refresh(target);
-                //Hud.Select(target);
         }
 
         public override ControlTool.Messages MouseMiddleDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if(this.ScrollingMode != MouseScroll)
+            if (this.ScrollingMode != MouseScroll)
                 this.MouseMiddleTimestamp = DateTime.Now;
             this.ScrollingMode = MouseDrag;
-            //this.MouseScrolling = true;
             this.MouseScrollOrigin = UIManager.Mouse;
             var map = Rooms.Ingame.GetMap();
-            //var cam = Rooms.Ingame.CurrentMap.Camera;// Net.Client.Instance.Map.Camera;
             var cam = map.Camera;
-
-            //this.CameraCoordinatesOrigin = this.Camera.Coordinates;
             this.CameraCoordinatesOrigin = cam.Coordinates;
             return Messages.Default;
         }
@@ -377,7 +296,6 @@ namespace Start_a_Town_
                 this.ScrollingMode = MouseScroll;
             else
                 this.ScrollingMode = null;
-                //this.MouseScrolling = false;
             return Messages.Default;
         }
         public override ControlTool.Messages MouseMiddle()
@@ -389,19 +307,18 @@ namespace Start_a_Town_
             if (this.Target != null)
             {
                 if (this.Target.Type == TargetType.Entity)
-                    //UISelectedInfo.SelectAllVisible(this.Target.Object.ID);
                     UISelectedInfo.SelectAllVisible(this.Target.Object.Def);
 
                 // TODO: drawing multiple block selection textures is slow, need to optimize
                 else if (this.Target.Type == TargetType.Position)
                     ToolManager.SetTool(
-                        new ToolSelectRectangleBlocks(this.Target.Global, 
+                        new ToolSelectRectangleBlocks(this.Target.Global,
                         (a, b, r) =>
                         {
                             if (a == b)
                                 UISelectedInfo.Refresh(this.Target);
                             else
-                                UISelectedInfo.Refresh(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Rooms.Ingame.GetMap(), t))); 
+                                UISelectedInfo.Refresh(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Rooms.Ingame.GetMap(), t)));
                         }));
             }
             DblClicked = true;
@@ -417,16 +334,13 @@ namespace Start_a_Town_
             if (e.Handled)
                 return Messages.Default;
 
-            //if(UISelectedInfo.ClearTargets())
-            //    return Messages.Default;
-           
             if (!TryShowForceTaskGUI(this.Target))
                 Rooms.Ingame.CurrentMap.Town.ToggleQuickMenu();
 
             e.Handled = true;
             return Messages.Default;
         }
-        
+
         private bool TryShowForceTaskGUI(TargetArgs target)
         {
             var actor = UISelectedInfo.GetSingleSelectedEntity() as Actor;
@@ -438,23 +352,21 @@ namespace Start_a_Town_
             if (tasks?.Any() ?? false)
             {
                 UIForceTask.ClearControls();
-                //UIForceTask.AddControlsBottomLeft(tasks.Select(t => t.GetControl()).ToArray());
                 UIForceTask.AddControlsBottomLeft(tasks
-                    //.Where(t=>t.Task.Def!=null)
                     .Select(t =>
-                {
-                    var task = t.Task;
-                    var giver = t.Source;
-                    return new Button(task.GetForceTaskText())
-                    { 
-                        LeftClickAction = ()=>
+                    {
+                        var task = t.Task;
+                        var giver = t.Source;
+                        return new Button(task.GetForceTaskText())
                         {
-                            PacketForceTask.Send(giver, actor, target);
-                            UIForceTask.Hide();
-                        }
-                    };
+                            LeftClickAction = () =>
+                            {
+                                PacketForceTask.Send(giver, actor, target);
+                                UIForceTask.Hide();
+                            }
+                        };
 
-                }).ToArray());
+                    }).ToArray());
 
                 UIForceTask.Location = UIManager.Mouse;
                 UIForceTask.Show();
@@ -475,35 +387,22 @@ namespace Start_a_Town_
         }
         internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
         {
-            
             var cam = map.Camera;
-            //base.DrawAfterWorld(sb, map, cam);
             this.DrawBlockMouseover(sb, map, cam);
 
-            if(Engine.DrawRegions)
-            if (this.Target != null)
-                if (this.Target.Type != TargetType.Null)
-                {
-                    map.Regions.Draw(this.Target.Global, sb, cam);
-                }
-            
+            if (Engine.DrawRegions)
+                if (this.Target != null)
+                    if (this.Target.Type != TargetType.Null)
+                    {
+                        map.Regions.Draw(this.Target.Global, sb, cam);
+                    }
+
         }
         internal override void DrawUI(SpriteBatch sb, Camera camera)
         {
-            
-            //if (this.MouseScrolling && this.ScrollingMode == this.MouseScroll)
-                if (this.ScrollingMode == this.MouseScroll)
-                    Icon.Cross.Draw(sb, this.MouseScrollOrigin, Vector2.One * .5f);
+            if (this.ScrollingMode == this.MouseScroll)
+                Icon.Cross.Draw(sb, this.MouseScrollOrigin, Vector2.One * .5f);
             base.DrawUI(sb, camera);
         }
-        //internal override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera)
-        //{
-        //    base.DrawUI(sb, camera);
-        //    if (this.Selected != null)
-        //    {
-        //        if (this.Selected.Type == TargetType.Entity)
-        //            Components.SpriteComponent.DrawHighlight(this.Selected.Object, sb, camera);
-        //    }
-        //}
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
@@ -26,9 +23,6 @@ namespace Start_a_Town_
 
         protected virtual void Select()
         {
-            //var cam = Rooms.Ingame.Instance.Camera;
-            //var entities = Rooms.Ingame.Instance.Scene.ObjectsDrawn.Where(o=>o.GetBounds(cam).Intersects(this.Selection));
-            //UISelectedInfo.Refresh(entities);
             if (this.CurrentSelected != null)
             {
                 if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
@@ -39,12 +33,8 @@ namespace Start_a_Town_
         }
         public override void Update()
         {
-            //this.End = UIManager.Mouse;
             this.Selection = this.Begin.GetRectangle(UIManager.Mouse);
-            //var cam = Rooms.Ingame.Instance.Camera;
-            //var cam = Net.Client.Instance.Map.Camera;
             var cam = Rooms.Ingame.CurrentMap.Camera;
-
             this.CurrentSelected = Rooms.Ingame.Instance.Scene.ObjectsDrawn.Where(o => o.GetScreenBounds(cam).Intersects(this.Selection)).ToList();
         }
 
@@ -55,24 +45,14 @@ namespace Start_a_Town_
         }
         internal override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera)
         {
-            //this.Selection.DrawHighlight(sb);
             this.Selection.DrawHighlight(sb);
             if (this.CurrentSelected != null)
                 foreach (var obj in this.CurrentSelected)
                     obj.DrawBorder(sb, camera);
         }
 
-        //protected override void WriteData(System.IO.BinaryWriter w)
-        //{
-        //    w.Write(this.Begin);
-        //}
-        //protected override void ReadData(System.IO.BinaryReader r)
-        //{
-        //    this.Begin = r.ReadVector2();
-        //}
         internal override ControlTool Read(PlayerData player)
         {
-            //return this;
             this.Begin = player.MousePosition;
             return base.Read(player);
         }

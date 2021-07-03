@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using Start_a_Town_.Graphics;
@@ -40,18 +35,10 @@ namespace Start_a_Town_
         }
         public override void Update()
         {
-            //base.Update();
-            //var cam = ScreenManager.CurrentScreen.Camera;
             var cam = Engine.Map.Camera;
 
             cam.MousePicking(Rooms.Ingame.DrawServer ? Server.Instance.Map : Client.Instance.Map);
             this.UpdateTarget();
-
-            //if (this.Target == null)
-            //    return;
-            //if (this.Target.Type != TargetType.Position)
-            //    return;
-            //this.End = this.GetEndFromTarget(this.Target.Global);
 
             if (Controller.TargetCell != null)
                 this.End = this.GetEndFromTarget(Controller.TargetCell.Global);
@@ -61,8 +48,6 @@ namespace Start_a_Town_
         {
             if (this.Target == null)
                 return Messages.Default;
-            //if (this.Target.Type != TargetType.Position)
-            //    return Messages.Default;
             this.Select();
             return Messages.Remove;
         }

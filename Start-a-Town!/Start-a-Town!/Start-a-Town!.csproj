@@ -223,6 +223,8 @@
     <Compile Include="Control\KeyPressEventArgs2.cs" />
     <Compile Include="Control\Mouseover.cs" />
     <Compile Include="Control\MouseoverEventArgs.cs" />
+    <Compile Include="Engine\Camera\BlockBorderToken.cs" />
+    <Compile Include="Engine\Camera\LightToken.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
     <Compile Include="Modules\AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDef.cs" />
@@ -1440,7 +1442,7 @@
     <Compile Include="UI\Slots\Slot.cs" />
     <Compile Include="UI\TooltipManager.cs" />
     <Compile Include="UI\IngameMenu.cs" />
-    <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\Camera\Camera.cs" />
     <Compile Include="CameraGlobal.cs" />
     <Compile Include="Terraforming\Chunk.cs" />
     <Compile Include="Control\Controller.cs" />

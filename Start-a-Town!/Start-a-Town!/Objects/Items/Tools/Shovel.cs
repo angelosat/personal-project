@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.Animations;
 using Start_a_Town_.Components.Items;
 using Start_a_Town_.Components;
@@ -60,10 +59,7 @@ namespace Start_a_Town_
             {
                 return Create(materials["Handle"], materials["Head"]);
             }
-            public Entity Create(Dictionary<string, GameObject> materials)
-            {
-                return Create(materials[this.HandleReagent].GetComponent<ItemCraftingComponent>().Material, materials[this.HeadReagent].GetComponent<ItemCraftingComponent>().Material);
-            }
+            
             public Entity Create(List<GameObjectSlot> materials)
             {
                 //return Create(
@@ -78,7 +74,6 @@ namespace Start_a_Town_
                 var obj = ItemTemplate.Item;// new GameObject();
                 obj.Def = ToolDefs.Shovel;
 
-                obj.AddComponent<GuiComponent>().Initialize(21, 1);
                 obj.AddComponent<ToolAbilityComponent>();
                 obj.AddComponent<EquipComponent>().Initialize(GearType.Mainhand);
 

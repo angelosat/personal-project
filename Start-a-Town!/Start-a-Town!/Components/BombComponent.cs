@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Animations;
 
 namespace Start_a_Town_.Components
 {
@@ -22,17 +17,14 @@ namespace Start_a_Town_.Components
         }
 
         public int Radius, Fuse, FuseMax;
-        //public ParticleEmitterSphere Emitter;
         public bool Exploded;
         int FuseLengthIndex;
-        //public List<ParticleEmitterSphere> Emitters = new List<ParticleEmitterSphere>();
         static int[] FuseLengths = new int[] { -1, 1, 2, 3 };
 
         public BombComponent(int radius, int fuse)
         {
             this.Radius = radius;
             this.Fuse = fuse;
-            //this.FuseMax = -1;
         }
 
         public override void Tick(GameObject parent)
@@ -46,19 +38,6 @@ namespace Start_a_Town_.Components
                     this.Explode(parent);
                 return;
             }
-            //if (this.Emitter == null)
-            //{
-            //    parent.Despawn();
-            //    parent.Dispose();
-            //    return;
-            //}
-
-            //this.Emitter.Update();
-            //if (this.Emitter.Particles.Count == 0)
-            //{
-            //    parent.Despawn();
-            //    parent.Dispose();
-            //}
         }
 
         void Explode(GameObject parent)
@@ -81,32 +60,8 @@ namespace Start_a_Town_.Components
                         if (d < rsquared)
                         {
                             block.Remove(map, pos);
-                            //var e = block.GetEmitter();
-                            //e.Source = pos + Vector3.UnitZ * 0.5f;
-                            //e.SizeBegin = 1;
-                            //e.SizeEnd = 1;
-                            //e.ParticleWeight = 1;
-                            //e.Radius = 1f;// .5f;
-                            //e.Force = .1f;
-                            //e.Friction = .5f;
-                            //e.AlphaBegin = 1;
-                            //e.AlphaEnd = 0;
-                            //e.ColorBegin = block.Material.Color;// Color.White;
-                            //e.ColorEnd = block.Material.Color;//Color.White;
-
-                            //e.Lifetime = Engine.TargetFps * 2;
-                            //var pieces = block.GetParticleRects(5);
-
-                            //var direction = pos - parent.Global;// attacker.Velocity;
-                            //direction.Normalize();
-                            //direction *= .2f;
-
-                            //e.Emit(Block.Atlas.Texture, pieces, direction);
-                            //this.Emitters.Add(e);
                         }
                     }
-            //parent.Despawn();
-            //parent.Dispose();
             parent.GetComponent<SpriteComponent>().Hidden = true;
             var emitter = ParticleEmitter.Dust;
             emitter.ColorBegin = Color.White;
@@ -119,7 +74,6 @@ namespace Start_a_Town_.Components
             emitter.Acceleration = new Vector3(.5f, .5f, .5f);
             emitter.HasPhysics = false;
             emitter.Emit(20);
-            //parent.Map.EventOccured(Message.Types.ParticleEmitterAdd, emitter);
             parent.Map.ParticleManager.AddEmitter(emitter);
             this.PushEntities(parent);
         }
@@ -141,24 +95,6 @@ namespace Start_a_Town_.Components
                 }
             }
         }
-
-        static public GameObject GetEntity(int radius, int fuse)
-        {
-            var entity = new GameObject(GameObject.Types.Bomb, "Bomb", "Explodes and removes blocks", ObjectType.Weapon);
-            entity.AddComponent(new SpriteComponent(new Bone(BoneDef.Torso, Sprite.Default)));
-            entity.AddComponent(new BombComponent(radius, fuse));
-            entity.AddComponent(new PhysicsComponent(size: 1, solid: false, height: 1, weight: 1));
-            return entity;
-        }
-
-        //public override void Draw(MySpriteBatch sb, GameObject parent, Camera camera)
-        //{
-        //    if (this.Emitter == null)
-        //        return;
-        //    this.Emitter.Draw(camera, parent.Map, this.Emitter.Source);
-        //    //foreach(var emitter in this.Emitters)
-        //    //    emitter.Draw(camera, parent.Map, emitter.Source);
-        //}
 
         internal override void GetEquippedActionsWithTarget(GameObject parent, GameObject actor, TargetArgs t, List<Interaction> list)
         {

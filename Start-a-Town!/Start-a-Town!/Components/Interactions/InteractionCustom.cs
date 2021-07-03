@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.Components.Interactions
 {
     class InteractionCustom : Interaction
     {
-        //private string p1;
-        //private int p2;
-        //private Action<GameObject, TargetArgs> action;
         readonly TaskConditions CustomConditions = new TaskConditions();
 
-        public InteractionCustom(string name, Action<GameObject, TargetArgs> callback)//, TaskConditions conds)
+        public InteractionCustom(string name, Action<GameObject, TargetArgs> callback)
             :base(name, callback)
         {
-            //this.CustomConditions = conds;
         }
         public InteractionCustom(string name, float seconds, Action<GameObject, TargetArgs> callback, TaskConditions conditions, ToolAbilityDef skill)
             :base(name, seconds, callback, conditions, skill)

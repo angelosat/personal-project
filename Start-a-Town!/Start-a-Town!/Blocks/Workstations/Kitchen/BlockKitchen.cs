@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Crafting;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.AI;
-using Start_a_Town_.Tokens;
 using Start_a_Town_.Blocks;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {

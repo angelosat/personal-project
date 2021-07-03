@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -10,10 +6,8 @@ namespace Start_a_Town_
     class StatNewModifierDef : Def
     {
         public StatNewDef Source;
-        //public List<Func<GameObject, float, float>> Modifiers = new List<Func<GameObject, float, float>>();
-        public Func<GameObject, float, float> Mod;// = new List<Func<GameObject, float, float>>();
+        public Func<GameObject, float, float> Mod;
         public DurationTypes DurationType;
-        //Func<GameObject, float, float> Function;
         public int BaseDurationInTicks = 0;
         public StatNewModifierDef(string name, StatNewDef source) : base(name)
         {

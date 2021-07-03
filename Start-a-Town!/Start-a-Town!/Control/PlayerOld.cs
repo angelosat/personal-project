@@ -13,6 +13,7 @@ using Start_a_Town_.PlayerControl;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     public class PlayerOld : EntityComponent, IDisposable
     {
 
@@ -33,10 +34,7 @@ namespace Start_a_Town_
 
         public HotBar HotBar { get; set; }
 
-        //public Selection Selection;
-        //public Selection NextSelection;
         public DefaultTool Tool;
-        ObjectOrientationTool2 OrientationTool;
 
         static GameObject _Actor;
         public static GameObject Actor
@@ -247,29 +245,6 @@ namespace Start_a_Town_
                     source.Object.GetUi().Show();
                     return;
 
-                //case Message.Types.UISetBlueprint:
-                //    // Target = e.Sender;
-                //    CraftingWindow.Instance.Initialize(e.Sender);//["Container"].GetProperty<List<GameObjectSlot>>("Slots").ToList());
-                //    CraftingWindow.Instance.Show();
-                //    //CraftingWindow.Instance.SelectedItemChanged += new EventHandler<EventArgs>(CraftingWindow_SelectedItemChanged);
-                //    //CraftingWindow.Instance.Hidden += new EventHandler<EventArgs>(CraftingWindow_Hidden);
-                //    CraftingWindow.Instance.Tag = e.Sender;
-                //    return;
-                //case Message.Types.UIJobBoard:
-                //    //JobBoardWindow.Instance.Initialize(e.Sender).Show();
-                //    JobBoardWindow.Instance.Show();
-                //    return;
-                case Message.Types.UIContainer:
-                    //if (ContainerWindows.ContainsKey(e.Sender))
-                    //{
-                    //    e.Sender.HandleMessage(new GameObjectEventArgs(Message.Types.ContainerClose, Player.Actor));
-                    //    return;
-                    //}
-                    win = (new ContainerWindow(e.Sender as GameObject));
-                    win.Show();
-                    ContainerWindows.Add(e.Sender, win);
-                    //win.Hidden += new EventHandler<EventArgs>(win_Closed);
-                    return;
                 case Message.Types.ContainerClose:
                     if (!ContainerWindows.TryGetValue(e.Sender, out win))
                         return;
@@ -376,7 +351,6 @@ namespace Start_a_Town_
             // TODO: Complete member initialization
             Log.Instance.EntryAdded += new EventHandler<LogEventArgs>(Log_EntryAdded);
 
-            OrientationTool = new ObjectOrientationTool2();
             //OrientationTool.MouseLeft += new EventHandler<EventArgs>(OrientationTool_MouseLeft);
 
         //    TooltipManager.Instance.TooltipBuild += new EventHandler<TooltipArgs>(Instance_TooltipBuild);

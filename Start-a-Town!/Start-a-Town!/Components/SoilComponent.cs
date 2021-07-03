@@ -17,7 +17,5 @@ namespace Start_a_Town_.Components
         {
             return new SoilComponent();
         }
-
-        
     }
 }

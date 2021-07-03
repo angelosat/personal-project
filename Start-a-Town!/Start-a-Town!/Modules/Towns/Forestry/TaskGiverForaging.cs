@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.AI.Behaviors.ItemOwnership;
 using Start_a_Town_.AI;
 using Microsoft.Xna.Framework;

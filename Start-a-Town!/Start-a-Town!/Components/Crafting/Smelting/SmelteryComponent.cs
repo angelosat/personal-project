@@ -266,21 +266,6 @@ namespace Start_a_Town_.Components
                     sourceSlot.Swap(targetSlot);
                     return true;
 
-                case Message.Types.Craft:
-                    if (!Materials.HasValue)
-                        return true;
-                    Recipe recipe = GetRecipe();
-                    if (recipe is null)
-                        return true;
-
-                    if (!this.Fuel.HasValue)
-                        return true;
-                    this.Power.Value += FuelComponent.GetPower(this.Fuel.Object);
-                    this.Fuel.Clear();
-                    this.State = States.Running;
-
-                    return true;
-
                 default:
                     return false;
             }

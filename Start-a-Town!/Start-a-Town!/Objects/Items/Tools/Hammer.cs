@@ -57,10 +57,7 @@ namespace Start_a_Town_
                 {
                     return Create(materials["Handle"], materials["Head"]);
                 }
-                public GameObject Create(Dictionary<string, GameObject> materials)
-                {
-                    return Create(materials[this.HandleReagent].GetComponent<ItemCraftingComponent>().Material, materials[this.HeadReagent].GetComponent<ItemCraftingComponent>().Material);
-                }
+                
                 public GameObject Create(List<GameObjectSlot> materials)
                 {
                     //return Create(
@@ -88,7 +85,6 @@ namespace Start_a_Town_
                     //obj.AddComponent<PhysicsComponent>();
 
 
-                    obj.AddComponent<GuiComponent>().Initialize(3, 1);
 
                     obj.AddComponent<ToolAbilityComponent>().Initialize(ToolAbilityDef.Building);
 

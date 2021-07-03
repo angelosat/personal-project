@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,7 +10,6 @@ namespace Start_a_Town_.Components.Crafting
     {
         static int _IDSequence = 0;
         public static int IDSequence { get { return _IDSequence++; } }
-        //const int BlockConstructionIDRange = 10000;
         public Towns.Constructions.ConstructionCategory Category;
 
         static Dictionary<int, BlockRecipe> _Dictionary;
@@ -30,25 +25,19 @@ namespace Start_a_Town_.Components.Crafting
 
         public int ID { get; set; }
         public string Name { get; set; }
-        //public GameObject.Types Building { get; set; }
-        public List<Reaction.Reagent> Reagents;// { get; set; }
-        public BlockRecipe.Product BlockProduct;// { get; set; }
-        public ToolAbilityDef Skill;// { get; set; }
+        public List<Reaction.Reagent> Reagents;
+        public BlockRecipe.Product BlockProduct;
+        public ToolAbilityDef Skill;
         public int WorkAmount = 1;
         public Block Block { get { return this.BlockProduct.Block; } }
 
         public BlockRecipe(List<Reaction.Reagent> reagents, BlockRecipe.Product product, ToolAbilityDef skill = null)
         {
             this.ID = IDSequence;
-            this.Name = product.Block.ToString();// Block.Registry[product.Type].Nam;
+            this.Name = product.Block.ToString();
             this.Skill = skill;
-            //this.Building = building;
             this.Reagents = reagents;
             this.BlockProduct = product;
-            //GameObject.Objects.Add(this.ToObject());
-
-            // don't register automatically? have blocks override a GetConstruction method to provide their construction recipe? (or return null if they don't have one)
-            //Dictionary[ID] = this;
         }
        
         public List<BlockRecipe.ProductMaterialPair> GetVariants()
@@ -68,7 +57,7 @@ namespace Start_a_Town_.Components.Crafting
 
             return list;
         }
-        public BlockRecipe.ProductMaterialPair GetVariant(byte data)
+        public ProductMaterialPair GetVariant(byte data)
         {
             var vars = this.GetVariants();
             return vars.First(v => v.Data == data);
@@ -99,6 +88,5 @@ namespace Start_a_Town_.Components.Crafting
         {
 
         }
-
     }
 }

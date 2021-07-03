@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components.Stats;
 
 namespace Start_a_Town_.Components
 {
+    [Obsolete]
     public class Stat : ITooltippable
     {
         static public Stat Strength { get { return new Stat(Types.Strength, "Strength"); } }
         static public Stat AtkSpeed { get { return new Stat(Types.AtkSpeed, "Attack Speed"); } }
-        
         static public Stat WorkSpeed { get { return new Stat(Types.WorkSpeed, "Work Speed"); } }
-
         static public Stat MaxSkills { get { return new Stat(Types.MaxSkills, "Maximum Skills"); } }
         static public Stat Tilling { get { return new Stat(Types.Tilling, "Tilling"); } }
         static public Stat Farming { get { return new Stat(Types.Farming, "Farming"); } }
@@ -51,8 +49,8 @@ namespace Start_a_Town_.Components
         static public Stat Health { get { return new Stat(Types.Health, "Health"); } }
         static public Stat Stage { get { return new Stat(Types.Stage, "Stage"); } }
 
-        static public readonly Stat WalkSpeed = new StatWalkSpeed();// Stat(Types.WalkSpeed, "Movement Speed", BonusType.Percentile, defaultValue: 1);
-        static public readonly Stat Building = new StatBuilding();// Stat(Types.Building, "Building", BonusType.Percentile, defaultValue: 1);
+        static public readonly Stat WalkSpeed = new StatWalkSpeed();
+        static public readonly Stat Building = new StatBuilding();
 
         public enum BonusType { Flat, Percentile }
         public enum Types
@@ -150,16 +148,13 @@ namespace Start_a_Town_.Components
             this.Group = Groups.General;
             this.DefaultValue = defaultValue;
             this.Value = defaultValue;
-            //     StatDB[type] = this;
         }
         public BonusType Type { get; set; }
         public string Name, Description;
         public Types ID { get; set; }
         public Groups Group { get; set; }
         public List<ValueModifier> Modifiers = new List<ValueModifier>();
-        //public int ID
-        //{ get { return (int)Type; } }
-        public float Value;// { get; set; }
+        public float Value;
         public int DefaultValue;
 
         public virtual float GetFinalValue(GameObject parent)
@@ -172,7 +167,6 @@ namespace Start_a_Town_.Components
 
         public static Stat Parse(string name)
         {
-            // return StatDB[(Stat.Types)Enum.Parse(typeof(Stat.Types), name)];
             return Registry.ToDictionary(stat => stat.ID, stat => stat)[(Stat.Types)Enum.Parse(typeof(Stat.Types), name)];
         }
 
@@ -183,9 +177,7 @@ namespace Start_a_Town_.Components
 
         public string ToString(float value)
         {
-            //return value.ToString(this.Type == Stat.BonusType.Percentile ? "+##0.##%;-##0.##%;+0%" : "+##0.##;-##0.##;+0") + " " + this.Name;
             return value.ToString(this.Type == Stat.BonusType.Percentile ? "##0.##%;-##0.##%;0%" : "##0.##;-##0.##;0") + " " + this.Name;
-
         }
 
         public virtual Stat Clone()
@@ -206,10 +198,6 @@ namespace Start_a_Town_.Components
             return stat;
         }
 
-        //public UI.Control GetInterface()
-        //{
-        //    Label lbl = new Label(this.ToString());
-        //}
         public void GetTooltipInfo(Tooltip tip)
         {
             tip.Controls.Add(new Label("Modifiers:") { Location = tip.Controls.BottomLeft });
@@ -237,12 +225,7 @@ namespace Start_a_Town_.Components
                 return new Stat(Types.JumpHeight, "Jump Height", BonusType.Percentile);
             }
         }
-        //{
-        //    get
-        //    {
-        //        return new Stat(Types.WalkSpeed, "Movement Speed", BonusType.Percentile);
-        //    }
-        //}
+       
         static public Stat Knockback
         {
             get

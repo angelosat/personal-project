@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components
@@ -18,6 +15,7 @@ namespace Start_a_Town_.Components
             this.Material = material;
         }
     }
+    [Obsolete]
     class MaterialsComponent : EntityComponent
     {
         public override string ComponentName

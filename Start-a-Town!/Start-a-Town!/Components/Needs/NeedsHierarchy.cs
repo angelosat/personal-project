@@ -7,7 +7,7 @@ using Start_a_Town_.Components.Needs;
 
 namespace Start_a_Town_.Components
 {
-    class NeedsHierarchy //: Dictionary<string, NeedsCollection>
+    class NeedsHierarchy
     {
         public Dictionary<string, NeedsCollection>.ValueCollection Values { get { return this.Inner.Values; } }
         public Dictionary<string, NeedsCollection> Inner = new Dictionary<string, NeedsCollection>();
@@ -37,23 +37,8 @@ namespace Start_a_Town_.Components
             return text.TrimEnd('\n');
         }
 
-        //public NeedsHierarchy Clone()
-        //{
-        //    NeedsHierarchy copy = new NeedsHierarchy();
-        //    foreach (var layer in this.Inner)
-        //    {
-        //        NeedsCollection newLayer = new NeedsCollection();
-        //        foreach (var need in layer.Value)
-        //            newLayer.Add(need.Key, need.Value.Clone() as Need);// new Need(need.Value.ID, need.Value.Name, need.Value.Value, need.Value.Decay, need.Value.Tolerance));
-        //        copy.Inner.Add(layer.Key, newLayer);
-        //    }
-        //    return copy;
-        //}
-
         public List<Need> GetNeeds(Func<Need, bool> layerTest)
         {
-           // List<Need> needs = new List<Need>();
-
             foreach (var layer in this.Inner)
                 if (!layer.Value.Values.All(layerTest) || this.Inner.Last().Value == layer.Value) // if the layer fails the test or it's the topmost one
                 {
@@ -61,12 +46,8 @@ namespace Start_a_Town_.Components
                         .TakeWhile(n => n.Value < n.Tolerance)
                         .OrderBy(n => n.Value)
                         .ToList();
-                    //foreach (var need in layer.Value)
-                    //    needs.Add(need.Value);
-                    //break;
                 }
             return new List<Need>();
-            //return needs.OrderBy(n=>n.Value).ToList();
         }
 
         public GroupBox GetUI(GameObject entity)

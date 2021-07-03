@@ -7,7 +7,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.AI;
 using Start_a_Town_.Animations;

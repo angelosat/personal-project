@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -13,7 +11,7 @@ namespace Start_a_Town_
     {
         public readonly ResourceDef ResourceDef;
         public List<ResourceRateModifier> Modifiers = new List<ResourceRateModifier>();
-        public float Max;// { get; set; }
+        public float Max;
         float _Value;
         public float Value
         {
@@ -21,25 +19,11 @@ namespace Start_a_Town_
             set { this._Value = Math.Max(0, Math.Min(value, this.Max)); }
         }
 
-        //public Recovery Rec = new Recovery();
         public Progress Rec = ResourceDef.Recovery;
         public float Percentage { get { return this.Value / this.Max; } set { this.Value = this.Max * value; } }
-
         public float Min => 0;
 
-        //float IProgressBar.Max => this.Max;
-
-        //float IProgressBar.Value => this.Value;
-
         public string Name => this.ResourceDef.Name;
-
-        //public float GetFinalValue(GameObject actor)
-        //{
-        //    var val = this.Value;
-        //    foreach (var mod in this.Modifiers)
-        //        val = mod.Def.Modify(actor, val);
-        //    return val;
-        //}
 
         public Resource(ResourceDef def)
         {
@@ -51,9 +35,6 @@ namespace Start_a_Town_
         public void Tick(GameObject parent)
         {
             this.ResourceDef.Tick(parent, this);
-            //foreach (var ratemod in this.Modifiers)
-            //    //this.Value += ratemod.Def.GetRateMod(parent);
-            //    this.Add(ratemod.Def.GetRateMod(parent));
         }
 
         internal virtual void HandleRemoteCall(GameObject parent, ObjectEventArgs e)
@@ -66,7 +47,6 @@ namespace Start_a_Town_
         }
         public void Adjust(float add)
         {
-            //this.Value += add;
             this.ResourceDef.Add(add, this);
         }
         public Resource Initialize(float max, float initPercentage)
@@ -115,7 +95,6 @@ namespace Start_a_Town_
         public ISaveable Load(SaveTag tag)
         {
             tag.TryGetTagValue("Value", out this._Value);
-            //this._Value = 1;
             tag.TryGetTagValue("Max", out this.Max);
             return this;
         }
@@ -128,8 +107,6 @@ namespace Start_a_Town_
 
         public ISerializable Read(BinaryReader r)
         {
-            //this._Value = r.ReadInt32();
-            //this.Max = r.ReadInt32();
             this._Value = r.ReadSingle();
             this.Max = r.ReadSingle();
             return this;

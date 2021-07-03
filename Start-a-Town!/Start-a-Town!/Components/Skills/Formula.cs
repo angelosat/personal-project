@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Start_a_Town_.Components
 {
@@ -39,8 +38,6 @@ namespace Start_a_Town_.Components
                 {
                     Function = (actor)=>
                     {
-                        //int skill = SkillsComponent.GetSkillLevel(actor, Skill.Types.Digging);
-                        //return (skill / 200f);
                         return StatsComponent.GetStatOrDefault(actor, Stat.Types.Digging, 0);
                     }
                 },
@@ -79,7 +76,6 @@ namespace Start_a_Town_.Components
         }
         public Types ID { get; set; }
         public string Name { get; set; }
-      //  public float Value { get; set; }
         public Func<GameObject, float> Function { get; set; }
         public string Format;
 

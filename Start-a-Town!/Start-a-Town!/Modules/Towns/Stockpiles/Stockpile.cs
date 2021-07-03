@@ -201,7 +201,7 @@ namespace Start_a_Town_
             Packets.Init();
         }
 
-        readonly static public List<string> Filters = new List<string>() { ReagentComponent.Name, ToolAbilityComponent.Name, SeedComponent.Name, SaplingComponent.Name, ConsumableComponent.Name };
+        readonly static public List<string> Filters = new List<string>() { ReagentComponent.Name, ToolAbilityComponent.Name, SeedComponent.Name, ConsumableComponent.Name };
         public List<HaulOrder> PendingOrders = new List<HaulOrder>();
         //public List<StorageFilter> CurrentFiltersNew = new List<StorageFilter>(StorageCategory.CreateFilterSet());
         public StorageSettings Settings = new StorageSettings();

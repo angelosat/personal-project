@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
@@ -48,11 +47,7 @@ namespace Start_a_Town_
                     //return Pickaxe(this.HandleGetter(), this.HeadGetter());
                     return Create(materials["Handle"], materials["Blade"]);
                 }
-                public Entity Create(Dictionary<string, Entity> materials)
-                {
-                    //return Pickaxe(this.HandleGetter(), this.HeadGetter());
-                    return Create(materials[this.HandleReagent].GetComponent<ItemCraftingComponent>().Material, materials[this.HeadReagent].GetComponent<ItemCraftingComponent>().Material);
-                }
+                
                 public Entity Create(List<GameObjectSlot> materials)
                 {
                     //return Pickaxe(this.HandleGetter(), this.HeadGetter());
@@ -76,7 +71,6 @@ namespace Start_a_Town_
                     Entity obj = ItemTemplate.Item;
                     obj.Def = ToolDefs.Handsaw;
 
-                    obj.AddComponent<GuiComponent>().Initialize(14, 1);
                     obj.AddComponent<PhysicsComponent>().Initialize(weight: 1, size: 0);
                     //obj.AddComponent<MaterialsComponent>().Initialize(new PartMaterialPair("Handle", handle), new PartMaterialPair("Blade", blade));
                     obj.AddComponent<EquipComponent>().Initialize(GearType.Mainhand);
@@ -111,6 +105,12 @@ namespace Start_a_Town_
                     //obj.AddComponent<EquipComponent>().Initialize(GearType.Mainhand);
                     return obj;
                 }
+
+                public Entity Create(Dictionary<string, Entity> materials)
+                {
+                    throw new NotImplementedException();
+                }
+
                 static public readonly Entity Default = Create(MaterialDefOf.Stone, MaterialDefOf.Stone);
             }
 

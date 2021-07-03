@@ -28,7 +28,7 @@ namespace Start_a_Town_
             return Value.CompareTo(obj.Value);
         }
     }
-
+    [Obsolete]
     public class Position
     {
         public Vector3 Global;// { get; set; }

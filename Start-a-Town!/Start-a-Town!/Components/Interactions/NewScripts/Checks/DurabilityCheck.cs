@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components;
 
@@ -21,7 +20,6 @@ namespace Start_a_Town_
         public override bool Condition(GameObject actor, TargetArgs target)
         {
             if (CachedSlot is null)
-                //CachedSlot = actor.GetComponent<GearComponent>().Holding;
                 CachedSlot = actor.GetComponent<HaulComponent>().Holding;
 
             var tool = CachedSlot.Object;

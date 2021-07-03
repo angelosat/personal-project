@@ -9,7 +9,6 @@ using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.Particles;
 using Start_a_Town_.Blocks;
-using Start_a_Town_.Tokens;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -194,7 +193,6 @@ namespace Start_a_Town_
         static public readonly int Width = 32, Depth = 16, Height = 40, BlockHeight = 20;
         static public readonly int HeightQuarter = Height / 4;
 
-        public TokenCollection Tokens = new();
 
         static public readonly Vector2 OriginCenter = new(Width / 2f, Height - Depth / 2f);
         static public readonly Vector2 Joint = new(Block.Width / 2, Block.Height);

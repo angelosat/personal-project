@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -35,20 +32,13 @@ namespace Start_a_Town_
             Value = 20,
             Mode = Moodlet.Modes.Finite,
             Duration = Engine.TicksPerSecond * 10
-            //,
-            //Condition = a => !a.HasRoomAssigned()
         };
 
         static public readonly HashSet<MoodletDef> All = new HashSet<MoodletDef>() { NoRoom, JustAte };
-        //static public readonly Dictionary<string, MoodletDef> Dictionary = new Dictionary<string, MoodletDef> { { NoRoom.Name, NoRoom }, { JustAte.Name, JustAte } };
 
         public bool TryAssignOrRemove(Actor actor)
         {
-            
             var hasMoodlet = actor.HasMoodlet(this);
-            //var hasMoodlet = actor.GetMoodlet(this);
-
-            //var condition = this.Condition(actor);
             var condition = this.Condition?.Invoke(actor) ?? false;
             if (condition && !hasMoodlet)
             {

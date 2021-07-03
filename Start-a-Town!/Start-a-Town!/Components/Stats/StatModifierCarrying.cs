@@ -8,10 +8,7 @@ namespace Start_a_Town_.Components
         {
             public StatModifierCarrying()
                 : base("Carrying", (mod, parent, v) => v * mod.GetValue("a"), new ValueModifierValue("a", 0.5f))
-                //: base("Carrying", GetFinalSpeed, new StatModifierValue("a", 0.5f))
-
             {
-                //this.Description = (mod) => "Carrying an item reduces your speed by " + (1 - mod.GetValue("a")).ToString("##%");
                 this.Modifier = this.GetFinalSpeed;
             }
 

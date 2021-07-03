@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components;
-using System;
 using System.Linq;
 
 namespace Start_a_Town_
@@ -49,27 +48,6 @@ namespace Start_a_Town_
                             return;
                         obj.GetInventoryContext(a, slotid);
                         return;
-
-                        //var interactions = obj.Query(actor);
-
-                        //a.Actions.AddRange(interactions.Select(inter => new ContextAction(() => inter.Name, (() =>
-                        //{
-                        //    //GameObject.PostMessage(Actor, new ObjectEventArgs(Message.Types.BeginInteraction, null, inter, Vector3.Zero, Actor["Inventory"]["Holding"] as GameObjectSlot));
-
-                        //    return;// true;
-                        //}))
-                        //{
-                        //    ControlInit = (ContextAction act, Button btn) =>
-                        //    {
-                        //        btn.TooltipFunc = tooltip => inter.GetTooltipInfo(tooltip);
-                        //        btn.TextColorFunc = () =>
-                        //        {
-                        //            List<Condition> failed = new List<Condition>();
-                        //            inter.TryConditions(actor, obj, failed);
-                        //            return failed.Count > 0 ? Color.Red : Color.White;
-                        //        };
-                        //    }
-                        //}));
                     },
                     DragDropAction = args =>
                     {
@@ -79,7 +57,6 @@ namespace Start_a_Town_
                         if (a.Effects == DragDropEffects.None)
                             return DragDropEffects.None;
                         Net.Client.PlayerInventoryOperationNew(a.SourceTarget, new TargetArgs(invSlot), a.DraggedTarget.Slot.StackSize);
-                        //Client.PlayerInventoryOperationNew(a.Source, invSlot, a.Slot.StackSize);
                         return DragDropEffects.Move;
                     },
                     LeftClickAction = () =>
@@ -87,13 +64,7 @@ namespace Start_a_Town_
                         UISelectedInfo.Refresh(invSlot.Object);
                     }
                 };
-                //if (invSlot.Object != null)
-                //{
-                //    var obj = invSlot.Object;
-                //    var contextActions = obj.GetInventoryContextActions(actor);
-                //    //slot.RightClickAction = () => ContextMenuManager.PopUp(new ContextAction("Drop", () => this.Drop(actor, obj)));
-                //    slot.RightClickAction = () => ContextMenuManager.PopUp(contextActions.ToArray());
-                //}
+                
                 
                 slot.RightClickAction = () =>
                 {
@@ -105,16 +76,11 @@ namespace Start_a_Town_
                 };
                 
 
-                //if (invSlot.Object != null)
-                //{
-                //    slot.RightClickAction = () => ContextMenuManager.PopUp(new ContextAction("Drop", () => this.Drop(actor, invSlot.Object)));
-                //}
                 this.PanelSlots.Controls.Add(slot);
             }
             this.AddControls(this.PanelSlots);
 
             var customizationClient = new GroupBox();
-            //var uicolors = new Window(string.Format("Edit {0}", actor.Name), new UICharacterCustomization(actor)) { Movable = true, Closable = true };
             var colorsui = new UICharacterCustomization(actor);
             customizationClient.AddControls(colorsui);
             customizationClient.AddControlsBottomLeft(new Button("Apply", customizationClient.Width) { LeftClickAction = () => PacketEditAppearance.Send(actor, colorsui.Colors) });
@@ -167,33 +133,13 @@ namespace Start_a_Town_
             }
             return GUI;
         }
-        //internal override void OnGameEvent(GameEvent e)
-        //{
-        //    switch (e.Type)
-        //    {
-        //        case Message.Types.SelectedChanged:
-        //            var target = e.Parameters[0] as TargetArgs;
-        //            //if(target.Object == this.Tag)
-        //            //    break;
-        //            var actor = target.Object as Actor;
-        //            if (actor != null && this.Tag != actor)
-        //                GetUI(actor);
-        //            break;
-
-        //        default:
-        //            break;
-        //    }
-        //}
+        
         internal override void OnSelectedTargetChanged(TargetArgs target)
         {
             var actor = target.Object as Actor;
             if (actor != null && this.Tag != actor)
                 GetUI(actor);
         }
-        private bool Drop(GameObject actor, GameObject item)
-        {
-            PacketInventoryDrop.Send(item.Net, actor.RefID, item.RefID, item.StackSize);
-            return true;
-        }
+       
     }
 }

@@ -125,27 +125,7 @@ namespace Start_a_Town_.Components
             //list.AddRange(this.Product);
             //list.AddRange(this.Materials);
         }
-        public override bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
-        {
-            switch (e.Type)
-            {
-                case Message.Types.Activate:
-
-                   // GameObjectSlot hauled = HaulComponent.GetHeldObject(e.Parameters[0] as GameObject);
-                    GameObjectSlot hauled = GearComponent.GetHeldObject(e.Parameters[0] as GameObject);
-                    if (!hauled.HasValue)
-                        return false;
-                    if (!hauled.Object.HasComponent<FuelComponent>())
-                        return false;
-
-                    return this.Fuel.InsertObject(e.Network, hauled);
-
-                default:
-                    break;
-            }
-            return false;
-        }
-
+        
         private Recipe GetRecipe()
         {
             if (!this.Materials.HasValue)

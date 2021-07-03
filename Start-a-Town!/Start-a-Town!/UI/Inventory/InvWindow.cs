@@ -91,7 +91,7 @@ namespace Start_a_Town_.UI
             InitEquipment(Actor);
             InitTabs(Actor);
             InitStats(Actor);
-            InitSkills(Actor);
+            //InitSkills(Actor);
 
             InitInvSlots();
             Panel_Details.Tag = Actor.GetComponent<StatsComponent>("Stats");
@@ -263,19 +263,18 @@ namespace Start_a_Town_.UI
 
             Panel_Tabs.Controls.Add(tab);
 
-            var skillsui = new Components.Skills.New.SkillsUI();
-            skillsui.Refresh(actor);
-            tab = new RadioButton("Skills", Panel_Tabs.Controls.TopRight)
-            {
-                Tag = Box_Skills,
-                LeftClickAction = () => 
-                { 
-                    Panel_Details.Controls.Clear(); 
-                    Panel_Details.Controls.Add(skillsui);//Box_Skills); 
-                }
-            };
-
-            Panel_Tabs.Controls.Add(tab);
+            //var skillsui = new Components.Skills.New.SkillsUI();
+            //skillsui.Refresh(actor);
+            //tab = new RadioButton("Skills", Panel_Tabs.Controls.TopRight)
+            //{
+            //    Tag = Box_Skills,
+            //    LeftClickAction = () => 
+            //    { 
+            //        Panel_Details.Controls.Clear(); 
+            //        Panel_Details.Controls.Add(skillsui);//Box_Skills); 
+            //    }
+            //};
+            //Panel_Tabs.Controls.Add(tab);
 
             Panel_Tabs.Controls.Add(new RadioButton("Crafting")
             {
@@ -296,21 +295,21 @@ namespace Start_a_Town_.UI
 
             return;
         }
-        void InitSkills(GameObject actor)
-        {
-            Box_Skills.Client.Controls.Clear();
-            var ui = new Components.Skills.New.SkillsUI();
-            ui.Refresh(actor);
-            Box_Skills.Client.Controls.Add(ui);
-            //this.Box_Skills = new Components.Skills.New.SkillsUI();
-            return;
+        //void InitSkills(GameObject actor)
+        //{
+        //    Box_Skills.Client.Controls.Clear();
+        //    var ui = new Components.Skills.New.SkillsUI();
+        //    ui.Refresh(actor);
+        //    Box_Skills.Client.Controls.Add(ui);
+        //    //this.Box_Skills = new Components.Skills.New.SkillsUI();
+        //    return;
 
-            //List<GameObjectSlot> skills = actor.GetComponent<SkillsComponent>().Skills.Select(sk => sk.ToObject().ToSlot()).ToList();// actor["Skills"].GetProperty<List<GameObjectSlot>>("Skills");
-            //foreach (var skill in skills)
-            //{
-            //    Box_Skills.Add(new SlotWithText(Box_Skills.Client.Controls.BottomLeft) { Tag = skill });
-            //}
-        }
+        //    //List<GameObjectSlot> skills = actor.GetComponent<SkillsComponent>().Skills.Select(sk => sk.ToObject().ToSlot()).ToList();// actor["Skills"].GetProperty<List<GameObjectSlot>>("Skills");
+        //    //foreach (var skill in skills)
+        //    //{
+        //    //    Box_Skills.Add(new SlotWithText(Box_Skills.Client.Controls.BottomLeft) { Tag = skill });
+        //    //}
+        //}
         void InitConditions()
         {
             if (Panel_Conditions != null)
@@ -552,27 +551,6 @@ namespace Start_a_Town_.UI
             if (slot.StackSize > 1)
                 e.Tooltip.Controls.Add(new Label(new Vector2(0, e.Tooltip.Controls.Last().Bottom), "Shift+Left click: Split"));
 
-        }
-
-        //void slot_DragDrop(object sender, DragEventArgs e)
-        //{
-        //    GameObjectSlot item = e.Item as GameObjectSlot;
-        //    GameObjectSlot source = e.Source as GameObjectSlot;
-        //    GameObjectSlot target = (sender as Slot).Tag;
-        //    Actor.PostMessage(Message.Types.ArrangeInventory, Player.Actor, source, target, item.StackSize);
-        //    return;
-        //}
-
-        void listView_DrawItem(object sender, DrawListViewItemEventArgs e)
-        {
-            e.SpriteBatch.Draw(UIManager.SlotSprite, e.Item.BoundsScreen, Color.White);
-            GameObjectSlot slot = (GameObjectSlot)e.Item.Tag;
-            if (slot != null)
-            {
-                GuiComponent gui;
-                if(slot.Object.TryGetComponent<GuiComponent>("Gui", out gui))
-                    e.SpriteBatch.Draw(gui.GetProperty<Icon>("Icon").SpriteSheet, e.Bounds, gui.GetProperty<Icon>("Icon").SourceRect, Color.White);
-            }
         }
 
         void slot_KeyPress(object sender, KeyPressEventArgs2 e)

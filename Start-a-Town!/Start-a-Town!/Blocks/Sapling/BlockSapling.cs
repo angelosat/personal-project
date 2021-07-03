@@ -13,11 +13,11 @@ namespace Start_a_Town_.Blocks.Sapling
         {
             this.AssetNames = "sapling";
         }
-        public override void Break(Start_a_Town_.GameObject actor, Microsoft.Xna.Framework.Vector3 global)
+        public override void Break(GameObject actor, Vector3 global)
         {
             base.Break(actor, global);
-            var sapling = ItemTemplate.Sapling.Factory.Create();
-            actor.Net.PopLoot(sapling, global, Vector3.Zero);
+            //var sapling = ItemTemplate.Sapling.Factory.Create();
+            //actor.Net.PopLoot(sapling, global, Vector3.Zero);
         }
         
         public override void RandomBlockUpdate(IObjectProvider net, IntVec3 global, Cell cell)

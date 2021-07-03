@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Components.Skills;
 
 namespace Start_a_Town_.Components
 {
@@ -40,9 +36,6 @@ namespace Start_a_Town_.Components
             if (currentStep == chain.Count - 1)
                 return;
             var product = chain[currentStep + 1].Clone();
-
-            //int prodID = mat.ProcessingChain.First().GetInfo().ID;
-            //var product = GameObject.Create(prodID);
             parent.Net.PopLoot(product, parent.Global, parent.Velocity);
             parent.Net.Despawn(parent);
             parent.Net.DisposeObject(parent);
@@ -50,8 +43,6 @@ namespace Start_a_Town_.Components
 
         internal override void GetAvailableTasks(GameObject parent, List<Interaction> list)
         {
-            //base.GetAvailableTasks(parent, list);
-
             list.Add(
                 new InteractionCustom(
                     this.SkillToProcess.Name,
@@ -67,12 +58,7 @@ namespace Start_a_Town_.Components
 
         public override void GetRightClickActions(GameObject parent, List<ContextAction> actions)
         {
-            //Material mat = parent.GetComponent<MaterialsComponent>().Parts["Body"].Material;
-            //actions.Add(new UI.ContextAction(() => mat.Type.SkillToExtract.Name, () => Client.PlayerInteract(new TargetArgs(parent))));
-
-            //actions.Add(new UI.ContextAction(() => this.SkillToProcess.Name, () => Client.PlayerUse(new TargetArgs(parent))));
             actions.Add(new ContextAction(() => this.SkillToProcess.Name, () => Net.Client.PlayerInteract(new TargetArgs(parent))));
-
         }
 
         public override void GetInteractions(GameObject parent, List<Interaction> actions)

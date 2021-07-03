@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Start_a_Town_.Components
 {
@@ -11,7 +8,6 @@ namespace Start_a_Town_.Components
         {
             Default,
             DropOn,
-            //  Drop,
             Give,
             Activate,
             Initialize,
@@ -23,11 +19,8 @@ namespace Start_a_Town_.Components
             Eat,
             Update,
             ConditionFinished,
-            PickUp,
             SkillAward,
             Loot,
-            //   Spawn,
-            //Despawn,
             UIContainer,
             ContainerClose,
             Create,
@@ -44,14 +37,12 @@ namespace Start_a_Town_.Components
             /// <para>arg0: Vector3 direction</para>
             /// <para>arg1: float: speed</para>
             /// </summary>
-            Move,
             Task,
             SetContent,
             Shovel,
             Saw,
             Mine,
             Action,
-            //    Destroy,
             Build,
             Consume,
             SetBlueprint,
@@ -61,11 +52,9 @@ namespace Start_a_Town_.Components
             /// <para>arg1: object contained in slot at time of message creation</para>
             /// <para>arg2: index of slot to insert the item</para>
             /// </summary>
-            Receive,
             Chop,
             Plant,
             Retrieve,
-            //       LoadStats,
             Aggro,
             Need,
             ModifyNeed,
@@ -92,7 +81,6 @@ namespace Start_a_Town_.Components
             /// </summary>
             UIOwnership,
             Constructed,
-            Ownership,
             Order,
             MoveToObject,
             ManageEquipment,
@@ -116,8 +104,6 @@ namespace Start_a_Town_.Components
             Structure,
             ChunkLoaded,
             SetTile,
-            SetSprite,
-            SetShadow,
             /// <summary>
             /// <para>arg0: GameObjectSlot to receive</para>
             /// <para>arg1: GameObject contained in slot at time of message creation</para>
@@ -316,8 +302,6 @@ namespace Start_a_Town_.Components
             GuidanceReceived,
             ShopsUpdated,
             ShopUpdated,
-            //QuestGiverAdded,
-            //QuestGiverRemoved,
             QuestDefsUpdated,
             QuestObjectivesUpdated,
             QuestDefAssigned,
@@ -337,25 +321,5 @@ namespace Start_a_Town_.Components
             this.Args = e;
             this.Callback = callback;
         }
-
-        //public Types Type;
-        //public GameObject Sender;
-        //public object[] Args;
-
-        //public Message(GameObject sender, Types type, object[] args)
-        //{
-        //    Sender = sender;
-        //    Type = type;
-        //    Args = args;
-        //}
-
-        //public override string ToString()
-        //{
-        //    //string info = Type.ToString();
-        //    //foreach (object obj in Args)
-        //    //    info += "\n" + obj;
-        //    return Type.ToString();
-        //}
     }
-
 }

@@ -48,7 +48,6 @@ namespace Start_a_Town_.Components
         {
             StatsComponentNew comp;
             if (obj.TryGetComponent<StatsComponentNew>(out comp))
-            //return comp.Stats.GetValueOrDefault(type);
             {
                 Stat stat;
                 if (comp.Stats.TryGetValue(type, out stat))
@@ -60,7 +59,6 @@ namespace Start_a_Town_.Components
         {
             StatsComponentNew comp;
             if (obj.TryGetComponent<StatsComponentNew>(out comp))
-            //return comp.Stats.GetValueOrDefault(type);
             {
                 Stat stat;
                 if (comp.Stats.TryGetValue(type, out stat))
@@ -89,8 +87,6 @@ namespace Start_a_Town_.Components
                 var lbl = new UI.Label(stat.ToString(parent)) { Location = ui.Controls.BottomLeft };
                 lbl.TooltipFunc = stat.GetTooltipInfo;
                 ui.Controls.Add(lbl);
-                
-                //stat.GetTooltipInfo(ui as UI.Tooltip);
             }
         }
         public override object Clone()
@@ -109,7 +105,6 @@ namespace Start_a_Town_.Components
         internal List<StatNewModifier> GetModifiers(StatNewDef statNewDef)
         {
             this.Modifiers.TryGetValue(statNewDef, out var item);
-            //return item?.Modifiers ?? new List<Func<GameObject, float, float>>();
             return item ?? new List<StatNewModifier>();
         }
         public void AddModifier(StatNewModifier mod)
@@ -144,10 +139,7 @@ namespace Start_a_Town_.Components
 
             foreach (var stat in StatDefOf.NpcStatPackage)
                 box.AddControlsBottomLeft(stat.GetControl(gameObject));
-            //var panel = new PanelLabeledNew("Stats") { AutoSize = true };
-            //foreach (var stat in StatNewDef.NpcStatPackage)
-            //    panel.AddControlsBottomLeft(stat.GetControl(gameObject));
-            //box.AddControls(box);
+            
         }
         TableScrollableCompactNewNew<StatNewDef> GUITable;
         public override GroupBox GetGUI()

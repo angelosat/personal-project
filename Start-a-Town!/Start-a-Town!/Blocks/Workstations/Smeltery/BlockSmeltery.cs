@@ -24,7 +24,6 @@ namespace Start_a_Town_.Blocks.Smeltery
                         Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building);
-            this.Tokens.Add(new IsWorkstation(IsWorkstation.Types.Smeltery));
             Towns.Constructions.ConstructionsManager.Production.Add(this.Recipe);
         }
 

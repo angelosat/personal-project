@@ -52,10 +52,6 @@ namespace Start_a_Town_
             {
                 data.Value = (byte)this.Material.ID;
             }
-            public void FromCraftingReagent(GameObject reagent)
-            {
-                this.Material = reagent.GetComponent<ItemCraftingComponent>().Material;
-            }
         }
         public override bool IsMinable => true;
 

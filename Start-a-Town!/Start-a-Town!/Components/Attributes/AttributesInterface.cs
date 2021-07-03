@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components.Attributes
@@ -36,7 +32,6 @@ namespace Start_a_Town_.Components.Attributes
                         {
                             case Message.Types.AttributeProgressChanged:
                                 var att = e.Parameters[0] as AttributeDef;
-                                //tiplbl.Text = "Next: " + att.Progress.ToString();
                                 if (a.Def == att)
                                     tiplbl.Invalidate();
                                 break;
@@ -47,7 +42,6 @@ namespace Start_a_Town_.Components.Attributes
                     };
                 };
                 this.Controls.Add(lbl);
-
             }
         }
         void Refresh(AttributeDef a)

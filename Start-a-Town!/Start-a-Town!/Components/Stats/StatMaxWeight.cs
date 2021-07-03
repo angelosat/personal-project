@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components.Stats
 {
@@ -18,11 +13,7 @@ namespace Start_a_Town_.Components.Stats
 
         float GetWeightFromStrength(GameObject parent)
         {
-            //var str = AttributesComponent.GetAttribute(parent, Attribute.Types.Strength);
-            //if (str == null)
-            //    return 0;
-            //return str.Value / 2;
-            var str = parent.GetAttribute(AttributeDef.Strength)?.Level ?? 0;// AttributesComponent.GetValueOrDefault(parent, AttributeDef.Strength, 0);
+            var str = parent.GetAttribute(AttributeDef.Strength)?.Level ?? 0;
             return str / 2;
         }
 
@@ -33,15 +24,12 @@ namespace Start_a_Town_.Components.Stats
         /// <returns></returns>
         static public float GetRatio(GameObject parent)
         {
-            //var obj = GearComponent.GetSlot(parent, GearType.Hauling).Object;
             var obj = parent.GetHauled();// parent.GetComponent<HaulComponent>().GetObject();//.Slot.Object;
 
             if (obj == null)
                 return 0;
             var w = obj.Physics.Weight; // sometimes obj is null? hauled obj is dropped without removing the modifier from the attribute?
             var maxW = StatsComponentNew.GetStat(parent, Stat.Types.MaxWeight).GetFinalValue(parent);
-            //var min = w;
-            //var max = 2 * w;
             var ratio = (maxW - w) / w;
             ratio = MathHelper.Clamp(ratio, 0, 1);
             return ratio;

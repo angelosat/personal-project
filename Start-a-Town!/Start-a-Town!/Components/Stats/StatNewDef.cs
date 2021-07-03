@@ -29,7 +29,6 @@ namespace Start_a_Town_
                 public ExpressionDef(string name, string label, Func<float, float, float> op) : base(name)
                 {
                     this.Label = label;
-                  
                     this.Operator = op;
                 }
 

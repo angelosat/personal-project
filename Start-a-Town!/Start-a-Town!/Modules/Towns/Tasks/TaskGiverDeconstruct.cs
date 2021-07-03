@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Skills;
 
 namespace Start_a_Town_
 {

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
@@ -52,10 +51,7 @@ namespace Start_a_Town_
                 {
                     return Create(materials["Handle"], materials["Head"]);
                 }
-                public GameObject Create(Dictionary<string, GameObject> materials)
-                {
-                    return Create(materials[this.HandleReagent].GetComponent<ItemCraftingComponent>().Material, materials[this.HeadReagent].GetComponent<ItemCraftingComponent>().Material);
-                }
+                
                 public GameObject Create(List<GameObjectSlot> materials)
                 {
                     //return Create(
@@ -72,10 +68,6 @@ namespace Start_a_Town_
                     //obj.AddComponent<DefComponent>().Initialize(ID, ObjectType.Equipment, "Hoe", "Used to dig soil and dirt.").Initialize(ItemSubType.Hoe);
                     obj.Def = ToolDefs.Hoe;
 
-                    //obj.AddComponent<SpriteComponent>().Initialize(new Sprite("hoe", 0) { Origin = new Vector2(16, 24), Joint = new Vector2(16, 16) });//16));
-                    //obj.AddComponent<PhysicsComponent>();
-                    obj.AddComponent<GuiComponent>().Initialize(4, 1);
-                    //obj.AddComponent<UseComponentOld>().Initialize(Script.Types.Tilling);
                     obj.AddComponent<ToolAbilityComponent>();//.Initialize(ToolAbilityDef.Argiculture);
                     //obj.AddComponent(new SkillComponentNew());
 

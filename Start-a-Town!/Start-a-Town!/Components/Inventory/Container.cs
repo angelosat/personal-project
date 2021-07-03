@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.Components
 {
@@ -11,7 +9,6 @@ namespace Start_a_Town_.Components
         public int ID;
         public string Name = "";
         public Func<GameObject, bool> Filter = o => true;
-        //public List<Container> Children = new List<Container>();
         GameObject _Parent;
         public GameObject Parent
         {
@@ -39,7 +36,6 @@ namespace Start_a_Town_.Components
         }
         private void Initialize(int capacity)
         {
-            //this.Slots = new List<GameObjectSlot>();
             for (int i = 0; i < capacity; i++)
             {
                 this.Slots.Add(new GameObjectSlot((byte)i) { ContainerNew = this });
@@ -47,21 +43,12 @@ namespace Start_a_Town_.Components
         }
         private void Initialize(int capacity, Func<GameObject, bool> filter)
         {
-            //this.Slots = new List<GameObjectSlot>();
             for (int i = 0; i < capacity; i++)
             {
                 this.Slots.Add(new GameObjectSlot((byte)i) { ContainerNew = this, Filter = filter });
             }
         }
-        //public Container(GameObject parent, int id, int size)
-        //{
-        //    this.ID = id;
-        //    this.Parent = parent;
-        //    for (int i = 0; i < size; i++)
-        //    {
-        //        this.Slots.Add(new GameObjectSlot((byte)i) { Parent = parent });
-        //    }
-        //}
+        
         public bool Contains(Predicate<GameObject> filter)
         {
             return (from slot in this.Slots
@@ -83,10 +70,7 @@ namespace Start_a_Town_.Components
         {
             return (from slot in this.Slots where slot.Object != null select slot).ToList();
         }
-        //public List<GameObjectSlot> GetEmpty()
-        //{
-        //    return (from slot in this.Slots where slot.Object == null select slot).ToList();
-        //}
+        
         public IEnumerable<GameObjectSlot> GetEmpty()
         {
             return (from slot in this.Slots where slot.Object == null select slot);
@@ -120,31 +104,7 @@ namespace Start_a_Town_.Components
                 slot.Read(reader);
             }
         }
-        //public void Write(System.IO.BinaryWriter writer)
-        //{
-        //    writer.Write(this.ID);
-        //    writer.Write(this.Name);
-        //    writer.Write(this.Slots.Count);
-        //    for (int i = 0; i < this.Slots.Count; i++)
-        //    {
-        //        var slot = this.Slots[i];
-        //        //writer.Write(i);
-        //        slot.Write(writer);
-        //    }
-        //}
-        //public void Read(System.IO.BinaryReader reader)
-        //{
-        //    this.Slots = new List<GameObjectSlot>();
-        //    this.ID = reader.ReadInt32();
-        //    this.Name = reader.ReadString();
-        //    int size = reader.ReadInt32();
-        //    for (byte n = 0; n < size; n++)
-        //    {
-        //        var slot = new GameObjectSlot() { Parent = this.Parent, ContainerNew = this };
-        //        slot.Read(reader);
-        //        this.Slots.Add(slot);
-        //    }
-        //}
+        
         public override string ToString()
         {
             return this.ID.ToString() + ":" + this.Name + ":" + this.Slots.Count.ToString();
@@ -158,49 +118,9 @@ namespace Start_a_Town_.Components
             }
             return text;
         }
-        public bool InsertObject(GameObject obj, out GameObjectSlot foundSlot)
-        {
-            if (obj == null)
-                throw new Exception();
-            var net = obj.Net;
-
-            // check if entity is already inside container
-            if ((from slot in this.Slots
-                 where slot.Object == obj
-                 select slot).FirstOrDefault() != null)
-                throw new Exception();
-
-            // TODO: might want to refactor there 2
-            GameObjectSlot firstStack =
-                (from slot in this.Slots
-                 where slot.HasValue
-                 where slot.Object.IDType == obj.IDType
-                 where slot.StackSize < slot.StackMax
-                 select slot)
-                 .FirstOrDefault();
-            if (firstStack != null)
-            {
-                // TODO: handle case where stacksize exceeds stackmax
-                foundSlot = firstStack;
-                return true;
-            }
-
-            GameObjectSlot firstEmpty =
-                (from slot in this.Slots
-                 where !slot.HasValue
-                 select slot)
-                 .FirstOrDefault();
-            if (firstEmpty == null)
-            {
-                foundSlot = null;
-                return false;
-            }
-            foundSlot = firstEmpty;
-            return true;
-        }
+        
         public bool InsertObject(Entity obj)
         {
-            //return this.InsertObject(objSlot.ToSlotLink());
             var net = obj.NetNew;
 
             // check if entity is already inside container
@@ -221,7 +141,6 @@ namespace Start_a_Town_.Components
             {
                 // TODO: handle case where stacksize exceeds stackmax
                 firstStack.StackSize += obj.StackSize;
-                //this.Parent.Net.EventOccured(Message.Types.ItemGot, this.Parent, obj);
                 // merge objects to existins object in slot, despawn and dispose old one
                 net?.Despawn(obj);
                 net.DisposeObject(obj);
@@ -238,9 +157,7 @@ namespace Start_a_Town_.Components
                 // drop item?
                 return false;
             }
-            //firstEmpty.Object = obj;
             firstEmpty.SetObject(obj);
-            //this.Parent.Net.EventOccured(Message.Types.ItemGot, this.Parent, obj);
             net?.Despawn(obj);
             return true;
 
@@ -250,7 +167,6 @@ namespace Start_a_Town_.Components
             if (objSlot.Object == null)
                 return false;
             var obj = objSlot.Object;
-            //var net = obj.Net;
             var net = obj.NetNew;
 
             // check if entity is already inside container
@@ -263,7 +179,6 @@ namespace Start_a_Town_.Components
             GameObjectSlot firstStack =
                 (from slot in this.Slots
                  where slot.HasValue
-                 //where slot.Object.IDType == obj.IDType
                  where slot.Object.CanAbsorb(obj)
                  where slot.StackSize < slot.StackMax // maybe not necessary with canabsorb
                  select slot)
@@ -272,7 +187,6 @@ namespace Start_a_Town_.Components
             {
                 // TODO: handle case where stacksize exceeds stackmax
                 firstStack.StackSize += obj.StackSize;
-                //this.Parent.Net.EventOccured(Message.Types.ItemGot, this.Parent, obj);
                 // merge objects to existins object in slot, despawn and dispose old one
                 net?.Despawn(obj);
                 net.DisposeObject(obj);
@@ -290,9 +204,7 @@ namespace Start_a_Town_.Components
                 // drop item?
                 return false;
             }
-            //firstEmpty.Object = obj;
             firstEmpty.SetObject(obj);
-            //this.Parent.Net.EventOccured(Message.Types.ItemGot, this.Parent, obj);
             net?.Despawn(obj);
             objSlot.Clear();
             return true;
@@ -327,8 +239,6 @@ namespace Start_a_Town_.Components
                 net.Despawn(obj);
                 net.DisposeObject(obj);
                 objSlot.Clear();
-                // haul existing item stack?
-                //index = firstStack.ID;
                 return true;
             }
 
@@ -340,7 +250,6 @@ namespace Start_a_Town_.Components
             if (firstEmpty == null)
                 return false;
 
-            //firstEmpty.Object = obj;
             firstEmpty.SetObject(obj);
             index = firstEmpty.ID;
 
@@ -385,11 +294,9 @@ namespace Start_a_Town_.Components
         }
         public Container Load(SaveTag containerTag)
         {
-            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;//.ToDictionary();
+            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;
             containerTag.TryGetTagValue<int>("ID", out this.ID);
             int count = (int)shit["Count"].Value;
-            //this.Initialize(count);
-            //List<SaveTag> itemList = shit["Items"].Value as List<SaveTag>;
             Dictionary<string, SaveTag> itemList = shit["Items"].Value as Dictionary<string, SaveTag>;
             foreach (SaveTag itemTag in itemList.Values)
             {
@@ -399,7 +306,6 @@ namespace Start_a_Town_.Components
                 GameObjectSlot slot = GameObjectSlot.Create(itemTag);
                 slot.ContainerNew = this;
                 slot.ID = (byte)index;
-                //this.Slots[index] = slot;
                 this.Slots[index].Object = slot.Object;
             }
             return this;
@@ -411,7 +317,5 @@ namespace Start_a_Town_.Components
                 if (slot.Object != null)
                     slot.Object.Dispose();
         }
-
-        
     }
 }

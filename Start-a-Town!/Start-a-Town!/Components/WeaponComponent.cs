@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components
@@ -50,13 +48,6 @@ namespace Start_a_Town_.Components
             return new WeaponComponent(this.Speed, this.Damage.Select(foo => Tuple.Create(foo.Key, foo.Value)).ToArray());
         }
 
-        //static public StatCollection GetDamage(GameObject obj)
-        //{
-        //    WeaponComponent w;
-        //    if(!obj.TryGetComponent<WeaponComponent>("Weapon", out w))
-        //        return new StatCollection();
-        //    return w.Damage;
-        //}
         static public StatCollection GetDamage(GameObject obj)
         {
             if (obj == null)

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
-using Start_a_Town_.Components.Items;
 using Start_a_Town_.Components;
 
 namespace Start_a_Town_
@@ -57,57 +54,51 @@ namespace Start_a_Town_
         public ItemDef Def;
        
         public bool InCatalogue = true;
-        public Quality Quality = Quality.Common;// { get { return (Quality)this["Quality"]; } protected set { this["Quality"] = value; } }
+        public Quality Quality = Quality.Common;
 
 
         private int _ID;
-        public int ID//;// { get { return (int)this["ID"]; } protected set { this["ID"] = value; } }
+        public int ID
         {
             get
             {
-                //throw new Exception();
                 return this.Def?.ID ?? this._ID;
             }
             set
             {
-                //throw new Exception();
                 this._ID = value;
             }
         }
 
 
         public string CustomName = "";
-        public string Name//;// { get { return (string)this["Name"]; } set { this["Name"] = value; } }
+        public string Name
         {
-            //get { return this.Def?.Name ?? this._Name; }
-            get { return string.IsNullOrEmpty(this.CustomName) ? this.Def.Label : this.CustomName; } //this.Def?.Name ?? this._Name; }
+            get { return string.IsNullOrEmpty(this.CustomName) ? this.Def.Label : this.CustomName; }
             set
             {
                 this.CustomName = value;
             }
         }
-            //{ get { return this.Prefix + " " + this.Def?.Name ?? this._Name; } set { this._Name = value; } }
-        //private string _Name;
 
         private string _Type;
-        public string Type//;// { get { return (string)this["Type"]; } set { this["Type"] = value; } }
+        public string Type
         { get { return this.Def?.ObjType ?? this._Type; } set { this._Type = value; } }
 
         string _Description;
-        public string Description//;// { get { return (string)this["Description"]; } set { this["Description"] = value; } }
+        public string Description
         { get { return this.Def?.Description ?? this._Description; } set { this._Description = value; } }
 
-        int _StackCapacity;// { get { return (int)this["StackMax"]; } set { this["StackMax"] = value; } }
-        public int StackMax//;// { get { return (string)this["Description"]; } set { this["Description"] = value; } }
+        int _StackCapacity;
+        public int StackMax
         { get { return this.Def?.StackCapacity ?? this._StackCapacity; } set { this._StackCapacity = value; } }
 
         ItemSubType _ItemSubType;
-        public ItemSubType ItemSubType// { get { return (ItemSubType)this["ItemSubType"]; } set { this["ItemSubType"] = value; } }
+        public ItemSubType ItemSubType
         { get { return this.Def?.SubType ?? this._ItemSubType; } set { this._ItemSubType = value; } }
 
         public string Prefix = "";
-        //public bool CustomName;// { get { return (bool)this["SaveName"]; } set { this["SaveName"] = value; } }
-        public bool SaveWithChunk;// { get { return (bool)this["SaveWithChunk"]; } set { this["SaveWithChunk"] = value; } }
+        public bool SaveWithChunk;
         int _StackSize;
         public int StackSize
         {
@@ -117,9 +108,6 @@ namespace Start_a_Town_
                 if (value < 0)
                     throw new Exception();
                 this._StackSize = value;
-                //if (value == 0)
-                    //Console.WriteLine("WARNING: STACKSIZE SET TO 0");
-                //throw (new Exception("WARNING: STACKSIZE SET TO 0")); 
             }
         }
 
@@ -130,7 +118,6 @@ namespace Start_a_Town_
             this.Description = description;
             this.Type = objType;
             this.Quality = quality ?? Quality.Common;
-            //this.CustomName = saveName;
             this.StackSize = this.StackMax = 1;
             this.ItemSubType = ItemSubType.Generic;
             return this;
@@ -183,7 +170,6 @@ namespace Start_a_Town_
             this.Description = description;
             this.Type = objType;
             this.Quality = quality ?? Quality.Common;
-            //this.CustomName = false;
             this.StackSize = this.StackMax = 1;
             this.ItemSubType = ItemSubType.Generic;
         }
@@ -225,28 +211,16 @@ namespace Start_a_Town_
             return Quality.Color;
         }
 
-
         // TODO: maybe optimize this by a custom name flag so i don't have to send names of default named objects
         public override void Write(BinaryWriter w)
         {
-
-            //if (this.CustomName)
-            //    w.Write(this.Name);
-            w.Write(this.CustomName);// ?? "");
+            w.Write(this.CustomName);
             w.Write(this.StackSize);
             w.Write(this.Quality.Name);
         }
 
         public override void Read(BinaryReader r)
         {
-
-            //if(this.CustomName)
-            //    this.Name = r.ReadString();
-            //this.CustomName = r.ReadBoolean();
-            //this._Name = r.ReadString();
-
-            //var customName = r.ReadString();
-            //this.CustomName = string.IsNullOrEmpty(customName) ? null : customName;
             this.CustomName = r.ReadString();
             this.StackSize = r.ReadInt32();
             this.Quality = Start_a_Town_.Def.GetDef<Quality>(r.ReadString());
@@ -256,16 +230,9 @@ namespace Start_a_Town_
         {
             var tag = new List<SaveTag>
             {
-                // tag.Add(new SaveTag(SaveTag.Types.Bool, "CustomName", this.Name));
-                //if(this.CustomName!=null)
                 this.CustomName.Save("CustomName"),
-                //tag.Add(this._Name.Save("CustomName"));
-
-                //if (CustomName)
-                //    tag.Add(new SaveTag(SaveTag.Types.String, "Name", this.Name));
                 new SaveTag(SaveTag.Types.Int, "Stack", this.StackSize),
                 this.Quality.Save("Quality")
-
             };
             return tag;
         }
@@ -284,7 +251,6 @@ namespace Start_a_Town_
 
         static private void EditStackSize(GameObject parent)
         {
-            //if(Game1)
             var win = new WindowSetStackSize((a) => SetStackSize(parent, a));
             win.ShowDialog();
         }
@@ -322,81 +288,19 @@ namespace Start_a_Town_
                     break;
             }
         }
-        public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent)
-        {
-            //if(camera.Zoom > 6f)
-            //    UIManager.DrawStringOutlined(sb, this.Name, parent.GetScreenPosition(camera) - new Vector2(0, parent.Body.Sprite.AtlasToken.Rectangle.Height * camera.Zoom / 2 - Label.DefaultHeight), Color.Black, Color.Gray, Color.Black * .5f, HorizontalAlignment.Center);
-            return;
-            //if (this.StackSize == 1 || this.StackMax == 1 || camera.Zoom <= 2.5f)
-            //    return;
-            //UIManager.DrawStringOutlined(sb,
-            //    GetNameplateText(camera), 
-            //    //parent.GetScreenPosition(camera) - new Vector2(0, ( parent.Body.Sprite.OriginGround.Y / 2) * camera.Zoom / 2), 
-            //    parent.GetScreenPosition(camera) - new Vector2(0, (parent.Body.Sprite.AtlasToken.Rectangle.Height) * camera.Zoom / 2), 
-            //    Color.Black, Color.Gray, Color.Black *.5f, HorizontalAlignment.Center);//, VerticalAlignment.Center);
-        }
-
-        private string GetNameplateText(Camera camera)
-        {
-            //return (ScreenManager.CurrentScreen.Camera.Zoom > 6f ? string.Format("{0} ", this.Name) : string.Empty) + string.Format("({0})", this.StackSize);
-            return (camera.Zoom > 6f ? string.Format("{0} ", this.Name) : string.Empty) + string.Format("({0})", this.StackSize);
-        }
-
+      
         public override void OnNameplateCreated(GameObject parent, Nameplate plate)
         {
             plate.Controls.Add(new Label()
             {
-                //Width = 100,
                 Font = UIManager.FontBold,
-                //TextFunc = GetName,// this.GetNameplateText,
                 TextFunc = () => parent.Name,
-                TextColorFunc = parent.GetNameplateColor,// this.GetQualityColor,
+                TextColorFunc = parent.GetNameplateColor,
                 MouseThrough = true,
                 TextBackgroundFunc = () => parent.HasFocus() ? this.Quality.Color * .5f : Color.Black * .5f
-                //TextBackgroundFunc = () => Color.Red,//parent.HasFocus() ? this.Quality.Color * .5f : Color.Black * .5f
-                //BackgroundColorFunc = () => parent.HasFocus() ? this.Quality.Color * .5f : Color.Black * .5f
 
             });
-            //plate.AddControlsBottomLeft(new Label("test") { TextBackgroundFunc = () => Color.Lime });
-            //plate.BackgroundColorFunc = () => parent.HasFocus() ? Color.Black * .5f : this.Quality.Color * .5f;
 
-        }
-
-    }
-
-    class WindowSetStackSize : Window
-    {
-        TextBox TextBox;
-        Action<int> Callback;
-        public WindowSetStackSize(int initial, Action<int> callback)
-        {
-            this.AutoSize = true;
-            this.Title = "Set stack size";
-            this.TextBox = new TextBox(100) { Text = initial.ToString() };
-            var btnok = new Button("Done") { Location = this.TextBox.BottomLeft, LeftClickAction = Done };
-            this.Callback = callback;
-            this.Client.AddControls(this.TextBox, btnok);
-            //this.Client.AlignTopToBottom();
-        }
-        public WindowSetStackSize(Action<int> callback)
-            : this(1, callback)
-        {
-            //this.AutoSize = true;
-            //this.Title = "Set stack size";
-            //this.TextBox = new TextBox(100);
-            //var btnok = new Button("Done") { Location = this.TextBox.BottomLeft, LeftClickAction = Done };
-            //this.Callback = callback;
-            //this.Client.AddControls(this.TextBox, btnok);
-        }
-
-        private void Done()
-        {
-            var txt = this.TextBox.Text;
-            int amount;
-            if (!Int32.TryParse(txt, out amount))
-                return;
-            this.Callback(amount);
-            this.Hide();
         }
     }
 }

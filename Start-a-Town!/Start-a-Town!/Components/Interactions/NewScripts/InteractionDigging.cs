@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.UI;
 using Start_a_Town_.Particles;
 using Start_a_Town_.Components;

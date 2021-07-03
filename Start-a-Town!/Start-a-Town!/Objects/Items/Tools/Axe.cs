@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
@@ -53,10 +52,7 @@ namespace Start_a_Town_
                 {
                     return Create(materials["Handle"], materials["Head"]);
                 }
-                public GameObject Create(Dictionary<string, GameObject> materials)
-                {
-                    return Create(materials[this.HandleReagent].GetComponent<ItemCraftingComponent>().Material, materials[this.HeadReagent].GetComponent<ItemCraftingComponent>().Material);
-                }
+                
                 public GameObject Create(List<GameObjectSlot> materials)
                 {
                     //return Create(

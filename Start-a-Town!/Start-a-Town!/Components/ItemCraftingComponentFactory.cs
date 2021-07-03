@@ -8,20 +8,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components
 {
-    class ItemCraftingComponentFactory
-    {
-        static public GameObject Create(GameObject.Types objID, string name = "<undefined>", string description = "", Quality quality = null, int size = 1, int spriteID = 0, int iconID = 0)
-        {
-            GameObject obj = GameObjectDb.MaterialTemplate;
-            obj["Info"] = new DefComponent(objID, ObjectType.Material, name, description, quality);
-            //obj["Sprite"] = new SpriteComponent(Map.ItemSheet, new Rectangle[][] { new Rectangle[] { Map.Icons[spriteID] } }, new Vector2(16, 24));//16));
-            obj["Sprite"] = new SpriteComponent(Sprite.Default);//16));
-
-            obj.AddComponent<GuiComponent>().Initialize(iconID, 1);
-            obj["Physics"] = new PhysicsComponent(size: size);
-            return obj;
-        }
-    }
+    
     class ItemCraftingComponent : EntityComponent
     {
         public override string ComponentName

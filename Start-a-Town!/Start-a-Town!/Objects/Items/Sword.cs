@@ -47,11 +47,7 @@ namespace Start_a_Town_
                     //return Pickaxe(this.HandleGetter(), this.HeadGetter());
                     return Create(materials["Hilt"], materials["Blade"]);
                 }
-                public Entity Create(Dictionary<string, GameObject> materials)
-                {
-                    //return Pickaxe(this.HandleGetter(), this.HeadGetter());
-                    return Create(materials[this.HandleReagent].GetComponent<ItemCraftingComponent>().Material, materials[this.HeadReagent].GetComponent<ItemCraftingComponent>().Material);
-                }
+                
                 public Entity Create(List<GameObjectSlot> materials)
                 {
                     //return Pickaxe(this.HandleGetter(), this.HeadGetter());
@@ -65,8 +61,7 @@ namespace Start_a_Town_
                 {
                     var obj = new Entity();
                     obj["Info"] = new DefComponent(ID, objType: ObjectType.Weapon, name: "Sword", description: "A basic sword").Initialize(ItemSubType.Sword);
-                    obj.AddComponent<GuiComponent>().Initialize(iconID: 22);
-                    //obj.AddComponent<SpriteComponent>().Initialize(new Sprite("sword", 0.5f) { Origin = new Vector2(16, 30), Joint = new Vector2(25, 6) }); //Origin = new Vector2(16, 24)
+                    
                     var hiltSprite = new Sprite(SpriteHilt);// { Tint = hilt.Color };
                     var bladeSprite = new Sprite(SpriteBlade);// { Tint = blade.Color };
                     //obj.Body.Sprite.Overlays.Add("Hilt", hiltSprite);
@@ -88,8 +83,7 @@ namespace Start_a_Town_
                     obj.AddComponent(new SpriteComponent(handle, new Sprite("sword", 0.5f) { OriginGround = new Vector2(16, 32) }));//Origin = new Vector2(16, 28) }));
 
 
-                    //obj.AddComponent<EquipComponent>().Initialize(GearType.Mainhand); //Offhand);// 
-                    EquipComponent.Add(obj, Tuple.Create(Stat.Types.Knockback, 1f));
+                    //EquipComponent.Add(obj, Tuple.Create(Stat.Types.Knockback, 1f));
                     obj["Physics"] = new PhysicsComponent(weight: 1, size: 0);
                     //obj.AddComponent<InteractiveComponent>().Initialize(Script.Types.Equipping, Script.Types.PickUp);
                     obj["Weapon"] = new WeaponComponent(1, Tuple.Create(Stat.Types.Slash, 10f));

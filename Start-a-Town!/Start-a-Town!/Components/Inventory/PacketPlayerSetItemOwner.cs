@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -31,25 +28,9 @@ namespace Start_a_Town_
             var itemID = r.ReadInt32();
             var ownerID = r.ReadInt32();
             var item = net.GetNetworkObject(itemID);
-            var previousOwner = item.GetOwner();// item.GetComponent<OwnershipComponent>().Owner;
-            var owner = ownerID == -1 ? null : net.GetNetworkObject(ownerID);
-            //item.GetComponent<OwnershipComponent>().Owner = owner;
-            //if(owner!=null)
-            //    NpcComponent.AddPossesion(owner, item);
-            //if (previousOwner != null)
-            //    if (owner != previousOwner)
-            //        NpcComponent.RemovePossesion(previousOwner, item);
-
-
-            // i moved this in the npccomponent add/removepossesion method// 
-            item.SetOwner(ownerID);// item.GetComponent<OwnershipComponent>().Owner = ownerID;
             
-            //if (owner != null)
-            //    NpcComponent.AddPossesion(owner, item);
-            //if(previousOwner != -1)
-            //if (ownerID != previousOwner)
-            //    NpcComponent.RemovePossesion(net.GetNetworkObject(previousOwner), item);
-            //net.EventOccured(Message.Types.ItemOwnerChanged, itemID);
+            item.SetOwner(ownerID);
+         
             if (net is Server)
                 Send(net, itemID, ownerID);
         }

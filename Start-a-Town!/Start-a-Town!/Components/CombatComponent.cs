@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Start_a_Town_.Components
+﻿namespace Start_a_Town_.Components
 {
     class CombatComponent : EntityComponent
     {
@@ -37,7 +32,6 @@ namespace Start_a_Town_.Components
             this.Stats = new StatCollection();
             BodyComponent.PollStats(parent, this.Stats);
             InventoryComponent.PollStats(parent, this.Stats);
-            SkillsComponent.PollStats(parent, this.Stats);
         }
 
         public override object Clone()

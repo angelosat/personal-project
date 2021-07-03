@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_.Components.Crafting
 {
@@ -15,7 +11,7 @@ namespace Start_a_Town_.Components.Crafting
             product.Name = product.Name.Insert(0, "Masterwork ");
             var eq = product.GetComponent<EquipComponent>();
             eq.Durability.Value = eq.Durability.Max += 10;
-            Tokens.TokensComponent.AddToken(product, new TokenMadeWithTools(10));
+            //Tokens.TokensComponent.AddToken(product, new TokenMadeWithTools(10));
         }
     }
 }

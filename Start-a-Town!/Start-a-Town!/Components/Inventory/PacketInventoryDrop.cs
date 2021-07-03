@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -13,6 +7,7 @@ namespace Start_a_Town_
     {
         static public void Init()
         {
+            // TODO
             Server.RegisterPacketHandler(PacketType.PacketInventoryDrop, Receive);
             Client.RegisterPacketHandler(PacketType.PacketInventoryDrop, Receive);
         }

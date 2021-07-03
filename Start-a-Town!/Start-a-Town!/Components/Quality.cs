@@ -7,8 +7,6 @@ namespace Start_a_Town_
     {
         public readonly string Label;
         static Random Rand = new();
-        //public enum Types { Trash, Common, Uncommon, Rare, Epic, Legendary, Unique, Cheating }
-        //public Types Type;
 
         public readonly Color Color;
         public readonly float Multiplier;
@@ -25,7 +23,6 @@ namespace Start_a_Town_
         float MasterySensitivity;
         public int GetWeightFromMastery(float masteryRatio)
         {
-            //return (int)(ProbabilityTableWeight * masteryRatio * WeightMultiplierFromMastery);
             var masteryExcess = masteryRatio - 1;
             var mastery = (int)(masteryExcess * MasterySensitivity);
             return ProbabilityTableWeight + mastery;
@@ -51,14 +48,5 @@ namespace Start_a_Town_
         static public Quality GetRandom(Random rand, float mastery) => All.SelectRandomWeighted(rand, q => q.GetWeightFromMastery(mastery));
         static public Quality GetRandom(Random rand) => All.SelectRandomWeighted(rand, q => q.ProbabilityTableWeight);
         static public Quality GetRandom() => All.SelectRandomWeighted(Rand, q => q.ProbabilityTableWeight);
-
-        //static public readonly (Quality, int)[] WeightTable = new[] {
-        //            (Trash, 5),
-        //            (Common, 50),
-        //            (Uncommon, 30),
-        //            (Rare, 10),
-        //            (Epic, 4),
-        //            (Legendary, 1)
-        //        };
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Components.Needs
@@ -17,21 +12,14 @@ namespace Start_a_Town_.Components.Needs
             server.OutgoingStream.Write(needDef.Name);
             server.OutgoingStream.Write(value);
 
-            //server.Enqueue(PacketType.NeedModifyValue, Network.Serialize(w =>
-            //{
-            //    w.Write(agentID);
-            //    w.Write(needID);
-            //    w.Write(value);
-            //}));
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)// byte[] payload)
+        static public void Receive(IObjectProvider net, BinaryReader r)
         {
-                var entity = net.GetNetworkObject(r.ReadInt32());
-            //var needID = (Need.Types)r.ReadInt32();
+            var entity = net.GetNetworkObject(r.ReadInt32());
             var needName = r.ReadString();
-                var needVal = r.ReadSingle();
-                Components.NeedsComponent.ModifyNeed(entity, needName, needVal);
-                net.Map.EventOccured(Components.Message.Types.NeedUpdated, entity, needName, needVal);
+            var needVal = r.ReadSingle();
+            Components.NeedsComponent.ModifyNeed(entity, needName, needVal);
+            net.Map.EventOccured(Components.Message.Types.NeedUpdated, entity, needName, needVal);
         }
     }
 }

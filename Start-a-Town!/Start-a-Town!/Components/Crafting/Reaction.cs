@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.UI;
-using Start_a_Town_.Tokens;
 
 namespace Start_a_Town_.Components.Crafting
 {
@@ -175,17 +173,6 @@ namespace Start_a_Town_.Components.Crafting
             //    {WoodenDeck.ID, WoodenDeck},
             //    {Cobblestone.ID, Cobblestone},
             //};
-        }
-
-        public GameObject ToObject()
-        {
-            GameObject obj = new GameObject();
-            obj.AddComponent<DefComponent>().Initialize(ReactionObjectIDRange + this.ID, ObjectType.Blueprint, "Reaction: " + this.Name, "A blueprint containing a crafting recipe");
-            obj.AddComponent<PhysicsComponent>();
-            obj.AddComponent<ReactionComponent>().Initialize(this);
-            //obj.AddComponent<GuiComponent>().Initialize(24, 64);
-            obj.AddComponent<SpriteComponent>().Initialize(new Sprite("writtenpage", new Vector2(16, 24), new Vector2(16, 24)));//Map.ItemSheet, new Rectangle[][] { new Rectangle[] { Map.Icons[24] } }, new Vector2(16, 16)));
-            return obj;
         }
 
         public class ToolRequirement

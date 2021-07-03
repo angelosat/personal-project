@@ -64,12 +64,5 @@ namespace Start_a_Town_.Components
             }
         }
 
-        static public List<Recipe> GetRecipes(GameObject material)
-        {
-            List<Recipe> found = new List<Recipe>();
-            found.AddRange(FurnaceComponent.Recipes.FindAll(r => r.Materials.Count(m => m.Key.IDType == material.IDType) > 0));
-            found.AddRange(SmelteryComponent.Recipes.FindAll(r => r.Materials.Count(m => m.Key.IDType == material.IDType) > 0));
-            return found;
-        }
     }
 }

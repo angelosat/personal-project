@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.Components;
-using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
 {
@@ -57,10 +53,7 @@ namespace Start_a_Town_
                 }
                 public GameObject Create(Dictionary<string, GameObject> materials)
                 {
-                    //return Pickaxe(this.HandleGetter(), this.HeadGetter());
                     return Create(materials[this.HandleReagent].Material, materials[this.HeadReagent].Material);
-
-                    return Create(materials[this.HandleReagent].GetComponent<ItemCraftingComponent>().Material, materials[this.HeadReagent].GetComponent<ItemCraftingComponent>().Material);
                 }
                 public GameObject Create(List<GameObjectSlot> materials)
                 {
@@ -105,8 +98,6 @@ namespace Start_a_Town_
                     obj.AddComponent(new SpriteComponent(handle, new Sprite("pickaxe") { OriginGround = new Vector2(16, 32) }));//24)}));
 
 
-                    obj.AddComponent<GuiComponent>().Initialize(1, 1);
-                    //obj.AddComponent<UseComponentOld>().Initialize(Script.Types.Mining);
                     obj.AddComponent<PhysicsComponent>();
                     obj.AddComponent<EquipComponent>().Initialize(GearType.Mainhand);
                     obj.AddComponent<ToolAbilityComponent>().Initialize(ToolAbilityDef.Mining);

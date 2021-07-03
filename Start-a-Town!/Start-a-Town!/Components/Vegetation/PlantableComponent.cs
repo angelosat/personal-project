@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
-using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Components.Vegetation
@@ -45,7 +41,6 @@ namespace Start_a_Town_.Components.Vegetation
             var itemSlot = PersonalInventoryComponent.GetHauling(a);
             var item = itemSlot.Object;
             BlockFarmland.Plant(a.Map, t.Global, item);
-            //itemSlot.Consume(1);
             a.Net.EventOccured(Message.Types.ItemLost, a, item, 1);
         }
 
@@ -77,16 +72,12 @@ namespace Start_a_Town_.Components.Vegetation
             }
             public override void Perform(GameObject a, TargetArgs t)
             {
-                //this.PlantAction(a, t);
                 PlantableComponent.GetAction(PersonalInventoryComponent.GetHauling(a).Object)(a, t);
             }
             public override object Clone()
             {
                 return new InteractionPlantNew(this.PlantAction);
             }
-
         }
-
-       
     }
 }

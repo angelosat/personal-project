@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -12,6 +7,7 @@ namespace Start_a_Town_
     {
         static public void Init()
         {
+            // TODO
             Server.RegisterPacketHandler(PacketType.PacketEditAppearance, Receive);
             Client.RegisterPacketHandler(PacketType.PacketEditAppearance, Receive);
         }

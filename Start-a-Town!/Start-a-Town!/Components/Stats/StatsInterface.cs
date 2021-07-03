@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 
@@ -20,7 +16,7 @@ namespace Start_a_Town_
         }
         public StatsInterface(GameObject actor)
         {
-            throw new Exception();
+            throw new NotImplementedException();
             var comp = actor.GetComponent<StatsComponentNew>();
             var stats = comp.Stats;
             foreach (var stat in stats)
@@ -29,15 +25,9 @@ namespace Start_a_Town_
             }
 
             var attsComp = actor.GetComponent<AttributesComponent>();
-            //this.PanelAttributes = new PanelLabeledNew("Attributes") { AutoSize = true };
-            //attsComp.GetInterface(actor, this.PanelAttributes.Client);
             this.PanelAttributes = attsComp.GetGUI().ToPanelLabeled("Attributes");
             this.AddControlsTopRight(this.PanelAttributes);
-
-            //this.PanelStats = new PanelLabeledNew("Stats") { AutoSize = true };
-            //actor.GetComponent<StatsComponentNew>().GetInterface(actor, this.PanelStats.Client);
             this.PanelStats = actor.GetComponent<StatsComponentNew>().GetGUI().ToPanelLabeled("Stats");
-
             this.AddControlsBottomLeft(this.PanelStats);
         }
         public void Refresh(GameObject actor)

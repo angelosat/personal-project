@@ -428,44 +428,22 @@ namespace Start_a_Town_
 
         static public GameObjectSlot Create(int id)
         {
-            //GameObjectSlot slot = new GameObjectSlot(GameObject.Create(id));
-            //slot.StackSize = 0;
-            //return slot;
             return new GameObjectSlot(GameObject.Create(id));
         }
         static public GameObjectSlot Create(GameObject.Types id, int stacksize = 1)
         {
-            //GameObjectSlot slot = new GameObjectSlot(GameObject.Create(id));
-            //slot.StackSize = 0;
-            //return slot;
             return new GameObjectSlot(GameObject.Create(id), stacksize);
         }
-        public int FreeSpace
-        {
-            get
-            {
-                GuiComponent gui = (GuiComponent)Object["Gui"];
-                return gui.GetProperty<int>("StackMax") - StackSize;
-            }
-        }
+       
 
         public void GetTooltipInfo(Tooltip tooltip)
         {
             if (Object != null)
             {
-                ////tooltip.Controls.Add(new Label("StackSize: " + StackSize));
-                ////   tooltip.Controls.Add(new Label(ToString()));
-                //Object.GetTooltipInfo(tooltip);
-                //Label name = (tooltip.Controls.First() as Label);
-                //name.Text = ToString();
-                //tooltip.Controls.Remove(name);
-                //tooltip.Controls.Insert(0, name);
                 this.Object.GetTooltipInfo(tooltip);
             }
             if (this.ContainerNew != null)
                 tooltip.Controls.Add(new Label(tooltip.Controls.BottomLeft, this.ContainerNew.ToString()));
-            //tooltip.Controls.Add(new Label(tooltip.Controls.BottomLeft, "[Container ID: " + this.Container.ID.ToString() + "]"));
-            //tooltip.Controls.Add(new Label(tooltip.Controls.BottomLeft, "[Slot ID: " + this.ID.ToString() + "]"));
             tooltip.Controls.Add(new Label(tooltip.Controls.BottomLeft, this.ToString()));
         }
 

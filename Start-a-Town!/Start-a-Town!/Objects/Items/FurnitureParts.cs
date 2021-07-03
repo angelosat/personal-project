@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Tokens;
 
 namespace Start_a_Town_.Components.Items
 {
@@ -44,7 +43,6 @@ namespace Start_a_Town_.Components.Items
             Entity obj = new Entity();
             obj["Info"] = new DefComponent(ID, ObjectType.Material, "Furniture Parts", "Used to construct furniture.", Quality.Rare);
             obj.AddComponent<SpriteComponent>().Initialize(new Sprite("log", new Vector2(16, 24)));
-            obj.AddComponent<GuiComponent>().Initialize(10, 8);
             obj["Physics"] = new PhysicsComponent(size: 1);
             //obj.AddComponent<MaterialsComponent>().Initialize(new PartMaterialPair("Body", Material.LightWood));
             obj.AddComponent<ReagentComponent>().Initialize(Reaction.Product.Types.Furniture);

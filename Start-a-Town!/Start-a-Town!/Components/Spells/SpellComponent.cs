@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Start_a_Town_.Components.Spells
+﻿namespace Start_a_Town_.Components.Spells
 {
     class SpellComponent : EntityComponent
     {
@@ -11,7 +6,7 @@ namespace Start_a_Town_.Components.Spells
         {
             get { return "Spell"; }
         }
-        public Spell Spell { get { return (Spell)this["Spell"]; } set { this["Spell"] = value; } }
+        public Spell Spell;
 
         public override object Clone()
         {

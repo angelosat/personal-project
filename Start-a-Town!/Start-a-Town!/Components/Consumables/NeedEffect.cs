@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Needs;
-
-namespace Start_a_Town_.Components
+﻿namespace Start_a_Town_.Components
 {
     public class NeedEffect : ConsumableEffect
     {
@@ -20,15 +13,10 @@ namespace Start_a_Town_.Components
 
         public override void Apply(GameObject actor)
         {
-            var need = actor.GetNeed(this.Type);// NeedsComponent.GetNeed(actor, this.Type);
+            var need = actor.GetNeed(this.Type);
             if (need == null)
                 return;
             need.Value += this.Value;
         }
-
-        //public override string ToString()
-        //{
-        //    return Need.Factory.Registry[this.Type].Name + " " + this.Value.ToString("+#;-#;0");
-        //}
     }
 }

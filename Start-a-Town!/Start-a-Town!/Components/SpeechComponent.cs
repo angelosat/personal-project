@@ -121,7 +121,7 @@ namespace Start_a_Town_.Components
         //    //this.Bubble = UI.SpeechBubble.Create(Parent, text);
         //}
     }
-
+    [Obsolete]
     class SpeechComponent : EntityComponent
     {
         public override string ComponentName

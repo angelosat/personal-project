@@ -5,10 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Graphics;
-using Start_a_Town_.Tokens;
 
 namespace Start_a_Town_
 {

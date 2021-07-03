@@ -419,18 +419,10 @@ new Vector2(UIManager.Width, 0),
                     SpeechBubbleOld.Create(target, "This doesn't fit in my inventory");
                     break;
 
-                case Message.Types.SkillAward:
-                    target = e.Parameters[0] as GameObject;
-                    var skill = e.Parameters[1] as SkillOld;
-                    var value = (int)e.Parameters[2];
-                    //FloatingText.Create(Player.Actor, value.ToString("+#;-#;0") + " " + skill.Name);
-                    new FloatingText(target, value.ToString("+#;-#;0") + " " + skill.Name) { Font = UIManager.FontBold, TextColorFunc = () => Color.Lime }.Show();
-                    break;
-
                 case Message.Types.Memorization:
                     target = e.Parameters[0] as GameObject;
                     var bp = e.Parameters[1] as GameObject;
-                    value = (int)e.Parameters[2];
+                    int value = (int)e.Parameters[2];
                     new FloatingText(target, value.ToString("+#;-#;0") + " " + bp.Name) { Font = UIManager.FontBold, TextColorFunc = () => Color.Gold }.Show();
                     break;
 

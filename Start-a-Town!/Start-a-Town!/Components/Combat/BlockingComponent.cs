@@ -18,7 +18,7 @@ namespace Start_a_Town_.Components
         {
             return new BlockingComponent();
         }
-        Animation Animation;// = AnimationCollection.Block;
+        Animation Animation;
         public bool Active;
         public void Start(GameObject parent)
         {
@@ -27,10 +27,9 @@ namespace Start_a_Town_.Components
             this.Active = true;
             var stat = StatsComponentNew.GetStat(parent, Stat.Types.DmgReduction);
             stat.Value += .5f;
+            throw new NotImplementedException();
             this.Animation = Animation.Block;
-            //parent.Body.AddAnimation(this.Animation);
             parent.AddAnimation(this.Animation);
-
             parent.GetComponent<MobileComponent>().ToggleBlock(true); // TODO: create a new movement state and set it in the mobile component?
         }
         public void Stop(GameObject parent)
@@ -38,7 +37,6 @@ namespace Start_a_Town_.Components
             this.Active = false;
             var stat = StatsComponentNew.GetStat(parent, Stat.Types.DmgReduction);
             stat.Value -= .5f;
-            //parent.Body.FadeOutAnimation(this.Animation);
             this.Animation.FadeOut();
 
             parent.GetComponent<MobileComponent>().ToggleBlock(false);

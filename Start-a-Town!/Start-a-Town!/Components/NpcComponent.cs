@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
@@ -9,7 +8,7 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    class NpcComponent : EntityComponent// DefComponent
+    class NpcComponent : EntityComponent
     {
         internal static void Init()
         {
@@ -17,30 +16,13 @@ namespace Start_a_Town_
             Client.RegisterPacketHandler(PacketType.NpcCitizenship, ReceiveCitizenshipToggle);
         }
 
-       
-
-        //static public event EventHandler<EventArgs> NpcDirectoryChanged;
-        //static void OnNpcDirectoryChanged()
-        //{
-        //    if (NpcDirectoryChanged != null)
-        //        NpcDirectoryChanged(null, EventArgs.Empty);
-        //}
-        //public string FullName => this.FirstName + " " + this.LastName;
         public string FullName => this.FirstName + (this.LastName.IsNullEmptyOrWhiteSpace() ? "" : string.Format(" {0}", this.LastName));
 
         static public List<GameObject> NpcDirectory = new List<GameObject>();
         public override void OnObjectCreated(GameObject parent)
         {
-            //parent.Name = GetRandomFullName();
             this.GenerateFullName();
-
-            // HACK
-            //var splitname = parent.GetInfo().CustomName.Split(' ');
-            //this.FirstName = splitname[0];
-            //if(splitname.Length>1)
-            //this.LastName = splitname[1];
         }
-        
 
         private void GenerateFullName()
         {
@@ -79,19 +61,10 @@ namespace Start_a_Town_
             }
         }
 
-        //public override void Initialize(GameObject parent)
-        //{
-        //    parent.Name = GetRandomName();
-        //    NpcDirectory.Add(parent);
-        //    OnNpcDirectoryChanged();
-        //}
-        //public NpcComponent() { this.CustomName = true; }
         public NpcComponent()
         {
 
         }
-        //public NpcComponent(GameObject.Types id, string objType = "<undefined>", string name = "<undefined>", string description = "<undefined>", Quality quality = null) : base(id, objType, name, description, quality) { this.CustomName = true; }
-        //public NpcComponent(int id, string objType = "<undefined>", string name = "<undefined>", string description = "<undefined>", Quality quality = null) : base(id, objType, name, description, quality) { this.CustomName = true; }
         #region possesions
         HashSet<int> Possesions = new();
 
@@ -110,8 +83,6 @@ namespace Start_a_Town_
         static public void RemovePossesion(GameObject actor, GameObject item)
         {
             var poss = GetPossesions(actor);
-            //if (!poss.Contains(item.InstanceID))
-            //    throw new Exception();
             poss.Remove(item.RefID);
             item.SetOwner(null);
         }
@@ -147,11 +118,11 @@ namespace Start_a_Town_
             for (int i = 0; i < r.Next(2) + 2; i++)
                 name += NameParts[r.Next(NameParts.Count)];
 
-            return char.ToUpper(name[0]) + name.Substring(1);// + " " + char.ToUpper(last[0]) + last.Substring(1);
+            return char.ToUpper(name[0]) + name.Substring(1);
         }
         public override object Clone()
         {
-            NpcComponent phys = new NpcComponent();// ID, Type, Name, Description, Quality);
+            NpcComponent phys = new NpcComponent();
             
             return phys;
         }
@@ -181,21 +152,15 @@ namespace Start_a_Town_
         internal override void Load(SaveTag tag)
         {
             base.Load(tag);
-            //tag.TryGetTag("Possesions", t => this.Possesions = new List<int>().Load(t));
             tag.TryGetTag("Possesions", t => this.Possesions = new HashSet<int>(new List<int>().Load(t)));
             tag.TryGetTagValue<string>("FirstName", v => this.FirstName = v);
             tag.TryGetTagValue<string>("LastName", v => this.LastName = v);
         }
-        //public override void OnSpawn(IObjectProvider net, GameObject parent)
-        //{
-        //    this.Discovered = true;
-        //}
-        public override void OnDespawn(//IObjectProvider net,
+       
+        public override void OnDespawn(
                     GameObject parent)
         {
             NpcDirectory.Remove(parent);
-
-            //OnNpcDirectoryChanged();
         }
 
         internal override void GetQuickButtons(UI.UISelectedInfo info, GameObject parent)
@@ -220,8 +185,6 @@ namespace Start_a_Town_
         }
         static void Control(List<TargetArgs> actors)
         {
-            //var actor = actors.First();
-            //PacketControlNpc.Send(Net.Client.Instance, Net.Client.Instance.GetPlayer().ID, actor.Object.InstanceID);
             var actor = actors.First().Object as Actor;
             if (actor.IsCitizen)
                 PacketControlNpc.Send(Net.Client.Instance, Net.Client.Instance.GetPlayer().ID, actor.RefID);
@@ -255,8 +218,6 @@ namespace Start_a_Town_
                 case Message.Types.PlayerControlNpc:
                     if (parent.Net is Net.Client)
                     {
-                        //if (e.Parameters[0] as Net.PlayerData == Net.Client.Instance.GetPlayer())
-                        //{
                         if (UISelectedInfo.GetSelectedEntities().Contains(parent))
                         {
                             if (e.Parameters[1] as GameObject == parent)
@@ -264,7 +225,6 @@ namespace Start_a_Town_
                             else if (e.Parameters[2] as GameObject == parent)
                                 UISelectedInfo.AddButton(IconControl);
                         }
-                        //}
                     }
                     break;
 
@@ -286,6 +246,5 @@ namespace Start_a_Town_
                     break;
             }
         }
-        
     }
 }

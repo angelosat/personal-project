@@ -7,7 +7,7 @@ namespace Start_a_Town_
         void Apply(IMap map, Vector3 global);
         void Apply(ref byte blockdata);
         void Apply(Block.Data data);
-        void FromCraftingReagent(GameObject material);
+        //void FromCraftingReagent(GameObject material);
         Color GetTint(byte p);
         string GetName(byte p);
     }

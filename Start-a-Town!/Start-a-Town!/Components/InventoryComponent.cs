@@ -1,27 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.Components
 {
+    [Obsolete]
     class InventoryComponent : EntityComponent, IObjectSpace
     {
         public GameObjectSlot Holding { get { return (GameObjectSlot)this["Holding"]; } set { this["Holding"] = value; } }
-       // Dictionary<string, ItemContainer> Containers = new Dictionary<string,ItemContainer>();// { get { return (Dictionary<string, ItemContainer>)this["Containers"]; } set { this["Containers"] = value; } }
         GameObject Parent { get { return (GameObject)this["Parent"]; } set { this["Parent"] = value; } }
         public List<ItemContainer> Containers = new();
-
-        public override void MakeChildOf(GameObject parent)
-        {
-            parent.AddComponent<ContainerComponent>();
-            this.Parent = parent;
-            if (Containers.Count > 0)
-                parent.GetComponent<ContainerComponent>().Add(Containers.First());
-        }
 
         public override string ComponentName
         {
@@ -160,49 +150,48 @@ namespace Start_a_Town_.Components
                     //parent.GetComponent<BodyComponent>().BodyParts[slotType].Wearing.Swap(eqSlot);
                     return true;
 
-                case Message.Types.StoreCarried:
-                    if (!this.Holding.HasValue)
-                        return true;
-                    GameObject o1;
-                    if (!this.Holding.Take(out o1))
-                        return true;
-                    ObjectSize oSize = (ObjectSize)o1["Physics"]["Size"];
-                    e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Dropped));
-                    if (oSize == ObjectSize.Inventoryable)
-                    {
-                        e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Receive, new object[] { o1 }));
-                        return true;
-                    }
-                    e.Network.Spawn(o1.SetGlobal(parent.Global + new Vector3(0, 0, (float)parent["Physics"]["Height"])));
-                    return true;
+                //case Message.Types.StoreCarried:
+                //    if (!this.Holding.HasValue)
+                //        return true;
+                //    GameObject o1;
+                //    if (!this.Holding.Take(out o1))
+                //        return true;
+                //    ObjectSize oSize = (ObjectSize)o1["Physics"]["Size"];
+                //    e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Dropped));
+                //    if (oSize == ObjectSize.Inventoryable)
+                //    {
+                //        e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Receive, new object[] { o1 }));
+                //        return true;
+                //    }
+                //    e.Network.Spawn(o1.SetGlobal(parent.Global + new Vector3(0, 0, (float)parent["Physics"]["Height"])));
+                //    return true;
 
-                    // make this a script?
-                case Message.Types.Unequip:
-                    e.Translate(r => {
-                        eqSlot = parent.GetComponent<BodyComponent>().BodyParts[r.ReadString()].Wearing;
-                        eq = eqSlot.Object;
-                        eqSlot.Clear();
-                        e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Receive, new object[] { eq }));
-                    });
-                    return true;
+                //case Message.Types.Unequip:
+                //    e.Translate(r => {
+                //        eqSlot = parent.GetComponent<BodyComponent>().BodyParts[r.ReadString()].Wearing;
+                //        eq = eqSlot.Object;
+                //        eqSlot.Clear();
+                //        e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Receive, new object[] { eq }));
+                //    });
+                //    return true;
                 
-                case Message.Types.Receive:
-                    GameObject obj = e.Parameters.Translate<SenderEventArgs>(e.Network).Sender;
+                //case Message.Types.Receive:
+                //    GameObject obj = e.Parameters.Translate<SenderEventArgs>(e.Network).Sender;
 
                     
 
-                    // TODO: this is a WORKAROUND
-                    GameObjectSlot existingSlot;
-                    // FAILSAFE in case player is picking items too fast resulting in picking the same item before the server processes the input
-                    if (HasObject(parent, o => o == obj, out existingSlot))
-                    {
-                        //parent.PostMessage(e.Network, Message.Types.Hold, w => w.Write(obj.NetworkID));
-                        return true;
-                    }
-                    GiveObject(e.Network, parent, obj.ToSlotLink());
+                //    // TODO: this is a WORKAROUND
+                //    GameObjectSlot existingSlot;
+                //    // FAILSAFE in case player is picking items too fast resulting in picking the same item before the server processes the input
+                //    if (HasObject(parent, o => o == obj, out existingSlot))
+                //    {
+                //        //parent.PostMessage(e.Network, Message.Types.Hold, w => w.Write(obj.NetworkID));
+                //        return true;
+                //    }
+                //    GiveObject(e.Network, parent, obj.ToSlotLink());
 
-                    //GiveObject(parent, objSlot);
-                    return true;
+                //    //GiveObject(parent, objSlot);
+                //    return true;
 
                 case Message.Types.ArrangeInventory:
                     GameObjectSlot source = e.Parameters[0] as GameObjectSlot;
@@ -244,19 +233,14 @@ namespace Start_a_Town_.Components
                     target.StackSize = amount;
 
                     return true;
-                case Message.Types.ConsumeItem:
-
-                    return true;
-               // case Message.Types.PickUp:
-
-               
+                
                 case Message.Types.Hold:
                     //objSlot = e.Parameters[0] as GameObjectSlot;
                     //Hold(parent, objSlot);
 
                     // temp workaround to save on client
                   //  e.Network.LogStateChange(parent.NetworkID);
-                    obj = e.Parameters.Translate<SenderEventArgs>(e.Network).Sender;//e.TargetArgs.Object;// e.Data.Translate<SenderEventArgs>(e.Network).Sender;
+                    var obj = e.Parameters.Translate<SenderEventArgs>(e.Network).Sender;//e.TargetArgs.Object;// e.Data.Translate<SenderEventArgs>(e.Network).Sender;
                     GameObjectSlot objSlot = obj.IsSpawned ? obj.ToSlotLink() : InventoryComponent.GetFirstOrDefault(parent, foo => foo == obj);
                     Hold(e.Network, parent, objSlot);
 
@@ -311,28 +295,8 @@ namespace Start_a_Town_.Components
 
         bool Hold(IObjectProvider net, GameObject parent, GameObjectSlot objSlot)
         {
-            if (objSlot == null)
-                return true;
-            if (!objSlot.HasValue)
-                return true;
-        //    GameObjectSlot.Swap(this.Holding, objSlot);
-
-            if (this.Holding.HasValue)
-                net.PostLocalEvent(parent, Message.Types.Receive, this.Holding.Object);
-                //net.Spawn(this.Holding.Object, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
-
-            this.Holding.Clear();
-            net.Despawn(objSlot.Object);
-            this.Holding.Swap(objSlot);
-
-            //if (this.Holding.Object.Exists)
-            //{
-            //    if (objSlot.HasValue)
-            //        net.Spawn(objSlot.Object.SetGlobal(this.Holding.Object.Global));
-            //    net.Despawn(this.Holding.Object);
-            //}
-          //  parent.GetComponent<ActorSpriteComponent>().UpdateHeldObject(this.Holding.Object);
-            return true;
+            throw new Exception();
+            
         }
         static public bool HasItems(GameObject actor, Dictionary<GameObject.Types, int> items)
         {
@@ -355,7 +319,6 @@ namespace Start_a_Town_.Components
             ItemContainer container = new ItemContainer(size);
 
             Containers.Add(container);
-            this.Parent.GetComponent<ContainerComponent>().Add(container);
 
             return container;
         }
@@ -463,26 +426,7 @@ namespace Start_a_Town_.Components
             return invComp.TryGetEmptySlots(emptySlots);
         }
 
-        /// <summary>
-        /// Returns true if objects with the same objectID are found.
-        /// </summary>
-        /// <param name="objID">The objectID to look for.</param>
-        /// <param name="slotsFound">A queue containing all the slots the objectID has been found in.</param>
-        /// <returns></returns>
-        public bool TryFind(GameObject.Types objID, out Queue<GameObjectSlot> slotsFound)
-        {
-            slotsFound = new Queue<GameObjectSlot>();
-            //GuiComponent gui;
-            foreach (var container in Containers)
-                foreach (GameObjectSlot slot in container)
-                    if (slot.Object != null)
-                        if (slot.Object.IDType == objID)
-                            //if (slot.Object.GetComponent<GuiComponent>("Gui").GetSpace() > 0)
-                            if (slot.FreeSpace> 0)
-                                slotsFound.Enqueue(slot);
-            return slotsFound.Count > 0;
-        }
-
+        
 
         /// <summary>
         /// Returns true if an object meeting the conditions is found
@@ -636,81 +580,12 @@ namespace Start_a_Town_.Components
                                 }
         }
 
-        /// <summary>
-        /// Tries to find the first interaction, within objects in the inventory, that has the potential to satisfy the supplied interaction condition.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="cond"></param>
-        /// <param name="objSlot"></param>
-        /// <param name="interaction"></param>
-        /// <returns></returns>
-        //public bool TryFind(GameObject parent, Condition cond, out GameObjectSlot objSlot, out InteractionOld interaction)
-        //{
-        //    objSlot = GameObjectSlot.Empty;
-        //    interaction = null;
-        //    foreach (var container in Containers)
-        //        foreach (GameObjectSlot slot in container)
-        //            if (slot.Object != null)
-        //            {
-        //                List<InteractionOld> interactions = new List<InteractionOld>();
-        //                slot.Object.Query(parent, interactions);
-        //                foreach (InteractionOld i in interactions)
-        //                    if (cond.Evaluate(i))
-        //                    {
-        //                        objSlot = slot;
-        //                        interaction = i;
-        //                        return true;
-        //                    }
-        //            }
-        //    return false;
-        //}
-
-        public bool TryGive(GameObject obj, int amount = 1)
-        {
-            //get slots that contain a same object and can fit more
-            Queue<GameObjectSlot> existingSlots;
-            GameObject.Types objID = obj.IDType;
-            TryFind(objID, out existingSlots);
-
-            //get empty slots
-            Queue<GameObjectSlot> emptySlots;
-            TryGetEmptySlots(out emptySlots);
-
-            GuiComponent existingGui, objGui = obj.GetComponent<GuiComponent>("Gui");
-            int capacity = (int)objGui["StackMax"];
-
-            Queue<GameObjectSlot> allSlots = existingSlots;
-            while (emptySlots.Count > 0)
-                allSlots.Enqueue(emptySlots.Dequeue());
-            if (allSlots.Count == 0)
-                return false;
-            while (allSlots.Count > 0 && amount > 0)
-            {
-                GameObjectSlot currentSlot = allSlots.Dequeue();
-                if (currentSlot.Object == null)
-                {
-                    currentSlot.Object = GameObject.Create(objID);
-                    currentSlot.StackSize = 1;
-                    amount -= 1;
-                }
-                existingGui = currentSlot.Object.GetComponent<GuiComponent>("Gui");
-                
-                while (currentSlot.StackSize < capacity && amount > 0)
-                {
-                    currentSlot.StackSize += 1;
-                    amount -= 1;
-                }
-            }
-            return true;
-        }
-
         static public void UseHeldObject(GameObject actor, TargetArgs target)
         {
             GameObjectSlot obj;
             if (!InventoryComponent.TryGetHeldObject(actor, out obj))
                 return;
             throw new NotImplementedException();
-            //obj.Object.PostMessage(Message.Types.Use, null, Player.Actor, target.Object, target.Face);
         }
 
         static public bool CheckWeight(GameObject actor, GameObject obj)
@@ -769,75 +644,6 @@ namespace Start_a_Town_.Components
                 net.Despawn(obj);
             return true;
         }
-        static public bool GiveObject(IObjectProvider net, GameObject receiver, GameObject obj, int amount = 1)
-        {
-            InventoryComponent inv;
-            if (!receiver.TryGetComponent<InventoryComponent>("Inventory", out inv))
-                return false;
-
-
-            if (CheckWeight(receiver, obj))
-                return true;
-
-            //get slots that contain a same object and can fit more
-            Queue<GameObjectSlot> existingSlots;
-            GameObject.Types objID = obj.IDType;
-            inv.TryFind(objID, out existingSlots);
-
-            //get empty slots
-            Queue<GameObjectSlot> emptySlots;
-            inv.TryGetEmptySlots(out emptySlots);
-
-            GuiComponent existingGui, objGui = obj.GetComponent<GuiComponent>("Gui");
-            int capacity = (int)objGui["StackMax"];
-            Queue<GameObjectSlot> allSlots = existingSlots;
-            while (emptySlots.Count > 0)
-                allSlots.Enqueue(emptySlots.Dequeue());
-
-            while (allSlots.Count > 0 && amount > 0)
-            {
-                GameObjectSlot currentSlot = allSlots.Dequeue();
-                if (currentSlot.Object == null)
-                {
-                    // DONT CREATE NEW OBJECT
-                    currentSlot.Object = obj;// GameObject.Create(objID);
-                    net.Despawn(obj);
-                    //obj.Remove();
-                    currentSlot.StackSize = 1;
-                    amount -= 1;
-                }
-                //existingGui = currentSlot.Object.GetComponent<GuiComponent>("Gui");
-
-                while (currentSlot.StackSize < capacity && amount > 0)
-                {
-                    currentSlot.StackSize += 1;
-                    amount -= 1;
-                }
-            }
-            //Map.RemoveObject(obj);
-            if (amount == 0)
-            {
-                net.Despawn(obj);
-                //obj.Remove();
-                return true;
-            }
-
-            if (inv.Holding.Object != null)
-                return true;
-
-            inv.Holding.Object = obj;
-            net.Despawn(obj);
-            //obj.Remove();
-            return true;
-        }
-
-        //static public GameObject TakeHolding(GameObject parent)
-        //{
-        //    GameObjectSlot holding = parent.GetComponent<InventoryComponent>().Holding;
-        //    GameObject obj = holding.Take();
-        //    parent.GetComponent<ActorSpriteComponent>().UpdateHeldObject(holding.Object);
-        //    return obj;
-        //}
 
         private static void Hold(IObjectProvider net, GameObject receiver, GameObject obj)
         {
@@ -914,131 +720,6 @@ namespace Start_a_Town_.Components
             //container[index].Swap(obj);
         }
 
-        public void Give(GameObject obj, int amount = 1)
-        {
-            //get slots that contain a same object and can fit more
-            Queue<GameObjectSlot> existingSlots;
-            GameObject.Types objID = obj.IDType;
-            TryFind(objID, out existingSlots);
-
-            //get empty slots
-            Queue<GameObjectSlot> emptySlots;
-            TryGetEmptySlots(out emptySlots);
-
-            GuiComponent objGui = obj.GetComponent<GuiComponent>("Gui");
-            int capacity = (int)objGui["StackMax"];
-            Queue<GameObjectSlot> allSlots = existingSlots;
-            while (emptySlots.Count > 0)
-                allSlots.Enqueue(emptySlots.Dequeue());
-
-            while (allSlots.Count > 0 && amount > 0)
-            {
-                GameObjectSlot currentSlot = allSlots.Dequeue();
-                if (currentSlot.Object == null)
-                {
-                    currentSlot.Object = GameObject.Create(objID);
-                    currentSlot.StackSize = 1;
-                    amount -= 1;
-                }
-                while (currentSlot.StackSize < capacity && amount > 0)
-                {
-                    currentSlot.StackSize += 1;
-                    amount -= 1;
-                }
-            }
-        }
-
-        public bool Contains(GameObject.Types objID, out int count, out List<GameObjectSlot> slots)
-        {
-            count = 0;
-            slots = new List<GameObjectSlot>();
-            foreach (var container in Containers)
-                foreach (GameObjectSlot slot in container)
-                    if (slot.Object != null)
-                        if (slot.Object.IDType == objID)
-                        {
-                            slots.Add(slot);
-                            count += slot.Object.GetComponent<GuiComponent>("Gui").GetProperty<int>("StackMax");
-                        }
-            return count > 0;
-        }
-
-        public bool Remove(GameObject.Types objID, int count)
-        {
-            GuiComponent gui;
-            int myCount = 0;
-            List<GameObjectSlot> slotsToTakeFrom = new List<GameObjectSlot>();
-            foreach (var container in Containers)
-                foreach (GameObjectSlot slot in container)
-                    if (slot.Object != null)
-                        if ((slot.Object as GameObject).IDType == objID)
-                            if (slot.Object.TryGetComponent<GuiComponent>("Gui", out gui))
-                            {
-                                if (myCount >= count)
-                                    continue;
-                                myCount += gui.GetProperty<int>("StackMax");
-                                slotsToTakeFrom.Add(slot);
-                            }
-            foreach (GameObjectSlot slot in slotsToTakeFrom)
-                if (slot.Object != null)
-                    if (slot.Object.TryGetComponent<GuiComponent>("Gui", out gui))
-                    {
-                        if (count <= 0)
-                            continue;
-                        int taken = Math.Min(count, gui.GetProperty<int>("StackMax"));
-                        //gui.StackSize -= taken;
-                        gui.Properties["StackMax"] = gui.GetProperty<int>("StackMax") - taken;
-                        if (gui.GetProperty<int>("StackMax") == 0)
-                            slot.Clear();
-                        count -= taken;
-                    }
-            return true;
-        }
-
-        //internal bool Find(GameObject obj, out GameObject found)
-        //{
-        //    found = null;
-        //    foreach (KeyValuePair<string, ItemContainer> container in GetProperty<Dictionary<string, ItemContainer>>("Containers"))
-        //        foreach (GameObjectSlot slot in container.Value)
-        //            if (slot.Object == obj)
-        //            {
-        //                if (slot.StackSize == 1)
-        //                {
-        //                    found = slot.Object;
-        //                    return true;
-        //                }
-        //                else if (slot.StackSize > 1)
-        //                {
-        //                    found = GameObject.Create(slot.Object.ID);
-        //                    return true;
-        //                }
-        //            }
-        //    return false;
-        //}
-
-        //internal bool TryTake(GameObject obj, out GameObject found)
-        //{
-        //    found = null;
-        //    foreach (KeyValuePair<string, ItemContainer> container in GetProperty<Dictionary<string, ItemContainer>>("Containers"))
-        //        foreach (GameObjectSlot slot in container.Value)
-        //            if (slot.Object == obj)
-        //            {
-        //                if (slot.StackSize == 1)
-        //                {
-        //                    found = slot.Object;
-        //                    slot.Object = null;
-        //                    slot.StackSize = 0;
-        //                    return true;
-        //                }
-        //                else if (slot.StackSize > 1)
-        //                {
-        //                    slot.StackSize -= 1;
-        //                    found = GameObject.Create(slot.Object.ID);
-        //                    return true;
-        //                }
-        //            }
-        //    return false;
-        //}
 
         internal bool TryRemove(GameObject parent)
         {
@@ -1051,65 +732,8 @@ namespace Start_a_Town_.Components
                             slot.Object = null;
                         return true;
 
-                        //int stackSize = slot.Object["Gui"].GetProperty<int>("StackMax");
-                        //if (stackSize == 1)
-                        //{
-                        //    slot.Object = null;
-                        //   // return true;
-                        //}
-                        //else
-                        //    slot.Object["Gui"]["StackMax"] = stackSize - 1;
-                        //return true;
                     }
             return false;
-        }
-
-        //public int Find(GameObject obj)
-        //{
-        //    int found = 0;
-        //    foreach (KeyValuePair<string, ItemContainer> container in GetProperty<Dictionary<string, ItemContainer>>("Containers"))
-        //        foreach (GameObjectSlot slot in container.Value)
-        //            if (slot.Object != null)
-        //                if ((slot.Object as GameObject).ID == (obj as GameObject).ID)
-        //                    found++;
-        //    return found;
-        //}
-
-        //public int Find(GameObject.Types objID)
-        //{
-        //    int found = 0;
-        //    foreach (KeyValuePair<string, ItemContainer> container in GetProperty<Dictionary<string, ItemContainer>>("Containers"))
-        //        foreach (GameObjectSlot slot in container.Value)
-        //            if (slot.Object != null)
-        //                if ((slot.Object as GameObject).ID == objID)
-        //                {
-        //                    GuiComponent gui;
-        //                    if ((slot.Object as GameObject).TryGetComponent<GuiComponent>("Gui", out gui))
-        //                        found += gui.GetProperty<int>("StackMax");
-        //                    //found++;
-        //                }
-        //    return found;
-        //}
-
-        static public bool Give(GameObject actor, GameObject.Types objID, int amount)
-        {
-            InventoryComponent inv;
-            if (!actor.TryGetComponent<InventoryComponent>("Inventory", out inv))
-                return false;
-
-            GameObject obj = GameObject.Create(objID);
-            //obj.GetComponent<GuiComponent>("Gui").Properties["StackMax"] = count;
-            // for (int i = 0; i < count; i++)
-            inv.Give(obj, amount);
-            //InventoryComponent.GiveObject(actor, obj);
-            return true;
-        }
-
-       
-
-        static public void CollectBonuses(GameObject obj, BonusCollection list)
-        {
-            BonusesComponent.GetBonuses(obj["Inventory"]["Holding"] as GameObjectSlot, list);
         }
 
        
@@ -1140,40 +764,9 @@ namespace Start_a_Town_.Components
             //    writer.Write(cont.ID);
                 cont.Write(writer);
             }
-            //for (int i = 0; i < this.Containers.Count; i++)
-            //{
-            //    Containers.ElementAt(i).Value.Write(writer);
-            //}
-            //Containers.First().Value.Write(writer);
+           
         }
-        public override void Read(System.IO.BinaryReader reader)
-        {
-            this.Holding.Read(reader);
-            var containerCount = reader.ReadInt32();
-            if (this.Parent is not null)
-                foreach (var cont in this.Containers)
-                    this.Parent.GetComponent<ContainerComponent>().Remove(cont);
-            this.Containers = new List<ItemContainer>();
-            for (int i = 0; i < containerCount; i++)
-                this.Containers.Add(ItemContainer.Create(this.Parent, reader));
-            if (this.Parent is not null)
-                foreach (var cont in this.Containers)
-                    this.Parent.GetComponent<ContainerComponent>().Add(cont);
-            ////this.Containers = new List<ItemContainer>();
-            //for (int i = 0; i < containerCount; i++)
-            //{
-            //    byte index = reader.ReadByte();
-            //    ItemContainer existing = this.Containers.ElementAtOrDefault(index);
-            //    if (existing.IsNull())
-            //    {
-            //        ItemContainer cont = ItemContainer.Create(reader);
-            //        this.Containers.Add(cont);
-            //        this.Parent.GetComponent<ContainerComponent>().Add(cont);
-            //    }
-            //    else
-            //        existing.Read(reader);
-            //}
-        }
+        
 
         public override void OnObjectCreated(GameObject parent)
         {

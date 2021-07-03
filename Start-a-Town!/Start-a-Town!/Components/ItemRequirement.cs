@@ -2,9 +2,11 @@
 using System.IO;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Start_a_Town_.Components
 {
+    [Obsolete]
     public class ItemRequirement
     {
         public string Name = "";
@@ -48,7 +50,7 @@ namespace Start_a_Town_.Components
         }
         public SaveTag Save(string name)
         {
-            List<SaveTag> tag = new List<SaveTag>();
+            var tag = new List<SaveTag>();
             tag.Add(new SaveTag(SaveTag.Types.String, "Name", this.Name));
             tag.Add(new SaveTag(SaveTag.Types.Int, "Material", this.ObjectID));
             tag.Add(new SaveTag(SaveTag.Types.Int, "Amount", this.AmountCurrent));
@@ -86,23 +88,11 @@ namespace Start_a_Town_.Components
 
         public SlotWithText GetUI(Vector2 loc)
         {
-            SlotWithText slotReq = new SlotWithText(loc);// { Tag = GameObject.Objects[this.ObjectID].ToSlot() };
+            SlotWithText slotReq = new SlotWithText(loc);
             slotReq.Tag = new GameObjectSlot() { Link = GameObject.Objects[this.ObjectID] };
             slotReq.Slot.CornerTextFunc = o => this.AmountCurrent.ToString() + "/" + this.AmountRequired.ToString();
-            //slotReq.OnGameEventAction = (e) =>
-            //{
-            //    if (e.Type != Message.Types.InventoryChanged)
-            //        return;
-            //    var obj = e.Parameters[0] as GameObject;
-            //    if (obj != parent)
-            //        return;
-            //    slotReq.Invalidate(true);
-            //};
             return slotReq;
         }
-
-
-
 
         internal GameObject GetObject()
         {

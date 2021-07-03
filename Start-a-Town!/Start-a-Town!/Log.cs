@@ -358,16 +358,7 @@ List of available commands:
                     case "/querycell":
                         QueryCell(words);
                         break;
-                    //case "/querychunk":
-                    //    QueryChunk(words);
-                    //    break;
-                    //case "invalidate":
-                    //    Invalidate(words);
-                    //    break;
-                    case "/give":
-                      //  Give(words.Skip(1).ToList());
-                        Give(new Queue<string>(words.Skip(1)));
-                        break;
+                    
                     case "/set":
                         Set(wordQueue);
                         break;
@@ -485,88 +476,10 @@ List of available commands:
         private static void QueryCell(List<string> words)
         {
             throw new Exception();
-            //GameObject obj;
-            //if (!Cell.TryGetObject(Engine.Map, new Vector3(Convert.ToSingle(words[1]), Convert.ToSingle(words[2]), Convert.ToSingle(words[3])), out obj))
-            //{
-            //    Log.Write(EntryTypes.Default, "Cell out of bounds");
-            //    return;
-            //}
-            //DebugQueryWindow win = new DebugQueryWindow(obj);
-            //win.Show();
-            //return;
+            
         }
 
-        private static void Give(Queue<string> words)
-        {
-            try
-            {
-                GameObject target;
-                string objName = "";//, targetName = "";
-                Stack<string> names = new Stack<string>();
-                int amount = 1, i = 0;
-                while (words.Count > 0)
-                {
-                    string word = words.Dequeue();
-                    if (Int32.TryParse(word, out amount))
-                        break;
-                    names.Push(word);
-                }
-                objName = names.Pop();
-                if (names.Count > 0)
-                {
-                    // targetName = names.Pop();
-                    target = NpcComponent.NpcDirectory.ToDictionary(foo => foo.Name)[names.Pop()];
-                }
-                else
-                    target = PlayerOld.Actor;
-                
-                amount = Math.Max(amount, 1);
-
-                GameObject obj;
-
-                if (!GameObject.Objects.TryGetValue(objName, out obj))
-                {
-                    Enqueue(EntryTypes.System, "Object \"" + objName + "\" doesn't exist");
-                    return;
-                }
-                InventoryComponent.Give(target, obj.IDType, amount);
-                Log.Write(EntryTypes.Default, target + " received " + objName + " (" + amount + ").");
-            }
-            catch (Exception) { Enqueue(EntryTypes.System, "Syntax: /give '[receiver]' '[object]' [amount = 1]"); }
-        }
-
-
-        //private static void Give(List<string> words)
-        //{
-        //    try
-        //    {
-        //        string objName = "";
-        //        int amount = 1, i = 0;
-        //        while (i < words.Count)
-        //        {
-        //            if (Int32.TryParse(words[i], out amount))
-        //                break;
-        //            objName += words[i++] + " ";
-        //        }
-        //        if (objName.Length > 0)
-        //            objName = objName.Remove(objName.Length - 1);
-        //        else
-        //            throw(new Exception());
-        //        amount = Math.Max(amount, 1);
-               
-        //        GameObject obj;
-
-        //        if(!GameObject.Objects.TryGetValue(objName, out obj))
-        //        {
-        //            Enqueue(EntryTypes.System, "Object \"" + objName + "\" doesn't exist");
-        //            return;
-        //        }
-        //        InventoryComponent.Give(Player.Actor, obj.ID, amount); 
-        //        Log.Write(EntryTypes.Default, Player.Actor.Name + " received " + objName + " (" + amount + ").");
-        //    }
-        //    catch (Exception) { Enqueue(EntryTypes.System, "Syntax: /give [object name] [amount = 1]"); }
-        //}
-
+      
         private static void Set(Queue<string> words)
         {
             string setWhat = words.Dequeue();// words[1];

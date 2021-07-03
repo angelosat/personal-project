@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Start_a_Town_.Animations;
 using Start_a_Town_.Components;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Tokens;
 
 namespace Start_a_Town_
 {

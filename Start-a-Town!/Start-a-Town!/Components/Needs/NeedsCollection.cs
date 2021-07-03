@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Start_a_Town_.Components.Needs;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_.Components
 {
     class NeedsCollection : Dictionary<Need.Types, Need>
     {
-        //public Need this[string name] { get { return ByName[name]; } }
-        //public Dictionary<string, Need> ByName { get { return this.ToDictionary(foo => foo.Name); } }
-
         public NeedsCollection(params Need[] needs)
         {
             foreach (var need in needs)
-                //this.Add(need.Name, need);
                 this.Add(need.ID, need);
         }
 

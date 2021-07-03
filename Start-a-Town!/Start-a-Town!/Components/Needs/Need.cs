@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
-using Start_a_Town_.AI;
-using Start_a_Town_.Components.AI;
-using Start_a_Town_.AI.Behaviors;
 
-namespace Start_a_Town_//.Components.Needs
+namespace Start_a_Town_
 {
-    public abstract class Need : IProgressBar, ISerializable, ISaveable //ICloneable,
+    public abstract class Need : IProgressBar, ISerializable, ISaveable
     {
         internal void AddMod(NeedLetDef needLetDef, float value, float rate)
         {
@@ -24,10 +20,9 @@ namespace Start_a_Town_//.Components.Needs
             this.Mods.RemoveAll(n => n.Def == def);
         }
 
-        //static public readonly Need Hunger = new NeedHunger();
         public NeedDef NeedDef;
         public enum Types { Hunger, Water, Sleep, Achievement, Work, Brains, Curiosity, Social, Energy }
-        const string Format = "P0";// "##0%";//.00";
+        const string Format = "P0";
         public virtual Types ID { get; set; }
         public virtual string Name { get { return this.NeedDef.Name; } set { } }
         public float DecayDelay, DecayDelayMax = 3;
@@ -49,47 +44,31 @@ namespace Start_a_Town_//.Components.Needs
         public float Max = 100f;
         public virtual float Percentage { get { return this.Value / this.Max; } }
         public float Decay;
-        public float Mod;// { get; set; }
+        public float Mod;
         readonly List<NeedLet> Mods = new();
         public virtual float Tolerance { get; set; }
-        public virtual float Threshold { get { return this.NeedDef.BaseThreshold; } }// 50; } }
+        public virtual float Threshold { get { return this.NeedDef.BaseThreshold; } }
         public virtual bool IsBelowThreshold { get { return this.Value < this.Threshold; } }
         public override string ToString()
         {
-            //var txt = Name + ": " + Value.ToString(Format).PadLeft(Format.Length);// Name + " " + Value.ToString();
-            var txt = $"{Name}: {this.Percentage:P0}";// Name + " " + Value.ToString();
+            var txt = $"{Name}: {this.Percentage:P0}";
 
             foreach (var needlet in Mods)
                 txt += $"\n{needlet}";
             return txt;
         }
-        //public Need()
-        //{
-        //    //this.Def = def;
-        //    this.Value = def.BaseValue;// this.Max;
-        //}
-        //public Need()
-        //{
-        //    this.Min = 0;
-        //    this.Max = 100;
-        //}
+        
         public Need(Actor parent)
         {
             this.Parent = parent;
             this._Value = this.Max;
         }
-        //public abstract object Clone();
-        //public object Clone()
-        //{
-        //    return Activator.CreateInstance(this.Def.Type, this.Def);
-        //}
-        //public virtual object Clone() { return new Need(this.Def); }
+        
         public virtual void TickLong(GameObject parent) { }
         public virtual void Tick(GameObject parent)
         {
             this.LastTick = parent.NetNew.CurrentTick;
             float newValue;
-            //var mod = this.Mod;
             var mod = this.Mods.Sum(d => d.RateMod);
             if (mod != 0)
             {
@@ -110,16 +89,9 @@ namespace Start_a_Town_//.Components.Needs
                     float d = this.Decay * (1 + 5 * p * p);
                     d = this.Decay;
                     d = this.NeedDef.BaseDecayRate;
-                    newValue = this._Value - d;// Math.Max(0, Value - d);
+                    newValue = this._Value - d;
                 }
             }
-           
-            //if (Value >= 50 && newValue < 50)
-            //{
-            //    //parent.PostMessage(Message.Types.Think, parent, "Need low: " + this.Name, "I need to satisfy my: " + this.Name + " soon");
-            //    parent.PostMessage(Message.Types.Need, parent, this);
-            //}
-        //   Value = newValue;
 
             SetValue(newValue, parent);
         }
@@ -128,21 +100,16 @@ namespace Start_a_Town_//.Components.Needs
         
         public virtual TaskGiver TaskGiver { get { return this.NeedDef.TaskGiver; } }
 
-
         [Obsolete]
         public void SetValue(float newVal, GameObject parent)
         {
             float oldVal = Value;
             if (oldVal >= Tolerance && newVal < Tolerance)
             {
-                //throw new NotImplementedException();
-                //parent.PostMessage(Message.Types.Need, parent, this);
             }
             this.Value = Math.Max(0, Math.Min(100, newVal));
             if (this.Value > oldVal)
                 this.DecayDelay = DecayDelayMax;
-            //if(parent.Net is Server)
-            //    PacketNeedModify.Send(parent.Net as Server, parent.InstanceID, (int)this.ID, newVal - oldVal);
         }
 
         public Bar ToBar(GameObject parent)
@@ -151,10 +118,8 @@ namespace Start_a_Town_//.Components.Needs
             {
                 ColorFunc = () => Color.Lerp(Color.Red, Color.Lime, this.Value / 100f),
                 Object = this,
-                //Tag = this,
-                //PercFunc = () => this.Value / 100f,
                 NameFunc = () => this.Name,
-                HoverFunc = () => this.ToString(),// Name + ": " + Value.ToString(Format).PadLeft(Format.Length),
+                HoverFunc = () => this.ToString(),
                 HoverFormat = this.Name + ": " + Format,
 
             };
@@ -162,7 +127,6 @@ namespace Start_a_Town_//.Components.Needs
             {
                 if (InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey))
                 {
-                    //this.SetValue(100 * (UIManager.Mouse.X - bar.ScreenLocation.X) / (float)bar.Width, parent);
                     "todo: request need change from server".ToConsole();
                     return;
                 }
@@ -197,7 +161,6 @@ namespace Start_a_Town_//.Components.Needs
         public SaveTag Save(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            //var tag = new SaveTag(SaveTag.Types.Compound, this.NeedDef.Name);
             this.NeedDef.Save(tag, "Def");
             tag.Add(this.Value.Save("Value"));
             tag.Add(this.Mod.Save("Mod"));
@@ -207,17 +170,12 @@ namespace Start_a_Town_//.Components.Needs
         }
         public ISaveable Load(SaveTag tag)
         {
-            //this.NeedDef = Def.GetDef<NeedDef>(tag.Name);
-            //this.NeedDef = tag.LoadDef<NeedDef>("Def");
             tag.TryGetTagValue<string>("Def", v => this.NeedDef = Def.GetDef<NeedDef>(v));
             tag.TryGetTagValue<float>("Value", out this._Value);
             tag.TryGetTagValue<float>("Mod", out this.Mod);
             tag.TryGetTagValue<float>("DecayTimer", out this.DecayDelay);
-            //tag.TryGetTag("Mods", t=>)
             this.Mods.TryLoadMutable(tag, "Mods");
             return this;
         }
-        //public abstract Behavior GetSatisfyBehavior();
-
     }
 }

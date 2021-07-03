@@ -274,8 +274,6 @@ namespace Start_a_Town_.Components
             net.Spawn(this.Product.Object, parent.Global);
             net.Despawn(parent);
             net.DisposeObject(parent.RefID);
-            //SkillsComponent.AwardSkill(net, parent, Skill.Types.Construction, 1);
-            SkillOld.Award(net, actor, parent, SkillOld.Types.Construction, 1);
         }
 
         public override void OnTooltipCreated(GameObject parent, UI.Control tooltip)

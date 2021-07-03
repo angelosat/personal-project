@@ -1129,13 +1129,11 @@ namespace Start_a_Town_
         }
 
         public PositionComponent Transform;
-        public Components.Tokens.TokensComponent Tokens;// = new Components.Tokens.TokensComponent();
 
         public GameObject()
         {
             this.Transform =
                 this.AddComponent<PositionComponent>();
-            this.Tokens = this.AddComponent<Components.Tokens.TokensComponent>();
         }
         public GameObject(GameObject.Types id, string name, string description, string type = "")
             : this()

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components
 {
@@ -22,25 +19,8 @@ namespace Start_a_Town_.Components
         static void Initialize()
         {
             _Registry = new Dictionary<string, EntityComponent>();
-            // REGISTERING COMPONENTS DYNAMICALLY ON THEIR CREATION
             Register(
                 new PositionComponent()
-                //new GeneralComponent(),
-                //new PhysicsComponent(),
-                //new InventoryComponent(),
-                //new NeedsComponent(),
-                //new MemoryComponent(),
-                //new ActorSpriteComponent(),
-                //new SkillsComponent(),
-                //new SpellBookComponent(),
-                //new AbilitiesComponent(),
-                //new PartyComponent(),
-                //new ControlComponent(),
-                //new BodyComponent(),
-                //new ProductionComponent(),
-                //new EquipComponent(),
-                //new GuiComponent(),
-                //new ItemComponent()
                 );
         }
 
@@ -50,12 +30,7 @@ namespace Start_a_Town_.Components
             {
                 if (string.IsNullOrWhiteSpace(comp.ComponentName))
                     throw new ArgumentException();
-                //{
-                //    //Client.Console.Write(Color.Red, "WARNING! Error registering component " + comp.GetType().ToString());
-                //    //Client.Console.Show();
-                //    ("WARNING! Error registering component " + comp.GetType().ToString()).ToConsole();
-                //    continue;
-                //}
+                
                 if (!Registry.ContainsKey(comp.ComponentName))
                     Registry.Add(comp.ComponentName, comp);
             }
@@ -66,10 +41,7 @@ namespace Start_a_Town_.Components
             EntityComponent comp;
             if (!Registry.TryGetValue(componentName, out comp))
                 throw new ArgumentException("Invalid component name");
-                //return null;
             return comp.Clone() as EntityComponent;
-
-            //return Registry[componentName].Clone() as Component;
         }
     }
 }

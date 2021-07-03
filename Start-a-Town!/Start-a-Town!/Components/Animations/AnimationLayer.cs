@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components.Animations
 {
-    public enum AnimationBlending { Override, Additive }
 
     class AnimationLayer : List<AnimationClip>
     {

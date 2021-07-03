@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
 
-
 namespace Start_a_Town_.Components
 {
     public class InteractionChoppingSimple : InteractionPerpetual
@@ -11,7 +10,6 @@ namespace Start_a_Town_.Components
         int StrikeCount = 0;
         ParticleEmitterSphere EmitterStrike;
         List<Rectangle> ParticleRects;
-        GameObject Logs;
         public InteractionChoppingSimple()
             : base("Chopping")
         { }
@@ -20,8 +18,6 @@ namespace Start_a_Town_.Components
                     new AllCheck(
                         new Exists(),
                         new RangeCheck()
-            //,
-            //new SkillCheck(Skills.Skill.Chopping)
                 ));
         public override ScriptTaskCondition CancelState
         {
@@ -45,8 +41,6 @@ namespace Start_a_Town_.Components
         public override void Start(GameObject a, TargetArgs t)
         {
             base.Start(a, t);
-            // cache variables
-            //this.EmittersList = WorkComponent.GetEmitters(a);
 
             this.EmitterStrike = new ParticleEmitterSphere();
             this.EmitterStrike.Source = t.Global + Vector3.UnitZ;
@@ -62,11 +56,6 @@ namespace Start_a_Town_.Components
             this.EmitterStrike.ColorEnd = MaterialDefOf.LightWood.Color;
             this.EmitterStrike.Lifetime = Engine.TicksPerSecond * 2;
             this.EmitterStrike.Rate = 0;
-
-            //this.Logs = MaterialType.RawMaterial.Create(t.Object.Body.Material);
-            //this.ParticleRects = GameObject.Objects[Logs.IDType].Body.Sprite.AtlasToken.Rectangle.Divide(25);
-
-            //this.Logs = ItemFactory.CreateFrom(RawMaterialDef.Logs, t.Object.Body.Material);// MaterialType.RawMaterial.Create(t.Object.Body.Material);
             this.ParticleRects = ItemContent.LogsGrayscale.AtlasToken.Rectangle.Divide(25);
         }
 
@@ -74,7 +63,6 @@ namespace Start_a_Town_.Components
         {
             if (a.Net is Net.Client)
             {
-                //this.EmitterStrike.Emit(this.Logs.Body.Sprite.AtlasToken.Atlas.Texture, this.ParticleRects, Vector3.Zero);
                 this.EmitterStrike.Emit(ItemContent.LogsGrayscale.AtlasToken.Atlas.Texture, this.ParticleRects, Vector3.Zero);
                 a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
             }
@@ -84,12 +72,10 @@ namespace Start_a_Town_.Components
                 return;
             }
             this.Done(a, t);
-            //this.State = States.Finished;
             this.Finish(a, t);
         }
         public void Done(GameObject a, TargetArgs t)
         {
-            //TreeComponent.ChopDown(a, t.Object);
             CutDownPlant(a as Actor, t.Object as Plant);
         }
         public override object Clone()
@@ -99,31 +85,9 @@ namespace Start_a_Town_.Components
 
         static public void CutDownPlant(Actor actor, Plant plant)
         {
-            //var comp = parent.GetComponent<TreeComponent>();
-            var comp = plant.PlantComponent;/// parent.GetComponent<PlantComponent>();
+            var comp = plant.PlantComponent;
             comp.Harvest(plant, actor);
             comp.CutDown(plant, actor);
-            //var plantdef = plant.Def.PlantProperties;
-            ////var logs = MaterialType.RawMaterial.Create(parent.Body.Material);
-            ////var logs = ItemFactory.CreateFrom(RawMaterialDef.Logs, parent.Body.Material);
-            //if (plantdef.ProductCutDown != null)
-            //{
-            //    var table = comp.Growth.Value >= plantdef.YieldThreshold ?
-            //        new LootTable(
-            //            //new Loot(() => MaterialType.RawMaterial.Create(parent.Body.Material), 1, 1, 5, 10), //1, 3),
-            //            //new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Logs, parent.Body.Material ?? Material.LightWood), 1, 1, 5, 10) //1, 3),
-            //            new Loot(() => ItemFactory.CreateFrom(plantdef.ProductCutDown, plant.Body.Material ?? MaterialDefOf.LightWood), comp.GrowthBody.Percentage, 5, 1, 3) //1, 3),
-            //                                                                                                                                                                 //,new Loot(ItemTemplate.Sapling.Factory.Create, 1, 1, 1, 3)
-            //            )
-            //            :
-            //            new LootTable();
-
-            //    //actor.Net.PopLoot(logs, parent);
-            //    //actor.Net.PopLoot(sapling, parent);
-            //    actor.Net.PopLoot(table, plant.Global, Vector3.Zero);
-            //}
-            //actor.Net.Despawn(plant);
-            //actor.Net.DisposeObject(plant);
         }
     }
 }

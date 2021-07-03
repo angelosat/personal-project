@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
@@ -12,7 +7,6 @@ namespace Start_a_Town_
         public enum Types { Permanent, Finite }
         public Types Type;
         Func<GameObject, float> Function;
-        //public delegate float Function(GameObject obj);
         public ResourceDef Source;
         public int BaseDurationInTicks = 0;
         public ResourceRateModifierDef(string name, ResourceDef source) : base(name)
@@ -28,13 +22,7 @@ namespace Start_a_Town_
             Function = 
                 (actor) =>
                 {
-                    //var w = actor.GetHauled()?.TotalWeight ?? 0;
-                    //if (w == 0)
-                    //    return 0;
-                    //var maxw = StatNewDef.MaxHaulWeight.GetValue(actor);
-                    //var val = 2 - (maxw / w);
-                    //val *= .5f;// 0.1f;
-
+                    
                     var val = StatDefOf.Encumberance.GetValue(actor);
                     var factor = .1f;
                     val *= factor;

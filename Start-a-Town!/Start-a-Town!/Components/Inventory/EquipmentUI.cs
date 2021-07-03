@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
+﻿using Start_a_Town_.UI;
 using Start_a_Town_.Components;
 
 namespace Start_a_Town_
@@ -30,7 +24,6 @@ namespace Start_a_Town_
             if (actor == null)
                 return;
             var gear = actor.GetGear();
-            //this.GearList.AddItems(gear, ButtonHelper.CreateFromItemCompact);
             this.GearList.AddItems(gear, o =>
             {
                 var btn = ButtonHelper.CreateFromItemCompact(o);
@@ -42,11 +35,6 @@ namespace Start_a_Town_
                 };
                 return btn;
             });
-
-            //this.GearList.AddItems(gear, ο=>ButtonHelper.CreateFromItemCompact(ο).SetLeftClickAction(btn => 
-            //{
-            //    ContextMenuManager.PopUp(new ContextAction(() => "Unequip", () => { o.InstanceID }));
-            //}) as Button);
         }
 
         internal override void OnGameEvent(GameEvent e)

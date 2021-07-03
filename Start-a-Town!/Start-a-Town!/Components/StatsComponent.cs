@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 
@@ -31,7 +29,7 @@ namespace Start_a_Town_.Components
             return text.TrimEnd('\n');
         }
     }
-
+    [Obsolete]
     public class StatsComponent : EntityComponent
     {
         static public StatsComponent Actor
@@ -156,7 +154,6 @@ namespace Start_a_Town_.Components
             this.Stats = new StatCollection(this.BaseStats);
             BodyComponent.PollStats(parent, this.Stats);
             InventoryComponent.PollStats(parent, this.Stats);
-            SkillsComponent.PollStats(parent, this.Stats);
         }
 
         static public StatCollection GetStats(GameObject obj, Stat.Groups group)
@@ -181,17 +178,7 @@ namespace Start_a_Town_.Components
                 return value;
             return defaultValue;
         }
-        static public float GetStatOrDefault(GameObject obj, string statName, float defaultValue)
-        {
-            GameObjectSlot heldSlot = obj["Inventory"]["Holding"] as GameObjectSlot;
-            GameObject held = heldSlot.Object;
-            if (held == null)
-                return defaultValue;
-            float bonus;
-            if (BonusesComponent.TryGetStat(held, statName, out bonus))
-                return bonus;
-            return defaultValue;
-        }
+        
         static public float GetStat(GameObject obj, string statName)
         {
             StatsComponent statsComp;

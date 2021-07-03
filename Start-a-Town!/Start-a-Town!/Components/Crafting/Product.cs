@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components.Items;
-using Start_a_Town_.Components.Skills;
 using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.GameModes;
 
@@ -94,22 +93,7 @@ namespace Start_a_Town_.Components.Crafting
                 this.Modifiers.Add(mod);
                 return this;
             }
-            public List<GameObject> GetMaterialChoices(Reaction parent)
-            {
-                List<GameObject> mats = new List<GameObject>();
-                foreach (var r in parent.Reagents)
-                {
-                    foreach (var mat in from mat in ItemCraftingComponent.Registry
-                                        let obj = GameObject.Objects[mat]
-                                        //where r.Condition.Condition(obj)
-                                        where r.Filter(obj)
-                                        select obj)
-                    {
-                        mats.Add(mat);
-                    }
-                }
-                return mats;
-            }
+            
 
             public List<ProductMaterialPair> Create(Reaction parent)
             {

@@ -12,8 +12,6 @@ namespace Start_a_Town_.Components
             get { return "Attack"; }
         }
 
-        Bone Hand;
-        Bone Body;
         public static float DefaultRange = Interaction.DefaultRange;
         public static double DefaultArc = Math.PI / 6d;
         public static float LungeMax = 0.2f;
@@ -42,7 +40,6 @@ namespace Start_a_Town_.Components
 
         public int DamageValue
         {
-            //get { return (int)Math.Round(Charge * Damage.Values.Aggregate((a, b) => a + b)); }
             get { return (int)Math.Round(ChargeFunc() * Damage.Values.Aggregate((a, b) => a + b)); }
         }
 
@@ -67,9 +64,8 @@ namespace Start_a_Town_.Components
             if (this.State != Attack.States.Ready)
                 return;
             this.State = Attack.States.Charging;
-            this.Body = parent.GetComponent<SpriteComponent>().Body;
             this.AttackAnimation = Animation.RaiseRHand(parent);
-            throw new Exception();
+            throw new NotImplementedException();
             this.Charge = 0;
             this.ChargeMax = 80;
             parent.CrossFade(AttackAnimation, true, this.ChargeMax,
@@ -81,7 +77,6 @@ namespace Start_a_Town_.Components
         {
             if (this.State != Attack.States.Charging)
                 return;
-            //this.Body.FadeOutAnimation(this.AttackAnimation);
             this.AttackAnimation.FadeOut();
 
             this.State = Attack.States.Ready;
@@ -95,11 +90,11 @@ namespace Start_a_Town_.Components
         }
         public void Finish(GameObject parent, Vector3 dir)
         {
-            if (this.State != Attack.States.Charging)// == Attack.States.Delivering)
+            if (this.State != Attack.States.Charging)
                 return;
             this.State = Attack.States.Delivering;
-            throw new Exception();
-            AnimationClip hand = null;// this.AttackAnimation[BoneDef.RightHand];
+            throw new NotImplementedException();
+            AnimationClip hand = null;
 
             Attack attack = Attack.Create(parent, dir, Attack.Ray, this.ChargeFunc);
             float lunge = parent.Velocity.Z == 0 ? this.Lunge(this.ChargeFunc()) : 0;

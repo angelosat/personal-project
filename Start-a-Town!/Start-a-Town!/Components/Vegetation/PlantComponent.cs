@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Components.Needs;
 
 namespace Start_a_Town_.Components
 {
@@ -13,7 +9,7 @@ namespace Start_a_Town_.Components
     {
         const float ForageThreshold = .5f;
         
-        static int GrowthRate = 20;//60;
+        static int GrowthRate = 20;
 
         public override string ComponentName
         {
@@ -33,33 +29,18 @@ namespace Start_a_Town_.Components
 
         float Length;
         Progress Progress;
-        public int Level { get { return (int)this["Level"]; } set { this["Level"] = value; } }
-        Loot Produce { get { return (Loot)this["Produce"]; } set { this["Produce"] = value; } }
-        public GrowthStates CurrentGrowthState
-        {
-            get { return (GrowthStates)this["GrowthState"]; }
-            set
-            {
-                this["GrowthState"] = value;
-            }
-        }
+        public int Level;
+        Loot Produce;
        
         public override void OnObjectCreated(GameObject parent)
         {
-            //var def = parent.Def;
-            //var plant = def.PlantProperties;
-            //this.Length = plant.FruitGrowTicks;
-            //this.Progress = new Progress(0, this.Length, 0);
         }
         public override void OnObjectLoaded(GameObject parent)
         {
-            //parent.Body.Sprite = this.IsHarvestable ? parent.Def.PlantProperties.TextureGrown : parent.Def.PlantProperties.TextureGrowing;
             parent.Body.Sprite = this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing;
         }
         public PlantComponent()
         {
-            Properties[Stat.Max.Name] = 3600f;
-            Properties.Add(Stat.Loot.Name);
             this.Progress = new Progress();
         }
         public void SetProperties(PlantProperties props)
@@ -72,13 +53,7 @@ namespace Start_a_Town_.Components
         {
             this.PlantProperties = props;
         }
-        //public PlantComponent(ItemDef def)
-        //{
-        //    var plant = def.PlantProperties;
-        //    this.Length = plant.GrowTicks;
-        //    this.Progress = new Progress(0, this.Length, 0);
-        //}
-
+        
         internal void SetGrowth(float growth, float fruitGrowth)
         {
             this.GrowthBody.Percentage = growth;
@@ -90,25 +65,13 @@ namespace Start_a_Town_.Components
             this.Length = fruitGrowTicks;
             this.Progress = new Progress(0, this.Length, 0);
         }
-        public PlantComponent(Loot lootList, float growthTime = 3600f)
-            : this()
-        {
-            Properties[Stat.Max.Name] = growthTime;
-            Properties[Stat.ValueOld.Name] = growthTime;
-            Properties[Stat.Loot.Name] = lootList;
-        }
+        
         public PlantComponent(PlantComponent toCopy)
         {
             this.GrowthBody = new Progress(toCopy.GrowthBody);
             this.FruitGrowth = new Progress(toCopy.FruitGrowth);
         }
        
-        public override void Initialize(GameObject parent)
-        {
-            if (parent.GetComponent<SpriteComponent>("Sprite").Variation == 1)
-                Properties[Stat.ValueOld.Name] = 0f;
-
-        }
         public PlantComponent Initialize(Loot produce, int level)
         {
             this.Length = level * GrowthRate * Engine.TicksPerSecond; //*2;
@@ -126,7 +89,6 @@ namespace Start_a_Town_.Components
             Wiggle(parent);
             if (this.GrowthBody.Percentage >= ForageThreshold)
             {
-                //if (parent.Def.PlantProperties.ProducesFruit)
                 if(this.PlantProperties.ProducesFruit)
                     if (!this.FruitGrowth.IsFinished)
                     {
@@ -139,7 +101,6 @@ namespace Start_a_Town_.Components
                             {
                                 if (prevPercentage < ForageThreshold)
                                     parent.Net.EventOccured(Message.Types.PlantReady, parent);
-                                //parent.Body.Sprite = parent.Def.PlantProperties.TextureGrown;
                                 parent.Body.Sprite = this.PlantProperties.TextureGrown;
                             }
                         }
@@ -177,7 +138,6 @@ namespace Start_a_Town_.Components
         public bool Harvest(GameObject parent, GameObject actor)
         {
             var plant = parent as Plant;
-            //var props = plant.Def.PlantProperties;
             var props = plant.PlantComponent.PlantProperties;
             if (props.Growth is null)
                 return false;
@@ -186,7 +146,6 @@ namespace Start_a_Town_.Components
                 return false;
           
             parent.Net.PopLoot(
-                //CreateFruit(props).SetStackSize(yield)
                 props.Growth.CreateEntity()
                 , parent.Global, parent.Velocity);
 
@@ -194,12 +153,10 @@ namespace Start_a_Town_.Components
             parent.Net.EventOccured(Message.Types.PlantHarvested, parent);
             return true;
         }
-
-        //private static GameObject CreateFruit(PlantProperties props) => props.ProductHarvest.CreateFrom(props.PlantMaterial);
         
         public void CutDown(GameObject plant, Actor actor)
         {
-            var plantdef = this.PlantProperties;// plant.Def.PlantProperties;
+            var plantdef = this.PlantProperties;
             var yield = (int)(this.GrowthBody.Percentage * plantdef.MaxYieldCutDown);
             if (plantdef.ProductCutDown != null && yield > 0)
             {
@@ -214,7 +171,6 @@ namespace Start_a_Town_.Components
         {
             this.FruitGrowth.Value = 0;
             this.FruitGrowthTick = 0;
-            //parent.Body.Sprite = parent.Def.PlantProperties.TextureGrowing;
             parent.Body.Sprite = this.PlantProperties.TextureGrowing;
         }
 
@@ -236,7 +192,7 @@ namespace Start_a_Town_.Components
             actions.Add(PlayerInput.Activate, new InteractionHarvest(parent, this));
         }
 
-        public override bool HandleMessage(GameObject parent, ObjectEventArgs e)// GameObject sender, Message.Types msg)
+        public override bool HandleMessage(GameObject parent, ObjectEventArgs e)
         {
             Message.Types msg = e.Type;
             GameObject sender = e.Sender;
@@ -296,9 +252,7 @@ namespace Start_a_Town_.Components
 
         public override void DrawMouseover(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent)
         {
-            //if (this.State == GrowthState.Ready)
-            //    return;
-            Bar.Draw(sb, camera, parent, GameObject.Objects[this.Produce.ObjID].Name, 1 - this.Progress.Percentage);// / this.Length);
+            Bar.Draw(sb, camera, parent, GameObject.Objects[this.Produce.ObjID].Name, 1 - this.Progress.Percentage);
         }
 
         public override void Write(System.IO.BinaryWriter writer)
@@ -342,7 +296,7 @@ namespace Start_a_Town_.Components
             actions.Add(new ContextAction("Debug: Grow", () => { return false; }));
         }
 
-        internal bool IsHarvestable => this.FruitGrowth.Percentage >= ForageThreshold;// this.CurrentState == this.Grown;
+        internal bool IsHarvestable => this.FruitGrowth.Percentage >= ForageThreshold;
 
         public class Props : ComponentProps
         {

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.AI;
 using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.UI;
 
@@ -30,7 +26,7 @@ namespace Start_a_Town_.Components
         {
         }
 
-        public abstract string ComponentName{get;}// { get { return ""; } }
+        public abstract string ComponentName{get;}
 
         public virtual void OnNameplateCreated(GameObject parent, UI.Nameplate plate) { }
         public virtual void OnHealthBarCreated(GameObject parent, UI.Nameplate plate) { }
@@ -42,7 +38,7 @@ namespace Start_a_Town_.Components
             return Properties.ToString();
         }
 
-        public ComponentPropertyCollection Properties; //Dictionary<string, object> Parameters;
+        public ComponentPropertyCollection Properties;
         public GameObject Parent;
 
         public object this[string propertyName]
@@ -105,7 +101,6 @@ namespace Start_a_Town_.Components
         {
             return false;
         }
-        //public virtual void Query(GameObject parent, List<InteractionOld> actions) { }
 
         public virtual void OnHitTestPass(GameObject parent, Vector3 face, float depth) { }
 
@@ -139,32 +134,16 @@ namespace Start_a_Town_.Components
         {
             return "";
         }
-        //public abstract Component.Types Type { get; }
-
-        //public virtual void Attach(IEntity entity)
-        //{
-        //    entity.Components.Add(this);
-        //}
-
-        //public virtual void Detach(IEntity entity)
-        //{
-        //    entity.Components.Remove(this);
-        //}
-
-        //public virtual void Instantiate(IObjectProvider instantiator) { }
+        
         public virtual void Instantiate(GameObject parent, Action<GameObject> instantiator) { }
 
-        public virtual void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null) { }//return ScriptState.Finished; }
+        public virtual void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null) { }
         public virtual void Tick(GameObject parent)
         { this.Tick(parent.Net, parent); }
-        //{ this.Tick(parent as Actor); }
 
-        //public virtual void RandomBlockUpdate(IObjectProvider net, GameObject parent) { }//return ScriptState.Finished; }
         public virtual void Initialize(GameObject parent) { }
         public virtual void Initialize(GameObject parent, RandomThreaded random) { this.Initialize(parent); }
         public virtual void OnSpawn(IObjectProvider net, GameObject parent) { }
-        //[Obsolete] // pass iobjectprovider to remove object there
-        //public virtual void Despawn(IObjectProvider net, GameObject parent) { }
         public virtual void OnDespawn(GameObject parent) { }
         public virtual void OnDispose(GameObject parent) { }
         public virtual void OnObjectCreated(GameObject parent) { }
@@ -179,18 +158,7 @@ namespace Start_a_Town_.Components
 
         public virtual void MakeChildOf(GameObject parent) { this.Parent = parent; }
 
-        public virtual void Draw(
-            SpriteBatch sb, DrawObjectArgs e
-            //Camera camera,
-            //Controller controller,
-            //Player player,
-            //Map map,
-            //Chunk chunk,
-            //Cell cell,
-            //Rectangle bounds,
-            //GameObject obj,
-            //float depth
-            ) { }
+        public virtual void Draw(SpriteBatch sb, DrawObjectArgs e) { }
         public virtual void Draw(MySpriteBatch sb, DrawObjectArgs e) { }
         public virtual void Draw(MySpriteBatch sb, GameObject parent, Camera camera) { }
 
@@ -209,7 +177,6 @@ namespace Start_a_Town_.Components
         public virtual void OnTooltipCreated(GameObject parent, UI.Control tooltip) { }
         public virtual void GetInventoryTooltip(GameObject parent, UI.Control tooltip) { this.OnTooltipCreated(parent, tooltip); }
         public virtual void GetActorTooltip(GameObject parent, GameObject actor, UI.Tooltip tooltip) { }
-        //public virtual void GetUI(GameObject parent, UI.Control ui) { }
         public virtual void GetUI(GameObject parent, UI.Control ui, List<EventHandler<ObjectEventArgs>> gameEventHandlers) { }
         public virtual void GetUI(GameObject parent, UI.Control ui, List<EventHandler<GameEvent>> gameEventHandlers) { }
         public virtual void GetContextActions(GameObject actor, List<GameObject> abilities) { }
@@ -229,7 +196,6 @@ namespace Start_a_Town_.Components
             var t = new TargetArgs(parent);
             var a = PlayerOld.Actor;
             foreach (var i in list)
-                //if (i.Value.InRange(a, t))
                     actions.Add(new ContextAction(i.Key.ToString() + ": " + i.Value.Name, null) { Available = () => i.Value.Conditions.Evaluate(a, t) });// () => true));
         }
         public virtual void GetInteractions(GameObject parent, List<Interaction> actions) { }
@@ -244,13 +210,6 @@ namespace Start_a_Town_.Components
         public virtual string GetStats() { return ""; }
         internal SaveTag SaveAs(string name = "")
         {
-            //var savetag = this.Save();
-            //if (savetag == null)
-            //    return null;
-            //var tag = new SaveTag(SaveTag.Types.Compound, name);
-            //foreach (var t in savetag)
-            //    tag.Add(t);
-            //return tag;
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             this.AddSaveData(tag);
             return tag.Value != null ? tag : null;
@@ -277,33 +236,19 @@ namespace Start_a_Town_.Components
 
         public virtual void Write(BinaryWriter w) { }
         public virtual void Read(BinaryReader r) { }
-        //public virtual void Read(IObjectProvider net, BinaryReader reader) { this.Read(reader); }
-
-        //public virtual void AIQuery(GameObject parent, GameObject ai, List<AIAction> actions) { }
         internal virtual void GetAvailableTasks(GameObject parent, List<Interaction> list)
         {
 
         }
-        //internal virtual void GetAvailableActions(List<Script> list)
-        //{
-            
-        //}
-        //internal virtual void GetAvailableActions(List<Script.Types> list)
-        //{
-
-        //}
+        
         internal virtual void GetInteractionsFromSkill(GameObject parent, ToolAbilityDef skill, List<Interaction> list) { }
-        //public virtual void GetPlayerActions(Dictionary<KeyBinding, Interaction> list)
-        //{
-
-        //}
+        
         public virtual void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> actions)
         {
         }
         public virtual GroupBox GetGUI() { return null; }
         internal virtual void GetInterface(GameObject parent, UI.Control box) { }
         internal virtual void GetManagementInterface(GameObject gameObject, UI.Control box) { }
-
 
         internal virtual void MapLoaded(GameObject parent)
         {
@@ -367,23 +312,4 @@ namespace Start_a_Town_.Components
             yield break;
         }
     }
-
-    public interface IEntity
-    {
-        //CompomentCollection Components { get; }
-        T GetComponent<T>(string name) where T : EntityComponent;//, new();
-        //bool TryGetComponent<T>(string name, out T component) where T : Component;
-        //bool TryGetComponent<T>(string name, out Component component);
-        bool TryGetComponent<T>(string name, out T component) where T : EntityComponent;//, new();
-        void Update(IObjectProvider net, Chunk chunk);
-    }
-
-    //public interface IHasChildren
-    //{
-    //    GameObjectSlot GetChild(int containerID, int slotID);
-    //    Vector3 Global { get; }
-    //    IObjectProvider Net { get; }
-    //    //int InstanceID { get; }
-    //    //void PostMessage(ObjectEventArgs a);
-    //}
 }

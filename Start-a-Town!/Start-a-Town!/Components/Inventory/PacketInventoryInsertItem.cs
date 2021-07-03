@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -13,7 +8,6 @@ namespace Start_a_Town_
     {
         static public void Init()
         {
-            //Server.RegisterPacketHandler(PacketType.PacketInventoryInsertItem, Receive);
             Client.RegisterPacketHandler(PacketType.PacketInventoryInsertItem, Receive);
         }
         static public void Send(IObjectProvider net, Actor actor, Entity item, OffsiteAreaDef area)
@@ -37,9 +31,7 @@ namespace Start_a_Town_
             var item = net.GetNetworkObject(itemID) as Entity;
             var actor = net.GetNetworkObject(actorID) as Actor;
             var area = Def.GetDef<OffsiteAreaDef>(r.ReadString());
-            //actor.InsertToInventory(item);
             actor.Loot(item, area);
-            //actor.Inventory.Insert(item);
         }
     }
 }

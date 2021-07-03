@@ -45,22 +45,6 @@ namespace Start_a_Town_.Components
             return false;
         }
 
-        public override bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
-        {
-            switch (e.Type)
-            {
-                case Message.Types.Ownership:
-                    GameObject obj = e.Parameters[0] as GameObject;
-                    if (this.Property.Contains(obj))
-                        this.Property.Remove(obj);
-                    else
-                        this.Property.Add(obj);
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         public override object Clone()
         {
             return new PropertyComponent();

@@ -1,9 +1,7 @@
 ﻿using Start_a_Town_.UI;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Start_a_Town_.Components
 {
@@ -16,10 +14,7 @@ namespace Start_a_Town_.Components
                 return "Attributes";
             }
         }
-
-        //public AttributeCollection Attributes { get { return (AttributeCollection)this["Attributes"]; } set { this["Attributes"] = new AttributeCollection(); } }
         public AttributeStat[] Attributes;
-
 
         public AttributesComponent(ItemDef def)
         {
@@ -33,7 +28,6 @@ namespace Start_a_Town_.Components
         }
         public AttributesComponent()
         {
-            //this.Attributes = new AttributeCollection();
         }
 
         public AttributesComponent(params AttributeStat[] atts)
@@ -58,7 +52,6 @@ namespace Start_a_Town_.Components
         
         public override void Tick(GameObject parent)
         {
-            //this.Attributes.Update(parent);
             for (int i = 0; i < this.Attributes.Length; i++)
             {
                 this.Attributes[i].Update(parent);
@@ -68,14 +61,6 @@ namespace Start_a_Town_.Components
         public override object Clone()
         {
             return new AttributesComponent(this.Attributes);
-
-            //IEnumerable<AttributeStat> newAtts = this.Attributes.Select(foo => foo.Clone() as AttributeStat);
-            //AttributeStat[] atts = newAtts.ToArray();
-            //AttributesComponent c = new AttributesComponent()
-            //{
-            //    Properties = new ComponentPropertyCollection() { { "Attributes", new AttributeCollection(atts) } }
-            //};
-            //return c;
         }
 
         public override string GetStats()
@@ -83,10 +68,6 @@ namespace Start_a_Town_.Components
             return this.Attributes.ToString();
         }
 
-        //public AttributeDef GetAttribute(AttributeDef.Types type)
-        //{
-        //    return this.Attributes.FirstOrDefault(att => att.ID == type);
-        //}
         public AttributeStat GetAttribute(AttributeDef def)
         {
             return this.Attributes.FirstOrDefault(att => att.Def == def);
@@ -129,9 +110,6 @@ namespace Start_a_Town_.Components
             GUITableAttributes.ClearItems();
             GUITableAttributes.AddItems(this.Attributes);
             box.AddControlsBottomLeft(GUITableAttributes);
-            return;
-            foreach (var a in this.Attributes)
-                box.AddControlsBottomLeft(a.GetControl());
         }
         
         internal Control GetUI()
@@ -167,7 +145,6 @@ namespace Start_a_Town_.Components
         }
         internal override void Load(GameObject parent, SaveTag tag)
         {
-            //this.Attributes.TryLoadMutable(tag, "Attributes");
             this.Attributes.Sync(tag, "Attributes");
         }
         public override void Write(BinaryWriter w)

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Start_a_Town_
 {
     class AttributeProgressAwarderDef : Def
@@ -11,7 +6,6 @@ namespace Start_a_Town_
         readonly Func<GameObject, float> Getter;
         public AttributeProgressAwarderDef(string name, Func<GameObject, float> getter) : base(name)
         {
-     
             this.Getter = getter;
         }
         public float GetValue(GameObject a)

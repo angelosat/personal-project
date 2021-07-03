@@ -209,14 +209,20 @@
     <Compile Include="Blocks\LiduidFlowProcess.cs" />
     <Compile Include="Components\AI\Memory.cs" />
     <Compile Include="Components\AI\Personality\TraitDefOf.cs" />
+    <Compile Include="Components\Animations\AnimationBlending.cs" />
+    <Compile Include="Components\BuildingPlanComponent.cs" />
+    <Compile Include="Components\GearType.cs" />
+    <Compile Include="Components\IEntity.cs" />
+    <Compile Include="Components\Loot.cs" />
+    <Compile Include="Components\LootTable.cs" />
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />
     <Compile Include="Components\Stats\Stats\StatsHelper.cs" />
+    <Compile Include="Components\WindowSetStackSize.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
     <Compile Include="Modules\AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDef.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDefOf.cs" />
     <Compile Include="Blocks\Workstations\IBlockWorkstation.cs" />
-    <Compile Include="Components\GuiComponent.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionCraftVisitorRequest.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionSwapCarried.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConversationGradual.cs" />
@@ -371,7 +377,6 @@
     <Compile Include="Components\Crafting\ReagentFilters\ReagentFilterMaterial.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConversation.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionCraftNew.cs" />
-    <Compile Include="Blocks\Workstations\Kitchen\BlockKitchen.cs" />
     <Compile Include="Blocks\Workstations\Kitchen\BlockKitchenEntity.cs" />
     <Compile Include="Blocks\Workstations\Processing\BlockPlantProcessing.cs" />
     <Compile Include="Blocks\Workstations\ReactionsInterface.cs" />
@@ -397,7 +402,6 @@
     <Compile Include="Components\Crafting\ReactionIngredientIndex.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\IsEdible.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\ReagentFilterCustom.cs" />
-    <Compile Include="Components\FoodComponent.cs" />
     <Compile Include="Components\Fuel\Fuel.cs" />
     <Compile Include="Components\Fuel\FuelDef.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropEquippedTarget.cs" />
@@ -415,7 +419,6 @@
     <Compile Include="Components\Inventory\PacketInventoryDrop.cs" />
     <Compile Include="Components\Inventory\PacketPlayerSetItemOwner.cs" />
     <Compile Include="Components\ItemRequirement.cs" />
-    <Compile Include="Components\Vegetation\PlantComponentNew.cs" />
     <Compile Include="Helpers\RectangleHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
@@ -490,16 +493,7 @@
     <Compile Include="Components\Mood\MoodletDef.cs" />
     <Compile Include="Components\Needs\NeedCategoryDef.cs" />
     <Compile Include="Components\Needs\NeedDef.cs" />
-    <Compile Include="Components\Needs\NeedsHierarchyUI.cs" />
     <Compile Include="Components\Needs\PacketNeedModify.cs" />
-    <Compile Include="Components\Needs\Social\AIBehaviorChat.cs" />
-    <Compile Include="Components\Needs\Social\AIBehaviorFindChatTarget.cs" />
-    <Compile Include="Components\Needs\Social\AITaskChat.cs" />
-    <Compile Include="Components\Needs\Social\BehaviorConversationEngage.cs" />
-    <Compile Include="Components\Needs\Social\BehaviorConversationRespond.cs" />
-    <Compile Include="Components\Needs\Social\BehaviorHasConversation.cs" />
-    <Compile Include="Components\Needs\Social\BehaviorInitiateConversation.cs" />
-    <Compile Include="Components\Needs\Social\BehaviorIsConversationInitiator.cs" />
     <Compile Include="Blocks\Comps\BlockComp.cs" />
     <Compile Include="Blocks\Comps\BlockEntityComp.cs" />
     <Compile Include="Blocks\Comps\BlockEntityCompSwitchable.cs" />
@@ -517,7 +511,6 @@
     <Compile Include="Components\Skills\Best\NpcSkillsComponent.cs" />
     <Compile Include="Components\Skills\Best\NpcSkill.cs" />
     <Compile Include="Components\Skills\SkillDef.cs" />
-    <Compile Include="Components\Skills\SkillUI.cs" />
     <Compile Include="Components\Skills\ToolAbility.cs" />
     <Compile Include="Components\Stats\StatModifierCarrying.cs" />
     <Compile Include="Components\Stats\StatNewModifier.cs" />
@@ -587,7 +580,6 @@
     <Compile Include="Extensions\SaveHelper.cs" />
     <Compile Include="Terraforming\Biome.cs" />
     <Compile Include="Terraforming\Managers\PopulationManager.cs" />
-    <Compile Include="Tokens\Token.cs" />
     <Compile Include="UI\Buttons\ButtonHelper.cs" />
     <Compile Include="UI\Buttons\ButtonNew.cs" />
     <Compile Include="UI\Buttons\ButtonBase.cs" />
@@ -690,17 +682,13 @@
     <Compile Include="Components\BloodComponent.cs" />
     <Compile Include="Components\BombComponent.cs" />
     <Compile Include="Components\Combat\BlockingComponent.cs" />
-    <Compile Include="Components\Consumables\Consumable.cs" />
     <Compile Include="Components\Consumables\Effects\ConsumableEffect.cs" />
     <Compile Include="Components\Consumables\NeedEffect.cs" />
-    <Compile Include="Components\Containers\ContainerUI.cs" />
     <Compile Include="Components\Crafting\CanBeCraftedAt.cs" />
     <Compile Include="Components\Crafting\InteractionCraftingPerson.cs" />
     <Compile Include="Components\Crafting\Modifiers\Quantity.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\IsFuel.cs" />
     <Compile Include="Components\Crafting\Smelting\SmeltingInterface.cs" />
-    <Compile Include="Components\HandsComponent.cs" />
-    <Compile Include="Components\HaulComponentNew.cs" />
     <Compile Include="Components\Interactions\InteractionCustom.cs" />
     <Compile Include="Components\Interactions\InteractionPerpetual.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\IsBlockType.cs" />
@@ -709,7 +697,6 @@
     <Compile Include="Components\Interactions\NewScripts\InteractionChopping.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropCarriedSnap.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionStoreHauled.cs" />
-    <Compile Include="Components\Skills\SkillArgiculture.cs" />
     <Compile Include="Components\Vegetation\FertilizerComponent.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\BlockCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConsume.cs" />
@@ -717,9 +704,7 @@
     <Compile Include="Components\Interactions\NewScripts\InteractionFertilizing.cs" />
     <Compile Include="Objects\Items\ItemTypes\Rock.cs" />
     <Compile Include="Objects\Items\Tools\Pickaxe.cs" />
-    <Compile Include="Objects\Items\Sapling.cs" />
     <Compile Include="Objects\Items\Chair.cs" />
-    <Compile Include="Objects\Items\Stool.cs" />
     <Compile Include="Objects\Items\Sword.cs" />
     <Compile Include="Modules\Packets\PacketToggleForbidden.cs" />
     <Compile Include="Modules\Particles\Particle.cs" />
@@ -731,11 +716,6 @@
     <Compile Include="Modules\Particles\VelocityGetter.cs" />
     <Compile Include="Modules\Particles\VelocityGetterSphere.cs" />
     <Compile Include="Components\Physics\Physics.cs" />
-    <Compile Include="Components\Skills\SkillComponentNew.cs" />
-    <Compile Include="Components\Skills\New\Skill.cs" />
-    <Compile Include="Components\Skills\New\SkillsNewComponent.cs" />
-    <Compile Include="Components\Skills\New\SkillsUI.cs" />
-    <Compile Include="Components\Vegetation\SaplingComponent.cs" />
     <Compile Include="Components\Vegetation\TreeComponent.cs" />
     <Compile Include="GameModes\StaticMaps\CommandParser.cs" />
     <Compile Include="Animations\AnimationDeliverAttack.cs" />
@@ -780,22 +760,9 @@
     <Compile Include="Components\AI\AIState.cs" />
     <Compile Include="Modules\AI\Jobs\AIInstruction.cs" />
     <Compile Include="Modules\AI\Jobs\AIJob.cs" />
-    <Compile Include="Components\Animations\AnimationComponent.cs" />
-    <Compile Include="Components\Animations\AnimationLayer.cs" />
     <Compile Include="Components\Attributes\AttributesInterface.cs" />
-    <Compile Include="Components\BlockableComponent.cs" />
-    <Compile Include="Components\ClimbingComponent.cs" />
-    <Compile Include="Components\ConditionComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Components\BuildingComponent.cs" />
-    <Compile Include="Components\ConstructionFootprint.cs" />
-    <Compile Include="Components\Construction\Spawner.cs" />
-    <Compile Include="Components\Construction\SpawnerBlock.cs" />
-    <Compile Include="Components\Construction\SpawnerEntity.cs" />
     <Compile Include="Components\Crafting\Blocks\BlockRecipe.cs" />
     <Compile Include="Components\Crafting\Blocks\Modifier.cs" />
-    <Compile Include="Components\Crafting\Blocks\Modifiers\GetMaterialFromReagent.cs" />
     <Compile Include="Components\Crafting\Blocks\Product.cs" />
     <Compile Include="Components\Crafting\Blocks\ProductMaterialPair.cs" />
     <Compile Include="Components\Crafting\BlueprintMemory.cs" />
@@ -803,10 +770,7 @@
     <Compile Include="Components\Crafting\CraftOperation.cs" />
     <Compile Include="Components\Crafting\MemorizedBlueprints.cs" />
     <Compile Include="Components\Crafting\Modifiers\GetDurabilityFromTool.cs" />
-    <Compile Include="Components\Crafting\Modifiers\GetPartMaterialFromReagent.cs" />
-    <Compile Include="Components\Crafting\Modifiers\GetMaterialFromReagent.cs" />
     <Compile Include="Components\Crafting\Modifiers\FlimsyIfNoBench.cs" />
-    <Compile Include="Components\Crafting\Modifiers\TokenMadeWithTools.cs" />
     <Compile Include="Components\Crafting\Product.cs" />
     <Compile Include="Components\Crafting\Reaction.cs" />
     <Compile Include="Blocks\BlockDoor.cs" />
@@ -826,7 +790,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Components\Interactions\NewScripts\EquipFromWorld.cs" />
-    <Compile Include="Components\Interactions\NewScripts\UseItem.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionThrow.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropCarried.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropItem.cs" />
@@ -847,7 +810,6 @@
     <Compile Include="Objects\Items\Tools\Shovel.cs" />
     <Compile Include="Objects\Items\Templates.cs" />
     <Compile Include="Objects\Items\Tools\ToolComponent.cs" />
-    <Compile Include="Components\LadderComponent.cs" />
     <Compile Include="Components\MaterialsComponent.cs" />
     <Compile Include="Components\Crafting\ReagentComponent.cs" />
     <Compile Include="Objects\Items\Materials\CanBeMadeInto.cs" />
@@ -855,8 +817,6 @@
     <Compile Include="Objects\Items\Materials\MaterialType.cs" />
     <Compile Include="Components\MobileComponent.cs" />
     <Compile Include="Components\Inventory\PersonalInventoryComponent.cs" />
-    <Compile Include="Components\ReactionComponent.cs" />
-    <Compile Include="Components\RawMaterialComponent.cs" />
     <Compile Include="Components\Resources\Stamina.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\All.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\GearCheck.cs" />
@@ -866,7 +826,6 @@
     <Compile Include="Components\Interactions\NewScripts\InteractionDigging.cs" />
     <Compile Include="Components\Interactions\NewScripts\EquipFromInventory.cs" />
     <Compile Include="Components\Interactions\NewScripts\Planting.cs" />
-    <Compile Include="Components\Interactions\NewScripts\ProcessMaterial.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionTilling.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionHaul.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\Any.cs" />
@@ -876,33 +835,17 @@
     <Compile Include="Components\Interactions\NewScripts\Interaction.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\ScriptTaskCondition.cs" />
     <Compile Include="Components\Skills\ToolAbilityComponent.cs" />
-    <Compile Include="Components\Skills\SkillComponentOld.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Components\Skills\ToolAbilityDef.cs" />
-    <Compile Include="Components\Skills\SkillBuilding.cs" />
-    <Compile Include="Components\SoilComponent.cs" />
-    <Compile Include="Components\StackableComponent.cs" />
     <Compile Include="Components\Stats\StatMaxWeight.cs" />
     <Compile Include="Components\Stats\StatModifier.cs" />
     <Compile Include="Components\Stats\StatsComponentNew.cs" />
     <Compile Include="Components\Stats\StatsInterface.cs" />
-    <Compile Include="Components\Containers\StorageComponent.cs" />
-    <Compile Include="Components\ItemContainerComponent.cs" />
     <Compile Include="Components\Factory.cs" />
     <Compile Include="Components\Inventory\ItemContainer.cs" />
     <Compile Include="Components\Message.cs" />
     <Compile Include="Components\Resources\Durability.cs" />
     <Compile Include="Components\Resources\Health.cs" />
     <Compile Include="Components\Shadow.cs" />
-    <Compile Include="Components\Skills\SkillArgicultureOld.cs" />
-    <Compile Include="Components\Tokens\Token.cs" />
-    <Compile Include="Components\Tokens\TokensComponent.cs" />
-    <Compile Include="Components\ToolComponentOld.cs" />
-    <Compile Include="Components\UseComponent.cs" />
-    <Compile Include="Components\Workbench\WorkbenchInterface.cs" />
-    <Compile Include="Components\Workbench\WorkbenchReactionComponent.cs" />
-    <Compile Include="Components\Workbench\WorkbenchWindow.cs" />
     <Compile Include="Components\Interactions\WorkComponent.cs" />
     <Compile Include="Control\BlockPainter.cs" />
     <Compile Include="Control\BuildingPlacer.cs" />
@@ -1097,7 +1040,6 @@
     <Compile Include="GameModes\StaticMaps\Regions\RegionNode.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\RegionRoom.cs" />
     <Compile Include="Tokens\IsWorkstation.cs" />
-    <Compile Include="Tokens\TokenCollection.cs" />
     <Compile Include="UI\Bars\BarSmooth.cs" />
     <Compile Include="UI\Bars\BarSigned.cs" />
     <Compile Include="UI\Buttons\ButtonGridGeneric.cs" />
@@ -1215,31 +1157,19 @@
     <Compile Include="Components\Attack.cs" />
     <Compile Include="Components\Attributes\AttributeStat.cs" />
     <Compile Include="Components\Attributes\AttributesComponent.cs" />
-    <Compile Include="Components\BuildingPlanComponent.cs" />
     <Compile Include="Components\CombatComponent.cs" />
     <Compile Include="Components\Crafting\Recipe.cs" />
     <Compile Include="Components\Crafting\Template.cs" />
-    <Compile Include="Components\FuelComponent.cs" />
-    <Compile Include="Components\FurnaceComponent.cs" />
     <Compile Include="Components\Crafting\Smelting\SmelteryComponent.cs" />
     <Compile Include="Objects\Items\ItemComponent.cs" />
     <Compile Include="Components\ObjectFilter2.cs" />
     <Compile Include="Components\Resources\ResourcesComponent.cs" />
     <Compile Include="Components\Resources\ResourceDef.cs" />
-    <Compile Include="Components\Skills\Formula.cs" />
-    <Compile Include="Components\Skills\SkillOld.cs" />
-    <Compile Include="Components\SpellBookComponent.cs" />
-    <Compile Include="Components\Spells\Spell.cs" />
-    <Compile Include="Components\Spells\SpellComponent.cs" />
     <Compile Include="Components\Stats\Stat.cs" />
     <Compile Include="Components\WeaponComponent.cs" />
-    <Compile Include="Components\WorkshopComponent.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Components\Needs\Need.cs" />
-    <Compile Include="Components\Needs\AIAdvertisement.cs" />
-    <Compile Include="Components\Needs\NeedEffectCollection.cs" />
     <Compile Include="Components\Needs\NeedsCollection.cs" />
-    <Compile Include="Components\Needs\NeedsHierarchy.cs" />
     <Compile Include="Components\Physics\PhysicsComponent.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1263,53 +1193,30 @@
     </Compile>
     <Compile Include="Components\AI\Knowledge.cs" />
     <Compile Include="Components\AI\Personality\PersonalityComponent.cs" />
-    <Compile Include="Components\BedComponent.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\Behavior.cs" />
-    <Compile Include="Components\BonusesComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
-    <Compile Include="Components\KnowledgeComponent.cs" />
     <Compile Include="Components\OwnershipComponent.cs" />
-    <Compile Include="Components\ProductionComponent.cs" />
     <Compile Include="Components\Needs\NeedsComponent.cs" />
     <Compile Include="Components\NpcComponent.cs" />
-    <Compile Include="Components\PackableComponent.cs" />
     <Compile Include="Components\BodyPart.cs" />
-    <Compile Include="Components\BoxComponent.cs" />
     <Compile Include="Components\ComponentParameterCollection.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Components\Consumables\ConsumableComponent.cs" />
-    <Compile Include="Components\ContainerComponent.cs" />
     <Compile Include="Components\BodyComponent.cs" />
-    <Compile Include="Components\BodypartComponent.cs" />
-    <Compile Include="Components\PackageComponent.cs" />
-    <Compile Include="Components\PartyComponent.cs" />
-    <Compile Include="Components\ProjectComponent.cs" />
     <Compile Include="Components\PropertyComponent.cs" />
-    <Compile Include="Components\MultiTile2Component.cs" />
-    <Compile Include="Components\LightComponent.cs" />
-    <Compile Include="Components\ItemCraftingComponentFactory.cs" />
-    <Compile Include="Components\FluidComponent.cs" />
-    <Compile Include="Components\FarmingComponent.cs" />
     <Compile Include="Components\Vegetation\PlantComponent.cs" />
     <Compile Include="Components\Vegetation\SeedComponent.cs" />
-    <Compile Include="Components\Skills\SkillsComponent.cs" />
-    <Compile Include="Components\StatusComponent.cs" />
     <Compile Include="Components\StatsComponent.cs" />
     <Compile Include="Components\DefComponent.cs" />
     <Compile Include="Components\ComponentCollection.cs" />
     <Compile Include="Components\EquipComponent.cs" />
     <Compile Include="Components\InventoryComponent.cs" />
-    <Compile Include="Components\LootComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Control\ControlTool.cs" />
-    <Compile Include="Control\BlueprintTool.cs" />
-    <Compile Include="Control\ObjectOrientationTool.cs" />
-    <Compile Include="Control\ObjectOrientationTool2.cs" />
     <Compile Include="Control\Hotbar.cs" />
     <Compile Include="Control\InputBlock.cs" />
     <Compile Include="Control\PlanningTool.cs" />
-    <Compile Include="Control\ProjectTool.cs" />
     <Compile Include="Components\Crafting\Blueprint.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Interfaces\IUndoable.cs" />
@@ -1386,7 +1293,6 @@
     <Compile Include="UI\BuildingsWindow.cs" />
     <Compile Include="UI\CameraWidget.cs" />
     <Compile Include="UI\ConsoleBoxAsync.cs" />
-    <Compile Include="UI\ContainerWindow.cs" />
     <Compile Include="UI\CraftingTooltip.cs" />
     <Compile Include="UI\Dialogs\DialogLoading.cs" />
     <Compile Include="UI\Editor\ObjectSpawnTool.cs" />
@@ -1447,7 +1353,6 @@
     <Compile Include="UI\Panels\PanelList.cs" />
     <Compile Include="UI\PanelSkills.cs" />
     <Compile Include="UI\PopupManager.cs" />
-    <Compile Include="UI\ProjectsWindow.cs" />
     <Compile Include="UI\QuickBar.cs" />
     <Compile Include="UI\RenameWorldWindow.cs" />
     <Compile Include="UI\ScrollBars\ScrollableBox.cs" />
@@ -1633,7 +1538,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\Crafting\ToolFilters\" />
-    <Folder Include="Components\Particles\" />
     <Folder Include="GameModes\StaticMaps\Rooms\" />
     <Folder Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemManagerNew\" />
     <Folder Include="Objects\Coins\" />

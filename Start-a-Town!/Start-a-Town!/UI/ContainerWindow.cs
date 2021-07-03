@@ -39,33 +39,6 @@ namespace Start_a_Town_.UI
 
         }
 
-        //private void InitInvSlots()
-        //{
-
-        //    ContainerComp = Container.GetComponent<ContainerComponent>("Container");
-
-        //    List<GameObjectSlot> objSlots = ContainerComp.Slots;
-
-        //    Client.Controls.Remove(Panel_Slots);
-        //    Panel_Slots.Controls.Clear();
-
-        //    for (int i = 0; i < objSlots.Count; i++)
-        //        Panel_Slots.Controls.Add(new InventorySlot(objSlots[i], Container) { Filter = this.Filter, Location = new Vector2((i % LineMax) * UIManager.SlotSprite.Width, (i / LineMax) * UIManager.SlotSprite.Height) });
-           
-        //}
-
-        void listView_DrawItem(object sender, DrawListViewItemEventArgs e)
-        {
-            e.SpriteBatch.Draw(UIManager.SlotSprite, e.Item.BoundsScreen, Color.White);
-            GameObjectSlot slot = (GameObjectSlot)e.Item.Tag;
-            if (slot != null)
-            {
-                GuiComponent gui;
-                if (slot.Object.TryGetComponent<GuiComponent>("Gui", out gui))
-                    e.SpriteBatch.Draw(gui.GetProperty<Icon>("Icon").SpriteSheet, e.Bounds, gui.GetProperty<Icon>("Icon").SourceRect, Color.White);
-            }
-        }
-
         void slot_MouseMove(object sender, EventArgs e)
         {
             if (Controller.Instance.msCurrent.LeftButton == ButtonState.Pressed)

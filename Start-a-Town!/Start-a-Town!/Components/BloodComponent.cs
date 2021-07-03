@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
 using Start_a_Town_.Net;
@@ -41,7 +38,6 @@ namespace Start_a_Town_.Components
         }
         public override void Tick(GameObject parent)
         {
-            //this.BloodEmitter.Update(parent.Map, parent.Global);
             foreach (var e in this.Emitters.ToList())
             {
                 e.Update(parent.Map, e.Source);
@@ -55,11 +51,10 @@ namespace Start_a_Town_.Components
             switch(e.Type)
             {
                 case Message.Types.Attacked:
-                    //this.BloodEmitter.Emit(10);
                     if (parent.Net is Server)
                         break;
                     GameObject attacker = e.Parameters[0] as GameObject;
-                    var direction = parent.Global - attacker.Global;// attacker.Velocity;
+                    var direction = parent.Global - attacker.Global;
                     direction.Normalize();
                     direction *= .05f;
                     direction += attacker.Velocity;
@@ -78,7 +73,6 @@ namespace Start_a_Town_.Components
 
         public override void Draw(MySpriteBatch sb, GameObject parent, Camera camera)
         {
-            //this.BloodEmitter.Draw(camera, parent.Map, parent.Global);
             foreach (var e in this.Emitters)
                 e.Draw(camera, parent.Map, e.Source);
         }

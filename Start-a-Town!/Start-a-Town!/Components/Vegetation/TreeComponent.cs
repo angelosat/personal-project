@@ -83,34 +83,6 @@ namespace Start_a_Town_.Components
             
         }
 
-        static public void ChopDown(GameObject actor, GameObject parent)
-        {
-            var comp = parent.GetComponent<TreeComponent>();
-            
-            //var logs = MaterialType.RawMaterial.Create(parent.Body.Material);
-            //var logs = ItemFactory.CreateFrom(RawMaterialDef.Logs, parent.Body.Material);
-
-            var sapling = ItemTemplate.Sapling.Factory.Create();
-
-            var table = comp.Growth.Value >= YieldThreshold ?
-                new LootTable(
-
-                    //new Loot(() => MaterialType.RawMaterial.Create(parent.Body.Material), 1, 1, 5, 10), //1, 3),
-                    //new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Logs, parent.Body.Material ?? Material.LightWood), 1, 1, 5, 10) //1, 3),
-                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Logs, parent.Body.Material ?? MaterialDefOf.LightWood), comp.GrowthNew.Percentage, 5, 1, 3) //1, 3),
-
-                    //,new Loot(ItemTemplate.Sapling.Factory.Create, 1, 1, 1, 3)
-                    )
-                    :
-                    new LootTable();
-
-            //actor.Net.PopLoot(logs, parent);
-            //actor.Net.PopLoot(sapling, parent);
-            actor.Net.PopLoot(table, parent.Global, Vector3.Zero);
-
-            actor.Net.Despawn(parent);
-            actor.Net.DisposeObject(parent);
-        }
         public override void Write(System.IO.BinaryWriter w)
         {
             //w.Write(this.Growth);
@@ -211,93 +183,5 @@ namespace Start_a_Town_.Components
         {
             return new InteractionChopDown(this.Parent, this.ProcessAction);
         }
-    }
-    public class InteractionChopping : InteractionPerpetual
-    {
-        static int MaxStrikes = 3;
-        int StrikeCount = 0;
-        ParticleEmitterSphere EmitterStrike;
-        List<Rectangle> ParticleRects;
-        GameObject Logs;
-        public InteractionChopping()
-            : base("Chopping")
-        { }
-        static readonly ScriptTaskCondition cancel = new Exists();
-        static readonly TaskConditions conds = new TaskConditions(
-                    new AllCheck(
-                        new Exists(),
-                        new RangeCheck()
-                ));
-        public override ScriptTaskCondition CancelState
-        {
-            get
-            {
-                return cancel;
-            }
-            set
-            {
-                base.CancelState = value;
-            }
-        }
-        public override TaskConditions Conditions
-        {
-            get
-            {
-                return conds;
-            }
-        }
-
-        public override void Start(GameObject a, TargetArgs t)
-        {
-            base.Start(a, t);
-            // cache variables
-            //this.EmittersList = WorkComponent.GetEmitters(a);
-
-            this.EmitterStrike = new ParticleEmitterSphere();
-            this.EmitterStrike.Source = t.Global + Vector3.UnitZ;
-            this.EmitterStrike.SizeBegin = 1;
-            this.EmitterStrike.SizeEnd = 1;
-            this.EmitterStrike.ParticleWeight = 1;
-            this.EmitterStrike.Radius = 1f;// .5f;
-            this.EmitterStrike.Force = .1f;
-            this.EmitterStrike.Friction = .5f;
-            this.EmitterStrike.AlphaBegin = 1;
-            this.EmitterStrike.AlphaEnd = 0;
-            this.EmitterStrike.ColorBegin = MaterialDefOf.LightWood.Color;
-            this.EmitterStrike.ColorEnd = MaterialDefOf.LightWood.Color;
-            this.EmitterStrike.Lifetime = Engine.TicksPerSecond * 2;
-            this.EmitterStrike.Rate = 0;
-
-            this.Logs = MaterialType.RawMaterial.Create(t.Object.Body.Material);
-            this.ParticleRects = GameObject.Objects[Logs.IDType].Body.Sprite.AtlasToken.Rectangle.Divide(25);
-        }
-
-        public override void OnUpdate(GameObject a, TargetArgs t)
-        {
-            if (a.Net is Net.Client)
-            {
-                //this.EmitterStrike.Emit(25);
-                this.EmitterStrike.Emit(this.Logs.Body.Sprite.AtlasToken.Atlas.Texture, this.ParticleRects, Vector3.Zero);
-                //a.Map.EventOccured(Message.Types.ParticleEmitterAdd, this.EmitterStrike);
-                a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
-            }
-            this.StrikeCount++;
-            if (this.StrikeCount < MaxStrikes)
-            {
-                return;
-            }
-            this.Done(a, t);
-            //this.State = States.Finished;
-            this.Finish(a, t);
-        }
-        public void Done(GameObject a, TargetArgs t)
-        {
-            TreeComponent.ChopDown(a, t.Object);
-        }
-        public override object Clone()
-        {
-            return new InteractionChopping();
-        }
-        
     }
 }

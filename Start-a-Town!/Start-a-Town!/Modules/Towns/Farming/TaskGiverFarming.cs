@@ -7,7 +7,6 @@ using Start_a_Town_.AI;
 using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.Towns.Forestry;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Skills;
 
 namespace Start_a_Town_
 {

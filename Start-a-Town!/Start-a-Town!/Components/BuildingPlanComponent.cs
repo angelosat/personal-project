@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components
@@ -17,7 +16,7 @@ namespace Start_a_Town_.Components
             this.Orientation = orientation;
         }
     }
-
+    [Obsolete]
     class BuildingPlanComponent : EntityComponent
     {
         public override string ComponentName
@@ -41,15 +40,5 @@ namespace Start_a_Town_.Components
             return comp;
         }
 
-        //static public bool AddStage(GameObject obj)//, Dictionary<Vector3, DesignObject> stage)
-        //{
-        //    BuildingPlanComponent comp;
-        //    if (!obj.TryGetComponent<BuildingPlanComponent>("Project", out comp))
-        //        return false;
-
-        //    //comp.Stages[index] = stage;
-        //    comp.Stages.Add(new Dictionary<Vector3, DesignObject>()); //  stage);
-        //    return true;
-        //}
     }
 }

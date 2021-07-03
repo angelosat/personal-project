@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-using Microsoft.Xna.Framework;
 namespace Start_a_Town_.Components
 {
-    public class ItemContainer : GameObjectSlotCollection//, IObjectSpace
+    public class ItemContainer : GameObjectSlotCollection
     {
-        //public Func<GameObject, bool> Filter { get; set; }
-        //public byte ID;
         public Func<GameObject, bool> Filter = o => true;
-        //public Func<GameObject, bool> Filter
-        //{
-        //    get { return this.Container.IsNull() ? this._Filter : this.Container.Filter; }
-        //    set { this._Filter = value; }
-        //}
         GameObject _Parent;
         public GameObject Parent
         {
@@ -28,7 +19,7 @@ namespace Start_a_Town_.Components
             }
         }
         public List<ItemContainer> Children { get; set; }
-        public byte ID;// { get; set; }
+        public byte ID;
         new public byte Capacity { get; set; }
         public ItemContainer(GameObject parent, byte size = 0) : this(parent, size, o => true) { }
         public ItemContainer(GameObject parent, byte size, Func<GameObject, bool> filter)
@@ -41,14 +32,10 @@ namespace Start_a_Town_.Components
                 var id = parent.ChildrenSequence;
                 var sl = new GameObjectSlot(id) { Container = this };
                 Add(sl);
-                //if (sl.ID > 11 && (int)parent.ID == 10000)
-                //    "tistoputso".ToConsole();
             }
-            //Initialize(size);
             this.Filter = filter;
         }
         public ItemContainer(byte size = 0)
-         //: this(null, size)
         {
             this.Parent = null;
             this.Children = new List<ItemContainer>();
@@ -61,10 +48,8 @@ namespace Start_a_Town_.Components
             for (byte n = 0; n < size; n++)
                 Add(new GameObjectSlot(n) { Container = this });
         }
-        public ItemContainer(byte size, Func<byte> indexSequence) //GameObject parent, 
-        // : base(size)
+        public ItemContainer(byte size, Func<byte> indexSequence) 
         {
-           // this.Parent = parent;
             this.Children = new List<ItemContainer>();
             this.Clear();
             this.Capacity = size;
@@ -96,19 +81,10 @@ namespace Start_a_Town_.Components
                 slot.Container = this;
             }
         }
-        //public byte AddChild(ItemContainer itemcontainer)
-        //{
-        //    itemcontainer.ID = (byte)this.Children.Count;
-        //    itemcontainer.Parent = this;
-        //    this.Children.Add(itemcontainer);
-        //    return itemcontainer.ID;
-        //}
-
+        
         public override string ToString()
         {
             string text = "";
-            //foreach (GameObjectSlot slot in this)
-            //    text += slot.ToString() + "\n";
             for (int i = 0; i < this.Count; i++)
                 text += "[" + i + "]: " + this[i].ToString() + "\n";
             return text.TrimEnd('\n');
@@ -116,12 +92,10 @@ namespace Start_a_Town_.Components
 
         public void Write(System.IO.BinaryWriter writer)
         {
-            //TargetArgs.Write(writer, this.Parent);
             writer.Write(this.ID);
             writer.Write(this.Count);
             var slots = from slot in this where slot.HasValue select slot;
             writer.Write(slots.Count());
-            //slots.ToList().ForEach(s => s.Write(writer));
             for (int i = 0; i < this.Count; i++)
             {
                 var slot = this[i];
@@ -131,7 +105,7 @@ namespace Start_a_Town_.Components
                 slot.Write(writer);
             }
         }
-        public void Read(System.IO.BinaryReader reader)
+        public void Read(BinaryReader reader)
         {
             this.Clear();
             this.ID = reader.ReadByte();
@@ -142,16 +116,13 @@ namespace Start_a_Town_.Components
             for (int i = 0; i < occupiedslotCount; i++)
             {
                 int slotID = reader.ReadInt32();
-                //this[slotID].Read(reader);
                 GameObjectSlot slot = this[slotID];
-
                 slot.Container = this;
-                //   slot.ID = (byte)slotID; //redundant?
                 slot.Read(reader);
             }
         }
-        static public ItemContainer Create(System.IO.BinaryReader reader) { return Create(null, reader); }
-        static public ItemContainer Create(GameObject parent, System.IO.BinaryReader reader)
+        static public ItemContainer Create(BinaryReader reader) { return Create(null, reader); }
+        static public ItemContainer Create(GameObject parent, BinaryReader reader)
         {
             var id = reader.ReadByte();
             ItemContainer cont = new ItemContainer(parent, (byte)reader.ReadInt32()) { ID = id };
@@ -213,14 +184,12 @@ namespace Start_a_Town_.Components
 
         static public ItemContainer Create(GameObject parent, SaveTag containerTag)
         {
-            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;// containerTag.ToDictionary();
+            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;
         
             byte capacity = (byte)shit["Capacity"].Value;
             ItemContainer container = new ItemContainer(parent, capacity);
             containerTag.TryGetTagValue<byte>("ID", out container.ID);
-            //List<SaveTag> itemList = shit["Items"].Value as List<SaveTag>;
             Dictionary<string, SaveTag> itemList = shit["Items"].Value as Dictionary<string, SaveTag>;
-            //foreach (SaveTag itemTag in itemList)
 
             foreach (SaveTag itemTag in itemList.Values)
             {
@@ -233,7 +202,7 @@ namespace Start_a_Town_.Components
         }
         static public ItemContainer Create(SaveTag containerTag)
         {
-            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;//.ToDictionary();
+            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;
             byte capacity = (byte)shit["Capacity"].Value;
             ItemContainer container = new ItemContainer(capacity);
             containerTag.TryGetTagValue<byte>("ID", out container.ID);
@@ -252,7 +221,7 @@ namespace Start_a_Town_.Components
         }
         public ItemContainer Load(SaveTag containerTag)
         {
-            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;//.ToDictionary();
+            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;
             containerTag.TryGetTagValue<byte>("ID", out this.ID);
             byte capacity = (byte)shit["Capacity"].Value;
             this.Initialize(capacity);
@@ -317,7 +286,6 @@ namespace Start_a_Town_.Components
                 int diff = remaining - slot.StackSize;
                 slot.StackSize -= Math.Min(slot.StackSize, remaining);
                 if (slot.StackSize == 0)
-                    //obj.Net.DisposeObject(obj);
                     obj.Dispose();
                 remaining -= diff;
             }
@@ -364,7 +332,6 @@ namespace Start_a_Town_.Components
                 if (source != null)
                     if (obj.RefID == source.RefID)
                     {
-                        //   net.InstantiateInContainer(obj, parent, targetSlot.Parent.ID, targetSlot.ID, (byte)amount);
                         if (net.Instantiate(obj) != null)
                         {
                             targetSlot.Object = obj;
@@ -393,7 +360,6 @@ namespace Start_a_Town_.Components
                  .FirstOrDefault();
             if (firstStack is not null)
             {
-                //firstStack.StackSize++;
                 firstStack.StackSize += obj.StackSize;
                 // merge objects to existins object in slot, despawn and dispose old one
                 net.Despawn(obj);
@@ -410,7 +376,6 @@ namespace Start_a_Town_.Components
                 return false;
 
             firstEmpty.Object = obj;
-            //firstEmpty.StackSize = 1;
             net.Despawn(obj);
             return true;
         }
@@ -418,12 +383,8 @@ namespace Start_a_Town_.Components
         {
             if (InsertObject(net, objSlot.Object))
             {
-              //  objSlot.StackSize--;
-                
-
                 objSlot.Clear();
                 // dispose if stacksize == 0?
-                //net.EventOccured(Components.Message.Types.InventoryChanged, objSlot.Parent);
                 return true;
             }
             return false;

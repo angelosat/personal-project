@@ -26,11 +26,9 @@ namespace Start_a_Town_.Components
             switch (e.Type)
             {
                 case Message.Types.BlockCollision:
-                    return true;
+                    throw new NotImplementedException();
 
                     Vector3 blockGlobal = (Vector3)e.Parameters[0];
-                    //BlockComponent.Blocks[blockGlobal.GetCell(e.Network.Map).Type].
-                    //Cell cell = blockGlobal.GetCell(e.Network.Map);
                     Cell cell = e.Network.Map.GetCell(blockGlobal);
 
                     if (cell == null)

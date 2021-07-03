@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
     class NpcSkill : ISaveable, ISerializable, INamed
     {
-        //public virtual string Name { get; }
-        //public virtual string Description { get; }
-        //public virtual Icon Icon { get; }
-
-        //public int ID;
         public SkillDef Def;
         public string Name { get { return this.Def.Name; } }
         public int Level;
@@ -36,16 +28,11 @@ namespace Start_a_Town_
             hud.RegisterEventHandler(Components.Message.Types.SkillIncrease, OnSkillIncrease);
         }
 
-        //public void GetTooltipInfo(Tooltip tooltip)
-        //{
-        //    tooltip.AddControlsBottomLeft(new Label(this.Description));
-        //}
         public Control GetControl()
         {
             var label = new Label()
             {
                 TextFunc = () => string.Format("{0}: {1}", this.Def.Name, this.Level),
-                //HoverText = this.Description,
                 TooltipFunc = (t) =>
                 {
                     t.AddControlsBottomLeft(
@@ -56,9 +43,6 @@ namespace Start_a_Town_
             };
             return label;
         }
-
-        //internal static readonly NpcSkill Digging = new NpcSkillDigging();
-        //internal static readonly NpcSkill Constructing = new NpcSkillDigging();
 
         static void OnSkillIncrease(GameEvent a)
         {

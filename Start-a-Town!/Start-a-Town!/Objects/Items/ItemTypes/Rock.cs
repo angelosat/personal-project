@@ -34,7 +34,6 @@ namespace Start_a_Town_
                     GameObject obj = new GameObject();
                     obj.AddComponent<DefComponent>().Initialize(ID, ObjectType.Material, "Rock", "A piece of rock", Quality.Common).Initialize(ItemSubType.Rock);
                     obj.AddComponent<SpriteComponent>().Initialize(new Sprite("boulder", Map.BlockDepthMap) { OriginGround = new Vector2(16, 24) });
-                    obj.AddComponent<GuiComponent>().Initialize(10, 8);
                     obj.AddComponent<PhysicsComponent>().Initialize(size: 1);
                     obj.AddComponent<ReagentComponent>().Initialize(Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks);
                     return obj;

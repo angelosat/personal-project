@@ -25,10 +25,8 @@ namespace Start_a_Town_.Components
             if (!MultiTile2Component.IsPositionValid(this.Content.Object, parent.Map, parent.Global))
                 return;
 
-            //parent.Remove(e.Network);
             net.Despawn(parent);
 
-            //e.Network.Spawn(this.Content.Object.SetGlobal(parent.Global));
             net.Spawn(this.Content.Object.SetGlobal(parent.Global));
         }
 

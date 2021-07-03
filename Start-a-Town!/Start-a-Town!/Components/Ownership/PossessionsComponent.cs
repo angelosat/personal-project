@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.Components;
 
 namespace Start_a_Town_
@@ -28,7 +26,6 @@ namespace Start_a_Town_
         {
             if (this.Rooms.Contains(room))
                 throw new Exception();
-            //room.TimeClaimed = this.Parent.NetNew.Clock;
             this.Rooms.Add(room);
             room.AddOwner(this.Parent as Actor);
         }

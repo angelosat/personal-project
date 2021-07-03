@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Start_a_Town_
 {
@@ -40,7 +35,6 @@ namespace Start_a_Town_
 
         public ISaveable Load(SaveTag tag)
         {
-            //tag.TryGetTagValue<string>("Def", t => this.Def = Start_a_Town_.Def.GetDef<NeedLetDef>(t));
             tag.LoadDef<NeedLetDef>("Def");
             tag.TryGetTagValue<float>("RateMod", out this.RateMod);
             tag.TryGetTagValue<float>("ValueMod", out this.ValueMod);
@@ -57,7 +51,6 @@ namespace Start_a_Town_
 
         public ISerializable Read(BinaryReader r)
         {
-            //this.Def = Start_a_Town_.Def.GetDef<NeedLetDef>(r.ReadString());
             this.Def = r.ReadDef<NeedLetDef>();
             this.RateMod = r.ReadSingle();
             this.ValueMod = r.ReadSingle();

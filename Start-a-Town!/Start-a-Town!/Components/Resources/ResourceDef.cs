@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
 using Start_a_Town_.Components.Resources;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
@@ -17,7 +15,6 @@ namespace Start_a_Town_
             readonly public float Value;
             public ResourceThreshold(string name, float value) : base(name)
             {
-                //this.Name = name;
                 this.Value = value;
             }
             public ResourceThreshold Get(float value)
@@ -37,8 +34,7 @@ namespace Start_a_Town_
                         return n;
                     current = current.Next;
                     n++;
-                } while (true);// current != null);
-                               //return n;
+                } while (true);
             }
             public float GetThresholdValue(int index)
             {
@@ -56,22 +52,6 @@ namespace Start_a_Town_
                 if (next.Value <= this.Value)
                     throw new Exception();
                 return this;
-                //this.Next = next;
-                //if (this.Next.Value <= this.Value)
-                //    throw new Exception();
-                //return this;
-            }
-            ResourceThreshold GetLast(out int depth)
-            {
-                depth = 0;
-                var current = this;
-                do
-                {
-                    if (current.Next == null)
-                        return current;
-                    current = current.Next;
-                    depth++;
-                } while (true);
             }
             public override string ToString()
             {
@@ -81,13 +61,13 @@ namespace Start_a_Town_
 
 
         static public readonly ResourceDef Health =
-            new Health()//; //new ResourceDef("Health");
+            new Health()
                 .AddThreshold("Dying", .25f)
                 .AddThreshold("Critical", .5f)
                 .AddThreshold("Injured", .75f)
                 .AddThreshold("Healthy", 1f);
 
-        static public readonly ResourceDef Stamina = //new ResourceDef("Stamina");
+        static public readonly ResourceDef Stamina =
             new Stamina()
                 .AddThreshold("Out of breath", .25f)
                 .AddThreshold("Exhausted", .5f)
@@ -123,11 +103,6 @@ namespace Start_a_Town_
             this.Thresholds.Add(t);
             this.Thresholds.Sort((a, b) => a.Value.CompareTo(b.Value));
             return this;
-            //if (this.Root == null)
-            //    this.Root = t;
-            //else
-            //    this.Root.Add(t);
-            //return this;
         }
         public ResourceThreshold GetThreshold(Resource res)
         {
@@ -184,7 +159,7 @@ namespace Start_a_Town_
                 ColorFunc = () => this.GetBarColor(resource),
                 TextFunc = () => this.GetBarLabel(resource),
                 HoverFunc = () => this.GetBarHoverText(resource)
-            };//, HoverFunc = () => $"{resource.Value} / {resource.Max}" };
+            };
             return bar;
         }
 
@@ -204,12 +179,8 @@ namespace Start_a_Town_
                 this.Add(ratemod.Def.GetRateMod(parent), resource);
         }
         public virtual bool HandleMessage(Resource resource, GameObject parent, ObjectEventArgs e = null) { return false; }
-
         
         public virtual string Format { get { return ""; } }
-
-
-        //public virtual Control GetControl(Resource resource) { return null; }
 
         public virtual void OnHealthBarCreated(GameObject parent, UI.Nameplate plate, Resource values) { }
         public virtual void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent) { }

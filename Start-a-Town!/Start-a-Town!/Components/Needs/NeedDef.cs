@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.AI;
 
 namespace Start_a_Town_
@@ -21,10 +17,7 @@ namespace Start_a_Town_
             n.NeedDef = this;
             return n;
         }
-        //public NeedDef(string name, NeedCategoryDef category = null) : base(name)
-        //{
-        //    this.CategoryDef = category;
-        //}
+        
         public NeedDef(string name, Type needType, NeedCategoryDef category = null) : base(name)
         {
             this.Type = needType;
@@ -38,33 +31,25 @@ namespace Start_a_Town_
         };
         static public readonly NeedDef Hunger = new("Hunger", typeof(NeedFood))
         {
-            //BaseThreshold = 20,
             TaskGiver = new TaskGiverEat(),
             CategoryDef = NeedCategoryDef.NeedCategoryPhysiological
         };
         static public readonly NeedDef Energy = new("Energy", typeof(NeedEnergy))
         {
-            //Name = ,
-            //BaseThreshold = 20,
             TaskGiver = new TaskGiverSleeping(),
             CategoryDef = NeedCategoryDef.NeedCategoryPhysiological
         };
         static public readonly NeedDef Work = new("Work", typeof(NeedWork))
         {
-            //Name = ,
             CategoryDef = NeedCategoryDef.NeedCategoryEsteem
-            //BaseThreshold = 95,
-            //TaskGiver = new TaskGiverSleeping()
         };
         static public readonly NeedDef Social = new("Social", typeof(NeedSocial))
         {
-            //Name = ,
             CategoryDef = NeedCategoryDef.NeedCategoryRelationships
         };
 
         static public readonly NeedDef Curiosity = new("Curiosity", typeof(NeedCuriosity))
         {
-            //Name = ,
             CategoryDef = NeedCategoryDef.NeedCategoryCognitive
         };
 

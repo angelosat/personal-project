@@ -7,57 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.Components
 {
-    struct StatusCondition
-    {
-        //static public GameObject StatusCondition
-        //{
-        //    get
-        //    {
-        //        GameObject obj = new GameObject();
-        //        obj.AddComponent("Info", new InfoComponent(GameObject.Types.StatusCondition, "Status Condition", "Base status condition"));
-        //        Texture2D tex = Game1.Instance.Content.Load<Texture2D>("Graphics/spritesheet");
-        //        obj.AddComponent("Sprite", new SpriteComponent(Map.ItemSheet, new Rectangle[][] { new Rectangle[] { Map.Icons[6] } }, new Vector2(16)));
-        //        obj.AddComponent<GuiComponent>().Initialize(6));
-        //        obj.AddComponent("Condition", new ConditionComponent());
-        //        return obj;
-        //    }
-        //}
-
-        static public GameObject Empty
-        {
-            get
-            {
-                //GameObject obj = new GameObject();
-                //obj.AddComponent("Info", new InfoComponent(GameObject.Types.StatusCondition, "Status Condition", "Base status condition"));
-                //Texture2D tex = Game1.Instance.Content.Load<Texture2D>("Graphics/spritesheet");
-                //obj.AddComponent("Sprite", new SpriteComponent(Map.ItemSheet, new Rectangle[][] { new Rectangle[] { Map.Icons[6] } }, new Vector2(16)));
-                //obj.AddComponent<GuiComponent>().Initialize(6));
-                //obj.AddComponent("Condition", new ConditionComponent());
-                return Create();// obj;
-            }
-        }
-
-        static public GameObject Create(Message.Types message = Message.Types.Default, string name = "<undefined>", string description = "<undefined>", Stat stat = null, float value = 0f, float duration = 0f)
-        {
-                GameObject obj = new GameObject();
-                obj.AddComponent("Info", new DefComponent(GameObject.Types.StatusCondition, ObjectType.Condition, name, description));
-                //Texture2D tex = Game1.Instance.Content.Load<Texture2D>("Graphics/spritesheet");
-                obj.AddComponent("Sprite", new SpriteComponent(Map.ItemSheet, new Rectangle[][] { new Rectangle[] { Map.Icons[6] } }, new Vector2(16)));
-                obj.AddComponent<GuiComponent>().Initialize(6);
-                obj.AddComponent("Condition", new ConditionComponent(message, stat, value, duration));
-                return obj;
-        }
-        //static public GameObject StatModCondition
-        //{
-        //    get
-        //    {
-        //        GameObject obj = GameObjectDb.StatusCondition;
-        //        //     obj.GetComponent<StatusComponent>("Conditions").Properties.Add(
-        //        return obj;
-        //    }
-        //}
-    }
-
     class ConditionComponent : EntityComponent
     {
         public override string ComponentName

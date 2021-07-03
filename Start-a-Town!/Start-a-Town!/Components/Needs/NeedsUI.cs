@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
     class NeedsUI : GroupBox
     {
-        GameObject Entity;
         GroupBox BoxNeeds, BoxMood;
         public NeedsUI()
         {
@@ -21,13 +14,11 @@ namespace Start_a_Town_
         }
         public NeedsUI(GameObject entity)
         {
-            this.Entity = entity;
 
             var needs = entity.GetComponent<NeedsComponent>();
             var mood = entity.GetComponent<MoodComp>();
 
             this.BoxNeeds = new GroupBox();
-            //this.BoxNeeds.AddControls(needs.NeedsHierarchy.GetUI(entity));
             needs.GetUI(entity, this.BoxNeeds);
 
             this.BoxMood = new GroupBox() { Location = this.BoxNeeds.TopRight };
@@ -38,7 +29,6 @@ namespace Start_a_Town_
         }
         public void Refresh(GameObject entity)
         {
-            this.Entity = entity;
             var needs = entity.GetComponent<NeedsComponent>();
             var mood = entity.GetComponent<MoodComp>();
 
@@ -47,7 +37,6 @@ namespace Start_a_Town_
             this.BoxNeeds.ClearControls();
             this.BoxMood.ClearControls();
 
-            //this.BoxNeeds.AddControls(needs.NeedsHierarchy.GetUI(entity));
             needs.GetUI(entity, this.BoxNeeds);
 
             mood.GetInterface(entity, this.BoxMood);

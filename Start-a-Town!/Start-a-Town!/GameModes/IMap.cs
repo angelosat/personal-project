@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Collections.Concurrent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
@@ -32,7 +28,6 @@ namespace Start_a_Town_
             static public void Send(IObjectProvider net, GameObject entity, IMap map, Vector3 global, Vector3 velocity)
             {
                 if (net is Client)
-                    //throw new Exception();
                     return;
                 var w = net.GetOutgoingStream();
                 w.Write(PacketSpawn);
@@ -46,7 +41,7 @@ namespace Start_a_Town_
                 var actor = client.GetNetworkObject(r.ReadInt32());
                 var global = r.ReadVector3();
                 var velocity = r.ReadVector3();
-                var map = client.Map;// as StaticMap;
+                var map = client.Map;
                 map.SyncSpawn(actor, global, velocity);
             }
             
@@ -80,44 +75,33 @@ namespace Start_a_Town_
         public GameObject PlayerCharacter;
         public ParticleManager ParticleManager;
         public RegionManager Regions;
-        protected List<GameObject> CachedObjects = new List<GameObject>();
+        protected List<GameObject> CachedObjects = new();
         protected Dictionary<Vector3, BlockEntity> CachedBlockEntities = new Dictionary<Vector3, BlockEntity>();
 
         public abstract Color GetAmbientColor();
         public abstract void SetAmbientColor(Color color);
         public abstract double GetDayTimeNormal();
         public abstract Texture2D GetThumbnail();
-        //string Name;
         public abstract float LoadProgress { get; }
         public ulong CurrentTick => this.World.CurrentTick;
         public TimeSpan Clock => this.World.Clock;
-
-        //public TimeSpan Clock
-        //{
-        //    get => this.clock; 
-        //    set
-        //    {
-        //        this.clock = value;
-        //        this.CurrentTick = (ulong)(this.clock.TotalMilliseconds / TickLengthMilliseconds);
-        //    }
-        //}
-        //TimeSpan clock;
-
-        //public abstract IWorld GetWorld();
+        
         public abstract Vector2 GetOffset();
 
         internal bool IsDeconstructible(Vector3 global)
         {
-            return this.GetBlockEntity(global)?.HasComp<BlockEntityCompDeconstructible>() ?? this.GetBlock(global).IsDeconstructible;//.GetCell(global).IsDeconstructible();
+            return this.GetBlockEntity(global)?.HasComp<BlockEntityCompDeconstructible>() ?? this.GetBlock(global).IsDeconstructible;
         }
 
         public Vector2 Coordinates;
         public abstract string GetName();
         public float Gravity
         {
-            get { return Components.PhysicsComponent.Gravity; }
+            get { return PhysicsComponent.Gravity; } // TODO: move gravity to world class
         }
-        public readonly float PlantDensityTarget = .1f;// .01f;
+        public readonly float PlantDensityTarget = .1f;
+        public int ChunkVolume => Chunk.Size * Chunk.Size * this.GetMaxHeight();
+
         public int Area { get { return this.ActiveChunks.Count * Chunk.Size * Chunk.Size; } }
 
         internal Room GetRoomAt(IntVec3 global)
@@ -128,7 +112,6 @@ namespace Start_a_Town_
         public int Volume { get { return this.ActiveChunks.Count * ChunkVolume; } }
 
         public Random Random { get { return this.World.Random; } }
-        //Dictionary<Vector2, Chunk> ActiveChunks { get; set; }
         public abstract Dictionary<Vector2, Chunk> GetActiveChunks();
         public abstract bool AddChunk(Chunk chunk);
         public abstract List<GameObject> GetObjects();
@@ -145,7 +128,6 @@ namespace Start_a_Town_
         public abstract int GetMaxHeight();
         public abstract int GetSizeInChunks();
 
-        //protected Vector2[] _RandomOrderedChunkIndices;
         protected int[] _RandomOrderedChunkIndices;
         protected int[] RandomOrderedChunkIndices
         {
@@ -164,45 +146,19 @@ namespace Start_a_Town_
                 }
                 return this._RandomOrderedChunkIndices;
             }
-            //set { this._RandomOrderedChunkIndices = value; }
         }
-
         
-
-        //protected List<Chunk> _RandomOrderedChunks;
-        //List<Chunk> RandomOrderedChunks
-        //{
-        //    get
-        //    {
-        //        if (this._RandomOrderedChunks == null)
-        //        {
-        //            //this._RandomOrderedChunks = this.ActiveChunks.Values.Randomize(this.Random);
-        //            //this._RandomOrderedChunkIndices = this.ActiveChunks.Keys.Randomize(this.Random).ToArray();
-        //            this._RandomOrderedChunkIndicesNew = Enumerable.Range(0, this.ActiveChunks.Count).Randomize(this.Random).ToArray();
-
-        //            foreach (var ch in this.ActiveChunks.Values)
-        //            {
-        //                // force initialization on all chunks
-        //                if (ch.GetRandomCellInOrder(0) == null)
-        //                    throw new Exception();
-        //            }
-        //        }
-        //        return this._RandomOrderedChunks;
-        //    }
-        //}
         Chunk GetRandomChunkInOrder(int index)
         {
             if (index >= this.ActiveChunks.Count)
                 throw new Exception();
             return this.ActiveChunks.ElementAt(this.RandomOrderedChunkIndices[index]).Value;
-            //return this.ActiveChunks[this._RandomOrderedChunkIndices[index]];
-            //return this.RandomOrderedChunks[index];
         }
         public Vector3 GetRandomCellInOrder(int index)
         {
             if (index >= this.Volume)
                 throw new Exception();
-            var chunkLength = ChunkVolume;// Chunk.Size * Chunk.Size * this.GetMaxHeight();
+            var chunkLength = ChunkVolume;
             var chunkIndex = index / chunkLength;
             var cellIndex = index % chunkLength;
             var chunk = this.GetRandomChunkInOrder(chunkIndex);
@@ -228,10 +184,6 @@ namespace Start_a_Town_
             return randomCell.ToGlobal(randomChunk);
         }
 
-        public int ChunkVolume
-        {
-            get { return Chunk.Size * Chunk.Size * this.GetMaxHeight(); }
-        }
         public IEnumerable<Cell> GetAllCells()
         {
             foreach (var ch in this.ActiveChunks.Values)
@@ -243,33 +195,6 @@ namespace Start_a_Town_
         {
             this.World.ResolveReferences();
         }
-
-        //List<Vector3> _RandomOrderedCells;
-        //List<Vector3> RandomOrderedCells
-        //{
-        //    get
-        //    {
-        //        if (this._RandomOrderedCells == null)
-        //        {
-        //            var size = this.GetSizeInChunks();
-        //            var allPositions = new BoundingBox(Vector3.Zero, new Vector3(size * Chunk.Size - 1, size * Chunk.Size - 1, 0)).GetBox();
-
-        //            this._RandomOrderedCells = allPositions.Select(g=>this.GetHeightmapValue(.Randomize(this.Random);
-        //        }
-        //        return this._RandomOrderedCells;
-        //    }
-        //}
-        //public Chunk GetRandomGlobalInOrder(int index)
-        //{
-        //    if (index >= this.ActiveChunks.Count)
-        //        throw new Exception();
-        //    return this.RandomOrderedChunks[index];
-        //}
-        //public Vector3 GetRandomGlobal(int index)
-        //{
-
-        //}
-
 
         internal void ReplaceBlocks(IEnumerable<Vector3> positions, Block.Types type, byte data, int variation, int orientation)
         {
@@ -290,9 +215,9 @@ namespace Start_a_Town_
             }
 
             // reenable physics of entities resting on block
-            foreach (var entity in this.GetObjects(global.Above()))// - new Vector3(1, 1, 0), global + new Vector3(1, 1, 2)))
+            foreach (var entity in this.GetObjects(global.Above()))
             {
-                Components.PhysicsComponent.Enable(entity);
+                PhysicsComponent.Enable(entity);
             }
 
             this.SetBlock(global, type, data, variation, orientation, raiseEvent);
@@ -314,8 +239,6 @@ namespace Start_a_Town_
             var center = block.GetCenter(data, global);
             foreach (var u in block.UtilitiesProvided)
                 this.Town.RemoveUtility(u, center);
-            //var blockentity = this.RemoveBlockEntity(center);
-            //var blockentity = this.RemoveBlockEntity(global); // LATEST DECISION: add blockentity to all occupied cells
             var blockentity = this.GetBlockEntity(global);
             var parts = block.GetParts(data, global);
 
@@ -343,8 +266,6 @@ namespace Start_a_Town_
         public void RemoveBlock(Vector3 global, bool notify = true)
         {
             this.RemoveBlockNew(global, notify);
-            return;
-            this.GetBlock(global).Remove(this, global, notify);
         }
         internal void RemoveBlocks(List<Vector3> positions, bool notify = true)
         {
@@ -364,13 +285,7 @@ namespace Start_a_Town_
                 return null;
             return cell.Block;
         }
-        //public Block GetBlock(Vector3 global)
-        //{
-        //    Cell cell;
-        //    if (!this.TryGetCell(global, out cell))
-        //        return null;
-        //    return cell.Block;
-        //}
+        
         public Block GetBlock(Vector3 global, out Cell cell)
         {
             if (!this.TryGetCell(global, out cell))
@@ -382,26 +297,12 @@ namespace Start_a_Town_
         {
             Chunk chunk = this.GetChunk(global);
             var local = global.ToLocal();
-            //if (chunk.BlockEntitiesByPosition.TryGetValue(local, out var entity))
-            //{
-            //    chunk.BlockEntitiesByPosition.Remove(local);
-            //    return entity;
-            //}
+            
             if (chunk.TryRemoveBlockEntity(local, out var entity))
                 return entity;
-            //this.Net.SyncReport($"Tried to remove non-existent block entity from {global}");
             return null;
         }
-        //public void RemoveBlockEntity(BlockEntity entity)
-        //{
-        //    if(!this.BlockEntities.Remove(entity))
-        //        this.Net.SyncReport($"Tried to remove non-existent block entity {entity}");
-        //    foreach (var global in entity.CellsOccupied)
-        //    {
-        //        this.RemoveBlockEntity(global);
-        //    }
-        //}
-        //readonly HashSet<BlockEntity> BlockEntities = new();
+        
         public void AddBlockEntity(Vector3 global, BlockEntity entity)
         {
             entity.CellsOccupied.Add(global);
@@ -409,8 +310,6 @@ namespace Start_a_Town_
             entity.Place(this, global);
             var local = global.ToLocal();
             chunk.AddBlockEntity(entity, local);
-            //chunk.BlockEntitiesByPosition[local] = entity;
-            //this.BlockEntities.Add(entity);
         }
         public IEnumerable<KeyValuePair<Vector3, T>> GetBlockEntities<T>() where T : BlockEntity
         {
@@ -431,49 +330,33 @@ namespace Start_a_Town_
             var cell = this.GetCell(global);
             return global + cell.Back;
         }
-        //public IEnumerable<Vector3> GetBlockEntities()// IObjectProvider net)
-        //{
-        //    List<Vector3> list = new();
-        //    foreach (var ch in ActiveChunks.Values)
-        //        list.AddRange(ch.BlockEntitiesByPosition.Keys.Select(l=>l.ToGlobal(ch)));
-        //    return list;
-        //}
-        public IEnumerable<Vector3> GetBlockEntities()// IObjectProvider net)
+       
+        public IEnumerable<Vector3> GetBlockEntities()
         {
             foreach (var ch in ActiveChunks.Values)
-                foreach (var (local, entity) in ch.GetBlockEntitiesByPosition())// .BlockEntitiesByPosition)
+                foreach (var (local, entity) in ch.GetBlockEntitiesByPosition())
                     yield return local.ToGlobal(ch);
-                    //yield return new KeyValuePair<Vector3, BlockEntity>(b.Key.ToGlobal(ch), b.Value);
         }
-        //public IEnumerable<KeyValuePair<Vector3, BlockEntity>> GetBlockEntitiesCache()// IObjectProvider net)
-        //{
-        //    return this.CachedBlockEntities;
-        //}
-        public Dictionary<Vector3, BlockEntity> GetBlockEntitiesCache()// IObjectProvider net)
+        
+        public Dictionary<Vector3, BlockEntity> GetBlockEntitiesCache()
         {
             return this.CachedBlockEntities;
         }
-        public bool TryGetBlockEntity(Vector3 global, out BlockEntity entity)// IObjectProvider net)
+        public bool TryGetBlockEntity(Vector3 global, out BlockEntity entity)
         {
             entity = null;
             if (this.GetChunk(global) is not Chunk chunk)
                 return false;
-            //chunk.BlockEntitiesByPosition.TryGetValue(global.ToLocal(), out var entity);
             return chunk.TryGetBlockEntity(global.ToLocal(), out entity);
-
         }
-        public BlockEntity GetBlockEntity(Vector3 global)// IObjectProvider net)
+        public BlockEntity GetBlockEntity(Vector3 global)
         {
             Chunk chunk = this.GetChunk(global);
-            //chunk.BlockEntitiesByPosition.TryGetValue(global.ToLocal(), out var entity);
             chunk.TryGetBlockEntity(global.ToLocal(), out var entity);
-
             return entity;
         }
         public T GetBlockEntity<T>(Vector3 global) where T : BlockEntity
         {
-            //return this.GetBlock(global).GetBlockEntity(this, global) as T;
-
             Chunk chunk = this.GetChunk(global);
             chunk.TryGetBlockEntity(global.ToLocal(), out var entity);
 
@@ -512,20 +395,7 @@ namespace Start_a_Town_
             var cell = chunk[x - chunk.Start.X, y - chunk.Start.Y, z];
             return cell;
         }
-        //public Cell GetCell(IntVec3 global)
-        //{
-        //    //Vector3 globalRound = new Vector3((int)Math.Round(global.X), (int)Math.Round(global.Y), (int)Math.Floor(global.Z));
-        //    Chunk chunk;
-        //    if (this.TryGetChunk(globalRound, out chunk))
-        //    {
-        //        //Cell cell = chunk[globalRound.X - chunk.Start.X, globalRound.Y - chunk.Start.Y, globalRound.Z];
-        //        cell = chunk.GetCellFromGlobal(global);
-        //        if (cell == null)
-        //            Console.WriteLine("GAMW TO SPITI");
-        //        return cell;
-        //    }
-        //    return null;
-        //}
+        
         public Cell GetCell(Vector3 global)
         {
             Vector3 globalRound = new Vector3((int)Math.Round(global.X), (int)Math.Round(global.Y), (int)Math.Floor(global.Z));
@@ -546,11 +416,6 @@ namespace Start_a_Town_
             if (this.TryGetChunk(global, out var chunk))
                 return chunk;
             return null;
-            //Vector3 globalRound = new Vector3((int)Math.Round(global.X), (int)Math.Round(global.Y), (int)Math.Floor(global.Z));
-            //Chunk chunk;
-            //if (this.TryGetChunk(globalRound, out chunk))
-            //    return chunk;
-            //return null;
         }
         public Chunk GetChunk(int x, int y)
         {
@@ -558,19 +423,17 @@ namespace Start_a_Town_
             int chunkY = y / Chunk.Size;
             return this.ActiveChunks[new Vector2(chunkX, chunkY)];
         }
-        public List<Chunk> GetChunks(Vector2 pos, int radius = 1)//, int radius = Engine.ChunkRadius)
+        public List<Chunk> GetChunks(Vector2 pos, int radius = 1)
         {
-            Chunk ch;
             List<Chunk> list = new List<Chunk>();
             int x = (int)pos.X, y = (int)pos.Y;
             for (int i = x - radius; i <= x + radius; i++)
                 for (int j = y - radius; j <= y + radius; j++)
-                    //if (ChunkLoader.TryGetChunk(map, new Vector2(i, j), out ch))
-                    if (this.ActiveChunks.TryGetValue(new Vector2(i, j), out ch))
+                    if (this.ActiveChunks.TryGetValue(new Vector2(i, j), out Chunk ch))
                         list.Add(ch);
             return list;
         }
-        public IEnumerable<Chunk> GetChunkNeighborhood(Vector2 chunkCoords, int radius = 1)//, int radius = Engine.ChunkRadius)
+        public IEnumerable<Chunk> GetChunkNeighborhood(Vector2 chunkCoords, int radius = 1)
         {
             int x = (int)chunkCoords.X, y = (int)chunkCoords.Y;
             for (int i = x - radius; i <= x + radius; i++)
@@ -578,7 +441,7 @@ namespace Start_a_Town_
                     if (this.ActiveChunks.TryGetValue(new Vector2(i, j), out var ch))
                         yield return ch;
         }
-        public IEnumerable<Chunk> GetChunkNeighborhood(Vector3 global, int radius = 1)//, int radius = Engine.ChunkRadius)
+        public IEnumerable<Chunk> GetChunkNeighborhood(Vector3 global, int radius = 1)
         {
             var chunkCoords = this.GetChunk(global).MapCoords;
             return this.GetChunkNeighborhood(chunkCoords, radius);
@@ -611,8 +474,6 @@ namespace Start_a_Town_
             float chunkX = (float)Math.Floor((float)globalx / Chunk.Size);
             float chunkY = (float)Math.Floor((float)globaly / Chunk.Size);
 
-            // I changed this because chunkloader exists only on the server now
-            // return ChunkLoader.TryGetChunk(map, new Vector2(chunkX, chunkY), out chunk);
             return this.ActiveChunks.TryGetValue(new Vector2(chunkX, chunkY), out chunk);
         }
         public bool TryGetAll(Vector3 global, out Chunk chunk, out Cell cell)
@@ -631,45 +492,22 @@ namespace Start_a_Town_
             }
             return false;
         }
-        public bool TryGetAllNew(Vector3 rounded, out Chunk chunk, out Cell cell)
-        {
-            throw new Exception();
-            cell = null;
-            chunk = null;
-            //if (!this.Contains(rounded))
-            //    return false;
-            if (rounded.Z < 0 || rounded.Z > this.World.MaxHeight - 1)
-                return false;
-            var chunkX = (int)(rounded.X / Chunk.Size);
-            var chunkY = (int)(rounded.Y / Chunk.Size);
-            if (this.ActiveChunks.TryGetValue(new Vector2(chunkX, chunkY), out chunk))
-            {
-                //cell = chunk[(int)(rounded.X - chunk.Start.X), (int)(rounded.Y - chunk.Start.Y), (int)rounded.Z];
-                cell = chunk.GetCellGlobal(rounded);
-                return true;
-            }
-            return false;
-        }
-
+        
         internal bool IsStandableIn(Vector3 global)
         {
             var curblock = this.GetBlock(global);
             var belowBlock = this.GetBlock(global.Below());
             return curblock.IsStandableIn && belowBlock.IsStandableOn;
-                //&& this.IsEmpty(global.Above());
-                ;//&& this.IsEmpty(global);
         }
         internal bool IsStandableOn(Vector3 global)
         {
             var above = global.Above();
             return this.GetBlock(global).IsStandableOn && this.GetBlock(above).IsStandableIn;
-                //&& this.IsEmpty(above.Above());
-                ;// && this.IsEmpty(above);
         }
         public bool TryGetAll(Vector3 global, out Chunk chunk, out Cell cell, out Vector3 local)
         {
-            Vector3 rnd = global.RoundXY();// Position.Round(global);
-            local = rnd.ToLocal();// Position.ToLocal(rnd);
+            Vector3 rnd = global.RoundXY();
+            local = rnd.ToLocal();
             return this.TryGetAll(global, out chunk, out cell);
         }
         public bool ChunkExists(Vector2 chunkCoords)
@@ -698,7 +536,7 @@ namespace Start_a_Town_
         public virtual bool IsHidden(Vector3 global)
         {
             var cell = this.GetCell(global);
-            return cell.IsHidden();// && !ScreenManager.CurrentScreen.Camera.DrawUnknownBlocks;
+            return cell.IsHidden();
         }
         public virtual bool IsSolid(Vector3 global)
         {
@@ -708,10 +546,8 @@ namespace Start_a_Town_
                 return true; // return true to prevent crashing by trying to add object to missing chunk
             //return false; // return false to let entity attempt to enter unloaded chunk so we can handle the event of that
 
-            //cell = this.GetCell(global);
 
             var offset = global + new Vector3(0.5f, 0.5f, 0);
-            //var blockCoords = offset - offset.RoundXY();
             var blockCoords = offset - offset.FloorXY();
 
             var issolid = cell.Block.IsSolid(cell, blockCoords);
@@ -723,22 +559,15 @@ namespace Start_a_Town_
             foreach (var entity in this.GetObjects(global - new Vector3(5), global + new Vector3(5)))
             {
                 if (entity.Physics.Solid)
-                //if (Vector3.Distance(global, entity.Global) < 0.5f)
-                //    return true;
                 {
                     BoundingBox box = new BoundingBox(entity.Global - new Vector3(0.5f, 0.5f, 0), entity.Global + new Vector3(0.5f, 0.5f, entity.Physics.Height));
                     var cont = box.Contains(global);
-                    //BoundingBox actorbox = new BoundingBox(global, global + Vector3.UnitZ * 0.01f);
-                    //var cont = box.Contains(actorbox);
-                    // if (cont == ContainmentType.Contains)// || cont == ContainmentType.Intersects)
                     if (cont != ContainmentType.Disjoint)
                     {
                         return true;
                         if (Vector3.Distance(global * new Vector3(1, 1, 0), entity.Global * new Vector3(1, 1, 0)) < 0.5f)
                             return true;
                     }
-                    //else if (cont == ContainmentType.Intersects)
-                    //    return false;
                 }
             }
 
@@ -788,10 +617,6 @@ namespace Start_a_Town_
         }
         public IEnumerable<GameObject> GetObjects(Vector3 global)
         {
-            //foreach (var i in this.GetObjects(global))
-            //    yield return i;
-            //yield break;
-
             var ch = this.GetChunk(global);
             var objects = ch.Objects;
             var count = objects.Count;
@@ -805,32 +630,9 @@ namespace Start_a_Town_
         }
         public bool IsEmptyNew(Vector3 global)
         {
-            //return !this.GetObjects(global).Any();
             return !this.GetObjects(global).Any();
-
         }
-        //[Obsolete]
-        //public List<GameObject> GetObjects(Vector3 global)
-        //{
-        //    return this.GetChunk(global).Objects.Where(e => e.Global.SnapToBlock() == global.SnapToBlock()).ToList();
-        //    //var ch = this.GetChunk(global);
-        //    //var objects = ch.Objects;
-        //    //foreac
-
-
-
-
-        //    //var entities = this.GetObjectsAtChunk(global);
-        //    //var list = new HashSet<GameObject>(); // make it a hashset so i dont add duplicate objects in case one's position is exactly at the edge between two blocks
-        //    //var blockbox = new BoundingBox(global - new Vector3(.5f, .5f, 0), global + new Vector3(.5f, .5f, 1));
-        //    //foreach (var entity in entities)
-        //    //{
-        //    //    var result = blockbox.Contains(entity.Global);
-        //    //    if (result == ContainmentType.Contains || result == ContainmentType.Intersects)
-        //    //        list.Add(entity);
-        //    //}
-        //    //return list.ToList();
-        //}
+        
         internal virtual IEnumerable<GameObject> GetObjects(IEnumerable<Vector3> positions)
         {
             var chunks = new HashSet<Chunk>();
@@ -859,8 +661,6 @@ namespace Start_a_Town_
         /// <returns></returns>
         public virtual bool GetLight(Vector3 global, out byte sky, out byte block)
         {
-            //return Chunk.TryGetFinalLight(this, (int)global.X, (int)global.Y, (int)global.Z, out sky, out block);
-
             int x = (int)Math.Round(global.X);
             int y = (int)Math.Round(global.Y);
             int z = (int)Math.Floor(global.Z);
@@ -883,7 +683,7 @@ namespace Start_a_Town_
         public abstract bool InvalidateCell(Vector3 global, Cell cell);
         public abstract void GenerateThumbnails();
         public abstract void GenerateThumbnails(string fullpath);
-        public abstract void LoadThumbnails();//string fullpath);
+        public abstract void LoadThumbnails();
         public abstract MapThumb GetThumb();
         public abstract void Generate();
 
@@ -927,28 +727,22 @@ namespace Start_a_Town_
             cell.Variation = (byte)variation;
             cell.BlockData = data;
             cell.Orientation = orientation;
-            //chunk.InvalidateCell(cell);
             // maybe put block entity creation here?
 
-            //chunk.UpdateHeightMapColumnWithoutLight(cell.X, cell.Y);
             chunk.InvalidateHeightmap(cell.X, cell.Y);
 
             // maybe i can refresh cell edges here on the spot?
             this.InvalidateCell(global);
-            //chunk.Invalidate();
-            //var neighbors = global.GetNeighbors();
             var neighbors = global.GetAdjacentLazy();
 
             foreach (var n in neighbors)
             {
-                //this.InvalidateCell(n);
                 var nblock = this.GetBlock(n);
                 if (nblock != BlockDefOf.Air)
                     this.InvalidateCell(n);
 
                 if (nblock != null)
                     nblock.NeighborChanged(this.Net, n);
-
             }
             //this.Town.InvalidateBlock(global); // handle blockchanged event in town class instead
             if (raiseEvent)
@@ -978,15 +772,12 @@ namespace Start_a_Town_
 
         public void NotifyBlocksChanged(IEnumerable<Vector3> positions)
         {
-            //foreach (var pos in positions)
-            //    this.NotifyBlockChanged(pos);
             this.Net.EventOccured(Components.Message.Types.BlocksChanged, this, positions);
             this.Town.OnBlocksChanged(positions.Select(i => (IntVec3)i)); // TODO fix
         }
         private void NotifyBlockChanged(Vector3 pos)
         {
             this.NotifyBlocksChanged(new[] { pos });
-            //this.Net.EventOccured(Components.Message.Types.BlockChanged, this, pos);
         }
 
         public abstract bool SetBlockLuminance(Vector3 global, byte luminance);
@@ -994,7 +785,6 @@ namespace Start_a_Town_
         public virtual bool Contains(GameObject obj)
         {
             Chunk chunk;
-            //if (.TryGetChunk(this, out chunk))
             if (this.TryGetChunk(obj.Global, out chunk))
                 return chunk.GetObjects().Contains(obj);
             return false;
@@ -1029,16 +819,8 @@ namespace Start_a_Town_
             var lower = Math.Min(globalsource.Z, globaltarget.Z) == globalsource.Z ? globalsource : globaltarget;
             var above1 = lower.Above();
             var above2 = above1.Above();
-            //var above3 = above2.Above();
             return !this.GetBlock(above2).Solid;
-            //var above3block = this.GetBlock(above3);
-            //if (above3block.Solid) // no need to check for doors because they are defined as non-solid
-            //{
-            //    return false;
-            //}
-            //return true;
         }
-        //public abstract void EventOccured(Components.Message.Types types, params object[] p);
         public void EventOccured(Components.Message.Types type, params object[] p)
         {
             if (this.Net != null)
@@ -1076,7 +858,7 @@ namespace Start_a_Town_
         public void InvalidateChunks()
         {
             foreach (var chunk in this.ActiveChunks)
-                chunk.Value.Invalidate();//.Valid = false;
+                chunk.Value.Invalidate();
         }
 
         internal void UpdateParticles()
@@ -1088,9 +870,6 @@ namespace Start_a_Town_
             if (this.Net is Net.Server)
                 return;
             this.ParticleManager.Draw(camera);
-            //foreach (var ch in this.ActiveChunks.Values)
-            //    foreach (var be in ch.BlockEntitiesByPosition)
-            //        be.Value.Draw(camera, this, be.Key);
             foreach (var ch in this.ActiveChunks.Values)
                 foreach (var be in ch.GetBlockEntitiesByPosition())
                     be.entity.Draw(camera, this, be.local.ToGlobal(ch));
@@ -1105,11 +884,11 @@ namespace Start_a_Town_
             this.Town.OnTargetSelected(info, selected);
         }
 
-        internal IEnumerable<GameObject> GetNearbyObjects(GameObject obj, float range, bool inclusive) //float range)// 
+        internal IEnumerable<GameObject> GetNearbyObjects(GameObject obj, float range, bool inclusive)  
         {
             return this.GetNearbyObjects(obj, r => r < range, inclusive);
         }
-        internal IEnumerable<GameObject> GetNearbyObjects(GameObject obj, Func<float, bool> range, bool inclusive) //float range)// 
+        internal IEnumerable<GameObject> GetNearbyObjects(GameObject obj, Func<float, bool> range, bool inclusive) 
         {
             if(inclusive)
                 yield return obj;
@@ -1129,15 +908,12 @@ namespace Start_a_Town_
             var a = action ?? ((obj) => { });
             var f = filter ?? ((obj) => { return true; });
             List<GameObject> nearbies = new List<GameObject>();
-            //Chunk chunk = Position.GetChunk(map, this.Global);
             Chunk chunk = this.GetChunk(global);
 
             List<GameObject> objects = new List<GameObject>();
-            //foreach (Chunk ch in Position.GetChunks(map, chunk.MapCoords))
             foreach (Chunk ch in this.GetChunks(chunk.MapCoords))
                 foreach (GameObject obj in ch.GetObjects())
                 {
-                    //if ((obj.Global - parent.Global).Length() > range)
                     if (!range(Vector3.Distance(obj.Global, global)))
                         continue;
                     if (!f(obj))
@@ -1151,15 +927,11 @@ namespace Start_a_Town_
         {
             var a = action ?? ((obj) => { });
             var f = filter ?? ((obj) => { return true; });
-            //Chunk chunk = Position.GetChunk(map, this.Global);
             Chunk chunk = this.GetChunk(global);
 
-            //List<GameObject> objects = new List<GameObject>();
-            //foreach (Chunk ch in Position.GetChunks(map, chunk.MapCoords))
             foreach (Chunk ch in this.GetChunks(chunk.MapCoords))
                 foreach (GameObject obj in ch.GetObjects())
                 {
-                    //if ((obj.Global - parent.Global).Length() > range)
                     if (!range(Vector3.Distance(obj.Global, global)))
                         continue;
                     if (!f(obj))
@@ -1180,8 +952,6 @@ namespace Start_a_Town_
             return los;
         }
 
-
-
         internal Material GetBlockMaterial(Vector3 global)
         {
             return Block.GetBlockMaterial(this, global);
@@ -1196,8 +966,6 @@ namespace Start_a_Town_
             return this.Regions.GetNodeAt(vector3);
         }
 
-        
-
         internal bool CanReach(GameObject actor, Vector3 global)
         {
             return this.Regions.CanReach(actor, global);
@@ -1207,18 +975,10 @@ namespace Start_a_Town_
         {
             return this.Regions.GetRegionDistance(source, target, actor);
         }
-
-
-
         internal bool Contains(Vector3 global)
         {
             return this.GetChunk(global) != null;
         }
-
-
-
-
-
 
         internal bool IsAir(Vector3 global)
         {
@@ -1228,8 +988,6 @@ namespace Start_a_Town_
         internal void RandomBlockUpdate(Vector3 global)
         {
             Cell cell = this.GetCell(global);
-            //if (net.Map.TryGetCell(vec, out cell))
-            //    cell.Block.RandomBlockUpdate(net, vec, cell);
             if (cell != null)
                 cell.Block.RandomBlockUpdate(this.Net, global, cell);
             else
@@ -1263,9 +1021,6 @@ namespace Start_a_Town_
         internal virtual bool IsUndiscovered(Vector3 global)
         {
             return false;
-            //throw new Exception();
-            //return this.IsUndiscovered(global); //this.UndiscoveredAreaManager.IsUndiscovered(global);
-         
         }
 
 
@@ -1346,13 +1101,11 @@ namespace Start_a_Town_
             obj.Map = this;
             obj.Parent = null;
             obj.Spawn(this.Net);
-            //PacketEntitySpawn.Send(this.Net, obj, this, global, velocity);
             Packets.Send(this.Net, obj, this, global, velocity);
         }
         static IMap()
         {
 
         }
-        
     }
 }

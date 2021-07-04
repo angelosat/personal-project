@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes;
-
-namespace Start_a_Town_.GameEvents
+﻿namespace Start_a_Town_.GameEvents
 {
     class EventEntityDespawned
     {

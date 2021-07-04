@@ -2970,17 +2970,7 @@ namespace Start_a_Town_.Net
         public void SyncSetBlock(Vector3 global, Block.Types type, byte data, int orientation)
         {
         }
-        public void SetBlock(Vector3 global, Block.Types type)
-        {
-            // set block locally until the sync from server is received
-            if (!global.TrySetCell(this, type))
-                throw new Exception("Invalid cell position");
-        }
-        public void SetBlock(Vector3 global, Block.Types type, byte data)
-        {
-            if (!global.TrySetCell(this, type))
-                throw new Exception("Invalid cell position");
-        }
+       
         public void UpdateBlock(Vector3 global, Action<Cell> updater)
         {
         }

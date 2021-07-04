@@ -46,11 +46,7 @@ namespace Start_a_Town_
             Performed = !this.UndoOperation.Perform();
             return !Performed;
         }
-        public bool Redo()
-        {
-            return Perform();
-        }
-
+        
         public SaveTag Save()
         {
             SaveTag tag = new SaveTag(SaveTag.Types.Compound);

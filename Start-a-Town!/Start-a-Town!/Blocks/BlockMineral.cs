@@ -102,16 +102,16 @@ namespace Start_a_Town_
         }
 
 
-        public override void Break(IMap map, Vector3 global)
-        {
-            var net = map.Net;
-            var state = new State(map, global);
-            var material = state.Material;
-            var rawmaterialentity = material.ProcessingChain.First().IDType;
-            var loottable = new LootTable(new Loot(rawmaterialentity, 0.75f, 4));
-            net.PopLoot(loottable, global, Vector3.Zero);
-            net.SetBlock(global, Block.Types.Air);
-        }
+        //public override void Break(IMap map, Vector3 global)
+        //{
+        //    var net = map.Net;
+        //    var state = new State(map, global);
+        //    var material = state.Material;
+        //    var rawmaterialentity = material.ProcessingChain.First().IDType;
+        //    var loottable = new LootTable(new Loot(rawmaterialentity, 0.75f, 4));
+        //    net.PopLoot(loottable, global, Vector3.Zero);
+        //    net.SetBlock(global, Block.Types.Air);
+        //}
 
         public override byte ParseData(string data)
         {

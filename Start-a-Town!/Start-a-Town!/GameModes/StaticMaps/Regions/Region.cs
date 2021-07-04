@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -20,7 +17,7 @@ namespace Start_a_Town_
             set
             {
                 if (value == this.Room.ID)
-                    return;// throw new Exception();
+                    return;
                 this.Room.Remove(this);
                 var newRoom = this.Map.Regions.GetRoomID(value);
                 newRoom.Add(this);
@@ -28,50 +25,34 @@ namespace Start_a_Town_
             }
         }
         public int RegionID;
-        //HashSet<Vector3> Positions = new HashSet<Vector3>();
-        //public Dictionary<Vector3, RegionNode> Nodes = new Dictionary<Vector3, RegionNode>();
         public RegionNodeCollection Nodes;
 
         public Color Color { get { return this.Room.Color; } }
         public int Size = 1;
-        public HashSet<Region> Neighbors = new HashSet<Region>();
+        public HashSet<Region> Neighbors = new();
         public bool Validated;
         public RegionRoom Room;
         public Region(Chunk chunk)
         {
             this.Nodes = new RegionNodeCollection(this);
             this.Chunk = chunk;
-            //this.RoomID = chunk.Map.Regions.GetRoomID();
             this.Room = chunk.Map.Regions.CreateRoom(this);
             this.RegionID = chunk.Map.Regions.GetRegionID();
-            //this.AssignColor();
         }
 
-        //private void AssignColor()
-        //{
-        //    var colorand = new Random();
-        //    var array = new byte[3];
-        //    colorand.NextBytes(array);
-        //    this.Color = new Color(array[0], array[1], array[2]);
-        //}
         public override string ToString()
         {
             return string.Format("Region: {0} Room: {1} Nodes: {2} Neighbors: {3}", this.RegionID, this.RoomID, this.Nodes.Count, this.Neighbors.Count);
         }
         
-
         public RegionNode Add(Vector3 local)
         {
             var node = new RegionNode(this, local);
-            //this.Nodes.Add(node.Global, node);
             this.Nodes.Add(node);
             return node;
         }
         public void Add(RegionNode node)
         {
-            //this.Nodes.Add(node.Global, node);
-            //node.Region = this;
-            // remove node from node's previous region?
             this.Nodes.Add(node);
         }
         private void Add(IEnumerable<RegionNode> nodes)
@@ -79,18 +60,13 @@ namespace Start_a_Town_
             foreach (var n in nodes)
                 this.Add(n);
         }
-        private void Remove(IEnumerable<RegionNode> nodes)
-        {
-            foreach (var n in nodes)
-                this.Remove(n);
-        }
+        
         public void Remove(Vector3 global)
         {
             RegionNode node;
             if(this.Nodes.TryGetValue(global, out node))
                 node.ClearLinks();
             this.Nodes.Remove(global);
-            //this.Positions.Remove(global);
         }
         internal void Remove(RegionNode n)
         {
@@ -99,7 +75,6 @@ namespace Start_a_Town_
         public IEnumerable<Vector3> GetPositions()
         {
             return this.Nodes.Values.Select(n => n.Global);
-            //return this.Positions;
         }
         internal bool Contains(Vector3 global)
         {
@@ -172,20 +147,17 @@ namespace Start_a_Town_
                         }
                 }
             }
-            //}
         }
         public void FindEdges()
         {
-            foreach (var node in this.Nodes.Values)//.Where(n=>n.AtEdge()))
+            foreach (var node in this.Nodes.Values)
             {
                 // if one of node's neighbors is null, check all other regions for a neighbor
                 if (node.West == null)
                 {
                     var adj = node.Global.West();
-                    //if (this.Map.Contains(adj))
                     if (this.Map.IsInBounds(adj))
                     {
-                        //foreach (var pos in RegionTracker.GetColumn(adj))
                         for (int i = 0; i < VectorHelper.Column3.Length; i++)
                         {
                             var pos = adj + VectorHelper.Column3[i];
@@ -208,10 +180,8 @@ namespace Start_a_Town_
                 if (node.East == null)
                 {
                     var adj = node.Global.East();
-                    //if (this.Map.Contains(adj))
                     if (this.Map.IsInBounds(adj))
                     {
-                        //foreach (var pos in RegionTracker.GetColumn(adj))
                         for (int i = 0; i < VectorHelper.Column3.Length; i++)
                         {
                             var pos = adj + VectorHelper.Column3[i];
@@ -235,10 +205,8 @@ namespace Start_a_Town_
                 if (node.North == null)
                 {
                     var adj = node.Global.North();
-                    //if (this.Map.Contains(adj))
                     if (this.Map.IsInBounds(adj))
                     {
-                        //foreach (var pos in RegionTracker.GetColumn(adj))
                         for (int i = 0; i < VectorHelper.Column3.Length; i++)
                         {
                             var pos = adj + VectorHelper.Column3[i];
@@ -261,10 +229,8 @@ namespace Start_a_Town_
                 if (node.South == null)
                 {
                     var adj = node.Global.South();
-                    //if (this.Map.Contains(adj))
                     if (this.Map.IsInBounds(adj))
                     {
-                        //foreach (var pos in RegionTracker.GetColumn(adj))
                         for (int i = 0; i < VectorHelper.Column3.Length; i++)
                         {
                             var pos = adj + VectorHelper.Column3[i];
@@ -286,112 +252,13 @@ namespace Start_a_Town_
                 }
             }
         }
-        public void FindEdgesOld()
-        {
-            foreach (var node in this.Nodes.Values)//.Where(n=>n.AtEdge()))
-            {
-                // if one of node's neighbors is null, check all other regions for a neighbor
-                if (node.Local.X == 0)// && node.West == null)
-                {
-                    var nchunk = this.Chunk.West;
-                    if (nchunk != null)
-                        foreach (var north in RegionTracker.GetColumn(node.Global.West()))
-                        {
-                            var nregion = this.Map.GetRegionAt(north);// nchunk.Regions.GetRegionAt(north);
-                            if (nregion != null)
-                            {
-                                RegionNode nnode;
-                                nregion.Nodes.TryGetValue(north, out nnode);
-                                {
-                                    node.West = nnode;
-                                    nnode.East = node;
-                                    this.Neighbors.Add(nregion);
-                                    nregion.Neighbors.Add(this);
-                                }
-                            }
-                        }
-                }
-                if (node.Local.X == Chunk.Size - 1)//  && node.East == null)
-                {
-                    var chunk = this.Chunk.East;
-                    if (chunk != null)
-                        foreach (var pos in RegionTracker.GetColumn(node.Global.East()))
-                        {
-                            var otherRegion = this.Map.GetRegionAt(pos);//.chunk.Regions.GetRegionAt(pos);
-                            if (otherRegion != null)
-                            {
-                                RegionNode otherNode;
-                                otherRegion.Nodes.TryGetValue(pos, out otherNode);
-                                {
-                                    node.East = otherNode;
-                                    otherNode.West = node;
-                                    this.Neighbors.Add(otherRegion);
-                                    otherRegion.Neighbors.Add(this);
-                                }
-                            }
-                        }
-                }
-                if (node.Local.Y == 0)//  && node.North == null)
-                {
-                    var chunk = this.Chunk.North;
-                    if (chunk != null)
-                        foreach (var pos in RegionTracker.GetColumn(node.Global.North()))
-                        {
-                            var otherRegion = this.Map.GetRegionAt(pos);//chunk.Regions.GetRegionAt(pos);
-                            if (otherRegion != null)
-                            {
-                                RegionNode otherNode;
-                                otherRegion.Nodes.TryGetValue(pos, out otherNode);
-                                {
-                                    node.North = otherNode;
-                                    otherNode.South = node;
-                                    this.Neighbors.Add(otherRegion);
-                                    otherRegion.Neighbors.Add(this);
-                                }
-                            }
-                        }
-                }
-                if (node.Local.Y == Chunk.Size - 1)//  && node.South == null)
-                {
-                    var chunk = this.Chunk.South;
-                    if (chunk != null)
-                        foreach (var pos in RegionTracker.GetColumn(node.Global.South()))
-                        {
-                            var otherRegion = this.Map.GetRegionAt(pos);//chunk.Regions.GetRegionAt(pos);
-                            if (otherRegion != null)
-                            {
-                                RegionNode otherNode;
-                                otherRegion.Nodes.TryGetValue(pos, out otherNode);
-                                {
-                                    node.South = otherNode;
-                                    otherNode.North = node;
-                                    this.Neighbors.Add(otherRegion);
-                                    otherRegion.Neighbors.Add(this);
-                                }
-                            }
-                        }
-                }
-            }
-        }
 
-        //internal void SetID(int p)
-        //{
-        //    foreach (var r in this.GetConnected())
-        //    {
-        //        r.RoomID = p;
-        //    }
-        //}
         internal void Paint(Region sourceRegion)
         {
             foreach (var r in this.GetConnected())
             {
                 r.RoomID = sourceRegion.RoomID;
-                //r.Color = sourceRegion.Color;
             }
-        }
-        public int CountAllConnectedRegions()
-        {
-            return this.GetConnected().Count();
         }
         public IEnumerable<Region> GetConnected()
         {
@@ -411,20 +278,12 @@ namespace Start_a_Town_
             }
             return counted;
         }
-        public int GetSize()
-        {
-            int n = 0;
-            foreach (var region in GetConnected())
-                n += region.Nodes.Count;
-            return n;
-        }
         public void Refresh()
         {
             if (this.Validated)
                 return;
             this.Validated = true;
             this.Size = 1;
-            //if (this.Nodes.Count == 1 && this.Map.GetBlock(this.Nodes.First().Key.Above()) == Block.Door) // TODO: FIX LOL
                 if (this.Nodes.Count == 1 && this.Map.GetBlock(this.Nodes.First().Key.Above()) is BlockDoor) // TODO: FIX LOL
                     return;
             var queue = new Queue<Region>();
@@ -435,13 +294,11 @@ namespace Start_a_Town_
             {
                 var r = queue.Dequeue();
                 r.RoomID = this.RoomID;
-                //r.Color = this.Color;
                 r.Validated = true;
                 counted.Add(r);
                 this.Size++;
                 foreach (var n in r.Neighbors)
                 {
-                    //if (n.Nodes.Count == 1 && this.Map.GetBlock(n.Nodes.First().Key.Above()) == Block.Door) // TODO: FIX LOL
                         if (n.Nodes.Count == 1 && this.Map.GetBlock(n.Nodes.First().Key.Above()) is BlockDoor) // TODO: FIX LOL
                             continue;
                     if (!counted.Contains(n))
@@ -451,95 +308,12 @@ namespace Start_a_Town_
             foreach (var r in counted)
                 r.Size = this.Size;
         }
-        //int CountOld()
-        //{
-        //    var i = 0;
-        //    var queue = new Queue<Region>();
-        //    queue.Enqueue(this);
-        //    var counted = new HashSet<Region>();
-        //    while(queue.Any())
-        //    {
-        //        var r = queue.Dequeue();
-        //        counted.Add(r);
-        //        i++;
-        //        foreach(var n in r.Neighbors)
-        //        {
-        //            if (!counted.Contains(n) && !queue.Contains(n))
-        //                queue.Enqueue(n);
-        //        }
-        //    }
-        //    return i;
-        //}
 
         internal void DrawNode(Vector3 global, MySpriteBatch sb, Camera cam)
         {
             cam.DrawGridCell(sb, Color.Lime, global.Above());
             var node = this.Nodes[global];//.ToLocal()];
             cam.DrawGridCells(sb, Color.Lime, node.GetLinks().Select(link=> link.Global.Above()));
-
-            //foreach(var link in node.GetLinks())
-            //    cam.DrawGridCell(sb, Color.Lime, link.Global.Above());
-
-        }
-
-        internal bool AffectedBy(Vector3 global)
-        {
-            return this.Contains(global) || this.Contains(global.Below()) || this.Contains(global.Below().Below());
-        }
-
-        internal void Handle(Vector3 global)
-        {
-            if (!this.AffectedBy(global))
-                return;
-            var isSolid = this.Map.IsSolid(global);
-            var below = global.Below();
-            var belowbelow = below.Below();
-            if (isSolid)
-            {
-                if (this.Contains(belowbelow))
-                {
-                    this.Remove(belowbelow);
-                    // TODO: check heighbors and seperate regions if necessary
-                    // TODO: also must compare height with neighbors and add current to region
-                    // here or in the remove method?
-                }
-                else if (this.Contains(below))
-                {
-                    var oldNode = this.Nodes[below];
-                    var newNode = new RegionNode(this, global);
-                    if(newNode.TryReplace(oldNode))
-                    {
-                        this.Remove(below);
-                        this.Add(newNode);
-                    }
-                    // TODO: check heighbors and seperate regions if necessary
-                }
-                else if (this.Contains(global))
-                {
-                    // nothing, the cell was already solid to begin with, if it's part of a region
-                }
-            }
-            //else
-            //{
-            //    if (this.Contains(global))
-            //    {
-            //        // block removed that was part of a region. check the two blocks below if they should be added
-            //        if (this.Map.IsSolid(below) && !this.Map.IsSolid(global.Above()))
-            //        {
-            //            var oldNode = this.Nodes[global];
-            //            var newNode = new RegionNode(this, below);
-            //            if(newNode.TryReplace(oldNode))
-            //            {
-            //                this.Remove(global);
-            //                this.Add(newNode);
-            //            }
-            //        }
-            //    }
-            //    else if (this.Map.IsSolid(belowbelow) && !this.Map.IsSolid(below))
-            //    {
-
-            //    }
-            //}
         }
 
         internal void Add(Region r)
@@ -559,40 +333,11 @@ namespace Start_a_Town_
                 this.Neighbors.Add(nRegion);
             }
         }
-
         internal void Delete()
         {
             this.Room.Remove(this);
             this.Map.Regions.GetRegions(this.Chunk).Regions.Remove(this);
         }
-        internal bool IsConnected()
-        {
-            var n = this.CountLinked();
-            return this.Nodes.Count == n;
-        }
-        internal int CountLinked()
-        {
-            IEnumerable<RegionNode> temp;
-            return this.CountLinked(out temp);
-        }
-        internal int CountLinked(out IEnumerable<RegionNode> disconnectedNodes)
-        {
-            var openList = new Queue<RegionNode>();
-            var closedList = new HashSet<RegionNode>();
-            openList.Enqueue(this.Nodes.First().Value);
-            var n = 0;
-            while(openList.Any())
-            {
-                n++;
-                var node = openList.Dequeue();
-                closedList.Add(node);
-                foreach (var l in node.GetLinks().Where(p=>p.Region.Chunk == this.Chunk))
-                    openList.Enqueue(l);
-            }
-            disconnectedNodes = n < this.Nodes.Count / 2 ? closedList : this.Nodes.Values.Except(closedList);
-            return n;
-        }
-        
 
         internal bool TryGetSubRegionNodesNew(RegionNode startNode, IEnumerable<HashSet<RegionNode>> existing, out HashSet<RegionNode> nodes, out HashSet<Region> neighbors, out int size)
         {
@@ -614,14 +359,12 @@ namespace Start_a_Town_
                     return false;
                 }
                 counted.Add(node);
-                foreach (var link in node.GetLinks())//.Where(p => p.Region.Chunk == this.Chunk))
+                foreach (var link in node.GetLinks())
                 {
-                    if (counted.Contains(link) || toCountAdded.Contains(link)) //optimize
+                    if (counted.Contains(link) || toCountAdded.Contains(link)) // TODO: optimize
                         continue;
                     if (link.Region != this)
                     {
-                        //if (!this.Neighbors.Contains(link.Region))
-                        //    throw new Exception();
                         if (link.Region.RoomID == this.RoomID)
                             neighborsFound.Add(link.Region);
                         continue;
@@ -633,7 +376,7 @@ namespace Start_a_Town_
             neighbors = neighborsFound;
             size = n;
             nodes = counted;
-            return n < this.Nodes.Count;// ? closedList : null;
+            return n < this.Nodes.Count;
         }
 
         internal void TrySplitRegion(Vector3 split)
@@ -645,18 +388,13 @@ namespace Start_a_Town_
         }
         internal void TrySplitRegion(RegionNode split) // with door handling
         {
-            //var isBelowDoor = this.Map.GetBlock(split.Global.Above()) == Block.Door;
             var isBelowDoor = this.Map.GetBlock(split.Global.Above()) is BlockDoor;
 
             Region doorRegion = null;
-            //RegionNode doorNode;
             var links = split.GetLinks();
             if (isBelowDoor)
             {
                 doorRegion = new Region(this.Chunk);
-                //doorNode = new RegionNode(doorRegion, split.Local);
-                //doorRegion.Add(doorNode);//split.Global);
-                //LinkNoPaint(doorRegion, this);
                 doorRegion.Add(split);
                 this.Map.Regions.Add(doorRegion);
             }
@@ -732,8 +470,6 @@ namespace Start_a_Town_
                 var heightmapvalue = this.Chunk.GetHeightMapValue(node.Value.Local);
                 if (node.Key.Z == heightmapvalue)
                     return true;
-                //if (this.Chunk.IsAboveHeightMap(node.Key))
-                //    return true;
             }
             return false;
         }

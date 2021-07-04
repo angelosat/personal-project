@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -24,12 +22,7 @@ namespace Start_a_Town_
         }
         static public void TryLoad<T>(this SaveTag save, string name, out T item) where T : class, ISaveable, new()
         {
-            //if (!save.TryGetTag(name, out var t))// => new T().Load(t)))
-            //    return new T().Load(t.Value as SaveTag) as T;
-            //else
-            //    return null;
             item = save.TryGetTag(name, out var t) ? new T().Load(t) as T : null;
-            //return save.TryGetTag(name, out var t) ? new T().Load(t) as T : null;
         }
         
         static public void Save<T,U>(this Dictionary<T, U> dic, SaveTag save, string name, SaveTag.Types keyType, Func<T, object> keySelector) where U : ISaveable
@@ -38,8 +31,6 @@ namespace Start_a_Town_
             foreach(var vk in dic)
             {
                 var vkTag = new SaveTag(SaveTag.Types.Compound);
-                //vkTag.Add(vk.Key.Save("Key"));
-                //vkTag.Add(vk.Key.Save("Key"));
                 vkTag.Add(new SaveTag(keyType, "Key", keySelector(vk.Key)));
                 vkTag.Add(vk.Value.Save("Value"));
                 tag.Add(vkTag);
@@ -48,14 +39,13 @@ namespace Start_a_Town_
         }
         static public Dictionary<T, U> TrySync<T, U>(this Dictionary<T, U> dic, SaveTag save, string name, Func<SaveTag, T> keySelector) where U : ISaveable
         {
-            //var vkList = save[name].Value as List<SaveTag>;
             if (!save.TryGetTag(name, out SaveTag tag))
                 return dic;
             var vkList = tag.Value as List<SaveTag>;
             foreach (var vk in vkList)
             {
                 var key = keySelector(vk["Key"]);
-                if (key != null) // HACK will i ever need null keys?
+                if (key is not null) // HACK will i ever need null keys?
                     dic[key].Load(vk["Value"]);
             }
             return dic;
@@ -134,7 +124,6 @@ namespace Start_a_Town_
         {
             return save.TryGetTag(name, t =>
             {
-                //var list = save[name].Value as List<SaveTag>;
                 var list = t.Value as List<SaveTag>;
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -202,28 +191,12 @@ namespace Start_a_Town_
                 array[i] = new T().Load(list[i]) as T;
             return true;
         }
-        //public static void TryLoadVariableTypes<T>(this ICollection<T> array, SaveTag tag, string name, params object[] ctorArgs) where T : class, ISaveable
-        //{
-        //    tag.TryGetTag(name, t =>
-        //    {
-        //        var list = t.Value as List<SaveTag>;
-        //        var array = new T[list.Count];
-        //        for (int i = 0; i < list.Count; i++)
-        //        {
-        //            var tag = list[i];
-        //            var typeName = tag.GetValue<string>("Type");
-        //            var item = Activator.CreateInstance(Type.GetType(typeName), ctorArgs) as T;
-        //            item.Load(tag["Data"]);
-        //            array[i] = item;
-        //        }
-        //    });
-        //}
+        
         public static void SaveAsList<T>(this IEnumerable<T> items, SaveTag tag, string name) where T : ISaveable, INamed
         {
             var listTag = new SaveTag(SaveTag.Types.List, name, SaveTag.Types.Compound);
             foreach (var item in items)
                 listTag.Add(item.Save());
-            //return tag;
             tag.Add(listTag);
         }
 
@@ -312,19 +285,7 @@ namespace Start_a_Town_
             }
             save.Add(list);
         }
-        //public static bool TryLoad(this Vector3[] vectors, SaveTag save, string name)
-        //{
-        //    return save.TryGetTag(name, t =>
-        //    {
-        //        var positions = t.Value as List<SaveTag>;
-        //        var count = positions.Count;
-        //        vectors = new Vector3[count];
-        //        for (int i = 0; i < count; i++)
-        //        {
-        //            vectors[i] = (Vector3)positions[i].Value;
-        //        }
-        //    });
-        //}
+        
         public static bool TryLoad(this SaveTag save, string name, ref Vector3[] vectors)
         {
             if (save.TryGetTag(name, out var t))
@@ -346,7 +307,6 @@ namespace Start_a_Town_
             {
                 var positions = t.Value as List<SaveTag>;
                 var count = positions.Count;
-                //vectors = new Vector3[count];
                 vectors = new T();
                 for (int i = 0; i < count; i++)
                 {
@@ -356,18 +316,7 @@ namespace Start_a_Town_
             }
             return false;
         }
-        //public static bool TryLoad(this Vector3[] vectors, SaveTag save, string name)
-        //{
-        //    return save.TryGetTag(name, t =>
-        //    {
-        //        var positions = t.Value as List<SaveTag>;
-        //        var count = positions.Count;
-        //        for (int i = 0; i < count; i++)
-        //        {
-        //            vectors[i] = (Vector3)positions[i].Value;
-        //        }
-        //    });
-        //}
+        
         public static bool TryLoad<T>(this T vectors, SaveTag save, string name) where T : ICollection<Vector3>
         {
             return save.TryGetTag(name, t =>
@@ -421,7 +370,6 @@ namespace Start_a_Town_
             list.Clear();
             if (!tag.TryGetTagValue(name, out List<SaveTag> positions))
                 return false;
-            //var positions = tag[name].Value as List<SaveTag>;
             foreach (var pos in positions)
                 list.Add((IntVec3)pos.Value);
             return true;
@@ -452,14 +400,7 @@ namespace Start_a_Town_
                 list.Add((Vector3)pos.Value);
             return list;
         }
-        //public static List<int> Load(this List<int> list, SaveTag tag)
-        //{
-        //    list.Clear();
-        //    var positions = tag.Value as List<SaveTag>;
-        //    foreach (var pos in positions)
-        //        list.Add((int)pos.Value);
-        //    return list;
-        //}
+        
         public static T LoadVectors<T>(this T list, SaveTag tag) where T: ICollection<Vector3>, new()
         {
             list.Clear();
@@ -468,9 +409,9 @@ namespace Start_a_Town_
                 list.Add((Vector3)pos.Value);
             return list;
         }
-        public static List<string> LoadStringList(this SaveTag tag, string name)// where T : ICollection<string>, new()
+        public static List<string> LoadStringList(this SaveTag tag, string name)
         {
-            var collection = new List<string>();// T();
+            var collection = new List<string>();
             var items = tag[name].Value as List<SaveTag>;
             foreach (var pos in items)
                 collection.Add((string)pos.Value);
@@ -485,7 +426,6 @@ namespace Start_a_Town_
         /// <param name="name"></param>
         /// <returns></returns>
         public static bool TryLoad<U>(this ICollection<U> collection, SaveTag save, string name, params object[] ctorArgs)
-            //where T : ICollection<U>
             where U : class, ISaveable
         {
             return save.TryGetTag(name, t =>
@@ -495,7 +435,6 @@ namespace Start_a_Town_
                 for (int i = 0; i < count; i++)
                 {
                     collection.Add(Activator.CreateInstance(typeof(U), new[] { tags[i] }.Concat(ctorArgs).ToArray()) as U);
-                    //collection.Add(item.Load(tags[i]) as U);
                 }
             });
         }
@@ -516,10 +455,9 @@ namespace Start_a_Town_
             return tag.TryGetTag(name, t =>
             {
                 list.Clear();
-                var positions = t.Value as List<SaveTag>;
-                if(positions!=null)
-                foreach (var pos in positions)
-                    list.Add(new U().Load(pos.Value as SaveTag) as U);
+                if (t.Value is List<SaveTag> positions)
+                    foreach (var pos in positions)
+                        list.Add(new U().Load(pos.Value as SaveTag) as U);
             });
         }
         public static T[] LoadList<T>(this SaveTag tag, string name)
@@ -553,10 +491,8 @@ namespace Start_a_Town_
             for (int i = 0; i < array.Length; i++)
             {
                 var sk = array[i];
-                //sk.Load(save[sk.Name]);
                 save.TryGetTag(sk.Name, t => sk.Load(t));
             }
-            //return array;
         }
         public static bool TryLoadImmutable<T>(this T[] array, SaveTag tag, string name) where T : ISaveable, INamed
         {
@@ -571,17 +507,9 @@ namespace Start_a_Town_
                 list.Add((int)item.Value);
         }
 
-        //public static bool TryLoad<T>(this ICollection<T> list, SaveTag save, string name) where T : class, ISaveable
-        //{
-        //    return save.TryGetTag(name, t =>
-        //    {
-        //        list.Load
-        //    });
-        //}
         [Obsolete]
         public static List<T> Load<T>(this List<T> list, SaveTag save) where T : class, ISaveable
         {
-            //var objType = Type.GetType(save.GetValue<string>("Type"));
             if (!save.TryGetTagValue<string>("Type", out string objTypeName))
                 return list;
             var objType = Type.GetType(objTypeName);
@@ -592,27 +520,13 @@ namespace Start_a_Town_
             {
                 var obj = Activator.CreateInstance(objType) as T;
                 obj.Load(t);
-                //list.Add(Convert.ChangeType(obj, objType));
                 list.Add(obj);
             }
             return list;
         }
-        [Obsolete]
-        public static Dictionary<T,U> LoadOld<T, U>(this Dictionary<T,U> dic, SaveTag save, Func<U, T> keySelector, Action<U> initializer = null)
-            where U: class, ISaveable, new()
-            //where T: struct, IComparable<T>
-        {
-            var list = new List<U>().Load(save);
-            foreach(var i in list)
-            {
-                dic[keySelector(i)] = i;
-                initializer?.Invoke(i);
-            }
-            return dic;
-        }
+      
         public static bool Load<T, U>(this Dictionary<T, U> dic, SaveTag save, string name, Func<U, T> keySelector, Action<U> initializer = null)
             where U : class, ISaveable, new()
-            //where T: struct, IComparable<T>
         {
             var list = new List<U>();
             if (!list.TryLoadMutable(save, name))
@@ -631,8 +545,6 @@ namespace Start_a_Town_
         }
         public static void SaveImmutable<T>(this T[] array, SaveTag saveTag, string tagName) where T:ISaveable, INamed
         {
-            //saveTag.Add(item.Save(name));
-
             var tag = new SaveTag(SaveTag.Types.Compound, tagName);
             for (int i = 0; i < array.Length; i++)
             {
@@ -682,15 +594,7 @@ namespace Start_a_Town_
                 list.Add(item.Name.Save(""));
             save.Add(list);
         }
-        //public static bool TryLoadDefs<T, U>(this T defs, SaveTag tag, string name) where T : ICollection<U> where U : Def
-        //{
-        //    if (!tag.TryGetTag(name, out var listTag))
-        //        return false;
-        //    var list = listTag.Value as List<SaveTag>;
-        //    foreach (var item in list)
-        //        defs.Add(Def.GetDef<U>((string)item.Value));
-        //    return true;
-        //}
+       
         public static bool TryLoadDefs<T>(this ICollection<T> defs, SaveTag tag, string name) where T : Def
         {
             if (!tag.TryGetTag(name, out var listTag))
@@ -719,7 +623,6 @@ namespace Start_a_Town_
                 return false;
             target = Def.GetDef<T>((string)deftag.Value) as PlantProperties;
             return true;
-            //return tag.TryGetTagValue<string>(name, v => target = Def.GetDef<T>(v));
         }
         public static SaveTag Save(this IEnumerable<string> strings, string name)
         {
@@ -745,25 +648,25 @@ namespace Start_a_Town_
         public static List<SaveTag> SaveAsList(this Vector3 pos)
         {
             return new List<SaveTag>() {
-                new SaveTag(Start_a_Town_.SaveTag.Types.Float, "X", pos.X),
-                new SaveTag(Start_a_Town_.SaveTag.Types.Float, "Y", pos.Y),
-                new SaveTag(Start_a_Town_.SaveTag.Types.Float, "Z", pos.Z),
+                new SaveTag(SaveTag.Types.Float, "X", pos.X),
+                new SaveTag(SaveTag.Types.Float, "Y", pos.Y),
+                new SaveTag(SaveTag.Types.Float, "Z", pos.Z),
             };
         }
         public static SaveTag SaveOld(this Vector3 pos, string name = "")
         {
             return new SaveTag(SaveTag.Types.Compound, name, new List<SaveTag>() {
-                new SaveTag(Start_a_Town_.SaveTag.Types.Float, "X", pos.X),
-                new SaveTag(Start_a_Town_.SaveTag.Types.Float, "Y", pos.Y),
-                new SaveTag(Start_a_Town_.SaveTag.Types.Float, "Z", pos.Z),
+                new SaveTag(SaveTag.Types.Float, "X", pos.X),
+                new SaveTag(SaveTag.Types.Float, "Y", pos.Y),
+                new SaveTag(SaveTag.Types.Float, "Z", pos.Z),
             });
         }
         public static SaveTag Save(this Vector3 pos, string name = "") => new SaveTag(SaveTag.Types.Vector3, name, pos);
         public static SaveTag Save(this Vector2 pos, string name)
         {
             return new SaveTag(SaveTag.Types.Compound, name, new List<SaveTag>() {
-                new SaveTag(Start_a_Town_.SaveTag.Types.Float, "X", pos.X),
-                new SaveTag(Start_a_Town_.SaveTag.Types.Float, "Y", pos.Y)
+                new SaveTag(SaveTag.Types.Float, "X", pos.X),
+                new SaveTag(SaveTag.Types.Float, "Y", pos.Y)
             });
         }
         public static SaveTag Save(this int value, string name)
@@ -801,19 +704,51 @@ namespace Start_a_Town_
             if (save.TryGetTag(name, out var l))
             {
                 var taglist = l.Value as List<SaveTag>;
-                //list = new List<T>();
                 foreach (var tag in taglist)
                 {
                     list.Add(tag.LoadRef<T>());
                 }
                 return true;
             }
-            //list = null;
             return false;
         }
         public static bool TrySaveRefs<T>(this IList<T> refs, SaveTag save, string name) where T : ILoadReferencable
         {
             return save.TrySaveRefs(refs, name);
+        }
+
+
+        public static SaveTag Save(this List<TargetArgs> list, string name = "")
+        {
+            var tag = new SaveTag(SaveTag.Types.List, name, SaveTag.Types.Compound);
+            foreach (var i in list)
+                tag.Add(i.Save());
+            return tag;
+        }
+        public static void Load(this List<TargetArgs> list, SaveTag tag)
+        {
+            list.Clear();
+            var tags = tag.Value as List<SaveTag>;
+            foreach (var i in tags)
+                list.Add(new TargetArgs(null, i));
+
+        }
+
+        public static SaveTag Save(this Dictionary<string, int> dic, string name)
+        {
+            var tag = new SaveTag(SaveTag.Types.Compound, name);
+            tag.Add(dic.Keys.Save("Keys"));
+            tag.Add(dic.Values.Save("Values"));
+            return tag;
+        }
+        public static Dictionary<string, int> Load(this Dictionary<string, int> dic, SaveTag save)
+        {
+            var keys = new List<string>().Load(save["Keys"].Value as List<SaveTag>);
+            var values = new List<int>().Load(save["Values"].Value as List<SaveTag>);
+            var tempdic = keys.Zip(values, (k, v) => new { k, v });
+            foreach (var i in tempdic)
+                dic.Add(i.k, i.v);
+            return dic;
         }
     }
 }

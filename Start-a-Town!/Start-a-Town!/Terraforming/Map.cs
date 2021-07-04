@@ -207,7 +207,6 @@ namespace Start_a_Town_
 
                 t = Engine.TicksPerSecond;
             }
-            PerformCellOperations();
            // AnimateWater();
             while (ChunksToActivate.Count > 0)
             {
@@ -244,17 +243,7 @@ namespace Start_a_Town_
             //this.Town.Update(); // moved this to when adding time
         }
 
-        private void PerformCellOperations()
-        {
-            while (CellOperations.Count > 0)
-            {
-                CellOperation op;
-                if (!CellOperations.TryPeek(out op))
-                    break;
-                if (op.Perform())
-                    CellOperations.TryDequeue(out op);
-            }
-        }
+       
         float WaterAnim = 20;
         private void AnimateWater()
         {
@@ -898,23 +887,7 @@ namespace Start_a_Town_
             tooltip.Controls.Add(ToString().ToLabel());
         }
 
-        public ConcurrentQueue<CellOperation> CellOperations = new ConcurrentQueue<CellOperation>();
-        //public CellOperation SetCell(Vector3 position, Block.Types type, int variation = 0, int orientation = 0)
-        //{
-        //    CellOperation op = new CellOperation(this, position, type, variation, orientation);
-        //    CellOperations.Enqueue(op);
-        //    return op;
-        //}
-        public void SetCell(CellOperation operation)
-        {
-            CellOperations.Enqueue(operation);
-        }
-        public void SetCell(IEnumerable<CellOperation> operations)
-        {
-            foreach(var op in operations)
-                CellOperations.Enqueue(op);
-        }
-
+        
         public override bool Contains(GameObject obj)
         {
             Chunk chunk;
@@ -932,9 +905,6 @@ namespace Start_a_Town_
         }
         public override IEnumerable<GameObject> GetObjects(Vector3 min, Vector3 max)
         {
-            //Chunk minChunk, maxChunk;
-            //minChunk = min.GetChunk(this);
-            //maxChunk = max.GetChunk(this);
             List<GameObject> list = new List<GameObject>();
             Vector2 minChunk, maxChunk;
             minChunk = min.GetChunkCoords();

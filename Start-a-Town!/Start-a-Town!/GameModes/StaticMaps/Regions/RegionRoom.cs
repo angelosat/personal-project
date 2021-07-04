@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -11,11 +8,9 @@ namespace Start_a_Town_
     {
         public int ID;
         public Color Color;
-        static readonly Random ColorRand = new Random();
-        HashSet<Region> Regions = new HashSet<Region>();
-        HashSet<RegionRoom> Neighbors = new HashSet<RegionRoom>(); // TODO:
-
-        RegionManager Manager;
+        static readonly Random ColorRand = new();
+        readonly HashSet<Region> Regions = new();
+        readonly RegionManager Manager;
         public bool IsOutdoors = true;
         private void AssignColor()
         {
@@ -59,10 +54,6 @@ namespace Start_a_Town_
                     break;
                 }
             }
-        }
-        public void Update()
-        {
-
         }
     }
 }

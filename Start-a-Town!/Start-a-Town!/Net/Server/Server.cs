@@ -2461,24 +2461,7 @@ namespace Start_a_Town_.Net
             this.SyncCell(global, this.Map.GetCell(global));
            
         }
-        public void SetBlock(Vector3 global, Block.Types type)
-        {
-            this.SetBlock(global, type, 0);
-            //if (!global.TrySetCell(this, type))
-            //    throw new Exception("Invalid cell position");
-        }
-        public void SetBlock(Vector3 global, Block.Types type, byte data)
-        {
-            this.SetBlock(global, type, data, 0);
-            //if (!global.TrySetCell(this, type, data))
-            //    throw new Exception("Invalid cell position");
-        }
-        public void SetBlock(Vector3 global, Block.Types type, byte data, int variation)
-        {
-            //if (!global.TrySetCell(this, type, data))
-            if (!global.TrySetCell(this, type, data, variation))
-                throw new Exception("Invalid cell position");
-        }
+        
 
         /// <summary>
         /// Syncs cell across the network

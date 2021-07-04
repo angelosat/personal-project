@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.GameModes.StaticMaps
@@ -24,10 +21,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
                             case "hour":
                                 int t = int.Parse(p[2]);
                                 (net.Map as StaticMap).SetHour(t);
-                                ////net.Map.Time = new TimeSpan(net.Map.Time.Days, t, net.Map.Time.Minutes, net.Map.Time.Seconds);
-                                //net.Map.Time = new TimeSpan(net.Map.Time.Days, t, 0, 0);
-                                //foreach (var ch in net.Map.GetActiveChunks())
-                                //    ch.Value.LightCache.Clear();
                                 if (net is Server)
                                     (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
                                 break;
@@ -55,7 +48,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                                     }
                                     data = data.TrimEnd(' ');
                                     if (p.Length > 3)
-                                        cell.BlockData = replace.ParseData(data);//p[3]);
+                                        cell.BlockData = replace.ParseData(data);
                                 }
                         if (net is Server)
                             (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
@@ -74,19 +67,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
                         break;
 
                     case "plant":
-                        //var global = new Vector3(int.Parse(p[1]),int.Parse(p[2]),int.Parse(p[3]));
                         var x = int.Parse(p[1]);
                         var y = int.Parse(p[2]);
                         var z = int.Parse(p[3]);
 
-                        //var planttype = (GameObject.Types)int.Parse(p[4]);
                         var planttype = (GameObject.Types)Enum.Parse(typeof(GameObject.Types), p[4], true);
                         GeneratorPlants.GeneratePlants(net.Map, x, y, z, planttype);
-                        //if (net is Server)
-                        //    (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
                         break;
-
-                   
 
                     default:
                         break;

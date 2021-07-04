@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.UI;
-using Start_a_Town_.GameModes.StaticMaps;
-using Start_a_Town_.GameModes.StaticMaps.Screens;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.GameModes.StaticMaps.UI
@@ -19,9 +13,8 @@ namespace Start_a_Town_.GameModes.StaticMaps.UI
         Button BtnCreateMap;
         Action<StaticMap> CallBack;
 
-        public StaticMapBrowser(Action<StaticMap> callback)//StaticWorld world)
+        public StaticMapBrowser(Action<StaticMap> callback)
         {
-            //this.World = world;
             this.CallBack = callback;
 
             this.PanelMapList = new PanelLabeled("Maps") { AutoSize = true};
@@ -29,17 +22,10 @@ namespace Start_a_Town_.GameModes.StaticMaps.UI
             this.MapList = new ListBox<IMap, Button>(new Rectangle(0, 0, 150, 300)) { Location = this.PanelMapList.Label.BottomLeft };
             this.PanelMapList.Controls.Add(this.MapList);
 
-            //this.PanelInfo = new PanelLabeled("Info") { Location = this.PanelMapList.TopRight, Size = this.PanelMapList.Size };
             this.PanelInfo = new Panel() { Location = this.PanelMapList.TopRight, Size = this.PanelMapList.Size };
 
-            //this.MapList = new ScrollableList(Vector2.Zero, this.PanelMapList.Size);//, m => m.Coordinates.ToString());
-            
             this.BtnCreateMap = new Button("Create Map", this.PanelMapList.Width * 2) { Location = this.PanelMapList.BottomLeft, LeftClickAction = CreateMap };
-            //var box = new Panel() { Location = this.PanelInfo.TopRight, AutoSize = true };
-            //box.Controls.Add(this.MapList);
             this.Controls.Add(this.PanelMapList, this.PanelInfo);//
-                //box);
-            //this.Location = this.CenterScreen;
             this.SnapToScreenCenter();
 
         }
@@ -54,25 +40,17 @@ namespace Start_a_Town_.GameModes.StaticMaps.UI
         {
             this.Controls.Remove(this.BtnCreateMap);
             this.PanelInfo.Controls.Clear();
-            //this.PanelMapList.Controls.Clear();
-            //this.PanelInfo.Controls.Clear();
-            //this.MapList.Build(new IMap[] { });
             this.MapList.Clear();
             if (this.World == null)
                 return;
             if (this.World.Maps.Count == 0)
                 this.Controls.Add(this.BtnCreateMap);
 
-            //this.MapList.Build(this.World.GetMaps().Values);
             this.MapList.Build(this.World.GetMaps().Values, m => m.Coordinates.ToString(), (map, btn) => btn.LeftClickAction = () => this.SelectMap(map));
-            
-            //this.Controls.Remove(this.MapList);
-            //this.Controls.Add(this.MapList);
         }
 
         void CreateMap()
         {
-            //var map = this.World.CreateMap(Vector2.Zero);
             var map = new StaticMap(this.World, Vector2.Zero.ToString(), Vector2.Zero, StaticMap.MapSize.Default);
             this.World.Maps.Add(Vector2.Zero, map);
             this.Refresh();
@@ -89,9 +67,7 @@ namespace Start_a_Town_.GameModes.StaticMaps.UI
 
         private void PlayMap(IMap map)
         {
-            //Server.LoadMap(map);
             this.CallBack(map as StaticMap);
-            //ScreenManager.Add(new ScreenMapLoading(map as StaticMap));
         }
     }
 }

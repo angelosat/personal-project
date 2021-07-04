@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
 using Start_a_Town_.GameModes.StaticMaps;
+
 namespace Start_a_Town_
 {
     class PacketWorld
@@ -21,12 +18,11 @@ namespace Start_a_Town_
 
             if (player == null)
             {
-                //server.Players.GetList().ForEach(p => server.Enqueue(p, Packet.Create(player, PacketType.WorldInfo, data, SendType.Ordered | SendType.Reliable)));
                 foreach (var p in server.Players.GetList())
-                    server.Enqueue(p, Packet.Create(player, PacketType.WorldInfo, data, SendType.OrderedReliable));// SendType.Ordered | SendType.Reliable));
+                    server.Enqueue(p, Packet.Create(player, PacketType.WorldInfo, data, SendType.OrderedReliable));
             }
             else
-                server.Enqueue(player, Packet.Create(player, PacketType.WorldInfo, data, SendType.OrderedReliable));// SendType.Ordered | SendType.Reliable));
+                server.Enqueue(player, Packet.Create(player, PacketType.WorldInfo, data, SendType.OrderedReliable));
         }
         internal static void Receive(IObjectProvider net, BinaryReader r)
         {
@@ -36,7 +32,7 @@ namespace Start_a_Town_
                 throw new Exception("world already received");
                 //"world already received, dropping packet".ToConsole();
             }
-            StaticWorld world = StaticWorld.ReadData(r);// Network.Deserialize<StaticWorld>(msg.Payload, StaticWorld.ReadData);// as World;
+            StaticWorld world = StaticWorld.ReadData(r);
             client.World = world;
         }
     }

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    class EnclosedArea //: ISelectable
+    class EnclosedArea
     {
         public int ID;
-        public HashSet<Vector3> Positions = new HashSet<Vector3>();
-
-        //public bool Exists => true;
+        public HashSet<Vector3> Positions = new();
 
         public override string ToString()
         {
@@ -59,8 +53,6 @@ namespace Start_a_Town_
         {
             area.Clear();
             edges.Clear();
-            //var area = new EnclosedArea();
-            //area.Add(global);
             if (map.GetCell(global).IsRoomBorder)
                 edges.Add(global);
             else
@@ -76,14 +68,10 @@ namespace Start_a_Town_
                     if (handled.Contains(n))
                         continue;
                     handled.Add(n);
-                    //if (!map.IsAir(n))
-                    //    continue;
                     if (!map.Contains(n))
                         continue;
                     if (!map.IsAboveHeightMap(n))
                     {
-                        //queue.Enqueue(n);
-                        //if (map.IsAir(n))
                         if (!map.GetCell(n).IsRoomBorder)
                         {
                             area.Add(n);
@@ -115,15 +103,11 @@ namespace Start_a_Town_
                     if (handled.Contains(n))
                         continue;
                     handled.Add(n);
-                    //if (!map.IsAir(n))
-                    //    continue;
                     if (!map.Contains(n))
                         continue;
                     if (!map.IsAboveHeightMap(n))
                     {
                         area.Add(n);
-                        //queue.Enqueue(n);
-                        //if (map.IsAir(n))
                         if (!map.GetCell(n).IsRoomBorder)
                             queue.Enqueue(n);
                     }
@@ -150,13 +134,10 @@ namespace Start_a_Town_
                     if (handled.Contains(n))
                         continue;
                     handled.Add(n);
-                    //if (!map.IsAir(n))
-                    //    continue;
                     if (!map.Contains(n))
                         continue;
                     if (!map.IsAboveHeightMap(n))
                     {
-                        //queue.Enqueue(n);
                         if (map.IsAir(n))
                         {
                             queue.Enqueue(n);
@@ -193,7 +174,6 @@ namespace Start_a_Town_
 
                     var cell = map.GetCell(n);
                     if (!cell.IsRoomBorder)
-                    //if (map.IsAir(n))
                     {
                         if (map.IsAboveHeightMap(n))
                             return null;
@@ -205,55 +185,5 @@ namespace Start_a_Town_
             }
             return area;
         }
-        //public string GetName()
-        //{
-        //    return string.Format("Room {0}", this.ID);
-        //}
-
-        //public void GetSelectionInfo(UISelectedInfo panel)
-        //{
-        //    //throw new NotImplementedException();
-        //}
-
-        //public void GetQuickButtons(UISelectedInfo panel)
-        //{
-        //    //throw new NotImplementedException();
-        //}
-        //static public IEnumerable<Vector3> BeginExclusiveLazy(IMap map, Vector3 global)
-        //{
-        //    //var area = new EnclosedArea();
-        //    yield return global;
-        //    var queue = new Queue<Vector3>();
-        //    var handled = new HashSet<Vector3>() { global };
-        //    queue.Enqueue(global);
-        //    while (queue.Any())
-        //    {
-        //        var current = queue.Dequeue();
-        //        foreach (var n in current.GetAdjacentLazy())
-        //        {
-        //            if (handled.Contains(n))
-        //                continue;
-        //            handled.Add(n);
-
-        //            if (!map.Contains(n))
-        //                continue;
-        //            if (map.IsAboveHeightMap(n))
-        //                continue;
-        //                if (map.IsAir(n))
-        //                {
-        //                    queue.Enqueue(n);
-        //                    area.Add(n);
-        //                }
-
-        //            else
-        //            {
-        //                return null;
-        //            }
-        //        }
-        //    }
-        //    return area;
-        //}
-
-
     }
 }

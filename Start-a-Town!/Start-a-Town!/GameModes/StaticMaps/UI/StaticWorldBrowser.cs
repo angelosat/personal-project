@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.UI;
-using Start_a_Town_.GameModes;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.GameModes.StaticMaps.UI

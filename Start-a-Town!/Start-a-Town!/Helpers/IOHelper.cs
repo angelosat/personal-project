@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
+using Start_a_Town_.Net;
+using System.Text;
 
 namespace Start_a_Town_
 {
@@ -60,7 +60,6 @@ namespace Start_a_Town_
             return dic;
         }
         public static Dictionary<T, U> Read<T, U>(this Dictionary<T, U> dic, BinaryReader r, Func<U, T> keySelector, Action<U> initializer)
-            //where T : ICollection<U>, new()
             where U : class, ISerializable, new()
         {
             var list = new List<U>().Read(r);
@@ -72,7 +71,6 @@ namespace Start_a_Town_
             return dic;
         }
         public static Dictionary<T, U> Read<T, U>(this Dictionary<T, U> dic, BinaryReader r, Func<U, T> keySelector, params object[] constructorArgs)
-            //where T : ICollection<U>, new()
             where U : class, ISerializable, new()
         {
             var list = new List<U>().Read(r, constructorArgs);
@@ -87,27 +85,18 @@ namespace Start_a_Town_
         {
             var count = r.ReadInt32();
             for (int i = 0; i < count; i++)
-                array[i].Read(r);// = new T().Read(r) as T;
+                array[i].Read(r);
             return array;
         }
-        //static public T Read<T, U>(this T collection, BinaryReader r)
-        //    where T : ICollection<U>
-        //    where U : class, ISerializable, new()
-        //{
-        //    var count = r.ReadInt32();
-        //    for (int i = 0; i < count; i++)
-        //        collection.Add(new U().Read(r) as U);
-        //    return collection;
-        //}
+        
         static public ICollection<U> Read<U>(this ICollection<U> collection, BinaryReader r, params object[] args)
-            where U : class, ISerializable//, new()
+            where U : class, ISerializable
         {
             var count = r.ReadInt32();
             for (int i = 0; i < count; i++)
             {
                 var item = Activator.CreateInstance(typeof(U), args) as U;
                 collection.Add(item.Read(r) as U);
-                //collection.Add(new U().Read(r) as U);
                 }
             return collection;
         }
@@ -222,21 +211,21 @@ namespace Start_a_Town_
         }
         public static void Write<T>(this ICollection<T> list, BinaryWriter w) where T: ISerializable
         {
-            var count = list.Count;// ();
+            var count = list.Count;
             w.Write(count);
             foreach (var i in list)
                 i.Write(w);
         }
         public static void WriteDefs<T>(this ICollection<T> list, BinaryWriter w) where T : Def
         {
-            var count = list.Count;// ();
+            var count = list.Count;
             w.Write(count);
             foreach (var i in list)
                 i.Write(w);
         }
         public static void Write(this ICollection<Def> list, BinaryWriter w)
         {
-            var count = list.Count;// ();
+            var count = list.Count;
             w.Write(count);
             foreach (var i in list)
                 i.Write(w);
@@ -262,7 +251,7 @@ namespace Start_a_Town_
         }
         public static void WriteAbstract<T>(this ICollection<T> list, BinaryWriter w) where T : ISerializable
         {
-            var count = list.Count;// ();
+            var count = list.Count;
             w.Write(count);
             foreach (var i in list)
             {
@@ -354,7 +343,6 @@ namespace Start_a_Town_
         }
 
         static public ICollection<T> SyncOld<T>(this ICollection<T> collection, BinaryReader r)
-            //where T : ICollection<U>
             where T : ISerializable
         {
             var count = r.ReadInt32();
@@ -502,9 +490,148 @@ namespace Start_a_Town_
         {
             return Def.GetDef<T>(r.ReadString());
         }
-        //static public Def ReadDef(this BinaryReader r)
-        //{
-        //    return Def.GetDef(r.ReadString());
-        //}
+        public static void Write(this BinaryWriter w, List<Vector2> list)
+        {
+            w.Write(list.Count);
+            foreach (var g in list)
+                w.Write(g);
+        }
+        public static void Write(this BinaryWriter w, List<Vector3> list)
+        {
+            w.Write(list.Count);
+            foreach (var g in list)
+                w.Write(g);
+        }
+        public static void Write(this BinaryWriter w, IEnumerable<Vector3> list)
+        {
+            w.Write(list.Count());
+            foreach (var g in list)
+                w.Write(g);
+        }
+        public static void Write(this BinaryWriter w, List<string> strings)
+        {
+            w.Write(strings.Count);
+            foreach (var s in strings)
+                w.Write(s);
+        }
+        public static byte[] GetBytes(this Vector2 vector)
+        {
+            byte[] data =
+                BitConverter.GetBytes(vector.X)
+                .Concat(BitConverter.GetBytes(vector.Y))
+                .ToArray();
+            return data;
+        }
+        public static byte[] GetBytes(this Vector3 vector)
+        {
+            byte[] data =
+                BitConverter.GetBytes(vector.X)
+                .Concat(BitConverter.GetBytes(vector.Y))
+                .Concat(BitConverter.GetBytes(vector.Z))
+                .ToArray();
+            return data;
+        }
+        public static void Write(this BinaryWriter w, Progress progress)
+        {
+            progress.Write(w);
+        }
+        public static void Write(this BinaryWriter writer, Vector2 vec2)
+        {
+            writer.Write(vec2.X);
+            writer.Write(vec2.Y);
+        }
+        public static void Write(this BinaryWriter writer, Vector3 vec3)
+        {
+            writer.Write(vec3.X);
+            writer.Write(vec3.Y);
+            writer.Write(vec3.Z);
+        }
+        public static void Write(this BinaryWriter writer, IntVec3 vec3)
+        {
+            writer.Write(vec3.X);
+            writer.Write(vec3.Y);
+            writer.Write(vec3.Z);
+        }
+        public static void Write(this BinaryWriter writer, Vector3? vec3)
+        {
+            var has = vec3.HasValue;
+            writer.Write(has);
+            if (!has)
+                return;
+            var val = vec3.Value;
+            writer.Write(val.X);
+            writer.Write(val.Y);
+            writer.Write(val.Z);
+        }
+        public static void Write(this BinaryWriter w, TargetArgs target)
+        {
+            target.Write(w);
+        }
+        public static void Write(this BinaryWriter writer, PacketType packetType)
+        {
+            writer.Write((int)packetType);
+        }
+        public static void Write(this BinaryWriter w, params object[] args)
+        {
+            for (int i = 0; i < args.Length; i++)
+            {
+                var arg = args[i];
+                var argType = arg.GetType();
+                if (argType == typeof(int))
+                    w.Write((int)arg);
+                else if (argType == typeof(float))
+                    w.Write((float)arg);
+                else if (argType == typeof(string))
+                    w.Write((string)arg);
+                else if (argType == typeof(byte))
+                    w.Write((byte)arg);
+                else if (argType == typeof(short))
+                    w.Write((short)arg);
+                else if (argType == typeof(bool))
+                    w.Write((bool)arg);
+                else if (argType == typeof(long))
+                    w.Write((long)arg);
+                else if (argType == typeof(uint))
+                    w.Write((uint)arg);
+                else if (argType == typeof(ushort))
+                    w.Write((ushort)arg);
+                else if (argType == typeof(ulong))
+                    w.Write((ulong)arg);
+                else if (argType == typeof(decimal))
+                    w.Write((decimal)arg);
+                else if (argType == typeof(IntVec3))
+                    w.Write((IntVec3)arg);
+                else
+                    throw new ArgumentException();
+            }
+        }
+        public static Vector2 ReadVector2(this BinaryReader reader)
+        {
+            return new Vector2(reader.ReadSingle(), reader.ReadSingle());
+        }
+        public static Vector3 ReadVector3(this BinaryReader reader)
+        {
+            return new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+        }
+        public static IntVec3 ReadIntVec3(this BinaryReader reader)
+        {
+            return new Vector3(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
+        }
+        public static Vector3? ReadVector3Nullable(this BinaryReader reader)
+        {
+            if (!reader.ReadBoolean())
+                return null;
+            return new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+        }
+        public static string ReadASCII(this BinaryReader reader)
+        {
+            return Encoding.ASCII.GetString(reader.ReadBytes(reader.ReadInt32()));
+        }
+        public static void WriteASCII(this BinaryWriter writer, string text)
+        {
+            byte[] encoded = Encoding.ASCII.GetBytes(text);
+            writer.Write(encoded.Length);
+            writer.Write(encoded);
+        }
     }
 }

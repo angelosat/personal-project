@@ -1,40 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI.WorldSelection;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
     class StaticWorldCreateWindow : Window
     {
-        #region Singleton
         static StaticWorldCreateWindow _Instance;
-        public static StaticWorldCreateWindow Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new StaticWorldCreateWindow();
-                return _Instance;
-            }
-        }
+        public static StaticWorldCreateWindow Instance => _Instance ??= new StaticWorldCreateWindow();
+       
         public override bool Close()
         {
             return base.Hide();
         }
-        #endregion
 
         public Action<IWorld> Callback { get; set; }
         TextBox Txt_MapName, Txt_Seed, Txt_CharName;
-        //CheckBox Chk_Trees; //Chk_Caves
         PictureBox Pic_Preview;
-        //ComboBox<Terraformer> Combo_Terraformers;
         Panel Panel_Preview;
         RadioButton Rd_Name, Rd_Mutators;
         Panel Panel_Tabs, Panel_Main, Panel_Character;
@@ -53,12 +40,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Panel_Tabs.AutoSize = true;
             Rd_Name = new RadioButton("Name") { Location = Vector2.Zero };
             Rd_Mutators = new RadioButton("Mutators") { Location = Rd_Name.BottomLeft };
-            //Rd_Name = new RadioButton("Name",Vector2.Zero);
-            //Rd_Mutators = new RadioButton("Mutators", Rd_Name.BottomLeft);
             Rd_Name.Checked = true;
-           // RadioButton rad_character = new RadioButton("Character", new Vector2(0, Rd_Name.Bottom));
             
-            //rad_character.LeftClick += new UIEvent(tab_Click);
             Rd_Name.LeftClick += new UIEvent(tab_Click);
             Rd_Mutators.LeftClick += new UIEvent(tab_Click);
 
@@ -70,36 +53,27 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Label lbl_name = new Label(new Vector2(0, 0), "Name");
             Txt_MapName = new TextBox(new Vector2(0, lbl_name.Bottom), new Vector2(150, Label.DefaultHeight));
 
-            //Txt_MapName.TextEntered += new EventHandler<TextEventArgs>(Txt_MapName_TextEntered);
-            Label lbl_seed = new Label(new Vector2(0, Txt_MapName.Bottom), "Seed (Leave blank for random)");//0 - 4294967295)");
+            Label lbl_seed = new Label(new Vector2(0, Txt_MapName.Bottom), "Seed (Leave blank for random)");
             Txt_Seed = new TextBox(new Vector2(0, lbl_seed.Bottom), new Vector2(150, Label.DefaultHeight));
-            //Txt_Seed.TextEntered += new EventHandler<TextEventArgs>(Txt_Seed_TextEntered);
 
-            IconButton btn_random = new IconButton() { Name = "Randomize seed", Location = Txt_Seed.TopRight,  Icon = new Icon(UIManager.Icons16x16, 1, 16) }; //BackgroundTexture = UIManager.Icon16Background, 
-            
+            IconButton btn_random = new IconButton() { Name = "Randomize seed", Location = Txt_Seed.TopRight,  Icon = new Icon(UIManager.Icons16x16, 1, 16) };
             btn_random.HoverText = "Randomize";
             btn_random.LeftClick += new UIEvent(btn_random_Click);
 
-            //Chk_Trees = new CheckBox("Trees", Txt_Seed.BottomLeft);
             this.PanelMapSizes = new PanelMapSizes() { Location = this.Txt_Seed.BottomLeft };
 
             Tab_World.Controls.Add(lbl_name, Txt_MapName, lbl_seed, Txt_Seed, btn_random
-                //,Chk_Trees
                 ,this.PanelMapSizes
-                );//, Combo_Terraformers); //Chk_Flat,Chk_Caves,
-
+                );
 
             InitCharacterTab();
             CreateTabMutators();
             Rd_Name.Tag = Tab_World;
-            Rd_Mutators.Tag = this.MutatorBrowser;// new MutatorBrowser();// Tab_Mutators;
+            Rd_Mutators.Tag = this.MutatorBrowser;
 
-         //   rad_character.Tag = Panel_Character;
-            Panel_Main = new Panel() { Location = Panel_Tabs.TopRight};//, AutoSize = true };
+            Panel_Main = new Panel() { Location = Panel_Tabs.TopRight};
             Panel_Main.Conform(Tab_World, Tab_Mutators);
             Panel_Main.Size = new Rectangle(0, 0, 500, 500);
-           // Panel_Main.AddControls(Tab_Mutators, Tab_World);
-            //Panel_Main.Controls.Clear();
             Panel_Main.Controls.Add(Tab_World);
 
             Panel_Preview = new Panel() { Location = Panel_Main.TopRight, ClientSize = new Rectangle(0, 0, Map.SizeInBlocks, Map.SizeInBlocks) };
@@ -119,7 +93,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             panel_btnPreview.Controls.Add(btn_preview);
             btn_preview.LeftClick += new UIEvent(btn_preview_Click);
 
-            panel_button.Controls.Add(btn_create);//, btn_preview);
+            panel_button.Controls.Add(btn_create);
 
             Panel_Main.AutoSize = false;
             Client.Controls.Add(Panel_Tabs, panel_button, Panel_Main, Panel_Preview, panel_btnPreview);
@@ -144,8 +118,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             List_Available.Build(Terraformer.All, foo => foo.Name, onControlInit: (t, c) =>
             {
-                // List<Terraformer> available = List_Available.List.Except(new Terraformer[] { t }).ToList();
-                //List_Available.Build(List_Available.List.Except(new Terraformer[] { t }), 
                 c.LeftClickAction = () => MutatorAdd(t);
             });
 
@@ -170,7 +142,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         float Progress;
         void btn_preview_Click(object sender, EventArgs e)
         {
-            Terraformer terra = List_Added.List.FirstOrDefault();// Combo_Terraformers.SelectedItem;
+            Terraformer terra = List_Added.List.FirstOrDefault();
             if (terra.IsNull())
                 return;
             Window win = new Window()
@@ -200,8 +172,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Progress = 0;
             new System.Threading.Thread(() =>
             {
-                //Pic_Preview.Sprite = terra.GetThumbnail(World.Create(new WorldArgs(Txt_MapName.Text, Chk_Trees.Checked, seed, new Terraformer[] { terra })), ref Progress); // Chk_Caves.Checked,
-                Pic_Preview.Sprite = terra.GetThumbnail(new World(Txt_MapName.Text, seed, new Terraformer[] { terra }), ref Progress); // Chk_Caves.Checked,
+                Pic_Preview.Sprite = terra.GetThumbnail(new World(Txt_MapName.Text, seed, new Terraformer[] { terra }), ref Progress); 
 
                 Panel_Preview.Controls.Clear();
                 Panel_Preview.Controls.Add(Pic_Preview);
@@ -229,9 +200,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             Txt_MapName.Text = GetDefaultMapName();
             Txt_Seed.Text = "";
-          //  Chk_Caves.Checked = false;
-            //Chk_Trees.Checked = true;
-         //   Chk_Flat.Checked = false;
         }
 
 
@@ -241,11 +209,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
             if (!Directory.Exists(directory.FullName))
                 Directory.CreateDirectory(directory.FullName);
             DirectoryInfo[] directories = directory.GetDirectories("World_*", SearchOption.TopDirectoryOnly);
-            SortedSet<int> worldNumbers = new SortedSet<int>();//directories.ForEach(foo => Int16.Parse(foo.Name.Split('.')[0].Split('_')[1])));
+            SortedSet<int> worldNumbers = new SortedSet<int>();
             foreach (DirectoryInfo dir in directories)
             {
-                short i;
-                if (Int16.TryParse(dir.Name.Split('.')[0].Split('_')[1], out i))
+                if (short.TryParse(dir.Name.Split('.')[0].Split('_')[1], out short i))
                     worldNumbers.Add(i);
             }
             if (directories.Length == 0)
@@ -280,21 +247,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             return false;
         }
-
-        //void Txt_MapName_TextEntered(object sender, TextEventArgs e)
-        //{
-        //    TextBox.DefaultTextHandling(Txt_MapName, e);
-        //    //if (e.Char == 13) //enter
-        //    //{
-        //    //    Txt_MapName.Enabled = false;
-        //    //}
-        //    //else if (e.Char == 27) //escape
-        //    //{
-        //    //    Txt_MapName.Enabled = false;
-        //    //}
-        //    //else
-        //    //    Txt_MapName.Text += e.Char;
-        //}
+        
 
         void Txt_CharName_TextEntered(object sender, TextEventArgs e)
         {
@@ -313,35 +266,11 @@ namespace Start_a_Town_.GameModes.StaticMaps
         void tab_Click(object sender, EventArgs e)
         {
             Panel_Main.Controls.Clear();
-            //Controls.Remove(Panel_Main);
             global::Start_a_Town_.UI.Control panel = (sender as global::Start_a_Town_.UI.Control).Tag as Control;
             if(panel == null)
                 return;
             Panel_Main.AddControls(panel);
-            //Controls.Add(panel);
-           // Panel_Main = panel;
         }
-
-        //void Txt_Seed_TextEntered(object sender, TextEventArgs e)
-        //{
-        //    //if (e.Char == 13 || e.Char == 27) //enter || escape
-        //    //    Txt_Seed.Enabled = false;
-        //    //else
-        //    //    Txt_Seed.Text += e.Char;
-
-        //    switch (e.Char)
-        //    {
-        //        //case '\033':
-        //        case '\n':
-        //            Txt_Seed.Enabled = false;
-        //            break;
-        //        case '\b':
-        //            break;
-        //        default:
-        //            Txt_Seed.Text += e.Char;
-        //            break;
-        //    }
-        //}
 
         void btn_random_Click(object sender, EventArgs e)
         {
@@ -352,7 +281,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         void btn_Create_Click()
         {
-            //var mutators = List_Added.List.ToList();
             var mutators = MutatorBrowser.GetSelected();
             if (mutators.Count == 0)
                 return;
@@ -381,20 +309,12 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Hide();
             Task.Factory.StartNew(() =>
             {
-                //map.Load(loadingToken);
                 int chunksCount = map.Size.Chunks * map.Size.Chunks;
                 int maxTasks = chunksCount * 2;
                 map.GenerateWithNotifications((t, p) => loadingDialog.Refresh(t, p / 2f));
-                //map.Update();
                 map.Save();
-                //var n = 0;
-                //foreach (var ch in map.ActiveChunks.Values)
-                //{
-                //    loadingDialog.Refresh("Saving chunk " + n.ToString() + " of " + chunksCount.ToString(), (1 + (n++ / (float)chunksCount)) / 2f);
-                //    ch.SaveToFile();
-                //}
+                
                 world.Maps.Add(map.Coordinates, map);
-
 
                 world.Save();
 
@@ -402,22 +322,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
                 loadingDialog.Close();
             });
-        }
-
-        void GenerateMap(Map map)
-        {
-            throw new Exception();
-            //Chunk chunk = ChunkLoader.Load(map, Vector2.Zero);
-            //map.AddChunk(chunk);
-            //LightingEngine engine = new LightingEngine(map)
-            //{
-            //    OutdoorBlockHandler = (ch, cell) =>
-            //    {
-            //        ch.VisibleOutdoorCells[Chunk.GetCellIndex(cell.LocalCoords)] = cell;
-            //    }
-            //};
-            //var positions = chunk.ResetHeightMap();
-            //engine.HandleBatchSync(positions);
         }
 
         public override bool Show()

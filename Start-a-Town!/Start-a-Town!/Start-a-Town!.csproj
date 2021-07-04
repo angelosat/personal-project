@@ -225,6 +225,10 @@
     <Compile Include="Control\MouseoverEventArgs.cs" />
     <Compile Include="Engine\Camera\BlockBorderToken.cs" />
     <Compile Include="Engine\Camera\LightToken.cs" />
+    <Compile Include="Helpers\GraphHelper.cs" />
+    <Compile Include="Helpers\NetworkHelper.cs" />
+    <Compile Include="Helpers\PathingHelper.cs" />
+    <Compile Include="Helpers\UIExtensions.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
     <Compile Include="Modules\AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDef.cs" />
@@ -256,7 +260,7 @@
     <Compile Include="Components\Needs\Types\NeedEnergy.cs" />
     <Compile Include="Components\Needs\Types\NeedFood.cs" />
     <Compile Include="Components\Resources\ExtensionsResources.cs" />
-    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Helpers\CollectionExtensions.cs" />
     <Compile Include="Helpers\Serializable.cs" />
     <Compile Include="Interfaces\ISyncable.cs" />
     <Compile Include="Modules\AI\Labors\Job.cs" />
@@ -536,11 +540,11 @@
     <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Interfaces\IDefinable.cs" />
     <Compile Include="Interfaces\ILoadReferencable.cs" />
-    <Compile Include="Extensions\IOHelper.cs" />
+    <Compile Include="Helpers\IOHelper.cs" />
     <Compile Include="Interfaces\IReferencable.cs" />
     <Compile Include="Interfaces\ISaveable.cs" />
     <Compile Include="Interfaces\ISerializable.cs" />
-    <Compile Include="Extensions\MapHelper.cs" />
+    <Compile Include="Helpers\MapHelper.cs" />
     <Compile Include="IntVec3.cs" />
     <Compile Include="Modules\Crafting\OrderContainer.cs" />
     <Compile Include="Modules\Towns\Constructions\IConstructible.cs" />
@@ -579,7 +583,7 @@
     <Compile Include="Objects\Properties\CraftingProperties.cs" />
     <Compile Include="Objects\SeedsDef.cs" />
     <Compile Include="ReferenceManager.cs" />
-    <Compile Include="Extensions\SaveHelper.cs" />
+    <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Terraforming\Biome.cs" />
     <Compile Include="Terraforming\Managers\PopulationManager.cs" />
     <Compile Include="UI\Buttons\ButtonHelper.cs" />
@@ -597,10 +601,6 @@
     <Compile Include="UI\Hud\QuickButtonBar.cs" />
     <Compile Include="UI\Hud\UIToolHelp.cs" />
     <Compile Include="GameEvents\EventBlocksChanged.cs" />
-    <Compile Include="GameModes\EventHandlerClient.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GameModes\StaticMaps\Screens\NewGame\ScreenNewGame.cs" />
     <Compile Include="GameModes\StaticMaps\Screens\NewGame\UINewGame.cs" />
     <Compile Include="Modules\Towns\Rooms\RoomManager.cs" />
     <Compile Include="GameModes\StaticMaps\SaveFile.cs" />
@@ -610,7 +610,6 @@
     <Compile Include="GameModes\StaticMaps\Packets\PacketWorld.cs" />
     <Compile Include="GameModes\StaticMaps\Packets\PacketMap.cs" />
     <Compile Include="GameModes\StaticMaps\Packets\PacketPlayerSetSpeed.cs" />
-    <Compile Include="GameModes\StaticMaps\UI\StaticWorldScreenUINew.cs" />
     <Compile Include="GameModes\StaticMaps\UI\WindowSelectedWorldNew.cs" />
     <Compile Include="GameModes\StaticMaps\EnclosedArea.cs" />
     <Compile Include="GameModes\StaticMaps\UndiscoveredAreaManager.cs" />
@@ -816,7 +815,6 @@
     <Compile Include="Components\Interactions\NewScripts\Checks\GearCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\DurabilityCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionMining.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionGrassClear.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionDigging.cs" />
     <Compile Include="Components\Interactions\NewScripts\EquipFromInventory.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionTilling.cs" />
@@ -847,18 +845,13 @@
     <Compile Include="GameModes\IMap.cs" />
     <Compile Include="GameModes\IWorld.cs" />
     <Compile Include="GameModes\MapRules.cs" />
-    <Compile Include="GameModes\ClientPacketHandler.cs" />
-    <Compile Include="GameModes\PacketHandlerServer.cs" />
-    <Compile Include="GameModes\StaticMaps\ClientSession.cs" />
     <Compile Include="GameModes\StaticMaps\GameModeStaticMaps.cs" />
     <Compile Include="GameModes\StaticMaps\Screens\ScreenMapLoading.cs" />
     <Compile Include="GameModes\StaticMaps\StaticMap.cs" />
-    <Compile Include="GameModes\StaticMaps\Screens\StaticWorldScreen.cs" />
     <Compile Include="GameModes\StaticMaps\StaticMapLoader.cs" />
     <Compile Include="GameModes\StaticMaps\StaticWorld.cs" />
     <Compile Include="GameModes\StaticMaps\UI\PanelMapSizes.cs" />
     <Compile Include="GameModes\StaticMaps\UI\StaticMapBrowser.cs" />
-    <Compile Include="GameModes\StaticMaps\UI\WindowSelectedWorld.cs" />
     <Compile Include="Modules\Construction\PlaceBlockConstructionTool.cs" />
     <Compile Include="Blocks\Workstations\BlockWorkstation.cs" />
     <Compile Include="Blocks\Workstations\BlockEntityWorkstation.cs" />
@@ -1020,7 +1013,6 @@
     <Compile Include="Terraforming\LightingEngineThreaded.cs" />
     <Compile Include="Terraforming\Location.cs" />
     <Compile Include="Terraforming\Mutators\PerlinWorm.cs" />
-    <Compile Include="GameModes\StaticMaps\Regions\Pathing.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\Region.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\RegionManager.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\RegionNodeCollection.cs" />
@@ -1086,9 +1078,6 @@
     <Compile Include="UI\Slots\SlotEquipment.cs" />
     <Compile Include="UI\LoadingWidget.cs" />
     <Compile Include="GameModes\StaticMaps\UI\StaticMapLoadingWidget.cs" />
-    <Compile Include="GameModes\StaticMaps\UI\StaticWorldCreateWindow.cs" />
-    <Compile Include="GameModes\StaticMaps\UI\StaticWorldScreenUI.cs" />
-    <Compile Include="GameModes\StaticMaps\UI\StaticWorldBrowser.cs" />
     <Compile Include="Graphics\AtlasWithDepth.cs" />
     <Compile Include="Graphics\Atlas.cs" />
     <Compile Include="Animations\BodyTemplates.cs" />
@@ -1155,7 +1144,7 @@
     <Compile Include="Components\Resources\ResourceDef.cs" />
     <Compile Include="Components\Stats\Stat.cs" />
     <Compile Include="Components\WeaponComponent.cs" />
-    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Components\Needs\Need.cs" />
     <Compile Include="Components\Needs\NeedsCollection.cs" />
     <Compile Include="Components\Physics\PhysicsComponent.cs">
@@ -1210,7 +1199,6 @@
     <Compile Include="Net\PlayerData.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Net\Server\Server.cs" />
-    <Compile Include="Terraforming\CellOperation.cs" />
     <Compile Include="Terraforming\ChunkCollection.cs" />
     <Compile Include="Terraforming\ChunkLoader.cs">
       <SubType>Code</SubType>
@@ -1282,7 +1270,6 @@
     <Compile Include="UI\Editor\ObjectSpawnTool.cs" />
     <Compile Include="UI\Editor\TerrainWindow.cs" />
     <Compile Include="UI\Context\UIContextActions.cs" />
-    <Compile Include="UI\MainMenu\GameModeWindow.cs" />
     <Compile Include="UI\Online\CharacterPanel.cs" />
     <Compile Include="UI\Panels\PanelLabeled.cs" />
     <Compile Include="UI\RandomizeButton.cs" />
@@ -1297,10 +1284,8 @@
     <Compile Include="UI\Popup.cs" />
     <Compile Include="UI\Context\ContextMenuManager.cs" />
     <Compile Include="UI\Context\ContextMenu2.cs" />
-    <Compile Include="UI\Editor\Bldg.cs" />
     <Compile Include="UI\Editor\ControlBlocksWindow.cs" />
     <Compile Include="UI\Editor\BldgLoadWindow.cs" />
-    <Compile Include="UI\Editor\EditorOperation.cs" />
     <Compile Include="UI\Editor\ObjectsWindow.cs" />
     <Compile Include="UI\Hud\HotBar.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarH.cs" />
@@ -1372,7 +1357,7 @@
     <Compile Include="UI\WorldSelection\WorldScreenUI.cs" />
     <Compile Include="UI\WorldSelection\WorldBrowser.cs" />
     <Compile Include="UndoableCollection.cs" />
-    <Compile Include="Extensions\VectorHelper.cs" />
+    <Compile Include="Helpers\VectorHelper.cs" />
     <Compile Include="Visualizations\BlockCacheEntry.cs" />
     <Compile Include="Visualizations\Isometric.cs" />
     <Compile Include="WindowsHook.cs" />
@@ -1521,7 +1506,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\Crafting\ToolFilters\" />
-    <Folder Include="GameModes\StaticMaps\Rooms\" />
     <Folder Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemManagerNew\" />
     <Folder Include="Objects\Coins\" />
     <Folder Include="Start-a-Town!\Components\Tokens\" />

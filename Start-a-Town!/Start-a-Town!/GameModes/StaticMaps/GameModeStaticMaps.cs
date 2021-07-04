@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.GameModes.StaticMaps.Screens;
 using Start_a_Town_.UI;
-using Start_a_Town_.Modules.Construction;
-using Start_a_Town_.Modules.Base;
 using Start_a_Town_.Towns;
 using Start_a_Town_.Net;
 using System.IO;
@@ -25,7 +20,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             this.Name = "Static Map";
 
-            //this.GameComponents.Add(new ConstructionManager());
             this.GameComponents.Add(new TownsManager());
             this.GameComponents.Add(new AI.AIManager());
 
@@ -34,25 +28,18 @@ namespace Start_a_Town_.GameModes.StaticMaps
             PacketChunkReceived.Init();
             PacketMap.Init();
             PacketWorld.Init();
-
         }
 
-        public override Rooms.GameScreen GetWorldSelectScreen(IObjectProvider net)
-        {
-            return StaticWorldScreen.Instance.Initialize(net);
-        }
-
+        
         public override void OnIngameMenuCreated(IngameMenu menu)
         {
             Button btn_save = new Button("Save", width: menu.PanelButtons.ClientSize.Width) { LeftClickAction = IngameSave };
-            //menu.PanelButtons.AutoSize = true;
             menu.PanelButtons.Controls.Insert(0, btn_save);
             menu.PanelButtons.AlignVertically();
             menu.SizeToControl(menu.PanelButtons);
         }
         internal override void OnMainMenuCreated(MainMenuWindow mainmenu)
         {
-            //DialogLoad = new DialogLoad();
         }
 
         void IngameSave()
@@ -73,33 +60,19 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var tablePanel = table.ToPanel();
 
             getSaveName = new DialogInput("Enter save name", saveNew, 300, map.World.Name);
-            //getSaveName.ShowDialog();
-
            
             groupBox.AddControlsVertically(tablePanel, new Button("Create new save", tablePanel.Width) { LeftClickAction = () => getSaveName.ShowDialog() });
             groupBox.ToWindow("Save", true, false).ShowDialog();
 
-
-            //void save(string name)
-            //{
-            //    //Server.StartSaving();
-            //    saveNew(name);
-
-            //    //map.Save();
-            //    //Server.FinishSaving();
-            //    //return;
-            //}
             void saveNew(string name = "")
             {
                 var tag = new SaveTag(SaveTag.Types.Compound, "Save");
-                //var map = Server.Instance.Map as StaticMap;
                 var world = map.World as StaticWorld; // TODO: add methods to interface instead of casting them
 
                 name = name.IsNullEmptyOrWhiteSpace() ? world.Name : name;
 
                 string directory = GlobalVars.SaveDir + @"/Worlds/";
                 string worldPath = @"/Saves/Worlds/";
-                //string fullPath = worldPath + world.Name + ".sat";
                 string fullPath = worldPath + name + ".sat";
                 var workingDir = Directory.GetCurrentDirectory();
                 if (File.Exists(workingDir + fullPath))
@@ -113,14 +86,11 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 void save()
                 {
                     Server.StartSaving();
-
                     tag.Add(world.SaveToTag());
-                    //tag.Add(map.SaveToTag());
 
                     using (MemoryStream stream = new())
                     {
                         BinaryWriter writer = new(stream);
-                        //tag.WriteTo(writer);
                         tag.WriteWithRefs(writer);
 
                         if (!Directory.Exists(directory))
@@ -136,52 +106,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 }
             }
         }
-
-        //private void SaveNew(string name = "")
-        //{
-        //    var tag = new SaveTag(SaveTag.Types.Compound, "Save");
-        //    var map = Server.Instance.Map as StaticMap;
-        //    var world = map.World as StaticWorld; // TODO: add methods to interface instead of casting them
-
-        //    name = name.IsNullEmptyOrWhiteSpace() ? world.Name : name;
-
-        //    string directory = GlobalVars.SaveDir + @"/Worlds/";
-        //    string worldPath = @"/Saves/Worlds/";
-        //    //string fullPath = worldPath + world.Name + ".sat";
-        //    string fullPath = worldPath + name + ".sat";
-        //    var workingDir = Directory.GetCurrentDirectory();
-        //    if (File.Exists(workingDir + fullPath))
-        //    {
-        //        var msgBoxOverwrite = new MessageBox("", string.Format("{0} already exists. Overwrite?", fullPath), save);
-        //        msgBoxOverwrite.ShowDialog();
-        //    }
-        //    else
-        //        save();
-
-        //    void save()
-        //    {
-        //        Server.StartSaving();
-
-        //        tag.Add(world.SaveToTag());
-        //        tag.Add(map.SaveToTag());
-
-        //        using (MemoryStream stream = new MemoryStream())
-        //        {
-        //            BinaryWriter writer = new BinaryWriter(stream);
-        //            //tag.WriteTo(writer);
-        //            tag.WriteWithRefs(writer);
-
-        //            if (!Directory.Exists(directory))
-        //                Directory.CreateDirectory(directory);
-
-        //            Chunk.Compress(stream, workingDir + fullPath);
-
-        //            stream.Close();
-        //        }
-        //        Server.FinishSaving();
-
-        //    }
-        //}
 
         public override bool IsPlayerWithinRangeForPacket(PlayerData player, Vector3 packetEventGlobal)
         {
@@ -204,7 +128,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         internal override void PlayerIDAssigned(Client client)
         {
-            //client.Send(Net.PacketType.RequestChunks, new byte[0]);
             PacketChunkRequest.Send(client, Client.Instance.PlayerData.ID);
         }
         internal override void ChunkReceived(Server server, int playerid, Vector2 vec)
@@ -215,7 +138,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         internal override void MapReceived(IMap map)
         {
             this.ChunksPending = new List<Vector2>();
-            var size = (map as StaticMap).Size.Chunks;//  StaticMap.MapSize.Default.Chunks;
+            var size = (map as StaticMap).Size.Chunks;
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
                     this.ChunksPending.Add(new Vector2(i, j));
@@ -238,11 +161,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     // all chunks received, enter world
                     "all chunks loaded!".ToConsole();
                     (client.Map as StaticMap).Regions.Init();
-                    //if(false)
-                    //    (client.Map as StaticMap).InitUndiscoveredAreas();
-                    (client.Map as StaticMap).FinishLoading();//.CacheObjects();
+                    (client.Map as StaticMap).FinishLoading();
                     client.EnterWorld(PlayerOld.Actor);
-                    Rooms.Ingame ingame = Rooms.Ingame.Instance;// new Rooms.Ingame();
+                    Rooms.Ingame ingame = Rooms.Ingame.Instance;
                     ScreenManager.Add(ingame.Initialize(client)); // TODO: find out why there's a freeze when ingame screen begins (and causing rendertargets during ingame.initialize() not work
                 }
             }
@@ -263,9 +184,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var first = pending.First();
                 pending.Remove(first.Key);
                 pl.SentChunks.Add(first.Key);
-                //PacketChunk.Send(server, first.Key, pl);
                 PacketChunk.Send(server, first.Key, first.Value, pl);
-                //server.Enqueue(PacketType.Chunk, first.Value);
                 ("sending chunk " + first.Key.ToString()).ToConsole();
             }
         }
@@ -277,25 +196,17 @@ namespace Start_a_Town_.GameModes.StaticMaps
             net.EventOccured(Components.Message.Types.ChunksLoaded);
             var map = net.Map as GameModes.StaticMaps.StaticMap;
             map.Regions.Init();
-            //if(false)
-                map.InitUndiscoveredAreas();
+            map.InitUndiscoveredAreas();
             map.Init();
-            map.FinishLoading();//.CacheObjects();
+            map.FinishLoading();
             map.ResolveReferences();
 
             var client = net as Client;
-            //client.EnterWorld(global::Start_a_Town_.Player.Actor);
-
 
             var ingame = Rooms.Ingame.Instance.Initialize(client);
 
-            //ingame.Camera.CenterOn(map);
             map.CameraRecenter(); // TODO: save camera position
             ScreenManager.Add(ingame); // TODO: find out why there's a freeze when ingame screen begins (and causing rendertargets during ingame.initialize() not work
-
-            //var ingame = new Rooms.Ingame();
-            //ingame.Camera.CenterOn(map);
-            //ScreenManager.Add(ingame);    
         }
 
         internal override Control Load()
@@ -304,7 +215,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 DialogLoad = new UIDialogLoad();
             DialogLoad.Populate();
             return DialogLoad;
-            //DialogLoad.ShowDialog();
         }
         internal override Control NewGame()
         {
@@ -319,6 +229,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return directory.GetFiles().OrderByDescending(s => s.CreationTime).ToArray();
         }
 
-     
+        public override Rooms.GameScreen GetWorldSelectScreen(IObjectProvider net)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

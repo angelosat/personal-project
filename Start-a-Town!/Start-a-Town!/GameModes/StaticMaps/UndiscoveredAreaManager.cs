@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes.StaticMaps;
-using Start_a_Town_.Towns;
 using System.Diagnostics;
 
 namespace Start_a_Town_
 {
     class UndiscoveredAreaManager
     {
-        //static readonly bool Enabled = true;// false; //
-        Dictionary<int, EnclosedArea> Areas = new Dictionary<int, EnclosedArea>();
-        //static int ID = 1;
         IMap Map;
         public UndiscoveredAreaManager(IMap map)
         {
@@ -50,27 +43,20 @@ namespace Start_a_Town_
             cell.Discovered = value;
             map.GetChunk(begin).InvalidateSlice(begin.Z);
             if (cell.Block != BlockDefOf.Air)
-                //throw new Exception(); 
                 return;
             var tohandle = new Queue<Vector3>();
             tohandle.Enqueue(current);
             while (tohandle.Any())
             {
                 current = tohandle.Dequeue();
-                //foreach (var n in current.GetNeighbors())
-                //var neighbors = current.GetAdjacent();
                 foreach(var n in current.GetAdjacentLazy())
-                //for (int i = 0; i < neighbors.Length; i++)
                 {
-                //    var n = neighbors[i];
                     if (map.TryGetCell(n, out Cell ncell))
                     {
                         if (!ncell.Discovered)
                         {
                             ncell.Discovered = true;
                             map.GetChunk(n).InvalidateSlice(n.Z);
-                            //if (ncell.Block == Block.Air)
-                            //if(!ncell.Opaque)
                             if(!ncell.IsRoomBorder)
                                 tohandle.Enqueue(n);
                         }
@@ -86,11 +72,6 @@ namespace Start_a_Town_
         public void Write(BinaryWriter w)
         {
             w.Write(this.Valid);
-            //w.Write(this.Areas.Count);
-            //foreach(var area in this.Areas)
-            //{
-            //    area.Value.Write(w);
-            //}
         }
         public UndiscoveredAreaManager Read(BinaryReader r)
         {
@@ -99,24 +80,13 @@ namespace Start_a_Town_
         }
         public SaveTag Save(string name)
         {
-            //var tag = new SaveTag(SaveTag.Types.List, name, SaveTag.Types.Compound);
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             this.Valid.Save(tag, "Valid");
-            //foreach (var area in this.Areas.Values)
-            //    tag.Add(area.Save());
             return tag;
         }
-        
         internal void Load(SaveTag tag)
         {
             tag.TryGetTagValueNew("Valid", ref this.Valid);
-
-            //this.Areas = new Dictionary<int, EnclosedArea>();
-            //foreach (var areatag in tag.Value as List<SaveTag>)
-            //{
-            //    var area = EnclosedArea.Create(areatag);
-            //    this.Areas.Add(area.ID, area);
-            //}
         }
 
         internal void OnGameEvent(GameEvent e)
@@ -124,7 +94,6 @@ namespace Start_a_Town_
             switch(e.Type)
             {
                 case Components.Message.Types.BlocksChanged:
-                    //Handle(e.Parameters[0] as IMap, e.Parameters[1] as IEnumerable<Vector3>);
                     foreach (var pos in e.Parameters[1] as IEnumerable<Vector3>)
                         Handle(e.Parameters[0] as IMap, pos);
                     break;
@@ -150,21 +119,14 @@ namespace Start_a_Town_
                     if (!nc.Discovered)
                     {
                         this.FloodFill(map, n, true);
-                        //map.AreaDiscovered(new HashSet<Vector3>() { n });
-                        //return;
                     }
                 }
             }
         }
-       
-        //internal EnclosedArea GetAreaAt(Vector3 global)
-        //{
-        //    return this.Areas.Values.FirstOrDefault(v => v.Contains(global));
-        //}
+        
         public bool IsUndiscovered(Vector3 global)
         {
             return !this.Map.GetCell(global).Discovered;
-            //return this.GetAreaAt(global) != null;
         }
     }
 }

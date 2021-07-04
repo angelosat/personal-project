@@ -472,12 +472,7 @@ namespace Start_a_Town_
         }
         protected override IEnumerable<GroupBox> GetUI()
         {
-            
             yield return OrdersGUI ??= CreateOrdersGUI();
-
-            //var workerRolesBox = WorkersUI ??= GetWorkersUI();
-            //workerRolesBox.GetData(this);
-            //yield return workerRolesBox;
         }
 
         protected override void ResolveExtraReferences()

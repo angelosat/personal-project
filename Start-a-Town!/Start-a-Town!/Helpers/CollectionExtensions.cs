@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -20,7 +18,7 @@ namespace Start_a_Town_
         {
             int currentP = 0;
             var count = list.Length;
-            var weights = new (T order, int prob)[count];// orders.ToDictionary(o => o, o => favs.Count(o.IsAllowed));
+            var weights = new (T order, int prob)[count];
             for (int i = 0; i < count; i++)
             {
                 var o = list[i];
@@ -37,5 +35,34 @@ namespace Start_a_Town_
             }
             throw new Exception();
         }
+        public static void AddOrUpdate<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue value, Func<TKey, TValue, TValue> updater)
+        {
+            if (dic.TryGetValue(key, out TValue existing))
+                updater(key, existing);
+            else
+                dic.Add(key, value);
+        }
+        public static void AddOrUpdate<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue value, Func<TValue, TValue> updater)
+        {
+            if (dic.TryGetValue(key, out TValue existing))
+                dic[key] = updater(existing);
+            else
+                dic.Add(key, value);
+        }
+        public static void Update<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, Func<TValue, TValue> updater)
+        {
+            if (dic.TryGetValue(key, out TValue existing))
+                dic[key] = updater(existing);
+        }
+        public static bool TryGetValue<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, Action<TValue> action)
+        {
+            if (dic.TryGetValue(key, out TValue existing))
+            {
+                action(existing);
+                return true;
+            }
+            return false;
+        }
     }
+
 }

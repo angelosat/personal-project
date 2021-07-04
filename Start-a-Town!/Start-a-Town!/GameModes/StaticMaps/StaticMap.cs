@@ -277,7 +277,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.CacheObjects();
             this.CacheBlockEntities();
 
-            PerformCellOperations();
             while (ChunksToActivate.Count > 0)
             {
                 Chunk chunk = this.ChunksToActivate.Dequeue();
@@ -335,20 +334,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         
         public bool Running = true;
 
-        private void PerformCellOperations()
-        {
-            while (CellOperations.Any())
-                this.CellOperations.Dequeue().Perform();
-
-            //while (CellOperations.Count > 0)
-            //{
-            //    CellOperation op;
-            //    if (!CellOperations.TryPeek(out op))
-            //        break;
-            //    if (op.Perform())
-            //        CellOperations.TryDequeue(out op);
-            //}
-        }
         float WaterAnim = 20;
         private void AnimateWater()
         {
@@ -1535,40 +1520,19 @@ namespace Start_a_Town_.GameModes.StaticMaps
             tooltip.Controls.Add(ToString().ToLabel());
         }
 
-        public Queue<CellOperation> CellOperations = new();
-       
-        public void SetCell(CellOperation operation)
-        {
-            CellOperations.Enqueue(operation);
-        }
-        public void SetCell(IEnumerable<CellOperation> operations)
-        {
-            foreach(var op in operations)
-                CellOperations.Enqueue(op);
-        }
-
         public override bool Contains(GameObject obj)
         {
-            //Chunk chunk;
-            //if (this.TryGetChunk(obj.Global, out chunk))
-            //    return chunk.GetObjects().Contains(obj);
-            //return false;
             return this.CachedObjects.Contains(obj);
         }
 
         public override List<GameObject> GetObjects()
         {
-            //if (this.CachedObjects == null)
-            //this.CacheObjects();
             return this.CachedObjects.Where(o => o.Exists).ToList(); // because an object might have despawned during an earlier operation on the current frame
         }
 
         public void CacheBlockEntities()
         {
-            var list = new Dictionary<Vector3, BlockEntity>();// new List<GameObject>();
-            //foreach (var chunk in this.ActiveChunks)
-            //    foreach (var be in chunk.Value.BlockEntitiesByPosition)
-            //        list.Add(be.Key.ToGlobal(chunk.Value), be.Value);
+            var list = new Dictionary<Vector3, BlockEntity>();
             foreach (var chunk in this.ActiveChunks.Values)
                 foreach (var (local, entity) in chunk.GetBlockEntitiesByPosition())
                     list.Add(local.ToGlobal(chunk), entity);
@@ -1580,7 +1544,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             foreach (var chunk in this.ActiveChunks)
                 list.AddRange(chunk.Value.GetObjects());
             this.CachedObjects = list;
-            //return list;
         }
         public override IEnumerable<GameObject> GetObjects(Vector3 min, Vector3 max)
         {

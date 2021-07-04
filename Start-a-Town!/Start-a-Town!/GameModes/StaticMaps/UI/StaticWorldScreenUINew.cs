@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
 using Microsoft.Xna.Framework;
-using System.Xml;
-using System.Xml.Linq;
-using Start_a_Town_.UI.WorldSelection;
 using Start_a_Town_.UI;
-using Start_a_Town_.GameModes.StaticMaps;
 using Start_a_Town_.GameModes.StaticMaps.UI;
 using Start_a_Town_.GameModes.StaticMaps.Screens;
 
@@ -16,19 +9,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
 {
     class StaticWorldScreenUINew : Window
     {
-        #region Singleton
         static StaticWorldScreenUINew _Instance;
-        public static StaticWorldScreenUINew Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new StaticWorldScreenUINew();
-                return _Instance;
-            }
-        }
-        #endregion
-
+        public static StaticWorldScreenUINew Instance => _Instance ??= new StaticWorldScreenUINew();
+        
         Panel Panel_Info, Panel_MapInfo, Panel_WorldButtons, Panel_WorldList;
         Button Btn_EnterMap, Btn_NewWorld, Btn_Refresh, Btn_WorldRename, Btn_Back, Btn_WorldList;
         MapPopUp MapPopUp;
@@ -72,18 +55,11 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     Panel_WorldList.Toggle();
                 }
             };
-
-
-            
             
             Panel_WorldList = new Panel() { AutoSize = true };
-            //WorldBrowser = new StaticWorldBrowser(200, UIManager.Height - Panel_Info.Height - Panel_WorldButtons.Height, OnWorldSelected);// Load);
             WorldBrowser = new StaticWorldBrowser(200, UIManager.Height / 3, OnWorldSelected);// Load);
             this.CharacterBrowser = new CharacterBrowser(200, this.WorldBrowser.Height, this.SelectCharacter);
             Panel_WorldList.Controls.Add(this.WorldBrowser);
-
-            //Btn_Refresh = new Button(Vector2.Zero, Panel_Info.ClientSize.Width, "Refresh") { LeftClickAction = RefreshWorlds };
-            //Btn_NewWorld = new Button(Btn_Refresh.BottomLeft, Panel_Info.ClientSize.Width, "Create World") { LeftClickAction = CreateWorld };
             Btn_Refresh = new Button("Refresh", 200) { LeftClickAction = RefreshWorlds };
             Btn_NewWorld = new Button("Create World", 200) { LeftClickAction = CreateWorld };
             Btn_Back = new Button("Back", 200) { LeftClickAction = Btn_Back_Click };
@@ -94,28 +70,18 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 ,
                 Btn_Back
                 );
-            //Panel_WorldButtons.Location.Y = UIManager.Height - Panel_WorldButtons.Height;
-
 
             Btn_EnterMap = new Button(new Vector2(0, Panel_MapInfo.ClientSize.Bottom - Button.DefaultHeight), Panel_MapInfo.ClientSize.Width, "Enter Map")
             {
                 HoverFunc = () => (Window_Character.Tag as GameObject) == null ? "No character selected" : ""
             };
-            //Btn_EnterMap.LeftClick += new UIEvent(Btn_EnterMap_Click);
 
-            this.MapPopUp = new MapPopUp(m => EnterMap(null, m));// { BtnEnter.HoverFunc = () => (Window_Character.Tag as GameObject).IsNull() ? "No character selected!" : "" };
+            this.MapPopUp = new MapPopUp(m => EnterMap(null, m));
             this.MapPopUp.BtnEnter.HoverFunc = () => (Window_Character.Tag as GameObject) == null ? "No character selected!" : "";
 
-            //CheckBox platebox = Nameplate.CheckBox;
-            //platebox.Location = Panel_Info.TopRight;
-
-          
-            
             RenameWorldWindow.WorldRenamed += new EventHandler(RenameWorldWindow_WorldRenamed);
 
             this.MapBrowser = new StaticMapBrowser(this.EnterMap);
-
-            //this.SelectedWorldWindow = new WindowSelectedWorldNew();
 
             Panel_WorldList.Location = Panel_WorldButtons.Location;
             Panel_WorldList.Anchor = Vector2.UnitY;
@@ -174,14 +140,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Box_CharacterInfo = new GroupBox();
             GameObject lastChar = SelectCharacterWindow.LoadCharacter(lastCharName);
             Window_Character.Tag = lastChar;
-            if (!lastChar.IsNull())
+            if (lastChar is not null))
                 Box_CharacterInfo.Controls.Add(lastChar.GetTooltip());
             Window_Character.Client.Controls.Add(btn_select, btn_create, Box_CharacterInfo);
         }
 
         private void SelectCharacter(GameObject ch)
         {
-            if (ch.IsNull())
+            if (ch is null)
                 return;
             Window_Character.Tag = ch;
             Box_CharacterInfo.Controls.Clear();
@@ -194,12 +160,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             ScreenManager.GameScreens.Pop();
         }
-        //public override bool Hide()
-        //{
-        //    Server.Stop();
-        //    ScreenManager.GameScreens.Pop();
-        //    return base.Hide();
-        //}
+       
         void RenameWorldWindow_WorldRenamed(object sender, EventArgs e)
         {
             this.WorldBrowser.Refresh();
@@ -227,45 +188,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
         private void Load(IWorld world)
         {
             PlayerOld.Actor = this.Window_Character.Tag as GameObject;
-
-
             var map = world.GetMaps().First().Value as StaticMap;
-
-            //this.SelectedWorldWindow.Refresh(map);
             this.SelectedWorldWindow = WindowSelectedWorldNew.Refresh(map);
-            //this.SelectedWorldWindow.Show();
             this.SelectedWorldWindow.ShowFrom(this);
             this.SelectedWorldWindow.SnapToScreenCenter();
             this.WorldBrowser.Refresh();
-            return;
-
-           
-            //while (!map.LoadThumbnails2())
-            //{
-            //    var loader = new ChunkLoader(map);
-            //    var max = StaticMap.MapSize.Default.Chunks;
-            //    for (int i = 0; i < max; i++)
-            //    {
-            //        for (int j = 0; j < max; j++)
-            //        {
-            //            Chunk ch;
-            //            var vector = new Vector2(i, j);
-            //            loader.FromFile(vector, out ch);
-            //            map.GetActiveChunks().Add(vector, ch);
-            //        }
-            //    }
-            //    map.GenerateThumbnails();
-            //};
-            //return;
-            //Rooms.WorldScreen.Instance.World = world;
-            //Initialize(world);
-            //Net.Server.SetWorld(world);
         }
 
-        //void Btn_EnterMap_Click(object sender, EventArgs e)
-        //{
-        //    EnterMap();
-        //}
         void EnterMap(IObjectProvider net, IMap map)
         {
             if (map == null)
@@ -281,7 +210,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Rooms.WorldScreen.Instance.Map = null;
             Initialize(Rooms.WorldScreen.Instance.Map);
 
-            Engine.PlayGame(character);//, map);
+            Engine.PlayGame(character);
             Rooms.Ingame ingame = Rooms.Ingame.Instance;
             ScreenManager.Add(ingame.Initialize(net));
 
@@ -301,14 +230,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
 
             GameObject character = Window_Character.Tag as GameObject;
-            if (character.IsNull())
+            if (character is null)
                 return;
 
             Rooms.WorldScreen.Instance.Map = null;
             Initialize(Rooms.WorldScreen.Instance.Map);
 
-            Engine.PlayGame(character);//, map);
-            Rooms.Ingame ingame = Rooms.Ingame.Instance;// new Rooms.Ingame();
+            Engine.PlayGame(character);
+            Rooms.Ingame ingame = Rooms.Ingame.Instance;
             ScreenManager.Add(ingame.Initialize(game.Network.Client));
 
             string localHost = "127.0.0.1";
@@ -316,11 +245,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Net.Client.Instance.EnterWorld(PlayerOld.Actor);
         }
 
-
         public void Initialize(IWorld world)
         {
             ChunkLoader.Restart();
-            //Controls.Remove(Btn_Play);
             Panel_Info.Controls.Clear();
             Panel_MapInfo.Controls.Clear(); 
             if (world == null)
@@ -351,9 +278,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 return;
 
             Panel_MapInfo.Controls.Add(new Label(Vector2.Zero, map.ToString()), Btn_EnterMap);
-
         }
-
 
         public override void Reposition(Vector2 ratio)
         {

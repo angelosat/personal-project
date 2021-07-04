@@ -106,8 +106,6 @@ namespace Start_a_Town_
 
         void SyncSetBlock(Vector3 global, Block.Types type);
         void SyncSetBlock(Vector3 global, Block.Types type, byte data, int orientation);
-        void SetBlock(Vector3 global, Block.Types type, byte data);
-        void SetBlock(Vector3 global, Block.Types type);
         void UpdateBlock(Vector3 global, Action<Cell> updater);
 
         void TryGetRandomValue(Action<double> action);

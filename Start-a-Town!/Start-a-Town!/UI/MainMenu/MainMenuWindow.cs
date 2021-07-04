@@ -12,11 +12,8 @@ namespace Start_a_Town_.UI
     class MainMenuWindow : Window
     {
         MessageBox quitbox;
-        GameModeWindow GameModeWindow;
-        Game1 Game;
         public MainMenuWindow(Game1 game)
         {
-            this.Game = game;
             AutoSize = true;
             Closable = false;
             Panel panel = new Panel() { AutoSize = true, Color = Color.Black };
@@ -30,7 +27,6 @@ namespace Start_a_Town_.UI
             Button quit = new Button("Quit", 100) { LeftClickAction = quit_Click };
             Button create = new Button(new Vector2(0, quit.Bottom), 100, "Create Character") { LeftClickAction = create_Click };
 
-            this.GameModeWindow = new MainMenu.GameModeWindow(game);
 
             panel.AddControlsVertically(newgame, load, online,
                 //design, editor, 

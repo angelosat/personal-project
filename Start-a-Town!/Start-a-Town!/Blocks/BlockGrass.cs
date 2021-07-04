@@ -113,25 +113,6 @@ namespace Start_a_Town_
             
         }
        
-        public override void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
-        {
-           
-            list.Add(PlayerInput.Activate, new InteractionClearGrass());
-            var mainhand = GearComponent.GetSlot(PlayerOld.Actor, GearType.Mainhand);
-            if (mainhand.Object != null)
-            {
-                var skill = mainhand.Object.GetComponent<ToolAbilityComponent>();
-                if (skill != null)
-                {
-                    if (ToolAbilityComponent.HasSkill(mainhand.Object, ToolAbilityDef.Digging))
-                        list[PlayerInput.RButton] = new InteractionDigging();
-                    else if (ToolAbilityComponent.HasSkill(mainhand.Object, ToolAbilityDef.Argiculture))
-                        list[PlayerInput.RButton] = new InteractionTilling();
-                }
-            }
-               base.GetPlayerActionsWorld(player, global, list);
-            
-        }
         internal override ContextAction GetContextRB(GameObject player, Vector3 global)
         {
             var mainhand = GearComponent.GetSlot(PlayerOld.Actor, GearType.Mainhand);
@@ -148,11 +129,6 @@ namespace Start_a_Town_
             }
             return base.GetContextRB(player, global);
         }
-        internal override ContextAction GetContextActivate(GameObject player, Vector3 global)
-        {
-            return new ContextAction(new InteractionClearGrass()) { Shortcut = PlayerInput.Activate };
-        }
-
         
         internal override float GetFertility(Cell cell)
         {

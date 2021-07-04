@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Towns
 {
+    [Obsolete]
     class PacketZone
     {
         internal static byte[] Write(int editorID, int zoneID, Vector3 begin, int width, int height, bool value)

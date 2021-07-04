@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Graphics;
 
 namespace Start_a_Town_.Particles
 {
@@ -12,16 +7,13 @@ namespace Start_a_Town_.Particles
     {
         public float Force = .01f;
 
-        public ParticleEmitterSphere()//AtlasWithDepth atlas)
-            //: base(atlas)
+        public ParticleEmitterSphere()
         {
 
         }
         public ParticleEmitterSphere(
-            //AtlasWithDepth atlas, 
             Vector3 offset, float lifetime, float radius, float particleWeight, float force)
-            : base(//atlas,
-            offset, lifetime, radius, particleWeight)
+            : base(offset, lifetime, radius, particleWeight)
         {
             this.Force = force;
         }
@@ -35,15 +27,13 @@ namespace Start_a_Town_.Particles
             float z = (float)Math.Cos(φ);
             Vector3 direction = new Vector3(x, y, z);
             direction.Normalize();
-            var startVelocity = direction * this.Force;// 0.01f;
+            var startVelocity = direction * this.Force;
             return startVelocity;
         }
 
         public override object Clone()
         {
-            return new ParticleEmitterSphere(
-                //this.Atlas, 
-                this.Offset, this.Lifetime, this.Radius, this.ParticleWeight, this.Force)
+            return new ParticleEmitterSphere(this.Offset, this.Lifetime, this.Radius, this.ParticleWeight, this.Force)
             {
                 Friction = this.Friction,
                 Rate = this.Rate,
@@ -54,7 +44,5 @@ namespace Start_a_Town_.Particles
                 SizeVariance = this.SizeVariance
             };
         }
-
-        
     }
 }

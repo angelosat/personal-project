@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using Start_a_Town_.Net;
 using Start_a_Town_.Crafting;
 
@@ -13,8 +8,9 @@ namespace Start_a_Town_.Modules.Crafting
     {
         static internal void Init()
         {
-            Net.Server.RegisterPacketHandler(PacketType.PacketCraftOrderToggleHaul, Receive);
-            Net.Client.RegisterPacketHandler(PacketType.PacketCraftOrderToggleHaul, Receive);
+            // TODO
+            Server.RegisterPacketHandler(PacketType.PacketCraftOrderToggleHaul, Receive);
+            Client.RegisterPacketHandler(PacketType.PacketCraftOrderToggleHaul, Receive);
         }
 
         internal static void Send(CraftOrderNew order, bool value)
@@ -24,14 +20,13 @@ namespace Start_a_Town_.Modules.Crafting
             var bench = order.Workstation;
             w.Write(PacketType.PacketCraftOrderToggleHaul);
             w.Write(bench);
-            w.Write(order.ID);//.GetIndex());
+            w.Write(order.ID);
             w.Write(value);
         }
         private static void Receive(IObjectProvider net, BinaryReader r)
         {
             var station = r.ReadVector3();
             var id = r.ReadInt32();
-            //var order = net.Map.Town.CraftingManager.GetOrder(station, index);
             var order = net.Map.GetBlockEntity<BlockEntityWorkstation>(station).GetOrder(id);
             order.HaulOnFinish = r.ReadBoolean();
             net.Map.EventOccured(Components.Message.Types.OrderParametersChanged, order);

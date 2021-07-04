@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Start_a_Town_
 {
     public class PriorityQueue<P, V>
     {
-        private SortedDictionary<P, Queue<V>> list = new SortedDictionary<P, Queue<V>>();
+        private readonly SortedDictionary<P, Queue<V>> list = new();
         public void Enqueue(P priority, V value)
         {
             Queue<V> q;
@@ -46,7 +45,6 @@ namespace Start_a_Town_
             {
                 int c = 0;
                 foreach (KeyValuePair<P, Queue<V>> pair in list)
-                    //foreach (KeyValuePair<V> pair in p)
                     c += pair.Value.Count;
                 return c;
             }
@@ -73,9 +71,8 @@ namespace Start_a_Town_
         }
         public bool Remove(V item)
         {
-            var copy = new PriorityQueue<P, V>();
             Queue<V> newQueue = null;
-            P foundkey = default(P);
+            P foundkey = default;
             foreach (var p in list)
                 if(p.Value.Contains(item))
                 {
@@ -87,13 +84,7 @@ namespace Start_a_Town_
             if (newQueue != null)
                 if (newQueue.Count == 0)
                     list.Remove(foundkey);
-                //copy.list.Add(p.Key, new Queue<V>(p.Value.Except(new V[] { item }))); // TODO: OPTIMIZE THIS ONE
             return false;
-
-            //var copy = new PriorityQueue<P, V>();
-            //foreach (var p in list)
-            //    copy.list.Add(p.Key, new Queue<V>(p.Value.Except(new V[] { item }))); // TODO: OPTIMIZE THIS ONE
-            //return false;
         }
     }
 }

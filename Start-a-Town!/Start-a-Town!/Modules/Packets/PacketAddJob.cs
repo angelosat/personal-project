@@ -1,26 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Towns
 {
+    [Obsolete]
     class PacketAddJob : Packet
     {
         public int CreatorID;
         public TargetArgs Target;
-        //public int InteractionID;
         public string InteractionName;
 
-        //public PacketAddJob(int creatorID, TargetArgs target, int interactionID)
-        //{
-        //    this.CreatorID = creatorID;
-        //    this.Target = target;
-        //    this.InteractionID = interactionID;
-        //}
         public PacketAddJob(int creatorID, TargetArgs target, string interactionName)
         {
             this.CreatorID = creatorID;
@@ -31,12 +21,6 @@ namespace Start_a_Town_.Towns
         {
 
         }
-        //public PacketAddJob(BinaryReader r)
-        //{
-        //    this.CreatorID = r.ReadInt32();
-        //    //this.Target = new TargetArgs(r);
-        //    this.InteractionID = r.ReadInt32();
-        //}
 
         public override byte[] Write()
         {
@@ -45,7 +29,6 @@ namespace Start_a_Town_.Towns
                 w.Write((int)TownsPacketHandler.Channels.AddJob);
                 w.Write(this.CreatorID);
                 this.Target.Write(w);
-                //w.Write(this.InteractionID);
                 w.Write(this.InteractionName);
             });
         }
@@ -54,7 +37,6 @@ namespace Start_a_Town_.Towns
         {
             this.CreatorID = r.ReadInt32();
             this.Target = TargetArgs.Read(net, r);
-            //this.InteractionID = r.ReadInt32();
             this.InteractionName = r.ReadString();
         }
     }

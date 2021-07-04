@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.Crafting;
 
 namespace Start_a_Town_
 {
@@ -13,8 +7,9 @@ namespace Start_a_Town_
     {
         static internal void Init()
         {
-            Net.Server.RegisterPacketHandler(PacketType.PacketCraftOrderChangeMode, Receive);
-            Net.Client.RegisterPacketHandler(PacketType.PacketCraftOrderChangeMode, Receive);
+            // TODO
+            Server.RegisterPacketHandler(PacketType.PacketCraftOrderChangeMode, Receive);
+            Client.RegisterPacketHandler(PacketType.PacketCraftOrderChangeMode, Receive);
         }
 
         internal static void Send(CraftOrderNew order, int value)
@@ -24,14 +19,13 @@ namespace Start_a_Town_
             var bench = order.Workstation;
             w.Write(PacketType.PacketCraftOrderChangeMode);
             w.Write(bench);
-            w.Write(order.GetUniqueLoadID());//.GetIndex());
+            w.Write(order.GetUniqueLoadID());
             w.Write(value);
         }
         private static void Receive(IObjectProvider net, BinaryReader r)
         {
             var station = r.ReadVector3();
-            var index = r.ReadString();// r.ReadInt32();
-            //var bench = net.Map.GetBlockEntity<BlockEntityWorkstation>(station);
+            var index = r.ReadString();
             var bench = net.Map.Town.CraftingManager.GetWorkstation(station);
             var order = bench.GetOrder(index);
             order.FinishMode = CraftOrderFinishMode.GetMode(r.ReadInt32());

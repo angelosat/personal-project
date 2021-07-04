@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     class PacketEntityDesignation
     {
         const int SelectionRectangle = 0;
@@ -33,7 +32,7 @@ namespace Start_a_Town_
             strem.Write((int)PacketType.ChoppingDesignation);
             strem.Write(type);
             strem.Write(SelectionList);
-            strem.Write(targets);//.Select(i => i.InstanceID).ToList());
+            strem.Write(targets);
             strem.Write(value);
         }
         static public void Send(IObjectProvider net, int type, Vector3 start, Vector3 end, bool value)

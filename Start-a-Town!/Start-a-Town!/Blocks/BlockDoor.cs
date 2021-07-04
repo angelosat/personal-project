@@ -317,36 +317,7 @@ namespace Start_a_Town_
                 chunk.InvalidateSlice(g.Z);
             }
         }
-        private static void ToggleLock(IMap map, Vector3 global)
-        {
-            var children = GetChildren(map, global);
-            foreach (var g in children)
-            {
-                Cell cell = map.GetCell(g);
-                if (map.GetBlock(global).Type != Types.Door)
-                    throw new Exception();
-                bool locked;
-                int part;
-                bool open;
-                Read(cell.BlockData, out locked, out open, out part);
-                if (open)
-                    return;
-                cell.BlockData = WriteLocked(cell.BlockData, !locked);
-            }
-            map.EventOccured(Message.Types.DoorLockToggled, global);
-        }
-        public override void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
-        {
-            if (!IsLocked(player.Map.GetData(global)))
-                list.Add(PlayerInput.RButton, new InteractionToggleDoor());
-            if (!IsOpen(player.Map.GetData(global)))
-                list.Add(PlayerInput.Activate, new InteractionToggleDoorLock());
-        }
-        public override List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
-        {
-            return new List<Interaction>() { new InteractionToggleDoor() };
-        }
-
+        
         public override void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             bool locked;
@@ -385,33 +356,6 @@ namespace Start_a_Town_
             sb.DrawBlock(Block.Atlas.Texture, map, global, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
             sb.DrawBlock(Block.Atlas.Texture, map, global + Vector3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
             sb.DrawBlock(Block.Atlas.Texture, map, global + Vector3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
-        }
-
-        public class InteractionToggleDoorLock : Interaction
-        {
-            public InteractionToggleDoorLock()
-                : base("Lock/Unlock", .4f)
-            {
-            }
-            static readonly TaskConditions conds = new TaskConditions(new AllCheck(new RangeCheck()));
-            public override TaskConditions Conditions
-            {
-                get
-                {
-                    return conds;
-                }
-            }
-
-            public override void Perform(GameObject a, TargetArgs t)
-            {
-                base.Perform(a, t);
-                ToggleLock(a.Map, t.Global);
-            }
-
-            public override object Clone()
-            {
-                return new InteractionToggleDoorLock();
-            }
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_.Towns.Constructions
 {
+    [Obsolete]
     class UIBlockVariationPicker : GroupBox
     {
         static UIBlockVariationPicker _Instance;
@@ -33,8 +31,6 @@ namespace Start_a_Town_.Towns.Constructions
             Instance.Panel.AutoSize = true;
             Instance.ClearControls();
             List<Cell> variations = new List<Cell>();
-            //foreach (var item in variants)
-            //    variations.Add(new Cell() { Block = block, BlockData = item.Data });
             var buttonGrid = new ButtonGridIcons<BlockRecipe.ProductMaterialPair>(8, 2, variants, (btn, product) =>
             {
                 var cell = new Cell() { Block = block, BlockData = product.Data };
@@ -43,10 +39,10 @@ namespace Start_a_Town_.Towns.Constructions
                 {
                     cell.Block.PaintIcon(btn.Width, btn.Height, cell.BlockData);
                 };
-                btn.HoverFunc = product.GetName;// cell.Block.GetName(cell.BlockData);
+                btn.HoverFunc = product.GetName;
                 btn.LeftClickAction = () =>
                 {
-                    action(product);// (btn.Tag as Cell).BlockData);
+                    action(product);
                 };
             });
             Instance.Panel.AddControls(buttonGrid);

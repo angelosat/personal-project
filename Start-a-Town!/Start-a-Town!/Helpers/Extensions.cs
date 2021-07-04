@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
-using System.IO;
 using System.Xml.Linq;
 using System.Threading;
 
@@ -51,10 +50,6 @@ namespace Start_a_Town_
         }
         public static Vector2 ToVector(this Point point)
         { return new Vector2(point.X, point.Y); }
-        public static void ToConsole(this object obj)
-        {
-            Console.WriteLine(obj.ToString());
-        }
 
         [Obsolete]
         public static bool IsNull(this object obj)
@@ -106,35 +101,6 @@ namespace Start_a_Town_
             global -= global.FloorXY();
             return global;
         }
-
-        public static int MaxWidth(this IEnumerable<string> strings, SpriteFont font)
-        {
-            var max = 0;
-            foreach (var txt in strings)
-                max = Math.Max(max, (int)font.MeasureString(txt).X);
-            return max;
-        }
-
-        public static string Wrap(this string text, int maxWidthInPixels)
-        {
-            if (string.IsNullOrEmpty(text))
-                return text;
-            string[] words = text.Split(' ');
-            var newtext = new StringBuilder();
-            string line = "";
-            foreach (var word in words)
-            {
-                if ((int)(UI.UIManager.Font.MeasureString(line + word)).X > maxWidthInPixels)
-                {
-                    newtext.AppendLine(line);
-                    line = "";
-                }
-                line += string.Format("{0} ", word);
-            }
-            if (line.Length > 0)
-                newtext.Append(line);
-            return newtext.ToString();
-        }
         
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
@@ -145,23 +111,7 @@ namespace Start_a_Town_
         public static Time ToTime(this DateTime dateTime) { return new Time(dateTime); }
         public static string ToLocalTime(this DateTime dateTime)
         { return dateTime.ToString("MMM dd, HH:mm:ss", System.Globalization.CultureInfo.GetCultureInfo("en-GB")); }
-
-        public static List<Rectangle> Divide(this Rectangle rect, int count)
-        {
-            var list = new List<Rectangle>();
-            var sqrt = (int)Math.Sqrt(count);
-            var w = rect.Width / sqrt;
-            var h = rect.Height / sqrt;
-            for (int i = 0; i < sqrt; i++)
-                for (int j = 0; j < sqrt; j++)
-                    list.Add(new Rectangle(rect.X + i * w, rect.Y + j * h, w, h));
-            return list;
-        }
-
-        public static Rectangle ToRectangle(this Vector4 bounds)
-        {
-            return new Rectangle((int)bounds.X, (int)bounds.Y, (int)bounds.Z, (int)bounds.W);
-        }
+       
         public static bool Intersects(this Vector4 bounds, Vector2 position)
         {
             return (bounds.X <= position.X &&
@@ -170,21 +120,6 @@ namespace Start_a_Town_
                 position.Y < bounds.Y + bounds.W);
         }
 
-        public static Vector4 ToVector4(this Rectangle rect)
-        {
-            return new Vector4(rect.Left, rect.Top, rect.Right, rect.Bottom);
-        }
-        public static void Clip(this Rectangle bounds, Rectangle source, Rectangle viewport, out Rectangle finalBounds, out Rectangle finalSource)
-        {
-            finalBounds = Rectangle.Intersect(bounds, viewport);
-            finalSource =
-                new Rectangle(
-                    source.X + finalBounds.X - bounds.X,
-                    source.Y + finalBounds.Y - bounds.Y,
-                    source.Width - (bounds.Width - finalBounds.Width),
-                    source.Height - (bounds.Height - finalBounds.Height)
-                    );
-        }
       
         public static T Translate<T>(this object[] data, IObjectProvider objProvider) where T : PacketTranslator, new()
         {
@@ -248,16 +183,6 @@ namespace Start_a_Town_
             var blockbox = blockGlobal.GetBoundingBox();
             var containment = blockbox.Contains(footprint);
             return containment == ContainmentType.Contains;
-        }
-        static public Rectangle GetRectangle(this Vector2 vec1, Vector2 vec2)
-        {
-            int xm = (int)Math.Min(vec1.X, vec2.X);
-            int ym = (int)Math.Min(vec1.Y, vec2.Y);
-
-            int xM = (int)(vec1.X + vec2.X - xm);
-            int yM = (int)(vec1.Y + vec2.Y - ym);
-
-            return new Rectangle(xm, ym, xM - xm, yM - ym);
         }
         static public BoundingBox GetBoundingBox(this Vector3 vec1, Vector3 vec2)
         {
@@ -435,15 +360,6 @@ namespace Start_a_Town_
                 dic.AddOrUpdate(item, item.StackSize, f => f + item.StackSize);
             return dic;
         }
-
-        public static int GetMaxWidth(this IEnumerable<string> strings)
-        {
-            int max = 0;
-            foreach (var item in strings)
-                max = (int)Math.Max(max, Math.Ceiling(UI.UIManager.Font.MeasureString(item).X));
-            return max;
-        }
-
         
         public static void Draw(this Vector3 global, MySpriteBatch sb, Camera cam, Graphics.AtlasWithDepth.Node.Token sprite, Color color)
         {
@@ -549,24 +465,6 @@ namespace Start_a_Town_
                 dic.Add(keySelector(listA[i]), valueSelector(listB[i]));
             }
             return dic;
-        }
-        static public bool TryParseColor(this string text, out Color color)
-        {
-            var posFrom = text.IndexOf('{');
-            if (posFrom != -1)
-            {
-                var posTo = text.IndexOf('}', posFrom + 1);
-                if (posFrom != -1)
-                {
-                    var sub = text.Substring(posFrom + 1, posTo - posFrom - 1);
-                    var elements = sub.Split(' ');
-                    var values = elements.Select(e => int.Parse(e.Split(':')[1])).ToArray();
-                    color = new Color(values[0], values[1], values[2], values[3]);
-                    return true;
-                }
-            }
-            color = Color.White;
-            return false;
         }
     }
 }

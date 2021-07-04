@@ -1,17 +1,16 @@
 ﻿using Start_a_Town_.UI;
-using System;
 using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
     public sealed class JobDef : Def
     {
-        public Func<Icon> GetIcon = ()=>Icon.Replace;
-
         readonly TaskGiver[] TaskGivers;
         readonly public HashSet<ToolAbilityDef> AssociatedTools = new();
         public ToolAbilityDef ToolUse;
         public readonly string Label;
+        public Icon Icon => Icon.Replace;
+
         public JobDef(string name, params TaskGiver[] taskGivers) : base(name)
         {
             this.Label = name;
@@ -28,6 +27,7 @@ namespace Start_a_Town_
         {
             return this.Name;
         }
+
         public JobDef AddTools(params ToolAbilityDef[] abilities)
         {
             foreach (var a in abilities)
@@ -39,7 +39,5 @@ namespace Start_a_Town_
             this.ToolUse = toolUse;
             return this;
         }
-
-        
     }
 }

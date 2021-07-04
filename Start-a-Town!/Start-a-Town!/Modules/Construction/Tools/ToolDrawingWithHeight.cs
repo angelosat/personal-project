@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 
@@ -13,7 +11,6 @@ namespace Start_a_Town_.Modules.Construction
         protected bool SettingHeight;
         protected int Height;
         protected Vector3 TopCorner;
-
         
         public ToolDrawingWithHeight()
         {
@@ -26,12 +23,9 @@ namespace Start_a_Town_.Modules.Construction
         }
         public override ControlTool.Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            //base.MouseLeftPressed(e);
-            //this.TopCorner = this.Begin;
-            //return Messages.Default;
             if (this.SettingHeight && this.Enabled)
             {
-                this.Send(this.Mode, this.Begin, this.TopCorner, this.Orientation);// this.End + Vector3.UnitZ * this.Height);//
+                this.Send(this.Mode, this.Begin, this.TopCorner, this.Orientation);
                 this.SettingHeight = false;
                 this.Enabled = false;
                 return Messages.Default;
@@ -47,8 +41,6 @@ namespace Start_a_Town_.Modules.Construction
             }
             this.Height = 0;
             return Messages.Default;
-
-            //return base.MouseLeftPressed(e);
         }
         public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -94,37 +86,24 @@ namespace Start_a_Town_.Modules.Construction
         }
         protected override void OnUpdate()
         {
-            //base.OnUpdate();
             if (this.SettingHeight)
             {
-                //this.Height = Math.Min(Net.Client.Instance.Map.GetMaxHeight() - 1, lengthinblocks);
-
-                //this.TopCorner = this.End + Vector3.UnitZ * Math.Min(Net.Client.Instance.Map.GetMaxHeight() - 1, this.Height - this.End.Z);
                 this.TopCorner = new Vector3(this.End.X, this.End.Y, Math.Min(this.End.Z + this.Height, Net.Client.Instance.Map.GetMaxHeight() - 1));
-
                 return;
             }
             else
             {
-                this.End = GetBottomCorner(); //this.Target.Global;
+                this.End = GetBottomCorner();
                 this.TopCorner = this.End;
             }
         }
         protected virtual Vector3 GetBottomCorner()
         {
-            //return this.Target.FaceGlobal;
             var g = this.Target.FaceGlobal;
             return new Vector3(g.X, g.Y, this.Begin.Z);
         }
         private void SetHeight()
         {
-            //var endscreenposition = ScreenManager.CurrentScreen.Camera.GetScreenPosition(this.End);
-            //var currentposition = UIManager.Mouse;
-            //var length = Math.Max(0, endscreenposition.Y - currentposition.Y) / ScreenManager.CurrentScreen.Camera.Zoom;
-            //var lengthinblocks = (int)(length / Block.BlockHeight);
-            //this.Height = lengthinblocks;
-            //if (this.Height < 0)
-            //    throw new Exception();
             this.Height = GetHeight(this.End, UIManager.Mouse);
         }
         static protected int GetHeight(Vector3 end, Vector2 mousePointer)
@@ -133,17 +112,7 @@ namespace Start_a_Town_.Modules.Construction
             var length = (endscreenposition.Y - mousePointer.Y) / ScreenManager.CurrentScreen.Camera.Zoom;
             var lengthinblocks = (int)(length / Block.BlockHeight);
             var height = lengthinblocks;
-            //if (height < 0)
-            //    throw new Exception();
             return height;
-
-            //var endscreenposition = ScreenManager.CurrentScreen.Camera.GetScreenPosition(end);
-            //var length = Math.Max(0, endscreenposition.Y - mousePointer.Y) / ScreenManager.CurrentScreen.Camera.Zoom;
-            //var lengthinblocks = (int)(length / Block.BlockHeight);
-            //var height = lengthinblocks;
-            //if (height < 0)
-            //    throw new Exception();
-            //return height;
         }
 
         protected override void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)

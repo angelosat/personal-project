@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Towns
 {
+    [Obsolete]
     class PacketDesignate
     {
         internal static byte[] Write(int designatorID, int designationID, Vector3 begin, Vector3 end, bool value)

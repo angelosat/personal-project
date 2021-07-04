@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Modules.Construction
 {
@@ -15,11 +11,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             get { return Modes.Single; }
         }
-        Func<Block> BlockGetter;
-        public override string Name
-        {
-            get { return "Single"; }
-        }
+        public override string Name => "Single";
         public ToolDrawingSinglePreview()
         {
 
@@ -32,30 +24,20 @@ namespace Start_a_Town_.Modules.Construction
         public ToolDrawingSinglePreview(Action<Args> callback, Func<Block> blockGetter)
             : this(callback)
         {
-            this.BlockGetter = blockGetter;
             this.Block = blockGetter();
         }
-        //public ToolDrawingSinglePreview(Action<Args> callback, Block block)
-        //    : this(callback)
-        //{
-        //    this.Block = block;
-        //}
+        
         public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (!this.Enabled)
                 return Messages.Default;
             if (this.Target == null)
                 return Messages.Default;
-            //var args = new Args(Modes.Single, this.Begin, this.Begin, InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey), this.Orientation);
-            //this.Callback(args);
             this.Send(Modes.Single, this.Begin, this.Begin, this.Orientation);
             this.Enabled = false;
             return Messages.Default;
         }
-        //public override void Update()
-        //{
-        //    base.Update();
-        //}
+       
         protected override void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)
         {
             if (!this.Enabled)
@@ -68,12 +50,11 @@ namespace Start_a_Town_.Modules.Construction
         }
         internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
         {
-            //base.DrawAfterWorld(sb, map, cam);
             var cam = map.Camera;
             if (this.Target == null && !this.Enabled)
                 return;
 
-            var atlastoken = this.Block.GetDefault();// this.Block.Variations.First();
+            var atlastoken = this.Block.GetDefault();
             var global = this.Enabled ? this.Begin : this.Target.FaceGlobal;
             atlastoken.Atlas.Begin(sb);
             this.Block.DrawPreview(sb, map, global, cam, this.State, this.Variation, this.Orientation);

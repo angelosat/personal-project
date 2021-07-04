@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -62,9 +65,111 @@ namespace Start_a_Town_
         }
 
 
-        public static UI.Label ToLabel(this string text) { return new UI.Label(Vector2.Zero, text); }
-        public static UI.Label ToLabel(this string text, Vector2 location) { return new UI.Label(location, text); }
-        public static UI.Label ToLabel(this string text, Vector2 location, int width) { return new UI.Label(location, text) { Width = width }; }
+        public static Label ToLabel(this string text) { return new UI.Label(Vector2.Zero, text); }
+        public static Label ToLabel(this string text, Vector2 location) { return new UI.Label(location, text); }
+        public static Label ToLabel(this string text, Vector2 location, int width) { return new UI.Label(location, text) { Width = width }; }
 
+
+        static public Panel ToPanel(this Control ctrl)
+        {
+            var panel = new Panel() { AutoSize = true };
+            panel.AddControls(ctrl);
+            return panel;
+        }
+        static public PanelLabeledNew ToPanelLabeled(this Control ctrl)
+        {
+            var panel = new PanelLabeledNew(ctrl.Name) { AutoSize = true };
+            panel.Client.AddControls(ctrl);
+            return panel;
+        }
+        static public PanelLabeledNew ToPanelLabeled(this Control ctrl, string label)
+        {
+            var panel = new PanelLabeledNew(label) { AutoSize = true };
+            panel.Client.AddControls(ctrl);
+            return panel;
+        }
+        static public PanelLabeledNew ToPanelLabeled(this Control ctrl, Func<string> label)
+        {
+            var panel = new PanelLabeledNew(label) { AutoSize = true };
+            panel.Client.AddControls(ctrl);
+            return panel;
+        }
+        
+        static public Control HideOnRightClick(this Control control)
+        {
+            control.MouseRBAction = () => { if (!control.ContainsMouse()) control.Hide(); };
+            return control;
+        }
+        static public Control HideOnLeftClick(this Control control)
+        {
+            control.MouseLBAction = () => { if (!control.ContainsMouse()) control.Hide(); };
+            return control;
+        }
+        static public Control HideOnAnyClick(this Control control)
+        {
+            control.HideOnLeftClick();
+            control.HideOnRightClick();
+            return control;
+        }
+        static public Control ToContextMenu(this Control control, string title)
+        {
+            return control.ToPanelLabeled(title).SetLocation(UIManager.Mouse).HideOnAnyClick();
+        }
+        static public Control ToContextMenuClosable(this Control control, string title)
+        {
+            return control.ToWindow(title, movable: false).SetLocation(UIManager.Mouse).HideOnAnyClick();
+        }
+        static public Control ToContextMenuClosable(this Control control, string title, Vector2 screenLoc)
+        {
+            return control.ToWindow(title, movable: false).SetLocation(screenLoc).HideOnAnyClick();
+        }
+        static public GroupBox Wrap(IEnumerable<ButtonBase> labels, int width = int.MaxValue)
+        {
+            var box = new GroupBox();
+            var currentX = 0;
+            var currentY = 0;
+            foreach (var l in labels)
+            {
+                if (currentX + l.Width > width)
+                {
+                    currentX = 0;
+                    currentY += l.Height;
+                }
+                l.Location = new IntVec2(currentX, currentY);
+                currentX += l.Width;
+                box.AddControls(l);
+            }
+            if (width != int.MaxValue)
+                box.Width = width;
+            return box;
+        }
+
+        static public Control ToTabbedContainer(params Control[] namedControls)
+        {
+            var box = new GroupBox();
+
+            var labeledPanels = namedControls.Select(c =>
+            {
+                if (c.Name.IsNullEmptyOrWhiteSpace())
+                    throw new ArgumentException($"Control's \"Name\" field is null empty or whitespace");
+                return c.ToPanelLabeled(c.Name);
+            });
+
+            var maxw = labeledPanels.Max(c => c.Width);
+            var maxh = labeledPanels.Max(c => c.Height);
+
+            var boxclient = new GroupBox(maxw, maxh);
+
+            var boxtabs = Wrap(labeledPanels.Select(c => new Button(c.Name, () => select(c))), maxw);
+
+            void select(Control c)
+            {
+                boxclient.ClearControls();
+                boxclient.AddControls(c);
+            }
+
+            box.AddControlsVertically(boxtabs, boxclient);
+            return box;
+        }
     }
 }

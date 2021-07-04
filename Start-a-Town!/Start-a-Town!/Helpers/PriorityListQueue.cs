@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Start_a_Town_
 {
     public class PriorityListQueue<P, V>
     {
-        private SortedDictionary<P, List<V>> list = new SortedDictionary<P, List<V>>();
+        private readonly SortedDictionary<P, List<V>> list = new();
         public void Enqueue(P priority, V value)
         {
             List<V> q;
@@ -23,7 +22,7 @@ namespace Start_a_Town_
             // will throw if there isn’t any first element!
             var pair = list.First();
             var v = pair.Value[0];
-            pair.Value.RemoveAt(0);//.Dequeue();
+            pair.Value.RemoveAt(0);
             if (pair.Value.Count == 0) // nothing left of the top priority.
                 list.Remove(pair.Key);
             return v;
@@ -32,7 +31,7 @@ namespace Start_a_Town_
         public V Peek()
         {
             var pair = list.First();
-            var v = pair.Value[0];//.Peek();
+            var v = pair.Value[0];
             return v;
         }
 
@@ -47,7 +46,6 @@ namespace Start_a_Town_
             {
                 int c = 0;
                 foreach (KeyValuePair<P, List<V>> pair in list)
-                    //foreach (KeyValuePair<V> pair in p)
                     c += pair.Value.Count;
                 return c;
             }

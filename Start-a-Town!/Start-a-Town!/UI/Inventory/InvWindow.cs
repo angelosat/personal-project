@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Stats;
-using Start_a_Town_.Modules.Crafting.UI;
 
 namespace Start_a_Town_.UI
 {
@@ -263,28 +258,14 @@ namespace Start_a_Town_.UI
 
             Panel_Tabs.Controls.Add(tab);
 
-            //var skillsui = new Components.Skills.New.SkillsUI();
-            //skillsui.Refresh(actor);
-            //tab = new RadioButton("Skills", Panel_Tabs.Controls.TopRight)
+            //Panel_Tabs.Controls.Add(new RadioButton("Crafting")
             //{
-            //    Tag = Box_Skills,
-            //    LeftClickAction = () => 
-            //    { 
-            //        Panel_Details.Controls.Clear(); 
-            //        Panel_Details.Controls.Add(skillsui);//Box_Skills); 
-            //    }
-            //};
-            //Panel_Tabs.Controls.Add(tab);
-
-            Panel_Tabs.Controls.Add(new RadioButton("Crafting")
-            {
-                Location = Panel_Tabs.Controls.TopRight,
-                Tag = CraftInterfaceNew.Instance,
-                LeftClickAction = () => { Panel_Details.Controls.Clear(); Panel_Details.Controls.Add(CraftInterfaceNew.Instance); }
-            });
+            //    Location = Panel_Tabs.Controls.TopRight,
+            //    Tag = CraftInterfaceNew.Instance,
+            //    LeftClickAction = () => { Panel_Details.Controls.Clear(); Panel_Details.Controls.Add(CraftInterfaceNew.Instance); }
+            //});
 
             Panel_Details.Location = Panel_Tabs.BottomLeft;
-            //Panel_Details.Width = Panel_Tabs.Width;
             Panel_Details.Conform((from btn in Panel_Tabs.Controls select btn.Tag as Control).ToArray());
         }
         void InitStats(GameObject entity)

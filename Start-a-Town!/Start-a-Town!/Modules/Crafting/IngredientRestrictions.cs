@@ -4,8 +4,6 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    //public partial class CraftOrderNew
-    //{
     public class IngredientRestrictions : ISaveable, ISerializable
     {
         public HashSet<Material> Material = new();
@@ -42,7 +40,6 @@ namespace Start_a_Town_
         }
         public IngredientRestrictions Restrict(MaterialType mattype)
         {
-            //this.MaterialType.Add(item);
             foreach (var m in mattype.SubTypes)
                 this.Restrict(m);
             return this;
@@ -110,8 +107,6 @@ namespace Start_a_Town_
 
         public ISaveable Load(SaveTag tag)
         {
-            //this.ItemDef = new HashSet<ItemDef>(tag.LoadStringList("ItemDef").Select(s => Def.GetDef<ItemDef>(s)));
-            //this.ItemDef.TryLoadDefs<HashSet<ItemDef>, ItemDef>(tag, "Material");
             this.ItemDef.TryLoadDefs<ItemDef>(tag, "Material");
 
             this.Material = new HashSet<Material>(tag.LoadListInt("ItemDef").Select(s => Start_a_Town_.Material.GetMaterial(s)));
@@ -135,7 +130,4 @@ namespace Start_a_Town_
             return this;
         }
     }
-
-
-    //}
 }

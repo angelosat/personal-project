@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.AI;
 
 namespace Start_a_Town_.Modules.AI.Net.Packets
 {
@@ -17,15 +11,11 @@ namespace Start_a_Town_.Modules.AI.Net.Packets
             server.OutgoingStream.Write(agentID);
             server.OutgoingStream.Write(entry);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)// byte[] payload)
+        static public void Receive(IObjectProvider net, BinaryReader r)
         {
-            //payload.Deserialize(r =>
-            //{
-                var entity = net.GetNetworkObject(r.ReadInt32()) as Actor;
-                var entry = r.ReadString();
+            var entity = net.GetNetworkObject(r.ReadInt32()) as Actor;
+            var entry = r.ReadString();
             entity.Log.Write(entry);
-                //AILog.SyncWrite(entity, entry);
-            //});
         }
     }
 }

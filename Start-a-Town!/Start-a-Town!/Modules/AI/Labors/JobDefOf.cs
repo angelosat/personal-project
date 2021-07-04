@@ -4,7 +4,6 @@ namespace Start_a_Town_
 {
     public sealed class JobDefOf
     {
-
         static public readonly JobDef Digger = new JobDef("Digger", new TaskGiverDigging()).AddTools(ToolAbilityDef.Digging);
         static public readonly JobDef Miner = new JobDef("Miner").AddTools(ToolAbilityDef.Mining);
         static public readonly JobDef Hauler = new("Hauler", new TaskGiverHaulToStockpileNew(), new TaskGiverRefueling());
@@ -20,7 +19,6 @@ namespace Start_a_Town_
         static public readonly JobDef Cook = new("Cook");
         static public readonly JobDef Guide = new("Guide");
         static public readonly JobDef QuestGiver = new("QuestGiver", new TaskGiverOfferQuest());
-        //static public readonly JobDef ShopDuties = new("ShopDuties", new TaskGiverTradingOverCounter());
         static public readonly JobDef MiscDuties = new("MiscDuties", new TaskGiverSwitchToggle());
         static public readonly JobDef Workplace = new("TavernWorker", new TaskGiverWorkplace());
         static JobDefOf()
@@ -46,7 +44,6 @@ namespace Start_a_Town_
                     Guide,
                     QuestGiver,
                     Hauler,
-                    //ShopDuties,
                     MiscDuties,
                 };
     }

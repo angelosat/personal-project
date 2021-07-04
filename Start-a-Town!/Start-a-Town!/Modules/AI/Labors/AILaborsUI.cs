@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
-using Start_a_Town_.Components.AI;
 using Start_a_Town_.Components;
 using Start_a_Town_.Towns;
 using Start_a_Town_.Net;

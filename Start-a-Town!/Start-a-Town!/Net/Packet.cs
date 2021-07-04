@@ -125,7 +125,6 @@ namespace Start_a_Town_.Net
         AIJobStarted,
         AIJobComplete,
         StockpileDelete,
-        AIGenerateNpc,
         StockpileCreate,
         JobRemoved,
         MergedPackets,

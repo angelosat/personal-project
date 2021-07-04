@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Modules.Construction
 {
     class ToolDrawingBoxFilled : ToolDrawingWithHeight
     {
-        public override string Name
-        {
-            get { return "Box Filled"; }
-        }
-        //protected bool SettingHeight;
-        //protected int Height;
+        public override string Name => "Box Filled";
         public ToolDrawingBoxFilled()
         {
 
@@ -23,9 +14,7 @@ namespace Start_a_Town_.Modules.Construction
         public ToolDrawingBoxFilled(Action<Args> callback)
             : base(callback)
         {
-
         }
-        
         
         protected override void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)
         {
@@ -34,9 +23,6 @@ namespace Start_a_Town_.Modules.Construction
             var end = this.End + Vector3.UnitZ * this.Height;
 
             var box = this.Begin.GetBox(end);
-
-            //foreach (var vec in box)
-            //    cam.DrawGridBlock(sb, this.Valid ? Color.Lime : Color.Red, vec);
 
             cam.DrawGridBlocks(sb, Block.BlockBlueprint, box, color);
         }
@@ -56,14 +42,12 @@ namespace Start_a_Town_.Modules.Construction
         protected override void WriteData(System.IO.BinaryWriter w)
         {
             base.WriteData(w);
-            //w.Write(this.End);
             w.Write(this.SettingHeight);
             w.Write(this.Height);
         }
         protected override void ReadData(System.IO.BinaryReader r)
         {
             base.ReadData(r);
-            //this.End = r.ReadVector3();
             this.SettingHeight = r.ReadBoolean();
             this.Height = r.ReadInt32();
         }

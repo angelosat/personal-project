@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.UI;
 using Start_a_Town_.AI;
 
 namespace Start_a_Town_
@@ -14,25 +10,19 @@ namespace Start_a_Town_
     public enum TargetIndex { A, B, C, Tool = 15 }
     public class AITask
     {
-        static Dictionary<string, Func<AITask>> Factory = new Dictionary<string, Func<AITask>>();
+        static readonly Dictionary<string, Func<AITask>> Factory = new();
 
         public TargetArgs GetTarget(TargetIndex targetInd)
         {
-            switch (targetInd)
+            return targetInd switch
             {
-                case TargetIndex.Tool:
-                    return this.Tool;
-                case TargetIndex.A:
-                    return this.TargetA;
-                case TargetIndex.B:
-                    return this.TargetB;
-                case TargetIndex.C:
-                    return this.TargetC;
-                default:
-                    throw new Exception();
-            }
+                TargetIndex.Tool => this.Tool,
+                TargetIndex.A => this.TargetA,
+                TargetIndex.B => this.TargetB,
+                TargetIndex.C => this.TargetC,
+                _ => throw new Exception(),
+            };
         }
-
       
         internal TargetArgs GetTarget(int targetInd)
         {
@@ -41,7 +31,6 @@ namespace Start_a_Town_
 
         internal bool ReserveAll(GameObject actor, TargetIndex sourceIndex)
         {
-         
             var targets = this.GetTargetQueue(sourceIndex);
             var amounts = this.GetAmountQueue(sourceIndex);
             var count = targets.Count;
@@ -60,51 +49,38 @@ namespace Start_a_Town_
         {
             return actor.Town.ReservationManager.Reserve(actor, this.GetTarget(index), this.GetAmount(index));
         }
-
         
         internal int GetAmount(TargetIndex amountInd)
         {
-            switch (amountInd)
+            return amountInd switch
             {
-                case TargetIndex.A:
-                    return this.AmountA;
-                case TargetIndex.B:
-                    return this.AmountB;
-                case TargetIndex.C:
-                    return this.AmountC;
-                default:
-                    throw new Exception();
-            }
+                TargetIndex.A => this.AmountA,
+                TargetIndex.B => this.AmountB,
+                TargetIndex.C => this.AmountC,
+                _ => throw new Exception(),
+            };
         }
         
         internal List<TargetArgs> GetTargetQueue(TargetIndex targetInd)
         {
-            switch (targetInd)
+            return targetInd switch
             {
-                case TargetIndex.A:
-                    return this.TargetsA;
-                case TargetIndex.B:
-                    return this.TargetsB;
-                case TargetIndex.C:
-                    return this.TargetsC;
-                default:
-                    throw new Exception();
-            }
+                TargetIndex.A => this.TargetsA,
+                TargetIndex.B => this.TargetsB,
+                TargetIndex.C => this.TargetsC,
+                _ => throw new Exception(),
+            };
         }
         
         internal List<int> GetAmountQueue(TargetIndex amountInd)
         {
-            switch (amountInd)
+            return amountInd switch
             {
-                case TargetIndex.A:
-                    return this.AmountsA;
-                case TargetIndex.B:
-                    return this.AmountsB;
-                case TargetIndex.C:
-                    return this.AmountsC;
-                default:
-                    throw new Exception();
-            }
+                TargetIndex.A => this.AmountsA,
+                TargetIndex.B => this.AmountsB,
+                TargetIndex.C => this.AmountsC,
+                _ => throw new Exception(),
+            };
         }
 
         internal AITask SetTarget(TargetIndex targetInd, GameObject target, int amount)
@@ -162,10 +138,7 @@ namespace Start_a_Town_
                     throw new Exception();
             }
         }
-        internal void SetTool(TargetArgs t)
-        {
-            this.Tool = t;
-        }
+        
         internal bool NextTarget(TargetIndex ind)
         {
             var targets = this.GetTargetQueue(ind);
@@ -186,26 +159,13 @@ namespace Start_a_Town_
             return true;
         }
 
-        static public void AddTask<T>() where T : AITask, new()
-        {
-            Factory[typeof(T).FullName] = () => new T();
-        }
-        
         static public AITask Load(SaveTag tag)
         {
-            var typeName = (string)tag["Type"].Value;
-            var task = Activator.CreateInstance(Type.GetType(typeName)) as AITask;
-            task = new AITask();
+            var task = new AITask();
             task.LoadData(tag);
             return task;
         }
-        static public AITask Load(BinaryReader r)
-        {
-            var typeName = r.ReadString();
-            var task = Activator.CreateInstance(Type.GetType(typeName)) as AITask;
-            task.Read(r);
-            return task;
-        }
+        
         internal static void Initialize()
         {
         }
@@ -213,10 +173,7 @@ namespace Start_a_Town_
         {
             this.ID = ReservationManager.GetNextTaskID();
         }
-        public virtual string Name
-        {
-            get { return "unnamed task"; }
-        }
+        public virtual string Name => "unnamed task";
         public TargetArgs Tool = TargetArgs.Null;
         public TargetArgs TargetA = TargetArgs.Null;
         public TargetArgs TargetB = TargetArgs.Null;
@@ -250,37 +207,9 @@ namespace Start_a_Town_
         public int CustomerID;
 
         bool Cancelled = false;
+        public bool IsCancelled => this.Cancelled;
 
-
-        internal void Cancel()
-        {
-            this.Cancelled = true;
-        }
-        public bool IsCancelled { get
-        { 
-            return this.Cancelled;
-        } }
-
-
-        public void Reserve(GameObject actor)
-        {
-            this.ReservedBy = actor.RefID;
-        }
-        public void Unreserve()
-        {
-            this.ReservedBy = -1;
-        }
-        public bool IsReservedBy(GameObject actor)
-        {
-            return actor.Net.GetNetworkObject(this.ReservedBy) == actor;
-        }
-        public bool IsReserved
-        {
-            get
-            {
-                return this.ReservedBy > -1;
-            }
-        }
+        public bool IsReserved => this.ReservedBy > -1;
 
         public TaskDef Def;
         public int ID { get; internal set; }
@@ -293,7 +222,6 @@ namespace Start_a_Town_
         public AITask(Type behaviorType) : this()
         {
             this.BehaviorType = behaviorType;
-            
         }
         public AITask(Type behaviorType, TargetArgs targetA) : this()
         {
@@ -317,22 +245,21 @@ namespace Start_a_Town_
             this.SetTarget(TargetIndex.A, targetA);
             this.SetTarget(TargetIndex.B, targetB);
         }
-        public AITask(Type behaviorType, TargetArgs targetA, TargetArgs targetB, TargetArgs targetC) : this()
-        {
-            this.BehaviorType = behaviorType;
-            this.SetTarget(TargetIndex.A, targetA);
-            this.SetTarget(TargetIndex.B, targetB);
-            this.SetTarget(TargetIndex.C, targetC);
-        }
         
         public override string ToString()
         {
             return this.Def?.Name ?? base.ToString();
         }
-        public Control GetControl()
+        internal void Cancel()
         {
-            return new Button(this.Def?.GetForceText(this) ?? this.BehaviorType.Name);
+            this.Cancelled = true;
         }
+
+        public void Reserve(GameObject actor)
+        {
+            this.ReservedBy = actor.RefID;
+        }
+       
         public string GetForceTaskText()
         {
             return this.Def?.GetForceText(this) ?? this.BehaviorType.Name;
@@ -345,8 +272,9 @@ namespace Start_a_Town_
             set { this._BehaviorType = value; }
         }
 
+        //public virtual Behavior GetBehavior(GameObject actor) { return null; }
+        //public virtual void Succeeded(GameObject actor) { }
 
-        public virtual Behavior GetBehavior(GameObject actor) { return null; }
         public BehaviorPerformTask CreateBehavior(Actor actor)
         {
             var behav = Activator.CreateInstance(this.BehaviorType) as BehaviorPerformTask;
@@ -354,12 +282,7 @@ namespace Start_a_Town_
             behav.Task = this;
             return behav;
         }
-        public virtual bool IsAvailable()
-        {
-            return true;
-        }
         
-        public virtual void Succeeded(GameObject actor) { }
         public SaveTag Save(string name = "") 
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
@@ -469,7 +392,7 @@ namespace Start_a_Town_
             tag.TryGetTag("Transaction", v => this.Transaction = new Transaction(v));
         }
 
-        internal virtual void Write(System.IO.BinaryWriter w)
+        internal virtual void Write(BinaryWriter w)
         {
             w.Write(this.GetType().FullName);
             w.Write(this.ID);
@@ -513,20 +436,6 @@ namespace Start_a_Town_
             this.Transaction = new Transaction(r);
         }
         
-        internal virtual void WriteBlackboard(BinaryWriter w, Dictionary<string, object> blackboard) 
-        {
-        }
-        internal virtual void ReadBlackboard(BinaryReader r, Dictionary<string, object> blackboard)
-        {
-        }
-        internal virtual SaveTag SaveBlackboard(string name, Dictionary<string, object> blackboard)
-        {
-            return null;
-        }
-        internal virtual void LoadBlackboard(SaveTag tag, Dictionary<string, object> blackboard) 
-        {
-        }
-
         public void ObjectLoaded(GameObject parent)
         {
         }
@@ -551,24 +460,7 @@ namespace Start_a_Town_
             foreach (var t in this.GetCustomTargets())
                 t.Map = parent.Map;
         }
-        internal void AddTargets(TargetIndex index, params TargetArgs[] targets)
-        {
-            var list = this.GetTargetQueue(index);
-            foreach (var t in targets)
-                list.Add(t);
-        }
-        
-        internal void AddAmountNew(TargetIndex index, params int[] amounts)
-        {
-            var list = this.GetAmountQueue(index);
-            foreach (var t in amounts)
-                list.Add(t);
-        }
-        
-        internal void AddAmount(int index, int amount)
-        { 
-        }
-        
+       
         internal void AddTarget(TargetIndex index, GameObject target, int count = -1)
         {
             this.AddTarget(index, new TargetArgs(target), count);
@@ -605,39 +497,10 @@ namespace Start_a_Town_
             a.Add(count);
         }
 
-        internal void AddTargetOld(int index, TargetArgs target, int count = -1)
-        {
-            var targets = this.TargetQueues.ElementAtOrDefault(index);
-            if (targets == null)
-                this.TargetQueues.Insert(index, new List<TargetArgs>() { target });
-            else
-                targets.Add(target);
-            var counts = this.AmountQueues.ElementAtOrDefault(index);
-            if (counts == null)
-                this.AmountQueues.Insert(index, new List<int>() { count });
-            else
-                counts.Add(count);
-        }
         internal void AddTarget(TargetArgs target, int count = -1)
         {
             this.TargetsA.Add(target);
             this.AmountsA.Add(count);
-        }
-        internal void AddTarget(GameObject target, int count = -1)
-        {
-            this.AddTarget(new TargetArgs(target), count);
-        }
-        public bool HasFailed()
-        {
-            foreach (var fail in this.FailConditions)
-                if (fail())
-                    return true;
-            return false;
-        }
-
-        internal void AddFailCondition(Func<bool> condition)
-        {
-            this.FailConditions.Add(condition);
         }
 
         protected virtual IEnumerable<TargetArgs> GetCustomTargets() { yield break; }

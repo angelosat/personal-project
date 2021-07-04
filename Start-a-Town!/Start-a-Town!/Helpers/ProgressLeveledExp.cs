@@ -1,26 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
     class ProgressLeveledExp : Progress
     {
-        //private int level;
         public int Level { get; private set; }
-        //{ 
-        //    get => level; 
-        //    set
-        //    {
-        //        if (level != value) 
-        //            this.Value = 0; 
-        //        level = value;
-        //    }
-        //}
+        
         public void SetLevel(int level)
         {
             if (level == this.Level)
@@ -34,15 +20,8 @@ namespace Start_a_Town_
         {
             this.BaseAmountToLevel = amountToLevelBase;
             this.Level = level;
-
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    var val = GetAmountRequired(i);
-            //    string.Format("{0}: {1}", i, val).ToConsole();
-            //}
         }
 
-        //public override float Max { get => (int)Math.Pow(AmountToLevelBase, this.Level + 1); }
         public override float Max { get => GetAmountRequired(this.Level + 1) ; }
 
         float GetAmountRequired(int level)

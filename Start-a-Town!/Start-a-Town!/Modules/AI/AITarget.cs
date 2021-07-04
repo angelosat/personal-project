@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_.AI
+﻿namespace Start_a_Town_.AI
 {
     public class AITarget
     {
@@ -16,7 +10,6 @@ namespace Start_a_Town_.AI
         public float RangeMax;
 
         // use a timer or a value threshold before the ai starts closing a distance that has increased past the max value?
-        //public float Delay;
         public float RangeThreshold;
 
         public AITarget(TargetArgs target, float min, float max)

@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
-using Start_a_Town_.Components.Needs;
-using Start_a_Town_.Components.AI;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.UI;
 using Start_a_Town_.GameModes;
-using UI;
 
 namespace Start_a_Town_.AI
 {
@@ -26,7 +16,7 @@ namespace Start_a_Town_.AI
         public NpcUI(Actor npc)
         {
             this.PanelTask = new Panel() { AutoSize = true };
-            var aistate = AIState.GetState(npc);// npc.GetComponent<AIComponent>().State;
+            var aistate = AIState.GetState(npc);
             var labeltask = new Label("Task: ") { TextFunc = () => aistate.ToString() };
             this.PanelTask.Controls.Add(labeltask);
 
@@ -49,18 +39,11 @@ namespace Start_a_Town_.AI
             var winlog = this.Log.ToWindow(Npc.Name + "'s Log");
             var btnlog = new Button("Log", this.PanelNeeds.ClientSize.Width) { LeftClickAction = () => ShowLog(winlog) };
 
-            //var winPersonality = AIState.GetState(npc).Personality.GetUI().ToWindow(Npc.Name + "'s Personality");
             var winPersonality = npc.Personality.GetUI().ToWindow(Npc.Name + "'s Personality");
 
             var btnpersonality = new Button("Personality", this.PanelNeeds.ClientSize.Width) { Location = btnlog.BottomLeft, LeftClickAction = () => winPersonality.ToggleSmart() };
 
-
-            
-
             this.Buttons.AddControls(btnlog, btnpersonality);
-
-
-   
 
             this.AddControls(this.PanelTask, this.PanelNeeds,
                 this.PanelStats,
@@ -68,7 +51,6 @@ namespace Start_a_Town_.AI
                 this.Buttons);
 
             GameMode.Current.OnUIEvent(UIManager.Events.NpcUICreated, this);
-
         }
 
         public void AddButton(Button btn)
@@ -82,6 +64,5 @@ namespace Start_a_Town_.AI
             this.Log.Refresh();
             winlog.ToggleSmart();
         }
-
     }
 }

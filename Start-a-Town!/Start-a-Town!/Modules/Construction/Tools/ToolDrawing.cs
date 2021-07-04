@@ -1,79 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.PlayerControl;
 using Start_a_Town_.UI;
-using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    public abstract class ToolDrawing : ToolManagement, INamed// ControlTool// DefaultTool// ControlTool
+    public abstract partial class ToolDrawing : ToolManagement, INamed
     {
         public enum Modes { Single, Line, Wall, Enclosure, BoxFilled, BoxHollow, Box, Roof, Pyramid }
-        public class Args
-        {
-            public Vector3 Begin, End;
-            public bool Removing, Replacing, Cheat;
-            public Modes Mode;
-            public int Orientation;
-            public Args(Modes mode, Vector3 begin, Vector3 end, bool modkey, bool cheat, bool replacing = false, int orientation = 0)
-            {
-                this.Mode = mode;
-                this.Begin = begin;
-                this.End = end;
-                this.Removing = modkey;
-                this.Replacing = replacing;
-                this.Orientation = orientation;
-                this.Cheat = cheat;
-            }
-            public void Write(BinaryWriter w)
-            {
-                w.Write((byte)this.Mode);
-                w.Write(this.Begin);
-                w.Write(this.End);
-                w.Write(this.Removing);
-                w.Write(this.Replacing);
-                w.Write(this.Orientation);
-                w.Write(this.Cheat);
-            }
-            public Args(BinaryReader r)
-            {
-                this.Mode = (Modes)r.ReadByte();
-                this.Begin = r.ReadVector3();
-                this.End = r.ReadVector3();
-                this.Removing = r.ReadBoolean();
-                this.Replacing = r.ReadBoolean();
-                this.Orientation = r.ReadInt32();
-                this.Cheat = r.ReadBoolean();
-            }
-        }
         new readonly Icon Icon = new(UIManager.Icons32, 12, 32);
         public abstract Modes Mode { get; }
         public abstract string Name { get; }
-        //Action<BlockConstruction.ProductMaterialPair, TargetArgs, int, bool, bool> Callback;
         private Action<Args> Callback;
         protected bool Valid, Enabled;
         protected Vector3 Begin, End, Axis;
 
-        public Block Block;// { get { return this.blockbette} }
+        public Block Block;
         public byte State;
         public int Variation, Orientation;
 
         int 
-            Length, 
             Height;
         public ToolDrawing()
         {
 
         }
         public ToolDrawing(Action<Args> callback)
-            //:base(ScreenManager.CurrentScreen.Camera)
         {
             this.Callback = callback;
         }
@@ -85,10 +39,7 @@ namespace Start_a_Town_.Modules.Construction
         }
         private void CheckValidity()
         {
-            var targetposition = this.Target.FaceGlobal; // the construction designation block is non-solid, so we don't want to exclude non-solid in selecting target block face
             this.Valid = true;
-            //foreach(var p in this.Item.Block.GetParts(targetposition, this.Orientation))
-            //    this.Valid &= Client.Instance.Map.IsEmpty(p.Key);
         }
         public override ControlTool.Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -98,16 +49,12 @@ namespace Start_a_Town_.Modules.Construction
                 return Messages.Default;
             if (this.Target.Type != TargetType.Position)
                 return Messages.Default;
-            this.Replacing = IsReplacing();// InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey);
+            this.Replacing = IsReplacing();
             var pos = this.Replacing ? this.Target.Global : this.Target.FaceGlobal;
-            //if (this.GetZones().Contains(pos))
-            //    this.Removing = true;
             this.Begin = pos;
             this.End = this.Begin;
-            this.Length = 1;
             this.Height = 0;
             this.Enabled = true;
-            //this.Valid = this.Check(this.Width, this.Height);
             Sync();
             return Messages.Default;
         }
@@ -125,7 +72,6 @@ namespace Start_a_Town_.Modules.Construction
 
             return ControlTool.Messages.Default;
         }
-        //public override ControlTool.Messages MouseRightUp(System.Windows.Forms.HandledMouseEventArgs e)
         public override ControlTool.Messages MouseRightDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (this.Enabled)
@@ -137,8 +83,6 @@ namespace Start_a_Town_.Modules.Construction
             }
             else
                 return Messages.Remove;
-            //return Messages.Default;
-
         }
         public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
@@ -187,25 +131,6 @@ namespace Start_a_Town_.Modules.Construction
             return IsReplacing() ? this.Target.Global : this.Target.FaceGlobal;
         }
 
-        private void SetHeight()
-        {
-            var endscreenposition = ScreenManager.CurrentScreen.Camera.GetScreenPosition(this.End);
-            var currentposition = UIManager.Mouse;
-            var length = Math.Max(0, endscreenposition.Y - currentposition.Y) / ScreenManager.CurrentScreen.Camera.Zoom;
-            var lengthinblocks = (int)(length / Block.BlockHeight);
-            this.Height = Math.Min(Net.Client.Instance.Map.GetMaxHeight() - 1, lengthinblocks);
-        }
-
-        
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
-        {
-            
-
-            //foreach (var g in this.GetZones())
-            //    this.DrawGridCell(sb, camera, Color.Yellow, g);
-
-            //base.DrawBeforeWorld(sb, map, camera);
-        }
         internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
         {
             var cam = map.Camera;
@@ -216,7 +141,6 @@ namespace Start_a_Town_.Modules.Construction
             }
             else
                 this.DrawBlockPreviews(sb, map, cam);
-                //this.DrawGrid(sb, map, cam, Color.White);
         }
         public override void DrawBlockMouseover(MySpriteBatch sb, IMap map, Camera camera)
         {
@@ -224,25 +148,15 @@ namespace Start_a_Town_.Modules.Construction
             if (!this.Enabled)
             {
                 if (this.Target != null)
-                    camera.DrawGridBlock(sb, Color.Yellow, this.GetMouseover());// this.Target.FaceGlobal);
+                    camera.DrawGridBlock(sb, Color.Yellow, this.GetMouseover());
                 return;
             }
-            //this.DrawGrid(sb, camera);
         }
-        //internal override void DrawAfterWorld(MySpriteBatch sb, IMap map, Camera cam)
-        //{
-        //    Game1.Instance.GraphicsDevice.Textures[0] = Sprite.Atlas.Texture;
-        //    Game1.Instance.GraphicsDevice.Textures[1] = Sprite.Atlas.DepthTexture;
-        //    this.DrawGrid(sb, cam);
-        //    base.DrawAfterWorld(sb, map, cam);
-        //}
-        //protected virtual void DrawAction(MySpriteBatch sb, Camera cam){}
+    
         protected virtual void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)
         {
             if (!this.Enabled)
                 return;
-            //this.DrawAction(sb, cam);
-            //return;
 
             var end = this.End + Vector3.UnitZ * this.Height;
             var col = this.Valid ? Color.Lime : Color.Red;
@@ -263,7 +177,6 @@ namespace Start_a_Town_.Modules.Construction
                     {
                         Vector3 global = minBegin + new Vector3(i, j, k);
                         cam.DrawGridCell(sb, col, global);
-                        //DrawGridCell(sb, cam, col, global);
                     }
                 }
             }
@@ -276,11 +189,7 @@ namespace Start_a_Town_.Modules.Construction
         }
         protected void DrawBlockPreviews(MySpriteBatch sb, IMap map, Camera cam)
         {
-            //if (this.Target == null)
-            //    return;
-
             var atlastoken = this.Block.GetDefault();
-            //var global = this.Target.FaceGlobal;
             atlastoken.Atlas.Begin(sb);
             foreach(var pos in this.GetPositions())
                 this.Block.DrawPreview(sb, map, pos, cam, this.State, this.Variation, this.Orientation);
@@ -296,26 +205,15 @@ namespace Start_a_Town_.Modules.Construction
 
             if (!this.Enabled)
                 return;
-            //var dimensionsText = this.GetDimensionSize().Aggregate((a, b) => a + " x " + b);
             var txt = string.Join(" x ", this.GetDimensionSize());
-            //UIManager.DrawStringOutlined(sb, GetPositions().Count.ToString(), UIManager.Mouse - new Vector2(0, 32), Vector2.Zero);
             UIManager.DrawStringOutlined(sb, txt, UIManager.Mouse - new Vector2(0, Label.DefaultHeight), Vector2.Zero);
-            
-            return;
-            //if (IsDesignating())
-            //    Icon.Replace.Draw(sb);
-            //else if(IsRemoving())
-            //    Icon.Cross.Draw(sb);
         }
         public virtual IEnumerable<string> GetDimensionSize()
         {
             yield return (Math.Abs(this.End.X - this.Begin.X) + 1).ToString();
             yield return (Math.Abs(this.End.Y - this.Begin.Y) + 1).ToString();
         }
-        private static bool IsDesignating()
-        {
-            return InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey);
-        }
+        
         private static bool IsRemoving()
         {
             return InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey);
@@ -329,53 +227,22 @@ namespace Start_a_Town_.Modules.Construction
         public virtual List<Vector3> GetPositions() { return new List<Vector3>(); }
         static public List<Vector3> GetPositions(Modes mode, Vector3 a, Vector3 b)
         {
-            switch(mode)
+            return mode switch
             {
-                case Modes.Single:
-                    return ToolDrawingSingle.GetPositions(a,b);
-        
-                case Modes.Line:
-                    return ToolDrawingLine.GetPositions(a,b);
-        
-                case Modes.Enclosure:
-                    return ToolDrawingEnclosure.GetPositions(a, b);
-
-                case Modes.Box:
-                    return ToolDrawingBox.GetPositions(a, b);
-
-                case Modes.Wall:
-                    return ToolDrawingWall.GetPositions(a, b);
-
-                case Modes.Pyramid:
-                    return ToolDrawingPyramid.GetPositions(a, b).ToList();
-
-                case Modes.Roof:
-                    return ToolDrawingRoof.GetPositions(a, b).ToList();
-
-                case Modes.BoxFilled:
-                    return ToolDrawingBoxFilled.GetPositions(a, b);
-
-                default:
-                    return new List<Vector3>();
-            }
+                Modes.Single => ToolDrawingSingle.GetPositions(a, b),
+                Modes.Line => ToolDrawingLine.GetPositions(a, b),
+                Modes.Enclosure => ToolDrawingEnclosure.GetPositions(a, b),
+                Modes.Box => ToolDrawingBox.GetPositions(a, b),
+                Modes.Wall => ToolDrawingWall.GetPositions(a, b),
+                Modes.Pyramid => ToolDrawingPyramid.GetPositions(a, b).ToList(),
+                Modes.Roof => ToolDrawingRoof.GetPositions(a, b).ToList(),
+                Modes.BoxFilled => ToolDrawingBoxFilled.GetPositions(a, b),
+                _ => new List<Vector3>(),
+            };
         }
         static public List<Vector3> GetPositions(Args a)
         {
             return GetPositions(a.Mode, a.Begin, a.End);
-            //switch (a.Mode)
-            //{
-            //    case Modes.Single:
-            //        return ToolDrawingSingle.GetPositions(a.Begin, a.End);
-
-            //    case Modes.Line:
-            //        return ToolDrawingLine.GetPositions(a.Begin, a.End);
-
-            //    case Modes.Enclosure:
-            //        return ToolDrawingEnclosure.GetPositions(a.Begin, a.End);
-
-            //    default:
-            //        return new List<Vector3>();
-            //}
         }
         public Args Send(Modes mode, Vector3 start, Vector3 end, int orientation)// = 0)
         {
@@ -388,7 +255,7 @@ namespace Start_a_Town_.Modules.Construction
 
         private static bool IsGodMode()
         {
-            return false;// InputState.IsKeyDown(System.Windows.Forms.Keys.LMenu);
+            return false;
         }
         protected override void WriteData(BinaryWriter w)
         {
@@ -400,7 +267,5 @@ namespace Start_a_Town_.Modules.Construction
             this.Enabled = r.ReadBoolean();
             this.Begin = r.ReadVector3();
         }
-
-       
     }
 }

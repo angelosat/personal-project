@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.GameModes;
-using Start_a_Town_.Components.Particles;
-using Start_a_Town_.GameEvents;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Particles
@@ -62,10 +56,6 @@ namespace Start_a_Town_.Particles
                     this.EntityFootStep(e);
                     break;
 
-                //case Components.Message.Types.ParticleEmitterAdd:
-                //    //this.AddEmitter(e.Parameters[0] as ParticleEmitter);
-                //    break;
-
                 default:
                     break;
             }
@@ -76,10 +66,9 @@ namespace Start_a_Town_.Particles
             var entity = e.Parameters[0] as GameObject;
             var vector3 = (Vector3)e.Parameters[1];
             var block = entity.Map.GetBlock(vector3);
-            var emitter = block.GetEmitter();//.GetDustEmitter();
-            emitter.Source = entity.Global;// +Vector3.UnitZ;
-            //emitter.Lifetime = Engine.TargetFps * .1f;
-            emitter.Emit(10);//, -parent.Velocity * .1f);
+            var emitter = block.GetEmitter();
+            emitter.Source = entity.Global;
+            emitter.Emit(10);
             this.Emitters.Add(emitter);
         }
 
@@ -88,20 +77,18 @@ namespace Start_a_Town_.Particles
             var entity = e.Parameters[0] as GameObject;
             var vector3 = (Vector3)e.Parameters[1];
             var block = entity.Map.GetBlock(vector3);
-            var emitter = block.GetEmitter();//.GetDustEmitter();
-            emitter.Source = new Vector3(vector3.XY(), (float)Math.Floor(vector3.Z) - .1f);// +Vector3.UnitZ;
-            //emitter.Lifetime = Engine.TargetFps * .1f;
-            emitter.Emit(10);//, -parent.Velocity * .1f);
+            var emitter = block.GetEmitter();
+            emitter.Source = new Vector3(vector3.XY(), (float)Math.Floor(vector3.Z) - .1f);
+            emitter.Emit(10);
             this.Emitters.Add(emitter);
         }
 
         void EntityFootStep(GameEvent e)
         {
             var entity = e.Parameters[0] as GameObject;
-            //var block = entity.Map.GetBlock(entity.Global - .01f * Vector3.UnitZ);
             var vec = new Vector3(entity.Global.X, entity.Global.Y, (int)Math.Ceiling(entity.Global.Z) - 1);
             var block = entity.Map.GetBlock(vec);
-            var emitter = block.GetEmitter();//.GetDustEmitter();
+            var emitter = block.GetEmitter();
             emitter.Source = entity.Global;
             emitter.Emit(10, -entity.Velocity * .1f);
             this.Emitters.Add(emitter);

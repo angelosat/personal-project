@@ -78,5 +78,24 @@ namespace Start_a_Town_
             };
             return c;
         }
+        static public bool TryParseColor(this string text, out Color color)
+        {
+            var posFrom = text.IndexOf('{');
+            if (posFrom != -1)
+            {
+                var posTo = text.IndexOf('}', posFrom + 1);
+                if (posFrom != -1)
+                {
+                    var sub = text.Substring(posFrom + 1, posTo - posFrom - 1);
+                    var elements = sub.Split(' ');
+                    var values = elements.Select(e => int.Parse(e.Split(':')[1])).ToArray();
+                    color = new Color(values[0], values[1], values[2], values[3]);
+                    return true;
+                }
+            }
+            color = Color.White;
+            return false;
+        }
+
     }
 }

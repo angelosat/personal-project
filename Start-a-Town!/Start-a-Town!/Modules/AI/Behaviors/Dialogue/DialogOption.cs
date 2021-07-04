@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Net;
-using Start_a_Town_.AI;
+﻿using Start_a_Town_.Net;
+using System;
 
 namespace Start_a_Town_.AI.Behaviors
 {
+    [Obsolete]
     public class DialogOption
     {
         public string Value;
@@ -18,21 +14,8 @@ namespace Start_a_Town_.AI.Behaviors
             this.Target = target;
         }
 
-        //public void Select(GameObject speaker)
-        //{
-        //    // net send selection
-        //    byte[] data = Network.Serialize(w =>
-        //    {
-        //        w.Write((int)AIPacketHandler.Channels.DialogueOption);
-        //        w.Write(speaker.InstanceID);
-        //        w.Write(this.Target.InstanceID);
-        //        w.Write(this.Value);
-        //    });
-        //    Client.Instance.Send(PacketType.AI, data);
-        //}
         static public void Select(GameObject speaker, GameObject target, string text)
         {
-            // net send selection
             byte[] data = Network.Serialize(w =>
             {
                 w.Write((int)AIPacketHandler.Channels.DialogueOption);

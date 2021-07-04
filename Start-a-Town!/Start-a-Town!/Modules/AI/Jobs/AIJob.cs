@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_.AI
 {
+    [Obsolete]
     public class AIJob : ICloneable
     {
         public enum States { Default, GeneratingPlan, CalculatingPaths, Ready, Inaccessible }

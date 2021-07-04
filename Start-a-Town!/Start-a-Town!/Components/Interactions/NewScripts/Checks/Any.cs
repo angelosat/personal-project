@@ -46,18 +46,5 @@ namespace Start_a_Town_
             foreach (var item in this.Children)
                 item.AIInit(agent, target, state);
         }
-
-        public override bool AITrySolve(GameObject agent, TargetArgs target, AIState state, List<AIInstruction> solution)
-        {
-            foreach (var cond in this.Children)
-            {
-                if (cond.Condition(agent, target))
-                    return true;
-                else
-                    if (cond.AITrySolve(agent, target, state, solution))
-                        return true;
-            }
-            return false;
-        }
     }
 }

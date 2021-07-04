@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.PlayerControl;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 
@@ -14,16 +11,8 @@ namespace Start_a_Town_.Modules.Crafting.UI
     class CraftInterfaceNew : GroupBox
     {
         static CraftInterfaceNew _Instance;
-        public static CraftInterfaceNew Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new CraftInterfaceNew();
-                return _Instance;
-            }
-        }
-
+        public static CraftInterfaceNew Instance => _Instance ??= new CraftInterfaceNew();
+      
         Panel Panel_Selected;
         ReagentPanel Panel_Reagents;
         Button Btn_Build;
@@ -31,18 +20,16 @@ namespace Start_a_Town_.Modules.Crafting.UI
         
         CraftInterfaceNew()
         {
-            //Client.Instance.GameEvent += Client_GameEvent;
             this.AutoSize = true;
 
             var list = new ListBox<Reaction, Button>(new Rectangle(0, 0, 150, 200));
             Panel_Selected = new Panel();
 
             Panel_Reagents = new ReagentPanel() { ClientSize = list.Size, Callback = RefreshSelectedPanel };
-            //Panel_Reagents.ClientSize = list.Size;
 
             List<GameObjectSlot> matSlots = new List<GameObjectSlot>();
             Reaction selected = null;
-            Action refreshBpList = () =>
+            void refreshBpList()
             {
                 list.Build(GetAvailableBlueprints(), foo => foo.Name, (r, btn) =>
                 {
@@ -50,28 +37,25 @@ namespace Start_a_Town_.Modules.Crafting.UI
                     {
                         selected = r;
                         this.SelectedReaction = r;
-                        //RefreshMaterialPicking(r);
-                        //this.Panel_Reagents.Refresh(r);
                         this.Panel_Reagents.Refresh(r, PlayerOld.Actor.GetComponent<PersonalInventoryComponent>().GetContents());
                     };
                 });
-            };
+            }
             refreshBpList();
 
-
             RadioButton
-                rd_All = new RadioButton("All", Vector2.Zero, true)
+                rd_All = new("All", Vector2.Zero, true)
                 {
                     LeftClickAction = () =>
                     {
                         refreshBpList();
                     }
                 },
-                rd_MatsReady = new RadioButton("Have Materials", rd_All.TopRight)
+                rd_MatsReady = new("Have Materials", rd_All.TopRight)
                 {
                     LeftClickAction = () =>
                     {
-                        //list.Build(GetAvailableBlueprints(parent).FindAll(foo => BlueprintComponent.MaterialsAvailable(foo, this.Slots)), foo => foo.Name, RecipeListControlInitializer(panel_Selected));
+                        // TODO
                     }
                 };
 

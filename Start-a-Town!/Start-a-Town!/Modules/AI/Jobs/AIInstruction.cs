@@ -131,36 +131,6 @@ namespace Start_a_Town_.AI
         //    return true;// steps.Count == 0;
         //}
 
-        public bool FindPlan(GameObject agent, TargetArgs target, AIState state, List<AIInstruction> steps)
-        {
-            var successfulConditions = new List<ScriptTaskCondition>();
-            var root = this.Interaction.Conditions.Root;
-            if (root.Condition(agent, target))
-                return true;
-            return root.AITrySolve(agent, target, state, steps);
-
-            //var conditions = this.Interaction.Conditions.GetChildren();//.GetConditions();
-            //foreach (var cond in conditions)
-            //{
-            //    // if condition evaluates, continue, otherwise try to get instruction and if it's null, return
-            //    if (cond.Condition(agent, target))
-            //    {
-            //        successfulConditions.Add(cond);
-            //        continue;
-            //    }
-            //    AIInstruction instruction;
-            //    if (cond.AITrySolve(agent, target, state, out instruction))
-            //        continue;
-
-            //    // if the condition didn't evaluate and it did output null, it didn't find a solution so return null
-            //    if (instruction == null)
-            //        return false;
-            //    if (!instruction.FindPlan(agent, target, state, steps))
-            //        return false;
-            //    steps.Add(instruction);
-            //}
-            //return true;
-        }
 
         public void Write(BinaryWriter w)
         {

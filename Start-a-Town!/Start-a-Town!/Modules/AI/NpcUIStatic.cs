@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
-using Start_a_Town_.Components.Needs;
-using Start_a_Town_.Components.AI;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.UI;
 using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.AI
@@ -15,15 +6,7 @@ namespace Start_a_Town_.AI
     class NpcUIStatic : GroupBox
     {
         static NpcUIStatic _Instance;
-        public static NpcUIStatic Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new NpcUIStatic();
-                return _Instance;
-            }
-        }
+        public static NpcUIStatic Instance => _Instance ??= new NpcUIStatic();
 
         public Actor Npc;
         NeedsUI Needs;
@@ -42,8 +25,7 @@ namespace Start_a_Town_.AI
         public NpcUIStatic()
         {
             this.PanelTask = new Panel() { AutoSize = true };
-            //var aistate = AIState.GetState(npc);
-            this.LabelTask = new Label("Task: ");// { TextFunc = () => aistate.ToString() };
+            this.LabelTask = new Label("Task: ");
             this.PanelTask.Controls.Add(this.LabelTask);
 
             this.PanelNeeds = new Panel() { AutoSize = true, Location = this.PanelTask.BottomLeft };
@@ -62,24 +44,14 @@ namespace Start_a_Town_.AI
             this.SkillsUI = new GroupBox();
             this.PanelSkills.AddControls(this.SkillsUI);
 
-
-
             this.Buttons = new Panel() { AutoSize = true, Location = this.PanelNeeds.BottomLeft };
-            //this.Log = new NpcLogUINew(this.Npc);
-            //var winlog = this.Log.ToWindow(Npc.Name + "'s Log");
             this.Log = new NpcLogUINew();
-            var btnlog = new Button("Log", this.PanelNeeds.ClientSize.Width);// { LeftClickAction = () => ShowLog(winlog) };
+            var btnlog = new Button("Log", this.PanelNeeds.ClientSize.Width);
 
-            //var winPersonality = AIState.GetState(npc).Personality.GetUI().ToWindow(Npc.Name + "'s Personality");
-            var btnpersonality = new Button("Personality", this.PanelNeeds.ClientSize.Width);// { Location = btnlog.BottomLeft, LeftClickAction = () => winPersonality.ToggleSmart() };
+            var btnpersonality = new Button("Personality", this.PanelNeeds.ClientSize.Width);
             this.PersonalityUI = new PersonalityUI();
 
             this.Buttons.AddControls(btnlog, btnpersonality);
-
-            //this.AddControls(this.PanelTask, this.PanelNeeds,
-            //    this.PanelStats,
-            //    this.PanelInventory,
-            //    this.Buttons);
 
             var paneltbs = new PanelTabs(400, 250);
             paneltbs
@@ -97,7 +69,7 @@ namespace Start_a_Town_.AI
         public NpcUIStatic(Actor npc)
         {
             this.PanelTask = new Panel() { AutoSize = true };
-            var aistate = AIState.GetState(npc);// npc.GetComponent<AIComponent>().State;
+            var aistate = AIState.GetState(npc);
             var labeltask = new Label("Task: ") { TextFunc = () => aistate.ToString() };
             this.PanelTask.Controls.Add(labeltask);
 
@@ -114,23 +86,15 @@ namespace Start_a_Town_.AI
             var statsui = new StatsInterface(npc);
             this.PanelStats.AddControls(statsui);
             
-
             this.Buttons = new Panel() { AutoSize = true, Location = this.PanelNeeds.BottomLeft };
             this.Log = new NpcLogUINew(this.Npc);
             var winlog = this.Log.ToWindow(Npc.Name + "'s Log");
             var btnlog = new Button("Log", this.PanelNeeds.ClientSize.Width) { LeftClickAction = () => ShowLog(winlog) };
 
-            //var winPersonality = AIState.GetState(npc).Personality.GetUI().ToWindow(Npc.Name + "'s Personality");
             var winPersonality = npc.Personality.GetUI().ToWindow(Npc.Name + "'s Personality");
             var btnpersonality = new Button("Personality", this.PanelNeeds.ClientSize.Width) { Location = btnlog.BottomLeft, LeftClickAction = () => winPersonality.ToggleSmart() };
 
-
-            
-
             this.Buttons.AddControls(btnlog, btnpersonality);
-
-
-   
 
             this.AddControls(this.PanelTask, this.PanelNeeds,
                 this.PanelStats,
@@ -138,7 +102,6 @@ namespace Start_a_Town_.AI
                 this.Buttons);
 
             GameMode.Current.OnUIEvent(UIManager.Events.NpcUICreated, this);
-
         }
         public void Refresh(Actor npc)
         {
@@ -151,7 +114,6 @@ namespace Start_a_Town_.AI
             this.StatsUI.Refresh(npc);
             this.PersonalityUI.Refresh(npc as Actor);
             this.SkillsUI.ClearControls();
-            //NpcSkillsComponent.GetUI(npc, this.SkillsUI);
             this.SkillsUI.AddControls(NpcSkillsComponent.GetGUI(npc));
 
             this.PanelNeeds.Location = this.PanelTask.BottomLeft;
@@ -160,10 +122,6 @@ namespace Start_a_Town_.AI
             this.PanelSkills.Location = this.PanelStats.TopRight;
 
             this.Buttons.Location = this.PanelNeeds.BottomLeft;
-
-            //var win = this.GetWindow();
-            //this.Refresh();
-            //win.Client.Refresh();
         }
         internal override void OnGameEvent(GameEvent e)
         {

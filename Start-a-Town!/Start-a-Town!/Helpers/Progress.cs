@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 using System.Globalization;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -69,18 +64,17 @@ namespace Start_a_Town_
         protected virtual void SaveExtra(SaveTag tag) { }
         public void Load(SaveTag tag)
         {
-            this.Min = tag.GetValue<float>("Min");// tag.TagValueOrDefault<float>("Min", 0);
-            this.Max = tag.GetValue<float>("Max");//tag.TagValueOrDefault<float>("Max", 0);
-            this.Value = tag.GetValue<float>("Value");//tag.TagValueOrDefault<float>("Value", 0);
-            //return this;
+            this.Min = tag.GetValue<float>("Min");
+            this.Max = tag.GetValue<float>("Max");
+            this.Value = tag.GetValue<float>("Value");
             this.LoadExtra(tag);
         }
         protected virtual void LoadExtra(SaveTag tag) { }
         public Progress(SaveTag tag)
         {
-            this.Min = tag.GetValue<float>("Min");//tag.TagValueOrDefault<float>("Min", 0);
-            this.Max = tag.GetValue<float>("Max");//tag.TagValueOrDefault<float>("Max", 0);
-            this.Value = tag.GetValue<float>("Value");//tag.TagValueOrDefault<float>("Value", 0);
+            this.Min = tag.GetValue<float>("Min");
+            this.Max = tag.GetValue<float>("Max");
+            this.Value = tag.GetValue<float>("Value");
         }
 
         public Progress(Progress toCopy)

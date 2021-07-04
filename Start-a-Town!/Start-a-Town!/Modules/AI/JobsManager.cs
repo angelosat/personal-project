@@ -151,7 +151,7 @@ namespace Start_a_Town_.AI
             //this.PanelTable = new Panel() { AutoSize = true };
             foreach (var labor in JobDefOf.All)
             {
-                var ic = labor.GetIcon();
+                var ic = labor.Icon;
 
                 var icon = new PictureBox(ic.SpriteSheet, ic.SourceRect) { HoverText = labor.Name };//, BackgroundColorFunc = ()=>Color.White *.5f };
                 var iconManual = new PictureBox(ic.SpriteSheet, ic.SourceRect) { HoverText = labor.Name };//, BackgroundColorFunc = ()=>Color.White *.5f };

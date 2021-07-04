@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
-using Start_a_Town_.Net.Packets;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Modules.Base
@@ -37,11 +30,9 @@ namespace Start_a_Town_.Modules.Base
             PacketEntityRequestDispose.Init();
             PacketEntityRequestSpawn.Init();
 
-            //PacketEntitySpawn.Init();
             PacketEntityDespawn.Init();
 
             PacketPlayerDisconnected.Init();
-            //PacketServerHandshake.Init();
         }
 
         public override void InitHUD(Hud hud)

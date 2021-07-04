@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
     class ToolDrawingSingle : ToolDrawing
     {
-        public override string Name
-        {
-            get { return "Single"; }
-        }
+        public override string Name => "Single";
         public override Modes Mode { get { return Modes.Single; } }
         public ToolDrawingSingle()
         {

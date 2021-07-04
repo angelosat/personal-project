@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
-    class PanelLabeledNew : Panel
+    public class PanelLabeledNew : Panel
     {
         public Label Label;
         public GroupBox Client;

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Components.Physics;
-using Start_a_Town_.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 
@@ -17,13 +13,13 @@ namespace Start_a_Town_.Particles
     {
         public List<Particle> Particles = new List<Particle>();
         public Random Random = new Random();
-        public float Radius;// = 0.2f;
+        public float Radius;
         public Vector3 Offset = Vector3.Zero;
-        public float ParticleWeight;// = 0;
+        public float ParticleWeight;
         public float Lifetime = Engine.TicksPerSecond;
         public float Friction = 0.5f;
         int _Rate = 1;
-        public int Rate// = 1;
+        public int Rate
         {
             get
             {
@@ -49,12 +45,8 @@ namespace Start_a_Town_.Particles
             return this;
         }
 
-        //public Texture2D Texture = UI.UIManager.Highlight;
-        //public Rectangle SourceRectangle = new Rectangle(0, 0, 1, 1);
-        //public Texture2D Texture { get { return this.Atlas.Texture; } }// Block.ParticlePixel.Atlas.Texture;
         public Texture2D Texture = Block.ParticlePixel.Atlas.Texture;
-        //public AtlasBase Atlas = Block.ParticlePixel.Atlas;
-        public Rectangle SourceRectangle = Block.ParticlePixel.Rectangle;//new Rectangle(0, 0, 1, 1);
+        public Rectangle SourceRectangle = Block.ParticlePixel.Rectangle;
 
         public Vector3 Source;
 
@@ -84,37 +76,20 @@ namespace Start_a_Town_.Particles
                 this.Update();
                 return;
             }
-            //var global = this.Global;
             foreach (var p in this.Particles.ToList())
             {
                 if (p.Lifetime <= 0)
                     this.Particles.Remove(p);
-                //var adjustment = new Vector3(0, 0, PhysicsComponent.Gravity * this.ParticleWeight);
-                //p.Update(adjustment);
-
-                //if (HasPhysics)
-                //{
                     var pos = global + this.Offset + p.Offset;
                     Vector3 nextpos, nextvel;
                     Physics.Update(this.ParticleWeight, this.Friction, map, pos, p.Velocity*this.Acceleration, out nextpos, out nextvel);
                     p.Offset = nextpos - global - this.Offset;
                     p.Velocity = nextvel;
-                //}
-                //else
-                //{
-                //    var adjustment = new Vector3(0, 0, PhysicsComponent.Gravity * this.ParticleWeight);
-                //    p.Velocity += adjustment;
-                //    p.Offset += p.Velocity;
-                //}
-
-
+             
                 p.Update();
             }
 
-            //for (int i = 0; i < this.Rate; i++)
-            //{
-                Emit(this.Rate);
-            //}
+            Emit(this.Rate);
         }
         /// <summary>
         /// Update particles without physics
@@ -148,14 +123,12 @@ namespace Start_a_Town_.Particles
                 var scalevariance = (float)this.Random.NextDouble() * this.SizeVariance * 2;
                 scalevariance -= (this.SizeVariance / 2f);
 
-                //var particle = new Particle(startOffset, startVelocity, this.Lifetime) { ScaleFunc = p => p.LifePercentage * 3, ColorFunc = p => Color.Lerp(Color.Red, Color.Yellow, p.LifePercentage) };
                 var particle = new Particle(startOffset, startVelocity + force, this.Lifetime)
                 {
-                    //ScaleFunc = p => p.LifePercentage * 3,
                     ScaleFunc = p =>
                     {
                         return (this.SizeBegin + scalevariance) * p.LifePercentage + (this.SizeEnd + scalevariance) * (1 - p.LifePercentage);
-                    },// Size p.LifePercentage * 3,
+                    },
                     ColorFunc = p => Color.Lerp(this.ColorEnd, this.ColorBegin, p.LifePercentage),
                     Texture = this.Texture,
                     SourceRectangle = this.SourceRectangle,
@@ -177,14 +150,12 @@ namespace Start_a_Town_.Particles
                 var scalevariance = (float)this.Random.NextDouble() * this.SizeVariance * 2;
                 scalevariance -= (this.SizeVariance / 2f);
 
-                //var particle = new Particle(startOffset, startVelocity, this.Lifetime) { ScaleFunc = p => p.LifePercentage * 3, ColorFunc = p => Color.Lerp(Color.Red, Color.Yellow, p.LifePercentage) };
                 var particle = new Particle(startOffset, startVelocity + force, this.Lifetime)
                 {
-                    //ScaleFunc = p => p.LifePercentage * 3,
                     ScaleFunc = p =>
                     {
                         return (this.SizeBegin + scalevariance) * p.LifePercentage + (this.SizeEnd + scalevariance) * (1 - p.LifePercentage);
-                    },// Size p.LifePercentage * 3,
+                    },
                     ColorFunc = p => Color.Lerp(this.ColorEnd, this.ColorBegin, p.LifePercentage),
                     Texture = texture,
                     SourceRectangle = rect,
@@ -195,17 +166,7 @@ namespace Start_a_Town_.Particles
             }
         }
         protected abstract Vector3 GetStartVelocity();
-        //{
-        //    double θ = this.Random.NextDouble() * (Math.PI + Math.PI);
-        //    double φ = this.Random.NextDouble() * (Math.PI);
-        //    float x = (float)(Math.Sin(φ) * Math.Cos(θ));
-        //    float y = (float)(Math.Sin(φ) * Math.Sin(θ));
-        //    float z = (float)Math.Cos(φ);
-        //    Vector3 direction = new Vector3(x, y, z);
-        //    direction.Normalize();
-        //    var startVelocity = direction * 0.01f;
-        //    return startVelocity;
-        //}
+        
         Vector3 GetStartOffset()
         {
             double θ = this.Random.NextDouble() * (Math.PI + Math.PI);
@@ -216,17 +177,10 @@ namespace Start_a_Town_.Particles
             return startOffset;
         }
 
-        //public void Draw(Camera cam, IMap map, Vector3 global)
-        //{
-        //    SortParticlesByDepth(cam, map);
-        //    foreach (var particle in this.Particles)
-        //        particle.Draw(cam, map, global + this.Offset);
-        //}
+       
         public void Draw(Camera cam, IMap map, Vector3 global)
         {
             // TODO: slow if many emmiters
-            //cam.ParticlesSpriteBatch.Device.Textures[0] = this.Atlas.Texture;
-            //cam.ParticlesSpriteBatch.Device.Textures[1] = this.Atlas.DepthTexture;
             SortParticlesByDepth(cam, map);
 
             // TODO: find better way to do this OPTIMIZE FIX
@@ -252,9 +206,6 @@ namespace Start_a_Town_.Particles
         }
 
         public abstract object Clone();
-        //{
-        //    return new ParticleEmitter(this.Offset, this.Lifetime, this.Radius, this.ParticleWeight);
-        //}
 
         static public ParticleEmitterSphere Fire
         {
@@ -280,7 +231,7 @@ namespace Start_a_Town_.Particles
         {
             get
             {
-                var emitter = new ParticleEmitterSphere() //DustEmitter.Clone() as ParticleEmitterSphere;
+                var emitter = new ParticleEmitterSphere() 
                 {
                     Lifetime = Engine.TicksPerSecond / 2f,
                     Offset = Vector3.Zero,

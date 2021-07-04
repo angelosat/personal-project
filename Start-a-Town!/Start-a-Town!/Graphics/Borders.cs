@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,9 +12,9 @@ namespace Start_a_Town_.Graphics
         {
             var gfx = Game1.Instance.GraphicsDevice;
 
-            SpriteBatch sb = new SpriteBatch(gfx);
+            SpriteBatch sb = new(gfx);
 
-            RenderTarget2D next = new RenderTarget2D(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
+            RenderTarget2D next = new(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
             gfx.SetRenderTarget(next);
             gfx.Clear(Color.Transparent);
 
@@ -36,29 +32,23 @@ namespace Start_a_Town_.Graphics
                 sb.Draw(texture, (Vector2.One - tempVect) * Thickness, Color.Red);
             }
             sb.End();
-            //blur.CurrentTechnique.Passes["Pass2"].Apply();
-            //sb.Begin(0, null, null, null, null, blur);
             blur.CurrentTechnique = blur.Techniques["Technique2"];
             blur.CurrentTechnique.Passes["Pass1"].Apply();
             sb.Begin(0, BlendState.Opaque, null, null, null, blur);
-            //BlendState blend = new BlendState();
-            //blend.AlphaDestinationBlend = Blend.Zero;
-            //sb.Begin();//0, blend);
             sb.Draw(texture, Vector2.One * Thickness, Color.White);
             sb.End();
 
             gfx.SetRenderTarget(null);
             return next;
-
         }
 
         public static Texture2D GenerateDepthTexture(Texture2D texture, float layer = 0.5f) // default value is the object rests at the center of the block
         {
             var gfx = Game1.Instance.GraphicsDevice;
 
-            SpriteBatch sb = new SpriteBatch(gfx);
+            SpriteBatch sb = new(gfx);
 
-            RenderTarget2D next = new RenderTarget2D(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
+            RenderTarget2D next = new(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
             gfx.SetRenderTarget(next);
             gfx.Clear(Color.Transparent);
 
@@ -109,9 +99,9 @@ namespace Start_a_Town_.Graphics
         {
             var gfx = Game1.Instance.GraphicsDevice;
 
-            SpriteBatch sb = new SpriteBatch(gfx);
+            SpriteBatch sb = new(gfx);
 
-            RenderTarget2D next = new RenderTarget2D(gfx, texture.Width, texture.Height);
+            RenderTarget2D next = new(gfx, texture.Width, texture.Height);
             gfx.SetRenderTarget(next);
             gfx.Clear(Color.Transparent);
 

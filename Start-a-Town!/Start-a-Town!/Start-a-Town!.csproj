@@ -225,6 +225,10 @@
     <Compile Include="Control\MouseoverEventArgs.cs" />
     <Compile Include="Engine\Camera\BlockBorderToken.cs" />
     <Compile Include="Engine\Camera\LightToken.cs" />
+    <Compile Include="Graphics\Atlas.Node.Token.cs" />
+    <Compile Include="Graphics\AtlasDepthNormals.Node.Token.cs" />
+    <Compile Include="Graphics\AtlasWithDepth.Node.Token.cs" />
+    <Compile Include="Graphics\MouseMap.cs" />
     <Compile Include="Helpers\GraphHelper.cs" />
     <Compile Include="Helpers\NetworkHelper.cs" />
     <Compile Include="Helpers\PathingHelper.cs" />
@@ -720,7 +724,7 @@
     <Compile Include="Graphics\AtlasBase.cs" />
     <Compile Include="Graphics\IAtlasNodeToken.cs" />
     <Compile Include="Animations\Joint.cs" />
-    <Compile Include="Graphics\NodeDepthNormals.cs" />
+    <Compile Include="Graphics\AtlasDepthNormals.Node.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Modules\AI\AIManager.cs" />
     <Compile Include="Modules\AI\AITarget.cs" />
@@ -1082,9 +1086,8 @@
     <Compile Include="Graphics\Atlas.cs" />
     <Compile Include="Animations\BodyTemplates.cs" />
     <Compile Include="Graphics\Borders.cs" />
-    <Compile Include="Graphics\Blur.cs" />
-    <Compile Include="Graphics\NodeWithDepth.cs" />
-    <Compile Include="Graphics\Node.cs" />
+    <Compile Include="Graphics\AtlasWithDepth.Node.cs" />
+    <Compile Include="Graphics\Atlas.Node.cs" />
     <Compile Include="Interfaces\IDebuggable.cs" />
     <Compile Include="Interfaces\IGameComponent.cs" />
     <Compile Include="Interfaces\IProgressBar.cs" />

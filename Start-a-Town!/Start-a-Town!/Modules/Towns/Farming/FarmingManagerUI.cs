@@ -1,111 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
-using Start_a_Town_.Towns;
-using Start_a_Town_.Net;
-using Start_a_Town_.Towns.Farming;
+﻿using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Towns.Farming
 {
     class FarmingManagerUI : GroupBox
     {
-        FarmingManager Manager;
         IconButton BtnDesignate;
         Panel PanelList;
-        //ListBox<Farmland, Label> ListFarms;
-        //Dictionary<Farmland, Window> OpenWindows = new Dictionary<Farmland, Window>();
 
         public FarmingManagerUI(FarmingManager manager)
         {
-            this.Manager = manager;
-
             this.PanelList = new Panel() { AutoSize = true };
-            //this.ListFarms = new ListBox<Farmland, Label>(80, 150);
-            //RefreshFarmList();
-            //this.PanelList.AddControls(this.ListFarms);
 
             this.BtnDesignate = new IconButton()
             {
                 BackgroundTexture = UIManager.DefaultIconButtonSprite,
                 Icon = new Icon(UIManager.Icons32, 12, 32),
-                HoverFunc = () => "Designate farmland\n\nLeft click & drag: Add farmland\nCtrl+Left click: Remove farmland",// "Add/Remove stockpiles",
-                LeftClickAction = () => ZoneNew.Edit(typeof(GrowingZone))// GrowingZone.Edit
-                    //() => ToolManager.SetTool(new ToolDesignateZone(manager.Town, typeof(GrowingZone)))
-                    ,
+                HoverFunc = () => "Designate farmland\n\nLeft click & drag: Add farmland\nCtrl+Left click: Remove farmland",
+                LeftClickAction = () => ZoneNew.Edit(typeof(GrowingZone)),
                 Location = this.PanelList.TopRight
             };
-            //var btnForage = new IconButton()
-            //{
-            //    BackgroundTexture = UIManager.DefaultIconButtonSprite,
-            //    Icon = new Icon(UIManager.Icons32, 12, 32),
-            //    HoverFunc = () => "Designate forage zone\n\nLeft click & drag: Create\nCtrl+Left click: Remove",// "Add/Remove stockpiles",
-            //    LeftClickAction = () => ScreenManager.CurrentScreen.ToolManager.ActiveTool = new ToolZoningPositions(
-            //        CreateForaging
-            //    , manager.Town.FarmingManager.GetPositions),// manager.Town.GetZones
-            //    Location = this.BtnDesignate.BottomLeft
-            //};
-            this.Controls.Add(this.PanelList, this.BtnDesignate);//, btnForage);
+            this.Controls.Add(this.PanelList, this.BtnDesignate);
         }
-
-       
-
-        //private static void CreateFarm(Vector3 global, int w, int h, bool remove)
-        //{
-        //    Client.Instance.Send(PacketType.FarmCreate, new PacketCreateFarmland(PlayerOld.Actor.RefID, 0, global, w, h, remove).Write());
-        //}
-
-        //internal override void OnGameEvent(GameEvent e)
-        //{
-        //    switch (e.Type)
-        //    {
-        //        case Components.Message.Types.FarmCreated:
-        //            //var farm = e.Parameters[0] as Farmland;
-        //            //FloatingText.Manager.Create(() => farm.Positions.First(), "Farm created", ft => ft.Font = UIManager.FontBold);
-        //            //RefreshFarmList();
-        //            //OpenFarm(farm);
-        //            var zone = e.Parameters[0] as GrowingZone;
-        //            FloatingText.Manager.Create(() => zone.Tasks.Keys.First(), "Farm created", ft => ft.Font = UIManager.FontBold);
-        //            //RefreshFarmList();
-        //            break;
-
-        //        case Components.Message.Types.FarmRemoved:
-        //            //RefreshFarmList();
-        //            //Window win;
-        //            //var farm = e.Parameters[0] as Farmland;
-        //            //if (this.OpenWindows.TryGetValue(farm, out win))
-        //            //    win.Hide();
-        //            //this.OpenWindows.Remove(farm);
-        //            //ScreenManager.CurrentScreen.ToolManager.ActiveTool = null;
-        //            //FloatingText.Manager.Create(() => farm.Positions.First(), "Farm deleted", ft => ft.Font = UIManager.FontBold);
-
-        //            //RefreshFarmList();
-        //            //Window win;
-        //            //var growzone = e.Parameters[0] as GrowingZone;
-        //            ////if (this.OpenWindows.TryGetValue(growzone, out win))
-        //            ////    win.Hide();
-        //            ////this.OpenWindows.Remove(growzone);
-        //            //ScreenManager.CurrentScreen.ToolManager.ActiveTool = null;
-        //            //////FloatingText.Manager.Create(() => growzone.Tasks.First().Key, "Farm deleted", ft => ft.Font = UIManager.FontBold);
-        //            break;
-
-        //        //case Components.Message.Types.FarmSeedChanged:
-        //        //    var farm = e.Parameters[0] as Farmland;
-        //        //    var seed = e.Parameters[1] as GameObject;
-        //        //    FloatingText.Manager.Create(() => farm.Positions.First(), "Farm seed set to: " + (seed == null ? "None" : seed.Name), ft => ft.Font = UIManager.FontBold);
-        //        //    break;
-
-        //        //case Components.Message.Types.FarmUpdated:
-        //        //    this.RefreshFarmList();
-        //        //    break;
-
-
-        //        default:
-        //            break;
-        //    }
-        //}
     }
 }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI;
-using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.Towns.Forestry;
-using Start_a_Town_.Components;
+﻿using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -17,10 +9,10 @@ namespace Start_a_Town_
             if (!actor.HasLabor(JobDefOf.Lumberjack))
                 return null;
             var manager = actor.Map.Town.FarmingManager;
-            var trees = manager.GetChoppableTrees().Where(o => actor.CanReserve(o)).OrderByReachableRegionDistance(actor);// .OrderByDistanceTo(actor);
+            var trees = manager.GetChoppableTrees().Where(o => actor.CanReserve(o)).OrderByReachableRegionDistance(actor);
             if (!trees.Any())
                 return null;
-            var task = new AITask(typeof(TaskBehaviorChoppingNew));// AITaskChoppingNew();
+            var task = new AITask(typeof(TaskBehaviorChoppingNew));
             var equipped = actor.GetEquipmentSlot(GearType.Mainhand);
             if (!(equipped != null && equipped.ProvidesSkill(ToolAbilityDef.Chopping)))
                 task.Tool = TaskHelper.FindItemAnywhere(actor, o => o.ProvidesSkill(ToolAbilityDef.Chopping));

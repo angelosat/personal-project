@@ -8,6 +8,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Towns.Farming
 {
+    [Obsolete]
     class PacketFarmSync
     {
         //public static byte[] Write(int id, string name, int seedID, bool harvesting, bool planting)

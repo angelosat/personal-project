@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
@@ -14,6 +12,7 @@ namespace Start_a_Town_
         enum SelectionType { List, Box }
         static public void Init()
         {
+            // TODO
             Server.RegisterPacketHandler(PacketType.Designation, Receive);
             Client.RegisterPacketHandler(PacketType.Designation, Receive);
         }
@@ -21,7 +20,7 @@ namespace Start_a_Town_
         {
             var stream = net.GetOutgoingStream();
             stream.Write((int)PacketType.Designation);
-            stream.Write(designation.Name);//.GetType().FullName);
+            stream.Write(designation.Name);
             stream.Write(remove);
             stream.Write((int)SelectionType.List);
             stream.Write(targets);
@@ -30,7 +29,7 @@ namespace Start_a_Town_
         {
             var stream = net.GetOutgoingStream();
             stream.Write((int)PacketType.Designation);
-            stream.Write(designation.Name);//.GetType().FullName);
+            stream.Write(designation.Name);
             stream.Write(remove);
             stream.Write((int)SelectionType.Box);
             stream.Write(begin);
@@ -38,9 +37,7 @@ namespace Start_a_Town_
         }
         static public void Receive(IObjectProvider net, BinaryReader r)
         {
-            //var manager = net.Map.Town.DiggingManager;
             var typeName = r.ReadString();
-            //var designation = Activator.CreateInstance(Type.GetType(typeName)) as Designation;
             var designation = DesignationDef.Dictionary[typeName];
             var remove = r.ReadBoolean();
             var selectionType = (SelectionType)r.ReadInt32();
@@ -63,11 +60,7 @@ namespace Start_a_Town_
             else
                 throw new Exception();
 
-            //net.Map.Town.DesignationManager.Add(designation, positions, remove);
             net.EventOccured(Components.Message.Types.ZoneDesignation, designation, positions, remove);
-            //if (net is Server)
-            //    Send(net, designation, begin, end, remove);
         }
-        
     }
 }

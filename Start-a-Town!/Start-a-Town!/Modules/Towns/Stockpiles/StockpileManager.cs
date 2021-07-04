@@ -288,7 +288,6 @@ namespace Start_a_Town_.Towns
             if (removed)
             {
                 this.Stockpiles.Remove(stockpileID);
-                deleted.CancelJobs();
                 this.Town.Map.EventOccured(Components.Message.Types.StockpileDeleted, deleted);
 
                 return true;

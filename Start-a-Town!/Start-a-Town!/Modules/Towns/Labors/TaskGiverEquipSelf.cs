@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -47,9 +43,6 @@ namespace Start_a_Town_
                 {
                     if (job.Enabled)
                     {
-                        //var potentialTools = actor.Map.Find(i => i.Def.ToolProperties?.AssociatedJobs.Contains(j.Def) ?? false);
-                        //var potentialTools = actor.Map.Find(i => j.Def.AssociatedTools.Contains(i.Def.ToolProperties?.Ability.Def));
-                        //var potentialTools = actor.Map.Find(i => i.Def.ToolProperties?.Ability.Def is ToolAbilityDef tool && job.Def.AssociatedTools.Contains(tool));
                         var potentialTools = actor.Map.Find(i => i.Def.ToolProperties?.Ability.Def == toolUse);
 
                         var scoredTools = potentialTools.OrderByDescending(i => i.Def.ToolProperties.Ability.Efficiency);

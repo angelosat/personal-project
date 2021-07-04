@@ -37,13 +37,7 @@ namespace Start_a_Town_.Blocks
         {
             return data == 1;
         }
-        public override List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
-        {
-            var list = new List<Interaction>();
-            list.Add(new InteractionPlantSeed()); // commented out until i figure out how to seperate ai planting job on farmlands and player planting anywhere
-            list.Add(new Components.Vegetation.PlantableComponent.InteractionPlantNew());
-            return list;
-        }
+        
         public override void OnDrop(GameObject actor, GameObject dropped, TargetArgs target, int amount = -1)
         {
             if (dropped.HasComponent<SeedComponent>())
@@ -70,15 +64,6 @@ namespace Start_a_Town_.Blocks
             if (entity == null)
                 throw new Exception();
             entity.Sprout.Value -= entity.Sprout.Max * potency;
-        }
-        
-        internal override ContextAction GetContextRB(GameObject player, Vector3 global)
-        {
-            var hauled = PersonalInventoryComponent.GetHauling(player).Object;
-            if (hauled != null)
-                if (hauled.HasComponent<SeedComponent>())
-                    return new ContextAction(new InteractionPlantSeed()) { Shortcut = PlayerInput.RButton }; // commented out until i figure out how to seperate ai planting job on farmlands and player planting anywhere
-            return null;
         }
     }
 }

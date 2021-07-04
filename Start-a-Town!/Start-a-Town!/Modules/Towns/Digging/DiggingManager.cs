@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
-using Start_a_Town_.AI;
-using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.GameEvents;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Towns.Digging
 {
@@ -20,10 +15,7 @@ namespace Start_a_Town_.Towns.Digging
         {
             this.Town = town;
         }
-        public override string Name
-        {
-            get { return "Digging"; }
-        }
+        public override string Name => "Digging";
 
         internal HashSet<Vector3> GetPositions()
         {
@@ -49,33 +41,10 @@ namespace Start_a_Town_.Towns.Digging
             {
                 case PacketType.DiggingDesignate:
                     var p = new PacketDiggingDesignate(msg.Payload);
-
-                    var server = net as Server;
-                    var dx = p.End.X - p.Begin.X;
-                    var dy = p.End.Y - p.Begin.Y;
-                    var dz = p.End.Z - p.Begin.Z;
-
                     var positions = new BoundingBox(p.Begin, p.End).GetBox();
                     net.EventOccured(Components.Message.Types.MiningDesignation, positions, p.Remove);
                     net.Forward(msg);
                     break;
-
-                    //for (int i = 0; i <= dx; i++)// p.Width; i++)
-                    //    for (int j = 0; j <= dy; j++)//p.Height; j++)
-                    //        for (int k = 0; k <= dz; k++)
-                    //        {
-                    //            var offset = new Vector3(i, j, k);//0);
-                    //            var global = p.Begin + offset;
-                    //            if (!p.Remove)
-                    //                this.AddPosition(global);
-                    //            else
-                    //            {
-                    //                this.AllPositions.Remove(global);
-
-                    //            }
-                    //        }
-                    //net.Forward(msg);
-                    //break;
 
                 default:
                     break;
@@ -94,7 +63,6 @@ namespace Start_a_Town_.Towns.Digging
                     IMap map;
                     Vector3 global;
                     EventBlockChanged.Read(e.Parameters, out map, out global);
-                    //AITaskMining task;
                     HandleBlocksChanged(new Vector3[] {global});
                     break;
 
@@ -108,10 +76,6 @@ namespace Start_a_Town_.Towns.Digging
                         foreach (var p in positions)
                             this.HandlePosition(p);
                     break;
-
-                //case Components.Message.Types.ZoneDesignation:
-                //    this.Add(e.Parameters[0] as Designation, e.Parameters[1] as List<Vector3>, (bool)e.Parameters[2]);
-                //    break;
 
                 default:
                     break;
@@ -137,20 +101,11 @@ namespace Start_a_Town_.Towns.Digging
         {
             this.AllPositions.Remove(p);
         }
-        //public override List<AIJob> FindJob(GameObject actor)
-        //{
-        //    throw new Exception();
-        //}
         public HashSet<Vector3> GetAllPendingTasks()
         {
             return this.AllPositions;
         }
 
-        private void AddPosition(Vector3 global)
-        {
-            if(this.IsMinable(global))
-                this.AllPositions.Add(global);
-        }
         bool IsMinable(Vector3 global)
         {
             var material = Block.GetBlockMaterial(this.Town.Map, global);
@@ -204,15 +159,7 @@ namespace Start_a_Town_.Towns.Digging
         }
         public void Edit()
         {
-            //ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDiggingDesignate.Send(Client.Instance, a, b, r)));
-
             ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, DesignationDef.Mine, a, b, r)));
-
-
-            //ToolManager.SetTool(new ToolDesignate3D(
-            //        (a,b,r)=>PacketDiggingDesignate.Send(Client.Instance, a, b, r)
-            //    , this.Town.DiggingManager.GetAllPendingTasks().ToList// manager.Town.GetZones
-            //    ) { ValidityCheck = g => true });
         }
         public void EditDeconstruct()
         {

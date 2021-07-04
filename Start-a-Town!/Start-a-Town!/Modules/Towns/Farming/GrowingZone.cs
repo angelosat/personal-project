@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.AI;
-using Start_a_Town_.Components.Vegetation;
 using Start_a_Town_.Components;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
-using Start_a_Town_.Towns;
-using Start_a_Town_.Towns.Farming;
 
 namespace Start_a_Town_
 {

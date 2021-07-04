@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.AI;
-using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.AI.Behaviors.ItemOwnership;
-using Start_a_Town_.Towns.Digging;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -26,8 +17,6 @@ namespace Start_a_Town_
 
             if (!jobs.Any())
                 return TaskHelper.TryStoreEquipped(actor, GearType.Mainhand);
-
-            //var minDistance = float.MaxValue;
 
             foreach (var job in jobs) // TODO: check if another npc is standing on the target block to be digged
             {

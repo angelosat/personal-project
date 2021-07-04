@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.Towns.Housing;
-using Start_a_Town_.Towns.Stockpiles;
 
 namespace Start_a_Town_.Towns
 {
+    [Obsolete]
     class TownsPacketHandler : IServerPacketHandler, IClientPacketHandler
     {
         public enum Channels { CreateStockpile = 1, DeleteStockpile, AddJob, PlayerCreateHouse, AddHouse, PlayerRenameHouse, PlayerRemoveHouse }
@@ -20,21 +17,10 @@ namespace Start_a_Town_.Towns
 
         Dictionary<Channels, ServerHandler> ServerHandlers = new Dictionary<Channels, ServerHandler>()
         {
-            //{Channels.CreateStockpile, PacketCreateStockpile.Handle},
-            //{Channels.DeleteStockpile, PacketDeleteStockpile.Handle},
         };
         Dictionary<Channels, ClientHandler> ClientHandlers = new Dictionary<Channels, ClientHandler>()
         {
-            //{Channels.CreateStockpile, PacketCreateStockpile.Handle},
-            //{Channels.DeleteStockpile, PacketDeleteStockpile.Handle},
         };
-
-
-        //public void PlayerCreateStockpile(int entityID, Vector3 begin, int w, int h)
-        //{
-        //    byte[] data = Network.Serialize(new PacketCreateStockpile(entityID, 0, begin, w, h).Write);
-        //    Client.Instance.Send(PacketType.Towns, data);
-        //}
 
         internal static void PlayerCreateHouse(string name, Vector3 vector3)
         {
@@ -83,30 +69,13 @@ namespace Start_a_Town_.Towns
                 Channels channel = (Channels)r.ReadInt32();
                 switch (channel)
                 {
-                    //case Channels.CreateStockpile:
-                    //    var p = new PacketCreateStockpile(r);
-                    //    var stockpile = new Stockpile(p.Begin, p.Width, p.Height);
-                    //    var town = server.Map.GetTown();
-                    //    town.AddStockpile(stockpile);
-                    //    server.Enqueue(PacketType.Towns, packet.Payload, SendType.OrderedReliable);
-                    //    break;
-
-                    //case Channels.DeleteStockpile:
-                    //    var packetDeleteStockpile = new PacketDeleteStockpile(r);
-                    //    if (server.Map.GetTown().DeleteStockpile(packetDeleteStockpile.StockpileID))
-                    //        server.Enqueue(PacketType.Towns, packet.Payload, SendType.OrderedReliable);
-                    //    break;
-
                     case Channels.AddJob:
                         var addJob = new PacketAddJob();
                         addJob.Read(server, r);
-                        //var targetInteractions = addJob.Target.Object.GetInteractionsList();
-                        //var interaction = targetInteractions.FirstOrDefault(i => i.Name == addJob.InteractionName);
                         var interaction = addJob.Target.GetInteraction(server, addJob.InteractionName);
                         if (interaction == null)
                             return;
                         server.Map.GetTown().AddJob(new AI.AIJob(new AI.AIInstruction(addJob.Target, interaction)));
-                        //server.Enqueue(PacketType.Towns, packet.Payload, SendType.OrderedReliable);
                         break;
 
                     case Channels.PlayerCreateHouse:
@@ -157,39 +126,15 @@ namespace Start_a_Town_.Towns
             Channels channel = (Channels)r.ReadInt32();
             switch (channel)
             {
-                //case Channels.CreateStockpile:
-                //    //var creatorID = r.ReadInt32();
-                //    var p = new PacketCreateStockpile(r);
-                //    var stockpile = new Stockpile(p.Begin, p.Width, p.Height);// new Stockpile(r);
-                //    var town  =client.Map.GetTown();
-                //    town.AddStockpile(stockpile);
-                //    //client.Map.Town.AddStockpile(stockpile);
-                //    client.EventOccured(Components.Message.Types.StockpileCreated, stockpile);
-                //    break;
-
-                //case Channels.DeleteStockpile:
-                //    var packetDeleteStockpile = new PacketDeleteStockpile(r);
-                //    client.Map.GetTown().DeleteStockpile(packetDeleteStockpile.StockpileID);
-                //    break;
-
                 case Channels.AddJob:
                     var addJob = new PacketAddJob();
                     addJob.Read(client, r);
-                    //var targetInteractions = addJob.Target.Object.GetInteractionsList();
-                    //var interaction = targetInteractions.FirstOrDefault(i => i.Name == addJob.InteractionName);
                     var interaction = addJob.Target.GetInteraction(client, addJob.InteractionName);
                     if (interaction == null)
                         return;
                     client.Map.GetTown().AddJob(new AI.AIJob(new AI.AIInstruction(addJob.Target, interaction)));
                     break;
 
-                //case Channels.PlayerCreateHouse:
-                //    var actor = client.GetNetworkObject(r.ReadInt32());
-                //    var house = House.FloodFill(client.Map, r.ReadVector3());
-                //    if (house == null)
-                //        break;
-                //    client.Map.GetTown().AddHouse(house);
-                //    break;
                 case Channels.AddHouse:
                     var house = new House(client.Map.GetTown(), r);
                     client.Map.GetTown().AddHouse(house);
@@ -220,7 +165,5 @@ namespace Start_a_Town_.Towns
                     break;
             }
         }
-
-
     }
 }

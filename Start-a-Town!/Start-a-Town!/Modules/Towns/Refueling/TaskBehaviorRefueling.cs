@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI;
+﻿using System.Collections.Generic;
 using Start_a_Town_.AI.Behaviors;
 using Microsoft.Xna.Framework;
 
@@ -22,18 +17,11 @@ namespace Start_a_Town_
             };
             var extract = BehaviorHelper.ExtractNextTargetAmount(SourceIndex);
             yield return extract;
-            //yield return BehaviorHelper.InteractInInventoryOrWorld(SourceIndex, () => new Haul());
             yield return new BehaviorGetAtNewNew(SourceIndex).FailOn(failOnInvalidRefuelable).FailOnForbidden(SourceIndex);
             yield return BehaviorHelper.StartCarrying(SourceIndex, SourceIndex).FailOn(failOnInvalidRefuelable).FailOnForbidden(SourceIndex);
             yield return BehaviorHelper.JumpIfMoreTargets(extract, SourceIndex);
             yield return new BehaviorGetAtNewNew(DestinationIndex).FailOnNotCarrying().FailOn(failOnInvalidRefuelable);
             yield return new BehaviorInteractionNew(DestinationIndex,  () => new UseHauledOnTarget()).FailOnNotCarrying().FailOn(failOnInvalidRefuelable);
-            /*yield return BehaviorHelper.JumpIfMoreTargets(extract, SourceIndex); */// i jump here because the taskgiver finds items of multiple types. do i want this? answer: NO
-
-            /// old with only one fuel item set in the task
-            //yield return BehaviorHelper.InteractInInventoryOrWorld(TargetIndex.A, () => new Haul());
-            //yield return new BehaviorGetAtNewNew(TargetIndex.B, 1);
-            //yield return new BehaviorInteractionNew(TargetIndex.B, new UseHauledOnTarget());
         }
         protected override bool InitExtraReservations()
         {

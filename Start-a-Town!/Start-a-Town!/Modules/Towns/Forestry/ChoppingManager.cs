@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.AI;
 using Start_a_Town_.GameEvents;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Net.Packets;
 using Start_a_Town_.UI;
 using Start_a_Town_.Towns;
@@ -21,22 +17,12 @@ namespace Start_a_Town_
     public class ChoppingManager : TownComponent
     {
         public enum Types { Chopping, Foraging }
-        static public readonly Icon ChopIcon = new(ItemContent.AxeFull);// GameObject.Objects[ItemTemplate.Axe.GetID()].GetIcon();
-        static public readonly Icon ForageIcon = new(ItemContent.BerriesFull);// GameObject.Objects[GameObject.Types.Berries].GetIcon();
+        static public readonly Icon ChopIcon = new(ItemContent.AxeFull);
+        static public readonly Icon ForageIcon = new(ItemContent.BerriesFull);
 
-
-        public override string Name
-        {
-            get { return "Forestry"; }
-        }
+        public override string Name => "Forestry"; 
         readonly HashSet<int> QueuedForaging = new();
         
-        int GroveIDSequence = 1;
-        readonly Dictionary<int, Grove> Groves = new();
-        public List<Grove> GetGroves()
-        {
-            return this.Groves.Values.ToList();
-        }
         public List<GameObject> GetTrees()
         {
             var list = this.ChoppingTasks.Select(id => this.Town.Map.Net.GetNetworkObject(id)).ToList();
@@ -47,14 +33,13 @@ namespace Start_a_Town_
             var list = this.QueuedForaging.Select(id => this.Town.Map.Net.GetNetworkObject(id)).ToList();
             return list;
         }
-        readonly Dictionary<GameObject, ChopOrder> PendingForageOrders = new();
         public HashSet<int> ChoppingTasks = new();
 
         public List<Vector3> GetPositions()
         {
             var list = new List<Vector3>();
-            foreach (var tree in this.GetTrees())// this.QueuedTrees)
-                if (tree != null) //no idea why it's null when a tree just gets despawned // BECAUSE THE NETWORK RETURNS NULL FOR THE PARTICULAR INSTANCEID
+            foreach (var tree in this.GetTrees())
+                if (tree is null) //THE NETWORK RETURNS NULL FOR THE PARTICULAR INSTANCEID if disposed
                     list.Add(tree.Global.Round() - Vector3.UnitZ);
             return list;
         }
@@ -62,17 +47,16 @@ namespace Start_a_Town_
         {
             var list = new List<Vector3>();
             foreach (var plant in this.Town.Map.Net.GetNetworkObjects(this.QueuedForaging.ToArray()))
-                list.Add(plant.Global.Round());// - Vector3.UnitZ);
+                list.Add(plant.Global.Round());
             return list;
         }
 
         public ChoppingManager(Towns.Town town)
         {
-            // TODO: Complete member initialization
             this.Town = town;
         }
 
-        public override UI.GroupBox GetInterface()
+        public override GroupBox GetInterface()
         {
             return new ChoppingManagerUI(this);
         }
@@ -107,128 +91,10 @@ namespace Start_a_Town_
                     });
                     break;
 
-                case PacketType.ZoneGrove:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        PacketZone.Read(r, out int entityID, out int zoneID, out Vector3 begin, out int w, out int h, out bool remove);
-                        Grove grove;
-                        int groveID = zoneID;// 0;
-                        if (remove)
-                        {
-                            //grove = this.GetGroveAt(begin);
-                            //if (grove != null)
-                            if (zoneID != 0)
-                                this.RemoveGrove(entityID, zoneID);
-                            else
-                                this.RemoveGrove(entityID, begin);
-                        }
-                        else
-                        {
-                            //grove = this.GetGroveAt(begin);
-                            //if (grove != null)
-                            //{
-                            //    if (this.Town.Map.Net is Client)
-                            //    {
-                            //        grove.GetInterface().ToWindow("Grove " + grove.ID.ToString()).Show();
-                            //        return;
-                            //    }
-                            //}
-                            //else
-                            //{
-                            grove = new Grove(this, this.GroveIDSequence++, begin, w, h);
-                            groveID = grove.ID;
-                            AddGrove(entityID, grove);
-                            //}
-                        }
-                        if (net is Server server)
-                            server.Enqueue(PacketType.ZoneGrove, PacketZone.Write(entityID, groveID, begin, w, h, remove), SendType.OrderedReliable, true);
-                    });
-                    break;
-
-                case PacketType.GroveEdit:
-                    msg.Payload.Deserialize(r =>
-                        {
-                            //var id = r.ReadInt32();
-                            //var density = r.ReadSingle();
-                            int id;
-                            string name;
-                            float density;
-                            PacketGroveEdit.Read(r, out id, out name, out density);
-                            var grove = this.Groves[id];
-                            grove.Name = name;
-                            grove.TargetDensity = density;
-                            this.Town.Map.EventOccured(Message.Types.GroveEdited, grove);
-                            this.Town.Map.EventOccured(Message.Types.GrovesUpdated);
-
-                            var server = net as Server;
-                            if (server != null)
-                                server.Enqueue(PacketType.GroveEdit, msg.Payload, SendType.OrderedReliable, true);
-                        });
-                    break;
-
-                case PacketType.ForagingDesignate:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        PacketZone.Read(r, out int actorid, out int zoneid, out Vector3 start, out int w, out int h, out bool value);
-                        this.DesignateForaging(start, w, h, value);
-                    });
-                    break;
 
                 default:
                     break;
             }
-        }
-
-        private void DesignateForaging(Vector3 start, int w, int h, bool value)
-        {
-            foreach (var plant in this.Town.Net.GetNetworkObjects(this.QueuedForaging.ToArray()))
-                if (!plant.IsSpawned)
-                {
-                    this.QueuedForaging.Remove(plant.RefID);
-                    this.PendingForageOrders.Remove(plant);
-                }
-
-            var end = start + new Vector3(w - 1, h - 1, 0);
-            var plants = from entity in this.Town.Map.GetObjects(start + Vector3.UnitZ, end + Vector3.UnitZ)
-                         where entity.HasComponent<PlantComponent>()
-                         select entity;
-            foreach (var p in plants)
-            {
-                if (!value)
-                    this.QueuedForaging.Add(p.RefID);
-                else
-                {
-                    this.QueuedForaging.Remove(p.RefID);
-                    //CancelOrder(p);
-                }
-            }
-        }
-
-        private void AddGrove(int senderID, Grove grove)
-        {
-            this.Groves.Add(grove.ID, grove);
-            this.Town.Map.EventOccured(Message.Types.GrovesUpdated);
-            this.Town.Map.EventOccured(Message.Types.GroveAdded, senderID, grove);
-        }
-        private void RemoveGrove(int senderID, int groveID)
-        {
-            var grove = this.Groves[groveID];
-            this.Groves.Remove(groveID);
-            this.Town.Map.EventOccured(Message.Types.GrovesUpdated);
-            this.Town.Map.EventOccured(Message.Types.GroveRemoved, senderID, grove);
-        }
-        private void RemoveGrove(int senderID, Vector3 global)
-        {
-            var grove = this.GetGroveAt(global);
-            if (grove != null)
-                this.RemoveGrove(senderID, grove.ID);
-        }
-        public Grove GetGroveAt(Vector3 global)
-        {
-            foreach (var grove in this.Groves.Values.ToList())
-                if (grove.Contains(global))
-                    return grove;
-            return null;
         }
 
         internal void Designate(int type, List<int> ids, bool remove)
@@ -308,27 +174,12 @@ namespace Start_a_Town_
                 else
                 {
                     this.QueuedForaging.Remove(p.RefID);
-                    //CancelOrder(p);
                 }
             }
         }
         
-        class ChopOrder
-        {
-            public GameObject Tree;
-            public AIJob Job;
-            public ChopOrder(GameObject tree, AIJob job)
-            {
-                this.Tree = tree;
-                this.Job = job;
-            }
-        }
-
         internal override void OnGameEvent(GameEvent e)
         {
-            foreach (var grove in this.Groves.Values)
-                grove.OnGameEvent(e);
-
             switch (e.Type)
             {
                 case Message.Types.PlantHarvested:
@@ -346,22 +197,7 @@ namespace Start_a_Town_
                     EventEntityDespawned.Read(e.Parameters, out entity);
                     this.ChoppingTasks.Remove(entity.RefID);
                     this.QueuedForaging.Remove(entity.RefID);
-                    //AITaskChopping task;
-                    //if(this.PendingChoppingTasks.TryGetValue(entity, out task))
-                    //{
-                    //    task.Cancel();
-                    //    this.PendingChoppingTasks.Remove(entity);
-                    //}
                     break;
-
-            
-
-                //case Message.Types.TaskComplete:
-                //    var task = e.Parameters[0] as AITaskChopping;
-                //    var actor = e.Parameters[1];
-                //    if (task != null)
-                //        this.PendingChoppingTasks.Remove(task.Plant);
-                //    break;
 
                 default:
                     break;
@@ -376,13 +212,6 @@ namespace Start_a_Town_
         }
         public override void Load(SaveTag tag)
         {
-            //List<int> treeIDs = new List<int>();
-            //if (tag.TryGetTagValue<List<int>>("Trees", out treeIDs))
-            //    foreach (var id in treeIDs)
-            //        //this.QueuedTrees.Add(this.Town.Map.GetNetwork().GetNetworkObject(id));
-            //        this.QueuedTreesIDs.Add(id);
-
-            //tag.TryGetTagValue<List<SaveTag>>("Trees", v => this.QueuedTreesIDs = new HashSet<int>(new List<int>().Load(v)));
             tag.TryGetTagValue<List<SaveTag>>("ChoppingTasks", v => this.ChoppingTasks = new HashSet<int>(new List<int>().Load(v)));
         }
         public override void Write(System.IO.BinaryWriter w)
@@ -394,12 +223,6 @@ namespace Start_a_Town_
             this.ChoppingTasks = new HashSet<int>(r.ReadListInt());
         }
 
-        public override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
-        {
-            // i started drawing icons instead
-            //cam.DrawGridCells(sb, Color.Yellow * .5f, this.GetPositions().Select(s => s + Vector3.UnitZ));
-            //cam.DrawGridCells(sb, Color.Yellow * .5f, this.GetForagingPositions());
-        }
         public override void DrawUI(SpriteBatch sb, IMap map, Camera cam)
         {
             this.DrawIcons(sb, map, cam, ChopIcon, GetTrees());
@@ -410,7 +233,6 @@ namespace Start_a_Town_
         {
             foreach (var parent in objects)
                 icon.DrawAboveEntity(sb, camera, parent);
-                //parent.DrawIconAbove(sb, camera, icon, .5f);
         }
         internal override void OnContextMenuCreated(IContextable obj, ContextArgs a)
         {
@@ -439,7 +261,7 @@ namespace Start_a_Town_
             var plant = obj.Object as Plant;
             if (obj.Object.HasComponent<PlantComponent>())
             {
-                var orderExists = this.ChoppingTasks.Contains(plant.RefID);// this.QueuedTreesIDs.Contains(obj.Object.InstanceID);
+                var orderExists = this.ChoppingTasks.Contains(plant.RefID);
                 a.Actions.Add(new ContextActionBar.ContextActionBarAction(() => Client.Instance.Send(PacketType.ChoppingSingle, PacketIntInt.Write(PlayerOld.Actor.RefID, plant.RefID)), new Icon(UIManager.Icons32, 12, 32), orderExists ? "Cancel: Cut" : "Order: Cut"));
 
                 if (plant.IsHarvestable)
@@ -449,7 +271,6 @@ namespace Start_a_Town_
                 }
 
             }
-            
         }
 
         internal bool IsChoppingTask(GameObject tree)
@@ -472,7 +293,6 @@ namespace Start_a_Town_
         private void Add(Types type, Vector3 start, Vector3 end, bool value)
         {
             PacketEntityDesignation.Send(Client.Instance, (int)type, start, end, value);
-            //Client.Instance.Send(PacketType.ChoppingDesignation, PacketChoppingDesignation.Write(Player.Actor.InstanceID, start, end, !value));
         }
         private bool IsPositionValid(Vector3 arg)
         {
@@ -487,10 +307,8 @@ namespace Start_a_Town_
         static readonly IconButton ButtonChopAdd = new(ChopIcon) { HoverText = "Chop down" };
         static readonly IconButton ButtonChopRemove = new(ChopIcon, Icon.Cross) { HoverText = "Cancel chop down" };
 
-        //static IconButton ButtonForageAdd = new IconButton(ForageIcon) { HoverText = "Forage" };
         static readonly QuickButton ButtonForageAdd = new(ForageIcon, null, "Forage");// { HoverText = "Forage" };
         static readonly IconButton ButtonForageRemove = new(ForageIcon, Icon.Cross) { HoverText = "Cancel forage" };
-
 
         static void ChopDownAdd(List<TargetArgs> targets)
         {
@@ -514,15 +332,12 @@ namespace Start_a_Town_
             if (this.Town.Net is Server)
                 return;
             var entities = UISelectedInfo.GetSelectedEntities();
-                //UISelectedInfo.GetSelected()
-                //.Where(tar => tar.Type == TargetType.Entity).Select(t => t.Object);
             UpdateQuickButtonsChopping(entities);
             UpdateQuickButtonsForaging(entities);
         }
         private void UpdateQuickButtonsChopping(IEnumerable<GameObject> entities)
         {
             var areTask = entities.Where(e => this.ChoppingTasks.Contains(e.RefID));
-            //var areNotTask = entities.Except(areTask).OfType<Tree>();//.Where(IsChoppable);
             var areNotTask = entities.Except(areTask).OfType<Plant>().Where(IsChoppable);
 
             if (areTask.Any())
@@ -553,8 +368,6 @@ namespace Start_a_Town_
         private static bool IsChoppable(GameObject o)
         {
             return o.HasComponent<PlantComponent>();
-            return o.HasComponent<TreeComponent>();
         }
-        
     }
 }

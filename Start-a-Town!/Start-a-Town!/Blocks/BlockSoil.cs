@@ -88,15 +88,7 @@ namespace Start_a_Town_
         {
             return MaterialDefOf.Soil;
         }
-        public override List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
-        {
-            return new List<Interaction>(){
-                    new InteractionDigging(),
-                new InteractionTilling(),
-                new InteractionPlantTree()
-            };
-        }
-
+        
         public override ContextAction GetRightClickAction(Vector3 global)
         {
             return new ContextAction(() => "Dig", () => { Net.Client.PlayerInteract(new TargetArgs(global)); });

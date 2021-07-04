@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
-using Start_a_Town_.GameModes;
-using Start_a_Town_.Net.Packets;
-using Start_a_Town_.AI;
-using Start_a_Town_.Components.Interactions;
 
 namespace Start_a_Town_.Towns.Farming
 {
@@ -61,31 +55,6 @@ namespace Start_a_Town_.Towns.Farming
             }
             return null;
         }
-        //[Obsolete]
-        //public override void Handle(IObjectProvider net, Packet msg)
-        //{
-        //    throw new Exception();
-        //    switch (msg.PacketType)
-        //    {
-        //        case PacketType.FarmlandDesignate:
-        //            msg.Payload.Deserialize(r =>
-        //            {
-        //                int entityid, farmid;
-        //                Vector3 begin, end;
-        //                bool value;
-        //                PacketDesignate.Read(r, out entityid, out farmid, out begin, out end, out value);
-        //                //this.Farmlands[farmid].Edit(begin.GetBox(end), value);
-        //                this.GrowZones[farmid].Edit(begin.GetBox(end), value);
-        //                var server = net as Server;
-        //                if (server != null)
-        //                    server.Enqueue(msg.PacketType, msg.Payload);
-        //            });
-        //            break;
-
-        //        default:
-        //            break;
-        //    }
-        //}
 
         public override void HandlePacket(Server server, Net.Packet msg)
         {
@@ -120,72 +89,14 @@ namespace Start_a_Town_.Towns.Farming
 
             }
         }
-
-        //void RegisterZone(GrowingZone farm)
-        //{
-        //    if (farm.ID == 0)
-        //        farm.ID = this.IDSequence++;
-        //    throw new Exception();
-        //    //farm.Town = this.Town;
-        //    this.GrowZones.Add(farm.ID, farm);
-        //    this.Town.Map.EventOccured(Components.Message.Types.FarmCreated, farm);
-        //    if (this.Town.Map.Net is Client)
-        //        FloatingText.Manager.Create(() => farm.Positions.First(), "Farm created", ft => ft.Font = UIManager.FontBold);
-        //}
-        private ZoneNew RegisterNewZone(int id, Vector3 a, int w, int h)
-        {
-            throw new Exception();
-            //var allpositions = new BoundingBox(a, a + new Vector3(w - 1, h - 1, 0)).GetBox();
-            //var finalPositions = new List<Vector3>();
-            //foreach (var po in allpositions)
-            //    if (this.Town.GetZoneAt(po) == null && ZoneNew.IsPositionValid(this.Town.Map, po))
-            //        finalPositions.Add(po);
-            //if (!finalPositions.IsConnected())
-            //    return null;
-            //var newzone = new GrowingZone(this.Town, finalPositions);
-            //this.RegisterZone(newzone);
-            //return newzone;
-        }
-        internal ZoneNew RegisterNewZone(IEnumerable<IntVec3> allpositions)
-        {
-            throw new Exception();
-            //if (!allpositions.IsConnectedNew())
-            //    return null;
-            //var finalPositions = allpositions.Where(
-            //    po => this.Town.GetZoneAt(po) == null &&
-            //    ZoneNew.IsPositionValid(this.Town.Map, po));
-            //var newzone = new GrowingZone(this.Town, finalPositions);
-            //this.RegisterZone(newzone);
-            //return newzone;
-        }
+      
         public override GroupBox GetInterface()
         {
             return new FarmingManagerUI(this);
         }
         
-        //public List<Vector3> GetAllPositions()
-        //{
-        //    //foreach (var farm in this.GrowZones)
-        //    //    foreach (var g in farm.Value.Tasks.Keys)
-        //    //        yield return g;
-
-        //    var list = new List<Vector3>();
-        //    foreach (var farm in this.GrowZones)
-        //        list.AddRange(farm.Value.Tasks.Keys);
-        //    return list;
-        //}
-      
         public List<Vector3> GetAllTillingLocations()
         {
-            //if (this.CachedTillingPositions != null)
-            //    foreach (var p in this.CachedSowingPositions)
-            //        yield return p;
-            //foreach (var farm in this.GrowZones)
-            //    foreach(var p in farm.Value.GetTillingPositions())
-            //        yield return p;
-            //this.CachedTillingPositions = list;
-            //return list;
-
             if (this.CachedTillingPositions != null)
                 return this.CachedTillingPositions;
             var list = new List<Vector3>();
@@ -222,20 +133,8 @@ namespace Start_a_Town_.Towns.Farming
             this.Town.Map.EventOccured(Components.Message.Types.FarmRemoved, zone);
             if (this.Town.Map.Net is Client)
                 FloatingText.Manager.Create(() => zone.Positions.First(), "Farm deleted", ft => ft.Font = UIManager.FontBold);
-
             return true;
         }
-
-        //internal override void OnGameEvent(GameEvent e)
-        //{
-        //    switch (e.Type)
-        //    {
-        //        default:
-        //            foreach (var f in this.GrowZones)
-        //                f.Value.OnGameEvent(e);
-        //            break;
-        //    }
-        //}
 
         protected override void AddSaveData(SaveTag tag)
         {
@@ -246,37 +145,6 @@ namespace Start_a_Town_.Towns.Farming
             tag.Add(farms);
         }
 
-        public override void Load(SaveTag tag)
-        {
-            //tag.TryGetTagValue<int>("IDSequence", v => this.IDSequence = v);
-            //var list = new List<SaveTag>();
-            //if (tag.TryGetTagValue("Farms", out list))
-            //    foreach (var farmtag in list)
-            //    {
-            //        var zone = new GrowingZone(this.Town, farmtag);
-            //        this.GrowZones.Add(zone.ID, zone);
-            //    }
-        }
-
-        public override void Write(BinaryWriter w)
-        {
-            //w.Write(this.IDSequence);
-            //w.Write(this.GrowZones.Count);
-            //foreach (var farm in this.GrowZones)
-            //    farm.Value.Write(w);
-        }
-        public override void Read(BinaryReader r)
-        {
-            //this.IDSequence = r.ReadInt32();
-            //var count = r.ReadInt32();
-            //for (int i = 0; i < count; i++)
-            //{
-            //    var farm = new GrowingZone(r);
-            //    farm.Town = this.Town;
-            //    this.GrowZones.Add(farm.ID, farm);
-            //}
-        }
-
         public override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
         {
             if (!cam.DrawZones)
@@ -284,7 +152,6 @@ namespace Start_a_Town_.Towns.Farming
             foreach (var s in this.GrowZones)
                 s.Value.DrawBeforeWorld(sb, map, cam);
         }
-
         
         public bool IsSowable(Vector3 arg)
         {
@@ -297,19 +164,7 @@ namespace Start_a_Town_.Towns.Farming
             var contains = positions.Contains(arg);
             return contains;
         }
-        //public bool IsSowable(Vector3 arg, GameObject item)
-        //{
-        //    var farm = this.GetZoneAt(arg);
-        //    if (farm == null)
-        //        return false;
-        //    if (!farm.Planting)
-        //        return false;
-        //    if(!item.IsSeedFor(farm.SeedType))
-        //        return false;
-        //    var positions = farm.GetSowingPositions();
-        //    var contains = positions.Contains(arg);
-        //    return contains;
-        //}
+       
         public bool IsTillable(Vector3 arg)
         {
             var farm = this.GetZoneAt(arg);
@@ -326,17 +181,6 @@ namespace Start_a_Town_.Towns.Farming
             var farm = this.GetZoneAt(rounded);
             return farm != null;
         }
-        
-        //public Dictionary<Vector3, GrowingZone.FarmingJob> GetUnreservedTasks(GrowingZone.FarmingJob.Types type)
-        //{
-        //    Dictionary<Vector3, GrowingZone.FarmingJob> tasks = new Dictionary<Vector3, GrowingZone.FarmingJob>();
-        //    foreach (var zone in this.GrowZones.Values)
-        //        foreach (var task in zone.Tasks)
-        //            if (task.Value.CanReserve && task.Value.Type == type)
-        //                tasks[task.Key] = task.Value;
-        //    return tasks;
-        //}
-
         
         public override void GetManagementInterface(TargetArgs t, WindowTargetManagement inter)
         {
@@ -372,26 +216,5 @@ namespace Start_a_Town_.Towns.Farming
                 containedInZone |= zone.Contains(tree);
             return containedInZone;
         }
-
-        internal ZoneNew PlayerEdit(int zoneID, Vector3 a, int w, int h, bool remove)
-        {
-            if (remove)
-            {
-                foreach (var zone in this.GrowZones.Values.ToList())
-                    zone.Edit(a, a + new Vector3(w - 1, h - 1, 0), remove);
-            }
-            else
-            {
-                if (zoneID == 0)
-                    return this.RegisterNewZone(0, a, w, h);
-                else
-                    this.GrowZones[zoneID].Edit(a, a + new Vector3(w - 1, h - 1, 0), remove);
-            }
-            return null;
-        }
-        //internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
-        //{
-        //    yield return new Tuple<string, Action>("Farm", () => ZoneNew.Edit(typeof(GrowingZone)));
-        //}
     }
 }

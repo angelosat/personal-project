@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
 {
@@ -15,8 +8,9 @@ namespace Start_a_Town_
     {
         static internal void Init()
         {
-            Net.Server.RegisterPacketHandler(PacketType.CraftingOrderPlaceNew, Receive);
-            Net.Client.RegisterPacketHandler(PacketType.CraftingOrderPlaceNew, Receive);
+            // TODO
+            Server.RegisterPacketHandler(PacketType.CraftingOrderPlaceNew, Receive);
+            Client.RegisterPacketHandler(PacketType.CraftingOrderPlaceNew, Receive);
         }
 
         internal static void Send(IObjectProvider net, Vector3 global, int reactionID)

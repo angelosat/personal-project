@@ -138,11 +138,9 @@ namespace Start_a_Town_.Towns
         public RoomManager RoomManager;
         public CraftingManager CraftingManager;
         public JobsManager JobsManager;
-        public HouseManager HousingManager;
-        //public RegionManager RegionManager;
+        //public HouseManager HousingManager;
         public ReservationManager ReservationManager;
         public TerrainManager TerrainManager;
-        //public ShopManager ShopManager;
         public WorkplaceManager ShopManager;
         public QuestsManager QuestManager;
 
@@ -193,7 +191,7 @@ namespace Start_a_Town_.Towns
 
             this.CraftingManager = new(this);
             this.JobsManager = new(this);
-            this.HousingManager = new(this);
+            //this.HousingManager = new(this);
             this.ReservationManager = new(this);
             //this.RegionManager = new RegionManager(this.Map);
             this.TerrainManager = new(this);
@@ -212,7 +210,7 @@ namespace Start_a_Town_.Towns
                 this.RoomManager,
                 this.CraftingManager,
                 this.JobsManager,
-                this.HousingManager,
+                //this.HousingManager,
                 this.ReservationManager,
                 this.TerrainManager,
                 //this.ShopManager,
@@ -583,92 +581,12 @@ namespace Start_a_Town_.Towns
         {
             foreach (var comp in this.TownComponents)
                 comp.HandlePacket(client, msg);
-
-            switch(msg.PacketType)
-            {
-                case PacketType.JobRemoved:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        string desc, reason;
-                        int workerid;
-                        PacketJobRemoved.Read(r, out desc, out reason, out workerid);
-                        if (workerid == -1)
-                            return;
-                        var worker = client.GetNetworkObject(workerid);
-                        AIState state = AIState.GetState(worker);
-                        //state.OnJobCancelled(desc);
-                        //state.History.WriteEntry(worker, "JOB CANCELLED: " + desc + " (" + reason + ")");
-                        state.History.WriteEntry(worker, string.Format("JOB CANCELLED: {0} ({1})", desc, reason));
-
-                    });
-                    break;
-
-                default:
-                    break;
-            }
         }
         internal void HandlePacket(IObjectProvider net, PacketType type, BinaryReader r)
         {
-            //var type = (PacketType)r.ReadInt32();
             foreach (var comp in this.TownComponents)
                 comp.HandlePacket(net, type, r);
-
-            switch (type)
-            {
-                case PacketType.JobRemoved:
-                    string desc, reason;
-                    int workerid;
-                    PacketJobRemoved.Read(r, out desc, out reason, out workerid);
-                    if (workerid == -1)
-                        return;
-                    var worker = net.GetNetworkObject(workerid);
-                    AIState state = AIState.GetState(worker);
-                    //state.OnJobCancelled(desc);
-                    //state.History.WriteEntry(worker, "JOB CANCELLED: " + desc + " (" + reason + ")");
-                    state.History.WriteEntry(worker, string.Format("JOB CANCELLED: {0} ({1})", desc, reason));
-                    break;
-
-                case PacketType.AIJobStarted:
-                    workerid = r.ReadInt32();
-                    desc = r.ReadString();
-                    worker = net.GetNetworkObject(workerid);
-                    AILog.SyncWrite(worker, "JOB STARTED: " + desc);
-                    net.EventOccured(Message.Types.JobAccepted, workerid, desc);
-                    break;
-
-                default:
-                    break;
-            }
         }
-        
-        //public List<Zone> GetZones()
-        //{
-        //    return new List<Zone>();
-        //    //var zones = this.FarmingManager.Farmlands.Values.Cast<Zone>().Concat(this.Stockpiles.Values).ToList();
-        //    var zones = this.StockpileManager.Stockpiles.Values.Cast<Zone>().ToList();
-        //    return zones;
-        //}
-
-        //internal void OnGameEvent(GameEvent e)
-        //{
-        //    foreach (var comp in this.TownComponents)
-        //        comp.OnGameEvent(e);
-        //    switch (e.Type)
-        //    {
-        //        //case Message.Types.EntityDespawned:
-        //        //    break;
-
-        //        case Message.Types.ObjectDisposed:
-        //            var obj = e.Parameters[0] as GameObject;
-        //            if (this.Agents.Contains(obj.InstanceID))
-        //                //this.Agents.Remove(obj.InstanceID);
-        //                this.RemoveAgent(obj);
-        //            break;
-
-        //        default:
-        //            break;
-        //    }
-        //}
 
         internal bool JobComplete(AIJob job, GameObject parent)
         {
@@ -722,23 +640,6 @@ namespace Start_a_Town_.Towns
             this.AIJobs.Add(job);
             this.Map.EventOccured(Message.Types.JobsUpdated, job);
         }
-
-        /// <summary>
-        /// Removes and cancels a job.
-        /// </summary>
-        /// <param name="job">The job to remove and cancel.</param>
-        internal void RemoveJob(AIJob job, string reason)
-        {
-            if (this.Net is Client)
-                //return;
-                throw new Exception();
-            this.AIJobs.Remove(job);
-            //Server.Instance.Enqueue(PacketType.JobRemoved, PacketJobRemoved.GetData(job.Description, reason, job.Entity != null ? job.Entity.InstanceID : -1));
-            Server.Instance.OutgoingStream.Write((int)PacketType.JobRemoved);
-            PacketJobRemoved.Write(Server.Instance.OutgoingStream, job.Description, reason, job.ReservedBy != null ? job.ReservedBy.RefID : -1);
-            job.Cancel();
-        }
-
 
         public void GetContextActions(Vector3 pos, ContextArgs a)
         {

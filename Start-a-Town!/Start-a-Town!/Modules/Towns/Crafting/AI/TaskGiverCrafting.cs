@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.AI;
-using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.Towns.Crafting;
-using Start_a_Town_.Crafting;
-using Start_a_Town_.Modules.Crafting;
 
 namespace Start_a_Town_
 {
@@ -21,14 +13,8 @@ namespace Start_a_Town_
             var map = actor.Map;
 
             var manager = actor.Map.Town.CraftingManager;
-            //var allStations = manager.GetWorkstations()
-            //    .Where(actor.CanReserve)// && actor.CanOperate)
-            //    .OrderByReachableRegionDistance(actor);
 
-
-            //var allOrders = manager.ByWorkstation();
             var allOrders = manager.ByWorkstationNew();
-            //var allBenches = actor.Map.GetBlockEntities<BlockEntityWorkstation>().zip(e => e.Orders);
 
 
             var allObjects = map.GetEntities().OfType<Entity>().ToArray();
@@ -86,7 +72,7 @@ namespace Start_a_Town_
                         continue;
                     if (!actor.CanReserve(operatingPos.Below()))
                         continue;
-                    if (order.IsActive() && order.IsCompletable())//actor.Map.GetBlockEntity(benchglobal)))
+                    if (order.IsActive && order.IsCompletable())
                         if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))
                         {
                             
@@ -96,20 +82,8 @@ namespace Start_a_Town_
                                 foreach (var k in i)
                                     task.AddTarget(TaskBehaviorCrafting.IngredientIndex, k.Key, k.Value);
                             task.SetTarget(TaskBehaviorCrafting.WorkstationIndex, workstationTarget);
-                            //task.SetTarget(TaskBehaviorCrafting.AuxiliaryIndex, new TargetArgs(map, ingredientDestination));
-                            //task.AddTarget(TaskBehaviorCrafting.AuxiliaryIndex, new TargetArgs(map, opPos.Value));
-                            //task.IngredientsUsed = materialsUsed;
                             task.Order = order;
                             return task;
-
-                            //var task = new AITask(typeof(TaskBehaviorCrafting), new TargetArgs(map, benchglobal));
-
-                            //foreach (var i in itemAmounts)
-                            //    foreach (var k in i)
-                            //        task.AddTarget(TaskBehaviorCrafting.IngredientIndex, k.Key, k.Value);
-                            //task.MaterialsUsed = materialsUsed;
-                            //task.Order = order;
-                            //return task;
                         }
                 }
             }
@@ -167,7 +141,7 @@ namespace Start_a_Town_
                     continue;
                 if (!actor.CanReserve(benchglobal))
                     continue;
-                if (order.IsActive() && order.IsCompletable())
+                if (order.IsActive && order.IsCompletable())
                     if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))
                     {
                         var workstationTarget = new TargetArgs(map, benchglobal);
@@ -198,22 +172,14 @@ namespace Start_a_Town_
                 var handled = new HashSet<GameObject>();
 
                 var validStacks = (from stack in allObjects
-                                       //where st is Entity
-                                       //let stack = st as Entity
                                    where stack.IsHaulable
                                    where !handled.Contains(stack)
-                                   //where !handledStacks.Contains(stack)
-                                   //where order.IsReagentAllowed(reagent.Name, (int)stack.IDType)
-                                   //where reagent.Filter(stack)
                                    where order.IsItemAllowed(reagent.Name, stack)
                                    select stack).OrderByReachableRegionDistance(actor); // closest to actor or workstation?
                 var reqAmount = reagent.Quantity; 
-                //var remaining = reqAmount;
                 var totalfound = 0;
                 var currentStack = 0;
-                //int materialID = -1;
                 Entity materialID = null;
-                //ItemDef materialID = null;
                 Dictionary<TargetArgs, int> targetsAmounts = new();
                 var currentTrip = new Dictionary<GameObject, int>();
                 foreach (var stack in validStacks)
@@ -241,7 +207,6 @@ namespace Start_a_Town_
                     }
                     if (currentStack > stack.StackMax)
                         throw new Exception();
-                    //materialID = stack.ID;
                     materialID = stack;
                     if (totalfound == reqAmount)
                         break;
@@ -257,21 +222,14 @@ namespace Start_a_Town_
                 }
                 if (totalfound < reqAmount)
                     return false;
-                //var materialID = validStacks.First().ID;
                 materialsUsed.Add(reagent.Name, materialID);
                 itemAmounts.Add(targetsAmounts);
-                //if (currentTrip.Any())
-                //    trips.Add(currentTrip);
             }
-            //itemAmounts.Clear();
-            //itemAmounts.Add(new Dictionary<TargetArgs, int>(alreadyFound.ToDictionary(i => new TargetArgs(i.Key), i => i.Value)));
             if (alreadyFound.Any())
                 trips.Add(alreadyFound);
             itemAmounts.Clear();
             foreach (var i in trips)
                 itemAmounts.Add(i.ToDictionary(o => new TargetArgs(o.Key), o => o.Value));
-            //itemAmounts = CombineStacks(itemAmounts);
-
             return true;
         }
     }

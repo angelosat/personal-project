@@ -697,13 +697,6 @@ namespace Start_a_Town_
             }
         }
         
-        internal void CancelJobs()
-        {
-            foreach (var item in this.PendingOrders)
-            {
-                this.Town.RemoveJob(item.Job, "Stockpile removed");
-            }
-        }
         internal Window GetWindow()
         {
             var win = StockpileUI.GetWindow(this);

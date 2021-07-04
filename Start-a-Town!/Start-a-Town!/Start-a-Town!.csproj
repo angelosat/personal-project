@@ -251,6 +251,7 @@
     <Compile Include="Components\Vegetation\InteractionHarvest.cs" />
     <Compile Include="Modules\AI\Labors\ExtensionsJobs.cs" />
     <Compile Include="Modules\Towns\Labors\TaskGiverEquipSelf.cs" />
+    <Compile Include="Modules\Towns\Rooms\Room.Packets.cs" />
     <Compile Include="Modules\Towns\Rooms\RoomRoleDef.cs" />
     <Compile Include="Modules\Towns\Rooms\RoomRoleDefOf.cs" />
     <Compile Include="Modules\Towns\Zones\ZoneDef.cs" />
@@ -848,21 +849,20 @@
     <Compile Include="Modules\Towns\Constructions\Categories\ConstructionCategoryWalls.cs" />
     <Compile Include="Modules\Towns\Constructions\Categories\ConstructionCategory.cs" />
     <Compile Include="Modules\Towns\Constructions\ConstructionsManager.cs" />
-    <Compile Include="Modules\Towns\Constructions\TaskBehaviorConstruct.cs" />
-    <Compile Include="Modules\Towns\Constructions\TaskBehaviorDeliverMaterials.cs" />
-    <Compile Include="Modules\Towns\Constructions\TaskGiverConstructing.cs" />
+    <Compile Include="Modules\Towns\Constructions\AI\TaskBehaviorConstruct.cs" />
+    <Compile Include="Modules\Towns\Constructions\AI\TaskBehaviorDeliverMaterials.cs" />
+    <Compile Include="Modules\Towns\Constructions\AI\TaskGiverConstructing.cs" />
     <Compile Include="Modules\Towns\Crafting\CraftingManager.cs" />
-    <Compile Include="Modules\Towns\Crafting\PacketCraftingPlaceOrder.cs" />
     <Compile Include="Modules\Towns\Crafting\Packets\PacketOrderRemove.cs" />
     <Compile Include="Modules\Towns\Crafting\Packets\PacketOrderAdd.cs" />
-    <Compile Include="Modules\Towns\Crafting\TaskBehaviorCrafting.cs" />
-    <Compile Include="Modules\Towns\Crafting\TaskGiverCrafting.cs" />
+    <Compile Include="Modules\Towns\Crafting\AI\TaskBehaviorCrafting.cs" />
+    <Compile Include="Modules\Towns\Crafting\AI\TaskGiverCrafting.cs" />
     <Compile Include="Modules\Towns\Designations\DesignationDef.cs" />
     <Compile Include="Modules\Towns\Digging\DiggingManager.cs" />
     <Compile Include="Modules\Towns\Digging\DiggingManagerUI.cs" />
     <Compile Include="Modules\Towns\Digging\PacketDiggingDesignate.cs" />
-    <Compile Include="Modules\Towns\Digging\TaskBehaviorDiggingNewNew.cs" />
-    <Compile Include="Modules\Towns\Digging\TaskGiverDigging.cs" />
+    <Compile Include="Modules\Towns\Digging\AI\TaskBehaviorDiggingNewNew.cs" />
+    <Compile Include="Modules\Towns\Digging\AI\TaskGiverDigging.cs" />
     <Compile Include="Modules\Towns\Digging\ToolDigging.cs" />
     <Compile Include="Modules\Towns\Farming\FarmingManager.cs" />
     <Compile Include="Modules\Towns\Farming\FarmingManagerUI.cs" />
@@ -870,40 +870,28 @@
     <Compile Include="Modules\Towns\Farming\GrowingZone.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskBehaviorHarvestingNew.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskGiverHarvestingNew.cs" />
-    <Compile Include="Modules\Towns\Farming\InteractionPlantSeed.cs" />
-    <Compile Include="Modules\Towns\Farming\InteractionPlantTree.cs" />
-    <Compile Include="Modules\Towns\Farming\PacketCreateFarmland.cs" />
     <Compile Include="Modules\Towns\Farming\PacketFarmSetSeed.cs" />
-    <Compile Include="Modules\Towns\Farming\PacketFarmSync.cs" />
-    <Compile Include="Modules\Towns\Farming\Packets\PacketFarmDelete.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskBehaviorSowingNewNew.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskGiverSowingNew.cs" />
-    <Compile Include="Modules\Towns\Farming\TaskGiverFarming.cs" />
+    <Compile Include="Modules\Towns\Farming\AI\TaskGiverFarming.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskBehaviorTillingNew.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskGiverTillingNew.cs" />
-    <Compile Include="Modules\Towns\Farming\ToolFarmDesignate.cs" />
-    <Compile Include="Modules\Towns\Forestry\Grove.cs" />
-    <Compile Include="Modules\Towns\Forestry\GroveUI.cs" />
-    <Compile Include="Modules\Towns\Forestry\PacketGroveEdit.cs" />
-    <Compile Include="Modules\Towns\Forestry\TaskBehaviorChoppingNew.cs" />
-    <Compile Include="Modules\Towns\Forestry\TaskGiverForaging.cs" />
-    <Compile Include="Modules\Towns\Forestry\TaskGiverChopping.cs" />
-    <Compile Include="Modules\Towns\Hauling\HaulingManager.cs" />
-    <Compile Include="Modules\Towns\Housing\HouseManager.cs" />
-    <Compile Include="Modules\Towns\Housing\Packets\PacketResidenceAdd.cs" />
-    <Compile Include="Modules\Towns\Housing\ResidenceTool.cs" />
-    <Compile Include="Modules\Towns\Housing\UI\HouseListUI.cs" />
-    <Compile Include="Modules\Towns\Housing\UI\HouseManagerUI.cs" />
-    <Compile Include="Modules\Towns\Housing\Residence.cs" />
-    <Compile Include="Modules\Towns\Housing\UIHouses.cs" />
-    <Compile Include="Modules\Towns\Housing\HouseTool.cs" />
+    <Compile Include="Modules\Towns\Forestry\AI\TaskBehaviorChoppingNew.cs" />
+    <Compile Include="Modules\Towns\Forestry\AI\TaskGiverForaging.cs" />
+    <Compile Include="Modules\Towns\Forestry\AI\TaskGiverChopping.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\HouseManager.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\Packets\PacketResidenceAdd.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\ResidenceTool.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\UI\HouseListUI.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\UI\HouseManagerUI.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\Residence.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\UIHouses.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\HouseTool.cs" />
     <Compile Include="Modules\Towns\Forestry\ChoppingManager.cs" />
     <Compile Include="Modules\Towns\Forestry\ChoppingManagerUI.cs" />
     <Compile Include="Modules\Packets\PacketEntityDesignation.cs" />
-    <Compile Include="Modules\Towns\Forestry\PacketCreateChoppingZone.cs" />
-    <Compile Include="Modules\Towns\Housing\UI\HouseOwnershipUI.cs" />
-    <Compile Include="Modules\Towns\Housing\UI\ResidenceUI.cs" />
-    <Compile Include="Modules\Towns\Jobs\PacketJobRemoved.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\UI\HouseOwnershipUI.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\UI\ResidenceUI.cs" />
     <Compile Include="Modules\Packets\PacketZoneDelete.cs" />
     <Compile Include="Modules\Packets\PacketZone.cs" />
     <Compile Include="Modules\Packets\PacketZoneDesignation.cs" />
@@ -1213,7 +1201,6 @@
     <Compile Include="TextInput.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Modules\Towns\Control\ControlTown.cs" />
     <Compile Include="Modules\Packets\PacketAddJob.cs" />
     <Compile Include="Modules\Towns\Network\TownsPacketHandler.cs" />
     <Compile Include="Modules\Towns\Stockpiles\HaulingJob.cs" />
@@ -1476,7 +1463,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Compile Include="Modules\Towns\Housing\House.cs" />
+    <Compile Include="Modules\Towns\HousingOBSOLETE\House.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

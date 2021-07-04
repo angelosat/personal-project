@@ -45,7 +45,7 @@ namespace Start_a_Town_
                     continue;
                 }
 
-                var deliverTask = TryDeliverMaterialNewNew(actor, closest, all, def, mat);//, amount);
+                var deliverTask = TryDeliverMaterialNewNew(actor, closest, all, def, mat);
                 if (deliverTask != null)
                     return deliverTask;
                 else
@@ -182,8 +182,6 @@ namespace Start_a_Town_
                     continue;
                 yield return designation;
             }
-            
         }
-
     }
 }

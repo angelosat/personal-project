@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI;
+﻿using System.Collections.Generic;
 using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_
@@ -14,7 +9,6 @@ namespace Start_a_Town_
         {
             yield return new BehaviorGetAtNewNew(TargetIndex.B);
             yield return new BehaviorInteractionNew(TargetIndex.A, () => new InteractionHaul(this.Task.AmountA));
-            //yield return BehaviorHaulHelper.StartCarrying(TargetIndex.A);
             var tradePartner = this.Task.TargetB.Object as Actor;
             var item = this.Task.TargetA.Object as Entity;
             var itemvalue = item.GetValueTotal();

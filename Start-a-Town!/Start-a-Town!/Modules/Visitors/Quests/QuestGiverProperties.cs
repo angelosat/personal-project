@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
     class QuestGiverProperties
     {
         public int Giver { get; private set; }
-        //public HashSet<int> QuestsOffered;
         public int NextQuestReceiver { get; private set; } = -1;
 
-        //public QuestGiverProperties(Actor giver)
-        //{
-        //    this.Giver = giver.InstanceID;
-        //}
         public QuestGiverProperties(int giverID)
         {
             this.Giver = giverID;
@@ -40,7 +31,7 @@ namespace Start_a_Town_
         }
         public int GetNextQuestReceiverID()
         {
-            return this.NextQuestReceiver;// == -1 ? null : this.Giver.Net.GetNetworkObject(this.NextQuestReceiver) as Actor;
+            return this.NextQuestReceiver;
         }
     }
 }

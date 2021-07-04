@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
@@ -11,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public abstract class Workplace : ISerializable, ISaveable//, ILoadReferencable
+    public abstract class Workplace : ISerializable, ISaveable
     {
         class Packets
         {
@@ -26,7 +24,7 @@ namespace Start_a_Town_
                 var player = net.GetPlayer(r.ReadInt32());
                 var tavern = net.Map.Town.GetShop(r.ReadInt32());
                 var role = Def.GetDef<JobDef>(r.ReadString());
-                var actor = net.GetNetworkObject<Actor>(r.ReadInt32());// r.ReadIntArray());.Cast<Actor>();
+                var actor = net.GetNetworkObject<Actor>(r.ReadInt32());
                 if (net is Client)
                     tavern.ToggleJob(actor, role);
                 else
@@ -51,16 +49,14 @@ namespace Start_a_Town_
         public HashSet<int> Rooms = new();
         public IntVec3? Counter;
 
-        readonly protected Dictionary<WorkerRoleDef, WorkerRole> Roles;/* = RolesAll.ToDictionary(d => d, d => new WorkerRole(d));*/
+        readonly protected Dictionary<WorkerRoleDef, WorkerRole> Roles;
 
         public IObjectProvider Net => this.Town.Net;
         public Town Town;
         public IMap Map => this.Town.Map;
         public int ID;
-        //string _Name;
-        public string Name;// { return this._Name.IsNullEmptyOrWhiteSpace() ? string.Format("Shop{0}", this.ID) : this._Name; } set { this._Name = value; } }
+        public string Name;
         public string DefaultName => $"{this.GetType().Name}{this.ID}";
-        //public string GetUniqueLoadID() => this.DefaultName;
         public Workplace()
         {
 
@@ -68,7 +64,6 @@ namespace Start_a_Town_
         public Workplace(TownComponent manager, int id) : this(manager)
         {
             this.ID = id;
-            //this.Name = string.Format("Shop{0}", this.ID);
         }
         public Workplace(TownComponent manager)
         {
@@ -78,7 +73,6 @@ namespace Start_a_Town_
         public virtual IEnumerable<JobDef> GetRoleDefs() { yield break; }
 
         public virtual bool IsValidRoom(Room room) { return false; }
-        //public virtual WorkerRole GetRole(WorkerRoleDef roleDef) { return null; }
         public bool HasWorker(Actor actor)
         {
             return this.Workers.Contains(actor.RefID);
@@ -133,7 +127,6 @@ namespace Start_a_Town_
             {
                 if (room.Workplace != this)
                     throw new Exception();
-                //this.Rooms.Remove(room);
                 room.SetWorkplace(null);
             }
         }
@@ -186,7 +179,6 @@ namespace Start_a_Town_
             w.Write(this.Workers);
             w.Write(this.Rooms);
             w.Write(this.Counter);
-            //this.WorkerProps.Sync(w);
             this.WorkerProps.Values.Write(w);
             this.WriteExtra(w);
         }
@@ -199,7 +191,6 @@ namespace Start_a_Town_
             this.Workers.Read(r);
             this.Rooms.Read(r);
             this.Counter = r.ReadVector3Nullable();
-            //this.WorkerProps.Sync(r);
             this.WorkerProps = r.ReadList<WorkerProps>().ToDictionary(w => w.ActorID, w => w);
             this.ReadExtra(r);
             return this;
@@ -228,12 +219,9 @@ namespace Start_a_Town_
                 this.Name = this.DefaultName;
             this.Stockpiles.Load(tag, "Stockpiles");
             this.Workers.Load(tag, "Workers");
-            //this.Rooms.Load(tag, "Rooms");
             this.Rooms.TryLoad(tag, "Rooms");
-            //this.WorkerProps = tag.LoadList<WorkerProps>("WorkerProps").ToDictionary(i => i.ActorID, i => i);
             if (!tag.TryGetTag("WorkerProps", v => this.WorkerProps = v.LoadList<WorkerProps>().ToDictionary(i => i.ActorID, i => i)))
                 this.InitWorkerProps();
-            //tag.TryGetTagValue<Microsoft.Xna.Framework.Vector3>("Counter", v => this.Counter = v);
             tag.TryGetTagValue<Vector3>("Counter", v => this.Counter = v);
             this.LoadExtra(tag);
             return this;
@@ -256,11 +244,8 @@ namespace Start_a_Town_
 
             string nameGetter() => box.Tag is Workplace wp ? $" {wp.Name}" : "";
             var boxstockpiles = liststockpiles.ToPanelLabeled(() => $"Stockpiles{nameGetter()}");
-            //var boxworkers = listworkers.ToPanelLabeled(() => $"Workers{nameGetter()}");
             var boxfacilities = listfacilities.ToPanelLabeled(() => $"Facilities{nameGetter()}");
 
-          
-            //var btnCounter = new Button("Counter", () => { });
             var btnCounter = new Button()
             {
                 TextFunc = () =>
@@ -274,11 +259,10 @@ namespace Start_a_Town_
             var boxtabs = new GroupBox();
             var boxLists = new GroupBox();
 
-            boxtabs.AddControlsLineWrap(new[] {//(UIHelper.Wrap(new[] {
+            boxtabs.AddControlsLineWrap(new[] {
                 new Button("Stockpiles", ()=>selectTab(boxstockpiles)),
                 new Button("Facilities", ()=>selectTab(boxfacilities)) },
                 listw);
-                //.ToPanel();
 
             void selectTab(Control tab)
             {
@@ -287,49 +271,38 @@ namespace Start_a_Town_
                 tab.Validate(true);
             }
 
-            boxLists.AddControlsHorizontally(boxstockpiles);//, boxworkers, boxfacilities);// listfacilities.ToPanelLabeled("Facilities"));
+            boxLists.AddControlsHorizontally(boxstockpiles);
 
-            //var boxbuttons = new GroupBox();
-            //boxbuttons.AddControlsVertically(btnworkers);//, btnCounter);
-
-            box.AddControlsVertically(boxtabs, boxLists);//, boxbuttons);
+            box.AddControlsVertically(boxtabs, boxLists);
           
             void refresh(Workplace shop)
-            //var refresh = new Action<Workplace>(shop =>
             {
                 if (box.Tag?.GetType() != shop.GetType())
                     boxLists.ClearControls();
                 
-                liststockpiles.Clear().AddItems(shop.Stockpiles.Select(i => shop.Town.StockpileManager.GetStockpile(i)));//.ToArray());
-                //listworkers.Clear().AddItems(shop.Workers.Select(i => shop.Town.Net.GetNetworkObject(i) as Actor));//.ToArray());
+                liststockpiles.Clear().AddItems(shop.Stockpiles.Select(i => shop.Town.StockpileManager.GetStockpile(i)));
                 listfacilities.Clear().AddItems(shop.GetFacilities().Select(f => new TargetArgs(shop.Town.Map, f)));
 
                 boxtabs.ClearControls();
-                boxtabs.AddControlsLineWrap(new[] {//(UIHelper.Wrap(new[] {
+                boxtabs.AddControlsLineWrap(new[] {
                 new Button("Stockpiles", ()=>selectTab(boxstockpiles)),
-                //new Button("Workers", ()=>selectTab(boxworkers)),
                 new Button("Facilities", ()=>selectTab(boxfacilities)) },
                 listw);
                 boxtabs.AddControlsLineWrap(shop.GetUIBase().Select(b =>
                 {
-                    //b.GetData(shop);
-                    //var bpanel = b.ToPanelLabeled(b.Name);
                     return new Button(b.Name, () =>
                     {
                         b.GetData(shop);
                         selectTab(b);
-                        //selectTab(bpanel);
                     });
                 }), listw);
             
                 box.ClearControls();
                 
-                box.AddControlsVertically(boxtabs, boxLists);//, boxbuttons);
+                box.AddControlsVertically(boxtabs, boxLists);
                 box.Validate(true);
                 box.Tag = shop;
-                //workersUI.Value.Tag = shop;
-            }//);
-            //return refresh;
+            }
             liststockpiles.OnGameEventAction = e =>
             {
                 var shop = box.Tag as Shop;
@@ -358,8 +331,6 @@ namespace Start_a_Town_
             return (box, refresh);
         }
 
-        
-       
         IEnumerable<GroupBox> GetUIBase()
         {
             yield return WorkersUI ??= GetWorkersUI();
@@ -378,18 +349,14 @@ namespace Start_a_Town_
         {
             var town = shop.Town;
             var manager = town.ShopManager;
-            //var listworkers = new ListBoxNew<Actor, ButtonNew>(200, UIManager.LargeButton.Height * 7, (a, l) => a.GetButton(l.Client.Width, () => a.Town.ShopManager.FindShop(a)?.Name, () => { }));
             var listworkers = new ListBoxNew<Actor, ButtonNew>(
                  200, UIManager.LargeButton.Height * 7,
                  (a, l) =>
                  a.GetButton(l.Client.Width,
-                 //() => a.Workplace?.Name ?? "",
                  () => a.Workplace != null ? $"Assigned to {a.Workplace.Name}" : "",
-
                  () => manager.ToggleWorker(a, shop)
                  ));
             listworkers.AddItems(town.GetAgents()
-                //.Where(a => manager.GetShop(a) != shop)
                 );
             return listworkers;
         }
@@ -397,10 +364,9 @@ namespace Start_a_Town_
         static GroupBox WorkersUI;
         static GroupBox GetWorkersUI()
         {
-          
             var box = new GroupBox() { Name = "Workers" };
             Workplace tav = null;
-            var table = new TableScrollableCompactNewNew<Actor>(16, true);//.Build();
+            var table = new TableScrollableCompactNewNew<Actor>(16, true);
 
             var btnworkers = new Button("Assign Workers", () =>
             {
@@ -436,21 +402,14 @@ namespace Start_a_Town_
             };
             box.SetGetDataAction(o =>
             {
-                tav = o as Workplace;// as Tavern;
+                tav = o as Workplace;
                 table.Clear();
                 table.AddColumn(new(), "", 128, a => new Label(a.Name), 0);
-                //foreach (var role in tav.GetRoles())
-                //    table.AddColumn(role, role.Def.Label, 32, a => new CheckBoxNew()
-                //    {
-                //        TickedFunc = () => role.Contains(a),
-                //        LeftClickAction = () => Packets.UpdateWorkerRoles(tav.Net, tav.Net.GetPlayer(), tav, role.Def, new[] { a })
-                //    });
                 foreach (var role in tav.GetRoleDefs())
                 {
                     table.AddColumn(role, role.Label, 32, a =>
                     {
-                        //var j = tav.WorkerProps[a.InstanceID].Jobs[role];
-                        var j = tav.GetWorkerJob(a, role);// .Jobs[role];
+                        var j = tav.GetWorkerJob(a, role);
 
                         return new CheckBoxNew()
                         {
@@ -460,15 +419,10 @@ namespace Start_a_Town_
                     });
                 }
                 table.AddItems(tav.Workers.Select(tav.Net.GetNetworkObject).Cast<Actor>());
-                //table.AddItems(this.Town.GetAgents()); // TODO add event handler for new/removed citizens
             });
 
-           
-
             box.AddControlsVertically(
-                //btnworkers, 
                 tablePanel);
-            //WorkersUI = box;
             return box;
         }
 

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -38,7 +35,6 @@ namespace Start_a_Town_
                 task.TicksWaited = 0;
                 task.SetTarget(TargetIndex.B, customerProps.OrderTakenBy);
             });
-            //yield return new BehaviorWait(()=customerProps.Dish != null);
             yield return new BehaviorWait(() => customerProps.Dish?.Cell == table.Global.Above()).FailOn(lostPatience);
             yield return new BehaviorCustom(() => actor.Reserve(customerProps.Dish));
             yield return new BehaviorCustom(() =>
@@ -52,8 +48,6 @@ namespace Start_a_Town_
             yield return BehaviorHelper.SetTarget(TargetIndex.B, table.Global.Above());
             yield return BehaviorHelper.PlaceCarried(TargetIndex.B);
             yield return new BehaviorCustom(() => actor.GetVisitorProperties().AddRecentlyVisitedShop(tavern));
-            //yield return BehaviorHelper.SetTarget(TargetIndex.B, () => customerProps.ServedBy);
-            //yield return new BehaviorWait(()=>)
             /// TODO wait until a tavern worker
             /// a) has the corresponding taskbehavior
             /// b) or has started/completed a "rquest order" interaction

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -15,7 +12,6 @@ namespace Start_a_Town_
         }
 
         public override string Text => ItemDefAmount.GetText(ItemDefOf.Coins, this.Amount);
-        //public override int Count => this.Amount;
         public override int Count { get => this.Amount; set { this.Amount = Math.Max(0, value); this.Parent.Manager.QuestModified(this.Parent); } }
 
         public override int Budget => this.Count;
@@ -25,7 +21,6 @@ namespace Start_a_Town_
         internal override void Award(Actor actor)
         {
             this.AwardFromTownStockpiles(actor);
-            //this.AwardFromQuestGiver(actor);
         }
         void AwardFromTownStockpiles(Actor actor)
         {
@@ -49,33 +44,10 @@ namespace Start_a_Town_
                     actor.Inventory.Insert(i.item);
             }
         }
-        private void AwardFromQuestGiver(Actor actor)
-        {
-            var giver = this.Parent.Giver;
-            var money = giver.GetMoney();
-            if (this.Amount < money.StackSize)
-            {
-                if (actor.NetNew is Net.Server server)
-                {
-                    money = money.Split(this.Amount) as Entity;
-                    server.SyncInstantiate(money);
-                    actor.Inventory.SyncInsert(money);
-                }
-            }
-            else
-            {
-                giver.Inventory.Remove(money);
-                actor.Inventory.Insert(money);
-            }
-        }
 
         internal override bool CanAward()
         {
             var qgiver = this.Parent.Giver;
-            //var money = qgiver.GetMoney();
-            ////return money?.StackSize >= this.Amount;
-            //if (money?.StackSize >= this.Amount)
-            //    return true;
             return qgiver.Town.StockpileManager
                 .FindItems(e => e.Def == ItemDefOf.Coins, this.Amount)
                 .Sum(i => i.amount) 

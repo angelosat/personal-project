@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes.StaticMaps;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
@@ -31,7 +25,6 @@ namespace Start_a_Town_
             var citizens = town.GetAgents().Randomize(town.Map.Random);
             foreach(var citizen in citizens)
             {
-                //return citizen.Global.SnapToBlock();
                 foreach (var spot in citizen.Global.SnapToBlock().GetRadial(3))
                 {
                     if(actor.Map.Contains(spot) && actor.CanStandIn(spot) && actor.CanReach(spot))

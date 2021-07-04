@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI;
 using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_
@@ -16,7 +12,6 @@ namespace Start_a_Town_
             // TODO send reply / complete transaction
             var actor = this.Actor;
             var state = this.Actor.GetState();
-            //var shop = actor.Workplace as Shop;
             var task = this.Task;
             var shop = actor.Town.GetShop(task.ShopID) as Shop;
 
@@ -26,12 +21,10 @@ namespace Start_a_Town_
                 {
                     task.SetTarget(TargetIndex.A, shop.Counter.Value);
                     task.SetTarget(TargetIndex.B, shop.GetNextSaleItem());
-                    //task.SetTarget(TargetIndex.B, shop.)
                 }
             };
             yield return new BehaviorGetAtNewNew(TargetIndex.A);
             yield return new BehaviorWait(() => task.TargetB.Object.Parent == null && task.TargetB.Object.Global.SnapToBlock() == task.TargetA.Global.Above());
-            //yield return BehaviorHaulHelper.StartCarrying(TargetIndex.B);
             yield return new BehaviorInteractionNew(TargetIndex.B, () => new InteractionHaul());
             // TODO wait until money on counter
             yield return new BehaviorWait(() =>
@@ -46,7 +39,7 @@ namespace Start_a_Town_
             yield return new BehaviorInteractionNew(() => task.TargetC, () => new InteractionSwapCarried());
 
             // if carrying coins, store in inventory. otherwise drop or haul to stockpile
-            yield return new BehaviorInteractionNew(TargetIndex.A, () => //this.Actor.Carried.Def == ItemDefOf.Coins ? new InteractionStoreHauled() : new InteractionThrow());
+            yield return new BehaviorInteractionNew(TargetIndex.A, () =>
             {
                 if (this.Actor.Carried.Def == ItemDefOf.Coins)
                     return new InteractionStoreHauled();

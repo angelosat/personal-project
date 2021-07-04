@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     class TaskGiverTavernWaiter : TaskGiver
     {
@@ -16,12 +10,12 @@ namespace Start_a_Town_
             {
                 if (customer.IsSeated && !customer.IsOrderTaken)
                 {
-                    return new AITask(typeof(TaskBehaviorTavernWorkerTakeOrder), customer.Customer);// { ShopID = this.ID };// { CustomerProps = customer };//, worker.Net.GetNetworkObject(customer.CustomerID));
+                    return new AITask(typeof(TaskBehaviorTavernWorkerTakeOrder), customer.Customer);
                 }
                 else if (!customer.IsServed && customer.Dish != null)
                 {
                     customer.ServedBy = actor;
-                    return new AITask(typeof(TaskBehaviorTavernWorkerServe), customer.Dish, (actor.Map, customer.Table.Above())) { CustomerID = customer.CustomerID };// CustomerProps = customer };
+                    return new AITask(typeof(TaskBehaviorTavernWorkerServe), customer.Dish, (actor.Map, customer.Table.Above())) { CustomerID = customer.CustomerID };
                 }
             }
             return null;

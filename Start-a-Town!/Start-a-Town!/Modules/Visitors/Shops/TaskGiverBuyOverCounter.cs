@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -33,13 +30,9 @@ namespace Start_a_Town_
                     continue;
                 if (!actor.CanReserve(item))
                     continue;
-                //var worker = shop.GetWorkers().FirstOrDefault();
-                //if (worker == null)
-                //    continue; // TODO maybe attempt to buy an item but fail the transaction and drop town approval rating if there's no worker ?
+                // TODO maybe attempt to buy an item but fail the transaction and drop town approval rating if there's no worker ?
 
                 var cost = item.GetValueTotal();
-                //if (!worker.InitiateTrade(actor, item, cost))
-                //    continue;
                 if (!actor.HasMoney(cost))
                     continue;
                 if (!shop.HandleCustomer(actor, item))

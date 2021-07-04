@@ -1,46 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Towns;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public class Shop : Workplace//, ISerializable, ISaveable
+    public class Shop : Workplace
     {
         public int OwnerID;
-
-        //static public readonly WorkerRoleDef RoleRegistry = new("ShopRegistry", "Registry");
-        //static public readonly WorkerRoleDef RoleRestock = new("ShopRestock", "Restock");
 
         static public readonly JobDef JobRegistry = new("JobShopRegistry", new TaskGiverTradingOverCounter());
         static public readonly JobDef JobeRestock = new("JobShopRestock");
         static public readonly JobDef[] RolesAll = { JobRegistry, JobeRestock };
 
-        //readonly Dictionary<WorkerRoleDef, WorkerRole> Roles = RolesAll.ToDictionary(d => d, d => new WorkerRole(d));
-        //public override IEnumerable<WorkerRoleDef> GetRoleDefs()
-        //{
-        //    yield return RoleRegistry;
-        //    yield return RoleRestock;
-        //}
         public override IEnumerable<JobDef> GetRoleDefs()
         {
             foreach (var r in RolesAll)
                 yield return r;
         }
-        //public override IEnumerable<WorkerRole> GetRoles()
-        //{
-        //    foreach (var role in Roles.Values)
-        //        yield return role;
-        //}
-        //public override WorkerRole GetRole(WorkerRoleDef roleDef)
-        //{
-        //    return this.Roles[roleDef];
-        //}
+       
         Actor NextCustomer;
         readonly Queue<Actor> CustomerQueue = new();
 
@@ -55,27 +33,7 @@ namespace Start_a_Town_
         {
 
         }
-      
-        //public override AITask GetTask(Actor actor)
-        //{
-        //    //if(this.GetRole(RoleRegistry).Contains(actor))
-        //    if(this.GetWorkerProps(actor).GetJob(JobRegistry).Enabled)
-        //    {
-        //        if (!this.IsValid())
-        //            return null;
-        //        if (!this.TryGetNextTransaction(out var transaction))
-        //            return null;
-        //        if (!this.CanExecuteTransaction(actor, transaction))
-        //            return null;
-        //        if (transaction.Type == Transaction.Types.Buy)
-        //            return new AITask(typeof(TaskBehaviorAcceptSellOverCounter), (actor.Map, this.Counter.Value));
-        //        else if (transaction.Type == Transaction.Types.Sell)
-        //            return new AITask(typeof(TaskBehaviorAcceptBuyOverCounter)) { ShopID = this.ID, Transaction = transaction }; // shop holds value for counter so no need to pass it to the task as a target
-        //        else
-        //            throw new Exception();
-        //    }
-        //    return null;
-        //}
+        
         internal override void AddFacility(IntVec3 global)
         {
             var block = this.Town.Map.GetBlock(global);
@@ -132,7 +90,6 @@ namespace Start_a_Town_
         public Actor GetNextCustomer()
         {
             return this.CustomerQueue.Count > 0 ? this.CustomerQueue.Peek() : null;
-            //return this.NextCustomer;
         }
         public bool HasCustomer()
         {
@@ -164,7 +121,6 @@ namespace Start_a_Town_
             return this.PendingSales[this.NextCustomer];
         }
       
-
         public override bool IsAllowed(Block block)
         {
             return block is BlockShopCounter;

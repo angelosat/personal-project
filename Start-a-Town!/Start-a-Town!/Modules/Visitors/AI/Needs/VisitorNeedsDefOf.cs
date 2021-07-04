@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
@@ -10,10 +6,6 @@ namespace Start_a_Town_
     {
         static public readonly NeedCategoryDef NeedCategoryVisitor = new("Visitor")
         {
-            //BaseNeedDefs = new NeedDef[] {
-            //    Guidance,
-            //    Trading,
-            //    Blessing, }
         };
 
         static public readonly NeedDef Guidance = new("Guidance", typeof(NeedGuidance), NeedCategoryVisitor);

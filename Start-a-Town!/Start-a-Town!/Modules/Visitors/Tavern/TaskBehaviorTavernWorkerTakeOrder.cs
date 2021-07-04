@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
@@ -13,9 +9,8 @@ namespace Start_a_Town_
             var actor = this.Actor;
             var task = this.Task;
             var customerIndex = TargetIndex.A;
-            //var customerProps = task.CustomerProps as Tavern.CustomerTavern;
             var customer = task.GetTarget(customerIndex);
-            var shop = actor.Workplace as Tavern;// actor.Town.GetShop(task.ShopID) as Tavern;
+            var shop = actor.Workplace as Tavern;
             var customerProps = shop.GetCustomer(customer) as CustomerTavern;
 
             // TODO wait until customer is seated

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI;
+﻿using System.Collections.Generic;
 using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_
@@ -47,9 +42,6 @@ namespace Start_a_Town_
                     task.SetTarget(Money, money, cost);
                 }
             };
-
-            //yield return new BehaviorInteractionNew(Money, () => new InteractionHaul(cost));
-            //yield return new BehaviorCustom() { InitAction = () => actor.Reserve(Actor.Carried) }; // this reserves the new object that resulted from splitting the money stack
             yield return BehaviorHelper.CarryFromInventoryAndReplaceTarget(Money); // this assigns the new split object to the same target index
             yield return BehaviorReserve.Reserve(Money); // this reserves just the source object and not the new object from splitting the source object (but CarryFromInventoryAndReplaceTarget replaces the target with the new object)
 

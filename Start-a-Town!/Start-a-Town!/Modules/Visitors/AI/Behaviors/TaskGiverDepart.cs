@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.GameModes.StaticMaps;
+﻿using Start_a_Town_.GameModes.StaticMaps;
 
 namespace Start_a_Town_
 {
@@ -25,7 +20,6 @@ namespace Start_a_Town_
                 }
                 actor.Net.Report($"Failed to find a reachable exit for {actor.Name}'s departure");
             }
-            //actor.Net.Report($"Failed to depart with chance {chance}");
             return null;
         }
     }

@@ -11,7 +11,6 @@
         public override int Score(Actor actor, Entity item)
         {
             var props = item.Def.ToolProperties;
-            //return (props.Ability.Def == this.ToolAbility ? 1 : 0) * props.Ability.Efficiency;
             if (props?.Ability.Def != this.ToolAbility)
                 return 0;
             return props.Ability.Efficiency;

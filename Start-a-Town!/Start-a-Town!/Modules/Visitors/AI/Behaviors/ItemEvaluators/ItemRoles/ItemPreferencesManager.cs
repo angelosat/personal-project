@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
-    class ItemPreferencesManager : IItemPreferencesManager, ISaveable, ISerializable
+    partial class ItemPreferencesManager : IItemPreferencesManager, ISaveable, ISerializable
     {
         static ItemPreferencesManager()
         {
@@ -38,12 +35,10 @@ namespace Start_a_Town_
         
         static public readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
         static public readonly Dictionary<ToolAbilityDef, ItemRole> ItemRolesTool = new();
-        //readonly Dictionary<Entity, ItemPreferenceProperties> Desires = new();
         readonly Dictionary<ItemRole, int> Preferences = new();
         readonly HashSet<int> ToDiscard = new();
         readonly HashSet<Entity> Items = new();
         readonly Actor Actor;
-        bool Validated;
         public ItemPreferencesManager(Actor actor)
         {
             this.Actor = actor;
@@ -56,35 +51,8 @@ namespace Start_a_Town_
                 this.Preferences.Add(r.Value, -1);
             foreach (var r in ItemRolesTool)
                 this.Preferences.Add(r.Value, -1);
-            //foreach (var r in ItemRolesGear)
-            //    this.Preferences.Add(r.Value, null);
-            //foreach (var r in ItemRolesTool)
-            //    this.Preferences.Add(r.Value, null);
         }
 
-        
-        //static IEnumerable<ItemRole> GetItemRoles(Actor actor)
-        //{
-        //    foreach (var g in actor.GetGearTypes())
-        //        yield return ItemRolesGear[g];
-        //    foreach (var t in ItemRolesTool)
-        //        yield return t.Value;
-        //}
-
-        //public IEnumerable<(ItemRole role, Entity item)> GetPreferences(Actor actor)
-        //{
-        //    var items = actor.Inventory.GetItems();
-        //    var roles = GetItemRoles(actor);
-        //    foreach (var role in roles)
-        //    {
-        //        var best = role.FindBest(actor, items);
-        //        yield return (role, best);
-        //    }
-        //}
-        //public Entity GetPreference(Actor actor, ItemRole role, IEnumerable<Entity> items)
-        //{
-        //    return this.Preferences[role];
-        //}
         public void HandleItem(Entity item)
         {
             foreach (var role in this.Preferences.Keys)
@@ -105,7 +73,6 @@ namespace Start_a_Town_
 
         private void SetItemPreference(Entity item, ItemRole role)
         {
-            //this.Preferences[role] = item;
             this.Preferences[role] = item.RefID;
         }
         private Entity GetPreference(ItemRole role)
@@ -115,12 +82,10 @@ namespace Start_a_Town_
         }
         public Entity GetPreference(GearType gt)
         {
-            //return this.Preferences[ItemRolesGear[gt]];
             return this.GetPreference(ItemRolesGear[gt]);
         }
         public Entity GetPreference(ToolAbilityDef def)
         {
-            //return this.Preferences[ItemRolesTool[def]];
             return this.GetPreference(ItemRolesTool[def]);
         }
         public void ResetPreferences()
@@ -128,11 +93,6 @@ namespace Start_a_Town_
             var items = this.Actor.Inventory.GetItems();
             foreach (var i in items)
                 this.HandleItem(i);
-            //return;
-            //foreach(var role in this.Preferences.Keys)
-            //{
-            //    this.Preferences[role] = role.FindBest(this.Actor, items);
-            //}
         }
         public IEnumerable<Entity> GetUselessItems(IEnumerable<Entity> entity)
         {
@@ -151,14 +111,9 @@ namespace Start_a_Town_
         }
         public void Validate()
         {
-            //if (this.Validated)
-            //    return;
-
             this.ResetPreferences();
-            this.Validated = true;
         }
 
-        
         public IEnumerable<Entity> GetJunk()
         {
             this.Validate();
@@ -184,35 +139,23 @@ namespace Start_a_Town_
         public void AddPreferenceTool(Entity tool)
         {
             var toolUse = tool.Def.ToolProperties.Ability.Def;
-            //this.Preferences[ItemRolesTool[toolUse]] = tool;
             this.SetItemPreference(tool, ItemRolesTool[toolUse]);
-            //return;
-            //var desire = new ItemPreferenceProperties(tool) { ToolUse = tool.Def.ToolProperties.Ability.Def };
-            //this.Desires.Add(tool, desire);
         }
-
 
         public void RemovePreference(ToolAbilityDef toolUse)
         {
-            //this.Preferences[ItemRolesTool[toolUse]] = null;
             this.Preferences[ItemRolesTool[toolUse]] = -1;
-
         }
         public bool IsPreference(Entity item)
         {
             return
                 (item.Def.ApparelProperties?.GearType is GearType g && this.GetPreference(ItemRolesGear[g]) == item) ||
                 (item.Def.ToolProperties?.Ability.Def is ToolAbilityDef t && this.GetPreference(ItemRolesTool[t]) == item);
-            //return
-            //    (item.Def.ApparelProperties?.GearType is GearType g && this.Preferences[ItemRolesGear[g]] == item) ||
-            //    (item.Def.ToolProperties?.Ability.Def is ToolAbilityDef t && this.Preferences[ItemRolesTool[t]] == item);
         }
 
         public SaveTag Save(string name = "")
         {
-            //var dic = this.Preferences.ToDictionary(i => i.Key.GetType().FullName, i => i.Value);
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            //tag.Add(dic.Save("Preferences"));
 
             var dicGear = ItemRolesGear.Where(r => this.Preferences[r.Value] != -1).ToDictionary(r => r.Key.Name, r => this.Preferences[r.Value]);
             tag.Add(dicGear.Save("PreferencesGear"));
@@ -251,19 +194,6 @@ namespace Start_a_Town_
             foreach (var i in dicTool)
                 this.Preferences[ItemRolesTool[i.Key]] = i.Value;
             return this;
-        }
-
-        class ItemPreferenceProperties
-        {
-            public Entity Item;
-            public bool Keep;
-            public JobDef Job;
-            public GearType Gear;
-            public ToolAbilityDef ToolUse;
-            public ItemPreferenceProperties(Entity item)
-            {
-                this.Item = item;
-            }
         }
     }
 }

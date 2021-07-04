@@ -1,16 +1,9 @@
-﻿using Start_a_Town_.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
     public interface IItemPreferencesManager : ISaveable, ISerializable
     {
-        //public IEnumerable<(ItemRole role, Entity item)> GetPreferences(Actor actor);
-        //public Entity GetPreference(ItemRole role);
         Entity GetPreference(GearType gt);
         Entity GetPreference(ToolAbilityDef toolUse);
         IEnumerable<Entity> GetJunk();

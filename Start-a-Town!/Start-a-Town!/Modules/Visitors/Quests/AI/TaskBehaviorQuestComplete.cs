@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -16,7 +12,6 @@ namespace Start_a_Town_
             var qgiver = TargetIndex.A;
             yield return BehaviorHelper.MoveTo(qgiver);
             yield return new BehaviorInteractionNew(qgiver, () => new InteractionQuestDeliver(task.Quest));
-            //yield return new BehaviorCustom(() => actor.Town.QuestManager.RemoveQuestReceiver(task.Quest));
         }
         public override void CleanUp()
         {

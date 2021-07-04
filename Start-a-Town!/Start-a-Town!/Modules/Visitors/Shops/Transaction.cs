@@ -2,7 +2,7 @@
 
 namespace Start_a_Town_
 {
-    public struct Transaction //: ISerializable
+    public struct Transaction
     {
         public enum Types { Buy, Sell }
         public int Customer;
@@ -34,8 +34,6 @@ namespace Start_a_Town_
         }
         public Transaction(SaveTag load)
         {
-            //load.TryGetTagValue<int>("Type", out int t);
-            //this.Type = (Types)t;
             this.Type = (Types)load.GetValue<int>("Type");
             this.Customer = load.GetValue<int>("Customer");
             this.Item = load.GetValue<int>("Item");
@@ -66,13 +64,5 @@ namespace Start_a_Town_
             this.Cost.Save(tag, "Cost");
             save.Add(tag);
         }
-        //public ISerializable Read(BinaryReader r)
-        //{
-        //    this.Type = (Types)r.ReadInt32();
-        //    this.Customer = r.ReadInt32();
-        //    this.Item = r.ReadInt32();
-        //    this.Cost = r.ReadInt32();
-        //    return this;
-        //}
     }
 }

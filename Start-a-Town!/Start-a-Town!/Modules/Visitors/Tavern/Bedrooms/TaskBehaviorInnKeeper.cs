@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -16,14 +13,12 @@ namespace Start_a_Town_
             var task = this.Task;
             var actor = this.Actor;
             var map = actor.Map;
-            //var shop = actor.Town.ShopManager.GetShop<Tavern>(task.ShopID);
             var shop = actor.Workplace as Tavern;
             var counter = shop.Counter.Value;
             var counterSurface = counter.Above();
-            var customerProps = shop.GetCustomerProperties(task.GetTarget(Customer));// task.CustomerProps as CustomerTavern;
+            var customerProps = shop.GetCustomerProperties(task.GetTarget(Customer));
             var customer = customerProps.Customer;
             var counterCell = map.GetCell(counter);
-            //var room = map.Town.RoomManager.GetRoomAt(customerProps.Bed.Value);
             var room = customerProps.Bedroom;
 
             yield return BehaviorHelper.SetTarget(Customer, customer);
@@ -51,10 +46,6 @@ namespace Start_a_Town_
             yield return new BehaviorCustom(() =>
             {
             });
-            //yield return new BehaviorCustom(() => 
-            //{
-            //    room.OwnerRef = 
-            //});
         }
     }
 }

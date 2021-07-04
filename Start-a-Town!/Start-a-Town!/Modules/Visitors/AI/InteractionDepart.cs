@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
     class InteractionDepart : Interaction
     {
-        //public InteractionDepart() : base("Departing")
-        //{
-
-        //}
         public override void Perform(GameObject a, TargetArgs t)
         {
             var actor = a as Actor;

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     class TaskGiverInnKeeper : TaskGiver
     {
@@ -17,7 +11,7 @@ namespace Start_a_Town_
                 if (customer.Bedroom is not null && 
                     !customer.Customer.Ownership.Owns(customer.Bedroom))
                 {
-                    return new AITask(typeof(TaskBehaviorInnKeeper), customer.Customer);// { CustomerProps = customer };
+                    return new AITask(typeof(TaskBehaviorInnKeeper), customer.Customer);
                 }
             }
             return null;

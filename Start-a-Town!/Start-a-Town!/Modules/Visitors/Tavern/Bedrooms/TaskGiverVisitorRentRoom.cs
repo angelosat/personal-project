@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -13,8 +9,6 @@ namespace Start_a_Town_
             if (actor.Ownership.Has(RoomRoleDefOf.Bedroom))
                 return null;
             return SearchByTavern(actor);
-            return SearchByBed(actor);
-
         }
 
         private static AITask SearchByBed(Actor actor)

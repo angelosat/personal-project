@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Start_a_Town_
 {
@@ -40,6 +35,5 @@ namespace Start_a_Town_
             return this;
         }
         protected virtual void ReadExtra(BinaryReader r) { }
-
     }
 }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.AI;
 
 namespace Start_a_Town_
 {

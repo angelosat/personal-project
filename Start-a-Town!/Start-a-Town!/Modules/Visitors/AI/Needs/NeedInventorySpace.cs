@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     class NeedInventorySpace : Need
     {
@@ -15,13 +9,9 @@ namespace Start_a_Town_
         public override void Tick(GameObject parent)
         {
             var inv = parent.Inventory;
-            //var p = inv.PercentageEmpty;
-            //this.Value = p * p;
             var p = inv.PercentageFull;
             this.Value = 1 - p * p;
             this.Value *= 100;
         }
-
-        //public override object Clone() => new NeedInventorySpace();
     }
 }

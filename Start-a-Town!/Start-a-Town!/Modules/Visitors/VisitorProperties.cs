@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.GameModes.StaticMaps;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
@@ -20,8 +18,6 @@ namespace Start_a_Town_
             PacketSyncAwardTownRating = Network.RegisterPacketHandler(SyncAwardTownRating);
             PacketSync = Network.RegisterPacketHandler(Sync);
         }
-
-
 
         public int ActorID;
         Actor CachedActor;
@@ -44,26 +40,14 @@ namespace Start_a_Town_
         {
             this.CachedActor = this.World.Map.Net.GetNetworkObject(this.ActorID) as Actor;
         }
-        //public float TownVisitChance;
-        //float _TownApprovalRating;
-        //public float TownApprovalRating
-        //{
-        //    get => this._TownApprovalRating;
-        //    set 
-        //    {
-        //        this._TownApprovalRating = value;
-
-        //    }
-        //}
+        
         public float TownApprovalRating;
         int ApprovalMin = -100, ApprovalMax = 100;
 
         public HashSet<int> JunkItems = new();
         public IntVec3? HangAroundSpot;
-        //public bool RequiresGuidance = true;
         
         public float TownRating => this.TownApprovalRating >= 0 ? this.TownApprovalRating / ApprovalMax : this.TownApprovalRating / ApprovalMin;
-        //internal Actor Guide;
         public TimeSpan Timer = new();
 
         public OffsiteAreaDef OffsiteArea;
@@ -72,9 +56,7 @@ namespace Start_a_Town_
 
         public HashSet<int> ShopBlacklist = new();
         public HashSet<int> RecentlyVisitedShops = new();
-        //readonly HashSet<int> Quests = new();
         public readonly ObservableCollection<QuestDef> Quests = new();
-        //public IObjectProvider Net;
         public StaticWorld World;
         public VisitorProperties(BinaryReader r, PopulationManager manager)
         {
@@ -88,14 +70,10 @@ namespace Start_a_Town_
         }
         public VisitorProperties(StaticWorld world, Actor actor, float townVisitChance, int townApprovalRating)
         {
-            //this.Net = net;
             this.World = world;
             this.Timer = world.Clock;
-            //ActorID = actor.InstanceID;
             this.Actor = actor;
-            //TownVisitChance = townVisitChance;
             TownApprovalRating = townApprovalRating;
-            //this.ItemPreferences = new ItemPreferencesManager(actor);
         }
         public void Tick()
         {
@@ -147,7 +125,7 @@ namespace Start_a_Town_
                     Vector3 coords = map.GetRandomEdgeCell().Above();
                     map.SyncSpawn(actor, coords, Vector3.Zero);
                     this.Arrive();
-                    this.ResetTimer(world.Clock);//.Clock);
+                    this.ResetTimer(world.Clock);
                 }
             }
             this.Sync();
@@ -170,17 +148,6 @@ namespace Start_a_Town_
 
         public void GetTooltipInfo(Tooltip tooltip)
         {
-
-            //TimeSpan elapsedTime() => this.GetTimeElapsed();
-            //var box = new GroupBox();
-            //box.AddControls(new Label(() => string.Format("{0} chance: {1}\nApproval Rating: {2}\nTime since last visit/departure: {3}",
-                
-            //    this.Actor.IsSpawned ? "Depart" : "Visit"
-            //    , $"{this.GetVisitDepartChance():0.00%}", this.TownApprovalRating.ToString("0.00%"),
-            //    $"{elapsedTime().TotalDays:#0} days(s), {elapsedTime().Hours:#0} hour(s), {elapsedTime().Minutes:#0} minute(s), {elapsedTime().Seconds:#0} second(s)")));
-
-            ////,this.TownVisitChance.ToString("0.00%"), this.TownApprovalRating.ToString("0.00%"))));
-            //tooltip.AddControls(box);
         }
 
         internal VisitorProperties AddRecentlyVisitedShop(Workplace shop)
@@ -194,35 +161,22 @@ namespace Start_a_Town_
         }
         internal void ResetTimer(TimeSpan clock)
         {
-            this.Timer = clock;// TimeSpan.Zero;
+            this.Timer = clock;
         }
         internal TimeSpan GetTimer()
         {
             return this.Timer;
         }
-        //internal TimeSpan GetTimeElapsed(TimeSpan now)
-        //{
-        //    return now - this.Timer;
-        //}
+        
         internal TimeSpan GetTimeElapsed()
         {
-            //return this.Net.Clock - this.Timer;
             return this.World.Clock - this.Timer;
         }
-        //public double GetVisitChance(TimeSpan now)
-        //{
-        //    var fromTimeAway = now.TotalSeconds * .5 + this.TownApprovalRating;
-        //    return fromTimeAway;
-        //}
-        //public double GetVisitDepartChance()
-        //{
-        //    return this.GetVisitChanceFromTimeElapsed();
-        //}
+       
         public double GetVisitChance()
         {
             if (this.GetQuests().Any(q => q.IsCompleted(this.Actor)))
                 return 1;
-            //var fromTime = this.GetVisitChanceFromTimeElapsed();
             var fromTime = this.FromTimeElapsed();
             var fromNeeds = this.GetVisitChanceFromNeeds();
             var fromTownRating = (.5 + this.TownRating);
@@ -233,18 +187,8 @@ namespace Start_a_Town_
             if (this.GetQuests().Any(q => !q.IsCompleted(this.Actor)))
                 return 1;
             return this.FromTimeElapsed();
-            //var elapsed = this.GetTimeElapsed();
-            //var a = elapsed.TotalHours / 24;
-            //var fromElapsed = a * a;
-            //return fromElapsed;
         }
-        //double GetVisitChanceFromTimeElapsed()
-        //{
-        //    return this.GetDepartChance();
-        //    var elapsed = this.GetTimeElapsed();
-        //    var fromTimeAway = elapsed.TotalSeconds * (.5 + this.TownRating) * .005;
-        //    return fromTimeAway;
-        //}
+       
         double FromTimeElapsed()
         {
             var elapsed = this.GetTimeElapsed();
@@ -254,15 +198,10 @@ namespace Start_a_Town_
         }
         double GetVisitChanceFromNeeds()
         {
-            //var needInv = this.Actor.GetNeed(VisitorNeedsDefOf.InventorySpace);
             var value = this.Actor.GetNeeds(VisitorNeedsDefOf.NeedCategoryVisitor).Average(n => n.Percentage);
             return 1 - value;
         }
-        void HandleNewItem(Entity item)
-        { 
-
-        }
-        
+       
         internal void BlacklistShop(int shopID)
         {
             this.ShopBlacklist.Add(shopID);
@@ -308,32 +247,26 @@ namespace Start_a_Town_
         }
         internal bool HasQuest(QuestDef quest)
         {
-            //return this.Quests.Contains(quest.ID);
             return this.Quests.Contains(quest);
         }
         internal bool AcceptQuest(QuestDef quest)
         {
-            //this.Quests.Add(quest.ID);
             var actor = this.Actor;
             this.Quests.Add(quest);
             actor.Net.EventOccured(Components.Message.Types.QuestReceived, actor, quest);
-            //actor.Net.Report($"{actor.Name} accepted quest {quest}");
             AILog.SyncWrite(actor, $"Received quest [{quest}] from [{quest.Giver.Name}]");
-
             return true;
         }
         internal void AbandonQuest(QuestDef quest)
         {
             this.Quests.Remove(quest);
             this.Actor.Net.EventOccured(Components.Message.Types.QuestAbandoned, this.Actor, quest);
-            //this.Actor.Net.Report($"{this.Actor.Name} abandoned quest {quest}");
             this.Actor.Log.Write($"Abandoned quest [{quest.Name}]");
         }
         internal void CompleteQuest(QuestDef quest)
         {
             this.Quests.Remove(quest);
             this.Actor.Log.Write($"Received reward for completing quest [{quest.Name}]");
-            //this.TownApprovalRating += quest.GetRewardRatio();
             this.AwardTownRating(quest.GetRewardRatio());
         }
         internal IEnumerable<QuestDef> GetQuests()
@@ -342,7 +275,6 @@ namespace Start_a_Town_
             foreach(var qid in this.Quests)
             {
                 yield return qid;
-                //yield return manager.GetQuest(qid);
             }
         }
         public override string ToString()
@@ -355,29 +287,19 @@ namespace Start_a_Town_
             w.Write(this.Actor.IsSpawned);
             if (!this.Actor.IsSpawned)
                 this.Actor.Write(w);
-            //w.Write(this.TownVisitChance);
             w.Write(this.TownApprovalRating);
             w.Write(this.ShopBlacklist);
             w.Write(this.RecentlyVisitedShops);
-            //w.Write(this.Quests);
-            //w.Write(this.Quests.Select(q=>q.ID));
             w.Write(this.Discovered);
             w.Write(this.Timer.TotalMilliseconds);
-
             w.Write(this.Quests.Select(q => q.ID).ToArray());
-
         }
         public ISerializable Read(BinaryReader r)
         {
-            //_ = r.ReadInt32();
             this.ActorID = r.ReadInt32();
             var isspawned = r.ReadBoolean();
             if (!isspawned)
-            {
                 this.Actor = GameObject.CreatePrefab(r) as Actor;
-                //this.World.Map.Net.Instantiate(this.Actor); // TEMP until i find a cleaner solution to save and sync unspawned actors
-            }
-            //this.TownVisitChance = r.ReadSingle();
             this.TownApprovalRating = r.ReadSingle();
             this.ShopBlacklist = new(r.ReadIntArray());
             this.RecentlyVisitedShops = new(r.ReadIntArray());
@@ -391,19 +313,16 @@ namespace Start_a_Town_
         public ISyncable Sync(BinaryWriter w)
         {
             w.Write(this.Actor.RefID);
-            
             w.Write(this.TownApprovalRating);
             w.Write(this.ShopBlacklist);
             w.Write(this.RecentlyVisitedShops);
             w.Write(this.Discovered);
             w.Write(this.Timer.TotalMilliseconds);
             return this;
-
         }
         public ISyncable Sync(BinaryReader r)
         {
             this.ActorID = r.ReadInt32();
-            
             this.TownApprovalRating = r.ReadSingle();
             this.ShopBlacklist = new(r.ReadIntArray());
             this.RecentlyVisitedShops = new(r.ReadIntArray());
@@ -420,8 +339,6 @@ namespace Start_a_Town_
             this.TownApprovalRating.Save(tag, "TownApprovalRating");
             this.ShopBlacklist.Save(tag, "ShopBlacklist");
             this.RecentlyVisitedShops.Save(tag, "RecentlyVisitedShops");
-            //this.Quests.Save(tag, "Quests");
-            //tag.TrySaveRefs(this.Quests, "Quests");
             this.Discovered.Save(tag, "Discovered");
             this.Quests.TrySaveRefs(tag, "Quests");
             this.Timer.TotalMilliseconds.Save(tag, "Timer");
@@ -429,14 +346,12 @@ namespace Start_a_Town_
         }
         public ISaveable Load(SaveTag tag)
         {
-            //this.Actor = this.World.Net.GetNetworkObject(tag.GetValue<int>("ActorID")) as Actor;
             this.ActorID.TryLoad(tag, "ActorID");
             tag.TryGetTag("ActorObject", t => this.Actor = GameObject.Load(t) as Actor);
             this.TownApprovalRating.TryLoad(tag, "TownApprovalRating");
             this.ShopBlacklist.TryLoad(tag, "ShopBlacklist");
             this.RecentlyVisitedShops.TryLoad(tag, "RecentlyVisitedShops");
             this.Discovered.TryLoad(tag, "Discovered");
-            //this.Quests.TryLoad(tag, "Quests");
             this.Quests.TryLoadRefs(tag, "Quests");
             tag.TryGetTagValue<double>("Timer", v => this.Timer = TimeSpan.FromMilliseconds(v));
             return this;
@@ -452,7 +367,6 @@ namespace Start_a_Town_
             Control[] tabs = new[] 
             {
                 QuestsManager.ActorActiveQuestsGUI,
-                //InventoryUI.GetGUI() 
             };
             var gui = GUI ??= UIHelper.ToTabbedContainer(tabs).ToWindow().SetOnSelectedTargetChangedAction((c, t) =>
             {
@@ -461,13 +375,10 @@ namespace Start_a_Town_
                 else if (!(t.Object is Actor))
                     c.Hide();
             });
-            //gui.GetData(this.Actor, true);
             foreach (var t in tabs)
                 t.GetData(this.Actor);
            
             gui.GetWindow().SetTitle(this.Actor.Name).Show();
-            //gui.Show();
         }
-        
     }
 }

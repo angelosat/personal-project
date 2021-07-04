@@ -2,157 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Towns
 {
-    public class WorkplaceManager : TownComponent
+    public partial class WorkplaceManager : TownComponent
     {
-        private class Packets
-        {
-            static int PacketPlayerCreateShop, PacketPlayerDeleteShop, PacketPlayerAddStockpileToShop, PacketPlayerAssignWorkerToShop, PacketPlayerShopAssignCounter;
-
-            static public void Init()
-            {
-                PacketPlayerCreateShop = Network.RegisterPacketHandler(ReceivePlayerCreateShop);
-                PacketPlayerDeleteShop = Network.RegisterPacketHandler(ReceivePlayerDeleteShop);
-                PacketPlayerAddStockpileToShop = Network.RegisterPacketHandler(ReceivePlayerAddStockpileToShop);
-                PacketPlayerAssignWorkerToShop = Network.RegisterPacketHandler(HandlePlayerAssignWorkerToShop);
-                PacketPlayerShopAssignCounter = Network.RegisterPacketHandler(ReceivePlayerShopAssignCounter);
-            }
-            public static void SendPlayerDeleteShop(IObjectProvider net, PlayerData player, int shopid)
-            {
-                if(net is Server)
-                {
-                    net.Map.Town.ShopManager.RemoveShop(shopid);
-                }
-                //net.GetOutgoingStream().Write((int)PacketType.PlayerDeleteShop, player.ID, shopid);
-                net.GetOutgoingStream().Write(PacketPlayerDeleteShop, player.ID, shopid);
-            }
-            private static void ReceivePlayerDeleteShop(IObjectProvider net, BinaryReader r)
-            {
-                var pl = net.GetPlayer(r.ReadInt32());
-                var shopid = r.ReadInt32();
-                if (net is Client)
-                    net.Map.Town.ShopManager.RemoveShop(shopid);
-                else
-                    SendPlayerDeleteShop(net, pl, shopid);
-            }
-
-            static public void SendPlayerShopAssignCounter(IObjectProvider net, PlayerData player, Workplace shop, IntVec3 global)
-            {
-                var w = net.GetOutgoingStream();
-                //w.Write(PacketType.PlayerShopAssignCounter);
-                w.Write(PacketPlayerShopAssignCounter);
-                w.Write(player.ID);
-                w.Write(shop?.ID ?? -1);
-                w.Write(global);
-            }
-            static void ReceivePlayerShopAssignCounter(IObjectProvider net, BinaryReader r)
-            {
-                var player = net.GetPlayer(r.ReadInt32());
-                var manager = net.Map.Town.ShopManager;
-                var shop = manager.GetShop(r.ReadInt32());
-                var global = r.ReadIntVec3();// r.ReadVector3();
-                if (shop != null)
-                {
-                    if (global.Z < 0)
-                        throw new NotImplementedException();
-                    shop.AddFacility(global);
-                    //shop.Counter = global.Z < 0 ? null : global;
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                    //var prevShop = manager.Shopss.FirstOrDefault(s => s.Counter.HasValue && s.Counter.Value == new IntVec3(global));
-                    //if (prevShop != null)
-                    //    prevShop.Counter = null;
-                }
-                if (net is Server)
-                    SendPlayerShopAssignCounter(net, player, shop, global);
-            }
-
-            static public void SendPlayerAssignWorkerToShop(IObjectProvider net, PlayerData player, Actor actor, Workplace shop)
-            {
-                var w = net.GetOutgoingStream();
-                //w.Write(PacketType.PlayerAssignWorkerToShop);
-                w.Write(PacketPlayerAssignWorkerToShop);
-                w.Write(player.ID);
-                w.Write(actor.RefID);
-                w.Write(shop.ID);
-            }
-            private static void HandlePlayerAssignWorkerToShop(IObjectProvider net, BinaryReader r)
-            {
-                var playerID = r.ReadInt32();
-                var actorID = r.ReadInt32();
-                var shopID = r.ReadInt32();
-                var manager = net.Map.Town.ShopManager;
-                var actor = net.GetNetworkObject(actorID) as Actor;
-                var shop = manager.GetShop(shopID);
-                shop.AddWorker(actor);
-                if (net is Server)
-                    SendPlayerAssignWorkerToShop(net, net.GetPlayer(playerID), actor, shop);
-            }
-
-            static public void SendPlayerAddStockpileToShop(IObjectProvider net, int playerID, int shopID, int stockpileID)
-            {
-                if (shopID < 0)
-                    return;
-                var w = net.GetOutgoingStream();
-                //w.Write(PacketType.PlayerAddStockpileToShop);
-                w.Write(PacketPlayerAddStockpileToShop);
-                w.Write(playerID);
-                w.Write(shopID);
-                w.Write(stockpileID);
-            }
-            private static void ReceivePlayerAddStockpileToShop(IObjectProvider net, BinaryReader r)
-            {
-                var playerID = r.ReadInt32();
-                var shopid = r.ReadInt32();
-                var stockpileid = r.ReadInt32();
-                var shopmanager = net.Map.Town.ShopManager;
-                var stockpilemanager = net.Map.Town.StockpileManager;
-                var stockpile = stockpilemanager.GetStockpile(stockpileid);
-                //var shop = shopid < 0 ? null : shopmanager.GetShop(shopid);
-                var shop = shopmanager.GetShop(shopid) as Shop;
-                shop.AddStockpile(stockpile);
-
-                if (net is Server)
-                    SendPlayerAddStockpileToShop(net, playerID, shopid, stockpileid);
-            }
-
-            static public void SendPlayerCreateShop(IObjectProvider net, int playerID, Type shopType, int shopID = 0)
-            {
-                var w = net.GetOutgoingStream();
-                //w.Write(PacketType.PlayerCreateShop);
-                w.Write(PacketPlayerCreateShop);
-                w.Write(playerID);
-                w.Write(shopType.FullName);
-                w.Write(shopID);
-            }
-            private static void ReceivePlayerCreateShop(IObjectProvider net, BinaryReader r)
-            {
-                var playerID = r.ReadInt32();
-                var shoptypename = r.ReadString();
-
-                var shopid = r.ReadInt32();
-                var manager = net.Map.Town.ShopManager;
-
-                if (net is Client)
-                    manager.CurrentShopID = shopid;
-                var shoptype = Type.GetType(shoptypename);
-                var id = manager.GetNextShopID();
-                //var shop = new Shop(manager, id);
-                var workplace = Activator.CreateInstance(shoptype, manager, id) as Workplace;
-                manager.AddShop(workplace);
-                if (net is Server)
-                    SendPlayerCreateShop(net, playerID, shoptype, workplace.ID);
-            }
-        }
-
         internal IEnumerable<T> GetShops<T>() where T : Workplace
         {
             return this.Shopss.OfType<T>();
@@ -173,7 +28,6 @@ namespace Start_a_Town_.Towns
         public WorkplaceManager(Town town) : base(town)
         {
         }
-        
 
         public override string Name => "Shops";
         Dictionary<int, Workplace> Shops = new();
@@ -229,10 +83,7 @@ namespace Start_a_Town_.Towns
         {
             return this.Shopss.FirstOrDefault(s => s.HasWorker(worker));
         }
-        //public IEnumerable<Workplace> GetWorkplaces(Actor worker)
-        //{
-        //    return this.Shopss.Where(s => s.role(worker));
-        //}
+       
         public T GetShop<T>(Actor worker) where T : Workplace
         {
             return this.Shopss.FirstOrDefault(s => s.HasWorker(worker)) as T;
@@ -249,9 +100,7 @@ namespace Start_a_Town_.Towns
         {
             if (selected is Stockpile stockpile)
             {
-
                 var net = stockpile.Town.Net;
-                //var control = new Lazy<Control>(() => this.CreateUIShopList(sh => Packets.SendPlayerAddStockpileToShop(net, net.GetPlayer().ID, sh.ID, stockpile.ID)).ToPanelLabeled("Select shop").HideOnAnyClick());
 
                 var control = new Lazy<Control>(
                     () =>
@@ -269,7 +118,6 @@ namespace Start_a_Town_.Towns
                 if (target.Type == TargetType.Position)
                 {
                     var block = target.Block;
-                    //if (block is IBlockWorkstation)
                     if (this.Shopss.Any(s => s.IsAllowed(block)))
                     {
                         info.AddTabAction("Shopp", () =>
@@ -280,13 +128,6 @@ namespace Start_a_Town_.Towns
         }
         const int UIListWidth = 250;
 
-        //public Control GetUIShopListWithNoneOption(Action<Workplace> selectAction) // TODO make this a singleton
-        //{
-        //    return new GroupBox().AddControlsVertically(
-        //            new Button("None", () => selectAction(null), UIListWidth),
-        //            this.CreateUIShopList(selectAction))
-        //        .ToPanelLabeled("Select shop").HideOnAnyClick();
-        //}
         public Control GetUIShopListWithNoneOption<T>(Action<Workplace> selectAction, Func<T, bool> filter) where T : Workplace // TODO make this a singleton
         {
             var box = new GroupBox();
@@ -325,7 +166,6 @@ namespace Start_a_Town_.Towns
                         break;
                 }
             };
-            //shoplist.AddItems(this.Shops.Values.ToArray());
             shoplist.OnShowAction = () =>
             {
                 shoplist.Clear();
@@ -343,11 +183,9 @@ namespace Start_a_Town_.Towns
             var win = new Lazy<Window>(() => shopUI.Value.control.ToWindow("Shop"));
             
 
-            var shoplist = new TableScrollableCompactNewNew<Workplace>(16)//, s => new Button(s.Name, () => selectAction?.Invoke(s)));
+            var shoplist = new TableScrollableCompactNewNew<Workplace>(16)
                 .AddColumn(new(), "name", 200, sh => new Label(sh.Name, ()=> {
                         shopUI.Value.refresh(sh);
-                        //win.Value.Title = sh.Name;
-                        //win.Value.Show();
                 }), 0)
                 .AddColumn(new(), "delete", Icon.Cross.SourceRect.Width,
                     w => IconButton.CreateSmall(Icon.Cross,
@@ -377,7 +215,7 @@ namespace Start_a_Town_.Towns
             shoplist.AddItems(this.Shops.Values.ToArray());
             var net = this.Town.Net;
             var selectTypeMenu = selectShopType(t=> Packets.SendPlayerCreateShop(net, net.GetPlayer().ID, t));
-            var btnNew = new Button("New", () => selectTypeMenu.Toggle(UIManager.Mouse));// Packets.SendPlayerCreateShop(net, net.GetPlayer().ID), shoplist.Width);
+            var btnNew = new Button("New", () => selectTypeMenu.Toggle(UIManager.Mouse));
             boxList.AddControlsVertically(shoplist, btnNew);
             box.AddControlsHorizontally(boxList, shopUI.Value.control);
             return box;
@@ -418,16 +256,13 @@ namespace Start_a_Town_.Towns
         public override void Write(BinaryWriter w)
         {
             w.Write(this.CurrentShopID);
-            //w.Write(this.Shopss);
             this.Shopss.WriteAbstract(w);
         }
         public override void Read(BinaryReader r)
         {
             this.CurrentShopID = r.ReadInt32();
-            //this.Shopss = new(r.ReadList<Shop>(this));
             this.Shopss.ReadListAbstract(r, this);
             this.Shops = this.Shopss.ToDictionary(i => i.ID, i => i);
         }
-         
     }
 }

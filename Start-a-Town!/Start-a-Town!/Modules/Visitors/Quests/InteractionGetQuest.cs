@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Interactions;
 
 namespace Start_a_Town_
 {
@@ -33,8 +28,6 @@ namespace Start_a_Town_
         {
             return new InteractionGetQuest(this.QuestID);
         }
-
-
 
         protected override void WriteExtra(BinaryWriter w)
         {

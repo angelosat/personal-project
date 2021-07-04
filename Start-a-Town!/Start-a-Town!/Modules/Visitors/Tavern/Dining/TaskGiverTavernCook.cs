@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -33,11 +30,10 @@ namespace Start_a_Town_
                         var task = new AITask(typeof(TaskBehaviorTavernWorkerPrepareOrder));
                         foreach (var (reagent, item) in foundIngredients)
                             task.AddTarget(TargetIndex.A, item, 1);
-                        task.SetTarget(TargetIndex.B, availableKitchen.Value);// this.Workstations.First());
+                        task.SetTarget(TargetIndex.B, availableKitchen.Value);
                         task.IngredientsUsed = foundIngredients.ToDictionary(i => i.reagent, i => new ObjectRefIDsAmount(i.item, 1));
                         task.Order = order.Order;
                         task.CustomerProps = customer;
-                        //task.ShopID = this.ID;
                         return task;
                     }
                 }

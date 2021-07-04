@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -36,20 +32,9 @@ namespace Start_a_Town_
             this.Count.Save(save, "Count");
             this.AddSaveData(save);
         }
-        //void _Load(SaveTag load)
-        //{
-        //    this.Count = load.GetValue<int>("Count");
-        //    //this.Load(load);
-        //}
+        
         protected virtual void Load(SaveTag load) { }
-        //static public QuestObjective Load(SaveTag load, QuestDef parent)
-        //{
-        //    var typeName = load.GetValue<string>("Type");
-        //    var qobj = Activator.CreateInstance(Type.GetType(typeName), parent) as QuestObjective;
-        //    qobj._Load(load);
-        //    return qobj;
-        //}
-
+       
         public SaveTag Save(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);

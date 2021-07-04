@@ -1,32 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
     class QuestRewardItem : QuestReward
     {
-       
-        //public ItemDefMaterialAmount Reward;
-        //public override string Text => this.Reward.ToString();
-
-        //public override int Budget => this.Reward.Def.BaseValue * this.Reward.Amount;
         public ObjectAmount Reward;
 
         public QuestRewardItem(QuestDef parent) : base(parent)
         {
         }
-
         public override string Text => $"{this.Reward.Object.Label} x{this.Reward.Amount}";
-        //public override int Budget => this.Reward.GetValueTotal();
         public override int Budget => this.Reward.Object.GetValue() * this.Reward.Amount;
-
         public override string Label => this.Reward.Object.Label;
-
-        //public override int Count => this.Reward.Amount;
-
         public override int Count { get => this.Reward.Amount; set => this.Reward.Amount = value; }
 
         internal override void Award(Actor actor)

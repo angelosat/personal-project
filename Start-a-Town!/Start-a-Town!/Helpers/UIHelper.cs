@@ -7,7 +7,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public static class UIExtensions
+    public static class UIHelper
     {
         public static void DrawHighlight(this Rectangle bounds, SpriteBatch sb, Vector2 origin, float rotation, float alpha = 0.5f)
         {

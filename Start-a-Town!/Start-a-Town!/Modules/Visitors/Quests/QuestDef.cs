@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 using Microsoft.Xna.Framework;
@@ -22,43 +20,23 @@ namespace Start_a_Town_
             set { this._MaxConcurrent = Math.Max(-1, value); } // TODO maximum value affected by quest giving skill of quest giver
         }
         readonly List<QuestObjective> Objectives = new();
-        //readonly List<QuestReward> Rewards = new();
         readonly ObservableCollection<QuestReward> Rewards = new();
 
-        
-
-        //QuestRewardMoney RewardCurrency;
-        //HashSet<int> PendingReceivers = new();
-        //HashSet<int> Givers = new();
         int GiverID = -1;
         public Actor Giver
         {
             get
             {
-                return this.Manager.Net.GetNetworkObject(this.GiverID) as Actor;// this._Giver;
+                return this.Manager.Net.GetNetworkObject(this.GiverID) as Actor;
             }
             set
             {
-                //this._Giver = value;
                 this.GiverID = value?.RefID ?? -1;
                 this.Manager.Town.Map.EventOccured(Components.Message.Types.QuestDefAssigned, this);
             }
         }
         public bool IsValid { get { return this.Objectives.Any(); } }
-        //int PendingReceiverID = -1;
-        //HashSet<Actor> CurrentOwners = new();
-        //public bool IsValid { get { return this.Actor != null; } }
-
-        //[Obsolete]
-        //public QuestGiver(int id, IEnumerable<QuestObjective> objectives)
-        //{
-        //    this.ID = id;
-        //    this.Objectives = objectives.ToList();
-        //}
-        //public QuestDef(BinaryReader r, QuestsManager manager) : this(manager)
-        //{
-        //    this.Read(r);
-        //}
+        
         public QuestDef(QuestsManager manager, int id)
         {
             this.Manager = manager; 
@@ -69,21 +47,7 @@ namespace Start_a_Town_
         {
             this.Manager = manager;
         }
-
-        //public bool TryGiveQuest(Actor actor)
-        //{
-        //    return actor.AcceptQuest(new Quest(this, this.Objectives.ToArray(), null));
-        //}
-        //internal void HandleQuestReceiver(Actor actor)
-        //{
-        //    //this.PendingReceiverID = actor.InstanceID;
-        //}
-        //internal void RemoveQuestReceiver(Actor actor)
-        //{
-        //    if (this.PendingReceiverID != actor.InstanceID)
-        //        throw new Exception();
-        //    this.PendingReceiverID = -1;
-        //}
+        
         public bool IsCompleted(Actor actor)
         {
             return this.Objectives.All(o => o.IsCompleted(actor));
@@ -102,10 +66,7 @@ namespace Start_a_Town_
             foreach (var o in this.Rewards)
                 yield return o;
         }
-        //public Quest GetQuest(Actor hero)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        
         public QuestDef AddObjective(QuestObjective objective)
         {
             this.Objectives.Add(objective);
@@ -126,8 +87,6 @@ namespace Start_a_Town_
         }
         public int GetRewardTotal()
         {
-            //foreach(var rew in this.Rewards)
-            //return this.Rewards.Sum(r => r.Budget) + this.RewardCurrency?.Amount ?? 0;
             return this.Rewards.Sum(r => r.Budget);
         }
         public float GetRewardRatio()
@@ -144,8 +103,6 @@ namespace Start_a_Town_
             var budget = this.GetBudgetTotal();
             var reward = this.GetRewardTotal();
             var diff = budget - reward;
-            //var money = this.RewardCurrency ??= new QuestRewardMoney(diff);
-            //money = this.Rewards.FirstOrDefault(r => r is QuestRewardMoney) as QuestRewardMoney;
             var money = this.Rewards.OfType<QuestRewardMoney>().SingleOrDefault();
             if (money == null)
                 this.Rewards.Add(new QuestRewardMoney(this, diff));
@@ -163,7 +120,6 @@ namespace Start_a_Town_
                 this.Objectives[i].TryComplete(actor, area);
             }
             if (this.IsCompleted(actor))
-                //actor.Net.SyncReport($"{actor.Name} has completed {this.Name}!");
                 AILog.SyncWrite(actor, $"Received reward for completing [{this.Name}]");
         }
         public IEnumerable<ObjectAmount> GetQuestItemsInInventory(Actor actor)
@@ -181,8 +137,6 @@ namespace Start_a_Town_
             if (items.Any())
             {
                 var actorInv = actor.Inventory;
-                //foreach (var i in items)
-                //    i.Object.StackSize -= i.Amount;
                 foreach (var i in items)
                 {
                     if (i.Object.StackSize == i.Amount)
@@ -263,7 +217,7 @@ namespace Start_a_Town_
             var box = new GroupBox();
             QuestDef quest = null;
             ListBoxNew<ItemDefMaterialAmount, Button> listAvailableReqs = null;
-            var iconW = UIManager.Icon16Background.Width; //Icon.Cross.SourceRect.Width
+            var iconW = UIManager.Icon16Background.Width;
 
             void showAdjustObjectiveCountGui(QuestObjective qo)
             {
@@ -285,7 +239,6 @@ namespace Start_a_Town_
             }
 
             var reqList = new TableScrollableCompactNewNew<QuestObjective>(10, true)
-                //.AddColumn(new(), "", 200, qo => new Label(qo.Text), 0f)
                 .AddColumn("quantity", "", 32, q => new Label(() => q.Count.ToString(), ()=> showAdjustObjectiveCountGui(q)), 0f)
                 .AddColumn("minus", "", iconW, q => IconButton.CreateSmall('-', () => confirm(()=>Packets.SendAdjustObjectiveCount(quest.Manager.Net, quest.Manager.Net.GetPlayer(), q, q.Count - 1))), 0f)
                 .AddColumn("plus", "", iconW, q => IconButton.CreateSmall('+', () => confirm(() => Packets.SendAdjustObjectiveCount(quest.Manager.Net, quest.Manager.Net.GetPlayer(), q, q.Count + 1))), 0f)
@@ -337,8 +290,6 @@ namespace Start_a_Town_
                 .AddColumn(new(), "text", 200, qr => new Label(qr.Label), 0f)
                 .AddColumn(new(), "remove", Icon.Cross.SourceRect.Width, qo => IconButton.CreateCloseButton().SetLeftClickAction(btn => { }));
 
-
-
             var addNewBtn = new Button("Add new", () => createNewObjective(quest));
             var btnRename = new Button("Rename");
             var btnDelete = new Button("Delete");
@@ -352,7 +303,6 @@ namespace Start_a_Town_
                 rewardList.Bind(quest.Rewards);
                 box.GetWindow()?.SetTitle(quest.ToString());
             });
-            //var table = new ListBoxNew<QuestObjective, Button>(300, 350, qg => new(qg.Text));
             var modMaxCurrentDialog = new DialogInput("Enter value", control =>
             {
                 if (int.TryParse(control.Input, out int modValue))
@@ -361,7 +311,7 @@ namespace Start_a_Town_
                     control.Hide();
                 }
             }, 300, quest?.MaxConcurrent.ToString() ?? "this shouldn't happen");
-            var boxMaxConcurrent = new GroupBox().AddControlsHorizontally(//lblText, lblValue, btnMinus, btnPlus);
+            var boxMaxConcurrent = new GroupBox().AddControlsHorizontally(
                 new Label(() => "Max Available:"),
                 IconButton.CreateSmall('-', () => modMaxConcurrent(quest.MaxConcurrent - 1)),
                 IconButton.CreateSmall('+', () => modMaxConcurrent(quest.MaxConcurrent + 1)),
@@ -370,27 +320,12 @@ namespace Start_a_Town_
                     if (quest == null)
                         return "";
                     var v = quest.MaxConcurrent;
-                    return (v == -1 ? "unlimited" : v.ToString());// + $"(Currently {popManager.Find(v => v.HasQuest(currentQuest)).Count()})";
+                    return (v == -1 ? "unlimited" : v.ToString());
                 }, () => modMaxCurrentDialog.SetText(quest?.MaxConcurrent.ToString()).ShowDialog())
                 { Width = (int)UIManager.Font.MeasureString("unlimited").X },
                 new Label(() => $"(Currently {quest?.Manager.Town.Map.World.Population.Find(v => v.HasQuest(quest)).Count()})")
-                //new IconButton("-") { LeftClickAction = () => modMaxConcurrent(1) },
-                //new IconButton("+") { LeftClickAction = () => modMaxConcurrent(-2) });
                 );
 
-
-            //var guiReward = new Label(() => $"Total budget: {quest?.GetBudgetTotal()}");
-            //var guiReward = new Label(() => $"Desirability: {quest?.GetRewardRatio():0%}") { 
-            //    TextColorFunc = () =>
-            //    {
-            //        var ratio = quest.GetRewardRatio();
-            //        if(ratio <= 1)
-            //            return Color.Lerp(Color.White, Color.Red, (1f - ratio) * 2f); 
-            //        else
-            //            return Color.Lerp(Color.White, Color.Lime, (ratio - 1f) * 2f);
-
-            //    }
-            //};// {quest?.GetBudgetTotal()}");
             var guiReward = new GroupBox().AddControlsLineWrap(new[] {
                 new Label(() => $"Desirability"),
                 new Label(() => $"{quest?.GetRewardRatio():0%}")
@@ -416,7 +351,7 @@ namespace Start_a_Town_
                guiReward,
                btnMatchBudget);
             _ = box.ToWindow();
-            return box;//.ToWindow("Edit quest");
+            return box;
 
             void modMaxConcurrent(int modValue)
             {
@@ -427,21 +362,16 @@ namespace Start_a_Town_
                 var box = new GroupBox();
 
                 var items = Def.Database.Values.OfType<ItemDef>().Where(d => d.Category == ItemCategory.RawMaterials).SelectMany(d => d.GenerateVariants());
-                //var list = new ListBoxNew<ItemDef, Button>(150, 200, (def, btn) => new(def.Name, () => selectDef(def)));
                 listAvailableReqs = new ListBoxNew<ItemDefMaterialAmount, Button>(200, 200, (def, currentList) => new(def.ToString(), () =>
                 {
-                    //reqList.AddItems(new QuestObjectiveItem(def));
-                    //currentList.RemoveItems(def);
                     Packets.SendQuestCreateObjective(quest.Manager.Town.Net, quest.Manager.Town.Net.GetPlayer(), quest, new QuestObjectiveItem(quest, def));
                 }));
                 listAvailableReqs.AddItems(items);
                 box.AddControlsVertically(listAvailableReqs);
-                //var context = box.ToContextMenu("Select item");
                 var contextLoc = new Microsoft.Xna.Framework.Vector2(reqList.Parent.Parent.BoundsScreen.Right, reqList.Parent.Parent.BoundsScreen.Top);
                 var context = box.ToContextMenuClosable("Select item", contextLoc);
 
                 context.Show();
-                //return box;
             }
         }
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI;
+﻿using System.Collections.Generic;
 using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_
@@ -18,8 +13,6 @@ namespace Start_a_Town_
             var task = this.Task;
             yield return new BehaviorWait(() =>
             {
-                //var convo = this.Actor.GetState().ConversationNew;
-                //return convo?.Finished ?? true;
                 return state.ConversationPartner == null;
             })
             {
@@ -28,8 +21,6 @@ namespace Start_a_Town_
                     actor.FaceTowards(task.TargetA);
                 }
             };
-
-            //yield return new BehaviorWait(()=>!this.Actor.Net.Map.World.Population.GetVisitorProperties(this.Actor).RequiresGuidance);
         }
     }
 }

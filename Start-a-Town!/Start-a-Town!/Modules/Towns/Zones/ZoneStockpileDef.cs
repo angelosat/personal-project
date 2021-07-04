@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
     class ZoneStockpileDef : ZoneDef
     {
-        //public ZoneStockpileDef()
-        //{
-        //    this.ZoneType = typeof(Stockpile);
-        //}
         public override Type ZoneType => typeof(Stockpile);
 
         public override bool IsValidLocation(IMap map, IntVec3 global)

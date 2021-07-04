@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
@@ -62,17 +60,6 @@ namespace Start_a_Town_
             }
         }
 
-        private bool IsValidLocation(IntVec3 global)
-        {
-            var map = this.Map;
-            var above = global.Above();
-            if (this.Positions.Contains(global) && !map.IsSolid(global))
-                return false;
-            if (map.IsSolid(above))
-                return false;
-            return this.ZoneDef.IsValidLocation(map, global);
-        }
-
         public void AddPosition(IntVec3 pos)
         {
             this.Positions.Add(pos);
@@ -85,12 +72,6 @@ namespace Start_a_Town_
         public void RemovePosition(IntVec3 pos)
         {
             this.RemovePositions(new[] { pos });
-            //this.Positions.Remove(pos);
-            //var splitgraphs = this.Positions.GetAllConnectedSubGraphs();
-            //if (splitgraphs.Count == 1)
-            //    return;
-            //var largest = splitgraphs.OrderByDescending(g => g.Count).First();
-            //this.Positions = largest;
         }
         public void RemovePositions(IEnumerable<IntVec3> positions)
         {
@@ -107,15 +88,6 @@ namespace Start_a_Town_
             var largest = splitgraphs.OrderByDescending(g => g.Count).First();
             this.Positions = largest;
         }
-        protected void PopulateOwnedPositions(IEnumerable<Vector3> positions)
-        {
-            foreach (var pos in positions)
-            {
-                if (!IsPositionValid(this.Map, pos))
-                    continue;
-                this.Positions.Add(pos);
-            }
-        }
         
         internal void Edit(IntVec3 begin, IntVec3 end, bool remove)
         {
@@ -126,13 +98,6 @@ namespace Start_a_Town_
                 var finalPositions = inputpositions.Where(pos => this.Town.GetZoneAt(pos) == null).Union(this.Positions);
                 if (!finalPositions.IsConnectedNew())
                 {
-                    //if (this.Town.Map.Net is Client)
-                    //    Client.Instance.Log.Write("Resulting zone must be connected");
-                    // TODO is it safe to register new zones independently on client?
-                    //if (this.GetType() == typeof(GrowingZone))
-                    //    this.Map.Town.FarmingManager.RegisterNewZone(inputpositions);
-                    //else if (this.GetType() == typeof(Stockpile))
-                    //    this.Map.Town.StockpileManager.RegisterNewZone(inputpositions);
                     this.Manager.RegisterNewZone(this.GetType(), inputpositions);
 
                     return;
@@ -148,22 +113,6 @@ namespace Start_a_Town_
             else
             {
                 this.RemovePositions(inputpositions);
-                //// check if result positions are connected
-                //var checkPositions = thisPositions;//.Intersect(inputpositions).ToList();
-                //foreach (var pos in inputpositions)
-                //    checkPositions.Remove(pos);
-                //if (checkPositions.Count == 0)
-                //{
-                //    this.Delete();
-                //    return;
-                //}
-                //var isConnected = checkPositions.IsConnectedNew();
-                //if (isConnected)
-                //    foreach (var pos in inputpositions)
-                //        this.RemovePosition(pos);
-                //else
-                //    if (this.Town.Map.Net is Client)
-                //    Client.Instance.Log.Write("Resulting zone must be connected");
             }
         }
         public void Invalidate()
@@ -179,58 +128,6 @@ namespace Start_a_Town_
                 this.RemovePosition(pos);
             this.Validate();
         }
-        internal void EditOld(IntVec3 begin, IntVec3 end, bool remove)
-        {
-            //var thisPositions = this.GetPositions();
-            var thisPositions = this.Positions;
-            //var inputpositions = begin.GetBox(end);
-            var inputpositions = begin.GetBoxLazy(end);
-
-            if (!remove)
-            {
-                var finalPositions = inputpositions.Where(pos => this.Town.GetZoneAt(pos) == null).Union(thisPositions);
-                if(!finalPositions.IsConnectedNew())
-                {
-                    if (this.Town.Map.Net is Client)
-                        Client.Instance.Log.Write("Resulting zone must be connected");
-                    return;
-                }
-                foreach (var pos in inputpositions.Except(thisPositions))
-                {
-                    if (this.Town.GetZoneAt(pos) == null)
-                    {
-                        this.AddPosition(pos);
-                    }
-                }
-            }
-            else
-            {
-                // check if result positions are connected
-                var checkPositions = thisPositions;//.Intersect(inputpositions).ToList();
-                foreach (var pos in inputpositions)
-                    checkPositions.Remove(pos);
-                if (checkPositions.Count == 0)
-                {
-                    this.Delete();
-                    return;
-                }
-                var isConnected = checkPositions.IsConnectedNew();
-                if (isConnected)
-                    foreach (var pos in inputpositions)
-                        this.RemovePosition(pos);
-                else
-                    if (this.Town.Map.Net is Client)
-                        Client.Instance.Log.Write("Resulting zone must be connected");
-            }
-        }
-        [Obsolete]
-        public bool ContainsOld(GameObject obj)
-        {
-            foreach (var pos in this.GetPositions().Select(p => p.Above()))
-                if (this.Town.Map.GetObjects(pos).Contains(obj))
-                    return true;
-            return false;
-        }
         internal bool Contains(GameObject obj)
         {
             var g = obj.Global.SnapToBlock() - Vector3.UnitZ;
@@ -239,16 +136,6 @@ namespace Start_a_Town_
         internal bool Contains(IntVec3 pos)
         {
             return this.Positions.Contains(pos);
-        }
-        internal void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
-        {
-            var isselected = UISelectedInfo.IsSelected(this);
-            var col = Color.Lerp(this.Color, Color.White, isselected ? .5f : 0) * .5f; //(isselected ? Color.White : this.Color) * .5f;// this.Color * (isselected ? .5f : .3f);
-            var positions = this.GetPositions().Select(t => t + IntVec3.UnitZ);
-            //var positions = this.GetPositions();                                          
-            //if (!(ToolManager.Instance.ActiveTool is ToolZoningPositions))
-                cam.DrawGrid(sb, map, positions, col);
-                //cam.DrawGridBlocks(sb, Block.BlockBlueprintGrayscale, positions, col);
         }
 
         internal static bool IsPositionValid(IMap map, Vector3 pos)
@@ -271,22 +158,15 @@ namespace Start_a_Town_
         {
             ToolManager.SetTool(new ToolDesignateZone(zoneType));
         }
-        //public virtual void Select(UISelectedInfo info)
-        //{
-        //    //info.AddButtons(new IconButton(Icon.Cross) { LeftClickAction = this.RequestDelete, HoverText = "Delete" });
-        //    //info.AddButtons(new IconButton(Icon.Construction) { LeftClickAction = this.Edit, HoverText = "Edit" });
-        //}
 
         public abstract string GetName();
 
         public virtual void GetSelectionInfo(IUISelection info)
         {
-            //throw new NotImplementedException();
         }
 
         public void GetQuickButtons(UISelectedInfo info)
         {
-            //throw new NotImplementedException();
             info.AddButtons(new IconButton(Icon.Cross) { LeftClickAction = this.RequestDelete, HoverText = "Delete" });
             info.AddButtons(new IconButton(Icon.Construction) { LeftClickAction = this.Edit, HoverText = "Edit" });
         }
@@ -295,11 +175,17 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
+        internal void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
+        {
+            var isselected = UISelectedInfo.IsSelected(this);
+            var col = Color.Lerp(this.Color, Color.White, isselected ? .5f : 0) * .5f;
+            var positions = this.GetPositions().Select(t => t + IntVec3.UnitZ);
+            cam.DrawGrid(sb, map, positions, col);
+        }
 
         public SaveTag Save(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            //this.GetType().FullName.Save(tag, "Type");
             this.ID.Save(tag, "ID");
             this.Name.Save(tag, "Name");
             this.Positions.Save(tag, "Positions");

@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 
@@ -30,7 +27,6 @@ namespace Start_a_Town_
             var finalPositions = allpositions.Where(
                 po => this.Town.GetZoneAt(po) == null &&
                 ZoneNew.IsPositionValid(this.Town.Map, po));
-            //var stockpile = new Stockpile(this.Town, finalPositions);
             var zone = Activator.CreateInstance(zoneType, this, finalPositions) as ZoneNew;
             this.RegisterZone(zone);
             return zone;
@@ -39,10 +35,6 @@ namespace Start_a_Town_
         internal void Delete(ZoneNew zone)
         {
             this.Delete(zone.ID);
-            //if (!this.Zones.ContainsKey(zone.ID))
-            //    throw new Exception();
-            //this.Zones.Remove(zone.ID);
-            //FloatingText.Create(this.Map, zone.Positions.Average(), $"{zone.GetType()} deleted", ft => ft.Font = UIManager.FontBold);
         }
         internal void Delete(int zoneID)
         {
@@ -55,18 +47,10 @@ namespace Start_a_Town_
         {
             if (zone.ID == 0)
                 zone.ID = this.GetNextID();
-            //farm.Town = this.Town;
             this.Zones.Add(zone.ID, zone);
             zone.Manager = this;
             zone.Name = zone.UniqueName;
-            //this.Town.Map.EventOccured(Components.Message.Types.FarmCreated, farm);
-            //if (this.Town.Map.Net is Client)
-                //FloatingText.Manager.Create(() => farm.Positions.First(), "Farm created", ft => ft.Font = UIManager.FontBold);
             FloatingText.Create(this.Town.Map, zone.Positions.Average(), $"{zone.GetType()} created", ft => ft.Font = UIManager.FontBold);
-
-            //this.Town.Map.EventOccured(Components.Message.Types.FarmCreated, farm);
-            //if (this.Town.Map.Net is Client)
-            //    FloatingText.Manager.Create(() => farm.Positions.First(), "Farm created", ft => ft.Font = UIManager.FontBold);
         }
 
         internal static void Init()
@@ -98,18 +82,9 @@ namespace Start_a_Town_
         }
         internal override void OnBlocksChanged(IEnumerable<IntVec3> positions)
         {
-            //foreach (var s in this.GetZones())
-            //    foreach (var pos in positions)
-            //        s.OnBlockChanged(pos);
-            //foreach (var pos in positions)
-            //{
-
-            //}
             for (int i = this.Zones.Count - 1; i >= 0; i--)
             {
                 var item = this.Zones.ElementAt(i);
-                //foreach (var pos in positions)
-                //    item.Value.OnBlockChanged(pos);
                 foreach (var pos in positions)
                 {
                     item.Value.OnBlockChangedNew(pos);
@@ -135,23 +110,12 @@ namespace Start_a_Town_
         }
         static Type[] ZoneTypes = { typeof(Stockpile), typeof(GrowingZone) }; // TODO make these defs
 
-        //public bool IsValidHaulDestination(IntVec3 global, GameObject item)
-        //{
-        //    var zoneBelow = this.GetZoneAt(global.Below);
-        //    if(zoneBelow)
-        //}
-
         internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
         {
-            //yield return new Tuple<string, Action>("Stockpile", () => ZoneNew.Edit(typeof(Stockpile)));
-            //yield return new Tuple<string, Action>("Stockpile", () => ZoneNew.Edit(typeof(Stockpile)));
             foreach(var zoneType in ZoneTypes)
                 yield return new Tuple<string, Action>(zoneType.Name, () => ZoneNew.Edit(zoneType));
         }
-        //public override IContextable QueryPosition(Vector3 global)
-        //{
-        //    return this.GetZoneAt(global);
-        //}
+        
         public override ISelectable QuerySelectable(TargetArgs target)
         {
             var global = target.Global;

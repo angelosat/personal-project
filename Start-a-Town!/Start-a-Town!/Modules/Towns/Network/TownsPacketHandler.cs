@@ -10,7 +10,8 @@ namespace Start_a_Town_.Towns
     [Obsolete]
     class TownsPacketHandler : IServerPacketHandler, IClientPacketHandler
     {
-        public enum Channels { CreateStockpile = 1, DeleteStockpile, AddJob, PlayerCreateHouse, AddHouse, PlayerRenameHouse, PlayerRemoveHouse }
+        public enum Channels { CreateStockpile = 1, DeleteStockpile,
+            PlayerCreateHouse, AddHouse, PlayerRenameHouse, PlayerRemoveHouse }
 
         delegate void ServerHandler(Server server, BinaryReader r, Packet p);
         delegate void ClientHandler(Client client, BinaryReader r, Packet p);
@@ -69,15 +70,6 @@ namespace Start_a_Town_.Towns
                 Channels channel = (Channels)r.ReadInt32();
                 switch (channel)
                 {
-                    case Channels.AddJob:
-                        var addJob = new PacketAddJob();
-                        addJob.Read(server, r);
-                        var interaction = addJob.Target.GetInteraction(server, addJob.InteractionName);
-                        if (interaction == null)
-                            return;
-                        server.Map.GetTown().AddJob(new AI.AIJob(new AI.AIInstruction(addJob.Target, interaction)));
-                        break;
-
                     case Channels.PlayerCreateHouse:
                         var actor = server.GetNetworkObject(r.ReadInt32());
                         var name = r.ReadString();
@@ -126,15 +118,6 @@ namespace Start_a_Town_.Towns
             Channels channel = (Channels)r.ReadInt32();
             switch (channel)
             {
-                case Channels.AddJob:
-                    var addJob = new PacketAddJob();
-                    addJob.Read(client, r);
-                    var interaction = addJob.Target.GetInteraction(client, addJob.InteractionName);
-                    if (interaction == null)
-                        return;
-                    client.Map.GetTown().AddJob(new AI.AIJob(new AI.AIInstruction(addJob.Target, interaction)));
-                    break;
-
                 case Channels.AddHouse:
                     var house = new House(client.Map.GetTown(), r);
                     client.Map.GetTown().AddHouse(house);

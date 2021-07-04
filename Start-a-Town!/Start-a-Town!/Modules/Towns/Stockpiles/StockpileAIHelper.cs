@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.AI;
-using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.Towns;
 
 namespace Start_a_Town_
 {
     class StockpileAIHelper
     {
-        const int BaseSearchRange = 5;
         static public AITask FindBestTask(Actor actor, IEnumerable<Entity> items)
         {
             foreach (var i in items)
@@ -25,23 +20,6 @@ namespace Start_a_Town_
             return null;
         }
         
-        static public AITask HaulToStockpileNew(Actor actor, Entity item)
-        {
-            var target = StockpileManager.GetBestStoragePlace(actor, item, out int maxAmount);
-            maxAmount = item.StackSize;// Math.Min(item.StackSize, maxAmount);
-            if (target == null)
-                return null;
-            var task = new AITask(typeof(TaskBehaviorHaulToStockpileNew));
-            //task.Targets.Add(new TargetArgs(item));
-            //task.Targets.Add(target);
-            task.TargetA = new TargetArgs(item);
-            task.TargetB = target;
-            task.AmountA = maxAmount;
-            return task;
-        }
-
-        
-
         static public AITask TryHaulNew(Actor actor, Entity item, bool ignoreOtherReservations = false)
         {
             var unreservedAmount = actor.GetUnreservedAmount(item);
@@ -50,7 +28,6 @@ namespace Start_a_Town_
             var targets = StockpileAIHelper.GetAllValidStoragePlacesNoReserveCheckLazy(actor, item);
             if (!targets.Any())
                 return null;
-            //var ordered = targets.OrderBy(t => Vector3.DistanceSquared(actor.Global, t.Key.Global));
             var enumerator = targets.GetEnumerator();
             enumerator.MoveNext();
             TargetArgs bestTarget = enumerator.Current;
@@ -66,11 +43,8 @@ namespace Start_a_Town_
                 return null;
             var maxweight = Math.Min(item.StackMax, actor.GetHaulStackLimitFromEndurance(item));
             var maxamount = Math.Min(maxweight, unreservedAmount);
-            //maxamount = Math.Min(maxamount, bestTargetUnreservedAmount);
-            var task = new AITask(TaskDefOf.Hauling, new TargetArgs(item), bestTarget) { Count = maxamount };// item.StackMax };
+            var task = new AITask(TaskDefOf.Hauling, new TargetArgs(item), bestTarget) { Count = maxamount };
             if (bestTarget.HasObject)
-                //task.Count -= bestTarget.Object.StackSize;
-                //task.Count = Math.Min(task.Count, Math.Min(bestTargetUnreservedAmount, bestTarget.Object.StackAvailableSpace));
                 task.Count = Math.Min(task.Count, bestTarget.Object.StackAvailableSpace);
 
             if (task.Count < 0)
@@ -85,56 +59,25 @@ namespace Start_a_Town_
                         throw new Exception();
                 }
                 else
-                    task.Count = item.StackMax;// Math.Min(item.StackMax, task.Count);
+                    task.Count = item.StackMax;
             }
-            //foreach(var target in targets)
-            //{
-
-            //}
+            
             if (task.Count < 0)
                 throw new Exception();
             if (task.Count == 0)
-                return null;// throw new Exception("haul task count was initialized as 0");
+                return null;
              return task;
             
         }
 
-        static public IEnumerable<TargetArgs> GetAllValidHaulDestinationsLazy(GameObject actor, GameObject item)
-        {
-            Dictionary<TargetArgs, int> all = new Dictionary<TargetArgs, int>();
-            var stockpiles = item.Map.Town.StockpileManager.GetStockpilesByPriority();
-
-            foreach (var s in stockpiles)
-            {
-                if (s.Accepts(item.ID))
-                    foreach (var spot in s.GetPotentialHaulTargets(actor, item))
-                        yield return spot;
-            }
-        }
         static public Dictionary<TargetArgs, int> GetAllValidHaulDestinations(GameObject actor, GameObject item, out int maxamount)
         {
             Dictionary<TargetArgs, int> all = new Dictionary<TargetArgs, int>();
-            var stockpiles = GetStoragesByPriority(item.Map);// item.Map.Town.StockpileManager.GetStockpilesByPriority();
+            var stockpiles = GetStoragesByPriority(item.Map);
             maxamount = 0;
 
             foreach (var s in stockpiles)
             {
-                //if (s.Accepts(item.ID))
-                if (s.Accepts(item as Entity))
-                    foreach (var spot in s.GetPotentialHaulTargets(actor, item, out maxamount))
-                        all.Add(spot.Key, spot.Value);
-            }
-            return all;
-        }
-        static public Dictionary<TargetArgs, int> GetAllValidHaulDestinationsOld(GameObject actor, GameObject item, out int maxamount)
-        {
-            Dictionary<TargetArgs, int> all = new Dictionary<TargetArgs,int>();
-            var stockpiles = item.Map.Town.StockpileManager.GetStockpilesByPriority();
-            maxamount = 0;
-           
-            foreach (var s in stockpiles)
-            {
-                //if (s.Accepts(item.ID))
                 if (s.Accepts(item as Entity))
                     foreach (var spot in s.GetPotentialHaulTargets(actor, item, out maxamount))
                         all.Add(spot.Key, spot.Value);
@@ -148,14 +91,7 @@ namespace Start_a_Town_
             var closest = all.OrderBy(t => Vector3.DistanceSquared(t.Global, actor.Global)).FirstOrDefault();
             return closest == null ? TargetArgs.Null : closest;
         }
-        static bool IsItemStockpiled(GameObject obj)
-        {
-            return obj.Map.Town.StockpileManager.IsItemAtBestStockpile(obj);
-            //foreach (var s in obj.Map.Town.StockpileManager.Stockpiles.Values)
-            //    if (s.Contains(obj))
-            //        return true;
-            //return false;
-        }
+        
         static public bool IsItemAtBestStockpile(GameObject item)
         {
             var stockpiles = item.Map.Town.ZoneManager.GetZones<Stockpile>();
@@ -174,7 +110,6 @@ namespace Start_a_Town_
 
         static public IEnumerable<IStorage> GetStoragesByPriority(IMap map)
         {
-            //var containers = this.Storages.Select(g => this.Town.Map.GetBlockEntity(g) as IStorage);
             IEnumerable<Stockpile> stockpiles = GetStockpiles(map);
             return stockpiles.OrderByDescending(i => i.Priority);
         }
@@ -186,8 +121,6 @@ namespace Start_a_Town_
 
         static public IEnumerable<TargetArgs> GetAllValidStoragePlacesNoReserveCheckLazy(Actor actor, Entity item)
         {
-            //var storages = item.Map.Town.StockpileManager.GetStoragesByPriority();
-            //var storages = item.Map.Town.StockpileManager.GetStockpilesByPriority();
             var storages = GetStoragesByPriority(actor.Map);
             foreach (var s in storages)
             {
@@ -206,8 +139,6 @@ namespace Start_a_Town_
             if (targetStockpile == null)
                 return false;
             return targetStockpile.IsValidStorage(item as Entity, new TargetArgs(global - Vector3.UnitZ), item.StackSize);
-
-            //return targetStockpile.IsValidStorage(itemID, global - Vector3.UnitZ);
         }
     }
 }

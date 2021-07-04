@@ -1,40 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.PlayerControl;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Towns
 {
-    class ToolZoningPositionsNew : ToolManagement// ControlTool
+    class ToolZoningPositionsNew : ToolManagement
     {
-        Sprite GridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
         protected Vector3 Begin, End;
         int Width, Height;
         bool Enabled;
-        bool Valid;
         bool Removing;
-        //Action<Rectangle> Callback;
         protected Action<Vector3, int, int, bool> Add, Remove;
         public Func<Vector3, bool> IsValid;
-        //protected Func<List<Vector3>> GetZones = () => new List<Vector3>();
         protected Func<List<ZoneNew>> GetZones = () => new List<ZoneNew>();
         public override bool TargetOnlyBlocks => true;
         protected Town Town;
-        protected ToolZoningPositionsNew()
-        {
-
-        }
-        public ToolZoningPositionsNew(Town town)
-        {
-            this.Town = town;
-        }
-
+        
         public ToolZoningPositionsNew(Action<Vector3, int, int, bool> callback, Func<List<ZoneNew>> zones)
         {
             this.Add = callback;
@@ -53,38 +37,14 @@ namespace Start_a_Town_.Towns
             this.End = new Vector3(this.Target.Global.XY(), this.Begin.Z);
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;
-            if (w != this.Width || h != this.Height)
-                this.Valid = this.IsValidShape(w, h);
             this.Width = w;
             this.Height = h;
         }
-
-        //private void Create(Stockpile stockpile)
-        //{
-        //    if (stockpile == null)
-        //        return;
-        //    new TownsPacketHandler()
-        //        .Send(new PacketCreateStockpile(Player.Actor.InstanceID, stockpile));
-        //}
-
-        //internal void DeleteStockpileAt(Vector3 pos)
-        //{
-        //    foreach (var item in this.Town.Stockpiles.Values.ToList())
-        //    {
-        //        var box = new BoundingBox(item.Begin, item.End);
-        //        if (box.Contains(pos) == ContainmentType.Contains)
-        //        {
-        //            new TownsPacketHandler()
-        //                .Send(new PacketDeleteStockpile(item.ID));
-        //        }
-        //    }
-        //}
-
         private bool IsValidShape(int w, int h)
         {
-            if (w < 1)//2)
+            if (w < 1)
                 return false;
-            if (h < 1)//2)
+            if (h < 1)
                 return false;
             return true;
             if (this.IsRemoving())
@@ -97,10 +57,6 @@ namespace Start_a_Town_.Towns
                         continue;
                 if (!ZoneNew.IsPositionValid(this.Town.Map, pos))
                     return false;
-                //if (!Engine.Map.IsSolid(pos))
-                //    return false;
-                //if (Engine.Map.IsSolid(pos + Vector3.UnitZ))
-                //    return false;
             }
             return true;
         }
@@ -117,19 +73,10 @@ namespace Start_a_Town_.Towns
                 return Messages.Default;
             var pos = this.Target.Global;// +this.Target.Face; //DO I WANT the zone to contain the solid blocks under the empty space? or the empty space itself???
 
-            // removed this from here so that we remove zones only by pressing control 
-            //var zones = this.GetZones();
-            //foreach(var z in zones)
-            //    if (z.GetPositions().Contains(pos))
-            //    {
-            //        this.Removing = true;
-            //        break;
-            //    }
             this.Begin = pos;
             this.End = this.Begin;
             this.Width = this.Height = 1;
             this.Enabled = true;
-            this.Valid = this.IsValidShape(this.Width, this.Height);
             Sync();
             return Messages.Default;
         }
@@ -148,22 +95,12 @@ namespace Start_a_Town_.Towns
                 return Messages.Default;
             int x = (int)Math.Min(this.Begin.X, this.End.X);
             int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            //var stockpile = new Stockpile(new Town(Engine.Map), new Vector3(x, y, this.Begin.Z), this.Width, this.Height);
-            //this.Create(stockpile);
             var rect = new Rectangle(x, y, this.Width, this.Height);
 
             var begin = new Vector3(x, y, this.Begin.Z);
             var end = new Vector3(x + this.Width - 1, y + this.Height - 1, this.Begin.Z);
             this.Add(begin, this.Width, this.Height, IsRemoving());
-            //for (int i = 0; i < this.Width; i++)
-            //{
-            //    var xx = x + i;
-            //    for (int j = 0; j < this.Height; j++)
-            //    {
-            //        var yy = y + j;
-            //        this.Add(new Vector3(xx, yy, this.Begin.Z - 1));
-            //    }
-            //}
+            
             this.Removing = false;
             this.Enabled = false;
             Sync();
@@ -181,37 +118,11 @@ namespace Start_a_Town_.Towns
             else
                 return Messages.Remove;
         }
-        //internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
-        //{
-        //    this.DrawGrid(sb, camera);
-        //    base.DrawBeforeWorld(sb, map, camera);
-        //}
         
-        //static IEnumerable<Vector3> GetPositions(Vector3 a, Vector3 b)
-        //{
-        //    return a.GetBox(b);
-        //    var x = Math.Min(a.X, b.X);
-        //    var y = Math.Min(a.Y, b.Y);
-        //    var xx = Math.Max(a.X, b.X);
-        //    var yy = Math.Max(a.Y, b.Y);
-        //    var min = new Vector3(x, y, a.Z);
-        //    var max = new Vector3(xx, yy, a.Z);
-        //    return min.GetBox(max);
-        //}
         public override void UpdateRemote(TargetArgs target)
         {
             if (target.Type == TargetType.Position)
                 this.End = new Vector3(target.Global.XY(), this.Begin.Z);
-        }
-        List<Vector3> GetPositionsOld()
-        {
-            List<Vector3> list = new List<Vector3>();
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            for (int i = x; i < x + this.Width; i++)
-                for (int j = y; j < y + this.Height; j++)
-                    list.Add(new Vector3(i, j, this.Begin.Z));
-            return list;
         }
         List<Vector3> GetPositions(int w, int h)
         {
@@ -236,7 +147,7 @@ namespace Start_a_Town_.Towns
             }
             if (!this.Enabled)
                 return;
-            UIManager.DrawStringOutlined(sb, string.Format("{0} x {1}", this.Width, this.Height), UIManager.Mouse, Vector2.UnitY);
+            UIManager.DrawStringOutlined(sb, $"{this.Width} x {this.Height}", UIManager.Mouse, Vector2.UnitY);
         }
 
         private bool IsRemoving()
@@ -261,8 +172,6 @@ namespace Start_a_Town_.Towns
             var validpositions = a.GetBox(b).Where(v => ZoneNew.IsPositionValid(map, v)).Select(v => v.Above());
             return validpositions;
         }
-
-        
        
         protected override void WriteData(System.IO.BinaryWriter w)
         {

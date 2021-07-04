@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Interactions;
+﻿using System.Collections.Generic;
 using Start_a_Town_.Particles;
-using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 
@@ -18,23 +12,11 @@ namespace Start_a_Town_
             return .5f + actor.GetSkill(SkillDef.Construction).Level * .1f;
         }
         Progress Progress;
-        //static int MaxStrikes = 3;
-        float MaxStrikes;
-
-        //int StrikeCount = 0;
-        int StrikeCount
-        {
-            get { return (int)this.Progress.Value; }
-            set
-            {
-                this.Progress.Value = value;
-            }
-        }
+        
         public InteractionDeconstruct()
             : base("Deconstruct")
         {
             this.Verb = "Deconstructing";
-            //this.Skill = Skill.Digging;
         }
         static public int ID = "Deconstruct".GetHashCode();
 
@@ -89,9 +71,6 @@ namespace Start_a_Town_
             var actor = a as Actor;
 
             this.EmitStrike(actor);
-
-            
-            //var workAmount = actor.GetToolWorkAmount(Components.GearType.Types.Mainhand, ToolAbilityDef.Building.ID);
             var workAmount = actor.GetToolWorkAmount(ToolAbilityDef.Building.ID);
             actor.AwardSkillXP(SkillDef.Construction, workAmount);
 
@@ -100,28 +79,22 @@ namespace Start_a_Town_
             if (this.Progress.Percentage == 1)
             {
                 this.Done(actor, t);
-                //this.State = States.Finished;
                 this.Finish(actor, t);
             }
         }
         public void Done(GameObject a, TargetArgs t)
         {
-            //this.Block.Break(a.Map, t.Global);
             this.Block.Deconstruct(a, t.Global);
-
-            var tool = GearComponent.GetSlot(a, GearType.Mainhand).Object;
             this.EmitBreak(a);
         }
         private void EmitStrike(GameObject a)
         {
             this.EmitterStrike.Emit(Block.Atlas.Texture, this.ParticleTextures, Vector3.Zero);
-            //a.Map.EventOccured(Message.Types.ParticleEmitterAdd, this.EmitterStrike);
             a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
         }
         private void EmitBreak(GameObject a)
         {
             this.EmitterBreak.Emit(Block.Atlas.Texture, this.ParticleTextures, Vector3.Zero);
-            //a.Map.EventOccured(Message.Types.ParticleEmitterAdd, this.EmitterBreak);
             a.Map.ParticleManager.AddEmitter(this.EmitterBreak);
         }
 
@@ -129,14 +102,10 @@ namespace Start_a_Town_
         public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
         {
             Vector3 global = parent.Global;
-            //Rectangle bounds = camera.GetScreenBounds(global, Block.Bounds);
-            //Vector2 scrLoc = new Vector2(bounds.X + bounds.Width / 2f, bounds.Y);//
-            //Vector2 barLoc = scrLoc - new Vector2(InteractionBar.DefaultWidth / 2, InteractionBar.DefaultHeight / 2);
             Vector2 barLoc = camera.GetScreenPositionFloat(global);
             if (this.BarSmooth == null)
                 this.BarSmooth = new BarSmooth(this.Progress);
             this.BarSmooth.Draw(sb, UIManager.Bounds, barLoc, InteractionBar.DefaultWidth, camera.Zoom * .2f);
-            //Bar.Draw(sb, camera, global, "", this.StrikeCount / (float)MaxStrikes, camera.Zoom * .2f);
         }
         public override object Clone()
         {

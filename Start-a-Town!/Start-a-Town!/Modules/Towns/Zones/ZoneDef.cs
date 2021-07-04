@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -14,7 +10,6 @@ namespace Start_a_Town_
         public ZoneNew Create()
         {
             var zone = Activator.CreateInstance(this.ZoneType) as ZoneNew;
-            //zone.Def = this;
             return zone;
         }
         public virtual void OnBlockChanged(IntVec3 global) { }

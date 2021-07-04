@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
@@ -43,14 +39,10 @@ namespace Start_a_Town_
                 Anchor = new Vector2(.5f, .5f),
                 TextFunc = () => actor.Name.Split(' ').First(),
             };
-            //this.Height += Label.DefaultHeight;
-            //var testbox = new GroupBox() { LocationFunc = () => new Vector2(this.PictureBoxBox.Width / 2, this.PictureBoxBox.Height), BackgroundColorFunc = ()=>Color.Red, MouseThrough = false, AutoSize = false, Size = new Rectangle(0, 0, this.PictureBoxBox.Width, Label.DefaultHeight) };
             this.AddControls(
                 this.PictureBoxBox
                 ,this.Label
                 );
-            //this.BackgroundColor = Color.Transparent;
-            //this.BackgroundColorFunc = () => Color.Black;
         }
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
@@ -61,18 +53,4 @@ namespace Start_a_Town_
             }
         }
     }
-    //class UINpcFrame : PictureBox
-    //{
-    //    public UINpcFrame(Actor actor) : base(actor.Body.RenderIcon(actor), scale: 2)
-    //    {
-    //        Tag = actor;
-    //        LeftClickAction = () =>
-    //        {
-    //            if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
-    //                UISelectedInfo.AddToSelection(new TargetArgs(actor));
-    //            else
-    //                UISelectedInfo.Refresh(new TargetArgs(actor));
-    //        };
-    //    }
-    //}
 }

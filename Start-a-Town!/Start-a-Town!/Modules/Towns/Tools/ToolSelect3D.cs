@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.PlayerControl;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Towns
@@ -15,27 +10,20 @@ namespace Start_a_Town_.Towns
     class ToolSelect3D : ControlTool
     {
         enum ValidityType { Invalid, Valid, Ignore }
-        //Sprite GridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
         protected Vector3 Begin, End;
         int Width, Height;
         protected bool Enabled;
         readonly bool Valid;
         bool Removing;
-        protected Action<Vector3, Vector3, bool> Add;//, Remove;
-        //public Func<Vector3, bool> IsValid;
+        protected Action<Vector3, Vector3, bool> Add;
         Func<List<Vector3>> GetZones = () => new List<Vector3>();
-        //public Func<Vector3, bool> ValidityCheck;
         Vector3 Plane;
 
-        //Town Town;
         protected ToolSelect3D()
         {
 
         }
-        //public ToolSelect3D(Town town)
-        //{
-        //    this.Town = town;
-        //}
+       
         public ToolSelect3D(Action<Vector3, Vector3, bool> callback)
             : this(callback, () => new List<Vector3>())
         {
@@ -59,8 +47,6 @@ namespace Start_a_Town_.Towns
 
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;
-            //if (w != this.Width || h != this.Height)
-            //    this.Valid = this.Check(w, h);
             this.Width = w;
             this.Height = h;
         }
@@ -98,7 +84,6 @@ namespace Start_a_Town_.Towns
             this.Width = this.Height = 1;
             this.Enabled = true;
             this.Sync();
-            //this.Valid = this.Check(this.Width, this.Height);
             return Messages.Default;
         }
 
@@ -110,8 +95,6 @@ namespace Start_a_Town_.Towns
                 return Messages.Default;
             if (this.Target.Type != TargetType.Position)
                 return Messages.Default;
-            //if (!this.Check(this.Width, this.Height))
-            //    return Messages.Default;
             int x = (int)Math.Min(this.Begin.X, this.End.X);
             int y = (int)Math.Min(this.Begin.Y, this.End.Y);
             int z = (int)Math.Min(this.Begin.Z, this.End.Z);
@@ -144,26 +127,6 @@ namespace Start_a_Town_.Towns
                 return Messages.Remove;
         }
 
-        //List<Vector3> GetPositions()
-        //{
-        //    List<Vector3> list = new List<Vector3>();
-        //    int x = (int)Math.Min(this.Begin.X, this.End.X);
-        //    int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-        //    for (int i = x; i < x + this.Width; i++)
-        //        for (int j = y; j < y + this.Height; j++)
-        //            list.Add(new Vector3(i, j, this.Begin.Z));
-        //    return list;
-        //}
-        //List<Vector3> GetPositions(int w, int h)
-        //{
-        //    var list = new List<Vector3>();
-        //    int x = (int)Math.Min(this.Begin.X, this.End.X);
-        //    int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-        //    for (int i = x; i < x + w; i++)
-        //        for (int j = y; j < y + h; j++)
-        //            list.Add(new Vector3(i, j, this.Begin.Z));
-        //    return list;
-        //}
         Icon _Icon = new(UI.UIManager.Icons32, 12, 32);
         public override Icon Icon => _Icon;
         internal override void DrawUI(SpriteBatch sb, Camera camera)
@@ -190,9 +153,6 @@ namespace Start_a_Town_.Towns
         }
         internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
         {
-            //Game1.Instance.GraphicsDevice.Textures[0] = Sprite.Atlas.Texture;
-            //Game1.Instance.GraphicsDevice.Textures[1] = Sprite.Atlas.DepthTexture;
-            //this.DrawGrid(sb, camera);
             this.DrawGrid(sb, camera);
 
             foreach (var g in this.GetZones())
@@ -205,7 +165,6 @@ namespace Start_a_Town_.Towns
         {
             if (!this.Enabled)
                 return;
-            var col = this.Valid ? Color.Lime : Color.Red;
             int x = (int)Math.Min(this.Begin.X, this.End.X);
             int y = (int)Math.Min(this.Begin.Y, this.End.Y);
             int z = (int)Math.Min(this.Begin.Z, this.End.Z);
@@ -213,11 +172,6 @@ namespace Start_a_Town_.Towns
             int dx = (int)Math.Abs(this.Begin.X - this.End.X);
             int dy = (int)Math.Abs(this.Begin.Y - this.End.Y);
             int dz = (int)Math.Abs(this.Begin.Z - this.End.Z);
-
-            //int zmin = (int)Math.Min(this.Begin.Z, this.End.Z);
-            //int zmax = (int)(this.Begin.Z + this.End.Z - zmin);
-            //zmax = Math.Min(zmax, cam.MaxDrawZ);
-            //dz = zmax - zmin;
 
             var minBegin = new Vector3(x, y, z);
             for (int i = 0; i <= dx; i++)
@@ -228,34 +182,10 @@ namespace Start_a_Town_.Towns
                     {
                         Vector3 global = minBegin + new Vector3(i, j, k);
                         cam.DrawGridBlock(sb, Block.BlockBlueprint, Color.Red, global);
-                        //continue;
-                        //var bounds = cam.GetScreenBounds(global, Block.Bounds);
-                        //var pos = new Vector2(bounds.X, bounds.Y);
-                        //var depth = global.GetDrawDepth(Engine.Map, cam);
-                        //sb.Draw(Sprite.Atlas.Texture, pos, Sprite.BlockHighlight.AtlasToken.Rectangle, 0, Vector2.Zero, cam.Zoom, col * .5f, SpriteEffects.None, depth);
                     }
                 }
             }
         }
-        void DrawGrid2d(MySpriteBatch sb, Camera cam)
-        {
-            if (!this.Enabled)
-                return;
-            var col = this.Valid ? Color.Lime : Color.Red;
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            for (int i = x; i < x + this.Width; i++)
-                for (int j = y; j < y + this.Height; j++)
-                {
-                    var global = new Vector3(i, j, this.Begin.Z);
-
-                    var bounds = cam.GetScreenBounds(global, Block.Bounds);
-                    var pos = new Vector2(bounds.X, bounds.Y);
-                    var depth = global.GetDrawDepth(Engine.Map, cam);
-                    sb.Draw(Sprite.Atlas.Texture, pos, Sprite.BlockHighlight.AtlasToken.Rectangle, 0, Vector2.Zero, cam.Zoom, col*.5f, SpriteEffects.None, depth);
-                }
-        }
-
         private void DrawGridCell(MySpriteBatch sb, Camera cam, Color col, Vector3 global)
         {
             if (global.Z > cam.MaxDrawZ)
@@ -291,6 +221,5 @@ namespace Start_a_Town_.Towns
             this.Enabled = r.ReadBoolean();
             this.Begin = r.ReadVector3();
         }
-        
     }
 }

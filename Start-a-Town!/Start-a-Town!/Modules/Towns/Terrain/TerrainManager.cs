@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Towns;
 using Start_a_Town_.GameModes.StaticMaps;
@@ -19,28 +16,16 @@ namespace Start_a_Town_
         int TotalFertileCells;
         int TotalFertileCellsTemp;
         public override string Name => "Terrain";
-        int t = 0;
         int CycleIndex;
 
         Action<IMap, IntVec3>[] SpawnActions;
-        //=  
-        //{ 
-        //    SpawnEntity,
-        //    SpawnBlock
-        //};
+        
         PlantProperties[] ValidPlants;
        
         public override void Tick()
         {
             if (this.Map.Net is Net.Client)
                 return;
-            //if (t < Engine.TicksPerSecond * 5)
-            //{
-            //    t++;
-            //    return;
-            //}
-            //t = 0;
-           
             this.GeneratePlant();
         }
         public void GeneratePlant()
@@ -75,10 +60,6 @@ namespace Start_a_Town_
                     {
                         var action = (SpawnActions ??= initSpawnActions()).SelectRandom(rand);
                         action(map, new IntVec3(x, y, z));
-
-
-                        //var plant = rand.Next(2) < 1 ? ItemFactory.CreateFrom(PlantDefOf.Tree, this.Map.Biome.Wood) : Plant.CreateBush(PlantDefOf.BerryBush);
-                        //map.Net.Spawn(plant, new Vector3(x, y, z + 1));
                     }
                 }
                 this.CycleIndex++;
@@ -94,8 +75,6 @@ namespace Start_a_Town_
         {
             var allPlants = this.ValidPlants ??= this.GetValidPlants();
             var randomPlant = allPlants.SelectRandom(map.Random);
-            //var rand = map.Random;
-            //var plant = rand.Next(2) < 1 ? ItemFactory.CreateFrom(PlantDefOf.Tree, map.Biome.Wood) : Plant.CreateBush(PlantDefOf.Bush);
             var plant = randomPlant.CreatePlant();
             plant.SyncInstantiate(map.Net);
             map.SyncSpawn(plant, global.Above(), Vector3.Zero);
@@ -111,9 +90,6 @@ namespace Start_a_Town_
         bool CanGrowOn(Vector3 global)
         {
             return !this.Map.GetObjects(global.Above()).Any() && this.Map.GetBlock(global.Above()) == BlockDefOf.Air;
-
-            return !this.Map.GetObjects(global.Above()).Any() && this.Map.GetBlock(global.Above()) == BlockDefOf.Air;
-            return !this.Map.GetObjects(global.Above()).Any(o => o.IsPlant()) && this.Map.GetBlock(global.Above()) == BlockDefOf.Air;
         }
         bool IsSaturated()
         {
@@ -128,7 +104,7 @@ namespace Start_a_Town_
 
         int GetTotalFertileCells()
         {
-            var total = this.Map.GetAllCells().Where(c => c.Fertility > 0).Count();//.Aggregate((a, b) => a + b);
+            var total = this.Map.GetAllCells().Where(c => c.Fertility > 0).Count();
             return total;
         }
         protected override void AddSaveData(SaveTag tag)
@@ -147,29 +123,5 @@ namespace Start_a_Town_
             tag.TryGetTagValue("TotalFertileCellsTemp", out this.TotalFertileCellsTemp);
             tag.TryGetTagValue("CycleIndex", out this.CycleIndex);
         }
-        //public void GeneratePlant()
-        //{
-        //    var map = this.Map as StaticMap;
-        //    var rand = map.Random;
-        //    var num = this.Map.ActiveChunks.Count;
-        //    for (int i = 0; i < num; i++)
-        //    {
-        //        if (rand.Next(10) > 1)
-        //            continue;
-        //        var x = rand.Next(0, map.Size.Blocks);
-        //        var y = rand.Next(0, map.Size.Blocks);
-        //        var z = map.GetHeightmapValue(x, y);
-        //        var cell = map.GetCell(x, y, z);
-        //        var block = cell.Block;// map.GetBlock(x, y, z);
-        //        if (
-        //            //block == Block.Soil ||
-        //            //block == Block.Grass)
-        //            block.GetMaterial(cell.BlockData) == Components.Materials.Material.Soil)
-        //        {
-        //            var plant = rand.Next(2) < 1 ? GameObject.Objects[GameObject.Types.Tree].Clone() : GameObject.Objects[GameObject.Types.BerryBush].Clone();
-        //            map.Net.Spawn(plant, new Vector3(x, y, z + 1));
-        //        }
-        //    }
-        //}
     }
 }

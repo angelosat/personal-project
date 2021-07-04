@@ -20,7 +20,6 @@ namespace Start_a_Town_.Towns
             }
         }
         Stockpile Stockpile;
-        //StockpileFiltersUIAdvanced UIFilters;
         StorageUI UIFilters;
         UIStockpileFiltersNew()
         {

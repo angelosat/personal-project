@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Towns
 {
-    class StockpileFiltersUIBasic : GroupBox// ScrollableBox
+    class StockpileFiltersUIBasic : GroupBox
     {
         Stockpile Stockpile;
         ListBox<string, CheckBoxNew> ListCategories;
-        //Panel PanelFilters;
-        Dictionary<string, ListBox<GameObject, CheckBoxNew>> Filters = new Dictionary<string, ListBox<GameObject, CheckBoxNew>>();
         const int W = 200, H = 400;
         public StockpileFiltersUIBasic(Stockpile stockpile)
         {
             this.Stockpile = stockpile;
 
-            var btnW = 120;// Panel.GetClientLength(panelCategories.Width);
+            var btnW = 120;
             var btnAll = new Button("All", btnW) { LeftClickAction = SelectAll };
             var btnNone = new Button("None", btnW) { Location = btnAll.BottomLeft, LeftClickAction = SelectNone };
             var btnInvert = new Button("Invert", btnW) { Location = btnNone.BottomLeft, LeftClickAction = SelectInverse };
@@ -28,32 +22,17 @@ namespace Start_a_Town_.Towns
             var panelbuttons = new Panel() { AutoSize = true };
             panelbuttons.AddControls(btnAll, btnNone, btnInvert, btnAdvanced);
 
-            var panelCategories = new Panel(Vector2.Zero, new Vector2(panelbuttons.Width, 400 - panelbuttons.Height));// { AutoSize = true };
-            this.ListCategories = new ListBox<string, CheckBoxNew>(panelCategories.ClientSize.Width, panelCategories.ClientSize.Height);// (120, 400 - panelbuttons.Height);
+            var panelCategories = new Panel(Vector2.Zero, new Vector2(panelbuttons.Width, 400 - panelbuttons.Height));
+            this.ListCategories = new ListBox<string, CheckBoxNew>(panelCategories.ClientSize.Width, panelCategories.ClientSize.Height);
             this.ListCategories.Build(Stockpile.Filters, f => f, (c, btn) =>
             {
-                btn.Tag = c;// GetObjectsFromCategory(c);
-                btn.LeftClickAction = () => this.SelectFilter(c, !btn.Value);// this.SelectCategory(c);
+                btn.Tag = c;
+                btn.LeftClickAction = () => this.SelectFilter(c, !btn.Value);
             });
             panelCategories.AddControls(this.ListCategories);
 
             panelbuttons.Location = panelCategories.BottomLeft;
 
-            //this.PanelFilters = new Panel(panelCategories.TopRight, new Vector2(200, panelCategories.Height - panelbuttons.Height));
-            //panelbuttons.Location = this.PanelFilters.BottomLeft;
-
-            //foreach (var type in Stockpile.Filters)
-            //{
-            //    var items = GameObject.Objects.Values.Where(o => o.Components.ContainsKey(type)).ToList();
-            //    var listitems = new ListBox<GameObject, CheckBoxNew>(this.PanelFilters.ClientSize.Width, this.PanelFilters.ClientSize.Height);
-            //    listitems.Build(items, f => f.Name, (f, btn) =>
-            //    {
-            //        var id= (int)f.ID;
-            //        btn.Tag = id;
-            //        btn.LeftClickAction = () => this.SelectFilter(id, !btn.Value);
-            //    });
-            //    this.Filters.Add(type, listitems);
-            //}
             this.AddControls(panelCategories, panelbuttons);
             this.Refresh();
         }
@@ -108,19 +87,7 @@ namespace Start_a_Town_.Towns
             Client.Instance.Send(PacketType.StockpileFiltersCategories, PacketStockpileFiltersToggleCategories.Write(this.Stockpile.ID, values));
         }
 
-        new void Refresh()
-        {
-            //foreach (var item in this.ListCategories.Items)
-            //{
-            //    var f = (string)item.Tag;
-            //    var items = GameObject.Objects.Values.Where(o => o.Components.ContainsKey(f)).Select(o => (int)o.IDType).ToArray();
-            //    if (items.All(i => this.Stockpile.CurrentFilters.Contains(i)))
-            //        item.Value = true;
-            //    else
-            //        item.Value = false;
-            //}
-        }
-
+      
         internal override void OnGameEvent(GameEvent e)
         {
             switch (e.Type)
@@ -135,19 +102,6 @@ namespace Start_a_Town_.Towns
             }
         }
 
-        //ListBox<GameObject, CheckBoxNew> CurrentCategory;
-        //private void SelectCategory(string category)
-        //{
-        //    this.PanelFilters.Controls.Clear();
-        //    var list = this.Filters[category];
-        //    this.PanelFilters.Controls.Add(list);
-        //    this.CurrentCategory = list;//.Tag as List<GameObject>;
-        //}
-
-        //static List<GameObject> GetObjectsFromCategory(string cat)
-        //{
-        //    var items = GameObject.Objects.Values.Where(o => o.Components.ContainsKey(cat)).ToList();
-        //    return items;
-        //}
+        
     }
 }

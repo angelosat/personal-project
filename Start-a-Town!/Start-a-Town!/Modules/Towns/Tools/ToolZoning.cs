@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.PlayerControl;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Towns
@@ -20,21 +15,13 @@ namespace Start_a_Town_.Towns
         int Width, Height;
         bool Enabled;
         bool Valid;
-
-        //Action<Rectangle> Callback;
-        readonly Action<Vector3, int, int, bool> Add;//, Remove;
+        readonly Action<Vector3, int, int, bool> Add;
         public Func<Vector3, bool> IsValid;
         Func<List<Zone>> GetZones = () => new List<Zone>();
-
-        Town Town;
-        public ToolZoning(Town town)
-        {
-            this.Town = town;
-        }
+        
         public ToolZoning(Action<Vector3, int, int, bool> callback)
             : this(callback, () => new List<Zone>())
         {
-            //this.Add = callback;
         }
         public ToolZoning(Action<Vector3, int, int, bool> callback, Func<List<Zone>> zones)
         {
@@ -50,13 +37,11 @@ namespace Start_a_Town_.Towns
                 return;
             if (this.Target.Type != TargetType.Position)
                 return;
-
             
             this.End = new Vector3(this.Target.Global.XY(), this.Begin.Z);
 
             if (this.State == States.Selecting)
             {
-                //this.End = this.Begin;
                 this.Width = this.Height = 1;
                 this.Valid = true;
                 return;
@@ -69,27 +54,6 @@ namespace Start_a_Town_.Towns
             this.Width = w;
             this.Height = h;
         }
-
-        //private void Create(Stockpile stockpile)
-        //{
-        //    if (stockpile == null)
-        //        return;
-        //    new TownsPacketHandler()
-        //        .Send(new PacketCreateStockpile(Player.Actor.InstanceID, stockpile));
-        //}
-
-        //internal void DeleteStockpileAt(Vector3 pos)
-        //{
-        //    foreach (var item in this.Town.Stockpiles.Values.ToList())
-        //    {
-        //        var box = new BoundingBox(item.Begin, item.End);
-        //        if (box.Contains(pos) == ContainmentType.Contains)
-        //        {
-        //            new TownsPacketHandler()
-        //                .Send(new PacketDeleteStockpile(item.ID));
-        //        }
-        //    }
-        //}
 
         private bool Check(int w, int h)
         {
@@ -123,13 +87,6 @@ namespace Start_a_Town_.Towns
                 return Messages.Default;
             var pos = this.Target.Global + this.Target.Face;
 
-            //if (InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey))
-            //{
-            //    //DeleteStockpileAt(pos);
-            //    //return Messages.Default;
-            //    this.State = States.Selecting;
-            //}
-            //else
             foreach (var z in this.GetZones())
                 if (z.Contains(pos))
                     this.State = States.Selecting;
@@ -152,32 +109,23 @@ namespace Start_a_Town_.Towns
             if (!this.Valid)
                 return Messages.Default;
 
-            
-            //if (IsRemoving()) // if we are removing then we only need one position, the current mouse position (end)
-            //{
-            //    this.Add(this.End, 1, 1, true);
-            //}
-            //else
-            //{
-
-            if(this.State == States.Selecting)
-                if(this.Begin != this.End)
+            if (this.State == States.Selecting)
+                if (this.Begin != this.End)
                 {
                     this.Enabled = false;
                     this.State = States.Inactive;
                     return Messages.Default;
                 }
-           
-                int x = (int)Math.Min(this.Begin.X, this.End.X);
-                int y = (int)Math.Min(this.Begin.Y, this.End.Y);
 
-                var rect = new Rectangle(x, y, this.Width, this.Height);
+            int x = (int)Math.Min(this.Begin.X, this.End.X);
+            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
 
-                var begin = new Vector3(x, y, this.Begin.Z);
-                var end = new Vector3(x + this.Width - 1, y + this.Height - 1, this.Begin.Z);
-                this.Add(begin, this.Width, this.Height, IsRemoving());
-            //}
-                this.State = States.Inactive;
+            var rect = new Rectangle(x, y, this.Width, this.Height);
+
+            var begin = new Vector3(x, y, this.Begin.Z);
+            var end = new Vector3(x + this.Width - 1, y + this.Height - 1, this.Begin.Z);
+            this.Add(begin, this.Width, this.Height, IsRemoving());
+            this.State = States.Inactive;
             this.Enabled = false;
             return Messages.Default;
         }
@@ -193,11 +141,7 @@ namespace Start_a_Town_.Towns
             else
                 return Messages.Remove;
         }
-        //internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
-        //{
-        //    this.DrawGrid(sb, camera);
-        //    base.DrawBeforeWorld(sb, map, camera);
-        //}
+        
         void DrawGrid(MySpriteBatch sb, Camera cam)
         {
             if (!this.Enabled)
@@ -227,16 +171,6 @@ namespace Start_a_Town_.Towns
             sb.Draw(Sprite.Atlas.Texture, pos, GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, cam.Zoom, col, SpriteEffects.None, depth);
         }
 
-        List<Vector3> GetPositions()
-        {
-            List<Vector3> list = new List<Vector3>();
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            for (int i = x; i < x + this.Width; i++)
-                for (int j = y; j < y + this.Height; j++)
-                    list.Add(new Vector3(i, j, this.Begin.Z));
-            return list;
-        }
         List<Vector3> GetPositions(int w, int h)
         {
             List<Vector3> list = new List<Vector3>();
@@ -269,9 +203,6 @@ namespace Start_a_Town_.Towns
             Game1.Instance.GraphicsDevice.Textures[0] = Sprite.Atlas.Texture;
             Game1.Instance.GraphicsDevice.Textures[1] = Sprite.Atlas.DepthTexture;
             this.DrawGrid(sb, camera);
-            //var stockpiles = map.GetTown().Stockpiles;
-            //foreach (var s in stockpiles.Values)
-            //    this.DrawGrid(sb, camera, s.Global, s.Width, s.Height, Color.Yellow);
             foreach(var z in this.GetZones())
                 this.DrawGrid(sb, camera, z.Begin, z.Width, z.Height, Color.Yellow);
 
@@ -283,7 +214,6 @@ namespace Start_a_Town_.Towns
         }
         void DrawGrid(MySpriteBatch sb, Camera cam, int x, int y, int z, int w, int h, Color col)
         {
-            
             for (int i = x; i < x + w; i++)
                 for (int j = y; j < y + h; j++)
                 {

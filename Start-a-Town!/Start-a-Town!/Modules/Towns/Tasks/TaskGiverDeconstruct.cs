@@ -1,12 +1,4 @@
-﻿using Start_a_Town_.AI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     class TaskGiverDeconstruct : TaskGiver
     {
@@ -23,16 +15,12 @@ namespace Start_a_Town_
                     continue;
                 if (!actor.Map.IsEmptyNew(pos.Above()))
                     continue;
-                var task = new AITask()// AITaskMining()
+                var task = new AITask()
                 {
                     BehaviorType = typeof(TaskBehaviorDeconstruct),
-                    //Tool = tool,
-                    //TargetA = new TargetArgs(actor.Map, pos)
                 };
                 task.SetTarget(TaskBehaviorDeconstruct.DeconstructInd, new TargetArgs(actor.Map, pos));
-                //FindTool(actor, Skill.Building, task, TaskBehaviorDeconstruct.ToolInd);
                 FindTool(actor, task, ToolAbilityDef.Building);
-
                 return task;
             }
             return null;   

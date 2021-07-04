@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.PlayerControl;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Towns
@@ -18,15 +13,7 @@ namespace Start_a_Town_.Towns
         int Width, Height;
         bool Enabled;
         bool Valid;
-        //Action<Rectangle> Callback;
-        Action<Vector3, int, int> Add;//, Remove;
-        //Predicate<Vector3> IsValid;
-
-        //Town Town;
-        //public ToolDesignate(Town town)
-        //{
-        //    this.Town = town;
-        //}
+        Action<Vector3, int, int> Add;
         public ToolDesignate(Action<Vector3, int, int> callback)
         {
             this.Add = callback;
@@ -50,28 +37,6 @@ namespace Start_a_Town_.Towns
             this.Width = w;
             this.Height = h;
         }
-
-        //private void Create(Stockpile stockpile)
-        //{
-        //    if (stockpile == null)
-        //        return;
-        //    new TownsPacketHandler()
-        //        .Send(new PacketCreateStockpile(Player.Actor.InstanceID, stockpile));
-        //}
-
-        //internal void DeleteStockpileAt(Vector3 pos)
-        //{
-        //    foreach (var item in this.Town.Stockpiles.Values.ToList())
-        //    {
-        //        var box = new BoundingBox(item.Begin, item.End);
-        //        if (box.Contains(pos) == ContainmentType.Contains)
-        //        {
-        //            new TownsPacketHandler()
-        //                .Send(new PacketDeleteStockpile(item.ID));
-        //        }
-        //    }
-        //}
-
         private bool Check(int w, int h)
         {
             if (w < 2)

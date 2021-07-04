@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.PlayerControl;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Towns
 {
+    [Obsolete]
     class ToolZoningPositions : ControlTool
     {
         Sprite GridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
@@ -19,24 +15,13 @@ namespace Start_a_Town_.Towns
         bool Enabled;
         bool Valid;
         bool Removing;
-        //Action<Rectangle> Callback;
         protected Action<Vector3, int, int, bool> Add, Remove;
         public Func<Vector3, bool> IsValid;
         protected Func<List<Vector3>> GetZones = () => new List<Vector3>();
 
-        Town Town;
-        protected ToolZoningPositions()
-        {
-
-        }
-        public ToolZoningPositions(Town town)
-        {
-            this.Town = town;
-        }
         public ToolZoningPositions(Action<Vector3, int, int, bool> callback)
             : this(callback, () => new List<Vector3>())
         {
-            //this.Add = callback;
         }
         public ToolZoningPositions(Action<Vector3, int, int, bool> callback, Func<List<Vector3>> zones)
         {
@@ -62,27 +47,6 @@ namespace Start_a_Town_.Towns
             this.Height = h;
         }
 
-        //private void Create(Stockpile stockpile)
-        //{
-        //    if (stockpile == null)
-        //        return;
-        //    new TownsPacketHandler()
-        //        .Send(new PacketCreateStockpile(Player.Actor.InstanceID, stockpile));
-        //}
-
-        //internal void DeleteStockpileAt(Vector3 pos)
-        //{
-        //    foreach (var item in this.Town.Stockpiles.Values.ToList())
-        //    {
-        //        var box = new BoundingBox(item.Begin, item.End);
-        //        if (box.Contains(pos) == ContainmentType.Contains)
-        //        {
-        //            new TownsPacketHandler()
-        //                .Send(new PacketDeleteStockpile(item.ID));
-        //        }
-        //    }
-        //}
-
         private bool Check(int w, int h)
         {
             if (w < 1)//2)
@@ -101,10 +65,6 @@ namespace Start_a_Town_.Towns
                 if (Engine.Map.IsSolid(pos + Vector3.UnitZ))
                     return false;
 
-                //if (Engine.Map.IsSolid(pos))
-                //    return false;
-                //if (!Engine.Map.IsSolid(pos - Vector3.UnitZ))
-                //    return false;
             }
             return true;
         }
@@ -120,11 +80,6 @@ namespace Start_a_Town_.Towns
                 return Messages.Default;
             var pos = this.Target.Global;// +this.Target.Face; //DO I WANT the zone to contain the solid blocks under the empty space? or the empty space itself???
 
-            //if (InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey))
-            //{
-            //    DeleteStockpileAt(pos);
-            //    return Messages.Default;
-            //}
             var existingPositions = this.GetZones();
             if (existingPositions.Contains(pos))
                 this.Removing = true;
@@ -148,22 +103,12 @@ namespace Start_a_Town_.Towns
                 return Messages.Default;
             int x = (int)Math.Min(this.Begin.X, this.End.X);
             int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            //var stockpile = new Stockpile(new Town(Engine.Map), new Vector3(x, y, this.Begin.Z), this.Width, this.Height);
-            //this.Create(stockpile);
             var rect = new Rectangle(x, y, this.Width, this.Height);
 
             var begin = new Vector3(x, y, this.Begin.Z);
             var end = new Vector3(x + this.Width - 1, y + this.Height - 1, this.Begin.Z);
             this.Add(begin, this.Width, this.Height, IsRemoving());
-            //for (int i = 0; i < this.Width; i++)
-            //{
-            //    var xx = x + i;
-            //    for (int j = 0; j < this.Height; j++)
-            //    {
-            //        var yy = y + j;
-            //        this.Add(new Vector3(xx, yy, this.Begin.Z - 1));
-            //    }
-            //}
+           
             this.Removing = false;
             this.Enabled = false;
             return Messages.Default;
@@ -179,23 +124,7 @@ namespace Start_a_Town_.Towns
             else
                 return Messages.Remove;
         }
-        //internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
-        //{
-        //    this.DrawGrid(sb, camera);
-        //    base.DrawBeforeWorld(sb, map, camera);
-        //}
-        
-
-        List<Vector3> GetPositions()
-        {
-            List<Vector3> list = new List<Vector3>();
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            for (int i = x; i < x + this.Width; i++)
-                for (int j = y; j < y + this.Height; j++)
-                    list.Add(new Vector3(i, j, this.Begin.Z));
-            return list;
-        }
+       
         List<Vector3> GetPositions(int w, int h)
         {
             List<Vector3> list = new List<Vector3>();
@@ -249,89 +178,19 @@ namespace Start_a_Town_.Towns
             Game1.Instance.GraphicsDevice.Textures[1] = Sprite.Atlas.DepthTexture;
             foreach (var pos in allPositions)
                 this.DrawGridCell(sb, camera, Color.Yellow, pos + Vector3.UnitZ, selectedPositions);
-            //base.DrawBeforeWorld(sb, map, camera);
-            return;
-
-            //Game1.Instance.GraphicsDevice.Textures[0] = Sprite.Atlas.Texture;
-            //Game1.Instance.GraphicsDevice.Textures[1] = Sprite.Atlas.DepthTexture;
-            //this.DrawGrid(sb, camera);
-
-            ////foreach(var z in this.GetZones())
-            ////    this.DrawGrid(sb, camera, z.Begin, z.Width, z.Height, Color.Yellow);
-            //foreach (var g in this.GetZones())
-            //    this.DrawGridCell(sb, camera, Color.Yellow, g + Vector3.UnitZ, new HashSet<Vector3>());
-
-            //base.DrawBeforeWorld(sb, map, camera);
-
         }
-        //void DrawGrid(MySpriteBatch sb, Camera cam, Vector3 global, int w, int h, Color c)
-        //{
-        //    this.DrawGrid(sb, cam, (int)global.X, (int)global.Y, (int)global.Z, w, h, c);
-        //}
-        //void DrawGrid(MySpriteBatch sb, Camera cam, int x, int y, int z, int w, int h, Color col)
-        //{
-            
-        //    for (int i = x; i < x + w; i++)
-        //        for (int j = y; j < y + h; j++)
-        //        {
-        //            Vector3 global = new Vector3(i, j, z);
-
-        //            DrawGridCell(sb, cam, col, global);
-        //        }
-        //}
-        void DrawGrid(MySpriteBatch sb, Camera cam)
-        {
-            if (!this.Enabled)
-                return;
-            var col = this.Valid ? Color.Lime : Color.Red;
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            for (int i = x; i < x + this.Width; i++)
-                for (int j = y; j < y + this.Height; j++)
-                {
-                    //Vector3 global = new Vector3(i, j, this.Begin.Z);
-                    Vector3 global = new Vector3(i, j, this.Begin.Z + 1);
-
-                    var bounds = cam.GetScreenBounds(global, Block.Bounds);
-                    var pos = new Vector2(bounds.X, bounds.Y);
-                    var depth = global.GetDrawDepth(Engine.Map, cam);
-                    sb.Draw(Sprite.Atlas.Texture, pos, GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, cam.Zoom, col, SpriteEffects.None, depth);
-                }
-        }
+       
         private void DrawGridCell(MySpriteBatch sb, Camera cam, Color col, Vector3 global, HashSet<Vector3> selected)
         {
             var bounds = cam.GetScreenBounds(global, Block.Bounds);
             var pos = new Vector2(bounds.X, bounds.Y);
             var depth = global.GetDrawDepth(Engine.Map, cam);
-            //if (IsRemoving())
-            //{
-            //    var x = Math.Min(this.Begin.X, this.End.X);
-            //    var y = Math.Min(this.Begin.Y, this.End.Y);
-            //    var xx = Math.Max(this.Begin.X, this.End.X);
-            //    var yy = Math.Max(this.Begin.Y, this.End.Y);
-            //    var a = new Vector3(x, y, this.Begin.Z + 1);
-            //    var b = new Vector3(xx, yy, this.Begin.Z + 1);
-            //    BoundingBox box = new BoundingBox(a, b);
-            //    if (box.Contains(global) != ContainmentType.Disjoint)
-            //        col = Color.Red;
-            //}
+          
             if (Enabled)
                 if (selected.Contains(global))
                     col = IsRemoving() ? Color.Red : Color.Lime;
-            //if (Enabled)
-            //{
-            //    var x = Math.Min(this.Begin.X, this.End.X);
-            //    var y = Math.Min(this.Begin.Y, this.End.Y);
-            //    var xx = Math.Max(this.Begin.X, this.End.X);
-            //    var yy = Math.Max(this.Begin.Y, this.End.Y);
-            //    var a = new Vector3(x, y, this.Begin.Z + 1);
-            //    var b = new Vector3(xx, yy, this.Begin.Z + 1);
-            //    BoundingBox box = new BoundingBox(a, b);
-            //    if (box.Contains(global) != ContainmentType.Disjoint)
-            //        col = IsRemoving() ? Color.Red : Color.Lime;
-            //}
+           
             sb.Draw(Sprite.Atlas.Texture, pos, GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, cam.Zoom, col, SpriteEffects.None, depth);
         }
-
     }
 }

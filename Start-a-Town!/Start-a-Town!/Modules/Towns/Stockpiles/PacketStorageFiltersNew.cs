@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.Towns;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
@@ -14,8 +7,9 @@ namespace Start_a_Town_
     {
         static internal void Init()
         {
-            Net.Server.RegisterPacketHandler(PacketType.StorageFiltersNew, Receive);
-            Net.Client.RegisterPacketHandler(PacketType.StorageFiltersNew, Receive);
+            // TODO
+            Server.RegisterPacketHandler(PacketType.StorageFiltersNew, Receive);
+            Client.RegisterPacketHandler(PacketType.StorageFiltersNew, Receive);
         }
         public static void Send(Stockpile stockpile, int[] nodeIndices = null, int[] leafIndices = null)
         {
@@ -30,7 +24,6 @@ namespace Start_a_Town_
             var stockpileID = r.ReadInt32();
             var nodes = r.ReadIntArray();
             var items = r.ReadIntArray();
-            //var stockpile = net.Map.Town.StockpileManager.Stockpiles[stockpileID];
             var stockpile = net.Map.Town.ZoneManager.GetZone<Stockpile>(stockpileID);
 
             stockpile.ToggleItemFiltersCategories(nodes);
@@ -38,18 +31,5 @@ namespace Start_a_Town_
             if (net is Server)
                 Send(stockpile, nodes, items);
         }
-        //internal static void Send(IMap map, Vector3 blockEntity, int[] filtersIndices)
-        //{
-        //    var w = map.Net.GetOutgoingStream();
-        //    w.Write(PacketType.StorageFiltersNew);
-        //    w.Write(blockEntity);
-        //    w.Write(filtersIndices);
-        //}
-        //private static void Receive(IObjectProvider net, BinaryReader r)
-        //{
-        //    var storageGlobal = r.ReadVector3();
-        //    var filters = r.ReadIntArray();
-        //    throw new NotImplementedException();
-        //}
     }
 }

@@ -1,41 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.PlayerControl;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 using Start_a_Town_.Towns;
 
 namespace Start_a_Town_
 {
-    class ToolDesignate3D : ToolManagement// DefaultTool// ControlTool
+    class ToolDesignate3D : ToolManagement
     {
         enum ValidityType { Invalid, Valid, Ignore }
-        Sprite GridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
         protected Vector3 Begin, End;
         protected int Width, Height;
         protected bool Enabled;
         bool Valid;
         bool Removing;
-        protected Action<Vector3, Vector3, bool> Callback;//, Remove;
+        protected Action<Vector3, Vector3, bool> Callback;
         public Func<Vector3, bool> IsValid;
         Func<List<Vector3>> GetZones = () => new List<Vector3>();
         public Func<Vector3, bool> ValidityCheck;
         Vector3 Plane;
         public override bool TargetOnlyBlocks => true;
-        Town Town;
         public ToolDesignate3D()
         {
 
         }
-        public ToolDesignate3D(Town town)
-        {
-            this.Town = town;
-        }
+       
         public ToolDesignate3D(Action<Vector3, Vector3, bool> callback)
             : this(callback, () => new List<Vector3>())
         {
@@ -67,9 +57,9 @@ namespace Start_a_Town_
 
         private bool Check(int w, int h)
         {
-            if (w < 1)//2)
+            if (w < 1)
                 return false;
-            if (h < 1)//2)
+            if (h < 1)
                 return false;
             var positions = this.GetPositions(w, h);
             foreach (var pos in positions)
@@ -120,8 +110,6 @@ namespace Start_a_Town_
                 return Messages.Default;
             if (this.Target.Type != TargetType.Position)
                 return Messages.Default;
-            //if (!this.Check(this.Width, this.Height))
-            //    return Messages.Default;
             int x = (int)Math.Min(this.Begin.X, this.End.X);
             int y = (int)Math.Min(this.Begin.Y, this.End.Y);
             int z = (int)Math.Min(this.Begin.Z, this.End.Z);
@@ -201,11 +189,9 @@ namespace Start_a_Town_
         }
         internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
         {
-            //return;
             Block.Atlas.Begin(sb);
             this.DrawGrid(sb, camera);
             sb.Flush();
-            //DrawExistingZones(sb, camera);
             base.DrawBeforeWorld(sb, map, camera);
         }
 
@@ -229,10 +215,6 @@ namespace Start_a_Town_
             int dy = (int)Math.Abs(this.Begin.Y - this.End.Y);
             int dz = (int)Math.Abs(this.Begin.Z - this.End.Z);
 
-            //int zmin = (int)Math.Min(this.Begin.Z, this.End.Z);
-            //int zmax = (int)(this.Begin.Z + this.End.Z - zmin);
-            //zmax = Math.Min(zmax, cam.MaxDrawZ);
-            //dz = zmax - zmin;
             Block.Atlas.Begin(sb);
             var minBegin = new Vector3(x, y, z);
             for (int i = 0; i <= dx; i++)
@@ -246,7 +228,6 @@ namespace Start_a_Town_
                         var bounds = cam.GetScreenBounds(global, Block.Bounds);
                         var pos = new Vector2(bounds.X, bounds.Y);
                         var depth = global.GetDrawDepth(Engine.Map, cam);
-                        //sb.Draw(Sprite.Atlas.Texture, pos, Sprite.BlockHighlight.AtlasToken.Rectangle, 0, Vector2.Zero, cam.Zoom, col * .5f, SpriteEffects.None, depth);
                         sb.Draw(Block.Atlas.Texture, pos, Block.BlockHighlight.Rectangle, 0, Vector2.Zero, cam.Zoom, col * .5f, SpriteEffects.None, depth);
 
                     }
@@ -295,7 +276,6 @@ namespace Start_a_Town_
                 if (box.Contains(global) != ContainmentType.Disjoint)
                     col = Color.Red;
             }
-            //sb.Draw(Sprite.Atlas.Texture, pos, Sprite.BlockHighlight.AtlasToken.Rectangle, 0, Vector2.Zero, cam.Zoom, col * .5f, SpriteEffects.None, depth);
             sb.Draw(Block.Atlas.Texture, pos, Block.BlockHighlight.Rectangle, 0, Vector2.Zero, cam.Zoom, col * .5f, SpriteEffects.None, depth);
 
         }

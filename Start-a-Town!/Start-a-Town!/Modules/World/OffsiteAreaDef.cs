@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.GameModes.StaticMaps;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -36,7 +33,6 @@ namespace Start_a_Town_
             var max = 5;
             var actor = visitor.Actor;
             var rand = visitor.World.Random;
-            //actor.AdjustHealth(-rand.Next(5));
             var dmg = min + rand.Next(max - min);
             actor.SyncAdjustResource(ResourceDef.Health, -dmg);
             AILog.SyncWrite(actor, $"[Lost {dmg} health,{Color.Red}] while exploring {this.Name}");
@@ -75,11 +71,8 @@ namespace Start_a_Town_
 
         internal GameObject GetRandomRawMaterial(Random rand)
         {
-            //var itemdef = this.Resources.SelectRandom(actor.Map.World.Random);
             if (!this.ResourcesNew.Any())
                 return null;
-            //var rand = actor.Map.World.Random;
-            //var matType = new[] { Wood, Stone, Soil, Ore }.SelectRandom(rand);
             var matType = this.ResourcesNew.SelectRandom(rand);
             var mat = matType.Value.SelectRandomWeighted(rand, p => p.Value);
             var obj = matType.Key.CreateFrom(mat.Key);
@@ -99,10 +92,6 @@ namespace Start_a_Town_
         }
         internal GameObject TryGenerate(ItemDef def, Material material, Random rand, float chance)
         {
-            //if (!this.ResourcesNew.TryGetValue(def, out var found))
-            //    return null;
-            //if (!found.TryGetValue(material, out var foundMat))
-            //    return null;
             if (!this.ResourcesNew.TryGetValue(def, out var found))
                 return null;
             if (!found.TryGetValue(material, out var foundChance))
@@ -122,11 +111,7 @@ namespace Start_a_Town_
             weight = foundWeight / totalWeight;
             return true;
         }
-        //public OffsiteAreaDef AddLoot(ItemDef def)
-        //{
-        //    this.Resources.Add(def);
-        //    return this;
-        //}
+       
         public OffsiteAreaDef AddLoot(Loot loot)
         {
             this.LootTable.Add(loot);
@@ -145,7 +130,6 @@ namespace Start_a_Town_
         public OffsiteAreaDef AddLootCurrency(int min, int max)
         {
             this.LootCurrency = new Loot(ItemDefOf.Coins, amountmin: min, amountmax: max);
-            //this.LootTable.Add(this.LootCurrency);
             return this;
         }
     }

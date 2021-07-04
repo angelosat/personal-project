@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Start_a_Town_.Animations;
-using Start_a_Town_.Components;
 namespace Start_a_Town_
 {
     class InteractionGiveItem : Interaction
@@ -32,7 +26,6 @@ namespace Start_a_Town_
             var actor = a as Actor;
             var item = a.Carried as Entity;
             var seller = t.Object as Actor;
-            //(a as Actor).GiveCarriedTo(seller);
             var sellerCarriedItem = seller.Carried as Entity;
             seller.Carry(item);
             if(this.Trade)

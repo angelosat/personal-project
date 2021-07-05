@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Components;
 using Start_a_Town_.AI;
 
 namespace Start_a_Town_
@@ -12,7 +6,6 @@ namespace Start_a_Town_
     class BehaviorCustom : Behavior
     {
         public enum Modes { Instant, Continuous }
-        //Func<BehaviorState> Action;
         public Modes Mode = Modes.Instant;
         bool Initialized;
         public Action<Actor, AIState> Init = (parent, state) => { };
@@ -52,16 +45,10 @@ namespace Start_a_Town_
             {
                 this.Initialized = false;
                 var actor = this.Actor;
-                //this.Actor.NetNew.SyncReport($"{actor.CurrentTaskBehavior} failed at {this} ({this.Label})");
                 return BehaviorState.Fail;
             }
-            //if (this.SuccessCondition(parent))
-            //{
-            //    this.Initialized = false;
-            //    return BehaviorState.Success;
-            //}
+            
             this.Tick();
-            //return this.Mode == Modes.Instant ? BehaviorState.Success : BehaviorState.Running;
             if (this.Mode== Modes.Instant)
             {
                 this.Initialized = false; 
@@ -73,13 +60,5 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
-
-        //static public BehaviorCustom DropEquipped(GearType geartype)
-        //{
-        //    return new BehaviorCustom()
-        //    {
-        //        act
-        //    }
-        //}
     }
 }

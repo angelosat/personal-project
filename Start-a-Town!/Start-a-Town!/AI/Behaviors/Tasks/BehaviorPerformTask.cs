@@ -1,5 +1,4 @@
-﻿using Start_a_Town_.AI.Behaviors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Start_a_Town_.AI;
 
@@ -7,22 +6,22 @@ namespace Start_a_Town_
 {
     abstract public class BehaviorPerformTask : Behavior
     {
-        //public GameObject Actor;
-        public AITask Task { get { 
-                return this.Actor.CurrentTask;
-            } set { this.Actor.CurrentTask = value; } }
-        //IEnumerator<Behavior> Steps;
+        public AITask Task
+        {
+            get => this.Actor.CurrentTask;
+            set => this.Actor.CurrentTask = value;
+        }
         protected abstract IEnumerable<Behavior> GetSteps();
         int CurrentStepIndex;
         public bool Finished;
         readonly List<Action> FinishActions = new();
 
         List<Behavior> _CachedBehaviors;
-        List<Behavior> CachedBehaviors// = new List<Behavior>();
+        List<Behavior> CachedBehaviors
         {
             get
             {
-                if (this._CachedBehaviors == null)
+                if (this._CachedBehaviors is null)
                 {
                     this._CachedBehaviors = new List<Behavior>();
                     foreach (var bhav in this.GetSteps())
@@ -34,8 +33,6 @@ namespace Start_a_Town_
                 return this._CachedBehaviors;
             }
         }
-        //Behavior CurrentBehavior
-        //{ get { return this.CachedBehaviors[this.CurrentStepIndex]; } }
 
         public BehaviorPerformTask()
         {
@@ -51,14 +48,6 @@ namespace Start_a_Town_
         {
             if (this.HasFailedOrEnded())
                 return BehaviorState.Fail;
-
-            //if (this.Steps == null)
-            //{
-            //    this.Steps = this.GetSteps().GetEnumerator();
-            //    this.Steps.MoveNext();
-            //    this.CurrentStepIndex++;
-            //}
-            //var current = this.Steps.Current;
             var current = this.CachedBehaviors[this.CurrentStepIndex];
             if (current != null)
             {
@@ -83,8 +72,6 @@ namespace Start_a_Town_
                 //    return BehaviorState.Fail;
                 //var result = failedorended ? BehaviorState.Fail : current.Execute(parent, state);
                 var result = current.Execute(parent, state);
-                //if (current.HasFailedOrEnded())
-                //    result = BehaviorState.Fail;
                 if (current.HasFailedOrEnded())
                     return BehaviorState.Fail;
                 switch (result)
@@ -98,9 +85,8 @@ namespace Start_a_Town_
                     case BehaviorState.Success:
                         if(!FromJump) // workaround
                         {
-                            //throw new Exception("jumped to a behavior but immediately skipped it in the same tick");
                             NextBehavior();
-                            var hasNext = this.CachedBehaviors.Count > this.CurrentStepIndex;//  this.Steps.MoveNext();
+                            var hasNext = this.CachedBehaviors.Count > this.CurrentStepIndex;
 
                             if (!hasNext)
                                 return BehaviorState.Success;
@@ -127,53 +113,22 @@ namespace Start_a_Town_
         
         public override void Write(System.IO.BinaryWriter w)
         {
-            //return;
-            //base.Write(w);
-            //this.Task.Write(w);
-            //w.Write(this.CurrentStepIndex);
-            //this.Steps.Current.Write(w);
         }
         public override void Read(System.IO.BinaryReader r)
         {
-            //return;
-
-            //base.Read(r);
-            //this.Task = AITask.Load(r);
-            //this.CurrentStepIndex = r.ReadInt32();
-
-            ////this.Steps.Current.Read(r);
-            //if (this.Steps == null)
-            //{
-            //    this.Steps = this.GetSteps().GetEnumerator();
-            //    this.Steps.MoveNext();
-            //}
-            //    for (int i = 0; i < this.CurrentStepIndex - 1; i++)
-            //        this.Steps.MoveNext();
-            
-            //this.Steps.Current.Read(r);
         }
         protected override void AddSaveData(SaveTag tag)
         {
             base.AddSaveData(tag);
             tag.Add(this.CurrentStepIndex.Save("CurrentStep"));
-
-            //tag.Add(this.CurrentBehavior.Save("Behavior"));
-
-            //return tag;
         }
         internal override void Load(SaveTag tag)
         {
             base.Load(tag);
-            //this.Task = AITask.Load(tag["Task"]);
-            
             var currentStep = tag.GetValue<int>("CurrentStep");
             this.CurrentStepIndex = currentStep;
-            //this.CurrentBehavior.Load(tag["Behavior"]);
         }
-        //internal override void ObjectLoaded(GameObject parent)
-        //{
-        //    this.Steps.Current.ObjectLoaded(parent);
-        //}
+       
         public override object Clone()
         {
             throw new NotImplementedException();
@@ -185,7 +140,6 @@ namespace Start_a_Town_
                     return false;
 
             return this.InitExtraReservations();
-            //return this.Task.ReserveTargets(this.Actor);
         }
         protected virtual bool InitExtraReservations()
         {
@@ -193,12 +147,11 @@ namespace Start_a_Town_
         }
         public virtual void CleanUp() 
         {
-            //this.Actor.Town.ReservationManager.Unreserve(this.Actor, this.Task); // UNDONE i'm unreserving elsewhere
             for (int i = 0; i < this.FinishActions.Count; i++)
             {
                 this.FinishActions[i]();
             }
-            this.Actor.Net.Report(string.Format("{0} cleaned up", this));
+            this.Actor.NetNew.Report(string.Format("{0} cleaned up", this));
         }
         internal override void MapLoaded(Actor parent)
         {
@@ -209,7 +162,6 @@ namespace Start_a_Town_
         public void JumpTo(Behavior bhav)
         {
             FromJump = true;
-            //this.CurrentStepIndex = this.CachedBehaviors.IndexOf(bhav) - 1; //because it's increased by one 
             this.CurrentStepIndex = this.CachedBehaviors.IndexOf(bhav); //because it's increased by one 
         }
 
@@ -217,11 +169,5 @@ namespace Start_a_Town_
         {
             this.FinishActions.Add(a);
         }
-        //public BehaviorPerformTask FailOn(Func<bool> condition)
-        //{
-        //    //this.AddEndCondition(condition);
-        //    base.FailOn(condition);
-        //    return this;
-        //}
     }
 }

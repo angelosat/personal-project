@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_.AI.Behaviors
 {
@@ -26,13 +22,5 @@ namespace Start_a_Town_.AI.Behaviors
         {
             return base.Execute(parent, state);
         }
-        //public override BehaviorState Execute(Entity parent, AIState state)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //public override object Clone()
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

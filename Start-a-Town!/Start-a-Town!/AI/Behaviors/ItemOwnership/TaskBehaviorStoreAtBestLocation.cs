@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.AI.Behaviors.ItemOwnership
 {
@@ -21,13 +18,8 @@ namespace Start_a_Town_.AI.Behaviors.ItemOwnership
             }
             else
             {
-                //actor.Map.Town.StockpileManager.get
                 //find stockpile
             }
-            //else
-            //{
-            //    //drop on ground
-            //}
         }
     }
 }

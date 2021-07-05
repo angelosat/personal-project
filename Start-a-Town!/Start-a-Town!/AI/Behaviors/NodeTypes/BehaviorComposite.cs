@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.AI.Behaviors
 {
@@ -37,16 +35,7 @@ namespace Start_a_Town_.AI.Behaviors
             }
             tag.Add(childrenTag);
         }
-        //internal override void Load(SaveTag tag)
-        //{
-        //    base.Load(tag);
-
-        //    var childrenTags = tag["Children"].Value as List<SaveTag>;
-        //    for (int i = 0; i < this.Children.Count; i++)
-        //    {
-        //        this.Children[i].Load(childrenTags[i]);
-        //    }
-        //}
+        
         internal override void Load(SaveTag tag)
         {
             base.Load(tag);
@@ -54,7 +43,6 @@ namespace Start_a_Town_.AI.Behaviors
             var childrenTags = tag["Children"].Value as List<SaveTag>;
             for (int i = 0; i < childrenTags.Count; i++)
             {
-                //this.Children[i].Load(childrenTags[i]);
                 var behavtag = childrenTags[i];
                 var typename = behavtag["Type"].Value as string;
                 var behav = this.Children.FirstOrDefault(c => c.GetType().FullName == typename);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_.AI.Behaviors
 {
@@ -20,7 +16,6 @@ namespace Start_a_Town_.AI.Behaviors
             var queue = state.Blackboard[this.QueueName] as Queue<object>;
             if (queue.Count > 0)
             {
-                //state.Blackboard[this.TargetName] = queue.Dequeue();
                 for (int i = 0; i < this.Targets.Length; i++)
                 {
                     var target = this.Targets[i];

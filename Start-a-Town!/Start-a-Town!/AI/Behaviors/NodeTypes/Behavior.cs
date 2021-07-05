@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-using Start_a_Town_.Net;
-using Start_a_Town_.Components;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Components.AI;
 using Start_a_Town_.AI;
 using Start_a_Town_.AI.Behaviors;
 
@@ -15,7 +10,6 @@ namespace Start_a_Town_
     public enum BehaviorState { Running, Success, Fail }
     public abstract class Behavior : ICloneable
     {
-        //public string Name = "";
         public virtual string Name { get { return ""; } }
         public string Label;
         /// <summary>
@@ -42,20 +36,11 @@ namespace Start_a_Town_
         {
             this.PreTickActions.Add(act);
         }
-        //public virtual bool HasEnded()
-        //{
-        //    foreach (var cond in this.EndConditions)
-        //        if (cond() == BehaviorState.Fail)
-        //            return true;
-        //    return false;
-        //}
+        
         public virtual bool HasFailedOrEnded()
         {
             if (!this.EndConditions.Any())
                 return false;
-            //foreach (var cond in this.EndConditions)
-            //    if (cond() == BehaviorState.Running)
-            //        return false;
             foreach (var cond in this.EndConditions)
             {
                 var result = cond();
@@ -66,7 +51,6 @@ namespace Start_a_Town_
         }
         public Behavior FailOn(Func<bool> cond)
         {
-            //this.AddEndCondition(cond);
             this.AddEndCondition(() =>
             {
                 if (cond())
@@ -86,7 +70,7 @@ namespace Start_a_Town_
         }
         public Actor Actor;
 
-        public abstract BehaviorState Execute(Actor parent, AIState state);// { throw new Exception(); }
+        public abstract BehaviorState Execute(Actor parent, AIState state);
 
         public virtual void Write(BinaryWriter w)
         {
@@ -97,23 +81,10 @@ namespace Start_a_Town_
             
         }
 
-        public Behavior Not()
-        {
-            return new BehaviorInverter(this);
-        }
         public abstract object Clone();
-        public BehaviorDomain While(Func<GameObject, AIState, bool> condition)
-        {
-            return new BehaviorDomain(new BehaviorCondition(condition), this);
-        }
-        public BehaviorDomain While(Func<bool> condition)
-        {
-            return new BehaviorDomain(new BehaviorCondition((a, t) => condition()), this);
-        }
-
+        
         internal SaveTag Save(string name = "")
         {
-            //throw new NotImplementedException();
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             tag.Add(new SaveTag(SaveTag.Types.String, "Type", this.GetType().FullName));
             this.AddSaveData(tag);
@@ -122,7 +93,6 @@ namespace Start_a_Town_
         protected virtual void AddSaveData(SaveTag tag) { }
         internal virtual void Load(SaveTag tag)
         {
-            //throw new NotImplementedException();
         }
 
         internal virtual void ObjectLoaded(GameObject parent)
@@ -139,7 +109,5 @@ namespace Start_a_Town_
             
         }
     }
-
-    
 }
 

@@ -8,7 +8,6 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
         int Timer = TimerMax;
         
         TaskGiver CurrentTaskGiver;
-       
 
         public override BehaviorState Execute(Actor parent, AIState state)
         {
@@ -87,7 +86,6 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                         if (bhav.InitBaseReservations())
                         {
                             string.Format("found followup task from same taskgiver {0}", this.CurrentTaskGiver).ToConsole();
-                            //this.CleanUp(parent, state);
                             state.CurrentTaskBehavior = bhav;
                             state.CurrentTask = next.Task;
                             return BehaviorState.Success;
@@ -117,15 +115,13 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
 
                         if (task != null)
                         {
-                            //Start_a_Town_.Modules.AI.Net.PacketTaskUpdate.Send(parent.Net as Net.Server, parent.InstanceID, state.CurrentTaskBehavior.Name);
                             return BehaviorState.Success;
                         }
                     }
                 }
             }
-            //Start_a_Town_.Modules.AI.Net.PacketTaskUpdate.Send(parent.Net as Net.Server, parent.InstanceID, "Idle");
 
-            return BehaviorState.Fail;// Success;
+            return BehaviorState.Fail;
         }
 
         bool TryForceTask(Actor parent, AITask task, AIState state)
@@ -135,14 +131,10 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
                 return false;
 
             string.Format("found followup task from same taskgiver {0}", this.CurrentTaskGiver).ToConsole();
-            //this.CleanUp(parent, state);
             state.CurrentTaskBehavior = bhav;
             state.CurrentTask = task;
             return true;
         }
-        
-        
-
 
         private void CleanUp(GameObject parent)
         {

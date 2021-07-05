@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components;
+﻿using System.Linq;
 
 namespace Start_a_Town_.AI.Behaviors.ItemOwnership
 {
@@ -15,15 +10,12 @@ namespace Start_a_Town_.AI.Behaviors.ItemOwnership
 
             // first see if they need to drop an unowned item
             var carriedItems = actor.InventoryAll();
-            //var notOwnedItems = carriedItems.Except(possesions);
-            //var itemToDrop = notOwnedItems.FirstOrDefault();
 
             // drop only items that have another specific owner set, instead of every unowned item
-            //var itemToDrop = carriedItems.Where(i => !actor.Owns(i as Entity, true)).FirstOrDefault();
             var itemToDrop = carriedItems.Where(i => !actor.OwnsOrCanClaim(i as Entity)).FirstOrDefault();
 
             if (itemToDrop != null)
-                return new AITask(typeof(TaskBehaviorDropItem)) { TargetA = new TargetArgs(itemToDrop) };// TaskDropItem(itemToDrop);
+                return new AITask(typeof(TaskBehaviorDropItem)) { TargetA = new TargetArgs(itemToDrop) };
 
             // then continue to try and go pick up any owned items in the world
             foreach (var item in possesions)
@@ -32,7 +24,7 @@ namespace Start_a_Town_.AI.Behaviors.ItemOwnership
                     continue;
                 if (!actor.InventoryContains(item))
                 {
-                    return new AITask(typeof(BehaviorPickUpItemNew)) { TargetA = new TargetArgs(item) };// new TaskPickUp(item);
+                    return new AITask(typeof(BehaviorPickUpItemNew)) { TargetA = new TargetArgs(item) };
                 }
             }
             return null;

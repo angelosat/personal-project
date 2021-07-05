@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.PathFinding;
 
 namespace Start_a_Town_.AI.Behaviors
 {
     class BehaviorFindPathNew : Behavior
     {
-        string TargetKey, PathKey;// = "Path";
+        string TargetKey, PathKey;
         PathingSync Pathing = new PathingSync();
         TargetArgs Target;
         float Range;
@@ -18,13 +13,11 @@ namespace Start_a_Town_.AI.Behaviors
             this.TargetKey = variableName;
             this.Range = range;
             this.PathKey = pathName;
-            //this.Pathing = new PathingSync();
         }
         public BehaviorFindPathNew(string variableName, float range = 0)
         {
             this.TargetKey = variableName;
             this.Range = range;
-            //this.Pathing = new PathingSync();
         }
         public BehaviorFindPathNew(TargetArgs target, float range = 0)
         {
@@ -57,7 +50,6 @@ namespace Start_a_Town_.AI.Behaviors
                     break;
             }
             throw new Exception();
-            //return base.Execute(parent, state);
         }
 
         public override object Clone()

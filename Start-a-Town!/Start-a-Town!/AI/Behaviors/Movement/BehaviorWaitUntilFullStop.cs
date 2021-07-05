@@ -22,9 +22,8 @@ namespace Start_a_Town_.AI.Behaviors
             if (parent.Velocity == Vector3.Zero)
                 return BehaviorState.Success;
 
-            var acceleration = parent.Acceleration;// parent.GetComponent<MobileComponent>().Acceleration;
+            var acceleration = parent.Acceleration;
             if (acceleration != 0)
-            //    (parent.Net as Server).AIHandler.AIStopMove(parent);
                 AIManager.AIStopMoveNew(parent);
             return BehaviorState.Running;
         }

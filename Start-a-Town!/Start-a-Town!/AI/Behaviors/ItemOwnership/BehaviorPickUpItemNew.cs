@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Interactions;
+﻿using System.Collections.Generic;
 using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_.AI
 {
     class BehaviorPickUpItemNew : BehaviorPerformTask
     {
-        public override string Name
-        {
-            get
-            {
-                return "Picking up item";
-            }
-        }
-
+        public override string Name => "Picking up item";
+       
         protected override IEnumerable<Behavior> GetSteps()
         {
             var item = this.Task.TargetA;
@@ -29,7 +18,6 @@ namespace Start_a_Town_.AI
         public override bool HasFailedOrEnded()
         {
             return false;
-            //return !this.Actor.GetPossesions().Contains(this.Task.TargetA.Object);
         }
         protected override bool InitExtraReservations()
         {

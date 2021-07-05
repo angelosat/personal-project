@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.AI;
-using Start_a_Town_.Components;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.AI.Behaviors
 {
@@ -33,25 +27,15 @@ namespace Start_a_Town_.AI.Behaviors
                 var isAboveNextBlockSolid = parent.Map.IsSolid(corner.Above());
                 float nextBlockHeight = Block.GetBlockHeight(parent.Map, corner);
                 var heightDifference = (cell.Z + nextBlockHeight) - parentGlobal.Z;
-                if (isNextBlockSolid && !isAboveNextBlockSolid &&
+                if (isNextBlockSolid && 
+                    !isAboveNextBlockSolid &&
                     heightDifference > MaxClimbableHeight)
-                    //nextBlockHeight > MaxClimbableHeight)
                 {
                     parent.Jump();
                     return BehaviorState.Success;
                 }
             }
             return BehaviorState.Success;
-
-            //var nextStep = parent.Global + parent.Direction * .5f; //parent.Velocity;// +parent.Direction * .5f;
-            //var isNextBlockSolid = parent.Map.IsSolid(nextStep);
-            //float nextBlockHeight = Block.GetBlockHeight(parent.Map, nextStep);
-
-            //var isAboveNextBlockSolid = parent.Map.IsSolid(nextStep + Vector3.UnitZ);
-
-            //if (isNextBlockSolid && !isAboveNextBlockSolid && nextBlockHeight > .5f)
-            //    parent.Jump();
-            //return BehaviorState.Success;
         }
         public override object Clone()
         {

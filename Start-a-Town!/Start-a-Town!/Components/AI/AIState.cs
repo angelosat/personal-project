@@ -78,7 +78,6 @@ namespace Start_a_Town_.AI
         public AILog History = new();
 
         public GameObject Target;
-        public AIJob Job;
         public List<GameObject> NearbyEntities { get; set; }
         public bool InSync;
         public PathFinding.Path Path;
@@ -151,9 +150,7 @@ namespace Start_a_Town_.AI
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             tag.Add(new SaveTag(SaveTag.Types.Vector3, "Leash", this.Leash));
-            if (this.Job != null)
-                tag.Add(new SaveTag(SaveTag.Types.Compound, "Job", this.Job.Save()));
-
+            
             tag.Add((this.CurrentTask != null).Save("HasTask"));
             if(this.CurrentTask!=null)
             {
@@ -189,19 +186,6 @@ namespace Start_a_Town_.AI
             this.Jobs.TrySync(tag, "Jobs", keyTag => Def.TryGetDef<JobDef>((string)keyTag.Value));
 
             tag.TryGetTag("ItemPreferences", t => this.ItemPreferences.Load(t));
-        }
-        internal void SetPath(PathFinding.Path path)
-        {
-            this.Path = path;
-            if (path.Stack.Count == 1)
-            {
-                var range = this.Job.CurrentStep.Interaction.RangeCheckCached;
-                this.MoveTarget = new AITarget(this.Job.CurrentStep.Target.Clone(), range.Min, range.Max);
-
-                path.Stack.Pop();
-            }
-            else
-                this.MoveTarget = new AITarget(new TargetArgs(path.Stack.Pop()), 0, .1f);
         }
        
         internal T1 GetBlackboardValue<T1>(string p)

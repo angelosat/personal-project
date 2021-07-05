@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_.AI.Behaviors
+﻿namespace Start_a_Town_.AI.Behaviors
 {
     class BehaviorHandleOrders : Behavior
     {
@@ -17,7 +11,6 @@ namespace Start_a_Town_.AI.Behaviors
                 if (this.CurrentBehav.Execute(parent, state) != BehaviorState.Running)
                 {
                     this.CurrentBehav = null;
-                    //state.MoveOrder = TargetArgs.Null;
                     state.MoveOrders.Dequeue();
                     this.CurrentMoveOrder = TargetArgs.Null;
                 }

@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_.AI.Behaviors
+﻿namespace Start_a_Town_.AI.Behaviors
 {
     class BehaviorRepeat : Behavior
     {
         Behavior Child;
         BehaviorCondition Condition;
-        public BehaviorRepeat(BehaviorCondition condition, Behavior child)
-            : this(child, condition)
-        {
-
-        }
-
+        
         public BehaviorRepeat(Behavior child, BehaviorCondition condition)
         {
             this.Child = child;

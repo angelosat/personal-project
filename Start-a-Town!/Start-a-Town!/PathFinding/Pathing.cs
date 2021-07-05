@@ -1,97 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.PathFinding
 {
     public class Pathing
     {
-        //enum State { Stopped, Working, Finished }
-        //public State State;
-
         const float CostStraight = 10, CostDiag = 14;
-        
-
-        
-        PriorityQueue<float, Node> Open = new PriorityQueue<float, Node>();
-        //List<Vector3> Closed = new List<Vector3>();
-        List<Node> Closed = new List<Node>();
-
+        PriorityQueue<float, Node> Open = new();
+        List<Node> Closed = new();
+        Dictionary<Vector3, Node> Nodes = new();
         Vector3 Goal;
-        Dictionary<Vector3, Node> Nodes = new Dictionary<Vector3, Node>();
-
-        public Path GetPath(IMap map, Vector3 start, Vector3 finish)
-        {
-            var watch = Stopwatch.StartNew();
-            var finishPrecise = finish;
-            Path path = new Path();
-            this.Goal = finish;
-            start = start.Round();
-            finish = finish.Round();
-            var startNode = new Node(map, start, finish, Heuristic) { };
-            var finishNode = new Node(map, finish, finish, Heuristic);
-
-            this.Nodes.Add(start, startNode);
-            this.Nodes[finish] = finishNode;
-
-            //var open = new PriorityQueue<float, Node>();
-            ////var open = new PriorityQueue<float, Vector3>();
-            //var closed = new List<Vector3>();
-
-            this.Open.Enqueue(startNode.CostToGoal, startNode);
-            //open.Enqueue(Heuristic(start, finish), start);
-            while (this.Open.Count > 0)
-            {
-                var current = this.Open.Dequeue();
-                if (current.Global == finish)
-                //if (current == finish)
-                {
-                    path.Build(current);
-                    watch.Stop();
-                    Console.WriteLine("path found in " + watch.ElapsedMilliseconds.ToString() + "ms");
-
-                    // replace rounded finish node with original precise node
-                    path.Stack.Pop();
-                    path.Stack.Push(finishPrecise);
-
-                    return path;
-                }
-                //this.Closed.Add(current.Global);
-                this.Closed.Add(current);
-                //if (!IsWalkable(map, current.Global))
-                //    continue;
-                var neighbors = current.Global.GetNeighborsDiag();
-                foreach (var n in neighbors) // put visibility check here
-                //foreach (var n in current.GetNeighborsDiag())
-                {
-                    Node nnode;
-                    if (!this.Nodes.TryGetValue(n, out nnode))
-                    {
-                        nnode = new Node(map, n, finish, Heuristic);
-                        this.Nodes[n] = nnode;
-                    }
-                    //if (!this.Closed.Contains(n))
-                    if (!this.Closed.Any(nn => nn.Global == n))
-                    {
-                        //if(!open.Contains(n))
-                        if (!this.Open.Any(node => node.Global == n))
-                        {
-                            nnode.CostFromStart = float.MaxValue;// -1;
-                            nnode.Parent = null;
-                        }
-                        //Update(current, n);
-                        Update(map, current, nnode);
-                    }
-                }
-            }
-
-            return null;
-        }
 
         static float Heuristic(Vector3 start, Vector3 finish)
         {

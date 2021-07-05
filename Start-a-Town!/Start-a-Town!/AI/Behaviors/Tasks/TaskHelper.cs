@@ -1,32 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
 using Start_a_Town_.AI.Behaviors.ItemOwnership;
 using Start_a_Town_.AI.Behaviors;
 namespace Start_a_Town_
 {
     static class TaskHelper
     {
-        static public AITask TryEquip(Actor actor, Func<GameObject, bool> condition)
-        {
-            var item = (from obj in actor.Map.GetObjects()
-                        where condition(obj)
-                        where actor.CanReserve(obj)
-                        orderby Vector3.DistanceSquared(obj.Global, actor.Global)
-                        select obj).FirstOrDefault();
-            if (item == null)
-                return null;
-
-            return new AITask(typeof(BehaviorEquipItemNew)) { TargetA = new TargetArgs(item) };
-        }
-        static public AITask TryStoreEquipped(Actor actor, GearType.Types type)
-        {
-            return TryStoreEquipped(actor, GearType.Dictionary[type]);
-        }
         static public AITask TryStoreEquipped(Actor actor, GearType type)
         {
             var mainhand = actor.GetEquipmentSlot(type);
@@ -40,11 +20,8 @@ namespace Start_a_Town_
                 }
                 else
                 {
-                    //var haul = Stockpiles.StockpileAIHelper.HaulToStockpile(actor, mainhand.Object);
                     // TODO: make a single drop item behavior that accepts a target item parameters and checks both inventory and equipment slots to find it and drop it
                     return new AITask(typeof(BehaviorCarryItem)) { TargetA = new TargetArgs(mainhand) };
-
-                    //return new AITask(typeof(BehaviorDropEquippedNew)) { Target = new TargetArgs(mainhand.Object) };
                 }
             }
             else
@@ -67,9 +44,6 @@ namespace Start_a_Town_
         {
             if (!item.IsHaulable)
                 return null;
-            //var unreservedCount = actor.GetUnreservedAmount(item);
-            //if (unreservedCount == 0)
-            //    return null;
             if (!actor.TryGetUnreservedAmount(item, out var unreservedCount))
                 return null;
             if (!HaulHelper.TryFindNearbyPlace(actor, item, out var place))
@@ -118,11 +92,6 @@ namespace Start_a_Town_
             else
             {
                 var nearbyItems = actor.Map.GetObjects();
-                //var item = (from i in nearbyItems
-                //            where condition(i)
-                //            where actor.CanReserve(i)
-                //            orderby Vector3.DistanceSquared(actor.Global, i.Global)
-                //            select i).FirstOrDefault();
                 var item = nearbyItems
                     .Where(i => condition(i) && actor.CanReserve(i))
                     .OrderByReachableRegionDistance(actor)
@@ -133,27 +102,6 @@ namespace Start_a_Town_
                 return new TargetArgs(item);
             }
         }
-        static public bool TryFindItemAnywhere(Actor actor, Func<GameObject, bool> condition, out TargetArgs target)
-        {
-            target = FindItemAnywhere(actor, condition);
-            return target != TargetArgs.Null;
-        }
-
-        //[Obsolete]
-        //static public Behavior FailOnDisposed(this Behavior bhav, int targetInd)
-        //{
-        //    //var target = bhav.Task.GetTarget(targetInd);
-        //    bhav.AddEndCondition(() =>
-        //    {
-        //        var task = bhav.Actor.CurrentTask;
-        //        if (task.GetTarget(targetInd).Object.IsDisposed)
-        //            return true;
-        //        if (task.GetTargetQueue(targetInd).Any(t => t.Object.IsDisposed))
-        //            return true;
-        //        return false;
-        //    });
-        //    return bhav;
-        //}
         static public Behavior FailOnNotCarrying(this Behavior bhav)
         {
             bhav.FailOn(() => bhav.Actor.Carried == null);
@@ -171,23 +119,6 @@ namespace Start_a_Town_
             });
             return bhav;
         }
-        static public Behavior FailOnForbiddenQueue(this Behavior bhav, TargetIndex targetInd)
-        {
-            bhav.FailOn(() =>
-            {
-                var task = bhav.Actor.CurrentTask;
-                
-                if (task.GetTargetQueue(targetInd).Any(t => t.IsForbidden))
-                    return true;
-                return false;
-            });
-            return bhav;
-        }
-        //[Obsolete]
-        //static public Behavior FailOnForbidden(this Behavior bhav, int targetInd)
-        //{
-        //    return FailOnForbidden(bhav, (TargetIndex)targetInd);
-        //}
         static public Behavior FailOnUnavailableTarget(this Behavior bhav, TargetIndex targetInd)
         {
             bhav.FailOn(() =>
@@ -201,11 +132,6 @@ namespace Start_a_Town_
                 return false;
             });
             return bhav;
-        }
-        [Obsolete]
-        static public Behavior FailOnUnavailableTarget(this Behavior bhav, int targetInd)
-        {
-            return bhav.FailOnUnavailableTarget((TargetIndex)targetInd);
         }
         static public Behavior FailOnUnavailablePlacedItems(this Behavior bhav)
         {
@@ -257,20 +183,8 @@ namespace Start_a_Town_
                 var global = bhav.Task.GetTarget(targetInd).Global;
                 var actor = bhav.Actor;
                 var objects = actor.Map.GetObjects(global.Above());
-                return objects.Any() && (objects.SingleOrDefault(o => o == actor) != actor); //objects.SingleOrDefault() != actor;
-                //return !bhav.Actor.Map.IsEmptyNew(global.Above());
+                return objects.Any() && (objects.SingleOrDefault(o => o == actor) != actor);
             });
-        }
-        static public BehaviorCustom NextTarget(Behavior bhavRoot, TargetIndex index)
-        {
-            var bhav = new BehaviorCustom();
-            bhav.InitAction = () =>
-            {
-                if (bhav.Actor.CurrentTask.NextTarget(index))
-                    if(bhavRoot!=null)
-                        bhav.Actor.CurrentTaskBehavior.JumpTo(bhavRoot);
-            };
-            return bhav;
         }
         static public BehaviorCustom NextTargetAmount(Behavior bhavRoot, TargetIndex index)
         {
@@ -282,11 +196,6 @@ namespace Start_a_Town_
                         bhav.Actor.CurrentTaskBehavior.JumpTo(bhavRoot);
             };
             return bhav;
-        }
-        [Obsolete]
-        static public BehaviorCustom NextTargetAmount(Behavior bhavRoot, int index)
-        {
-            return NextTargetAmount(bhavRoot, (TargetIndex)index);
         }
     }
 }

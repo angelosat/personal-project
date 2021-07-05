@@ -1,7 +1,5 @@
-﻿using System;
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
-    [Obsolete]
     public class InteractionToggleDoor : Interaction
     {
         public InteractionToggleDoor() : base("Open/close") { }

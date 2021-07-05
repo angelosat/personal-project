@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Interactions;
+﻿using System.Collections.Generic;
 using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_
 {
     class TaskBehaviorStoreInInventory : BehaviorPerformTask
     {
-        public override string Name
-        {
-            get
-            {
-                return "Storing item in inventory";
-            }
-        }
+        public override string Name => "Storing item in inventory";
 
         protected override IEnumerable<Behavior> GetSteps()
         {

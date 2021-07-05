@@ -7,6 +7,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_.AI.Behaviors
 {
+    [Obsolete]
     class BehaviorCombat : BehaviorSequence//Queue
     {
         public BehaviorCombat()

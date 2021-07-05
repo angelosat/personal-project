@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Start_a_Town_.AI.Behaviors
 {
+    [Obsolete]
     class BehaviorFindEquipment : BehaviorSequence
     {
         public BehaviorFindEquipment()

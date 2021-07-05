@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.AI.Behaviors
 {
@@ -18,13 +15,13 @@ namespace Start_a_Town_.AI.Behaviors
         {
             return this.Current != null ? this.Current.ToString() : "<none>";
         }
-        public override BehaviorState Execute(Actor parent, AIState state)//IObjectProvider net, GameObject parent, Personality personality, Knowledge knowledge, params object[] p)
+        public override BehaviorState Execute(Actor parent, AIState state)
         {
             for (int i = this.Position; i < this.Children.Count; i++)
             {
                 var child = this.Children[i];
                 this.Position = i;
-                var result = child.Execute(parent, state);//net, parent, personality, knowledge, p);
+                var result = child.Execute(parent, state);
                 switch (result)
                 {
                     case BehaviorState.Fail:
@@ -42,18 +39,7 @@ namespace Start_a_Town_.AI.Behaviors
             this.Position = 0;
             return BehaviorState.Fail;
         }
-        //public override Behavior Initialize(GameObject parent)
-        //{
-        //    foreach (var child in this.Children)
-        //        child.Initialize(parent);
-        //    return this;
-        //}
-        //public override Behavior Initialize(AIState state)
-        //{
-        //    foreach (var child in this.Children)
-        //        child.Initialize(state);
-        //    return this;
-        //}
+        
         public override void Write(System.IO.BinaryWriter w)
         {
             w.Write(this.Position);

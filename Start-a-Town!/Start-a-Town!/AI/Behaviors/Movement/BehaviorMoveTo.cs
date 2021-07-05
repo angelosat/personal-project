@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Interactions;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_.AI.Behaviors
 {
-    class BehaviorMoveTo : BehaviorQueue// BehaviorSequence
+    class BehaviorMoveTo : BehaviorQueue
     {
         public BehaviorMoveTo(string targetKey, int range)
         {
             this.Children = new List<Behavior>()
             {
-                //new BehaviorGetAt(targetKey, range),
-                //new BehaviorInteractionNew(targetKey, interaction)
                 new BehaviorDomain(new IsAt(targetKey, range),
                     new BehaviorStopMoving()),
                 new BehaviorGetAtNewNew(targetKey)//, range)
@@ -27,7 +20,7 @@ namespace Start_a_Town_.AI.Behaviors
             {
                 new BehaviorDomain(new IsAt(targetArgs, range),
                     new BehaviorStopMoving()),
-                new BehaviorGetAtNewNew(targetArgs)//, range)
+                new BehaviorGetAtNewNew(targetArgs)
             };
         }
         public override BehaviorState Execute(Actor parent, AIState state)
@@ -35,10 +28,5 @@ namespace Start_a_Town_.AI.Behaviors
             var result = base.Execute(parent, state);
             return result;
         }
-        //public override object Clone()
-        //{
-            
-        //    throw new Exception();
-        //}
     }
 }

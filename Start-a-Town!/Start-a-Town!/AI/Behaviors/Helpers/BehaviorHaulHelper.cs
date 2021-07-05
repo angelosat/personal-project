@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.AI;
-using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.Towns;
 
 namespace Start_a_Town_
 {
@@ -32,8 +27,6 @@ namespace Start_a_Town_
                     {
                         if (!item.CanAbsorb(pot))
                             continue;
-                    //if (!actor.CanReserve(pot))
-                    //    continue;
                     var unreservedAmount = actor.GetUnreservedAmount(pot);
                         if (unreservedAmount == 0)
                             continue;
@@ -49,7 +42,6 @@ namespace Start_a_Town_
             };
             return bhav;
         }
-
         static public Behavior StartCarrying(TargetIndex storageIndex)
         {
             var bhav = new BehaviorCustom() { Mode = BehaviorCustom.Modes.Continuous };
@@ -71,7 +63,7 @@ namespace Start_a_Town_
                     amountFromTask = amountFromTask == -1 ? item.StackSize : amountFromTask;
                     if (reservedAmount != amountFromTask)
                         //throw new Exception(); // TODO not sure i should be getting the haul amount from the reservation instead of the amount propert in the task
-                        actor.Net.SyncReport($"Reserved amount [{reservedAmount}] different than target amount [{amountFromTask}] in [{actor.Name}]'s [{bhav.GetType()}] behavior");
+                        actor.NetNew.SyncReport($"Reserved amount [{reservedAmount}] different than target amount [{amountFromTask}] in [{actor.Name}]'s [{bhav.GetType()}] behavior");
 
                     //// the item stacksize might have been increased since the behavior initialization 
                     //if (amountFromTask > reservedAmount)
@@ -89,7 +81,7 @@ namespace Start_a_Town_
             bhav.FailOnUnavailableTarget(storageIndex);
             bhav.SuccessCondition = a =>
             {
-                if (interaction.IsFinished)// .State == Interaction.States.Finished)
+                if (interaction.IsFinished)
                 {
                     var actor = bhav.Actor;
                     var task = actor.CurrentTask;
@@ -107,80 +99,12 @@ namespace Start_a_Town_
                 }
                 return false;
             };
-            //bhav.AddEndCondition(() =>
-            //{
-            //    //var interaction = actor.CurrentInteraction;
-            //    if (interaction.State == Interaction.States.Failed)
-            //        return BehaviorState.Fail;
-            //    else if (interaction.State == Interaction.States.Finished)
-            //    {
-            //        var task = actor.CurrentTask;
-            //        var hauled = actor.GetHauled();
-            //        task.Count -= amountToPickUp;
-            //        return BehaviorState.Success;
-            //    }
-            //    return BehaviorState.Running;
-            //});
-            return bhav;
-        }
-        static public Behavior DropInStorage(Behavior gotoBhav, TargetIndex storageIndex)
-        {
-            var bhav = new BehaviorCustom() { Mode = BehaviorCustom.Modes.Continuous };
-            Interaction interaction = null;
-            GameObject hauledObj = null;
-            //bhav.FailOnNotCarrying();
-            bhav.PreInitAction = () =>
-            {
-                {
-                    var actor = gotoBhav.Actor;
-                    interaction = new UseHauledOnTargetNew();
-                    hauledObj = actor.GetHauled();
-                    var task = actor.CurrentTask;
-                    var target = task.GetTarget(storageIndex);
-                    actor.Interact(interaction, target);
-                }
-            };
-            bhav.AddEndCondition(() =>
-            {
-                var actor = gotoBhav.Actor;
-                //var interaction = actor.CurrentInteraction;
-                if (interaction.State == Interaction.States.Failed)
-                    return BehaviorState.Fail;
-                else if (interaction.State == Interaction.States.Finished)
-                {
-                    //actor.Net.Log.Write("successfully dropped item");
-                    if (actor.GetHauled() is not Entity hauled)//!(hauled?.StackSize > 0))
-                        return BehaviorState.Success;
-                    if (!hauledObj.IsDisposed)
-                        actor.Unreserve(hauledObj);
-                    var task = actor.CurrentTask;
-                    var target = task.GetTarget(storageIndex);
-                    actor.Unreserve(target);
-                    var cell = target.Global;
-                    var targets = StockpileManager.GetMoreValidStoragePlaces(actor, hauled, cell);
-                    foreach (var tar in targets)
-                    {
-                        if (tar.HasObject && !tar.Object.CanAbsorb(hauled))
-                            continue;
-                        if (!actor.CanReserve(tar))
-                            continue;
-                        actor.Reserve(tar, 1);
-                        task.SetTarget(storageIndex, tar);
-                        actor.CurrentTaskBehavior.JumpTo(gotoBhav);
-                        //actor.Net.Log.Write("found next storage place " + tar.ToString());
-                        return BehaviorState.Running;
-                    }
-                }
-                return BehaviorState.Running;
-            });
             return bhav;
         }
         static public Behavior DropInStorage(TargetIndex storageIndex)
         {
             var bhav = new BehaviorCustom() { Mode = BehaviorCustom.Modes.Continuous };
-            //Interaction interaction = null;
             GameObject hauledObj = null;
-            //bhav.FailOnNotCarrying();
             bhav.PreInitAction = () =>
             {
                 {
@@ -200,28 +124,14 @@ namespace Start_a_Town_
                     return BehaviorState.Fail;
                 else if (interaction.State == Interaction.States.Finished)
                 {
-                    actor.Net.Log.Write("successfully dropped item");
-                    if (actor.GetHauled() is not Entity hauled)//!(hauled?.StackSize > 0))
+                    actor.NetNew.Log.Write("successfully dropped item");
+                    if (actor.GetHauled() is not Entity hauled)
                         return BehaviorState.Success;
                     if (!hauledObj.IsDisposed)
                         actor.Unreserve(hauledObj);
                     var task = actor.CurrentTask;
                     var target = task.GetTarget(storageIndex);
                     actor.Unreserve(target);
-                    //var cell = target.Global;
-                    //var targets = StockpileManager.GetMoreValidStoragePlaces(actor, hauled, cell);
-                    //foreach (var tar in targets)
-                    //{
-                    //    if (tar.HasObject && !tar.Object.CanAbsorb(hauled))
-                    //        continue;
-                    //    if (!actor.CanReserve(tar))
-                    //        continue;
-                    //    actor.Reserve(tar, 1);
-                    //    task.SetTarget(storageIndex, tar);
-                    //    actor.CurrentTaskBehavior.JumpTo(gotoBhav);
-                    //    actor.Net.Log.Write("found next storage place " + tar.ToString());
-                    //    return BehaviorState.Running;
-                    //}
                 }
                 return BehaviorState.Running;
             });
@@ -240,7 +150,6 @@ namespace Start_a_Town_
                 var task = actor.CurrentTask;
                 var target = task.GetTarget(storageIndex);
                 var cell = target.Global.SnapToBlock();
-                //var targets = StockpileManager.GetMoreValidStoragePlaces(actor, hauledObj, cell);
                 var targets = GetMoreValidStoragePlaces(actor, hauledObj, cell);
 
                 foreach (var tar in targets)
@@ -252,13 +161,12 @@ namespace Start_a_Town_
                     actor.Reserve(tar, 1);
                     task.SetTarget(storageIndex, tar);
                     actor.CurrentTaskBehavior.JumpTo(gotoBhav);
-                    actor.Net.Log.Write("found next storage place " + tar.ToString());
+                    actor.NetNew.Log.Write("found next storage place " + tar.ToString());
                     return;
                 }
             };
             return bhav;
         }
-
         static public IEnumerable<TargetArgs> GetMoreValidStoragePlaces(Actor actor, Entity item, IntVec3 center)
         {
             var storage = item.Map.Town.ZoneManager.GetZoneAt<Stockpile>(center.Below);

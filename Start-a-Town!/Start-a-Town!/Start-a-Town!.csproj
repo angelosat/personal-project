@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\Behaviors\BehaviorWait.cs" />
+    <Compile Include="AI\Behaviors\Conversation\ConversationNew.cs" />
     <Compile Include="AI\Behaviors\Conversation\ConversationTopic.cs" />
     <Compile Include="AI\Behaviors\Eating\TaskBehaviorEatWithoutTable.cs" />
     <Compile Include="AI\Behaviors\Eating\TaskBehaviorEatWithTable.cs" />
@@ -134,36 +135,23 @@
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorYieldNode.cs" />
     <Compile Include="AI\Behaviors\Eating\TaskBehaviorEating.cs" />
     <Compile Include="AI\Behaviors\Eating\TaskGiverEat.cs" />
-    <Compile Include="AI\Behaviors\Interactions\BehaviorInitializeInteraction.cs" />
-    <Compile Include="AI\Behaviors\Interactions\BehaviorIsInteractionFinished.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorDropCarried.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorDropEquippedNew.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorEquipItemNew.cs" />
-    <Compile Include="AI\Behaviors\ItemOwnership\BehaviorEquipItem.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorCarryItem.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorPickUpItemNew.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorUnequip.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\IsItemOwner.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\TaskBehaviorDropItem.cs" />
-    <Compile Include="AI\Behaviors\ItemOwnership\TaskBehaviorStoreAtBestLocation.cs" />
-    <Compile Include="AI\Behaviors\ItemOwnership\TaskEquipInventoryItem.cs" />
-    <Compile Include="AI\Behaviors\ItemOwnership\TaskEquipment.cs" />
-    <Compile Include="AI\Behaviors\ItemOwnership\TaskGiverDropItem.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\TaskGiverItemOwnership.cs" />
-    <Compile Include="AI\Behaviors\ItemOwnership\TaskEquip.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorFollowPathNewNew.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorGetAtNewNew.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorMoveTo.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorOpenDoor.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorStartMoving.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorStopMoving.cs" />
-    <Compile Include="AI\Behaviors\Movement\BehaviorWaitUntilFullStop.cs" />
     <Compile Include="AI\Behaviors\Observe\BehaviorTaskObserveNew.cs" />
     <Compile Include="AI\Behaviors\Observe\TaskGiverObserve.cs" />
-    <Compile Include="AI\Behaviors\Pathing\BehaviorCreatePath.cs" />
-    <Compile Include="AI\Behaviors\Pathing\BehaviorFindPathNew.cs" />
-    <Compile Include="AI\Behaviors\Pathing\BehaviorNextPathStep.cs" />
-    <Compile Include="AI\Behaviors\Pathing\BehaviorPathTo.cs" />
     <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorAttackCharge.cs" />
     <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorAttackDeliver.cs" />
     <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorChaseTarget.cs" />
@@ -192,7 +180,6 @@
     <Compile Include="AI\Behaviors\Sleeping\TaskBehaviorSleepingNew.cs" />
     <Compile Include="AI\Behaviors\Sleeping\TaskBehaviorSleepOnGround.cs" />
     <Compile Include="AI\Behaviors\Sleeping\TaskGiverSleeping.cs" />
-    <Compile Include="AI\Behaviors\Tasks\BehaviorCustomSteps.cs" />
     <Compile Include="AI\Behaviors\Tasks\TaskGiver.cs" />
     <Compile Include="AI\Behaviors\Tasks\BehaviorFindTask.cs" />
     <Compile Include="AI\Behaviors\Tasks\BehaviorPerformTask.cs" />
@@ -578,6 +565,8 @@
     <Compile Include="Objects\Properties\RecipeProperties.cs" />
     <Compile Include="Objects\Properties\FoodClass.cs" />
     <Compile Include="Objects\Properties\CraftingProperties.cs" />
+    <Compile Include="PathFinding\PathingSync.FinishMode.cs" />
+    <Compile Include="PathFinding\PathingSync.Node.cs" />
     <Compile Include="ReferenceManager.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Terraforming\Biome.cs" />
@@ -915,13 +904,11 @@
     <Compile Include="Objects\Entity.cs" />
     <Compile Include="Objects\EntityDef.cs" />
     <Compile Include="Objects\Plants\Plant.cs" />
-    <Compile Include="PathFinding\Node.cs" />
+    <Compile Include="PathFinding\NodeBase.cs" />
     <Compile Include="PathFinding\Path.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PathFinding\PathingNew.cs" />
     <Compile Include="PathFinding\PathingSync.cs" />
-    <Compile Include="PathFinding\Pathing.cs" />
     <Compile Include="Start-a-Town!\GameModes\ServerEventHandler.cs" />
     <Compile Include="Terraforming\LightingEngineThreaded.cs" />
     <Compile Include="Terraforming\Location.cs" />
@@ -1119,7 +1106,7 @@
     <Compile Include="KeyboardMap.cs" />
     <Compile Include="Terraforming\Position.cs" />
     <Compile Include="Objects\GameObjectSlot.cs" />
-    <Compile Include="Rooms\WorldScreen.cs" />
+    <Compile Include="Screens\WorldScreen.cs" />
     <Compile Include="SaveTag.cs" />
     <Compile Include="Terraforming\WorldArgs.cs" />
     <Compile Include="TextInput.cs">
@@ -1239,7 +1226,7 @@
     <Compile Include="WindowsHook.cs" />
     <Compile Include="Timer2.cs" />
     <Compile Include="Terraforming\Cell.cs" />
-    <Compile Include="Rooms\LoadingScreen.cs" />
+    <Compile Include="Screens\LoadingScreen.cs" />
     <Compile Include="Operand.cs" />
     <Compile Include="Interfaces\ISlottable.cs" />
     <Compile Include="ProgressOld.cs" />
@@ -1274,8 +1261,8 @@
     <Compile Include="Parameter.cs" />
     <Compile Include="TimerArgs.cs" />
     <Compile Include="Timer.cs" />
-    <Compile Include="Rooms\MainScreen.cs" />
-    <Compile Include="Rooms\ScreenManager.cs" />
+    <Compile Include="Screens\MainScreen.cs" />
+    <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Terraforming\PerlinArgs.cs" />
     <Compile Include="UI\InteractionBar.cs" />
     <Compile Include="UI\BorderStyle.cs" />
@@ -1316,8 +1303,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Rooms\Ingame.cs" />
-    <Compile Include="Rooms\GameScreen.cs" />
+    <Compile Include="Screens\Ingame.cs" />
+    <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Blocks\Block.cs" />
     <Compile Include="UI\Buttons\Button.cs" />
     <Compile Include="UI\ComboBox\ComboBox.cs" />

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
 
@@ -13,7 +9,6 @@ namespace Start_a_Town_
         readonly static PacketType PckType = PacketType.PacketEntitySync;
         static public void Init()
         {
-            //Server.RegisterPacketHandler(PckType, Receive);
             Client.RegisterPacketHandler(PckType, Receive);
         }
         static public void Send(IObjectProvider net, GameObject entity)

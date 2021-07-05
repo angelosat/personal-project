@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Net
 {
@@ -19,26 +14,6 @@ namespace Start_a_Town_.Net
             var type = p[0];
             switch (type)
             {
-                //case "set":
-                //    switch (p[1])
-                //    {
-                //        case "time":
-                //            int t = int.Parse(p[2]);
-                //            //net.Map.Time = new TimeSpan(net.Map.Time.Days, t, net.Map.Time.Minutes, net.Map.Time.Seconds);
-                //            net.Map.Time = new TimeSpan(net.Map.Time.Days, t, 0, 0);
-                //            foreach (var ch in net.Map.GetActiveChunks())
-                //                ch.Value.LightCache.Clear();
-                //            if(net is Server)
-                //                (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
-                //            return true;
-
-                //            break;
-
-                //        default:
-                //            break;
-                //    }
-                //    break;
-
                 case "resetlight":
                     foreach (var chunk in net.Map.GetActiveChunks().Values)
                     {
@@ -82,33 +57,12 @@ namespace Start_a_Town_.Net
             return false;
         }
 
-
         static public bool Execute(IObjectProvider net, string command)
         {
             var p = command.Split(' ');
             var type = p[0];
             switch (type)
             {
-                //case "set":
-                //    switch (p[1])
-                //    {
-                //        case "time":
-                //            int t = int.Parse(p[2]);
-                //            //net.Map.Time = new TimeSpan(net.Map.Time.Days, t, net.Map.Time.Minutes, net.Map.Time.Seconds);
-                //            net.Map.Time = new TimeSpan(net.Map.Time.Days, t, 0, 0);
-                //            foreach (var ch in net.Map.GetActiveChunks())
-                //                ch.Value.LightCache.Clear();
-                //            if(net is Server)
-                //                (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
-                //            return true;
-
-                //            break;
-
-                //        default:
-                //            break;
-                //    }
-                //    break;
-
                 case "resetlight":
                     foreach (var chunk in net.Map.GetActiveChunks().Values)
                     {
@@ -116,8 +70,6 @@ namespace Start_a_Town_.Net
                         new LightingEngine(net.Map).HandleBatchSync(items);
                     }
                     break;
-
-                
 
                 case "fog":
                     var client = net as Client;
@@ -129,14 +81,11 @@ namespace Start_a_Town_.Net
                         (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
                     break;
 
-
-
                 default:
                     GameModes.GameMode.Current.ParseCommand(net, command);
                     break;
             }
             return false;
         }
-
     }
 }

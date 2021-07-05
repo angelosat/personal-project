@@ -60,6 +60,7 @@ namespace Start_a_Town_.Towns.Crafting
             var craftOp = new CraftOperation(reactionID, materials, workstationGlobal);
             Client.Instance.Send(PacketType.CraftingOrderPlace, Network.Serialize(craftOp.WriteOld));
         }
+        [Obsolete]
         public override void Handle(IObjectProvider net, Packet msg)
         {
             switch (msg.PacketType)

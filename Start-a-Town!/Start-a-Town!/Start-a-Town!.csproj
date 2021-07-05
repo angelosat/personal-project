@@ -469,6 +469,7 @@
     <Compile Include="Modules\Visitors\VisitorProperties.cs" />
     <Compile Include="Modules\World\OffsiteAreaDef.cs" />
     <Compile Include="Modules\World\OffsiteAreaDefOf.cs" />
+    <Compile Include="Net\Packets\New\PacketEntityCrouchToggle.cs" />
     <Compile Include="Net\Packets\New\PacketEntityDespawn.cs" />
     <Compile Include="Objects\Actors\ActorDef.cs" />
     <Compile Include="Objects\Actors\ActorDefOf.cs" />
@@ -685,7 +686,6 @@
     <Compile Include="Components\Crafting\InteractionCraftingPerson.cs" />
     <Compile Include="Components\Crafting\Modifiers\Quantity.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\IsFuel.cs" />
-    <Compile Include="Components\Crafting\Smelting\SmeltingInterface.cs" />
     <Compile Include="Components\Interactions\InteractionCustom.cs" />
     <Compile Include="Components\Interactions\InteractionPerpetual.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\IsBlockType.cs" />
@@ -940,7 +940,6 @@
     <Compile Include="Net\Packets\New\PacketServerHandshake.cs" />
     <Compile Include="Net\Packets\New\PacketSnapshots.cs" />
     <Compile Include="Net\Packets\PacketIntInt.cs" />
-    <Compile Include="Net\Packets\PacketInt.cs" />
     <Compile Include="Net\PlayerList.cs" />
     <Compile Include="Net\RPCargs.cs" />
     <Compile Include="Net\UI\UIConnecting.cs" />
@@ -1037,14 +1036,10 @@
     <Compile Include="Interfaces\IProgressBar.cs" />
     <Compile Include="Engine\MySpriteBatch.cs" />
     <Compile Include="Engine\MyVertex.cs" />
-    <Compile Include="Net\ChunkTransfer.cs" />
-    <Compile Include="Net\EventSnapshot.cs" />
     <Compile Include="Net\GameEvent.cs" />
-    <Compile Include="Net\IEventHandler.cs" />
     <Compile Include="Net\ObjectSnapshot.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Net\Packets\PacketInventoryOperation.cs" />
     <Compile Include="Net\PacketWrapper.cs" />
     <Compile Include="Net\Packets\IServerPacketHandler.cs" />
     <Compile Include="Net\Packets\IClientPacketHandler.cs" />
@@ -1052,13 +1047,7 @@
     <Compile Include="Net\Packets\PacketEntityBoolean.cs" />
     <Compile Include="Net\Packets\PacketEntityVector3.cs" />
     <Compile Include="Net\Packets\PacketEntity.cs" />
-    <Compile Include="Net\Packets\PacketChunk.cs" />
-    <Compile Include="Net\Packets\PacketHandling.cs" />
     <Compile Include="Net\Packets\Player\PacketPlayerChangeDirection.cs" />
-    <Compile Include="Net\Packets\Player\PacketPlayerJump.cs" />
-    <Compile Include="Net\Packets\Player\PlayerPacketHandler.cs" />
-    <Compile Include="Net\Packets\Player\PacketPlayerStopMoving.cs" />
-    <Compile Include="Net\Packets\Player\PacketPlayerStartMoving.cs" />
     <Compile Include="Net\PacketTransfer.cs" />
     <Compile Include="Net\PlayerServerToken.cs" />
     <Compile Include="Net\RandomThreaded.cs" />
@@ -1076,7 +1065,7 @@
     <Compile Include="SceneState.cs" />
     <Compile Include="Net\IObjectProvider.cs" />
     <Compile Include="Net\PacketTranslation.cs" />
-    <Compile Include="Net\Client.cs" />
+    <Compile Include="Net\Client\Client.cs" />
     <Compile Include="Components\AI\Thoughts.cs" />
     <Compile Include="Components\Attack.cs" />
     <Compile Include="Components\Attributes\AttributeStat.cs" />
@@ -1084,7 +1073,6 @@
     <Compile Include="Components\CombatComponent.cs" />
     <Compile Include="Components\Crafting\Recipe.cs" />
     <Compile Include="Components\Crafting\Template.cs" />
-    <Compile Include="Components\Crafting\Smelting\SmelteryComponent.cs" />
     <Compile Include="Objects\Items\ItemComponent.cs" />
     <Compile Include="Components\ObjectFilter2.cs" />
     <Compile Include="Components\Resources\ResourcesComponent.cs" />
@@ -1198,7 +1186,6 @@
     <Compile Include="UI\Crafting\ReactionInterface.cs" />
     <Compile Include="UI\Crafting\MaterialPicker.cs" />
     <Compile Include="UI\Crafting\ReagentPanel.cs" />
-    <Compile Include="UI\Crafting\Smeltery\SmelteryInterface.cs" />
     <Compile Include="UI\Crafting\Smeltery\SmeltingWindow.cs" />
     <Compile Include="UI\BuildingsWindow.cs" />
     <Compile Include="UI\CameraWidget.cs" />
@@ -1440,6 +1427,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Components\Crafting\Smelting\" />
     <Folder Include="Components\Crafting\ToolFilters\" />
     <Folder Include="Objects\Coins\" />
     <Folder Include="Objects\Items\Storage\UI\" />

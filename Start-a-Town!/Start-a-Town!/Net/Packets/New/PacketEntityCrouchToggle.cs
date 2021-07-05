@@ -3,9 +3,9 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketEntitySprintToggle
+    class PacketEntityCrouchToggle
     {
-        static readonly PacketType PType = PacketType.EntitySprintToggle;
+        static readonly PacketType PType = PacketType.EntityCrouchToggle;
         internal static void Init()
         {
             Server.RegisterPacketHandler(PType, Receive);
@@ -23,7 +23,7 @@ namespace Start_a_Town_
             var id = r.ReadInt32();
             var entity = net.GetNetworkObject(id) as Actor;
             var toggle = r.ReadBoolean();
-            entity.SprintToggle(toggle);
+            entity.CrouchToggle(toggle);
 
             if (net is Server)
                 Send(net, entity.RefID, toggle);

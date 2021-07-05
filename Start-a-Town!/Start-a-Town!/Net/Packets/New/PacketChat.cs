@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -13,6 +7,7 @@ namespace Start_a_Town_
     {
         internal static void Init()
         {
+            // TODO
             Server.RegisterPacketHandler(PacketType.Chat, Receive);
             Client.RegisterPacketHandler(PacketType.Chat, Receive);
         }
@@ -34,9 +29,6 @@ namespace Start_a_Town_
             else 
             {
                 var player = net.GetPlayer(playerid);
-                //GameObject plachar;
-                //if (!Instance.TryGetNetworkObject(pla.CharacterID, out plachar))
-                //    throw new Exception("Player character with id: " + pla.CharacterID + " is missing (" + plachar.Name + ")");
                 net.EventOccured(Components.Message.Types.ChatPlayer, player.Name, text);
             }
         }

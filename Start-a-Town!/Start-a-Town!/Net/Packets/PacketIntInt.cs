@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.Net.Packets
 {
+    [Obsolete]
     class PacketIntInt : Packet
     {
         public static byte[] Write(int arg1, int arg2)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Start_a_Town_.UI;
-using Microsoft.Xna.Framework;
+﻿using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Net
 {
@@ -14,7 +9,7 @@ namespace Start_a_Town_.Net
         {
             get
             {
-                if (_Instance.IsNull())
+                if (_Instance is null)
                     _Instance = new ServerUI();
                 return _Instance;
             }
@@ -22,11 +17,7 @@ namespace Start_a_Town_.Net
 
         ServerUI()
         {
-            //var panel_players = UIPlayerList.Instance;
-            //UIPlayerList.Instance.Location = ServerConsole.Instance.TopRight;
-            //UIPlayerList.Instance.Show(Server.Instance.Players);
-
-            this.Controls.Add(ServerConsole.Instance);//, panel_players);
+            this.Controls.Add(ServerConsole.Instance);
         }
     }
 }

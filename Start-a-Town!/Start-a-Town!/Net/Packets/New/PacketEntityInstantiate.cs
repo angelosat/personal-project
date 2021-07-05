@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
 
@@ -30,23 +28,14 @@ namespace Start_a_Town_
             var strem = net.GetOutgoingStream();
             strem.Write((int)PckTypeNew);
             strem.Write(templateID);
-           
-                //if (entity.InstanceID != 0)
-                //    throw new Exception();
-                //net.Instantiate(entity);
-                //entity.Spawn(net);
-                var data = entity.Serialize();
-                strem.Write(data.Length);
-                strem.Write(data);
+            var data = entity.Serialize();
+            strem.Write(data.Length);
+            strem.Write(data);
         }
         static public void ReceiveTemplate(IObjectProvider net, BinaryReader r)
         {
             if (net is Server)
                 throw new Exception();
-            //var count = r.ReadInt32();
-
-            //for (int i = 0; i < count; i++)
-            //{
             var templateID = r.ReadInt32();
             var length = r.ReadInt32();
             var data = r.ReadBytes(length);
@@ -54,7 +43,6 @@ namespace Start_a_Town_
             entity.Instantiate(net.Instantiator); // move this to client class
             if (entity.IsSpawned)// move this to client class
                 entity.Spawn(net);// move this to client class
-            //}
         }
         static public void Send(IObjectProvider net, IEnumerable<GameObject> entities)
         {
@@ -89,6 +77,5 @@ namespace Start_a_Town_
                     entity.Spawn(net);
             }
         }
-        
     }
 }

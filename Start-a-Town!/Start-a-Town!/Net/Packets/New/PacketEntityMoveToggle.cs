@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -13,6 +8,7 @@ namespace Start_a_Town_
         static readonly PacketType PType = PacketType.EntityMoveToggle;
         internal static void Init()
         {
+            // TODO
             Server.RegisterPacketHandler(PType, Receive);
             Client.RegisterPacketHandler(PType, Receive);
         }

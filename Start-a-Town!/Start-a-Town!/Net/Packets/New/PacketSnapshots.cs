@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
 
@@ -31,7 +28,6 @@ namespace Start_a_Town_
         static public void Receive(IObjectProvider net, BinaryReader r)
         {
             var client = net as Client;
-            //client.ReadSnapshot(msg.Decompressed);
             client.ReadSnapshot(r);
         }
     }

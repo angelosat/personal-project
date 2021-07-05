@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.PlayerControl;
 
 namespace Start_a_Town_
 {
@@ -29,22 +23,8 @@ namespace Start_a_Town_
             var player = net.GetPlayer(plid);
             var tool = ControlTool.CreateOrSync(r, player);
             player.CurrentTool = tool;
-            if (net is Client)
-            {
-                //player.CurrentTool = tool;
-            }
-            else
+            if (net is Server)
                 Send(net, plid, tool);
-
-            //var plid = r.ReadInt32();
-            //var tool = ControlTool.Create(r);
-            //if (net is Client)
-            //{
-            //    var player = net.GetPlayer(plid);
-            //    player.CurrentTool = tool;
-            //}
-            //else
-            //    Send(net, plid, tool);
         }
     }
 }

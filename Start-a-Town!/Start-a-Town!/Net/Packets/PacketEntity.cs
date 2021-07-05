@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.Net.Packets
 {
+    [Obsolete]
     class PacketEntity : Packet
     {
         public int EntityID;
@@ -34,13 +31,9 @@ namespace Start_a_Town_.Net.Packets
 
         public override byte[] Write()
         {
-            //return BitConverter.GetBytes(this.EntityID);
             return Write(this.EntityID);
         }
-        //public override void Read(byte[] data)
-        //{
-        //    data.Translate(r => this.EntityID = r.ReadInt32());
-        //}
+        
         static public byte[] Write(int entityID)
         {
             return BitConverter.GetBytes(entityID);

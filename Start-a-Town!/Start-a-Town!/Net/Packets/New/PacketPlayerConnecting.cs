@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -13,7 +7,6 @@ namespace Start_a_Town_
     {
         internal static void Init()
         {
-            //Server.Instance.RegisterPacketHandler(PacketType.EntityInteract, Receive);
             Client.RegisterPacketHandler(PacketType.PlayerConnecting, Receive);
         }
         internal static void Send(IObjectProvider net, PlayerData player)
@@ -27,7 +20,6 @@ namespace Start_a_Town_
             PlayerData player = PlayerData.Read(r);
             var client = net as Client;
             client.AddPlayer(player);
-            
         }
     }
 }

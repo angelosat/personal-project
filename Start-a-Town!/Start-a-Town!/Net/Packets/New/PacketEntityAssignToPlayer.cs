@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -30,11 +25,6 @@ namespace Start_a_Town_
             var playerid = r.ReadInt32();
             var entityid = r.ReadInt32();
             client.AssignCharacter(playerid, entityid);
-            //Client.PlayerData.CharacterID = playerChar.InstanceID;
-            //Player.Actor = playerChar;// client.GetNetworkObject(playerChar.InstanceID);
-            //Rooms.Ingame.Instance.Hud.Initialize(Player.Actor);
-            //Rooms.Ingame.Instance.Camera.CenterOn(Player.Actor.Global);
-            //PlayerSaveTimer.Change(PlayerSaveInterval, PlayerSaveInterval);
         }
     }
 }

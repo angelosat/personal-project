@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -36,8 +30,6 @@ namespace Start_a_Town_
             {
                 case Components.Message.Types.ServerResponseReceived:
                     this.SetText("Connected!\nReceiving session...");
-                    //this.LabelText.Text = "Connected!\nReceiving session...";
-                    //this.LabelText.AnchorTo(this.ClientDimensions / 2, Vector2.One / 2);
                     break;
 
                 case Components.Message.Types.ChunksLoaded:

@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Interactions;
 
 namespace Start_a_Town_
 {
@@ -23,21 +18,15 @@ namespace Start_a_Town_
         internal static void EndInteraction(IObjectProvider net, GameObject entity, bool success)
         {
             var server = net as Server;
-            //var w = server.GetOutgoingStream();
             var w = server.OutgoingStreamTimestamped;
             w.Write(PacketInteract);
             w.Write(entity.RefID);
-            var map = net.Map;
-
             w.Write(false);
             w.Write(success);
         }
         internal static void Send(IObjectProvider net, GameObject entity, Interaction action, TargetArgs target)
         {
-            //entity.TryGetComponent<WorkComponent>(c => c.Perform(entity, action, target));
-            
             var server = net as Server;
-            //var w = server.GetOutgoingStream();
             var w = server.OutgoingStreamTimestamped;
             w.Write(PacketInteract);
             w.Write(entity.RefID);
@@ -57,11 +46,9 @@ namespace Start_a_Town_
             var map = net.Map;
             if(!r.ReadBoolean())
             {
-                //endinteraction
                 WorkComponent.End(entity, r.ReadBoolean());
                 return;
             }
-            //var target = TargetArgs.Create(net, r);
             var target = TargetArgs.Read(net.Map, r);
 
             var action = Activator.CreateInstance(Type.GetType(r.ReadString())) as Interaction;

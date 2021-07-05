@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using System.IO;
 using Start_a_Town_.Net;
 using Start_a_Town_.GameModes.StaticMaps;
 
@@ -14,13 +8,11 @@ namespace Start_a_Town_
     {
         static public void Init()
         {
-            //Server.RegisterPacketHandler(PacketType.SpawnEntity, Receive);
             Client.RegisterPacketHandler(PacketType.PacketEntityDespawn, Receive);
         }
         static public void Send(IObjectProvider net, Entity entity)
         {
             if (net is Client)
-                //throw new Exception();
                 return;
             var w = net.GetOutgoingStream();
             w.Write(PacketType.PacketEntityDespawn);

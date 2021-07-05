@@ -6,17 +6,17 @@ namespace Start_a_Town_
 {
     class PacketToggleForbidden
     {
+        static int p;
         static public void Init()
         {
             // TODO
-            Client.RegisterPacketHandler(PacketType.ToggleForbidden, Receive);
-            Server.RegisterPacketHandler(PacketType.ToggleForbidden, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, List<int> instanceID)
         {
            
             var w = net.GetOutgoingStream();
-            w.Write((int)PacketType.ToggleForbidden);
+            w.Write(p);
             w.Write(instanceID);
         }
         static public void Receive(IObjectProvider net, BinaryReader r)

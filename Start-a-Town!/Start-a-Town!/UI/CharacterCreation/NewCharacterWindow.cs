@@ -9,6 +9,7 @@ using Start_a_Town_.Components;
 
 namespace Start_a_Town_.UI
 {
+    [Obsolete]
     class NewCharacterWindow : Window
     {
         Panel Panel_Tabs, Panel_Buttons; //Panel_Main
@@ -42,7 +43,6 @@ namespace Start_a_Town_.UI
             Btn_Create = new Button(Vector2.Zero, 100, "Create");
             Btn_Create.CustomTooltip = true;
             Btn_Create.DrawTooltip += new EventHandler<TooltipArgs>(Btn_Create_DrawTooltip);
-            Btn_Create.LeftClick += new UIEvent(Btn_Create_Click);
             Panel_Buttons.Controls.Add(Btn_Create);
             //Panel_Buttons.Location = new Vector2(Panel_Main.Right - Panel_Buttons.Width, Math.Max(Panel_Main.Bottom, Panel_Tabs.Bottom));//.X = Panel_Main.Right - Btn_Create.Width;
 
@@ -53,65 +53,6 @@ namespace Start_a_Town_.UI
             //Location = CenterScreen;
             this.SnapToScreenCenter();
 
-        }
-
-        //void tab_Click(object sender, EventArgs e)
-        //{
-        //    Client.Controls.Remove(Panel_Main);
-        //    Panel panel = (sender as Control).Tag as Panel;
-        //    if (panel == null)
-        //        return;
-        //    Client.Controls.Add(panel);
-        //    Panel_Main = panel;
-        //}
-
-        void Btn_Create_Click(object sender, EventArgs e)
-        {
-            if (AlreadyExists(Txt_CharName.Text))
-                return;
-
-            DirectoryInfo directory = new DirectoryInfo( GlobalVars.SaveDir + "Characters/");
-            if (!Directory.Exists(directory.FullName))
-                Directory.CreateDirectory(directory.FullName);
-
-            GameObject actor = GameObjectDb.Actor;
-            actor["Info"]["Name"] = Txt_CharName.Text;
-
-            //foreach(var item in this.Customization.Colors.Colors)
-            //{
-            //    actor.Body.Find(item.Key).Sprite.Tint = item.Value;
-            //}
-            //this.Customization.Colors.Apply(actor.Body);
-            actor.GetComponent<SpriteComponent>().Customization = this.Customization.Colors;
-
-            //InventoryComponent.Give(actor, GameObject.Types.Berries, 3);
-            //InventoryComponent.Give(actor, GameObject.Types.Pickaxe, 1);
-            //InventoryComponent.Give(actor, GameObject.Types.EpicShovel, 1);
-            //InventoryComponent.Give(actor, GameObject.Types.Hoe, 1);
-            //InventoryComponent.Give(actor, GameObject.Types.Axe, 1);
-            //InventoryComponent.Give(actor, GameObject.Types.Hammer, 1);
-            //InventoryComponent.Give(actor, GameObject.Types.WoodenPlank, 4);
-            //InventoryComponent.Give(actor, GameObject.Types.Handsaw, 1);
-            //InventoryComponent.Give(actor, GameObject.Types.StrengthPotion, 1);
-
-            using (MemoryStream stream = new MemoryStream())
-            {
-                BinaryWriter writer = new BinaryWriter(stream);
-
-                //SaveTag charTag = new SaveTag(Start_a_Town_.SaveTag.Types.Compound, Txt_CharName.Text, actor.Save());
-                //charTag.WriteTo(writer);
-
-                Net.Client.Instance.SavePlayer(actor, writer);
-
-                Chunk.Compress(stream, @"\Saves\Characters\" + actor["Info"]["Name"] + ".character.sat");
-
-                
-               // stream.Close(); // no need for that if using
-            }
-
-          //  SelectWorldWindow.Player = actor;
-            Tag = actor;
-            Hide();
         }
 
         void Btn_Create_DrawTooltip(object sender, TooltipArgs e)

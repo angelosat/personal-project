@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -25,7 +21,6 @@ namespace Start_a_Town_
         public override string ToString()
         {
             return this.Name;
-            //return string.Format("Priority: {0}", this.Name);
         }
     }
 }

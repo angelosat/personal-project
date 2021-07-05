@@ -13,7 +13,7 @@ namespace Start_a_Town_
         static Texture2D ChestNormalMap = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chestnormal");
         public override Material GetMaterial(byte blockdata)
         {
-            return Material.Database[blockdata];
+            return Material.Registry[blockdata];
         }
         public BlockStorage()
             : base(Block.Types.Bin, opaque: false)
@@ -37,7 +37,7 @@ namespace Start_a_Town_
         }
         public override IEnumerable<byte> GetCraftingVariations()
         {
-            var vars = (from mat in Material.Database.Values
+            var vars = (from mat in Material.Registry.Values
                         where mat.Type == MaterialType.Wood || mat.Type == MaterialType.Metal
                         select (byte)mat.ID);
             return vars;
@@ -48,7 +48,7 @@ namespace Start_a_Town_
         }
         public override Vector4 GetColorVector(byte data)
         {
-            var mat = Material.Database[data];
+            var mat = Material.Registry[data];
             var c = mat.ColorVector;
             return c;
         }

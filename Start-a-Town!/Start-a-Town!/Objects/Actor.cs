@@ -18,8 +18,25 @@ namespace Start_a_Town_
         }
 
         public override float Height => this.Physics.Height - (this.Mobile.Crouching ? 1 : 0);
+        public override bool IsHaulable => false;
 
+        MobileComponent _Mobile;
+        public MobileComponent Mobile => this._Mobile ??= this.GetComponent<MobileComponent>();
+        internal NpcSkillsComponent Skills => this.GetComponent<NpcSkillsComponent>();
+        internal AttributesComponent Attributes => this.GetComponent<AttributesComponent>();
+        internal NpcComponent Npc => this.GetComponent<NpcComponent>();
+        PossessionsComponent _Ownership;
+        public PossessionsComponent Ownership => this._Ownership ??= this.GetComponent<PossessionsComponent>();
+        public Interaction CurrentInteraction => this.GetComponent<WorkComponent>().Task;
+        AIState _CachedState;
+        public AIState State => this._CachedState ??= this.GetComponent<AIComponent>().State;
         internal Workplace Workplace => this.Town.ShopManager.GetShop(this);
+        internal PersonalityComponent Personality => this.GetComponent<PersonalityComponent>();
+        public AILog Log => AIState.GetState(this).History;
+        public Room AssignedRoom => this.Town.RoomManager.FindRoom(this.RefID);
+        public bool IsCitizen => this.Town.Agents.Contains(this.RefID);
+        public IItemPreferencesManager ItemPreferences => this.GetState().ItemPreferences;
+
         internal T GetWorkplace<T>() where T : Workplace
         {
             return this.Town.ShopManager.GetShop(this) as T;
@@ -70,7 +87,6 @@ namespace Start_a_Town_
             return PersonalInventoryComponent.Count(this, o => o.Def == ItemDefOf.Coins);
         }
 
-
         internal void ModifyNeed(NeedDef def, Func<float, float> modOldValue)
         {
             var need = this.GetNeed(def);
@@ -101,10 +117,6 @@ namespace Start_a_Town_
             throw new NotImplementedException();
         }
 
-        public override bool IsHaulable => false;
-
-
-
         internal void ForceTask(TaskDef taskdef, TargetArgs target)
         {
             throw new NotImplementedException();
@@ -134,6 +146,15 @@ namespace Start_a_Town_
                 map.GetBlock(global.Above()).IsStandableIn &&
                 map.GetBlock(global.Below()).IsStandableOn; //TODO: take into account actor's height instead of hardcoding checks 2 blocks above
         }
+        internal bool CanStandOn(Vector3 global)
+        {
+            var map = this.Map;
+            var above = global.Above();
+            return
+                map.GetBlock(global).IsStandableOn &&
+                map.GetBlock(above).IsStandableIn &&
+                map.GetBlock(above.Above()).IsStandableIn; //TODO: take into account actor's height instead of hardcoding checks 2 blocks above
+        }
 
         internal void FinishConversation()
         {
@@ -162,20 +183,9 @@ namespace Start_a_Town_
             return topic;
         }
 
-        internal bool CanStandOn(Vector3 global)
-        {
-            var map = this.Map;
-            var above = global.Above();
-            return
-                map.GetBlock(global).IsStandableOn &&
-                map.GetBlock(above).IsStandableIn &&
-                map.GetBlock(above.Above()).IsStandableIn; //TODO: take into account actor's height instead of hardcoding checks 2 blocks above
-        }
         internal void CancelInteraction()
         {
             AIManager.EndInteraction(this);
-            return;
-            this.GetComponent<WorkComponent>().Interrupt(this, false);
         }
 
         internal void Equip(GameObject item)
@@ -196,18 +206,6 @@ namespace Start_a_Town_
             this.GetState().Path = null;
         }
 
-
-
-        MobileComponent _Mobile;
-        public MobileComponent Mobile
-        {
-            get
-            {
-                if (this._Mobile == null)
-                    this._Mobile = this.GetComponent<MobileComponent>();
-                return this._Mobile;
-            }
-        }
         public override GameObject Create()
         {
             return new Actor();
@@ -223,9 +221,6 @@ namespace Start_a_Town_
             this.GetComponent<NeedsComponent>().AddNeed(defs);
         }
 
-
-
-
         static public Actor Create(ItemDef def)
         {
             var obj = new Actor
@@ -234,7 +229,6 @@ namespace Start_a_Town_
             };
             obj.Physics.Height = def.Height;
             obj.Physics.Weight = def.Weight;
-            
 
             obj.AddComponent(new AttributesComponent(def).Randomize());
             obj.AddComponent(new NpcSkillsComponent(def).Randomize());
@@ -261,7 +255,7 @@ namespace Start_a_Town_
                    new AI.Behaviors.Tasks.BehaviorFindTask(),
                    new BehaviorIdle()
                    )));
-            obj.AddComponent(new SpriteComponent(def.Body));//, sprite));
+            obj.AddComponent(new SpriteComponent(def.Body));
             foreach (var b in obj.Body.GetAllBones())
                 b.Material = def.DefaultMaterial;
 
@@ -396,17 +390,7 @@ namespace Start_a_Town_
             givers = this.IsCitizen ? givers.Concat(jobTaskGivers) : givers.Concat(TaskGiver.VisitorTaskGivers);
             return givers;
         }
-        AIState _CachedState;
-        public AIState State
-        {
-            get
-            {
-                return this._CachedState ??= this.GetComponent<AIComponent>().State;
-            }
-        }
-        internal PersonalityComponent Personality
-        { get { return this.GetComponent<PersonalityComponent>(); } }
-
+        
         internal void InsertToInventory(Entity item)
         {
             PersonalInventoryComponent.InsertItem(this, item);
@@ -415,24 +399,7 @@ namespace Start_a_Town_
         {
             PersonalInventoryComponent.RemoveItem(this, item);
         }
-        internal NpcSkillsComponent Skills
-        { get { return this.GetComponent<NpcSkillsComponent>(); } }
-        internal AttributesComponent Attributes
-        { get { return this.GetComponent<AttributesComponent>(); } }
-        internal NpcComponent Npc
-        { get { return this.GetComponent<NpcComponent>(); } }
-        PossessionsComponent _Ownership;
-        public PossessionsComponent Ownership => this._Ownership ??= this.GetComponent<PossessionsComponent>(); 
-        public Interaction CurrentInteraction { get { return this.GetComponent<WorkComponent>().Task; } }
-
-        public AILog Log
-        {
-            get
-            {
-                return AIState.GetState(this).History;
-            }
-        }
-
+       
         internal Trait GetTrait(TraitDef trait)
         {
             return this.GetComponent<PersonalityComponent>().Traits.First(t => t.Def == trait);
@@ -503,21 +470,6 @@ namespace Start_a_Town_
         {
             return this.GetPossesions().Contains(item);
         }
-        public Room AssignedRoom
-        {
-            get
-            {
-                return this.Town.RoomManager.FindRoom(this.RefID);
-              }
-        }
-
-        public bool IsCitizen
-        {
-            get
-            {
-                return this.Town.Agents.Contains(this.RefID);
-            }
-        }
 
         internal GearType[] GetGearTypes()
         {
@@ -541,7 +493,6 @@ namespace Start_a_Town_
             var score = ItemUsefulnessEvaluator.Evaluate(this, item);
             return score;
         }
-
       
         internal bool CanAcceptQuest(QuestDef quest)
         {
@@ -561,11 +512,7 @@ namespace Start_a_Town_
             if (this.GetVisitorProperties() is VisitorProperties props)
                 props.OffsiteArea = null;
         }
-        public IItemPreferencesManager ItemPreferences => this.GetItemPreferences();
-        public IItemPreferencesManager GetItemPreferences()
-        {
-            return this.GetState().ItemPreferences;
-        }
+        
         internal void AwardSkillXP(SkillDef skill, float v)
         {
             this.GetComponent<NpcSkillsComponent>().AwardSkillXP(this, skill, v);

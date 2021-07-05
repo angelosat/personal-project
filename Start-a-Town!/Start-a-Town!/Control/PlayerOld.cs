@@ -253,12 +253,6 @@ namespace Start_a_Town_
                     throw new NotImplementedException();
                     //e.Sender.PostMessage(Message.Types.ContainerClose, Player.Actor);
                     //return;
-                case Message.Types.UIOwnership:
-                    OwnershipWindow.Instance.Tag = e.Sender;
-                    OwnershipWindow.Instance.Filter = e.Parameters[0] as Predicate<GameObject>;
-                    OwnershipWindow.Instance.Show();
-                    //   ObjectInterfaceWindows.Add(NpcWindow.Instance);
-                    return;
 
                 //case Message.Types.BeginInteraction:
                 //    Interaction inter = e.Parameters[0] as Interaction;

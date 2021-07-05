@@ -204,7 +204,7 @@ namespace Start_a_Town_.Components
                     return true;
 
                 case Message.Types.DropInventoryItem:
-                    slotID = (int)e.Parameters[0];
+                    var slotID = (int)e.Parameters[0];
                     amount = (int)e.Parameters[1];
                     DropInventoryItem(parent, slotID, amount);
                     return true;
@@ -458,23 +458,6 @@ namespace Start_a_Town_.Components
             return true;
         }
        
-        bool PickUpOld(GameObject parent, GameObject obj, int amount)
-        {
-            var newobj = GameObject.Create(obj.IDType);
-            newobj.StackSize = amount;
-            parent.Net.InstantiateAndSync(newobj);
-
-            var server = parent.Net as Net.Server;
-            if (server != null)
-            {
-                obj.StackSize -= amount;
-
-                this.Haul(parent, newobj);
-                server.RemoteProcedureCall(new TargetArgs(parent), Message.Types.Haul, w => { w.Write(newobj.RefID); w.Write(obj.RefID); w.Write(amount); });
-            }
-            return true;
-        }
-
         static public bool PickUp(GameObject parent, GameObjectSlot objSlot)
         {
             var inv = parent.GetComponent<PersonalInventoryComponent>();
@@ -500,32 +483,7 @@ namespace Start_a_Town_.Components
             }
             return inv.PickUpOld(parent, objSlot);
         }
-        static public bool PickUp(GameObject parent, GameObject obj, int amount)
-        {
-            var inv = parent.GetComponent<PersonalInventoryComponent>();
-            if (inv.HaulSlot.Object != null)
-            {
-                // check if item of same type, and if true, add to stack
-                var haulObj = inv.HaulSlot.Object;
-                if (haulObj.IDType == obj.IDType)
-                {
-                    var transferAmount = Math.Min(amount == -1 ? obj.StackSize : amount, haulObj.StackMax - haulObj.StackSize);
-                    haulObj.StackSize += transferAmount;
-                    if (transferAmount == obj.StackSize)
-                    {
-                        parent.Net.Despawn(obj);
-                        parent.Net.DisposeObject(obj);
-                        return true; // if we didn't leave any amount left on the ground, return
-                    }
-                }
-                //else
-                // if we maxed out our hauling stack, but there is some remaining amout of item on the ground, store hauled stack and haul the remaining item stack
-                if (!StoreHauled(parent))
-                    return false;
-            }
-            return inv.PickUpOld(parent, obj, amount);
-        }
-        
+       
         static public bool PickUpNewNew(GameObject parent, GameObject obj, int amount)
         {
             if (parent.Net is Net.Client)

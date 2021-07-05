@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Animations;
 using Start_a_Town_.Components;
 using Start_a_Town_.Components.Crafting;
 
@@ -12,31 +8,25 @@ namespace Start_a_Town_
 {
     static class ToolDefs
     {
+        // TODO: make a single base tool def and create tools from it with different properties (graphics/usage)
         static readonly string HandleIngredientIndex = "Handle";
         static readonly string HeadIngredientIndex = "Head";
-
 
         private static readonly CraftingProperties ToolCraftingProperties = new()
         {
             Reagents = new Dictionary<BoneDef, Reaction.Reagent>()
                 {
-                    //{ BoneDef.EquipmentHandle, new Reaction.Reagent(HandleIngredientIndex, new Ingredient(null, null, null).IsCraftingMaterial().HasReactionClass(ReactionClass.Tools)) }, //.IsBuildingMaterial()
-                    //{ BoneDef.EquipmentHead, new Reaction.Reagent(HeadIngredientIndex, new Ingredient(null, null, null).IsCraftingMaterial().HasReactionClass(ReactionClass.Tools))  }
                     { BoneDef.EquipmentHandle, new Reaction.Reagent(HandleIngredientIndex, new Ingredient(null, null, null).SetAllow(ItemCategory.Manufactured, true)) }, //.IsBuildingMaterial()
                     { BoneDef.EquipmentHead, new Reaction.Reagent(HeadIngredientIndex, new Ingredient(null, null, null).SetAllow(ItemCategory.Manufactured, true))  }
                 }
         };
 
-        static public readonly ItemDef Shovel = new("Shovel")//, new ToolAbility(ToolAbilityDef.Digging, 5))
+        static public readonly ItemDef Shovel = new("Shovel")
         {
-            //ItemClass = typeof(Entity),
-            //Factory = ItemFactory.CreateTool,
             BaseValue = 10,
             QualityLevels = true,
             Category = ItemCategory.Tools,
             Description = "Used to dig out grainy material like soil dirt and sand.",
-            //SubType = ItemSubType.Shovel,
-            //ID = ItemTemplate.Shovel.ID,
             DefaultSprite = ItemContent.ShovelFull,
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
@@ -45,9 +35,6 @@ namespace Start_a_Town_
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.ShovelHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                             .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.ShovelHead) { DrawMaterialColor = true }),
-            //CraftingIngredientIndices = new Dictionary<BoneDef, ReactionIngredientIndex>(){
-            //    {BoneDef.EquipmentHandle, new ReactionIngredientIndex(HandleIngredientIndex) } ,
-            //    {BoneDef.EquipmentHead, new ReactionIngredientIndex(HeadIngredientIndex) } },
             CraftingProperties = ToolCraftingProperties,
             CompProps = new List<ComponentProps>()
             { 
@@ -56,16 +43,10 @@ namespace Start_a_Town_
             }
         };
         
-
-        //.AddIngredientIndex<ItemToolDef>(BoneDef.EquipmentHandle, "Handle")
-        //.AddIngredientIndex<ItemToolDef>(BoneDef.EquipmentHead, "Head");
-
-        static public readonly ItemDef Axe = new("Axe")//, new ToolAbility(ToolAbilityDef.Chopping, 5))
+        static public readonly ItemDef Axe = new("Axe")
         {
             Category = ItemCategory.Tools,
             Description = "Chops down trees.",
-            //SubType = ItemSubType.Axe,
-            //ID = ItemTemplate.Axe.ID,
             QualityLevels = true,
             DefaultSprite = ItemContent.AxeFull,
             MadeFromMaterials = true,
@@ -77,9 +58,6 @@ namespace Start_a_Town_
 
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.AxeHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                     .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.AxeHead) { DrawMaterialColor = true }),
-            //CraftingIngredientIndices = new Dictionary<BoneDef, ReactionIngredientIndex>(){
-            //    {BoneDef.EquipmentHandle, new ReactionIngredientIndex(HandleIngredientIndex) } ,
-            //    {BoneDef.EquipmentHead, new ReactionIngredientIndex(HeadIngredientIndex) } }
             CraftingProperties = ToolCraftingProperties,
             CompProps = new List<ComponentProps>()
             {
@@ -87,12 +65,10 @@ namespace Start_a_Town_
             }
         };
 
-        static public readonly ItemDef Hammer = new("Hammer")//, new ToolAbility(ToolAbilityDef.Building, 5))
+        static public readonly ItemDef Hammer = new("Hammer")
         {
             Category = ItemCategory.Tools,
             Description = "Chops down trees.",
-            //SubType = ItemSubType.Hammer,
-            //ID = ItemTemplate.Hammer.ID,
             BaseValue = 10,
             QualityLevels = true,
             DefaultSprite = ItemContent.HammerFull,
@@ -103,9 +79,6 @@ namespace Start_a_Town_
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.HammerHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                     .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.HammerHead) { DrawMaterialColor = true }),
-            //CraftingIngredientIndices = new Dictionary<BoneDef, ReactionIngredientIndex>(){
-            //    {BoneDef.EquipmentHandle, new ReactionIngredientIndex(HandleIngredientIndex) } ,
-            //    {BoneDef.EquipmentHead, new ReactionIngredientIndex(HeadIngredientIndex) } }
             CraftingProperties = ToolCraftingProperties,
             CompProps = new List<ComponentProps>()
             {
@@ -113,12 +86,10 @@ namespace Start_a_Town_
             }
         };
 
-        static public readonly ItemDef Pickaxe = new("Pickaxe")//, new ToolAbility(ToolAbilityDef.Mining, 5))
+        static public readonly ItemDef Pickaxe = new("Pickaxe")
         {
             Category = ItemCategory.Tools,
             Description = "Used for mining.",
-            //SubType = ItemSubType.Pickaxe,
-            //ID = ItemTemplate.Pickaxe.ID,
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
             QualityLevels = true,
@@ -129,24 +100,18 @@ namespace Start_a_Town_
             BaseValue = 10,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.PickaxeHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                     .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.PickaxeHead) { DrawMaterialColor = true }),
-            //CraftingIngredientIndices = new Dictionary<BoneDef, ReactionIngredientIndex>(){
-            //    {BoneDef.EquipmentHandle, new ReactionIngredientIndex(HandleIngredientIndex) } ,
-            //    {BoneDef.EquipmentHead, new ReactionIngredientIndex(HeadIngredientIndex) } }
             CraftingProperties = ToolCraftingProperties,
             CompProps = new List<ComponentProps>()
             {
                 new ResourcesComponent.Props(ResourceDef.Durability)
             }
-
         };
 
-        static public readonly ItemDef Handsaw = new("Handsaw")//, new ToolAbility(ToolAbilityDef.Mining, 5))
+        static public readonly ItemDef Handsaw = new("Handsaw")
         {
             BaseValue = 10,
             Category = ItemCategory.Tools,
             Description = "Converts logs to planks.",
-            //SubType = ItemSubType.Handsaw,
-            //ID = ItemTemplate.Handsaw.ID,
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
             QualityLevels = true,
@@ -156,9 +121,6 @@ namespace Start_a_Town_
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.HandsawHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                     .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.HandsawHead) { DrawMaterialColor = true }),
-            //CraftingIngredientIndices = new Dictionary<BoneDef, ReactionIngredientIndex>(){
-            //    {BoneDef.EquipmentHandle, new ReactionIngredientIndex(HandleIngredientIndex) } ,
-            //    {BoneDef.EquipmentHead, new ReactionIngredientIndex(HeadIngredientIndex) } }
             CraftingProperties = ToolCraftingProperties,
             CompProps = new List<ComponentProps>()
             {
@@ -166,13 +128,11 @@ namespace Start_a_Town_
             }
 
         };
-        static public readonly ItemDef Hoe = new("Hoe")//, new ToolAbility(ToolAbilityDef.Argiculture, 5))
+        static public readonly ItemDef Hoe = new("Hoe")
         {
             BaseValue = 10,
             Category = ItemCategory.Tools,
             Description = "Converts logs to planks.",
-            //SubType = ItemSubType.Handsaw,
-            //ID = ItemTemplate.Handsaw.ID,
             MadeFromMaterials = true,
             QualityLevels = true,
             GearType = GearType.Mainhand,
@@ -182,9 +142,6 @@ namespace Start_a_Town_
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.HandsawHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                     .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.HandsawHead) { DrawMaterialColor = true }),
-            //CraftingIngredientIndices = new Dictionary<BoneDef, ReactionIngredientIndex>(){
-            //    {BoneDef.EquipmentHandle, new ReactionIngredientIndex(HandleIngredientIndex) } ,
-            //    {BoneDef.EquipmentHead, new ReactionIngredientIndex(HeadIngredientIndex) } }
             CraftingProperties = ToolCraftingProperties,
             CompProps = new List<ComponentProps>()
             {
@@ -221,10 +178,7 @@ namespace Start_a_Town_
             foreach (var tool in craftableTools)
             {
                 var reagents = new List<Reaction.Reagent>();
-                //foreach(var index in tool.CraftingIngredientIndices)
-                //{
-                //    reagents.Add(new Reaction.Reagent(index.Value.Label, null, null, MaterialType.Metal));//, new Reaction.Reagent.ReagentFilter() { _Condition = obj => obj.Def.CraftingProperties.ProductClass == ProductClass.Tools }));
-                //}
+               
                 foreach (var reagent in tool.CraftingProperties.Reagents)
                     reagents.Add(reagent.Value);
 

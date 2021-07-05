@@ -68,9 +68,6 @@ namespace Start_a_Town_
                     {
                         int z = chunk.HeightMap[lx][ly];
                         Cell cell = chunk.GetLocalCell(lx, ly, z);
-                        //if (cell.Block.Material != Material.Soil)
-                        
-                        //if (cell.Block.MaterialType != MaterialType.Soil)
                         if (cell.Block.GetMaterial(cell.BlockData).Type != MaterialType.Soil)
                             continue;
 
@@ -88,8 +85,8 @@ namespace Start_a_Town_
                             var r = random.NextDouble();
                             if (r < n)
                             {
-                                //GameObject tree = GameObject.Create(GameObject.Types.Tree);
-                                GameObject tree = GameObject.Create(plantType);
+                                throw new NotImplementedException();
+                                GameObject tree = null; //GameObject.Create(plantType);
 
                                 var angle = (float)(random.NextDouble() * (Math.PI + Math.PI));
                                 var offset = new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0) * .2f;
@@ -142,8 +139,8 @@ namespace Start_a_Town_
                             var r = random.NextDouble();
                             if (r < n)
                             {
-                                //GameObject tree = GameObject.Create(GameObject.Types.Tree);
-                                GameObject plant = GameObject.Create(plantType);
+                                throw new NotImplementedException();
+                                GameObject plant = null;// GameObject.Create(plantType);
 
                                 var angle = (float)(random.NextDouble() * (Math.PI + Math.PI));
                                 var offset = new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0) * .2f;
@@ -203,10 +200,10 @@ namespace Start_a_Town_
                         continue;
 
                     var offset = new Vector3(0,0, 1);
-                    //offset += new Vector3((float)random.NextDouble() * 2 - 1, (float)random.NextDouble() * 2 - 1, 0);
                     var angle = (float)(random.NextDouble() * (Math.PI + Math.PI));
                     offset += new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0) * .2f;
-                    server.Spawn(GameObject.Create(plantType), current + offset);
+                    throw new NotImplementedException();
+                    //server.Spawn(GameObject.Create(plantType), current + offset);
                     n++;
                 }
 

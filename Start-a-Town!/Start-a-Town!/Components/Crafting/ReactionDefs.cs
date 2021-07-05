@@ -48,39 +48,5 @@ namespace Start_a_Town_.Components.Crafting
                 .AddResourceFilter(ResourceDef.Durability)
                 .Preserve())
             .AddProduct(new Product("item").RestoreDurability());
-
-        static public readonly Reaction Burning = new(
-            "Burn",
-            //CanBeMadeAt(Site.Person, ItemTemplate.Workbench.ID),
-            CanBeMadeAt(IsWorkstation.Types.Smeltery),
-            Reagent.Create(new Reaction.Reagent("Body", Reagent.IsOfMaterialType(MaterialType.Wood))),
-            //Product.Create(new Product(MaterialType.Bars))
-            Product.Create(new Product(mats =>
-            {
-                //return MaterialType.Rocks.CreateFrom(Material.Coal);
-                return MaterialType.RawMaterial.Create(MaterialDefOf.Coal);
-
-            })
-            { Quantity = 2 }),
-            SkillDef.Tinkering);
-
-        //static public readonly Reaction BakePie = new Reaction(
-        //            "Bake Pie",
-        //            CanBeMadeAt(IsWorkstation.Types.Baking),
-        //            Reagent.Create(new Reaction.Reagent("Body", Reagent.IsEdible())),
-        //            //Product.Create(new Product(MaterialType.Bars))
-        //            Product.Create(new Product(mats => ItemPie.Create())),
-        //            labor: JobDef.Cook
-        //            )
-        //            { Fuel = 5 };
-
-
-        //static public readonly Reaction ExtractSeeds = new Reaction(
-        //            "Extract Seeds",
-        //            CanBeMadeAt(IsWorkstation.Types.PlantProcessing),
-        //            Reagent.Create(new Reaction.Reagent("Body", Reagent.HasSeeds())),
-        //            Product.Create(new Product(mats => GameObject.Objects[GameObject.Types.Seeds].Clone() as Entity, 4)),
-        //            SkillDef.Argiculture,
-        //            JobDefOf.Cook);
     }
 }

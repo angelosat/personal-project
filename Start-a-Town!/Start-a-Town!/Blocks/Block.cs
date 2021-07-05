@@ -280,16 +280,7 @@ namespace Start_a_Town_
             face = Vector3.Zero;
             return false;
         }
-        static public void Build(IObjectProvider net, GameObject builder, TargetArgs target, GameObject.Types consumeType, GameObject.Types blockType, Action<GameObject> onFinish)
-        {
-            if (InventoryComponent.ConsumeEquipped(builder, slot => slot.Object.IDType == consumeType))
-            {
-                GameObject objBlock = GameObject.Create(blockType);
-                objBlock.Global = target.Object.Global + target.Face;
-                objBlock.Spawn(net);
-                onFinish(objBlock);
-            }
-        }
+       
         public virtual Color[] UV
         {
             get { return BlockCoordinatesFull; }

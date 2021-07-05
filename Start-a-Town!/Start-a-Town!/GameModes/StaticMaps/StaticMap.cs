@@ -936,16 +936,12 @@ namespace Start_a_Town_.GameModes.StaticMaps
             mapTag.Add(new SaveTag(SaveTag.Types.Int, "X", (int)this.Coordinates.X));
             mapTag.Add(new SaveTag(SaveTag.Types.Int, "Y", (int)this.Coordinates.Y));
             mapTag.Add(new SaveTag(SaveTag.Types.String, "Name", this.Name));
-            //mapTag.Add(new SaveTag(SaveTag.Types.Double, "Time", this.Time.TotalSeconds));
             this.CurrentTick.Save(mapTag, "CurrentTick");
             mapTag.Add(this.Town.Save("Town"));
 
             mapTag.Add(new SaveTag(SaveTag.Types.String, "Size", this.Size.Name));
 
             SaveTag playerTag = new SaveTag(SaveTag.Types.Compound, "Player");
-            // TODO: SAVE ALL PLAYERS, also save players when they log out (or make the map autosave in intervals?)
-            if (PlayerOld.Actor != null)
-                playerTag.Add(new SaveTag(SaveTag.Types.Compound, PlayerOld.Actor.Name, PlayerOld.Actor.SaveInternal()));
             mapTag.Add(playerTag);
 
             var chunkstags = this.SaveChunks();
@@ -1527,7 +1523,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public override List<GameObject> GetObjects()
         {
-            return this.CachedObjects.Where(o => o.Exists).ToList(); // because an object might have despawned during an earlier operation on the current frame
+            return this.CachedObjects.Where(o => o.IsSpawned).ToList(); // because an object might have despawned during an earlier operation on the current frame
         }
 
         public void CacheBlockEntities()

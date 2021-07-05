@@ -134,20 +134,6 @@ namespace Start_a_Town_.Components
 
                     return true;
                 
-                case Message.Types.DropInventoryItem:
-                    e.Data.Translate(e.Network, r =>
-                    {
-                        var slotID = r.ReadInt32();
-                        GameObjectSlot slot = this.Containers.First()[slotID];
-                        GameObject toDrop;
-                        if(!slot.Take(out toDrop))
-                            return;
-
-                        toDrop.SetGlobal(parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
-                        e.Network.Spawn(toDrop);
-                    });
-                    return true;
-
                 default:
                     return false;
             }
@@ -739,16 +725,6 @@ namespace Start_a_Town_.Components
             return true;
         }
 
-        public override string GetStats()
-        {
-            //BonusCollection list = new BonusCollection();
-            //BonusesComponent.GetBonuses(this.Holding, list);
-            //return list.ToString() + "\n";
-            string text = "";
-            if (Holding.HasValue)
-                text += Holding.Object.GetStats();
-            return text;
-        }
 
         static public void PollStats(GameObject obj, StatCollection list)
         {

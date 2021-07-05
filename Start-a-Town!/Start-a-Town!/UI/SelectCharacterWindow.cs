@@ -11,6 +11,7 @@ using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.UI
 {
+    [Obsolete]
     class SelectCharacterWindow : Window
     {
         #region Singleton
@@ -122,7 +123,8 @@ namespace Start_a_Town_.UI
                     if (!tag.TryGetTag("PlayerCharacter", out charTag))
                         return null;
 
-                    GameObject ch = PlayerEntity.Create(charTag);
+                    throw new NotImplementedException();
+                    GameObject ch = null;// PlayerEntity.Create(charTag);
 
                     tag.TryGetTag("HotBar", t => PlayerOld.Instance.HotBar.Load(t, ch));
 

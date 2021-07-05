@@ -96,7 +96,7 @@ namespace Start_a_Town_.Components
             for (int i = 0; i < count; i++)
             {
                 string name = r.ReadString();
-                this.Parts.Add(name, new PartMaterialPair(name, Material.Database[r.ReadInt32()]));
+                this.Parts.Add(name, new PartMaterialPair(name, Material.Registry[r.ReadInt32()]));
             }
         }
         internal override List<SaveTag> Save()
@@ -123,7 +123,7 @@ namespace Start_a_Town_.Components
                     continue;
                 //var tag = item.Value as SaveTag;
                 string name = item.GetValue<string>("Name");
-                Material material = Material.Database[item.GetValue<int>("Material")];
+                Material material = Material.Registry[item.GetValue<int>("Material")];
                 this.Parts.Add(name, new PartMaterialPair(name, material));
             }
         }

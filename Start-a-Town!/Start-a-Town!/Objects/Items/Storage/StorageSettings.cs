@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
     public class StorageSettings
     {
-        //public enum Priorities { Low, Normal, High };
-        //static readonly public Priorities[] PrioritiesAll = new Priorities[] { Priorities.Low, Priorities.Normal, Priorities.High };
-        //public Priorities Priority = Priorities.Normal;
-        StorageFilterCategoryNew StorageFiltersRoot;
-
         public HashSet<StorageFilter> ActiveFilters = new HashSet<StorageFilter>(StorageFilter.CreateFilterSet());
         public StoragePriority Priority = StoragePriority.Normal;
 
@@ -30,13 +21,5 @@ namespace Start_a_Town_
             else
                 this.ActiveFilters.Remove(filter);
         }
-        //public void Enable(StorageFilter filter)
-        //{
-
-        //}
-        //public void Disable(StorageFilter filter)
-        //{
-
-        //}
     }
 }

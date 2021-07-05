@@ -168,8 +168,6 @@ namespace Start_a_Town_
                 tag.Add(new SaveTag(SaveTag.Types.Double, "Time", Time.TotalSeconds));
                 tag.Add(new SaveTag(SaveTag.Types.Int, "DefaultTile", (int)this.DefaultTile));
                 SaveTag playerTag = new SaveTag(SaveTag.Types.Compound, "Player");
-                if (PlayerOld.Actor != null)
-                    playerTag.Add(new SaveTag(SaveTag.Types.Compound, PlayerOld.Actor.Name, PlayerOld.Actor.SaveInternal()));
                 tag.Add(playerTag);
                 tag.Add(new SaveTag(SaveTag.Types.String, "Name", GetProperty<string>("Name")));
 

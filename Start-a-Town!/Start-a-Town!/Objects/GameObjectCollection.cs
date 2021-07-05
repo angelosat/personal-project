@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     public class GameObjectCollection// SortedDictionary<GameObject.Types, GameObject>
     {
         SortedDictionary<int, GameObject> Dictionary;// = new SortedDictionary<int, GameObject>();

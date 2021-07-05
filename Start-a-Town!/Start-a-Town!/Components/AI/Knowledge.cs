@@ -5,7 +5,6 @@ namespace Start_a_Town_.AI
 {
     public class Knowledge
     {
-        public List<Blueprint> Blueprints = new List<Blueprint>();
         public Dictionary<GameObject, Memory> Objects = new Dictionary<GameObject, Memory>();
         public void Update()
         {

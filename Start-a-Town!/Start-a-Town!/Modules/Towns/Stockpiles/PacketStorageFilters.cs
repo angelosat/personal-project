@@ -7,16 +7,16 @@ namespace Start_a_Town_
 {
     class PacketStorageFilters : Packet
     {
+        static int p;
         static internal void Init()
         {
             // TODO
-            Server.RegisterPacketHandler(PacketType.StorageFilters, Receive);
-            Client.RegisterPacketHandler(PacketType.StorageFilters, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IStorage storage, StorageFilter[] filters)
         {
             var w = storage.Map.Net.GetOutgoingStream();
-            w.Write(PacketType.StorageFilters);
+            w.Write(p);
             w.Write(storage.ID);
             w.Write(filters.Select(r => r.Name).ToArray());
         }

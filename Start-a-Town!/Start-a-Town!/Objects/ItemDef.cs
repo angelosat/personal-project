@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Animations;
-using Start_a_Town_.Components;
 using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
@@ -16,9 +12,9 @@ namespace Start_a_Town_
         public ItemSubType SubType;
         public string ObjType;
         public int ID;
-        public ItemCategory Category;// = StorageCategory.Unlisted;
+        public ItemCategory Category;
         public Sprite DefaultSprite;
-        public Material DefaultMaterial;// = Material.LightWood;
+        public Material DefaultMaterial;
         public bool MadeFromMaterials;
         public List<Reaction.Product.Types> CanProcessInto = new();
         public int BaseValue = 1;
@@ -37,25 +33,14 @@ namespace Start_a_Town_
         public Func<ItemDef, GameObject> Randomizer;
         public List<MaterialToken> MadeFrom = new();
         public bool QualityLevels;
-        //public virtual Entity Create()
-        //{
-        //    throw new Exception();
-        //}
-        public ItemDef(string name) : base(name)
-        {
-            //this.Name = name;
-        }
         public Dictionary<BoneDef, ReactionIngredientIndex> CraftingIngredientIndices = new();
 
-        string _Label;
-        //public string Label => _Label ?? Name;
-        public string Label { get => _Label ?? Name; set => _Label = value; }
-
-        public T AddIngredientIndex<T>(BoneDef bone, string index) where T : ItemDef
+        public ItemDef(string name) : base(name)
         {
-            this.CraftingIngredientIndices.Add(bone, new ReactionIngredientIndex(index));
-            return this as T;
         }
+
+        string _Label;
+        public string Label { get => _Label ?? Name; set => _Label = value; }
 
         internal GameObject CreateRandom()
         {
@@ -72,7 +57,6 @@ namespace Start_a_Town_
         public Entity CreateFrom(Material mat)
         {
             var item = ItemFactory.CreateFrom(this, mat);
-            //item.Name = mat.Name + " " + item.Name;
             return item;
         }
         public IEnumerable<ItemDefMaterialAmount> GenerateVariants(int amount = 1)
@@ -91,7 +75,6 @@ namespace Start_a_Town_
             }
         }
         
-       
         public ItemDef SetMadeFrom(params MaterialToken[] tokens)
         {
             this.MadeFrom.AddRange(tokens);
@@ -104,30 +87,16 @@ namespace Start_a_Town_
         }
         public IEnumerable<Material> GetValidMaterials()
         {
-            //IEnumerable<Material> validMats = Material.GetMaterials(m => this.ValidMaterialTypes.Contains(m.Type));
             IEnumerable<Material> validMats = this.ValidMaterialTypes.SelectMany(t => t.SubTypes);
             foreach (var m in validMats)
                 yield return m;
-            //yield break;
-            //if (this.DefaultMaterial != null)
-            //    yield return this.DefaultMaterial;
-            //else if (this.DefaultMaterialType != null)
-            //    foreach (var m in this.DefaultMaterialType.SubTypes)
-            //        yield return m;
         }
         public IEnumerable<Entity> CreateFromAllMAterials()
         {
-            //foreach (var m in this.DefaultMaterialType.SubTypes)
             foreach (var m in this.ValidMaterialTypes.SelectMany(t => t.SubTypes))
                 yield return ItemFactory.CreateFrom(this, m);
         }
-        public IEnumerable<Entity> CreateFromAllMAterialsNew()
-        {
-            var mats= Material.GetMaterialsAny(this.MadeFrom.ToArray());
-            foreach (var m in mats)
-                yield return ItemFactory.CreateFrom(this, m);
-        }
-
+        
         internal Reaction CreateRecipe()
         {
             return this.RecipeProperties.CreateRecipe(this);

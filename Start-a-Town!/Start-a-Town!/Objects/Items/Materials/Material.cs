@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -13,29 +11,27 @@ namespace Start_a_Town_
         static int _IDSequence = 0;
         public static int IDSequence { get { return _IDSequence++; } }
 
-        public static Dictionary<int, Material> Database = new();
+        public static Dictionary<int, Material> Registry = new();
        
-
         public string Label => Name;
 
         static public Material GetMaterial(int materialID)
         {
             if (materialID < 0)
                 return null;
-            return Database[materialID];
+            return Registry[materialID];
         }
 
         internal static Material GetRandom()
         {
             var index = Randomizer.Next(0, _IDSequence);
-            return Database[index];
+            return Registry[index];
         }
 
         static public void Initialize()
         {
             MaterialDefOf.Init();
         }
-
 
         public override string ToString()
         {
@@ -44,11 +40,6 @@ namespace Start_a_Town_
         public string DebugName { get { return $"Material:{this.Name}"; } }
 
         public bool IsTemplate { get; private set; }
-
-        static public Material Parse(string name)
-        {
-            return Database.Values.ToDictionary(f => f.Name, f => f)[name];
-        }
 
         public MaterialType Type;
         public readonly int ID;
@@ -63,6 +54,10 @@ namespace Start_a_Town_
         public HashSet<MaterialToken> Tokens = new();
         public Fuel Fuel;
         public List<GameObject> ProcessingChain;
+        public float WorkToBreak = 1;
+        public int ValueBase = 1;
+        public float ValueMultiplier = 1;
+        public int Value => (int)(this.ValueBase * this.ValueMultiplier);
 
         public Material()
         {
@@ -73,7 +68,7 @@ namespace Start_a_Town_
         public Material(string name, Material template) : base(name)
         {
             this.ID = IDSequence;
-            Database[this.ID] = this;
+            Registry[this.ID] = this;
 
             this.State = template.State;
             this.Category = template.Category;
@@ -83,13 +78,12 @@ namespace Start_a_Town_
             this.Type = template.Type;
             this.Type.AddMaterial(this);
             this.Fuel = template.Fuel;
-
         }
 
         public Material(Material template)
         {
             this.ID = IDSequence;
-            Database[this.ID] = this;
+            Registry[this.ID] = this;
 
             this.State = template.State;
             this.Category = template.Category;
@@ -100,60 +94,40 @@ namespace Start_a_Town_
             this.Type.AddMaterial(this);
             this.Fuel = template.Fuel;
         }
-       
-        internal void Apply(Entity entity)
-        {
-            //entity.Name = $"{this.Prefix} {entity.Name}";
-        }
-
         public Material(MaterialType type, string name, string prefix, Color color, int density) : base(name)
         {
             this.Type = type;
             type.SubTypes.Add(this);
             this.ID = IDSequence;
-            Database[this.ID] = this;
+            Registry[this.ID] = this;
             this.Prefix = prefix;
             this.Density = density;
             this.Color = color;
-            this.ColorVector = new Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, type.Shininess);// textcolor.A / 255.0f);
+            this.ColorVector = new Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, type.Shininess);
+        }
+        internal void Apply(Entity entity)
+        {
         }
 
-        internal static IEnumerable<Material> GetMaterials(MaterialToken madeFrom)
-        {
-            return Database.Values.Where(m => m.Tokens.Contains(madeFrom));
-        }
         internal static IEnumerable<Material> GetMaterials(Func<Material, bool> condition)
         {
-            return Database.Values.Where(condition);
+            return Registry.Values.Where(condition);
         }
         internal static IEnumerable<Material> GetMaterialsAny(params MaterialToken[] tokens)
         {
             return Material.GetMaterials(m => tokens.Any(m.Tokens.Contains));
         }
-        internal static IEnumerable<Material> GetMaterialsAll(params MaterialToken[] tokens)
-        {
-            return Material.GetMaterials(m => tokens.All(m.Tokens.Contains));
-        }
+        
         static public Material CreateColor(Color color)
         {
             var mat = new Material(MaterialType.Dye, "Color", "Color", color, 1);
             return mat;
         }
-        public float WorkToBreak = 1;
-        public int ValueBase = 1;
-        public float ValueMultiplier = 1;
-        public int Value => (int)(this.ValueBase * this.ValueMultiplier);
-       
-        public Material AddTokens(params MaterialToken[] tokens)
-        {
-            for (int i = 0; i < tokens.Length; i++)
-                this.Tokens.Add(tokens[i]);
-            return this;
-        }
+        
         public Material SetColor(Color color)
         {
             this.Color = color;
-            this.ColorVector = new Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, this.Shininess);// textcolor.A / 255.0f);
+            this.ColorVector = new Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, this.Shininess);
             return this;
         }
         public Material SetDensity(int density)
@@ -164,7 +138,7 @@ namespace Start_a_Town_
         public Material SetReflectiveness(float reflectiveness)
         {
             this.Shininess = reflectiveness;
-            this.ColorVector = new Vector4(this.Color.R / 255.0f, this.Color.G / 255.0f, this.Color.B / 255.0f, reflectiveness);// textcolor.A / 255.0f);
+            this.ColorVector = new Vector4(this.Color.R / 255.0f, this.Color.G / 255.0f, this.Color.B / 255.0f, reflectiveness);
             return this;
         }
         public Material SetState(MaterialState state)
@@ -172,11 +146,7 @@ namespace Start_a_Town_
             this.State = state;
             return this;
         }
-        public Material SetCategory(MaterialCategory category)
-        {
-            this.Category = category;
-            return this;
-        }
+       
         public Material SetName(string name)
         {
             this.Name = name;
@@ -194,13 +164,7 @@ namespace Start_a_Town_
             this.ValueBase = value;
             return this;
         }
-        public Material SetValueMultiplier(float value)
-        {
-            if (this.IsTemplate)
-                throw new Exception();
-            this.ValueMultiplier = value;
-            return this;
-        }
+       
         public Material SetType(MaterialType type)
         {
             this.Type = type;

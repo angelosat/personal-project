@@ -42,7 +42,7 @@ namespace Start_a_Town_.Blocks
         //public override bool IsDeconstructable => true;
         public override Material GetMaterial(byte blockdata)
         {
-            return Material.Database[blockdata];
+            return Material.Registry[blockdata];
         }
 
         public override BlockRecipe GetRecipe()
@@ -51,7 +51,7 @@ namespace Start_a_Town_.Blocks
         }
         public override IEnumerable<byte> GetCraftingVariations()
         {
-            var vars = (from mat in Material.Database.Values
+            var vars = (from mat in Material.Registry.Values
                         where mat.Type == MaterialType.Wood
                         select (byte)mat.ID);
             return vars;

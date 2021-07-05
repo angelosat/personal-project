@@ -9,6 +9,7 @@ using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     abstract class PlayerEntity : GameObject
     {
         //public PlayerData Player;

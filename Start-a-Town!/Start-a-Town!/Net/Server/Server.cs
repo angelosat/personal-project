@@ -1012,28 +1012,7 @@ namespace Start_a_Town_.Net
                     break;
             }
         }
-        public void SpawnRequest(int entityType, TargetArgs target)
-        {
-            var entity = GameObject.Create(entityType);
-            entity.Initialize(Random);
-            target.Map = Instance.Map;
-            switch (target.Type)
-            {
-                case TargetType.Slot:
-                    Instance.Instantiate(entity);
-                    target.Slot.Object = entity;
-                    Instance.SyncChild(entity, target.Slot.Parent, target.Slot.ID);
-                    break;
-
-                case TargetType.Position:
-                    entity.Global = target.Global;
-                    PacketEntityInstantiate.Send(this, entity);
-                    break;
-
-                default:
-                    break;
-            }
-        }
+       
         public static Vector3 FindValidSpawnPosition(GameObject obj)
         {
             // TODO: move to map

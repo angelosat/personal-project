@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
-    public class ObjectAmount : ISaveable//, ISerializable
+    public class ObjectAmount : ISaveable
     {
         TargetArgs ObjectTarget;
         public GameObject Object
@@ -67,21 +62,5 @@ namespace Start_a_Town_
         {
             return this.Object.Name + ": " + this.Amount.ToString();
         }
-        //public void Write(BinaryWriter w)
-        //{
-        //    this.ObjectTarget.Write(w);
-        //    w.Write(this.Amount);
-        //}
-
-        //public ISerializable Read(BinaryReader r)
-        //{
-        //    this.ObjectTarget = TargetArgs.Read(r);
-        //    this.Amount = r.ReadInt32();
-        //    return this;
-        //}
-        //public void MapLoaded(IMap map)
-        //{
-        //    this.ObjectTarget.Map = map;
-        //}
     }
 }

@@ -11,6 +11,5 @@
 
         static public readonly FoodClass Fruit = new("Fruit");
         static public readonly FoodClass Dish = new("Dish");
-
     }
 }

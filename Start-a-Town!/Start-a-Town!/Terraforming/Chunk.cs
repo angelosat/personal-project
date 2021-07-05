@@ -3155,15 +3155,8 @@ namespace Start_a_Town_
             sw.Stop();
             string.Format("heightmap saved in {0} ms", sw.ElapsedMilliseconds).ToConsole();
 
-            //sw.Restart();
-            //foreach (Cell cell in VisibleOutdoorCells.Values)
-            //    visibleCells.Add(new SaveTag(SaveTag.Types.Int, "", GetCellHash(cell.LocalCoords)));
-            //sw.Stop();
-            //string.Format("visible cells saved in {0} ms", sw.ElapsedMilliseconds).ToConsole();
-
             foreach (GameObject obj in Objects)
-                if (obj.IDType != GameObject.Types.Dummy)
-                    entitiestag.Add(new SaveTag(SaveTag.Types.Compound, obj.Name, obj.SaveInternal()));
+                entitiestag.Add(new SaveTag(SaveTag.Types.Compound, obj.Name, obj.SaveInternal()));
 
             
             SaveTag blockEntitiesTag = SaveBlockEntitiesDistinct();

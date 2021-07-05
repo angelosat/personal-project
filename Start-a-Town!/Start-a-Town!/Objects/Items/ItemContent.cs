@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_
@@ -53,8 +48,5 @@ namespace Start_a_Town_
         static public readonly Sprite TreeFull = new Sprite("trees/tree1g").SetGroundContact(new Vector2(.5f, 1));
 
         static public readonly Sprite SkeletonFull = new Sprite("mobs/skeleton/full", new Vector2(17 / 2, 38)).SetGroundContact(new Vector2(.5f, 1));
-        //Sprite sprite = new Sprite("mobs/skeleton/full", new Vector2(17 / 2, 38));
-        //sprite.OriginGround = new Vector2(sprite.AtlasToken.Texture.Bounds.Width / 2, sprite.AtlasToken.Texture.Bounds.Height);
-
     }
 }

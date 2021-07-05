@@ -1351,15 +1351,6 @@ namespace Start_a_Town_.Net
             })).BeginSendTo(Host, RemoteIP);
         }
         
-        public void RemoveObject(GameObject obj)
-        {
-            if (obj == null)
-                throw new ArgumentNullException();
-
-            if (obj.IsPlayerEntity())
-                return;
-            Packet.Create(this.PacketID, PacketType.DisposeObject, Network.Serialize(w => TargetArgs.Write(w, obj))).BeginSendTo(Host, RemoteIP);
-        }
 
         /// <summary>
         /// The client can't create objects, must await for a server message

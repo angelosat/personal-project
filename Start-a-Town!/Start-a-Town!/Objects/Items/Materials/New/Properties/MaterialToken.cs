@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     public class MaterialToken
     {
@@ -15,7 +9,5 @@ namespace Start_a_Town_
         static public readonly MaterialToken Metal = new();
         static public readonly MaterialToken Meat = new();
         static public readonly MaterialToken Seed = new();
-        //static public readonly MaterialToken EdibleRaw = new();
-        //static public readonly MaterialToken EdibleCooked = new();
     }
 }

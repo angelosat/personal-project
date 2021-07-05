@@ -31,14 +31,6 @@ namespace Start_a_Town_.Components
         public override object Clone()
         {
             BodyComponent comp = new BodyComponent();
-
-            foreach (var bodypart in this.BodyParts)
-            {
-                comp.BodyParts[bodypart.Key] = new BodyPart(
-                    bodypart.Value.Base.Object != null ? GameObject.Create(bodypart.Value.Base.Object.IDType) : null,
-                    bodypart.Value.Wearing.Object != null ? GameObject.Create(bodypart.Value.Wearing.Object.IDType) : null);
-            }
-
             return comp;
         }
 

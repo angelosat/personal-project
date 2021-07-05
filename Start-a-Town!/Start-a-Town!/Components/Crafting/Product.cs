@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Items;
 using Start_a_Town_.Modules.Construction;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Components.Crafting
 {
@@ -62,11 +58,7 @@ namespace Start_a_Town_.Components.Crafting
                 this.ObjectCreator = creator;
                 this.Modifiers = new List<Modifier>(modifiers);
             }
-            public Product(IItemFactory factory, params Modifier[] modifiers)
-            {
-                this.ObjectCreator = factory.Create;
-                this.Modifiers = new List<Modifier>(modifiers);
-            }
+            
             public Product(ItemDef def, int quantity = 1)
             {
                 this.ObjectCreator = mats=> def.Factory(def);
@@ -399,30 +391,7 @@ namespace Start_a_Town_.Components.Crafting
                         item.Write(w);
                     }
                 }
-                //public void Read(System.IO.BinaryReader r)
-                //{
-                //    this.Product = GameObject.CreatePrefab(r);
-                //    this.Req.ObjectID = r.ReadInt32();
-                //    this.Req.Max = r.ReadInt32();
-                //}
-                public List<SaveTag> Save()
-                {
-                    List<SaveTag> save = new List<SaveTag>();
-                    save.Add(new SaveTag(SaveTag.Types.Compound, "Product", this.Product.SaveInternal()));
-                    //save.Add(new SaveTag(SaveTag.Types.Int, "Material", (int)this.Req.ObjectID));
-                    //save.Add(new SaveTag(SaveTag.Types.Int, "Amount", this.Req.Max));
-                    SaveTag reqs = new SaveTag(SaveTag.Types.List, "Materials", SaveTag.Types.Compound);
-                    foreach (var item in this.Requirements)
-                    {
-                        //SaveTag req = new SaveTag(SaveTag.Types.Compound, "");
-                        //req.Add(new SaveTag(SaveTag.Types.Compound, "Material", (int)item.ObjectID));
-                        //req.Add(new SaveTag(SaveTag.Types.Int, "Amount", item.Max));
-                        //reqs.Add(req);
-                        reqs.Add(new SaveTag(SaveTag.Types.Compound, "", item.Save()));
-                    }
-                    save.Add(reqs);
-                    return save;
-                }
+               
                 public bool MaterialsAvailable(IEnumerable<GameObject> items)
                 {
                     foreach (var item in this.Requirements)

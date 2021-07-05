@@ -501,8 +501,6 @@ namespace Start_a_Town_
                 mapTag.Add(new SaveTag(SaveTag.Types.Double, "Time", this.Time.TotalSeconds));
 
                 SaveTag playerTag = new SaveTag(SaveTag.Types.Compound, "Player");
-                if (PlayerOld.Actor != null)
-                    playerTag.Add(new SaveTag(SaveTag.Types.Compound, PlayerOld.Actor.Name, PlayerOld.Actor.SaveInternal()));
                 mapTag.Add(playerTag);
 
                 

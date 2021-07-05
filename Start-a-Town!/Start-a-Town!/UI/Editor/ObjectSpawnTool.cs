@@ -78,7 +78,6 @@ namespace Start_a_Town_.UI.Editor
             var blockHeight = Block.GetBlockHeight(Engine.Map, this.Target.Global);
             var position = this.Target.Global + this.Target.Face * new Vector3(1,1,blockHeight) + GetPrecise();
             PacketEntityRequestSpawn.Send(Client.Instance, this.Entity.ID, new TargetArgs(position));
-
         }
 
         private void SpawnChild()

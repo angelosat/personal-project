@@ -22,10 +22,10 @@ namespace Start_a_Town_
                 }
             }
             public override Color GetTint(byte d)
-            { return Material.Database[d].Color; }
+            { return Material.Registry[d].Color; }
             public override string GetName(byte d)
             {
-                return Material.Database[d].Name;
+                return Material.Registry[d].Name;
             }
             
             public State()
@@ -38,7 +38,7 @@ namespace Start_a_Town_
             }
             static public void Read(byte data, out Material material)
             {
-                material = Material.Database[data];
+                material = Material.Registry[data];
             }
            
             public override void FromCraftingReagent(GameObject reagent)
@@ -104,14 +104,14 @@ namespace Start_a_Town_
         }
         public override IEnumerable<byte> GetCraftingVariations()
         {
-            return (from mat in Material.Database.Values
+            return (from mat in Material.Registry.Values
                         where mat.Type == MaterialType.Wood
                         select (byte)mat.ID);
 
         }
         public override Material GetMaterial(byte blockdata)
         {
-            return Material.Database[blockdata];
+            return Material.Registry[blockdata];
         }
 
         public override List<Interaction> GetAvailableTasks(IMap map, Vector3 global)

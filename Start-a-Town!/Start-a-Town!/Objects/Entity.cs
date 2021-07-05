@@ -37,8 +37,6 @@ namespace Start_a_Town_
             return this;
         }
 
-        
-
         internal void InitComps()
         {
             foreach (var props in this.Def.CompProps)
@@ -96,6 +94,5 @@ namespace Start_a_Town_
                     c.Initialize(this, quality);
             return this;
         }
-       
     }
 }

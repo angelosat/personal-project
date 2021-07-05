@@ -13,7 +13,7 @@ namespace Start_a_Town_
         public BlockStone()
             : base(Block.Types.Cobblestone, GameObject.Types.CobblestoneItem, 0, 1, true, true)
         {
-            this.LootTable = new LootTable(new Loot(GameObject.Types.Stone, 0.75f, 4));
+            //this.LootTable = new LootTable(new Loot(GameObject.Types.Stone, 0.75f, 4));
             this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks), Reaction.Reagent.IsOfMaterial(MaterialDefOf.Stone)));
             this.AssetNames = "stone5height19";
 

@@ -45,7 +45,7 @@ namespace Start_a_Town_
         }
         public override Material GetMaterial(byte blockdata)
         {
-            return Material.Database[blockdata];
+            return Material.Registry[blockdata];
         }
         public override IEnumerable<byte> GetCraftingVariations()
         {

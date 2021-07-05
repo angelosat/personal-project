@@ -22,9 +22,6 @@ namespace Start_a_Town_.Blocks
                 new BlockRecipe.Product(this)
                 );
 
-            var reag = Reaction.Reagent.Create(new Reaction.Reagent("Base", Reaction.Reagent.IsOfMaterialType(MaterialType.Soil), Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks)));
-            var prod = Reaction.Product.Create(new Reaction.Product(mats => BlockEntityPacked.Create(BlockDefOf.Sand, 0)));
-            
             this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Sand, null, 1);
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(

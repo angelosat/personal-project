@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -16,16 +14,7 @@ namespace Start_a_Town_
 
             this.Label = label;
         }
-        public void Add(StorageFilter filter)
-        {
-            this.Filters.Add(filter);
-        }
-        public void Add(GameObject o)
-        {
-            var cat = new StorageFilter(o.Name, obj => obj.ID == o.ID);
-            this.Filters.Add(cat);
-            o.StorageCategory = cat;
-        }
+       
         public void Add(int oID)
         {
             var o = GameObject.Objects[oID];
@@ -52,7 +41,6 @@ namespace Start_a_Town_
         };
         static ItemCategory()
         {
-            //Def.Register(Unlisted);
             Def.Register(Tools);
             Def.Register(Wearables);
             Def.Register(RawMaterials);
@@ -60,26 +48,9 @@ namespace Start_a_Town_
             Def.Register(FoodRaw);
         }
         
-        //static public List<StorageFilter> CreateFilterSet()
-        //{
-        //    return 
-        //        (from c in All
-        //        from f in c.Filters
-        //        select f).ToList();
-        //}
         public override string ToString()
         {
             return this.Name;
-        }
-        static public StorageFilter Find(string filterName)
-        {
-            foreach(var c in All)
-            {
-                var f = c.Filters.FirstOrDefault(_f => _f.Name == filterName);
-                if (f != null)
-                    return f;
-            }
-            throw new Exception();
         }
     }
 }

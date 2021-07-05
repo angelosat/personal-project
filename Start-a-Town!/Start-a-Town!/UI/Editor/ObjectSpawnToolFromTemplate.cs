@@ -65,8 +65,7 @@ namespace Start_a_Town_.UI.Editor
                     break;
 
                 case TargetType.Slot:
-                    //spawn entity as a child
-                    SpawnChild();
+                    // TODO: spawn entity as a child
                     break;
 
                 default:
@@ -79,33 +78,7 @@ namespace Start_a_Town_.UI.Editor
         {
             var blockHeight = Block.GetBlockHeight(Engine.Map, this.Target.Global);
             var position = this.Target.Global + this.Target.Face * new Vector3(1,1,blockHeight) + GetPrecise();
-            //PacketEntityRequestSpawn.Send(Client.Instance, this.Entity.ID, new TargetArgs(position));
             PacketEntityRequestSpawn.SendTemplate(Client.Instance, this.TemplateID, new TargetArgs(position));
-
-        }
-
-        private void SpawnChild()
-        {
-            if (this.Target.Slot.HasValue)
-            {
-                if (this.Target.Slot.Object.GetID() != this.Entity.GetID())
-                    return;
-                else
-                {
-                    // increase entity's quantity
-                    IncreaseQuantity();
-                    return;
-                }
-            }
-            else
-            {
-                byte[] data = Network.Serialize(w =>
-                {
-                    this.Entity.Write(w);
-                    this.Target.Write(w);
-                });
-                Client.Instance.Send(PacketType.SpawnEntity, data);
-            }
         }
 
         private void IncreaseQuantity()

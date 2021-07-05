@@ -45,8 +45,6 @@ namespace Start_a_Town_.Net
         RequestEntity,
         Towns,
         IncreaseEntityQuantity,
-        SpawnEntity,
-        SpawnEntityFromTemplate,
         AI,
         PlayerUnequip,
         PlayerInput,
@@ -58,7 +56,6 @@ namespace Start_a_Town_.Net
         ChangeEntityPosition,
         FarmSetSeed,
         DiggingDesignate,
-        StorageFilters,
         StorageFiltersNew,
         ChoppingDesignation,
         LaborToggle,
@@ -85,7 +82,6 @@ namespace Start_a_Town_.Net
         AILogWrite,
         SetSaving,
         NpcCommand,
-        ToggleForbidden,
         RequestChunks,
         Acks
     }

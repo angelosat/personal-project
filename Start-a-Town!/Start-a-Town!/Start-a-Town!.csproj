@@ -199,6 +199,7 @@
     <Compile Include="AI\Behaviors\Tasks\TaskGiverResult.cs" />
     <Compile Include="AI\Behaviors\Tasks\TaskHelper.cs" />
     <Compile Include="AI\Reservations\Reservation.cs" />
+    <Compile Include="AI\Reservations\ReservationExtensions.cs" />
     <Compile Include="Animations\Bone.Props.cs" />
     <Compile Include="Blocks\Bed\InteractionAssignVisitorRoom.cs" />
     <Compile Include="Blocks\Block.DefaultState.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="Components\AI\Memory.cs" />
     <Compile Include="Components\AI\Personality\TraitDefOf.cs" />
     <Compile Include="Components\Animations\AnimationBlending.cs" />
+    <Compile Include="Components\Animations\AnimationExtensions.cs" />
     <Compile Include="Components\BuildingPlanComponent.cs" />
     <Compile Include="Components\GearType.cs" />
     <Compile Include="Components\IEntity.cs" />
@@ -385,7 +387,6 @@
     <Compile Include="Blocks\Construction\BlockConstruction.cs" />
     <Compile Include="Blocks\Construction\BlockConstructionEntity.cs" />
     <Compile Include="Blocks\Construction\BlockDesignation.cs" />
-    <Compile Include="Blocks\EntityPrefabBlock.cs" />
     <Compile Include="Blocks\Prefab\BlockPrefabEntity.cs" />
     <Compile Include="Blocks\Prefab\BlockPrefab.cs" />
     <Compile Include="Blocks\Construction\BlockDesignationEntity.cs" />
@@ -476,29 +477,22 @@
     <Compile Include="Objects\Apparel\ApparelDef.cs" />
     <Compile Include="Objects\DrawObjectArgs.cs" />
     <Compile Include="Objects\GameObjectCollection.cs" />
-    <Compile Include="Objects\ItemAmount.cs" />
+    <Compile Include="Objects\GameObjectSlotCollection.cs" />
     <Compile Include="Objects\ItemDefAmount.cs" />
     <Compile Include="Objects\ItemDefMaterialAmount.cs" />
     <Compile Include="Objects\ItemDefOf.cs" />
-    <Compile Include="Objects\Items\BodyParts\BodyPart.cs" />
     <Compile Include="Objects\Items\ItemContent.cs" />
-    <Compile Include="Objects\Items\Materials\MaterialType.RawMaterial.cs" />
     <Compile Include="Objects\Items\Materials\New\MaterialCategory.cs" />
     <Compile Include="Objects\Items\Materials\New\MaterialClassDef.cs" />
-    <Compile Include="Objects\Items\Materials\New\MaterialClassPlant.cs" />
     <Compile Include="Objects\Items\Materials\New\MaterialDefOf.cs" />
-    <Compile Include="Objects\Items\Materials\New\Properties\MaterialEdibility.cs" />
     <Compile Include="Objects\Items\Materials\New\Properties\MaterialState.cs" />
     <Compile Include="Objects\Items\Materials\New\MaterialTemplates.cs" />
-    <Compile Include="Objects\Items\Materials\New\PlantNewDef.cs" />
     <Compile Include="Objects\Items\Materials\New\Properties\MaterialToken.cs" />
     <Compile Include="Objects\Items\Materials\RawMaterials\RawMaterialDef.cs" />
     <Compile Include="Objects\Items\Storage\New\StorageFilterCategoryNew.cs" />
     <Compile Include="Objects\Items\Storage\New\StorageFilterNew.cs" />
-    <Compile Include="Objects\Items\Storage\New\StorageSettingsNew.cs" />
     <Compile Include="Objects\Items\ToolDefs.cs" />
     <Compile Include="Objects\Items\ItemFactory.cs" />
-    <Compile Include="Objects\Items\Seeds.cs" />
     <Compile Include="Objects\Items\Storage\ItemCategory.cs" />
     <Compile Include="Objects\Items\Storage\StorageFilter.cs" />
     <Compile Include="Objects\Items\Storage\StoragePriority.cs" />
@@ -534,7 +528,6 @@
     <Compile Include="Components\Stats\Stats\StatBuilding.cs" />
     <Compile Include="Components\Stats\Stats\StatWalkSpeed.cs" />
     <Compile Include="Components\Vegetation\Growth.cs" />
-    <Compile Include="Components\Vegetation\PlantableComponent.cs" />
     <Compile Include="Control\Tools\ToolControlActor.cs" />
     <Compile Include="Control\Tools\ToolSelect.cs" />
     <Compile Include="Control\Tools\ToolSelectRectangle.cs" />
@@ -573,11 +566,9 @@
     <Compile Include="Objects\BodyDef.cs" />
     <Compile Include="Objects\ItemDef.cs" />
     <Compile Include="Objects\ItemToolDef.cs" />
-    <Compile Include="Objects\Items\ApparelDefOf.cs" />
+    <Compile Include="Objects\Apparel\ApparelDefOf.cs" />
     <Compile Include="Objects\ObjectRefIDsAmount.cs" />
-    <Compile Include="Objects\ObjectIDAmount.cs" />
     <Compile Include="Objects\ObjectAmount.cs" />
-    <Compile Include="Objects\ParameterEventArgs.cs" />
     <Compile Include="Objects\Plants\GrowthProperties.cs" />
     <Compile Include="Objects\Plants\PlantProperties.cs" />
     <Compile Include="Objects\Plants\PlantDefOf.cs" />
@@ -587,7 +578,6 @@
     <Compile Include="Objects\Properties\RecipeProperties.cs" />
     <Compile Include="Objects\Properties\FoodClass.cs" />
     <Compile Include="Objects\Properties\CraftingProperties.cs" />
-    <Compile Include="Objects\SeedsDef.cs" />
     <Compile Include="ReferenceManager.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Terraforming\Biome.cs" />
@@ -653,8 +643,6 @@
     <Compile Include="Components\Interactions\NewScripts\InteractionConstruct.cs" />
     <Compile Include="Components\Interactions\NewScripts\UseHauledOnTarget.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionObserve.cs" />
-    <Compile Include="Objects\Items\FurnitureParts.cs" />
-    <Compile Include="Objects\Items\ItemManager.cs" />
     <Compile Include="Components\Needs\NeedsUI.cs" />
     <Compile Include="Control\Tools\ToolManagement.cs" />
     <Compile Include="Engine\Canvas.cs" />
@@ -671,7 +659,6 @@
     <Compile Include="Blocks\Chest\BlockChest.cs" />
     <Compile Include="Blocks\Chest\ContainerUI.cs" />
     <Compile Include="Blocks\Chest\BlockChestEntity.cs" />
-    <Compile Include="Blocks\Sapling\BlockSapling.cs" />
     <Compile Include="Blocks\Workstations\Smeltery\BlockSmeltery.cs" />
     <Compile Include="Blocks\BlockWoodPaneling.cs" />
     <Compile Include="Blocks\Workstations\Smeltery\BlockSmelteryEntity.cs" />
@@ -696,10 +683,6 @@
     <Compile Include="Components\Interactions\NewScripts\Checks\BlockCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConsume.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionFertilizing.cs" />
-    <Compile Include="Objects\Items\ItemTypes\Rock.cs" />
-    <Compile Include="Objects\Items\Tools\Pickaxe.cs" />
-    <Compile Include="Objects\Items\Chair.cs" />
-    <Compile Include="Objects\Items\Sword.cs" />
     <Compile Include="Modules\Packets\PacketToggleForbidden.cs" />
     <Compile Include="Modules\Particles\Particle.cs" />
     <Compile Include="Modules\Particles\ParticleDensityLevel.cs" />
@@ -723,7 +706,6 @@
     <Compile Include="Modules\AI\Control\ToolNpcControl.cs" />
     <Compile Include="Modules\AI\Net\Packets\PacketDialogueOptions.cs" />
     <Compile Include="Blocks\BlockEntity.cs" />
-    <Compile Include="Blocks\BlockEntityPacked.cs" />
     <Compile Include="Blocks\BlockMineral.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -782,19 +764,9 @@
     <Compile Include="Modules\Base\GameManager.cs" />
     <Compile Include="Modules\Construction\IConstructionProduct.cs" />
     <Compile Include="Components\Inventory\Container.cs" />
-    <Compile Include="Objects\Items\Tools\Axe.cs" />
-    <Compile Include="Objects\Items\Tools\Hammer.cs" />
-    <Compile Include="Objects\Items\Tools\Handsaw.cs" />
-    <Compile Include="Objects\Items\Workbench.cs" />
-    <Compile Include="Objects\Items\Tools\Hoe.cs" />
-    <Compile Include="Objects\Items\IItemFactory.cs" />
     <Compile Include="Objects\Items\ItemCategory.cs" />
-    <Compile Include="Objects\Items\Tools\Shovel.cs" />
-    <Compile Include="Objects\Items\Templates.cs" />
-    <Compile Include="Objects\Items\Tools\ToolComponent.cs" />
     <Compile Include="Components\MaterialsComponent.cs" />
     <Compile Include="Components\Crafting\ReagentComponent.cs" />
-    <Compile Include="Objects\Items\Materials\CanBeMadeInto.cs" />
     <Compile Include="Objects\Items\Materials\Material.cs" />
     <Compile Include="Objects\Items\Materials\MaterialType.cs" />
     <Compile Include="Components\MobileComponent.cs" />
@@ -933,7 +905,6 @@
     <Compile Include="Net\Packets\New\PacketMousePosition.cs" />
     <Compile Include="Net\Packets\New\PacketPlayerConnecting.cs" />
     <Compile Include="Net\Packets\New\PacketPlayerDisconnected.cs" />
-    <Compile Include="Net\Packets\New\PacketPlayerEnterWorld.cs" />
     <Compile Include="Net\Packets\New\PacketPlayerToolSwitch.cs" />
     <Compile Include="Net\Packets\New\PacketServerHandshake.cs" />
     <Compile Include="Net\Packets\New\PacketSnapshots.cs" />
@@ -941,11 +912,8 @@
     <Compile Include="Net\PlayerList.cs" />
     <Compile Include="Net\UI\UIConnecting.cs" />
     <Compile Include="Objects\Actor.cs" />
-    <Compile Include="Objects\ItemPie.cs" />
-    <Compile Include="Objects\Berries.cs" />
     <Compile Include="Objects\Entity.cs" />
     <Compile Include="Objects\EntityDef.cs" />
-    <Compile Include="Objects\ObjectGenerator.cs" />
     <Compile Include="Objects\Plants\Plant.cs" />
     <Compile Include="PathFinding\Node.cs" />
     <Compile Include="PathFinding\Path.cs">
@@ -1053,7 +1021,6 @@
     <Compile Include="Net\UIPlayerList.cs" />
     <Compile Include="Net\WorldSnapshot.cs" />
     <Compile Include="Objects\ObjectEventArgs.cs" />
-    <Compile Include="Objects\PlayerEntity.cs" />
     <Compile Include="Objects\TargetArgs.cs" />
     <Compile Include="Helpers\Progress.cs" />
     <Compile Include="SceneState.cs" />
@@ -1066,7 +1033,6 @@
     <Compile Include="Components\CombatComponent.cs" />
     <Compile Include="Components\Crafting\Recipe.cs" />
     <Compile Include="Components\Crafting\Template.cs" />
-    <Compile Include="Objects\Items\ItemComponent.cs" />
     <Compile Include="Components\ObjectFilter2.cs" />
     <Compile Include="Components\Resources\ResourcesComponent.cs" />
     <Compile Include="Components\Resources\ResourceDef.cs" />
@@ -1118,7 +1084,6 @@
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Control\ControlTool.cs" />
     <Compile Include="Control\Hotbar.cs" />
-    <Compile Include="Components\Crafting\Blueprint.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Interfaces\IUndoable.cs" />
     <Compile Include="Log.cs" />
@@ -1153,7 +1118,6 @@
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="KeyboardMap.cs" />
     <Compile Include="Terraforming\Position.cs" />
-    <Compile Include="Objects\GameObjectDb.cs" />
     <Compile Include="Objects\GameObjectSlot.cs" />
     <Compile Include="Rooms\WorldScreen.cs" />
     <Compile Include="SaveTag.cs" />
@@ -1182,7 +1146,6 @@
     <Compile Include="UI\ConsoleBoxAsync.cs" />
     <Compile Include="UI\CraftingTooltip.cs" />
     <Compile Include="UI\Dialogs\DialogLoading.cs" />
-    <Compile Include="UI\Editor\ObjectSpawnTool.cs" />
     <Compile Include="UI\Editor\TerrainWindow.cs" />
     <Compile Include="UI\Context\UIContextActions.cs" />
     <Compile Include="UI\Online\CharacterPanel.cs" />
@@ -1201,7 +1164,6 @@
     <Compile Include="UI\Context\ContextMenu2.cs" />
     <Compile Include="UI\Editor\ControlBlocksWindow.cs" />
     <Compile Include="UI\Editor\BldgLoadWindow.cs" />
-    <Compile Include="UI\Editor\ObjectsWindow.cs" />
     <Compile Include="UI\Hud\HotBar.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarH.cs" />
     <Compile Include="UI\FpsCounter.cs" />
@@ -1232,7 +1194,6 @@
     <Compile Include="UI\WorldSelection\MapPopUp.cs" />
     <Compile Include="UI\WorldSelection\MutatorBrowser.cs" />
     <Compile Include="UI\WorldSelection\NewWorldWindow.cs" />
-    <Compile Include="UI\OwnershipWindow.cs" />
     <Compile Include="UI\Panels\PanelList.cs" />
     <Compile Include="UI\PanelSkills.cs" />
     <Compile Include="UI\PopupManager.cs" />
@@ -1417,9 +1378,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Blocks\Sapling\" />
     <Folder Include="Components\Crafting\Smelting\" />
     <Folder Include="Components\Crafting\ToolFilters\" />
-    <Folder Include="Objects\Items\Storage\UI\" />
     <Folder Include="Start-a-Town!\Components\Tokens\" />
     <Folder Include="UI\Crafting\Smeltery\" />
   </ItemGroup>

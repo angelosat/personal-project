@@ -1,6 +1,4 @@
-﻿using System;
-using Start_a_Town_.AI;
-using Start_a_Town_.AI.Behaviors;
+﻿using Start_a_Town_.AI;
 
 namespace Start_a_Town_
 {
@@ -14,10 +12,6 @@ namespace Start_a_Town_
         public override BehaviorState Execute(Actor parent, AIState state)
         {
             return BehaviorState.Fail;
-
-            //if (parent.GetResource(ResourceDef.Stamina).Value <= 0 && parent.IsHauling())
-            //    parent.Interact(new InteractionThrow(true));
-            //return BehaviorState.Fail;
         }
     }
 }

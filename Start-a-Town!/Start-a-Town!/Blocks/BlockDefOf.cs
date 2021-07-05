@@ -20,7 +20,6 @@ namespace Start_a_Town_
         static public readonly Block Smeltery = new Blocks.Smeltery.BlockSmeltery();
         static public readonly Block Chest = new Blocks.Chest.BlockChest();
         static public readonly Block Bin = new BlockStorage();
-        static public readonly Block Sapling = new Blocks.Sapling.BlockSapling();
         static public readonly Block Water = new BlockWater();
         static public readonly Block Stool = new BlockStool();
         static public readonly Block Chair = new BlockChair();

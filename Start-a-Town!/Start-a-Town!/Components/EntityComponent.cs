@@ -124,7 +124,6 @@ namespace Start_a_Town_.Components
         internal virtual void HandleRemoteCall(GameObject gameObject, ObjectEventArgs e) { }
         internal virtual void HandleRemoteCall(GameObject gameObject, Message.Types type, BinaryReader r) { }
 
-        public virtual void RandomEvent(GameObject parent, RandomObjectEventArgs e) { }
 
         public virtual string GetInventoryText(GameObject parent, GameObject actor)
         {

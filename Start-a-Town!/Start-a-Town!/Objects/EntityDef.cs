@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components;
-using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
 {
@@ -20,13 +15,7 @@ namespace Start_a_Town_
         {
 
         }
-        //public GameObject Create()
-        //{
-        //    return this.Factory(this);
-
-        //    throw new NotFiniteNumberException();
-        //    //return ItemFactory.CreateItem(this);
-        //}
+        
         public List<ComponentProps> CompProps = new List<ComponentProps>();
 
         public EntityDef AddCompProp(ComponentProps props)

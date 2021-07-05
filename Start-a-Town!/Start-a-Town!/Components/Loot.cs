@@ -37,19 +37,7 @@ namespace Start_a_Town_
             Chance = chance;
             Count = count;
         }
-        public Loot(GameObject.Types objID, float chance = 1, int count = 1)
-        {
-            Chance = chance;
-            Count = count;
-            this.Factory = () => GameObject.Create(this.ObjID);
-        }
-        public Loot(int objID, float chance = 1, int count = 1)
-        {
-            Chance = chance;
-            Count = count;
-            this.Factory = () => GameObject.Create(this.ObjID);
-
-        }
+        
         public int Generate(RandomThreaded random)
         {
             int count = 0;

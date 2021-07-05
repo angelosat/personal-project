@@ -9,11 +9,5 @@ namespace Start_a_Town_
     public struct MaterialEdibility
     {
         public bool Raw, Cooked;
-
-        //public MaterialEdibility(bool raw, bool cooked)
-        //{
-        //    Raw = raw;
-        //    Cooked = cooked;
-        //}
     }
 }

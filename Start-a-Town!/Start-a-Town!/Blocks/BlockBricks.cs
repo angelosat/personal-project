@@ -26,14 +26,14 @@ namespace Start_a_Town_
 
         public override IEnumerable<byte> GetCraftingVariations()
         {
-            return (from mat in Material.Database.Values
+            return (from mat in Material.Registry.Values
                     where mat.Type == MaterialType.Stone
                     select (byte)mat.ID);
 
         }
         public override Material GetMaterial(byte data)
         {
-            return Material.Database[data];
+            return Material.Registry[data];
         }
         public override byte GetDataFromMaterial(GameObject craftingReagent)
         {
@@ -41,20 +41,20 @@ namespace Start_a_Town_
         }
         public override Color GetColor(byte data)
         {
-            var mat = Material.Database[data];
+            var mat = Material.Registry[data];
             var c = mat.Color;
             c.A = (byte)(255*mat.Type.Shininess);
             return c;
         }
         public override Vector4 GetColorVector(byte data)
         {
-            var mat = Material.Database[data];
+            var mat = Material.Registry[data];
             var c = mat.ColorVector;
             return c;
         }
         public override byte ParseData(string data)
         {
-            var mat = Material.Database.Values.FirstOrDefault(m => string.Equals(m.Name, data, StringComparison.OrdinalIgnoreCase));
+            var mat = Material.Registry.Values.FirstOrDefault(m => string.Equals(m.Name, data, StringComparison.OrdinalIgnoreCase));
             if (mat == null)
                 return (byte)MaterialDefOf.Stone.ID;
             return (byte)mat.ID;

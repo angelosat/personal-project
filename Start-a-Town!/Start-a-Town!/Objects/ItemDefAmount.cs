@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Start_a_Town_
 {
@@ -24,7 +19,6 @@ namespace Start_a_Town_
         public override string ToString()
         {
             return GetText(this.Def, this.Amount);
-            //return string.Format("{0}x {1}", this.Amount, this.Def);
         }
         static public string GetText(ItemDef def, int amount)
         {

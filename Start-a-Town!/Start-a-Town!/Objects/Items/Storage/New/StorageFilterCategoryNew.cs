@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -10,8 +8,8 @@ namespace Start_a_Town_
     class StorageFilterCategoryNew
     {
         public string Label;
-        public List<StorageFilterCategoryNew> Children = new List<StorageFilterCategoryNew>();
-        public List<StorageFilterNew> Leaves = new List<StorageFilterNew>();
+        public List<StorageFilterCategoryNew> Children = new();
+        public List<StorageFilterNew> Leaves = new();
 
         public StorageFilterCategoryNew(string label)
         {
@@ -102,24 +100,16 @@ namespace Start_a_Town_
         public Control GetControl(Action<int[], int[]> callback)
         {
             bool isEnabled(StorageFilterCategoryNew cat) => cat.Leaves.All(l => l.Enabled) && cat.Children.All(isEnabled);
-            //bool isEnabled(ListBoxCollapsibleNode cat) => cat.LeafControls.All(l => (l as CheckBoxNew).TickedFunc()) && cat.Children.All(isEnabled);
 
-            var listcollapsible = new ListBoxCollapsible(300, 400);// { BackgroundColorFunc = () => Color.Black * .5f };
+            var listcollapsible = new ListBoxCollapsible(300, 400);
             
             ListBoxCollapsibleNode createNode(StorageFilterCategoryNew cat)
             {
                 var node = new ListBoxCollapsibleNode(cat.Label, n => new CheckBoxNew() 
                 {
                     TickedFunc = () => isEnabled(cat),
-                    //TickedFunc = () => isEnabled(n),
                     LeftClickAction = () => 
                     {
-                        //int[] indices = new int[cat.Leafs.Count];
-                        //for (int i = 0; i < indices.Length; i++)
-                        //{
-                        //    this.FindLeafIndex(cat.Leafs[i], out var j);
-                        //    indices[i] = j;
-                        //}
                         this.FindNodeIndex(cat, out var k);
                         callback(new int[] { k }, null);
                     }
@@ -140,7 +130,7 @@ namespace Start_a_Town_
             listcollapsible.AddNode(createNode(this));
             
             listcollapsible.Build();
-            return listcollapsible;//.ToPanelLabeled("Select permitted fuel");
+            return listcollapsible;
         }
 
         public bool Filter(Entity obj)

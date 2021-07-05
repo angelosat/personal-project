@@ -58,16 +58,6 @@ namespace Start_a_Town_.Net
                                 Server.Log.Write("SERVER", "ACK reporting off");
                             break;
 
-                        case "updatechunkedges":
-                            if (queue.Count == 0)
-                                if (PlayerOld.Actor != null)
-                                {
-                                    var pos = Instance.Map.GetChunk(PlayerOld.Actor.Global).MapCoords;
-                                    Instance.Enqueue(PacketType.UpdateChunkEdges, Network.Serialize(w => w.Write(pos)), SendType.OrderedReliable);
-                                    Server.Log.Write("SERVER", "Updating chunk edges at player's location");
-                                }
-                            break;
-
                         case "savechunk":
                             try
                             {

@@ -673,19 +673,6 @@ namespace Start_a_Town_.Net
                     CloseConnection(msg.Connection);
                     break;
 
-                case PacketType.PlayerKick:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        var plid = r.ReadInt32();
-                        KickPlayer(plid);
-                    });
-                    break;
-
-
-                case PacketType.PlayerList:
-                    "playerlist".ToConsole();
-                    break;
-
                 case PacketType.RequestEntity:
                     int entityID = msg.Payload.Deserialize<int>(r => r.ReadInt32());
                     var entity = Instance.GetNetworkObject(entityID);
@@ -698,30 +685,6 @@ namespace Start_a_Town_.Net
                         CommandParser.Execute(Instance, msg.Player, r.ReadASCII());
                     });
                     break;
-                
-                case PacketType.PlayerInventoryOperation:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        var target = TargetArgs.Read(Instance, r);
-                        var source = TargetArgs.Read(Instance, r);
-                        var destination = TargetArgs.Read(Instance, r);
-                        int amount = r.ReadInt32();
-                        Instance.InventoryOperation(source.Slot, destination.Slot, amount);
-                        byte[] data = Network.Serialize(w =>
-                        {
-                            w.Write(2);
-                            source.Write(w);
-                            w.Write(source.Slot.StackSize);
-                            if (source.Slot.StackSize > 0)
-                                w.Write(source.Slot.Object.RefID);
-                            destination.Write(w);
-                            w.Write(destination.Slot.StackSize);
-                            if (destination.Slot.StackSize > 0)
-                                w.Write(destination.Slot.Object.RefID);
-                        });
-                        Instance.Enqueue(PacketType.EntityInventoryChange, data, SendType.OrderedReliable, msg.Player.ControllingEntity.Global);
-                    });
-                    return;
 
                 case PacketType.PlayerInventoryOperationNew:
                     msg.Payload.Deserialize(r =>
@@ -781,13 +744,6 @@ namespace Start_a_Town_.Net
                             block.Place(Instance.Map, global, data, variation, orientation);
                         }
                         Instance.Enqueue(PacketType.PlayerSetBlock, msg.Payload, SendType.OrderedReliable, global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerRemoveBlock:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        Instance.SyncSetBlock(r.ReadVector3(), Block.Types.Air);
                     });
                     return;
 
@@ -994,8 +950,6 @@ namespace Start_a_Town_.Net
                         long ackID = r.ReadInt64();
                         if (msg.Player.WaitingForAck.TryRemove(ackID, out Packet existing))
                         {
-                            if (existing.PacketType == PacketType.Ping) // i will calculate ping by the acking of the constant stream packets instead of a seperate ping packet
-                                msg.Connection.Ping.Stop();
                             existing.RTT.Stop();
                             msg.Connection.RTT = TimeSpan.FromMilliseconds(existing.RTT.ElapsedMilliseconds);
                             msg.Player.Ping = TimeSpan.FromMilliseconds(existing.RTT.ElapsedMilliseconds).Milliseconds;
@@ -1563,27 +1517,6 @@ namespace Start_a_Town_.Net
             Instance.Parser.Command(command);
         }
 
-        /// <summary>
-        /// Syncs light at specified global positions across all clients.
-        /// </summary>
-        /// <param name="globals"></param>
-        void SyncLight(IEnumerable<Vector3> globals)
-        {
-            byte[] data = Network.Serialize(a =>
-            {
-                a.Write(globals.Count()); //number of entries
-                foreach (var global in globals.ToList())
-                {
-                    a.Write(global);
-                    this.Map.GetLight(global, out byte sky, out byte block);
-                    a.Write(sky);
-                    a.Write(block);
-                }
-            });
-            foreach (var pl in Players.GetList())
-                Enqueue(pl, Packet.Create(pl, PacketType.SyncLight, data, SendType.Reliable | SendType.Ordered));
-        }
-       
         public void InventoryOperation(GameObjectSlot sourceSlot, GameObjectSlot targetSlot, int amount)
         {
             var sourceParent = sourceSlot.Parent;
@@ -1794,8 +1727,6 @@ namespace Start_a_Town_.Net
                 long ackID = r.ReadInt64();
                 if (player.WaitingForAck.TryRemove(ackID, out Packet existing))
                 {
-                    if (existing.PacketType == PacketType.Ping) // i will calculate ping by the acking of the constant stream packets instead of a seperate ping packet
-                        player.Connection.Ping.Stop();
                     existing.RTT.Stop();
                     player.Connection.RTT = TimeSpan.FromMilliseconds(existing.RTT.ElapsedMilliseconds);
                     player.Ping = TimeSpan.FromMilliseconds(existing.RTT.ElapsedMilliseconds).Milliseconds;

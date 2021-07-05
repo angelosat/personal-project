@@ -121,7 +121,6 @@ namespace Start_a_Town_.Components
                     return true;
 
                 case Message.Types.Refresh:
-                case Message.Types.Hold:
                     Refresh(parent);
                     return true;
 

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Start_a_Town_.Net
 {
     public class RandomThreaded
     {
-        //World World;
         static Random Random;
         [ThreadStatic]
         static Random _Local;
@@ -18,7 +14,6 @@ namespace Start_a_Town_.Net
                 if (_Local == null)
                 {
                     int seed;
-                    //lock (World.Random) seed = World.Random.Next();
                     lock (Random) seed = Random.Next();
                     _Local = new Random(seed);
                     return _Local;
@@ -32,11 +27,6 @@ namespace Start_a_Town_.Net
             }
         }
 
-        //public RandomThreaded(World world)
-        //{
-        //    World = world;
-        //    //Global = new Random(seed);
-        //}
         public RandomThreaded(Random random)
         {
             Random = random;
@@ -48,14 +38,6 @@ namespace Start_a_Town_.Net
         public int Next()
         {
             return Local.Next();
-            //Random inst = Local;
-            //if (inst.IsNull())
-            //{
-            //    int seed;
-            //    lock (Global) seed = Global.Next();
-            //    Local = inst = new Random(seed);
-            //}
-            //return inst.Next();
         }
         public int Next(int maxValue)
         {

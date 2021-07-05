@@ -5,12 +5,10 @@ namespace Start_a_Town_
 {
     class PacketEntityJump
     {
-        static readonly PacketType PType = PacketType.EntityJump;
+        static int PType;
         internal static void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PType, Receive);
-            Client.RegisterPacketHandler(PType, Receive);
+            PType = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, int entityID)
         {

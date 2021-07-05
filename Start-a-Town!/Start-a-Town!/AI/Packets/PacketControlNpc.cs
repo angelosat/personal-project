@@ -6,12 +6,11 @@ namespace Start_a_Town_
 {
     class PacketControlNpc
     {
-        static readonly PacketType PType = PacketType.NpcControl;
+        static int PType;
         internal static void Init()
         {
             // TODO: update
-            Server.RegisterPacketHandler(PType, Receive);
-            Client.RegisterPacketHandler(PType, Receive);
+            PType = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, int entityid)
         {

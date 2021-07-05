@@ -6,10 +6,10 @@ namespace Start_a_Town_
 {
     class PacketForceTask
     {
-        static readonly PacketType PType = PacketType.ForceTask;
+        static int PType;
         internal static void Init()
         {
-            Server.RegisterPacketHandler(PType, Receive);
+            PType = Network.RegisterPacketHandler(Receive);
         }
         public static void Send(TaskGiver def, Actor actor, TargetArgs target)
         {

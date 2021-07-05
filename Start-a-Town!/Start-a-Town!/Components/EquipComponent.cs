@@ -98,18 +98,6 @@ namespace Start_a_Town_.Components
             actions.Add(new EquipFromInventory());
         }
 
-        public override void GetInventoryContext(GameObject actor, List<ContextAction> actions, int inventorySlotID)
-        {
-            actions.Add(new ContextAction(() => "Hold", () =>
-            {
-                Net.Client.PostPlayerInput(Message.Types.HoldInventoryItem, w => w.Write(inventorySlotID));
-            }));
-            actions.Add(new ContextAction(() => "Equip", () =>
-            {
-                Net.Client.PostPlayerInput(Message.Types.EquipInventoryItem, w => w.Write(inventorySlotID));
-            }));
-        }
-
         public override void GetInventoryActions(GameObject actor, GameObjectSlot parentSlot, List<ContextAction> actions)
         {
             var work = new EquipFromInventory();

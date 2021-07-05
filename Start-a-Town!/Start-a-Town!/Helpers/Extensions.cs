@@ -120,12 +120,6 @@ namespace Start_a_Town_
                 position.Y < bounds.Y + bounds.W);
         }
 
-      
-        public static T Translate<T>(this object[] data, IObjectProvider objProvider) where T : PacketTranslator, new()
-        {
-            return new T().Translate(objProvider, data) as T;
-        }
-        
         public static T SelectRandom<T>(this ICollection<T> collection, Random random)
         {
             return collection.ElementAt(random.Next(0, collection.Count));

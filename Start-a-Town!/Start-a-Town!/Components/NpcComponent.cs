@@ -10,10 +10,10 @@ namespace Start_a_Town_
 {
     class NpcComponent : EntityComponent
     {
+        static int p;
         internal static void Init()
         {
-            Server.RegisterPacketHandler(PacketType.NpcCitizenship, ReceiveCitizenshipToggle);
-            Client.RegisterPacketHandler(PacketType.NpcCitizenship, ReceiveCitizenshipToggle);
+            p = Network.RegisterPacketHandler(ReceiveCitizenshipToggle);
         }
 
         public string FullName => this.FirstName + (this.LastName.IsNullEmptyOrWhiteSpace() ? "" : string.Format(" {0}", this.LastName));
@@ -193,7 +193,7 @@ namespace Start_a_Town_
         {
             var actor = actors.First();
             var w = Client.Instance.GetOutgoingStream();
-            w.Write(PacketType.NpcCitizenship);
+            w.Write(p);
             w.Write(Net.Client.Instance.GetPlayer().ID);
             w.Write(actor.Object.RefID);
         }
@@ -206,7 +206,7 @@ namespace Start_a_Town_
             if(net is Server)
             {
                 var w = net.GetOutgoingStream();
-                w.Write(PacketType.NpcCitizenship);
+                w.Write(p);
                 w.Write(Net.Client.Instance.GetPlayer().ID);
                 w.Write(actor.RefID);
             }

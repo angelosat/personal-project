@@ -7,16 +7,17 @@ namespace Start_a_Town_
 {
     class PacketPlayerInput
     {
+        static int p;
         internal static void Init()
         {
-            Server.RegisterPacketHandler(PacketType.PlayerNpcControlDirection, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, Vector2 direction)
         {
             if (net is Server)
                 throw new NotImplementedException();
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.PlayerNpcControlDirection);
+            w.Write(p);
             w.Write(net.GetPlayer().ID);
             w.Write(direction);
         }

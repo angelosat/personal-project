@@ -8,14 +8,13 @@ namespace Start_a_Town_
 {
     class PacketEntityInstantiate
     {
-        static PacketType PckType = PacketType.InstantiateEntities;
-        static PacketType PckTypeNew = PacketType.InstantiateEntitiesFromTemplate;
+        static int PckType;
+        static int PckTypeNew;
 
         static public void Init()
         {
-            Server.RegisterPacketHandler(PckType, Receive);
-            Client.RegisterPacketHandler(PckType, Receive);
-            Client.RegisterPacketHandler(PckTypeNew, ReceiveTemplate);
+            PckType = Network.RegisterPacketHandler( Receive);
+            PckTypeNew = Network.RegisterPacketHandler(ReceiveTemplate);
         }
         static public void Send(IObjectProvider net, GameObject entity)
         {

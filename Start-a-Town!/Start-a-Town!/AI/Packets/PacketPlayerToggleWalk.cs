@@ -6,16 +6,17 @@ namespace Start_a_Town_
 {
     class PacketPlayerToggleWalk
     {
+        static int p;
         internal static void Init()
         {
-            Server.RegisterPacketHandler(PacketType.PlayerNpcControlToggleWalk, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, bool toggle)
         {
             if (net is Server)
                 throw new Exception();
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.PlayerNpcControlToggleWalk);
+            w.Write(p);
             w.Write(net.GetPlayer().ID);
             w.Write(toggle);
         }

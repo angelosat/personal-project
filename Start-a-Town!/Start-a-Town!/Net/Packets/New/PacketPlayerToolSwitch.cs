@@ -5,15 +5,15 @@ namespace Start_a_Town_
 {
     class PacketPlayerToolSwitch
     {
+        static int p;
         internal static void Init()
         {
-            Server.RegisterPacketHandler(PacketType.PlayerToolSwitch, Receive);
-            Client.RegisterPacketHandler(PacketType.PlayerToolSwitch, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, int playerid, ControlTool tool)
         {
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.PlayerToolSwitch);
+            w.Write(p);
             w.Write(playerid);
             tool.Write(w);
         }

@@ -14,10 +14,6 @@ namespace Start_a_Town_
         {
             Packet.Create(packetID, type, data).BeginSendTo(so, ip);
         }
-        public static T Translate<T>(this byte[] data, IObjectProvider objProvider) where T : PacketTranslator, new()
-        {
-            return new T().Translate(objProvider, data) as T;
-        }
         public static void Translate(this byte[] data, IObjectProvider objProvider, Action<BinaryReader> reader)
         {
             using var r = new BinaryReader(new MemoryStream(data));

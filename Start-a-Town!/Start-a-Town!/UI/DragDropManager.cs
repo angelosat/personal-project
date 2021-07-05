@@ -25,17 +25,6 @@ namespace Start_a_Town_
         public object Item;
         public object Source;
         public DragDropEffects Effects;
-
-        //public DragEventArgs(object item, object source, DragDropEffects effects)
-        //{
-        //    this.Item = item;
-        //    this.Source = source;
-        //    this.Effects = effects;
-        //}
-        public virtual bool Cancel()
-        {
-            return false;
-        }
         public virtual void Draw(SpriteBatch sb) { }
     }
 
@@ -73,35 +62,6 @@ namespace Start_a_Town_
         public DragDropEffects Perform(object target)
         {
             return DragDropEffects.None;
-        }
-
-        public override bool Cancel()
-        {
-            if (this.Source == null)
-                return true;
-            if (!Source.HasValue || (Source.Object == Slot.Object))
-            {
-                // MUST SEND INPUT TO SERVER
-                Net.Client.PostPlayerInput(Message.Types.ContainerOperation, w =>
-                {
-                    ArrangeInventoryEventArgs.Write(w, new TargetArgs(this.Parent), new TargetArgs(this.Source.Object), new TargetArgs(this.Slot.Object), this.Source.Container.ID, this.Source.ID, (byte)this.Slot.StackSize);
-                });
-                //Source.Set(Slot.Object, Source.StackSize + Slot.StackSize);
-                
-                return true;
-            }
-            else
-            {
-                // if the source slot it occupied by a new item other than the dragged one, give object to container normally
-                // OR IF THE SOURCE SLOT IS NULL (item originates from a split stack operation)
-                Net.Client.PostPlayerInput(this.Parent, Message.Types.ReceiveItem, w =>
-                {
-                    TargetArgs.Write(w, Slot.Object);
-                    w.Write((byte)Slot.StackSize);
-                });
-            }
-            //Source.StackSize + Slot.StackSize;
-            return true;
         }
 
         public override void Draw(SpriteBatch sb)

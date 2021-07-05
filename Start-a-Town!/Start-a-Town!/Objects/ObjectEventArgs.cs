@@ -32,8 +32,6 @@ namespace Start_a_Town_
         public Message.Types Type;
         public GameObject Sender, Target;
         public object[] Parameters;
-        public PacketTranslator Translated;
-     //   public TargetArgs TargetArgs { get; set; }
         public Action Success { get { return _Success; } set { _Success = value; } }
         public Action Fail { get { return _Fail; } set { _Fail = value; } }
        // public TargetArgs Source { get; set; }

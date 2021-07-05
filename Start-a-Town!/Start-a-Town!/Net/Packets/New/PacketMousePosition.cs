@@ -5,15 +5,15 @@ namespace Start_a_Town_
 {
     class PacketMousePosition
     {
+        static int p;
         static internal void Init()
         {
-            Server.RegisterPacketHandler(PacketType.MousePosition, Receive);
-            Client.RegisterPacketHandler(PacketType.MousePosition, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static internal void Send(IObjectProvider net, int playerid, TargetArgs target)
         {
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.MousePosition);
+            w.Write(p);
             w.Write(playerid);
             target.Write(w);
         }

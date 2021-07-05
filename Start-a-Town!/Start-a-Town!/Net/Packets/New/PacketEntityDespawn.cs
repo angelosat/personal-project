@@ -6,16 +6,17 @@ namespace Start_a_Town_
 {
     class PacketEntityDespawn
     {
+        static int p;
         static public void Init()
         {
-            Client.RegisterPacketHandler(PacketType.PacketEntityDespawn, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, Entity entity)
         {
             if (net is Client)
                 return;
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.PacketEntityDespawn);
+            w.Write(p);
             w.Write(entity.RefID);
         }
         static public void Receive(IObjectProvider net, BinaryReader r)

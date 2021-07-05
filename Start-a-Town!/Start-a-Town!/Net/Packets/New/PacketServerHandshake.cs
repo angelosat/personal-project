@@ -6,15 +6,17 @@ namespace Start_a_Town_
 {
     class PacketServerHandshake
     {
+        static int ServerHandshake;
         internal static void Init()
         {
             throw new NotImplementedException();
-            Client.RegisterPacketHandler(PacketType.ServerHandshake, Receive);
+            ServerHandshake = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(Server server, PlayerData player)
         {
             throw new NotImplementedException();
             var w = server.OutgoingStream;
+            w.Write(ServerHandshake);
             w.Write(player.ID);
             server.Players.Write(w);
             w.Write(server.Speed);

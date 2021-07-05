@@ -108,8 +108,6 @@ namespace Start_a_Town_.Components
             /// <para>arg0: GameObjectSlot to receive</para>
             /// <para>arg1: GameObject contained in slot at time of message creation</para>
             /// </summary>
-            Hold,
-            Throw,
             CraftObject,
             JobAccepted,
             GetGoals,
@@ -158,8 +156,6 @@ namespace Start_a_Town_.Components
             CraftOnBench,
             Wear,
             ExecuteScript,
-            HoldInventoryItem,
-            EquipInventoryItem,
             DropInventoryItem,
             StoreCarried,
             ContainerOperation,

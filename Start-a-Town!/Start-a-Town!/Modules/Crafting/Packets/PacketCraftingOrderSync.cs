@@ -5,11 +5,10 @@ namespace Start_a_Town_.Modules.Crafting
 {
     class PacketCraftingOrderSync
     {
+        static int p;
         static internal void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.CraftingOrderSync, Receive);
-            Client.RegisterPacketHandler(PacketType.CraftingOrderSync, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
 
         internal static void Send(CraftOrderNew order)
@@ -17,7 +16,7 @@ namespace Start_a_Town_.Modules.Crafting
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();
             var bench = order.Workstation;
-            w.Write(PacketType.CraftingOrderSync);
+            w.Write(p);
             w.Write(bench);
             w.Write(order.GetIndex());
             order.Write(w);

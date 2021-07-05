@@ -11,15 +11,15 @@ namespace Start_a_Town_
 {
     class EntityCompRefuelable : BlockEntityComp, IPowerSource
     {
+        static int p;
         static EntityCompRefuelable()
         {
-            Server.RegisterPacketHandler(PacketType.RefuelableChangeFilters, ChangeFilters);
-            Client.RegisterPacketHandler(PacketType.RefuelableChangeFilters, ChangeFilters);
+            p = Network.RegisterPacketHandler(ChangeFilters);
         }
         private static void ChangeFiltersSend(IObjectProvider net, Vector3 entity, int[] nodeIndices = null, int[] leafIndices = null)
         {
             var s = net.GetOutgoingStream();
-            s.Write(PacketType.RefuelableChangeFilters);
+            s.Write(p);
             s.Write(entity);
             s.Write(nodeIndices ?? new int[] { });
             s.Write(leafIndices ?? new int[] { });

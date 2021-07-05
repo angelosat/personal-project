@@ -6,9 +6,10 @@ namespace Start_a_Town_
 {
     class PacketInventoryInsertItem
     {
+        static int p;
         static public void Init()
         {
-            Client.RegisterPacketHandler(PacketType.PacketInventoryInsertItem, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, Actor actor, Entity item, OffsiteAreaDef area)
         {
@@ -16,7 +17,7 @@ namespace Start_a_Town_
                 throw new Exception();
 
             var stream = net.GetOutgoingStream();
-            stream.Write((int)PacketType.PacketInventoryInsertItem);
+            stream.Write(p);
             stream.Write(actor.RefID);
             stream.Write(item.RefID);
             stream.Write(area.Name);

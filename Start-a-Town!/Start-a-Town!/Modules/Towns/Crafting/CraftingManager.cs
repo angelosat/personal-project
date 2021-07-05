@@ -13,19 +13,13 @@ namespace Start_a_Town_.Towns.Crafting
 {
     public class CraftingManager : TownComponent
     {
+        static int pReaget, pPriority, pQuantity, pRestrictions;
         static CraftingManager()
         {
-            Server.RegisterPacketHandler(PacketType.CraftingOrderToggleReagent, CraftingOrderToggleReagent);
-            Client.RegisterPacketHandler(PacketType.CraftingOrderToggleReagent, CraftingOrderToggleReagent);
-
-            Server.RegisterPacketHandler(PacketType.CraftingOrderModifyPriority, CraftingOrderModifyPriority);
-            Client.RegisterPacketHandler(PacketType.CraftingOrderModifyPriority, CraftingOrderModifyPriority);
-
-            Server.RegisterPacketHandler(PacketType.CraftingOrderModifyQuantity, CraftingOrderModifyQuantity);
-            Client.RegisterPacketHandler(PacketType.CraftingOrderModifyQuantity, CraftingOrderModifyQuantity);
-
-            Server.RegisterPacketHandler(PacketType.OrderSetRestrictions, SetOrderRestrictions);
-            Client.RegisterPacketHandler(PacketType.OrderSetRestrictions, SetOrderRestrictions);
+            pReaget = Network.RegisterPacketHandler(CraftingOrderToggleReagent);
+            pPriority = Network.RegisterPacketHandler(CraftingOrderModifyPriority);
+            pQuantity = Network.RegisterPacketHandler(CraftingOrderModifyQuantity);
+            pRestrictions = Network.RegisterPacketHandler(SetOrderRestrictions);
 
             PacketOrderAdd.Init();
             PacketOrderRemove.Init();
@@ -54,52 +48,12 @@ namespace Start_a_Town_.Towns.Crafting
         {
             this.Town = town;
         }
-        [Obsolete]
-        internal void PlaceOrder(int reactionID, List<ItemRequirement> materials, Vector3 workstationGlobal)
-        {
-            var craftOp = new CraftOperation(reactionID, materials, workstationGlobal);
-            Client.Instance.Send(PacketType.CraftingOrderPlace, Network.Serialize(craftOp.WriteOld));
-        }
-        [Obsolete]
-        public override void Handle(IObjectProvider net, Packet msg)
-        {
-            switch (msg.PacketType)
-            {
-                case PacketType.CraftingOrdersClear:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        var global = r.ReadVector3();
-                        var entity = this.Town.Map.GetBlockEntity(global) as BlockEntityWorkstation;
-                        entity.ExecutingOrders = false;
-                        entity.CurrentOrder = null;
-                        this.Town.Map.EventOccured(Message.Types.OrdersUpdated);
-                        net.Forward(msg);
-                    });
-                    break;                    
-
-                case PacketType.WorkstationSetCurrent:
-                    msg.Payload.Deserialize(r =>
-                        {
-                            var senderID = r.ReadInt32();
-                            var craft = new CraftOperation(r);
-                            var benchEntity = net.Map.GetBlockEntity(craft.WorkstationEntity) as BlockEntityWorkstation;
-                            benchEntity.SetCurrentProject(net, craft);
-                            var server = net as Server;
-                            if (server != null)
-                                server.Enqueue(msg.PacketType, msg.Payload);
-                        });
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
+        
         public static void SetOrderRestrictions(CraftOrderNew order, string reagent, ItemDef[] defs, Material[] mats, MaterialType[] matTypes)
         {
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();
-            w.Write((int)PacketType.OrderSetRestrictions);
+            w.Write(pRestrictions);
             w.Write(order.Workstation);
             w.Write(order.ID);
             w.Write(reagent);
@@ -173,14 +127,14 @@ namespace Start_a_Town_.Towns.Crafting
 
         static public void WriteOrderModifyQuantityParams(BinaryWriter w, CraftOrderNew order, int quantity)
         {
-            w.Write(PacketType.CraftingOrderModifyQuantity);
+            w.Write(pQuantity);
             w.Write(order.Workstation);
             w.Write(order.GetUniqueLoadID());
             w.Write(quantity);
         }
         static public void WriteOrderToggleReagent(BinaryWriter w, CraftOrderNew order, string reagent, int item, bool add)
         {
-            w.Write(PacketType.CraftingOrderToggleReagent);
+            w.Write(pReaget);
             w.Write(order.Workstation);
             w.Write(order.ID);
             w.Write(reagent);
@@ -190,7 +144,7 @@ namespace Start_a_Town_.Towns.Crafting
 
         internal static void WriteOrderModifyPriority(BinaryWriter w, CraftOrderNew order, bool increase)
         {
-            w.Write(PacketType.CraftingOrderModifyPriority);
+            w.Write(pPriority);
             w.Write(order.Workstation);
             w.Write(order.ID);
             w.Write(increase);

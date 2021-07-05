@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 
@@ -10,34 +7,15 @@ namespace Start_a_Town_.Net
     class UIPlayerList : GroupBox
     {
         ListBoxNew<PlayerData, Button> List_Players;
-        //PlayerList List;
 
         public UIPlayerList(IEnumerable<PlayerData> pList)
         {
             this.AutoSize = true;
-            //Panel Panel = new Panel() { AutoSize = true };
-
-            //this.AutoSize = true;
-            //this.Title = "Players";
-            //Closable = false;
-
             List_Players = new ListBoxNew<PlayerData, Button>(new Rectangle(0, 0, 150, 300));
             this.List_Players.MouseThrough = true;
             this.Refresh(pList);
-            //Panel.Controls.Add(List_Players);
-            this.AddControls(List_Players);//List_Players);
-            //this.CenterScreen();
+            this.AddControls(List_Players);
         }
-
-        
-        // WARNING: restrict the use of show to this particular method
-        //public bool Show(PlayerList pList)
-        //{
-        //    this.List = pList;
-        //    Refresh(pList);
-        //    return base.Show();
-        //}
-
 
         public UIPlayerList Refresh(IEnumerable<PlayerData> pList)
         {
@@ -46,8 +24,7 @@ namespace Start_a_Town_.Net
                 ctrl.TextColorFunc = () => foo.Color;
                 ctrl.OnUpdate = () =>
                 {
-                    //ctrl.Text = foo.Name + " " + foo.Connection.RTT.TotalMilliseconds.ToString("###0ms");
-                    ctrl.Text = foo.ID + ": " + foo.Name + " " + foo.Ping.ToString("###0ms"); //" id:" + f
+                    ctrl.Text = foo.ID + ": " + foo.Name + " " + foo.Ping.ToString("###0ms");
                 };
             });
             return this;
@@ -69,7 +46,5 @@ namespace Start_a_Town_.Net
                     break;
             }
         }
-
-        
     }
 }

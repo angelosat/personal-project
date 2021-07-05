@@ -5,16 +5,15 @@ namespace Start_a_Town_
 {
     class PacketInventoryDrop
     {
+        static int p;
         static public void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.PacketInventoryDrop, Receive);
-            Client.RegisterPacketHandler(PacketType.PacketInventoryDrop, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, int actorID, int itemID, int amount)
         {
             var stream = net.GetOutgoingStream();
-            stream.Write((int)PacketType.PacketInventoryDrop);
+            stream.Write(p);
             stream.Write(actorID);
             stream.Write(itemID);
             stream.Write(amount);

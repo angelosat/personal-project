@@ -7,16 +7,16 @@ namespace Start_a_Town_
 {
     class PacketSnapshots
     {
+        static int p;
         static public void Init()
         {
-            Server.RegisterPacketHandler(PacketType.Snapshot, Receive);
-            Client.RegisterPacketHandler(PacketType.Snapshot, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, IEnumerable<GameObject> entities)
         {
             var server = net as Server;
             var strem = server.OutgoingStreamUnreliable;
-            strem.Write((int)PacketType.Snapshot);
+            strem.Write(p);
             strem.Write(Server.ServerClock.TotalMilliseconds);
             strem.Write(entities.Count());
             foreach (var obj in entities)

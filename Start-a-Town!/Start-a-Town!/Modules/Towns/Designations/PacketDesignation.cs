@@ -10,16 +10,15 @@ namespace Start_a_Town_
     class PacketDesignation
     {
         enum SelectionType { List, Box }
+        static int p;
         static public void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.Designation, Receive);
-            Client.RegisterPacketHandler(PacketType.Designation, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, DesignationDef designation, List<TargetArgs> targets, bool remove)
         {
             var stream = net.GetOutgoingStream();
-            stream.Write((int)PacketType.Designation);
+            stream.Write(p);
             stream.Write(designation.Name);
             stream.Write(remove);
             stream.Write((int)SelectionType.List);
@@ -28,7 +27,7 @@ namespace Start_a_Town_
         static public void Send(IObjectProvider net, DesignationDef designation, Vector3 begin, Vector3 end, bool remove)
         {
             var stream = net.GetOutgoingStream();
-            stream.Write((int)PacketType.Designation);
+            stream.Write(p);
             stream.Write(designation.Name);
             stream.Write(remove);
             stream.Write((int)SelectionType.Box);

@@ -6,10 +6,10 @@ namespace Start_a_Town_
 {
     class PacketEntitySync
     {
-        readonly static PacketType PckType = PacketType.PacketEntitySync;
+        static int PckType;
         static public void Init()
         {
-            Client.RegisterPacketHandler(PckType, Receive);
+            PckType = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, GameObject entity)
         {

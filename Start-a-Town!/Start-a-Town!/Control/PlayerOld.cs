@@ -286,22 +286,6 @@ namespace Start_a_Town_
                     //OrientationTool.Object = e.Sender;
                     return;
 
-
-                //case Message.Types.Receive:
-                //    GameObjectSlot objSlot = e.Parameters[0] as GameObjectSlot;
-                //    GameObject obj = objSlot.Object;
-                //    if (obj["Physics"].GetProperty<int>("Size") > 0)
-                //    {
-                //        float str = StatsComponent.GetStat(Player.Actor, Stat.Strength.Name);
-                //        float weight = (float)obj["Physics"]["Weight"];
-               
-                //    }
-                //    throw new NotImplementedException();
-                //    //GameObject.PostMessage(Actor, Message.Types.UpdateAbilities);
-                //    return;
-
-                case Message.Types.Hold:
-                case Message.Types.Throw:
                 case Message.Types.Dropped:
                     //throw new NotImplementedException();
                     //GameObject.PostMessage(Actor, Message.Types.UpdateAbilities);

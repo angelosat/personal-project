@@ -6,16 +6,17 @@ namespace Start_a_Town_
 {
     class PacketPlayerJump
     {
+        static int p;
         internal static void Init()
         {
-            Server.RegisterPacketHandler(PacketType.PlayerNpcControlJump, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net)
         {
             if (net is Server)
                 throw new Exception();
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.PlayerNpcControlJump);
+            w.Write(p);
             w.Write(net.GetPlayer().ID);
         }
         private static void Receive(IObjectProvider net, BinaryReader r)

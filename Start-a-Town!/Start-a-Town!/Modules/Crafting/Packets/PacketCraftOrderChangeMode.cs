@@ -5,11 +5,10 @@ namespace Start_a_Town_
 {
     class PacketCraftOrderChangeMode
     {
+        static int p;
         static internal void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.PacketCraftOrderChangeMode, Receive);
-            Client.RegisterPacketHandler(PacketType.PacketCraftOrderChangeMode, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
 
         internal static void Send(CraftOrderNew order, int value)
@@ -17,7 +16,7 @@ namespace Start_a_Town_
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();
             var bench = order.Workstation;
-            w.Write(PacketType.PacketCraftOrderChangeMode);
+            w.Write(p);
             w.Write(bench);
             w.Write(order.GetUniqueLoadID());
             w.Write(value);

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace Start_a_Town_.Net
@@ -35,16 +33,6 @@ namespace Start_a_Town_.Net
             return list;
         }
 
-        //public void Add(PlayerData player)
-        //{
-        //    this.List.Add(player);
-        //    this.Net.EventOccured(Components.Message.Types.PlayerConnected, this, player);
-        //}
-        //public void Remove(PlayerData player)
-        //{
-        //    this.List.Remove(player);
-        //    this.Net.EventOccured(Components.Message.Types.PlayerDisconnected, this, player);
-        //}
         public void Add(PlayerData player)
         {
             this.List.Add(player.ID, player);
@@ -62,26 +50,9 @@ namespace Start_a_Town_.Net
                 speed = pl.SuggestedSpeed < speed ? pl.SuggestedSpeed : speed;
             return speed;
         }
-        [Obsolete]
-        internal int GetPopularSpeed()
-        {
-            int speed = 0, maxcount = 0;
-            //for (int i = 0; i < 4; i++)
-            foreach (var i in new int[] { 0, 1, 2, 4 })
-            {
-                var count = this.List.Values.Where(p => p.SuggestedSpeed == i).Count();
-                if (count > maxcount)
-                {
-                    speed = i;
-                    maxcount = count;
-                }
-            }
-            return speed;
-        }
-
+      
         internal PlayerData GetPlayer(int id)
         {
-            //return this.List[id];
             return this.List.GetValueOrDefault(id);
         }
     }

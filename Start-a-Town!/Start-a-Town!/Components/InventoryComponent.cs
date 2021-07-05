@@ -93,106 +93,6 @@ namespace Start_a_Town_.Components
                     });
                     return true;
 
-                //case Message.Types.UseInventoryItem:
-                //    e.Translate(r =>
-                //    {
-                //        GameObject usedItem = TargetArgs.Read(e.Network, r).Object;
-                //        if (Containers.First().FirstOrDefault(_slot => _slot.Object == usedItem).IsNull())
-                //        {
-                //            return;
-                //        }
-                //        usedItem.TryGetComponent<InteractiveComponent>(comp =>
-                //        {
-                //            //TargetArgs recipient = TargetArgs.Read(Instance, r);
-                //            ObjectEventArgs a = ObjectEventArgs.Create(Message.Types.StartScript, w =>
-                //            {
-                //                Ability.Write(w, comp.Abilities.First(), new TargetArgs(usedItem));
-                //            });
-                //            e.Network.PostLocalEvent(parent, a);
-
-                //            // NO POSTPLAYERINPUT ON COMPONENTS BECAUSE IT CAN BE CALLED BY SERVER OR BY AI
-                //            //Client.PostPlayerInput(Message.Types.StartScript, w =>
-                //            //{
-                //            //    Ability.Write(w, comp.Abilities.First(), new TargetArgs(usedItem));
-                //            //});
-                //        });
-                //    });
-                //    return true;
-
-                case Message.Types.HoldInventoryItem:
-                    // a player initiated event that has its parameters in the bytearray instead of the object[] array
-                    int slotID = e.Data.Translate<InventoryEventArgs>(e.Network).SlotID;
-                    //int slotID = (int)e.Parameters[0];
-                    GameObjectSlot sl = Containers.First()[slotID];
-                    if (!sl.HasValue)
-                        return true;
-                    Hold(e.Network, parent, sl);
- 
-                    //e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Hold, new object[] { sl.Object }));
-                    //parent.PostMessage(e.Network, Message.Types.Hold, w => w.Write(sl.Object.NetworkID));
-
-
-                    //parent.PostMessage(e.Net, Message.Types.PerformAbility, w =>
-                    //{
-                    //    w.Write((int)Script.Types.PickUp);
-                    //    w.Write(Player.Actor.NetworkID);
-                    //    w.Write(Target.NetworkID);
-                    //});
-                    return true;
-
-                case Message.Types.EquipInventoryItem:
-                    slotID = e.Data.Translate<InventoryEventArgs>(e.Network).SlotID;
-                    GameObjectSlot eqSlot = Containers.First()[slotID];
-                    GameObject eq = eqSlot.Object;
-                    if (eq is null)
-                        return true;
-                    //string slotType = eq.GetComponent<EquipComponent>().Slot;
-                    //parent.GetComponent<BodyComponent>().BodyParts[slotType].Wearing.Swap(eqSlot);
-                    return true;
-
-                //case Message.Types.StoreCarried:
-                //    if (!this.Holding.HasValue)
-                //        return true;
-                //    GameObject o1;
-                //    if (!this.Holding.Take(out o1))
-                //        return true;
-                //    ObjectSize oSize = (ObjectSize)o1["Physics"]["Size"];
-                //    e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Dropped));
-                //    if (oSize == ObjectSize.Inventoryable)
-                //    {
-                //        e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Receive, new object[] { o1 }));
-                //        return true;
-                //    }
-                //    e.Network.Spawn(o1.SetGlobal(parent.Global + new Vector3(0, 0, (float)parent["Physics"]["Height"])));
-                //    return true;
-
-                //case Message.Types.Unequip:
-                //    e.Translate(r => {
-                //        eqSlot = parent.GetComponent<BodyComponent>().BodyParts[r.ReadString()].Wearing;
-                //        eq = eqSlot.Object;
-                //        eqSlot.Clear();
-                //        e.Network.PostLocalEvent(parent, ObjectEventArgs.Create(Message.Types.Receive, new object[] { eq }));
-                //    });
-                //    return true;
-                
-                //case Message.Types.Receive:
-                //    GameObject obj = e.Parameters.Translate<SenderEventArgs>(e.Network).Sender;
-
-                    
-
-                //    // TODO: this is a WORKAROUND
-                //    GameObjectSlot existingSlot;
-                //    // FAILSAFE in case player is picking items too fast resulting in picking the same item before the server processes the input
-                //    if (HasObject(parent, o => o == obj, out existingSlot))
-                //    {
-                //        //parent.PostMessage(e.Network, Message.Types.Hold, w => w.Write(obj.NetworkID));
-                //        return true;
-                //    }
-                //    GiveObject(e.Network, parent, obj.ToSlotLink());
-
-                //    //GiveObject(parent, objSlot);
-                //    return true;
-
                 case Message.Types.ArrangeInventory:
                     GameObjectSlot source = e.Parameters[0] as GameObjectSlot;
                     
@@ -234,22 +134,10 @@ namespace Start_a_Town_.Components
 
                     return true;
                 
-                case Message.Types.Hold:
-                    //objSlot = e.Parameters[0] as GameObjectSlot;
-                    //Hold(parent, objSlot);
-
-                    // temp workaround to save on client
-                  //  e.Network.LogStateChange(parent.NetworkID);
-                    var obj = e.Parameters.Translate<SenderEventArgs>(e.Network).Sender;//e.TargetArgs.Object;// e.Data.Translate<SenderEventArgs>(e.Network).Sender;
-                    GameObjectSlot objSlot = obj.IsSpawned ? obj.ToSlotLink() : InventoryComponent.GetFirstOrDefault(parent, foo => foo == obj);
-                    Hold(e.Network, parent, objSlot);
-
-                    return true;
-
                 case Message.Types.DropInventoryItem:
                     e.Data.Translate(e.Network, r =>
                     {
-                        slotID = r.ReadInt32();
+                        var slotID = r.ReadInt32();
                         GameObjectSlot slot = this.Containers.First()[slotID];
                         GameObject toDrop;
                         if(!slot.Take(out toDrop))
@@ -259,34 +147,6 @@ namespace Start_a_Town_.Components
                         e.Network.Spawn(toDrop);
                     });
                     return true;
-
-                case Message.Types.Throw:
-                    if (!Holding.HasValue)
-                        return true;
-
-                    Vector3 dir = e.Data.Translate<DirectionEventArgs>(e.Network).Direction;
-                    Vector3 speed = dir * 0.1f + parent.Velocity;
-
-                    GameObject newobj = Holding.Take();
-                    //e.Network.Spawn(newobj, new Position(e.Network.Map, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height), speed));
-                    newobj.Velocity = speed;
-                    e.Network.Spawn(newobj, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
-
-                    //if (!this.Holding.HasValue)
-                    //    parent.GetComponent<SpriteComponent>().UpdateHeldObject(null);
-
-                    return true;
-
-                //case Message.Types.CraftObject:
-                //    BlueprintComponent bpComp = e.Parameters[0] as BlueprintComponent;
-                //    Blueprint bp = bpComp.Blueprint;
-                //    if (!HasItems(parent, bp[0]))
-                //        return true;
-                //    foreach (KeyValuePair<GameObject.Types, int> mat in bp[0])
-                //        InventoryComponent.RemoveObjects(parent, foo => foo.IDType == mat.Key, mat.Value);
-                //    throw new NotImplementedException();
-                //    //parent.PostMessage(Message.Types.Receive, null, GameObject.Create(bp.ProductID).ToSlot());
-                //    return true;
 
                 default:
                     return false;

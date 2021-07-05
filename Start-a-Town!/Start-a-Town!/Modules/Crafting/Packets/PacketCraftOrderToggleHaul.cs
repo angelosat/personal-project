@@ -6,11 +6,11 @@ namespace Start_a_Town_.Modules.Crafting
 {
     class PacketCraftOrderToggleHaul
     {
+        static int p;
         static internal void Init()
         {
             // TODO
-            Server.RegisterPacketHandler(PacketType.PacketCraftOrderToggleHaul, Receive);
-            Client.RegisterPacketHandler(PacketType.PacketCraftOrderToggleHaul, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
 
         internal static void Send(CraftOrderNew order, bool value)
@@ -18,7 +18,7 @@ namespace Start_a_Town_.Modules.Crafting
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();
             var bench = order.Workstation;
-            w.Write(PacketType.PacketCraftOrderToggleHaul);
+            w.Write(p);
             w.Write(bench);
             w.Write(order.ID);
             w.Write(value);

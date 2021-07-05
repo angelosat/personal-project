@@ -291,58 +291,6 @@ namespace Start_a_Town_.Components
             }
         }
 
-        public void Operation(IObjectProvider net, ArrangeInventoryEventArgs args)
-        {
-            GameObjectSlot targetSlot = this[args.TargetSlotID];
-            int amount = args.Amount;
-            GameObject source = args.SourceObject.Object;
-
-            GameObject obj = args.Object.Object;
-
-            // TODO: HANDLE SLOT OVERFLOW
-
-            if (obj is not null)
-                if (targetSlot.HasValue)
-                    if (obj.IDType == targetSlot.Object.IDType)
-                    {
-                        // combine stacks and dispose added object
-                        targetSlot.StackSize += amount;
-                        net.DisposeObject(obj);
-                        return;
-                    }
-
-            targetSlot.Set(obj, amount);
-            return;
-
-            if (targetSlot.HasValue)
-            {
-                // if objects have the same id, DESTROY source object from the network if source stacksize == 0
-                if (obj.IDType == targetSlot.Object.IDType)
-                {
-                    int distFromMax = Math.Max(0, targetSlot.StackSize + amount - targetSlot.StackMax);
-                    int amountTransferred = amount - distFromMax;
-                    targetSlot.StackSize += amountTransferred;
-                    net.DisposeObject(args.Object.Object);
-                    return;
-                }
-            }
-            else
-            {
-                // if object and source have the same network id, request new instantiated object from server
-                if (source != null)
-                    if (obj.RefID == source.RefID)
-                    {
-                        if (net.Instantiate(obj) != null)
-                        {
-                            targetSlot.Object = obj;
-                            targetSlot.StackSize = amount;
-                        }
-                        return;
-                    }
-                targetSlot.Set(obj, amount);
-            }
-        }
-
         public bool InsertObject(IObjectProvider net, GameObject obj)
         {
             if ((from slot in this

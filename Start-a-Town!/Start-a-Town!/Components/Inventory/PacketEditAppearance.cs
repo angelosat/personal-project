@@ -5,16 +5,15 @@ namespace Start_a_Town_
 {
     static class PacketEditAppearance
     {
+        static int p;
         static public void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.PacketEditAppearance, Receive);
-            Client.RegisterPacketHandler(PacketType.PacketEditAppearance, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         public static void Send(Actor actor, CharacterColors colors)
         {
             var w = actor.Net.GetOutgoingStream();
-            w.Write(PacketType.PacketEditAppearance);
+            w.Write(p);
             w.Write(actor.RefID);
             colors.Write(w);
         }

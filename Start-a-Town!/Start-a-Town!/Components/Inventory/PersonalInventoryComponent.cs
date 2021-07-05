@@ -12,7 +12,7 @@ namespace Start_a_Town_.Components
     {
         class Packets
         {
-            static int PacketSyncInsert;
+            static int PacketSyncInsert, PacketSetHaulSlot;
             static public void Init()
             {
                 PacketSyncInsert = Network.RegisterPacketHandler(HandleSyncInsert);
@@ -23,7 +23,7 @@ namespace Start_a_Town_.Components
                     actor.Carry(item);
                 }
 
-                Client.RegisterPacketHandler(PacketType.SetHaulSlot, handleSetHaulSlot);
+                PacketSetHaulSlot = Network.RegisterPacketHandler(handleSetHaulSlot);
             }
 
             public static void SendSyncInsert(IObjectProvider net, Actor actor, Entity item)
@@ -46,7 +46,7 @@ namespace Start_a_Town_.Components
             {
                 var server = net as Server;
                 var w = server.GetOutgoingStream();
-                w.Write(PacketType.SetHaulSlot);
+                w.Write(PacketSetHaulSlot);
                 w.Write(actor.RefID);
                 w.Write(item.RefID);
             }
@@ -144,22 +144,6 @@ namespace Start_a_Town_.Components
         {
             switch (e.Type)
             {
-                case Message.Types.HoldInventoryItem:
-                    // a player initiated event that has its parameters in the bytearray instead of the object[] array
-                    int slotID = e.Data.Translate<InventoryEventArgs>(e.Network).SlotID;
-                    GameObjectSlot sl = parent.GetChildren()[slotID];
-                    if (!sl.HasValue)
-                        return true;
-                    return true;
-
-                case Message.Types.EquipInventoryItem:
-                    slotID = e.Data.Translate<InventoryEventArgs>(e.Network).SlotID;
-                    GameObjectSlot eqSlot = parent.GetChildren()[slotID];
-                    GameObject eq = eqSlot.Object;
-                    if (eq is null)
-                        return true;
-                    return true;
-
                     // TODO: maybe create a new message called InventoryInteraction that individual components can respond too?
                 case Message.Types.SlotInteraction:
                     this.SlotInteraction(parent, e.Parameters[0] as GameObject, e.Parameters[1] as GameObjectSlot);

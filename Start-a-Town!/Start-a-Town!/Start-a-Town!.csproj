@@ -667,7 +667,6 @@
     <Compile Include="Modules\AI\NpcLogUINew.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.cs" />
     <Compile Include="Modules\Crafting\CraftOrderNew.cs" />
-    <Compile Include="Blocks\Workstations\Smeltery\SmeltingInterfaceNewNew.cs" />
     <Compile Include="Blocks\Workstations\Workbench\BlockWorkbenchEntity.cs" />
     <Compile Include="Blocks\Chest\BlockChest.cs" />
     <Compile Include="Blocks\Chest\ContainerUI.cs" />
@@ -828,7 +827,6 @@
     <Compile Include="Components\Shadow.cs" />
     <Compile Include="Components\Interactions\WorkComponent.cs" />
     <Compile Include="Control\BlockPainter.cs" />
-    <Compile Include="Control\BuildingPlacer.cs" />
     <Compile Include="Control\KeyBinding.cs" />
     <Compile Include="Control\KeyControl.cs" />
     <Compile Include="GameModes\GameMode.cs" />
@@ -941,7 +939,6 @@
     <Compile Include="Net\Packets\New\PacketSnapshots.cs" />
     <Compile Include="Net\Packets\PacketIntInt.cs" />
     <Compile Include="Net\PlayerList.cs" />
-    <Compile Include="Net\RPCargs.cs" />
     <Compile Include="Net\UI\UIConnecting.cs" />
     <Compile Include="Objects\Actor.cs" />
     <Compile Include="Objects\ItemPie.cs" />
@@ -1040,7 +1037,6 @@
     <Compile Include="Net\ObjectSnapshot.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Net\PacketWrapper.cs" />
     <Compile Include="Net\Packets\IServerPacketHandler.cs" />
     <Compile Include="Net\Packets\IClientPacketHandler.cs" />
     <Compile Include="Net\Packets\IPacketHandler.cs" />
@@ -1048,8 +1044,6 @@
     <Compile Include="Net\Packets\PacketEntityVector3.cs" />
     <Compile Include="Net\Packets\PacketEntity.cs" />
     <Compile Include="Net\Packets\Player\PacketPlayerChangeDirection.cs" />
-    <Compile Include="Net\PacketTransfer.cs" />
-    <Compile Include="Net\PlayerServerToken.cs" />
     <Compile Include="Net\RandomThreaded.cs" />
     <Compile Include="Net\Server\AI.cs" />
     <Compile Include="Modules\AI\AIPacketHandler.cs" />
@@ -1064,7 +1058,6 @@
     <Compile Include="Helpers\Progress.cs" />
     <Compile Include="SceneState.cs" />
     <Compile Include="Net\IObjectProvider.cs" />
-    <Compile Include="Net\PacketTranslation.cs" />
     <Compile Include="Net\Client\Client.cs" />
     <Compile Include="Components\AI\Thoughts.cs" />
     <Compile Include="Components\Attack.cs" />
@@ -1183,11 +1176,8 @@
     <Compile Include="UI\CharacterCreation\ColorPickerWindow.cs" />
     <Compile Include="UI\CharacterCreation\ColorPickerHueSaturation.cs" />
     <Compile Include="UI\Crafting\ItemPicker.cs" />
-    <Compile Include="UI\Crafting\ReactionInterface.cs" />
     <Compile Include="UI\Crafting\MaterialPicker.cs" />
     <Compile Include="UI\Crafting\ReagentPanel.cs" />
-    <Compile Include="UI\Crafting\Smeltery\SmeltingWindow.cs" />
-    <Compile Include="UI\BuildingsWindow.cs" />
     <Compile Include="UI\CameraWidget.cs" />
     <Compile Include="UI\ConsoleBoxAsync.cs" />
     <Compile Include="UI\CraftingTooltip.cs" />
@@ -1429,9 +1419,9 @@
   <ItemGroup>
     <Folder Include="Components\Crafting\Smelting\" />
     <Folder Include="Components\Crafting\ToolFilters\" />
-    <Folder Include="Objects\Coins\" />
     <Folder Include="Objects\Items\Storage\UI\" />
     <Folder Include="Start-a-Town!\Components\Tokens\" />
+    <Folder Include="UI\Crafting\Smeltery\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

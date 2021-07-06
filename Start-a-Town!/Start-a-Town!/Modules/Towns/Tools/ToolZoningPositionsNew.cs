@@ -18,7 +18,10 @@ namespace Start_a_Town_.Towns
         protected Func<List<ZoneNew>> GetZones = () => new List<ZoneNew>();
         public override bool TargetOnlyBlocks => true;
         protected Town Town;
-        
+        public ToolZoningPositionsNew()
+        {
+
+        }
         public ToolZoningPositionsNew(Action<Vector3, int, int, bool> callback, Func<List<ZoneNew>> zones)
         {
             this.Add = callback;

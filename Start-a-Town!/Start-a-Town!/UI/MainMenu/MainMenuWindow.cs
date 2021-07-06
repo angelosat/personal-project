@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.UI.MainMenu;
 using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.UI

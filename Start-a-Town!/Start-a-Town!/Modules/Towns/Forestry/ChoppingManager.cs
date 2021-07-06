@@ -5,12 +5,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
-using Start_a_Town_.AI;
 using Start_a_Town_.GameEvents;
 using Start_a_Town_.Net.Packets;
 using Start_a_Town_.UI;
 using Start_a_Town_.Towns;
-using Start_a_Town_.Towns.Forestry;
 
 namespace Start_a_Town_
 {
@@ -56,10 +54,6 @@ namespace Start_a_Town_
             this.Town = town;
         }
 
-        public override GroupBox GetInterface()
-        {
-            return new ChoppingManagerUI(this);
-        }
         public override void Handle(IObjectProvider net, Packet msg)
         {
             switch (msg.PacketType)

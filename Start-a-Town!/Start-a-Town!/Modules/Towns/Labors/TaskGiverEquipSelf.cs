@@ -68,7 +68,7 @@ namespace Start_a_Town_
 
         static AITask DropUnnecessaryItems(Actor actor)
         {
-            if(actor.Inventory.All.FirstOrDefault(i=>!actor.GetItemPreferences().IsPreference(i)) is Entity item)
+            if(actor.Inventory.All.FirstOrDefault(i=>!actor.ItemPreferences.IsPreference(i)) is Entity item)
             {
                 return new AITask(typeof(TaskBehaviorHaulFromInventory), item);
             }

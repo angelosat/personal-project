@@ -250,7 +250,8 @@ namespace Start_a_Town_
             int EntityID;
             string GetText()
             {
-                return "Behavior: " + (this.State.Job != null ? this.State.Job.ToString() : "none");
+                return "OBSOLETE";
+                //return "Behavior: " + (this.State.Job != null ? this.State.Job.ToString() : "none");
             }
             public Interface(AIState state)
             {

@@ -848,7 +848,6 @@
     <Compile Include="Modules\Towns\HousingOBSOLETE\UIHouses.cs" />
     <Compile Include="Modules\Towns\HousingOBSOLETE\HouseTool.cs" />
     <Compile Include="Modules\Towns\Forestry\ChoppingManager.cs" />
-    <Compile Include="Modules\Towns\Forestry\ChoppingManagerUI.cs" />
     <Compile Include="Modules\Packets\PacketEntityDesignation.cs" />
     <Compile Include="Modules\Towns\HousingOBSOLETE\UI\HouseOwnershipUI.cs" />
     <Compile Include="Modules\Towns\HousingOBSOLETE\UI\ResidenceUI.cs" />
@@ -1368,7 +1367,6 @@
     <Folder Include="Blocks\Sapling\" />
     <Folder Include="Components\Crafting\Smelting\" />
     <Folder Include="Components\Crafting\ToolFilters\" />
-    <Folder Include="Start-a-Town!\Components\Tokens\" />
     <Folder Include="UI\Crafting\Smeltery\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

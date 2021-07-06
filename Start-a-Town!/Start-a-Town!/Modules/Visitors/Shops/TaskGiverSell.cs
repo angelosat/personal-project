@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            var prefs = actor.GetItemPreferences();
+            var prefs = actor.ItemPreferences;
             var junk = prefs.GetJunk();
             foreach (var item in junk)
             {

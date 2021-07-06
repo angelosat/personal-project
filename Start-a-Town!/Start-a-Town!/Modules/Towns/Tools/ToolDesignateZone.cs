@@ -15,20 +15,20 @@ namespace Start_a_Town_.Towns
 
         }
         public ToolDesignateZone(ZoneNew currentEditingZone)
-            : base(currentEditingZone.Town)
+            //: base(currentEditingZone.Town)
         {
             this.CurrentZoneID = currentEditingZone.ID;
             this.Add = this.Perform;
         }
         public ToolDesignateZone(Type zoneType)
-            : base(Client.Instance.Map.Town)
+            //: base(Client.Instance.Map.Town)
         {
             this.ZoneType = zoneType;
             this.CurrentZoneID = 0;
             this.Add = this.Perform;
         }
         public ToolDesignateZone(Town town, Type zoneType)
-            : base(town)
+            //: base(town)
         {
             this.ZoneType = zoneType;
             this.CurrentZoneID = 0;

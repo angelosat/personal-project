@@ -1,47 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.GameModes;
+using System;
 
 namespace Start_a_Town_.Rooms
 {
+    [Obsolete]
     class WorldScreen : GameScreen
     {
-        #region Singleton
         static WorldScreen _Instance;
-        public static WorldScreen Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new WorldScreen();
-                return _Instance;
-            }
-        }
-        #endregion
+        public static WorldScreen Instance => _Instance ??= new WorldScreen();
+        
         SceneState Scene = new SceneState();
         GameObject _Player;
         public GameObject Player { get { return _Player; } set { _Player = value; } }
         IWorld _World;
         public IWorld World
         {
-            get { return _World; }
-            set
-            {
-                //if (!_World.IsNull())
-                //    _World.Dispose();
-                _World = value;
-            }
+            get => _World; 
+            set =>_World = value;
+            
         }
         public IMap Map;
-       // Camera Camera;
         WorldScreenUI UI;
 
         WorldScreen()
@@ -51,21 +34,8 @@ namespace Start_a_Town_.Rooms
             this.WindowManager = new UIManager();
             this.UI.Show(this.WindowManager);
             this.Camera = new Camera();
-            //KeyHandlers.Push(Camera);
             KeyHandlers.Push(WindowManager);
             KeyHandlers.Push(ContextMenuManager.Instance);
-
-            //Server.Start();
-
-            // CONNECT WHEN ENTERING WORLD INSTEAD OF HERE
-            //string localHost = "127.0.0.1";
-            //Client.Connect(localHost, new PlayerData("host"), a => { LobbyWindow.Instance.Console.Write("Connected to " + localHost); });
-        }
-
-        WorldScreen(World world)
-            : this()
-        {
-            this.Initialize(world);
         }
 
         public override GameScreen Initialize(IObjectProvider net)
@@ -85,8 +55,8 @@ namespace Start_a_Town_.Rooms
 
         public override void Update(Game1 game, GameTime gt)
         {
-            if (!World.IsNull())
-                foreach (var map in World.GetMaps())
+            if (this.World is not null)
+                foreach (var map in this.World.GetMaps())
                     map.Value.GetThumb().Update();
             Camera.Update(gt);
             ContextMenuManager.Update();
@@ -101,7 +71,6 @@ namespace Start_a_Town_.Rooms
             if (World != null)
             {
                 sb.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                //this.Camera.Draw(sb, World);
                 this.World.Draw(sb, this.Camera);
                 sb.End();
             }
@@ -113,13 +82,10 @@ namespace Start_a_Town_.Rooms
             base.HandleLButtonDown(e);
             if (e.Handled)
                 return;
-            //Map map = Controller.Instance.Mouseover.Object as Map;
-            //this.UI.Initialize(map);
             MapThumb mapThumb = Controller.Instance.MouseoverBlock.Object as MapThumb;
-            if (mapThumb.IsNull())
+            if (mapThumb is null)
                 return;
-            this.Map = mapThumb.IsNull() ? null : mapThumb.Map;
-            //this.UI.Initialize(this.Map);
+            this.Map = mapThumb?.Map;
             this.UI.Initialize(mapThumb);
         }
 

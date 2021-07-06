@@ -8,7 +8,7 @@ namespace Start_a_Town_
         {
             var shops = actor.Town.ShopManager.GetShops().OfType<Shop>();
 
-            var prefs = actor.GetItemPreferences();
+            var prefs = actor.ItemPreferences;
             var junk = prefs.GetJunk();
             foreach (var item in junk)
             {

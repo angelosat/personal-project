@@ -9,7 +9,6 @@ using Start_a_Town_.Components;
 using Start_a_Town_.UI.Editor;
 using Start_a_Town_.PlayerControl;
 using Start_a_Town_.Net;
-using Start_a_Town_.Editor;
 using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.AI;
 using Start_a_Town_.AI.Behaviors;
@@ -62,68 +61,9 @@ namespace Start_a_Town_
         {
             this.SetMousethrough(true);
             #region Buttons
-            IconButton Btn_Prefabs = new IconButton()
-            {
-                BackgroundTexture = UIManager.DefaultIconButtonSprite,
-                Icon = new Icon(UIManager.Icons32, 0, 32),
-                LeftClickAction = () =>
-                {// Editor.BldgLoadWindow.Instance.Location = Editor.BldgLoadWindow.Instance.CenterScreen; Editor.BldgLoadWindow.Instance.Toggle(); },
-                    new BldgLoadWindow((fileinfo) =>
-                    {
-                        Bldg bldg = new Bldg().Load(fileinfo);
-                        var dic = bldg.ToDictionary();//.OrderBy(foo=>-foo.Key.GetDepth(ScreenManager.CurrentScreen.Camera));
-                        EmptyTool tool = new EmptyTool()
-                        {
-                            LeftClick = (target) =>
-                            {
-                                bldg.Apply(Engine.Map, target.Global);
-                                return ControlTool.Messages.Default;
-                            },
-                        };
-                        tool.DrawAction = (sb, cam) =>
-                        {
-                            //if (tool.TargetOld.IsNull())
-                            //    return;
-                            //Vector3 global = tool.TargetOld.Global;
-                            if (tool.Target == null)
-                                return;
-                            Vector3 global = tool.Target.Global;
-                            foreach (var block in dic)
-                            {
-                                Vector3 target = global + block.Key;
-                                //BlockComponent.Blocks[block.Value].Entity["Sprite"].DrawPreview(sb, cam, target, Color.White, target.GetDrawDepth(Engine.Map, cam));//GetDepth(cam));
-                            }
-                        };
-                        ScreenManager.CurrentScreen.ToolManager.ActiveTool = tool;
-                    }).Show();
-                },
-                HoverFunc = () => "Prefabs"// [" + GlobalVars.KeyBindings.Build + "]"
-            };
-            //IconButton Btn_Structures = new IconButton()
-            //{
-            //    Location = Btn_Prefabs.TopRight,
-            //    BackgroundTexture = UIManager.DefaultIconButtonSprite,
-            //    Icon = new Icon(UIManager.Icons32, 12, 32),
-            //  //  Anchor = Vector2.UnitX,
-            //    //LeftClickAction = () => BlocksWindow.Instance.Toggle(),// 
-            //    //LeftClickAction = () => BuildingsWindow.Instance.Toggle(), //StructuresWindow.Instance.Toggle(),
-            //    LeftClickAction = () => StructureWindow.Instance.Toggle(),
-            //    //LeftClickAction = () => TerrainWindow.Instance.Toggle(),// BuildingsWindow.Instance.Toggle(), //StructuresWindow.Instance.Toggle(),
-            //    HoverFunc = () => "Build [" + GlobalVars.KeyBindings.Build + "]"
-            //};
-            //IconButton Btn_Construct = new IconButton()
-            //{
-            //    Location = Btn_Structures.TopRight,
-            //    BackgroundTexture = UIManager.DefaultIconButtonSprite,
-            //    Icon = new Icon(UIManager.Icons32, 12, 32),
-            //    LeftClickAction = () => ConstructionsWindow.Instance.Toggle(),
-            //    HoverFunc = () => "Construct [" + GlobalVars.KeyBindings.Build + "]"
-            //};
+            
             IconButton Btn_Craft = new IconButton()
             {
-                //Location = Btn_Construct.TopRight,
-                //Location = Btn_Structures.TopRight,
-                Location = Btn_Prefabs.TopRight,
                 BackgroundTexture = UIManager.DefaultIconButtonSprite,
                 Icon = new Icon(UIManager.Icons32, 12, 32),
                 LeftClickAction = () => { },//CraftWindow.Instance.Toggle(),

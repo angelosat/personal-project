@@ -24,7 +24,6 @@ namespace Start_a_Town_.Modules.Base
             PacketPlayerToolSwitch.Init();
             PacketChat.Init();
             PacketChunk.Init();
-            PacketPlayerEnterWorld.Init();
             PacketEntityAssignToPlayer.Init();
             PacketMousePosition.Init();
             PacketEntityRequestDispose.Init();

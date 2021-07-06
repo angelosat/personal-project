@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
-using Start_a_Town_.PlayerControl;
 using System.Windows.Forms;
 using UI;
 
@@ -18,7 +16,6 @@ namespace Start_a_Town_.Rooms
         public UIManager WindowManager;
         public List<Timer2> Timers;
         public ToolManager ToolManager;
-        //public Camera Camera;
         public virtual Camera Camera
         {
             get { return Net.Client.Instance.Map.Camera; }
@@ -31,23 +28,16 @@ namespace Start_a_Town_.Rooms
         public GameScreen()
         {
             this.WindowManager = new UIManager();
-           // InputHandlers = new Stack<IInputHandler>();
             KeyHandlers = new Stack<IKeyEventHandler>();
             Timers = new List<Timer2>();
-
-            //Controller.TextInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(TextInput_KeyPress);
-            //Controller.TextInput.KeyDown += new System.Windows.Forms.KeyEventHandler(TextInput_Key);
-            //Controller.TextInput.KeyUp += new System.Windows.Forms.KeyEventHandler(TextInput_Key);
         }
 
-        //void TextInput_Key(object sender, System.Windows.Forms.KeyEventArgs e)
         public virtual void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
             foreach (IKeyEventHandler handler in KeyHandlers.ToList())
                 handler.HandleKeyDown(e);
         }
 
-        //void TextInput_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
         public virtual void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
         {
             foreach (IKeyEventHandler handler in KeyHandlers.ToList())
@@ -147,28 +137,6 @@ namespace Start_a_Town_.Rooms
             OnKeyPress(sender, e);
         }
 
-        void Controller_MouseMove()
-        {
-            OnMouseMove();
-        }
-        void Controller_MouseLeftPress()
-        {
-            OnMouseLeftPress();
-        }
-        void Controller_MouseRightPress()
-        {
-            OnMouseRightPress();
-        }
-        void Controller_MouseLeftUp()
-        {
-            OnMouseLeftUp();
-        }
-        void Controller_MouseLeftDown()
-        {
-            OnMouseLeftDown();
-        }
-
-        //static public void LoadContent();
         virtual public GameScreen Initialize(IObjectProvider net)
         {
             return this;
@@ -184,14 +152,10 @@ namespace Start_a_Town_.Rooms
 
         public virtual void Dispose()
         {
-            //Active = false; 
             GC.Collect();
         }
 
         public Stack<IKeyEventHandler> KeyHandlers;
-
-
-
 
         internal virtual void OnGameEvent(GameEvent e)
         {

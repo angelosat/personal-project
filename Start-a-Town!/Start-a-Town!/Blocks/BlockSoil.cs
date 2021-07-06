@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Towns.Forestry;
 using Start_a_Town_.Particles;
 
 namespace Start_a_Town_

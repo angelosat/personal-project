@@ -908,7 +908,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PathFinding\PathingSync.cs" />
-    <Compile Include="Start-a-Town!\GameModes\ServerEventHandler.cs" />
     <Compile Include="Terraforming\LightingEngineThreaded.cs" />
     <Compile Include="Terraforming\Location.cs" />
     <Compile Include="Terraforming\Mutators\PerlinWorm.cs" />

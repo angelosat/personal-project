@@ -76,19 +76,22 @@ namespace Start_a_Town_.Net
         {
             Packets.SendSyncReport(server, text);
         }
-
         static public byte[] Serialize(Action<BinaryWriter> dataGetter)
         {
-            using MemoryStream output = new();
-            using MemoryStream mem = new();
-            using BinaryWriter bin = new(mem);
-            using GZipStream zip = new(output, CompressionMode.Compress);
-
-            dataGetter(bin);
-            mem.Position = 0;
-            mem.CopyTo(zip);
-
-            byte[] data = output.ToArray();
+            // with compression
+            byte[] data;
+            using (MemoryStream output = new())
+            {
+                using (MemoryStream mem = new())
+                using (BinaryWriter bin = new(mem))
+                using (GZipStream zip = new(output, CompressionMode.Compress))
+                {
+                    dataGetter(bin);
+                    mem.Position = 0;
+                    mem.CopyTo(zip);
+                }
+                data = output.ToArray();
+            }
             return data;
         }
 

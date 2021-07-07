@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -20,17 +16,9 @@ namespace Start_a_Town_.UI
 
         static Texture2D CreateTexture()
         {
-            //for (int v = 0; v < 360; v++)
-            //    for (int h = 0; h < 360; h++)
-            //    {
-            //        Color color = HSVtoRGB(h, 1f, 1 - v / 360f);
-            //        Colors[v * 360 + h] = color;
-            //    }
-            //Texture2D texture = new Texture2D(Game1.Instance.GraphicsDevice, 360, 360);
             for (int v = 0; v < 256; v++)
                 for (int h = 0; h < 360; h++)
                 {
-                    //Color color = HSVtoRGB(h, 1f, 1 - v / 256f);
                     Color color = HSVtoRGB(h, 1 - v / 256f, 1f);
                     Colors[v * 360 + h] = color;
                 }
@@ -44,9 +32,7 @@ namespace Start_a_Town_.UI
             float h, s, v;
             h = s = v = 0;
             ColorHueSaturationPicker.RGBtoHSV(rgb, ref h, ref s, ref v);
-            //Vector2 pos = new Vector2(h, 255 - v);
             Vector2 pos = new Vector2(h, (1-s) * 255);
-            //Vector2 pos = new Vector2(h, v);
             this.Selected = Colors[(int)pos.Y * ColorWheel.Width + (int)pos.X];
             this.SelectedCoords = pos;
         }
@@ -79,10 +65,6 @@ namespace Start_a_Town_.UI
         {
             if (!this.MouseHover)
                 return;
-            //Vector2 pos = UIManager.Mouse - this.ScreenLocation;
-            //this.Selected = Colors[(int)pos.Y * ColorWheel.Width + (int)pos.X];
-            //this.SelectedCoords = pos;
-            //this.Callback(this.Selected);
             this.Pressed = true;
         }
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
@@ -97,11 +79,6 @@ namespace Start_a_Town_.UI
             var rect = new Rectangle((int)this.ScreenLocation.X + (int)this.SelectedCoords.X - 1, (int)this.ScreenLocation.Y + (int)this.SelectedCoords.Y - 1, 3, 3);
             rect.DrawHighlight(sb, Color.Black, Vector2.Zero, 0);
         }
-
-        //public override void HandleRButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
-        //{
-        //    this.TopLevelControl.Hide();
-        //}
 
         static public void RGBtoHSV(Color rgb, ref float h, ref float s, ref float v)
         {

@@ -1,27 +1,15 @@
-﻿using System.Collections.Generic;
-
-namespace Start_a_Town_.UI.Editor
+﻿namespace Start_a_Town_.UI.Editor
 {
     class ObjectsWindowDefs : Window
     {
         static ObjectsWindowDefs _Instance;
-        public static ObjectsWindowDefs Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new ObjectsWindowDefs();
-                return _Instance;
-            }
-        }
+        public static ObjectsWindowDefs Instance => _Instance ??= new ObjectsWindowDefs();
 
         ObjectsWindowDefs()
         {
             Title = "Objects";
             AutoSize = true;
             Movable = true;
-
-            //Load();
 
             var items = GameObject.Templates;
             var list = new ListBoxNew<GameObject, Label>(200, 400);

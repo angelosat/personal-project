@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
@@ -17,23 +14,20 @@ namespace Start_a_Town_.UI
         public Label LabelName;
         IconButton IconInfo, IconCenter;
         IconButton IconCycle;
+        int PreviousDrawLevel = -1;
 
         QuickButton IconSlice = new QuickButton(Icon.ArrowDown, KeyBind.SliceZ)
         {
             BackgroundTexture = UIManager.Icon16Background,
-            //Location = this.IconCenter.Location,
-            //Anchor = Vector2.UnitX,
             LeftClickAction = Slice,
             HoverText = "Slice z-level"
         };
-        //GroupBox BoxCornerIcons;
         public TargetArgs SelectedSource = TargetArgs.Null;
         ISelectable Selectable;
         Window WindowInfo;
         IEnumerator<ISelectable> SelectedStack;
         public IEnumerable<TargetArgs> MultipleSelected = new List<TargetArgs>(); // TODO: make this a list of iselectables
 
-        //int MultipleSelectedCount;
         int MultipleSelectedCount
         {
             get { return this.MultipleSelected.Count(); }
@@ -44,7 +38,6 @@ namespace Start_a_Town_.UI
 
         UISelectedInfo()
         {
-            //this.BackgroundColorFunc = () => Color.Red;
             this.PanelInfo = new Panel(new Rectangle(0, 0, 300, 100));
             this.BoxTabs = new GroupBox()
             {
@@ -52,22 +45,17 @@ namespace Start_a_Town_.UI
                 Size = new Rectangle(0, 0, 300, Button.DefaultHeight)
             };
             this.PanelInfo.Location = this.BoxTabs.BottomLeft;
-            //this.BackgroundStyle = BackgroundStyle.TickBox;
             this.LabelName = new Label() { TextFunc = () => "<none>" };
             this.IconInfo = new IconButton(Icon.ArrowUp)
             {
                 BackgroundTexture = UIManager.Icon16Background,
                 LeftClickAction = ToggleInfo,
-                //Location = new Vector2(this.PanelInfo.ClientSize.Right, this.PanelInfo.ClientSize.Top),
-                //Anchor = new Vector2(1, 0),
                 HoverText = "Show details"
             };
             this.IconCenter = new IconButton(Icon.ArrowUp)
             {
                 BackgroundTexture = UIManager.Icon16Background,
                 LeftClickAction = CenterCamera,
-                //Location = IconInfo.Location,
-                //Anchor = new Vector2(1, 0),
                 HoverText = "Center camera"
             };
             this.IconCycle = new IconButton(Icon.Replace)
@@ -76,42 +64,26 @@ namespace Start_a_Town_.UI
                 LeftClickAction = this.CycleTargets,
                 HoverText = "Cycle targets"
             };
-            //this.IconSlice = new IconButton(Icon.ArrowDown)
-            //{
-            //    BackgroundTexture = UIManager.Icon16Background,
-            //    //Location = this.IconCenter.Location,
-            //    //Anchor = Vector2.UnitX,
-            //    LeftClickAction = Slice,
-            //    HoverText = "Slice z-level"
-            //};
-
+           
             this.BoxIcons = new GroupBox();
             this.PopulateBoxIcons();
             
-            this.BoxButtons = new GroupBox();// { Location = new Vector2(this.PanelInfo.ClientSize.Left, this.PanelInfo.ClientSize.Bottom), Anchor = new Vector2(0, 1) };
+            this.BoxButtons = new GroupBox();
             BoxButtons.BackgroundColorFunc = () => Color.Black * .5f;
-            //this.BoxButtons.Location = new Vector2(this.PanelInfo.ClientRectangle.Left, this.PanelInfo.ClientRectangle.Bottom);
-            //this.BoxButtons.Location = this.TopRight;
             this.BoxButtons.LocationFunc = () => this.BottomRight;
             this.BoxButtons.Anchor = new Vector2(0, 1);
-            this.BoxButtons.ControlsChangedAction = this.BoxButtons.AlignLeftToRight;// RealignBoxButtons;
+            this.BoxButtons.ControlsChangedAction = this.BoxButtons.AlignLeftToRight;
 
-            this.BoxInfo = new GroupBox() { Location = this.LabelName.BottomLeft}; //, BackgroundColorFunc = () => Color.Red 
+            this.BoxInfo = new GroupBox() { Location = this.LabelName.BottomLeft};
             this.PanelInfo.AddControls(
                 this.LabelName,
                 this.BoxIcons,
-                //this.IconInfo,
-                //this.IconCenter,
-                //this.IconSlice,
-                //this.BoxButtons,
                 this.BoxInfo
                 );
             
             this.AddControls(
                 this.BoxTabs,
                 this.PanelInfo
-                //,
-                //this.BoxButtons
                 );
         }
 
@@ -120,7 +92,6 @@ namespace Start_a_Town_.UI
             this.BoxIcons.AlignLeftToRight();
             this.BoxIcons.Location = new Vector2(this.PanelInfo.ClientSize.Right - Panel.DefaultStyle.Border, this.PanelInfo.ClientSize.Top);
             this.BoxIcons.Anchor = new Vector2(1, 0);
-            //this.BoxIcons.BackgroundColorFunc = () => Color.Red;
         }
 
         private void PopulateBoxIcons()
@@ -150,18 +121,14 @@ namespace Start_a_Town_.UI
         }
         static private void ToggleInfo()
         {
-            if(Instance.WindowInfo == null)
-                //Instance.WindowInfo = WindowTargetManagement.Refresh(Instance.SelectedSource);
+            if(Instance.WindowInfo is null)
                 Instance.WindowInfo = WindowTargetManagementStatic.Refresh(Instance.SelectedSource);
             else
             {
                 Instance.WindowInfo.Toggle();
             }
         }
-        //static public void Refresh(GameObject obj)
-        //{
-        //    Instance.Select(new TargetArgs(obj));
-        //}
+        
         static public void Refresh(TargetArgs target)
         {
             Instance.Select(target);
@@ -178,11 +145,6 @@ namespace Start_a_Town_.UI
         {
             Instance.Select(targets);
         }
-        //internal static void SelectAllVisible(int id)
-        //{
-        //    var objects = Rooms.Ingame.Instance.Scene.ObjectsDrawn.Where(i => i.ID == id).Select(o => new TargetArgs(o));
-        //    Refresh(objects);
-        //}
         internal static void SelectAllVisible(ItemDef def)
         {
             var objects = Rooms.Ingame.Instance.Scene.ObjectsDrawn.Where(i => i.Def == def).Select(o => new TargetArgs(o));
@@ -199,7 +161,6 @@ namespace Start_a_Town_.UI
         }
         internal static void AddToSelection(TargetArgs target)
         {
-            //Instance.Select(Instance.MultipleSelected.Where(t => !targets.Any(t2 => t2.IsEqual(t))).Concat(targets));
             var existing = Instance.MultipleSelected.FirstOrDefault(t => t.IsEqual(target));
             if (existing != null)
                 Instance.Select(Instance.MultipleSelected.Except(new TargetArgs[] { existing }));
@@ -226,7 +187,6 @@ namespace Start_a_Town_.UI
                 return;
             }
 
-            //this.LabelName.Text = string.Format("Multiple x{0}", this.MultipleSelectedCount);
             this.LabelName.TextFunc = () => string.Format("Multiple x{0}", this.MultipleSelectedCount);
 
             this.CreateButtons(targets);
@@ -235,8 +195,6 @@ namespace Start_a_Town_.UI
         }
         private void Select(TargetArgs target)
         {
-            //this.MultipleSelectedCount = 1;
-            //this.MultipleSelected = new TargetArgs[0];
             if (this.SelectedSource.IsEqual(target))
             {
                 CycleTargets();
@@ -250,26 +208,19 @@ namespace Start_a_Town_.UI
             {
                 case TargetType.Entity:
                     var entity = target.Object;
-                    this.LabelName.TextFunc = () => entity.GetName();// entity.Name;
+                    this.LabelName.TextFunc = () => entity.GetName();
                     this.MultipleSelectedCount = 1;
                     this.MultipleSelected = new TargetArgs[1] { target };
-                    //entity.TabGetter(this.AddTabAction);
                     entity.GetSelectionInfo(this);
                     entity.GetQuickButtons(this);
                     this.InitInfoTabs(entity.GetInfoTabs());
-
                     entity.Town.Select(target, this);
                     this.InitInfoTabs(entity.Town.GetInfoTabs(target));
                     break;
 
                 case TargetType.Position:
-                    //target.Map.Town.SelectPosition(this, target.Global);
-
-                    //messing around with being able to select multiple blocks
                     this.MultipleSelectedCount = 1;
                     this.MultipleSelected = new TargetArgs[1] { target };
-                    //this.MultipleSelectedCount = 0;
-                    //this.MultipleSelected = new TargetArgs[0];
                     var selectables = target.Map.Town.QuerySelectables(target);
                     if (selectables.Any())
                     {
@@ -316,9 +267,7 @@ namespace Start_a_Town_.UI
         public override bool Show()
         {
             this.Location = Instance.BottomCenterScreen;
-            //RealignBoxButtons();
             Instance.BoxButtons.AlignLeftToRight();
-
             this.BoxButtons.Show();
             return base.Show();
         }
@@ -336,15 +285,11 @@ namespace Start_a_Town_.UI
             this.BoxButtons.ClearControls();
             this.BoxInfo.ClearControls();
             this.PanelInfo.ClearControls();
-
             this.PopulateBoxIcons();
-
             this.PanelInfo.AddControls(
                 this.LabelName,
-                //this.IconInfo, this.IconCenter, this.IconSlice, 
                 this.BoxInfo,
-                this.BoxIcons);//,
-            //this.BoxButtons);
+                this.BoxIcons);
         }
 
         private void CycleTargets()
@@ -355,7 +300,6 @@ namespace Start_a_Town_.UI
             var first = this.SelectedStack.Current;
             this.SetName(first.GetName());
             Clear();
-            //first.Select(this);
 
             first.GetSelectionInfo(this);
             first.GetQuickButtons(this);
@@ -365,7 +309,6 @@ namespace Start_a_Town_.UI
         }
         void InitInfoTabs(IEnumerable<(string name, Action action)> tabs)
         {
-            //this.AddTabs(tabs.Select(i => new Button(i.name, i.action)).ToArray());
             foreach (var (name, action) in tabs)
                 this.AddTabAction(name, action, Color.Orange);
         }
@@ -382,25 +325,18 @@ namespace Start_a_Town_.UI
             this.BoxButtons.ClearControls();
             this.ActionsAdded.Clear();
             foreach (var tar in targets)
-                //tar.Select(this);
                 tar.GetQuickButtons(this);
             Net.Client.Instance.Map.Town.Select(null, this);
 
         }
         void AddTabAction(string label, Action action, Color col)
         {
-            //this.BoxTabs.AddControlsTopRight(new Button(label) { LeftClickAction = action, BackgroundColor = Color.Orange *.5f });
             this.BoxTabs.AddControlsLineWrap(new[] { new Button(label) { LeftClickAction = action, BackgroundColor = col * .5f } }, this.PanelInfo.Width);
         }
         public void AddTabAction(string label, Action action)
         {
             this.AddTabAction(label, action, Color.PaleVioletRed);
-            //this.BoxTabs.AddControlsLineWrap(new[] { new Button(label) { LeftClickAction = action, BackgroundColor = Color.Orange * .5f } }, this.PanelInfo.Width);
         }
-        //internal void AddTabAction(string label, Control control)
-        //{
-        //    this.BoxTabs.AddControls(new Button(label) { LeftClickAction = () => control.Toggle(), BackgroundColor = Color.Orange * .5f });
-        //}
         internal void AddTabs(params Button[] buttons)
         {
             this.BoxTabs.AddControls(buttons);
@@ -422,8 +358,7 @@ namespace Start_a_Town_.UI
             if (singleTargetOnly && this.MultipleSelectedCount > 1)
                 return;
 
-            List<TargetArgs> existing;
-            if (this.ActionsAdded.TryGetValue(action, out existing))
+            if (this.ActionsAdded.TryGetValue(action, out List<TargetArgs> existing))
             {
                 existing.Add(obj);
                 return;
@@ -432,7 +367,6 @@ namespace Start_a_Town_.UI
                 this.ActionsAdded.Add(action, new List<TargetArgs>() { obj });
             button.LeftClickAction = () => this.MultipleSelectedAction(action);
                 this.BoxButtons.AddControls(button);
-
         }
     
         internal static void AddButton(IconButton button)
@@ -442,18 +376,15 @@ namespace Start_a_Town_.UI
         private void MultipleSelectedAction(Action<List<TargetArgs>> action)
         {
             action(this.ActionsAdded[action]);
-            //action(this.MultipleSelected.Where(tar => tar.Type == TargetType.Entity).Select(tar => tar.Object).ToList());
         }
-
-        
 
         public override void Update()
         {
             base.Update();
-            if (this.SelectedSource != null && this.SelectedSource.Type == TargetType.Entity && this.SelectedSource.Object.IsDisposed)//!this.SelectedSource.Object.Exists)
+            if (this.SelectedSource is not null && this.SelectedSource.Type == TargetType.Entity && this.SelectedSource.Object.IsDisposed)
                 this.Select(TargetArgs.Null);
     
-            if (this.Selectable == null)
+            if (this.Selectable is null)
             {
                 if (!this.MultipleSelected.Any())
                     if (this.IsOpen)
@@ -469,28 +400,20 @@ namespace Start_a_Town_.UI
         {
             switch (e.Type)
             {
-                //case Components.Message.Types.EntityDespawned:
-                //    var entity = e.Parameters[0] as GameObject;
-                //    this.MultipleSelected = this.MultipleSelected.Except(new GameObject[] { entity });
-                //    break;
-
                 case Components.Message.Types.BlockChanged:
                     var map = e.Parameters[0] as IMap;
                     var global = (Vector3)e.Parameters[1];
                     var target = new TargetArgs(map, global);
                     if (IsSelected(map, global))
-                        //Select(TargetArgs.Null);
                     ClearTargets();
                     break;
 
                 case Components.Message.Types.BlocksChanged:
                     map = e.Parameters[0] as IMap;
-                    var globals = e.Parameters[1] as Vector3[];// as List<Vector3>;
+                    var globals = e.Parameters[1] as Vector3[];
                     var targets = globals.Select(g => new TargetArgs(map, g));
                     if (targets.Any(t => IsSelected(t)))
-                        //Select(TargetArgs.Null);
                     ClearTargets();
-
                     break;
 
                 case Components.Message.Types.EntityDespawned:
@@ -532,7 +455,6 @@ namespace Start_a_Town_.UI
         }
         public override void DrawOnCamera(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera)
         {
-            //if (this.MultipleSelectedCount > 1)
             if (this.MultipleSelected.Any())
                 foreach (var obj in this.MultipleSelected)
                     if (obj.Type == TargetType.Entity)
@@ -541,10 +463,7 @@ namespace Start_a_Town_.UI
                 if (this.SelectedSource.Type == TargetType.Entity)
                     this.SelectedSource.Object.DrawBorder(sb, camera);
         }
-        //static public bool IsSelected(GameObject item)
-        //{
-        //    return Instance.MultipleSelected.Any(t=>t.Object == item) || Instance.SelectedSource?.Object == item;
-        //}
+        
         static public bool IsSelected(TargetArgs tar)
         {
             return Instance.MultipleSelected.Any(t => t.IsEqual(tar)) || Instance.SelectedSource.IsEqual(tar);
@@ -557,7 +476,6 @@ namespace Start_a_Town_.UI
             return true;
         }
 
-        int PreviousDrawLevel = -1;
         static void Slice()
         {
             var next =  (int)Instance.SelectedSource.Global.Z;
@@ -569,19 +487,13 @@ namespace Start_a_Town_.UI
             }
             else if (Instance.PreviousDrawLevel != -1)
                 ScreenManager.CurrentScreen.Camera.DrawLevel = Instance.PreviousDrawLevel;
-            //ScreenManager.CurrentScreen.Camera.DrawLevel = (int)this.Selected.Global.Z;
         }
         public void AddIcon(IconButton icon)
         {
             if (this.MultipleSelectedCount > 1)
                 return;
 
-            //icon.Location = this.IconSlice.Location;
-            //icon.Anchor = Vector2.UnitX;
-            //this.PanelInfo.AddControls(icon);
-            //this.BoxIcons.AddControls(icon);
             this.BoxIcons.Controls.Insert(0, icon);
-            //this.BoxIcons.Controls.Reverse();
             this.RepositionsBoxIcons();
         }
 
@@ -604,7 +516,6 @@ namespace Start_a_Town_.UI
             List<TargetArgs> existing;
             if (Instance.ActionsAdded.TryGetValue(action, out existing))
             {
-                //throw new Exception();
                 Instance.ActionsAdded.Remove(action);
             }
             Instance.ActionsAdded.Add(action, targets.ToList());
@@ -624,16 +535,7 @@ namespace Start_a_Town_.UI
                 Instance.BoxButtons.AddControls(button);
                 button.LeftClickAction = () => Instance.MultipleSelectedAction(action);
             }
-            //if (Instance.BoxButtons.Controls.Contains(button))
-            //    throw new Exception();
-            //Instance.BoxButtons.AddControls(button);
-            //button.LeftClickAction = () => Instance.MultipleSelectedAction(action);
         }
-
-        //private static void RealignBoxButtons()
-        //{
-        //    Instance.BoxButtons.AlignLeftToRight();
-        //}
 
         internal static IEnumerable<TargetArgs> GetSelected()
         {
@@ -659,11 +561,5 @@ namespace Start_a_Town_.UI
 
             return GetSelected().First().Object as Entity;
         }
-        //public override void Draw(SpriteBatch sb, Rectangle viewport)
-        //{
-        //    base.Draw(sb, viewport);
-        //    var cc = new Rectangle((int)this.PanelInfo.BoundsScreen.X + this.PanelInfo.ClientSize.X, (int)this.PanelInfo.BoundsScreen.Y + this.PanelInfo.ClientSize.Y, this.PanelInfo.ClientSize.Width, this.PanelInfo.ClientSize.Height);
-        //    cc.DrawHighlight(sb);
-        //}
     }
 }

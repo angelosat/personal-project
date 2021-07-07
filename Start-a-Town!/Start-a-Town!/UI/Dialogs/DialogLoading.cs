@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
@@ -22,9 +21,6 @@ namespace Start_a_Town_.UI
             var count = LoadingTasks.Count;
             Task.Factory.StartNew(() =>
             {
-                //for (int i = 0; i < count; i++)
-                //{
-                //    var task = LoadingTasks[i];
                 var i = 0;
                 while(LoadingTasks.Any())
                 {
@@ -37,12 +33,7 @@ namespace Start_a_Town_.UI
                 callback();
             });
         }
-        //Label LblLoading, LblInfo;
-        //Panel PanelBar;
-        //Bar ProgressBar;
-        //Progress LoadProgress;
         LoadingWidget Widget;
-        //Action Callback;
 
         public DialogLoading() : this(() => { }) { }
         public DialogLoading(Action callback) : this("Please wait...", callback) { }
@@ -57,11 +48,9 @@ namespace Start_a_Town_.UI
             this.Widget = new LoadingWidget(200) { Callback = callback };
             this.Client.Controls.Add(this.Widget);
 
-            //this.Location = this.CenterScreen;
             this.SnapToScreenCenter();
             this.Anchor = Vector2.One * .5f;
         }
-
         public DialogLoading(string title, string message, float percentage)
         {
             this.Title = title;
@@ -72,13 +61,10 @@ namespace Start_a_Town_.UI
             this.Widget = new LoadingWidget(200, message, percentage);
             this.Client.Controls.Add(this.Widget);
 
-            //this.Location = this.CenterScreen;
             this.SnapToScreenCenter();
             this.Anchor = Vector2.One * .5f;
             this.AutoSize = false;
         }
-
-
 
         public void Refresh(string text, float percentage)
         {

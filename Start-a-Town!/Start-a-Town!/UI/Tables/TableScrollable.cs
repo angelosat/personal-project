@@ -1,32 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
+    [Obsolete]
     class TableScrollable<TObject> : GroupBox
     {
         List<Column> Columns = new List<Column>();
         Panel ColumnLabels;
         ScrollableBoxNew BoxItems;
         Dictionary<TObject, Dictionary<object, Control>> Rows = new Dictionary<TObject, Dictionary<object, Control>>();
-        public int MaxVisibleItems;// = -1;
+        public int MaxVisibleItems;
         BackgroundStyle ItemStyle = BackgroundStyle.Window;
-        //bool ShowColumnLabels;
 
         public TableScrollable(int maxVisibleItems, BackgroundStyle style)
             : this(maxVisibleItems)
         {
             this.ItemStyle = style;
         }
-        public TableScrollable(int maxVisibleItems)//, BackgroundStyle itemStyle = BackgroundStyle.Window)
+        public TableScrollable(int maxVisibleItems)
         {
             this.MaxVisibleItems = maxVisibleItems;
-            //this.ItemStyle = itemStyle;
-            this.ColumnLabels = new Panel() { AutoSize = true };//, BackgroundStyle = this.ItemStyle };//BackgroundStyle.Window };
+            this.ColumnLabels = new Panel() { AutoSize = true };
         }
 
         /// <summary>
@@ -62,15 +59,12 @@ namespace Start_a_Town_.UI
             if (showColumnLabels)
                 this.Controls.Add(this.ColumnLabels);
 
-            //this.BoxItems = new ScrollableBoxNew(new Rectangle(0, 0, this.ColumnLabels.Width + ScrollbarV.Width, this.ColumnLabels.Height * this.MaxVisibleItems));
             this.BoxItems = new ScrollableBoxNew(new Rectangle(0, 0, this.ColumnLabels.Width, this.ColumnLabels.Height * this.MaxVisibleItems));
             if (showColumnLabels)
                 this.BoxItems.Location = this.ColumnLabels.BottomLeft;
             this.AddItems(items.ToArray());
 
             this.Controls.Add(this.BoxItems);
-
-            //this.Validate(true);
         }
 
         public Control GetElement(TObject row, object column)
@@ -89,7 +83,6 @@ namespace Start_a_Town_.UI
             var panel = new Panel() { Location = new Vector2(0, this.BoxItems.Client.Controls.BottomLeft.Y) };
             panel.BackgroundStyle = this.ItemStyle;
             panel.AutoSize = true;
-            //panel.Size = this.ColumnLabels.Size;
             panel.Tag = item;
             var offset = 0;
             Dictionary<object, Control> controls = new Dictionary<object, Control>();
@@ -100,8 +93,6 @@ namespace Start_a_Town_.UI
                 control.Anchor = new Vector2(c.Anchor, 0);
                 offset += c.Width;
                 panel.AddControls(control);
-                //if (c.Tag != null)
-                //    controls.Add(c.Tag, control);
                 controls.Add(c.Tag ?? c.Object, control);
 
             }
@@ -123,8 +114,6 @@ namespace Start_a_Town_.UI
         {
             var row = this.Rows[item];
             this.Rows.Remove(item);
-            //this.BoxItems.Client.Controls.RemoveAll(c => c.Tag.Equals(item));
-            //this.BoxItems.Client.Controls.RemoveAll(c => c.Tag.Equals(item));
 
             var prev = 0;
             foreach (var r in this.BoxItems.Client.Controls.Where(c => !c.Tag.Equals(item)))
@@ -133,7 +122,6 @@ namespace Start_a_Town_.UI
                 prev = r.Bottom;
             }
             this.BoxItems.Remove(this.BoxItems.Client.Controls.First(c => c.Tag.Equals(item)));
-            //Rearrange();
         }
         public void RemoveItems(IEnumerable<TObject> items)
         {

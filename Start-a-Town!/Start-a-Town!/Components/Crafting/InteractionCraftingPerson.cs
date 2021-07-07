@@ -74,7 +74,6 @@ namespace Start_a_Town_.Components.Crafting
             if (!inv.Has(reqs))
                 return;
             inv.Take(reqs);
-            actor.Net.EventOccured(Message.Types.InventoryChanged, target.Object);
             var server = actor.Net as Net.Server;
 
 

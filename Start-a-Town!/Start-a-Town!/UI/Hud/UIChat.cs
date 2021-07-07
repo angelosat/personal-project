@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_.UI
 {
     public class UIChat : Window
     {
-        //  ScrollableBox Box_Text;
         static public UIChat Instance;
         static UIChat()
         {
@@ -26,7 +21,7 @@ namespace Start_a_Town_.UI
         int HistoryIndex;
         readonly Dictionary<Control, float> Timers = new();
         public TextBox TextBox;
-        static public readonly float FadeDelay = 10 * Engine.TicksPerSecond;// 6;
+        static public readonly float FadeDelay = 10 * Engine.TicksPerSecond;
         readonly IconButton BtnSettings;
         readonly UIChatSettings UISettings;
         UIChat()
@@ -44,7 +39,6 @@ namespace Start_a_Town_.UI
             Panel_Text.Controls.Add(Console);
 
             Panel_Input = new Panel() { AutoSize = true, Location = Panel_Text.BottomLeft, Color = Color.Black };
-            //Panel_Input.BackgroundStyle = BackgroundStyle.TickBox;
             Panel_Input.ClientSize = new Rectangle(0, 0, Panel_Text.ClientSize.Width, Label.DefaultHeight);
             TextBox = new TextBox()
             {
@@ -93,10 +87,7 @@ namespace Start_a_Town_.UI
 
             Sldr_Opacity = new Slider(this.Label_Title.TopRight, width: 100, min: 0, max: 100, step: 1, value: Console.Opacity * 100) { Name = "Opacity", ValueChangedFunc = Sldr_Opacity_ValueChanged };
 
-            
-
             Panel_Input.Controls.Add(TextBox);
-            //Client.AddControls(Panel_Text, Panel_Input);
             this.BoxButtons = new GroupBox();
             this.BtnSettings = new IconButton(Icon.ArrowUp) { BackgroundTexture = IconButton.Small, Location = this.TopRight, Anchor = Vector2.UnitX, LeftClickAction = ToggleOptions };
             this.BoxButtons.AddControls(this.BtnSettings);
@@ -104,39 +95,21 @@ namespace Start_a_Town_.UI
             this.Client.AddControlsVertically(this.BoxButtons, Panel_Text, Panel_Input);
 
             this.UISettings = new UIChatSettings(this);
-            //Controls.Add(
-            //    //Client, 
-            //    Sldr_Opacity);
-
-            Location = new Vector2(0, UIManager.Height);// - Height);
+            
+            Location = new Vector2(0, UIManager.Height);
             Anchor = new Vector2(0, 1);
 
-            this.SetOpacity(0, true,this.Client);// Box_Text, this.IconSettings);//.Client);
+            this.SetOpacity(0, true,this.Client);
             TextBox.Enabled = false;
             SetMousethrough(true, true);
-            //LoadConfig();
-
         }
-
-        //private void LoadConfig()
-        //{
-        //    Engine.Config.Root.TryGetValue("Timestamps", v =>
-        //    {
-        //        bool parsed;
-        //        if (bool.TryParse(v, out parsed))
-        //            this.Console.TimeStamp = parsed;
-        //    });
-        //}
 
         private void ToggleOptions()
         {
             this.UISettings.Location = this.BtnSettings.ScreenLocation;
             this.UISettings.Anchor = Vector2.UnitY;
             this.UISettings.Toggle();
-            //UIChatSettings.Refresh(this);
         }
-
-        
 
         void ChatHistory(int index)
         {
@@ -144,10 +117,8 @@ namespace Start_a_Town_.UI
                 return;
             // TODO: do something
             this.HistoryIndex += index;
-
             this.HistoryIndex = Math.Max(0, Math.Min(this.History.Count - 1, this.HistoryIndex));
             this.TextBox.Text = this.History.ElementAt(this.HistoryIndex);
-
         }
       
         private void Sldr_Opacity_ValueChanged()
@@ -168,8 +139,6 @@ namespace Start_a_Town_.UI
         public override void Update()
         {
             base.Update();
-            //if (this.Box_Text.Client.Controls.Count != this.Timers.Count)
-            //    this.Refresh();
 
             if (this.TextBox.Enabled)
                 return;
@@ -195,12 +164,8 @@ namespace Start_a_Town_.UI
         void Timer_Tick(object sender, EventArgs e)
         {
             Hide();
-            // Timer.Stop();
         }
-        //internal void Write(Log.EntryTypes type, string source, string text)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        
         public void Write(string text)
         {
             this.Write(Log.EntryTypes.Default, text);
@@ -208,29 +173,6 @@ namespace Start_a_Town_.UI
         public void Write(Log.EntryTypes type, string text)
         {
             this.Write(new Log.Entry(type, text));
-            //if (text.Length == 0)
-            //    return;
-
-            //Color c = Color.White;
-            //switch (type)
-            //{
-            //    case Log.EntryTypes.System:
-            //        c = Color.Yellow;
-            //        break;
-            //    case Log.EntryTypes.Damage:
-            //        c = Color.Red;
-            //        break;
-            //    default:
-            //        break;
-            //}
-
-            //Label line = this.Box_Text.Write(c, text);
-            //line.MouseThrough = true;
-            
-            //this.Timers.Add(line, FadeDelay);
-
-            //this.Box_Text.Client.ClientLocation.Y = this.Box_Text.Client.Bottom - this.Box_Text.Client.ClientSize.Height;
-
         }
         public void Write(Log.Entry e)
         {
@@ -266,9 +208,7 @@ namespace Start_a_Town_.UI
         }
         internal void StartTyping()
         {
-
-            //this.SetOpacity(1, true, exclude: Box_Text);//.Client);
-            this.Client.SetOpacity(1, true, exclude: Console);//.Client);
+            this.Client.SetOpacity(1, true, exclude: Console);
 
             SetMousethrough(false, true);
             TextBox.Enabled = true;
@@ -280,37 +220,16 @@ namespace Start_a_Town_.UI
 
         public override bool Hide()
         {
-            //this.SetOpacity(0, true, exclude: Box_Text);//.Client);
-            this.Client.SetOpacity(0, true, exclude: Console);//.Client);
+            this.Client.SetOpacity(0, true, exclude: Console);
             this.UISettings.Hide();
             TextBox.Enabled = false;
             SetMousethrough(true, true);
             return true;
         }
 
-        public override void BringToFront()
-        {
-            //base.BringToFront();
-        }
-
         public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
             base.HandleKeyDown(e);
         }
-
-
-        public override void Validate(bool cascade = false)
-        {
-            //Refresh();
-            base.Validate(cascade);
-        }
-        private void Refresh()
-        {
-            this.Timers.Clear();
-            foreach (var entry in this.Console.Client.Controls)
-                this.Timers.Add(entry, FadeDelay / 2f);
-        }
-
-        
     }
 }

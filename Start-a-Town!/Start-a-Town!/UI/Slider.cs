@@ -143,11 +143,6 @@ namespace Start_a_Town_.UI
             Moving = false;
         }
 
-        protected override void OnMouseScroll(System.Windows.Forms.HandledMouseEventArgs e)
-        {
-          //  Value = Math.Max(Min, Math.Min(Max, Value + (e.CurrentMouseState.ScrollWheelValue > e.LastMouseState.ScrollWheelValue ? Step : -Step)));
-        }
-
         public override void Update()
         {
             base.Update();

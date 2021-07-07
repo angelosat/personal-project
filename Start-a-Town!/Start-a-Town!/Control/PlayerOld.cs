@@ -208,16 +208,6 @@ namespace Start_a_Town_
             Window win;
             switch (e.Type)
             {
-                //case Message.Types.UIConstruction:
-                //    StructuresWindowOld.Instance.Show();
-                //    GameObject temp = GameObject.Create(GameObject.Types.Air);
-                //    throw new Exception("Obsolete position handling");
-
-
-                case Message.Types.Dialogue:
-                    throw new NotImplementedException();
-                    //return;
-
                 case Message.Types.Speak:
                     // TODO: code for broadcasting speech to nearby objects
                     // todo: only create speechbubble on clients
@@ -254,15 +244,6 @@ namespace Start_a_Town_
                     //e.Sender.PostMessage(Message.Types.ContainerClose, Player.Actor);
                     //return;
 
-                //case Message.Types.BeginInteraction:
-                //    Interaction inter = e.Parameters[0] as Interaction;
-                //    if (!inter.Range(Player.Actor, inter.Source))
-                //        return;
-                //    return;
-
-                case Message.Types.ManageEquipmentOk:
-                    new InvWindow().Initialize(e.Sender).Show();
-                    return;
                 case Message.Types.Followed:
                     //Hud.Instance.AddUnitFrame(e.Sender);
                     Rooms.Ingame.Instance.Hud.AddUnitFrame(e.Sender);

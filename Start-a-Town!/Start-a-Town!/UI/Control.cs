@@ -692,10 +692,7 @@ namespace Start_a_Town_.UI
         {
             MouseWheel?.Invoke(this, e);
         }
-        protected virtual void OnMouseScroll(System.Windows.Forms.HandledMouseEventArgs e)
-        {
-            MouseScroll?.Invoke(this, e);
-        }
+        
         protected virtual void OnLButtonDblClk(System.Windows.Forms.HandledMouseEventArgs e)
         {
             this.OnMouseLeftPress(e);

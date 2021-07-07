@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
@@ -26,13 +22,5 @@ namespace Start_a_Town_.UI
             this.Client = new GroupBox() { AutoSize = true, Location = this.Label.BottomLeft };
             this.AddControls(this.Label, this.Client);
         }
-        public PanelLabeledNew(string label, int width, int height)
-            : base(Vector2.Zero, new Vector2(width, height))
-        {
-            this.Label = new Label(label) { TextColorFunc = () => Color.Goldenrod, Font = UIManager.FontBold };
-            this.Client = new GroupBox() { AutoSize = true, Location = this.Label.BottomLeft };
-            this.AddControls(this.Label, this.Client);
-        }
-        protected PanelLabeledNew() { }
     }
 }

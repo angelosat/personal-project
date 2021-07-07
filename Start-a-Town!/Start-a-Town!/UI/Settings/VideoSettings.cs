@@ -32,8 +32,6 @@ namespace Start_a_Town_.UI.Settings
             Chk_Fullscreen.Checked = Game1.Instance.graphics.IsFullScreen;
             Chk_Fullscreen.LeftClickAction = () => this.Changed = true;
 
-
-
             this.Controls.Add(Combo_Resolutions, label_resolutions, Chk_Fullscreen);
         }
 
@@ -52,21 +50,15 @@ namespace Start_a_Town_.UI.Settings
             {
                 Game1.Instance.graphics.PreferredBackBufferHeight = displayMode.Height;
                 Game1.Instance.graphics.PreferredBackBufferWidth = displayMode.Width;
-                //Engine.Settings["Settings"]["Video"]["Resolution"]["Width"].InnerText = displayMode.Width.ToString();
-                //Engine.Settings["Settings"]["Video"]["Resolution"]["Height"].InnerText = displayMode.Height.ToString();
 
                 Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Width").Value = displayMode.Width.ToString();
                 Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Height").Value = displayMode.Height.ToString();
-
             }
             Game1.Instance.graphics.IsFullScreen = this.Chk_Fullscreen.Checked;
             Combo_Resolutions.SelectedItem = null;
             Game1.Instance.graphics.ApplyChanges();
-            //Engine.Settings["Settings"]["Video"]["Fullscreen"].InnerText = this.Chk_Fullscreen.Checked.ToString();
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Fullscreen").Value = this.Chk_Fullscreen.Checked.ToString();
             Engine.Config.Save("config.xml");
-            //Engine.Settings.Save("config.xml");
         }
-
     }
 }

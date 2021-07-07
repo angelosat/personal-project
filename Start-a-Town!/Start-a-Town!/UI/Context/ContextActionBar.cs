@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.UI
 {
@@ -37,7 +34,7 @@ namespace Start_a_Town_.UI
         {
             get
             {
-                if (_Instance == null)
+                if (_Instance is null)
                     _Instance = new ContextActionBar();
                 return _Instance;
             }

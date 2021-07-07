@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI.WorldSelection
@@ -18,11 +15,8 @@ namespace Start_a_Town_.UI.WorldSelection
             ListBox<Terraformer, CheckBox> List;
             public PanelMutatorList(int w, int h)
             {
-                //CheckBox chk_showSelected = new CheckBox("Selected", true);
-                //CheckBox chk_showUnselected = new CheckBox("Unselected", true);
                 this.AutoSize = true;
                 this.List = new ListBox<Terraformer, CheckBox>(w, h);
-            //    this.Refresh();
                 this.Controls.Add(this.List);
             }
 

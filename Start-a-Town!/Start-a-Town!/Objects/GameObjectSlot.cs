@@ -36,9 +36,6 @@ namespace Start_a_Town_
             get { return this.HasValue ? this.Object.GetInfo().StackSize : 0; }
             set
             {
-                if (this.Parent is not null)
-                    if (this.Parent.NetNew is not null)
-                    this.Parent.NetNew.EventOccured(Components.Message.Types.InventoryChanged, this.Parent);
                 if (value == 0)
                 {
                     this.Object = null;
@@ -77,9 +74,6 @@ namespace Start_a_Town_
                 if (value is not null)
                     if (!this.Filter(value))
                         return;
-                if (this.Parent is not null)
-                    if (this.Parent.NetNew is not null)
-                        this.Parent.NetNew.EventOccured(Components.Message.Types.InventoryChanged, this.Parent);
                 if (this._Object != null)
                     this._Object.Slot = null;
                 _Object = value;

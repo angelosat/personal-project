@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
@@ -43,11 +40,5 @@ namespace Start_a_Town_.UI
             if (!this.HitTest())
                 this.Hide();
         }
-        //public override void HandleLButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
-        //{
-        //    base.HandleLButtonDown(e);
-        //    if (!this.HitTest())
-        //        this.Hide();
-        //}
     }
 }

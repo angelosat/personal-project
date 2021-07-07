@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
+    [Obsolete]
     class PanelLabeled : Panel
     {
         public Label Label { get; set; }
@@ -16,12 +13,5 @@ namespace Start_a_Town_.UI
             this.Label = new Label(label) { TextColorFunc = () => Color.Goldenrod, Font = UIManager.FontBold };
             this.Controls.Add(this.Label);
         }
-        public PanelLabeled(string label, int width, int height)
-            : base(Vector2.Zero, new Vector2(width, height))
-        {
-            this.Label = new Label(label) { TextColorFunc = () => Color.Goldenrod, Font = UIManager.FontBold };
-            this.Controls.Add(this.Label);
-        }
-        protected PanelLabeled() { }
     }
 }

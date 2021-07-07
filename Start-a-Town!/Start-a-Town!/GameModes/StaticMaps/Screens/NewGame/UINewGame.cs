@@ -17,8 +17,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Panel_Main;
         GroupBox 
             Tab_World;
-        MutatorBrowser MutatorBrowser = new MutatorBrowser();
-        PanelMapSizes PanelMapSizes;
         private StaticMap.MapSize SelectedSize;
         public UINewGame()
         {
@@ -45,7 +43,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             seedBox.AddControls(
                 Txt_Seed, btn_random);
 
-            this.PanelMapSizes = new PanelMapSizes() { Location = this.Txt_Seed.BottomLeft };
 
             var defaultSizes = StaticMap.MapSize.GetList();
             this.SelectedSize = defaultSizes.First();

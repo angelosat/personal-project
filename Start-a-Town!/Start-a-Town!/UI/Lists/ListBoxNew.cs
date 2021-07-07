@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_.UI
 {
@@ -17,24 +15,10 @@ namespace Start_a_Town_.UI
         Func<TObject, TControl> ControlGetter;
         public TObject SelectedItem { get { return (SelectedControl == null ? default(TObject) : SelectedControl.Tag as TObject); } }
         TControl SelectedControl;
+        Func<TObject, bool> CurrentFilter = i => true;
 
-        public void SelectItem(TObject obj)
-        {
-            this.SelectedControl = this.Client.Controls.FirstOrDefault(i => i.Tag == obj) as TControl;
-            this.btn_Click(this.SelectedControl);
-        }
-        public void SelectItem(int index)
-        {
-            this.SelectedControl = this.Client.Controls[index] as TControl;
-            this.btn_Click(this.SelectedControl);
-        }
         public List<TControl> Items = new List<TControl>();
-        //{
-        //    get
-        //    {
-        //        return this.Client.Controls.Cast<TControl>().ToList();
-        //    }
-        //}
+        public event EventHandler<EventArgs> SelectedItemChanged;
 
         public Action<TObject> ItemChangedFunc = (item) => { };
         public IEnumerable<TObject> List = new List<TObject>();
@@ -45,25 +29,17 @@ namespace Start_a_Town_.UI
         }
         public ListBoxNew(int width, int height, ScrollableBoxNew.ScrollModes mode = ScrollModes.Vertical) : base(new Rectangle(0,0,width,height), mode) 
         {
-        }//MouseThrough = true; }
+        }
         public ListBoxNew(int width, int height, Func<TObject, TControl> controlGetter, ScrollableBoxNew.ScrollModes mode = ScrollModes.Vertical) : this(width, height, mode)
         {
             this.ControlGetter = controlGetter;
-        }//MouseThrough = true; }
+        }
         public ListBoxNew(int width, int height, Func<TObject, ListBoxNew<TObject,TControl>, TControl> controlGetter, ScrollableBoxNew.ScrollModes mode = ScrollModes.Vertical) : this(width, height, mode)
         {
             this.ControlGetter = i => controlGetter(i, this);
-        }//MouseThrough = true; }
+        }
         public ListBoxNew(Rectangle bounds) : base(bounds)
         {
-        }//MouseThrough = true; }
-
-        public event EventHandler<EventArgs> SelectedItemChanged;
-        void OnSelectedItemChanged(object control)
-        {
-            ItemChangedFunc((control as TControl).Tag as TObject);
-            if (SelectedItemChanged != null)
-                SelectedItemChanged(control, EventArgs.Empty);
         }
         public ListBoxNew<TObject, TControl> Clear()
         {
@@ -71,26 +47,22 @@ namespace Start_a_Town_.UI
             this.Items.Clear();
             return this;
         }
-
         public ListBoxNew<TObject, TControl> Build(IEnumerable<TObject> list, Func<TObject, string> nameFunc, Func<TObject, string> hoverTextFunc = null)
         {
             this.List = list;
             Func<TObject, string> htv = hoverTextFunc ?? (foo => "");
             this.Client.Controls.Clear();
-            //TControl btn;
             foreach (var obj in list)
             {
                 var btn = new TControl()
                 {
                     Location = Client.Controls.Count > 0 ? Client.Controls.Last().BottomLeft : Vector2.Zero,
-                  //  Width = this.Width,// Client.Width,
                     Tag = obj,
                     Text = nameFunc(obj),
                     Name = nameFunc(obj),
                     HoverText = htv(obj),
                     Active = true
                 };
-                //btn.LeftClick += new UIEvent(btn_Click);
                 var action = btn.LeftClickAction;
                 btn.LeftClickAction = () =>
                 {
@@ -101,33 +73,19 @@ namespace Start_a_Town_.UI
             }
             Remeasure();
             Client.ClientLocation = Vector2.Zero;
-           // SelectedItem = default(TObject);
             SelectedControl = null;
             return this;
         }
         public ListBoxNew<TObject, TControl> Build(IEnumerable<TObject> list, Func<TObject, string> nameFunc, Action<TObject, TControl> onControlInit)
         {
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 this.AddItem(item, nameFunc, onControlInit);
             }
             return this;
-
-            //this.List = list;
-            //this.ItemNameFunc = nameFunc;
-            //this.OnControlInit = onControlInit;
-            //this.Client.Controls.Clear();
-            //foreach (var obj in list)
-            //{
-            //    AddItem(obj, nameFunc, onControlInit);
-            //}
-            //Remeasure(); // why did i have this commented out?
-            //Client.ClientLocation = Vector2.Zero;
-            //SelectedControl = null;
-            //this.UpdateClientSize();
-
-            //return this;
         }
+       
+        
         /// <summary>
         /// obsolete, use AddItems instead
         /// </summary>
@@ -170,6 +128,8 @@ namespace Start_a_Town_.UI
             //this.UpdateScrollbars();
             return this;
         }
+        
+
         /// <summary>
         /// Adds a control that doesn't use the lists default name getter and control initializer
         /// </summary>
@@ -189,7 +149,6 @@ namespace Start_a_Town_.UI
                 this.AddItem(obj, controlGetter);
             return this;
         }
-        
         public ListBoxNew<TObject, TControl> AddItems(params TObject[] objs)
         {
             foreach (var obj in objs)
@@ -215,11 +174,8 @@ namespace Start_a_Town_.UI
         }
         public ListBoxNew<TObject, TControl> AddItem(TObject obj, Func<TObject, TControl> controlGetter)
         {
-            // i'm testing adding a null option in the beginning of some lists
-            //if (obj == null)
-            //    return this;
             var btn = controlGetter(obj);
-            btn.AutoSize = false; // latest addition
+            btn.AutoSize = false;
             btn.Location = Client.Controls.BottomLeft;
             btn.Tag = obj;
             btn.Name = btn.Text;
@@ -233,58 +189,12 @@ namespace Start_a_Town_.UI
                 btn_Click(btn);
             };
             this.Items.Add(btn);
-            //this.Client.Controls.Add(btn);
             if (this.CurrentFilter(obj))
             {
                 this.Client.AddControlsBottomLeft(btn);
                 this.UpdateClientSize();
             }
-            //this.Client.ClientSize = this.Client.PreferredClientSize;
-            //this.UpdateScrollbars();
             return this;
-        }
-        public void RemoveItems(Func<TObject, bool> condition)
-        {
-            foreach(var ctrl in this.Client.Controls.ToList())
-            {
-                var item = ctrl.Tag as TObject;
-                if (condition(item))
-                    this.RemoveItem(item);
-            }
-        }
-        public void RemoveItems(IEnumerable<TObject> items)
-        {
-            foreach (var i in items)
-                this.RemoveItem(i);
-        }
-        public void RemoveItems(params TObject[] items)
-        {
-            foreach (var i in items)
-                this.RemoveItem(i);
-        }
-        public void RemoveItem(TObject item)
-        {
-            if (item == null)
-                return;
-            var listControls = this.Client.Controls;
-            var removedItemIndex = listControls.FindIndex(c => c.Tag == item);
-            var prevY = listControls[removedItemIndex].Location.Y;
-            for (int i = removedItemIndex + 1; i < listControls.Count; i++)
-            {
-                var r = listControls[i];
-                r.Location.Y = prevY;
-                prevY = r.Bottom;
-            }
-            listControls.RemoveAt(removedItemIndex);
-            this.UpdateClientSize();
-
-            //foreach (var r in this.Client.Controls.Where(c => c.Tag != null && !c.Tag.Equals(item)))
-            //{
-            //    r.Location.Y = prev;
-            //    prev = r.Bottom;
-            //}
-            //this.Client.Controls.Remove(this.Client.Controls.First(c => c.Tag != null && c.Tag.Equals(item)));
-            //this.UpdateClientSize();
         }
         [Obsolete]
         public ListBoxNew<TObject, TControl> Build(Dictionary<string, List<TObject>> list, Func<TObject, string> nameFunc, Action<string, TControl> onCategoryInit, Action<TObject, TControl> onControlInit)
@@ -293,7 +203,7 @@ namespace Start_a_Town_.UI
             foreach (var obj in list)
             {
                 var inner = new GroupBox();// new List<TControl>();
-                foreach(var item in obj.Value)
+                foreach (var item in obj.Value)
                 {
                     TControl btninner = new TControl();
                     btninner.Tag = item;
@@ -329,6 +239,47 @@ namespace Start_a_Town_.UI
             return this;
         }
 
+        public void SelectItem(int index)
+        {
+            this.SelectedControl = this.Client.Controls[index] as TControl;
+            this.btn_Click(this.SelectedControl);
+        }
+        void OnSelectedItemChanged(object control)
+        {
+            ItemChangedFunc((control as TControl).Tag as TObject);
+            SelectedItemChanged?.Invoke(control, EventArgs.Empty);
+        }
+        public void RemoveItems(Func<TObject, bool> condition)
+        {
+            foreach(var ctrl in this.Client.Controls.ToList())
+            {
+                var item = ctrl.Tag as TObject;
+                if (condition(item))
+                    this.RemoveItem(item);
+            }
+        }
+        public void RemoveItems(params TObject[] items)
+        {
+            foreach (var i in items)
+                this.RemoveItem(i);
+        }
+        public void RemoveItem(TObject item)
+        {
+            if (item == null)
+                return;
+            var listControls = this.Client.Controls;
+            var removedItemIndex = listControls.FindIndex(c => c.Tag == item);
+            var prevY = listControls[removedItemIndex].Location.Y;
+            for (int i = removedItemIndex + 1; i < listControls.Count; i++)
+            {
+                var r = listControls[i];
+                r.Location.Y = prevY;
+                prevY = r.Bottom;
+            }
+            listControls.RemoveAt(removedItemIndex);
+            this.UpdateClientSize();
+        }
+       
         void Toggle(TControl btn)
         {
             var inner = btn.Tag as GroupBox;
@@ -347,9 +298,7 @@ namespace Start_a_Town_.UI
                 var control = this.Client.Controls[i];
                 control.Location.Y += inner.Height;
             }
-            //this.Client.Controls.Add(inner);
             this.Add(inner);
-            //Remeasure();
         }
         private void Collapse(TControl btn)
         {
@@ -368,62 +317,24 @@ namespace Start_a_Town_.UI
         public override void Remeasure()
         {
             base.Remeasure();
-            // TODO: lol
-            //int oldH = Client.Height;
-            //Client.ClientSize = new Rectangle(0, 0, Client.Width, Client.ClientSize.Height);
-            //Client.Height = oldH;
             foreach (var btn in Client.Controls)
             {
-                //btn.Width = Client.Width;
                 btn.Width = Math.Max(btn.Width, Client.Width);
             }
         }
-        public void Sort<T>(Func<TObject, T> selector, IComparer<T> comparer)
-        {
-            //var strings = this.Client.Controls.Select(c => selector(c.Tag as TObject)).ToList();
-            //strings.Sort()
-            //var ordered = strings.OrderBy(s => s, comparer).ToList();
-            var ordered = this.Client.Controls.OrderBy(c=>selector(c.Tag as TObject), comparer);
-            var prev = 0;
-            foreach (var r in ordered)
-            {
-                r.Location.Y = prev;
-                prev = r.Bottom;
-            }
-        }
-
-        //void btn_Click(object sender, EventArgs e)
-        //{
-        //    TControl ctrl = sender as TControl;
-        ////    this.SelectedItem = ctrl.Tag as TObject;
-        //    if (!this.SelectedControl.IsNull())
-        //        this.SelectedControl.BackgroundColor = Color.Transparent;
-        //    this.SelectedControl = ctrl;
-        //    ctrl.BackgroundColor = Color.White * 0.5f;
-        //    OnSelectedItemChanged(sender);
-        //}
+        
         void btn_Click(TControl ctrl)
         {
-            //TControl ctrl = sender as TControl;
-            //    this.SelectedItem = ctrl.Tag as TObject;
             if (this.SelectedControl != null)
                 this.SelectedControl.BackgroundColor = Color.Transparent;
             this.SelectedControl = ctrl;
             ctrl.BackgroundColor = Color.White * 0.5f;
             OnSelectedItemChanged(ctrl);
         }
-        public override void Draw(SpriteBatch sb)
-        {
-            base.Draw(sb);
-        }
-        Func<TObject, bool> CurrentFilter = i => true;
-
+       
+        
         public void Filter(Func<TObject, bool> filter)
         {
-            //var validControls = this.Client.Controls.Where(c => filter(c.Tag as TObject)).ToArray();
-            //var validControlsHash = new HashSet<Control>(validControls);
-            //this.Client.Controls.RemoveAll(c => !validControlsHash.Contains(c));
-            //this.Client.AddControlsBottomLeft(validControls);
             this.Client.Controls.Clear();
             var validControls = this.Items.Where(c => filter(c.Tag as TObject)).ToArray();
             this.Client.AddControlsBottomLeft(validControls);

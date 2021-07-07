@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
@@ -14,24 +12,18 @@ namespace Start_a_Town_.UI
         GroupBox ColumnLabels;
         ListBoxNewNoBtnBase<TObject, GroupBox> BoxItems;
         Dictionary<TObject, Dictionary<object, Control>> Rows = new();
-        public int MaxVisibleItems;// = -1;
-        BackgroundStyle ItemStyle = BackgroundStyle.Window;
+        public int MaxVisibleItems;
         public bool ShowColumnLabels = true;
         public Color ClientBoxColor = Color.Black * .5f;
         private ScrollableBoxNew.ScrollModes ScrollBarMode = ScrollableBoxNew.ScrollModes.Vertical;
         ObservableCollection<TObject> BoundCollection;
         static readonly int ItemHeight = Label.DefaultHeight + ListBoxNewNoBtnBase<TObject, GroupBox>.Spacing;
-        public TableScrollableCompactNewNew(int maxVisibleItems, BackgroundStyle style)
-            : this(maxVisibleItems)
-        {
-            this.ItemStyle = style;
-        }
-        public TableScrollableCompactNewNew(int maxVisibleItems, bool showColumnLabels = false, ScrollableBoxNew.ScrollModes scrollbarMode = ScrollableBoxNew.ScrollModes.Vertical)//, BackgroundStyle itemStyle = BackgroundStyle.Window)
+       
+        public TableScrollableCompactNewNew(int maxVisibleItems, bool showColumnLabels = false, ScrollableBoxNew.ScrollModes scrollbarMode = ScrollableBoxNew.ScrollModes.Vertical)
         {
             this.MaxVisibleItems = maxVisibleItems;
             this.ShowColumnLabels = showColumnLabels;
-            //this.ItemStyle = itemStyle;
-            this.ColumnLabels = new GroupBox() { AutoSize = true, BackgroundColor = Color.SlateGray * .5f };// Color.Black * .5f };//, BackgroundStyle = this.ItemStyle };//BackgroundStyle.Window };
+            this.ColumnLabels = new GroupBox() { AutoSize = true, BackgroundColor = Color.SlateGray * .5f };
         }
         public TableScrollableCompactNewNew<TObject> Bind(ObservableCollection<TObject> collection)
         {
@@ -40,22 +32,10 @@ namespace Start_a_Town_.UI
             collection.CollectionChanged += Collection_CollectionChanged;
             this.BoundCollection = collection;
             this.ClearItems();
-            //this.AddItems(this.Sorter(collection));
             this.AddItems(collection);
             return this;
         }
-        //public TableScrollableCompactNewNew<TObject> Bind<U>(ObservableCollection<TObject> collection, Func<TObject, U> keyGetter, IComparer<U> comparer)
-        //{
-        //    if (this.BoundCollection != null)
-        //        this.BoundCollection.CollectionChanged -= Collection_CollectionChanged;
-        //    collection.CollectionChanged += Collection_CollectionChanged;
-        //    this.BoundCollection = collection;
-        //    this.ClearItems();
-        //    this.Sorter = l => l.OrderBy(keyGetter, comparer);
-        //    this.AddItems(this.Sorter(collection));// collection.OrderBy(keyGetter, comparer));
-        //    return this;
-        //}
-        //Func<ICollection<TObject>, IEnumerable<TObject>> Sorter = c => c;
+        
         private void Collection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             this.AddItems(e.NewItems?.Cast<TObject>());
@@ -68,12 +48,7 @@ namespace Start_a_Town_.UI
             this.Build();//, showColumnLabels);
             return this;
         }
-        //public TableScrollableCompactNewNew<TObject> AddColumn(object index, Func<TableScrollableCompactNewNew<TObject>, Control> columnHeader, int spacing, Func<TObject, Control> control, float anchor = .5f)
-        //{
-        //    this.Columns.Add(new Column(index, columnHeader(this), spacing, control, anchor));
-        //    this.Build();//, showColumnLabels);
-        //    return this;
-        //}
+        
         /// <summary>
         /// 
         /// </summary>
@@ -84,67 +59,38 @@ namespace Start_a_Town_.UI
         /// <returns></returns>
         public TableScrollableCompactNewNew<TObject> AddColumn(object tag, string type, int width, Func<TObject, Control> control, float anchor = 0)//, bool showColumnLabels = true)//float anchor = .5f, bool showColumnLabels = true)
         {
-            //this.ShowColumnLabels = showColumnLabels;
             this.Columns.Add(new Column(tag, type, width, control, anchor));
-            this.Build();//, showColumnLabels);
+            this.Build();
             return this;
         }
         public TableScrollableCompactNewNew<TObject> AddColumn(object tag, string type, int width, Func<TableScrollableCompactNewNew<TObject>, TObject, Control> control, float anchor = 0)//, bool showColumnLabels = true)//float anchor = .5f, bool showColumnLabels = true)
         {
-            //this.ShowColumnLabels = showColumnLabels;
             this.Columns.Add(new Column(tag, type, width, item => control(this, item), anchor));
-            this.Build();//, showColumnLabels);
+            this.Build();
             return this;
-        }
-        public void ToggleColumnLabels(bool show)
-        {
-            if (show && !this.ShowColumnLabels)
-            {
-                this.AddControls(this.ColumnLabels);
-                this.BoxItems.Location = this.ColumnLabels.BottomLeft;
-            }
-            else if (!show && this.ShowColumnLabels)
-            {
-                this.RemoveControls(this.ColumnLabels);
-                this.BoxItems.Location = Vector2.Zero;
-            }
-            this.ShowColumnLabels = show;
         }
         public TableScrollableCompactNewNew<TObject> Build()
         {
             return this.Build(new List<TObject>());
         }
-        public TableScrollableCompactNewNew<TObject> Build(IEnumerable<TObject> items)//, bool showColumnLabels = true)
+        public TableScrollableCompactNewNew<TObject> Build(IEnumerable<TObject> items)
         {
-            //this.ShowColumnLabels = showColumnLabels;
             this.Rows.Clear();
             this.Controls.Clear();
             this.ColumnLabels.Controls.Clear();
-            //this.ColumnLabels.BackgroundStyle = this.ItemStyle;
             int offset = 0;
             foreach (var c in this.Columns)
             {
-                if (c.ColumnHeader != null)
+                if (c.ColumnHeader is not null)
                 {
-                    //c.ColumnHeader.Location = new Vector2(offset + c.Width * .5f, 0);
-                    //c.ColumnHeader.Location = new Vector2(offset + c.ColumnHeader.Width * .5f, 0);
-                    //c.ColumnHeader.Anchor = new Vector2(.5f, 0);
-
-                    //c.ColumnHeader.Location = new Vector2(offset, 0);
-
-
                     c.ColumnHeader.Location = new Vector2(offset + c.Width * c.Anchor, 0);
                     c.ColumnHeader.Anchor = new Vector2(c.Anchor, 0);
-
-                    //c.ColumnHeader.Location = new Vector2(offset + (c.Width - c.ColumnHeader.Width) / 2, 0);
 
                     offset += c.Width;
                     this.ColumnLabels.AddControls(c.ColumnHeader);
                 }
                 else
                 {
-                    //var label = new Label(new Vector2(offset + c.Width / 2f, 0), c.Object);
-                    //label.Anchor = new Vector2(.5f, 0);
                     var label = new Label(new Vector2(offset, 0), c.Label);
                     offset += c.Width;
                     label.TextHAlign = HorizontalAlignment.Center;
@@ -153,15 +99,12 @@ namespace Start_a_Town_.UI
             }
             // HACK
             this.ColumnLabels.AutoSize = false;
-            //this.ColumnLabels.ClientSize = new Rectangle(0, 0, this.Columns.Sum(c => c.Width), this.ColumnLabels.ClientSize.Height);
             this.ColumnLabels.ClientSize = new Rectangle(0, 0, offset, this.ColumnLabels.ClientSize.Height);
             this.ColumnLabels.Width = offset; 
-            //
 
             if (this.ShowColumnLabels)
                 this.Controls.Add(this.ColumnLabels);
             this.ColumnLabels.Controls.AlignCenterHorizontally();
-            //this.BoxItems = new ScrollableBoxNew(new Rectangle(0, 0, offset, Label.DefaultHeight * this.MaxVisibleItems), this.ScrollBarMode);// ScrollableBoxNew.Modes.Vertical);
             this.BoxItems = new(offset + ScrollbarV.Width, ItemHeight * this.MaxVisibleItems, (TObject item) =>
             {
                 var panel = new GroupBox() { BackgroundColor = this.ClientBoxColor };
@@ -183,10 +126,8 @@ namespace Start_a_Town_.UI
                 panel.Controls.AlignCenterHorizontally();
 
                 this.Rows.Add(item, controls);
-                //this.BoxItems.Add(panel);
                 return panel;
-            });// ScrollableBoxNew.Modes.Vertical);
-
+            });
 
             if (this.ShowColumnLabels)
                 this.BoxItems.Location = this.ColumnLabels.BottomLeft + Vector2.UnitY;
@@ -194,71 +135,22 @@ namespace Start_a_Town_.UI
 
             this.Controls.Add(this.BoxItems);
             return this;
-            //this.Validate(true);
         }
 
         public Control GetItem(TObject row, object column)
         {
             return this.Rows[row][column];
         }
-        public Control GetItem(Func<TObject, bool> row, object column)
-        {
-            if (!this.Rows.Any(v => row(v.Key)))
-                return null;
-            var r = this.Rows.FirstOrDefault(v => row(v.Key));
-            return r.Value[column];
-        }
-        public void AddItem(TObject item)
-        {
-            //var control = this.BoxItems.AddItem(item);
-
-            //this.Rows.Add(item, control);
-            ////this.BoxItems.Add(panel);
-            //this.BoxItems.Client.AddControlsBottomLeft(panel);
-            ////this.BoxItems.UpdateClientSize();
-
-            var panel = new GroupBox(this.BoxItems.Client.Width, UIManager.Icon16Background.Height) { Location = new Vector2(0, this.BoxItems.Client.Controls.BottomLeft.Y), BackgroundColor = this.ClientBoxColor };
-            //panel.BackgroundStyle = this.ItemStyle;
-            panel.AutoSize = true;
-            //panel.Size = this.ColumnLabels.Size;
-            panel.Tag = item;
-            var offset = 0;
-            Dictionary<object, Control> controls = new Dictionary<object, Control>();
-            foreach (var c in this.Columns)
-            {
-                var control = c.ControlGetter(item);
-                control.Location = new Vector2(offset + c.Width * c.Anchor, 0);
-                control.Anchor = new Vector2(c.Anchor, 0);
-                //control.Location = new Vector2(offset, 0);
-                offset += c.Width;
-                panel.AddControls(control);
-                //if (c.Tag != null)
-                //    controls.Add(c.Tag, control);
-                controls.Add(c.Tag ?? c.Label, control);
-
-            }
-            //panel.Size = new Rectangle(0, 0, this.ColumnLabels.Width, (int)Math.Max(this.ColumnLabels.Height, panel.Height));
-            //panel.Size = new Rectangle(0, 0, this.ColumnLabels.Width, panel.Height);
-            //panel.Size = new Rectangle(0, 0, this.BoxItems.Client.Width, panel.Height);
-
-            panel.Controls.AlignCenterHorizontally();
-            this.Rows.Add(item, controls);
-            this.BoxItems.Add(panel);
-        }
+       
         public TableScrollableCompactNewNew<TObject> AddItems(params TObject[] items)
         {
             return this.AddItems(items as IEnumerable<TObject>);
-            //this.BoxItems.AddItems(items);
-            //this.Validate(true);
-            //return this;
         }
         public TableScrollableCompactNewNew<TObject> AddItems(IEnumerable<TObject> items)
         {
-            if (items == null)
+            if (items is null)
                 return this;
             this.BoxItems.AddItems(items);
-            //foreach (var item in items)
-            //    this.AddItem(item);
             this.Validate(true);
             return this;
         }
@@ -276,29 +168,14 @@ namespace Start_a_Town_.UI
         }
         public void RemoveItem(TObject item)
         {
-            var row = this.Rows[item];
             this.Rows.Remove(item);
-
-            //var prev = 0;
-            //foreach (var r in this.BoxItems.Client.Controls.Where(c => !c.Tag.Equals(item)))
-            //{
-            //    r.Location.Y = prev;
-            //    prev = r.Bottom;
-            //}
-            //this.BoxItems.Remove(this.BoxItems.Client.Controls.First(c => c.Tag.Equals(item)));
             this.BoxItems.RemoveItem(item);
-            //Rearrange();
         }
-        public void RemoveItems(Func<TObject, bool> condition)
-        {
-            foreach (var row in this.Rows.Where(i => condition(i.Key)).ToList())
-                this.RemoveItem(row.Key);
-        }
+      
         public TableScrollableCompactNewNew<TObject> ClearItems()
         {
             this.BoxItems?.Client.ClearControls();
             this.Rows.Clear();
-            
             return this;
         }
         public TableScrollableCompactNewNew<TObject> Clear()
@@ -309,20 +186,7 @@ namespace Start_a_Town_.UI
             this.ColumnLabels.Controls.Clear();
             return this;
         }
-        //private void Rearrange()
-        //{
-        //    var prev = 0;
-        //    foreach (var row in this.BoxItems.Client.Controls)
-        //    {
-        //        row.Location.Y = prev;
-        //        prev = row.Bottom;
-        //    }
-        //    this.BoxItems.Remeasure();
-        //}
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Rectangle viewport)
-        {
-            base.Draw(sb, viewport);
-        }
+    
         class Column
         {
             public object Tag;
@@ -345,7 +209,6 @@ namespace Start_a_Town_.UI
                 this.Tag = tag;
                 this.ColumnHeader = columnHeader;
                 this.Width = width;
-                //this.Width = this.ColumnHeader.Width + width;
                 this.ControlGetter = control;
                 this.Anchor = anchor;
             }

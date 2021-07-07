@@ -1,9 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.UI
 {
@@ -25,11 +20,6 @@ namespace Start_a_Town_.UI
             this.List = list;
             return this;
         }
-        //private void Refresh(string text)
-        //{
-        //    var validSlots = this.AllSlots.FindAll(foo => foo.Tag.Object.Name.ToLower().Contains(text.ToLower()));
-        //    this.Arrange(validSlots);
-        //}
         protected override void OnTextChanged()
         {
             if (this.Text?.Length > 0 && !this.Controls.Contains(this.IconClear))

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
@@ -11,7 +6,6 @@ namespace Start_a_Town_.UI
     {
         Panel PanelClient;
         GroupBox BoxTabs, Selected;
-        List<GroupBox> Tabs = new List<GroupBox>();
         public PanelTabs(int w, int h)
         {
             this.BoxTabs = new GroupBox()

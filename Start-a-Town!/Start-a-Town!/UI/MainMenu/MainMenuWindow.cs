@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.GameModes;
 
@@ -19,30 +16,15 @@ namespace Start_a_Town_.UI
             Button newgame = new Button("Play", 100) { LeftClickAction = newgame_Click };
             Button load = new Button("Load", 100) { LeftClickAction = Load };
             Button online = new Button("Multiplayer", 100) { LeftClickAction = online_LeftClick };
-            Button design = new Button("Design", 100) { LeftClickAction = design_Click };
-            Button editor = new Button("Editor", 100) { LeftClickAction = editor_LeftClick };
             Button settings = new Button("Settings", 100) { LeftClickAction = settings_Click };
             Button about = new Button("About", 100) { LeftClickAction = about_Click };
             Button quit = new Button("Quit", 100) { LeftClickAction = quit_Click };
-            Button create = new Button(new Vector2(0, quit.Bottom), 100, "Create Character") { LeftClickAction = create_Click };
 
-
-            panel.AddControlsVertically(newgame, load, online,
-                //design, editor, 
-                settings, about, quit);
+            panel.AddControlsVertically(newgame, load, online, settings, about, quit);
             
             Client.Controls.Add(panel);
-            //this.Location = UIManager.Center;
-            //Anchor = new Vector2(0.5f);
             this.SnapToScreenCenter();
             Title = "Start-a-Town!";
-        }
-
-        
-
-        void editor_LeftClick()
-        {
-            throw new NotImplementedException();
         }
 
         void online_LeftClick()
@@ -52,11 +34,6 @@ namespace Start_a_Town_.UI
                 GameMode.Current = GameMode.Registry.First();
                 MultiplayerWindowNew.Instance.ShowFrom(this);
             }
-        }
-
-        void design_Click()
-        {
-            //ScreenManager.Add(Rooms.EditorRoom.Instance.Initialize());
         }
 
         void about_Click()
@@ -88,16 +65,11 @@ namespace Start_a_Town_.UI
                     {
                         LeftClickAction = () => { this.Show(); client.GetWindow().Hide(); }
                     });
-            var win = new Window("New Game", client)//.Show();
+            var win = new Window("New Game", client)
             {
-                //Previous = this, 
                 Movable = false,
                 Closable = false
             }.AnchorToScreenCenter().Show();
-
-            return;
-            //ScreenManager.Add(GameModes.StaticMaps.ScreenNewGame.Instance);
-           
         }
         private void Load()
         {
@@ -112,15 +84,6 @@ namespace Start_a_Town_.UI
             control.Anchor = Vector2.One * .5f;
             control.Show();
             this.Hide();
-        }
-        void create_Click()
-        {
-            (new NewCharacterWindow()).ShowDialog();
-        }
-
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
-        {
-            base.Draw(sb, this.BoundsScreen);
         }
     }
 }

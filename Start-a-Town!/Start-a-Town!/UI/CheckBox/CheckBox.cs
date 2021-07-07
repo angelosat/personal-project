@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
+    [Obsolete]
     public class CheckBox : ButtonBase
     {
         static public readonly Rectangle
@@ -72,7 +70,6 @@ namespace Start_a_Town_.UI
 
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
-            //this.BoundsScreen.DrawHighlight(sb);
             base.Draw(sb, viewport);
         }
 
@@ -82,8 +79,7 @@ namespace Start_a_Town_.UI
         {
             // change state only if clicked within the actual checkmark box, otherwise just select
             Rectangle bounds = this.BoundsScreen;
-            //if (Rectangle.Intersect(bounds, new Rectangle(bounds.X, bounds.Y, 23, 23)).Intersects(UIManager.MouseRect))
-                Checked = (!Checked && Active);
+            Checked = (!Checked && Active);
             base.OnLeftClick();
         }
     }

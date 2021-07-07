@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-
-namespace Start_a_Town_.UI.Settings
+﻿namespace Start_a_Town_.UI.Settings
 {
     class CameraSettings : GroupBox
     {
-        CheckBox Chk_Fog;//, Chk_HideCeiling, Chk_HideObscuringBlocks;
+        CheckBox Chk_Fog;
         bool Changed;
 
         public CameraSettings()
@@ -17,7 +10,6 @@ namespace Start_a_Town_.UI.Settings
             this.Name = "Camera";
 
             this.Chk_Fog = new CheckBox("Fog", Camera.Fog);
-            //this.Chk_HideCeiling = new CheckBox("Draw blocks above player", Camera.hi)
             this.Controls.Add(this.Chk_Fog);
         }
 

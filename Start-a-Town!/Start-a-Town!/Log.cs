@@ -30,7 +30,7 @@ namespace Start_a_Town_
             /// <para>arg1: text</para>
             /// </summary>
             Chat,
-            System, Dialogue, DialogueOption, DialogueEnd, Inventory, Thoughts, Jobs, Needs,
+            System, Dialogue, DialogueOption, DialogueEnd, Thoughts, Jobs, Needs,
             ChatPlayer
         }
         static Log _Instance;
@@ -314,10 +314,6 @@ List of available commands:
                 case EntryTypes.DialogueEnd:
                     speaker = p[0] as GameObject;
                     SpeechBubbleOld.Hide(speaker);
-                    break;
-
-                case EntryTypes.Inventory:
-                    InvWindow.Show(p[0] as GameObject);
                     break;
 
                 case EntryTypes.Needs:

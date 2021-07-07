@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
@@ -36,13 +31,11 @@ namespace Start_a_Town_.UI
         }
         public override void ClearControls()
         {
-            this.Client.ClearControls();//.Controls.Clear();
+            this.Client.ClearControls();
         }
         static public int GetClientLength(int totallength)
         {
             return totallength - BackgroundStyle.Window.Border - BackgroundStyle.Window.Border;
         }
-
-        
     }
 }

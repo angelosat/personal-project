@@ -155,31 +155,7 @@ namespace Start_a_Town_.Components
             DialogueOption[] options;
             switch (msg)
             {
-                case Message.Types.Speak:
-                    // TODO: code for broadcasting speech to nearby objects
-                    // todo: only create speechbubble on clients
-                    //Log.Command(Log.EntryTypes.Chat, parent, (string)e.Parameters[0]);
-
-                    return true;
-                case Message.Types.DialogueStart:
-                    //this.Conversation = new Dialogue(parent, e.Sender);
-                    text = (string)e.Parameters[0];
-                    options = (e.Parameters[1] as DialogueOptionCollection).ToArray();// e.Parameters.Skip(1).Cast<string>().ToArray();
-                    this.Conversation = new Conversation(parent, e.Sender);
-                    this.Conversation.Add(parent, text, options);
-                    //UI.SpeechBubble.Create(parent, text, options);
-                    //this.Conversation.Paused = true;
-                    return true;
-
-                case Message.Types.Dialogue:
-                    text = (string)e.Parameters[0];
-                    //options = e.Parameters.Length > 1 ? (string[])e.Parameters[1] : new string[0];
-                //    options = e.Parameters.Length > 1 ? e.Parameters[1] as ConversationOptionCollection : new ConversationOptionCollection();
-                    options = e.Parameters.Length > 1 ? e.Parameters[1] as DialogueOption[] : new DialogueOption[0];
-                    this.Conversation.Update(text, options);
-                    return true;
                 case Message.Types.DialogueEnd:
-                    //this.Conversation.End((string)e.Parameters[0]);
                     Log.Command(Log.EntryTypes.Chat, parent, (string)e.Parameters[0]);
                     this.Conversation = null;
                     return true;

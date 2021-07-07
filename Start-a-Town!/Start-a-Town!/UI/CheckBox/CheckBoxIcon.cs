@@ -39,7 +39,5 @@ namespace Start_a_Town_.UI
                 this.Invalidate();
             this.LastValue = nowValue;
         }
-        
-        
     }
 }

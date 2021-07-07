@@ -146,10 +146,6 @@ namespace Start_a_Town_.UI
                 this.ValueSelectAction(this.NewValue);
         }
 
-        protected override void OnMouseScroll(System.Windows.Forms.HandledMouseEventArgs e)
-        {
-        }
-
         public override void Update()
         {
             base.Update();

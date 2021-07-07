@@ -70,8 +70,6 @@ namespace Start_a_Town_.Towns.Farming
 
         private void SelectSeed()
         {
-            var itempicker = ItemPicker.Instance;
-            itempicker.Show(UIManager.Mouse, obj => obj.HasComponent<SeedComponent>(), (obj) => SetSeed(obj));
         }
 
         private void SetSeed(GameObject obj)

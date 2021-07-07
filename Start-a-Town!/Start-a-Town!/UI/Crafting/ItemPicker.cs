@@ -1,29 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Components;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
+    [Obsolete]
     class ItemPicker : PanelLabeled
     {
         static ItemPicker _Instance;
-        static public ItemPicker Instance
-        {
-            get
-            {
-                if (_Instance is null)
-                    _Instance = new ItemPicker();
-                return _Instance;
-            }
-        }
+        static public ItemPicker Instance => _Instance ??= new ItemPicker();
 
         Func<GameObject, bool> Condition { get; set; }
-        //SlotGrid<Slot<GameObject>, GameObject> Slots { get; set; }
         SlotGrid Slots { get; set; }
         CheckBox ChkBox_MatsAvailable;
         Container Storage;
@@ -48,10 +37,7 @@ namespace Start_a_Town_.UI
             this.ChkBox_MatsAvailable.ValueChangedFunction = (value) =>
                 {
                     if (value)
-                        //this.Slots.Refresh(slot => PersonalInventoryComponent.HasObject(Player.Actor, o => slot.Object.ID == o.ID));
-                        //this.Slots.Refresh(slot => this.Storage.Contains(o => slot.Object.ID == o.ID));
                         this.Slots.Refresh(slot => 
-                            //this.Sources.FirstOrDefault(o => slot.Object.ID == o.Object.ID) != null
                             (from s in this.Sources
                                  where s.Object != null
                                  where s.Object.IDType == slot.Object.IDType

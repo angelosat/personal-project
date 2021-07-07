@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -20,16 +17,13 @@ namespace Start_a_Town_.UI
             sb.Draw(BackgroundTexture, new Vector2(0, (Pressed && Active) ? 1 : 0), Region, UIManager.DefaultTextColor * ((MouseHover && Active) ? 1 : 0.5f));
             UIManager.DrawStringOutlined(sb, this.Text, new Vector2(25, Height / 2), new Vector2(0, 0.5f));
         }
-        //public Action<bool> ValueChangedFunction = value => { };
         bool _Value;
         public bool Value
         {
-            //get { return _Value; }
             get { return this.TickedFunc != null ? this.TickedFunc() : _Value; }
             set
             {
                 _Value = value;
-                //this.ValueChangedFunction(value);
                 this.Invalidate();
             }
         }
@@ -47,9 +41,8 @@ namespace Start_a_Town_.UI
             this.LastValue = nowValue;
         }
 
-        public CheckBoxNew():this("")
+        public CheckBoxNew() : this("")
         {
-            //BackgroundTexture = UIManager.TextureTickBox;
         }
         public CheckBoxNew(string text, bool check = false)
             : this(text, Vector2.Zero, check)
@@ -67,14 +60,8 @@ namespace Start_a_Town_.UI
         protected override void OnTextChanged()
         {
             base.OnTextChanged();
-            if(!string.IsNullOrWhiteSpace(this.Text))
-            this.Width += BackgroundTexture.Width + 5;
-        }
-
-        public override void Draw(SpriteBatch sb, Rectangle viewport)
-        {
-            //this.BoundsScreen.DrawHighlight(sb);
-            base.Draw(sb, viewport);
+            if (!string.IsNullOrWhiteSpace(this.Text))
+                this.Width += BackgroundTexture.Width + 5;
         }
 
         public CheckBoxNew SetChecked(bool condition) { Value = condition; return this; }
@@ -83,9 +70,7 @@ namespace Start_a_Town_.UI
         {
             // change state only if clicked within the actual checkmark box, otherwise just select
             Rectangle bounds = this.BoundsScreen;
-                //Checked = (!Checked && Active); //this checkbox doesnt change its value itself
             base.OnLeftClick();
         }
-
     }
 }

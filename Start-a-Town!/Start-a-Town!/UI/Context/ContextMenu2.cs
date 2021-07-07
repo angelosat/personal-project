@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Start_a_Town_.Components;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
@@ -22,13 +20,6 @@ namespace Start_a_Town_.UI
             }
         }
 
-        //public event EventHandler ContextMenuInit;
-        //void OnContextMenuInit()
-        //{
-        //    if (ContextMenuInit != null)
-        //        ContextMenuInit(this, EventArgs.Empty);
-        //}
-
         ContextMenu2()
         {
             AutoSize = true;
@@ -47,7 +38,7 @@ namespace Start_a_Town_.UI
         public void Initialize(GameObject obj, ContextArgs a)
         {
     }
-        public void Initialize(ContextArgs a)//List<ContextAction> actions)
+        public void Initialize(ContextArgs a)
         {
             var actions = a.Actions;
             if (actions.Count == 0)
@@ -56,22 +47,16 @@ namespace Start_a_Town_.UI
             this.Panel_List.AutoSize = true;
             this.Panel_List.Build(actions, foo => foo.Name(), (ContextAction act, Button btn) =>
             {
-                //btn.Color = Color.Black;
                 btn.Color = Color.White * 0.5f;
                 btn.IdleColor = Color.Transparent;
                 act.ControlInit(act, btn);
-                //btn.BackgroundColor = Color.Black; 
-               // btn.TextColorFunc = () => Color.Black;
                 a.ControlInit(btn);
             });
             this.Controls.Add(Panel_List);
-            //this.AddControlsBottomLeft(new Label("test1"), new Label("test2"));
-
             this.Location = UIManager.Mouse - ClientLocation - Panel_List.Location - (Panel_List.Controls.Count > 0 ? Panel_List.Controls.First().Location : Vector2.Zero) - new Vector2(Label.DefaultHeight / 2);
             this.Show();
             this.Invalidate();
             this.Texture = null;
-            //OnContextMenuInit();
         }
         public void Initialize(params ContextAction[] actions)
         {
@@ -91,7 +76,6 @@ namespace Start_a_Town_.UI
             Show();
             Invalidate();
             Texture = null;
-            //OnContextMenuInit();
         }
     }
 }

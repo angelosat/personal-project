@@ -90,18 +90,7 @@ namespace Start_a_Town_.Modules.Construction.UI
             Panel_Reagents.ClearControls();
             Panel_Reagents.AddControls(list);
         }
-        private void RefreshSelectedPanel(Panel panel_Selected, GameObject product, List<ItemRequirement> materials)// Reaction reaction)
-        {
-            panel_Selected.Controls.Clear();
-            panel_Selected.Tag = product;
-            if (product.IsNull())
-                return;
-
-            CraftingTooltip tip = new CraftingTooltip(product.ToSlotLink(), materials);
-            panel_Selected.Controls.Add(tip);
-            return;
-        }
-
+      
         public ConstructionsWindowNewNew Refresh(ConstructionCategory cat)
         {
             if (this.IsOpen && this.List_Constructions.List == cat.List)

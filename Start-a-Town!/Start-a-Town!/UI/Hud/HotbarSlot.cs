@@ -18,7 +18,7 @@ namespace Start_a_Town_.UI
         DragDropEffects _OnDragDrop(DragEventArgs a)
         {
             DragDropSlot drag = a as DragDropSlot;
-            if (drag.IsNull())
+            if (drag is null)
                 return DragDropEffects.None;
 
             //this.Tag.Link = drag.Slot.Object;

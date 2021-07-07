@@ -22,28 +22,6 @@ namespace Start_a_Town_.Visualizations
             this.Camera = camera;
         }
 
-        public void Update()
-        {
-            if (this.Valid)
-                return;
-            this.Reset();
-        }
-
-        private void Reset()
-        {
-            this.VisibleBlocks = new Dictionary<Vector2, Dictionary<Vector3, BlockCacheEntry>>();
-            foreach(var chunk in this.Map.GetActiveChunks())
-            {
-                var cache = new Dictionary<Vector3, BlockCacheEntry>();
-                this.VisibleBlocks[chunk.Key] = cache;
-                chunk.Value.ResetVisibleCells(cell => this.HandleCell(chunk.Value, cell));
-                //foreach(var cell in chunk.Value.CellGrid2)
-                //{
-
-                //}
-            }
-        }
-
         private void HandleCell(Chunk chunk, Cell cell)
         {
             var local = cell.LocalCoords;

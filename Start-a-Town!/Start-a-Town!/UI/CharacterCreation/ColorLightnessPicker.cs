@@ -4,37 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
-    //class Picker : GroupBox
-    //{
-    //    public override void HandleRButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
-    //    {
-    //        this.TopLevelControl.Hide();
-    //    }
-
-    //    ColorHueSaturationPicker ColorPick;
-    //    ColorLightnessPicker LightnessPick;
-    //    public Action<Color> Callback = c => { };
-    //    Button BtnOk, BtnCancel;
-
-    //    public Picker()//Action<Color> callback)
-    //    {
-    //        this.ColorPick = new ColorHueSaturationPicker() { Callback = c => this.LightnessPick.Tint = c };
-    //        this.LightnessPick = new ColorLightnessPicker() { Location = this.ColorPick.TopRight };
-    //        this.Controls.Add(this.ColorPick, this.LightnessPick);
-    //        this.BtnOk = new Button("Ok") { LeftClickAction = () => { this.Callback(this.LightnessPick.Selected.Multiply(this.ColorPick.Selected)); this.TopLevelControl.Hide(); }, Location = this.ColorPick.BottomLeft };
-    //        this.BtnCancel = new Button("Cancel") { LeftClickAction = () => { this.TopLevelControl.Hide(); }, Location = this.BtnOk.TopRight };
-    //      //  this.Callback = callback;
-    //        this.Controls.Add(this.BtnOk, this.BtnCancel);
-    //    }
-
-    //    public void SelectColor(Color rgb)
-    //    {
-    //        this.ColorPick.SelectColor(rgb);
-    //        this.LightnessPick.SelectColor(rgb);
-    //        this.LightnessPick.Tint = this.ColorPick.Selected;
-    //    }
-    //}
-
     class ColorLightnessPicker : PictureBox
     {
         static readonly int TexWidth = 20;
@@ -49,7 +18,6 @@ namespace Start_a_Town_.UI
                 for (int x = 0; x < TexWidth; x++)
                 {
                     float val = 1 - v / 255f;
-                    //Color color = new Color(val, val, val, 255);
                     Color color = ColorHueSaturationPicker.HSVtoRGB(0, 0, val);
                     Gradient[v * TexWidth + x] = color;
                 }
@@ -87,7 +55,7 @@ namespace Start_a_Town_.UI
             var y = (int)Math.Max(0, Math.Min(GradientTexture.Height - 1, pos.Y));
 
             this.Selected = Gradient[y * GradientTexture.Width + x];
-            this.SelectedCoords = new Vector2(x, y);// pos;
+            this.SelectedCoords = new Vector2(x, y);
             this.Callback(this.Selected);
         }
 
@@ -95,12 +63,7 @@ namespace Start_a_Town_.UI
         {
             if (!this.MouseHover)
                 return;
-            //Vector2 pos = UIManager.Mouse - this.ScreenLocation;
-            //this.Selected = Gradient[(int)pos.Y * GradientTexture.Width + (int)pos.X];
-            //this.SelectedCoords = pos;
-            //this.Callback(this.Selected);
             this.Pressed = true;
-            //this.TopLevelControl.Hide();
         }
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -109,15 +72,8 @@ namespace Start_a_Town_.UI
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);
-            if (this.Selected.IsNull())
-                return;
             var rect = new Rectangle((int)this.ScreenLocation.X + (int)this.SelectedCoords.X - 1, (int)this.ScreenLocation.Y + (int)this.SelectedCoords.Y - 1, 3, 3);
-            //rect.DrawHighlight(sb);
             rect.DrawHighlight(sb, Color.White, Vector2.Zero, 0);
         }
-        //public override void HandleRButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
-        //{
-        //    this.TopLevelControl.Hide();
-        //}
     }
 }

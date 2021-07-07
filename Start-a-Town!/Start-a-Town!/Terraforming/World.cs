@@ -1,48 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading;
-using System.IO.Compression;
-using System.Xml;
-using System.Xml.Linq;
-using Start_a_Town_.Components;
 using Start_a_Town_.GameModes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
+using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     public class World : EntityComponent, IWorld, IDisposable
     {
-        public override string ComponentName
-        {
-            get { return "World"; }
-        }
         public const int Zenith = 14;
 
         #region Properties
-        public bool Lighting { get { return (bool)this["Lighting"]; } set { this["Lighting"] = value; } }
+        public bool Lighting;
         public int MaxHeight { get; set; }
         public Block.Types DefaultTile { get; set; }
-        public string Name { get { return (string)this["Name"]; } set { this["Name"] = value; } }
+        public string Name { get; set; }
         public int Seed { get; set; }
-        //{
-        //    get { return (int)this["Seed"]; }
-        //    set
-        //    {
-        //        this.Random = new Random(value);
-        //        this["Seed"] = value;
-        //    }
-        //}
-    //    public bool Caves { get { return (bool)this["Caves"]; } set { this["Caves"] = value; } }
-        public bool Flat { get { return (bool)this["Flat"]; } set { this["Flat"] = value; } }
-        public bool Trees { get { return (bool)this["Trees"]; } set { this["Trees"] = value; } }
-        public TimeSpan Time { get { return (TimeSpan)this["Time"]; } set { this["Time"] = value; } }
-        public Random Random { get { return (Random)this["Random"]; } set { this["Random"] = value; } }
-        public MapCollection Maps { get { return (MapCollection)this["Maps"]; } set { this["Maps"] = value; } }
+        public bool Flat;
+        public bool Trees;
+        public TimeSpan Time;
+        public Random Random { get; set; }
+        public MapCollection Maps;
 
         public string SeedString => throw new NotImplementedException();
 
@@ -51,6 +34,8 @@ namespace Start_a_Town_
         public ulong CurrentTick { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public TimeSpan Clock => throw new NotImplementedException();
+
+        public override string ComponentName => throw new NotImplementedException();
 
         public SortedSet<Terraformer> Mutators;
         #endregion
@@ -283,7 +268,7 @@ namespace Start_a_Town_
                         world["Player"] = player;
                     }
 
-                    world["Name"] = (string)worldTag["Name"].Value;
+                    world.Name = (string)worldTag["Name"].Value;
 
                     SaveTag mutatorsTag;
                     if (!worldTag.TryGetTag("Mutators", out mutatorsTag))
@@ -309,7 +294,7 @@ namespace Start_a_Town_
                         Vector2 coords = new Vector2(Convert.ToInt32(c[0]), Convert.ToInt32(c[1]));
                         FileInfo mapFile = mapdir.GetFiles("*.map.sat").FirstOrDefault();
                         Map map;
-                        if (mapFile.IsNull())
+                        if (mapFile is null)
                         {
                             map = Map.Create(world, coords);
                             map.Save();

@@ -119,7 +119,7 @@ namespace Start_a_Town_.Components
             var list = save["Parts"].Value as List<SaveTag>;
             foreach(var item in list)
             {
-                if(item.Value.IsNull())
+                if(item.Value is null)
                     continue;
                 //var tag = item.Value as SaveTag;
                 string name = item.GetValue<string>("Name");

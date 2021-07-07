@@ -7,10 +7,9 @@ using Microsoft.Xna.Framework;
 namespace Start_a_Town_.Components
 {
     [Obsolete]
-    class InventoryComponent : EntityComponent, IObjectSpace
+    class InventoryComponent : EntityComponent
     {
         public GameObjectSlot Holding { get { return (GameObjectSlot)this["Holding"]; } set { this["Holding"] = value; } }
-        GameObject Parent { get { return (GameObject)this["Parent"]; } set { this["Parent"] = value; } }
         public List<ItemContainer> Containers = new();
 
         public override string ComponentName
@@ -702,7 +701,7 @@ namespace Start_a_Town_.Components
         static public void ConsumeEquipped(GameObject parent, int amount)
         {
             InventoryComponent invComp = parent.Components.Values.FirstOrDefault(foo => foo is InventoryComponent) as InventoryComponent;
-            if (invComp.IsNull())
+            if (invComp is null)
                 return;
             invComp.Holding.StackSize -= amount;
             throw new NotImplementedException();
@@ -711,7 +710,7 @@ namespace Start_a_Town_.Components
         static public bool ConsumeEquipped(GameObject parent, Func<GameObjectSlot, bool> check, int amount = 1)
         {
             InventoryComponent invComp = parent.Components.Values.FirstOrDefault(foo => foo is InventoryComponent) as InventoryComponent;
-            if (invComp.IsNull())
+            if (invComp is null)
                 return false;
             if (!invComp.Holding.HasValue)
                 return false;

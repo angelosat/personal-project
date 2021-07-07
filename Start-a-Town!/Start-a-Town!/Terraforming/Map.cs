@@ -1,91 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Threading;
-using System.IO.Compression;
-using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 using Start_a_Town_.Towns;
 using Start_a_Town_.GameModes;
-using Start_a_Town_.Net;
-using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_
 {
-    public interface IObjectSpace
+    [Obsolete]
+    public partial class Map : IMap, IDisposable, ITooltippable
     {
-        float Distance(GameObject obj1, GameObject obj2);
-        Vector3? DistanceVector(GameObject obj1, GameObject obj2);
-    }
-    public class Map : IMap, IObjectSpace, IDisposable, ITooltippable
-    {
-        public string Network = "local";
-
         public override float LoadProgress
         {
             get { return this.ActiveChunks.Count / (float)(Map.SizeInChunks * Map.SizeInChunks); }
         }
         static public int SizeInChunks { get { return (Engine.ChunkRadius * 2); } }
         static public int SizeInBlocks { get { return SizeInChunks * Chunk.Size; } }
-        public float Distance(GameObject obj1, GameObject obj2)
-        {
-            return Vector3.Distance(obj1.Global, obj2.Global);
-        }
-        public Vector3? DistanceVector(GameObject obj1, GameObject obj2)
-        {
-            return obj1.Global - obj2.Global;
-        }
-        public struct MapSize
-        {
-            public string Name { get; set; }
-            public int Size { get; set; }
-            public MapSize(string name, int size)
-                : this()
-            {
-                Name = name;
-                Size = size;
-            }
-        }
         public static List<MapSize> Sizes
         { get { return new List<MapSize>() { new MapSize("Tiny", 64), new MapSize("Small", 128), new MapSize("Normal", 256), new MapSize("Huge", 512) }; } }
         ConcurrentQueue<Chunk> ChunksToActivate;
 
         public override bool AddChunk(Chunk chunk)
         {
-            //return this.ActiveChunks.TryAdd(chunk.MapCoords, chunk);
             this.ActiveChunks.Add(chunk.MapCoords, chunk);
-
             // sort chunks back to front to prevent glitches with semi-transparent blocks on chunk edges
             this.ActiveChunks = this.ActiveChunks.OrderBy(c => c.Key.X + c.Key.Y).ToDictionary(i => i.Key, i => i.Value);
-
             return true;
         }
-        public bool Lighting = true;
         public int TimeSpeed = 1;
         public const int Zenith = 14;
-       
         public double DayTimeNormal = 0;
         public bool AddTime()
         {
-
             Time = Time.Add(new TimeSpan(0, TimeSpeed, 0));
-            //double normal = (Time.TotalMinutes - 120) / 1440f;
             double normal = (Time.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
             double nn = normal * 2 * Math.PI;
             nn = 3 * Math.Cos(nn);
-            // nn = Math.Pow(nn, 0.5f);
             DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
-            //   DayTimeNormal = Math.Pow(DayTimeNormal, 2f);
 
             byte oldDarkness = SkyDarkness;
-            SkyDarkness = 0;// (byte)(Math.Round(DayTimeNormal * SkyDarknessMax));
+            SkyDarkness = 0;
             if (SkyDarkness != oldDarkness)
                 foreach (var ch in ActiveChunks)
                     ch.Value.LightCache.Clear();
@@ -93,39 +52,28 @@ namespace Start_a_Town_
             return true;
         }
         public byte SkyDarkness = 0, SkyDarknessMax = 13;
-        public Color AmbientColor = Color.Blue;//Color.MidnightBlue; //Color.RoyalBlue;//Color.MidnightBlue; //Color.MediumPurple; //Color.Lerp(Color.White, Color.Cornsilk, 0.5f);
-        //public bool Fog = false, BorderShading = true;
-        //public bool
-        //    HideUnderground = false,//true,
-        //    HideOverground = false;
-        public static int  VisibleCellCount = 0;//SeaLevel,
+        public Color AmbientColor = Color.Blue;
+        public static int  VisibleCellCount = 0;
         public Dictionary<int, Rectangle[,]> BaseTileRegions;
         public Game1 game;
 
         public bool hasClicked = false;
-        public static int MaxHeight = 128;//256; //
+        public static int MaxHeight = 128;
         public static float MaxDepth = 0, MinDepth = 0;
-        static public Texture2D TerrainSprites, CharacterSprites, ShaderMouseMap, BlockDepthMap;//, BlockDepthMapFlatTop;
+        static public Texture2D TerrainSprites, CharacterSprites, ShaderMouseMap, BlockDepthMap;
         public List<Texture2D> VisibleTileTypes;
         public Vector2 tileLocation = new(16, 8);
-        public const double GroundDensity = 0.1; //0.2
+        public const double GroundDensity = 0.1;
         static public Texture2D Shadow;
         static public List<Rectangle> Icons;
         static public Texture2D ItemSheet;
         static public void Initialize()
         {
-           // content = Game1.Instance.Content;
             Generator.InitGradient3();
             CharacterSprites = Game1.Instance.Content.Load<Texture2D>("Graphics/Characters/best/best2");
             ShaderMouseMap = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap - Cube");
-            BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19"); //blockDepth09");
-            //BlockDepthMapFlatTop = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09flatTop");
+            BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19");
             Shadow = Game1.Instance.Content.Load<Texture2D>("Graphics/shadow");
-
-            //Block.Initialize();
-            //Cell.Initialize();
-
-            
 
             ItemSheet = Game1.Instance.Content.Load<Texture2D>("Graphics/ItemSheet");
             ItemSheet.Name = "Default item sprites";
@@ -134,15 +82,9 @@ namespace Start_a_Town_
             for (int j = 0; j < iconsV; j++)
                 for (int i = 0; i < iconsH; i++)
                     Icons.Add(new Rectangle(i * 32, j * 32, 32, 32));
-
-
-            //Cell.Initialize();
-
-
-            
         }
 
-        public World World;// { get { return (World)this["World"]; } set { this["World"] = value; } }
+        public World World;
         public string Name;
         public TimeSpan Time;
         public Texture2D[] Thumbnails;
@@ -970,7 +912,7 @@ namespace Start_a_Town_
         public override bool SetCell(Vector3 global, Block.Types type, byte data, int variation = 0)
         {
             Cell cell = global.GetCell(this);
-            if (cell.IsNull())
+            if (cell is null)
                 return false;
             Chunk chunk = global.GetChunk(this);
             //undoOperation = new CellOperation(net, global, cell.Type, cell.Variation, cell.Orientation);
@@ -1010,7 +952,7 @@ namespace Start_a_Town_
         public override bool SetBlock(Vector3 global, Block.Types type)
         {
             Cell cell = global.GetCell(this);
-            if (cell.IsNull())
+            if (cell is null)
                 return false;
             Chunk chunk = global.GetChunk(this);
             //undoOperation = new CellOperation(net, global, cell.Type, cell.Variation, cell.Orientation);
@@ -1033,7 +975,7 @@ namespace Start_a_Town_
         public override bool SetBlock(Vector3 global, Block.Types type, byte data, int variation = 0, int orientation = 0, bool raiseEvent = true)
         {
             Cell cell = global.GetCell(this);
-            if (cell.IsNull())
+            if (cell is null)
                 return false;
             Chunk chunk = global.GetChunk(this);
             //undoOperation = new CellOperation(net, global, cell.Type, cell.Variation, cell.Orientation);
@@ -1198,7 +1140,7 @@ namespace Start_a_Town_
         public override void SetLight(Vector3 global, byte sky, byte block)
         {
             Chunk ch = this.GetChunk(global);
-            if (ch.IsNull())
+            if (ch is null)
                 return;
             Vector3 loc = global.ToLocal();
             ch.SetSunlight(loc, sky);
@@ -1209,7 +1151,7 @@ namespace Start_a_Town_
         public override void SetSkyLight(Vector3 global, byte value)
         {
             Chunk ch = this.GetChunk(global);
-            if (ch.IsNull())
+            if (ch is null)
                 return;
             Vector3 loc = global.ToLocal();
             ch.SetSunlight(loc, value);
@@ -1219,7 +1161,7 @@ namespace Start_a_Town_
         public override void SetBlockLight(Vector3 global, byte value)
         {
             Chunk ch = this.GetChunk(global);
-            if (ch.IsNull())
+            if (ch is null)
                 return;
             Vector3 loc = global.ToLocal();
             ch.SetBlockLight(loc, value);

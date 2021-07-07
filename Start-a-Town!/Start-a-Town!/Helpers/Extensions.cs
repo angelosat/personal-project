@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 using System.Xml.Linq;
 using System.Threading;
@@ -51,12 +49,6 @@ namespace Start_a_Town_
         public static Vector2 ToVector(this Point point)
         { return new Vector2(point.X, point.Y); }
 
-        [Obsolete]
-        public static bool IsNull(this object obj)
-        {
-            throw new Exception();
-            return obj == null;
-        }
         public static float GetMouseoverDepth(this Vector3 worldGlobal, IMap map, Camera camera)
         {
             Vector3 local = worldGlobal - new Vector3(map.GetOffset(), 0);

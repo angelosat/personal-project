@@ -440,7 +440,7 @@ namespace Start_a_Town_.UI
         public void GetContextActions(ContextArgs a)
         {
             IContextable contextable = this.Object as IContextable;
-            if (contextable.IsNull())
+            if (contextable is null)
                 return;// throw new NullReferenceException("Nameplate's object is null");
             contextable.GetContextActions(a);
         }

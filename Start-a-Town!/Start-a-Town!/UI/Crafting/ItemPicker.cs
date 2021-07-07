@@ -16,7 +16,7 @@ namespace Start_a_Town_.UI
         {
             get
             {
-                if (_Instance.IsNull())
+                if (_Instance is null)
                     _Instance = new ItemPicker();
                 return _Instance;
             }

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     class Location
     {
         public IMap Map;
@@ -38,7 +35,6 @@ namespace Start_a_Town_
                     new Vector3(box.Max.X, box.Min.Y, global.Z), 
                     new Vector3(box.Max.X, box.Max.Y, global.Z) 
                 };
-            //return corners.Any(c => map.IsSolid(c + new Vector3(0, 0, gravity)));
             return corners.Any(c => map.GetBlock(c + new Vector3(0, 0, gravity)).Density > 0);
         }
     }

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections.Concurrent;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes.StaticMaps.Screens;
 using Start_a_Town_.UI;
 using Start_a_Town_.Towns;
 using Start_a_Town_.Net;

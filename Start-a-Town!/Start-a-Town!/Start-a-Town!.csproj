@@ -200,6 +200,7 @@
     <Compile Include="Components\Animations\AnimationBlending.cs" />
     <Compile Include="Components\Animations\AnimationExtensions.cs" />
     <Compile Include="Components\BuildingPlanComponent.cs" />
+    <Compile Include="Components\ColorCustomization\CharacterColor.cs" />
     <Compile Include="Components\GearType.cs" />
     <Compile Include="Components\IEntity.cs" />
     <Compile Include="Components\Loot.cs" />
@@ -571,8 +572,12 @@
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Terraforming\Biome.cs" />
     <Compile Include="Modules\Population\PopulationManager.cs" />
+    <Compile Include="Terraforming\LightingEngine.BatchToken.cs" />
+    <Compile Include="Terraforming\LightingEngine.BatchTokenWorldPositions.cs" />
+    <Compile Include="Terraforming\Map.MapSize.cs" />
     <Compile Include="Terraforming\Mutators\GradientLowRes.cs" />
     <Compile Include="Terraforming\Mutators\MutatorProperty.cs" />
+    <Compile Include="Terraforming\Time.cs" />
     <Compile Include="UI\Buttons\ButtonHelper.cs" />
     <Compile Include="UI\Buttons\ButtonNew.cs" />
     <Compile Include="UI\Buttons\ButtonBase.cs" />
@@ -797,7 +802,6 @@
     <Compile Include="GameModes\IWorld.cs" />
     <Compile Include="GameModes\MapRules.cs" />
     <Compile Include="GameModes\StaticMaps\GameModeStaticMaps.cs" />
-    <Compile Include="GameModes\StaticMaps\Screens\ScreenMapLoading.cs" />
     <Compile Include="GameModes\StaticMaps\StaticMap.cs" />
     <Compile Include="GameModes\StaticMaps\StaticMapLoader.cs" />
     <Compile Include="GameModes\StaticMaps\StaticWorld.cs" />
@@ -910,7 +914,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PathFinding\PathingSync.cs" />
-    <Compile Include="Terraforming\LightingEngineThreaded.cs" />
     <Compile Include="Terraforming\Location.cs" />
     <Compile Include="Terraforming\Mutators\PerlinWorm.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\Region.cs" />
@@ -1079,7 +1082,6 @@
     <Compile Include="Net\PlayerData.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Net\Server\Server.cs" />
-    <Compile Include="Terraforming\ChunkCollection.cs" />
     <Compile Include="Terraforming\ChunkLoader.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1099,14 +1101,12 @@
     <Compile Include="Terraforming\Mutators\Normal.cs" />
     <Compile Include="Terraforming\Mutators\Test.cs" />
     <Compile Include="Terraforming\Mutators\Terraformer.cs" />
-    <Compile Include="Terraforming\LightSpread.cs" />
     <Compile Include="Terraforming\MapThumb.cs" />
     <Compile Include="Terraforming\World.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="KeyboardMap.cs" />
     <Compile Include="Terraforming\Position.cs" />
     <Compile Include="Objects\GameObjectSlot.cs" />
-    <Compile Include="Screens\WorldScreen.cs" />
     <Compile Include="SaveTag.cs" />
     <Compile Include="Terraforming\WorldArgs.cs" />
     <Compile Include="TextInput.cs">
@@ -1121,7 +1121,7 @@
     <Compile Include="UI\ActionBar.cs" />
     <Compile Include="UI\Bars\Bar.cs" />
     <Compile Include="UI\CharacterCreation\ButtonColor.cs" />
-    <Compile Include="UI\CharacterCreation\CharacterColors.cs" />
+    <Compile Include="Components\ColorCustomization\CharacterColors.cs" />
     <Compile Include="UI\CharacterCreation\UICharacterCustomization.cs" />
     <Compile Include="UI\CharacterCreation\ColoredRectangle.cs" />
     <Compile Include="UI\CharacterCreation\ColorPickerWindow.cs" />
@@ -1217,12 +1217,10 @@
     <Compile Include="UI\SplitStackWindow.cs" />
     <Compile Include="UI\SuperDataView.cs" />
     <Compile Include="UI\ThoughtsWindow.cs" />
-    <Compile Include="UI\WorldSelection\WorldScreenUI.cs" />
     <Compile Include="UI\WorldSelection\WorldBrowser.cs" />
     <Compile Include="UndoableCollection.cs" />
     <Compile Include="Helpers\VectorHelper.cs" />
     <Compile Include="Visualizations\BlockCacheEntry.cs" />
-    <Compile Include="Visualizations\Isometric.cs" />
     <Compile Include="WindowsHook.cs" />
     <Compile Include="Timer2.cs" />
     <Compile Include="Terraforming\Cell.cs" />

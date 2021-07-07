@@ -1342,16 +1342,6 @@ namespace Start_a_Town_.Net
         {
         }
 
-        public void AddObject(GameObject obj, Vector3 global)
-        {
-            Packet.Create(this.PacketID, PacketType.InstantiateAndSpawnObject, Network.Serialize(w =>
-            {
-                obj.Write(w);
-                Position.Write(w, global, Vector3.Zero);
-            })).BeginSendTo(Host, RemoteIP);
-        }
-        
-
         /// <summary>
         /// The client can't create objects, must await for a server message
         /// </summary>

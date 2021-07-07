@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Specialized;
-using Start_a_Town_.Components;
-using Start_a_Town_.Blocks;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
     [Flags]
-    public enum Edges { None = 0x0, West = 0x1, North = 0x2, East = 0x4, South = 0x8, All = 0xF }//, Top = 0x10, Bottom = 0x20 }
+    public enum Edges { None = 0x0, West = 0x1, North = 0x2, East = 0x4, South = 0x8, All = 0xF }
     [Flags]
     public enum VerticalEdges { None = 0x0, Top = 0x1, Bottom = 0x2, All = 0x3 }
     public class Cell : ISlottable
@@ -37,24 +33,16 @@ namespace Start_a_Town_
         }
         public void GetTooltipInfo(UI.Tooltip tooltip)
         {
-            //tooltip.Controls.Add(new UI.Label(this.Type.ToString()) { Location = tooltip.Controls.BottomLeft });
             tooltip.Controls.Add(new UI.Label(this.Block.GetName(this.BlockData)) { Location = tooltip.Controls.BottomLeft });
         }
         public void DrawUI(SpriteBatch sb, Vector2 pos)
         {
-            //Block.Registry[this.Type].Draw(sb, pos, Color.White, Vector4.One, 1, 0, this);
-            //sb.Draw(this.Block.Variations.First().Atlas.Texture, pos, this.Block.BlockState.GetTint(this.BlockData));
             this.Block.DrawUI(sb, pos, this.BlockData);
         }
         public void SetBlockType(Block.Types type)
         {
             this.Block = Block.Registry[type];
         }
-
-        //internal bool IsDeconstructible()
-        //{
-        //    return this.Block.IsDeconstructible(this.BlockData);
-        //}
 
         public void SetBlockType(int type)
         {
@@ -66,18 +54,15 @@ namespace Start_a_Town_
             return
                 "Local: " + LocalCoords +
                 "\nTile ID: " + this.Block.Type +
-                // "\nNext Tile ID: " + NextTile +
-                // "\nBrightness: " + Brightness +
                 "\nHorizontal Edges: " + HorizontalEdges +
                 "\nVertical Edges: " + VerticalEdges +
                 "\nStyle: " + Variation +
                 "\nOrientation: " + Orientation +
-                "\nVisible: " + Visible;// +
-               // "\nSolid: " + Solid;
+                "\nVisible: " + Visible;
         }
 
-        static BitVector32.Section _X, _Y, _Z, _HasData, _Orientation, _Visible; // _QueuedForActivation,//,_Skylight , _Edges
-        static BitVector32.Section _Variation, _HorEdges, _VerEdges, _Luminance, _BlockData; //_NextTile,_Solid, 
+        static BitVector32.Section _X, _Y, _Z, _HasData, _Orientation, _Visible;
+        static BitVector32.Section _Variation, _HorEdges, _VerEdges, _Luminance, _BlockData;
         static BitVector32.Section _Valid, _Discovered, _HorizontalEdges, _VerticalEdges;
 
         static public void Initialize()
@@ -87,10 +72,8 @@ namespace Start_a_Town_
             _Z = BitVector32.CreateSection((short)(Map.MaxHeight - 1), _Y); //7 bits
 
             _HasData = BitVector32.CreateSection(1, _Z); //1 bits
-            //_Orientation = BitVector32.CreateSection(3, _Z); //2 bits
             _Orientation = BitVector32.CreateSection(3); //2 bits
             _Variation = BitVector32.CreateSection(3, _Orientation); //2 bits
-        //    _QueuedForActivation = BitVector32.CreateSection(1, _Variation); //1 bit
             _Visible = BitVector32.CreateSection(1, _Variation);//_QueuedForActivation); //1 bit
             _HorEdges = BitVector32.CreateSection(15, _Visible); //4 bits
             _VerEdges = BitVector32.CreateSection(3, _HorEdges); //2 bits
@@ -101,7 +84,6 @@ namespace Start_a_Town_
             _Discovered = BitVector32.CreateSection(1, _Valid); //1 bits
             _HorizontalEdges = BitVector32.CreateSection(15, _Discovered); //1 bits
             _VerticalEdges = BitVector32.CreateSection(3, _HorizontalEdges); //1 bits
-
         }
 
         #region fields
@@ -109,12 +91,8 @@ namespace Start_a_Town_
         public byte Y; // 1 byte
         public byte Z; // 1 byte
         public Block Block = BlockDefOf.Air; // 4 bytes
-        //public bool Valid = true; // 4 bytes
-        //public bool Discovered; // 4 bytes
         public BitVector32 Data2; // 4 bytes
         public BitVector32 ValidDiscovered; // 4 bytes
-        //public Edges HorizontalEdges = Edges.All; // 4 bytes
-        //public VerticalEdges VerticalEdges = VerticalEdges.All; // 4 bytes
         #endregion
 
         public bool Valid
@@ -149,7 +127,7 @@ namespace Start_a_Town_
         {
             get 
             { 
-                return this.Block.IsOpaque(this);//.Opaque;
+                return this.Block.IsOpaque(this);
             }
         }
         public bool Visible
@@ -167,7 +145,7 @@ namespace Start_a_Town_
             get { return Data2[_Variation]; }
             set { Data2[_Variation] = value; }
         }
-        public bool IsRoomBorder => this.Block.IsRoomBorder;// this.Block.Opaque;
+        public bool IsRoomBorder => this.Block.IsRoomBorder;
         public byte Luminance
         {
             get { return (byte)Data2[_Luminance]; }
@@ -202,8 +180,6 @@ namespace Start_a_Town_
         public Material Material => this.Block.GetMaterial(this.BlockData);
         #endregion
 
-
-
         public Cell()
         {
             this.Valid = true;
@@ -223,28 +199,17 @@ namespace Start_a_Town_
         }
         public bool IsSolid()
         {
-            return this.Block.IsSolid(this);// Block.Registry[this.Type].IsSolid(this);
+            return this.Block.IsSolid(this);
         }
         public bool IsInvisible()
         {
             return !this.Opaque;
-            //return this.Block.Type == Block.Types.Air;
         }
         static public bool IsInvisible(Cell cell)
         {
-            //return cell.Block.Type == Block.Types.Air;
             return cell.IsInvisible();
         }
-        public bool IsDrawable()
-        {
-            if (this.Block.Type == Block.Types.Air)
-                return false;
-            if (this.AllEdges == 0)
-                return false;
-            return true;
-        }
-
-
+       
         public SaveTag Save()
         {
             SaveTag data = new SaveTag(SaveTag.Types.Compound);
@@ -252,7 +217,6 @@ namespace Start_a_Town_
             data.Add(new SaveTag(SaveTag.Types.Int, "Data", this.Data2.Data));
             this.ValidDiscovered.Data.Save(data, "Extra");
             data.Add(new SaveTag(SaveTag.Types.Int, "ValidDiscovered", this.ValidDiscovered.Data));
-
             return data;
         }
         public Cell Load(SaveTag data)
@@ -263,62 +227,6 @@ namespace Start_a_Town_
             return this;
         }
 
-        static public List<Cell> GetNeighbors(Map map, Vector3 global)
-        {
-            var list = new List<Cell>();
-            foreach (var vector in global.GetNeighbors())
-            {
-                Cell cell;
-                if (vector.TryGetCell(map, out cell))
-                    list.Add(cell);
-            }
-            return list;
-        }
-
-        
-
-        static public bool CheckFace(Camera camera, Cell cell, Vector3 face)
-        {
-            return CheckFace(camera, cell.HorizontalEdges, cell.VerticalEdges, face);
-        }
-        static public bool CheckFace(Camera camera, Edges horEdges, VerticalEdges verEdges, Vector3 face)
-        {
-            Edges hor = Edges.None; ; VerticalEdges ver = VerticalEdges.None;
-            int rx, ry;
-            //Camera cam = new Camera(camera.Width, camera.Height, rotation: (int)-camera.Rotation);
-            //Coords.Rotate(cam, face.X, face.Y, out rx, out ry);
-            Coords.Rotate((int)camera.Rotation, face.X, face.Y, out rx, out ry);
-            //   cell.GetOutlines(camera);
-            // if (face.X == -1)
-            if (rx == -1)
-                hor = Edges.West;
-            //  else if (face.X == 1)
-            if (rx == 1)
-                hor = Edges.East;
-            //  if (face.Y == -1)
-            if (ry == -1)
-                hor = Edges.North;
-            //  else if (face.Y == 1)
-            if (ry == 1)
-                hor = Edges.South;
-
-            Edges transformed = horEdges;// cell.HorizontalEdges;// (Edges)cell.GetOutlines(camera);
-            //Console.WriteLine(hor + " " + transformed);
-            if (hor != Edges.None)
-                if ((transformed & hor) == hor)
-                    return true;
-
-            if (face.Z == 1)
-                ver = VerticalEdges.Top;
-            else if (face.Z == -1)
-                ver = VerticalEdges.Bottom;
-            if (ver != VerticalEdges.None)
-                //if ((cell.VerticalEdges & ver) == ver)
-                if ((verEdges & ver) == ver)
-                    return true;
-
-            return false;
-        }
         public void Write(BinaryWriter writer)
         {
             writer.Write((byte)this.Block.Type);
@@ -333,20 +241,16 @@ namespace Start_a_Town_
         }
         public Cell Read(BinaryReader reader)
         {
-            //this.Type = ;
             this.SetBlockType((Block.Types)reader.ReadByte());
             this.X = reader.ReadByte();
             this.Y = reader.ReadByte();
             this.Z = reader.ReadByte();
             this.Variation = reader.ReadByte();
-            //this.Data = new BitVector32(reader.ReadInt32());
             this.Data2 = new BitVector32(reader.ReadInt32());
             this.BlockData = reader.ReadByte();
             this.Discovered = reader.ReadBoolean();
-            //this.SetVariation(this.Data2);
             return this;
         }
-
 
         public IntVec3 Front => Block.Front(this);
         public IntVec3 Back => Block.Back(this);
@@ -361,11 +265,7 @@ namespace Start_a_Town_
         }
         internal bool IsHidden()
         {
-            //return !this.IsExposed && ScreenManager.CurrentScreen.Camera.HideUnknownBlocks;
             return !this.IsExposed && Rooms.Ingame.CurrentMap.Camera.HideUnknownBlocks;
-
-            //return this.AllEdges == 0 && !ScreenManager.CurrentScreen.Camera.DrawUnknownBlocks;
         }
-        
     }
 }

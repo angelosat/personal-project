@@ -1258,30 +1258,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return list;
         }
 
-        public bool LoadAllChunks()
-        {
-            this.ActiveChunks = new Dictionary<Vector2, Chunk>();
-            var loader = new ChunkLoader(this);
-            var max = this.Size.Chunks;
-            for (int i = 0; i < max; i++)
-            {
-                for (int j = 0; j < max; j++)
-                {
-                    Chunk ch;
-                    var vector = new Vector2(i, j);
-                    if (!loader.FromFile(vector, out ch))
-                        return false;
-                    this.ActiveChunks.Add(vector, ch);
-                    ch.ResetVisibleCells(); //uncomment to fix incorrectly detected exposed block faces
-                    
-
-                }
-            }
-
-            this.Regions.Init();
-            this.FinishLoading();
-            return true;
-        }
         public bool InitChunks(Action<string, float> callback = null)
         {
             callback?.Invoke("Post processing chunks", 0);
@@ -1380,12 +1356,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, -1), out neighbor))
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.South));
         }
-        void ResetLight(Chunk chunk, Action callback)
-        {
-            Queue<Vector3> cellList = chunk.ResetHeightMap();
-            //this.LightingEngine.Enqueue(cellList, callback);
-            this.UpdateLight(cellList, callback);
-        }
+       
         void ResetLight(Chunk chunk)
         {
             Queue<Vector3> cellList = chunk.ResetHeightMap();
@@ -1635,7 +1606,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             //Cell cell = global.GetCell(this);
             Cell cell = this.GetCell(global);
 
-            if (cell.IsNull())
+            if (cell is null)
                 return false;
             //Chunk chunk = global.GetChunk(this);
             Chunk chunk = this.GetChunk(global);
@@ -1749,85 +1720,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 }
             }
         }
-        /// <summary>
-        /// reports back text and loading percentage after loading each chunk
-        /// </summary>
-        /// <param name="callback"></param>
-        public void GenerateWithNotifications(Action<string, float> callback)
-        {
-            var size = this.Size.Chunks;
-            var max = (size * size);
-            //int loaded = 0;
-            //callback("Initializing Chunks: " + loaded.ToString() + " of " + max.ToString(), 0);
-            var n = 0;
-
-            callback("Initializing Chunks", n);
-
-            var mutatorlist = this.World.GetMutators().ToList();
-            mutatorlist.ForEach(m => m.SetWorld(this.World));
-
-            Dictionary<Chunk, Dictionary<Vector3, double>> gradCache = new Dictionary<Chunk, Dictionary<Vector3, double>>();
-            var watch = new Stopwatch();
-            watch.Start();
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    var pos = new Vector2(i, j);
-                    //var chunk = this.Generate(pos);
-                    var chunk = Chunk.Create(this, pos);// i, j); //(Map.Instance.MapArgs, (int)pos.X, (int)pos.Y, Map.Instance.GetSeedArray());
-                    gradCache[chunk] = chunk.InitCells2(mutatorlist);//.FinalizeCells(Server.Random); // WARNING!
-                    this.ActiveChunks.Add(pos, chunk);
-                    //loaded++;
-                    //callback("Loading Chunks: " + loaded.ToString() + " of " + max.ToString(), loaded / (float)max);
-                }
-            }
-            watch.Stop();
-            string.Format("chunks initialized in {0} ms", watch.ElapsedMilliseconds).ToConsole();
-
-            //watch.Restart();
-
-            //foreach (var chunk in this.ActiveChunks.Values)
-            //{
-            //    gradCache[chunk] = chunk.InitCells2(mutatorlist);//.FinalizeCells(Server.Random); // WARNING!
-            //}
-            foreach (var m in mutatorlist)//this.World.GetMutators())
-            {
-                callback("Applying " + m.Name, n++);
-
-                watch.Restart();
-                foreach (var chunk in this.ActiveChunks.Values)
-                {
-                    var cached = gradCache[chunk];
-                    chunk.InitCells3(m, cached);
-                    m.Finally(chunk, cached);
-                }
-                m.Generate(this);
-                watch.Stop();
-
-                string.Format("{0} finished in in {1} ms", m.ToString(), watch.ElapsedMilliseconds).ToConsole();
-            }
-            //foreach (var m in mutatorlist)//this.World.GetMutators())
-            //{
-            //    foreach (var chunk in this.ActiveChunks.Values)
-            //    {
-            //        m.Finally(chunk, gradCache[chunk]);
-            //    }
-            //}
-            //string.Format("chunk {0} finalized in {1} ms", chunkvector, watch.ElapsedMilliseconds).ToConsole();
-            //watch.Stop();
-
-            this.InitChunks(callback);                  
-            this.FinishCreating(callback); // initializes light and generates wild plants
-            this.InitUndiscoveredAreas(callback);
-
-            /* seed: "test"
-             * chunks generated in 525 ms
-                light calculated in 1996 ms
-                regions initialized in 244 ms
-                light updated in 846 ms
-             * */
-        }
+       
         public void GenerateWithNotificationsNew(Action<string, float> callback)
         {
             //List<Action> tasks = new List<Action>();
@@ -1987,13 +1880,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             this.LightingEngine.Enqueue(positions);
         }
-        public void UpdateLight(IEnumerable<Vector3> positions, Action callback)
-        {
-            if (this.LightingEngine == null)
-                this.LightingEngine = LightingEngine.StartNew(this, a => { }, a => { });// new LightingEngine(this);
-
-            this.LightingEngine.Enqueue(positions, callback);
-        }
+      
         public void UpdateLight(IEnumerable<Vector3> positions)
         {
             this.LightingEngine.HandleImmediate(positions);
@@ -2047,7 +1934,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override void SetLight(Vector3 global, byte sky, byte block)
         {
             Chunk ch = this.GetChunk(global);
-            if (ch.IsNull())
+            if (ch is null)
                 return;
             Vector3 loc = global.ToLocal();
             ch.SetSunlight(loc, sky);
@@ -2074,7 +1961,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override void SetBlockLight(Vector3 global, byte value)
         {
             Chunk ch = this.GetChunk(global);
-            if (ch.IsNull())
+            if (ch is null)
                 return;
             Vector3 loc = global.ToLocal();
             ch.SetBlockLight(loc, value);
@@ -2274,31 +2161,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         };
         public override MapRules Rules { get { return this._Rules; ; } }
 
-
-        internal void FinishCreating(Action<string, float> callback = null)
-        {
-            callback?.Invoke("Calculating light", 0);
-            var watch = Stopwatch.StartNew();
-            foreach (var ch in this.ActiveChunks)
-            {
-                ch.Value.UpdateSkyLight(true); //459
-            }
-            watch.Stop();
-            string.Format("light updated in {0} ms", watch.ElapsedMilliseconds).ToConsole();
-
-            callback?.Invoke("Generating plants", 0);
-            watch.Restart();
-            Terraformer.Trees.Generate(this);
-            watch.Stop();
-            string.Format("plants generated in {0} ms", watch.ElapsedMilliseconds).ToConsole();
-
-            callback?.Invoke("Diffusing light", 0);
-            foreach (var ch in this.ActiveChunks)
-            {
-                ch.Value.UpdateChunkBoundaries();
-                //ch.Value.ActivateCells();
-            } 
-        }
         internal IEnumerable<(string, Action)> FinishCreatingNew()
         {
             Stopwatch watch;

@@ -258,8 +258,6 @@ namespace Start_a_Town_.Net
             {
                 Instance.MapSaveTimer = Instance.MapSaveInterval;
             }
-            /// TODO: maybe reduce frequency of that call?
-            UnloadChunks();
 
             /// THESE MUST BE CALLED FROM WITHIN THE GAMESPEED LOOP
             CreatePacketsFromAllStreams();
@@ -330,45 +328,6 @@ namespace Start_a_Town_.Net
                 this.OutgoingStream.Write(Network.Packets.PacketTimestamped);
                 auxStream.BaseStream.CopyTo(this.OutgoingStream.BaseStream);
             }
-        }
-
-
-        /// <summary>
-        /// TODO: maybe reduce frequency of that call?
-        /// OBSOLETE, legacy code from when map was infinite
-        /// </summary>
-        [Obsolete]
-        private static void UnloadChunks()
-        {
-            if (!Instance.Map.Rules.UnloadChunks)
-                return;
-            var actives = Instance.Map.GetActiveChunks();
-            if (Instance.Map is null)
-                return;
-            var chunksToUnload = new List<Chunk>();
-            foreach (var chunk in actives.Values.ToList())
-            {
-                bool unload = true;
-                foreach (var player in Instance.GetPlayers())
-                {
-                    if (player.ControllingEntity is null)
-                        continue;
-                    var playerchunk = player.ControllingEntity.Global.GetChunkCoords();
-                    if (Vector2.Distance(chunk.MapCoords, playerchunk) <= Engine.ChunkRadius)
-                    {
-                        unload = false;
-                        break;
-                    }
-                }
-                if (unload)
-                {
-                    chunk.UnloadTimer--;
-                    if (chunk.UnloadTimer <= 0)
-                        chunksToUnload.Add(chunk);
-                }
-            }
-            foreach (var ch in chunksToUnload)
-                Instance.UnloadChunk(ch.MapCoords);
         }
 
         static public int RandomBlockUpdatesCount = 1;
@@ -1291,25 +1250,9 @@ namespace Start_a_Town_.Net
 
             if (!chunk.Saved)
                 this.ChunkLoader.ScheduleForSaving(chunk);
-            chunk.SaveThumbnails();
         }
 
         readonly ChunkLoader ChunkLoader;
-
-        private static void LoadChunk(Vector2 chunkPos, Action<Chunk> callback)
-        {
-            if (Instance.Map.GetActiveChunks().TryGetValue(chunkPos, out Chunk existing))
-            {
-                callback(existing);
-                return;
-            }
-            Instance.ChunkLoader.TryEnqueue(chunkPos,
-                (c) =>
-                {
-                    HandleLoadedChunk(c);
-                    callback(c);
-                });
-        }
 
         private static void HandleLoadedChunk(Chunk ch)
         {

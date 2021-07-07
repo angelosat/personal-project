@@ -147,7 +147,7 @@ namespace Start_a_Town_.UI
                     ContextAction = (a) =>
                     {
                         GameObject obj = invSlot.Object;
-                        if (obj.IsNull())
+                        if (obj is null)
                             return;
 
                         obj.GetInventoryContext(a, slotid);

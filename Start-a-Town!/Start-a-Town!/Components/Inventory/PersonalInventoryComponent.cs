@@ -8,7 +8,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Components
 {
-    public class PersonalInventoryComponent : EntityComponent, IObjectSpace
+    public class PersonalInventoryComponent : EntityComponent
     {
         class Packets
         {

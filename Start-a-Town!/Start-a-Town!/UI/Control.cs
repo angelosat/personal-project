@@ -1453,7 +1453,6 @@ namespace Start_a_Town_.UI
 
             return this.Show();
         }
-
         internal virtual void OnControlResized(ButtonBase buttonBase)
         {
 

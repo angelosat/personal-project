@@ -22,7 +22,6 @@ namespace Start_a_Town_.Rooms
         {
             get => _World; 
             set =>_World = value;
-            
         }
         public IMap Map;
         WorldScreenUI UI;

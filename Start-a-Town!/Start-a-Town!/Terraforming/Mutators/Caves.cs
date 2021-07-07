@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using Start_a_Town_.GameModes;
 
@@ -36,26 +32,14 @@ namespace Start_a_Town_.Terraforming.Mutators
                 c.Block == BlockDefOf.Sand)
                 return;
 
-
-            //byte[] ridgedSeed = BitConverter.GetBytes(w.Seed + Hash1);
-            //byte[] ridgedSeed2 = BitConverter.GetBytes(w.Seed + Hash2);
-            //double ridged = Generator.Perlin3D(x, y, z, 64, ridgedSeed);
-            //double ridged2 = Generator.Perlin3D(x, y, z, 64, ridgedSeed2);
-
             double ridged = Generator.Perlin3D(x, y, z, this.CaveFrequency, this.RidgedSeed);
 
-
-            //CavesVariation(c, z, ridged);
-            //return;
-
             double ridged2 = Generator.Perlin3D(x, y, z, this.CaveFrequency, this.RidgedSeed2);
-            double multi = ridged * ridged2;
+            //double multi = ridged * ridged2;
 
             if (ridged > -this.Threshold && ridged < this.Threshold && ridged2 > -this.Threshold && ridged2 < this.Threshold)
                 if (z > 0)
-                    //c.Type = Block.Types.Air;
                     c.Block = BlockDefOf.Air;
-                    //c.SetBlockType(Block.Types.Air);
             Watch.Stop();
         }
 

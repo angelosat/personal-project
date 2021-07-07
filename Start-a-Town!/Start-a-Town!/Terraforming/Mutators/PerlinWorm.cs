@@ -105,7 +105,6 @@ namespace Start_a_Town_.Terraforming.Mutators
             int CurrentStep, MaxLength;
             public float Life { get { return (MaxLength - CurrentStep) / (float)MaxLength; } }
 
-            readonly Random Random;
             float LastRadius;
             Vector3 Origin;
             readonly int Seed;
@@ -113,7 +112,6 @@ namespace Start_a_Town_.Terraforming.Mutators
             {
                 this.CurrentPosition = origin;
                 this.MaxLength = maxLength;
-                this.Random = new Random(seed);
                 this.LastRadius = GetRadius(3, 5, this.Life);
                 this.Origin = origin;
                 this.Seed = seed;
@@ -157,15 +155,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                
                 dir *= radius;
                 return dir;
-            }
-            Vector3 GetNextPosition(int currenstep, int seed)
-            {
-               
-                var dx = this.Random.Next(-1, 1);
-                var dy = this.Random.Next(-1, 1);
-                var dz = this.Random.Next(-1, 1);
-
-                return new Vector3(dx, dy, dz);
             }
             public float GetRadius(float minRadius, float maxRadius, float life)
             {

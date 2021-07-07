@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
@@ -21,14 +17,12 @@ namespace Start_a_Town_.Terraforming.Mutators
             {
                 Random random = new Random(gradient.GetHashCode() + "rock".GetHashCode());
                 c.Variation = (byte)random.Next(Block.Registry[Block.Types.Cobblestone].Variations.Count);
-                //c.Type = Block.Types.Cobblestone;
                 c.SetBlockType(Block.Types.Cobblestone);
                 return;
             }
 
             if (z == 0)
             {
-                //c.Type = Block.Types.Stone;
                 c.SetBlockType(Block.Types.Stone);
                 return;
             }
@@ -36,11 +30,9 @@ namespace Start_a_Town_.Terraforming.Mutators
             {
                 Random random = new Random(gradient.GetHashCode() + "soil".GetHashCode());
                 c.Variation = (byte)random.Next(Block.Registry[Block.Types.Soil].Variations.Count);
-                //c.Type = w.DefaultTile;
                 c.SetBlockType(w.DefaultTile);
                 return;
             }
-            //c.Type = Block.Types.Air;
             c.SetBlockType(Block.Types.Air);
         }
     }

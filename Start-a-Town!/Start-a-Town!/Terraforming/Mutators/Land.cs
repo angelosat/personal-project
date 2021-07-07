@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Terraforming.Mutators
@@ -29,17 +26,14 @@ namespace Start_a_Town_.Terraforming.Mutators
         {
             if (z > this.LandLevel)
             {
-                //c.Type = Block.Types.Air;
                 c.SetBlockType(Block.Types.Air);
                 return;
             }
-            //c.Type = w.DefaultTile;
             c.SetBlockType(w.DefaultTile);
         }
         public override List<MutatorProperty> GetAdjustableParameters()
         {
             List<MutatorProperty> list = new List<MutatorProperty>();
-            //list.Add(new MutatorProperty("Sea Level", 0, Map.MaxHeight, Map.MaxHeight / 2));
             list.Add(new MutatorProperty("Land Level", this.LandLevel, 0, Map.MaxHeight, 1));
             return list;
         }

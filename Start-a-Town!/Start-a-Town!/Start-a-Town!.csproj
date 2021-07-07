@@ -570,7 +570,9 @@
     <Compile Include="ReferenceManager.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Terraforming\Biome.cs" />
-    <Compile Include="Terraforming\Managers\PopulationManager.cs" />
+    <Compile Include="Modules\Population\PopulationManager.cs" />
+    <Compile Include="Terraforming\Mutators\GradientLowRes.cs" />
+    <Compile Include="Terraforming\Mutators\MutatorProperty.cs" />
     <Compile Include="UI\Buttons\ButtonHelper.cs" />
     <Compile Include="UI\Buttons\ButtonNew.cs" />
     <Compile Include="UI\Buttons\ButtonBase.cs" />

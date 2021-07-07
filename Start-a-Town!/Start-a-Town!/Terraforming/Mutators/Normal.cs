@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Terraforming.Mutators
@@ -13,43 +10,32 @@ namespace Start_a_Town_.Terraforming.Mutators
         static readonly int HashRock = "rock".GetHashCode();
         static readonly int HashSoil = "soil".GetHashCode();
 
-        float GroundRatio;// { get; set; }
-        float SoilThickness;// { get; set; }
+        float GroundRatio;
+        float SoilThickness;
         Random SoilRandomizer = new Random(HashSoil);
-        Random RockRandomizer = new Random(HashRock);
 
         public Normal()
         {
             this.ID = Terraformer.Types.Normal;
             this.Name = "Normal";
-            this.SoilThickness = .02f;// .025f;// 0.01f;// 5f;// 0.1f;
+            this.SoilThickness = .02f;
 
             this.GroundRatio = 0f;// .5f;
         }
 
         public override Block.Types Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r)
         {
-            double gradientSoil, gradientRock, turbulence, tRock, zNormal,
-              turbpower; //lower? higher turbpower makes floating islands
-            //    int soilLayerThickness = 10;
-            //float rockDensity = 0.01f;
-            byte[] seedArray = w.GetSeedArray();
-            //byte[] rockSeed = Generator.Shuffle(seedArray, 5);
-            //byte[] coalSeed = Generator.Shuffle(seedArray, 4);
-            
+            double gradientSoil, gradientRock, turbulence, tRock, zNormal; //turbpower; //lower? higher turbpower makes floating islands
 
             zNormal = z / (float)Map.MaxHeight - 0.5f;
 
             turbulence = 0;
             tRock = 0;
 
-            //turbpower = 1;
-            //for (int k = 0; k < octaves; k++)
-            //    turbulence += Generator.Perlin3D(i, j, z, 256 >> k, seedArray) * 0.2f;
             byte[] magnitudeSeed = BitConverter.GetBytes(w.Seed + HashMagnitude);
             byte[] rockSeed = BitConverter.GetBytes(w.Seed + HashRock);
 
-            turbpower = 0.1;
+            //turbpower = 0.1;
 
             int octaves = 8;
             for (int k = 0; k < octaves; k++)
@@ -63,11 +49,10 @@ namespace Start_a_Town_.Terraforming.Mutators
             tRock /= octaves;
 
             gradientSoil = zNormal + turbulence;
-            //tRock = Generator.Perlin3D(x, y, z, 16, rockSeed) * 0.4f;
 
-            gradientRock = zNormal + tRock + SoilThickness;// * (tRock + 1) / 2f;
+            gradientRock = zNormal + tRock + SoilThickness;
 
-            if (gradientRock < this.GroundRatio)//(this.GroundRatio * (1 - SoilThickness)))// rockDensity)// this.SoilThickness * GroundLevel)
+            if (gradientRock < this.GroundRatio)
             {
                 c.Variation = (byte)Terraformer.GetRandom(rockSeed, x, y, z, 0, Block.Registry[Block.Types.Cobblestone].Variations.Count);
                 return Block.Types.Cobblestone;
@@ -101,9 +86,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         {
             if (z == 0)
             {
-                //c.Type = Block.Types.Stone;
                 c.Block = BlockDefOf.Stone;
-                //c.SetBlockType(Block.Types.Stone);
                 return;
             }
             var maxZ = (float)Map.MaxHeight;
@@ -112,51 +95,20 @@ namespace Start_a_Town_.Terraforming.Mutators
             var rockTurbulence = 2;//5
             double gradientRock = zNormal + gradient * rockTurbulence + SoilThickness; 
             var seaLevel = maxZ / 2 - 2;
-            //if (gradientRock < this.GroundRatio)
-
-
-            //if (gradientSoil < -.3f) // for deep open space (hell?)
-            //{
-            //    c.Block = Block.Air;
-            //    return;
-            //}
-
-            //var gradRock = new GradientLowRes(w, x / 16, y / 16);
-            //var rockValue = zNormal + gradRock.GetGradient(x, y, z, 2);
-
-            //if (gradientSoil < this.GroundRatio - this.SoilThickness)
-            //if (rockValue < this.GroundRatio - this.SoilThickness)
-            if (gradientRock < this.GroundRatio)// - .001f)// this.SoilThickness)
+        
+            if (gradientRock < this.GroundRatio)
             {
-                    //Random random = this.RockRandomizer;// new Random(gradient.GetHashCode() + HashRock);
-                //c.Variation = (byte)random.Next(Block.Cobblestone.Variations.Count);
-                // why was i using mineral?
                 c.Block = BlockDefOf.Cobblestone;
-                //c.Block = Block.Mineral;
                 return;
             }
-
             
             if (gradientSoil <= this.GroundRatio)
             {
-                //var sandThickness = .01f;
-                //if (gradientSoil > this.GroundRatio - sandThickness)
-                //{
-                //    c.Block = Block.Sand;
-                //    return;
-                //}
-                //c.Variation = (byte)random.Next(Block.Registry[Block.Types.Soil].Variations.Count);
                 c.Variation = (byte)this.SoilRandomizer.Next(BlockDefOf.Soil.Variations.Count);
-
-                //c.Type = w.DefaultTile;
-                c.Block = BlockDefOf.Soil; // TODO: store the block class in the world instead of just the type, to reduce lookup
-                //c.SetBlockType(w.DefaultTile);// store the block class in the world instead of just the type, to reduce lookup
+                c.Block = BlockDefOf.Soil;
                 return;
             }
 
-            
-            //else
-            //{
             var sandThickness = .01f;
             var sandMaxLevel = seaLevel + 1;// 2;
 
@@ -168,47 +120,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                     if (gradientSoil < this.GroundRatio + sandThickness)
                         c.Block = BlockDefOf.Sand;
                 return;
-            //}
-            //c.Block = Block.Air;
-
         }
-
-        //internal override void Finally(Chunk newChunk, Dictionary<Microsoft.Xna.Framework.Vector3, double> gradients)
-        //{
-        //    var seaLevel = Map.MaxHeight / 2;
-        //    float zNormal;// = z / (float)Map.MaxHeight - 0.5f;
-
-        //    foreach (var c in newChunk.CellGrid2)
-        //    {
-
-        //        var z = c.Z;
-        //        var gradient = gradients[c.LocalCoords];
-        //        zNormal = z / (float)Map.MaxHeight - 0.5f;
-
-        //        double gradientSoil = zNormal + gradient;
-
-
-        //        var sandThickness = .01f;
-
-        //        if (c.Block == Block.Air)
-        //        {
-        //            if (z <= seaLevel)
-        //            {
-        //                c.Block = Block.Water;
-
-        //                if (z < seaLevel)
-        //                    c.BlockData = Blocks.BlockWater.GetData(1);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (z <= seaLevel + 2)
-        //                if (gradientSoil < this.GroundRatio + sandThickness)
-        //                    c.Block = Block.Sand;
-        //        }
-
-        //    }
-        //}
 
         public override object Clone()
         {

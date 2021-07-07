@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +11,7 @@ using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_
 {
-    public abstract class Terraformer : IComparable<Terraformer>, ICloneable//, 
+    public abstract class Terraformer : IComparable<Terraformer>, ICloneable
     {
         public int CompareTo(Terraformer other)
         {
@@ -37,7 +36,6 @@ namespace Start_a_Town_
         public static readonly Terraformer PerlinWorms = new PerlinWormGenerator();
 
         static int _IndexSequence = 0;
-        static int IndexSequence { get { return _IndexSequence++; } }
         static public Dictionary<Types, Terraformer> Dictionary { get { return _Dictionary; } }
         static readonly Dictionary<Types, Terraformer> _Dictionary = new Dictionary<Types, Terraformer>()
         {
@@ -53,13 +51,6 @@ namespace Start_a_Town_
             {Types.Minerals, Minerals},
             {Types.Empty, Empty},
         };
-        [Obsolete]
-        void Register(params Terraformer[] mutators)
-        {
-            foreach (var item in mutators)
-                Dictionary.Add(item.ID, item);
-        }
-
         public string Name { get; protected set; }
         public Types ID { get; protected set; }
 
@@ -199,7 +190,5 @@ namespace Start_a_Town_
         {
             return (Dictionary[id].Clone() as Terraformer).SetWorld(world);
         }
-
-
     }
 }

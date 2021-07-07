@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.Net;
-using Start_a_Town_.GameModes;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
     class GeneratorPlants : Terraformer
     {
-        float Density;// { get; set; }
+        float Density;
+        [Obsolete]
         List<GameObject.Types> PlantTypes = new List<GameObject.Types>() { 
             GameObject.Types.Tree, 
             GameObject.Types.BerryBush 
@@ -30,7 +27,6 @@ namespace Start_a_Town_
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    //if (rand.Next(2) > 0)
                     if (rand.Chance(0.5f))
                         continue;
                     var x = rand.Next(0, size);
@@ -38,12 +34,11 @@ namespace Start_a_Town_
                     var z = chunk.HeightMap[x][y];
                     var cell = chunk.GetLocalCell(x, y, z);
 
-                    //var block = cell.Block;// map.GetBlock(x, y, z);
                     if (
-                        //block == Block.Soil ||
                         cell.Block == BlockDefOf.Grass)
                     {
-                        var plant = rand.Next(2) < 1 ? Plant.CreateTree(PlantDefOf.Tree, map.Biome.Wood,1) : Plant.CreateBush(PlantDefOf.Bush,1,1);
+                        throw new NotImplementedException();
+                        GameObject plant = null;// rand.Next(2) < 1 ? Plant.CreateTree(PlantDefOf.Tree, map.Biome.Wood,1) : Plant.CreateBush(PlantDefOf.Bush,1,1);
                         int gx = x + (int)chunk.Start.X, gy = y + (int)chunk.Start.Y;
                         plant.Global = new Vector3(gx, gy, z + 1);
                         chunk.Objects.Add(plant);
@@ -101,15 +96,11 @@ namespace Start_a_Town_
         }
         public void Generate(Chunk chunk)
         {
-            var random = chunk.Map.Random;// new Random(seedInt + n.GetHashCode());
+            var random = chunk.Map.Random;
 
-            //int zSlice = Map.MaxHeight / 2;
-            //int zSlice = (int)(random.NextDouble() * Map.MaxHeight);
             var entities = new LinkedList<GameObject>();
             foreach (var plantType in this.PlantTypes)
             {
-                //int seedInt = chunk.Map.World.Seed + plantType.ToString().GetHashCode();
-                //byte[] seed = BitConverter.GetBytes(seedInt);
                 byte[] seed = new byte[4];
                 random.NextBytes(seed);
 
@@ -119,9 +110,6 @@ namespace Start_a_Town_
                     {
                         int z = chunk.HeightMap[lx][ly];
                         Cell cell = chunk.GetLocalCell(lx, ly, z);
-                        //if (cell.Block.Material != Material.Soil)
-
-                        //if (cell.Block.MaterialType != MaterialType.Soil)
                         if (cell.Block.GetMaterial(cell.BlockData).Type != MaterialType.Soil)
                             continue;
 
@@ -130,7 +118,6 @@ namespace Start_a_Town_
                         int oct = 2;
                         double n = 0;
                         for (int o = 0; o < oct; o++)
-                            //n += Generator.Perlin3D(gx, gy, zSlice, 16 >> o, seed) / Math.Pow(2, o);
                             n += Generator.Perlin3D(gx, gy, 0, 16 >> o, seed) / Math.Pow(2, o);
 
                         n += ((this.Density) * 2 - 1);
@@ -208,35 +195,6 @@ namespace Start_a_Town_
                 }
 
             n.ToConsole();
-            //int seedInt = map.GetWorld().Seed + plantType.ToString().GetHashCode();
-            //byte[] seed = BitConverter.GetBytes(seedInt);
-            //var g = new Vector3(x, y, zz);
-            //int z = map.GetHeightmapValue(g);// chunk.HeightMap[lx][ly];
-            //Cell cell = map.GetCell(g);// chunk.GetLocalCell(lx, ly, z);
-            ////if (cell.Block.Material != Material.Soil)
-            //if (cell.Block.MaterialType != MaterialType.Soil)
-            //    continue;
-
-            //int gx = lx + (int)chunk.Start.X, gy = ly + (int)chunk.Start.Y;
-
-            //int oct = 2;
-            //double n = 0;
-            //for (int o = 0; o < oct; o++)
-            //    n += Generator.Perlin3D(gx, gy, zSlice, 16 >> o, seed) / Math.Pow(2, o);
-
-            //n += ((this.Density) * 2 - 1);
-            //if (n > 0)
-            //{
-            //    Random random = new Random(seedInt + n.GetHashCode());
-            //    var r = random.NextDouble();
-            //    if (r < n)
-            //    {
-            //        //GameObject tree = GameObject.Create(GameObject.Types.Tree);
-            //        GameObject tree = GameObject.Create(plantType);
-            //        tree.Global = new Vector3(gx, gy, z + 1);
-            //        chunk.Objects.Add(tree);
-            //    }
-            //}
         }
 
         internal static void GeneratePlants(IMap map)

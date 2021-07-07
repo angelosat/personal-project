@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Start_a_Town_.UI
 {   
@@ -20,7 +18,6 @@ namespace Start_a_Town_.UI
                 {
                     base.Add(item);
                     Parent.Controls.Add(item);
-             //       Parent.OnItemAdded(item);
                 }
             }
         }
@@ -34,17 +31,12 @@ namespace Start_a_Town_.UI
         }
         public void Activate(MenuStripItem item)
         {
-            //if (!IsOpen)
-            //    return;
             var items = this.Items.Except(new MenuStripItem[] { item }).ToList();
             foreach (var other in items)
             {
-                //Control control = other.Tag as Control;
-                // if (!other.Dropdown.IsNull())
                 if (other.Dropdown.Controls.Count > 0)
                     other.Dropdown.Hide();
             }
-            // if (!item.Dropdown.IsNull())
             if (item.Dropdown.Controls.Count > 0)
                 item.Dropdown.Show();
         }
@@ -59,7 +51,7 @@ namespace Start_a_Town_.UI
             IsOpen = false;
             foreach (var item in this.Items)
             {
-                if (item.Dropdown.Controls.Count > 0)//IsNull())
+                if (item.Dropdown.Controls.Count > 0)
                     item.Dropdown.Hide();
             }
             base.HandleLButtonUp(e);

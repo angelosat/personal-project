@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
+    [Obsolete]
     class Slider : Control
     {
         public Action<float> ValueChangedAction = v => { };
@@ -32,11 +30,7 @@ namespace Start_a_Town_.UI
                 ValueChangedFunc();
                 OnValueChanged();
                 this.ValueChangedAction(value);
-
-                //    ThumbPosition = (int)((Value / (float)Max) * (ThumbMax));
                 this.Thumb.Location.X = Offset + (Width - 2 * Offset) * (Value - Min) / (Max - Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2;
-              //  this.Thumb.HoverText = !Name.IsNull() ? string.Format(Name, Value) : Value.ToString("##0.##");
-              //  this.Invalidate();
             }
         }
 
@@ -48,7 +42,6 @@ namespace Start_a_Town_.UI
             }
             set
             {
-               // base.Height = value;
             }
         }
 
@@ -61,19 +54,16 @@ namespace Start_a_Town_.UI
             set
             {
                 base.Name = value;
-                //this.Thumb.Name = value;
-                //this.Thumb.HoverText = !Name.IsNull() ? string.Format(Name, Value) : Value.ToString("##0.##");
             }
         }
 
-        public float Min, Max, Step;//, Value;
+        public float Min, Max, Step;
         public int TickFrequency { get; set; }
 
         public override void OnPaint(SpriteBatch sb)
         {
             DrawSprite(sb, Vector2.Zero);
         }
-
 
         public event EventHandler<EventArgs> ValueChanged;
         protected void OnValueChanged()
@@ -93,7 +83,6 @@ namespace Start_a_Town_.UI
             Alpha = Color.Lerp(Color.White, Color.Transparent, 0.5f);
 
             this.Thumb = new PictureBox(new Vector2(Offset + (Width - 2 * Offset) * (Value - Min) / (Max - Min), 0), UIManager.DefaultTrackBarThumbSprite, null) { MouseThrough = true };
-            this.Thumb.MouseLeftPress += new EventHandler<System.Windows.Forms.HandledMouseEventArgs>(Thumb_MouseLeftPress);
             this.Name = "{0}";
             Min = min;
             Max = max;
@@ -102,7 +91,6 @@ namespace Start_a_Town_.UI
             HoverFunc = () => Value.ToString("##0.##");
             
             Controls.Add(Thumb);
-            //Paint();
         }
 
         void Thumb_MouseLeftPress(object sender, System.Windows.Forms.HandledMouseEventArgs e)
@@ -116,20 +104,10 @@ namespace Start_a_Town_.UI
             sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X, (int)position.Y, Height / 2, Height), new Rectangle(0, 0, UIManager.DefaultTrackBarSprite.Height / 2, UIManager.DefaultTrackBarSprite.Height), Color.White);
             sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X + Height / 2, (int)position.Y, Width - Height, Height), new Rectangle(UIManager.DefaultTrackBarSprite.Height / 2, 0, 1, UIManager.DefaultTrackBarSprite.Height), Color.White);
             sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X + Width - Height / 2, (int)position.Y, Height / 2, Height), new Rectangle(UIManager.DefaultTrackBarSprite.Height / 2 + 1, 0, UIManager.DefaultTrackBarSprite.Height / 2, UIManager.DefaultTrackBarSprite.Height), Color.White);
-            //sb.Draw(UIManager.DefaultTrackBarThumbSprite, 
-            //    position - new Vector2(UIManager.DefaultTrackBarThumbSprite.Width / 2, 0) + new Vector2(Offset + (Width-2*Offset) * (Value - Min) / (Max - Min), 0), 
-            //    Color.White);
         }
 
-        //public override void Draw(SpriteBatch sb)
-        //{
-        //   // sb.Draw(Background, ScreenLocation, Alpha);
-        //    DrawSprite(sb, ScreenLocation);
-        //    base.Draw(sb);
-        //}
-
         bool Moving;
-        float Offset = UIManager.DefaultTrackBarSprite.Width / 4;// + UIManager.DefaultTrackBarSprite.Width / 2;
+        float Offset = UIManager.DefaultTrackBarSprite.Width / 4;
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
             float mouseX = (Controller.Instance.msCurrent.X / UIManager.Scale - ScreenLocation.X);
@@ -150,27 +128,9 @@ namespace Start_a_Town_.UI
                 return;
 
             float mouseX = (Controller.Instance.msCurrent.X / UIManager.Scale - ScreenLocation.X);
-            //if (mouseX < Offset || mouseX > Width - Offset)
-            //    return;
             float mousePerc = MathHelper.Clamp(mouseX / (float)Width, 0, 1);
-
-           // Console.WriteLine(mousePerc);
             Value = (float)Math.Round((Min + mousePerc * (Max - Min)) / Step) * Step;
-            //this.HoverText = Value.ToString("##0.##");
         }
-
-        //public override string HoverText
-        //{
-        //    get
-        //    {
-        //      //  return (!Name.IsNull() ? Name + ": " : "" ) + Value.ToString("##0.##");
-        //        return !Name.IsNull() ? string.Format(Name, Value) : Value.ToString("##0.##");
-        //    }
-        //    set
-        //    {
-        ////        base.HoverText = value;
-        //    }
-        //}
 
         protected override void OnGotFocus()
         {
@@ -181,11 +141,6 @@ namespace Start_a_Town_.UI
         {
             Alpha = Color.Lerp(Color.Transparent, Color.White, 0.5f);
             base.OnLostFocus();
-        }
-
-        public override void Dispose()
-        {
-            this.Thumb.MouseLeftPress -= Thumb_MouseLeftPress;
         }
     }
 }

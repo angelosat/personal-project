@@ -1,33 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using UI;
 
 namespace Start_a_Town_.UI
 {
-    class Anchor 
-    {
-        static public Vector2 Center
-        {
-            get { return new Vector2(0.5f); }
-        }
-        static public Vector2 TopLeft
-        {
-            get { return Vector2.Zero; }
-        }
-    }
-    class ControlEventArgs : EventArgs
-    {
-        public Control Control;
-        public ControlEventArgs(Control control)
-        {
-            this.Control = control;
-        }
-    }
     public abstract class Control : Element, IDisposable, ITooltippable, IKeyEventHandler, IBounded, IBoundedCollection
     {
         /// <summary>
@@ -36,7 +15,6 @@ namespace Start_a_Town_.UI
         /// <returns></returns>
         public virtual Vector2 GetLocation()
         {
-            //return Location + (Parent != null ? Parent.Location : Vector2.Zero);
             return Location + (Parent != null ? Parent.ClientLocation + Parent.GetLocation() : Vector2.Zero);
         }
         public virtual Vector2 ScreenLocation
@@ -47,7 +25,6 @@ namespace Start_a_Town_.UI
                - this.Dimensions * this.Anchor
                   + (Parent != null ? Parent.ScreenLocation + Parent.ClientLocation : Vector2.Zero);
             }
-            //get { return Location + (Parent != null ? Parent.ScreenLocation : new Vector2(0)); } 
         }
         public int X
         {
@@ -64,7 +41,6 @@ namespace Start_a_Town_.UI
             set
             {
                 _Parent = value;
-                //UpdateScreenLocation();
                 OnParentChanged();
             }
         }
@@ -80,12 +56,8 @@ namespace Start_a_Town_.UI
             this.ClearControls();
             this.AddControls(ctrls.ToArray());
         }
-        public Control SnapToScreenCenter()// { get { return new Vector2(UIManager.Width / 2, UIManager.Height / 2); } }
+        public Control SnapToScreenCenter()
         {
-            //this.Location = new Vector2(UIManager.Width - this.Width, UIManager.Height - this.Height) / 2;
-            //return this;
-
-
             this.Location = new Vector2(UIManager.Width, UIManager.Height) / 2;
             this.Anchor = Vector2.One / 2f;
             return this;
@@ -101,7 +73,7 @@ namespace Start_a_Town_.UI
             return this;
         }
 
-        public Control AnchorToScreenCenter()// { get { return new Vector2(UIManager.Width / 2, UIManager.Height / 2); } }
+        public Control AnchorToScreenCenter()
         {
             this.LocationFunc = () => UIManager.Center;
             this.Anchor = Vector2.One / 2f;
@@ -109,8 +81,7 @@ namespace Start_a_Town_.UI
         }
         public Control CenterLeftScreen()
         {
-            this.Location = new Vector2(0, (UIManager.Height-this.Height)/ 2);
-            //this.Anchor = Vector2.UnitY;
+            this.Location = new Vector2(0, (UIManager.Height - this.Height) / 2);
             return this;
         }
         public Vector2 LeftCenterScreen
@@ -119,11 +90,6 @@ namespace Start_a_Town_.UI
         { get { return new Vector2(UIManager.Width - this.Width, (UIManager.Height - Height) / 2); } }
         public Vector2 BottomLeftScreen
         { get { return new Vector2(0, UIManager.Height - Height); } }
-
-        //internal virtual void OnControlsChanged()
-        //{
-        //}
-
         public Vector2 BottomRightScreen
         { get { return new Vector2(UIManager.Width - Width, UIManager.Height - Height); } }
         public Vector2 BottomCenterScreen
@@ -141,13 +107,11 @@ namespace Start_a_Town_.UI
         bool _MouseThrough = false;
         public virtual bool MouseThrough
         {
-         //   get { return (Parent != null ? Parent.MouseThrough : _MouseThrough); }
             get { return _MouseThrough; }
             set { _MouseThrough = value; }
         }
         public bool IsMouseThrough
         {
-            //get { return this.Parent == null ? MouseThrough : Parent.IsMouseThrough; }
             get { return MouseThrough; }
         }
         LayerTypes _Layer = LayerTypes.Windows;
@@ -160,12 +124,12 @@ namespace Start_a_Town_.UI
         }
 
         public event EventHandler<TooltipArgs> DrawTooltip;
-        protected virtual void OnDrawTooltip(TooltipArgs e)//TooltipArgs e)
+        protected virtual void OnDrawTooltip(TooltipArgs e)
         {
             DrawTooltip?.Invoke(this, e);
         }
         Object _Tag;
-       
+
         public virtual Object Tag { get { return _Tag; } set { _Tag = value; OnTagChanged(); } }
         public event EventHandler<EventArgs> GotFocus, MouseEnter, MouseLeave, LostFocus, TooltipChanged, TagChanged;
         public event EventHandler<KeyPressEventArgs2> KeyPress, KeyRelease;
@@ -173,7 +137,7 @@ namespace Start_a_Town_.UI
         public UIManager WindowManager { get { return _WindowManager ?? ScreenManager.CurrentScreen.WindowManager; } set { _WindowManager = value; } }
         public bool AllowDrop, ClipToBounds = true;
         public Action LostFocusAction = () => { };
-        public Action ControlsChangedAction = () => { };        
+        public Action ControlsChangedAction = () => { };
         public Action OnUpdate = () => { };
         public Action<SpriteBatch, Rectangle> OnDrawAction = (sb, bounds) => { };
         string _Name;
@@ -183,7 +147,6 @@ namespace Start_a_Town_.UI
         public UIManager ui;
         public Dictionary<Components.Message.Types, Action<Control, GameEvent>> GameEventHandlers = new Dictionary<Components.Message.Types, Action<Control, GameEvent>>();
         public int ID;
-        //public SpriteEffects SprFx;
         public float t = 0, dt = -0.05f;
         public Color Alpha, Blend;
         Color _BackgroundColor = Color.Transparent;
@@ -199,22 +162,18 @@ namespace Start_a_Town_.UI
             }
             set { _BackgroundColor = value; this.Invalidate(); }
         }
-        
+
         public override Vector2 Dimensions { get => base.Dimensions; set { base.Dimensions = value; OnSizeChanged(); } }
         float _Opacity = 1;
-        //public Func<float> OpacityFunc;
         public virtual float Opacity
         {
             get
             {
-                //if (this.OpacityFunc != null)
-                //    return this.OpacityFunc();
                 return this._Opacity;
             }
             set { _Opacity = value; }
-        }//Invalidate(); } }
+        }
         public virtual RenderTarget2D Texture { get; set; }
-       // protected bool TopMost;
         public bool Focused { get { return Controller.Instance.MouseoverBlock.Object == this; } } //return WindowManager.ActiveControl == this; } }
         ControlCollection _Controls;
         public ControlCollection Controls
@@ -245,7 +204,7 @@ namespace Start_a_Town_.UI
         public bool IsValidated { get { return this.Valid; } }
         public virtual Control Invalidate(bool invalidateChildren = false)
         {
-   
+
             this.Valid = false;
             if (invalidateChildren)
                 foreach (Control ctrl in Controls)
@@ -257,7 +216,6 @@ namespace Start_a_Town_.UI
         {
             float ratio = e.NewScale / e.OldScale;
             Location = Location / ratio - (new Vector2(Size.Width - Size.Width / ratio, Size.Height - Size.Height / ratio) * Anchor);
-            // Location = (Location + (new Vector2(Size.Width, Size.Height) * Anchor)) / ratio;// ;
         }
 
         public virtual void Reposition(float ratio = 1)
@@ -268,19 +226,10 @@ namespace Start_a_Town_.UI
         public virtual void Reposition(Vector2 ratio)
         {
             Location = Location * ratio - (new Vector2(this.Size.Width - this.Size.Width * ratio.X, this.Size.Height - this.Size.Height * ratio.Y) * Anchor);
-            //foreach (var control in Controls)
-            //    control.Reposition(ratio);
         }
 
         public void AlignVertically(HorizontalAlignment alignment = HorizontalAlignment.Left)
         {
-            //Vector2 last = Vector2.Zero;
-            //foreach (var current in this.Controls)
-            //{
-            //    current.Location = last;
-            //    last = current.BottomLeft;
-            //}
-
             switch (alignment)
             {
                 case HorizontalAlignment.Left:
@@ -293,7 +242,6 @@ namespace Start_a_Town_.UI
                     break;
 
                 case HorizontalAlignment.Center:
-                    //last = current.BottomCenter - new Vector2(current.Width / 2, 0);
                     int maxw = 0, maxx = 0;
                     foreach (var current in this.Controls)
                     {
@@ -309,7 +257,6 @@ namespace Start_a_Town_.UI
                     break;
 
                 case HorizontalAlignment.Right:
-                    //last = current.BottomRight - new Vector2(current.Width, 0);
                     maxw = 0;
                     maxx = 0;
                     foreach (var current in this.Controls)
@@ -371,14 +318,7 @@ namespace Start_a_Town_.UI
             this.Tag = tag;
             return this;
         }
-        //{
-        //    get { return _ClientLocation; }
-        //    set
-        //    {
-        //        _ClientLocation = value;
 
-        //    }
-        //}
         Color _Tint = Color.White;
         public Func<Color> TintFunc;
         public virtual Color Tint
@@ -386,12 +326,7 @@ namespace Start_a_Town_.UI
             get
             {
                 return this.TintFunc?.Invoke() ?? this._Tint;
-                //if (TintFunc.IsNull())
-                //    return _Tint;
-                //else
-                //    return TintFunc();
             }
-            //set { _Color = value; this.Invalidate(); }    
             set
             {
                 this._Tint = value;
@@ -399,7 +334,7 @@ namespace Start_a_Town_.UI
             }
         }
 
-        Color _Color = Color.White*.5f; //Color.Red;// 
+        Color _Color = Color.White * .5f;
         public Func<Color> ColorFunc;
         public virtual Color Color
         {
@@ -410,9 +345,9 @@ namespace Start_a_Town_.UI
                 else
                     return ColorFunc();
             }
-            set 
-            { 
-                _Color = value; 
+            set
+            {
+                _Color = value;
                 this.Invalidate();
             }
         }
@@ -420,7 +355,7 @@ namespace Start_a_Town_.UI
         {
             PreparingPaint();
 
-            if (this.Width <= 0 || 
+            if (this.Width <= 0 ||
                 this.Height <= 0)
                 return;
 
@@ -430,15 +365,12 @@ namespace Start_a_Town_.UI
             gd.SetRenderTarget(Texture);
             gd.Clear(this.BackgroundColor);
 
-            sb.Begin();//SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-            //sb.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);//SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-
+            sb.Begin();
             OnPaint(sb);
             sb.End();
 
-            sb.Begin();//SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-            //sb.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);//SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-            OnAfterPaint(sb);//.GraphicsDevice);
+            sb.Begin();
+            OnAfterPaint(sb);
             sb.End();
 
             this.Valid = true;
@@ -462,7 +394,7 @@ namespace Start_a_Town_.UI
         }
         public Control SetOnSelectedTargetChangedAction(Action<Control, TargetArgs> action)
         {
-            this.OnSelectedTargetChangedAction = (t)=>action(this, t);
+            this.OnSelectedTargetChangedAction = (t) => action(this, t);
             return this;
         }
         public Control SetOnSelectedTargetChangedAction(Action<TargetArgs> action)
@@ -541,28 +473,18 @@ namespace Start_a_Town_.UI
         public Control(Vector2 location)
             : this()
         {
-            //Name = "<undefined>";
             Location = location;
-
-           // Initialize();
         }
         public Control(Vector2 location, Vector2 size)
             : this()
         {
             Width = (int)size.X;
             Height = (int)size.Y;
-
-            //Name = "<undefined>";
             Location = location;
-
-          //  Initialize();
         }
         public Control()
         {
-           // Name = "<undefined>";
             Location = new Vector2(0);
-            //this.AutoSize = true;
-            //Initialize();
         }
 
         #region Raise Events
@@ -639,7 +561,7 @@ namespace Start_a_Town_.UI
         }
         Action MouseEnterAction = () => { }, MouseLeaveAction = () => { };
         public Action MouseLBActionOld = () => { };
-        public Action MouseRBAction;// = () => { };
+        public Action MouseRBAction;
         public Action MouseLBAction = () => { };
 
         public virtual void OnMouseEnter()
@@ -658,7 +580,6 @@ namespace Start_a_Town_.UI
         }
         protected virtual void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            //this.WindowManager.BringToFront(GetWindow());
             this.MouseLBActionOld();
             Root.BringToFront();
             if (MouseLeftPress != null)
@@ -692,7 +613,10 @@ namespace Start_a_Town_.UI
         {
             MouseWheel?.Invoke(this, e);
         }
-        
+        protected virtual void OnMouseScroll(System.Windows.Forms.HandledMouseEventArgs e)
+        {
+            MouseScroll?.Invoke(this, e);
+        }
         protected virtual void OnLButtonDblClk(System.Windows.Forms.HandledMouseEventArgs e)
         {
             this.OnMouseLeftPress(e);
@@ -732,7 +656,6 @@ namespace Start_a_Town_.UI
         public Vector2 Center
         { get { return new Vector2(Width / 2, Height / 2); } }
         public Vector2 BottomCenter
-        //{ get { return new Vector2(Left + Width / 2, Bottom); } }
         {
             get
             {
@@ -740,23 +663,15 @@ namespace Start_a_Town_.UI
             }
         }
 
-//public Vector2 BottomLeft
-//{
-//    get { return new Vector2(Left, Bottom); }
-//   // set { Location.X = value.X; Location.Y = value.Y - Height; }
-//}
-public Vector2 BottomLeft
+        public Vector2 BottomLeft
         {
             get { return this.TopLeft + Vector2.UnitY * this.Height; }
         }
-        //public Vector2 BottomRight
-        //{ get { return new Vector2(Right, Bottom); } }
         public Vector2 BottomRight
         { get { return this.TopLeft + new Vector2(this.Width, this.Height); } }
         public Vector2 TopLeft
         { get { return this.Location + this.LocationFunc() - this.Dimensions * this.Anchor; } }
         public Vector2 TopRight
-        //{ get { return new Vector2(Right, Top); } }
         { get { return TopLeft + Vector2.UnitX * this.Width; } }
         public Vector2 CenterRight
         { get { return new Vector2(Right, Top + Height / 2); } }
@@ -767,42 +682,19 @@ public Vector2 BottomLeft
             set
             {
                 ClientLocation.X = value.X; ClientLocation.Y = value.Y;
-              //  ClientSize = new Rectangle((int)ClientLocation.X, (int)ClientLocation.Y, value.Width, value.Height);
                 ClientSize = new Rectangle(0, 0, value.Width, value.Height);
             }
         }
 
-        static public bool HitTest(Rectangle rect, Rectangle? viewport = null)
-        {
-            Rectangle final = Rectangle.Intersect(rect, viewport ?? rect);
-            return (final.Intersects(new Rectangle((int)(Controller.Instance.msCurrent.X / UIManager.Scale), (int)(Controller.Instance.msCurrent.Y / UIManager.Scale), 1, 1)));
-        }
         public virtual bool HitTest(Rectangle viewport)
         {
             return ((!this.IsMouseThrough) && Rectangle.Intersect(viewport, this.BoundsScreen).Intersects(new Rectangle((int)(Controller.Instance.msCurrent.X / UIManager.Scale), (int)(Controller.Instance.msCurrent.Y / UIManager.Scale), 1, 1)));
         }
         public virtual bool HitTest()
         {
-            //return ((!this.MouseThrough) && Bounds.Intersects(new Rectangle((int)(Controller.Instance.msCurrent.X / UIManager.Scale), (int)(Controller.Instance.msCurrent.Y / UIManager.Scale), 1, 1)));
             return ((!this.IsMouseThrough) && BoundsScreen.Intersects(new Rectangle((int)(Controller.Instance.msCurrent.X / UIManager.Scale), (int)(Controller.Instance.msCurrent.Y / UIManager.Scale), 1, 1)));
         }
-        public virtual bool HitTest(System.Windows.Forms.HandledMouseEventArgs e)//MouseState ms)
-        {
-            //return ((!MouseThrough) && Bounds.Intersects(new Rectangle((int)(ms.X / UIManager.Scale),(int)( ms.Y / UIManager.Scale), 1, 1)));
-            return ((!this.IsMouseThrough) && BoundsScreen.Intersects(new Rectangle((int)(e.X / UIManager.Scale), (int)(e.Y / UIManager.Scale), 1, 1)));
-        }
-        public virtual bool HitTest(System.Windows.Forms.HandledMouseEventArgs e, Rectangle viewport)
-        {
-            //return ((!MouseThrough) && Bounds.Intersects(new Rectangle((int)(ms.X / UIManager.Scale),(int)( ms.Y / UIManager.Scale), 1, 1)));
-            return ((!this.IsMouseThrough) && Rectangle.Intersect(viewport, this.BoundsScreen).Intersects(new Rectangle((int)(e.X / UIManager.Scale), (int)(e.Y / UIManager.Scale), 1, 1)));
-        }
-        public virtual bool HitTest(Vector2 ms)
-        {
-           // Vector2 ms = new Vector2(ms2.X, ms2.Y);
-            //return ((!MouseThrough) && Bounds.Intersects(new Rectangle((int)(ms.X / UIManager.Scale),(int)( ms.Y / UIManager.Scale), 1, 1)));
-            return ((!this.IsMouseThrough) && BoundsScreen.Intersects(new Rectangle((int)(ms.X / UIManager.Scale), (int)(ms.Y / UIManager.Scale), 1, 1)));
-        }
-        
+
         public Vector2 ScreenClientLocation
         {
             get { return new Vector2(X + ClientLocation.X, Y + ClientLocation.Y); }
@@ -820,20 +712,16 @@ public Vector2 BottomLeft
             get { return new Rectangle((int)Location.X, (int)Location.Y, Width, Height); }
         }
 
-        
         protected Rectangle _ClientSize;
         public virtual Rectangle ClientSize
         {
             get
             {
                 return _ClientSize;
-               // return new Rectangle((int)ClientLocation.X, (int)ClientLocation.Y, 
             }
             set
             {
                 _ClientSize = value;
-                //ClientLocation.X = value.X;
-                //ClientLocation.Y = value.Y;
 
                 if (AutoSize)
                 {
@@ -859,14 +747,9 @@ public Vector2 BottomLeft
             this.Location = value;
             return this;
         }
-       
+
         public virtual void SetOpacity(float value, bool children = false, params Control[] exclude)
         {
-            //this.Opacity = value;
-            //if (children)
-            //foreach (Control control in Controls.Except(exclude))
-            //    control.SetOpacity(value, children, exclude);
-
             if (!exclude.Contains(this))
                 this.Opacity = value;
             if (children)
@@ -881,7 +764,7 @@ public Vector2 BottomLeft
                     control.SetMousethrough(value, children);
             return this;
         }
-        
+
         public virtual Vector2 ClientDimensions
         {
             get
@@ -889,7 +772,6 @@ public Vector2 BottomLeft
             set
             {
                 ClientSize = new Rectangle(0, 0, (int)value.X, (int)value.Y);
-          //      OnSizeChanged();
             }
         }
         public virtual Rectangle Size
@@ -898,18 +780,12 @@ public Vector2 BottomLeft
             { return new Rectangle(0, 0, Width, Height); }
             set
             {
-                //this.AutoSize = false;
-                // set autosize to false when manually resizing?
                 var oldheight = this.Height;
                 Width = value.Width;
                 Height = value.Height;
-                var border = this.BackgroundStyle != null ? this.BackgroundStyle.Border : 0;// UIManager.BorderPx;
+                var border = this.BackgroundStyle != null ? this.BackgroundStyle.Border : 0;
                 this._ClientSize.Width = Width - 2 * border;
                 this._ClientSize.Height = Height - 2 * border;
-
-                //if (oldheight != this.Height)
-                //    this.Invalidate();
-
                 OnSizeChanged();
             }
         }
@@ -924,36 +800,17 @@ public Vector2 BottomLeft
         public virtual void Conform(params Control[] controls)
         {
             var rects = new Queue<Control>(controls);
-            //if (rects.Count == 0)
-            //    return;
-            var union = new Rectangle(0,0,0,0);
+            var union = new Rectangle(0, 0, 0, 0);
             while (rects.Count > 0)
                 union = Rectangle.Union(union, rects.Dequeue().BoundsLocal);
             this.ClientSize = union;
-            //this.Invalidate();
-            //return;
-
-
-            //Rectangle biggest = new Rectangle(0, 0, 0, 0);
-            //(new List<Control>(controls)).ForEach(
-            //    t =>
-            //    {
-            //        biggest.Width = Math.Max(biggest.Width, t.Size.Width);
-            //        biggest.Height = Math.Max(biggest.Height, t.Size.Height);
-            //    });
-            //this.ClientSize = biggest;
-
         }
         public event EventHandler<EventArgs> SizeChanged;
         protected virtual void OnSizeChanged()
         {
-            // i commented this out because i couldn't place controls above and left of the parent
-            //Location.X = MathHelper.Clamp(Location.X, 0, Game1.Instance.graphics.PreferredBackBufferWidth - Width);
-            //Location.Y = MathHelper.Clamp(Location.Y, 0, Game1.Instance.graphics.PreferredBackBufferHeight - Height);
-
             SizeChanged?.Invoke(this, EventArgs.Empty);
         }
-        
+
         public virtual bool AutoSize { get; set; }
         public event EventHandler<EventArgs> ControlAdded, ControlRemoved;
 
@@ -962,13 +819,9 @@ public Vector2 BottomLeft
             if (this.AutoSize)
             {
                 this.ClientSize = PreferredClientSize;
-                //Size = PreferredSize;
-
                 ResizeToClientSize();
             }
-            if (ControlAdded != null)
-                ControlAdded(this, new ControlEventArgs(control));
-            if(Parent != null)
+            if (Parent != null)
                 Parent.OnControlAdded(control);
 
             this.ControlsChangedAction();
@@ -991,10 +844,8 @@ public Vector2 BottomLeft
 
                 ResizeToClientSize();
             }
-                //Size = PreferredSize;
-            if (ControlRemoved != null)
-                ControlRemoved(this, new ControlEventArgs(control));
-            if (Parent != null) Parent.OnControlRemoved(control);
+            if (Parent != null)
+                Parent.OnControlRemoved(control);
             this.ControlsChangedAction();
         }
 
@@ -1023,9 +874,6 @@ public Vector2 BottomLeft
                 int width = 0, height = 0;
                 foreach (Control control in Controls)
                 {
-                    //width = Math.Max(width, (int)control.Location.X + control.Width - (int)control.Origin.X);
-                    //height = Math.Max(height, (int)control.Location.Y + control.Height - (int)control.Origin.Y);
-
                     width = Math.Max(width, (int)control.TopLeft.X + control.Width - (int)control.Origin.X);
                     height = Math.Max(height, (int)control.TopLeft.Y + control.Height - (int)control.Origin.Y);
                 }
@@ -1035,28 +883,21 @@ public Vector2 BottomLeft
 
         public virtual void OnBeforeDraw(SpriteBatch sb, Rectangle viewport) { }
         public virtual void OnAfterDraw(SpriteBatch sb, Rectangle viewport) { }
-        public virtual void OnHitTestPass() {
+        public virtual void OnHitTestPass()
+        {
             Controller.Instance.MouseoverBlockNext.Object = this;
         }
         public virtual void Draw(SpriteBatch sb, Rectangle viewport)
         {
-            // TODO: maybe put that somewhere else?
-            //if (HitTest(viewport))
-            //    Controller.Instance.MouseoverNext.Object = this;
             OnDrawItem(new DrawItemEventArgs(sb, BoundsScreen));
-            OnBeforeDraw(sb, viewport); 
-            //this.Bounds.DrawHighlight(sb);
-            Color c = Tint;// Color.White;//Color;
+            OnBeforeDraw(sb, viewport);
+            Color c = Tint;
             if (Texture != null)
             {
                 Rectangle final, source;
-               // this.Bounds.DrawHighlight(sb, new Vector2(Origin.X / Width, Origin.Y / Height), Rotation, 0.5f);
-
                 // TODO: this is no use because if i add something outside the window's client area and the window has autosize, it expands the client area screwing up hittesting
                 if (!ClipToBounds)
                 {
-                    //          this.Bounds.DrawHighlight(sb);
-                    //sb.Draw(this.Texture, this.Bounds, null, c * Opacity);
                     sb.Draw(this.Texture, this.BoundsScreen, null, c * Opacity, Rotation, this.Origin, SpriteEffects.None, 0);
                 }
                 else
@@ -1068,30 +909,20 @@ public Vector2 BottomLeft
 
             }
             OnAfterDraw(sb, viewport);
-            // let's try putting the hittest in the update method, as it should be
-            //if (this.HitTest(viewport))
-            //    OnHitTestPass();
 
-
-            foreach (Control control in this.Controls)//.ToList()) // no need for tolist, i shouldn't remove a control during drawing anyway
+            foreach (Control control in this.Controls)
                 control.Draw(sb, Rectangle.Intersect(control.BoundsScreen, viewport));
-            //OnDrawAction(sb);
-
         }
 
-        public virtual void Draw(SpriteBatch sb)//, ref IMouseoverable mouseover)
+        public virtual void Draw(SpriteBatch sb)
         {
             // TODO: maybe put that somewhere else?
             if (HitTest())
                 Controller.Instance.MouseoverBlockNext.Object = this;
-                //WindowManager.ActiveControl = this;
 
-            //if (MouseHover)
-            //    Controller.Instance.MouseoverNext.Object = this;
-            
+
             foreach (Control control in Controls)
                 control.Draw(sb);
-            //else
             OnDrawItem(new DrawItemEventArgs(sb, BoundsScreen));
         }
 
@@ -1117,7 +948,6 @@ public Vector2 BottomLeft
         {
             get
             {
-                //return this.HoverFunc.IsNull() ? _HoverText : HoverFunc();
                 if (this.HoverFunc == null)
                     return _HoverText;
                 else
@@ -1126,15 +956,9 @@ public Vector2 BottomLeft
             set { _HoverText = value; }
         }
 
-        public event EventHandler<TooltipEventArgs> TooltipDraw;
-        void OnTooltipDraw(TooltipEventArgs e)
-        {
-            TooltipDraw?.Invoke(this, e);
-        }
-
         public Action<Tooltip> TooltipFunc;
         public bool CustomTooltip;
-        public virtual void GetTooltipInfo(Tooltip tooltip)//List<GroupBox> TooltipGroups
+        public virtual void GetTooltipInfo(Tooltip tooltip)
         {
             if (TooltipFunc != null)
             {
@@ -1142,31 +966,20 @@ public Vector2 BottomLeft
                 return;
             }
             if (this.HoverText.Length > 0)
-                //tooltip.Controls.Add(new Label(HoverText, HoverFormat));// { TextFunc = this.HoverFunc });//new Label(HoverText));
-                tooltip.Controls.Add(new Label(HoverText, HoverFormat){ TextFunc = this.HoverFunc });//new Label(HoverText));
+                tooltip.Controls.Add(new Label(HoverText, HoverFormat) { TextFunc = this.HoverFunc });
 
-            // get
-            // {
             if (CustomTooltip)
             {
                 List<GroupBox> tt = new List<GroupBox>();
-                OnDrawTooltip(new TooltipArgs(tooltip));//new TooltipArgs(this, tt));
-                //return tt;
+                OnDrawTooltip(new TooltipArgs(tooltip));
             }
-            // return null;
-
-            // }
         }
         public override void Update()
         {
             this.OnUpdate();
 
-            //if (!Valid)
-            //    this.Validate();
-
             base.Update();
 
-            //ControlCollection copy = Controls.Copy();
             List<Control> copy = this.Controls.ToList();
             foreach (Control control in copy)
                 control.Update();
@@ -1302,15 +1115,9 @@ public Vector2 BottomLeft
                 OnMouseLeftPress(e);
                 return;
             }
-            // i moved that before the if clause to make the combobox close when clicking anywhere else 
-            // alternatively, could have just removed the return from inside the if clause 
-            //foreach (var c in this.Controls.ToList())
-            //    c.HandleLButtonDown(e);
         }
         public virtual void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            //this.MouseLBAction();
-
             if (this.HasChildren)
             {
                 List<Control> controls = Controls.ToList();
@@ -1318,13 +1125,6 @@ public Vector2 BottomLeft
                 foreach (Control c in controls)
                     c.HandleLButtonUp(e);
             }
-            //if (WindowManager.ActiveControl != this)
-            //    return;
-
-            //if (!MouseHover)
-            //    return;
-
-          //  Select();
             OnMouseLeftUp(e);
         }
         public virtual void HandleMiddleUp(System.Windows.Forms.HandledMouseEventArgs e)
@@ -1354,7 +1154,6 @@ public Vector2 BottomLeft
         public virtual void HandleRButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
             this.MouseRBAction?.Invoke();
-            //OnMouseRightPress(e);
             foreach (var c in this.Controls.ToList())
                 c.HandleRButtonDown(e);
             if (WindowManager.ActiveControl == this)
@@ -1365,14 +1164,6 @@ public Vector2 BottomLeft
         }
         public virtual void HandleRButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            //if (!e.Handled)
-            //{
-            //    if (this.MouseRBAction != null)
-            //    {
-            //        this.MouseRBAction();
-            //        e.Handled = true;
-            //    }
-            //}
             if (this.HasChildren)
             {
                 List<Control> controls = Controls.ToList();
@@ -1422,18 +1213,6 @@ public Vector2 BottomLeft
         public virtual bool Toggle(LayerTypes layer)
         {
             this.Layer = layer;
-            //if (WindowManager.Controls.Contains(this))
-            //{
-            //    WindowManager.Controls.Remove(this);
-            //    return false;
-            //}
-            //else
-            //{
-            //    if (!WindowManager.ControlsInMemory.Contains(this))
-            //        WindowManager.ControlsInMemory.Add(this);
-            //    WindowManager.Controls.Add(this);
-            //}
-            //return true;
 
             if (Show(layer))
                 return true;
@@ -1442,7 +1221,7 @@ public Vector2 BottomLeft
         }
         public virtual bool ToggleSmart()
         {
-            if(!this.IsOpen)
+            if (!this.IsOpen)
                 this.SmartPosition();
 
             if (Show())
@@ -1487,7 +1266,7 @@ public Vector2 BottomLeft
             return this;
         }
         public Action ShowAction = () => { };
-        
+
         public virtual bool Show()
         {
             return this.Show(this.Layer);
@@ -1498,7 +1277,6 @@ public Vector2 BottomLeft
             this.OnShow();
 
             ShowAction();
-            //Invalidate(true);
             if (!WindowManager.Layers[this.Layer].Contains(this))
             {
                 if (!WindowManager.ControlsInMemory.Contains(this))
@@ -1507,7 +1285,6 @@ public Vector2 BottomLeft
                 this.ConformToScreen();
                 return true;
             }
-          //  WindowManager.BringToFront(this);
             this.BringToFront();
             return false;
         }
@@ -1554,9 +1331,6 @@ public Vector2 BottomLeft
         }
         public virtual bool Hide()
         {
-            //var topControl = this.TopLevelControl;
-            //if (this != topControl)
-            //    return topControl.Hide();
             if (WindowManager.Remove(this))
             {
                 if (DialogBlock != null)
@@ -1566,7 +1340,7 @@ public Vector2 BottomLeft
                 OnHidden();
                 return true;
             }
-          
+
             return false;
         }
         public virtual bool HideOld()
@@ -1576,8 +1350,6 @@ public Vector2 BottomLeft
                 WindowManager[Layer].Remove(this);
                 return true;
             }
-            // if (WindowManager.Windows.Contains(this))
-            //     WindowManager.Windows.Remove(this);
             return false;
         }
 
@@ -1605,20 +1377,18 @@ public Vector2 BottomLeft
         {
             if (this is Window)
                 return this as Window;
-            Window window = new Window() { Title = name, Movable = movable, AutoSize = true, 
-                //Location = UIManager.Mouse, 
-                Closable = closable };//, TintFunc = ()=>Color.Black };
-            //if(name.Length==0)
-            //    window.Controls.Remove(window.labe
+            Window window = new Window()
+            {
+                Title = name,
+                Movable = movable,
+                AutoSize = true,
+                Closable = closable
+            };
             window.Client.Controls.Add(this);
             return window;
         }
         public Action<GameEvent> OnGameEventAction = (e) => { };
         readonly Dictionary<Components.Message.Types, Action<GameEvent>> Listeners = new();
-        //public void ListenTo(Components.Message.Types msgType, Action<GameEvent> action)
-        //{
-        //    this.Listeners.Add(msgType, action);
-        //}
         public void ListenTo(Components.Message.Types msgType, Action<object[]> action)
         {
             this.Listeners.Add(msgType, e => action(e.Parameters));
@@ -1626,7 +1396,6 @@ public Vector2 BottomLeft
         internal virtual void OnGameEvent(GameEvent e)
         {
             this.OnGameEventAction(e);
-            //this.Listeners.TryGetValue(e.Type, out A)
             this.Listeners.TryGetValue(e.Type, a => a(e));
             foreach (var child in this.Controls)
                 child.OnGameEvent(e);
@@ -1657,7 +1426,6 @@ public Vector2 BottomLeft
                 this.OnHitTestPass();
             foreach (var c in this.Controls)
                 c.Update(Rectangle.Intersect(rectangle, this.BoundsScreen));
-                //c.Update(rectangle);
         }
 
         public virtual Control FindChild(Func<Control, bool> predicate)
@@ -1675,32 +1443,25 @@ public Vector2 BottomLeft
         }
 
         protected DialogBlock DialogBlock;
-        //protected InputBlock InputBlock;
         public virtual bool ShowDialog()
         {
-            //InputBlock = new InputBlock();
-
-            //DialogBlock = new DialogBlock();
             WindowManager.Layers[LayerTypes.Dialog].Remove(DialogBlock.Instance);
             WindowManager.Layers[LayerTypes.Dialog].Add(DialogBlock.Instance);
             this.Layer = LayerTypes.Dialog;
 
             SnapToScreenCenter();
 
-            //WindowManager.Controls.Add(this);
             return this.Show();
         }
 
         internal virtual void OnControlResized(ButtonBase buttonBase)
         {
-            
+
         }
         public Control SetGameEventAction(Action<GameEvent> onGameEventAction)
         {
             this.OnGameEventAction = onGameEventAction;
             return this;
         }
-
-       
     }
 }

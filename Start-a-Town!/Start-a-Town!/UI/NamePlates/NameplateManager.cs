@@ -102,5 +102,10 @@ namespace Start_a_Town_
             else
                 this.RemoveControls(this.Container);
         }
+
+        public override void Draw(SpriteBatch sb, Rectangle viewport)
+        {
+            base.Draw(sb, viewport);
+        }
     }
 }

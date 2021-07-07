@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 
 namespace Start_a_Town_.UI
 {
-  //  public enum FilterType { Include, Exclude }
     public enum ConsoleMessageTypes { Acks }
 
     public class ConsoleBoxAsync : ScrollableBox
     {
-        const int Capacity = 32;
         public readonly object Lock = new object();
-        #region Filtering
         public FilterType FilterType = FilterType.Exclude;
         public HashSet<ConsoleMessageTypes> Filters = new HashSet<ConsoleMessageTypes>() { ConsoleMessageTypes.Acks };
 
@@ -25,9 +21,7 @@ namespace Start_a_Town_.UI
                 return FilterType == FilterType.Include;
             return FilterType == FilterType.Exclude;
         }
-        #endregion
 
-        ConcurrentQueue<Control> QueuedEntries = new ConcurrentQueue<Control>();
         public bool FadeText;
         public bool TimeStamp = true;
         public ConsoleBoxAsync(Rectangle bounds)
@@ -35,10 +29,10 @@ namespace Start_a_Town_.UI
         {
             LoadConfig();
             BackgroundColor = Color.Black;
-            Opacity = 0f;// 0.5f;
+            Opacity = 0f;
         }
 
-        public System.Collections.Concurrent.ConcurrentBag<string> Entries = new System.Collections.Concurrent.ConcurrentBag<string>();
+        public ConcurrentBag<string> Entries = new System.Collections.Concurrent.ConcurrentBag<string>();
 
         public Label Write(string name, string text)
         {
@@ -60,8 +54,6 @@ namespace Start_a_Town_.UI
                 if (TimeStamp)
                     text = text.Insert(0, DateTime.Now.ToString("[HH:mm:ss]"));
                 text = UIManager.WrapText(text, Client.Width);
-                //Label line = new Label(Client.Controls.BottomLeft, text) { TextColorFunc = () => c };
-               
 
                 if (this.Client.Controls.Count >= 16)
                 {
@@ -72,7 +64,6 @@ namespace Start_a_Town_.UI
 
                 Add(line); //add line after removing oldest one so that the box height doesn't increase?
                 this.AlignTopToBottom();
-
 
                 Client.ClientLocation.Y = Client.Bottom - Client.ClientSize.Height;
                 return line;
@@ -100,16 +91,8 @@ namespace Start_a_Town_.UI
             this.Entries.Add(text);
             lock (Lock)
             {
-                //if (TimeStamp)
-                //    text = text.Insert(0, DateTime.Now.ToString("[HH:mm:ss]" + "[" + name + "]: "));
                 text = text.Insert(0, DateTime.Now.ToString("[" + name + "]: "));
-                //text = UIManager.WrapText(text, Client.Width);
                 return this.Write(c, text);
-
-                //Label line = new Label(Client.Controls.BottomLeft, text) { TextColorFunc = () => c };
-
-                //Add(line);
-                //Client.ClientLocation.Y = Client.Bottom - Client.ClientSize.Height;
             }
         }
 

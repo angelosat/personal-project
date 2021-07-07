@@ -37,7 +37,6 @@ namespace Start_a_Town_.Rooms
             KeyHandlers.Push(ToolManager); // if i have it here then the hud handles 1,2,3 first instead of letting toolmanagement change game speed
             KeyHandlers.Push(WindowManager);
             KeyHandlers.Push(ContextMenuManager.Instance);
-            KeyHandlers.Push(PopupManager.Instance);
             return this;
         }
 

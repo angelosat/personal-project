@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,6 +9,11 @@ namespace Start_a_Town_
         public override Control Invalidate(bool invalidateChildren = false)
         {
             return this;
+        }
+
+        public override void Draw(SpriteBatch sb, Rectangle viewport)
+        {
+            base.Draw(sb, UIManager.Bounds);
         }
     }
 }

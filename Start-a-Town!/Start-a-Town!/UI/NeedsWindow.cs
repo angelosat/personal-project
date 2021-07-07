@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
-using Start_a_Town_.Components.Needs;
+
 
 namespace Start_a_Town_.UI
 {

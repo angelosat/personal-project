@@ -4,7 +4,6 @@ using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.UI.WorldSelection;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.GameModes.StaticMaps

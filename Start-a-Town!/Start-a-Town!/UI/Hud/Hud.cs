@@ -29,7 +29,6 @@ namespace Start_a_Town_
         UINpcFrameContainer UnitFrames;
         public UIContextActions ContextActions;
         public Panel PartyFrame;
-        public QuickBar QuickBar;
         public HotBar HotBar;
         public UnitFrame PlayerUnitFrame;
         public Panel Box_Buttons;
@@ -272,7 +271,6 @@ namespace Start_a_Town_
         void bar_Finished(object sender, EventArgs e)
         {
             FloatingBar bar = sender as FloatingBar;
-            bar.Finished -= bar_Finished;
             FloatingBars.Remove(bar.Object);
         }
         public void Initialize(GameObject obj)

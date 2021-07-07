@@ -1,23 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
     class HelpWindow : Window
     {
         static HelpWindow _Instance;
-        static public HelpWindow Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new HelpWindow();
-                return _Instance;
-            }
-        }
+        static public HelpWindow Instance => _Instance ??= new HelpWindow();
 
         public HelpWindow()
         {
@@ -39,9 +27,7 @@ namespace Start_a_Town_.UI
             panel.Controls.Add(text);
 
             Controls.Add(panel);
-            //Location = CenterScreen;
             this.SnapToScreenCenter();
-
         }
     }
 }

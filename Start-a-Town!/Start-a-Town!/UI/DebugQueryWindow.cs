@@ -1,35 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
-using Start_a_Town_.PathFinding;
 using Start_a_Town_.Components;
 
 namespace Start_a_Town_.UI
 {
     class DebugQueryWindow : Window
     {
-        //static DebugQueryWindow _Instance;
-
-        //public 
-        GameObject Object;
         EntityComponent Component;
         Label ComponentInfo;
-
-        static public void SetObject(GameObject obj)  
-        {
-            
-
-        }
 
         Panel Panel_Tabs, Panel_Mouseover;
 
         public DebugQueryWindow(GameObject obj)
         {
-            Object = obj;
             Title = obj.Name;
             AutoSize = true;
             Movable = true;
@@ -89,18 +75,15 @@ namespace Start_a_Town_.UI
             Client.Controls.Add(Panel_Mouseover);
         }
 
-        
-
         void chunkshot_Click(object sender, EventArgs e)
         {
             SpriteBatch sb = Game1.Instance.spriteBatch;
             GraphicsDevice gfx = Game1.Instance.GraphicsDevice;
-            using (RenderTarget2D screenshot = new RenderTarget2D(gfx, Block.Width * Chunk.Size, Map.MaxHeight * Block.Height))//Player.Instance.Chunk.Bounds.Height))
+            using (RenderTarget2D screenshot = new RenderTarget2D(gfx, Block.Width * Chunk.Size, Map.MaxHeight * Block.Height))
             {
                 gfx.SetRenderTarget(screenshot);
                 gfx.Clear(Color.Transparent);
                 sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-                //Player.Actor.Chunk.Render(sb);
                 sb.End();
                 gfx.SetRenderTarget(null);
 
@@ -115,7 +98,6 @@ namespace Start_a_Town_.UI
             }
         }
 
-
         void RB_mouseover_CheckedChanged(object sender, EventArgs e)
         {
             if ((sender as RadioButton).Checked)
@@ -124,15 +106,8 @@ namespace Start_a_Town_.UI
                 Controls.Remove(Panel_Mouseover);
         }
 
-
-
-     
-
         public override bool Close()
         {
-            //Map.Instance.VisibleChunksChanged -= Instance_VisibleChunksChanged;
-            //Player.Actor.CurrentTaskChanged -= Instance_CurrentTaskChanged;
-            //UI.FpsCounter.Updated -= UIFpsCounter_Updated;
             return base.Close();
         }
     }

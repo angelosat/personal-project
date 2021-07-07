@@ -17,10 +17,9 @@ namespace Start_a_Town_.UI
             Button load = new Button("Load", 100) { LeftClickAction = Load };
             Button online = new Button("Multiplayer", 100) { LeftClickAction = online_LeftClick };
             Button settings = new Button("Settings", 100) { LeftClickAction = settings_Click };
-            Button about = new Button("About", 100) { LeftClickAction = about_Click };
             Button quit = new Button("Quit", 100) { LeftClickAction = quit_Click };
 
-            panel.AddControlsVertically(newgame, load, online, settings, about, quit);
+            panel.AddControlsVertically(newgame, load, online, settings, quit);
             
             Client.Controls.Add(panel);
             this.SnapToScreenCenter();
@@ -36,11 +35,6 @@ namespace Start_a_Town_.UI
             }
         }
 
-        void about_Click()
-        {
-            Window aboutwindow = new AboutWindow();
-            aboutwindow.ShowDialog();
-        }
 
         void settings_Click()
         {

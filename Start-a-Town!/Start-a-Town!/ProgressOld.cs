@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     public class ProgressOld
     {
         public event EventHandler<EventArgs> ValueChanged;

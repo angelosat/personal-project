@@ -6,7 +6,6 @@ using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Components;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
-using Start_a_Town_.Modules.Crafting;
 
 namespace Start_a_Town_.Crafting
 {
@@ -16,7 +15,6 @@ namespace Start_a_Town_.Crafting
         /// make this a property that returns first item from this.getorders(this.global) ?
         /// </summary>
         public CraftOperation CurrentOrder;
-        public CraftOperationNew CurrentOperation;
         public GameObject CurrentWorker;
         public List<CraftOrderNew> Orders = new List<CraftOrderNew>();
         public bool ExecutingOrders;

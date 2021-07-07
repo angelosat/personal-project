@@ -34,60 +34,6 @@ namespace Start_a_Town_.UI
             return plate;
         }
 
-        static public void Show(GameObject entity)
-        {
-            var plate = Nameplate.GetNameplate(entity);
-            if (plate is not null)
-                plate.OnFocus();
-        }
-        static public void Hide(GameObject entity)
-        {
-            var plate = Nameplate.GetNameplate(entity);
-            if (plate is not null)
-                plate.OnFocusLost();
-        }
-        public INameplateable Object;
-        Nameplate(INameplateable obj)
-        {
-            this.Layer = LayerTypes.Nameplates;
-            this.Object = obj;
-            this.Active = true;
-            this.LocationFunc = () =>
-                {
-                    Camera camera = obj.Map.Camera;
-                    Rectangle rect = Object.GetScreenBounds(camera);
-                    return new Vector2(rect.X + rect.Width / 2, rect.Y - this.Height - VertOffset) - this.Dimensions * new Vector2(.5f,0);
-                };
-        }
-
-        public override void OnBeforeDraw(SpriteBatch sb, Rectangle viewport)
-        {
-            if (PlayerOld.Actor is not null)
-            {
-                var playertarget = PlayerOld.Actor.GetComponent<AttackComponent>().Target;
-                if (this.Object is GameObject entity && playertarget != null)
-                    if (entity.RefID == playertarget.RefID)
-                    {
-                        var border = this.BoundsScreen;
-                        border.Inflate(1, 1);
-                        border.DrawHighlight(sb, Color.Red * 0.5f, Vector2.Zero, 0);
-                    }
-            }
-        }
-        public override void OnHitTestPass()
-        {
-            Controller.Instance.MouseoverBlockNext.Object = this.Object;
-        }
-        public override void OnMouseEnter()
-        {
-            this.BackgroundColor = this.Object.GetNameplateColor() * 0.5f;
-            base.OnMouseEnter();
-        }
-        public override void OnMouseLeave()
-        {
-            this.BackgroundColor = Color.Black * 0.5f;
-            base.OnMouseLeave();
-        }
         public void OnFocus()
         {
             this.Show();
@@ -100,28 +46,95 @@ namespace Start_a_Town_.UI
             this.Hide();
         }
 
+        static public void Show(GameObject entity)
+        {
+            var plate = Nameplate.GetNameplate(entity);
+            if (plate != null)
+                plate.OnFocus();
+        }
+        static public void Hide(GameObject entity)
+        {
+            var plate = Nameplate.GetNameplate(entity);
+            if (plate != null)
+                plate.OnFocusLost();
+        }
+        public INameplateable Object;
+        Nameplate(INameplateable obj)
+        {
+            this.Layer = LayerTypes.Nameplates;
+            this.Object = obj;
+            this.Active = true;
+            this.LocationFunc = () =>
+            {
+                Camera camera = obj.Map.Camera;
+                Rectangle rect = Object.GetScreenBounds(camera);
+                return new Vector2(rect.X + rect.Width / 2, rect.Y - this.Height - VertOffset) - this.Dimensions * new Vector2(.5f, 0);
+            };
+        }
+
+        public override void OnBeforeDraw(SpriteBatch sb, Rectangle viewport)
+        {
+            if (PlayerOld.Actor != null)
+            {
+                var playertarget = PlayerOld.Actor.GetComponent<AttackComponent>().Target;
+                if (this.Object is GameObject entity && playertarget != null)
+                    if (entity.RefID == playertarget.RefID)
+                    {
+                        var border = this.BoundsScreen;
+                        border.Inflate(1, 1);
+                        border.DrawHighlight(sb, Color.Red * 0.5f, Vector2.Zero, 0);
+                    }
+            }
+        }
+
+        public override void OnHitTestPass()
+        {
+            Controller.Instance.MouseoverBlockNext.Object = this.Object;
+        }
+
+        public override void OnMouseEnter()
+        {
+            this.BackgroundColor = this.Object.GetNameplateColor() * 0.5f;
+            base.OnMouseEnter();
+        }
+
+        public override void OnMouseLeave()
+        {
+            this.BackgroundColor = Color.Black * 0.5f;
+            base.OnMouseLeave();
+        }
+
+        
         static public Nameplate GetNameplate(INameplateable entity)
         {
             return Plates.GetValueOrDefault(entity);
         }
-        private static void Update(SceneState scene)
+        static bool Collision2(Nameplate b1, Nameplate toMove, Camera camera)
         {
-            var nextplates = new Dictionary<INameplateable, Nameplate>();
-            var sceneEntities = from o in scene.ObjectsDrawn select o as INameplateable;
-            foreach (var obj in sceneEntities)
+            if (b1 == toMove)
+                return false;
+            if (!b1.BoundsScreen.Intersects(toMove.BoundsScreen))
+                return false;
+
+            Vector2 plateCenter = new Vector2(b1.BoundsScreen.Center.X, b1.BoundsScreen.Center.Y);
+            Vector2 toMoveCenter = new Vector2(toMove.BoundsScreen.Center.X, toMove.BoundsScreen.Center.Y);
+            Vector2 d = toMoveCenter - plateCenter;
+
+            if (Math.Abs(d.X) > Math.Abs(d.Y)) // offset on x axis
             {
-                if (!Plates.TryGetValue(obj, out Nameplate plate))
-                {
-                    plate = Nameplate.Create(obj);
-                    plate.Show();
-                }
+                if (d.X > 0)
+                    toMove.Location.X = b1.Location.X + b1.BoundsScreen.Width + 1;
                 else
-                    Plates.Remove(obj);
-
-                nextplates.Add(obj, plate);
+                    toMove.Location.X = b1.Location.X - toMove.BoundsScreen.Width - 1;
             }
-
-            Plates = nextplates;
+            else // offset on y axis
+            {
+                if (d.Y < 0)
+                    toMove.Location.Y = b1.Location.Y - toMove.BoundsScreen.Height - 1;
+                else
+                    toMove.Location.Y = b1.Location.Y + b1.BoundsScreen.Height + 1;
+            }
+            return true;
         }
 
         public override void GetTooltipInfo(Tooltip tooltip)
@@ -142,7 +155,7 @@ namespace Start_a_Town_.UI
 
         internal override void OnGameEvent(GameEvent e)
         {
-            switch(e.Type)
+            switch (e.Type)
             {
                 case Message.Types.NameChanged:
                 case Message.Types.StackSizeChanged:
@@ -162,12 +175,12 @@ namespace Start_a_Town_.UI
         {
             return base.Invalidate(invalidateChildren);
         }
-        
+
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);
-            if(UISelectedInfo.IsSelected(this.Object as GameObject))
-                this.BoundsScreen.DrawHighlightBorder(sb, thickness:2, padding: 2);
+            if (UISelectedInfo.IsSelected(this.Object as GameObject))
+                this.BoundsScreen.DrawHighlightBorder(sb, thickness: 2, padding: 2);
         }
     }
 }

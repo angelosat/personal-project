@@ -24,36 +24,12 @@ namespace Start_a_Town_.Blocks.Chest
                 return this.Container.GetSlot(slotID);
             }
 
-            static public void GetPlayerActionsWorld(Dictionary<PlayerInput, Interaction> actions)
-            {
-                actions.Add(PlayerInput.RButton, new InteractionCustom("Open", Activate));
-            }
-            static void Activate(GameObject a, TargetArgs t)
-            {
-                var comp = a.Map.GetBlockEntity(t.Global) as BlockChestEntity;
-                var hauled = a.GetComponent<HaulComponent>().GetSlot();
-                if (hauled.Object == null)
-                    return;
-                comp.Container.Slots.Insert(hauled);
-                if (a.Net is Client)
-                {
-                    ShowUI(a, t);
-                }
-            }
             public override void OnRemove(IMap map, Vector3 global)
             {
                 foreach(var slot in this.Container.GetNonEmpty())
                 {
                     map.Net.PopLoot(slot.Object, global, Vector3.Zero);
                 }
-            }
-            private static void ShowUI(GameObject a, TargetArgs t)
-            {
-                var entity = a.Map.GetBlockEntity(t.Global) as BlockChestEntity;
-                var window = new WindowEntityInterface(entity, "Chest", () => t.Global);
-                var ui = new ContainerUI().Refresh(t.Global, entity);
-                window.Client.Controls.Add(ui);
-                window.Show();
             }
             public override object Clone()
             {

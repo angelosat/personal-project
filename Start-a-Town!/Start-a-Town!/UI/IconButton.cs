@@ -38,7 +38,6 @@ namespace Start_a_Town_.UI
             }
             set
             {
-                //   base.Width = value;
             }
         }
         public override int Height
@@ -53,7 +52,6 @@ namespace Start_a_Town_.UI
             }
             set
             {
-                //  base.Height = value;
             }
         }
 

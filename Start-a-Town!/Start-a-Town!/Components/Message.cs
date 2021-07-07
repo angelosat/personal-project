@@ -111,7 +111,6 @@ namespace Start_a_Town_.Components
             JobAccepted,
             GetGoals,
             JobGet,
-            UpdateAbilities,
             Dropped,
             Walk,
             JobComplete,

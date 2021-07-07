@@ -902,7 +902,6 @@ namespace Start_a_Town_
             return !this.IsSolid(cell, blockCoords);
         }
 
-        public virtual void GetInterface(Vector3 global) { WindowTargetInterface.Instance.Client.ClearControls(); }
         public virtual void GetInterface(IMap map, Vector3 global, WindowTargetManagement window) { }
         public virtual void ShowUI(Vector3 global)
         {

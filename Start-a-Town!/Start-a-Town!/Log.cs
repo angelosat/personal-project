@@ -30,7 +30,7 @@ namespace Start_a_Town_
             /// <para>arg1: text</para>
             /// </summary>
             Chat,
-            System, Dialogue, DialogueOption, DialogueEnd, Thoughts, Jobs, Needs,
+            System, Dialogue, DialogueOption, DialogueEnd, Jobs,
             ChatPlayer
         }
         static Log _Instance;
@@ -315,18 +315,6 @@ List of available commands:
                     speaker = p[0] as GameObject;
                     SpeechBubbleOld.Hide(speaker);
                     break;
-
-                case EntryTypes.Needs:
-                    NeedsWindow.Show(p[0] as GameObject);
-                    break;
-
-                case EntryTypes.Thoughts:
-                    ThoughtsWindow.Show(p[0] as GameObject);
-                    break;
-
-                //case EntryTypes.Jobs:
-                //    NpcJobsWindow.Show(p[0] as GameObject, p[1] as List<JobEntry>);
-                //    break;
 
                 default:
                     break;

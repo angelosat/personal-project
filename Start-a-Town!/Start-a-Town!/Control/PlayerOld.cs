@@ -65,32 +65,6 @@ namespace Start_a_Town_
         }
 
 
-        void Log_EntryAdded(object sender, LogEventArgs e)
-        {
-            switch (e.Entry.Type)
-            {
-                case Log.EntryTypes.CellChanged:
-                    GameObject tileObj = e.Entry.Values[0] as GameObject;
-                    if (Controller.Instance.MouseoverBlock.Object == tileObj)
-                        Controller.Instance.MouseoverBlock.Object = null;
-                    //GameObject obj ;
-                    //if(Controller.Instance.Mouseover.TryGet(out obj))
-                    //    if(obj == tileObj)
-                    //        Controller.Instance.Mouseover.Reset();
-                    break;
-                case Log.EntryTypes.Equip:
-                case Log.EntryTypes.Unequip:
-                    GameObject actor = e.Entry.Values[0] as GameObject;
-                    if (actor == PlayerOld.Actor)
-                        ActionBar.Instance.Initialize();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        
-
         //void Instance_TooltipBuild(object sender, TooltipArgs e)
         //{
         //    GameObject actor = Player.Actor;
@@ -265,13 +239,6 @@ namespace Start_a_Town_
                     //throw new NotImplementedException();
                     //GameObject.PostMessage(Actor, Message.Types.UpdateAbilities);
                     return;
-                case Message.Types.UpdateAbilities:
-                    ActionBar.Instance.Refresh();
-                    //InvWindow.Initialize(Actor);
-                   // InvWindow.Show(Actor);
-                   // InvWindow.Invalidate(Actor);
-                    return;
-
 
                 //case Message.Types.SkillAward:
                 //    //Hud.Instance.Controls.Add(new FloatingText(Actor, Skill.SkillRegistry.Find(sk => sk.ID == (Skill.Types)e.Parameters[0]).Name + " experience gained (" + (int)e.Parameters[1] + ")"));
@@ -307,13 +274,6 @@ namespace Start_a_Town_
         PlayerOld()
         {
             this.HotBar = new UI.HotBar();
-            // TODO: Complete member initialization
-            Log.Instance.EntryAdded += new EventHandler<LogEventArgs>(Log_EntryAdded);
-
-            //OrientationTool.MouseLeft += new EventHandler<EventArgs>(OrientationTool_MouseLeft);
-
-        //    TooltipManager.Instance.TooltipBuild += new EventHandler<TooltipArgs>(Instance_TooltipBuild);
-
         }
 
         

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
@@ -11,7 +6,6 @@ namespace Start_a_Town_.UI
     {
         KeyBind KeyBind;
         Label LabelShortcut;
-        //Label LabelName;
         public QuickButton(char c, KeyBind keyBind, string label = "") : base(c)
         {
             KeyBind = keyBind;
@@ -45,7 +39,6 @@ namespace Start_a_Town_.UI
         }
         public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
-            
             if (e.Handled)
                 return;
             if (KeyBind?.Key != e.KeyCode)

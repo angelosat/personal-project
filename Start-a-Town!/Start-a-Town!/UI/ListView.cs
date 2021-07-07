@@ -123,11 +123,7 @@ namespace Start_a_Town_.UI
         }
 
         public int HoverIndex;
-        void label_KeyPress(object sender, KeyPressEventArgs2 e)
-        {
-            OnKeyPress(e);
-        }
-
+       
         void scrollbar_Scroll(Object sender, ScrollEventArgs e)
         {
             BoxY = e.NewValue;
@@ -162,7 +158,6 @@ namespace Start_a_Town_.UI
             foreach (ListItem item in Controls)
             {
                 item.LeftClick -= listitem_Click;
-                item.KeyPress -= label_KeyPress;
                 item.Dispose();
             }
             Controls.Clear();

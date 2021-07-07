@@ -577,6 +577,7 @@
     <Compile Include="Terraforming\Mutators\GradientLowRes.cs" />
     <Compile Include="Terraforming\Mutators\MutatorProperty.cs" />
     <Compile Include="Terraforming\Time.cs" />
+    <Compile Include="UI\Anchor.cs" />
     <Compile Include="UI\Buttons\ButtonHelper.cs" />
     <Compile Include="UI\Buttons\ButtonNew.cs" />
     <Compile Include="UI\Buttons\ButtonBase.cs" />
@@ -587,6 +588,9 @@
     <Compile Include="UI\Control.cs" />
     <Compile Include="UI\DialogBlock.cs" />
     <Compile Include="Control\ObjectSpawnToolFromTemplate.cs" />
+    <Compile Include="UI\DragDrop\DragDropSlot.cs" />
+    <Compile Include="UI\DragDrop\DragEventArgs.cs" />
+    <Compile Include="UI\DrawMode.cs" />
     <Compile Include="UI\Editor\BlockBrowser.cs" />
     <Compile Include="UI\Editor\ObjectsWindowDefs.cs" />
     <Compile Include="UI\GroupBox.cs" />
@@ -936,7 +940,6 @@
     <Compile Include="UI\ComboBox\ComboBoxNew.cs" />
     <Compile Include="UI\ComboBox\ComboBoxNewNew.cs" />
     <Compile Include="UI\ComboBox\ComboBoxPanel.cs" />
-    <Compile Include="UI\ConsoleBox.cs" />
     <Compile Include="UI\Context\ContextActionBar.cs" />
     <Compile Include="UI\Context\ContextAction.cs" />
     <Compile Include="UI\DialogInput.cs" />
@@ -947,7 +950,6 @@
     <Compile Include="UI\Hud\UIChatSettings.cs" />
     <Compile Include="UI\Hud\UIGameSpeed.cs" />
     <Compile Include="UI\Hud\UISelectedInfo.cs" />
-    <Compile Include="UI\ILabelable.cs" />
     <Compile Include="UI\ItemText\EntityTextManager.cs" />
     <Compile Include="UI\ITooltippable.cs" />
     <Compile Include="UI\Lists\Collapsible\ListBoxCollapsible.cs" />
@@ -1109,7 +1111,6 @@
     <Compile Include="Modules\Towns\Town.cs" />
     <Compile Include="Modules\Towns\TownsManager.cs" />
     <Compile Include="Modules\Towns\UI\UITowns.cs" />
-    <Compile Include="UI\ActionBar.cs" />
     <Compile Include="UI\Bars\Bar.cs" />
     <Compile Include="UI\CharacterCreation\ButtonColor.cs" />
     <Compile Include="Components\ColorCustomization\CharacterColors.cs" />
@@ -1119,7 +1120,6 @@
     <Compile Include="UI\CharacterCreation\ColorPickerHueSaturation.cs" />
     <Compile Include="UI\CameraWidget.cs" />
     <Compile Include="UI\ConsoleBoxAsync.cs" />
-    <Compile Include="UI\CraftingTooltip.cs" />
     <Compile Include="UI\Dialogs\DialogLoading.cs" />
     <Compile Include="UI\Editor\TerrainWindow.cs" />
     <Compile Include="UI\Context\UIContextActions.cs" />
@@ -1133,24 +1133,20 @@
     <Compile Include="UI\Slots\SlotCustom.cs" />
     <Compile Include="UI\Slots\SlotGeneric.cs" />
     <Compile Include="UI\Slots\SlotDefault.cs" />
-    <Compile Include="UI\Popup.cs" />
     <Compile Include="UI\Context\ContextMenuManager.cs" />
     <Compile Include="UI\Context\ContextMenu2.cs" />
     <Compile Include="UI\Hud\HotBar.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarH.cs" />
-    <Compile Include="UI\FpsCounter.cs" />
-    <Compile Include="UI\IInterfaceable.cs" />
-    <Compile Include="UI\INameplateable.cs" />
+    <Compile Include="UI\NamePlates\INameplateable.cs" />
     <Compile Include="UI\Inventory\InventorySlot.cs" />
     <Compile Include="UI\LoadingBox.cs" />
-    <Compile Include="UI\LobbyWindow.cs" />
+    <Compile Include="Screens\LobbyWindow.cs" />
     <Compile Include="UI\MenuStrip.cs" />
     <Compile Include="UI\MenuStripItem.cs" />
     <Compile Include="UI\Lists\ListBox.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UI\NamePlates\Nameplate.cs" />
-    <Compile Include="UI\NeedsWindow.cs" />
     <Compile Include="UI\Slots\SlotGridCustom.cs" />
     <Compile Include="UI\Slots\SlotGridNew.cs" />
     <Compile Include="UI\SpeechBubble.cs" />
@@ -1158,41 +1154,22 @@
     <Compile Include="UI\Tables\TableScrollableCompact.cs" />
     <Compile Include="UI\WindowTargetManagementStatic.cs" />
     <Compile Include="UI\WindowTargetManagement.cs" />
-    <Compile Include="UI\WindowTargetInterface.cs" />
-    <Compile Include="UI\WindowEntityInterface.cs" />
-    <Compile Include="UI\PanelSkills.cs" />
-    <Compile Include="UI\PopupManager.cs" />
-    <Compile Include="UI\QuickBar.cs" />
-    <Compile Include="UI\RenameWorldWindow.cs" />
     <Compile Include="UI\ScrollBars\ScrollableBox.cs" />
     <Compile Include="UI\Slider.cs" />
     <Compile Include="UI\Slots\SlotGrid.cs" />
-    <Compile Include="UI\TestWindow.cs" />
-    <Compile Include="UI\UIConstructionFrame.cs" />
-    <Compile Include="UI\UIInventory.cs" />
     <Compile Include="Net\Server\ServerUI.cs" />
     <Compile Include="UI\Hud\UnitFrame.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarV.cs" />
-    <Compile Include="UI\SelectCharacterWindow.cs" />
     <Compile Include="UI\LogWindow.cs" />
     <Compile Include="UI\FloatingBar.cs" />
     <Compile Include="UI\FloatingText.cs" />
-    <Compile Include="UI\CharacterCreation\NewCharacterWindow.cs" />
     <Compile Include="UI\UICameraSettings.cs" />
     <Compile Include="UI\DebugQueryWindow.cs" />
-    <Compile Include="UI\DrawListViewItemEventArgs.cs" />
-    <Compile Include="UI\ListViewGroup.cs" />
-    <Compile Include="UI\ListViewGroupCollection.cs" />
-    <Compile Include="UI\ListViewItem.cs" />
-    <Compile Include="UI\ListView.cs" />
-    <Compile Include="UI\ListViewItemCollection.cs" />
     <Compile Include="UI\Slots\SlotWithText.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UI\SpeechBubbleOld.cs" />
     <Compile Include="UI\SplitStackWindow.cs" />
-    <Compile Include="UI\SuperDataView.cs" />
-    <Compile Include="UI\ThoughtsWindow.cs" />
     <Compile Include="UndoableCollection.cs" />
     <Compile Include="Helpers\VectorHelper.cs" />
     <Compile Include="Visualizations\BlockCacheEntry.cs" />
@@ -1204,25 +1181,12 @@
     <Compile Include="Interfaces\ISlottable.cs" />
     <Compile Include="ProgressOld.cs" />
     <Compile Include="Graphics\Sprite.cs" />
-    <Compile Include="UI\AboutWindow.cs" />
-    <Compile Include="UI\ShortcutMenu.cs" />
     <Compile Include="UI\ControlCollection.cs" />
     <Compile Include="UI\IconButton.cs" />
-    <Compile Include="UI\DrawMode.cs" />
     <Compile Include="UI\Hud\Hud.cs" />
     <Compile Include="UI\HelpWindow.cs" />
-    <Compile Include="UI\ListItem.cs" />
     <Compile Include="UI\TextBox.cs" />
-    <Compile Include="UI\ToolstripItemCollection.cs" />
-    <Compile Include="UI\Toolstrip.cs" />
     <Compile Include="UI\RadioButton.cs" />
-    <Compile Include="UI\ListControl.cs" />
-    <Compile Include="UI\MouseEventArgs.cs" />
-    <Compile Include="UI\ObjectCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UI\ToolstripButton.cs" />
-    <Compile Include="UI\ToolstripItem.cs" />
     <Compile Include="UI\Tooltip.cs" />
     <Compile Include="UI\TrackBar.cs" />
     <Compile Include="UI\DebugWindow.cs" />
@@ -1238,30 +1202,24 @@
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Terraforming\PerlinArgs.cs" />
     <Compile Include="UI\InteractionBar.cs" />
-    <Compile Include="UI\BorderStyle.cs" />
+    <Compile Include="UI\BackgroundStyle.cs" />
     <Compile Include="UI\CheckBox\CheckBox.cs" />
     <Compile Include="UI\Icon.cs" />
-    <Compile Include="UI\DragDropManager.cs" />
-    <Compile Include="UI\CharacterWindow.cs" />
-    <Compile Include="UI\IActivatable.cs" />
-    <Compile Include="UI\ICloseable.cs" />
-    <Compile Include="UI\IDropTarget.cs" />
+    <Compile Include="UI\DragDrop\DragDropManager.cs" />
+    <Compile Include="UI\DragDrop\IDropTarget.cs" />
     <Compile Include="UI\PictureBox.cs" />
     <Compile Include="UI\Label.cs" />
-    <Compile Include="UI\IScrollable.cs" />
     <Compile Include="UI\MainMenu\MainMenuWindow.cs" />
     <Compile Include="UI\MessageBox.cs" />
-    <Compile Include="UI\Notification.cs" />
-    <Compile Include="UI\NotificationArea.cs" />
-    <Compile Include="UI\ScrollEventArgs.cs" />
+    <Compile Include="UI\Notifications\Notification.cs" />
+    <Compile Include="UI\Notifications\NotificationArea.cs" />
     <Compile Include="UI\Settings\SettingsWindow.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Size.cs" />
-    <Compile Include="UI\SkillsWindow.cs" />
     <Compile Include="UI\Slots\Slot.cs" />
     <Compile Include="UI\TooltipManager.cs" />
-    <Compile Include="UI\IngameMenu.cs" />
+    <Compile Include="Screens\IngameMenu.cs" />
     <Compile Include="Engine\Camera\Camera.cs" />
     <Compile Include="CameraGlobal.cs" />
     <Compile Include="Terraforming\Chunk.cs" />
@@ -1269,7 +1227,6 @@
     <Compile Include="Coords.cs" />
     <Compile Include="Terraforming\Generator.cs" />
     <Compile Include="Terraforming\Map.cs" />
-    <Compile Include="UI\WindowManager.cs" />
     <Compile Include="Components\EntityComponent.cs" />
     <Compile Include="Control\PlayerOld.cs" />
     <Compile Include="Helpers\PriorityQueue.cs" />
@@ -1282,9 +1239,7 @@
     <Compile Include="UI\Buttons\Button.cs" />
     <Compile Include="UI\ComboBox\ComboBox.cs" />
     <Compile Include="UI\UIEventArgs.cs" />
-    <Compile Include="UI\FpsCounterOld.cs" />
     <Compile Include="UI\UIManager.cs" />
-    <Compile Include="UI\UIMessage.cs" />
     <Compile Include="UI\Window.cs" />
     <Compile Include="UI\UICloseButton.cs" />
     <Compile Include="WorldPosition.cs" />

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,7 +20,6 @@ namespace Start_a_Town_.UI
             }
         }
 
-
         PictureBox Thumb;
         public static int DefaultHeight = UIManager.DefaultTrackBarThumbSprite.Height;
         protected float _Value;
@@ -33,11 +29,7 @@ namespace Start_a_Town_.UI
             set
             {
                 _Value = value;
-                //ValueChangedFunc();
-                //OnValueChanged();
-                //this.ValueChangedAction(value);
                 this.Thumb.Location.X = (int)(Border + (Width - 2 * Border) * (Value - Min) / (Max - Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2);
-                //this.Thumb.Location.X = (int)(Width * (Value - Min) / (Max - Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2);
             }
         }
         public float NewValue;
@@ -91,7 +83,6 @@ namespace Start_a_Town_.UI
 
             this.Thumb = new PictureBox(new Vector2(Border + (Width - 2 * Border) * (Value - Min) / (Max - Min), 0), UIManager.DefaultTrackBarThumbSprite, null) { MouseThrough = true };
             this.Thumb.ClipToBounds = false;
-            //this.Thumb.MouseLeftPress += new EventHandler<System.Windows.Forms.HandledMouseEventArgs>(Thumb_MouseLeftPress);
             this.Name = "{0}";
             Min = min;
             Max = max;
@@ -99,19 +90,14 @@ namespace Start_a_Town_.UI
             Value = value;
             HoverFunc = () => Value.ToString("##0.##");
 
-            this.PanelValue = new Panel() { Location = this.TopRight };// LocationFunc = () => this.ScreenLocation + new Vector2(this.Right, 0) };//, AutoSize = true};// - new Vector2(10,0)};
+            this.PanelValue = new Panel() { Location = this.TopRight };
             this.PanelValue.ClientDimensions = UIManager.Font.MeasureString(this.Min.ToString());
-            this.LabelValue = new Label();// { Width = (int)Math.Max(UIManager.Font.MeasureString(this.Min.ToString()).X, UIManager.Font.MeasureString(this.Max.ToString()).X) };
+            this.LabelValue = new Label();
             this.PanelValue.AddControls(this.LabelValue);
             this.PanelValue.SetMousethrough(true, true);
 
             Controls.Add(Thumb);
         }
-
-        //void Thumb_MouseLeftPress(object sender, System.Windows.Forms.HandledMouseEventArgs e)
-        //{
-        //    this.Moving = true;
-        //}
 
         void DrawSprite(SpriteBatch sb, Vector2 position)
         {
@@ -124,11 +110,7 @@ namespace Start_a_Town_.UI
         float Border = UIManager.DefaultTrackBarSprite.Width / 4;
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            float mouseX = (Controller.Instance.msCurrent.X / UIManager.Scale - ScreenLocation.X);
-            //if (mouseX < Offset || mouseX > Width - Offset)
-            //    return;
             SelectingValue = true;
-
             base.OnMouseLeftPress(e);
         }
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
@@ -138,10 +120,6 @@ namespace Start_a_Town_.UI
 
             SelectingValue = false;
 
-            //var oldValue = this.Value;
-            //this.Value = this.NewValue;
-            //if (oldValue != this.Value)
-            //    this.ValueChangedAction(this.Value);
             if (this.NewValue != this.Value)
                 this.ValueSelectAction(this.NewValue);
         }
@@ -152,17 +130,11 @@ namespace Start_a_Town_.UI
             if (!SelectingValue)
                 return;
             this.LabelValue.Text = this.NewValue.ToString();
-            //if (this.NewValue == 1)
-            //    "re".ToConsole();
-            //float mouseX = (Controller.Instance.msCurrent.X / UIManager.Scale - ScreenLocation.X);
-            //float mousePerc = MathHelper.Clamp(mouseX / (float)Width, 0, 1);
             float mouseX = (Controller.Instance.msCurrent.X / UIManager.Scale - (ScreenLocation.X + this.Border));
             float mousePerc = MathHelper.Clamp(mouseX / (float)(Width - 2 * this.Border), 0, 1);
 
             var newValue = ((Min + mousePerc * (Max - Min)) / Step);
             this.NewValue = (float)Math.Round(newValue) * Step;
-            //NewValue = (float)((Min + mousePerc * (Max - Min)) / Step) * Step;
-
         }
 
         protected override void OnGotFocus()
@@ -176,25 +148,16 @@ namespace Start_a_Town_.UI
             base.OnLostFocus();
         }
 
-        //public override void Dispose()
-        //{
-        //    this.Thumb.MouseLeftPress -= Thumb_MouseLeftPress;
-        //}
-
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);
             if (!this.SelectingValue)
                 return;
-            //this.Thumb.Location.X = Offset + (Width - 2 * Offset) * (Value - Min) / (Max - Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2;
             var loc = new Vector2((int)(Border + (Width - 2 * Border) * (this.NewValue - Min) / (Max - Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2), 0);
-            //var loc = new Vector2((int)(Width * (this.NewValue - Min) / (Max - Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2), 0);
 
             sb.Draw(UIManager.DefaultTrackBarThumbSprite,
                 this.ScreenLocation + loc,
                 Color.White * .5f);
-            //this.PanelValue.Draw(sb);
-            //new Label(this.NewValue.ToString()) { Location = new Vector2(300) }.Draw(sb);
             UIManager.DrawStringOutlined(sb, this.NewValue.ToString("##0%"), this.ScreenLocation + new Vector2(this.Width, 0), new Vector2(1));
         }
     }

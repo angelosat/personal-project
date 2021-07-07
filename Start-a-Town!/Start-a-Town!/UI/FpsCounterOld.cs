@@ -1,29 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
     class FpsCounterOld
     {
         public static float deltaFPSTime = 0, speed = 1;
-        //private Game1 Game;
         public int Fps;
-        //private float timePrevious;
-        //public static event EventHandler<EventArgs> Updated;
-        //void OnUpdated()
-        //{
-        //    if (Updated != null)
-        //        Updated(this, EventArgs.Empty);
-        //}
-
-        //public FpsCounterOld(Game1 game)
-        //{
-        //    this.Game = game;
-        //    //timePrevious = 0; // game.ElapsedGameTime.TotalSeconds;
-        //}
 
         public void Update(Game1 game, GameTime gt)
         {

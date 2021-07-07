@@ -840,12 +840,6 @@ namespace Start_a_Town_
             this.ChildrenSequence = 0;
             return this;
         }
-        public void GetInterface(WindowTargetInterface ui)
-        {
-            ui.Title = this.Name;
-            foreach (var comp in this.Components)
-                comp.Value.GetInterface(this, ui.PanelInfo);
-        }
         public void GetManagementInterface(WindowTargetManagement ui)
         {
             ui.Title = this.Name;

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
@@ -9,32 +7,12 @@ namespace Start_a_Town_.UI
     public class GroupBox : Control
     {
         public GroupBox() { MouseThrough = true; AutoSize = true; }
-        public GroupBox(Vector2 position) : base(position) { MouseThrough = true; AutoSize = true; }
-
         public GroupBox(int width, int height)
         {
             this.AutoSize = false;
             this.Size = new Rectangle(0, 0, width, height);
         }
 
-        //public override void Update()
-        //{
-        //    base.Update();
-
-        //    foreach (Control control in Controls)
-        //        control.Update();
-        //}
-        //public override void OnHitTestPass()
-        //{
-        //    base.OnHitTestPass();
-        //}
-
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Rectangle viewport)
-        {
-            //DrawHighlight(sb);
-            //this.ScreenBounds.DrawHighlight(sb, Color.White * .5f);
-            base.Draw(sb, viewport);
-        }
         internal override void OnControlResized(ButtonBase buttonBase)
         {
             this.ClientSize = PreferredClientSize;

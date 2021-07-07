@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
-
     public class LoadingBox : PictureBox
     {
-        //public Func<string> ProgressValueFunc;
         public Func<string> ProgressFunc;
-        public Func<string> TextFunc = () => "";
 
         public LoadingBox()
         {
@@ -36,7 +30,7 @@ namespace Start_a_Town_.UI
         }
         public override void OnAfterDraw(SpriteBatch sb, Rectangle viewport)
         {
-            UIManager.DrawStringOutlined(sb, ProgressFunc(), ScreenLocation, new Vector2(0.5f)); //+ Dimensions * 0.5f
+            UIManager.DrawStringOutlined(sb, ProgressFunc(), ScreenLocation, new Vector2(0.5f));
             UIManager.DrawStringOutlined(sb, TextFunc(), ScreenLocation + new Vector2(0, (int)(Dimensions.Y / 2f)), new Vector2(0.5f));
         }
     }

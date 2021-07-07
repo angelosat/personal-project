@@ -39,7 +39,7 @@ namespace Start_a_Town_.UI
             }
         }
         public VerticalAlignment Valign;
-        
+
         public Color TextBackground = Color.Transparent;
         public Func<Color> TextBackgroundFunc = () => Color.Transparent;
 
@@ -58,7 +58,7 @@ namespace Start_a_Town_.UI
             set
             {
                 base.Width = value;
-             
+
                 if (value > 0)
                     this.Invalidate();
             }
@@ -110,10 +110,10 @@ namespace Start_a_Town_.UI
         public event UIEvent TextChanged;
         protected override void OnTextChanged()
         {
-          
+
             base.OnTextChanged();
             this.Height = Math.Max(this.Height, Label.DefaultHeight);
-            
+
             switch (Halign)
             {
                 case HorizontalAlignment.Left:
@@ -146,7 +146,8 @@ namespace Start_a_Town_.UI
             if (TextChanged != null)
                 TextChanged(this, new UIEventArgs(this));
         }
-        public Label(int width) : base() { 
+        public Label(int width) : base()
+        {
             Text = "";
             this.Width = width;
             this.Height = Label.DefaultHeight;
@@ -277,7 +278,7 @@ namespace Start_a_Town_.UI
         static public void DrawText(SpriteBatch sb, Texture2D textSprite, Vector2 position, Rectangle? sourceRect, int width, Color color, float opacity, HorizontalAlignment hAlign)
         {
             Color c = color * opacity;
-            
+
             if (!sourceRect.HasValue)
                 sourceRect = textSprite.Bounds;
             // TODO: fix the origin so it's not always at the center
@@ -307,7 +308,7 @@ namespace Start_a_Town_.UI
         public override void DrawText(SpriteBatch sb, Vector2 position, Rectangle? sourceRect, Color color, float opacity)
         {
             //Color c = color * opacity;
- 
+
             //if (!sourceRect.HasValue)
             //    sourceRect = TextSprite.Bounds;
             //// TODO: fix the origin so it's not always at the center
@@ -346,7 +347,7 @@ namespace Start_a_Town_.UI
         }
 
         public HorizontalAlignment TextHAlign { get; set; }
-        
+
         public override Control SetLeftClickAction(Action<ButtonBase> action)
         {
             this.Active = true;
@@ -413,7 +414,7 @@ namespace Start_a_Town_.UI
 
                     var f = plainText.Split(' ');
                     foreach (var i in f)
-                        if(!i.IsNullEmptyOrWhiteSpace())
+                        if (!i.IsNullEmptyOrWhiteSpace())
                             yield return new Label(i);
                     //}
                     var posTo = text.IndexOf(']', posFrom + 1);

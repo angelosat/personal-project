@@ -10,6 +10,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components.Crafting
 {
+    [Obsolete]
     public class CraftOperation
     {
         public int ReactionID;
@@ -153,19 +154,6 @@ namespace Start_a_Town_.Components.Crafting
         {
             var reaction = Reaction.Dictionary[this.ReactionID];
             return Reaction.Dictionary[this.ReactionID].Products.First().GetProduct(reaction, null, this.Materials, null);
-        }
-
-        public GroupBox GetUI()
-        {
-            var box = new GroupBox();
-            var item = new CraftingTooltip(this.GetProduct().Product.ToSlotLink(), this.Materials);
-            box.AddControls(item);
-            var panelbar = new PanelTitled("Progress") { Location = box.Controls.BottomLeft };
-            //panelbar.Width = box.Width;
-            //panelbar.AutoSize = true;
-            panelbar.AddControls(new Bar(this.CraftProgress) { TextFunc = ()=>this.CraftProgress.Percentage.ToString("##0%"), Color = Color.Goldenrod, Width = item.Width - Panel.DefaultStyle.Border * 2});//, Location = item.BottomLeft });
-            box.AddControls(panelbar);
-            return box;
         }
     }
 }

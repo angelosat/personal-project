@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.PlayerControl;
 
 namespace Start_a_Town_.UI
 {
-    public class QuickBar : Panel //Window
+    public class QuickBar : Panel
     {
         public int Count = 0;
 
@@ -16,8 +12,6 @@ namespace Start_a_Town_.UI
         {
             Color = Color.Black;
             this.Name = "QuickBar";
-            //this.Closable = false;
-            //this.Movable = false;
             this.AutoSize = true;
             Game1.TextInput.KeyUp += new System.Windows.Forms.KeyEventHandler(TextInput_KeyUp);
             Game1.TextInput.KeyDown += new System.Windows.Forms.KeyEventHandler(TextInput_KeyDown);
@@ -29,7 +23,6 @@ namespace Start_a_Town_.UI
             foreach (var ctrl in Controls)
             {
                 ctrl.LeftClick -= slot_Click;
-                ctrl.RightClick -= slot_RightClick;
             }
             //Client.Controls.Clear();
             Controls.Clear();

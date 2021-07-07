@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net.Sockets;
-using System.Net;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.UI
@@ -16,20 +10,8 @@ namespace Start_a_Town_.UI
         ListBox<PlayerData, Label> Players;
         TextBox Txt_Input;
         public ConsoleBoxAsync Console;
-        //{
-        //    get{return(if(_Console.IsNull())
-        //        _Console = new ConsoleBox(
-        //}
         static LobbyWindow _Instance;
-        public static LobbyWindow Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new LobbyWindow();
-                return _Instance;
-            }
-        }
+        public static LobbyWindow Instance => _Instance ??= new LobbyWindow();
 
         LobbyWindow()
         {
@@ -41,7 +23,6 @@ namespace Start_a_Town_.UI
 
             Panel_Players = new Panel() { Dimensions = new Vector2(100, 200) };
             Players = new ListBox<PlayerData, Label>(Panel_Players.ClientSize);
-           // Players.Build(Start_a_Town_.Client.Players, ip => ip.Name);// ip.ToString());
             Panel_Players.Controls.Add(Players);
 
             Panel_Chat = new Panel(Panel_Players.TopRight) { Dimensions = new Vector2(400, 200) };
@@ -57,15 +38,6 @@ namespace Start_a_Town_.UI
                 },
                 EnterFunc = (e) =>
                 {
-                    //byte[] data = Net.Network.Serialize(writer =>
-                    //{
-                    //    writer.Write(Client.PlayerData.Name.Length);
-                    //    writer.Write(Encoding.ASCII.GetBytes(Client.PlayerData.Name));
-                    //    writer.Write(Txt_Input.Text.Length);
-                    //    writer.Write(Encoding.ASCII.GetBytes(Txt_Input.Text));
-                    //});
-                    //Client.Send(Packet.Create(PacketType.Chat, data));
-
                     Packet.Create(Net.Client.Instance.PacketID, PacketType.Chat, Network.Serialize(writer =>
                     {
                         Net.Client.Instance.PlayerData.Write(writer);
@@ -82,14 +54,7 @@ namespace Start_a_Town_.UI
 
             this.SnapToScreenCenter();
         }
-        public override void Update()
-        {
-            base.Update();
-        }
-        //void Server_OnPlayerConnect(object sender, EventArgs e)
-        //{
-        //    Players.Build(Start_a_Town_.Client.Players, player => player.Name.ToString());
-        //}
+      
         static public void RefreshPlayers(IEnumerable<PlayerData> players)
         {
             Instance.Players.Build(players, ip => ip.Name);

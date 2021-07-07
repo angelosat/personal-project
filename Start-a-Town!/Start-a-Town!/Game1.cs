@@ -22,8 +22,6 @@ namespace Start_a_Town_
     
 
     public delegate void UIEvent(Object sender, EventArgs e);
-    public delegate void MouseEventHandler(object sender, MouseEventArgs e);
-    public delegate void ScrollEventHandler(Object sender, ScrollEventArgs e);
     public delegate void InputEvent();
 
     public delegate void CellEvent(Chunk cell);

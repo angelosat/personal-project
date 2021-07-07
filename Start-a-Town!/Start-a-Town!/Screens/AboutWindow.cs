@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.UI
+namespace Start_a_Town_
 {
     class AboutWindow : Window
     {
@@ -37,11 +35,8 @@ namespace Start_a_Town_.UI
             panel_btns.Controls.Add(btn_forum, btn_facebook, btn_twitter, btn_blog);
 
             Client.Controls.Add(
-                //panel_btns, 
                 panel_text);
-            //Location = CenterScreen;
             this.SnapToScreenCenter();
-
         }
 
         void btn_twitter_Click(object sender, EventArgs e)
@@ -61,7 +56,6 @@ namespace Start_a_Town_.UI
 
         void btn_link_Click(object sender, EventArgs e)
         {
-            //System.Diagnostics.Process.Start("http://startatown.blogspot.com");
             System.Diagnostics.Process.Start("http://www.startatown.com");
         }
     }

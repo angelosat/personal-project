@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public class GameObjectSlotCollection : List<GameObjectSlot>, IInterfaceable
+    public class GameObjectSlotCollection : List<GameObjectSlot>
     {
         public GameObjectSlotCollection()
         {

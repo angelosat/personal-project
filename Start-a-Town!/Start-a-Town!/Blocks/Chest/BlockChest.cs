@@ -51,18 +51,5 @@ namespace Start_a_Town_.Blocks.Chest
             var c = mat.ColorVector;
             return c;
         }
-       
-        public override void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
-        {
-            BlockChestEntity.GetPlayerActionsWorld(list);
-        }
-        public override void ShowUI(Vector3 global)
-        {
-            var entity = Net.Client.Instance.Map.GetBlockEntity(global) as BlockChestEntity;
-            var window = new WindowEntityInterface(entity, "Chest", () => global);
-            var ui = new ContainerUI().Refresh(global, entity);
-            window.Client.Controls.Add(ui);
-            window.Show();
-        }
     }
 }

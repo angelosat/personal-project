@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.GameModes;
@@ -10,29 +7,12 @@ namespace Start_a_Town_.UI
 {
     class RenameWorldWindow : Window
     {
-        #region Singleton
         static RenameWorldWindow _Instance;
-        public static RenameWorldWindow Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new RenameWorldWindow();
-                return _Instance;
-            }
-        }
-        #endregion
+        public static RenameWorldWindow Instance => _Instance ??= new RenameWorldWindow();
 
         Panel Panel_Name, Panel_Buttons;
         TextBox Txt_Name;
         Button Btn_Accept, Btn_Cancel;
-
-        static public event EventHandler WorldRenamed;
-        void OnWorldRenamed()
-        {
-            if (WorldRenamed != null)
-                WorldRenamed(this, EventArgs.Empty);
-        }
 
         RenameWorldWindow()
         {

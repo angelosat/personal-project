@@ -162,12 +162,6 @@ namespace Start_a_Town_
             if (this.ActiveTool == null)
                 return;
             
-            if (pressed.Contains(GlobalVars.KeyBindings.Needs))
-                NeedsWindow.Toggle(PlayerOld.Actor);
-            
-            if (pressed.Contains(System.Windows.Forms.Keys.U))
-                TestWindow.Instance.Toggle();
-
             if (e.KeyCode == KeyBind.BlockTargeting.Key)
             {
                 if (this.ActiveTool != null)

@@ -27,12 +27,5 @@ namespace Start_a_Town_.UI
                 return;
             }
         }
-
-        protected override void OnRightClick()
-        {
-            if (!Tag.HasValue)
-                return;
-            Client.PlayerSlotInteraction(this.Tag);
-        }
     }
 }

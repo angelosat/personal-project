@@ -68,25 +68,6 @@ namespace Start_a_Town_
                     // if target was in container, remove it from its contents
                     if (this.Amount == prevStackSize && actor.Map.GetBlockEntity(containerGlobal) is BlockStorage.BlockStorageEntity container)
                         container.Remove(target.Object);
-
-                    break;
-
-                case TargetType.Slot:
-                    var hauling = actor.GetComponent<HaulComponent>().GetSlot();//.Slot;
-
-                    if (hauling.HasValue)
-                    {
-                        actor.Net.PostLocalEvent(target.Object, Message.Types.Insert, hauling);
-                        break;
-                    }
-                    var obj = target.Slot.Object;
-                    if (obj.Physics.Size == ObjectSize.Inventoryable)
-                        actor.Net.PostLocalEvent(actor, Message.Types.Insert, target.Slot);
-                    else if (obj.Physics.Size == ObjectSize.Haulable)
-                    {
-                        if (actor.GetComponent<HaulComponent>().Carry(actor, target.Slot))
-                            target.Slot.Clear();
-                    }
                     break;
 
 

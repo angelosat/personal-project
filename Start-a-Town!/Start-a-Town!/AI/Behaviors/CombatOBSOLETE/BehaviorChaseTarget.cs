@@ -30,11 +30,10 @@ namespace Start_a_Town_.AI.Behaviors
             var targetPos = target.Global;
             var diff = targetPos - parent.Global;
             var dist = diff.Length();
-            if (dist <= this.Range)// 1)
+            if (dist <= this.Range)
             {
                 AIManager.AIStopMove(parent);
                 return BehaviorState.Success;
-
             }
             else
             {

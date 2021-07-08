@@ -12,11 +12,7 @@ namespace Start_a_Town_.Blocks
             this.Variations.Add(txt);
 
             this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.IsOfSubType(ItemSubType.Planks, ItemSubType.Ingots)
-                        )),
+                Reaction.Reagent.Create(),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building);
             this.Ingredient = new Ingredient(RawMaterialDef.Ingots, null, null, 1);

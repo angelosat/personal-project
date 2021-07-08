@@ -70,7 +70,6 @@ namespace Start_a_Town_.GameModes
 
         public abstract bool IsPlayerWithinRangeForPacket(PlayerData playerData, Vector3 packetEventGlobal);
       
-        public virtual IEnterior GetEnterior(IMap map, Vector3 global) { return null; }
         internal virtual void PlayerConnected(Server server, PlayerData player) { }
         internal virtual void PlayerIDAssigned(Client client) { }
         internal virtual void MapReceived(IMap map) { }

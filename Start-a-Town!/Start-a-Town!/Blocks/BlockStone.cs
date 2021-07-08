@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.Towns.Constructions;
 
 namespace Start_a_Town_
@@ -11,9 +9,8 @@ namespace Start_a_Town_
         public override bool IsMinable => true;
 
         public BlockStone()
-            : base(Block.Types.Cobblestone, GameObject.Types.CobblestoneItem, 0, 1, true, true)
+            : base(Block.Types.Cobblestone, 0, 1, true, true)
         {
-            //this.LootTable = new LootTable(new Loot(GameObject.Types.Stone, 0.75f, 4));
             this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks), Reaction.Reagent.IsOfMaterial(MaterialDefOf.Stone)));
             this.AssetNames = "stone5height19";
 
@@ -27,13 +24,6 @@ namespace Start_a_Town_
         public override Particles.ParticleEmitterSphere GetEmitter()
         {
             return base.GetDustEmitter();
-        }
-
-        public override List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
-        {
-            return new List<Interaction>(){
-                new InteractionMining()
-            };
         }
         public override ContextAction GetRightClickAction(Vector3 global)
         {

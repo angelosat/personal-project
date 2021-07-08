@@ -5,15 +5,15 @@ namespace Start_a_Town_
 {
     class PacketEntityRequestDispose
     {
+        static int p;
         internal static void Init()
         {
-            Server.RegisterPacketHandler(PacketType.DisposeObject, Receive);
-            Client.RegisterPacketHandler(PacketType.DisposeObject, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, int entityID)
         {
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.DisposeObject);
+            w.Write(p);
             w.Write(entityID);
         }
         internal static void Receive(IObjectProvider net, BinaryReader r)

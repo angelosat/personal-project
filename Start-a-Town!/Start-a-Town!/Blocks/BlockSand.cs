@@ -13,7 +13,7 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.Sand;
         }
         public BlockSand()
-            : base(Block.Types.Sand, GameObject.Types.Sand)
+            : base(Block.Types.Sand)
         {
             this.AssetNames = "sand1";
 

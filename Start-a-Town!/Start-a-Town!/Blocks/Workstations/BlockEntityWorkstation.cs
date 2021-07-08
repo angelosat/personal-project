@@ -14,7 +14,6 @@ namespace Start_a_Town_.Crafting
         /// <summary>
         /// make this a property that returns first item from this.getorders(this.global) ?
         /// </summary>
-        public CraftOperation CurrentOrder;
         public GameObject CurrentWorker;
         public List<CraftOrderNew> Orders = new List<CraftOrderNew>();
         public bool ExecutingOrders;
@@ -48,39 +47,9 @@ namespace Start_a_Town_.Crafting
             return new List<GameObjectSlot>();
         }
 
-        public bool MaterialsPresent(CraftOperation craft)
-        {
-            var input = this.Input;
-
-            var mats = craft.Materials;
-            foreach (var req in mats)
-                if (input.GetAmount(o => (int)o.IDType == req.ObjectID) < req.AmountRequired)
-                    return false;
-            return true;
-        }
-
-        public CraftOperation GetCurrentOrder()
-        {
-            return this.CurrentOrder;
-        }
-
-        internal void SetCurrentProject(IObjectProvider net, CraftOperation craft)
-        {
-            this.ExecutingOrders = false;
-            this.CurrentOrder = craft;
-            net.Map.EventOccured(Message.Types.WorkstationOrderSet, this);
-        }
-        
         public bool Insert(Entity material)
         {
             return this.Input.InsertObject(material);
-        }
-
-        public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera cam, Vector3 global)
-        {
-            var craft = this.GetCurrentOrder();
-            if (craft != null)
-                Bar.Draw(sb, cam, global, "", craft.CraftProgress.Percentage, cam.Zoom * .2f);
         }
 
         protected override void AddSaveData(SaveTag tag)

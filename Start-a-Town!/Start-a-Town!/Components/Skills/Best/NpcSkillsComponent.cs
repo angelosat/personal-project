@@ -124,7 +124,7 @@ namespace Start_a_Town_
             if (currentSkill.CurrentXP >= currentSkill.XpToLevel)
             {
                 currentSkill.Level++;
-                actor.NetNew.EventOccured(Message.Types.SkillIncrease, actor, currentSkill.Def.Name);
+                actor.Net.EventOccured(Message.Types.SkillIncrease, actor, currentSkill.Def.Name);
             }
         }
 

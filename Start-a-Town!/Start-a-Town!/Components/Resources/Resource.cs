@@ -140,7 +140,7 @@ namespace Start_a_Town_
             }
             public static void SendSyncAdjust(Entity actor, ResourceDef def, float value)
             {
-                var net = actor.NetNew;
+                var net = actor.Net;
                 if (net is Server)
                     actor.GetResource(def).Adjust(value);
                 net.GetOutgoingStream().Write(PacketSyncAdjust, actor.RefID, def.Name, value);

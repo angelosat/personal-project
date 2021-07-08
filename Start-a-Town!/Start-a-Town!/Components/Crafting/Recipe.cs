@@ -34,17 +34,7 @@ namespace Start_a_Town_.Components
         {
             return new Recipe(this.ID, this.Name, this.Product) { Materials = this.Materials };
         }
-        public GameObject ToObject()
-        {
-            GameObject obj = new GameObject();
-            obj["Info"] = new DefComponent(0, ObjectType.Blueprint, "Recipe: " + this.Product.Object.Name, "A Recipe");
-            //obj["Gui"] = this.Product.Object.GetGui();
-            obj["Physics"] = new PhysicsComponent();
-            obj["Sprite"] = new SpriteComponent(this.Product.Object.GetSprite());
-            obj["Blueprint"] = this;
-            return obj;
-        }
-
+        
         public override void OnTooltipCreated(GameObject parent, UI.Control tooltip)
         {
             tooltip.Controls.Add("Materials:".ToLabel(tooltip.Controls.BottomLeft));

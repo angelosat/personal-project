@@ -9,7 +9,6 @@ namespace Start_a_Town_
     {
         public int StackCapacity = 1;
         public int StackDimension = 1;
-        public ItemSubType SubType;
         public string ObjType;
         public int ID;
         public ItemCategory Category;
@@ -33,7 +32,6 @@ namespace Start_a_Town_
         public Func<ItemDef, GameObject> Randomizer;
         public List<MaterialToken> MadeFrom = new();
         public bool QualityLevels;
-        public Dictionary<BoneDef, ReactionIngredientIndex> CraftingIngredientIndices = new();
 
         public ItemDef(string name) : base(name)
         {

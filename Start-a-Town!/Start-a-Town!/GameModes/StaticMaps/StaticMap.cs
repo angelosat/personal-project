@@ -270,15 +270,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
             camera.UpdateMaxDrawLevel();
             Mouseover = null;
-            Towns.Housing.House house = null;
-            if (PlayerOld.Actor != null)
-                house = this.Town.GetHouseAt(PlayerOld.Actor.Global);
-            if(house!=null)
-            {
-                foreach(var cell in house.GetVisibleBlocks(camera))
-                    camera.DrawCell(sb, this, this.GetChunk(cell.Key), cell.Value, playerGlobal, hiddenRects, a);
-            }
-            else
+            
             foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
             {
 

@@ -333,5 +333,16 @@ namespace Start_a_Town_.UI
             this.Label_Title.Active = true;
             return this;
         }
+
+        private void StopDragging()
+        {
+            IsDragged = false;
+        }
+
+        protected override void OnMouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
+        {
+            StopDragging();
+            base.OnMouseLeftUp(e);
+        }
     }
 }

@@ -91,12 +91,6 @@ namespace Start_a_Town_
         {
             var aID = a.RefID;
             return this.WorkerProps[aID];
-            if(!this.WorkerProps.TryGetValue(aID, out var props))
-            {
-                props = new WorkerProps(a, this.GetRoleDefs().ToArray());
-                this.WorkerProps.Add(aID, props);
-            }
-            return props;
         }
         
         public Job GetWorkerJob(Actor a, JobDef j)

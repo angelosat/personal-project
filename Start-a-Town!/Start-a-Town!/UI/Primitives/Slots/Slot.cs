@@ -32,16 +32,15 @@ namespace Start_a_Town_.UI
         public override void OnPaint(SpriteBatch sb)
         {
             float a = (this.MouseHover && Active) ? 1 : 0.5f;
-
-            sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, this.Color * a, 0, new Vector2(0), 1, SprFx, Depth);
+            var slotcol = this.Color * a;
+            sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, slotcol, 0, new Vector2(0), 1, SprFx, Depth);
             if (!this.Tag.HasValue)
             {
-                sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, this.Color * a, 0, new Vector2(0), 1, SprFx, Depth);
+                sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, slotcol, 0, new Vector2(0), 1, SprFx, Depth);
                 return;
             }
             var color = this.Tag.Object.GetInfo().GetQualityColor();
             sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, color * a, 0, new Vector2(0), 1, SprFx, Depth);
-            Rectangle rect = new Rectangle(3, 3, Width - 6, Height - 6);
         }
      
         public override void OnAfterPaint(SpriteBatch sb)

@@ -3,14 +3,16 @@ using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
+using System;
 
 namespace Start_a_Town_.Blocks
 {
     partial class BlockFarmland : Block
     {
+        [Obsolete]
         public class BlockFarmlandEntity : BlockEntity
         {
-            static public float TurnToSoilProbability = .5f;
+            static public float TurnToSoilChance = .5f;
 
             public override object Clone()
             {

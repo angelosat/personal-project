@@ -49,12 +49,6 @@ namespace Start_a_Town_.Towns
 
         }
 
-        public override GroupBox GetInterface()
-        {
-            var ui = new StockpilesManagerUI(this.Town);
-            return ui;
-        }
-        
 
         internal static void Init()
         {
@@ -121,9 +115,10 @@ namespace Start_a_Town_.Towns
         }
         public override void Load(SaveTag tag)
         {
-            if (tag.TryGetTagValue("Storages", out List<SaveTag> storagesTag))
-                foreach (var s in storagesTag)
-                    this.Storages.Add(s.LoadVector3());
+            this.Storages.LoadVectors(tag["Storages"]);
+            //if (tag.TryGetTagValue("Storages", out List<SaveTag> storagesTag))
+            //    foreach (var s in storagesTag)
+            //        this.Storages.Add(s.LoadVector3());
         }
 
         public override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
@@ -185,7 +180,6 @@ namespace Start_a_Town_.Towns
         public IEnumerable<Stockpile> GetStockpilesByPriority()
         {
             return this.Stockpiles.Values.OrderByDescending(s => s.Priority);
-            return this.Stockpiles.OrderByDescending(kvpair => kvpair.Value.Priority).Select(kv => kv.Value);
         }
         [Obsolete]
         public IEnumerable<IStorage> GetStoragesByPriority()

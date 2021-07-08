@@ -79,159 +79,7 @@ namespace Start_a_Town_
         {
             return new Memory(this, 100, 100, 1, actor);
         }
-        [Obsolete]
-        public enum Types
-        {
-            Actor,
-            Tree,
-            Workbench = 3,
-            Package,
-            Axe = 7,
-            Hammer = 9,
-            Tile,
-            Blueprint,
-            Soil = 13,
-            Grass,
-            Wall,
-            WoodenDeck,
-            Potion,
-            StatusCondition,
-            StrengthPotion,
-            Sand,
-            Material,
-            Shovel,
-            Stone,
-            Rock,
-            Pickaxe,
-            Skill,
-            SkillMining,
-            SkillLumberjacking,
-            Hoe,
-            Farmland,
-            Seeds,
-            BerryBush,
-            Consumable,
-            Berries,
-            Air,
-            BareHands,
-            BareFeet,
-            BodyPart,
-            Fists,
-            Water,
-            EpicShovel,
-            Chunk,
-            World,
-            Map,
-            Flowers,
-            Construction,
-            Cobblestone,
-            BlockLight,
-            CellLight,
-            Mineral,
-            Coal,
-            Campfire,
-            Door,
-            WallQuarter,
-            WallHalf,
-            Bed,
-            BigBed,
-            Chest,
-            Crate,
-            WallTile,
-            Dummy,
-            Scaffolding,
-            Action,
-            Shoe,
-            AbilityDigging,
-            AbilityAttack,
-            AbilityConsume,
-            AbilityActivate,
-            AbilityMining,
-            AbilityBuilding,
-            AbilityCrafting,
-            AbilityTilling,
-            AbilityPlanting,
-            AbilityPickingUp,
-            AbilityDrop,
-            AbilityChop,
-            AbilitySaw,
-            AbilityGive,
-            //FurnitureParts,
-            BlueprintAxe,
-            BlueprintFurnitureParts,
-            //    BlueprintBlank,
-            PickaxeHead = BlueprintFurnitureParts + 2,
-            Handle,
-            BlueprintPickaxe,
-            BlueprintHandle,
-            BlueprintPickaxeHead,
-            Npc,
-            Zombie,
-            RottenFeet,
-            TestJob,
-            ManageEquipment,
-            AssignJob,
-            BlueprintBed,
-            BlueprintWoodenDeck,
-            BlueprintSoil,
-            BlueprintWorkbench,
-            Construct,
-            Twig,
-            Cobblestones,
-            BlueprintHammer,
-            BlueprintAxeHead,
-            AxeHead,
-            BlueprintHandsaw,
-            ShovelHead,
-            BlueprintShovelHead,
-            BlueprintShovel,
-            Project,
-            ConstructionReservedTile,
-            BuildingPlan,
-            BlueprintCobblestone,
-            BlueprintScaffold,
-            TrainingDummy,
-            BlueprintCampfire,
-            ConstructionBlock,
-            BlueprintDoor,
-            JobBoard,
-            AbilityThrow,
-            AbilityWalk,
-            AbilityJump,
-            BlueprintBlock,
-            EditorAir,
-            //   BlockEmpty,
-            Sword,
-            Gravel,
 
-            Spell,//
-            WoodenFrame,
-            AbilityFraming,
-            Ability,
-            CheatHammer,
-            Iron,
-            Furnace,
-            //Bar,
-            //Smeltery,
-            Shield,
-            //Ore,
-            Default,
-            Brain,
-            Helmet,
-            Paper,
-            ScribeBench,
-            BenchReactions,
-            CobblestoneItem,
-            BlueprintCobblestoneItem,
-            Block,
-            WoodenPlankDark,
-            WoodenPlankRed,
-            Fertilizer,
-            Bomb,
-            Pie,
-        }
-
-        static public GameObjectCollection Objects = new();
         static public void LoadObjects()
         {
             PlantProperties.Init();
@@ -259,20 +107,7 @@ namespace Start_a_Town_
             get { return this.GetInfo().Description; }
             set { this.GetInfo().Description = value; }
         }
-        [Obsolete]
-        public GameObject.Types IDType
-        {
-            get { return (GameObject.Types)this.GetInfo().ID; }
-            set { this.GetInfo().ID = (int)value; }
-        }
-        [Obsolete]
-        public int ID
-        {
-            get
-            {
-                return GetComponent<DefComponent>().ID;
-            }
-        }
+        
         [Obsolete]
         public string Type
         {
@@ -284,23 +119,12 @@ namespace Start_a_Town_
 
         public int RefID;
         
-        public IObjectProvider NetNew;
-        [Obsolete]
-        public IObjectProvider Net
-        {
-            get { return this.Parent?.Map.Net ?? this.Map?.Net; }
-        }
+        public IObjectProvider Net;
+        
         IMap _Map;
         public IMap Map { get { return this.Parent?.Map ?? this._Map; } set { this._Map = value; } }
 
-        public Town Town => this.NetNew.Map.Town;
-        
-        //public virtual void Select(UISelectedInfo info)
-        //{
-        //    if (this.IsForbiddable())
-        //        info.AddButton(IconForbidden, RequestToggleForbidden, this);
-        //    info.AddIcon(IconCameraFollow);
-        //}
+        public Town Town => this.Net.Map.Town;
 
         internal object GetPath()
         {
@@ -441,7 +265,7 @@ namespace Start_a_Town_
                 if (value == 0)
                 {
                     if (this.IsSpawned)
-                        this.NetNew.Despawn(this);
+                        this.Net.Despawn(this);
                     if (this.Slot != null)
                         this.Slot.Clear();
                     this.Dispose();
@@ -503,7 +327,7 @@ namespace Start_a_Town_
                 bool added = Chunk.AddObject(this, this.Map, nextChunk, Position.Floor(global));
                 if (!added)
                     throw new Exception("Invalid move: Destination chunk is't loaded");
-                this.NetNew.EventOccured(Message.Types.EntityChangedChunk, this, nextChunk.MapCoords, lastChunk.MapCoords);
+                this.Net.EventOccured(Message.Types.EntityChangedChunk, this, nextChunk.MapCoords, lastChunk.MapCoords);
             }
 
             pos.Global = global;
@@ -523,7 +347,7 @@ namespace Start_a_Town_
             }
         }
         public bool IsReserved { get { return this.Town.ReservationManager.IsReserved(this); } }
-        public bool IsPlayerControlled { get { return this.NetNew.GetPlayers().Any(p => p.ControllingEntity == this); } }
+        public bool IsPlayerControlled { get { return this.Net.GetPlayers().Any(p => p.ControllingEntity == this); } }
         public virtual bool IsHaulable
         {
             get { return this.Def.Haulable; }
@@ -917,7 +741,7 @@ namespace Start_a_Town_
 
         public virtual void Spawn(IObjectProvider net)
         {
-            this.NetNew = net;
+            this.Net = net;
             this.Parent = null;
             foreach (var comp in this.Components.Values)
                 comp.OnSpawn(net, this);
@@ -926,7 +750,7 @@ namespace Start_a_Town_
         public void Spawn(IMap map, Vector3 global)
         {
             var net = map.Net;
-            this.NetNew = net;
+            this.Net = net;
             this.Global = global;
             this.Map = map;
             this.Spawn(net);
@@ -1032,7 +856,6 @@ namespace Start_a_Town_
 
         public void Write(BinaryWriter w)
         {
-            w.Write(this.ID);
             w.Write(this.Def?.Name ?? "");
             w.Write(this.RefID);
             w.Write(this.Components.Count);
@@ -1045,7 +868,6 @@ namespace Start_a_Town_
        
         public static GameObject CreatePrefab(BinaryReader r)
         {
-            _ = r.ReadInt32();
             string defName = r.ReadString();
             var def = Start_a_Town_.Def.GetDef<ItemDef>(defName);
             var refid = r.ReadInt32();
@@ -1113,10 +935,7 @@ namespace Start_a_Town_
         }
         internal List<SaveTag> SaveInternal()
         {
-            var data = new List<SaveTag>
-            {
-                new SaveTag(SaveTag.Types.Int, "TypeID", (int)IDType)
-            };
+            var data = new List<SaveTag>();
             if (this.Def != null)
                 data.Add(this.Def.Name.Save("Def"));
             data.Add(this.RefID.Save("InstanceID"));
@@ -1160,8 +979,8 @@ namespace Start_a_Town_
         public IEnumerable<ContextAction> GetInventoryContextActions(GameObject actor)
         {
             if (this.Def.GearType != null)
-                yield return new ContextAction(() => "Equip", () => PacketInventoryEquip.Send(this.NetNew, actor.RefID, this.RefID));
-            yield return new ContextAction(() => "Drop", () => PacketInventoryDrop.Send(this.NetNew, actor.RefID, this.RefID, this.StackSize));
+                yield return new ContextAction(() => "Equip", () => PacketInventoryEquip.Send(this.Net, actor.RefID, this.RefID));
+            yield return new ContextAction(() => "Drop", () => PacketInventoryDrop.Send(this.Net, actor.RefID, this.RefID, this.StackSize));
         }
        
         public void GetInventoryContext(ContextArgs a, int slotID)
@@ -1276,14 +1095,14 @@ namespace Start_a_Town_
             return list;
         }
 
-        public bool IsDisposed => this.NetNew.GetNetworkObject(this.RefID) is null;
+        public bool IsDisposed => this.Net.GetNetworkObject(this.RefID) is null;
         
         public bool Dispose()
         {
             foreach (var comp in this.Components.Values.ToList())
                 comp.OnDispose(this);
-            this.NetNew.EventOccured(Message.Types.ObjectDisposed, this);
-            return this.NetNew.DisposeObject(this);
+            this.Net.EventOccured(Message.Types.ObjectDisposed, this);
+            return this.Net.DisposeObject(this);
         }
 
         public GameObject Instantiate(Action<GameObject> instantiator)
@@ -1850,7 +1669,7 @@ namespace Start_a_Town_
         }
         public void SyncSetStackSize(int v)
         {
-            var net = this.NetNew;
+            var net = this.Net;
             if (net is Server)
                 this.SetStackSize(v);
             var w = net.GetOutgoingStream();
@@ -1881,7 +1700,7 @@ namespace Start_a_Town_
         }
         public void SyncAbsorb(GameObject obj)
         {
-            var net = this.NetNew;
+            var net = this.Net;
             if (net is Client)
                 throw new Exception();
             this.Absorb(obj);

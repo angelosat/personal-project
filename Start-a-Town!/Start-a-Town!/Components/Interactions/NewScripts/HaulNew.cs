@@ -49,29 +49,8 @@ namespace Start_a_Town_.Components.Interactions
                     if (this.Amount > target.Object.StackSize)
                         throw new Exception();
                     PersonalInventoryComponent.PickUpNewNew(actor, target.Object, this.Amount == - 1 ? target.Object.StackSize : this.Amount);
-
                     break;
 
-
-                case TargetType.Slot:
-                    var hauling = actor.GetComponent<HaulComponent>().GetSlot();//.Slot;
-
-                    if (hauling.HasValue)
-                    {
-                        actor.Net.PostLocalEvent(target.Object, Message.Types.Insert, hauling);
-                        break;
-                    }
-                    var obj = target.Slot.Object;
-                    if (obj.Physics.Size == ObjectSize.Inventoryable)
-                        actor.Net.PostLocalEvent(actor, Message.Types.Insert, target.Slot);
-                    else if (obj.Physics.Size == ObjectSize.Haulable)
-                    {
-                        if (actor.GetComponent<HaulComponent>().Carry(actor, target.Slot))
-                            target.Slot.Clear();
-                    }
-                    break;
-
-               
                 default:
                     break;
             }

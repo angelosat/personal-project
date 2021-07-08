@@ -425,7 +425,7 @@ namespace Start_a_Town_
         {
             return 0;
         }
-
+        [Obsolete]
         public BlockRecipe Recipe;
         public List<Reaction.Reagent> Reagents = new();
         
@@ -619,11 +619,11 @@ namespace Start_a_Town_
                 }
             }
         }
-
-        protected Block(Block.Types type, GameObject.Types entityType, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
-            : this(type, transparency, density, opaque, solid)
-        {
-        }
+        //[Obsolete]
+        //protected Block(Block.Types type, GameObject.Types entityType, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
+        //    : this(type, transparency, density, opaque, solid)
+        //{
+        //}
         protected Block(Block.Types type, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
         {
             this.Type = type;
@@ -750,15 +750,16 @@ namespace Start_a_Town_
         }
         public virtual IEnumerable<byte> GetCraftingVariations()
         {
-            var list = new List<byte>();
-            BlockRecipe constr = BlockRecipe.Dictionary.Values.FirstOrDefault(c => c.Block == this);
-            if (constr == null)
-            {
-                list.Add(0);
-                return list;
-            }
-            list.AddRange(from con in constr.GetVariants() select con.Data);
-            return list;
+            yield break;
+            //var list = new List<byte>();
+            //BlockRecipe constr = BlockRecipe.Dictionary.Values.FirstOrDefault(c => c.Block == this);
+            //if (constr is null)
+            //{
+            //    list.Add(0);
+            //    return list;
+            //}
+            //list.AddRange(from con in constr.GetVariants() select con.Data);
+            //return list;
         }
         public string GetName(byte p)
         {

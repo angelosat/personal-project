@@ -66,15 +66,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
                             (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
                         break;
 
-                    case "plant":
-                        var x = int.Parse(p[1]);
-                        var y = int.Parse(p[2]);
-                        var z = int.Parse(p[3]);
-
-                        var planttype = (GameObject.Types)Enum.Parse(typeof(GameObject.Types), p[4], true);
-                        GeneratorPlants.GeneratePlants(net.Map, x, y, z, planttype);
-                        break;
-
                     default:
                         break;
                 }

@@ -15,11 +15,7 @@ namespace Start_a_Town_
             obj.StackSize = stacksize;
             return obj;
         }
-        public override string ToString()
-        {
-            return GameObject.Objects[ObjID].Name + " x" + Count + " (" + Chance * 100 + " %)";
-        }
-
+       
         public Loot(ItemDef def, float chance = 1, int count= 1, int amountmin= 1, int amountmax = 1) : this(() => def.Factory(def), chance, count, amountmin, amountmax)
         {
         }

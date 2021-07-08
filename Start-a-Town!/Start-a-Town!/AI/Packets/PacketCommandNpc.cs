@@ -6,15 +6,15 @@ namespace Start_a_Town_
 {
     class PacketCommandNpc
     {
+        static int p;
         static public void Init()
         {
-            Server.RegisterPacketHandler(PacketType.NpcCommand, Receive);
-            Client.RegisterPacketHandler(PacketType.NpcCommand, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, List<int> npcIDs, TargetArgs target, bool enqueue)
         {
             var w = net.GetOutgoingStream();
-            w.Write((int)PacketType.NpcCommand);
+            w.Write(p);
             w.Write(npcIDs);
             target.Write(w);
             w.Write(enqueue);

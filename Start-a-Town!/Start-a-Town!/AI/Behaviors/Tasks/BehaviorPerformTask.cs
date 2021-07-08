@@ -151,7 +151,7 @@ namespace Start_a_Town_
             {
                 this.FinishActions[i]();
             }
-            this.Actor.NetNew.Report(string.Format("{0} cleaned up", this));
+            this.Actor.Net.Report(string.Format("{0} cleaned up", this));
         }
         internal override void MapLoaded(Actor parent)
         {

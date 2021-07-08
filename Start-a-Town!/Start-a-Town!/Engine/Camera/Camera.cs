@@ -1020,26 +1020,18 @@ namespace Start_a_Town_
             }
 
             this.PrepareShader(map);
-            Towns.Housing.House house = PlayerOld.Actor != null ? map.Town.GetHouseAt(PlayerOld.Actor.Global) : null;
 
             var visibleChunks = (from ch in map.GetActiveChunks().Values where this.ViewPort.Intersects(ch.GetScreenBounds(this)) select ch);
 
-            if (house != null)
+            foreach (var chunk in visibleChunks)
             {
-                house.Draw(this, this.Effect);
-            }
-            else
-            {
-                foreach (var chunk in visibleChunks)
-                {
-                    // TODO: DONT BUILD TOP SLICE TWICE!
+                // TODO: DONT BUILD TOP SLICE TWICE!
 
-                    if (!chunk.Valid)
-                        chunk.Build(this);
+                if (!chunk.Valid)
+                    chunk.Build(this);
 
-                    chunk.DrawOpaqueLayers(this, this.Effect); // TODO: is it faster to pass only the effectparameters?
-                    continue;
-                }
+                chunk.DrawOpaqueLayers(this, this.Effect); // TODO: is it faster to pass only the effectparameters?
+                continue;
             }
             this.TopSliceChanged = false;
             DepthFar--;
@@ -1141,13 +1133,10 @@ namespace Start_a_Town_
             //sort objects back to front for proper semitraspanrent rendering
             // TODO: culling
             SortEntities(map, objs);
-            IEnterior enterior = null;
-            if (PlayerOld.Actor != null)
-                enterior = GameMode.Current.GetEnterior(map, PlayerOld.Actor.Global);
             // TODO: have the particle manager set textures because different emitters might use different atlases (blocks vs entities)
             gd.Textures[0] = Sprite.Atlas.Texture;
             gd.Textures[1] = Sprite.Atlas.DepthTexture;
-            DrawEntities(scene, objs, enterior);
+            DrawEntities(scene, objs);
             map.DrawParticles(this.SpriteBatch, this);
 
             //  // draw entity shadows
@@ -1280,15 +1269,12 @@ namespace Start_a_Town_
             SpriteBatch.Flush();
         }
 
-        private void DrawEntities(SceneState scene, List<GameObject> objs, IEnterior enterior)
+        private void DrawEntities(SceneState scene, List<GameObject> objs)
         {
             foreach (var obj in objs)
             {
                 if (obj.Global.Z > this.MaxDrawZ + 1)
                     continue;
-                if (enterior != null)
-                    if (!enterior.Contains(obj.Global))
-                        continue;
                 
                 // TODO: check bounding box intersection instead of single point to avoid entity pop-in
                 var bounds = obj.GetScreenBounds(this); // TODO: cache bounds?

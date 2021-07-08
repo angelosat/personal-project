@@ -14,8 +14,6 @@ namespace Start_a_Town_.Crafting
     {
         public Action<Reaction.Product.ProductMaterialPair> Callback = a => { };
         Panel PanelParts, PanelItemTypes, PanelMaterials, PanelCollapsible;
-        Reaction.Reagent SelectedReagent;
-        Button BtnAllowAll, BtnClearAll, BtnInvert;
         Dictionary<Reaction.Reagent, ListBoxNew<ItemDef, CheckBoxNew>> CachedReagentLists = new Dictionary<Reaction.Reagent, ListBoxNew<ItemDef, CheckBoxNew>>();
         Dictionary<Reaction.Reagent, ListBoxNew<Material, CheckBoxNew>> CachedReagentMaterialLists = new Dictionary<Reaction.Reagent, ListBoxNew<Material, CheckBoxNew>>();
         CheckBoxNew ChkHaulOnFinish;
@@ -26,12 +24,7 @@ namespace Start_a_Town_.Crafting
             this.Order = order;
             this.AutoSize = true;
 
-            this.BtnAllowAll = new Button("Allow All") { LeftClickAction = AllowAll };
-            this.BtnClearAll = new Button("Clear All") { Location = this.BtnAllowAll.TopRight, LeftClickAction = ClearAll };
-            this.BtnInvert = new Button("Invert") { Location = this.BtnClearAll.TopRight, LeftClickAction = Invert };
-            this.AddControls(this.BtnAllowAll, this.BtnClearAll, this.BtnInvert);
-
-            this.PanelParts = new Panel() { AutoSize = true, Location = this.BtnAllowAll.BottomLeft };
+            this.PanelParts = new Panel() { AutoSize = true };
             var reagents = order.Reaction.Reagents;
             
             var listParts = new ListBoxNew<Reaction.Reagent, Label>(70, 150);
@@ -113,48 +106,13 @@ namespace Start_a_Town_.Crafting
             return list;
         }
 
-        private void Invert()
-        {
-            if (this.SelectedReagent == null)
-                return;
-            foreach (var item in this.GetReagentItems(this.SelectedReagent))
-            {
-                var isAllowed = this.Order.IsReagentAllowed(this.SelectedReagent.Name, (int)item.IDType);
-                CraftingManager.WriteOrderToggleReagent(Client.Instance.OutgoingStream, this.Order, this.SelectedReagent.Name, (int)item.IDType, isAllowed);
-            }
-        }
-
-        private void ClearAll()
-        {
-            if (this.SelectedReagent == null)
-                return;
-            foreach (var item in this.GetReagentItems(this.SelectedReagent))
-                CraftingManager.WriteOrderToggleReagent(Client.Instance.OutgoingStream, this.Order, this.SelectedReagent.Name, (int)item.IDType, true);
-        }
-
-        private void AllowAll()
-        {
-            if (this.SelectedReagent == null)
-                return;
-            foreach (var item in this.GetReagentItems(this.SelectedReagent))
-                CraftingManager.WriteOrderToggleReagent(Client.Instance.OutgoingStream, this.Order, this.SelectedReagent.Name, (int)item.IDType, false);
-        }
-
         private void SelectReagent(Reaction.Reagent r)
         {
-            this.SelectedReagent = r;
-
             this.PanelItemTypes.ClearControls();
             this.PanelItemTypes.AddControls(this.CachedReagentLists[r]);
 
             this.PanelMaterials.ClearControls();
             this.PanelMaterials.AddControls(this.CachedReagentMaterialLists[r]);
-        }
-       
-        private IEnumerable<Entity> GetReagentItems(Reaction.Reagent r)
-        {
-            var items = (from obj in GameObject.Objects.Values where r.Filter(obj as Entity) select obj as Entity);
-            return items;
         }
        
         internal override void OnGameEvent(GameEvent e)

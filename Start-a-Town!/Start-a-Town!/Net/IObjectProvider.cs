@@ -29,11 +29,9 @@ namespace Start_a_Town_
         PlayerData GetPlayer();
 
         GameObject Instantiate(GameObject obj);
-        void InstantiateAndSpawn(GameObject obj);
 
         bool DisposeObject(GameObject obj);
         bool DisposeObject(int netID);
-        void SyncDisposeObject(GameObject obj);
 
         GameObject InstantiateAndSync(GameObject obj);
 
@@ -59,8 +57,6 @@ namespace Start_a_Town_
         void SyncEvent(GameObject recipient, Components.Message.Types msg, Action<BinaryWriter> writer);
         bool LogStateChange(int netID);
 
-        [Obsolete]
-        void PopLoot(GameObject obj, GameObject parent);
         void PopLoot(GameObject loot, Vector3 startPosition, Vector3 startVelocity);
         void PopLoot(LootTable table, Vector3 startPosition, Vector3 startVelocity);
 
@@ -68,8 +64,6 @@ namespace Start_a_Town_
         void PostLocalEvent(GameObject recipient, Components.Message.Types type, params object[] args);
 
         void EventOccured(Components.Message.Types type, params object[] p);
-
-        void SyncSetBlock(Vector3 global, Block.Types type);
 
         void Forward(Packet p);
 

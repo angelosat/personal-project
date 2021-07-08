@@ -59,7 +59,7 @@ namespace Start_a_Town_
             {
                 var score = role.Score(this.Actor, item);
                 var existingItemID = this.Preferences[role];
-                var existingItem = existingItemID != -1 ? this.Actor.NetNew.GetNetworkObject<Entity>(existingItemID) : null;
+                var existingItem = existingItemID != -1 ? this.Actor.Net.GetNetworkObject<Entity>(existingItemID) : null;
                 var existingScore = existingItem != null ? role.Score(this.Actor, existingItem) : 0;
                 if (score > existingScore)
                 {
@@ -78,7 +78,7 @@ namespace Start_a_Town_
         private Entity GetPreference(ItemRole role)
         {
             var refid = this.Preferences[role];
-            return refid == -1 ? null : this.Actor.NetNew.GetNetworkObject<Entity>(refid);
+            return refid == -1 ? null : this.Actor.Net.GetNetworkObject<Entity>(refid);
         }
         public Entity GetPreference(GearType gt)
         {

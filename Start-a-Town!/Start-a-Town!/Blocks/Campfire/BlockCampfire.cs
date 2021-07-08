@@ -17,11 +17,7 @@ namespace Start_a_Town_.Blocks
             this.Variations.Add(Block.Atlas.Load("blocks/campfire", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap));
 
             this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.IsOfSubType(ItemSubType.Logs)
-                        )),
+                Reaction.Reagent.Create(),
                     new BlockRecipe.Product(this))
             { WorkAmount = 2 };
             Towns.Constructions.ConstructionsManager.Production.Add(this.Recipe);

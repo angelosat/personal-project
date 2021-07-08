@@ -17,7 +17,7 @@ namespace Start_a_Town_
 
         static public void SyncWrite(GameObject entity, string text)
         {
-            var net = entity.NetNew;
+            var net = entity.Net;
             if (net is not Server)
                 return;
             AIState state = AIState.GetState(entity);

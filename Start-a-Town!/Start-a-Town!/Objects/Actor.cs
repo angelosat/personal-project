@@ -54,7 +54,7 @@ namespace Start_a_Town_
 
         internal void Loot(Entity loot, OffsiteAreaDef area)
         {
-            var net = this.NetNew;
+            var net = this.Net;
             if (net is Server server)
             {
                 loot.SyncInstantiate(server);

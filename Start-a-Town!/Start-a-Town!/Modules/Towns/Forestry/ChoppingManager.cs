@@ -54,43 +54,6 @@ namespace Start_a_Town_
             this.Town = town;
         }
 
-        public override void Handle(IObjectProvider net, Packet msg)
-        {
-            switch (msg.PacketType)
-            {
-                
-                case PacketType.ForagingSingle:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        PacketIntInt.Read(r, out int actorID, out int plantID);
-                        var tree = net.GetNetworkObject(plantID);
-                        if (!tree.HasComponent<PlantComponent>())
-                            throw new Exception();
-                        var exists = this.QueuedForaging.Contains(plantID);
-                        if (!exists)
-                            this.QueuedForaging.Add(plantID);
-                        else
-                            this.QueuedForaging.Remove(plantID);
-                        if (net is Server server)
-                            server.Enqueue(PacketType.ForagingSingle, msg.Payload, SendType.OrderedReliable, true);
-                    });
-                    break;
-                case PacketType.ChoppingDesignation:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        PacketEntityDesignation.Read(r, out int entityID, out Vector3 begin, out Vector3 end, out bool value);
-                        this.Designate((int)Types.Chopping, begin, end, value);
-                        if (net is Server server)
-                            server.Enqueue(PacketType.ChoppingDesignation, msg.Payload, SendType.OrderedReliable, true);
-                    });
-                    break;
-
-
-                default:
-                    break;
-            }
-        }
-
         internal void Designate(int type, List<int> ids, bool remove)
         {
             var designationType = (Types)type;
@@ -228,45 +191,7 @@ namespace Start_a_Town_
             foreach (var parent in objects)
                 icon.DrawAboveEntity(sb, camera, parent);
         }
-        internal override void OnContextMenuCreated(IContextable obj, ContextArgs a)
-        {
-            if (obj is not TargetArgs tree)
-                return;
-            if (tree.Type != TargetType.Entity)
-                return;
-            if (!tree.Object.HasComponent<TreeComponent>())
-                return;
-            var orderExists = this.ChoppingTasks.Contains(tree.Object.RefID);
-            a.Actions.Add(new ContextAction(orderExists ? "Cancel: Chop" : "Order: Chop", () =>
-            {
-                Client.Instance.Send(PacketType.ChoppingSingle, PacketIntInt.Write(PlayerOld.Actor.RefID, tree.Object.RefID));
-                return true;
-            }));
-        }
-
         
-        internal override void OnContextActionBarCreated(ContextActionBar.ContextActionBarArgs a)
-        {
-            var obj = a.Target;
-            if (obj == null)
-                return;
-            if (obj.Type != TargetType.Entity)
-                return;
-            var plant = obj.Object as Plant;
-            if (obj.Object.HasComponent<PlantComponent>())
-            {
-                var orderExists = this.ChoppingTasks.Contains(plant.RefID);
-                a.Actions.Add(new ContextActionBar.ContextActionBarAction(() => Client.Instance.Send(PacketType.ChoppingSingle, PacketIntInt.Write(PlayerOld.Actor.RefID, plant.RefID)), new Icon(UIManager.Icons32, 12, 32), orderExists ? "Cancel: Cut" : "Order: Cut"));
-
-                if (plant.IsHarvestable)
-                {
-                    orderExists = this.QueuedForaging.Contains(plant.RefID);
-                    a.Actions.Add(new ContextActionBar.ContextActionBarAction(() => Client.Instance.Send(PacketType.ForagingSingle, PacketIntInt.Write(PlayerOld.Actor.RefID, plant.RefID)), new Icon(UIManager.Icons32, 12, 32), orderExists ? "Cancel: Forage" : "Order: Forage"));
-                }
-
-            }
-        }
-
         internal bool IsChoppingTask(GameObject tree)
         {
             return this.ChoppingTasks.Contains(tree.RefID);

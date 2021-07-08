@@ -6,17 +6,17 @@ namespace Start_a_Town_
 {
     class PacketOrderAdd
     {
+        static int p;
         static internal void Init()
         {
             // TODO
-            Server.RegisterPacketHandler(PacketType.CraftingOrderPlaceNew, Receive);
-            Client.RegisterPacketHandler(PacketType.CraftingOrderPlaceNew, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
 
         internal static void Send(IObjectProvider net, Vector3 global, int reactionID)
         {
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.CraftingOrderPlaceNew);
+            w.Write(p);
             w.Write(global);
             w.Write(reactionID);
         }

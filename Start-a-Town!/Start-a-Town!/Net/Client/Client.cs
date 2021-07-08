@@ -519,18 +519,6 @@ namespace Start_a_Town_.Net
                     Instance.PlayerDisconnected(plid);
                     break;
 
-                case PacketType.RemoteCall:
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        double timestamp = r.ReadDouble();
-                        TargetArgs recipient = TargetArgs.Read(Instance, r);
-                        Message.Types type = (Components.Message.Types)r.ReadInt32();
-                        byte[] data = r.ReadBytes(r.ReadInt32());
-                        GameObject obj = recipient.Object;
-                        obj.HandleRemoteCall(ObjectEventArgs.Create(type, data));
-                    });
-                    break;
-               
                 case PacketType.PlayerJump:
                     Network.Deserialize(msg.Payload, r =>
                     {
@@ -832,42 +820,6 @@ namespace Start_a_Town_.Net
                     ent.Instantiate(Instance.Instantiator);
                     return;
 
-                case PacketType.InstantiateAndSpawnObject: //register netID to list and spawn
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        GameObject ob = GameObject.CreatePrefab(r).ObjectCreated(); // the obj is received with a netid but without a position component// a  position component and netid
-                        ob.Instantiate(Instance.Instantiator);
-                        Instance.Spawn(ob);
-                    });
-                    return;
-
-                case PacketType.DisposeObject:
-                    TargetArgs tar = Network.Deserialize<TargetArgs>(msg.Payload, r => TargetArgs.Read(Instance, r));
-
-                    switch (tar.Type)
-                    {
-                        case TargetType.Entity:
-                            if (tar.Object == null)
-                            {
-                                Log.Write(Color.Orange, "CLIENT", "Can't dispose null entity");
-                                break;
-                            }
-                            GameObject o;
-                            Instance.Despawn(tar.Object);
-                            Instance.DisposeObject(tar.Object);
-                            break;
-
-                        case TargetType.Slot:
-                            o = tar.Slot.Object;
-                            Instance.DisposeObject(o);
-                            tar.Slot.Clear();
-                            break;
-
-                        default:
-                            throw new Exception("Invalid object");
-                    }
-                    break;
-
                 case PacketType.SyncEntity:
 
                     Network.Deserialize<GameObject>(msg.Payload, r =>
@@ -886,16 +838,6 @@ namespace Start_a_Town_.Net
                     });
 
                     break;
-
-                case PacketType.IncreaseEntityQuantity:
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        var tarentityID = r.ReadInt32(); 
-                        var entity = Instance.NetworkObjects[tarentityID];
-                        var quantity = r.ReadInt32();
-                        entity.StackSize += quantity;
-                    });
-                    return;
 
                 case PacketType.SpawnObject:
                     Network.Deserialize(msg.Payload, r =>
@@ -1137,14 +1079,7 @@ namespace Start_a_Town_.Net
                 this.DisposeObject(child);
             return true;
         }
-        /// <summary>
-        /// called ONLY upon recieving a message from the server
-        /// </summary>
-        /// <param name="obj"></param>
-        public void SyncDisposeObject(GameObject obj)
-        {
-        }
-       
+        
         public GameObject InstantiateAndSync(GameObject obj)
         {
             return null;
@@ -1160,12 +1095,11 @@ namespace Start_a_Town_.Net
             ob.Instantiate(Instantiator);
             return ob;
         }
-        public void InstantiateAndSpawn(GameObject obj) { }
 
         public void Instantiator(GameObject ob)
         {
             ob.Map = this.Map;
-            ob.NetNew = this;
+            ob.Net = this;
             Instance.NetworkObjects.Add(ob.RefID, ob);
         }
         
@@ -1700,9 +1634,6 @@ namespace Start_a_Town_.Net
             recipient.PostMessage(a);
         }
 
-        public void PopLoot(GameObject obj, GameObject parent)
-        {
-        }
         public void PopLoot(GameObject loot, Vector3 startPosition, Vector3 startVelocity) { }
         public void PopLoot(LootTable table, Vector3 startPosition, Vector3 startVelocity) { }
 
@@ -1733,7 +1664,7 @@ namespace Start_a_Town_.Net
                 targetSlot.Object = obj;
                 return;
             }
-            if (sourceSlot.Object.IDType == targetSlot.Object.IDType)
+            if (targetSlot.Object.CanAbsorb(sourceSlot.Object))
             {
                 if (sourceSlot.StackSize + targetSlot.StackSize <= targetSlot.StackMax)
                 {
@@ -1754,10 +1685,6 @@ namespace Start_a_Town_.Net
 
         }
 
-        public void SyncSetBlock(Vector3 global, Block.Types type)
-        {
-        }
-        
         public void Forward(Packet p)
         {
 

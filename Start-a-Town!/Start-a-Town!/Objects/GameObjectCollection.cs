@@ -9,11 +9,6 @@ namespace Start_a_Town_
     {
         SortedDictionary<int, GameObject> Dictionary;// = new SortedDictionary<int, GameObject>();
 
-        public GameObject this[GameObject.Types type]
-        {
-            get { return this.Dictionary[(int)type]; }
-            set { this.Dictionary[(int)type] = value; }
-        }
         public GameObject this[int type]
         {
             get { return this.Dictionary[type]; }
@@ -23,19 +18,9 @@ namespace Start_a_Town_
         {
             get { return Dictionary.Values; }
         }
-        public void Add(GameObject obj)
-        {
-            //Add(obj.ID, obj);
-            this.Dictionary.Add((int)obj.IDType, obj);
-        }
-        public void Add(params GameObject[] objects)
-        {
-            foreach (GameObject obj in objects)
-                Add(obj);
-        }
+       
         public SortedDictionary<string, GameObject> ByName()
         {
-            //return new SortedDictionary<string, GameObject>(GameObject.Objects.ToDictionary(pair => pair.Value.Name, pair => pair.Value));
             return new SortedDictionary<string, GameObject>(this.Dictionary.ToDictionary(pair => pair.Value.Name, pair => pair.Value));
         }
 
@@ -52,11 +37,6 @@ namespace Start_a_Town_
             if (this.Dictionary.TryGetValue(id, out obj))
                 return true;
             return false;
-        }
-        internal bool ContainsKey(GameObject.Types id)
-        {
-            return false;
-            //return this.Dictionary.ContainsKey((int)id);
         }
     }
 }

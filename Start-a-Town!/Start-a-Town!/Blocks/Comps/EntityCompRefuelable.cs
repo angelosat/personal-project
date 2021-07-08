@@ -37,53 +37,12 @@ namespace Start_a_Town_
 
         public Progress Fuel = new();
         readonly List<ItemDefMaterialAmount> StoredFuelItems = new();
-        HashSet<FuelDef> AcceptedFuelTypes = new();
-        HashSet<ItemSubType> AcceptedItemTypes = new();
-        HashSet<int> CurrentAllowedItemTypes = new();
-        HashSet<GameObject> _AllPermittedItemTypes;
-        HashSet<GameObject> AllPermittedItemTypes
-        {
-            get
-            {
-                if (this._AllPermittedItemTypes == null)
-                    InitPermittedTypes();
-                return this._AllPermittedItemTypes;
-            }
-        }
-        private void InitPermittedTypes()
-        {
-            this._AllPermittedItemTypes = new HashSet<GameObject>();
-            var objects = GameObject.Objects;
-            foreach (var obj in objects.Values)
-            {
-                if (
-                    this.AcceptedFuelTypes.Contains(obj.Material?.Fuel.Def)
-                    && this.AcceptedItemTypes.Contains(obj.GetInfo().ItemSubType)
-                    && obj.IsHaulable)
-                    this._AllPermittedItemTypes.Add(obj);
-            }
-        }
-        public EntityCompRefuelable SetDefaultFilter(Func<GameObject, bool> filter)
-        {
-            foreach (var i in this.AllPermittedItemTypes)
-                if (filter(i))
-                    this.CurrentAllowedItemTypes.Add(i.ID);
-            return this;
-        }
+        
         public EntityCompRefuelable(int storedFuelCapacity = 100)
         {
             this.Fuel.Max = storedFuelCapacity;
         }
-        public EntityCompRefuelable SetFuelTypes(params FuelDef[] fuelTypes)
-        {
-            this.AcceptedFuelTypes = new HashSet<FuelDef>(fuelTypes);
-            return this;
-        }
-        public EntityCompRefuelable SetPermittedItemTypes(params ItemSubType[] itemTypes)
-        {
-            this.AcceptedItemTypes = new HashSet<ItemSubType>(itemTypes);
-            return this;
-        }
+       
         public bool Accepts(Entity fuel)
         {
             return this.DefaultFilters.Filter(fuel);
@@ -228,26 +187,22 @@ namespace Start_a_Town_
         public override void AddSaveData(SaveTag tag)
         {
             tag.Add(this.Fuel.Save("Fuel"));
-            tag.Add(this.CurrentAllowedItemTypes.Save("CurrentAllowedItemTypes"));
             tag.Add(this.StoredFuelItems.SaveNewBEST("StoredFuelItems"));
         }
 
         public override void Load(SaveTag tag)
         {
             this.Fuel.Load(tag["Fuel"]);
-            this.CurrentAllowedItemTypes.Load(tag, "CurrentAllowedItemTypes");
             this.StoredFuelItems.TryLoadMutable(tag, "StoredFuelItems");
         }
         public override void Write(BinaryWriter w)
         {
             this.Fuel.Write(w);
-            w.Write(this.CurrentAllowedItemTypes);
             w.Write(this.StoredFuelItems);
         }
         public override ISerializable Read(BinaryReader r)
         {
             this.Fuel.Read(r);
-            this.CurrentAllowedItemTypes = r.ReadIntCollection<HashSet<int>>();
             this.StoredFuelItems.ReadMutable(r);
             return this;
         }

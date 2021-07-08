@@ -5,17 +5,15 @@ namespace Start_a_Town_
 {
     class PacketPlayerSetSpeed
     {
-        static readonly PacketType Type = PacketType.PlayerSetSpeed;
+        static int p;
         internal static void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(Type, Receive);
-            Client.RegisterPacketHandler(Type, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, int playerID, int speed)
         {
             var w = net.GetOutgoingStream();
-            w.Write(Type);
+            w.Write(p);
             w.Write(playerID);
             w.Write(speed);
         }

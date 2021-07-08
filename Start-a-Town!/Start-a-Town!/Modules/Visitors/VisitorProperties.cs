@@ -91,7 +91,7 @@ namespace Start_a_Town_
             if (actor.IsSpawned) // return if the actor is now spawned as result of the tryvisit function
                 return;
 
-            var net = actor.NetNew;
+            var net = actor.Net;
             if (net is Server)
                 this.OffsiteArea?.Tick(this);
 
@@ -139,7 +139,7 @@ namespace Start_a_Town_
 
         private void Sync()
         {
-            var net = this.Actor.NetNew;
+            var net = this.Actor.Net;
             if (net is Client)
                 throw new Exception();
             net.WriteToStream(PacketSync, this.Actor.RefID);
@@ -225,7 +225,7 @@ namespace Start_a_Town_
         }
         public void SyncAwardTownRating(float value)
         {
-            var net = this.Actor.NetNew;
+            var net = this.Actor.Net;
             if (net is Client)
                 return;
             this.AwardTownRating(value);

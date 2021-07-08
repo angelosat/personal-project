@@ -5,16 +5,15 @@ namespace Start_a_Town_
 {
     class PacketChunkRequest
     {
+        static int p;
         internal static void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.RequestChunks, Receive);
-            Client.RegisterPacketHandler(PacketType.RequestChunks, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, int playerid)
         {
             var w = (net as Client).OutgoingStream;
-            w.Write(PacketType.RequestChunks);
+            w.Write(p);
             w.Write(playerid);
         }
         internal static void Receive(IObjectProvider net, BinaryReader r)

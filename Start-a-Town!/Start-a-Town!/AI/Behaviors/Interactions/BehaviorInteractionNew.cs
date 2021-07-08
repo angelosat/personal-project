@@ -73,7 +73,7 @@ namespace Start_a_Town_
                     parent.MoveToggle(false);
                 return BehaviorState.Running;
             }
-            var net = parent.NetNew;
+            var net = parent.Net;
 
             TargetArgs target = this.Target;
             Interaction goal = this.Interaction;

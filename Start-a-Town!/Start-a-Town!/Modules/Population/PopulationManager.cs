@@ -100,7 +100,7 @@ namespace Start_a_Town_
                 {
                     this.Populated = true;
                     Packets.SendNotifyAdventurerCreated(actor);
-                    RegisterActor(actor.NetNew as Server, actor);
+                    RegisterActor(actor.Net as Server, actor);
                     Log.WriteToFile($"{actor.Name} is not a town member and was missing from the world population list.");
                 }
             }

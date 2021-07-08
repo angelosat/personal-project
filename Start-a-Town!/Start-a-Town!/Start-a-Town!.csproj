@@ -201,6 +201,8 @@
     <Compile Include="Components\Animations\AnimationExtensions.cs" />
     <Compile Include="Components\BuildingPlanComponent.cs" />
     <Compile Include="Components\ColorCustomization\CharacterColor.cs" />
+    <Compile Include="Components\Crafting\New\Ingredient.Modifier.cs" />
+    <Compile Include="Components\Crafting\Reaction.Product.ProductMaterialPair.cs" />
     <Compile Include="Components\GearType.cs" />
     <Compile Include="Components\IEntity.cs" />
     <Compile Include="Components\Loot.cs" />
@@ -410,9 +412,6 @@
     <Compile Include="Components\Attributes\AttributeProgressAwarderDef.cs" />
     <Compile Include="Components\ComponentProps.cs" />
     <Compile Include="Components\Crafting\CraftingIngredients.cs" />
-    <Compile Include="Components\Crafting\ReactionIngredientIndex.cs" />
-    <Compile Include="Components\Crafting\ReagentFilters\IsEdible.cs" />
-    <Compile Include="Components\Crafting\ReagentFilters\ReagentFilterCustom.cs" />
     <Compile Include="Components\Fuel\Fuel.cs" />
     <Compile Include="Components\Fuel\FuelDef.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropEquippedTarget.cs" />
@@ -426,7 +425,6 @@
     <Compile Include="Components\Inventory\InventoryUI.cs" />
     <Compile Include="Components\Inventory\PacketInventoryDrop.cs" />
     <Compile Include="Components\Inventory\PacketPlayerSetItemOwner.cs" />
-    <Compile Include="Components\ItemRequirement.cs" />
     <Compile Include="Helpers\RectangleHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\XmlHelper.cs" />
@@ -626,12 +624,9 @@
     <Compile Include="Modules\Construction\Tools\ToolDrawingLine.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawingSinglePreview.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawingSingle.cs" />
-    <Compile Include="Modules\Construction\Tools\UIBlockVariationPicker.cs" />
     <Compile Include="Modules\Construction\Tools\UIToolsBox.cs" />
     <Compile Include="Modules\Construction\Tools\UITools.cs" />
-    <Compile Include="Modules\Construction\UI\ConstructionsWindowNewNew.cs" />
     <Compile Include="Modules\Construction\UI\TerrainWindowNew.cs" />
-    <Compile Include="Modules\Crafting\CraftOperationNew.cs" />
     <Compile Include="Modules\Crafting\CraftOrderFinishMode.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderChangeMode.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderToggleHaul.cs" />
@@ -659,19 +654,13 @@
     <Compile Include="Blocks\Chest\BlockChest.cs" />
     <Compile Include="Blocks\Chest\ContainerUI.cs" />
     <Compile Include="Blocks\Chest\BlockChestEntity.cs" />
-    <Compile Include="Blocks\Workstations\Smeltery\BlockSmeltery.cs" />
     <Compile Include="Blocks\BlockWoodPaneling.cs" />
-    <Compile Include="Blocks\Workstations\Smeltery\BlockSmelteryEntity.cs" />
     <Compile Include="Components\Combat\AttackComponent.cs" />
     <Compile Include="Components\BloodComponent.cs" />
     <Compile Include="Components\BombComponent.cs" />
     <Compile Include="Components\Combat\BlockingComponent.cs" />
     <Compile Include="Components\Consumables\Effects\ConsumableEffect.cs" />
     <Compile Include="Components\Consumables\NeedEffect.cs" />
-    <Compile Include="Components\Crafting\CanBeCraftedAt.cs" />
-    <Compile Include="Components\Crafting\InteractionCraftingPerson.cs" />
-    <Compile Include="Components\Crafting\Modifiers\Quantity.cs" />
-    <Compile Include="Components\Crafting\ReagentFilters\IsFuel.cs" />
     <Compile Include="Components\Interactions\InteractionCustom.cs" />
     <Compile Include="Components\Interactions\InteractionPerpetual.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\IsBlockType.cs" />
@@ -679,10 +668,8 @@
     <Compile Include="Components\Interactions\NewScripts\Checks\Exists.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionChopping.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionStoreHauled.cs" />
-    <Compile Include="Components\Vegetation\FertilizerComponent.cs" />
     <Compile Include="Components\Interactions\NewScripts\Checks\BlockCheck.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConsume.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionFertilizing.cs" />
     <Compile Include="Modules\Packets\PacketToggleForbidden.cs" />
     <Compile Include="Modules\Particles\Particle.cs" />
     <Compile Include="Modules\Particles\ParticleDensityLevel.cs" />
@@ -734,24 +721,14 @@
     <Compile Include="Components\Crafting\Blocks\Modifier.cs" />
     <Compile Include="Components\Crafting\Blocks\Product.cs" />
     <Compile Include="Components\Crafting\Blocks\ProductMaterialPair.cs" />
-    <Compile Include="Components\Crafting\BlueprintMemory.cs" />
-    <Compile Include="Components\Crafting\Building.cs" />
-    <Compile Include="Components\Crafting\CraftOperation.cs" />
-    <Compile Include="Components\Crafting\Modifiers\GetDurabilityFromTool.cs" />
-    <Compile Include="Components\Crafting\Modifiers\FlimsyIfNoBench.cs" />
     <Compile Include="Components\Crafting\Product.cs" />
     <Compile Include="Components\Crafting\Reaction.cs" />
     <Compile Include="Blocks\BlockDoor.cs" />
     <Compile Include="Components\Crafting\Reagent.cs" />
-    <Compile Include="Components\Crafting\ReagentFilters\HasHardness.cs" />
-    <Compile Include="Components\Crafting\ReagentFilters\IsOfSubType.cs" />
-    <Compile Include="Components\Crafting\ReagentFilters\ToolHasUse.cs" />
-    <Compile Include="Components\Crafting\ReagentFilters\IsOfType.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\IsOfMaterialType.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\IsOfMaterial.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\CanProduce.cs" />
     <Compile Include="Components\Crafting\Site.cs" />
-    <Compile Include="Components\Crafting\Structures\StructureConstruction.cs" />
     <Compile Include="Components\Crafting\ReactionDefs.cs" />
     <Compile Include="Components\GearComponent.cs" />
     <Compile Include="Components\HaulComponent.cs">
@@ -761,9 +738,7 @@
     <Compile Include="Components\Interactions\NewScripts\DropCarried.cs" />
     <Compile Include="Components\Interactions\NewScripts\Equip.cs" />
     <Compile Include="Modules\Base\GameManager.cs" />
-    <Compile Include="Modules\Construction\IConstructionProduct.cs" />
     <Compile Include="Components\Inventory\Container.cs" />
-    <Compile Include="Objects\Items\ItemCategory.cs" />
     <Compile Include="Components\MaterialsComponent.cs" />
     <Compile Include="Components\Crafting\ReagentComponent.cs" />
     <Compile Include="Objects\Items\Materials\Material.cs" />
@@ -838,7 +813,6 @@
     <Compile Include="Modules\Towns\Farming\GrowingZone.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskBehaviorHarvestingNew.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskGiverHarvestingNew.cs" />
-    <Compile Include="Modules\Towns\Farming\PacketFarmSetSeed.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskBehaviorSowingNewNew.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskGiverSowingNew.cs" />
     <Compile Include="Modules\Towns\Farming\AI\TaskGiverFarming.cs" />
@@ -847,24 +821,12 @@
     <Compile Include="Modules\Towns\Forestry\AI\TaskBehaviorChoppingNew.cs" />
     <Compile Include="Modules\Towns\Forestry\AI\TaskGiverForaging.cs" />
     <Compile Include="Modules\Towns\Forestry\AI\TaskGiverChopping.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\HouseManager.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\Packets\PacketResidenceAdd.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\ResidenceTool.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\UI\HouseListUI.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\UI\HouseManagerUI.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\Residence.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\UIHouses.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\HouseTool.cs" />
     <Compile Include="Modules\Towns\Forestry\ChoppingManager.cs" />
     <Compile Include="Modules\Packets\PacketEntityDesignation.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\UI\HouseOwnershipUI.cs" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\UI\ResidenceUI.cs" />
     <Compile Include="Modules\Packets\PacketZoneDelete.cs" />
     <Compile Include="Modules\Packets\PacketZone.cs" />
     <Compile Include="Modules\Packets\PacketZoneDesignation.cs" />
     <Compile Include="Modules\Towns\Stockpiles\UI\StockpilesListUI.cs" />
-    <Compile Include="Modules\Towns\Stockpiles\UI\StockpileSlotsUI.cs" />
-    <Compile Include="Modules\Towns\Stockpiles\UI\StockpilesManagerUI.cs" />
     <Compile Include="Modules\Packets\PacketDesignate.cs" />
     <Compile Include="Modules\Towns\Stockpiles\UI\UIStockpileInventoryIcons.cs" />
     <Compile Include="Modules\Towns\Stockpiles\IStorage.cs" />
@@ -1102,7 +1064,6 @@
     <Compile Include="TextInput.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Modules\Towns\Network\TownsPacketHandler.cs" />
     <Compile Include="Modules\Towns\Stockpiles\Stockpile.cs" />
     <Compile Include="Modules\Towns\Stockpiles\StockpileManager.cs" />
     <Compile Include="Modules\Towns\Town.cs" />
@@ -1149,6 +1110,8 @@
     <Compile Include="UI\SpeechBubble.cs" />
     <Compile Include="UI\Tables\TableScrollable.cs" />
     <Compile Include="UI\Tables\TableScrollableCompact.cs" />
+    <Compile Include="UI\Tables\TableScrollableCompactNew.cs" />
+    <Compile Include="UI\Tables\TableScrollableCompactNewNew.cs" />
     <Compile Include="UI\WindowTargetManagementStatic.cs" />
     <Compile Include="UI\WindowTargetManagement.cs" />
     <Compile Include="UI\ScrollBars\ScrollableBox.cs" />
@@ -1277,7 +1240,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Compile Include="Modules\Towns\HousingOBSOLETE\House.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

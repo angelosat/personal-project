@@ -8,11 +8,7 @@ namespace Start_a_Town_
     class GeneratorPlants : Terraformer
     {
         float Density;
-        [Obsolete]
-        List<GameObject.Types> PlantTypes = new List<GameObject.Types>() { 
-            GameObject.Types.Tree, 
-            GameObject.Types.BerryBush 
-        };
+        
         public GeneratorPlants()
         {
             this.ID = Terraformer.Types.Trees;
@@ -46,162 +42,10 @@ namespace Start_a_Town_
                 }
             }
         }
-        public override void Finally(Chunk chunk)
-        {
-            return;
-
-            int zSlice = Map.MaxHeight / 2;
-
-            foreach (var plantType in this.PlantTypes)
-            {
-                //int seedInt = chunk.Map.GetWorld().Seed + "trees".GetHashCode();
-                int seedInt = chunk.Map.World.Seed + plantType.ToString().GetHashCode();
-                byte[] seed = BitConverter.GetBytes(seedInt);
-                for (int lx = 0; lx < Chunk.Size; lx++)
-                {
-                    for (int ly = 0; ly < Chunk.Size; ly++)
-                    {
-                        int z = chunk.HeightMap[lx][ly];
-                        Cell cell = chunk.GetLocalCell(lx, ly, z);
-                        if (cell.Block.GetMaterial(cell.BlockData).Type != MaterialType.Soil)
-                            continue;
-
-                        int gx = lx + (int)chunk.Start.X, gy = ly + (int)chunk.Start.Y;
-
-                        int oct = 2;
-                        double n = 0;
-                        for (int o = 0; o < oct; o++)
-                            n += Generator.Perlin3D(gx, gy, zSlice, 16 >> o, seed) / Math.Pow(2, o);
-
-                        n += ((this.Density) * 2 - 1);
-                        if (n > 0)
-                        {
-                            Random random = new Random(seedInt + n.GetHashCode());
-                            var r = random.NextDouble();
-                            if (r < n)
-                            {
-                                throw new NotImplementedException();
-                                GameObject tree = null; //GameObject.Create(plantType);
-
-                                var angle = (float)(random.NextDouble() * (Math.PI + Math.PI));
-                                var offset = new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0) * .2f;
-
-                                tree.Global = new Vector3(gx, gy, z + 1) + offset;
-                                chunk.Objects.Add(tree);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public void Generate(Chunk chunk)
-        {
-            var random = chunk.Map.Random;
-
-            var entities = new LinkedList<GameObject>();
-            foreach (var plantType in this.PlantTypes)
-            {
-                byte[] seed = new byte[4];
-                random.NextBytes(seed);
-
-                for (int lx = 0; lx < Chunk.Size; lx++)
-                {
-                    for (int ly = 0; ly < Chunk.Size; ly++)
-                    {
-                        int z = chunk.HeightMap[lx][ly];
-                        Cell cell = chunk.GetLocalCell(lx, ly, z);
-                        if (cell.Block.GetMaterial(cell.BlockData).Type != MaterialType.Soil)
-                            continue;
-
-                        int gx = lx + (int)chunk.Start.X, gy = ly + (int)chunk.Start.Y;
-
-                        int oct = 2;
-                        double n = 0;
-                        for (int o = 0; o < oct; o++)
-                            n += Generator.Perlin3D(gx, gy, 0, 16 >> o, seed) / Math.Pow(2, o);
-
-                        n += ((this.Density) * 2 - 1);
-                        if (n > 0)
-                        {
-                            var r = random.NextDouble();
-                            if (r < n)
-                            {
-                                throw new NotImplementedException();
-                                GameObject plant = null;// GameObject.Create(plantType);
-
-                                var angle = (float)(random.NextDouble() * (Math.PI + Math.PI));
-                                var offset = new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0) * .2f;
-
-                                plant.Global = new Vector3(gx, gy, z + 1) + offset;
-                                //chunk.Objects.Add(tree);
-                                //(chunk.Map.Net as Server).InstantiateAndSpawn(tree);
-                                entities.AddLast(plant);
-                                //chunk.Map.Net.InstantiateAndSpawn(plant);
-                            }
-                        }
-                    }
-                }
-            }
-            PacketEntityInstantiate.Send(Server.Instance, entities);
-        }
-
         public override object Clone()
         {
             return new GeneratorPlants();
         }
 
-        static public void GeneratePlants(IMap map, int x, int y, int z, GameObject.Types plantType)
-        {
-            var server = map.Net as Server;
-            if (server == null)
-                return;
-            var n = 0;
-            var global = new Vector3(x, y, z);
-            var radius = 5;
-            for (int i = x - radius; i <= x + radius; i++)
-                for (int j = y - radius; j <= y + radius; j++)
-                {
-                    var current = new Vector3(i, j, z);
-                    if (!map.IsInBounds(current))
-                        continue;
-                    var h = map.GetHeightmapValue(current);
-                    current = new Vector3(i, j, h);
-                    var distance = Vector3.Distance(global, current);
-                    if (distance > radius)
-                        continue;
-                    var cell = map.GetCell(current);
-                    if (cell == null)
-                        continue;
-                    //if (cell.Block.MaterialType != MaterialType.Soil)
-                    if (cell.Block.GetMaterial(cell.BlockData).Type != MaterialType.Soil)
-                        continue;
-                    if (map.GetBlock(current + Vector3.UnitZ) != BlockDefOf.Air)
-                        continue;
-                    var random = map.Random;// GetWorld().GetRandom();
-                    var p = random.NextDouble();
-                    var threshold = 1 - Math.Pow(distance / (float)radius, .33f);//.33);
-                    //var threshold = 1 - Math.Sqrt(distance / (float)radius);//.33);
-
-                    //threshold.ToConsole();
-                    if (p > threshold)
-                        continue;
-
-                    var offset = new Vector3(0,0, 1);
-                    var angle = (float)(random.NextDouble() * (Math.PI + Math.PI));
-                    offset += new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0) * .2f;
-                    throw new NotImplementedException();
-                    //server.Spawn(GameObject.Create(plantType), current + offset);
-                    n++;
-                }
-
-            n.ToConsole();
-        }
-
-        internal static void GeneratePlants(IMap map)
-        {
-            var gen = new GeneratorPlants();
-            foreach (var chu in map.ActiveChunks.Values)
-                gen.Generate(chu);
-        }
     }
 }

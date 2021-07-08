@@ -1,7 +1,5 @@
 ﻿using Start_a_Town_.UI;
 using Start_a_Town_.Net;
-using Start_a_Town_.Modules.Towns.Housing;
-using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.Towns.Farming;
 
 namespace Start_a_Town_.Towns
@@ -9,32 +7,9 @@ namespace Start_a_Town_.Towns
     class TownsManager : GameComponent
     {
         TownsUI TownsUI;
-        Window _HousesUI;
-        Window HousesUI
-        {
-            get
-            {
-                if (_HousesUI == null)
-                {
-                    _HousesUI = new Window()
-                    {
-                        Title = "Houses",
-                        AutoSize = true,
-                        Movable = true
-                    };
-                    _HousesUI.SnapToScreenCenter();
-                    _HousesUI.Client.Controls.Add(new UIHouses());
-                }
-                return _HousesUI;
-            }
-        }
-
+        
         public override void Initialize()
         {
-            // register handlers or just iterate through gamecomponents when handling packets at server and client?
-            Server.Instance.RegisterPacketHandler(PacketType.Towns, new TownsPacketHandler());
-            Client.Instance.RegisterPacketHandler(PacketType.Towns, new TownsPacketHandler());
-
             PacketInventoryDrop.Init();
             PacketInventoryEquip.Init();
             PacketInventoryInsertItem.Init();

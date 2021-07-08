@@ -15,7 +15,6 @@ namespace Start_a_Town_
         {
             BaseValue = 5,
             Description = "Processed logs",
-            SubType = ItemSubType.Planks,
             StackCapacity = 20,
             Weight = .1f,
             Category = ItemCategory.Manufactured,
@@ -32,7 +31,6 @@ namespace Start_a_Town_
         {
             BaseValue = 1,
             Description = "It came from a tree",
-            SubType = ItemSubType.Logs,
             StackCapacity = 10,
             Body = new Bone(BoneDef.Item, ItemContent.LogsGrayscale) { DrawMaterialColor = true },
             Category = ItemCategory.RawMaterials,
@@ -45,7 +43,6 @@ namespace Start_a_Town_
         {
             BaseValue = 1,
             Description = "A bag containing grainy material",
-            SubType = ItemSubType.Bags,
             StackCapacity = 10,
             Category = ItemCategory.RawMaterials,
             Body = new Bone(BoneDef.Item, ItemContent.BagsGrayscale) { DrawMaterialColor = true },
@@ -57,7 +54,6 @@ namespace Start_a_Town_
         {
             BaseValue = 5,
             Description = "Used for crafting of weapons, armor, and tools.",
-            SubType = ItemSubType.Ingots,
             StackCapacity = 20,
             Category = ItemCategory.Manufactured,
             Body = new Bone(BoneDef.Item, ItemContent.BarsGrayscale) { DrawMaterialColor = true },
@@ -70,7 +66,6 @@ namespace Start_a_Town_
         {
             BaseValue = 1,
             Description = "A piece of mineral ore",
-            SubType = ItemSubType.Ore,
             StackCapacity = 10,
             Category = ItemCategory.RawMaterials,
             Body = new Bone(BoneDef.Item, ItemContent.OreGrayscale) { DrawMaterialColor = true },
@@ -82,7 +77,6 @@ namespace Start_a_Town_
         {
             BaseValue = 1,
             Description = "Chunks of rock",
-            SubType = ItemSubType.Rock,
             StackCapacity = 10,
             Category = ItemCategory.RawMaterials,
             Body = new Bone(BoneDef.Item, ItemContent.OreGrayscale) { DrawMaterialColor = true },

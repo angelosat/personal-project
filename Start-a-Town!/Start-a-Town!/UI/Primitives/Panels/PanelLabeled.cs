@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
-    [Obsolete]
     class PanelLabeled : Panel
     {
         public Label Label { get; set; }

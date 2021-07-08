@@ -14,10 +14,7 @@ namespace Start_a_Town_
             this.AssetNames = "bricks/bricks";
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.IsOfSubType(ItemSubType.Planks, ItemSubType.Ingots, ItemSubType.Rock)
-                        )),
+                    new Reaction.Reagent()),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building) { WorkAmount = 20 };
             Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);

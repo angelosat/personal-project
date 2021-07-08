@@ -148,7 +148,7 @@ namespace Start_a_Town_
                     {
                         var split = i.Object.Split(i.Amount);
 
-                        if (actor.NetNew is Net.Server server)
+                        if (actor.Net is Net.Server server)
                         {
                             server.SyncInstantiate(split);
                             qgiverInv.SyncInsert(split);

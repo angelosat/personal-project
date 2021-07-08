@@ -22,17 +22,9 @@ namespace Start_a_Town_.Towns.Farming
             this.Farmland = farmland;
             this.PanelSeeds = new Panel() { AutoSize = true };
 
-            var seedObjects = GameObject.Objects.Values.Where(foo => foo.GetComponent<SeedComponent>() != null).Select(f => f.ToSlotLink());
-            var slotGrid = new SlotGrid(seedObjects.ToList(), 4, s =>
-            {
-                s.LeftClickAction = () => PacketFarmSetSeed.Send(PlayerOld.Actor.RefID, this.Farmland.ID, (int)s.Tag.Object.IDType);
-            });
             this.Seed = GameObjectSlot.Empty;
             var slotseed = new Slot() { Tag = this.Seed };
-            slotseed.RightClickAction = () =>
-            {
-                SetSeed(null);
-            };
+            
             slotseed.LeftClickAction = SelectSeed;
             this.PanelSeeds.AddControls(slotseed);
 
@@ -48,7 +40,6 @@ namespace Start_a_Town_.Towns.Farming
             paneloptions.AddControls(this.ChkHarvesting, this.ChkPlanting);
 
             this.PanelButtons = new Panel(paneloptions.BottomLeft) { AutoSize = true };
-           
 
             this.Controls.Add(this.PanelButtons, this.PanelSeeds, paneloptions);
         }
@@ -70,11 +61,6 @@ namespace Start_a_Town_.Towns.Farming
 
         private void SelectSeed()
         {
-        }
-
-        private void SetSeed(GameObject obj)
-        {
-            PacketFarmSetSeed.Send(PlayerOld.Actor.RefID, this.Farmland.ID, obj == null ? -1 : (int)obj.IDType);
         }
 
         private Window ToWindow(string name = "")

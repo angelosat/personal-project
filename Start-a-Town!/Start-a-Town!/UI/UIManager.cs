@@ -425,7 +425,6 @@ namespace Start_a_Town_.UI
         }
         static public void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, float scale, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f)
         {
-            Vector2 tempVect;
             Vector2 size = UIManager.Font.MeasureString(text);
             int xx = 0, yy = 0;
             switch (hAlign)

@@ -24,12 +24,6 @@ namespace Start_a_Town_
         public Job GetJob(JobDef def)
         {
             return this.Jobs[def];
-            if(!this.Jobs.TryGetValue(def, out var job))
-            {
-                job = new Job(def);
-                this.Jobs.Add(def, job);
-            }
-            return job;
         }
         public SaveTag Save(string name = "")
         {

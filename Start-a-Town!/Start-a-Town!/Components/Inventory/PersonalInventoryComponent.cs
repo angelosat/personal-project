@@ -76,7 +76,7 @@ namespace Start_a_Town_.Components
         internal void SyncInsert(GameObject split)
         {
             var actor = this.Parent as Actor;
-            var net = actor.NetNew;
+            var net = actor.Net;
             if (net is not Server server)
                 throw new Exception();
             Packets.SendSyncInsert(net, actor, split as Entity);
@@ -148,24 +148,6 @@ namespace Start_a_Town_.Components
                 case Message.Types.SlotInteraction:
                     this.SlotInteraction(parent, e.Parameters[0] as GameObject, e.Parameters[1] as GameObjectSlot);
                     return true;
-
-                case Message.Types.Insert:
-                    GameObjectSlot objSlot = e.Parameters[0] as GameObjectSlot;
-                    return PickUp(parent, objSlot);
-
-                //case Message.Types.Receive:
-                //    GameObject obj = e.Parameters.Translate<SenderEventArgs>(e.Network).Sender;
-
-                //    // TODO: this is a WORKAROUND
-                //    // FAILSAFE in case player is picking items too fast resulting in picking the same item before the server processes the input
-                //    GameObjectSlot existingSlot;
-                //    if (HasObject(parent, o => o == obj, out existingSlot))
-                //    {
-                //        //parent.PostMessage(e.Network, Message.Types.Hold, w => w.Write(obj.NetworkID));
-                //        return true;
-                //    }
-                //    GiveObject(e.Network, parent, obj.ToSlotLink());
-                //    return true;
 
                 case Message.Types.ArrangeInventory:
                     GameObjectSlot source = e.Parameters[0] as GameObjectSlot;
@@ -319,50 +301,7 @@ namespace Start_a_Town_.Components
                     return;
             }
         }
-        internal override void HandleRemoteCall(GameObject parent, Message.Types type, BinaryReader r)
-        {
-            switch (type)
-            {
-                case Message.Types.Haul:
-                    var tohaulobj = parent.Net.GetNetworkObject(r.ReadInt32());
-                    var sourceobj = parent.Net.GetNetworkObject(r.ReadInt32());
-                    var hauledobj = this.HaulSlot.Object;
-                    var amount = r.ReadInt32();
-                    if (hauledobj != null)
-                    {
-                        if (hauledobj.IDType == tohaulobj.IDType)
-                        {
-                            var transferAmount = Math.Min(amount == -1 ? tohaulobj.StackSize : amount, hauledobj.StackMax - hauledobj.StackSize);
-                            hauledobj.StackSize += transferAmount;
-                            if (tohaulobj.StackSize == amount)
-                            {
-                                parent.Net.Despawn(tohaulobj);
-                                parent.Net.DisposeObject(tohaulobj);
-                                return; // if we didn't leave any amount left on the ground, return
-                            }
-                            else
-                            tohaulobj.StackSize -= transferAmount;
-                            break;
-                        }
-                        else if (!StoreHauled(parent))
-                            return;
-                    }
-                    else
-                    {
-                        if (amount == sourceobj.StackSize)
-                        {
-                            //parent.Net.Despawn(sourceobj); // i call despawn in the haul method 
-                        }
-                        else
-                            sourceobj.StackSize -= amount;
-                        this.Haul(parent, tohaulobj);
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
+        
         void SlotInteraction(GameObject parent, GameObject actor, GameObjectSlot slot)
         {
             if (!slot.HasValue)
@@ -383,18 +322,9 @@ namespace Start_a_Town_.Components
             }
         }
 
-        static public bool HasItems(GameObject actor, Dictionary<GameObject.Types, int> items)
-        {
-            foreach (KeyValuePair<GameObject.Types, int> mat in items)
-                if (InventoryComponent.GetAmount(actor, foo => foo.IDType == mat.Key) < mat.Value)
-                    return false;
-            return true;
-        }
-
         static public bool StoreHauled(GameObject parent)
         {
             var inv = parent.GetComponent<PersonalInventoryComponent>();
-            var obj = inv.HaulSlot.Object;
             if (inv.HaulSlot.Object == null)
                 return false;
             if (!inv.Slots.InsertObject(inv.HaulSlot))
@@ -442,46 +372,6 @@ namespace Start_a_Town_.Components
             if (obj == null)
                 return false;
             return inv.Slots.Remove(obj);
-        }
-        bool PickUpOld(GameObject parent, GameObjectSlot objSlot)
-        {
-            if (objSlot.Object == null)
-                return true;
-            var haulObj = this.HaulSlot.Object;
-            if (haulObj != null)
-            {
-                
-                if (!this.Slots.InsertObject(this.HaulSlot))
-                    return false;
-            }
-            this.Haul(parent, objSlot);
-            return true;
-        }
-       
-        static public bool PickUp(GameObject parent, GameObjectSlot objSlot)
-        {
-            var inv = parent.GetComponent<PersonalInventoryComponent>();
-            if (inv.HaulSlot.Object != null)
-            {
-                // check if item of same type, and if true, add to stack
-                var haulObj = inv.HaulSlot.Object;
-                if (haulObj.IDType == objSlot.Object.IDType)
-                {
-                    var transferAmount = Math.Min(objSlot.Object.StackSize, haulObj.StackMax - haulObj.StackSize);
-                    haulObj.StackSize += transferAmount;
-                    if (transferAmount == objSlot.Object.StackSize)
-                    {
-                        parent.Net.Despawn(objSlot.Object);
-                        parent.Net.DisposeObject(objSlot.Object);
-                        return true; // if we didn't leave any amount left on the ground, return
-                    }
-                }
-                //else
-                // if we maxed out our hauling stack, but there is some remaining amout of item on the ground, store hauled stack and haul the remaining item stack
-                    if (!StoreHauled(parent))
-                        return false;
-            }
-            return inv.PickUpOld(parent, objSlot);
         }
        
         static public bool PickUpNewNew(GameObject parent, GameObject obj, int amount)
@@ -692,73 +582,9 @@ namespace Start_a_Town_.Components
             return true;
         }
 
-        static public bool GiveObject(IObjectProvider net, GameObject receiver, GameObjectSlot objSlot)
-        {
-            if (!CheckWeight(receiver, objSlot.Object))
-            {
-                // can't fit in inventory, drop in place
-                net.Spawn(objSlot.Object, receiver.Global + receiver.GetComponent<PhysicsComponent>().Height * Vector3.UnitZ); // add speed also?
-                return false;
-            }
-            
-
-            GameObject obj = objSlot.Object;
-            Queue<GameObjectSlot> slots = new Queue<GameObjectSlot>();
-          
-            GetSlots(receiver, foo => foo.IDType == objSlot.Object.IDType, slots);
-            TryGetEmptySlots(receiver, slots);
-            int stackMax = (int)objSlot.Object["Gui"]["StackMax"];
-            while (slots.Count > 0 && objSlot.StackSize > 0)
-            {
-                GameObjectSlot slot = slots.Dequeue();
-                if (!slot.HasValue)
-                    slot.Object = objSlot.Object;
-                while (slot.StackSize < stackMax && objSlot.StackSize > 0)
-                {
-                    slot.StackSize += 1;
-                    objSlot.StackSize -= 1;
-                }
-            }
-            if (!objSlot.HasValue)
-                    if (obj.IsSpawned)
-                //obj.Remove(); // local remove
-                net.Despawn(obj);
-            return true;
-        }
-
-        public bool Haul(GameObject parent, GameObjectSlot objSlot)
-        {
-            if (objSlot == null)
-                return true;
-            if (!objSlot.HasValue)
-                return true;
-            var current = this.HaulSlot.Object;
-
-            if (objSlot.Object == current)
-                return true;
-            if (!CheckWeight(parent, objSlot.Object))
-                return true;
-            var net = parent.Net;
-            // if currently hauling object of same type, increase held stacksize and dispose other object
-            if (current != null)
-                if (current.IDType == objSlot.Object.IDType)
-                {
-                    current.StackSize++;
-                    objSlot.Object.Despawn();
-                    net.DisposeObject(objSlot.Object);
-                    return true;
-                }
-            // else
-            // drop currently hauled object and pick up new one
-            this.Throw(Vector3.Zero, parent); //or store carried object in backpack? (if available)
-
-            net.Despawn(objSlot.Object);
-            this.HaulSlot.Object = objSlot.Object;
-            return true;
-        }
         public bool Haul(GameObject parent, GameObject obj)
         {
-            if (obj == null)
+            if (obj is null)
                 return true;
 
             var current = this.HaulSlot.Object;
@@ -824,41 +650,6 @@ namespace Start_a_Town_.Components
                 list.Add(c);
             return list;
         }
-        public bool Take(List<ItemRequirement> reqs)
-        {
-            if (!Has(reqs))//check that here? or keep taking until run out? regardless whether parent has full amount? or create a TryTake method which checks beforehand instead of cheking here?
-                return false;
-            var container = this.GetContents();
-            var parent = this.Slots.Parent;
-            var net = parent.Net;
-            
-            foreach (var item in reqs)
-            {
-                int amountRemaining = item.AmountRequired;
-                GameObject current;
-                foreach (var found in from slot in container where slot.HasValue where (int)slot.Object.IDType == item.ObjectID select slot)
-                {
-                    current = found.Object;
-                    int amountToTake = Math.Min(found.Object.StackSize, amountRemaining);
-                    amountRemaining -= amountToTake;
-                    if (amountToTake == found.Object.StackSize)
-                    {
-                        net.Despawn(found.Object);
-                        net.DisposeObject(found.Object);
-                        found.Clear();
-                    }
-                    else
-                        found.Object.StackSize -= amountToTake;
-
-                    if (amountRemaining == 0)
-                    {
-                        Net.Client.Instance.EventOccured(Message.Types.ItemLost, parent, current, item.AmountRequired);
-                        break;
-                    }
-                }
-            }
-            return true;
-        }
         public IEnumerable<ObjectAmount> Take(Func<Entity, bool> filter, int amount)
         {
             var remaining = amount;
@@ -871,20 +662,6 @@ namespace Start_a_Town_.Components
                 remaining -= amountToReturn;
                 yield return new ObjectAmount(i, amountToReturn);
             }
-        }
-        public bool Has(List<ItemRequirement> reqs)
-        {
-            var container = this.GetContents();
-
-            foreach (var item in reqs)
-            {
-                int amountFound = 0;
-                foreach (var found in from slot in container where slot.HasValue where (int)slot.Object.IDType == item.ObjectID select slot.Object)
-                    amountFound += found.StackSize;
-                if (amountFound < item.AmountRequired)
-                    return false;
-            }
-            return true;
         }
         public override object Clone()
         {

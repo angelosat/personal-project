@@ -7,7 +7,7 @@
             return MaterialDefOf.Stone;
         }
         public BlockBedrock()
-            : base(Block.Types.Stone, GameObject.Types.Rock)
+            : base(Block.Types.Stone)
         {
             AssetNames = "smoothstone";
         }

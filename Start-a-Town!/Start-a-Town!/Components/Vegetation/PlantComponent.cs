@@ -161,10 +161,10 @@ namespace Start_a_Town_.Components
             if (plantdef.ProductCutDown != null && yield > 0)
             {
                 var product = plantdef.ProductCutDown.CreateFrom(plant.Body.Material ?? MaterialDefOf.LightWood).SetStackSize(yield);                                                                                                                           //,new Loot(ItemTemplate.Sapling.Factory.Create, 1, 1, 1, 3)
-                actor.NetNew.PopLoot(product, plant.Global, plant.Velocity);
+                actor.Net.PopLoot(product, plant.Global, plant.Velocity);
             }
-            actor.NetNew.Despawn(plant);
-            actor.NetNew.DisposeObject(plant);
+            actor.Net.Despawn(plant);
+            actor.Net.DisposeObject(plant);
         }
 
         private void ResetFruitGrowth(GameObject parent)
@@ -247,12 +247,6 @@ namespace Start_a_Town_.Components
                     fmt += "%s's'";
                 return ts.ToString(fmt);
             }
-        }
-
-
-        public override void DrawMouseover(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent)
-        {
-            Bar.Draw(sb, camera, parent, GameObject.Objects[this.Produce.ObjID].Name, 1 - this.Progress.Percentage);
         }
 
         public override void Write(System.IO.BinaryWriter writer)

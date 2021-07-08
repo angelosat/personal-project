@@ -17,8 +17,6 @@ namespace Start_a_Town_.AI.Behaviors
             {
                 var chargeValue = attack.ChargeFunc();
                 if (chargeValue == 1)
-            //if (attack.State == Components.Attack.States.Charged)
-
                 {
                     var server = parent.Net as Server;
                     var dir = (state.Threats.First().Entity.Global - parent.Global).Normalized();

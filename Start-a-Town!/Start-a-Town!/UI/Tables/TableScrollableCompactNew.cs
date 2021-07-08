@@ -5,42 +5,46 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
-    class TableScrollableCompact<TObject> : GroupBox
+    class TableScrollableCompactNew<TObject> : GroupBox
     {
-        readonly List<Column> Columns = new();
+        readonly List<Column> Columns = new List<Column>();
         readonly GroupBox ColumnLabels;
         ScrollableBoxNew BoxItems;
-        readonly Dictionary<TObject, Dictionary<object, Control>> Rows = new();
-        public int MaxVisibleItems;// = -1;
+        readonly Dictionary<TObject, Dictionary<object, Control>> Rows = new Dictionary<TObject, Dictionary<object, Control>>();
+        public int MaxVisibleItems;
         public bool ShowColumnLabels = true;
         public Color ClientBoxColor = Color.Black * .5f;
-        public TableScrollableCompact(int maxVisibleItems, BackgroundStyle style)
-            : this(maxVisibleItems)
-        {
-        }
-        public TableScrollableCompact(int maxVisibleItems)
+        private readonly ScrollableBoxNew.ScrollModes ScrollBarMode;
+
+        public TableScrollableCompactNew(int maxVisibleItems, bool showColumnLabels = false, ScrollableBoxNew.ScrollModes scrollbarMode = ScrollableBoxNew.ScrollModes.Vertical)
         {
             this.MaxVisibleItems = maxVisibleItems;
+            this.ShowColumnLabels = showColumnLabels;
             this.ColumnLabels = new GroupBox() { AutoSize = true, BackgroundColor = Color.Black * .5f };
         }
-        public TableScrollableCompact<TObject> AddColumn(object tag, Control columnHeader, int spacing, Func<TObject, Control> control, float anchor = .5f)
+        public TableScrollableCompactNew<TObject> AddColumn(object index, Control columnHeader, int spacing, Func<TObject, Control> control, float anchor = .5f)
         {
-            this.Columns.Add(new Column(tag, columnHeader, spacing, control, anchor));
+            this.Columns.Add(new Column(index, columnHeader, spacing, control, anchor));
             return this;
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="spacing"></param>
+        /// <param name="width"></param>
         /// <param name="control"></param>
         /// <param name="anchor">Value between 0 and 1 for horizontal alignment</param>
         /// <returns></returns>
-        public TableScrollableCompact<TObject> AddColumn(object tag, string type, int spacing, Func<TObject, Control> control, float anchor = 0, bool showColumnLabels = true)
+        public TableScrollableCompactNew<TObject> AddColumn(object tag, string type, int width, Func<TObject, Control> control, float anchor = 0)
         {
-            this.ShowColumnLabels = showColumnLabels;
-            this.Columns.Add(new Column(tag, type, spacing, control, anchor));
-            this.Build(new List<TObject>(), showColumnLabels);
+            this.Columns.Add(new Column(tag, type, width, control, anchor));
+            this.Build(new List<TObject>());
+            return this;
+        }
+        public TableScrollableCompactNew<TObject> AddColumn(object tag, string type, int width, Func<TableScrollableCompactNew<TObject>, TObject, Control> control, float anchor = 0)
+        {
+            this.Columns.Add(new Column(tag, type, width, item => control(this, item), anchor));
+            this.Build(new List<TObject>());
             return this;
         }
         public void ToggleColumnLabels(bool show)
@@ -57,9 +61,8 @@ namespace Start_a_Town_.UI
             }
             this.ShowColumnLabels = show;
         }
-        public void Build(IEnumerable<TObject> items, bool showColumnLabels = true)
+        public void Build(IEnumerable<TObject> items)
         {
-            this.ShowColumnLabels = showColumnLabels;
             this.Rows.Clear();
             this.Controls.Clear();
             this.ColumnLabels.Controls.Clear();
@@ -88,7 +91,7 @@ namespace Start_a_Town_.UI
             }
 
             this.ColumnLabels.Controls.AlignCenterHorizontally();
-            this.BoxItems = new ScrollableBoxNew(new Rectangle(0, 0, this.ColumnLabels.Width, Label.DefaultHeight * this.MaxVisibleItems));
+            this.BoxItems = new ScrollableBoxNew(new Rectangle(0, 0, offset, Label.DefaultHeight * this.MaxVisibleItems), this.ScrollBarMode);// ScrollableBoxNew.Modes.Vertical);
 
             if (this.ShowColumnLabels)
             {
@@ -96,7 +99,6 @@ namespace Start_a_Town_.UI
             }
 
             this.AddItems(items.ToArray());
-
             this.Controls.Add(this.BoxItems);
         }
 
@@ -116,11 +118,11 @@ namespace Start_a_Town_.UI
         }
         public void AddItem(TObject item)
         {
-            var panel = new GroupBox() { Location = new Vector2(0, this.BoxItems.Client.Controls.BottomLeft.Y), BackgroundColor = this.ClientBoxColor };
+            var panel = new GroupBox() { BackgroundColor = this.ClientBoxColor };
             panel.AutoSize = true;
             panel.Tag = item;
             var offset = 0;
-            Dictionary<object, Control> controls = new Dictionary<object, Control>();
+            var controls = new Dictionary<object, Control>();
             foreach (var c in this.Columns)
             {
                 var control = c.ControlGetter(item);
@@ -134,7 +136,8 @@ namespace Start_a_Town_.UI
             panel.Size = new Rectangle(0, 0, this.ColumnLabels.Width, panel.Height);
             panel.Controls.AlignCenterHorizontally();
             this.Rows.Add(item, controls);
-            this.BoxItems.Add(panel);
+            this.BoxItems.Client.AddControlsBottomLeft(panel);
+            this.BoxItems.UpdateClientSize();
         }
         public void AddItems(params TObject[] items)
         {
@@ -148,6 +151,20 @@ namespace Start_a_Town_.UI
             foreach (var item in items)
             {
                 this.AddItem(item);
+            }
+        }
+        public void RemoveItems(params TObject[] items)
+        {
+            foreach (var item in items)
+            {
+                this.RemoveItem(item);
+            }
+        }
+        public void RemoveItems(IEnumerable<TObject> items)
+        {
+            foreach (var item in items)
+            {
+                this.RemoveItem(item);
             }
         }
         public void RemoveItem(TObject item)
@@ -168,6 +185,11 @@ namespace Start_a_Town_.UI
             {
                 this.RemoveItem(row.Key);
             }
+        }
+        public void Clear()
+        {
+            this.BoxItems.Client.ClearControls();
+            this.Rows.Clear();
         }
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Rectangle viewport)
         {

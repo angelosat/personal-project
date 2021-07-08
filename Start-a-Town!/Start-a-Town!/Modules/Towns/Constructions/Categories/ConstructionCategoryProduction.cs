@@ -32,25 +32,5 @@ namespace Start_a_Town_.Towns.Constructions
             return new List<ToolDrawing>() { this.GetTool(itemGetter) };
         }
 
-        internal void ShowQuickButtons()
-        {
-            foreach(var bl in this.List)
-            {
-                var slot = new IconButton();
-                var block = bl.BlockProduct.Block;
-                slot.Tag = block;
-
-                slot.IsToggledFunc = () => { var drawing = ToolManager.Instance.ActiveTool as ToolDrawing; return drawing != null ? drawing.Block == block : false; };
-                slot.PaintAction = () =>
-                {
-                    bl.BlockProduct.Block.PaintIcon(slot.Width, slot.Height, block.Recipe.GetVariants().First().Data);
-                };
-                slot.LeftClickAction = () =>
-                {
-                    BlockRecipe.ProductMaterialPair product = block.Recipe.GetVariants().First();
-                };
-                QuickButtonBar.AddItem(slot);
-            }
-        }
     }
 }

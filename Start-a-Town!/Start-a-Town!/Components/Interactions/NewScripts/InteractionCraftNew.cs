@@ -71,7 +71,7 @@ namespace Start_a_Town_.Crafting
         GameObject ProduceWithMaterialsOnTopNew(GameObject a, Vector3 global, CraftOrderNew order)
         {
             var actor = a as Actor;
-            var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.NetNew.GetNetworkObject(o.Object), o.Amount)).ToList();
+            var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
             
             var reaction = order.Reaction;
             var product = reaction.Products.First().Make(actor, reaction, ingr);

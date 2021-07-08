@@ -6,30 +6,29 @@ namespace Start_a_Town_
 {
     class PacketOrderRemove
     {
+        static int p;
         static internal void Init()
         {
-            // TODO
-            Net.Server.RegisterPacketHandler(PacketType.CraftingOrderRemoveNew, Receive);
-            Net.Client.RegisterPacketHandler(PacketType.CraftingOrderRemoveNew, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, CraftOrderNew order)
         {
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.CraftingOrderRemoveNew);
+            w.Write(p);
             w.Write(order.Workstation);
             w.Write(order.GetUniqueLoadID());
         }
         internal static void Send(IObjectProvider net, Vector3 global, string orderID)
         {
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.CraftingOrderRemoveNew);
+            w.Write(p);
             w.Write(global);
             w.Write(orderID);
         }
         internal static void SendOld(IObjectProvider net, Vector3 global, int orderIndex)
         {
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.CraftingOrderRemoveNew);
+            w.Write(p);
             w.Write(global);
             w.Write(orderIndex);
         }

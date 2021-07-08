@@ -5,9 +5,14 @@ namespace Start_a_Town_.Modules.AI.Net.Packets
 {
     class PacketAILogWrite
     {
+        static int p;
+        internal static void Init()
+        {
+            p = Network.RegisterPacketHandler(Receive);
+        }
         static public void Send(Server server, int agentID, string entry)
         {
-            server.OutgoingStream.Write((int)PacketType.AILogWrite);
+            server.OutgoingStream.Write(p);
             server.OutgoingStream.Write(agentID);
             server.OutgoingStream.Write(entry);
         }
@@ -17,5 +22,6 @@ namespace Start_a_Town_.Modules.AI.Net.Packets
             var entry = r.ReadString();
             entity.Log.Write(entry);
         }
+       
     }
 }

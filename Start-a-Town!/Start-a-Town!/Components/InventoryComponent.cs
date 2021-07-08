@@ -143,22 +143,7 @@ namespace Start_a_Town_.Components
             throw new Exception();
             
         }
-        static public bool HasItems(GameObject actor, Dictionary<GameObject.Types, int> items)
-        {
-            foreach (KeyValuePair<GameObject.Types, int> mat in items)
-                if (InventoryComponent.GetAmount(actor, foo => foo.IDType == mat.Key) < mat.Value)
-                    return false;
-            return true;
-        }
-
-        //public override void Query(GameObject parent, List<InteractionOld> list)//GameObjectEventArgs e)
-        //{
-        //    //List<Interaction> list = e.Parameters[0] as List<Interaction>;
-        //    list.Add(new InteractionOld(TimeSpan.Zero, Message.Types.DropOn, parent, "Give"));
-        //    list.Add(new InteractionOld(TimeSpan.Zero, Message.Types.Give, parent, "Give"));
-        //}
-
-
+       
         public ItemContainer AddContainer(byte size)
         {
             ItemContainer container = new ItemContainer(size);
@@ -198,21 +183,6 @@ namespace Start_a_Town_.Components
                         slot = invSlot;
                         return true;
                     }
-            slot = null;
-            return false;
-        }
-
-
-        public bool TryTake(GameObject.Types objID, out GameObjectSlot slot)
-        {
-            foreach (var container in Containers)
-                foreach (GameObjectSlot invSlot in container)
-                    if (invSlot.Object != null)
-                        if ((invSlot.Object as GameObject).IDType == objID)
-                        {
-                            slot = invSlot;
-                            return true;
-                        }
             slot = null;
             return false;
         }
@@ -450,45 +420,6 @@ namespace Start_a_Town_.Components
             return true;
         }
 
-        static public bool GiveObject(IObjectProvider net, GameObject receiver, GameObjectSlot objSlot)
-        {
-            if (!CheckWeight(receiver, objSlot.Object))
-            {
-                // can't fit in inventory, drop in place
-                net.Spawn(objSlot.Object, receiver.Global + receiver.GetComponent<PhysicsComponent>().Height * Vector3.UnitZ); // add speed also?
-                return false;
-            }
-            //// why not do this on the sender object straight away?
-            //if ((int)objSlot.Object["Physics"]["Size"] == 1)
-            //{
-            //    GameObject.PostMessage(receiver, Message.Types.Hold, receiver, objSlot, objSlot.Object);
-            //    return true;
-            //}
-
-            GameObject obj = objSlot.Object;
-            Queue<GameObjectSlot> slots = new Queue<GameObjectSlot>();
-            //if (!TryFind(receiver, foo => foo.ID == objSlot.Object.ID, slots))
-            //    return true;
-            GetSlots(receiver, foo => foo.IDType == objSlot.Object.IDType, slots);
-            TryGetEmptySlots(receiver, slots);
-            int stackMax = (int)objSlot.Object["Gui"]["StackMax"];
-            while (slots.Count > 0 && objSlot.StackSize > 0)
-            {
-                GameObjectSlot slot = slots.Dequeue();
-                if (!slot.HasValue)
-                    slot.Object = objSlot.Object;// GameObject.Create(objSlot.Object.ID);
-                while (slot.StackSize < stackMax && objSlot.StackSize > 0)
-                {
-                    slot.StackSize += 1;
-                    objSlot.StackSize -= 1;
-                }
-            }
-            if (!objSlot.HasValue)
-                    if (obj.IsSpawned)
-                //obj.Remove(); // local remove
-                net.Despawn(obj);
-            return true;
-        }
 
         private static void Hold(IObjectProvider net, GameObject receiver, GameObject obj)
         {

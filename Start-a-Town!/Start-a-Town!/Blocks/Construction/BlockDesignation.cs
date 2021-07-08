@@ -70,12 +70,6 @@ namespace Start_a_Town_.Blocks
             this.Remove(map, global);
         }
         
-        public bool MaterialsPresent(IMap map, Vector3 global)
-        {
-            var entity = map.GetBlockEntity(global) as BlockDesignationEntity;
-            return entity.MaterialsPresent();
-        }
-
         internal override bool IsValidHaulDestination(IMap map, Vector3 global, GameObject obj)
         {
             var entity = map.GetBlockEntity(global) as BlockDesignationEntity;

@@ -71,7 +71,7 @@ namespace Start_a_Town_
         AtlasDepthNormals.Node.Token GrayScale;
         
         public BlockWoodenDeck()
-            : base(Block.Types.WoodenDeck, GameObject.Types.WoodenDeck, 0, 1, true, true)
+            : base(Block.Types.WoodenDeck, 0, 1, true, true)
         {
             this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks), Reaction.Reagent.IsOfMaterial(MaterialDefOf.LightWood)));
             this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
@@ -81,10 +81,7 @@ namespace Start_a_Town_
 
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.IsOfSubType(ItemSubType.Planks)
-                        )),
+                    new Reaction.Reagent()),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building) { WorkAmount = 2 };// 20 };
             Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);

@@ -53,7 +53,6 @@ namespace Start_a_Town_
 
             CraftingWindow = new Modules.Crafting.WorkstationInterfaceNew(map, global, this).ToWindow("Crafting");
             CraftingWindow.ToggleSmart();
-
         }
 
         internal override void DrawSelected(MySpriteBatch sb, Camera cam, IMap map, Vector3 global)

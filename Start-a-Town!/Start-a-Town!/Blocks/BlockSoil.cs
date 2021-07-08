@@ -28,7 +28,7 @@ namespace Start_a_Town_
         }
 
         public BlockSoil()
-            : base(Block.Types.Soil, GameObject.Types.Soil)
+            : base(Block.Types.Soil)
         {
             this.RequiresConstruction = false;
             this.AssetNames = "soil/soil1, soil/soil2, soil/soil3, soil/soil4";

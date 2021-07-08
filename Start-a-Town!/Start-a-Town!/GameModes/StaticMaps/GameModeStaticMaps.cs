@@ -110,11 +110,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return true;
         }
-        public override IEnterior GetEnterior(IMap map, Vector3 global)
-        {
-            return map.GetTown().GetHouseAt(global);
-        }
-
+    
         public override void ParseCommand(IObjectProvider net, string command)
         {
             this.Parser.Execute(net, command);

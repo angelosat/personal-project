@@ -13,16 +13,8 @@ namespace Start_a_Town_.Components.Crafting
         public Towns.Constructions.ConstructionCategory Category;
 
         static Dictionary<int, BlockRecipe> _Dictionary;
-        public static Dictionary<int, BlockRecipe> Dictionary
-        {
-            get
-            {
-                if (_Dictionary == null)
-                    _Dictionary = new Dictionary<int, BlockRecipe>();
-                return _Dictionary;
-            }
-        }
-
+        public static Dictionary<int, BlockRecipe> Dictionary => _Dictionary ??= new Dictionary<int, BlockRecipe>();
+       
         public int ID { get; set; }
         public string Name { get; set; }
         public List<Reaction.Reagent> Reagents;
@@ -39,30 +31,6 @@ namespace Start_a_Town_.Components.Crafting
             this.Reagents = reagents;
             this.BlockProduct = product;
         }
-       
-        public List<BlockRecipe.ProductMaterialPair> GetVariants()
-        {
-            var list = new List<ProductMaterialPair>();
-            foreach (var reagent in this.Reagents)
-            {
-                foreach (var mat in reagent.GetValidCraftingItems())
-                {
-                    byte data = this.BlockProduct.Block.GetDataFromMaterial(mat);
-                    list.Add(
-                        new ProductMaterialPair(this.BlockProduct.Block, data, new ItemRequirement(mat.IDType, 1)) { Skill = this.Skill }
-                            .AddMaterial(mat.ID, 1));
-                }
-
-            }
-
-            return list;
-        }
-        public ProductMaterialPair GetVariant(byte data)
-        {
-            var vars = this.GetVariants();
-            return vars.First(v => v.Data == data);
-        }
-        
 
         public string GetName()
         {

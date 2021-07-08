@@ -7,16 +7,14 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    [Obsolete]
     class PacketEntityDesignation
     {
         const int SelectionRectangle = 0;
         const int SelectionList = 1;
-
+        static int p;
         static public void Init()
         {
-            Client.RegisterPacketHandler(PacketType.ChoppingDesignation, Receive);
-            Server.RegisterPacketHandler(PacketType.ChoppingDesignation, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, int type, IEnumerable<GameObject> targets, bool value)
         {
@@ -29,7 +27,7 @@ namespace Start_a_Town_
         static public void Send(IObjectProvider net, int type, List<int> targets, bool value)
         {
             var strem = net.GetOutgoingStream();
-            strem.Write((int)PacketType.ChoppingDesignation);
+            strem.Write(p);
             strem.Write(type);
             strem.Write(SelectionList);
             strem.Write(targets);
@@ -38,7 +36,7 @@ namespace Start_a_Town_
         static public void Send(IObjectProvider net, int type, Vector3 start, Vector3 end, bool value)
         {
             var strem = net.GetOutgoingStream();
-            strem.Write((int)PacketType.ChoppingDesignation);
+            strem.Write(p);
             strem.Write(type);
             strem.Write(SelectionRectangle);
             strem.Write(start);

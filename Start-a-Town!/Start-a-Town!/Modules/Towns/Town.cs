@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 using Start_a_Town_.AI;
-using Start_a_Town_.Towns.Housing;
 using Start_a_Town_.Towns.Farming;
 using Start_a_Town_.Towns.Digging;
 using Start_a_Town_.Towns.Crafting;
@@ -21,57 +20,10 @@ namespace Start_a_Town_.Towns
 
         int HouseSequence = 1;
         
-        public void AddHouse(House house)
-        {
-            house.ID = this.HouseSequence++;
-            house.Name = string.IsNullOrWhiteSpace(house.Name) ? GetDefaultHouseName(house) : house.Name;
-            this.Houses.Add(house.ID, house);
-            this.Map.EventOccured(Message.Types.HousesUpdated);
-        }
-
         internal void OnTooltipCreated(Tooltip tooltip, TargetArgs targetArgs)
         {
             foreach (var c in this.TownComponents)
                 c.OnTooltipCreated(tooltip, targetArgs);
-        }
-
-        public string GetDefaultHouseName(House house)
-        {
-            return "House_" + house.ID.ToString("00#");
-        }
-        public string GetDefaultHouseName()
-        {
-            return "House_" + this.HouseSequence.ToString("00#");
-        }
-
-        public bool RemoveHouse(House house)
-        {
-            var h = this.Houses.Remove(house.ID);
-            this.Map.EventOccured(Message.Types.HousesUpdated);
-            return h;
-        }
-        public bool RemoveHouse(int houseID)
-        {
-            var h = this.Houses.Remove(houseID);
-            this.Map.EventOccured(Message.Types.HousesUpdated);
-            return h;            
-        }
-        public bool RemoveHouse(int houseID, out House house)
-        {
-            house = this.Houses[houseID];
-            var h = this.Houses.Remove(houseID);
-            this.Map.EventOccured(Message.Types.HousesUpdated);
-            return h;
-        }
-        public House GetHouseAt(Vector3 global)
-        {
-            foreach (var house in this.Houses.Values)
-            {
-                var contains = house.Contains(global);
-                if (contains)
-                    return house;
-            }
-            return null;
         }
 
         internal void Init()
@@ -79,31 +31,7 @@ namespace Start_a_Town_.Towns
             this.RoomManager.Init();
         }
 
-        public void ClearHouses()
-        {
-            this.Houses.Clear();
-            this.Map.EventOccured(Message.Types.HousesUpdated);
-        }
-        public List<House> GetHouses()
-        {
-            return this.Houses.Values.ToList();
-        }
-        public House GetHouse(int houseID)
-        {
-            return this.Houses[houseID];
-        }
-        public bool RenameHouse(int houseID, string name)
-        {
-            var h = GetHouse(houseID);
-            if (h == null)
-                return false;
-            h.Name = name;
-            this.Map.EventOccured(Message.Types.HousesUpdated);
-            return true;
-        }
-        Dictionary<int, House> Houses = new Dictionary<int, House>();
-
-        public HashSet<int> Agents = new HashSet<int>();
+        public HashSet<int> Agents = new();
         public IEnumerable<Actor> GetAgents()
         {
             return this.Agents.Select(id => this.Map.Net.GetNetworkObject(id) as Actor);
@@ -281,10 +209,6 @@ namespace Start_a_Town_.Towns
         public SaveTag Save(string name)
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            var housestag = new SaveTag(SaveTag.Types.List, "Houses", SaveTag.Types.Compound);
-            foreach (var house in this.Houses)
-                housestag.Add(house.Value.Save("House"));
-            tag.Add(housestag);
 
             var compsTag = new SaveTag(SaveTag.Types.Compound, "Components");
             foreach (var comp in this.TownComponents)
@@ -318,10 +242,6 @@ namespace Start_a_Town_.Towns
         }
         public void Load(SaveTag save)
         {
-            List<SaveTag> housesTag;
-            if (save.TryGetTagValue("Houses", out housesTag))
-                foreach (var tag in housesTag)
-                    this.AddHouse(new House(this, tag));
             Dictionary<string, SaveTag> compsTag = new Dictionary<string, SaveTag>();
             if (save.TryGetTagValue("Components", out compsTag))
                 foreach (var tag in compsTag)
@@ -333,10 +253,9 @@ namespace Start_a_Town_.Towns
            
             LoadAgents(save);
 
-            List<SaveTag> utilitiesTag;
-            if(save.TryGetTagValue("Utilities", out utilitiesTag))
+            if (save.TryGetTagValue("Utilities", out List<SaveTag> utilitiesTag))
             {
-                foreach(var tag in utilitiesTag)
+                foreach (var tag in utilitiesTag)
                 {
                     var utilityType = (Utility.Types)(int)tag["Type"].Value;
                     var positionList = new List<Vector3>().Load(tag["Positions"].Value as List<SaveTag>);
@@ -362,10 +281,6 @@ namespace Start_a_Town_.Towns
 
         public void Write(BinaryWriter w)
         {
-            w.Write(this.Houses.Count);
-            foreach (var h in this.Houses.Values)
-                h.Write(w);
-
             foreach (var comp in this.TownComponents)
                 comp.Write(w);
 
@@ -378,12 +293,6 @@ namespace Start_a_Town_.Towns
         }
         public void Read(BinaryReader r)
         {
-            var hcount = r.ReadInt32();
-            for (int i = 0; i < hcount; i++)
-            {
-                this.AddHouse(new House(this, r));
-            }
-
             foreach (var comp in this.TownComponents)
                 comp.Read(r);
 
@@ -515,10 +424,6 @@ namespace Start_a_Town_.Towns
             }
         }
 
-        internal IEnumerable<Vector3> GetRefuelables()
-        {
-            return this.Map.GetBlockEntities().Where(g => this.Map.GetBlock(g).Type == Block.Types.Smeltery);
-        }
         internal IEnumerable<KeyValuePair<Vector3,Blocks.BlockEntity>> GetRefuelablesNew()
         {
             var entities = this.Map.GetBlockEntitiesCache();

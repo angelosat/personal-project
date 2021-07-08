@@ -11,30 +11,6 @@ namespace Start_a_Town_
 {
     public static class Extensions
     {
-        public static bool Insert(this List<GameObjectSlot> list, GameObjectSlot obj)
-        {
-            int capacity = 0;
-            int stackMax = obj.Object.StackMax;
-            foreach (var slot in list)
-                capacity = slot.HasValue ? stackMax - slot.StackSize : stackMax;
-            if (capacity < obj.StackSize)
-                return false;
-            foreach (var slot in list.FindAll(foo => foo.HasValue).FindAll(foo => foo.Object.IDType == obj.Object.IDType))
-            {
-                while (slot.StackSize < stackMax && obj.StackSize > 0)
-                {
-                    slot.StackSize += 1;
-                    obj.StackSize -= 1;
-                }
-            }
-            if (obj.StackSize > 0)
-            {
-                GameObjectSlot empty = list.FirstOrDefault(foo => !foo.HasValue);
-                if (empty is not null)
-                    empty.Swap(obj);
-            }
-            return true;
-        }
         public static int GetAmount(this List<GameObjectSlot> list, Func<GameObject, bool> condition)
         {
             int amount = 0;
@@ -323,22 +299,6 @@ namespace Start_a_Town_
                         }).ShowDialog();
         }
         
-        public static GameObject GetObject(this GameObject.Types type)
-        {
-            return GameObject.Objects[type];
-        }
-        public static GameObject GetObject(this int type)
-        {
-            return GameObject.Objects[type];
-        }
-
-        public static Dictionary<int, int> ToDictionaryIdAmount(this IEnumerable<GameObject> objList)
-        {
-            var dic = new Dictionary<int, int>();
-            foreach (var item in objList)
-                dic.AddOrUpdate((int)item.IDType, item.StackSize, f => f + item.StackSize);
-            return dic;
-        }
         public static Dictionary<GameObject, int> ToDictionaryGameObjectAmount(this IEnumerable<GameObject> objList)
         {
             var dic = new Dictionary<GameObject, int>();

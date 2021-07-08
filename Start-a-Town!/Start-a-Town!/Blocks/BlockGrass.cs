@@ -32,7 +32,7 @@ namespace Start_a_Town_
         static public readonly double TramplingChance = 0.1f;
 
         public BlockGrass()
-            : base(Block.Types.Grass, GameObject.Types.Grass, 0, 1, true, true)
+            : base(Block.Types.Grass, 0, 1, true, true)
         {
             this.LootTable = new LootTable(
                        
@@ -105,7 +105,7 @@ namespace Start_a_Town_
        
         public override void OnSteppedOn(GameObject actor, Vector3 global)
         {
-            var net = actor.NetNew;
+            var net = actor.Net;
             if (net is Client)
                 return;
             if (actor.Map.Random.Chance(TramplingChance))

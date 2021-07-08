@@ -6,9 +6,14 @@ namespace Start_a_Town_.Modules.AI.Net
 {
     class PacketTaskUpdate
     {
+        static int p;
+        internal static void Init()
+        {
+            p = Network.RegisterPacketHandler(PacketTaskUpdate.Receive);
+        }
         static public void Send(Server server, int agentID, string taskString)
         {
-            server.OutgoingStream.Write((int)PacketType.AITaskUpdate);
+            server.OutgoingStream.Write(p);
             server.OutgoingStream.Write(agentID);
             server.OutgoingStream.Write(taskString);
         }

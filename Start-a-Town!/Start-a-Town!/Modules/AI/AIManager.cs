@@ -6,6 +6,8 @@ using Start_a_Town_.Net.Packets;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 using Start_a_Town_.Modules.AI.Net.Packets;
+using Start_a_Town_.Components.Needs;
+using Start_a_Town_.Modules.AI.Net;
 
 namespace Start_a_Town_.AI
 {
@@ -13,15 +15,13 @@ namespace Start_a_Town_.AI
     {
         public override void Initialize()
         {
-            Server.Instance.RegisterPacketHandler(Net.PacketType.AI, new AIPacketHandler());
-            Client.Instance.RegisterPacketHandler(Net.PacketType.AI, new AIPacketHandler());
+            Server.Instance.RegisterPacketHandler(PacketType.AI, new AIPacketHandler());
+            Client.Instance.RegisterPacketHandler(PacketType.AI, new AIPacketHandler());
 
-            Client.RegisterPacketHandler(PacketType.AITaskUpdate, Start_a_Town_.Modules.AI.Net.PacketTaskUpdate.Receive);
-            Client.RegisterPacketHandler(PacketType.NeedModifyValue, Start_a_Town_.Components.Needs.PacketNeedModify.Receive);
-            Client.RegisterPacketHandler(PacketType.AILogWrite, PacketAILogWrite.Receive);
-
+            PacketAILogWrite.Init();
             PacketForceTask.Init();
-
+            PacketNeedModify.Init();
+            PacketTaskUpdate.Init();
             AITask.Initialize();
         }
         [Obsolete]
@@ -102,7 +102,7 @@ namespace Start_a_Town_.AI
             }
         }
 
-        public override void OnTooltipCreated(ITooltippable item, UI.Tooltip t)
+        public override void OnTooltipCreated(ITooltippable item, Tooltip t)
         {
             if (item is not TargetArgs target)
                 return;
@@ -115,7 +115,7 @@ namespace Start_a_Town_.AI
 
         internal static void Interact(GameObject entity, Interaction action, TargetArgs target)
         {
-            if (entity.Net is Net.Server) // interactions only initiated server-side?
+            if (entity.Net is Server) // interactions only initiated server-side?
             {
                 entity.TryGetComponent<WorkComponent>(c => c.Perform(entity, action, target));
                 PacketEntityInteract.Send(Server.Instance, entity, action, target);

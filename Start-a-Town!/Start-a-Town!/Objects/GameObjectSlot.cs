@@ -268,7 +268,7 @@ namespace Start_a_Town_
             }
             else
             {
-                this.Object.NetNew.DisposeObject(this.Object);
+                this.Object.Net.DisposeObject(this.Object);
                 this.Clear();
             }
         }

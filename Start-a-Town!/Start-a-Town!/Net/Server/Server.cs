@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
 using System.IO.Compression;
@@ -62,12 +61,14 @@ namespace Start_a_Town_.Net
 
         [Obsolete]
         readonly Dictionary<PacketType, IServerPacketHandler> PacketHandlers = new();
+        [Obsolete]
         public void RegisterPacketHandler(PacketType channel, IServerPacketHandler handler)
         {
             this.PacketHandlers.Add(channel, handler);
         }
         [Obsolete]
         readonly static Dictionary<PacketType, Action<IObjectProvider, BinaryReader>> PacketHandlersNew = new();
+        [Obsolete]
         static public void RegisterPacketHandler(PacketType channel, Action<IObjectProvider, BinaryReader> handler)
         {
             PacketHandlersNew.Add(channel, handler);
@@ -75,6 +76,7 @@ namespace Start_a_Town_.Net
         
         [Obsolete]
         readonly static Dictionary<PacketType, Action<IObjectProvider, PlayerData, BinaryReader>> PacketHandlersNewNew = new();
+        [Obsolete]
         static public void RegisterPacketHandler(PacketType channel, Action<IObjectProvider, PlayerData, BinaryReader> handler)
         {
             PacketHandlersNewNew.Add(channel, handler);
@@ -985,12 +987,6 @@ namespace Start_a_Town_.Net
             return spawnPosition;
         }
        
-        public void InstantiateAndSpawn(GameObject obj)
-        {
-            this.SyncInstantiate(obj);
-            this.SyncSpawn(obj);
-        }
-
         /// <summary>
         /// Creates the same item across the network (but doesn't spawn it in the game world)
         /// </summary>
@@ -1106,7 +1102,7 @@ namespace Start_a_Town_.Net
                 obj.RefID = GetNextObjID();
             else
                 _objID = Math.Max(_objID, obj.RefID + 1);
-            obj.NetNew = this;
+            obj.Net = this;
             Instance.NetworkObjects.Add(obj.RefID, obj);
         }
 
@@ -1198,19 +1194,7 @@ namespace Start_a_Town_.Net
                 this.DisposeObject(child);
             return true;
         }
-        /// <summary>
-        /// Releases the object's networkID, and syncs the disposal among clients.
-        /// NOTICE: if both server and client are executing the same code, then both should individually call DisposeObject instead of calling this method on the server
-        /// </summary>
-        /// <param name="obj"></param>
-        public void SyncDisposeObject(GameObject obj)
-        {
-            this.DisposeObject(obj);
-            byte[] data = Network.Serialize(w => TargetArgs.Write(w, obj));
-            foreach (var player in Players.GetList())
-                Enqueue(player, Packet.Create(player, PacketType.DisposeObject, data, SendType.OrderedReliable));
-        }
-        
+       
         static public void InstantiateMap(IMap map)
         {
             if (map == null)
@@ -1351,10 +1335,6 @@ namespace Start_a_Town_.Net
         }
 
         #region Loot
-        public void PopLoot(GameObject obj, GameObject parent)
-        {
-            this.PopLoot(obj, parent.Global, parent.Velocity);
-        }
         public void PopLoot(LootTable table, Vector3 startPosition, Vector3 startVelocity)
         {
             foreach (var obj in GenerateLoot(table))
@@ -1464,7 +1444,7 @@ namespace Start_a_Town_.Net
                 targetSlot.Object = obj;
                 return;
             }
-            if (sourceSlot.Object.IDType == targetSlot.Object.IDType)
+            if (targetSlot.Object.CanAbsorb(sourceSlot.Object))
             {
                 if (sourceSlot.StackSize + targetSlot.StackSize <= targetSlot.StackMax)
                 {
@@ -1485,16 +1465,6 @@ namespace Start_a_Town_.Net
 
         }
         
-        internal void RemoteProcedureCall(TargetArgs target, Message.Types type, byte[] uncompressedData, Vector3 global)
-        {
-            var data = Network.Serialize(w =>
-                {
-                    target.Write(w);
-                    w.Write((int)type);
-                    w.Write(uncompressedData);
-                });
-            Enqueue(PacketType.RemoteProcedureCall, data, SendType.OrderedReliable, global, true);
-        }
         internal void RemoteProcedureCall(TargetArgs target, Message.Types type, Action<BinaryWriter> writer)
         {
             this.OutgoingStream.Write((int)PacketType.RemoteProcedureCall);
@@ -1503,37 +1473,6 @@ namespace Start_a_Town_.Net
             writer(this.OutgoingStream);
         }
 
-        static readonly ConcurrentDictionary<Vector3, Cell> BlocksToSync = new();
-        
-        public void SyncSetBlock(Vector3 global, Block.Types type)
-        {
-            this.Map.SetBlock(global, type);
-            SyncCell(global, Instance.Map.GetCell(global));
-        }
-       
-        public void SyncSetBlock(Vector3 global, Block.Types type, byte data, int variation, int orientation)
-        {
-            // TODO: do all the below in the map class??
-            if (!this.Map.IsInBounds(global))
-                return;
-            var previousBlock = this.Map.GetBlock(global);
-            previousBlock.Remove(this.Map, global);
-            var block = Start_a_Town_.Block.Registry[type];
-            block.Place(this.Map, global, data, variation, orientation);
-            this.SyncCell(global, this.Map.GetCell(global));
-        }
-       
-        /// <summary>
-        /// Syncs cell across the network
-        /// </summary>
-        /// <param name="global"></param>
-        void SyncCell(Vector3 global, Cell cell)
-        {
-            if (cell is null)
-                return;
-            BlocksToSync.TryAdd(global, cell);
-        }
-       
         public void SyncSlots(params TargetArgs[] slots)
         {
             byte[] data = Network.Serialize(w =>

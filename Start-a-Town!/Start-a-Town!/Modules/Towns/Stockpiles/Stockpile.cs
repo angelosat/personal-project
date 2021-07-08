@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.AI;
-using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -16,7 +13,6 @@ namespace Start_a_Town_
             Packets.Init();
         }
 
-        readonly static public List<string> Filters = new List<string>() { ReagentComponent.Name, ToolAbilityComponent.Name, SeedComponent.Name, ConsumableComponent.Name };
         public StorageSettings Settings = new StorageSettings();
         public int Priority
         {
@@ -36,15 +32,6 @@ namespace Start_a_Town_
         public void CacheContents()
         {
             this.CacheContentsNew();
-            this.CachedContents.Clear();
-            foreach (var pos in this.Positions)
-            {
-                var items = this.Map.GetObjects(pos.Above);
-                foreach (var item in items.Where(i => i.IsStockpilable()))
-                {
-                    this.CachedContents.AddOrUpdate(item.ID, item.StackSize, (count) => count += item.StackSize);
-                }
-            }
         }
         public void CacheContentsNew()
         {
@@ -64,7 +51,6 @@ namespace Start_a_Town_
                 contents.AddRange(this.Town.Map.GetObjects(pos + IntVec3.UnitZ));
             return contents;
         }
-        public Dictionary<int, int> CachedContents = new Dictionary<int, int>();
         List<GameObject> Cache = new();
       
         public List<GameObject> ScanExistingStoredItems()

@@ -30,7 +30,7 @@ namespace Start_a_Town_
                 Reaction.Reagent.Create(
                     new Reaction.Reagent(
                         "Base",
-                        Reaction.Reagent.IsOfSubType(ItemSubType.Planks),
+                        //Reaction.Reagent.IsOfSubType(ItemSubType.Planks),
                         Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building);

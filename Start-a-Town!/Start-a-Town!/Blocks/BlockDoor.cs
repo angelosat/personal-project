@@ -248,7 +248,7 @@ namespace Start_a_Town_
         }
 
         public BlockDoor()
-            : base(Block.Types.Door, GameObject.Types.Door, 0, 1, false, true)
+            : base(Block.Types.Door, 0, 1, false, true)
         {
             this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks), Reaction.Reagent.IsOfMaterial(MaterialDefOf.LightWood)));
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();

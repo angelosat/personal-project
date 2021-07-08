@@ -121,7 +121,7 @@ namespace Start_a_Town_.Components
         
         public bool InsertObject(Entity obj)
         {
-            var net = obj.NetNew;
+            var net = obj.Net;
 
             // check if entity is already inside container
             if ((from slot in this.Slots
@@ -167,7 +167,7 @@ namespace Start_a_Town_.Components
             if (objSlot.Object == null)
                 return false;
             var obj = objSlot.Object;
-            var net = obj.NetNew;
+            var net = obj.Net;
 
             // check if entity is already inside container
             if ((from slot in this.Slots
@@ -206,54 +206,6 @@ namespace Start_a_Town_.Components
             }
             firstEmpty.SetObject(obj);
             net?.Despawn(obj);
-            objSlot.Clear();
-            return true;
-        }
-        public bool InsertObject(GameObjectSlot objSlot, out int index)
-        {
-            index = -1;
-            if (objSlot.Object == null)
-                return false;
-            var obj = objSlot.Object;
-            var net = obj.Net;
-
-            // check if entity is already inside container
-            if ((from slot in this.Slots
-                 where slot.Object == obj
-                 select slot).FirstOrDefault() != null)
-                return false;
-
-            // TODO: might want to refactor there 2
-            GameObjectSlot firstStack =
-                (from slot in this.Slots
-                 where slot.HasValue
-                 where slot.Object.IDType == obj.IDType
-                 where slot.StackSize < slot.StackMax
-                 select slot)
-                 .FirstOrDefault();
-            if (firstStack != null)
-            {
-                // TODO: handle case where stacksize exceeds stackmax
-                firstStack.StackSize += obj.StackSize;
-                // merge objects to existins object in slot, despawn and dispose old one
-                net.Despawn(obj);
-                net.DisposeObject(obj);
-                objSlot.Clear();
-                return true;
-            }
-
-            GameObjectSlot firstEmpty =
-                (from slot in this.Slots
-                 where !slot.HasValue
-                 select slot)
-                 .FirstOrDefault();
-            if (firstEmpty == null)
-                return false;
-
-            firstEmpty.SetObject(obj);
-            index = firstEmpty.ID;
-
-            net.Despawn(obj);
             objSlot.Clear();
             return true;
         }

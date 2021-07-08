@@ -22,10 +22,6 @@ namespace Start_a_Town_.Towns.Digging
             return this.AllPositions;
         }
 
-        internal IEnumerable<Vector3> GetDiggableBy(GameObject actor)
-        {
-            return this.AllPositions.Where(p => this.IsDiggableBy(actor, p));
-        }
         public override void HandlePacket(Server server, Packet msg)
         {
             this.Handle(server, msg);
@@ -146,12 +142,6 @@ namespace Start_a_Town_.Towns.Digging
             return this.AllPositions.Contains(global);
         }
 
-        internal bool IsDiggableBy(GameObject actor, Vector3 vector3)
-        {
-            bool isTask = this.IsDiggingTask(vector3);
-            bool actorStandingOn = this.Town.Map.GetObjects(vector3 + Vector3.UnitZ).Any(o => o != actor && o.IDType == GameObject.Types.Npc);
-            return isTask && !actorStandingOn;
-        }
         internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
         {
             yield return new Tuple<string, Action>("Mine", this.Edit);

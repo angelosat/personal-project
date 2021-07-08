@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.Towns.Farming;
 using Start_a_Town_.Graphics;
 
 namespace Start_a_Town_.Blocks
@@ -16,7 +15,7 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.Soil;
         }
         public BlockFarmland()
-            : base(Types.Farmland, GameObject.Types.Farmland)
+            : base(Types.Farmland)
         {
             this.Textures = new AtlasDepthNormals.Node.Token[2];
             this.Textures[0] = Block.Atlas.Load("blocks/farmland", Map.BlockDepthMap, Block.NormalMap);

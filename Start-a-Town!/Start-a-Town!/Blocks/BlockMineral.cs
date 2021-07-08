@@ -86,7 +86,7 @@ namespace Start_a_Town_
         }
 
         public BlockMineral()
-            : base(Block.Types.Mineral, GameObject.Types.CobblestoneItem, 0, 1, true, true)
+            : base(Block.Types.Mineral,  0, 1, true, true)
         {
             this.AssetNames = "stone5height19";
         }

@@ -63,7 +63,7 @@ namespace Start_a_Town_
                     amountFromTask = amountFromTask == -1 ? item.StackSize : amountFromTask;
                     if (reservedAmount != amountFromTask)
                         //throw new Exception(); // TODO not sure i should be getting the haul amount from the reservation instead of the amount propert in the task
-                        actor.NetNew.SyncReport($"Reserved amount [{reservedAmount}] different than target amount [{amountFromTask}] in [{actor.Name}]'s [{bhav.GetType()}] behavior");
+                        actor.Net.SyncReport($"Reserved amount [{reservedAmount}] different than target amount [{amountFromTask}] in [{actor.Name}]'s [{bhav.GetType()}] behavior");
 
                     //// the item stacksize might have been increased since the behavior initialization 
                     //if (amountFromTask > reservedAmount)
@@ -116,7 +116,7 @@ namespace Start_a_Town_
                     actor.Interact(interaction, target);
                 }
             };
-            bhav.AddEndCondition(() =>
+            bhav.AddEndCondition((Func<BehaviorState>)(() =>
             {
                 var actor = bhav.Actor;
                 var interaction = actor.CurrentInteraction;
@@ -124,7 +124,7 @@ namespace Start_a_Town_
                     return BehaviorState.Fail;
                 else if (interaction.State == Interaction.States.Finished)
                 {
-                    actor.NetNew.Log.Write("successfully dropped item");
+                    actor.Net.Log.Write("successfully dropped item");
                     if (actor.GetHauled() is not Entity hauled)
                         return BehaviorState.Success;
                     if (!hauledObj.IsDisposed)
@@ -134,7 +134,7 @@ namespace Start_a_Town_
                     actor.Unreserve(target);
                 }
                 return BehaviorState.Running;
-            });
+            }));
             return bhav;
         }
         static public Behavior JumpIfNextStorageFound(Behavior gotoBhav, TargetIndex storageIndex)
@@ -161,7 +161,7 @@ namespace Start_a_Town_
                     actor.Reserve(tar, 1);
                     task.SetTarget(storageIndex, tar);
                     actor.CurrentTaskBehavior.JumpTo(gotoBhav);
-                    actor.NetNew.Log.Write("found next storage place " + tar.ToString());
+                    actor.Net.Log.Write("found next storage place " + tar.ToString());
                     return;
                 }
             };

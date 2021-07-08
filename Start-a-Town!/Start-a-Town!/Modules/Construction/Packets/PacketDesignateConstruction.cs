@@ -7,11 +7,10 @@ namespace Start_a_Town_
 {
     class PacketDesignateConstruction
     {
+        static int p;
         static public void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.PlaceWallConstruction, PacketDesignateConstruction.Receive);
-            Client.RegisterPacketHandler(PacketType.PlaceWallConstruction, PacketDesignateConstruction.Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         
         internal static void Send(IObjectProvider net, ToolDrawing.Args a)
@@ -22,7 +21,7 @@ namespace Start_a_Town_
         static public void Send(IObjectProvider net, BlockRecipe.ProductMaterialPair item, ToolDrawing.Args a)
         {
             var stream = net.GetOutgoingStream();
-            stream.Write((int)PacketType.PlaceWallConstruction);
+            stream.Write(p);
             a.Write(stream);
             if(!a.Removing)
                 item.Write(stream);

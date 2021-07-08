@@ -33,41 +33,6 @@ namespace Start_a_Town_.Components
             parent.AddAnimation(this.AnimationHaul);
         }
         
-        public bool Carry(GameObject parent, GameObjectSlot objSlot)
-        {
-            return this.Carry(parent.Net, parent, objSlot);
-        }
-        public bool Carry(IObjectProvider net, GameObject parent, GameObjectSlot objSlot)
-        {
-            if (objSlot == null)
-                return true;
-            if (!objSlot.HasValue)
-                return true;
-
-            if (!CheckWeight(parent, objSlot.Object))
-                return true;
-
-            GameObjectSlot hauling = this.GetSlot();
-
-            var existing = hauling.Object;
-            if (existing != null)
-                if (existing.IDType == objSlot.Object.IDType)
-                {
-                    existing.StackSize++;
-                    objSlot.Object.Despawn();
-                    net.DisposeObject(objSlot.Object);
-                    return true;
-                }
-
-            // else
-            // drop currently hauled object and pick up new one
-            this.Throw(Vector3.Zero, parent);
-
-            net.Despawn(objSlot.Object);
-            hauling.Object = objSlot.Object;
-            return true;
-        }
-
         static public bool CheckWeight(GameObject a, GameObject t)
         {
             float w = t.Physics.Weight;
@@ -145,26 +110,6 @@ namespace Start_a_Town_.Components
         internal override void Load(SaveTag save)
         {
             save.TryGetTag("AnimationHaul", this.AnimationHaul.Load);
-        }
-
-        internal override void HandleRemoteCall(GameObject gameObject, Message.Types type, System.IO.BinaryReader r)
-        {
-            switch(type)
-            {
-                case Message.Types.Carry:
-                    var objid = r.ReadInt32();
-                    var obj = gameObject.Net.GetNetworkObject(objid);
-                    this.Carry(gameObject, obj.ToSlotLink());
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        
-        static public bool Carry(GameObject parent, GameObject obj)
-        {
-            return parent.GetComponent<HaulComponent>().Carry(parent, obj.ToSlotLink());
         }
     }
 }

@@ -8,17 +8,17 @@ namespace Start_a_Town_
 {
     class PacketRandomBlockUpdates
     {
+        static int p;
         static public void Init()
         {
-            Server.RegisterPacketHandler(PacketType.RandomBlockUpdates, Receive);
-            Client.RegisterPacketHandler(PacketType.RandomBlockUpdates, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, IEnumerable<Vector3> list)
         {
             if (net is Client)
                 throw new Exception();
             var strem = net.GetOutgoingStream();
-            strem.Write((int)PacketType.RandomBlockUpdates);
+            strem.Write(p);
             strem.Write(list);
         }
         static public void Receive(IObjectProvider net, BinaryReader r)

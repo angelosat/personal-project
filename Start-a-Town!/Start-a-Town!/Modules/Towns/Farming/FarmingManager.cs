@@ -56,40 +56,6 @@ namespace Start_a_Town_.Towns.Farming
             return null;
         }
 
-        public override void HandlePacket(Server server, Net.Packet msg)
-        {
-            switch (msg.PacketType)
-            {
-                case PacketType.FarmSetSeed:
-                    msg.Payload.Deserialize(r =>
-                        {
-                            PacketFarmSetSeed.Handle(server, msg, this);
-                        });
-                    break;
-
-                default:
-                    this.Handle(server, msg);
-                    break;
-            }
-        }
-        public override void HandlePacket(Client client, Net.Packet msg)
-        {
-            switch (msg.PacketType)
-            {
-                case PacketType.FarmSetSeed:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        PacketFarmSetSeed.Handle(client, msg, this);
-                    });
-                    break;
-
-                default:
-                    this.Handle(client, msg);
-                    break;
-
-            }
-        }
-      
         public override GroupBox GetInterface()
         {
             return new FarmingManagerUI(this);

@@ -20,7 +20,7 @@ namespace Start_a_Town_
             ApplyNew = (source, target) =>
             {
                 target.ModifyNeed(VisitorNeedsDefOf.Guidance, n => n + 15);
-                target.NetNew.Report(string.Format("{0} received guidance by {1}", source.Name, target.Name));
+                target.Net.Report(string.Format("{0} received guidance by {1}", source.Name, target.Name));
             },
             Tick = (source, target) =>
             {

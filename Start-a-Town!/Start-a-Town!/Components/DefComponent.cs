@@ -93,10 +93,6 @@ namespace Start_a_Town_
         public int StackMax
         { get { return this.Def?.StackCapacity ?? this._StackCapacity; } set { this._StackCapacity = value; } }
 
-        ItemSubType _ItemSubType;
-        public ItemSubType ItemSubType
-        { get { return this.Def?.SubType ?? this._ItemSubType; } set { this._ItemSubType = value; } }
-
         public string Prefix = "";
         public bool SaveWithChunk;
         int _StackSize;
@@ -119,7 +115,6 @@ namespace Start_a_Town_
             this.Type = objType;
             this.Quality = quality ?? Quality.Common;
             this.StackSize = this.StackMax = 1;
-            this.ItemSubType = ItemSubType.Generic;
             return this;
         }
         internal override void Initialize(Entity parent, Quality quality)
@@ -127,15 +122,6 @@ namespace Start_a_Town_
             this.Quality = quality;
         }
        
-        public DefComponent Initialize(GameObject.Types id, string objType = "<undefined>", string name = "<undefined>", string description = "<undefined>", Quality quality = null, bool saveName = false)//, int height = 1, int weight = -1)
-        {
-            return this.Initialize((int)id, objType, name, description, quality, saveName);
-        }
-        public DefComponent Initialize(ItemSubType subtype)
-        {
-            this.ItemSubType = subtype;
-            return this;
-        }
         public DefComponent(ItemDef def)
         {
             this.Def = def;
@@ -150,29 +136,9 @@ namespace Start_a_Town_
             Quality = Quality.Common;
             this.StackSize = 1;
             this.StackMax = 1;// 256; //default items are unstackable
-            this.ItemSubType = ItemSubType.Generic;
         }
 
-        public DefComponent(GameObject.Types id, string objType = "<undefined>", string name = "<undefined>", string description = "<undefined>", Quality quality = null)//, int height = 1, int weight = -1)
-        {
-            this.ID = (int)id;
-            this.Name = name;
-            this.Description = description;
-            this.Type = objType;
-            this.Quality = quality ?? Quality.Common;
-            this.StackSize = this.StackMax = 1;
-            this.ItemSubType = ItemSubType.Generic;
-        }
-        public DefComponent(int id, string objType = "<undefined>", string name = "<undefined>", string description = "<undefined>", Quality quality = null)//, int height = 1, int weight = -1)
-        {
-            this.ID = id;
-            this.Name = name;
-            this.Description = description;
-            this.Type = objType;
-            this.Quality = quality ?? Quality.Common;
-            this.StackSize = this.StackMax = 1;
-            this.ItemSubType = ItemSubType.Generic;
-        }
+       
         public override object Clone()
         {
             DefComponent phys = new DefComponent();
@@ -184,7 +150,6 @@ namespace Start_a_Town_
             phys.StackMax = this.StackMax;
             phys.StackSize = this.StackSize;
             phys.SaveWithChunk = this.SaveWithChunk;
-            phys.ItemSubType = this.ItemSubType;
             return phys;
         }
 
@@ -198,7 +163,7 @@ namespace Start_a_Town_
             tooltip.Color = GetQualityColor();
             var namelabel = new Label(Vector2.Zero, this.GetName(), tooltip.Color, Color.Black, UIManager.FontBold) { TextColorFunc = () => tooltip.Color, TextFunc = this.GetName };
             tooltip.Controls.Add(namelabel);
-            tooltip.Controls.Add(new Label(this.Quality.Label + " " + this.ItemSubType.ToString()) { Fill = Color.Gold, Location = tooltip.Controls.BottomLeft, TextColorFunc = () => Color.Gold });
+            tooltip.Controls.Add(new Label(this.Quality.Label/* + " " + this.ItemSubType.ToString()*/) { Fill = Color.Gold, Location = tooltip.Controls.BottomLeft, TextColorFunc = () => Color.Gold });
             tooltip.Controls.Add(new Label(this.Description) { Location = tooltip.Controls.BottomLeft });
         }
         static public Color GetQualityColor(GameObject obj)

@@ -5,22 +5,26 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
-    public class Slot<T> : ButtonBase, IDropTarget, ITooltippable, IContextable where T: class, ISlottable
+    public class Slot<T> : ButtonBase, IDropTarget, ITooltippable, IContextable where T : class, ISlottable
     {
         public Func<T, string> CornerTextFunc = item => "";
         Func<DragEventArgs, DragDropEffects> _DragDropAction = (args) => DragDropEffects.None;
-        public Func<DragEventArgs, DragDropEffects> DragDropAction 
+        public Func<DragEventArgs, DragDropEffects> DragDropAction
         { get { return _DragDropAction; } set { _DragDropAction = value; } }
+        protected override void OnTextChanged()
+        {
+
+        }
 
         public override void OnPaint(SpriteBatch sb)
         {
             float a = (this.MouseHover && Active) ? 1 : 0.5f;
-            a *= this.Alpha.A;
-
-            sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, this.Color * a, 0, new Vector2(0), 1, SprFx, Depth);
+            //a *= this.Alpha.A;
+            var slotcol = this.Color * a;
+            sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, slotcol, 0, new Vector2(0), 1, SprFx, Depth);
             if (this.Tag is null)
             {
-                sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, this.Color * a, 0, new Vector2(0), 1, SprFx, Depth);
+                sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, slotcol, 0, new Vector2(0), 1, SprFx, Depth);
                 return;
             }
             var color = this.Tag.GetSlotColor();
@@ -32,7 +36,6 @@ namespace Start_a_Town_.UI
             UIManager.DrawStringOutlined(sb, CornerTextFunc(Tag), new Vector2(Slot.DefaultHeight), Vector2.One, UIManager.FontBold);
         }
 
-        public event EventHandler<EventArgs> ItemChanged;
        
         T LastTag = default;
         string LastText = "";
@@ -64,11 +67,6 @@ namespace Start_a_Town_.UI
 
         public static int DefaultHeight = 38;
 
-        public override void Draw(SpriteBatch sb, Rectangle viewport)
-        {
-            base.Draw(sb, viewport);
-        }
-
         public virtual Slot<T> SetTag(T tag)
         {
             this.Tag = tag;
@@ -97,7 +95,25 @@ namespace Start_a_Town_.UI
         }
 
         readonly Label BottomRightLabel;
-       
+        public Slot() : this(Vector2.Zero)
+        {
+            Width = UIManager.SlotSprite.Width;
+            Height = UIManager.SlotSprite.Height;
+        }
+        public Slot(Vector2 location)
+            : base(location)
+        {
+            Blend = Color.White;
+            BackgroundTexture = UIManager.SlotSprite;
+            Alpha = Color.Lerp(Color.Transparent, Blend, 0.5f);
+            Width = UIManager.SlotSprite.Width;
+            Height = UIManager.SlotSprite.Height;
+            BottomRightLabel = new Label(new Vector2(UIManager.SlotSprite.Width), "", HorizontalAlignment.Right, VerticalAlignment.Bottom);
+            Controls.Add(BottomRightLabel);
+            Tag = null;
+            Text = "";
+        }
+
         public bool AutoText = true;
 
         public override void OnMouseEnter()
@@ -118,8 +134,10 @@ namespace Start_a_Town_.UI
             sb.Draw(UIManager.SlotSprite, loc, sourceRect, c, 0, new Vector2(0), 1, SprFx, Depth);
             if (Tag is null)
                 return;
+
             Tag.GetIcon().Draw(sb, loc + new Vector2(3), sourceRect);
         }
+
         public Texture2D IconSheet = Map.ItemSheet;
         public List<Rectangle> IconList = Map.Icons;
         public int IconIndex = -1;
@@ -142,7 +160,7 @@ namespace Start_a_Town_.UI
             else
                 Tag.GetTooltipInfo(tooltip);
         }
-        
+
         public void GetContextActions(ContextArgs a)
         {
             OnContextRequest(a);

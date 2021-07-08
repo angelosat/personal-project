@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     public class ReagentFilterMaterial
     {
@@ -27,10 +21,6 @@ namespace Start_a_Town_
                 return def == this.SpecificMaterial;
             else
                 return this.SpecificMaterialType == null || def.Type == this.SpecificMaterialType;
-
-            //return
-            //    (this.SpecificMaterial == null || def == this.SpecificMaterial) ||
-            //    (this.SpecificMaterialType == null || def.Type == this.SpecificMaterialType);
         }
     }
 }

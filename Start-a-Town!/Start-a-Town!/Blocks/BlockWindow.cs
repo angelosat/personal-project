@@ -41,10 +41,7 @@ namespace Start_a_Town_.Blocks
 
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.IsOfSubType(ItemSubType.Planks, ItemSubType.Ingots)
-                        )),
+                    new Reaction.Reagent()),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building);
             Towns.Constructions.ConstructionsManager.Doors.Add(this.Recipe);

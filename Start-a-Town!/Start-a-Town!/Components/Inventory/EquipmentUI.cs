@@ -24,17 +24,17 @@ namespace Start_a_Town_
             if (actor == null)
                 return;
             var gear = actor.GetGear();
-            this.GearList.AddItems(gear, o =>
+            this.GearList.AddItems(gear, (System.Func<Entity, Button>)(o =>
             {
                 var btn = ButtonHelper.CreateFromItemCompact(o);
                 btn.LeftClickAction = () => {
-                    ContextMenuManager.PopUp(new ContextAction(() => "Unequip", () =>
+                    ContextMenuManager.PopUp(new ContextAction(() => "Unequip", (System.Action)(() =>
                     {
-                        PacketInventoryEquip.Send(actor.Net, actor.RefID, o.RefID);
-                    }));
+                        PacketInventoryEquip.Send((IObjectProvider)actor.Net, actor.RefID, o.RefID);
+                    })));
                 };
                 return btn;
-            });
+            }));
         }
 
         internal override void OnGameEvent(GameEvent e)

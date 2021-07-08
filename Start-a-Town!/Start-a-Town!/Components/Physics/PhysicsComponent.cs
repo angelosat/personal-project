@@ -441,7 +441,7 @@ namespace Start_a_Town_.Components
                     return true;
 
                 case Message.Types.EntityCollision:
-                    if (parent.NetNew is Server)
+                    if (parent.Net is Server)
                         (e.Parameters[0] as GameObject).SyncAbsorb(parent);
                     return true;
 

@@ -17,7 +17,6 @@ namespace Start_a_Town_
         {
             this.AutoSize = true;
             this.AddControlsVertically(
-                new Button("Spawn plants") { LeftClickAction = () => SpawnVegetation(Server.Instance.Map) },
                 new Button("Grow selected") { LeftClickAction = () => GrowPlants(UISelectedInfo.GetSelectedEntities().Select(t=>t.RefID)) }
                 );
         }
@@ -39,9 +38,5 @@ namespace Start_a_Town_
             win.Location = UIManager.Mouse;
         }
 
-        internal static void SpawnVegetation(IMap map)
-        {
-            GeneratorPlants.GeneratePlants(map);
-        }
     }
 }

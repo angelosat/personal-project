@@ -27,7 +27,6 @@ namespace Start_a_Town_.Blocks
                     new Reaction.Reagent(
                         "Base",
                         Reaction.Reagent.IsOfMaterialType(MaterialType.Wood),
-                        Reaction.Reagent.IsOfSubType(ItemSubType.Logs),
                         Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building);

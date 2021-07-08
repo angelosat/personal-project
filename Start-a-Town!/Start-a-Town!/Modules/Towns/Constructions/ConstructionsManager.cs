@@ -41,38 +41,7 @@ namespace Start_a_Town_.Towns.Constructions
         {
             return this.Designations.Where(IsBuildableCurrently);
         }
-        [Obsolete]
-        private void RemoveZone(Vector3 arg1, Vector3 arg2, bool arg3)
-        {
-            var data = Network.Serialize(w =>
-            {
-                w.Write(PlayerOld.Actor.RefID);
-                w.Write(arg1);
-                w.Write(arg2);
-            });
-            Client.Instance.Send(PacketType.ConstructionRemove, data);
-        }
-
-        public override GroupBox GetInterface()
-        {
-            var box = new GroupBox();
-           
-            var btn_Remove = new IconButton()
-            {
-                BackgroundTexture = UIManager.DefaultIconButtonSprite,
-                Icon = Icon.X,
-                LeftClickAction = () => ToolManager.Instance.ActiveTool = new ToolSelect3D(RemoveZone),
-                HoverFunc = () => "Remove"
-            };
-            var btn_Construct = Walls.GetButton();
-            var btn_ConstructDoors = Doors.GetButton();
-            var btn_ConstructFurniture = Furniture.GetButton();
-            var btn_ConstructProduction = Production.GetButton();
-
-            box.AddControls(btn_Construct, btn_ConstructDoors, btn_ConstructFurniture, btn_ConstructProduction, btn_Remove);
-            box.AlignLeftToRight();
-            return box;
-        }
+        
         internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
         {
             yield return new Tuple<string, Action>(string.Format("{0} ({1})", "Build", KeyBind.Build.Key), () => WindowBuild.Toggle());
@@ -100,32 +69,6 @@ namespace Start_a_Town_.Towns.Constructions
             this.PendingDesignations.Load(tag, "PendingDesignations", i => i.Global);
         }
        
-        public override void Handle(IObjectProvider net, Packet msg)
-        {
-            switch (msg.PacketType)
-            {
-
-                case PacketType.ConstructionRemove:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        var netid = r.ReadInt32();
-                        var a = r.ReadVector3();
-                        var b = r.ReadVector3();
-                        var box = new BoundingBox(a, b);
-                        var positions = box.GetBox();
-                        foreach (var p in positions)
-                            net.Map.RemoveBlock(p);
-                        var server = net as Server;
-                        if (server != null)
-                            server.Enqueue(PacketType.ConstructionRemove, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
         internal override void OnGameEvent(GameEvent e)
         {
             switch(e.Type)

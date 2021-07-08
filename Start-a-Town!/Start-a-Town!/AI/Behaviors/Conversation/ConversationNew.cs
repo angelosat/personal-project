@@ -31,7 +31,7 @@ namespace Start_a_Town_
             if (this.CurrentTalker != actor)
                 throw new Exception();
             topic.Apply(actor, this);
-            actor.NetNew.Report(string.Format("conversation advanced {0}", topic.ToString()));
+            actor.Net.Report(string.Format("conversation advanced {0}", topic.ToString()));
             this.Step++;
         }
         public IEnumerable<Actor> GetParticipants()

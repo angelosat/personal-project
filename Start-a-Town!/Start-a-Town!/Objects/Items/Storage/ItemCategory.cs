@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
@@ -13,14 +11,6 @@ namespace Start_a_Town_
         {
 
             this.Label = label;
-        }
-       
-        public void Add(int oID)
-        {
-            var o = GameObject.Objects[oID];
-            var cat = new StorageFilter(o.Name, obj => obj.ID == o.ID);
-            this.Filters.Add(cat);
-            o.StorageCategory = cat;
         }
         public ItemCategory AddStats(params StatNewDef[] stats)
         {

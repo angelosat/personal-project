@@ -67,7 +67,7 @@ namespace Start_a_Town_
         public virtual void TickLong(GameObject parent) { }
         public virtual void Tick(GameObject parent)
         {
-            this.LastTick = parent.NetNew.CurrentTick;
+            this.LastTick = parent.Net.CurrentTick;
             float newValue;
             var mod = this.Mods.Sum(d => d.RateMod);
             if (mod != 0)

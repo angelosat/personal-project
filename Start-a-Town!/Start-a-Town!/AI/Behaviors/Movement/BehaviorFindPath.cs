@@ -58,7 +58,7 @@ namespace Start_a_Town_.AI.Behaviors
                     }
                     else
                     {
-                        parent.NetNew.SyncReport($"{parent.Name} failed to find path from {parent.StandingOn().Above()} to {this.Target.Global}! {state.PathFinder.Ticks}");
+                        parent.Net.SyncReport($"{parent.Name} failed to find path from {parent.StandingOn().Above()} to {this.Target.Global}! {state.PathFinder.Ticks}");
                         return BehaviorState.Fail;
                     }
 

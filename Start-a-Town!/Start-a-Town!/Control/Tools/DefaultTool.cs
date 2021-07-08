@@ -373,13 +373,6 @@ namespace Start_a_Town_.PlayerControl
 
             // maybe just create a "direction" target if the current one is null?
 
-            if(InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey))
-            {
-                if (this.Target != null)
-                    if (this.Target.Type == TargetType.Entity)
-                        if (this.Target.Object.IDType == GameObject.Types.Npc)
-                            ToolManager.SetTool(new AI.ToolNpcControl(this.Target.Object));
-            }
             RightClick();
             return Messages.Default;
         }

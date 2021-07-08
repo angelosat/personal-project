@@ -63,7 +63,7 @@ namespace Start_a_Town_.Blocks
             {
                 if (server != null)
                 {
-                    var probability = TurnToSoilProbability;
+                    var probability = TurnToSoilChance;
                     var turnToSoil = server.GetRandom().NextDouble();
                     if (turnToSoil <= probability)
                     {

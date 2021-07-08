@@ -147,7 +147,7 @@ namespace Start_a_Town_
                 return;
             }
             tooltip.Controls.Add(new UI.Label(this.Name) { Location = tooltip.Controls.BottomLeft, Font = UI.UIManager.FontBold, TextColor = Color.Goldenrod });
-            var mat = this.GetMaterial(map.GetData(global));
+            var mat = this.GetMaterial(map.GetBlockData(global));
             if(mat!=null)
                 tooltip.Controls.Add(new UI.Label(mat.ToString()) { TextColorFunc = () => mat.Color, Location = tooltip.Controls.BottomLeft });
 
@@ -509,14 +509,14 @@ namespace Start_a_Town_
         public virtual void Break(IMap map, Vector3 global)
         {
             var net = map.Net;
-            net.PopLoot(this.GetLootTable(net.Map.GetData(global)), global, Vector3.Zero);
+            net.PopLoot(this.GetLootTable(net.Map.GetBlockData(global)), global, Vector3.Zero);
             this.Remove(map, global);
         }
         public virtual void Break(GameObject actor, Vector3 global)
         {
             var mat = Block.GetBlockMaterial(actor.Map, global);
             var net = actor.Net;
-            net.PopLoot(this.GetLootTable(actor.Map.GetData(global)), global, Vector3.Zero);
+            net.PopLoot(this.GetLootTable(actor.Map.GetBlockData(global)), global, Vector3.Zero);
             this.Remove(net.Map, global);
 
             var e = this.GetEmitter();
@@ -556,7 +556,7 @@ namespace Start_a_Town_
         {
             var offset = global + 0.5f * new Vector3(1, 1, 0);
             offset -= offset.RoundXY();
-            var data = map.GetData(global);
+            var data = map.GetBlockData(global);
             var h = this.GetHeight(data, offset.X, offset.Y);
             return offset.Z < h ? this.Density : 0;
         }
@@ -580,7 +580,7 @@ namespace Start_a_Town_
         public virtual bool IsOpaque(Cell cell) { return this.Opaque; }
         public virtual Material GetMaterial(IMap map, Vector3 global)
         {
-            return this.GetMaterial(map.GetData(global));
+            return this.GetMaterial(map.GetBlockData(global));
         }
         public abstract Material GetMaterial(byte blockdata);
 

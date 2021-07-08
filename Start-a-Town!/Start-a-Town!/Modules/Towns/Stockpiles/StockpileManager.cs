@@ -33,7 +33,6 @@ namespace Start_a_Town_.Towns
 
         public override void Update()
         {
-          
             if (this.Stockpiles.Count > 0)
                 this.Tracker.Update();
 

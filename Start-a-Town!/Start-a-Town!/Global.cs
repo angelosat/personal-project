@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-//using System.Windows.Forms;
+﻿using System.IO;
 using Microsoft.Xna.Framework.Input;
-
 
 namespace Start_a_Town_
 {
     public class GlobalVars
     {
-        //public const int ACTION_CONSTRUCT = 3;
-
         static string _SaveDir = Directory.GetCurrentDirectory() + @"\Saves\";
         static public string SaveDir
         {
@@ -29,19 +21,15 @@ namespace Start_a_Town_
 
         public static int Fps;
         public static float DeltaTime;
-        //public static bool HideWalls;
-        //public static bool HideTerrain;
         public static bool DebugMode = false;
         public static string Undefined = "<undefined>";
-        //public static int MapSize;
 
         public const string Version = "0.2.1";
 
         public class Settings
         {
             public static bool OutlineTileEdges = true;
-            public static int TileEdgeOutlines = 0;//2;
-   //         public static bool MouseTooltip = true;
+            public static int TileEdgeOutlines = 0;
         }
 
         public class Physics
@@ -55,8 +43,8 @@ namespace Start_a_Town_
             public static System.Windows.Forms.Keys South = System.Windows.Forms.Keys.S;
             public static System.Windows.Forms.Keys East = System.Windows.Forms.Keys.D;
             public static System.Windows.Forms.Keys West = System.Windows.Forms.Keys.A;
-            public static System.Windows.Forms.Keys RunWalk = System.Windows.Forms.Keys.ControlKey;//LShiftKey;
-            public static System.Windows.Forms.Keys Sprint = System.Windows.Forms.Keys.ShiftKey;//LShiftKey;
+            public static System.Windows.Forms.Keys RunWalk = System.Windows.Forms.Keys.ControlKey;
+            public static System.Windows.Forms.Keys Sprint = System.Windows.Forms.Keys.ShiftKey;
             public static System.Windows.Forms.Keys Attack = System.Windows.Forms.Keys.Z;
             public static System.Windows.Forms.Keys Block = System.Windows.Forms.Keys.X;
             public static System.Windows.Forms.Keys Interact = System.Windows.Forms.Keys.RButton;
@@ -66,10 +54,8 @@ namespace Start_a_Town_
             public static Keys Character = Keys.C;
             public static Keys Browser = Keys.B;
             public static System.Windows.Forms.Keys ObjectBrowser = System.Windows.Forms.Keys.O;
-            //public static Keys Crafting = Keys.F;
             public static System.Windows.Forms.Keys Jobs = System.Windows.Forms.Keys.J;
             public static System.Windows.Forms.Keys Npcs = System.Windows.Forms.Keys.N;
-            //public static System.Windows.Forms.Keys Crafting = System.Windows.Forms.Keys.C;
             public static System.Windows.Forms.Keys Needs = System.Windows.Forms.Keys.J;
             public static System.Windows.Forms.Keys Menu = System.Windows.Forms.Keys.Escape;
             public static System.Windows.Forms.Keys Inventory = System.Windows.Forms.Keys.I;
@@ -98,8 +84,6 @@ namespace Start_a_Town_
             public static Keys QuickSlot8 = Keys.D8;
             public static Keys QuickSlot9 = Keys.D9;
             public static Keys QuickSlot10 = Keys.D0;
-
-            //public static MouseButtons Attack = MouseButtons.Left;
         }
     }
 }

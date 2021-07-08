@@ -836,7 +836,7 @@ namespace Start_a_Town_
             return false;
         }
 
-        public override List<GameObject> GetObjects()
+        public override IEnumerable<GameObject> GetObjects()
         {
             var list = new List<GameObject>();
             foreach (var chunk in this.ActiveChunks)
@@ -897,42 +897,9 @@ namespace Start_a_Town_
         }
 
 
-        public override void HandleEvent(GameEvent e)
-        {
-            this.Town.HandleGameEvent(e);
-        }
         public override void OnGameEvent(GameEvent e)
         {
 
-        }
-        public bool SetCell(int x, int y, int z, Block.Types type, byte data)
-        {
-            return this.SetCell(new Vector3(x, y, z), type, data);
-        }
-        public override bool SetCell(Vector3 global, Block.Types type, byte data, int variation = 0)
-        {
-            Cell cell = global.GetCell(this);
-            if (cell is null)
-                return false;
-            Chunk chunk = global.GetChunk(this);
-            //undoOperation = new CellOperation(net, global, cell.Type, cell.Variation, cell.Orientation);
-            cell.SetBlockType(type);
-            cell.Variation = (byte)variation;
-            //cell.Orientation = orientation;
-            cell.BlockData = data;
-            //Cell.UpdateEdges(this, global, Edges.All, VerticalEdges.All);
-            chunk.InvalidateCell(cell);
-            //chunk.Saved = false;
-            chunk.Invalidate();
-            
-            //// load neighbor chunks
-            //bool neighborAdded = false;
-            //foreach(var vector in chunk.MapCoords.GetNeighbors())
-            //    neighborAdded |= this.AddChunk(new Chunk(this, vector));
-            //if (neighborAdded)
-            //    chunk.UpdateEdges(this);
-
-            return true;
         }
         public override bool SetBlockLuminance(Vector3 global, byte luminance)
         {
@@ -1005,40 +972,7 @@ namespace Start_a_Town_
                 return false;
             return chunk.InvalidateCell(cell);
         }
-        public override bool InvalidateCell(Vector3 global, Cell cell)
-        {
-            Chunk chunk;
-            if (!global.TryGetChunk(this, out chunk))
-                return false;
-            return chunk.InvalidateCell(cell);
-        }
-
-        //public void UpdateChunkEdges(Vector2 chunkPos)
-        //{
-        //    Chunk chunk;
-        //    if (this.ActiveChunks.TryGetValue(chunkPos, out chunk))
-        //        chunk.UpdateEdges(this);
-        //}
-
-        public override void Generate()
-        {
-            throw new Exception();
-
-            //var loader = new ChunkLoader(this);
-            //Chunk chunk = loader.Generate(Vector2.Zero);
-            //this.AddChunk(chunk);
-            //LightingEngine engine = new LightingEngine(this)
-            //{
-            //    OutdoorBlockHandler = (ch, cell) =>
-            //    {
-            //        ch.VisibleOutdoorCells[Chunk.GetCellIndex(cell.LocalCoords)] = cell;
-            //        //Cell.UpdateEdges(this, cell.GetGlobalCoords(ch), Edges.All, VerticalEdges.All);
-            //    }
-            //};
-            //var positions = chunk.ResetHeightMap();
-            //engine.HandleBatchSync(positions);
-        }
-
+        
         public override void DrawWorld(MySpriteBatch mySB, Camera camera)
         {
             this.Town.DrawBeforeWorld(mySB, this, camera);
@@ -1097,11 +1031,6 @@ namespace Start_a_Town_
             return ch.GetHeightMapValue(global.ToLocal());
         }
         
-        
-        
-        
-        
-        
         public override bool TryGetAll(int gx, int gy, int gz, out Chunk chunk, out Cell cell, out int lx, out int ly)
         {
             if (gz > Map.MaxHeight - 1 || gz < 0)
@@ -1137,17 +1066,7 @@ namespace Start_a_Town_
         {
             return this.ActiveChunks;
         }
-        public override void SetLight(Vector3 global, byte sky, byte block)
-        {
-            Chunk ch = this.GetChunk(global);
-            if (ch is null)
-                return;
-            Vector3 loc = global.ToLocal();
-            ch.SetSunlight(loc, sky);
-            ch.SetBlockLight(loc, block);
-            ch.InvalidateLight(global);
-            return;
-        }
+       
         public override void SetSkyLight(Vector3 global, byte value)
         {
             Chunk ch = this.GetChunk(global);
@@ -1199,13 +1118,13 @@ namespace Start_a_Town_
             Chunk.TryGetSunlight(this, global, out sunlight);
             return sunlight;
         }
-        public override byte GetData(Vector3 global)
+        public override byte GetBlockData(Vector3 global)
         {
             Cell cell;
             //return global.TryGetCell(map, out cell) ? cell.BlockData : (byte)0;
             return this.TryGetCell(global, out cell) ? cell.BlockData : (byte)0;
         }
-        public override byte SetData(Vector3 global, byte data = 0)
+        public override byte SetBlockData(Vector3 global, byte data = 0)
         {
             Cell cell = this.GetCell(global);
             byte old = cell.BlockData;
@@ -1258,13 +1177,7 @@ namespace Start_a_Town_
             }
             return true;
         }
-        public override bool IsExposed(Vector3 vec)
-        {
-            foreach (var n in vec.GetNeighbors())
-                if (!Block.IsBlockSolid(this, n))
-                    return true;
-            return false;
-        }
+      
         public override List<GameObject> GetObjectsAtChunk(Vector3 global)
         {
             var chunks = GetChunks(global.GetChunkCoords(), 1);
@@ -1277,18 +1190,7 @@ namespace Start_a_Town_
         {
             return SizeInChunks;
         }
-        public override WorldPosition GetMouseover()
-        {
-            return this.Mouseover;
-        }
-        public override void SetMouseover(WorldPosition pos)
-        {
-            this.Mouseover = pos;
-        }
-        //public override IWorld GetWorld()
-        //{
-        //    return this.World;
-        //}
+       
         public override int GetMaxHeight()
         {
             return MaxHeight;
@@ -1314,10 +1216,5 @@ namespace Start_a_Town_
             return this.DayTimeNormal;
         }
         #endregion
-
-        readonly MapRules _Rules = new MapRules() { UnloadChunks = true, SaveChunks = true };
-        public override MapRules Rules { get { return this._Rules; ; } }
-
-       
     }
 }

@@ -224,6 +224,7 @@
     <Compile Include="Helpers\PathingHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
+    <Compile Include="Log.Entry.cs" />
     <Compile Include="Modules\AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawing.Args.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.Args.cs" />
@@ -567,7 +568,6 @@
     <Compile Include="Objects\Properties\CraftingProperties.cs" />
     <Compile Include="PathFinding\PathingSync.FinishMode.cs" />
     <Compile Include="PathFinding\PathingSync.Node.cs" />
-    <Compile Include="ReferenceManager.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Terraforming\Biome.cs" />
     <Compile Include="Modules\Population\PopulationManager.cs" />
@@ -699,7 +699,7 @@
     <Compile Include="Graphics\IAtlasNodeToken.cs" />
     <Compile Include="Animations\Joint.cs" />
     <Compile Include="Graphics\AtlasDepthNormals.Node.cs" />
-    <Compile Include="Line.cs" />
+    <Compile Include="LineHelper.cs" />
     <Compile Include="Modules\AI\AIManager.cs" />
     <Compile Include="Modules\AI\AITarget.cs" />
     <Compile Include="Modules\AI\Behaviors\Dialogue\DialogOption.cs" />
@@ -803,7 +803,6 @@
     <Compile Include="GameModes\GameMode.cs" />
     <Compile Include="GameModes\IMap.cs" />
     <Compile Include="GameModes\IWorld.cs" />
-    <Compile Include="GameModes\MapRules.cs" />
     <Compile Include="GameModes\StaticMaps\GameModeStaticMaps.cs" />
     <Compile Include="GameModes\StaticMaps\StaticMap.cs" />
     <Compile Include="GameModes\StaticMaps\StaticMapLoader.cs" />
@@ -1073,7 +1072,6 @@
     <Compile Include="Net\Network.cs" />
     <Compile Include="Net\Packet.cs" />
     <Compile Include="Net\PlayerData.cs" />
-    <Compile Include="Profile.cs" />
     <Compile Include="Net\Server\Server.cs" />
     <Compile Include="Terraforming\ChunkLoader.cs">
       <SubType>Code</SubType>
@@ -1097,7 +1095,6 @@
     <Compile Include="Terraforming\MapThumb.cs" />
     <Compile Include="Terraforming\World.cs" />
     <Compile Include="Objects\GameObject.cs" />
-    <Compile Include="KeyboardMap.cs" />
     <Compile Include="Terraforming\Position.cs" />
     <Compile Include="Objects\GameObjectSlot.cs" />
     <Compile Include="SaveTag.cs" />
@@ -1170,16 +1167,12 @@
     </Compile>
     <Compile Include="UI\SpeechBubbleOld.cs" />
     <Compile Include="UI\SplitStackWindow.cs" />
-    <Compile Include="UndoableCollection.cs" />
     <Compile Include="Helpers\VectorHelper.cs" />
-    <Compile Include="Visualizations\BlockCacheEntry.cs" />
     <Compile Include="WindowsHook.cs" />
     <Compile Include="Timer2.cs" />
     <Compile Include="Terraforming\Cell.cs" />
     <Compile Include="Screens\LoadingScreen.cs" />
-    <Compile Include="Operand.cs" />
     <Compile Include="Interfaces\ISlottable.cs" />
-    <Compile Include="ProgressOld.cs" />
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="UI\ControlCollection.cs" />
     <Compile Include="UI\IconButton.cs" />
@@ -1195,9 +1188,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Control\ToolManager.cs" />
-    <Compile Include="Parameter.cs" />
-    <Compile Include="TimerArgs.cs" />
-    <Compile Include="Timer.cs" />
     <Compile Include="Screens\MainScreen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Terraforming\PerlinArgs.cs" />
@@ -1216,12 +1206,10 @@
     <Compile Include="UI\Settings\SettingsWindow.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Size.cs" />
     <Compile Include="UI\Slots\Slot.cs" />
     <Compile Include="UI\TooltipManager.cs" />
     <Compile Include="Screens\IngameMenu.cs" />
     <Compile Include="Engine\Camera\Camera.cs" />
-    <Compile Include="CameraGlobal.cs" />
     <Compile Include="Terraforming\Chunk.cs" />
     <Compile Include="Control\Controller.cs" />
     <Compile Include="Coords.cs" />

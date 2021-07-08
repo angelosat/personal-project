@@ -206,7 +206,7 @@ namespace Start_a_Town_
             var x2 = (int)(next.Global.X);
             var y2 = (int)(next.Global.Y);
 
-            var positions = Line.Plot2D(x1, y1, x2, y2);
+            var positions = LineHelper.Plot2D(x1, y1, x2, y2);
             positions.RemoveAt(0);
             var positionsVec3 = positions.Select(p => new Vector3(p.X, p.Y, z));
             float cost = 0;
@@ -294,7 +294,7 @@ namespace Start_a_Town_
         static public bool LineOfSight(IMap map, Vector3 a, Vector3 b, out List<Vector3> cells)
         {
             if (a.Z == b.Z)
-                return Line.LineOfSight((int)a.X, (int)a.Y, (int)a.Z, (int)b.X, (int)b.Y, (int)b.Z, p => LosPathableFailCondition(map, p), out cells);
+                return LineHelper.LineOfSight((int)a.X, (int)a.Y, (int)a.Z, (int)b.X, (int)b.Y, (int)b.Z, p => LosPathableFailCondition(map, p), out cells);
             cells = new List<Vector3>();
             return false;
         }

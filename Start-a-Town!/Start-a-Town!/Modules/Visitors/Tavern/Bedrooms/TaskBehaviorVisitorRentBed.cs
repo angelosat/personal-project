@@ -14,7 +14,7 @@ namespace Start_a_Town_
             var counter = tavern.Counter.Value;
             var counterCell = map.GetCell(counter);
             var counterBehind = counter + counterCell.Back;
-            var counterSurface = counter.Above();
+            var counterSurface = counter.Above;
             var customerProps = tavern.GetCustomerProperties(actor);
             var room = customerProps.Bedroom;
             this.FailOnRanOutOfPatienceWaiting(() => actor.GetVisitorProperties().BlacklistShop(task.ShopID));

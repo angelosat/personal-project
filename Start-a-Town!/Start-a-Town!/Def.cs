@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace Start_a_Town_
@@ -41,15 +39,9 @@ namespace Start_a_Town_
                 throw new Exception($"def \"{defName}\" does not exist");
             return def;
         }
-        static public T GetDef<T>() where T : Def
-        {
-            return Database.Values.OfType<T>().Single();
-        }
-        
         static public T TryGetDef<T>(string defName) where T : Def
         {
             if (defName == null || string.IsNullOrEmpty(defName) || string.IsNullOrWhiteSpace(defName))
-                //return null;
                 throw new Exception();
             if (Database.TryGetValue(defName, out var result))
                 return result as T;
@@ -71,7 +63,6 @@ namespace Start_a_Town_
         {
             w.Write(this.Name);
         }
-        
         internal static IEnumerable<T> GetDefs<T>() where T: Def
         {
             return Database.Values.OfType<T>();

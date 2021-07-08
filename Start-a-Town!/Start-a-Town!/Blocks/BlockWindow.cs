@@ -77,7 +77,7 @@ namespace Start_a_Town_.Blocks
         }
         public override void Remove(IMap map, Vector3 global, bool notify = true)
         {
-            var part = map.GetData(global);
+            var part = map.GetBlockData(global);
             base.Remove(map, global);
 
             switch(part)

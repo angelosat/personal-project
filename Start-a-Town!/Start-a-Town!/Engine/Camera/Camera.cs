@@ -1059,7 +1059,7 @@ namespace Start_a_Town_
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             SpriteBatch.Flush();
 
-            var objs = map.GetObjects();
+            var objs = map.GetObjects().ToList();
 
             fx.CurrentTechnique = fx.Techniques["BlockHighlight"];
             //gd.DepthStencilState = new DepthStencilState() { DepthBufferWriteEnable = true }; // this broke depth on block highlights

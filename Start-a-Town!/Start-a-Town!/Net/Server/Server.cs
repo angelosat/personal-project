@@ -1325,13 +1325,8 @@ namespace Start_a_Town_.Net
         }
         static void Save()
         {
-            if (Instance.Map == null)
+            if (Instance.Map is null)
                 return;
-            if (!Instance.Map.Rules.SaveChunks)
-            {
-                Server.Instance.Log.Write("SERVER", "Saving is disabled for this map");
-                return;
-            }
             foreach (var chunk in Instance.Map.GetActiveChunks().Values)
             {
                 if (chunk.Saved)

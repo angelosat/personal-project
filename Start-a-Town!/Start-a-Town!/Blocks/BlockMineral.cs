@@ -26,7 +26,7 @@ namespace Start_a_Town_
             }
             public void Apply(IMap map, Vector3 global)
             {
-                map.SetData(global, (byte)this.Material.ID);
+                map.SetBlockData(global, (byte)this.Material.ID);
             }
             public State(Material material)
             {
@@ -93,7 +93,7 @@ namespace Start_a_Town_
 
         public override Material GetMaterial(IMap map, Vector3 global)
         {
-            var data = map.GetData(global);
+            var data = map.GetBlockData(global);
             return Material.Registry[data];
         }
         public override Material GetMaterial(byte data)

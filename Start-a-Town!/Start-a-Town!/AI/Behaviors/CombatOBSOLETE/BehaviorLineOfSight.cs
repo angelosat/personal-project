@@ -25,7 +25,7 @@ namespace Start_a_Town_.AI.Behaviors
             var x1 = (int)b.X;
             var y1 = (int)b.Y;
             var z1 = (int)b.Z;
-            var los = Line.LineOfSight(x0, y0, z0, x1, y1, z1, threat.Map.IsSolid);
+            var los = LineHelper.LineOfSight(x0, y0, z0, x1, y1, z1, threat.Map.IsSolid);
             if (los)
             {
                 state[this.LastKnownPositionKey] = new TargetArgs(threat.Map, b);// threat.Global);

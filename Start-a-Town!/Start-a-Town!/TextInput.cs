@@ -272,11 +272,8 @@ namespace Start_a_Town_
         public event KeyEventHandler KeyDown;
         protected virtual void OnKeyDown(KeyEventArgs e)
         {
-            
             Controller.Input.UpdateKeyStates();
             if (this.KeyDown != null) this.KeyDown(this, e);
-
-           // e.Control.ToString().ToConsole();
         }
 
         public event KeyPressEventHandler KeyPress;

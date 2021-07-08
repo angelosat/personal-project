@@ -106,13 +106,13 @@ namespace Start_a_Town_
                 var cellData = cell.BlockData;
                 if (block == BlockDefOf.Farmland)
                 {
-                    if (!this.Town.Map.GetObjects(pos.Above()).Any(o => o.IsPlant()))
+                    if (!this.Town.Map.GetObjects(pos.Above).Any(o => o.IsPlant()))
                         if (!Blocks.BlockFarmland.IsSeeded(cellData))
                             this.CachedSowing.Add(pos);
                 }
                 else if (block.GetMaterial(cellData) == MaterialDefOf.Soil)
                 {
-                    if (!this.Town.Map.GetObjects(pos.Above()).Any(o => o.IsPlant()))
+                    if (!this.Town.Map.GetObjects(pos.Above).Any(o => o.IsPlant()))
                         this.CachedTilling.Add(pos);
                 }
             }
@@ -136,7 +136,7 @@ namespace Start_a_Town_
         {
             foreach (var pos in this.Positions)
             {
-                var above = pos.Above();
+                var above = pos.Above;
                 var grownPlants = this.Town.Map.GetObjects(above).OfType<Plant>().Where(p => p.FruitGrowth >= this.HarvestThreshold);
                 foreach (var obj in grownPlants)
                     yield return obj;
@@ -144,12 +144,12 @@ namespace Start_a_Town_
         }
         internal IEnumerable<GameObject> GetHarvestablePlants()
         {
-            return this.Town.Map.GetObjects(this.Positions.Select(pos => (Vector3)pos.Above())).OfType<Plant>().Where(p => p.IsHarvestable);
+            return this.Town.Map.GetObjects(this.Positions.Select(pos => (Vector3)pos.Above)).OfType<Plant>().Where(p => p.IsHarvestable);
 
         }
         internal IEnumerable<GameObject> GetChoppableTrees()
         {
-            return this.Town.Map.GetObjects(this.Positions.Select(pos => (Vector3)pos.Above())).Where(TreeComponent.IsGrown);
+            return this.Town.Map.GetObjects(this.Positions.Select(pos => (Vector3)pos.Above)).Where(TreeComponent.IsGrown);
         }
         public bool IsValidSeed(GameObject item)
         {

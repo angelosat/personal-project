@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Start_a_Town_
 {
@@ -42,33 +38,27 @@ namespace Start_a_Town_
         }
         public override bool Equals(object obj)
         {
-            return obj is IntVec3 && this.Equals((IntVec3)obj);
+            return obj is IntVec3 vec && this.Equals(vec);
         }
         public override int GetHashCode()
         {
             return new Vector3(this.X, this.Y, this.Z).GetHashCode();
         }
-        static public IntVec3 Zero = new(0);
-        static public IntVec3 One = new(1);
-        static public IntVec3 UnitX = new(1, 0, 0);
-        static public IntVec3 UnitY = new(0, 1, 0);
-        static public IntVec3 UnitZ = new(0, 0, 1);
-        //public IntVec3 Above => this + UnitZ;
-        //public IntVec3 Below => this - UnitZ;
+        public static IntVec3 Zero = new(0);
+        public static IntVec3 One = new(1);
+        public static IntVec3 UnitX = new(1, 0, 0);
+        public static IntVec3 UnitY = new(0, 1, 0);
+        public static IntVec3 UnitZ = new(0, 0, 1);
 
-        //static public IntVec3 operator -(IntVec3 a)
-        //{
-        //    return new IntVec3(-a.X, -a.Y, -a.Z);
-        //}
-        static public IntVec3 operator +(IntVec3 a, IntVec3 b)
+        public static IntVec3 operator +(IntVec3 a, IntVec3 b)
         {
             return new IntVec3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
         }
-        static public IntVec3 operator -(IntVec3 a, IntVec3 b)
+        public static IntVec3 operator -(IntVec3 a, IntVec3 b)
         {
             return new IntVec3(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         }
-        static public IntVec3 operator -(IntVec3 a, int b)
+        public static IntVec3 operator -(IntVec3 a, int b)
         {
             return new IntVec3(a.X * b, a.Y * b, a.Z * b);
         }
@@ -93,11 +83,9 @@ namespace Start_a_Town_
         public override string ToString()
         {
             return $"{{X:{this.X} Y:{this.Y} Z:{this.Z}}}";
-            //return string.Format($"{{X: {this.X} Y: {this.Y} Z: {this.Z}}}");
         }
 
-        // this is a function because it's a leftover from converting vector3 to intvec3 in my code and above() being an extention for vector3's
-        public IntVec3 Above() => this + UnitZ;// new IntVec3(this.X, this.Y, this.Z + 1);
+        public IntVec3 Above => this + UnitZ;
         public IntVec3 Below => this - UnitZ;
 
         public static bool operator ==(IntVec3 a, Vector3 b)
@@ -113,7 +101,7 @@ namespace Start_a_Town_
         {
             return new IntVec3(chunk.Start.X + this.X, chunk.Start.Y + this.Y, this.Z);
         }
-        
+
         public IntVec3 ToLocal()
         {
             float lx, ly;

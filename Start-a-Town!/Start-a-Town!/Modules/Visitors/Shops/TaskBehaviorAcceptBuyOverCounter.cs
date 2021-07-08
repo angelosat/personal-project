@@ -20,7 +20,7 @@ namespace Start_a_Town_
             var item = net.GetNetworkObject(transaction.Item);
             var cost = transaction.Cost;
             var shop = actor.Map.Town.GetShop(shopID) as Shop;
-            var counterSurface = shop.Counter.Value.Above();
+            var counterSurface = shop.Counter.Value.Above;
 
             this.FailOn(() => !shop.IsValid());
 

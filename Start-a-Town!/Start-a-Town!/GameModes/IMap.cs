@@ -68,7 +68,6 @@ namespace Start_a_Town_
         public Biome Biome = new();
         protected Queue<Vector3> RandomBlockUpdateQueue = new();
         public LightingEngine LightingEngine;
-        public abstract MapRules Rules { get; }
         public IWorld World;
         public Dictionary<Vector2, Chunk> ActiveChunks;
         public IObjectProvider Net;
@@ -114,7 +113,7 @@ namespace Start_a_Town_
         public Random Random { get { return this.World.Random; } }
         public abstract Dictionary<Vector2, Chunk> GetActiveChunks();
         public abstract bool AddChunk(Chunk chunk);
-        public abstract List<GameObject> GetObjects();
+        public abstract IEnumerable<GameObject> GetObjects();
         public abstract IEnumerable<GameObject> GetObjects(Vector3 min, Vector3 max);
         public abstract IEnumerable<GameObject> GetObjects(BoundingBox box);
 
@@ -259,7 +258,7 @@ namespace Start_a_Town_
                 // reenable physics of entities resting on block
                 foreach (var entity in this.GetObjects(p - new IntVec3(1, 1, 0), p + new IntVec3(1, 1, 2)))
                     PhysicsComponent.Enable(entity);
-                var above = p.Above();
+                var above = p.Above;
                 this.GetBlock(above)?.BlockBelowChanged(this, above);
             }
         }
@@ -598,7 +597,6 @@ namespace Start_a_Town_
             }
             return true;
         }
-        public abstract bool IsExposed(Vector3 global);
 
         public abstract List<GameObject> GetObjectsAtChunk(Vector3 global);
         public List<GameObject> GetObjectsIntersectingBlock(Vector3 global)
@@ -644,7 +642,6 @@ namespace Start_a_Town_
 
         public abstract bool IsInBounds(Vector3 global);
 
-        public abstract void SetLight(Vector3 global, byte sky, byte block);
         public abstract void SetSkyLight(Vector3 global, byte value);
         public abstract void SetBlockLight(Vector3 global, byte value);
 
@@ -672,20 +669,18 @@ namespace Start_a_Town_
         } 
         public abstract byte GetSkyDarkness();
         public abstract byte GetSunLight(Vector3 global);
-        public abstract byte GetData(Vector3 global);
-        public abstract byte SetData(Vector3 global, byte data = 0);
+        public abstract byte GetBlockData(Vector3 global);
+        public abstract byte SetBlockData(Vector3 global, byte data = 0);
 
         public abstract void Update(IObjectProvider net);
         public virtual void Tick(IObjectProvider net) { }
         public abstract SaveTag Save();
 
         public abstract bool InvalidateCell(Vector3 global);
-        public abstract bool InvalidateCell(Vector3 global, Cell cell);
         public abstract void GenerateThumbnails();
         public abstract void GenerateThumbnails(string fullpath);
         public abstract void LoadThumbnails();
         public abstract MapThumb GetThumb();
-        public abstract void Generate();
 
 
         public abstract Towns.Town GetTown();
@@ -698,8 +693,6 @@ namespace Start_a_Town_
 
         public abstract void UpdateLight(IEnumerable<WorldPosition> positions);
 
-        public abstract WorldPosition GetMouseover();
-        public abstract void SetMouseover(WorldPosition position);
 
         public abstract void DrawBlocks(MySpriteBatch sb, Camera cam, EngineArgs a);
         public abstract void DrawObjects(MySpriteBatch sb, Camera cam, SceneState scene);
@@ -709,9 +702,6 @@ namespace Start_a_Town_
 
         public abstract void GetTooltipInfo(Tooltip tooltip);
 
-        public abstract void HandleEvent(GameEvent e);
-
-        public abstract bool SetCell(Vector3 global, Block.Types type, byte data, int variation = 0);
         public abstract bool SetBlock(Vector3 global, Block.Types type);
         public virtual bool SetBlock(Vector3 global, Block.Types type, byte data, int variation = 0, int orientation = 0, bool raiseEvent = true)
         {
@@ -948,7 +938,7 @@ namespace Start_a_Town_
             var x1 = (int)b.X;
             var y1 = (int)b.Y;
             var z1 = (int)b.Z;
-            var los = Line.LineOfSight(x0, y0, z0, x1, y1, z1, this.IsSolid);
+            var los = LineHelper.LineOfSight(x0, y0, z0, x1, y1, z1, this.IsSolid);
             return los;
         }
 

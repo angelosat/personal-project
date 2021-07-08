@@ -98,7 +98,7 @@ namespace Start_a_Town_
         }
         public override List<Vector3> GetParts(IMap map, Vector3 global)
         {
-            var data = map.GetData(global);
+            var data = map.GetBlockData(global);
             Part part;
             int ori;
             GetState(data, out part, out ori);

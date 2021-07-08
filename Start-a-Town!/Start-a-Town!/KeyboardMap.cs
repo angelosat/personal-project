@@ -32,7 +32,6 @@ namespace Start_a_Town_
                             c = Char.ToLower(c);
                     return c;
             }
-            //return '\0';
         }
     }
 }

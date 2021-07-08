@@ -18,10 +18,10 @@ namespace Start_a_Town_
             var shop = actor.Town.ShopManager.GetShop<Shop>(task.ShopID);
             var transaction = task.Transaction;
             var customer = transaction.Customer;
-            var item = actor.Net.GetNetworkObject(transaction.Item);
+            var item = actor.NetNew.GetNetworkObject(transaction.Item);
             var cost = transaction.Cost;
             var counter = shop.Counter.Value;
-            var counterSurface = counter.Above();
+            var counterSurface = counter.Above;
 
             this.FailOn(() => !shop.IsValid());
             this.FailOnRanOutOfPatienceWaiting(() => actor.GetVisitorProperties().BlacklistShop(task.ShopID));

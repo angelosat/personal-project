@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     public class Timer2
     {
         public event EventHandler<EventArgs> Tick;
 
-        public float Interval;// = 1;
+        public float Interval;
         protected float _Value = 0;
-        //protected float Value = 0;
 
         public Timer2(float interval)
         {
@@ -33,11 +30,10 @@ namespace Start_a_Town_
 
         public void Update(GameTime gt)
         {
-            Value -= 1;//GlobalVars.DeltaTime;
-            if (Value <= 0)//>= Interval)
+            Value -= 1;
+            if (Value <= 0)
             {
                 OnTick();
-                //Value -= Interval;
                 Value = Interval;
             }
         }

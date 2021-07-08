@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
-using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public class SaveTag// : IEnumerable
+    public class SaveTag
     {
         public enum Types : byte
         {
@@ -30,19 +28,13 @@ namespace Start_a_Town_
             Reference
         }
 
-        static Dictionary<string, SaveTag> SaveReferences = new Dictionary<string, SaveTag>();
-        static Dictionary<string, ISaveable> LoadReferences = new Dictionary<string, ISaveable>();
-        //static Dictionary<string, SaveTag> LoadReferences = new Dictionary<string, SaveTag>();
-
+        static Dictionary<string, SaveTag> SaveReferences = new();
+        static Dictionary<string, ISaveable> LoadReferences = new();
 
         public byte Type;
         public string Name;
         public object Value;
-        byte ListType;
-
-        //bool HasName 
-        //{ get { return Name != null; } }
-        
+        readonly byte ListType;
 
         #region Indexers
         public T GetValue<T>(string name)
@@ -55,26 +47,6 @@ namespace Start_a_Town_
                 return def;
             else
                 return (T)tag.Value;
-        }
-        public TResult TagValueOrDefault<TValue, TResult>(string name, Func<TValue, TResult> valueConvert, TResult valueDefault)
-        {
-            if (!TryGetTag(name, out var tag))
-                return valueDefault;
-            else
-                return valueConvert((TValue)tag.Value);
-        }
-        public bool TagValueOrDefault<TValue, TResult>(string name, Func<TValue, TResult> valueConvert, TResult valueDefault, out TResult result)
-        {
-            if (!TryGetTag(name, out var tag))
-            {
-                result = valueDefault;
-                return false;
-            }
-            else
-            {
-                result = valueConvert((TValue)tag.Value);
-                return true;
-            }
         }
         public bool TryGetTag(string name, Action<SaveTag> action)
         {
@@ -125,27 +97,6 @@ namespace Start_a_Town_
                 return true;
             }
         }
-        public TResult TagOrDefault<TResult>(string name, Func<SaveTag, TResult> valueConvert, TResult valueDefault)
-        {
-            if (!TryGetTag(name, out var tag))
-                return valueDefault;
-            else
-                return valueConvert(tag);
-        }
-        public bool TagOrDefault<TResult>(string name, Func<SaveTag, TResult> valueConvert, TResult valueDefault, out TResult result)
-        {
-            if (!TryGetTag(name, out var tag))
-            {
-                result = valueDefault;
-                return false;
-            }
-            else
-            {
-                result = valueConvert(tag);
-                return true;
-            }
-        }
-
         public bool TryGetTag(string name, out SaveTag tag)
         {
             if (Type != 10)
@@ -153,9 +104,6 @@ namespace Start_a_Town_
                 tag = null;
                 return false;
             }
-            //Dictionary<string, SaveTag> dic = (Value as List<SaveTag>).ToDictionary(foo => foo.Name);
-            //return dic.TryGetValue(name, out tag);
-            //return this.ToDictionary().TryGetValue(name, out tag);
             return (this.Value as Dictionary<string, SaveTag>).TryGetValue(name, out tag);//
         }
 
@@ -165,24 +113,8 @@ namespace Start_a_Town_
             {
                 if (Type != 10)
                     return null;
-                //Dictionary<string, SaveTag> dic = (Value as List<SaveTag>).ToDictionary(foo => foo.Name);
-                //// TODO: maybe do a tryget
-                //return dic[name];
-
-                //return this.ToDictionary()[name];
+              
                 return (this.Value as Dictionary<string, SaveTag>)[name];
-            }
-        }
-        //Dictionary<string, SaveTag> _Dictionary;
-        
-
-        public Object this[int n]
-        {
-            get
-            {
-                if (Type != 9)
-                    return null;
-                return (Value as List<SaveTag>)[n].Value;
             }
         }
         #endregion
@@ -202,10 +134,8 @@ namespace Start_a_Town_
         /// If the type is list, then the value can either be a list of tags (from which the type of the list is derived from the first element), 
         /// or the type of the list.</param>
         public SaveTag(Types type, string name = "", Object value = null) : this((byte)type, name, value) { }
-    //    public Tag(Types type, object obj = null, Object value = null) : this((byte)type, obj != null ? obj.ToString() : "", value) { }
         SaveTag(byte type, string name = "", Object value = null)
         {
-            //this.Dictionary = new Dictionary<string, SaveTag>();
             switch (type)
             {
                 case 9:
@@ -219,7 +149,6 @@ namespace Start_a_Town_
                         ListType = (byte)value;
                         Value = new List<SaveTag>();
                     }
-                    //Value = new List<Tag>();
                     break;
                 case 10:
                     if (value is Dictionary<string, SaveTag>)
@@ -235,37 +164,7 @@ namespace Start_a_Town_
                             Console.WriteLine(name + " value dropped");
                         Value = new Dictionary<string, SaveTag>();// { Value as Tag }; //when you create a compound tag with a value, it initializes a new list<tag> with the value as its first element
                     }
-                    //if (value is List<SaveTag>)
-                    //    Value = value;
-                    //else
-                    //{
-                    //    if (value != null)
-                    //        Console.WriteLine(name + " value dropped");
-                    //    Value = new List<SaveTag>();// { Value as Tag }; //when you create a compound tag with a value, it initializes a new list<tag> with the value as its first element
-                    //}
                     break;
-
-                //case 15: //reference
-                //    var reference = value as ILoadReferencable;
-                //    if (reference == null)
-                //        throw new Exception();
-                //    var refID = reference.GetUniqueLoadID();
-                //    this.Value = refID;
-                //    //    //if(!References.TryGetValue(refID, out var existing))
-                //    //    //    References[refID] = reference;
-                //    //    if (!SaveReferences.ContainsKey(refID))
-                //    //    {
-                //    //        var reftag = new SaveTag(SaveTag.Types.Compound, refID);
-                //    //        //newtag.Add(refID.Save("RefID"));
-                //    //        reftag.Add(reference.GetType().FullName.Save("TypeName"));
-                //    //        reftag.Add(reference.Save("Data"));
-                //    //        SaveReferences[refID] = reftag;
-                //    //        //SaveReferences[refID] = reference.Save();
-                //    //    }
-                //    //    //this.Value = reference; //refID;
-                //    //    this.Value = refID;
-
-                //    break;
 
                 default:
                     Value = value;
@@ -276,11 +175,6 @@ namespace Start_a_Town_
         }
         #endregion
 
-        //void Flush(BinaryWriter w)
-        //{
-        //    this.FlushWithReferences(w);
-        //    this.WriteTo(w);
-        //}
         public void WriteTo(BinaryWriter w)
         {
             w.Write(Type);
@@ -296,7 +190,6 @@ namespace Start_a_Town_
                 i.Value.WriteTo(w);
             }
             SaveReferences.Clear();
-
             this.WriteTo(w);
         }
         void Write(BinaryWriter writer)
@@ -338,7 +231,6 @@ namespace Start_a_Town_
                     break;
                 case 10:
                     Dictionary<string, SaveTag> Tags = (Dictionary<string, SaveTag>)Value;
-                    //Tags.Add(new Tag(Tag.Types.End));
                     writer.Write(Tags.Count);
                     foreach (SaveTag tag in Tags.Values)
                     {
@@ -347,19 +239,6 @@ namespace Start_a_Town_
                         tag.Write(writer);
                     }
                     writer.Write((byte)0);
-
-                    //List<SaveTag> Tags = (List<SaveTag>)Value;
-                    ////Tags.Add(new Tag(Tag.Types.End));
-                    //foreach (SaveTag tag in Tags)
-                    //{
-                    //    writer.Write(tag.Type);
-                    //    //if (tag.Type > 0)
-                    //    //{
-                    //        writer.Write(tag.Name);
-                    //        tag.Write(writer);
-                    //    //}
-                    //}
-                    //writer.Write((byte)0);
                     break;
                 case 11:
                     writer.Write((UInt16)this.Value);
@@ -375,7 +254,6 @@ namespace Start_a_Town_
                     break;
                 case 15: // reference
                     writer.Write((string)this.Value);
-                    //writer.Write(this.Name);
                     break;
                 default:
                     break;
@@ -407,20 +285,17 @@ namespace Start_a_Town_
                     return reader.ReadString();
                 case 9:
                     byte listtype = reader.ReadByte();
-                    //string wtf = reader.ReadString();
                     int length = reader.ReadInt32();
                     List<SaveTag> list = new List<SaveTag>(length);
                     for (int i = 0; i < length; i++)
                     {
                         list.Add(new SaveTag(listtype, "", Read(reader, listtype)));
-                        //list.Add((Tag)Read(reader, listtype));
                     }
                     if (length > 0)
                         return list;
                     else
                         return listtype;
                 case 10:
-                    //List<SaveTag> cmpdnlist = new List<SaveTag>();
                     int capacity = reader.ReadInt32();
                     Dictionary<string, SaveTag> cmpdnlist = new Dictionary<string, SaveTag>(capacity + 1); 
                     // initialize dictionary to capacity + 1 because we add an empty escape item in the dictionary at the end 
@@ -433,15 +308,7 @@ namespace Start_a_Town_
                         if (nexttype != 0)
                             nextname = reader.ReadString();
                         var t = new SaveTag(nexttype, nextname, Read(reader, nexttype));
-                        //try
-                        //{
-                            cmpdnlist.Add(nextname, t);
-                        //}
-                        //catch (Exception e) 
-                        //{
-                        //    nextname.ToConsole();
-                        //}
-                        //cmpdnlist[nextname] = new SaveTag(nexttype, nextname, Read(reader, nexttype));
+                        cmpdnlist.Add(nextname, t);
                     } while (nexttype > 0);
                     return cmpdnlist;
                 case 11:
@@ -453,8 +320,6 @@ namespace Start_a_Town_
                 case 14: 
                     return reader.ReadVector3();
                 case 15: //references
-                    //var refID = reader.ReadString();
-                    //return LoadReferences[refID];
                     return reader.ReadString();
             }
             return null;
@@ -496,9 +361,6 @@ namespace Start_a_Town_
         }
         public void Add(SaveTag tag)
         {
-            //if(!(Type == 9 || Type == 10))
-            //    throw(new ArrayTypeMismatchException())
-
             if (this.Type == 9)
                 (Value as List<SaveTag>).Add(tag);
             else if (this.Type == 10)
@@ -509,13 +371,13 @@ namespace Start_a_Town_
         {
             var tag = this[name];
             return (Vector3)tag.Value; // it's vector3 internally
-            return new IntVec3((int)tag["X"].Value, (int)tag["Y"].Value, (int)tag["Z"].Value);
         }
-        public IntVec3 LoadIntVec3()
+        public IntVec3 LoadVector3(string name)
         {
-            return (Vector3)this.Value;
-            return new IntVec3((int)this["X"].Value, (int)this["Y"].Value, (int)this["Z"].Value);
+            var tag = this[name];
+            return new Vector3((float)tag["X"].Value, (float)tag["Y"].Value, (float)tag["Z"].Value);
         }
+        [Obsolete]
         public Vector3 LoadVector3()
         {
             return new Vector3((float)this["X"].Value, (float)this["Y"].Value, (float)this["Z"].Value);
@@ -524,19 +386,20 @@ namespace Start_a_Town_
         {
             return new List<Vector3>().Load(this);
         }
-        public List<int> LoadListInt()
-        {
-            return new List<int>().Load(this);
-        }
         public List<int> LoadListInt(string name)
         {
             return new List<int>().Load(this[name]);
         }
+        [Obsolete]
         public Vector2 LoadVector2()
         {
             return new Vector2((float)this["X"].Value, (float)this["Y"].Value);
         }
-
+        public Vector2 LoadVector2(string name)
+        {
+            var tag = this[name];
+            return new Vector2((float)tag["X"].Value, (float)tag["Y"].Value);
+        }
         public Color LoadColor()
         {
             Color c = new Color();
@@ -546,7 +409,6 @@ namespace Start_a_Town_
             c.A = this.GetValue<Byte>("A");
             return c;
         }
-
         
         private static string RegisterRef(ILoadReferencable reference)
         {
@@ -635,7 +497,6 @@ namespace Start_a_Town_
             if (this.TryGetTag(name, out var l))
             {
                 var taglist = l.Value as List<SaveTag>;
-                //list = new List<T>();
                 foreach (var tag in taglist)
                 {
                     var refID = (string)tag.Value;
@@ -643,7 +504,6 @@ namespace Start_a_Town_
                 }
                 return true;
             }
-            //list = null;
             return false;
         }
     }

@@ -77,7 +77,7 @@ namespace Start_a_Town_
             var randomPlant = allPlants.SelectRandom(map.Random);
             var plant = randomPlant.CreatePlant();
             plant.SyncInstantiate(map.Net);
-            map.SyncSpawn(plant, global.Above(), Vector3.Zero);
+            map.SyncSpawn(plant, global.Above, Vector3.Zero);
         }
         private void SpawnBlock(IMap map, IntVec3 global)
         {

@@ -207,7 +207,7 @@ namespace Start_a_Town_
         }
         private static Vector3 GetBase(IMap map, Vector3 global)
         {
-            byte data = map.GetData(global);
+            byte data = map.GetBlockData(global);
             byte masked = data &= 0x1;// 0x3;
             int baseZ = (int)(global.Z - masked);
             Vector3 baseLoc = new Vector3(global.X, global.Y, baseZ);

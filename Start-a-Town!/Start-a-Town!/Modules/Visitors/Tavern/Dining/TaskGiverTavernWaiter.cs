@@ -15,7 +15,7 @@
                 else if (!customer.IsServed && customer.Dish != null)
                 {
                     customer.ServedBy = actor;
-                    return new AITask(typeof(TaskBehaviorTavernWorkerServe), customer.Dish, (actor.Map, customer.Table.Above())) { CustomerID = customer.CustomerID };
+                    return new AITask(typeof(TaskBehaviorTavernWorkerServe), customer.Dish, (actor.Map, customer.Table.Above)) { CustomerID = customer.CustomerID };
                 }
             }
             return null;

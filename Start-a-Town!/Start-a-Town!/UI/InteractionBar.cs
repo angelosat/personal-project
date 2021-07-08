@@ -100,31 +100,5 @@ namespace Start_a_Town_.UI
             if (width == DefaultWidth)
                 sb.Draw(UIManager.ProgressBarBorder, new Vector2(x, y), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0f);//0.05f);
         }
-      
-        public ProgressOld Meter;
-        public void Track(ProgressOld meter)
-        {
-            Meter = meter;
-            Percentage = meter.Percentage;
-            Meter.ValueChanged += new EventHandler<EventArgs>(Meter_ValueChanged);
-        }
-
-        void Meter_ValueChanged(object sender, EventArgs e)
-        {
-            Percentage = Meter.Percentage;
-        }
-
-        public void Stop()
-        {
-            Meter.ValueChanged -= Meter_ValueChanged;
-            Meter = null;
-        }
-
-        public override void Dispose()
-        {
-            if (Meter != null)
-                Meter.ValueChanged -= Meter_ValueChanged;
-            base.Dispose();
-        }
     }
 }

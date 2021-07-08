@@ -15,7 +15,7 @@ namespace Start_a_Town_
             var map = actor.Map;
             var shop = actor.Workplace as Tavern;
             var counter = shop.Counter.Value;
-            var counterSurface = counter.Above();
+            var counterSurface = counter.Above;
             var customerProps = shop.GetCustomerProperties(task.GetTarget(Customer));
             var customer = customerProps.Customer;
             var counterCell = map.GetCell(counter);

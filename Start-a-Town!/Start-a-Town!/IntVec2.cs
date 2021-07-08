@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Start_a_Town_
 {
@@ -29,7 +25,7 @@ namespace Start_a_Town_
         {
 
         }
-        
+
         public bool Equals(IntVec2 other)
         {
             return
@@ -38,26 +34,26 @@ namespace Start_a_Town_
         }
         public override bool Equals(object obj)
         {
-            return obj is IntVec2 && this.Equals((IntVec2)obj);
+            return obj is IntVec2 vec && this.Equals(vec);
         }
         public override int GetHashCode()
         {
             return new Vector2(this.X, this.Y).GetHashCode();
         }
-        static public IntVec2 Zero = new IntVec2(0);
-        static public IntVec2 One = new IntVec2(1);
-        static public IntVec2 UnitX = new IntVec2(1, 0);
-        static public IntVec2 UnitY = new IntVec2(0, 1);
+        public static IntVec2 Zero = new(0);
+        public static IntVec2 One = new(1);
+        public static IntVec2 UnitX = new(1, 0);
+        public static IntVec2 UnitY = new(0, 1);
 
-        static public IntVec2 operator +(IntVec2 a, IntVec2 b)
+        public static IntVec2 operator +(IntVec2 a, IntVec2 b)
         {
             return new IntVec2(a.X + b.X, a.Y + b.Y);
         }
-        static public IntVec2 operator -(IntVec2 a, IntVec2 b)
+        public static IntVec2 operator -(IntVec2 a, IntVec2 b)
         {
             return new IntVec2(a.X - b.X, a.Y - b.Y);
         }
-        static public IntVec2 operator -(IntVec2 a, int b)
+        public static IntVec2 operator -(IntVec2 a, int b)
         {
             return new IntVec2(a.X * b, a.Y * b);
         }

@@ -1,59 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
-using System.Threading;
-using System.IO.Compression;
-using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 using Start_a_Town_.Towns;
-using Start_a_Town_.Net;
 using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
-    public interface IObjectSpace
+    public class StaticMap : IMap, IDisposable, ITooltippable
     {
-        float Distance(GameObject obj1, GameObject obj2);
-        Vector3? DistanceVector(GameObject obj1, GameObject obj2);
-    }
-    public class StaticMap : IMap, IObjectSpace, IDisposable, ITooltippable
-    {
-        //public string Network = "local";
-
         public override float LoadProgress
         {
             get { return this.ActiveChunks.Count / (float)(this.Size.Chunks * this.Size.Chunks); }
         }
-        //static public int SizeInChunks { get { return (Engine.ChunkRadius * 2); } }
-        //static public int SizeInBlocks { get { return SizeInChunks * Chunk.Size; } }
-        public float Distance(GameObject obj1, GameObject obj2)
-        {
-            return Vector3.Distance(obj1.Global, obj2.Global);
-        }
-        public Vector3? DistanceVector(GameObject obj1, GameObject obj2)
-        {
-            return obj1.Global - obj2.Global;
-        }
 
         public MapSize Size;
-        #region Sizes
         public class MapSize : INamed
         {
-            //public int Index { get; private set; }
             public string Name { get; private set; }
             public int Blocks { get; private set; }
             public int Chunks { get; private set; }
-            public MapSize(//int index, 
+            public MapSize(
                 string name, int blocks)
             {
-                //this.Index = index;
                 Name = name;
                 Blocks = blocks;
                 this.Chunks = blocks / Chunk.Size;
@@ -64,7 +37,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             public static readonly MapSize Normal = new("Normal", 256);
             public static readonly MapSize Huge = new("Huge", 512);
 
-            public static MapSize Default = Micro;//Tiny;
+            public static MapSize Default = Micro;
 
             static public List<MapSize> GetList()
             {
@@ -88,35 +61,23 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public static List<MapSize> Sizes
         { get { return new List<MapSize>() { MapSize.Micro, MapSize.Tiny, MapSize.Small, MapSize.Normal, MapSize.Huge }; } }
 
-        
-        #endregion
-
         public List<GameObject> SavedPlayers = new();
 
         Queue<Chunk> ChunksToActivate;
 
         public override bool AddChunk(Chunk chunk)
         {
-            //return this.ActiveChunks.TryAdd(chunk.MapCoords, chunk);
             this.ActiveChunks.Add(chunk.MapCoords, chunk);
             // sort chunks back to front to prevent glitches with semi-transparent blocks on chunk edges
             this.ActiveChunks = this.ActiveChunks.OrderBy(c => c.Key.X + c.Key.Y).ToDictionary(i => i.Key, i => i.Value);
-
             return true;
         }
         public bool Lighting = true;
         public int TickLengthSeconds = (int)(60 * 1.44f); // one tick is 1.44 ingame minutes
         public const int Zenith = 14;
-        //public Dictionary<>
         public double DayTimeNormal = 0;
-        TimeSpan Clock => this.World.Clock;
-        //public TimeSpan TimeFromCurrentTick => TimeSpan.FromMilliseconds((double)this.CurrentTick * TickLengthMilliseconds);
         public void AddTime()
         {
-            //var seconds = TickLength;
-            //Time = Time.Add(new TimeSpan(0, 0, seconds));
-            //Time = Time.Add(TimeSpan.FromMilliseconds(TickLengthMilliseconds));
-            //Clock = TimeFromCurrentTick;
             var clock = this.Clock;
             double normal = (clock.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
             double nn = normal * 2 * Math.PI;
@@ -124,7 +85,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
 
             byte oldDarkness = SkyDarkness;
-            SkyDarkness = 0;// (byte)(Math.Round(DayTimeNormal * SkyDarknessMax));
+            SkyDarkness = 0;
             if (SkyDarkness != oldDarkness)
                 foreach (var ch in ActiveChunks)
                     ch.Value.LightCache.Clear();
@@ -133,68 +94,38 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public void SetHour(int t)
         {
             throw new Exception();
-            //this.Clock = new TimeSpan(this.Clock.Days, t, 0, 0);
             foreach (var ch in this.ActiveChunks)
                 ch.Value.LightCache.Clear();
         }
-        private void AdvanceTime()
-        {
-            //this.CurrentTick++;
-            this.AddTime();
-            return;
-            t -= 1;//GlobalVars.DeltaTime;
-            if (t <= 0)
-            {
-                AddTime();
-                t = Engine.TicksPerSecond;// Engine.TargetFps / 10f;// 8f;
-            }
-        }
+       
         public byte SkyDarkness = 0, SkyDarknessMax = 13;
         public Color AmbientColor = Color.Blue;//Color.MidnightBlue; //Color.RoyalBlue;//Color.MidnightBlue; //Color.MediumPurple; //Color.Lerp(Color.White, Color.Cornsilk, 0.5f);
-        //internal void Spawn(Entity obj)
-        //{
-        //    this.Spawn(obj, obj.Global, obj.Velocity);
-        //}
-
         
         internal void Despawn(Actor actor)
         {
             actor.Despawn();
             PacketEntityDespawn.Send(this.Net, actor);
         }
-        //public bool Fog = false, BorderShading = true;
-        //public bool
-        //    HideUnderground = false,//true,
-        //    HideOverground = false;
-        public static int  VisibleCellCount = 0;//SeaLevel,
-        public Dictionary<int, Rectangle[,]> BaseTileRegions;
+        public static int  VisibleCellCount = 0;
         public Game1 game;
         public bool hasClicked = false;
-        //public static int MaxHeight = 128;//256; //
         public static float MaxDepth = 0, MinDepth = 0;
-        static public Texture2D TerrainSprites, CharacterSprites, ShaderMouseMap, BlockDepthMap;//, BlockDepthMapFlatTop;
+        static public Texture2D TerrainSprites, CharacterSprites, ShaderMouseMap, BlockDepthMap;
         public List<Texture2D> VisibleTileTypes;
         public Vector2 tileLocation = new(16, 8);
-        public const double GroundDensity = 0.1; //0.2
+        public const double GroundDensity = 0.1;
         static public Texture2D Shadow;
         static public List<Rectangle> Icons;
         static public Texture2D ItemSheet;
 
         static public void Initialize()
         {
-           // content = Game1.Instance.Content;
             Generator.InitGradient3();
             TerrainSprites = Game1.Instance.Content.Load<Texture2D>("Graphics/spritesheet cubes");// New");//
             CharacterSprites = Game1.Instance.Content.Load<Texture2D>("Graphics/Characters/best/best2");
             ShaderMouseMap = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap - Cube");
             BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09");
-            //BlockDepthMapFlatTop = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09flatTop");
             Shadow = Game1.Instance.Content.Load<Texture2D>("Graphics/shadow");
-
-            //Block.Initialize();
-            //Cell.Initialize();
-
-            
 
             ItemSheet = Game1.Instance.Content.Load<Texture2D>("Graphics/ItemSheet");
             ItemSheet.Name = "Default item sprites";
@@ -203,32 +134,21 @@ namespace Start_a_Town_.GameModes.StaticMaps
             for (int j = 0; j < iconsV; j++)
                 for (int i = 0; i < iconsH; i++)
                     Icons.Add(new Rectangle(i * 32, j * 32, 32, 32));
-
-
-            //Cell.Initialize();
-
-
-            
         }
 
-        //public StaticWorld World;// { get { return (World)this["World"]; } set { this["World"] = value; } }
         public string Name;
         public Texture2D[] Thumbnails;
         public MapThumb Thumb;
-       // public DirectoryInfo DirectoryInfo { get { return (DirectoryInfo)this["DirectoryInfo"]; } set { this["DirectoryInfo"] = value; } }
         #region Initialization
 
-        public Vector2 Global;// { get { return Coordinates * SizeInBlocks;}}// (Engine.ChunkRadius * 2 + 1); } }
+        public Vector2 Global;
 
         public StaticMap(string name = "")
         {
             this.LightingEngine = new LightingEngine(this);
             this.Camera = new Camera((int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y);
             this.Name = name; 
-            //this.Clock = new TimeSpan(Zenith, 0, 0);
-            //ActiveChunks = new ConcurrentDictionary<Vector2, Chunk>();
             this.ActiveChunks = new Dictionary<Vector2, Chunk>();
-            ChunksToLight = new Queue<Chunk>();
             ChunksToActivate = new Queue<Chunk>();
             this.Thumbnails = new Texture2D[3];
             this.Town = new Town(this);
@@ -257,19 +177,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         #endregion
         
-        public Rectangle GetRandomTile(int type)
-        {
-            //return BaseTileRegions[type][rand.Next(BaseTileRegions[type].Count - 1)];
-            return BaseTileRegions[type][World.Random.Next(BaseTileRegions[type].Length - 1), 0];
-        }
-        float t = 0;
         #region Updating
-        public override void Update(IObjectProvider net)//GameTime gt, Camera camera)
+        public override void Update(IObjectProvider net)
         {
-            IconOffset = (float)Math.Sin(net.Clock.TotalMilliseconds / Engine.TicksPerSecond);// DateTime.Now.Second);
+            IconOffset = (float)Math.Sin(net.Clock.TotalMilliseconds / Engine.TicksPerSecond);
             this.Update();
         }
-        public void Update()//GameTime gt, Camera camera)
+        public void Update()
         {
             TryPerformQueuedRandomBlockUpdates();
             this.CachedAmbientColor = this.UpdateAmbientColor();
@@ -280,8 +194,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             while (ChunksToActivate.Count > 0)
             {
                 Chunk chunk = this.ChunksToActivate.Dequeue();
-                //if (!this.ChunksToActivate.TryDequeue(out chunk))
-                //    continue;
                 ActiveChunks[chunk.MapCoords] = chunk;
                 if (ActiveChunks.Count > ChunkLoader.ChunkMemoryCapacity)
                 {
@@ -296,18 +208,15 @@ namespace Start_a_Town_.GameModes.StaticMaps
                             furthestChunkCoords = pair.Key;
                         }
                     }
-                    //Chunk furthestChunk;
                     ActiveChunks.Remove(furthestChunkCoords);
                     ChunkLoader.UnloadChunk(furthestChunkCoords);
                 }
             }
-            //if(this.Running)
             foreach (var chunk in this.ActiveChunks.Values.ToList())
                 chunk.Update();
             this.Town.Update();
             Block.UpdateBlocks(this);
             this.ApplyLightChanges();
-            //PathFinding.PathingSync.UpdateInaccessibleAreas();
         }
 
         private void TryPerformQueuedRandomBlockUpdates()
@@ -324,89 +233,43 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public override void Tick(IObjectProvider net)
         {
-            AdvanceTime();
+            AddTime();
             this.Regions.Update();
             foreach (var chunk in this.ActiveChunks.Values.ToList())
                 chunk.Tick(this);
             this.Town.Tick();
         }
-
         
         public bool Running = true;
 
-        float WaterAnim = 20;
-        private void AnimateWater()
-        {
-            WaterAnim -= 1;// GlobalVars.DeltaTime;
-            if (WaterAnim <= 0)
-            {
-                WaterAnim = 20;
-                //Sprite water = Block.TileSprites[Block.Types.Water];
-                //Rectangle[][] sources = water.SourceRects;
-                //water.SourceRects = new Rectangle[][] { new Rectangle[] { sources[0][1], sources[0][2], sources[0][3], sources[0][0] } };
-            }
-        }
-
+      
         #endregion
 
-        public Queue<Chunk> ChunksToLight;
-
-        public int TilesDrawn, TileOutlinesDrawn, ObjectsDrawn, ChunksDrawn, CullingChecks;
-       
         #region Drawing
 
-        //struct ChunkTexture
-        //{
-        //    public RenderTarget2D Bitmap;
-        //    public RenderTarget2D Depth;
-        //    public RenderTarget2D Light;
-        //    public RenderTarget2D Mouse;
-        //    public Color[] MouseMap;
-        //}
-
-        //Dictionary<Chunk, ChunkTexture> ChunkSprites = new Dictionary<Chunk, ChunkTexture>();
         public bool Redraw;
-
-        //public bool RefreshChunk(Chunk chunk)
-        //{
-        //    return ChunkSprites.Remove(chunk);
-        //}
 
         public WorldPosition Mouseover;
 
-        public override void DrawBlocks(MySpriteBatch sb, Camera camera, EngineArgs a)//, SelectionArgs selection)
+        public override void DrawBlocks(MySpriteBatch sb, Camera camera, EngineArgs a)
         {
             Redraw = false;
-            ChunksDrawn = 0;
-            TilesDrawn = 0;
-            TileOutlinesDrawn = 0;
-            ObjectsDrawn = 0;
-            CullingChecks = 0;
             var copyOfActiveChunks = new Dictionary<Vector2, Chunk>(ActiveChunks);
-            Vector3? playerGlobal = null;// = new Nullable<Vector3>(Player.Actor != null ? Player.Actor.Global : null);
+            Vector3? playerGlobal = null;
             var hiddenRects = new List<Rectangle>();
             if (PlayerOld.Actor != null)
             {
                 if (PlayerOld.Actor.IsSpawned)
                 {
                     playerGlobal = new Nullable<Vector3>(PlayerOld.Actor.Global.RoundXY());
-                    Sprite sprite = PlayerOld.Actor.GetSprite();// (Sprite)Player.Actor["Sprite"]["Sprite"];
-                    Rectangle spriteBounds = sprite.GetBounds(); // make bounds a field
-                    //spriteBounds.Inflate(spriteBounds.Width, spriteBounds.Height);
-                    Rectangle screenBounds = camera.GetScreenBounds(playerGlobal.Value, spriteBounds);//, spriteBounds.Center.ToVector());
+                    Sprite sprite = PlayerOld.Actor.GetSprite();
+                    Rectangle spriteBounds = sprite.GetBounds(); // make bounds a field/prop
+                    Rectangle screenBounds = camera.GetScreenBounds(playerGlobal.Value, spriteBounds);
                     hiddenRects.Add(screenBounds);
-                    //var playerpos = camera.GetScreenPositionFloat(playerGlobal.Value);
-                    //var screenBounds = new Rectangle((int)(playerpos.X - 32 * camera.Zoom), (int)(playerpos.Y - 32 * camera.Zoom), (int)(64 * camera.Zoom), (int)(64 * camera.Zoom));
-                    //hiddenRects.Add(screenBounds);
                 }
             }
-            //playerGlobal = Player.Actor != null ? new Nullable<Vector3>(Player.Actor.Global) : null;
-            //playerGlobal.Value = Player.Actor != null ? Player.Actor.Global : null;
-            // Mouseovers = new SortedList<float, Vector3>();
             camera.UpdateMaxDrawLevel();
-            //Mouseover.Clear();
             Mouseover = null;
-            //int d = 0;
             Towns.Housing.House house = null;
             if (PlayerOld.Actor != null)
                 house = this.Town.GetHouseAt(PlayerOld.Actor.Global);
@@ -416,31 +279,16 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     camera.DrawCell(sb, this, this.GetChunk(cell.Key), cell.Value, playerGlobal, hiddenRects, a);
             }
             else
-            foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)//.OrderBy(foo => foo.Value.GetDepthFar(camera))) //Depth))
+            foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
             {
 
-                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, this.MaxHeight / 2, Chunk.Bounds);  //chunk.Value.GetBounds(camera);
+                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, this.MaxHeight / 2, Chunk.Bounds);
                 if (!camera.ViewPort.Intersects(chunkBounds))
                     continue;
                 camera.DrawChunk(sb, this, chunk.Value, playerGlobal, hiddenRects, a);
-
-                // draw front of frontmost chunks here?
-                //DrawFrontmostBlocks(sb, camera, a, playerGlobal, hiddenRects, chunk);
-                // draw chunk faces first because otherwise a fucking glitch appears on topmost blocks cause of the draw order or something
-
-                //d++;
-
-                
             }
-            //d.ToConsole();
             if (Mouseover != null)
                 camera.CreateMouseover(this, Mouseover.Global);
-            //else
-            //        "asdasd".ToConsole();
-            //camera.Mouseover(new Queue<Position>(Mouseover.Values.ToList()));
-            //Queue<Position> qms = new Queue<Position>(Mouseover.Values.ToList());
-            //while (Mouseover.Count > 0 && Controller.Instance.MouseoverNext.Object == null)
-            //    camera.Mouseover(Mouseover.Dequeue());
         }
 
         internal void SpawnStartingActors(Actor[] actors)
@@ -449,7 +297,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var y = x;
             var z = this.GetHeightmapValue(x, y);
             var center = new IntVec3(x, y, z);
-            //var vec = center;
             var radial = VectorHelper.GetRadialLarge(center).GetEnumerator();
             for (int i = 0; i < actors.Length; i++)
             {
@@ -460,370 +307,29 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     radial.MoveNext();
                     current = radial.Current;
                 } while (!this.IsStandableIn(current));
-                //while (!this.IsStandableIn(current))
-                //{
-                //    radial.MoveNext();
-                //    current = radial.Current;
-                //}
                 actor.Spawn(this, current);
             }
         }
-
-        //private void DrawFrontmostBlocksSortFirst(MySpriteBatch sb, Camera camera, EngineArgs a, Vector3? playerGlobal, List<Rectangle> hiddenRects, KeyValuePair<Vector2, Chunk> chunk)
-        //{
-        //    var chunkX = (int)chunk.Key.X;
-        //    var chunkY = (int)chunk.Key.Y;
-        //    var sorted = new SortedSet<int>();
-        //    int edgeX = 0, edgeY = 0;
-        //    switch ((int)camera.Rotation)
-        //    {
-        //        case 0:
-        //            edgeX = MapSize.Default.Chunks - 1;
-        //            edgeY = MapSize.Default.Chunks - 1;
-        //            break;
-        //        case 1:
-        //            edgeX = MapSize.Default.Chunks - 1;
-        //            edgeY = 0;
-        //            break;
-        //        case 2:
-        //            edgeX = 0;
-        //            edgeY = 0;
-        //            break;
-        //        case 3:
-        //            edgeX = 0;
-        //            edgeY = MapSize.Default.Chunks - 1;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    var maxheight = this.GetMaxHeight();
-
-        //    if (chunkX == edgeX)// || chunk.Key.Y == this.Size.Chunks)
-        //    {
-        //        for (int i = 0; i < Chunk.Size; i++)
-        //            for (int j = 0; j < maxheight; j++)
-        //            {
-
-        //                //for (int j = maxheight - 1; j >= 0; j--)
-        //                {
-        //                    Cell cell;
-        //                    //Vector3 pos;
-        //                    Vector3 pos = new Vector3(Chunk.Size - 1, i, j);
-        //                    switch ((int)camera.Rotation)
-        //                    {
-        //                        case 0:
-        //                        case 1:
-        //                            pos = new Vector3(Chunk.Size - 1, i, j);
-        //                            break;
-
-        //                        //case 3:
-        //                        //    pos = new Vector3(i, Chunk.Size - 1, j);
-        //                        //    break;
-        //                        case 2:
-        //                        case 3:
-        //                            pos = new Vector3(0, i, j);
-        //                            break;
-
-        //                        //case 1:
-        //                        //    pos = new Vector3(i, 0, j);
-        //                        //    break;
-
-        //                        default:
-        //                            break;
-        //                    }
-        //                    var cellIndex = Chunk.GetCellIndex((int)pos.X, (int)pos.Y, (int)pos.Z);// Chunk.FindIndex(pos); // FASTER WITH INTS
-        //                    cell = chunk.Value[cellIndex];
-        //                    if (cell.Block.Type == Block.Types.Air)
-        //                        continue;
-        //                    if (chunk.Value.VisibleOutdoorCells.ContainsKey(cellIndex)) // TODO: SLOW!!! OPTIMIZE
-        //                        continue;
-        //                    sorted.Add(cellIndex);
-        //                    //camera.DrawCell(sb, this, chunk.Value, cell, playerGlobal, hiddenRects, a);
-        //                    //Block.Soil.Draw(sb, screenBounds, light.Sun, light.Block, this.Zoom, cd, cell); // CURRENT WORKING ONE
-        //                }
-        //            }
-        //    }
-        //    if (chunkY == edgeY)// || chunk.Key.Y == this.Size.Chunks)
-        //    {
-        //        for (int i = 0; i < Chunk.Size; i++)
-        //            for (int j = 0; j < maxheight; j++)
-        //            {
-
-        //                //for (int j = maxheight - 1; j >= 0; j--)
-        //                {
-        //                    Cell cell;
-        //                    Vector3 pos = new Vector3(i, Chunk.Size - 1, j);
-        //                    switch ((int)camera.Rotation)
-        //                    {
-        //                        case 0:
-        //                        case 3:
-        //                            pos = new Vector3(i, Chunk.Size - 1, j);
-        //                            break;
-
-        //                        //case 3:
-        //                        //    pos = new Vector3(0, i, j);
-        //                        //    break;
-
-        //                        case 2:
-        //                        case 1:
-        //                            pos = new Vector3(i, 0, j);
-        //                            break;
-
-        //                        //case 1:
-        //                        //    pos = new Vector3(Chunk.Size - 1, i, j);
-        //                        //    break;
-
-        //                        default:
-        //                            break;
-        //                    }
-        //                    //var cellIndex = Chunk.FindIndex(pos);
-        //                    var cellIndex = Chunk.GetCellIndex((int)pos.X, (int)pos.Y, (int)pos.Z);// Chunk.FindIndex(pos); // FASTER WITH INTS
-
-        //                    cell = chunk.Value[cellIndex];
-        //                    if (cell.Block.Type == Block.Types.Air)
-        //                        continue;
-        //                    if (chunk.Value.VisibleOutdoorCells.ContainsKey(cellIndex))
-        //                        continue;
-        //                    sorted.Add(cellIndex);
-        //                    //camera.DrawCell(sb, this, chunk.Value, cell, playerGlobal, hiddenRects, a);
-        //                    //Block.Soil.Draw(sb, screenBounds, light.Sun, light.Block, this.Zoom, cd, cell); // CURRENT WORKING ONE
-        //                }
-        //            }
-        //    }
-        //    foreach (var index in sorted)
-        //    {
-        //        var cell = chunk.Value.CellGrid2[index];
-        //        camera.DrawCell(sb, this, chunk.Value, cell, playerGlobal, hiddenRects, a);
-        //    }
-        //}
-
-        private void DrawFrontmostBlocks(MySpriteBatch sb, Camera camera, EngineArgs a, Vector3? playerGlobal, List<Rectangle> hiddenRects, KeyValuePair<Vector2, Chunk> chunk)
-        {
-            var chunkX = (int)chunk.Key.X;
-            var chunkY = (int)chunk.Key.Y;
-
-            int edgeX = 0, edgeY = 0;
-            switch((int)camera.Rotation)
-            {
-                case 0:
-                    edgeX = MapSize.Default.Chunks - 1;
-                    edgeY = MapSize.Default.Chunks - 1;
-                    break;
-                case 1:
-                    edgeX = MapSize.Default.Chunks - 1;
-                    edgeY = 0;
-                    break;
-                case 2:
-                    edgeX = 0;
-                    edgeY = 0;
-                    break;
-                case 3:
-                    edgeX = 0;
-                    edgeY = MapSize.Default.Chunks - 1;
-                    break;
-                default:
-                    break;
-            }
-            var maxheight = this.GetMaxHeight();
-
-            if (chunkX == edgeX)// || chunk.Key.Y == this.Size.Chunks)
-            {
-                for (int i = 0; i < Chunk.Size; i++)
-                    for (int j = 0; j < maxheight; j++)
-                {
-                    
-                    //for (int j = maxheight - 1; j >= 0; j--)
-                    {
-                        Cell cell;
-                        //Vector3 pos;
-                        var pos = new Vector3(Chunk.Size - 1, i, j);
-                        switch((int)camera.Rotation)
-                        {
-                            case 0:
-                            case 1:
-                                pos = new Vector3(Chunk.Size - 1, i, j);
-                                break;
-
-                            //case 3:
-                            //    pos = new Vector3(i, Chunk.Size - 1, j);
-                            //    break;
-                            case 2:
-                            case 3:
-                                pos = new Vector3(0, i, j);
-                                break;
-
-                            //case 1:
-                            //    pos = new Vector3(i, 0, j);
-                            //    break;
-
-                            default:
-                                break;
-                        }
-                        var cellIndex = Chunk.GetCellIndex((int)pos.X, (int)pos.Y, (int)pos.Z);// Chunk.FindIndex(pos); // FASTER WITH INTS
-                        cell = chunk.Value[cellIndex];
-                        if (cell.Block.Type == Block.Types.Air)
-                            continue;
-                        // redraw visible cells to prevent glitchy black lines
-                        // TODO: find way to prevent glitchy black lines without redrawing blocks
-                        //if (chunk.Value.VisibleOutdoorCells.ContainsKey(cellIndex)) // TODO: SLOW!!! OPTIMIZE
-                        //    continue;
-                        camera.DrawCell(sb, this, chunk.Value, cell, playerGlobal, hiddenRects, a);
-                        //Block.Soil.Draw(sb, screenBounds, light.Sun, light.Block, this.Zoom, cd, cell); // CURRENT WORKING ONE
-                    }
-                }
-            }
-            if (chunkY == edgeY)// || chunk.Key.Y == this.Size.Chunks)
-            {
-                for (int i = 0; i < Chunk.Size; i++)
-                    for (int j = 0; j < maxheight; j++)
-                {
-                   
-                    //for (int j = maxheight - 1; j >= 0; j--)
-                    {
-                        Cell cell;
-                        Vector3 pos = new Vector3(i, Chunk.Size - 1, j);
-                        switch ((int)camera.Rotation)
-                        {
-                            case 0:
-                            case 3:
-                                pos = new Vector3(i, Chunk.Size - 1, j);
-                                break;
-
-                            //case 3:
-                            //    pos = new Vector3(0, i, j);
-                            //    break;
-
-                            case 2:
-                            case 1:
-                                pos = new Vector3(i, 0, j);
-                                break;
-
-                            //case 1:
-                            //    pos = new Vector3(Chunk.Size - 1, i, j);
-                            //    break;
-
-                            default:
-                                break;
-                        }
-                        //var cellIndex = Chunk.FindIndex(pos);
-                        var cellIndex = Chunk.GetCellIndex((int)pos.X, (int)pos.Y, (int)pos.Z);// Chunk.FindIndex(pos); // FASTER WITH INTS
-
-                        cell = chunk.Value[cellIndex];
-                        if (cell.Block.Type == Block.Types.Air)
-                            continue;
-                        // redraw visible cells to prevent glitchy black lines
-                        // TODO: find way to prevent glitchy black lines without redrawing blocks
-                        //if (chunk.Value.VisibleOutdoorCells.ContainsKey(cellIndex))
-                        //    continue;
-
-                        camera.DrawCell(sb, this, chunk.Value, cell, playerGlobal, hiddenRects, a);
-                        //Block.Soil.Draw(sb, screenBounds, light.Sun, light.Block, this.Zoom, cd, cell); // CURRENT WORKING ONE
-                    }
-                }
-            }
-        }
-
-        public bool TryGetBlockObject(Vector3 global, out GameObject blockObj)
-        {
-            //return (global.GetChunk(this).TryGetBlockObject(global.ToLocal().Round(), out blockObj));
-            return (this.GetChunk(global).TryGetBlockObject(global.ToLocal().RoundXY(), out blockObj));
-
-            //return (global.GetChunk(this).TryGetBlockObject(global.Round(), out blockObj));
-        }
-        //public bool GetBlockObjectOrDefault(Vector3 global, out GameObject blockObj)
-        //{
-        //    Vector3 rnd = global.RoundXY();
-        //    Chunk chunk;
-        //    Cell cell;
-        //    //if (!Position.TryGet(this, rnd, out cell, out chunk))
-        //    if(!this.TryGetAll(rnd, out chunk, out cell))
-        //    {
-        //        blockObj = null;
-        //        return false;
-        //    }
-        //    //if (cell.TileType == Tile.Types.Farmland)
-        //    //    "test".ToConsole();
-        //    // if the block object exists, assign it and return true
-        //    if (chunk.TryGetBlockObject(rnd.ToLocal(), out blockObj))
-        //        return true;
-
-        //    // otherwise, create a new block object
-        //    if (!BlockComponent.Blocks.ContainsKey(cell.Block.Type))
-        //    {
-        //        blockObj = null;
-        //        return false;
-        //    }
-        //    return false;
-        //    //return Cell.TryGetObject(this, global, out blockObj);
-
-        //}
-
-       
-
 
         public override void DrawObjects(MySpriteBatch sb, Camera camera, SceneState scene)
         {
             foreach (KeyValuePair<Vector2, Chunk> chunk in ActiveChunks)
             {
-                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, this.MaxHeight / 2, Chunk.Bounds);  //chunk.Value.GetBounds(camera);
+                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, this.MaxHeight / 2, Chunk.Bounds); 
                 if (camera.ViewPort.Intersects(chunkBounds))
-                    chunk.Value.DrawObjects(sb, camera, Controller.Instance, PlayerOld.Instance, this, scene);//, globaldMin, globaldMax);
+                    chunk.Value.DrawObjects(sb, camera, Controller.Instance, PlayerOld.Instance, this, scene);
             }
         }
 
-        //public void DrawObjects(SpriteBatch sb, Camera camera, SceneState scene)
-        //{
-        //    Dictionary<Vector2, Chunk> copyOfActiveChunks = new Dictionary<Vector2, Chunk>(ActiveChunks);
-        //    //float globaldNear = 0, globaldFar = 1;
-        //    //foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks.OrderBy(foo => foo.Value.GetDepthFar(camera))) //Depth))
-        //    //{
-        //    //    globaldFar = Math.Min(chunk.Value.GetDepthFar(camera), globaldFar);
-        //    //    globaldNear = Math.Max(chunk.Value.GetDepthNear(camera), globaldNear);
-        //    //    //Console.WriteLine(dMin + " " + dMax);
-        //    //}
-
-        //    foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)//.OrderBy(foo => foo.Value.GetDepthFar(camera))) //Depth))
-        //    {
-                
-
-        //        //if (chunk.Value.Visible(camera))
-        //        Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, Map.MaxHeight / 2, chunk.Value.GetBounds());  //chunk.Value.GetBounds(camera);
-        //        if (camera.ViewPort.Intersects(chunkBounds))
-        //        {
-        //            //chunk.Value.DrawHighlight(camera, chunkBounds);
-        //            //float localdNear, localdFar;
-        //            //chunk.Value.GetLocalDepthRange(camera, out localdNear, out localdFar);
-
-        //            //Game1.Instance.Effect.Parameters["NearDepth"].SetValue(localdNear);
-        //            //Game1.Instance.Effect.Parameters["FarDepth"].SetValue(localdFar);
-        //            chunk.Value.DrawObjects(sb, camera, Controller.Instance, Player.Instance, this, scene);//, globaldMin, globaldMax);
-        //        }
-        //        Game1.Instance.Effect.Parameters["SourceRectangle"].SetValue(new Vector4(0, 0, 1, 1));
-        //    }
-        //    Game1.Instance.Effect.Parameters["SourceRectangle"].SetValue(new Vector4(0, 0, 1, 1));
-
-        //    //DrawTileSelection(camera);
-
-        //}
-
-        public override void DrawInterface(SpriteBatch sb, Camera camera)//, SceneState state)
+        public override void DrawInterface(SpriteBatch sb, Camera camera)
         {
             Dictionary<Vector2, Chunk> copyOfActiveChunks = new Dictionary<Vector2, Chunk>(ActiveChunks);
-            foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)//.OrderBy(foo => foo.Value.GetDepthFar(camera))) //Depth))
+            foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
             {
-
-
-                //if (chunk.Value.Visible(camera))
                 Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, this.MaxHeight / 2, Chunk.Bounds);  //chunk.Value.GetBounds(camera);
                 if (camera.ViewPort.Intersects(chunkBounds))
                 {
-                    //chunk.Value.DrawHighlight(camera, chunkBounds);
-                    //float localdNear, localdFar;
-                    //chunk.Value.GetLocalDepthRange(camera, out localdNear, out localdFar);
-
-                    //Game1.Instance.Effect.Parameters["NearDepth"].SetValue(localdNear);
-                    //Game1.Instance.Effect.Parameters["FarDepth"].SetValue(localdFar);
-                    chunk.Value.DrawInterface(sb, camera);//, scene);
+                    chunk.Value.DrawInterface(sb, camera);
                 }
                 Game1.Instance.Effect.Parameters["SourceRectangle"].SetValue(new Vector4(0, 0, 1, 1));
             }
@@ -831,39 +337,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Town.DrawUI(sb, camera);
         }
 
-
         #endregion
-        private void Chunk_VisibleChanged(object sender, EventArgs e)
-        {
-            OnVisibleChunksChanged();
-        }
-        public event EventHandler<EventArgs> VisibleChunksChanged;
-        private void OnVisibleChunksChanged()
-        {
-            VisibleChunksChanged?.Invoke(this, EventArgs.Empty);
-        }
-        public Vector2 TranslateCellToChunk(int x, int y)
-        {
-            return new Vector2((float)Math.Floor(x / (float)Chunk.Size), (float)Math.Floor(y / (float)Chunk.Size));
-        }
-
-        public Chunk FindChunkAt(int x, int y)
-        {
-            //int size = Size / Chunk.Size;
-
-            //if (x >= 0)
-            //    if (x < Size)
-            //        if (y >= 0)
-            //            if (y < Size)
-            //                return Chunks[x / Chunk.Size, y / Chunk.Size];
-
-            //Vector2 vec = new Vector2(x, y);
-            var vec = new Vector2((float)Math.Floor(x / (float)Chunk.Size), (float)Math.Floor(y / (float)Chunk.Size));
-            //Vector2 vec = new Vector2(x / Chunk.Size, y / Chunk.Size);
-            if (!ActiveChunks.ContainsKey(vec))
-                return null;
-            return ActiveChunks[vec];
-        }
+        
         public void Dispose()
         {
             this.ActiveChunks = new Dictionary<Vector2, Chunk>();
@@ -878,54 +353,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return this.Coordinates.X.ToString() + "." + this.Coordinates.Y.ToString();
         }
 
-        public void ForceSaveChunks()
-        {
-            foreach (var chunk in this.ActiveChunks.Values)
-                chunk.SaveToFile();
-        }
-        
-
         public override SaveTag Save()
         {
             return this.SaveToTag();
-            ChunkLoader.Paused = true;
-            //ChunkLighter.Paused = true;
-
-            //string directory = GlobalVars.SaveDir + @"/Worlds/" + this["Name"] + "/";// Directory.GetCurrentDirectory() + @"/Saves/";
-            //string worldPath = @"/Saves/Worlds/" + this["Name"] + "/";
-            //string fullPath = worldPath + this["Name"] + ".map.sat";
-            string mapDir = @"/Saves/Worlds/Static/" + this.World.Name + "/" + GetFolderName() + "/";
-            string fullMapDir = GlobalVars.SaveDir + @"/Worlds/Static/" + this.World.Name + "/" + GetFolderName() + "/"; // Directory.GetCurrentDirectory() + @"/Saves/";
-            string fullFileName = mapDir + GetFolderName() + ".map.sat";
-            SaveTag mapTag;
-            using (var stream = new MemoryStream())
-            {
-                var writer = new BinaryWriter(stream);
-
-                mapTag = SaveToTag();
-                //mapTag.WriteTo(writer);
-                //mapTag.WriteTo(writer);
-                mapTag.WriteWithRefs(writer);
-                if (!Directory.Exists(fullMapDir))
-                    Directory.CreateDirectory(fullMapDir);
-
-                Chunk.Compress(stream, Directory.GetCurrentDirectory() + fullFileName);
-
-                stream.Close();
-
-            }
-
-            // don't save thumbnail until i figure out how to organize regions
-            //GenerateThumbnails(fullMapDir);
-
-            foreach (KeyValuePair<Vector2, Chunk> pair in ActiveChunks)
-            {
-                //pair.Value.Save();
-                throw new Exception();
-            }
-            ChunkLoader.Paused = false;
-
-            return mapTag;
         }
 
         public SaveTag SaveToTag()
@@ -983,32 +413,25 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public override void GenerateThumbnails()
         {
-            //string fullMapDir = this.World.GetPath() + GetFolderName() + "/";
-
-            //this.GenerateThumbnails(fullMapDir);
             this.GenerateThumbnails(this.GetFullPath());
         }
-        public override void GenerateThumbnails(string fullMapDir)//DirectoryInfo mapDir)//
+        public override void GenerateThumbnails(string fullMapDir)
         {
-           // string fullMapDir = mapDir.FullName;
             if (!Directory.Exists(fullMapDir))
                 Directory.CreateDirectory(fullMapDir);
             if (ActiveChunks.Count > 0)
             {
                 using Texture2D thumbnail = GetThumbnail();
-                //using (FileStream stream = new FileStream(Directory.GetCurrentDirectory() + worldPath + "thumbnailSmall.png", FileMode.OpenOrCreate))
                 using (FileStream stream = new FileStream(fullMapDir + "thumbnailSmall.png", FileMode.OpenOrCreate))
                 {
                     thumbnail.SaveAsPng(stream, thumbnail.Width, thumbnail.Height);
                     stream.Close();
                 }
-                //using (FileStream stream = new FileStream(Directory.GetCurrentDirectory() + worldPath + "thumbnailSmaller.png", FileMode.OpenOrCreate))
                 using (FileStream stream = new FileStream(fullMapDir + "thumbnailSmaller.png", FileMode.OpenOrCreate))
                 {
                     thumbnail.SaveAsPng(stream, thumbnail.Width / 2, thumbnail.Height / 2);
                     stream.Close();
                 }
-                //using (FileStream stream = new FileStream(Directory.GetCurrentDirectory() + worldPath + "thumbnailSmallest.png", FileMode.OpenOrCreate))
                 using (FileStream stream = new FileStream(fullMapDir + "thumbnailSmallest.png", FileMode.OpenOrCreate))
                 {
                     thumbnail.SaveAsPng(stream, thumbnail.Width / 4, thumbnail.Height / 4);
@@ -1018,41 +441,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public static StaticMap Load(StaticWorld world, Vector2 coords, SaveTag mapTag)
         {
-            var map = new StaticMap(world, coords);
-            map.Name = (string)mapTag["Name"].Value;
-            map.Coordinates = new Vector2((int)mapTag["X"].Value, (int)mapTag["Y"].Value);
-
-            //map.Time = TimeSpan.FromSeconds((double)mapTag["Time"].Value);
-            //mapTag.TryGetTagValueNew("CurrentTick", ref map.CurrentTick);
-            //mapTag.TryGetTagValue<double>("CurrentTick", v => map.CurrentTick = (ulong)v);
-
-            // DONT LOAD PLAYER todo: remove player saving from map
-            SaveTag playerTag = mapTag["Player"] as SaveTag;
-            var tagList = playerTag.Value as Dictionary<string, SaveTag>;
-            //List<SaveTag> tagList = playerTag.Value as List<SaveTag>;
-            if (tagList.Count > 1)
+            var map = new StaticMap(world, coords)
             {
-                //GameObject player;
-                //Dictionary<string, SaveTag> byName = playerTag.ToDictionary();
-                //player = GameObject.Create(byName.First().Value);
-                //player.Name = byName.First().Key;
-                ////map["Player"] = player;
-                //map.SavedPlayers.Add(player);
-                foreach (var tag in tagList.Values)
-                {
-                    if (tag.Type == 0)
-                        continue;
-                    var player = GameObject.Load(tag);
-                    map.SavedPlayers.Add(player);
-                }
-            }
-
-
-            //this.Name = (string)mapTag["Name"].Value;
+                Name = (string)mapTag["Name"].Value,
+                Coordinates = new Vector2((int)mapTag["X"].Value, (int)mapTag["Y"].Value)
+            };
 
             mapTag.TryGetTagValue<string>("Size", txt => map.Size = MapSize.GetList().First(f => f.Name == txt));
-
-            //mapTag.TryGetTag("Town", tag => map.Town.Load(tag));
 
             mapTag.TryGetTag("Chunks", map.LoadChunks);
             mapTag.TryGetTag("Town", tag => map.Town.Load(tag)); // LOAD TOWN AFTER CHUNKS because references are resolved pertaining to the map
@@ -1062,218 +457,34 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             return map;
         }
-        //[Obsolete]
-        //public StaticMap(StaticWorld world, Vector2 coords, SaveTag mapTag) :this(world, coords)
-        //{
-        //    this.Name = (string)mapTag["Name"].Value;
-        //    this.Coordinates = new Vector2((int)mapTag["X"].Value, (int)mapTag["Y"].Value);
-
-        //    this.Time = TimeSpan.FromSeconds((double)mapTag["Time"].Value);
-
-        //    // DONT LOAD PLAYER todo: remove player saving from map
-        //    SaveTag playerTag = mapTag["Player"] as SaveTag;
-        //    var tagList = playerTag.Value as Dictionary<string, SaveTag>;
-        //    //List<SaveTag> tagList = playerTag.Value as List<SaveTag>;
-        //    if (tagList.Count > 1)
-        //    {
-        //        //GameObject player;
-        //        //Dictionary<string, SaveTag> byName = playerTag.ToDictionary();
-        //        //player = GameObject.Create(byName.First().Value);
-        //        //player.Name = byName.First().Key;
-        //        ////map["Player"] = player;
-        //        //map.SavedPlayers.Add(player);
-        //        foreach (var tag in tagList.Values)
-        //        {
-        //            if (tag.Type == 0)
-        //                continue;
-        //            var player = GameObject.Load(tag);
-        //            this.SavedPlayers.Add(player);
-        //        }
-        //    }
-
-
-        //    //this.Name = (string)mapTag["Name"].Value;
-
-        //    mapTag.TryGetTagValue<string>("Size", txt => this.Size = MapSize.GetList().First(f => f.Name == txt));
-
-        //    mapTag.TryGetTag("Town", tag => this.Town.Load(tag));
-
-        //    mapTag.TryGetTag("Chunks", this.LoadChunks);
-
-        //    mapTag.TryGetTag("UndiscoveredAreas", this.UndiscoveredAreaManager.Load);
-        //    mapTag.TryGetTag("_RandomOrderedChunkIndices", t => this._RandomOrderedChunkIndices = new List<int>().Load(t).ToArray());
-        //}
-        static public StaticMap Load(string filename)
-        {
-            return new StaticMap();
-        }
-        static public StaticMap Load(DirectoryInfo mapDir, StaticWorld world, Vector2 coords)
-        {
-            string filename = mapDir.FullName + @"\" + coords.X.ToString() + "." + coords.Y.ToString() + ".map.sat";
-            StaticMap map = new StaticMap(world, coords);// { DirectoryInfo = new DirectoryInfo(mapDir + @"\") };
-            DateTime start = DateTime.Now;
-            string directory = GlobalVars.SaveDir;
-            using (FileStream stream = new FileStream(filename, System.IO.FileMode.Open))
-            {
-                
-                using (MemoryStream decompressedStream = Chunk.Decompress(stream))
-                {
-                    BinaryReader reader = new BinaryReader(decompressedStream); //stream);//
-                    var watch = Stopwatch.StartNew();
-                    var mapTag = SaveTag.Read(reader);
-
-                    watch.Stop();
-                    string.Format("{0} bytes read in {1} ms", reader.BaseStream.Position, watch.ElapsedMilliseconds).ToConsole();
-
-                    map.Name = (string)mapTag["Name"].Value;
-                    map.Coordinates = new Vector2((int)mapTag["X"].Value, (int)mapTag["Y"].Value);
-
-                    //map.Time = TimeSpan.FromSeconds((double)mapTag["Time"].Value);
-                    //mapTag.TryGetTagValueNew("CurrentTick", ref map.CurrentTick);
-                    //mapTag.TryGetTagValue<double>("CurrentTick", v => map.CurrentTick = (ulong)v);
-
-                    // DONT LOAD PLAYER todo: remove player saving from map
-                    SaveTag playerTag = mapTag["Player"] as SaveTag;
-                    var tagList = playerTag.Value as Dictionary<string, SaveTag>;
-                    //List<SaveTag> tagList = playerTag.Value as List<SaveTag>;
-                    if (tagList.Count > 1)
-                    {
-                        //GameObject player;
-                        //Dictionary<string, SaveTag> byName = playerTag.ToDictionary();
-                        //player = GameObject.Create(byName.First().Value);
-                        //player.Name = byName.First().Key;
-                        ////map["Player"] = player;
-                        //map.SavedPlayers.Add(player);
-                        foreach(var tag in tagList.Values)
-                        {
-                            if (tag.Type == 0)
-                                continue;
-                            var player = GameObject.Load(tag);
-                            map.SavedPlayers.Add(player);
-                        }
-                    }
-
-
-                    map.Name = (string)mapTag["Name"].Value;
-
-                    mapTag.TryGetTagValue<string>("Size", txt => map.Size = MapSize.GetList().First(f => f.Name == txt));
-
-                    mapTag.TryGetTag("Town", tag => map.Town.Load(tag));
-
-                    mapTag.TryGetTag("Chunks", map.LoadChunks);
-
-                    mapTag.TryGetTag("UndiscoveredAreas", map.UndiscoveredAreaManager.Load);
-
-                    mapTag.TryGetTag("_RandomOrderedChunkIndices", t => map._RandomOrderedChunkIndices = new List<int>().Load(t).ToArray());
-                }
-
-
-                stream.Close();
-            }
-            map.LoadThumbnails(mapDir.FullName);
-           // Console.WriteLine("map loaded in " + (DateTime.Now - start).ToString() + " ms");
-            return map;
-        }
+        
         public override void LoadThumbnails()
         {
             this.LoadThumbnails(this.GetFullPath());
         }
-        public void LoadThumbnails(string folderPath)//DirectoryInfo mapDir)
+        public void LoadThumbnails(string folderPath)
         {
-            //try
-            //{
-                DirectoryInfo mapDir = new DirectoryInfo(folderPath);
-                List<FileInfo> thumbFiles = new List<FileInfo>();
-                var filenames = new string[] { "thumbnailSmaller.png", "thumbnailSmaller.png", "thumbnailSmallest.png" };
-
-                    foreach (var name in filenames)
-                    {
-                        var file = new FileInfo(mapDir + "/" + name);
-                        //if (!file.Exists)
-                        //    throw new FileNotFoundException("File not found", file.Name);
-                    }
-
-
-                //thumbFiles.AddRange(mapDir.GetFiles("thumbnailSmall.png"));
-                //thumbFiles.AddRange(mapDir.GetFiles("thumbnailSmaller.png"));
-                //thumbFiles.AddRange(mapDir.GetFiles("thumbnailSmallest.png"));
-
-                int i = 0;
-           //     this.Thumb = new MapThumb(this);
-                foreach (FileInfo thumbFile in thumbFiles)
-                    using (FileStream stream = new FileStream(thumbFile.FullName, FileMode.Open))
-                    {
-                        Texture2D tex = Texture2D.FromStream(Game1.Instance.GraphicsDevice, stream);
-                        this.Thumbnails[i] = tex;
-                        Thumb.Sprites[i++] = new Sprite(tex, new Rectangle[][] { new Rectangle[] { tex.Bounds } }, tex.Bounds.Center.ToVector());
-                    }
-            //}
-            //catch (Exception) { }
-        }
-        public bool LoadThumbnails2()//DirectoryInfo mapDir)
-        {
-            //try
-            //{
-            DirectoryInfo mapDir = new DirectoryInfo(this.GetFullPath());
             List<FileInfo> thumbFiles = new List<FileInfo>();
-            var filenames = new string[] { "thumbnailSmaller.png", "thumbnailSmaller.png", "thumbnailSmallest.png" };
-
-            foreach (var name in filenames)
-            {
-                var file = new FileInfo(mapDir + "/" + name);
-                if (!file.Exists)
-                    return false;
-            }
-
-
-            //thumbFiles.AddRange(mapDir.GetFiles("thumbnailSmall.png"));
-            //thumbFiles.AddRange(mapDir.GetFiles("thumbnailSmaller.png"));
-            //thumbFiles.AddRange(mapDir.GetFiles("thumbnailSmallest.png"));
 
             int i = 0;
-            //     this.Thumb = new MapThumb(this);
             foreach (FileInfo thumbFile in thumbFiles)
-                using (FileStream stream = new FileStream(thumbFile.FullName, FileMode.Open))
+                using (FileStream stream = new(thumbFile.FullName, FileMode.Open))
                 {
                     Texture2D tex = Texture2D.FromStream(Game1.Instance.GraphicsDevice, stream);
                     this.Thumbnails[i] = tex;
                     Thumb.Sprites[i++] = new Sprite(tex, new Rectangle[][] { new Rectangle[] { tex.Bounds } }, tex.Bounds.Center.ToVector());
                 }
-            //}
-            //catch (Exception) { }
-            return true;
-        }
-        public List<Chunk> GetChunkNeighbors(Chunk chunk)
-        {
-            List<Chunk> list = new List<Chunk>(4);
-            Chunk neighbor;
-            if (ActiveChunks.TryGetValue(chunk.MapCoords + new Vector2(-1, 0), out neighbor))
-                list.Add(neighbor);
-            if (ActiveChunks.TryGetValue(chunk.MapCoords + new Vector2(1, 0), out neighbor))
-                list.Add(neighbor);
-            if (ActiveChunks.TryGetValue(chunk.MapCoords + new Vector2(0, -1), out neighbor))
-                list.Add(neighbor);
-            if (ActiveChunks.TryGetValue(chunk.MapCoords + new Vector2(0, 1), out neighbor))
-                list.Add(neighbor);
-            return list;
         }
 
         public bool InitChunks(Action<string, float> callback = null)
         {
             callback?.Invoke("Post processing chunks", 0);
             var sw = Stopwatch.StartNew();
-            //// TESTING IF REMOVING THIS BREAKS ANYTHING
-            ////foreach (var ch in this.ActiveChunks.Values)
-            ////    ch.ResetVisibleCells(); //uncomment to fix incorrectly detected exposed block faces
-            //sw.Stop();
-            //string.Format("visible cells initialized in {0} ms", sw.ElapsedMilliseconds).ToConsole();
-
-            //sw.Restart();
+          
             ResetChunkEdges();
             string.Format("chunk edges reset in {0} ms", sw.ElapsedMilliseconds).ToConsole();
 
             this.Regions.Init();
-            //this.InitUndiscoveredAreas(); // because i load them from the save file afterwards, in the calling method
             callback?.Invoke("Cacheing objects", 0);
 
             this.FinishLoading();
@@ -1285,29 +496,18 @@ namespace Start_a_Town_.GameModes.StaticMaps
             yield return ("Post processing chunks", () =>
             {
                 var sw = Stopwatch.StartNew();
-                //// TESTING IF REMOVING THIS BREAKS ANYTHING
-                ////foreach (var ch in this.ActiveChunks.Values)
-                ////    ch.ResetVisibleCells(); //uncomment to fix incorrectly detected exposed block faces
-                //sw.Stop();
-                //string.Format("visible cells initialized in {0} ms", sw.ElapsedMilliseconds).ToConsole();
-
-                //sw.Restart();
                 ResetChunkEdges();
                 string.Format("chunk edges reset in {0} ms", sw.ElapsedMilliseconds).ToConsole();
-            }
-            );
+            });
 
             yield return ("Initializing Regions", () =>
             {
                 this.Regions.Init();
-            }
-            );
+            });
             yield return ("Caching objects", () =>
             {
-                //this.InitUndiscoveredAreas(); // because i load them from the save file afterwards, in the calling method
                 this.FinishLoading();
-            }
-            );
+            });
         }
         void ResetChunkEdges()
         {
@@ -1315,21 +515,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
             {
                 if (!ch.LightValid)
                 {
-                    //ResetLight(ch, () =>
-                    //{
-                    //    ch.LightValid = true;
-                    //    // only update neighbor lights if we updated this chunk's light
-                    //    UpdateChunkNeighborsLight(ch);
-                    //});
                     ResetLight(ch);
-
                     ch.LightValid = true;
                     UpdateChunkNeighborsLight(ch);
                 }
                 foreach (var vector in ch.MapCoords.GetNeighbors())
                 {
-                    Chunk neighbor;
-                    if (this.ActiveChunks.TryGetValue(vector, out neighbor))
+                    if (this.ActiveChunks.TryGetValue(vector, out Chunk neighbor))
                         neighbor.InvalidateEdges();
                 }
             }
@@ -1337,17 +529,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
         void UpdateChunkNeighborsLight(Chunk chunk)
         {
             var actives = this.GetActiveChunks();
-            Chunk neighbor;
-            //if (actives.TryGetValue(chunk.MapCoords + new Vector2(1, 0), out neighbor))
-            //    this.LightingEngine.Enqueue(neighbor.GetEdges(Edges.West));
-            //if (actives.TryGetValue(chunk.MapCoords + new Vector2(-1, 0), out neighbor))
-            //    this.LightingEngine.Enqueue(neighbor.GetEdges(Edges.East));
-            //if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, 1), out neighbor))
-            //    this.LightingEngine.Enqueue(neighbor.GetEdges(Edges.North));
-            //if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, -1), out neighbor))
-            //    this.LightingEngine.Enqueue(neighbor.GetEdges(Edges.South));
 
-            if (actives.TryGetValue(chunk.MapCoords + new Vector2(1, 0), out neighbor))
+            if (actives.TryGetValue(chunk.MapCoords + new Vector2(1, 0), out Chunk neighbor))
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.West));
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(-1, 0), out neighbor))
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.East));
@@ -1360,108 +543,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
         void ResetLight(Chunk chunk)
         {
             Queue<Vector3> cellList = chunk.ResetHeightMap();
-            //this.LightingEngine.Enqueue(cellList, callback);
             this.UpdateLight(cellList);
         }
-        //class ChunkLoadArgs
-        //{
-        //    public StaticMap Map;
-        //    public Vector2 Coords;
-        //    public ManualResetEvent ManualResetEvent;
-        //    public void WaitCallbackAddChunk(object state)//object state)
-        //    {
-        //        ChunkLoadArgs a = state as ChunkLoadArgs;
-        //        //Map.ActiveChunks.TryAdd(a.Coords, ChunkLoader.Demand(Map, a.Coords));
-        //        Map.ActiveChunks.Add(a.Coords, ChunkLoader.Demand(Map, a.Coords));
-
-        //        a.ManualResetEvent.Set();
-        //    }
-        //}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="state">Vector2 of the chunk coords</param>
-        //void WaitCallbackAddChunk(object state)//object state)
-        //{
-        //    ChunkLoadArgs a = state as ChunkLoadArgs;
-        //    this.ActiveChunks.Add(a.Coords, ChunkLoader.Demand(this, a.Coords));
-        //    a.ManualResetEvent.Set();
-        //}
-
-        private void Activate(Chunk chunk)
-        {
-            //newChunk.UpdateCellEdges();
-
-            this.ChunksToActivate.Enqueue(chunk);
-            //ActiveChunks[chunk.MapCoords] = chunk;
-            //ChunksToLight.Enqueue(chunk);
-        }
-        static public void Load(WorldArgs args) //uint seed)
-        {
-            foreach (string file in Directory.GetFiles(GlobalVars.SaveDir))
-                File.Delete(file);
-
-            StaticMap map = new StaticMap();//args);
-        }
-        public void HandleInput(InputState input)
-        {
-
-        }
-
-        //internal void DrawObjectSelection(SpriteBatch sb, Camera camera)
-        //{
-        //    //GameObject mouseover;// = Controller.Instance.Mouseover.Object as GameObject;
-        //    //if (!Controller.Instance.Mouseover.TryGet<GameObject>(out mouseover))
-        //    //{
-        //    //    Console.WriteLine(Controller.Instance.Mouseover.Object);
-        //    //    return;
-        //    //}// Console.WriteLine(mouseover);
-            
-        //    GameObject mouseover = Controller.Instance.Mouseover.Object as GameObject;
-        //   // Console.WriteLine(Controller.Instance.Mouseover.Object);
-        //    //Console.WriteLine(mouseover);
-        //    if (mouseover.IsNull())
-        //        return;
-
-            
-        //    //return;
-
-        //    if ((bool)mouseover["Sprite"]["Flash"])
-        //        return;
-
-        //    //// TODO: this is also at the chunk.drawobjects
-        //    //if ((bool)mouseover["Sprite"]["Hidden"])
-        //    //    return;
-
-        //    //Console.WriteLine(mouseover);
-        //    if (mouseover.Transform == null)
-        //        return;
-        //    //Console.WriteLine(mouseover);
-        //    Vector3 g = mouseover.Global, off = SpriteComponent.GetOffset((Vector3)mouseover["Sprite"]["Offset"], (double)mouseover["Sprite"]["OffsetTimer"]);//sprComp.GetOffset();
-        //    Rectangle bounds;
-        //    // camera.CullingCheck(g.X + off.X, g.Y + off.Y, g.Z + off.Z, sprComp.Sprite.GetBounds(), out bounds);
-        //    Sprite sprite = (Sprite)mouseover["Sprite"]["Sprite"];
-        //    camera.CullingCheck(g.X + off.X, g.Y + off.Y, g.Z + off.Z, sprite.GetBounds(), out bounds);
-        //    // TODO: do i not clip the object if out of screen bounds???!?!?
-        //    Vector2 screenLoc = new Vector2(bounds.X, bounds.Y);
-        //    Game1.Instance.Effect.Parameters["Alpha"].SetValue(0.5f);
-        //    int variation = (int)mouseover["Sprite"]["Variation"];
-        //    mouseover.DrawMouseover(sb, camera);
-        //    //sb.Draw(sprite.Texture, screenLoc,
-        //    //    sprite.SourceRects[variation][SpriteComponent.GetOrientation((int)mouseover["Sprite"]["Orientation"], camera, sprite.SourceRects[variation].Length)],// sprComp.GetOrientation(camera)], 
-        //    //    new Color(255, 255, 255, 127), 0, Vector2.Zero, camera.Zoom, SpriteEffects.None, 0);
-
-        //    Game1.Instance.Effect.Parameters["Alpha"].SetValue(1);
-
-        //}
-
+        
         public override Texture2D GetThumbnail()
         {
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;
             float zoom = 1 / 8f;
-            //Effect fx = Game1.Instance.Content.Load<Effect>("blur");
-            //int width = (int)((Engine.ChunkRadius + Engine.ChunkRadius + 1) * Chunk.Size * Tile.Width * zoom);
             int width = (int)(this.Size.Blocks * Block.Width * zoom);
             Vector2 mapCoords = this.Global;
             var camera = new Camera(width, width, x: mapCoords.X, y: mapCoords.Y, z: this.MaxHeight / 2, zoom: zoom);
@@ -1471,11 +559,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return final;
         }
 
-        static public StaticMap Create(WorldArgs a)
-        {
-            var map = new StaticMap();//a);
-            return map;
-        }
         static public StaticMap Create(StaticWorld world, Vector2 coords)
         {
             var map = new StaticMap(world, coords);//a);
@@ -1490,11 +573,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override bool Contains(GameObject obj)
         {
             return this.CachedObjects.Contains(obj);
-        }
-
-        public override List<GameObject> GetObjects()
-        {
-            return this.CachedObjects.Where(o => o.IsSpawned).ToList(); // because an object might have despawned during an earlier operation on the current frame
         }
 
         public void CacheBlockEntities()
@@ -1512,61 +590,34 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 list.AddRange(chunk.Value.GetObjects());
             this.CachedObjects = list;
         }
+        public override IEnumerable<GameObject> GetObjects()
+        {
+            return this.CachedObjects.Where(o => o.IsSpawned); // because an object might have despawned during an earlier operation on the current frame
+        }
         public override IEnumerable<GameObject> GetObjects(Vector3 min, Vector3 max)
         {
             return this.GetObjects(new BoundingBox(min, max));
-
-            //List<GameObject> list = new List<GameObject>();
-            //Vector2 minChunk, maxChunk;
-            //minChunk = min.GetChunkCoords();
-            //maxChunk = max.GetChunkCoords();
-            //for (float i = minChunk.X; i < maxChunk.X + 1; i++)
-            //    for (float j = minChunk.Y; j < maxChunk.Y + 1; j++)
-            //    {
-            //        var currentChunkCoords = new Vector2(i, j);
-            //        Chunk currentChunk;
-            //        if (!this.ActiveChunks.TryGetValue(currentChunkCoords, out currentChunk))
-            //            continue;
-            //        list.AddRange(from obj in currentChunk.GetObjects() 
-            //                      where box.Contains(obj.Global) != ContainmentType.Disjoint// == ContainmentType.Contains 
-            //                      select obj);
-            //    }
-            //return list;
         }
         public override IEnumerable<GameObject> GetObjects(BoundingBox box)
         {
-            //return (from o in this.CachedObjects where box.Contains(o.Global) != ContainmentType.Disjoint select o);
             foreach(var o in this.CachedObjects)
             {
                 var type = box.Contains(o.Global);
                 if (type != ContainmentType.Disjoint)
                     yield return o;
             }
-            //return this.GetObjects(box.Min, box.Max);
         }
 
-        //static public void GetData(StaticMap map, BinaryWriter bin)
-        //{
-        //    bin.Write(map.Name);
-        //    bin.Write(map.Coordinates.X);
-        //    bin.Write(map.Coordinates.Y);
-        //    bin.Write(map.Time.TotalSeconds);
-        //}
         public override void WriteData(BinaryWriter w)
         {
             w.Write(this.Name);
             w.Write(this.Coordinates.X);
             w.Write(this.Coordinates.Y);
-            //w.Write(this.Clock.TotalSeconds);
             w.Write(this.Size.Name);
             this.Town.Write(w);
             this.UndiscoveredAreaManager.Write(w);
         }
 
-        //static public Tuple<string, float, float, double> ReadData(BinaryReader reader)
-        //{
-        //    return Tuple.Create(reader.ReadString(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadDouble());
-        //}
         static public StaticMap ReadData(IObjectProvider net, BinaryReader r)
         {
             var map = new StaticMap
@@ -1574,21 +625,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 Net = net,
                 Name = r.ReadString(),
                 Coordinates = new Vector2(r.ReadSingle(), r.ReadSingle()),
-                //Clock = TimeSpan.FromSeconds(r.ReadDouble())
             };
             var size = r.ReadString();
             map.Size = MapSize.GetList().First(foo => foo.Name == size);
             map.Town.Read(r);
-            //map.UndiscoveredAreaManager = UndiscoveredAreaManager.Create(r);
             map.UndiscoveredAreaManager.Read(r);
             return map;
         }
 
-
-        public override void HandleEvent(GameEvent e)
-        {
-            this.Town.HandleGameEvent(e);
-        }
         public override void OnGameEvent(GameEvent e)
         {
             base.OnGameEvent(e);
@@ -1597,145 +641,38 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.UndiscoveredAreaManager.OnGameEvent(e);
         }
 
-        public bool SetCell(int x, int y, int z, Block.Types type, byte data)
-        {
-            return this.SetCell(new Vector3(x, y, z), type, data);
-        }
-        public override bool SetCell(Vector3 global, Block.Types type, byte data, int variation = 0)
-        {
-            //Cell cell = global.GetCell(this);
-            Cell cell = this.GetCell(global);
-
-            if (cell is null)
-                return false;
-            //Chunk chunk = global.GetChunk(this);
-            Chunk chunk = this.GetChunk(global);
-
-            //undoOperation = new CellOperation(net, global, cell.Type, cell.Variation, cell.Orientation);
-            cell.SetBlockType(type);
-            cell.Variation = (byte)variation;
-            //cell.Orientation = orientation;
-            cell.BlockData = data;
-            //Cell.UpdateEdges(this, global, Edges.All, VerticalEdges.All);
-            chunk.InvalidateCell(cell);
-            //chunk.Saved = false;
-            chunk.Invalidate();
-
-            //// load neighbor chunks
-            //bool neighborAdded = false;
-            //foreach(var vector in chunk.MapCoords.GetNeighbors())
-            //    neighborAdded |= this.AddChunk(new Chunk(this, vector));
-            //if (neighborAdded)
-            //    chunk.UpdateEdges(this);
-
-            return true;
-        }
         public override bool SetBlockLuminance(Vector3 global, byte luminance)
         {
             global = global.RoundXY();
-            //if (!global.TryGetAll(net.Map, out chunk, out cell))
             if (!this.TryGetAll(global, out var chunk, out var cell))
                 return false;
             if (cell.Luminance == luminance)
                 return true;
             cell.Luminance = luminance;
-            //chunk.Invalidate();//.Saved = false;
             this.InvalidateCell(global);
-            //new LightingEngine(net.Map).HandleBatchSync(new Vector3[] { global });
-            //net.SpreadBlockLight(global);
             return true;
         }
         public override bool SetBlock(Vector3 global, Block.Types type)
         {
             // WARNING!!! set block with default data and variation or retain previous values?
             return this.SetBlock(global, type, 0, 0);
-            //Cell cell = this.GetCell(global);
-
-            //if (cell.IsNull())
-            //    return false;
-
-            //Chunk chunk = this.GetChunk(global);
-            //cell.SetBlockType(type);
-            ////chunk.InvalidateCell(cell);
-            //this.InvalidateCell(global);
-            //chunk.Invalidate();
-
-            //foreach (var n in global.GetNeighbors())
-            //    this.InvalidateCell(n);
-
-            //return true;
-        }
-        void InvalidateCell(IEnumerable<Vector3> globals)
-        {
-            foreach (var g in globals)
-                this.InvalidateCell(g);
         }
         public override bool InvalidateCell(Vector3 global)
         {
-            Chunk chunk;
-            Cell cell;
-            if (!this.TryGetAll(global, out chunk, out cell))
+            if (!this.TryGetAll(global, out Chunk chunk, out Cell cell))
                 return false;
             return chunk.InvalidateCell(cell);
         }
 
-        public override bool InvalidateCell(Vector3 global, Cell cell)
-        {
-            Chunk chunk;
-            if (!this.TryGetChunk(global, out chunk))
-                return false;
-            return chunk.InvalidateCell(cell);
-        }
-
-        public StaticMapLoadingProgressToken LoadAsync()
-        {
-            var token = new StaticMapLoadingProgressToken();
-            System.Threading.Tasks.Task.Factory.StartNew(() => this.Load(token));
-            return token;
-        }
-        public void Load(StaticMapLoadingProgressToken token)
-        {
-            var size = this.Size.Chunks;
-            var max = (size*size);
-            int loaded = 0;
-            //updateProgress("Loading Chunks: " + loaded.ToString() + " of " + max.ToString(), 0);
-            token.Text = "Loading Chunks: " + loaded.ToString() + " of " + max.ToString();
-            token.Percentage = 0;
-            token.Refresh();
-
-            // load chunks
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    var pos = new Vector2(i, j);
-                    //var chunk = new Chunk(this, pos);
-                    var chunk = this.Generate(pos);
-                    this.ActiveChunks.Add(pos, chunk);
-                    loaded++;
-                    //updateProgress("Loading Chunks: " + loaded.ToString() + " of " + max.ToString(), );
-                    token.Text = "Loading Chunks: " + loaded.ToString() + " of " + max.ToString();
-                    token.Percentage = loaded / (float)max;
-                    token.Refresh();
-                }
-            }
-        }
-       
         public void GenerateWithNotificationsNew(Action<string, float> callback)
         {
-            //List<Action> tasks = new List<Action>();
             var tasks = new List<(string label, Action action)>();
             var size = this.Size.Chunks;
             var max = (size * size);
-            //int loaded = 0;
-            //callback("Initializing Chunks: " + loaded.ToString() + " of " + max.ToString(), 0);
-            //var n = 0;
             var mutatorlist = this.World.GetMutators().ToList();
             mutatorlist.ForEach(m => m.SetWorld(this.World));
             var watch = new Stopwatch();
             Dictionary<Chunk, Dictionary<Vector3, double>> gradCache = new Dictionary<Chunk, Dictionary<Vector3, double>>();
-
-            //callback("Initializing Chunks", n);
             tasks.Add(("Initializing Chunks", () =>
              {
                  watch.Start();
@@ -1744,28 +681,18 @@ namespace Start_a_Town_.GameModes.StaticMaps
                      for (int j = 0; j < size; j++)
                      {
                          var pos = new Vector2(i, j);
-                          //var chunk = this.Generate(pos);
-                          var chunk = Chunk.Create(this, pos);// i, j); //(Map.Instance.MapArgs, (int)pos.X, (int)pos.Y, Map.Instance.GetSeedArray());
-                          gradCache[chunk] = chunk.InitCells2(mutatorlist);//.FinalizeCells(Server.Random); // WARNING!
+                          var chunk = Chunk.Create(this, pos);
+                          gradCache[chunk] = chunk.InitCells2(mutatorlist);// WARNING!
                           this.ActiveChunks.Add(pos, chunk);
-                          //loaded++;
-                          //callback("Loading Chunks: " + loaded.ToString() + " of " + max.ToString(), loaded / (float)max);
                       }
                  }
                  watch.Stop();
                  string.Format("chunks initialized in {0} ms", watch.ElapsedMilliseconds).ToConsole();
              }
             ));
-            //watch.Restart();
-
-            //foreach (var chunk in this.ActiveChunks.Values)
-            //{
-            //    gradCache[chunk] = chunk.InitCells2(mutatorlist);//.FinalizeCells(Server.Random); // WARNING!
-            //}
-
-            foreach (var m in mutatorlist)//this.World.GetMutators())
+           
+            foreach (var m in mutatorlist)
             {
-                //callback("Applying " + m.Name, n++);
                 tasks.Add(("Applying " + m.Name, () =>
                 {
                     watch.Restart();
@@ -1781,20 +708,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     string.Format("{0} finished in in {1} ms", m.ToString(), watch.ElapsedMilliseconds).ToConsole();
                 }));
             }
-            //foreach (var m in mutatorlist)//this.World.GetMutators())
-            //{
-            //    foreach (var chunk in this.ActiveChunks.Values)
-            //    {
-            //        m.Finally(chunk, gradCache[chunk]);
-            //    }
-            //}
-            //string.Format("chunk {0} finalized in {1} ms", chunkvector, watch.ElapsedMilliseconds).ToConsole();
-            //watch.Stop();
-
-            //tasks.Add(("Post processing map", () => this.InitChunks(null)));
+           
             foreach (var a in this.InitChunksNew())
                 tasks.Add(a);
-            //tasks.Add(("Finalizing map", () => this.FinishCreating(null))); // initializes light and generates wild plants
             foreach (var a in this.FinishCreatingNew())
                 tasks.Add(a);
             tasks.Add(("Detecting undiscovered areas", () => this.InitUndiscoveredAreas(null)));
@@ -1805,45 +721,16 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 callback(string.Format(task.label, i, tasks.Count), i / (float)tasks.Count);
                 task.action();
             }
-
-            /* seed: "test"
-             * chunks generated in 525 ms
-                light calculated in 1996 ms
-                regions initialized in 244 ms
-                light updated in 846 ms
-             * */
-        }
-
-        public override void Generate()
-        {
-            throw new Exception();
-
-            //var loader = new ChunkLoader(this);
-            //Chunk chunk = loader.Generate(Vector2.Zero);
-            //this.AddChunk(chunk);
-            //LightingEngine engine = new LightingEngine(this)
-            //{
-            //    OutdoorBlockHandler = (ch, cell) =>
-            //    {
-            //        ch.VisibleOutdoorCells[Chunk.GetCellIndex(cell.LocalCoords)] = cell;
-            //    }
-            //};
-            //var positions = chunk.ResetHeightMap();
-            //engine.HandleBatchSync(positions);
         }
 
         public override void DrawWorld(MySpriteBatch mySB, Camera camera)
         {
-            //this.Town.DrawWorld(mySB, this, camera);
         }
         public override void DrawBeforeWorld(MySpriteBatch mySB, Camera camera)
         {
             this.Town.DrawBeforeWorld(mySB, this, camera);
         }
-        public bool ChunkNeighborsExist(Vector3 global)
-        {
-            return this.ChunkNeighborsExist(global.GetChunkCoords());
-        }
+       
         public override bool ChunkNeighborsExist(Vector2 chunkCoords)
         {
             foreach (var n in chunkCoords.GetNeighbors())
@@ -1866,35 +753,19 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 global.X >= 0 && global.X < maxside &&
                 global.Y >= 0 && global.Y < maxside &&
                 global.Z >= 0 && global.Z < maxz;
-
-
-            //return this.GetChunk(global) != null && global.Z > -1 && global.Z < this.MaxHeight;
         }
-
-
 
         public override void UpdateLight(IEnumerable<WorldPosition> positions)
         {
-            if (this.LightingEngine == null)
-                this.LightingEngine = LightingEngine.StartNew(this, a => { }, a => { });// new LightingEngine(this);
-
+            this.LightingEngine ??= LightingEngine.StartNew(this, a => { }, a => { });
             this.LightingEngine.Enqueue(positions);
         }
       
         public void UpdateLight(IEnumerable<Vector3> positions)
         {
             this.LightingEngine.HandleImmediate(positions);
-            //if (this.LightingEngine == null)
-            //    this.LightingEngine = LightingEngine.StartNew(this, a => { }, a => { });// new LightingEngine(this);
-
-            //this.LightingEngine.Enqueue(positions);
         }
         #region IMap implementation
-        
-        
-        
-        
-        
         
         public override bool TryGetAll(int gx, int gy, int gz, out Chunk chunk, out Cell cell, out int lx, out int ly)
         {
@@ -1931,29 +802,15 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.ActiveChunks;
         }
-        public override void SetLight(Vector3 global, byte sky, byte block)
-        {
-            Chunk ch = this.GetChunk(global);
-            if (ch is null)
-                return;
-            Vector3 loc = global.ToLocal();
-            ch.SetSunlight(loc, sky);
-            ch.SetBlockLight(loc, block);
-            ch.InvalidateLight(global);
-            return;
-        }
         public override void SetSkyLight(Vector3 global, byte value)
         {
             Chunk ch = this.GetChunk(global);
-            //if (ch == null)
-            //    return;
             Vector3 loc = global.ToLocal();
             ch.SetSunlight(loc, value);
             ch.InvalidateLight(global);
             foreach(var n in global.GetNeighbors())
             {
-                Chunk nchunk;
-                if (this.TryGetChunk(n, out nchunk))
+                if (this.TryGetChunk(n, out Chunk nchunk))
                     nchunk.InvalidateLight(n);
             }
             return;
@@ -1968,8 +825,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             ch.InvalidateLight(global);
             foreach (var n in global.GetNeighbors())
             {
-                Chunk nchunk;
-                if (this.TryGetChunk(n, out nchunk))
+                if (this.TryGetChunk(n, out Chunk nchunk))
                     nchunk.InvalidateLight(n);
             }
             return;
@@ -2003,13 +859,11 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.SkyDarkness;
         }
-        public override byte GetData(Vector3 global)
+        public override byte GetBlockData(Vector3 global)
         {
-            Cell cell;
-            //return global.TryGetCell(map, out cell) ? cell.BlockData : (byte)0;
-            return this.TryGetCell(global, out cell) ? cell.BlockData : (byte)0;
+            return this.TryGetCell(global, out Cell cell) ? cell.BlockData : (byte)0;
         }
-        public override byte SetData(Vector3 global, byte data = 0)
+        public override byte SetBlockData(Vector3 global, byte data = 0)
         {
             Cell cell = this.GetCell(global);
             byte old = cell.BlockData;
@@ -2023,36 +877,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return sunlight;
         }
        
-        
-        
-        
-        //public override bool IsEmpty(Vector3 global)
-        //{
-        //    global = global.Round();
-        //    if (this.GetBlock(global) != Block.Air)
-        //        return false;
-        //    var blockbox = new BoundingBox(global - (Vector3.UnitX + Vector3.UnitY) * .5f, global + Vector3.UnitZ + (Vector3.UnitX + Vector3.UnitY) * .5f);
-        //    var entities = GetObjectsAtChunk(global);
-        //    foreach (var entity in entities)
-        //    {
-        //        var entitybox = new BoundingBox(entity.Transform.Global - (Vector3.UnitX + Vector3.UnitY) * .2f, entity.Transform.Global + Vector3.UnitZ * entity.Physics.Height + (Vector3.UnitX + Vector3.UnitY) * .2f);
-        //        if (blockbox.Intersects(entitybox))
-        //            return false;
-        //    }
-        //    return true;
-        //}
-        public override bool IsExposed(Vector3 vec)
-        {
-            foreach (var n in vec.GetNeighbors())
-                if (!Block.IsBlockSolid(this, n))
-                    return true;
-            return false;
-        }
-        //[Obsolete] // why get objects from neighbor chunks as well???
         public override List<GameObject> GetObjectsAtChunk(Vector3 global)
         {
             var chunks = GetChunks(global.GetChunkCoords(), 1);
-            List<GameObject> entities = new List<GameObject>();
+            var entities = new List<GameObject>();
             foreach (var ch in chunks)
                 entities.AddRange(ch.GetObjects());
             return entities;
@@ -2065,29 +893,22 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.Town;
         }
-        //public override IWorld GetWorld()
-        //{
-        //    return this.World;
-        //}
+        
         public override int GetMaxHeight()
         {
             return MaxHeight;
         }
-        public override WorldPosition GetMouseover()
-        {
-            return this.Mouseover;
-        }
-        public override void SetMouseover(WorldPosition pos)
-        {
-            this.Mouseover = pos;
-        }
+       
         static readonly Color ColorMidnight = new(21, 27, 84);
         static readonly Color ColorMango = new(255, 128, 64);
         static readonly Color ColorBronze = new(205, 127, 50);
-        //static readonly Dictionary<float, Color> AmbientColors = new Dictionary<float, Color>() { { 0, Color.White }, { 0.5f, ColorMango }, { 1f, Color.Blue } };
-        //static readonly Dictionary<float, Color> AmbientColors = new Dictionary<float, Color>() { { 0, Color.White }, { 0.33f, Color.Red }, { 0.66f, Color.Orange }, { 1f, Color.Blue } };
+
         static readonly Dictionary<float, Color> AmbientColors = new() { { 0, Color.White }, { 0.5f, Color.Red }, { 1f, Color.Blue } };
         Color CachedAmbientColor;
+        /// <summary>
+        /// TODO: move ambient color to biome class
+        /// </summary>
+        /// <returns></returns>
         public override Color GetAmbientColor()
         {
             return this.CachedAmbientColor;
@@ -2107,13 +928,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     var t = (nightAmount - a.Key) / (c.Key - a.Key);
                     var ab = Color.Lerp(a.Value, b.Value, t);
                     var bc = Color.Lerp(b.Value, c.Value, t);
-                    return Color.Lerp(ab, bc, t);// this.AmbientColor;
+                    return Color.Lerp(ab, bc, t);
                 }
                 else if (nightAmount == c.Key)
                     return c.Value;
             }
 
-            return Color.Lime;// this.AmbientColor;
+            return Color.Lime;
         }
         public override void SetAmbientColor(Color color)
         {
@@ -2129,37 +950,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
             double nn = normal * 2 * Math.PI;
             nn = 3 * Math.Cos(nn);
             return Math.Max(0, Math.Min(1, (1 + nn) / 2f));
-            //return this.DayTimeNormal;
         }
         #endregion
-
-
-        Chunk Generate(Vector2 chunkvector)
-        {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            Chunk newChunk = Chunk.Create(this, (int)chunkvector.X, (int)chunkvector.Y); //(Map.Instance.MapArgs, (int)pos.X, (int)pos.Y, Map.Instance.GetSeedArray());
-            var mutatorlist = this.World.GetMutators().ToList();
-
-
-            var gradients = newChunk.InitCells(mutatorlist);//.FinalizeCells(Server.Random); // WARNING!
-            watch.Stop();
-            string.Format("chunk {0} generated in {1} ms", chunkvector, watch.ElapsedMilliseconds).ToConsole();
-
-            newChunk.UpdateHeightMap();
-
-            watch.Restart();
-            foreach (var m in mutatorlist)//this.World.GetMutators())
-                m.Finally(newChunk, gradients);
-            string.Format("chunk {0} finalized in {1} ms", chunkvector, watch.ElapsedMilliseconds).ToConsole();
-            watch.Stop();
-            return newChunk;
-        }
-        readonly MapRules _Rules = new MapRules() { UnloadChunks = false, 
-            SaveChunks = true//false 
-            ,
-            Autosaving = false
-        };
-        public override MapRules Rules { get { return this._Rules; ; } }
 
         internal IEnumerable<(string, Action)> FinishCreatingNew()
         {
@@ -2170,7 +962,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 watch = Stopwatch.StartNew();
                 foreach (var ch in this.ActiveChunks)
                 {
-                    ch.Value.UpdateSkyLight(true); //459
+                    ch.Value.UpdateSkyLight(true);
                 }
                 watch.Stop();
                 string.Format("light updated in {0} ms", watch.ElapsedMilliseconds).ToConsole();
@@ -2190,7 +982,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 foreach (var ch in this.ActiveChunks)
                 {
                     ch.Value.UpdateChunkBoundaries();
-                    //ch.Value.ActivateCells();
                 }
                 string.Format("chunk edges updated in {0} ms", watch.ElapsedMilliseconds).ToConsole();
             }
@@ -2198,25 +989,16 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         internal void FinishLoading()
         {
-
-            //this.FinishCreating(); //uncomment this if i want to reinitialize lighting on a loaded map
             this.CacheObjects();
-
         }
         readonly UndiscoveredAreaManager UndiscoveredAreaManager;
         internal void InitUndiscoveredAreas(Action<string, float> callback = null)
         {
             callback?.Invoke("Detecing undiscovered areas", 0);
-            //foreach (var ch in this.ActiveChunks.Values)
-            //    foreach (var c in ch.CellGrid2)
-            //        c.Discovered = false; // TEMP
             this.UndiscoveredAreaManager.Init(); // TODO: send undiscovered areas to clients instead of them initializing them themselves?
-           
         }
         internal override bool IsUndiscovered(Vector3 global)
         {
-            //return false;
-            //return this.UndiscoveredAreaManager.IsUndiscovered(global); //this.UndiscoveredAreaManager.IsUndiscovered(global);
             if (!this.UndiscoveredAreaManager.IsUndiscovered(global))
                 return false;
             foreach (var n in global.GetAdjacentLazy())
@@ -2239,48 +1021,5 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             this.Camera.CenterOn(this);
         }
-        //internal void Spawn(GameObject obj, Vector3 global, Vector3 velocity)
-        //{
-        //    obj.Global = global;
-        //    obj.Velocity = velocity;
-        //    obj.Map = this;
-        //    obj.Parent = null;
-        //    obj.Spawn(this.Net);
-        //    //PacketEntitySpawn.Send(this.Net, obj, this, global, velocity);
-        //    Packets.Send(this.Net, obj, this, global, velocity);
-        //}
-        //static StaticMap()
-        //{
-
-        //}
-        //class Packets
-        //{
-        //    static readonly int PacketSpawn;
-        //    static Packets()
-        //    {
-        //        PacketSpawn = Network.RegisterPacketHandler(Receive);
-        //    }
-        //    static public void Send(IObjectProvider net, GameObject entity, StaticMap map, Vector3 global, Vector3 velocity)
-        //    {
-        //        if (net is Client)
-        //            //throw new Exception();
-        //            return;
-        //        var w = net.GetOutgoingStream();
-        //        w.Write(PacketType.SpawnEntityNew);
-        //        w.Write(PacketSpawn);
-        //        w.Write(entity.InstanceID);
-        //        w.Write(global);
-        //        w.Write(velocity);
-        //    }
-        //    static void Receive(IObjectProvider net, BinaryReader r)
-        //    {
-        //        var client = net as Client;
-        //        var actor = client.GetNetworkObject(r.ReadInt32());
-        //        var global = r.ReadVector3();
-        //        var velocity = r.ReadVector3();
-        //        var map = client.Map as StaticMap;
-        //        map.Spawn(actor, global, velocity);
-        //    }
-        //}
     }
 }

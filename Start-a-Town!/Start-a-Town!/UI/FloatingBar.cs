@@ -10,13 +10,7 @@ namespace Start_a_Town_.UI
     {
         static public float Speed = 0.5f, Life = 300f;
         float CurrentLife;
-        public FloatingBar(GameObject obj, ProgressOld progress)
-        {
-            Object = obj;
-            Percentage = progress.Percentage;
-            CurrentLife = Life;
-        }
-
+       
         public override void Update()
         {
             Rectangle rect = Ingame.Instance.Camera.GetScreenBounds(Object.Transform.Position.Global, Object.GetComponent<SpriteComponent>("Sprite").Sprite.GetBounds());

@@ -32,8 +32,6 @@ namespace Start_a_Town_
         {
             return this.Name;
         }
-        List<GameObject> Contents = new List<GameObject>();
-        public List<Vector3> ReservedSpots = new List<Vector3>();
       
         public void CacheContents()
         {
@@ -41,7 +39,7 @@ namespace Start_a_Town_
             this.CachedContents.Clear();
             foreach (var pos in this.Positions)
             {
-                var items = this.Map.GetObjects(pos.Above());
+                var items = this.Map.GetObjects(pos.Above);
                 foreach (var item in items.Where(i => i.IsStockpilable()))
                 {
                     this.CachedContents.AddOrUpdate(item.ID, item.StackSize, (count) => count += item.StackSize);
@@ -52,7 +50,7 @@ namespace Start_a_Town_
         {
             this.Cache.Clear();
             foreach (var pos in this.Positions)
-                this.Cache.AddRange(this.Map.GetObjects(pos.Above()).Where(i => i.IsStockpilable()));
+                this.Cache.AddRange(this.Map.GetObjects(pos.Above).Where(i => i.IsStockpilable()));
         }
         public IEnumerable<GameObject> GetContentsNew()
         {
@@ -68,17 +66,7 @@ namespace Start_a_Town_
         }
         public Dictionary<int, int> CachedContents = new Dictionary<int, int>();
         List<GameObject> Cache = new();
-        public Dictionary<int, int> GetContentsDictionary()
-        {
-            Dictionary<int, int> dic = new Dictionary<int, int>();
-            var conts = this.Contents;
-            foreach (var item in conts)
-            {
-                dic.AddOrUpdate((int)item.IDType, item.StackSize, f => f + item.StackSize);
-            }
-            return dic;
-        }
-
+      
         public List<GameObject> ScanExistingStoredItems()
         {
             List<GameObject> list = new List<GameObject>();
@@ -98,9 +86,9 @@ namespace Start_a_Town_
         {
             var emptyCells =
                 this.Positions
-                .Where(p => this.Town.ReservationManager.CanReserve(p.Above()))
-                .Where(p => !this.Town.Map.GetObjects(p.Above()).Any())
-                .Select(p => p.Above());
+                .Where(p => this.Town.ReservationManager.CanReserve(p.Above))
+                .Where(p => !this.Town.Map.GetObjects(p.Above).Any())
+                .Select(p => p.Above);
             return emptyCells;
         }
         public bool CanAccept(GameObject item)
@@ -109,7 +97,7 @@ namespace Start_a_Town_
         }
         public TargetArgs GetBestHaulTarget(GameObject actor, GameObject item)
         {
-            var emptyCells = this.Positions.Where(pos => !this.Town.Map.GetObjects(pos.Above()).Any()).Select(p => p.Above());
+            var emptyCells = this.Positions.Where(pos => !this.Town.Map.GetObjects(pos.Above).Any()).Select(p => p.Above);
             foreach (var pos in emptyCells)
             {
                 if (!actor.CanReserve(pos))
@@ -123,7 +111,7 @@ namespace Start_a_Town_
             var emptyCells = new List<Vector3>();
             foreach (var pos in this.Positions)
             {
-                var above = pos.Above();
+                var above = pos.Above;
                 var itemsInCell = this.Map.GetObjects(above);
                 if (!itemsInCell.Any())
                 {
@@ -160,10 +148,10 @@ namespace Start_a_Town_
             }
             var emptyCells =
                 this.Positions
-                .Where(pos => !this.Town.Map.GetObjects(pos.Above())
+                .Where(pos => !this.Town.Map.GetObjects(pos.Above)
                     .Where(t => t != actor)
                     .Any())
-                .Select(p => p.Above()).ToList();
+                .Select(p => p.Above).ToList();
 
             foreach (var pos in emptyCells)
             {

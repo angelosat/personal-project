@@ -10,7 +10,7 @@ namespace Start_a_Town_
         {
             if (!map.IsSolid(global))
                 return false;
-            if (map.IsSolid(global.Above()))
+            if (map.IsSolid(global.Above))
                 return false;
             var cell = map.GetCell(global);
             if (cell.Material != MaterialDefOf.Soil)

@@ -577,15 +577,15 @@
     <Compile Include="Terraforming\Mutators\GradientLowRes.cs" />
     <Compile Include="Terraforming\Mutators\MutatorProperty.cs" />
     <Compile Include="Terraforming\Time.cs" />
-    <Compile Include="UI\Anchor.cs" />
-    <Compile Include="UI\Buttons\ButtonHelper.cs" />
-    <Compile Include="UI\Buttons\ButtonNew.cs" />
-    <Compile Include="UI\Buttons\ButtonBase.cs" />
+    <Compile Include="UI\Primitives\Anchor.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonHelper.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonNew.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonBase.cs" />
     <Compile Include="UI\CharacterCreation\ColorLightnessPicker.cs" />
     <Compile Include="UI\CharacterCreation\ColorPickerBox.cs" />
-    <Compile Include="UI\CheckBox\CheckBoxIcon.cs" />
+    <Compile Include="UI\Primitives\CheckBox\CheckBoxIcon.cs" />
     <Compile Include="UI\ComboBox\ComboBoxLatest.cs" />
-    <Compile Include="UI\Control.cs" />
+    <Compile Include="UI\Primitives\Control.cs" />
     <Compile Include="UI\DialogBlock.cs" />
     <Compile Include="Control\ObjectSpawnToolFromTemplate.cs" />
     <Compile Include="UI\DragDrop\DragDropSlot.cs" />
@@ -593,7 +593,7 @@
     <Compile Include="UI\DrawMode.cs" />
     <Compile Include="UI\Editor\BlockBrowser.cs" />
     <Compile Include="UI\Editor\ObjectsWindowDefs.cs" />
-    <Compile Include="UI\GroupBox.cs" />
+    <Compile Include="UI\Primitives\GroupBox.cs" />
     <Compile Include="UI\Hud\QuickButtonBar.cs" />
     <Compile Include="UI\Hud\UIToolHelp.cs" />
     <Compile Include="GameEvents\EventBlocksChanged.cs" />
@@ -925,17 +925,17 @@
     <Compile Include="GameModes\StaticMaps\Regions\RegionNode.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\RegionRoom.cs" />
     <Compile Include="Tokens\IsWorkstation.cs" />
-    <Compile Include="UI\Bars\BarSmooth.cs" />
-    <Compile Include="UI\Bars\BarSigned.cs" />
-    <Compile Include="UI\Buttons\ButtonGridGeneric.cs" />
-    <Compile Include="UI\Buttons\ButtonGridIcons.cs" />
-    <Compile Include="UI\Buttons\ButtonGridGenericNew.cs" />
+    <Compile Include="UI\Primitives\Bars\BarSmooth.cs" />
+    <Compile Include="UI\Primitives\Bars\BarSigned.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonGridGeneric.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonGridIcons.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonGridGenericNew.cs" />
     <Compile Include="Interfaces\INamed.cs" />
-    <Compile Include="UI\Buttons\ButtonTogglable.cs" />
-    <Compile Include="UI\Buttons\ButtonGrid.cs" />
-    <Compile Include="UI\Buttons\ButtonIcon.cs" />
-    <Compile Include="UI\Buttons\ButtonList.cs" />
-    <Compile Include="UI\CheckBox\CheckBoxNew.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonTogglable.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonGrid.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonIcon.cs" />
+    <Compile Include="UI\Primitives\Buttons\ButtonList.cs" />
+    <Compile Include="UI\Primitives\CheckBox\CheckBoxNew.cs" />
     <Compile Include="UI\ComboBox\ComboBoxNew.cs" />
     <Compile Include="UI\ComboBox\ComboBoxNewNew.cs" />
     <Compile Include="UI\ComboBox\ComboBoxPanel.cs" />
@@ -961,15 +961,15 @@
     <Compile Include="UI\NamePlates\NameplateManager.cs" />
     <Compile Include="UI\NamePlates\NameplatesContainer.cs" />
     <Compile Include="UI\Online\MultiplayerWindowNew.cs" />
-    <Compile Include="UI\Panels\Panel.cs" />
-    <Compile Include="UI\Panels\PanelLabeledNew.cs" />
-    <Compile Include="UI\Panels\PanelTabs.cs" />
-    <Compile Include="UI\Panels\PanelTitled.cs" />
+    <Compile Include="UI\Primitives\Panels\Panel.cs" />
+    <Compile Include="UI\Primitives\Panels\PanelLabeledNew.cs" />
+    <Compile Include="UI\Primitives\Panels\PanelTabs.cs" />
+    <Compile Include="UI\Primitives\Panels\PanelTitled.cs" />
     <Compile Include="UI\QuickButton.cs" />
     <Compile Include="UI\ScrollBars\ScrollableBoxNew.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarVNew.cs" />
     <Compile Include="UI\SelectableItemList.cs" />
-    <Compile Include="UI\SliderNew.cs" />
+    <Compile Include="UI\Primitives\Slider\SliderNew.cs" />
     <Compile Include="UI\LoadingWidget.cs" />
     <Compile Include="GameModes\StaticMaps\UI\StaticMapLoadingWidget.cs" />
     <Compile Include="Graphics\AtlasWithDepth.cs" />
@@ -1108,7 +1108,7 @@
     <Compile Include="Modules\Towns\Town.cs" />
     <Compile Include="Modules\Towns\TownsManager.cs" />
     <Compile Include="Modules\Towns\UI\UITowns.cs" />
-    <Compile Include="UI\Bars\Bar.cs" />
+    <Compile Include="UI\Primitives\Bars\Bar.cs" />
     <Compile Include="UI\CharacterCreation\ButtonColor.cs" />
     <Compile Include="Components\ColorCustomization\CharacterColors.cs" />
     <Compile Include="UI\CharacterCreation\UICharacterCustomization.cs" />
@@ -1120,16 +1120,16 @@
     <Compile Include="UI\Dialogs\DialogLoading.cs" />
     <Compile Include="UI\Editor\TerrainWindow.cs" />
     <Compile Include="UI\Context\UIContextActions.cs" />
-    <Compile Include="UI\Panels\PanelLabeled.cs" />
+    <Compile Include="UI\Primitives\Panels\PanelLabeled.cs" />
     <Compile Include="UI\RandomizeButton.cs" />
     <Compile Include="UI\Settings\CameraSettings.cs" />
     <Compile Include="UI\Settings\ControlsSettings.cs" />
     <Compile Include="UI\Settings\InterfaceSettings.cs" />
     <Compile Include="UI\Settings\VideoSettings.cs" />
     <Compile Include="UI\Settings\GraphicsSettings.cs" />
-    <Compile Include="UI\Slots\SlotCustom.cs" />
-    <Compile Include="UI\Slots\SlotGeneric.cs" />
-    <Compile Include="UI\Slots\SlotDefault.cs" />
+    <Compile Include="UI\Primitives\Slots\SlotCustom.cs" />
+    <Compile Include="UI\Primitives\Slots\SlotGeneric.cs" />
+    <Compile Include="UI\Primitives\Slots\SlotDefault.cs" />
     <Compile Include="UI\Context\ContextMenuManager.cs" />
     <Compile Include="UI\Context\ContextMenu2.cs" />
     <Compile Include="UI\Hud\HotBar.cs" />
@@ -1144,16 +1144,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UI\NamePlates\Nameplate.cs" />
-    <Compile Include="UI\Slots\SlotGridCustom.cs" />
-    <Compile Include="UI\Slots\SlotGridNew.cs" />
+    <Compile Include="UI\Primitives\Slots\SlotGridCustom.cs" />
+    <Compile Include="UI\Primitives\Slots\SlotGridNew.cs" />
     <Compile Include="UI\SpeechBubble.cs" />
     <Compile Include="UI\Tables\TableScrollable.cs" />
     <Compile Include="UI\Tables\TableScrollableCompact.cs" />
     <Compile Include="UI\WindowTargetManagementStatic.cs" />
     <Compile Include="UI\WindowTargetManagement.cs" />
     <Compile Include="UI\ScrollBars\ScrollableBox.cs" />
-    <Compile Include="UI\Slider.cs" />
-    <Compile Include="UI\Slots\SlotGrid.cs" />
+    <Compile Include="UI\Primitives\Slider\Slider.cs" />
+    <Compile Include="UI\Primitives\Slots\SlotGrid.cs" />
     <Compile Include="Net\Server\ServerUI.cs" />
     <Compile Include="UI\Hud\UnitFrame.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarV.cs" />
@@ -1162,7 +1162,7 @@
     <Compile Include="UI\FloatingText.cs" />
     <Compile Include="UI\UICameraSettings.cs" />
     <Compile Include="UI\DebugQueryWindow.cs" />
-    <Compile Include="UI\Slots\SlotWithText.cs">
+    <Compile Include="UI\Primitives\Slots\SlotWithText.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UI\SpeechBubbleOld.cs" />
@@ -1175,10 +1175,10 @@
     <Compile Include="Interfaces\ISlottable.cs" />
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="UI\ControlCollection.cs" />
-    <Compile Include="UI\IconButton.cs" />
+    <Compile Include="UI\Primitives\IconButton.cs" />
     <Compile Include="UI\Hud\Hud.cs" />
     <Compile Include="UI\HelpWindow.cs" />
-    <Compile Include="UI\TextBox.cs" />
+    <Compile Include="UI\Primitives\TextBox.cs" />
     <Compile Include="UI\RadioButton.cs" />
     <Compile Include="UI\Tooltip.cs" />
     <Compile Include="UI\TrackBar.cs" />
@@ -1193,12 +1193,12 @@
     <Compile Include="Terraforming\PerlinArgs.cs" />
     <Compile Include="UI\InteractionBar.cs" />
     <Compile Include="UI\BackgroundStyle.cs" />
-    <Compile Include="UI\CheckBox\CheckBox.cs" />
-    <Compile Include="UI\Icon.cs" />
+    <Compile Include="UI\Primitives\CheckBox\CheckBox.cs" />
+    <Compile Include="UI\Primitives\Icon.cs" />
     <Compile Include="UI\DragDrop\DragDropManager.cs" />
     <Compile Include="UI\DragDrop\IDropTarget.cs" />
-    <Compile Include="UI\PictureBox.cs" />
-    <Compile Include="UI\Label.cs" />
+    <Compile Include="UI\Primitives\PictureBox.cs" />
+    <Compile Include="UI\Primitives\Label.cs" />
     <Compile Include="UI\MainMenu\MainMenuWindow.cs" />
     <Compile Include="UI\MessageBox.cs" />
     <Compile Include="UI\Notifications\Notification.cs" />
@@ -1206,7 +1206,7 @@
     <Compile Include="UI\Settings\SettingsWindow.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UI\Slots\Slot.cs" />
+    <Compile Include="UI\Primitives\Slots\Slot.cs" />
     <Compile Include="UI\TooltipManager.cs" />
     <Compile Include="Screens\IngameMenu.cs" />
     <Compile Include="Engine\Camera\Camera.cs" />
@@ -1224,11 +1224,11 @@
     <Compile Include="Screens\Ingame.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Blocks\Block.cs" />
-    <Compile Include="UI\Buttons\Button.cs" />
+    <Compile Include="UI\Primitives\Buttons\Button.cs" />
     <Compile Include="UI\ComboBox\ComboBox.cs" />
     <Compile Include="UI\UIEventArgs.cs" />
     <Compile Include="UI\UIManager.cs" />
-    <Compile Include="UI\Window.cs" />
+    <Compile Include="UI\Primitives\Window.cs" />
     <Compile Include="UI\UICloseButton.cs" />
     <Compile Include="WorldPosition.cs" />
   </ItemGroup>
@@ -1280,11 +1280,7 @@
     <Compile Include="Modules\Towns\HousingOBSOLETE\House.cs" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Blocks\Sapling\" />
-    <Folder Include="Components\Crafting\Smelting\" />
-    <Folder Include="Components\Crafting\ToolFilters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

@@ -24,10 +24,10 @@ namespace Start_a_Town_.UI
 
         public MenuSripItemCollection Items;
 
-        public bool IsOpen;
+        public bool IsMenuOpen;
         public void Open()
         {
-            IsOpen = true;
+            IsMenuOpen = true;
         }
         public void Activate(MenuStripItem item)
         {
@@ -48,7 +48,7 @@ namespace Start_a_Town_.UI
 
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            IsOpen = false;
+            IsMenuOpen = false;
             foreach (var item in this.Items)
             {
                 if (item.Dropdown.Controls.Count > 0)

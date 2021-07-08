@@ -25,7 +25,7 @@ namespace Start_a_Town_.UI
             CB_OUTLINETILES, CH_DebugTooltips, 
             Chk_HideWalls, Chk_HideTerrain;
         TrackBar TB_OUTLINES;
-        Slider Slider_UIScale;
+        SliderNew Slider_UIScale;
         Label LBL_Outlines;
         RadioButton Rd_Game, Rd_Graphics, Rd_UI;
         List<GroupBox> Tabs;
@@ -60,7 +60,7 @@ namespace Start_a_Town_.UI
             check_fullscreen = new CheckBox("Fullscreen", new Vector2(0, Combo_Resolutions.Bottom));
             check_fullscreen.Checked = Game1.Instance.graphics.IsFullScreen;
             Label_UIScale = new Label(Vector2.Zero, "UI Scale: " + UIManager.Scale);
-            Slider_UIScale = new Slider(new Vector2(0, Label_UIScale.Bottom), Combo_Resolutions.Width, 1, 2, 0.1f, UIManager.Scale) { Name = "UI Scale: {0}" };
+            Slider_UIScale = new SliderNew(new Vector2(0, Label_UIScale.Bottom), Combo_Resolutions.Width, 1, 2, 0.1f, UIManager.Scale) { Name = "UI Scale: {0}" };
             Label lbl_delay = new Label("Tooltip Delay") { Location = Slider_UIScale.BottomLeft };
             CH_DebugTooltips = new CheckBox("Debug info in tooltips", new Vector2(0, check_fullscreen.Bottom));
             CH_DebugTooltips.Checked = GlobalVars.DebugMode;
@@ -162,7 +162,7 @@ namespace Start_a_Town_.UI
 
         void Slider_UIScale_ValueChanged(object sender, EventArgs e)
         {
-            Label_UIScale.Text = "UI Scale: "  + (sender as Slider).Value.ToString();
+            Label_UIScale.Text = "UI Scale: "  + (sender as SliderNew).Value.ToString();
         }
 
         void ok_Click(Object sender, EventArgs e)

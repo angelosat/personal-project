@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.Graphics;

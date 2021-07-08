@@ -145,9 +145,9 @@ namespace Start_a_Town_
                 var name = new Label(item.Name) { Location = box.Controls.BottomLeft };
                 box.Controls.Add(name);
                 TextBox input;
-                var slider = new Slider(box.Controls.BottomLeft, 100, item.Min, item.Max, item.Step, item.Value);
+                var slider = new SliderNew(box.Controls.BottomLeft, 100, item.Min, item.Max, item.Step, item.Value);
                 input = new TextBox(50) { Location = slider.TopRight, Text = item.Value.ToString() };
-                slider.ValueChangedAction = value => input.Text = value.ToString();
+                slider.ValueSelectAction = value => input.Text = value.ToString();
                 input.InputFunc = (txt, ch) =>
                 {
                     if (!char.IsDigit(ch))

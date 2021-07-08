@@ -18,7 +18,7 @@ namespace Start_a_Town_.UI
         static SplitStackWindow _Instance;
         static public SplitStackWindow Instance => _Instance ??= new SplitStackWindow();
 
-        Slider Sldr_Amount;
+        SliderNew Sldr_Amount;
         Action<int> SplitAction;
         Panel Panel_Input;
         TextBox Txt_Amount;
@@ -84,7 +84,7 @@ namespace Start_a_Town_.UI
             Panel_Input.Controls.Remove(Txt_Amount);
             Panel_Input.Controls.Add(Txt_Amount);
 
-            Sldr_Amount = new Slider(Panel_Input.BottomLeft, Panel_Input.Width, 1, slotTarget.Slot.StackSize, 1, amount)
+            Sldr_Amount = new SliderNew(Panel_Input.BottomLeft, Panel_Input.Width, 1, slotTarget.Slot.StackSize, 1, amount)
             {
                 ValueChangedFunc = () => Txt_Amount.Text = Sldr_Amount.Value.ToString(),
                 HoverFunc = () => "Split to: " + Sldr_Amount.Value.ToString(),
@@ -130,7 +130,7 @@ namespace Start_a_Town_.UI
             Panel_Input.Controls.Remove(Txt_Amount);
             Panel_Input.Controls.Add(Txt_Amount);
 
-            Sldr_Amount = new Slider(Panel_Input.BottomLeft, Panel_Input.Width, 1, objSlot.StackSize, 1, amount)
+            Sldr_Amount = new SliderNew(Panel_Input.BottomLeft, Panel_Input.Width, 1, objSlot.StackSize, 1, amount)
             {
                 ValueChangedFunc = () => Txt_Amount.Text = Sldr_Amount.Value.ToString(),
                 HoverFunc = () => "Split to: " + Sldr_Amount.Value.ToString(),

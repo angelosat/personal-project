@@ -76,7 +76,6 @@ namespace Start_a_Town_.UI
         public SliderNew(Vector2 location, int width, float min = 0, float max = 1, float step = 0.1f, float value = 0)
             : base(location)
         {
-
             BackgroundTexture = UIManager.DefaultTrackBarSprite;
             Width = width;
             Alpha = Color.Lerp(Color.White, Color.Transparent, 0.5f);

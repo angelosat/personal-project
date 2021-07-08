@@ -159,7 +159,6 @@ namespace Start_a_Town_.Net
         {
             return Players.GetList();
         }
-        static public event EventHandler OnPlayerConnect, OnPlayersChanged;
 
         static public RandomThreaded Random;
 
@@ -1213,41 +1212,7 @@ namespace Start_a_Town_.Net
 
             Random = new RandomThreaded(Instance.Map.Random);
         }
-        [Obsolete]
-        public void UnloadChunk(Vector2 chunkPos)
-        {
-            var activeChunks = Instance.Map.GetActiveChunks();
-
-            if (!activeChunks.TryGetValue(chunkPos, out Chunk chunk))
-                return;
-
-            // check distance of chunk from every player
-            //if (Players.GetList().Any(pl => Vector2.Distance(chunkPos, pl.Character.Global.GetChunk(this.Map).MapCoords) <= Engine.ChunkRadius))
-            //    return;
-
-            foreach (var obj in chunk.GetObjects())
-                //Sync // don't sync dispose cause client will dispose object when it receives the unload chunk packet
-                this.DisposeObject(obj);
-
-            chunk = activeChunks[chunkPos];
-            activeChunks.Remove(chunkPos);
-
-            if (!chunk.Saved)
-                this.ChunkLoader.ScheduleForSaving(chunk);
-        }
-
-        readonly ChunkLoader ChunkLoader;
-
-        private static void HandleLoadedChunk(Chunk ch)
-        {
-            var actives = Instance.Map.GetActiveChunks();
-            // TODO: did we load an existing chunk by error?
-            if (actives.ContainsKey(ch.MapCoords))
-                return;
-            InstantiateChunk(ch);
-            Instance.ChunksToActivate.Enqueue(ch);
-        }
-        
+      
         private static void AddChunk(Chunk chunk)
         {
             var actives = Instance.Map.GetActiveChunks();
@@ -1315,8 +1280,6 @@ namespace Start_a_Town_.Net
             {
                 if (chunk.Saved)
                     continue;
-
-                Instance.ChunkLoader.ScheduleForSaving(chunk);
             }
         }
 

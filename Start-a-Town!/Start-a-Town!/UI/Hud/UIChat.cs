@@ -16,7 +16,7 @@ namespace Start_a_Town_.UI
         readonly GroupBox BoxButtons;
         public ConsoleBoxAsync Console;
         readonly Panel Panel_Text, Panel_Input;
-        readonly Slider Sldr_Opacity;
+        readonly SliderNew Sldr_Opacity;
         readonly Stack<string> History = new(16);
         int HistoryIndex;
         readonly Dictionary<Control, float> Timers = new();
@@ -85,7 +85,7 @@ namespace Start_a_Town_.UI
                 HistoryNextPrev = this.ChatHistory
             };
 
-            Sldr_Opacity = new Slider(this.Label_Title.TopRight, width: 100, min: 0, max: 100, step: 1, value: Console.Opacity * 100) { Name = "Opacity", ValueChangedFunc = Sldr_Opacity_ValueChanged };
+            Sldr_Opacity = new SliderNew(this.Label_Title.TopRight, width: 100, min: 0, max: 100, step: 1, value: Console.Opacity * 100) { Name = "Opacity", ValueChangedFunc = Sldr_Opacity_ValueChanged };
 
             Panel_Input.Controls.Add(TextBox);
             this.BoxButtons = new GroupBox();

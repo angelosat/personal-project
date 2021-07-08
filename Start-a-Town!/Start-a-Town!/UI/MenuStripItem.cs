@@ -31,7 +31,7 @@ namespace Start_a_Town_.UI
         public override void OnMouseEnter()
         {
             base.OnMouseEnter();
-            if(Parent.IsOpen)
+            if(Parent.IsMenuOpen)
             Parent.Activate(this);
         }
     }

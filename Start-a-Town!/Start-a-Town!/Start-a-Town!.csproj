@@ -1115,7 +1115,6 @@
     <Compile Include="UI\WindowTargetManagementStatic.cs" />
     <Compile Include="UI\WindowTargetManagement.cs" />
     <Compile Include="UI\ScrollBars\ScrollableBox.cs" />
-    <Compile Include="UI\Primitives\Slider\Slider.cs" />
     <Compile Include="UI\Primitives\Slots\SlotGrid.cs" />
     <Compile Include="Net\Server\ServerUI.cs" />
     <Compile Include="UI\Hud\UnitFrame.cs" />

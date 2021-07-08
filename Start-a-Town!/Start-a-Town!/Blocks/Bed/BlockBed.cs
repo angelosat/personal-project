@@ -256,10 +256,7 @@ namespace Start_a_Town_
             map.RemoveBlockEntity(bottom);
             map.Town.RemoveUtility(Utility.Types.Sleeping, top);
         }
-        protected override void OnRemove(IMap map, Vector3 global)
-        {
-            map.Town.RemoveUtility(Utility.Types.Sleeping, this.GetCenter(map, global));
-        }
+        
         public override IntVec3 GetCenter(byte data, Vector3 global)
         {
             return global + GetPartsDic(data)[Part.Top];

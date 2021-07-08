@@ -11,7 +11,7 @@ namespace Start_a_Town_.UI
     {
         ConsoleBoxAsync Box_Text;
         Panel Panel_Text, Panel_Input;
-        Slider Sldr_Opacity;
+        SliderNew Sldr_Opacity;
 
         Dictionary<Control, float> Timers;
         public TextBox TextBox;
@@ -74,7 +74,7 @@ namespace Start_a_Town_.UI
 
             Timers = new Dictionary<Control, float>();
 
-            Sldr_Opacity = new Slider(this.Label_Title.TopRight, width: 100, min: 0, max: 100, step: 1, value: Box_Text.Opacity * 100) { Name = "Opacity" };
+            Sldr_Opacity = new SliderNew(this.Label_Title.TopRight, width: 100, min: 0, max: 100, step: 1, value: Box_Text.Opacity * 100) { Name = "Opacity" };
             Sldr_Opacity.ValueChanged += new EventHandler<EventArgs>(Sldr_Opacity_ValueChanged);
 
             Panel_Input.Controls.Add(TextBox);

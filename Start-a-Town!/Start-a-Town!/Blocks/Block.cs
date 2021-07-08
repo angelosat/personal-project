@@ -494,7 +494,6 @@ namespace Start_a_Town_
         {
             map.RemoveBlockNew(global, notify);
         }
-        protected virtual void OnRemove(IMap map, Vector3 global) { }
         
         public void BlockBelowChanged(IMap map, Vector3 global)
         {

@@ -110,7 +110,7 @@ namespace Start_a_Town_.Net
                 switch (type)
                 {
                     case "time":
-                        throw new Exception();
+                        throw new NotImplementedException();
                         int t = int.Parse(p[2]);
                         foreach (var ch in this.Server.Map.GetActiveChunks())
                             ch.Value.LightCache.Clear();

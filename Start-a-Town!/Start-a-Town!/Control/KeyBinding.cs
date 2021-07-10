@@ -9,7 +9,6 @@ using Start_a_Town_.Components;
 namespace Start_a_Town_
 {
     public enum PlayerActions { LB, Interact, PickUp, Activate, Drop, Throw, Seathe }
-    [Obsolete]
     public class PlayerInput
     {
         static public Dictionary<PlayerActions, Keys> KeyBindings = new Dictionary<PlayerActions, Keys>(){

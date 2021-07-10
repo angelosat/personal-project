@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
-using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_.UI
 {
@@ -12,7 +10,6 @@ namespace Start_a_Town_.UI
     {
         Panel Graphic;
         bool Paused;
-        string Text;
         float Timer;
         float Duration;
         const float FadeSpeed = 10;
@@ -50,7 +47,6 @@ namespace Start_a_Town_.UI
         {
             this.Layer = LayerTypes.Speechbubbles;
             this.Owner = obj;
-            this.Text = text;
             this.AutoSize = true;
             Graphic = new Panel() { Color = Color.White, MouseThrough = true };
             this.Duration = Math.Max(text.Length * Engine.TicksPerSecond / 3, Engine.TicksPerSecond * 3);//10);

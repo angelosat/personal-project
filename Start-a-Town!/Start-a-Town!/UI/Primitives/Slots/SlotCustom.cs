@@ -40,7 +40,6 @@ namespace Start_a_Town_.UI
             UIManager.DrawStringOutlined(sb, CornerTextFunc(Tag), new Vector2(SlotCustom<T>.DefaultHeight), Vector2.One, UIManager.FontBold);
         }
 
-        public event EventHandler<EventArgs> ItemChanged;
         T LastObject = default;
         public override void Update()
         {

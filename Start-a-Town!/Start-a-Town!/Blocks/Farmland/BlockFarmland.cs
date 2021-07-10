@@ -22,10 +22,6 @@ namespace Start_a_Town_.Blocks
             this.Variations.Add(this.Textures[0]);
         }
 
-        public override BlockEntity CreateBlockEntity()
-        {
-            return new BlockFarmlandEntity();
-        }
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {
             return this.Textures[data];
@@ -54,14 +50,6 @@ namespace Start_a_Town_.Blocks
             placer.Place(map, global);
             map.Town.ZoneManager.GetZoneAt(global)?.Invalidate();
             obj.StackSize--;
-        }
-        
-        static public void Fertilize(MapBase map, Vector3 global, float potency)
-        {
-            var entity = map.GetBlockEntity(global) as BlockFarmland.BlockFarmlandEntity;
-            if (entity == null)
-                throw new Exception();
-            entity.Sprout.Value -= entity.Sprout.Max * potency;
         }
     }
 }

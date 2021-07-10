@@ -6,7 +6,6 @@ using System.Diagnostics;
 
 namespace Start_a_Town_.Net
 {
-    [Obsolete]
     public enum PacketType
     {
         PlayerConnecting = 1, PlayerDisconnected, PlayerEnterWorld, AssignCharacter, RequestConnection,

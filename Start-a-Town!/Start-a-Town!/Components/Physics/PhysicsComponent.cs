@@ -473,19 +473,6 @@ namespace Start_a_Town_.Components
                     new Label("Weight: ") { TextColor = Color.LightGray },
                     new Label(() => $"{this.Weight * parent.StackSize} kg ({this.Weight} kg x{parent.StackSize})") { TextColor = Color.LightGray })
                 );
-            return;
-
-            if (this.Size != ObjectSize.Immovable)
-            {
-                var lbl = new Label("Weight: ") { Location = tooltip.Controls.BottomLeft, TextColorFunc = () => Color.LightGray };
-                Color color = Color.LightGray;
-                if (parent.Net.GetPlayer().ControllingEntity is GameObject actor)
-                {
-                    color = HaulComponent.CheckWeight(actor, parent) ? Color.Lime : Color.Red;
-                }
-                var lblvalue = new Label(this.Weight.ToString()) { Location = lbl.TopRight, TextColorFunc = () => color };
-                tooltip.Controls.Add(lbl, lblvalue);
-            }
         }
         public override void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> list)
         {
@@ -544,15 +531,6 @@ namespace Start_a_Town_.Components
         public static Vector3 Decelerate(Vector3 velocity)
         {
             return velocity *= FrictionFactor;// .5f;
-            if (velocity.X > 0)
-                velocity.X = Math.Max(0, velocity.X - Friction);
-            else
-                velocity.X = Math.Min(0, velocity.X + Friction);
-            if (velocity.Y > 0)
-                velocity.Y = Math.Max(0, velocity.Y - Friction);
-            else
-                velocity.Y = Math.Min(0, velocity.Y + Friction);
-            return velocity;
         }
     }
 }

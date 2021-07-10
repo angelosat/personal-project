@@ -812,7 +812,6 @@ namespace Start_a_Town_.UI
         }
 
         public virtual bool AutoSize { get; set; }
-        public event EventHandler<EventArgs> ControlAdded, ControlRemoved;
 
         internal virtual void OnControlAdded(Control control)
         {

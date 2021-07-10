@@ -9,7 +9,6 @@ namespace Start_a_Town_
         readonly List<Actor> Participants = new(2);
 
         public int Step;
-        internal bool Finished;
 
         public ConversationNew(Actor initiator, params Actor[] otherParticipants)
         {

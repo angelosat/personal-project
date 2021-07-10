@@ -15,7 +15,6 @@ namespace Start_a_Town_.UI
                 return this.Tag.Object;
             return null;
         }
-        public event EventHandler<EventArgs> ItemChanged;
         GameObject LastObject = null;
         int LastStackSize = 0;
         public Func<GameObject, bool> DragDropCondition = o => true;

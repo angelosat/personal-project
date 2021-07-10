@@ -27,10 +27,7 @@ namespace Start_a_Town_.Blocks.Chest
                     ToolAbilityDef.Building);
             Towns.Constructions.ConstructionsManager.Furniture.Add(this.Recipe);
         }
-        public override BlockRecipe GetRecipe()
-        {
-            return this.Recipe;
-        }
+      
         public override IEnumerable<byte> GetCraftingVariations()
         {
             var vars = (from mat in Material.Registry.Values

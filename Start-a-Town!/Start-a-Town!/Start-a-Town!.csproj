@@ -195,6 +195,8 @@
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />
     <Compile Include="Blocks\LiduidFlowProcess.cs" />
+    <Compile Include="Blocks\Workstations\BlockCarpentryEntity.cs" />
+    <Compile Include="Blocks\Workstations\BlockPlantProcessingEntity.cs" />
     <Compile Include="Components\AI\Memory.cs" />
     <Compile Include="Components\AI\Personality\TraitDefOf.cs" />
     <Compile Include="Components\Animations\AnimationBlending.cs" />
@@ -381,9 +383,6 @@
     <Compile Include="Blocks\Prefab\BlockPrefabEntity.cs" />
     <Compile Include="Blocks\Prefab\BlockPrefab.cs" />
     <Compile Include="Blocks\Construction\BlockDesignationEntity.cs" />
-    <Compile Include="Blocks\Workstations\Carpentry\BlockCarpentryBench.cs" />
-    <Compile Include="Blocks\Workstations\Carpentry\BlockCarpentryEntity.cs" />
-    <Compile Include="Blocks\Workstations\Processing\BlockPlantProcessingEntity.cs" />
     <Compile Include="Components\AI\Threat.cs" />
     <Compile Include="Components\Crafting\Defs\ReactionClass.cs" />
     <Compile Include="Components\Crafting\New\BuildProperties.cs" />
@@ -391,11 +390,9 @@
     <Compile Include="Components\Crafting\ReagentFilters\ReagentFilterItem.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\ReagentFilterMaterial.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionCraftNew.cs" />
-    <Compile Include="Blocks\Workstations\Kitchen\BlockKitchenEntity.cs" />
-    <Compile Include="Blocks\Workstations\Processing\BlockPlantProcessing.cs" />
+    <Compile Include="Blocks\Workstations\BlockKitchenEntity.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorDomain.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorSelector.cs" />
-    <Compile Include="Blocks\Workstations\Workbench\IWorkplace.cs" />
     <Compile Include="Components\Inventory\EquipmentUI.cs" />
     <Compile Include="Components\Inventory\PacketEditAppearance.cs" />
     <Compile Include="Components\Inventory\PacketInventoryEquip.cs" />
@@ -650,7 +647,7 @@
     <Compile Include="Modules\AI\NpcLogUINew.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.cs" />
     <Compile Include="Modules\Crafting\CraftOrderNew.cs" />
-    <Compile Include="Blocks\Workstations\Workbench\BlockWorkbenchEntity.cs" />
+    <Compile Include="Blocks\Workstations\BlockWorkbenchEntity.cs" />
     <Compile Include="Blocks\Chest\BlockChest.cs" />
     <Compile Include="Blocks\Chest\ContainerUI.cs" />
     <Compile Include="Blocks\Chest\BlockChestEntity.cs" />
@@ -705,7 +702,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Blocks\Farmland\BlockFarmland.cs" />
-    <Compile Include="Blocks\Farmland\BlockFarmlandEntity.cs" />
     <Compile Include="Blocks\IBlockMaterial.cs" />
     <Compile Include="Blocks\IBlockState.cs" />
     <Compile Include="BoundingCylinder.cs" />
@@ -1119,7 +1115,6 @@
     <Compile Include="UI\SplitStackWindow.cs" />
     <Compile Include="Helpers\VectorHelper.cs" />
     <Compile Include="WindowsHook.cs" />
-    <Compile Include="Timer2.cs" />
     <Compile Include="Terraforming\Cell.cs" />
     <Compile Include="Screens\LoadingScreen.cs" />
     <Compile Include="Interfaces\ISlottable.cs" />

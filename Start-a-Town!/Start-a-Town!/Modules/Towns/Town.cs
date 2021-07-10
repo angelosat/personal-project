@@ -368,21 +368,6 @@ namespace Start_a_Town_.Towns
                 comp.DrawUI(sb, this.Map, camera);
         }
 
-        internal void SelectPosition(UI.UISelectedInfo uISelectedInfo, Vector3 vector3)
-        {
-            var queries = this.Map.Town.QueryPosition(vector3);
-            if (this.Map.IsHidden(vector3))
-            {
-                uISelectedInfo.SetName("Unknown block");
-            }
-            else
-            {
-                var block = this.Map.GetBlock(vector3);
-                uISelectedInfo.SetName(block.Name);
-                block.Select(uISelectedInfo, this.Map, vector3);
-            }
-        }
-
         internal UIQuickMenu ToggleQuickMenu()
         {
             if(this.QuickMenu == null)

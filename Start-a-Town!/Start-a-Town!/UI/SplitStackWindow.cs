@@ -24,7 +24,7 @@ namespace Start_a_Town_.UI
         TextBox Txt_Amount;
         Button Btn_Split;
         new public GameObjectSlot Tag;
-        GameObject Parent;
+        GameObject Entity;
         GameObjectSlot Copy;
         SplitStackWindow()
         {
@@ -69,7 +69,7 @@ namespace Start_a_Town_.UI
             this.SplitAction = (a) =>
             {
                 int count = short.Parse(Txt_Amount.Text);
-                DragDropManager.Create(new DragDropSlot(Parent, slotTarget, new TargetArgs(new GameObjectSlot(slotTarget.Slot.Object.Clone(), count)), DragDropEffects.Move | DragDropEffects.Link));
+                DragDropManager.Create(new DragDropSlot(Entity, slotTarget, new TargetArgs(new GameObjectSlot(slotTarget.Slot.Object.Clone(), count)), DragDropEffects.Move | DragDropEffects.Link));
             };
           
             this.Tag = slotTarget.Slot;
@@ -107,13 +107,13 @@ namespace Start_a_Town_.UI
             return this.Show(objSlot, parent, (amount) =>
                 {
                     int count = Int16.Parse(Txt_Amount.Text);
-                    DragDropManager.Create(new DragDropSlot(Parent, objSlot, new GameObjectSlot(objSlot.Object.Clone(), count), DragDropEffects.Move | DragDropEffects.Link));
+                    DragDropManager.Create(new DragDropSlot(Entity, objSlot, new GameObjectSlot(objSlot.Object.Clone(), count), DragDropEffects.Move | DragDropEffects.Link));
                 });
         }
         public bool Show(GameObjectSlot objSlot, GameObject parent, Action<int> splitAction)
         {
             this.SplitAction = splitAction;
-            Parent = parent;
+            Entity = parent;
             if (objSlot == null)
                 return false;
             if (objSlot.Object == null)

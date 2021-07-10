@@ -87,10 +87,7 @@ namespace Start_a_Town_
             Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
 
         }
-        public override BlockRecipe GetRecipe()
-        {
-            return this.Recipe;
-        }
+       
         public override LootTable GetLootTable(byte data)
         {
             var table =

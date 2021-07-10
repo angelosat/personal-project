@@ -21,11 +21,6 @@ namespace Start_a_Town_
             var materialQuantity = block.Ingredient.Amount;
             var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
             actor.Net.PopLoot(obj, global, Vector3.Zero);
-            return;
-            foreach (var mat in this.Materials)
-            {
-                actor.Net.PopLoot(mat.Create(), global, Vector3.Zero);
-            }
         }
         internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {

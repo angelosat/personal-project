@@ -414,11 +414,6 @@ namespace Start_a_Town_
             return list;
         }
 
-        public virtual BlockRecipe GetRecipe()
-        {
-            return this.Recipe;
-        }
-        
         public LootTable LootTable { get; set; }
 
         public virtual byte ParseData(string data)
@@ -774,7 +769,6 @@ namespace Start_a_Town_
             return null;
         }
 
-        [Obsolete]
         public virtual List<Interaction> GetAvailableTasks(MapBase map, Vector3 global)
         {
             return new List<Interaction>();
@@ -1015,18 +1009,7 @@ namespace Start_a_Town_
             foreach (var p in this.GetOperatingPositions(cell))
                 yield return p + global;
         }
-        [Obsolete]
-        internal virtual void Select(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
-        {
-            throw new Exception();
-            //return;
-            var node = map.Regions.GetNodeAt(vector3);
-            if (node == null)
-                return;
-            uISelectedInfo.AddInfo(new Label(node.ToString()));
-            uISelectedInfo.AddInfo(new Label(node.Region.ToString()));
-            uISelectedInfo.AddInfo(new Label(node.Region.Room.ToString()));
-        }
+       
         public virtual IEnumerable<(string name, Action action)> GetInfoTabs() { yield break; }
         internal virtual void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
@@ -1038,17 +1021,7 @@ namespace Start_a_Town_
             info.AddInfo(new Label(node.Region.ToString()));
             info.AddInfo(new Label(node.Region.Room.ToString()));
         }
-        [Obsolete]
-        internal void GetAdvancedInfo(Control container, MapBase map, Vector3 global)
-        {
-            throw new Exception();
-            var node = map.Regions.GetNodeAt(global);
-            if (node == null)
-                return;
-            container.AddControls(new Label(node.ToString()));
-            container.AddControls(new Label(node.Region.ToString()));
-            container.AddControls(new Label(node.Region.Room.ToString()));
-        }
+      
         internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
         {
             var e = map.GetBlockEntity(vector3);
@@ -1083,36 +1056,5 @@ namespace Start_a_Town_
                     c.DrawSelected(sb, cam, map, global);
             this.OnDrawSelected(sb, cam, map, global);
         }
-
-        public IEnumerable<BlockRecipe.ProductMaterialPair> GetAllValidProductMaterialPairs()
-        {
-            if (this.Ingredient.Material != null)
-            {
-                yield return new BlockRecipe.ProductMaterialPair(this, this.Ingredient.Material);
-            }
-            else if (this.Ingredient.MaterialType != null)
-            {
-                foreach(var m in this.Ingredient.MaterialType.SubTypes)
-                    yield return new BlockRecipe.ProductMaterialPair(this, m);
-            }
-            else if (this.Ingredient.ItemDef != null)
-            {
-                if (this.Ingredient.MaterialType != null && this.Ingredient.ItemDef.DefaultMaterialType != this.Ingredient.MaterialType)
-                    throw new Exception();
-                if (this.Ingredient.Material != null)
-                {
-                    if(!this.Ingredient.ItemDef.DefaultMaterialType.SubTypes.Contains(this.Ingredient.Material))
-                        throw new Exception();
-                    yield return new BlockRecipe.ProductMaterialPair(this, this.Ingredient.Material);
-                }
-                else
-                {
-                    foreach (var m in this.Ingredient.ItemDef.DefaultMaterialType.SubTypes)
-                        yield return new BlockRecipe.ProductMaterialPair(this, m);
-                }
-            }
-        }
-
-
     }
 }

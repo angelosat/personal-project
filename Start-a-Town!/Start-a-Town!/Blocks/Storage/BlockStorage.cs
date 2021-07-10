@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.UI;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Blocks;
 
@@ -28,10 +27,7 @@ namespace Start_a_Town_
                     ToolAbilityDef.Building);
             Towns.Constructions.ConstructionsManager.Furniture.Add(this.Recipe);
         }
-        public override BlockRecipe GetRecipe()
-        {
-            return this.Recipe;
-        }
+       
         public override IEnumerable<byte> GetCraftingVariations()
         {
             var vars = (from mat in Material.Registry.Values
@@ -55,23 +51,6 @@ namespace Start_a_Town_
             var binEntity = actor.Map.GetBlockEntity(target.Global) as BlockStorageEntity;
             binEntity.Insert(dropped);
             actor.ClearCarried();
-        }
-
-        StorageContentsUI ContentsUI = new StorageContentsUI();
-        internal override void Select(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
-        {
-            uISelectedInfo.AddTabAction("Contents", () => ShowContents(map, vector3));
-        }
-
-        private void ShowContents(MapBase map, Vector3 vector3)
-        {
-            var ent = map.GetBlockEntity(vector3) as BlockStorageEntity;
-            this.ContentsUI.Refresh(ent);
-            var win = this.ContentsUI.GetWindow();
-            if (win == null)
-                this.ContentsUI.ToWindow("Contents").Show();
-            else if (!ContentsUI.IsOpen)
-                win.Show();
         }
     }
 }

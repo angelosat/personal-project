@@ -17,7 +17,6 @@ namespace Start_a_Town_.UI
 
     public class TextBox : Label
     {
-        Timer2 CursorTimer;
         int _SelectionStart = 0;
         bool CursorVisible;
         public Func<char, bool> InputFilter = c => true;
@@ -27,6 +26,7 @@ namespace Start_a_Town_.UI
         public Action<KeyPressEventArgs> EscapeFunc = (e) => { };
         public Action<string> TextChangedFunc = txt => { };
         public int MaxLength = int.MaxValue;
+        int Timer = TimerMax;
 
         protected override void OnTextChanged()
         {
@@ -48,8 +48,6 @@ namespace Start_a_Town_.UI
         public TextBox() : base()
         { 
             Active = true;
-            CursorTimer = new Timer2(Engine.TicksPerSecond / 2f);
-            CursorTimer.Tick += new EventHandler<EventArgs>(CursorTimer_Tick);
             this.BackgroundColor = Color.Black * 0.5f;
             this.BackgroundColor = Color.White * .1f;
     }
@@ -66,8 +64,20 @@ namespace Start_a_Town_.UI
             this.Width = width;
             this.Height = DefaultHeight;
         }
-
-        void CursorTimer_Tick(object sender, EventArgs e)
+        readonly static int TimerMax = (int)(Engine.TicksPerSecond / 2f);
+        public override void Update()
+        {
+            base.Update();
+            if (!this.Enabled)
+                return;
+            this.Timer++;
+            if (this.Timer <= 0)
+            {
+                CursorTimer_Tick();
+                this.Timer = TimerMax;
+            }
+        }
+        void CursorTimer_Tick()
         {
             CursorVisible = !CursorVisible;
             this.Invalidate();
@@ -115,13 +125,12 @@ namespace Start_a_Town_.UI
                 {
                     if (!old)
                     {
-                        CursorTimer.Start();
+                        this.Timer = TimerMax;
                         CursorVisible = true;
                     }
                 }
                 else
                 {
-                    CursorTimer.Stop();
                     CursorVisible = false;
                 }
                 this.Invalidate();
@@ -140,7 +149,6 @@ namespace Start_a_Town_.UI
         public override void Dispose()
         {
             Texture.Dispose();
-            CursorTimer.Stop();
         }
 
         public void AppendText(string text)

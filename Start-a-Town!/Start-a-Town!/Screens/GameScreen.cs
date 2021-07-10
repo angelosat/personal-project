@@ -14,7 +14,6 @@ namespace Start_a_Town_.Rooms
         public float LoadingPercentage;
         public SpriteBatch spriteBatch;
         public UIManager WindowManager;
-        public List<Timer2> Timers;
         public ToolManager ToolManager;
         public virtual Camera Camera
         {
@@ -29,7 +28,6 @@ namespace Start_a_Town_.Rooms
         {
             this.WindowManager = new UIManager();
             KeyHandlers = new Stack<IKeyEventHandler>();
-            Timers = new List<Timer2>();
         }
 
         public virtual void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
@@ -143,9 +141,6 @@ namespace Start_a_Town_.Rooms
         }
         virtual public void Update(Game1 game, GameTime gt)
         {
-            List<Timer2> timers = Timers.ToList();
-            foreach (Timer2 timer in timers)
-                timer.Update(gt);
         }
         abstract public void Draw(SpriteBatch sb);
 

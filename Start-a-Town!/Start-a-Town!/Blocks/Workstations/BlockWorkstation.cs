@@ -39,10 +39,6 @@ namespace Start_a_Town_
             return Activator.CreateInstance(this.BlockEntityType) as BlockEntity;
         }
 
-        public override BlockRecipe GetRecipe()
-        {
-            return this.Recipe;
-        }
         public override Material GetMaterial(byte blockdata)
         {
             return Material.Registry[blockdata];

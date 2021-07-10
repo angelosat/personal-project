@@ -377,7 +377,6 @@ namespace Start_a_Town_
             var tag = this[name];
             return new Vector3((float)tag["X"].Value, (float)tag["Y"].Value, (float)tag["Z"].Value);
         }
-        [Obsolete]
         public Vector3 LoadVector3()
         {
             return new Vector3((float)this["X"].Value, (float)this["Y"].Value, (float)this["Z"].Value);
@@ -390,7 +389,6 @@ namespace Start_a_Town_
         {
             return new List<int>().Load(this[name]);
         }
-        [Obsolete]
         public Vector2 LoadVector2()
         {
             return new Vector2((float)this["X"].Value, (float)this["Y"].Value);

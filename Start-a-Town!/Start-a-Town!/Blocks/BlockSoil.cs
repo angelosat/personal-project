@@ -41,11 +41,6 @@ namespace Start_a_Town_
                 new BlockRecipe.Product(this)
                 );
             Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
-
-        }
-        public override BlockRecipe GetRecipe()
-        {
-            return this.Recipe;
         }
        
         public override void RandomBlockUpdate(IObjectProvider net, IntVec3 global, Cell celll)

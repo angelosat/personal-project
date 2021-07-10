@@ -11,6 +11,7 @@ namespace Start_a_Town_.Towns.Farming
         protected override IEnumerable<Behavior> GetSteps()
         {
             bool fail() => !this.Actor.Map.Town.FarmingManager.IsTillable(Target.Global);
+            this.FailOn(fail);
             yield return new BehaviorGrabTool().FailOnForbidden(TargetIndex.Tool);
             yield return new BehaviorGetAtNewNew(TargetInd);
             yield return new BehaviorInteractionNew(TargetInd, new InteractionTilling());

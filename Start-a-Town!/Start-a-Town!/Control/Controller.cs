@@ -228,7 +228,7 @@ namespace Start_a_Town_
         static public void TrySetMouseoverEntity(Camera camera, GameObject entity, Vector3 face, float drawdepth)
         {
             var global = entity.Global;
-            if (!camera.IsDrawable(global))
+            if (!camera.IsDrawable(entity.Map, global))
                 return;
             float mouseoverDepth = drawdepth;
             if (mouseoverDepth >= Instance.MouseoverBlockNext.Depth)

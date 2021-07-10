@@ -13,7 +13,7 @@ namespace Start_a_Town_.UI
        
         public override void Update()
         {
-            Rectangle rect = Ingame.Instance.Camera.GetScreenBounds(Object.Transform.Position.Global, Object.GetComponent<SpriteComponent>("Sprite").Sprite.GetBounds());
+            Rectangle rect = Ingame.Instance.Camera.GetScreenBounds(Object.Global, Object.GetComponent<SpriteComponent>("Sprite").Sprite.GetBounds());
             Location = new Vector2(rect.X + rect.Width / 2 - Width / 2, rect.Y);
             CurrentLife -= 1;
             if (CurrentLife < 0)
@@ -25,7 +25,7 @@ namespace Start_a_Town_.UI
 
         public override void Draw(SpriteBatch sb)
         {
-            if (Object == null)
+            if (Object is null)
                 return;
 
             Color alpha = Color.Lerp(Color.Transparent, Color.White, 10 * (float)Math.Sin(Math.PI * (CurrentLife / (float)Life)));

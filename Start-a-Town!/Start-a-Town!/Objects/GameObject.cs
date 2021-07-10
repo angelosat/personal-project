@@ -193,8 +193,8 @@ namespace Start_a_Town_
 
         public GameObject Parent
         {
-            get => this.Transform.Parent;
-            set => this.Transform.Parent = value;
+            get => this.Transform.ParentEntity;
+            set => this.Transform.ParentEntity = value;
         }
         public Vector3 Global
         {
@@ -228,12 +228,12 @@ namespace Start_a_Town_
         }
         public Vector3 Velocity
         {
-            get => this.Transform.Position.Velocity;
+            get => this.Transform.Velocity;
             set
             {
                 if (float.IsNaN(value.X) || float.IsNaN(value.Y))
                     throw new Exception();
-                this.Transform.Position.Velocity = value;
+                this.Transform.Velocity = value;
                 if (value != Vector3.Zero)
                     PhysicsComponent.Enable(this);
             }
@@ -296,41 +296,30 @@ namespace Start_a_Town_
             return this;
         }
 
-        public GameObject ChangePosition(Vector3 global) // TODO: merge this with SetGlobal
+        public GameObject ChangePosition(Vector3 nextGlobal) // TODO: merge this with SetGlobal
         {
-            if (this.Map.IsSolid(global))// + Vector3.UnitZ * 0.01f))// TODO: FIX THIS
+            if (this.Map.IsSolid(nextGlobal))// + Vector3.UnitZ * 0.01f))// TODO: FIX THIS
                 return this; // TODO: FIX: problem when desynced from server, block might be empty on server but solid on client
-            Position pos = this.Transform.Position;
-            if (pos == null)
-            {
-                this.Global = global;
-                bool added = Chunk.AddObject(this, this.Map, global);
-                if (!added)
-                    throw new Exception("Could not add object to chunk");
-                return this;
-            }
-            this.Map.TryGetChunk(global.RoundXY(), out Chunk nextChunk);
+          
+            this.Map.TryGetChunk(nextGlobal.RoundXY(), out Chunk nextChunk);
 
             if (nextChunk == null)
             {
                 return this;
             }
            
-            this.Map.TryGetChunk(pos.Global.Round(), out Chunk lastChunk);
+            this.Map.TryGetChunk(this.Global.Round(), out Chunk lastChunk);
+            this.Global = nextGlobal;
 
             if (nextChunk != lastChunk)
             {
                 bool removed = Chunk.RemoveObject(this, lastChunk);
                 if (!removed)
                     throw new Exception("Source chunk is't loaded"); //Could not remove object from previous chunk");
-
-                bool added = Chunk.AddObject(this, this.Map, nextChunk, Position.Floor(global));
-                if (!added)
-                    throw new Exception("Invalid move: Destination chunk is't loaded");
+                nextChunk.Objects.Add(this);
                 this.Net.EventOccured(Message.Types.EntityChangedChunk, this, nextChunk.MapCoords, lastChunk.MapCoords);
             }
 
-            pos.Global = global;
             this.Physics.Enabled = true;
             return this;
         }
@@ -978,38 +967,6 @@ namespace Start_a_Town_
             yield return new ContextAction(() => "Drop", () => PacketInventoryDrop.Send(this.Net, actor.RefID, this.RefID, this.StackSize));
         }
        
-        public void GetInventoryContext(ContextArgs a, int slotID)
-        {
-            if (PlayerOld.Actor is null)
-                return;
-
-            a.Actions.Add(new ContextAction(() => "Drop", () =>
-            {
-                GameObjectSlot slot = PlayerOld.Actor.GetChild((byte)slotID);
-                if (slot.StackSize == 1)
-                {
-                    Client.PostPlayerInput(Message.Types.DropInventoryItem, w =>
-                    {
-                        w.Write(slotID);
-                        w.Write(1);
-                    });
-                    return;
-                }
-                SplitStackWindow.Instance.Show(slot, PlayerOld.Actor, (amount) =>
-                {
-                    Client.PostPlayerInput(Message.Types.DropInventoryItem, w =>
-                    {
-                        w.Write(slotID);
-                        w.Write(amount);
-                    });
-                });
-                Client.PostPlayerInput(Message.Types.DropInventoryItem, w => w.Write(slotID));
-            }));
-
-            this.Components.Values.ToList().ForEach(c => c.GetInventoryContext(PlayerOld.Actor, a.Actions, slotID));
-            a.Actions.Add(new ContextAction(() => "Inspect", () => this.GetTooltip().ToWindow().Show()));
-        }
-
         public Dictionary<PlayerInput, Interaction> GetPlayerActionsWorld()
         {
             var list = new Dictionary<PlayerInput, Interaction>();
@@ -1057,9 +1014,9 @@ namespace Start_a_Town_
             }
             return list.FirstOrDefault();
         }
-        public void GetContextActions(ContextArgs a)
+        public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
-            if (PlayerOld.Actor == null)
+            if (playerEntity is null)
                 return;
             foreach (var c in this.Components.Values)
             {

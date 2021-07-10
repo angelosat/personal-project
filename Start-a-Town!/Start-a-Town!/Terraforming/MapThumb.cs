@@ -96,7 +96,7 @@ namespace Start_a_Town_
             }
         }
 
-        public void GetContextActions(ContextArgs a)
+        public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
             a.Actions.Add(
                 new ContextAction(

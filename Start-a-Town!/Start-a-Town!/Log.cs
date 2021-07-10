@@ -174,26 +174,17 @@ List of available commands:
                     case "/updatethumb":
                         UpdateMapThumpnail();
                         break;
-                    case "/refreshstats":
-                        RefreshStats();
-                        break;
+                   
                     case "/help":
                         Log.WriteHelp();
                         break;
                     default:
-                        Log.Enqueue(Log.EntryTypes.Chat, PlayerOld.Actor, gotText);
-                        SpeechBubbleOld.Create(PlayerOld.Actor, gotText);
                         break;
                 }
             }
             catch (Exception) { 
                 Log.Write(EntryTypes.Default, "Catastrophic Failure!"); 
             }
-        }
-
-        private static void RefreshStats()
-        {
-            PlayerOld.Actor.PostMessage(Message.Types.ChunkLoaded);
         }
 
         private static void UpdateMapThumpnail()
@@ -247,15 +238,7 @@ List of available commands:
                         Enqueue(EntryTypes.System, "Invalid color");
                     }
                     break;
-                case "skill":
-                    string skillName = words.Dequeue();
-                    float value = Convert.ToSingle(words.Dequeue());
-                    if (!PlayerOld.Actor["Skills"].Properties.ContainsKey(skillName))
-                        Log.Write(EntryTypes.Default, "Invalid Skill");
-                    float old = PlayerOld.Actor["Skills"].GetProperty<float>(skillName);
-                    PlayerOld.Actor["Skills"][skillName] = value;
-                    Log.Write(EntryTypes.Skill, skillName + " set to " + value);
-                    break;
+               
                 case "hour":
                 case "time":
                     throw new Exception();
@@ -264,33 +247,7 @@ List of available commands:
                         ch.Value.LightCache.Clear();
                     Enqueue(EntryTypes.System, "Hour set to " + t);
                     break;
-                case "need":
-                    try
-                    {
-                        string target, need;
-                        Need.Types needType;
-                        switch (words.Count)
-                        {
-                            case 5:
-                                target = words.Dequeue();
-                                need = words.Dequeue();
-                                value = float.Parse(words.Dequeue());
-                                GameObject targetAgent = NpcComponent.NpcDirectory.First(foo => foo.Name == target);
-                                needType = (Need.Types)Int32.Parse(need);
-                                targetAgent["Needs"].GetProperty<NeedsCollection>("Needs")[needType].Value = value;
-                                break;
-                            case 4:
-                                need = words.Dequeue();
-                                value = float.Parse(words.Dequeue());
-                                needType = (Need.Types)Int32.Parse(need);
-                                PlayerOld.Actor["Needs"].GetProperty<NeedsCollection>("Needs")[needType].Value = value;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    catch (Exception) { Enqueue(EntryTypes.System, "Syntax: /give '[receiver]' '[object]' [amount = 1]"); }
-                    break;
+                
                 default:
                     Log.Enqueue(EntryTypes.System, "Invalid command");
                     break;

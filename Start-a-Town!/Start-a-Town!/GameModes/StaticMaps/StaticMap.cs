@@ -233,18 +233,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var copyOfActiveChunks = new Dictionary<Vector2, Chunk>(ActiveChunks);
             Vector3? playerGlobal = null;
             var hiddenRects = new List<Rectangle>();
-            if (PlayerOld.Actor != null)
-            {
-                if (PlayerOld.Actor.IsSpawned)
-                {
-                    playerGlobal = new Nullable<Vector3>(PlayerOld.Actor.Global.RoundXY());
-                    Sprite sprite = PlayerOld.Actor.GetSprite();
-                    Rectangle spriteBounds = sprite.GetBounds(); // make bounds a field/prop
-                    Rectangle screenBounds = camera.GetScreenBounds(playerGlobal.Value, spriteBounds);
-                    hiddenRects.Add(screenBounds);
-                }
-            }
-            camera.UpdateMaxDrawLevel();
+           
+            camera.UpdateMaxDrawLevel(this);
             Mouseover = null;
             
             foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
@@ -285,7 +275,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             {
                 Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds); 
                 if (camera.ViewPort.Intersects(chunkBounds))
-                    chunk.Value.DrawObjects(sb, camera, Controller.Instance, PlayerOld.Instance, this, scene);
+                    chunk.Value.DrawObjects(sb, camera, Controller.Instance, this, scene);
             }
         }
 

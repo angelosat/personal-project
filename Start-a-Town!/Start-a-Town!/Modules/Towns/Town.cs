@@ -322,12 +322,12 @@ namespace Start_a_Town_.Towns
                 comp.HandlePacket(net, type, r);
         }
 
-        public void GetContextActions(Vector3 pos, ContextArgs a)
+        public void GetContextActions(GameObject playerEntity, Vector3 pos, ContextArgs a)
         {
             var zone = this.QueryPosition(pos);
             if (zone.Count == 0)
                 return;
-            zone.First().GetContextActions(a);
+            zone.First().GetContextActions(playerEntity, a);
         }
 
         public List<IContextable> QueryPosition(Vector3 pos)

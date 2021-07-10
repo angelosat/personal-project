@@ -27,9 +27,7 @@ namespace Start_a_Town_
         public static int DefaultHeight = UIManager.DefaultIconButtonSprite.Height;
         Control WindowPlayers;
         UINpcFrameContainer UnitFrames;
-        public UIContextActions ContextActions;
         public Panel PartyFrame;
-        public HotBar HotBar;
         public UnitFrame PlayerUnitFrame;
         public Panel Box_Buttons;
         public UIChat Chat;
@@ -67,8 +65,6 @@ namespace Start_a_Town_
 
             this.UnitFrames = new UINpcFrameContainer() { LocationFunc = () => new Vector2(UIManager.Width / 2, 0), Anchor = Vector2.UnitX * .5f };
             PartyFrame = new Panel();
-            this.HotBar = PlayerOld.Instance.HotBar;
-            this.HotBar.Location = new Vector2((UIManager.Width - this.HotBar.Width) / 2f, 0);
 
             Box_Buttons = new Panel() { AutoSize = true, Location = UIManager.Size, Color = Color.Black };
             Box_Buttons.AddControlsHorizontally(
@@ -103,7 +99,6 @@ namespace Start_a_Town_
             this.IngameMenu = new IngameMenu();
             GameModes.GameMode.Current.OnIngameMenuCreated(this.IngameMenu);
 
-            this.ContextActions = new UIContextActions() { Location = new Vector2(UIManager.Width / 2, UIManager.Height / 2) };
             this.ZLevelDrawBar = new ScrollbarVNew(MapBase.MaxHeight, MapBase.MaxHeight, 1, 16, 1,
                  () => MapBase.MaxHeight - Rooms.Ingame.GetMap().Camera.DrawLevel,
                  () => 1 / (float)MapBase.MaxHeight,
@@ -118,8 +113,7 @@ namespace Start_a_Town_
                 this.ZLevelDrawBar,
                 camWidget, uiSpeed,
                 this.ToolHelp,
-                Chat,
-                ContextActions
+                Chat
                 , this.Time
                 , this.UnitFrames
                 );
@@ -214,8 +208,6 @@ namespace Start_a_Town_
 
         private void NotEnoughSpace(GameObject parent)
         {
-            if (parent != PlayerOld.Actor)
-                return;
             var txt = "Not enough space";
             FloatingTextEx floating = new FloatingTextEx(parent,
                 new FloatingTextEx.Segment(txt, Color.White)
@@ -226,8 +218,6 @@ namespace Start_a_Town_
 
         private void OnItemGot(GameObject parent, GameObject item)
         {
-            if (parent != PlayerOld.Actor)
-                return;
             FloatingTextEx floating = new FloatingTextEx(parent,
                 new FloatingTextEx.Segment("Received ", Color.Lime),
                 new FloatingTextEx.Segment(item.Name, item.GetInfo().GetQualityColor())
@@ -237,8 +227,6 @@ namespace Start_a_Town_
         }
         private void OnItemLost(GameObject parent, GameObject item, int amount)
         {
-            if (parent != PlayerOld.Actor)
-                return;
             FloatingTextEx floating = new FloatingTextEx(parent,
                 new FloatingTextEx.Segment("Lost " + amount.ToString() + "x ", Color.Red),
                 new FloatingTextEx.Segment(item.GetInfo().Name, item.GetInfo().GetQualityColor())
@@ -284,8 +272,6 @@ namespace Start_a_Town_
 
             Controls.Add(PartyFrame);
             PartyFrame.Invalidate(true);
-            
-            PlayerOld.Instance.HotBar.Initialize(PlayerOld.Actor);
         }
 
         public void AddUnitFrame(GameObject obj)

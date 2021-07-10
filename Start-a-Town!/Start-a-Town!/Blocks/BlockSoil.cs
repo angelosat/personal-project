@@ -92,20 +92,6 @@ namespace Start_a_Town_
         {
             return new ContextAction(() => "Dig", () => { Net.Client.PlayerInteract(new TargetArgs(global)); });
         }
-        public override void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, Interaction> list)
-        {
-            var mainhand = GearComponent.GetSlot(PlayerOld.Actor, GearType.Mainhand);
-            if (mainhand.Object != null)
-            {
-                var skill = mainhand.Object.GetComponent<ToolAbilityComponent>();
-                if (skill != null)
-                {
-                    if (ToolAbilityComponent.HasSkill(mainhand.Object, ToolAbilityDef.Digging))
-                        list.Add(PlayerInput.RButton, new InteractionDigging());
-                    else if (ToolAbilityComponent.HasSkill(mainhand.Object, ToolAbilityDef.Argiculture))
-                        list.Add(PlayerInput.RButton, new InteractionTilling());
-                }
-            }
-        }
+      
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 
@@ -12,15 +11,14 @@ namespace Start_a_Town_.PlayerControl
     {
         protected Dictionary<System.Windows.Forms.Keys, KeyControl> KeyControls;
 
-        public Hotbar Hotbar;
         bool MoveToggle = false;
         bool RButtonDown = false;
 
         bool MouseMove = true;
+        GameObject Actor => Client.Instance.GetPlayer().ControllingEntity;
 
         public DefaultTool()
         {
-            Hotbar = new Hotbar();
             this.KeyControls = new Dictionary<System.Windows.Forms.Keys, KeyControl>
             {
                 { GlobalVars.KeyBindings.PickUp, new KeyControl(() => Client.PlayerInput(this.Target, PlayerInput.PickUp), () => Client.PlayerInput(this.Target, PlayerInput.PickUpHold)) },
@@ -66,7 +64,7 @@ namespace Start_a_Town_.PlayerControl
         
         private void ThrowNew(bool all = false)
         {
-            var dir3d = GetDirection3();
+            var dir3d = GetDirection3(this.Actor);
             Client.PlayerThrow(dir3d, all);
         }
         internal override void Activate()
@@ -74,7 +72,7 @@ namespace Start_a_Town_.PlayerControl
             base.Activate();
             if (this.Target == null)
                 return;
-            var action = this.Target.GetContextActivate();
+            var action = this.Target.GetContextActivate(this.Actor);
             if (action != null)
                 if (action.Action != null)
                 {
@@ -124,7 +122,8 @@ namespace Start_a_Town_.PlayerControl
           
             if (xx != 0 || yy != 0)
             {
-                var cam = PlayerOld.Actor.Map.Camera;
+                var actor = this.Actor;
+                var cam = actor.Map.Camera;
 
                 double rx, ry;
                 double cos = Math.Cos((-cam.Rotation) * Math.PI / 2f);
@@ -137,7 +136,7 @@ namespace Start_a_Town_.PlayerControl
 
                 var NextStep = new Vector2(roundx, roundy);
                 NextStep.Normalize();
-                var direction = new Vector3(NextStep.X, NextStep.Y, PlayerOld.Actor.Velocity.Z);
+                var direction = new Vector3(NextStep.X, NextStep.Y, actor.Velocity.Z);
 
                 Client.PlayerChangeDirection(direction);
                 if(!Walking)
@@ -256,7 +255,7 @@ namespace Start_a_Town_.PlayerControl
         }
         private void FinishAttack()
         {
-            Client.PlayerFinishAttack(GetDirection3());
+            Client.PlayerFinishAttack(GetDirection3(this.Actor));
             Attacking = false;
         }
 
@@ -327,7 +326,7 @@ namespace Start_a_Town_.PlayerControl
         public void MoveMouse()
         {
             Walking = true;
-            Vector3 final = GetDirection3();
+            Vector3 final = GetDirection3(this.Actor);
             this.ChangeDirection(final);
         }
         public static Vector2 GetDirection2()
@@ -342,10 +341,10 @@ namespace Start_a_Town_.PlayerControl
             var final = new Vector2(normal.X, normal.Y);
             return final;
         }
-        public static Vector3 GetDirection3()
+        public static Vector3 GetDirection3(GameObject referenceEntity)
         {
-            var cam = PlayerOld.Actor.Map.Camera;
-            var playerScreenPosition = cam.GetScreenPosition(PlayerOld.Actor.Global);
+            var cam = referenceEntity.Map.Camera;
+            var playerScreenPosition = cam.GetScreenPosition(referenceEntity.Global);
             int x = Controller.Instance.msCurrent.X - (int)playerScreenPosition.X;
             int y = Controller.Instance.msCurrent.Y - (int)playerScreenPosition.Y;
             Coords.Ortho(x, y, out float xx, out float yy);
@@ -381,7 +380,7 @@ namespace Start_a_Town_.PlayerControl
         {
             if (this.Target == null)
                 return;
-            var action = this.Target.GetContextRB();
+            var action = this.Target.GetContextRB(this.Actor);
 
             if (action != null)
                 if (action.Action != null)
@@ -396,14 +395,14 @@ namespace Start_a_Town_.PlayerControl
 
         internal override void GetContextActions(ContextArgs args)
         {
-            this.Target.GetContextAll(args);
+            this.Target.GetContextAll(this.Actor, args);
         }
 
         internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
             base.DrawAfterWorld(sb, map);
-            var haul = PersonalInventoryComponent.GetHauling(PlayerOld.Actor).Object;
+            var haul = PersonalInventoryComponent.GetHauling(this.Actor).Object;
             if (haul != null)
             {
                 if (this.Target == null)

@@ -19,10 +19,6 @@ namespace Start_a_Town_
                 MoveMouse();
             else
                 MoveKeys();
-
-            // this must be called for mouse picking to work, because the call to mousepicking is in the camera update method
-            // maybe put this in the base update? or seperate them?
-            var global = PlayerOld.Actor == null ? Vector3.Zero : PlayerOld.Actor.Global;
         }
         public void MoveMouse()
         {

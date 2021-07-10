@@ -58,12 +58,6 @@ namespace Start_a_Town_.UI
             get { return _ContextAction; }
             set { _ContextAction = value; }
         }
-        public event EventHandler<ContextArgs> ContextRequest;
-        protected virtual void OnContextRequest(ContextArgs a)
-        {
-            ContextAction(a);
-            ContextRequest?.Invoke(this, a);
-        }
 
         public static int DefaultHeight = 38;
 
@@ -159,9 +153,8 @@ namespace Start_a_Town_.UI
                 Tag.GetTooltipInfo(tooltip);
         }
 
-        public void GetContextActions(ContextArgs a)
+        public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
-            OnContextRequest(a);
         }
     }
 }

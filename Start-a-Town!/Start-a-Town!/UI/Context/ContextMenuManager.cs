@@ -20,13 +20,10 @@ namespace Start_a_Town_
             this.Actions = new List<ContextAction>(actions);
         }
     }
-    
-    /// <summary>
-    /// void GetContextActions(ContextArgs a)
-    /// </summary>
+  
     public interface IContextable
     {
-        void GetContextActions(ContextArgs a);
+        void GetContextActions(GameObject playerEntity, ContextArgs a);
     }
 
     class ContextMenuManager : InputHandler, IKeyEventHandler
@@ -36,20 +33,6 @@ namespace Start_a_Town_
         static IContextable Object;
         static float DelayInterval = Engine.TicksPerSecond / 2f;
         static float Delay;
-        static public void Update()
-        {
-            if (Object == null)
-                return;
-            Delay -= 1;
-            if (Delay > 0)
-                return;
-            ContextArgs a = new ContextArgs() { Parameters = new object[] { Controller.Instance.MouseoverBlock.Face } }; // TODO: possibility that the mouseover face has changed since getting the Object
-            Object.GetContextActions(a);
-            foreach (var comp in Game1.Instance.GameComponents)
-                comp.OnContextMenuCreated(Object, a);
-            ContextMenu2.Instance.Initialize(a);
-            Object = null;
-        }
 
         static public void PopUp(params ContextAction[] a)
         {

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using System;
 using System.IO;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components
 {
@@ -15,36 +16,21 @@ namespace Start_a_Town_.Components
         }
 
         public float Spin;
-        public Position Position;
+        public GameObject ParentEntity;
         public Vector2 Direction;
         public bool Exists;
-        
+        public Vector3 Velocity;
+        public Vector3 Global;
+       
+
         public override void MakeChildOf(GameObject parent)
         {
             parent.Transform = this;
         }
-
-        // TODO: MAKE FIELD FOR SPEED! OPTIMIZE!
-        public Vector3 Global
-        {
-            get {
-                return Parent == null ? this.Position.Global : Parent.Global; 
-            }
-            set { this.Position.Global = value; }
-        }
-
-        public PositionComponent()
-            : base()
-        {
-            this.Position = new Position();
-            this.Direction = Vector2.Zero;
-            this.Exists = false;
-            this.Parent = null;
-        }
         public override string ToString()
         {
             return this.Global.ToString() + "\n" +
-                "Velocity: " + this.Position.Velocity.ToString() + "\n" +
+                "Velocity: " + this.Velocity.ToString() + "\n" +
                 "Direction: " + this.Direction.ToString() + "\n" +
                 base.ToString();
         }
@@ -67,7 +53,7 @@ namespace Start_a_Town_.Components
             List<SaveTag> data = new List<SaveTag>();
 
             data.Add(this.Global.SaveOld("Global"));
-            data.Add(this.Position.Velocity.SaveOld("Velocity"));
+            data.Add(this.Velocity.SaveOld("Velocity"));
             data.Add(this.Direction.Save("Direction"));
 
             return data;
@@ -76,15 +62,15 @@ namespace Start_a_Town_.Components
         internal override void Load(SaveTag data)
         {
             data.TryGetTag("Global", t => this.Global = t.LoadVector3());
-            data.TryGetTag("Velocity", t => this.Position.Velocity = t.LoadVector3());
+            data.TryGetTag("Velocity", t => this.Velocity = t.LoadVector3());
             data.TryGetTag("Direction", t => this.Direction = t.LoadVector2());
         }
         
         public override void Write(BinaryWriter w)
         {
             w.Write(this.Exists);
-            w.Write(this.Position.Global);
-            w.Write(this.Position.Velocity);
+            w.Write(this.Global);
+            w.Write(this.Velocity);
             w.Write(this.Direction);
         }
 
@@ -92,7 +78,7 @@ namespace Start_a_Town_.Components
         {
             this.Exists = r.ReadBoolean();
             this.Global = r.ReadVector3();
-            this.Position.Velocity = r.ReadVector3();
+            this.Velocity = r.ReadVector3();
             this.Direction = r.ReadVector2();
         }
     }

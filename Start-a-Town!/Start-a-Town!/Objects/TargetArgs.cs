@@ -574,84 +574,61 @@ namespace Start_a_Town_
                     return new List<Interaction>();
             }
         }
-        internal void GetContextAll(ContextArgs args)
+        internal void GetContextAll(GameObject playerEntity, ContextArgs args)
         {
             var list = new ContextAction[]{
-                this.GetContextRB(),
-                this.GetContextActivate()
+                this.GetContextRB(playerEntity),
+                this.GetContextActivate(playerEntity)
             };
             args.Actions.AddRange(list.Where(i => i != null));
         }
 
-        internal ContextAction GetContextRB()
+        internal ContextAction GetContextRB(GameObject playerEntity)
         {
             switch (this.Type)
             {
                 case TargetType.Entity:
-                    return this.Object.GetContextRB(PlayerOld.Actor);
+                    return this.Object.GetContextRB(playerEntity);
 
                 case TargetType.Position:
                     var block = this.Network.Map.GetBlock(this.Global);
-                    return block.GetContextRB(PlayerOld.Actor, this.Global);
+                    return block.GetContextRB(playerEntity, this.Global);
 
                 default:
                     return null;
             }
         }
 
-        internal ContextAction GetContextActivate()
+        internal ContextAction GetContextActivate(GameObject playerEntity)
         {
             switch (this.Type)
             {
                 case TargetType.Entity:
-                    return this.Object.GetContextActivate(PlayerOld.Actor);
+                    return this.Object.GetContextActivate(playerEntity);
 
                 case TargetType.Position:
                     var block = this.Network.Map.GetBlock(this.Global);
-                    return block.GetContextActivate(PlayerOld.Actor, this.Global);
+                    return block.GetContextActivate(playerEntity, this.Global);
 
                 default:
                     return null;
             }
         }
 
-        internal Dictionary<PlayerInput, ContextAction> GetContextActionsFromInput()
-        {
-            var list = new Dictionary<PlayerInput, ContextAction>();
-            this.GetContextActions(list);
-            return list;
-        }
-        public void GetContextActions(Dictionary<PlayerInput, ContextAction> list)
+        public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
             switch (this.Type)
             {
                 case TargetType.Entity:
+                    this.Object.GetContextActions(playerEntity, a);
                     break;
 
                 case TargetType.Position:
                     Dictionary<PlayerInput, Interaction> interactions = new Dictionary<PlayerInput, Interaction>();
                     var block = this.Network.Map.GetBlock(this.Global);
-                    block.GetPlayerActionsWorld(PlayerOld.Actor, this.Global, list);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        public void GetContextActions(ContextArgs a)
-        {
-            switch (this.Type)
-            {
-                case TargetType.Entity:
-                    this.Object.GetContextActions(a);
-                    break;
-
-                case TargetType.Position:
-                    Dictionary<PlayerInput, Interaction> interactions = new Dictionary<PlayerInput, Interaction>();
-                    var block = this.Network.Map.GetBlock(this.Global);
-                    block.GetContextActions(PlayerOld.Actor, this.Global, a);
+                    block.GetContextActions(playerEntity, this.Global, a);
                     // check if block is part of any town designations such as stockpiles or fields, and add corresponding actions
-                    this.Map.Town.GetContextActions(this.Global, a);
+                    this.Map.Town.GetContextActions(playerEntity, this.Global, a);
                     break;
 
                 default:

@@ -113,23 +113,6 @@ namespace Start_a_Town_
             
         }
        
-        internal override ContextAction GetContextRB(GameObject player, Vector3 global)
-        {
-            var mainhand = GearComponent.GetSlot(PlayerOld.Actor, GearType.Mainhand);
-            if (mainhand.Object != null)
-            {
-                var skill = mainhand.Object.GetComponent<ToolAbilityComponent>();
-                if (skill != null)
-                {
-                    if (ToolAbilityComponent.HasSkill(mainhand.Object, ToolAbilityDef.Digging))
-                        return new ContextAction(new InteractionDigging()) { Shortcut = PlayerInput.RButton };
-                    else if (ToolAbilityComponent.HasSkill(mainhand.Object, ToolAbilityDef.Argiculture))
-                        return new ContextAction(new InteractionTilling()) { Shortcut = PlayerInput.RButton };
-                }
-            }
-            return base.GetContextRB(player, global);
-        }
-        
         internal override float GetFertility(Cell cell)
         {
             if (cell.BlockData > 0) // if there are flowers grown, dont grow anything else (return fertility = 0)

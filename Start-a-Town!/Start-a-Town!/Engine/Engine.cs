@@ -170,11 +170,10 @@ namespace Start_a_Town_
             
         }
 
-        static public void PlayGame(GameObject mapPlayer)
+        static public void PlayGame()
         {
             Nameplate.Reset();
             GC.Collect();
-            PlayerOld.Actor = mapPlayer;
         }
     }
 }

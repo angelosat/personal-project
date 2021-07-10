@@ -41,23 +41,10 @@ namespace Start_a_Town_
                 var slot = new InventorySlot(invSlot, actor, i)
                 {
                     Location = new Vector2((i % LineMax) * UIManager.SlotSprite.Width, (i / LineMax) * UIManager.SlotSprite.Height),
-                    ContextAction = (a) =>
-                    {
-                        GameObject obj = invSlot.Object;
-                        if (obj == null)
-                            return;
-                        obj.GetInventoryContext(a, slotid);
-                        return;
-                    },
                     DragDropAction = args =>
                     {
                         "npc inventory rearranging disabled".ToConsole();
                         return DragDropEffects.None;
-                        var a = args as DragDropSlot;
-                        if (a.Effects == DragDropEffects.None)
-                            return DragDropEffects.None;
-                        Net.Client.PlayerInventoryOperationNew(a.SourceTarget, new TargetArgs(invSlot), a.DraggedTarget.Slot.StackSize);
-                        return DragDropEffects.Move;
                     },
                     LeftClickAction = () =>
                     {

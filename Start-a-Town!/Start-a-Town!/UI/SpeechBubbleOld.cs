@@ -63,7 +63,6 @@ namespace Start_a_Town_.UI
                 };
 
                 btn.Tag = option;
-                btn.LeftClick += new UIEvent(option_Click);
                 Graphic.Controls.Add(btn);
             }
             Graphic.BackgroundStyle = BackgroundStyle.Window;
@@ -78,8 +77,6 @@ namespace Start_a_Town_.UI
         }
         public override bool Hide()
         {
-            foreach (var btn in Graphic.Controls.FindAll(foo => foo is Button))
-                btn.LeftClick -= option_Click;
             GameObject obj = this.Tag as GameObject;
             List[obj].Remove(this);
             if (List[obj].Count == 0)
@@ -89,24 +86,14 @@ namespace Start_a_Town_.UI
 
         public void Initialize(string text, params string[] options)
         {
-            foreach (var btn in Graphic.Controls.FindAll(foo => foo is Button))
-                btn.LeftClick -= option_Click;
             Graphic.Controls.Clear();
             Graphic.Controls.Add(new Label(Vector2.Zero, text, fill: Color.Black, outline: Color.White).SetMousethrough(true));
             foreach (var option in options)
             {
                 Button btn = new Button(Graphic.Controls.Last().BottomLeft, Graphic.ClientSize.Width, option);
                 btn.Tag = option;
-                btn.LeftClick += new UIEvent(option_Click);
                 Graphic.Controls.Add(btn);
             }
-        }
-
-        void option_Click(object sender, EventArgs e)
-        {
-            Log.Command(Log.EntryTypes.DialogueOption, PlayerOld.Actor, Tag as GameObject, (sender as Control).Tag);
-            Paused = false;
-            this.Hide();
         }
 
         static void Collision(SpeechBubbleOld b1, SpeechBubbleOld b2)

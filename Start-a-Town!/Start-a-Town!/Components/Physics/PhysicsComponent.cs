@@ -125,11 +125,11 @@ namespace Start_a_Town_.Components
             }
             this.DetectEntityCollisions(parent, lastGlobal, next);
             // reset speed according to new position to prevent it from accumulating
-            parent.Transform.Position.Velocity = velocity;
+            parent.Velocity = velocity;
 
             // log state change 
             if (parent.IsSpawned) // must check because entity might have despawned itself during it's update 
-                if (lastGlobal != parent.Transform.Global)
+                if (lastGlobal != parent.Global)
                 {
                     // send a "step on" message on next block
                     net.LogStateChange(parent.RefID);
@@ -479,10 +479,9 @@ namespace Start_a_Town_.Components
             {
                 var lbl = new Label("Weight: ") { Location = tooltip.Controls.BottomLeft, TextColorFunc = () => Color.LightGray };
                 Color color = Color.LightGray;
-                if (PlayerOld.Actor != null)
+                if (parent.Net.GetPlayer().ControllingEntity is GameObject actor)
                 {
-                    color = HaulComponent.CheckWeight(PlayerOld.Actor, parent) ? Color.Lime : Color.Red;
-
+                    color = HaulComponent.CheckWeight(actor, parent) ? Color.Lime : Color.Red;
                 }
                 var lblvalue = new Label(this.Weight.ToString()) { Location = lbl.TopRight, TextColorFunc = () => color };
                 tooltip.Controls.Add(lbl, lblvalue);
@@ -502,24 +501,7 @@ namespace Start_a_Town_.Components
                 return null;
             return new ContextAction(new InteractionHaul()) { Shortcut = PlayerInput.RButton, Available = () => this.Size != ObjectSize.Immovable };
         }
-        internal override ContextAction GetContextActivate(GameObject parent, GameObject player)
-        {
-            if (this.Size == ObjectSize.Immovable)
-                return null;
-            return new ContextAction("Pickup quantity",  () => { new WindowSetStackSize((a)=>SelectStacksize(parent, a)).ShowDialog(); return true; }) { Shortcut = PlayerInput.Activate, Available = () => this.Size != ObjectSize.Immovable };
-        }
-
-        private void SelectStacksize(GameObject parent, int amount)
-        {
-            var data = Network.Serialize(w =>
-            {
-                w.Write(PlayerOld.Actor.RefID);
-                w.Write(parent.RefID);
-                w.Write(amount);
-            });
-            Client.Instance.Send(PacketType.PlayerHaul, data);
-        }
-
+      
         public override string ToString()
         {
             return "Enabled: " + this.Enabled.ToString() + "\n" + base.ToString();

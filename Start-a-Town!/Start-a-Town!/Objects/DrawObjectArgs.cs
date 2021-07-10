@@ -6,7 +6,6 @@ namespace Start_a_Town_
     {
         public Camera Camera;
         public Controller Controller;
-        public PlayerOld Player;
         public MapBase Map;
         public Chunk Chunk;
         public Cell Cell;
@@ -17,7 +16,6 @@ namespace Start_a_Town_
 
         public DrawObjectArgs(Camera camera,
             Controller controller,
-            PlayerOld player,
             MapBase map,
             Chunk chunk,
             Cell cell,
@@ -29,7 +27,6 @@ namespace Start_a_Town_
         {
             this.Camera = camera;
             this.Controller = controller;
-            this.Player = player;
             this.Map = map;
             this.Chunk = chunk;
             this.Cell = cell;

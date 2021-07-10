@@ -211,7 +211,7 @@ namespace Start_a_Town_
         {
             this.Positions = new HashSet<IntVec3>(positions);
         }
-        public void GetContextActions(ContextArgs a)
+        public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
         }
 

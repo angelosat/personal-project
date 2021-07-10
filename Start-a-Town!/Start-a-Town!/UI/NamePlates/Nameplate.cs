@@ -74,17 +74,18 @@ namespace Start_a_Town_.UI
 
         public override void OnBeforeDraw(SpriteBatch sb, Rectangle viewport)
         {
-            if (PlayerOld.Actor != null)
-            {
-                var playertarget = PlayerOld.Actor.GetComponent<AttackComponent>().Target;
-                if (this.Object is GameObject entity && playertarget != null)
-                    if (entity.RefID == playertarget.RefID)
-                    {
-                        var border = this.BoundsScreen;
-                        border.Inflate(1, 1);
-                        border.DrawHighlight(sb, Color.Red * 0.5f, Vector2.Zero, 0);
-                    }
-            }
+            var obj = this.Tag as GameObject;
+            var actor = obj.Net.GetPlayer().ControllingEntity;
+            if (actor is null)
+                return;
+            var playertarget = actor.GetComponent<AttackComponent>().Target;
+            if (this.Object is GameObject entity && playertarget != null)
+                if (entity.RefID == playertarget.RefID)
+                {
+                    var border = this.BoundsScreen;
+                    border.Inflate(1, 1);
+                    border.DrawHighlight(sb, Color.Red * 0.5f, Vector2.Zero, 0);
+                }
         }
 
         public override void OnHitTestPass()
@@ -145,12 +146,12 @@ namespace Start_a_Town_.UI
             tooltip.Tag = this.Object;
         }
 
-        public void GetContextActions(ContextArgs a)
+        public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
             IContextable contextable = this.Object as IContextable;
             if (contextable is null)
                 return;
-            contextable.GetContextActions(a);
+            contextable.GetContextActions(playerEntity, a);
         }
 
         internal override void OnGameEvent(GameEvent e)

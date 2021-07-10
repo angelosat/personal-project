@@ -128,7 +128,7 @@ namespace Start_a_Town_
 
             SaveFieldsToConfig();
 
-            Engine.PlayGame(null);//this.Character.Character);
+            Engine.PlayGame();//this.Character.Character);
             //Rooms.Ingame ingame = new Rooms.Ingame();
             Net.Client.Instance.Connect(address, new PlayerData(Txt_Name.Text), ar =>
             {

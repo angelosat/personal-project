@@ -296,16 +296,6 @@ namespace Start_a_Town_
         }
 
         #region Adding and removing objects
-        static public bool AddObject(GameObject obj, MapBase map, Chunk chunk, Vector3 local)
-        {
-            Vector3 global = local + new Vector3(chunk.MapCoords * Size, 0);
-
-            obj.Global = global;
-            chunk.Objects.Add(obj);
-
-            chunk._Saved = false;
-            return true;
-        }
         static public bool AddObject(GameObject obj, MapBase map)
         {
             return AddObject(obj, map, obj.Global);
@@ -841,15 +831,16 @@ namespace Start_a_Town_
         #endregion
 
         #region Drawing
-        public void DrawObjects(MySpriteBatch sb, Camera camera, Controller controller, PlayerOld player, MapBase map, SceneState scene)
+        public void DrawObjects(MySpriteBatch sb, Camera camera, Controller controller, MapBase map, SceneState scene)
         {
             foreach (GameObject obj in this.Objects) //make a copy of the list first because currently the player character might be added while drawing
             {
                 Vector3 global = obj.Global;
                 if (global.Z > camera.DrawLevel + 1)// - 1)
                     continue;
-                if (camera.HideTerrainAbovePlayer && PlayerOld.Actor != null)
-                    if (global.Z > PlayerOld.Actor.Transform.Global.Z + 2)// - 1)
+                var actor = map.Net.GetPlayer().ControllingEntity;
+                if (camera.HideTerrainAbovePlayer && actor is not null)
+                    if (global.Z > actor.Transform.Global.Z + 2)// - 1)
                         continue;
 
                 if (!map.TryGetCell(global, out Cell cell))
@@ -879,7 +870,7 @@ namespace Start_a_Town_
                 Color color = new Color(l, l, l, 1);
                 Game1.Instance.Effect.Parameters["SourceRectangle"].SetValue(new Vector4(0, 0, 1, 1));
 
-                obj.Draw(sb, new DrawObjectArgs(camera, controller, player, map, this, cell, spriteBounds, screenBounds, obj, color, cd));
+                obj.Draw(sb, new DrawObjectArgs(camera, controller, map, this, cell, spriteBounds, screenBounds, obj, color, cd));
                 SpriteComponent.DrawShadow(camera, spriteBounds, map, obj, cd, cd);
 
                 if (scene.ObjectsDrawn.Contains(obj))

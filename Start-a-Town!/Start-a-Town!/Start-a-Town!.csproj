@@ -850,7 +850,6 @@
     <Compile Include="Net\CommandParser.cs" />
     <Compile Include="Net\Packets\New\PacketChat.cs" />
     <Compile Include="Net\Packets\New\PacketChunk.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityAssignToPlayer.cs" />
     <Compile Include="Net\Packets\New\PacketEntitySync.cs" />
     <Compile Include="Net\Packets\New\PacketEntityJump.cs" />
     <Compile Include="Net\Packets\New\PacketEntitySprintToggle.cs" />
@@ -906,7 +905,6 @@
     <Compile Include="UI\DialogInput.cs" />
     <Compile Include="UI\FloatingTextEx.cs" />
     <Compile Include="UI\Hud\UIChat.cs" />
-    <Compile Include="UI\Hud\HotbarSlot.cs" />
     <Compile Include="UI\Hud\ISelectable.cs" />
     <Compile Include="UI\Hud\UIChatSettings.cs" />
     <Compile Include="UI\Hud\UIGameSpeed.cs" />
@@ -1027,7 +1025,6 @@
     <Compile Include="Components\InventoryComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Control\ControlTool.cs" />
-    <Compile Include="Control\Hotbar.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Interfaces\IUndoable.cs" />
     <Compile Include="Log.cs" />
@@ -1051,7 +1048,6 @@
     <Compile Include="Terraforming\Mutators\Terraformer.cs" />
     <Compile Include="Terraforming\MapThumb.cs" />
     <Compile Include="Objects\GameObject.cs" />
-    <Compile Include="Terraforming\Position.cs" />
     <Compile Include="Objects\GameObjectSlot.cs" />
     <Compile Include="SaveTag.cs" />
     <Compile Include="Terraforming\WorldArgs.cs" />
@@ -1074,7 +1070,6 @@
     <Compile Include="UI\ConsoleBoxAsync.cs" />
     <Compile Include="UI\Dialogs\DialogLoading.cs" />
     <Compile Include="UI\Editor\TerrainWindow.cs" />
-    <Compile Include="UI\Context\UIContextActions.cs" />
     <Compile Include="UI\Primitives\Panels\PanelLabeled.cs" />
     <Compile Include="UI\RandomizeButton.cs" />
     <Compile Include="UI\Settings\CameraSettings.cs" />
@@ -1087,7 +1082,6 @@
     <Compile Include="UI\Primitives\Slots\SlotDefault.cs" />
     <Compile Include="UI\Context\ContextMenuManager.cs" />
     <Compile Include="UI\Context\ContextMenu2.cs" />
-    <Compile Include="UI\Hud\HotBar.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarH.cs" />
     <Compile Include="UI\NamePlates\INameplateable.cs" />
     <Compile Include="UI\Inventory\InventorySlot.cs" />

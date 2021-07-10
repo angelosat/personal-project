@@ -26,7 +26,6 @@ namespace Start_a_Town_.Net
         
         UI.ConsoleBoxAsync _Console;
         public UI.ConsoleBoxAsync Log => _Console ??= new UI.ConsoleBoxAsync(new Rectangle(0, 0, 800, 600)) { FadeText = false };
-        
         public UI.ConsoleBoxAsync GetConsole()
         {
             return Log;
@@ -85,12 +84,7 @@ namespace Start_a_Town_.Net
         public const int ClientClockDelayMS = Server.SnapshotIntervalMS * 4;
         int _Speed = 0;// 1;
         public int Speed { get { return this._Speed; } set { this._Speed = value; } }
-        [Obsolete]
-        public void EnterWorld(GameObject playerCharacter)
-        {
-            throw new NotImplementedException();
-        }
-      
+       
         public void Disconnect()
         {
             IsRunning = false;
@@ -201,10 +195,9 @@ namespace Start_a_Town_.Net
             HandleOrderedReliablePackets();
             ProcessSyncedPackets();
             ProcessIncomingPackets();
-            if (GameMode.Current != null)
-                GameMode.Current.Update(Instance);
+            GameMode.Current?.Update(Instance);
 
-            if (Instance.Map != null)
+            if (Instance.Map is not null)
             {
                 var size = Instance.Map.GetSizeInChunks();
                 var maxChunks = size * size;
@@ -427,10 +420,8 @@ namespace Start_a_Town_.Net
             var charTag = new SaveTag(SaveTag.Types.Compound, "PlayerCharacter", actor.SaveInternal());
 
             // save metadata such as hotbar
-            var hotbarTag = Rooms.Ingame.Instance.Hud.HotBar.Save();
 
             tag.Add(charTag);
-            tag.Add(hotbarTag);
 
             tag.WriteTo(writer);
         }
@@ -679,19 +670,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.PlayerHaul:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int playerid = r.ReadInt32();
-                        var entity = Instance.GetNetworkObject(playerid);
-                        var topickup = Instance.GetNetworkObject(r.ReadInt32());
-                        var target = new TargetArgs(topickup);
-                        var amount = r.ReadInt32();
-                        var interaction = new InteractionHaul(amount);
-                        entity.GetComponent<WorkComponent>().Perform(entity, interaction, target);
-                    });
-                    return;
-
                 case PacketType.PlayerUnequip:
                     msg.Payload.Deserialize(r =>
                     {
@@ -857,15 +835,6 @@ namespace Start_a_Town_.Net
                     {
                         string chatText = reader.ReadASCII();
                         Network.Console.Write(Color.Yellow, "SERVER", chatText);
-                    });
-                    break;
-
-                case PacketType.RequestNewObject:
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        TargetArgs obj = TargetArgs.Read(Instance, r);
-                        byte amount = r.ReadByte();
-                        DragDropManager.Create(new DragDropSlot(PlayerOld.Actor, GameObjectSlot.Empty, new GameObjectSlot(obj.Object, amount), DragDropEffects.Move | DragDropEffects.Copy));
                     });
                     break;
 
@@ -1381,16 +1350,6 @@ namespace Start_a_Town_.Net
             }
         }
 
-        static public void PostPlayerInput(Components.Message.Types type, Action<BinaryWriter> dataWriter, bool clientPrediction = true)
-        {
-            Network.Serialize(writer =>
-            {
-                writer.Write(Instance.ClientClock.TotalMilliseconds);
-                TargetArgs.Write(writer, PlayerOld.Actor);
-                ObjectEventArgs.Write(writer, type, dataWriter);
-            }).Send(Instance.PacketID, PacketType.PlayerInputOld, Instance.Host, Instance.RemoteIP);
-        }
-        
         static public void PlayerInventoryOperationNew(TargetArgs source, TargetArgs target, int amount)
         {
             Network.Serialize(w =>
@@ -1403,30 +1362,24 @@ namespace Start_a_Town_.Net
        
         static public void PlayerSlotInteraction(GameObjectSlot slot)
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(writer =>
             {
-                TargetArgs.Write(writer, PlayerOld.Actor);
+                TargetArgs.Write(writer, actor);
                 TargetArgs.Write(writer, slot);
             }).Send(Instance.PacketID, PacketType.PlayerSlotClick, Instance.Host, Instance.RemoteIP);
         }
         static public void PlayerSlotRightClick(TargetArgs parent, GameObject child)
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(writer =>
             {
-                TargetArgs.Write(writer, PlayerOld.Actor);
+                TargetArgs.Write(writer, actor);
                 parent.Write(writer);
                 TargetArgs.Write(writer, child);
             }).Send(Instance.PacketID, PacketType.PlayerSlotRightClick, Instance.Host, Instance.RemoteIP);
         }
-        static public void PostPlayerInput(GameObject recipient, Components.Message.Types type, Action<BinaryWriter> dataWriter, bool clientPrediction = true)
-        {
-            Network.Serialize(writer =>
-            {
-                writer.Write(Instance.ClientClock.TotalMilliseconds);
-                TargetArgs.Write(writer, recipient);
-                ObjectEventArgs.Write(writer, type, dataWriter);
-            }).Send(Instance.PacketID, PacketType.PlayerInputOld, Instance.Host, Instance.RemoteIP);
-        }
+       
         internal static void PlayerSetBlock(Vector3 global, Block.Types type, byte data = 0, int variation = 0, int orientation = 0)
         {
             //send variation or let server decide on random variation? send -1 if want to let server?
@@ -1441,85 +1394,96 @@ namespace Start_a_Town_.Net
         }
         internal static void PlayerStartMoving()
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
             }).Send(Instance.PacketID, PacketType.PlayerStartMoving, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerStopMoving()
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
             }).Send(Instance.PacketID, PacketType.PlayerStopMoving, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerChangeDirection(Vector3 direction)
         {
             // assign direction directly for prediction?
-            PlayerOld.Actor.Direction = direction;
-            new PacketPlayerChangeDirection(PlayerOld.Actor, direction).Send(Instance.Host, Instance.RemoteIP);
+            var actor = Instance.GetPlayer().ControllingEntity;
+            actor.Direction = direction;
+            new PacketPlayerChangeDirection(actor, direction).Send(Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerJump()
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
             }).Send(Instance.PacketID, PacketType.PlayerJump, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerToggleWalk(bool toggle)
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
                 w.Write(toggle);
             }).Send(Instance.PacketID, PacketType.PlayerToggleWalk, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerToggleSprint(bool toggle)
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
                 w.Write(toggle);
             }).Send(Instance.PacketID, PacketType.PlayerToggleSprint, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerInteract(TargetArgs target)
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
                 target.Write(w);
             }).Send(Instance.PacketID, PacketType.PlayerInteract, Instance.Host, Instance.RemoteIP);
         }
         
         internal static void PlayerUnequip(TargetArgs targetArgs)
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
                 targetArgs.Write(w);
             }).Send(Instance.PacketID, PacketType.PlayerUnequip, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerThrow(Vector3 dir, bool all)
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
                 w.Write(dir);
                 w.Write(all);
             }).Send(Instance.PacketID, PacketType.EntityThrow, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerAttack()
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
             }).Send(Instance.PacketID, PacketType.PlayerStartAttack, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerFinishAttack(Vector3 vector3)
         {
+            var actor = Instance.GetPlayer().ControllingEntity;
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(actor.RefID);
                 w.Write(vector3);
             }).Send(Instance.PacketID, PacketType.PlayerFinishAttack, Instance.Host, Instance.RemoteIP);
         }
@@ -1527,14 +1491,14 @@ namespace Start_a_Town_.Net
         {
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
             }).Send(Instance.PacketID, PacketType.PlayerStartBlocking, Instance.Host, Instance.RemoteIP);
         }
         internal static void PlayerFinishBlocking()
         {
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
             }).Send(Instance.PacketID, PacketType.PlayerFinishBlocking, Instance.Host, Instance.RemoteIP);
         }
        
@@ -1542,7 +1506,7 @@ namespace Start_a_Town_.Net
         {
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
                 w.Write(slotID);
                 w.Write(amount);
             }).Send(Instance.PacketID, PacketType.PlayerDropInventory, Instance.Host, Instance.RemoteIP);
@@ -1551,7 +1515,7 @@ namespace Start_a_Town_.Net
         {
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
                 target.Write(w);
                 w.Write((int)types);
             }).Send(Instance.PacketID, PacketType.PlayerRemoteCall, Instance.Host, Instance.RemoteIP);
@@ -1560,7 +1524,7 @@ namespace Start_a_Town_.Net
         {
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
                 target.Write(w);
                 w.Write((int)type);
                 argsWriter(w);
@@ -1571,7 +1535,7 @@ namespace Start_a_Town_.Net
         {
             Network.Serialize(w =>
             {
-                w.Write(PlayerOld.Actor.RefID);
+                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
                 targetArgs.Write(w);
                 input.Write(w);
             }).Send(Instance.PacketID, PacketType.PlayerInput, Instance.Host, Instance.RemoteIP);
@@ -1702,17 +1666,6 @@ namespace Start_a_Town_.Net
         }
         public PlayerData CurrentPlayer => this.PlayerData;
 
-        internal void AssignCharacter(int playerid, int entityid)
-        {
-            if (PlayerData.ID != playerid)
-                return;
-            var entity = this.GetNetworkObject(entityid);
-            PlayerData.CharacterID = entity.RefID;
-            PlayerOld.Actor = entity;
-            Rooms.Ingame.Instance.Hud.Initialize(PlayerOld.Actor);
-            Rooms.Ingame.Instance.Camera.CenterOn(PlayerOld.Actor.Global);
-        }
-        
         internal void HandleServerResponse(int playerID, PlayerList playerList, int speed)
         {
             throw new Exception();

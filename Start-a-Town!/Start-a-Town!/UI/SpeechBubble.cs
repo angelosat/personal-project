@@ -20,7 +20,6 @@ namespace Start_a_Town_.UI
         GameObject Owner;
         static Dictionary<GameObject, List<SpeechBubble>> List = new Dictionary<GameObject, List<SpeechBubble>>();
         Conversation Conversation;
-        GroupBox Options;
         Bar AttentionCountdown;
 
         public override bool Show()
@@ -35,37 +34,19 @@ namespace Start_a_Town_.UI
             return base.Show();
         }
 
-        static public SpeechBubble Create(DateTime time, GameObject obj, string text, params DialogOption[] options)
+        static public SpeechBubble ShowNew(GameObject obj, string text)
         {
-            SpeechBubble bubble = ShowNew(obj, text, options);
-            bubble.TimeStamp = time;
-            return bubble;
+            return ShowNew(obj, text, null);
         }
-        static public SpeechBubble ShowNew(GameObject obj, string text, IEnumerable<DialogOption> options, Conversation convo)
+        static public SpeechBubble ShowNew(GameObject obj, string text, Conversation convo)
         {
-            var bubble = ShowNew(obj, text, options.ToArray());
-            bubble.Conversation = convo;
-            return bubble;
-        }
-        static public SpeechBubble ShowNew(GameObject obj, string text, IEnumerable<DialogOption> options, Conversation convo, IProgressBar attention)
-        {
-            var bubble = ShowNew(obj, text, options.ToArray(), convo);
-            bubble.SetTimer(attention);
-            return bubble;
-        }
-        static public SpeechBubble ShowNew(GameObject obj, string text, params DialogOption[] options)
-        {
-            return ShowNew(obj, text, null, options);
-        }
-        static public SpeechBubble ShowNew(GameObject obj, string text, Conversation convo, params DialogOption[] options)
-        {
-            SpeechBubble bubble = new SpeechBubble(obj, text, options);
+            SpeechBubble bubble = new SpeechBubble(obj, text);
             bubble.Conversation = convo;
             bubble.TimeStamp = DateTime.Now;
             bubble.Show();
             return bubble;
         }
-        public SpeechBubble(GameObject obj, string text, params DialogOption[] options)
+        public SpeechBubble(GameObject obj, string text)
         {
             this.Layer = LayerTypes.Speechbubbles;
             this.Owner = obj;
@@ -76,57 +57,12 @@ namespace Start_a_Town_.UI
             this.MouseThrough = true;
             Graphic.AutoSize = true;
             Graphic.Controls.Add(new Label(Vector2.Zero, text, fill: Color.Black, outline: Color.White, font: UIManager.FontBold ) { TextColor = Color.Black }.SetMousethrough(true));
-            this.Options = new GroupBox() { Location = Graphic.Controls.BottomLeft };
-            foreach (var option in options)
-            {
-                Button btn = new Button(this.Options.Controls.BottomLeft, Graphic.ClientSize.Width, option.Value) { TextColor = Color.Black, TextOutline = Color.White };
-                btn.Tag = option;
-                btn.LeftClickAction = () =>
-                {
-                    this.Hide();
-                    DialogOption.Select(PlayerOld.Actor, obj, option.Value);
-                };
-                this.Options.Controls.Add(btn);
-            }
-            this.Graphic.Controls.Add(this.Options);
+          
             Controls.Add(Graphic); 
             Graphic.BackgroundStyle = BackgroundStyle.Window;
  
             this.Timer = this.Duration;
         }
-        public SpeechBubble(GameObject obj, string text, List<string> options)
-        {
-            this.Layer = LayerTypes.Speechbubbles;
-            this.Owner = obj;
-            this.Conversation = this.Owner.GetComponent<SpeechComponent>().Conversation;
-            this.Text = text;
-            this.AutoSize = true;
-            Graphic = new Panel() { Color = Color.White, MouseThrough = true };
-            this.Duration = Math.Max(text.Length * Engine.TicksPerSecond / 3, Engine.TicksPerSecond * 3);//10);
-            this.MouseThrough = true;
-            Graphic.AutoSize = true;
-            Graphic.Controls.Add(new Label(Vector2.Zero, text, fill: Color.Black, outline: Color.White, font: UIManager.FontBold) { TextColor = Color.Black }.SetMousethrough(true));
-            this.Options = new GroupBox() { Location = Graphic.Controls.BottomLeft };
-            foreach (var option in options)
-            {
-                Button btn = new Button(this.Options.Controls.BottomLeft, Graphic.ClientSize.Width, option) { TextColor = Color.Black, TextOutline = Color.White };
-
-                var d = new DialogOption(option, obj);
-                btn.Tag = option;
-                btn.LeftClickAction = () =>
-                {
-                    this.Hide();
-                    DialogOption.Select(PlayerOld.Actor, obj, option);
-                };
-                this.Options.Controls.Add(btn);
-            }
-            this.Graphic.Controls.Add(this.Options);
-            Controls.Add(Graphic);
-            Graphic.BackgroundStyle = BackgroundStyle.Window;
-
-            this.Timer = this.Duration;
-        }
-
         public void SetTimer(IProgressBar timer)
         {
             if (timer == null)
@@ -172,7 +108,6 @@ namespace Start_a_Town_.UI
             if (this.Conversation != null)
                 if (this.Conversation.State == Components.Conversation.States.Finished)
                 {
-                    this.Graphic.Controls.Remove(this.Options);
                     this.Graphic.Controls.Remove(this.AttentionCountdown);
                     this.Conversation = null;
                 }

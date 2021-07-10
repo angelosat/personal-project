@@ -118,7 +118,7 @@ namespace Start_a_Town_
             }
         }
         
-        public void GetContextActions(ContextArgs a) { }
+        public void GetContextActions(GameObject playerEntity, ContextArgs a) { }
 
         static public bool IsValidFarmPosition(MapBase map, Vector3 arg)
         {

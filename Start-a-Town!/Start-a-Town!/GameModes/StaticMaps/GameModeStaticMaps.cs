@@ -130,39 +130,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var player = server.GetPlayer(playerid);
             player.SentChunks.Remove(vec);
         }
-        internal override void MapReceived(MapBase map)
-        {
-            this.ChunksPending = new List<Vector2>();
-            var size = (map as StaticMap).Size.Chunks;
-            for (int i = 0; i < size; i++)
-                for (int j = 0; j < size; j++)
-                    this.ChunksPending.Add(new Vector2(i, j));
-        }
-        ConcurrentQueue<Chunk> IncomingChunks = new ConcurrentQueue<Chunk>();
-        List<Vector2> ChunksPending = new List<Vector2>();
-        internal override void Update(Client client)
-        {
-            Chunk chunk;
-            while (this.IncomingChunks.TryDequeue(out chunk))
-            {
-                client.ReceiveChunk(chunk);
-                this.ChunksPending.Remove(chunk.MapCoords);
-                ("chunk received " + chunk.MapCoords.ToString()).ToConsole();
-                Client.Instance.Send(PacketType.ChunkReceived, Network.Serialize(w => w.Write(chunk.MapCoords)));
-
-                // change screen when player entity is assigned instead of here?
-                if (this.ChunksPending.Count == 0)
-                {
-                    // all chunks received, enter world
-                    "all chunks loaded!".ToConsole();
-                    (client.Map as StaticMap).Regions.Init();
-                    (client.Map as StaticMap).FinishLoading();
-                    client.EnterWorld(PlayerOld.Actor);
-                    Rooms.Ingame ingame = Rooms.Ingame.Instance;
-                    ScreenManager.Add(ingame.Initialize(client)); // TODO: find out why there's a freeze when ingame screen begins (and causing rendertargets during ingame.initialize() not work
-                }
-            }
-        }
+        
         internal override void Update(Server server)
         {
             SendPendingChunks(server);

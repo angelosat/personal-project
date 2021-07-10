@@ -33,7 +33,6 @@ namespace Start_a_Town_
         {
             return this.Icon;
         }
-        public PlayerOld Owner;
         public ToolManager Manager;
 
         public virtual GameObject GetTarget()

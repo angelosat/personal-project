@@ -832,20 +832,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.PlayerHaul:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int playerid = r.ReadInt32();
-                        var topickup = Instance.GetNetworkObject(r.ReadInt32());
-                        var target = new TargetArgs(topickup);
-                        var amount = r.ReadInt32();
-                        var interaction = new InteractionHaul(amount);
-                        msg.Player.ControllingEntity.GetComponent<WorkComponent>().Perform(msg.Player.ControllingEntity, interaction, target);
-                        if (interaction.Conditions.Evaluate(msg.Player.ControllingEntity, target))
-                            Instance.Enqueue(PacketType.PlayerHaul, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
                 case PacketType.PlayerUnequip:
                     msg.Payload.Deserialize(r =>
                     {
@@ -917,21 +903,6 @@ namespace Start_a_Town_.Net
                                 if (msg.Player.OrderedPackets.Peek().ID == ackID)
                                     msg.Player.OrderedPackets.Dequeue();
                         }
-                    });
-                    break;
-
-                case PacketType.RequestNewObject:
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        GameObject toDrag = GameObject.CreatePrefab(r);
-                        Instance.InstantiateObject(toDrag);
-                        byte amount = r.ReadByte();
-                        foreach (var player in Instance.Players.GetList())
-                            Instance.Enqueue(player, Packet.Create(msg.Player, PacketType.RequestNewObject, Network.Serialize(w =>
-                            {
-                                TargetArgs.Write(w, toDrag);
-                                w.Write(amount);
-                            }), SendType.Ordered | SendType.Reliable));
                     });
                     break;
 

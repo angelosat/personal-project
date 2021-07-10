@@ -936,7 +936,7 @@ namespace Start_a_Town_
             }
 
             fx.Parameters["FogLevel"].SetValue(FogLevel);
-            this.MaxDrawZ = GetMaxDrawLevel();
+            this.MaxDrawZ = GetMaxDrawLevel(map);
             this.Effect.Parameters["FogEnabled"].SetValue(Fog);
             this.Effect.Parameters["MaxDrawLevel"].SetValue(this.MaxDrawZ);
             this.Effect.Parameters["HideWalls"].SetValue(Engine.HideWalls);
@@ -988,13 +988,14 @@ namespace Start_a_Town_
             this.Effect.Parameters["RotCos"].SetValue((float)this.RotCos);
             this.Effect.Parameters["RotSin"].SetValue((float)this.RotSin);
 
-            if (PlayerOld.Actor != null)
+            var actor = map.Net.GetPlayer().ControllingEntity;
+            if (actor != null)
             {
-                if (PlayerOld.Actor.IsSpawned)
+                if (actor.IsSpawned)
                 {
-                    Sprite sprite = PlayerOld.Actor.GetSprite();
+                    Sprite sprite = actor.GetSprite();
                     Rectangle spriteBounds = sprite.GetBounds(); 
-                    Rectangle screenBounds = this.GetScreenBounds(PlayerOld.Actor.Global, spriteBounds);
+                    Rectangle screenBounds = this.GetScreenBounds(actor.Global, spriteBounds);
                     var xxx = screenBounds.X / (float)this.Width - .5f;
                     var yyy = screenBounds.Y / (float)this.Height - .5f;
                     var www = (screenBounds.X + screenBounds.Width) / (float)this.Width - .5f;
@@ -1005,7 +1006,7 @@ namespace Start_a_Town_
                     hhh = .15f * this.Zoom;
                     var box = new Vector4(xxx, yyy, www, hhh);
                     this.Effect.Parameters["PlayerBoundingBox"].SetValue(box);
-                    this.Effect.Parameters["PlayerDepth"].SetValue(PlayerOld.Actor.Global.GetDrawDepth(map, this));
+                    this.Effect.Parameters["PlayerDepth"].SetValue(actor.Global.GetDrawDepth(map, this));
                 }
             }
 
@@ -1501,13 +1502,14 @@ namespace Start_a_Town_
             }
         }
 
-        public void UpdateMaxDrawLevel()
+        public void UpdateMaxDrawLevel(MapBase map)
         {
-            this.MaxDrawZ = this.GetMaxDrawLevel();
+            this.MaxDrawZ = this.GetMaxDrawLevel(map);
         }
-        public int GetMaxDrawLevel()
+        public int GetMaxDrawLevel(MapBase map)
         {
-            var value = (this.HideTerrainAbovePlayer && (PlayerOld.Actor != null)) ? (int)PlayerOld.Actor.Transform.Global.RoundXY().Z + 2 + this.HideTerrainAbovePlayerOffset : this.DrawLevel;
+            var actor = map.Net.GetPlayer().ControllingEntity;
+            var value = (this.HideTerrainAbovePlayer && (actor != null)) ? (int)actor.Transform.Global.RoundXY().Z + 2 + this.HideTerrainAbovePlayerOffset : this.DrawLevel;
             value = Math.Min(MapBase.MaxHeight - 1, Math.Max(0, value));
             return value;
         }
@@ -1553,25 +1555,6 @@ namespace Start_a_Town_
             this.WaterComposite = new RenderTarget2D(gfx, w, h, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
         }
 
-        public void BuildChunk(MapBase map, Chunk chunk, MySpriteBatch sb, EngineArgs a, int rotation)
-        {
-            Vector3? playerGlobal = null;
-            var hiddenRects = new List<Rectangle>();
-            if (PlayerOld.Actor != null)
-            {
-                if (PlayerOld.Actor.IsSpawned)
-                {
-                    playerGlobal = new Nullable<Vector3>(PlayerOld.Actor.Global.RoundXY());
-                    Sprite sprite = PlayerOld.Actor.GetSprite();
-                    Rectangle spriteBounds = sprite.GetBounds();
-                    Rectangle screenBounds = this.GetScreenBounds(playerGlobal.Value, spriteBounds);
-                    hiddenRects.Add(screenBounds);
-                }
-            }
-            this.DrawChunk(sb, map, chunk, playerGlobal, hiddenRects, a);
-            chunk.BuildFrontmostBlocks(this);
-            chunk.Valid = true;
-        }
         public void MousePicking(MapBase map)
         {
             foreach (var chunk in (from ch in map.GetActiveChunks().Values where this.ViewPort.Intersects(ch.GetScreenBounds(this)) select ch))
@@ -1582,8 +1565,9 @@ namespace Start_a_Town_
                 return;
             var controller = Controller.Instance;
             var hidewalls = Engine.HideWalls;
-            bool playerExists = PlayerOld.Actor != null;
-            Vector3 playerGlobal = playerExists ? PlayerOld.Actor.Global : default(Vector3);
+            var actor = map.Net.GetPlayer().ControllingEntity;
+            bool playerExists = actor != null;
+            Vector3 playerGlobal = playerExists ? actor.Global : default(Vector3);
             float radius = .01f * this.Zoom * this.Zoom; //occlusion radius
             bool found = false;
             var foundDepth = float.MinValue;
@@ -1824,9 +1808,9 @@ namespace Start_a_Town_
             ry = (x * sin + y * cos);
         }
 
-        internal bool IsDrawable(Vector3 global)
+        internal bool IsDrawable(MapBase map, Vector3 global)
         {
-            return global.Z <= this.GetMaxDrawLevel() + 1;
+            return global.Z <= this.GetMaxDrawLevel(map) + 1;
         }
 
         internal void ToggleFollowing(GameObject gameObject)

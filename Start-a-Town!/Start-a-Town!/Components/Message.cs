@@ -133,7 +133,6 @@ namespace Start_a_Town_.Components
             DialogueOption,
             ApplyMaterial,
             UpdateJobs,
-            Think,
             ObjectStateChanged,
             JobDeleteAll,
             JobRemoveAll,

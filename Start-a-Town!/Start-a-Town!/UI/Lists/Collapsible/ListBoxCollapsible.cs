@@ -11,7 +11,6 @@ namespace Start_a_Town_.UI
     public class ListBoxCollapsible : ScrollableBoxNew
     {
         readonly int IndentWidth = UIManager.ArrowRight.Rectangle.Width;
-        Control SelectedControl;
 
         public ListBoxCollapsibleNode ARoot = new("root");
         public ListBoxCollapsible(int width, int height, ScrollModes mode = ScrollModes.Vertical) : base(new Rectangle(0, 0, width, height), mode)

@@ -16,7 +16,6 @@ namespace Start_a_Town_.UI
         DateTime TimeStamp;
         GameObject Owner;
         static Dictionary<GameObject, List<SpeechBubble>> List = new Dictionary<GameObject, List<SpeechBubble>>();
-        Conversation Conversation;
         Bar AttentionCountdown;
 
         public override bool Show()
@@ -33,12 +32,7 @@ namespace Start_a_Town_.UI
 
         static public SpeechBubble ShowNew(GameObject obj, string text)
         {
-            return ShowNew(obj, text, null);
-        }
-        static public SpeechBubble ShowNew(GameObject obj, string text, Conversation convo)
-        {
             SpeechBubble bubble = new SpeechBubble(obj, text);
-            bubble.Conversation = convo;
             bubble.TimeStamp = DateTime.Now;
             bubble.Show();
             return bubble;
@@ -101,13 +95,8 @@ namespace Start_a_Town_.UI
             {
                 (this.AttentionCountdown.Object as Progress).Value--;
             }
-            if (this.Conversation != null)
-                if (this.Conversation.State == Components.Conversation.States.Finished)
-                {
-                    this.Graphic.Controls.Remove(this.AttentionCountdown);
-                    this.Conversation = null;
-                }
-            if (Paused || this.Conversation != null)
+            
+            if (Paused)
                 {
                     if (Timer > Duration / 2f)
                         this.Timer -= 1;

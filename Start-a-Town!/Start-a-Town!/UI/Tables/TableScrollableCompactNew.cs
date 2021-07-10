@@ -21,6 +21,7 @@ namespace Start_a_Town_.UI
             this.MaxVisibleItems = maxVisibleItems;
             this.ShowColumnLabels = showColumnLabels;
             this.ColumnLabels = new GroupBox() { AutoSize = true, BackgroundColor = Color.Black * .5f };
+            this.ScrollBarMode = scrollbarMode;
         }
         public TableScrollableCompactNew<TObject> AddColumn(object index, Control columnHeader, int spacing, Func<TObject, Control> control, float anchor = .5f)
         {

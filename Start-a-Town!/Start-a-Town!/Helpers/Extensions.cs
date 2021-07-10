@@ -76,7 +76,6 @@ namespace Start_a_Town_
             dictionary.TryGetValue(key, out TValue ret);
             return ret;
         }
-        public static Time ToTime(this DateTime dateTime) { return new Time(dateTime); }
         public static string ToLocalTime(this DateTime dateTime)
         { return dateTime.ToString("MMM dd, HH:mm:ss", System.Globalization.CultureInfo.GetCultureInfo("en-GB")); }
        

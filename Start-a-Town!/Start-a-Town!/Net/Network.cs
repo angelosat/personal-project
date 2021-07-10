@@ -42,7 +42,7 @@ namespace Start_a_Town_.Net
         public Server Server;
 
         static int PacketIDSequence = 10000;
-        internal static int RegisterPacketHandler(Action<IObjectProvider, BinaryReader> handler)
+        public static int RegisterPacketHandler(Action<IObjectProvider, BinaryReader> handler)
         {
             var id = PacketIDSequence++;
             Server.RegisterPacketHandler(id, handler);

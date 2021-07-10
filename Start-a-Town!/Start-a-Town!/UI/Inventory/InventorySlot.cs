@@ -9,7 +9,6 @@ namespace Start_a_Town_.UI
 
         }
         readonly bool DragDropEnabled = false;
-        public ObjectFilter2 Filter = new();
         public InventorySlot(GameObjectSlot invSlot, GameObject parent, int id = 0)
         {
             Tag = invSlot;

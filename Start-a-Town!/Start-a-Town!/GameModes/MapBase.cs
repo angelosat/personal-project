@@ -87,7 +87,7 @@ namespace Start_a_Town_
         
         public abstract Vector2 GetOffset();
 
-        static public Texture2D ShaderMouseMap, BlockDepthMap;
+        static public Texture2D ShaderMouseMap, BlockDepthMap; // TODO: move these to block class
         static public Texture2D Shadow;
         static internal void Initialize()
         {
@@ -551,9 +551,7 @@ namespace Start_a_Town_
         }
         public virtual bool IsSolid(Vector3 global)
         {
-            Cell cell;
-
-            if (!this.TryGetCell(global, out cell))
+            if (!this.TryGetCell(global, out Cell cell))
                 return true; // return true to prevent crashing by trying to add object to missing chunk
             //return false; // return false to let entity attempt to enter unloaded chunk so we can handle the event of that
 
@@ -562,26 +560,6 @@ namespace Start_a_Town_
             var blockCoords = offset - offset.FloorXY();
 
             var issolid = cell.Block.IsSolid(cell, blockCoords);
-            return issolid;
-            if (issolid)
-                return true;
-
-            // TODO: don't use entity collision yet, until i optimize it
-            foreach (var entity in this.GetObjects(global - new Vector3(5), global + new Vector3(5)))
-            {
-                if (entity.Physics.Solid)
-                {
-                    BoundingBox box = new BoundingBox(entity.Global - new Vector3(0.5f, 0.5f, 0), entity.Global + new Vector3(0.5f, 0.5f, entity.Physics.Height));
-                    var cont = box.Contains(global);
-                    if (cont != ContainmentType.Disjoint)
-                    {
-                        return true;
-                        if (Vector3.Distance(global * new Vector3(1, 1, 0), entity.Global * new Vector3(1, 1, 0)) < 0.5f)
-                            return true;
-                    }
-                }
-            }
-
             return issolid;
         }
         public virtual bool IsPathable(Vector3 global)
@@ -783,17 +761,14 @@ namespace Start_a_Town_
         }
 
         public abstract bool SetBlockLuminance(Vector3 global, byte luminance);
-
-        internal bool IsTraversable(Vector3 source, Vector3 target)
+        [Obsolete]
+        internal bool IsTraversable2Height(Vector3 source, Vector3 target)
         {
-            return this.IsTraversable1Height(source, target);
             var globalsource = source;
             var globaltarget = target;
             if (globalsource.Z == globaltarget.Z)
                 return true;
             var lower = Math.Min(globalsource.Z, globaltarget.Z) == globalsource.Z ? globalsource : globaltarget;
-            var higher = lower == globalsource ? globaltarget : globalsource;
-            var humanheight = 2;
             var above1 = lower.Above();
             var above2 = above1.Above();
             var above3 = above2.Above();
@@ -804,7 +779,7 @@ namespace Start_a_Town_
             }
             return true;
         }
-        internal bool IsTraversable1Height(Vector3 source, Vector3 target)
+        internal bool IsTraversable(Vector3 source, Vector3 target)
         {
             var globalsource = source;
             var globaltarget = target;
@@ -815,10 +790,9 @@ namespace Start_a_Town_
             var above2 = above1.Above();
             return !this.GetBlock(above2).Solid;
         }
-        public void EventOccured(Components.Message.Types type, params object[] p)
+        public void EventOccured(Message.Types type, params object[] p)
         {
-            if (this.Net != null)
-                this.Net.EventOccured(type, p);
+            this.Net?.EventOccured(type, p);
         }
 
         public virtual void OnGameEvent(GameEvent e)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_.UI
 {
@@ -18,15 +17,15 @@ namespace Start_a_Town_.UI
         DateTime TimeStamp;
         static Dictionary<GameObject, List<SpeechBubbleOld>> List = new Dictionary<GameObject, List<SpeechBubbleOld>>();
 
-        static public SpeechBubbleOld Create(DateTime time, GameObject obj, string text, params DialogueOption[] options)
+        static public SpeechBubbleOld Create(DateTime time, GameObject obj, string text)
         {
-            SpeechBubbleOld bubble = Create(obj, text, options);
+            SpeechBubbleOld bubble = Create(obj, text);
             bubble.TimeStamp = time;
             return bubble;
         }
-        static public SpeechBubbleOld Create(GameObject obj, string text, params DialogueOption[] options)
+        static public SpeechBubbleOld Create(GameObject obj, string text)
         {
-            SpeechBubbleOld bubble = new SpeechBubbleOld(obj, text, options);
+            SpeechBubbleOld bubble = new SpeechBubbleOld(obj, text);
             
             //List.Add(bubble);
             bubble.TimeStamp = DateTime.Now;
@@ -40,7 +39,7 @@ namespace Start_a_Town_.UI
             bubble.Show();
             return bubble;
         }
-        SpeechBubbleOld(GameObject obj, string text, params DialogueOption[] options)
+        SpeechBubbleOld(GameObject obj, string text)
         {
             this.Layer = LayerTypes.Speechbubbles;
             this.Tag = obj;
@@ -51,25 +50,11 @@ namespace Start_a_Town_.UI
 
             Graphic.AutoSize = true;
             Graphic.Controls.Add(new Label(Vector2.Zero, text, fill: Color.Black, outline: Color.White, font: UIManager.FontBold ) { TextColor = Color.Black }.SetMousethrough(true));
-            foreach (var option in options)
-            {
-                if (!option.Condition())
-                    continue;
-                Button btn = new Button(Graphic.Controls.Last().BottomLeft, Graphic.ClientSize.Width, option.Text) { TextColor = Color.Black, TextOutline = Color.White };
-
-                btn.TexBackgroundColorFunc = () =>
-                {
-                    return (btn.MouseHover && btn.Active) ? Color.White * 0.5f : Color.Transparent;
-                };
-
-                btn.Tag = option;
-                Graphic.Controls.Add(btn);
-            }
+         
             Graphic.BackgroundStyle = BackgroundStyle.Window;
 
             Controls.Add(Graphic);
             this.Timer = this.Duration;
-            Paused = options.Length > 0 ? true : false;
         }
         public void Restart()
         {

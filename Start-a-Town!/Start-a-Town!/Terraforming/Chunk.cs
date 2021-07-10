@@ -537,7 +537,6 @@ namespace Start_a_Town_
                     }
                 }
                 
-                byte oldLight;
                 SetSunlight(localx, localy, z, light);
                 if (z <= firstContact)
                     lightsourcesToHandle.Enqueue(cell.LocalCoords.ToGlobal(this));

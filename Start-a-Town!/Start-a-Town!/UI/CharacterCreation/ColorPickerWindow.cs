@@ -16,7 +16,6 @@ namespace Start_a_Town_.UI
         public Action<Color> Callback = c => { };
         Button BtnOk, BtnCancel;
         Panel PanelButtons, PanelHS, PanelV;
-        internal Func<Color> CancelAction;
 
         public ColorPickerWindow()
         {
@@ -36,7 +35,7 @@ namespace Start_a_Town_.UI
             this.Client.Controls.Add(this.PanelHS, this.PanelV);
             this.Closable = false;
             this.BtnOk = new Button("Ok") { LeftClickAction = () => { this.Callback(this.LightnessPick.Selected.Multiply(this.ColorPick.Selected)); this.TopLevelControl.Hide(); } };
-            this.BtnCancel = new Button("Cancel") { LeftClickAction = () => { this.CancelAction?.Invoke(); this.TopLevelControl.Hide(); } };
+            this.BtnCancel = new Button("Cancel") { LeftClickAction = () => this.TopLevelControl.Hide() };
             this.PanelButtons = new Panel() { AutoSize = true, Location = this.PanelHS.BottomLeft };
             this.PanelButtons.AddControlsHorizontally(this.BtnOk, this.BtnCancel);
             this.Client.Controls.Add(this.PanelButtons);

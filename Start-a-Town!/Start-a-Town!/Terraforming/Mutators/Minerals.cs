@@ -59,7 +59,6 @@ namespace Start_a_Town_.Terraforming.Mutators
         public override void Generate(MapBase map)
         {
             var mapSize = map.GetSizeInChunks() * Chunk.Size;
-            var n = 0;
             foreach (var ore in this.Templates)
             {
                 var seed = ore.Name.GetHashCode() + map.World.Seed;

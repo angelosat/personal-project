@@ -11,9 +11,7 @@ namespace Start_a_Town_.UI
         public enum OpenOrientation { Below, Above }
         public OpenOrientation Orientation = OpenOrientation.Below;
         public bool Open = false;
-        public T SelectedItem;
         Control Panel;
-        public Func<T, string> TextSelector;
         public Action<T> ItemChangedFunction = item => { };
 
         public ComboBoxLatest(T[] items, int width, int maxVisibleItems, Action<ComboBoxLatest<T>, T> callback, Func<ComboBoxLatest<T>, T> selectedGetter)

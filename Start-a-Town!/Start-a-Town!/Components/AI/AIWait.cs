@@ -11,8 +11,6 @@ namespace Start_a_Town_.AI.Behaviors
                 return "Idle";
             }
         }
-        TimeSpan Timer;
-        TimeSpan T;
         int TimerNew = 0;
         public AIWait() : this(new TimeSpan(0, 0, 1)) { }
         int BaseWaitTime = 5;

@@ -31,22 +31,6 @@ namespace Start_a_Town_.Towns.Digging
             this.Handle(client, msg);
         }
 
-        public override void Handle(IObjectProvider net, Packet msg)
-        {
-            switch (msg.PacketType)
-            {
-                case PacketType.DiggingDesignate:
-                    var p = new PacketDiggingDesignate(msg.Payload);
-                    var positions = new BoundingBox(p.Begin, p.End).GetBox();
-                    net.EventOccured(Components.Message.Types.MiningDesignation, positions, p.Remove);
-                    net.Forward(msg);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
         internal override void OnGameEvent(GameEvent e)
         {
             switch (e.Type)

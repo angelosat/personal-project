@@ -41,17 +41,14 @@ namespace Start_a_Town_
             // TODO: signal each npc that remembers obj, that obj's state has changed, so that they evaluate it again next time they see it
             throw new NotImplementedException();
         }
-        Behavior Root;// { get { return (BehaviorComposite)this["Root"]; } set { this["Root"] = value; } }
-        PersonalityComponent Personality { get { return (PersonalityComponent)this["Personality"]; } set { this["Personality"] = value; } }
-        Knowledge Knowledge { get { return (Knowledge)this["Memory"]; } set { this["Memory"] = value; } }
-        bool Running { get { return (bool)this["Running"]; } set { this["Running"] = value; } }
-        ThoughtCollection Thoughts { get { return (ThoughtCollection)this["Thoughts"]; } set { this["Thoughts"] = value; } }
+        Behavior Root;
+        Knowledge Knowledge;
+        bool Running;
         public AIState State;
         public bool Enabled = true;
         public AIComponent()
         {
             this.Running = true;
-            this.Thoughts = new ThoughtCollection();
             this.Knowledge = new Knowledge();
             this.Root = null;
         }
@@ -107,20 +104,10 @@ namespace Start_a_Town_
                 return true;
             switch (e.Type)
             {
-
-
                 case Message.Types.SyncAI:
                     var seed = (int)e.Parameters[0];
                     this.Sync(seed);
                     break;
-
-
-
-
-                case Message.Types.Think:
-                    var thought = new Thought() { Time = DateTime.Now.ToTime(), Title = (string)e.Parameters[0], Text = (string)e.Parameters[1] };
-                    Thoughts.Add(thought);
-                    return true;
 
                 case Message.Types.ManageEquipment:
                     throw new NotImplementedException();

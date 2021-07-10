@@ -15,9 +15,6 @@ namespace Start_a_Town_.AI
     {
         public override void Initialize()
         {
-            Server.Instance.RegisterPacketHandler(PacketType.AI, new AIPacketHandler());
-            Client.Instance.RegisterPacketHandler(PacketType.AI, new AIPacketHandler());
-
             PacketAILogWrite.Init();
             PacketForceTask.Init();
             PacketNeedModify.Init();

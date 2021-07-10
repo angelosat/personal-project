@@ -275,8 +275,7 @@ namespace Start_a_Town_.Components
                     for (int i = 0; i < (int)Math.Ceiling(fallheight); i++)
                     {
                         Vector3 check = global - new Vector3(0, 0, 1 + i);
-                        var loc = new Location(map, check);
-                        if(loc.IsStandable())
+                        if(IsStandable(map, check))
                         {
                             parent.Net.PostLocalEvent(parent, Message.Types.HitGround, Math.Abs(speed.Z));
                             speed.Z = 0;
@@ -296,7 +295,7 @@ namespace Start_a_Town_.Components
                             new Vector3(nextbox.Max.X, nextbox.Min.Y, next.Z), 
                             new Vector3(nextbox.Max.X, nextbox.Max.Y, next.Z) 
                         };
-                    if (corners.Any(c => new Location(map, c + new Vector3(0, 0, Gravity)).GetDensity() > 0))
+                    if (corners.Any(c => GetDensity(map, c + new Vector3(0, 0, Gravity)) > 0))
                     {
                         var f = speed.Z;
                         parent.Net.SyncEvent(parent, Message.Types.HitGround, w => w.Write(f));
@@ -531,6 +530,24 @@ namespace Start_a_Town_.Components
         public static Vector3 Decelerate(Vector3 velocity)
         {
             return velocity *= FrictionFactor;// .5f;
+        }
+
+        static public float GetDensity(MapBase map, Vector3 global)
+        {
+            var cell = map.GetCell(global);
+            return cell.Block.GetDensity(cell.BlockData, global);
+        }
+        static public bool IsStandable(MapBase map, Vector3 global)
+        {
+            var gravity = map.Gravity;
+            var box = new BoundingBox(global - new Vector3(.25f, .25f, 0), global + new Vector3(.25f, .25f, 1));
+            var corners = new Vector3[] {
+                    box.Min,
+                    new Vector3(box.Min.X, box.Max.Y, global.Z),
+                    new Vector3(box.Max.X, box.Min.Y, global.Z),
+                    new Vector3(box.Max.X, box.Max.Y, global.Z)
+                };
+            return corners.Any(c => map.GetBlock(c + new Vector3(0, 0, gravity)).Density > 0);
         }
     }
 }

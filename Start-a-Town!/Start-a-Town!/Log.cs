@@ -114,43 +114,6 @@ List of available commands:
             return text;
         }
 
-        internal static void Command(EntryTypes type, params object[] p)
-        {
-            GameObject speaker, target;
-            string text;
-            DialogueOption option;
-            switch (type)
-            {
-                case EntryTypes.Chat:
-                    Log.Enqueue(EntryTypes.Chat, p);
-                    SpeechBubbleOld.Create(p[0] as GameObject, (string)p[1]);
-                    break;
-
-                case EntryTypes.Dialogue:
-                    DateTime time = (DateTime)p[0];
-                    speaker = p[1] as GameObject;
-                    text = (string)p[2];
-                    DialogueOption[] options = (DialogueOption[])p[3];
-                    SpeechBubbleOld.Create(time, speaker, text, options.ToArray());
-                    Log.Enqueue(EntryTypes.Chat, speaker, text);
-                    break;
-
-                case EntryTypes.DialogueOption:
-                    speaker = p[0] as GameObject;
-                    option = (DialogueOption)p[2];
-                    SpeechBubbleOld.Create(speaker, option.Text);
-                    throw new NotImplementedException();
-
-                case EntryTypes.DialogueEnd:
-                    speaker = p[0] as GameObject;
-                    SpeechBubbleOld.Hide(speaker);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
         internal static void Command(string gotText)
         {
             List<string> words = new List<string>();

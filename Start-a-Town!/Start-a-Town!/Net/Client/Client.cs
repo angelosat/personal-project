@@ -327,13 +327,7 @@ namespace Start_a_Town_.Net
             if(this.Map!=null)
             this.Map.OnGameEvent(e);
         }
-        [Obsolete]
-        readonly Dictionary<PacketType, IClientPacketHandler> PacketHandlers = new();
-        [Obsolete]
-        public void RegisterPacketHandler(PacketType channel, IClientPacketHandler handler)
-        {
-            this.PacketHandlers.Add(channel, handler);
-        }
+       
         [Obsolete]
         readonly static Dictionary<PacketType, Action<IObjectProvider, BinaryReader>> PacketHandlersNew = new();
         [Obsolete]
@@ -342,14 +336,7 @@ namespace Start_a_Town_.Net
             PacketHandlersNew.Add(channel, handler);
         }
       
-        static int PacketSequence = 1;
         readonly static Dictionary<int, Action<IObjectProvider, BinaryReader>> PacketHandlersNewNewNew = new();
-        internal static int RegisterPacketHandler(Action<IObjectProvider, BinaryReader> handler)
-        {
-            var id = PacketSequence++;
-            PacketHandlersNewNewNew.Add(id, handler);
-            return id;
-        }
         internal static void RegisterPacketHandler(int id, Action<IObjectProvider, BinaryReader> handler)
         {
             PacketHandlersNewNewNew.Add(id, handler);
@@ -477,12 +464,6 @@ namespace Start_a_Town_.Net
 
         private void HandleMessage(Packet msg)
         {
-            if (Instance.PacketHandlers.TryGetValue(msg.PacketType, out IClientPacketHandler handler))
-            {
-                handler.HandlePacket(Instance, msg);
-                return;
-            }
-
             if (PacketHandlersNew.TryGetValue(msg.PacketType, out Action<IObjectProvider, BinaryReader> handlerNew))
             {
                 Network.Deserialize(msg.Payload, r=> handlerNew(Instance, r));

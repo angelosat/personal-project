@@ -51,7 +51,7 @@ namespace Start_a_Town_
             }            
         }
 
-        public static event InputEvent MouseLeftPress, MouseLeftRelease, MouseLeftDown, MouseWheelUp, MouseWheelDown, EscapeDown,
+        public static event InputEvent MouseLeftPress, MouseLeftRelease, MouseLeftDown, MouseWheelUp, MouseWheelDown,
             MouseRightPress, MouseRightDown, MouseRightRelease;
 
         public static event EventHandler<EventArgs> MouseOverEntityChanged, MouseOverTileChanged, KeyPressed;

@@ -86,7 +86,6 @@ namespace Start_a_Town_.AI
         // dialogue
         public GameObject Talker;
         public Progress Attention = new();
-        public Conversation Conversation;
         public Actor ConversationPartner, TradingPartner;
         public Dictionary<Actor, ConversationTopic> CommunicationPending = new();
         public float AttentionDecayDefault = 1;

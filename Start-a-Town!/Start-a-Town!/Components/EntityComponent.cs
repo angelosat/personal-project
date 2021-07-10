@@ -104,11 +104,6 @@ namespace Start_a_Town_.Components
 
         public virtual void OnHitTestPass(GameObject parent, Vector3 face, float depth) { }
 
-
-        public virtual void GetDialogueOptions(GameObject parent, GameObject speaker, DialogueOptionCollection options) { }
-        public virtual void GetDialogOptions(GameObject parent, GameObject speaker, List<DialogOption> options) { }
-       
-
         public virtual bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
         {
             switch (e.Type)

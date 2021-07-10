@@ -15,8 +15,6 @@ namespace Start_a_Town_
         public override object Clone()
         {
             return new NpcSkillsComponent(this.SkillsNew.ToArray());
-
-            return new NpcSkillsComponent(this.SkillsNew.Select(s => s.Def).ToArray());
         }
         public NpcSkillsComponent(ItemDef def)
         {
@@ -40,7 +38,6 @@ namespace Start_a_Town_
                 this.SkillsNew[i] = skills[i].Clone();
             }
         }
-        Dictionary<Type, NpcSkill> Skills;
         NpcSkill[] SkillsNew;
         public NpcSkillsComponent(params SkillDef[] defs)
         {
@@ -51,15 +48,6 @@ namespace Start_a_Town_
             }
         }
        
-        internal override void GetManagementInterface(GameObject gameObject, Control box)
-        {
-            foreach(var skill in this.Skills.Values)
-            {
-                box.AddControlsBottomLeft(new Label(string.Format("{0}: {1}", skill.Def.Name, skill.Level)));
-            }
-        }
-
-        static Control UIContainer;
         public static void GetUI(GameObject actor, Control container)
         {
             var skills = actor.GetComponent<NpcSkillsComponent>().SkillsNew;

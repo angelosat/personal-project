@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using Start_a_Town_.Net;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
     class GeneratorPlants : Terraformer
     {
-        float Density;
-        
         public GeneratorPlants()
         {
             this.ID = Terraformer.Types.Trees;
             this.Name = "Trees";
-            this.Density = 0.3f;
         }
         public override void Generate(MapBase map)
         {

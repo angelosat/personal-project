@@ -7,17 +7,15 @@ namespace Start_a_Town_
 {
     class PacketDiggingDesignate : Packet
     {
-        static PacketType Packet = PacketType.DiggingDesignate;
+        static int p;
         static public void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(Packet, Receive);
-            Client.RegisterPacketHandler(Packet, Receive);
+            p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, Vector3 begin, Vector3 end, bool remove)
         {
             var stream = net.GetOutgoingStream();
-            stream.Write((int)Packet);
+            stream.Write(p);
             stream.Write(begin);
             stream.Write(end);
             stream.Write(remove);

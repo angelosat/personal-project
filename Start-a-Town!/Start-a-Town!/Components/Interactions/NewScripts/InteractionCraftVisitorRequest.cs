@@ -87,7 +87,7 @@ namespace Start_a_Town_
                 return null;
             actor.CurrentTask?.AddCraftedItem(product.Product as Entity);
             product.Product.Global = global + Vector3.UnitZ;
-            server.SyncInstantiate(product.Product);
+            product.Product.SyncInstantiate(server);
             actor.Map.SyncSpawn(product.Product, global.Above(), Vector3.Zero);
 
             return product.Product;

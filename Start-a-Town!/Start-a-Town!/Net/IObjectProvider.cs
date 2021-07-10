@@ -33,8 +33,6 @@ namespace Start_a_Town_
         bool DisposeObject(GameObject obj);
         bool DisposeObject(int netID);
 
-        GameObject InstantiateAndSync(GameObject obj);
-
         GameObject InstantiateObject(GameObject obj);
         void Instantiator(GameObject o);
         

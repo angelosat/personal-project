@@ -16,9 +16,7 @@ namespace Start_a_Town_
         bool Valid;
         bool Removing;
         protected Action<Vector3, Vector3, bool> Callback;
-        public Func<Vector3, bool> IsValid;
-        Func<List<Vector3>> GetZones = () => new List<Vector3>();
-        public Func<Vector3, bool> ValidityCheck;
+        Func<List<Vector3>> GetZones;
         Vector3 Plane;
         public override bool TargetOnlyBlocks => true;
         public ToolDesignate3D()
@@ -40,7 +38,7 @@ namespace Start_a_Town_
             base.Update();
             if (!Enabled)
                 return;
-            if (this.Target == null)
+            if (this.Target is null)
                 return;
             if (this.Target.Type != TargetType.Position)
                 return;
@@ -64,17 +62,6 @@ namespace Start_a_Town_
             var positions = this.GetPositions(w, h);
             foreach (var pos in positions)
             {
-                if (ValidityCheck != null)
-                {
-                    if (!ValidityCheck(pos))
-                        return false;
-                    else
-                        continue;
-                }
-                if (IsValid != null)
-                    if (IsValid(pos))
-                        continue;
-
                 if (Engine.Map.IsSolid(pos))
                     return false;
                 if (!Engine.Map.IsSolid(pos - Vector3.UnitZ))

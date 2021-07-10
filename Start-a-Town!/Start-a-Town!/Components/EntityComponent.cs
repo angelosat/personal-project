@@ -37,7 +37,7 @@ namespace Start_a_Town_.Components
         {
             return Properties.ToString();
         }
-
+        [Obsolete]
         public ComponentPropertyCollection Properties;
         public GameObject Parent;
 

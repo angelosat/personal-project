@@ -90,7 +90,7 @@ namespace Start_a_Town_.Crafting
             if (!product.Product.IsSpawned) // HACK for when the product is one of the ingredients (already existing on top of the workstation)
             {
                 product.Product.Global = global + Vector3.UnitZ;
-                server.SyncInstantiate(product.Product);
+                product.Product.SyncInstantiate(server);
                 actor.Map.SyncSpawn(product.Product, global.Above(), Vector3.Zero);
             }
             return product.Product;

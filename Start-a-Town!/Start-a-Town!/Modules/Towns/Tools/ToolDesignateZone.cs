@@ -10,29 +10,13 @@ namespace Start_a_Town_.Towns
         int CurrentZoneID;
         int ClickedZoneID;
         int EditingZone { get { return this.CurrentZoneID != 0 ? this.CurrentZoneID : this.ClickedZoneID; } }
-        public ToolDesignateZone()
-        {
-
-        }
-        public ToolDesignateZone(ZoneNew currentEditingZone)
-            //: base(currentEditingZone.Town)
-        {
-            this.CurrentZoneID = currentEditingZone.ID;
-            this.Add = this.Perform;
-        }
-        public ToolDesignateZone(Type zoneType)
-            //: base(Client.Instance.Map.Town)
-        {
-            this.ZoneType = zoneType;
-            this.CurrentZoneID = 0;
-            this.Add = this.Perform;
-        }
+        Town Town;
         public ToolDesignateZone(Town town, Type zoneType)
-            //: base(town)
         {
             this.ZoneType = zoneType;
             this.CurrentZoneID = 0;
             this.Add = this.Perform;
+            this.Town = town;
         }
         void Perform(Vector3 arg1, int arg2, int arg3, bool arg4)
         {

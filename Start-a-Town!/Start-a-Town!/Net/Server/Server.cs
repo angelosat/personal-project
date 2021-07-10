@@ -60,13 +60,6 @@ namespace Start_a_Town_.Net
         readonly Queue<Chunk> ChunksToActivate = new();
 
         [Obsolete]
-        readonly Dictionary<PacketType, IServerPacketHandler> PacketHandlers = new();
-        [Obsolete]
-        public void RegisterPacketHandler(PacketType channel, IServerPacketHandler handler)
-        {
-            this.PacketHandlers.Add(channel, handler);
-        }
-        [Obsolete]
         readonly static Dictionary<PacketType, Action<IObjectProvider, BinaryReader>> PacketHandlersNew = new();
         [Obsolete]
         static public void RegisterPacketHandler(PacketType channel, Action<IObjectProvider, BinaryReader> handler)
@@ -582,12 +575,6 @@ namespace Start_a_Town_.Net
 
         private static void HandleMessage(Packet msg)
         {
-            if (Instance.PacketHandlers.TryGetValue(msg.PacketType, out IServerPacketHandler handler))
-            {
-                handler.HandlePacket(Instance, msg);
-                return;
-            }
-            
             if (PacketHandlersNew.TryGetValue(msg.PacketType, out Action<IObjectProvider, BinaryReader> handlerNew))
             {
                 Network.Deserialize(msg.Payload, r => handlerNew(Instance, r));
@@ -957,36 +944,6 @@ namespace Start_a_Town_.Net
             return spawnPosition;
         }
        
-        /// <summary>
-        /// Creates the same item across the network (but doesn't spawn it in the game world)
-        /// </summary>
-        /// <param name="obj"></param>
-        public byte[] SyncInstantiate(GameObject obj)
-        {
-            obj.SyncInstantiate(this);
-            return null;
-
-            if (obj.RefID == 0)
-                Instantiate(obj);
-            
-            byte[] newData = Network.Serialize(w =>
-            {
-                obj.Write(w);
-            });
-           
-            Sync(newData);
-            return newData;
-        }
-        void Sync(byte[] data)
-        {
-            foreach (var player in Players.GetList())
-                Enqueue(player, Packet.Create(player, PacketType.InstantiateObject, data, SendType.Reliable)); 
-            /// WARNING i removed ordered tag because the client might need to have
-            /// a new object instantiated and use that object at the exact same tick as it happened server-side
-            /// the unordered packet should get processed immediately when it arrives on the client instead of waiting for the server-delay
-        }
-        
-        
         [Obsolete]
         public void SyncSpawn(GameObject obj)
         {
@@ -1035,13 +992,7 @@ namespace Start_a_Town_.Net
             PacketPlayerDisconnected.Send(Instance, existing.Player.ID);
         }
 
-        public GameObject InstantiateAndSync(GameObject obj)
-        {
-            this.SyncInstantiate(obj);
-            return obj;
-        }
-
-        public void SyncEvent(GameObject recipient, Components.Message.Types msg, Action<BinaryWriter> writer)
+        public void SyncEvent(GameObject recipient, Message.Types msg, Action<BinaryWriter> writer)
         {
             byte[] data;
             using (var w = new BinaryWriter(new MemoryStream()))
@@ -1120,7 +1071,7 @@ namespace Start_a_Town_.Net
         {
             if (obj.RefID == 0)
             {
-                this.SyncInstantiate(obj);
+                obj.SyncInstantiate(this);
                 SyncChild(obj, parent, childID);
             }
             obj.Parent = parent;
@@ -1131,7 +1082,7 @@ namespace Start_a_Town_.Net
         void SpawnObject(GameObject obj)
         {
             if (obj.RefID == 0)
-                SyncInstantiate(obj);
+                obj.SyncInstantiate(this);
             SyncSpawn(obj);
         }
 

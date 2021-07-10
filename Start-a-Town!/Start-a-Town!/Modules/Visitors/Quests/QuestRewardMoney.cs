@@ -36,7 +36,7 @@ namespace Start_a_Town_
                     var split = i.item.Split(i.amount);
                     if (qgiver.Net is Net.Server server)
                     {
-                        server.SyncInstantiate(split);
+                        split.SyncInstantiate(server);
                         actor.Inventory.SyncInsert(split);
                     }
                 }

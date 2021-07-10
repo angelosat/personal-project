@@ -224,7 +224,7 @@ namespace Start_a_Town_.Components
                 {
                     var splitItem = obj.Clone();
                     splitItem.StackSize = amount;
-                    server.SyncInstantiate(splitItem);
+                    splitItem.SyncInstantiate(server);
                     Packets.SyncSetHaulSlot(server, parent as Actor, splitItem as Entity);
                     parent.GetComponent<PersonalInventoryComponent>().Haul(parent, splitItem);
                 }
@@ -418,7 +418,7 @@ namespace Start_a_Town_.Components
                 {
                     var newobj = obj.Clone();
                     newobj.StackSize = amount;
-                    parent.Net.InstantiateAndSync(newobj);
+                    newobj.SyncInstantiate(parent.Net);
 
                     if (server != null)
                     {

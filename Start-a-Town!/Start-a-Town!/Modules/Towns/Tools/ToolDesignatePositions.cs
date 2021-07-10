@@ -16,8 +16,7 @@ namespace Start_a_Town_.Towns
         bool Removing;
 
         readonly Action<Vector3, Vector3, bool> Add;
-        public Func<Vector3, bool> IsValid;
-        Func<List<Vector3>> GetZones = () => new List<Vector3>();
+        Func<List<Vector3>> GetZones;
         public Func<Vector3, bool> ValidityCheck;
         Vector3 Plane;
 
@@ -66,10 +65,7 @@ namespace Start_a_Town_.Towns
                     else
                         continue;
                 }
-                if (IsValid != null)
-                    if (IsValid(pos))
-                        continue;
-
+                
                 if (Engine.Map.IsSolid(pos))
                     return false;
                 if (!Engine.Map.IsSolid(pos - Vector3.UnitZ))

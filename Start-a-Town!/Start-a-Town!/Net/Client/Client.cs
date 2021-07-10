@@ -1029,12 +1029,7 @@ namespace Start_a_Town_.Net
                 this.DisposeObject(child);
             return true;
         }
-        
-        public GameObject InstantiateAndSync(GameObject obj)
-        {
-            return null;
-        }
-
+      
         /// <summary>
         /// Is passed recursively to an object and its children objects (inventory items) to register their network ID.
         /// </summary>

@@ -801,14 +801,12 @@
     <Compile Include="Modules\Towns\Digging\AI\TaskGiverDigging.cs" />
     <Compile Include="Modules\Towns\Digging\ToolDigging.cs" />
     <Compile Include="Modules\Towns\Farming\FarmingManager.cs" />
-    <Compile Include="Modules\Towns\Farming\FarmingManagerUI.cs" />
     <Compile Include="Modules\Towns\Farming\GrowingZoneUI.cs" />
     <Compile Include="Modules\Towns\Farming\GrowingZone.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskBehaviorHarvestingNew.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskGiverHarvestingNew.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskBehaviorSowingNewNew.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskGiverSowingNew.cs" />
-    <Compile Include="Modules\Towns\Farming\AI\TaskGiverFarming.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskBehaviorTillingNew.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskGiverTillingNew.cs" />
     <Compile Include="Modules\Towns\Forestry\AI\TaskBehaviorChoppingNew.cs" />
@@ -833,7 +831,6 @@
     <Compile Include="Modules\Towns\Tools\ToolDesignate3D.cs" />
     <Compile Include="Modules\Towns\Tools\ToolDesignatePositions.cs" />
     <Compile Include="Modules\Towns\Tools\ToolZoningPositionsNew.cs" />
-    <Compile Include="Modules\Towns\Tools\ToolZoningPositions.cs" />
     <Compile Include="Modules\Towns\Tools\ToolDesignateSingle.cs" />
     <Compile Include="Modules\Towns\TownComponent.cs" />
     <Compile Include="Modules\Towns\UI\UIDebugCommands.cs" />
@@ -1219,6 +1216,7 @@
   <ItemGroup>
     <Folder Include="Modules\AI\Behaviors\Dialogue\" />
     <Folder Include="Modules\AI\Control\" />
+    <Folder Include="Modules\Towns\Farming\AI\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

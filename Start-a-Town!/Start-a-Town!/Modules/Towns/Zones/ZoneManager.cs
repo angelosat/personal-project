@@ -113,7 +113,7 @@ namespace Start_a_Town_
         internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
         {
             foreach(var zoneType in ZoneTypes)
-                yield return new Tuple<string, Action>(zoneType.Name, () => ZoneNew.Edit(zoneType));
+                yield return new Tuple<string, Action>(zoneType.Name, () => ZoneNew.Edit(this.Town, zoneType));
         }
         
         public override ISelectable QuerySelectable(TargetArgs target)

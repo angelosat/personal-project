@@ -54,7 +54,7 @@ namespace Start_a_Town_
             {
                 if (actor.Net is Net.Server server)
                 {
-                    server.SyncInstantiate(newobj);
+                    newobj.SyncInstantiate(server);
                     actor.Map.SyncSpawn(newobj, newGlobal, velocity);
                 }
             }

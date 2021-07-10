@@ -18,8 +18,6 @@ namespace Start_a_Town_.Towns
     {
         UIQuickMenu QuickMenu;
 
-        int HouseSequence = 1;
-        
         internal void OnTooltipCreated(Tooltip tooltip, TargetArgs targetArgs)
         {
             foreach (var c in this.TownComponents)

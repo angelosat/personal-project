@@ -118,7 +118,7 @@ namespace Start_a_Town_
             if (this.ActorsAdventuring.Count < ActorsCap)
             {
                 Actor actor = GenerateVisitor();
-                Server.Instance.SyncInstantiate(actor);
+                actor.SyncInstantiate(Server.Instance);
                 Packets.SendNotifyAdventurerCreated(actor);
                 RegisterActor(Server.Instance, actor);
             }

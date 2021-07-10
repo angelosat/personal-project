@@ -150,7 +150,7 @@ namespace Start_a_Town_
 
                         if (actor.Net is Net.Server server)
                         {
-                            server.SyncInstantiate(split);
+                            split.SyncInstantiate(server);
                             qgiverInv.SyncInsert(split);
                         }
                     }

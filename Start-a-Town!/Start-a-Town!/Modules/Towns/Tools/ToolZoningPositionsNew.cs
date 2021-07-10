@@ -13,11 +13,9 @@ namespace Start_a_Town_.Towns
         int Width, Height;
         bool Enabled;
         bool Removing;
-        protected Action<Vector3, int, int, bool> Add, Remove;
-        public Func<Vector3, bool> IsValid;
+        protected Action<Vector3, int, int, bool> Add;
         protected Func<List<ZoneNew>> GetZones = () => new List<ZoneNew>();
         public override bool TargetOnlyBlocks => true;
-        protected Town Town;
         public ToolZoningPositionsNew()
         {
 
@@ -49,18 +47,6 @@ namespace Start_a_Town_.Towns
                 return false;
             if (h < 1)
                 return false;
-            return true;
-            if (this.IsRemoving())
-                return true;
-            var positions = this.GetPositions(w, h);
-            foreach (var pos in positions)
-            {
-                if (IsValid != null)
-                    if (IsValid(pos))
-                        continue;
-                if (!ZoneNew.IsPositionValid(this.Town.Map, pos))
-                    return false;
-            }
             return true;
         }
        

@@ -63,10 +63,6 @@ namespace Start_a_Town_
         public void AddPosition(IntVec3 pos)
         {
             this.Positions.Add(pos);
-            return;
-            // maybe dont check here because positions might be added in bulk and the most distant ones might be checked first
-            if (pos.GetAdjacentHorLazy().Any(this.Positions.Contains)) 
-                this.Positions.Add(pos);
         }
 
         public void RemovePosition(IntVec3 pos)
@@ -152,11 +148,11 @@ namespace Start_a_Town_
         }
         public void Edit()
         {
-            ToolManager.SetTool(new ToolDesignateZone(this.GetType()));
+            ToolManager.SetTool(new ToolDesignateZone(this.Town, this.GetType()));
         }
-        static public void Edit(Type zoneType)
+        static public void Edit(Town town, Type zoneType)
         {
-            ToolManager.SetTool(new ToolDesignateZone(zoneType));
+            ToolManager.SetTool(new ToolDesignateZone(town, zoneType));
         }
 
         public abstract string GetName();

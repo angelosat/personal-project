@@ -186,7 +186,7 @@ List of available commands:
                         Engine.Map.SetAmbientColor(color);
                         break;
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                     }
                     try

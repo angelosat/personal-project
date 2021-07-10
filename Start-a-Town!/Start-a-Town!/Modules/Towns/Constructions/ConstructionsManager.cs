@@ -189,7 +189,7 @@ namespace Start_a_Town_.Towns.Constructions
                 }
         }
 
-        private static void PlaceDesignationsGodMode(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<Vector3> positions, IMap map)
+        private static void PlaceDesignationsGodMode(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<Vector3> positions, MapBase map)
         {
             if (!args.Removing)
             {

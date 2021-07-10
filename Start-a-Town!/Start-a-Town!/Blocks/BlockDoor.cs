@@ -34,7 +34,7 @@ namespace Start_a_Town_
                 this.Open = (data & 0x4) == 0x4;
                 this.Part = data & 0x3;
             }
-            public void Apply(IMap map, Vector3 global)
+            public void Apply(MapBase map, Vector3 global)
             {
                 Cell cell = map.GetCell(global);
 
@@ -85,7 +85,7 @@ namespace Start_a_Town_
         {
             return new State(data);
         }
-        static public BoundingBox GetBoundingBox(IMap map, Vector3 global)
+        static public BoundingBox GetBoundingBox(MapBase map, Vector3 global)
         {
             var children = GetChildren(map, global);
             var minx = children.Min(c => c.X);
@@ -171,7 +171,7 @@ namespace Start_a_Town_
             return !IsLocked(cell.BlockData);
         }
         public override bool Multi => true;
-        public override void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             var positions = new Vector3[2];
             for (int i = 0; i < 2; i++)
@@ -197,7 +197,7 @@ namespace Start_a_Town_
                 //flood fill to find all enterior
             }
         }
-        public override void Remove(IMap map, Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, Vector3 global, bool notify = true)
         {
             var positions = GetChildren(map, global);
             foreach (var g in positions)
@@ -205,7 +205,7 @@ namespace Start_a_Town_
             if (notify)
                 map.NotifyBlocksChanged(positions);
         }
-        private static Vector3 GetBase(IMap map, Vector3 global)
+        private static Vector3 GetBase(MapBase map, Vector3 global)
         {
             byte data = map.GetBlockData(global);
             byte masked = data &= 0x1;// 0x3;
@@ -213,7 +213,7 @@ namespace Start_a_Town_
             Vector3 baseLoc = new Vector3(global.X, global.Y, baseZ);
             return baseLoc;
         }
-        public static IEnumerable<Vector3> GetChildren(IMap map, Vector3 global)
+        public static IEnumerable<Vector3> GetChildren(MapBase map, Vector3 global)
         {
             Vector3 baseLoc = GetBase(map, global);
             for (int i = 0; i < 2; i++)
@@ -223,7 +223,7 @@ namespace Start_a_Town_
             }
         }
 
-        public override bool IsSolid(IMap map, Vector3 global)
+        public override bool IsSolid(MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
             return this.IsSolid(cell);
@@ -256,10 +256,10 @@ namespace Start_a_Town_
             var ndepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorndepth");
             var wdepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwdepth");
 
-            Orientations[0] = Block.Atlas.Load("blocks/doors/doors", Map.BlockDepthMap, Block.NormalMap);
+            Orientations[0] = Block.Atlas.Load("blocks/doors/doors", MapBase.BlockDepthMap, Block.NormalMap);
             Orientations[1] = Block.Atlas.Load("blocks/doors/doorw", wdepth, Block.NormalMap);
             Orientations[2] = Block.Atlas.Load("blocks/doors/doorn", ndepth, Block.NormalMap);
-            Orientations[3] = Block.Atlas.Load("blocks/doors/doore", Map.BlockDepthMap, Block.NormalMap);
+            Orientations[3] = Block.Atlas.Load("blocks/doors/doore", MapBase.BlockDepthMap, Block.NormalMap);
 
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(new Reaction.Reagent("Base", Reaction.Reagent.IsOfMaterialType(MaterialType.Wood), Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
@@ -276,7 +276,7 @@ namespace Start_a_Town_
             yield return 0;
         }
 
-        public override void GetTooltip(UI.Control tooltip, IMap map, Vector3 global)
+        public override void GetTooltip(UI.Control tooltip, MapBase map, Vector3 global)
         {
             base.GetTooltip(tooltip, map, global);
             var cell = map.GetCell(global);
@@ -299,7 +299,7 @@ namespace Start_a_Town_
             return Orientations[orientation];
         }
 
-        public static void Toggle(IMap map, Vector3 global)
+        public static void Toggle(MapBase map, Vector3 global)
         {
             var children = GetChildren(map, global);
             var chunk = map.GetChunk(global);
@@ -350,7 +350,7 @@ namespace Start_a_Town_
                 ori %= 4;
             return canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, Orientations[ori], camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockCoordinates);
         }
-        public override void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
+        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
         {
             var token = Orientations[orientation];
             sb.DrawBlock(Block.Atlas.Texture, map, global, token, cam, Color.Transparent, tint, Color.White, Vector4.One);

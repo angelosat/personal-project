@@ -160,7 +160,7 @@ namespace Start_a_Town_.Components
                         actor.Net.PostLocalEvent(obj, ObjectEventArgs.Create(Message.Types.Attacked, new object[] { actor, attack }));
                 }
         }
-        static public bool LineOfSight(IMap map, Vector3 start, Vector3 end)
+        static public bool LineOfSight(MapBase map, Vector3 start, Vector3 end)
         {
             Vector3 difference = end - start;
             float maxlength = difference.LengthSquared();
@@ -182,7 +182,7 @@ namespace Start_a_Town_.Components
             return true;
         }
         [Obsolete]
-        static public bool LineOfSightOld(IMap map, Vector3 start, Vector3 end)
+        static public bool LineOfSightOld(MapBase map, Vector3 start, Vector3 end)
         {
             Vector3 difference = end - start;
             float length = difference.Length();

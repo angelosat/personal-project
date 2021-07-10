@@ -15,7 +15,7 @@ namespace Start_a_Town_.Blocks
         private Vector3 Source;
         readonly HashSet<Vector3> Handled = new();
         readonly Queue<Vector3> ToHandle = new();
-        IMap Map;
+        MapBase Map;
 
 
         static public void Add(LiduidFlowProcess proc)
@@ -23,7 +23,7 @@ namespace Start_a_Town_.Blocks
             FlowProcesses.Add(proc);
         }
 
-        public LiduidFlowProcess(IMap map, Vector3 source, Vector3 current)
+        public LiduidFlowProcess(MapBase map, Vector3 source, Vector3 current)
         {
             this.Map = map;
             this.Source = source;

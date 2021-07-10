@@ -112,7 +112,7 @@ namespace Start_a_Town_.Towns
             else
                 return Messages.Remove;
         }
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             this.DrawGrid(sb, camera);
             base.DrawBeforeWorld(sb, map, camera);

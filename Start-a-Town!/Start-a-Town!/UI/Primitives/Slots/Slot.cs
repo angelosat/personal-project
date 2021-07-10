@@ -192,8 +192,6 @@ namespace Start_a_Town_.UI
                     UIManager.DrawStringOutlined(sb, slot.StackSize.ToString(), loc + new Vector2(Slot.DefaultHeight), Vector2.One);
         }
 
-        public Texture2D IconSheet = Map.ItemSheet;
-        public List<Rectangle> IconList = Map.Icons;
         public int IconIndex = -1;
 
         public event EventHandler<DragEventArgs> DragDrop;

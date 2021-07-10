@@ -93,7 +93,7 @@ namespace Start_a_Town_.PlayerControl
             }
         }
         
-        internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
             base.DrawAfterWorld(sb, map);
@@ -122,7 +122,7 @@ namespace Start_a_Town_.PlayerControl
             return base.GetIcon();
         }     
 
-        internal override void DrawAfterWorldRemote(MySpriteBatch sb, IMap map, Camera camera, Net.PlayerData player)
+        internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
             var targetArgs = player.Target;
             if (targetArgs.Type != TargetType.Position)

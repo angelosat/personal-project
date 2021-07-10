@@ -68,7 +68,7 @@ namespace Start_a_Town_
             this.UpdateQuickButtons();
         }
 
-        public override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
+        public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             foreach (var des in Designations)
                     cam.DrawGridBlocks(sb, Block.BlockBlueprint, des.Value, Color.White);
@@ -95,7 +95,7 @@ namespace Start_a_Town_
                     break;
 
                 case Components.Message.Types.BlockChanged:
-                    IMap map;
+                    MapBase map;
                     Vector3 global;
                     GameEvents.EventBlockChanged.Read(e.Parameters, out map, out global);
                     HandleBlocksChanged(new Vector3[] { global });

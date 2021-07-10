@@ -26,7 +26,7 @@ namespace Start_a_Town_.Components.Crafting
             public ItemDefMaterialAmount Requirement;
             public BlockRecipe Recipe { get { return this.Block.Recipe; } }
 
-            public void SpawnProduct(IMap map, Vector3 global)
+            public void SpawnProduct(MapBase map, Vector3 global)
             {
                 // TODO: WARNING: check if target cell is still empty !!!
                 map.GetBlock(global).Remove(map, global);

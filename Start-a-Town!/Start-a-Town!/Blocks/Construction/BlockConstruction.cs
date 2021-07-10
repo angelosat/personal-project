@@ -27,11 +27,11 @@ namespace Start_a_Town_
             var color = Color.White;
             return canvas.Designations.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, color, sunlight, blocklight, depth, this, blockCoordinates);
         }
-        public override void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, data, variation, orientation, notify);
         }
-        public override void Remove(IMap map, Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, Vector3 global, bool notify = true)
         {
             var entity = map.GetBlockEntity(global) as BlockConstructionEntity;
             foreach (var mat in entity.Container)
@@ -51,11 +51,11 @@ namespace Start_a_Town_
                 map.SetBlock(g, Block.Types.Air, 0, raiseEvent: false);
             }
         }
-        internal override string GetName(IMap map, Vector3 global)
+        internal override string GetName(MapBase map, Vector3 global)
         {
             return map.GetBlockEntity<BlockConstructionEntity>(global).Product.Block.Name + " (Construction)";
         }
-        internal override bool IsValidHaulDestination(IMap map, Vector3 global, GameObject obj)
+        internal override bool IsValidHaulDestination(MapBase map, Vector3 global, GameObject obj)
         {
             var entity = map.GetBlockEntity(global) as BlockConstructionEntity;
             return entity.IsValidHaulDestination(obj.Def);

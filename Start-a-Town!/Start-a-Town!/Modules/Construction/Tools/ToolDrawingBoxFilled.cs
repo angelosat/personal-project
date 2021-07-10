@@ -16,7 +16,7 @@ namespace Start_a_Town_.Modules.Construction
         {
         }
         
-        protected override void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)
+        protected override void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             if (!this.Enabled)
                 return;
@@ -35,7 +35,7 @@ namespace Start_a_Town_.Modules.Construction
             var box = a.GetBox(b);
             return box;
         }
-        internal override void DrawAfterWorldRemote(MySpriteBatch sb, IMap map, Camera camera, Net.PlayerData player)
+        internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
             this.DrawGrid(sb, map, camera, Color.Red);
         }

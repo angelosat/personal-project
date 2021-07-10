@@ -6,12 +6,12 @@ namespace Start_a_Town_
 {
     static class HaulHelper
     {
-        static public bool IsValidStorage(this TargetArgs storage, IMap map, GameObject item)
+        static public bool IsValidStorage(this TargetArgs storage, MapBase map, GameObject item)
         {
             return StockpileAIHelper.IsValidStorage(item, storage);
         }
         
-        static public bool IsValidHaulDestination(this TargetArgs destination, IMap map, GameObject item)
+        static public bool IsValidHaulDestination(this TargetArgs destination, MapBase map, GameObject item)
         {
             if (StockpileAIHelper.IsValidStorage(item, destination))
                 return true;

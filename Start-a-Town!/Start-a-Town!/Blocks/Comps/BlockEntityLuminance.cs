@@ -53,12 +53,12 @@ namespace Start_a_Town_
             }
         }
         
-        void TurnOn(IMap map, Vector3 global)
+        void TurnOn(MapBase map, Vector3 global)
         {
             this.Powered = true;
             map.SetBlockLuminance(global, this.Intensity);
         }
-        void TurnOff(IMap map, Vector3 global)
+        void TurnOff(MapBase map, Vector3 global)
         {
             this.Powered = false;
             map.SetBlockLuminance(global, (byte)0);

@@ -103,7 +103,7 @@ namespace Start_a_Town_
         static public readonly MouseMap BlockHalfMouseMap = new(HalfBlockMouseMapTexture, MouseMapSpriteOpposite, HalfBlockMouseMapTexture.Bounds, true);
         static public readonly MouseMap BlockQuarterMouseMap = new(QuarterBlockMouseMapTexture, MouseMapSpriteOpposite, QuarterBlockMouseMapTexture.Bounds, true);
 
-        static public AtlasDepthNormals Atlas = new("Blocks") { DefaultDepthMask = Map.BlockDepthMap, DefaultNormalMask = Block.NormalMap }; ///Sprite.Atlas;//
+        static public AtlasDepthNormals Atlas = new("Blocks") { DefaultDepthMask = MapBase.BlockDepthMap, DefaultNormalMask = Block.NormalMap }; ///Sprite.Atlas;//
 
         static public readonly AtlasDepthNormals.Node.Token[] TexturesCounter = 
             new AtlasDepthNormals.Node.Token[4] {
@@ -135,7 +135,7 @@ namespace Start_a_Town_
         {
         }
         
-        public virtual void GetTooltip(Control tooltip, IMap map, Vector3 global)
+        public virtual void GetTooltip(Control tooltip, MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
             tooltip.Controls.Add(new Label($"Global: {global}") { Location = tooltip.Controls.BottomLeft });
@@ -293,9 +293,9 @@ namespace Start_a_Town_
         public virtual BlockEntity CreateBlockEntity()
         { return null; }
         [Obsolete]
-        public virtual BlockEntity GetBlockEntity(IMap map, Vector3 global)
+        public virtual BlockEntity GetBlockEntity(MapBase map, Vector3 global)
         { return null; }
-        public virtual T GetBlockEntityNew<T>(IMap map, IntVec3 global) where T : BlockEntity
+        public virtual T GetBlockEntityNew<T>(MapBase map, IntVec3 global) where T : BlockEntity
         { 
             return map.GetBlockEntity<T>(global); 
         }
@@ -307,11 +307,11 @@ namespace Start_a_Town_
         {
             return new Dictionary<Vector3, byte>() { { global, 0 } };
         }
-        public virtual List<Vector3> GetParts(IMap map, Vector3 global) { return new List<Vector3> { global }; }
+        public virtual List<Vector3> GetParts(MapBase map, Vector3 global) { return new List<Vector3> { global }; }
         public virtual List<Vector3> GetParts(byte data) { return new List<Vector3> { Vector3.Zero }; }
         public virtual IEnumerable<IntVec3> GetParts(byte data, IntVec3 global) { return new List<IntVec3> { global }; }
 
-        public IntVec3 GetCenter(IMap map, Vector3 global) { return this.GetCenter(map.GetCell(global).BlockData, global); }
+        public IntVec3 GetCenter(MapBase map, Vector3 global) { return this.GetCenter(map.GetCell(global).BlockData, global); }
         public virtual IntVec3 GetCenter(byte blockData, Vector3 global) { return global; }
 
         public virtual bool Multi { get { return false; } }
@@ -347,13 +347,13 @@ namespace Start_a_Town_
         public virtual bool IsDeconstructible { get { return false; } }
         public virtual bool IsSwitchable { get; }
         public virtual bool IsRoomBorder => this.Opaque;
-        public virtual FurnitureDef GetFurnitureRole(IMap map, IntVec3 global) { return null; }
+        public virtual FurnitureDef GetFurnitureRole(MapBase map, IntVec3 global) { return null; }
         public virtual bool IsTargetable(Vector3 global)
         {
             return true;
         }
         public List<Utility.Types> UtilitiesProvided = new();
-        public virtual float GetWorkToBreak(IMap map, Vector3 global)
+        public virtual float GetWorkToBreak(MapBase map, Vector3 global)
         {
             return map.GetBlockMaterial(global).WorkToBreak;
         }
@@ -447,7 +447,7 @@ namespace Start_a_Town_
             foreach (var block in Registry.Values)
                 block.Update();
         }
-        internal static void UpdateBlocks(IMap map)
+        internal static void UpdateBlocks(MapBase map)
         {
             foreach (var block in Registry.Values)
                 block.Update(map);
@@ -456,7 +456,7 @@ namespace Start_a_Town_
 
 
         public virtual void Update() { }
-        public virtual void Update(IMap map) { }
+        public virtual void Update(MapBase map) { }
         /// <summary>
         /// TODO: maybe pass position of neighbor that changed?
         /// </summary>
@@ -464,12 +464,12 @@ namespace Start_a_Town_
         /// <param name="global"></param>
         public virtual void NeighborChanged(IObjectProvider net, Vector3 global) { }
         
-        public virtual void Removed(IMap map, Vector3 global)
+        public virtual void Removed(MapBase map, Vector3 global)
         {
         }
-        public virtual bool IsValidPosition(IMap map, IntVec3 global, int orientation) { return true; }
+        public virtual bool IsValidPosition(MapBase map, IntVec3 global, int orientation) { return true; }
         [Obsolete]
-        internal void Place(IMap map, List<Vector3> positions, byte data, int orientation, bool notify)
+        internal void Place(MapBase map, List<Vector3> positions, byte data, int orientation, bool notify)
         {
             throw new Exception();
             foreach (var pos in positions)
@@ -477,7 +477,7 @@ namespace Start_a_Town_
             if (notify)
                 map.NotifyBlocksChanged(positions);
         }
-        public virtual void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public virtual void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             map.SetBlock(global, this.Type, data, variation, orientation, notify);
             var entity = this.CreateBlockEntity();
@@ -490,22 +490,22 @@ namespace Start_a_Town_
         }
         
         [Obsolete]
-        public virtual void Remove(IMap map, Vector3 global, bool notify = true)
+        public virtual void Remove(MapBase map, Vector3 global, bool notify = true)
         {
             map.RemoveBlockNew(global, notify);
         }
         
-        public void BlockBelowChanged(IMap map, Vector3 global)
+        public void BlockBelowChanged(MapBase map, Vector3 global)
         {
             map.GetBlockEntity(global)?.OnBlockBelowChanged(map, global);
             this.OnBlockBelowChanged(map, global);
         }
-        protected virtual void OnBlockBelowChanged(IMap map, Vector3 global) { }
+        protected virtual void OnBlockBelowChanged(MapBase map, Vector3 global) { }
         public virtual LootTable GetLootTable(byte data)
         {
             return this.LootTable;
         }
-        public virtual void Break(IMap map, Vector3 global)
+        public virtual void Break(MapBase map, Vector3 global)
         {
             var net = map.Net;
             net.PopLoot(this.GetLootTable(net.Map.GetBlockData(global)), global, Vector3.Zero);
@@ -537,21 +537,21 @@ namespace Start_a_Town_
             e.Emit(Block.Atlas.Texture, pieces, Vector3.Zero);
             actor.Map.ParticleManager.AddEmitter(e);
         }
-        public virtual bool IsSolid(IMap map, Vector3 global, byte data)
+        public virtual bool IsSolid(MapBase map, Vector3 global, byte data)
         {
             var offset = global + 0.5f * new Vector3(1, 1, 0);
             offset -= offset.RoundXY();
             var h = this.GetHeight(data, offset.X, offset.Y);
             return this.Solid && offset.Z < h;
         }
-        public virtual bool IsSolid(IMap map, Vector3 global)
+        public virtual bool IsSolid(MapBase map, Vector3 global)
         {
             var offset = global + 0.5f * new Vector3(1, 1, 0);
             offset -= offset.RoundXY();
             var h = this.GetHeight(offset.X, offset.Y);
             return this.Solid && offset.Z < h;
         }
-        public virtual float GetDensity(IMap map, Vector3 global)
+        public virtual float GetDensity(MapBase map, Vector3 global)
         {
             var offset = global + 0.5f * new Vector3(1, 1, 0);
             offset -= offset.RoundXY();
@@ -577,7 +577,7 @@ namespace Start_a_Town_
         }
         public virtual bool IsOpaque(IObjectProvider net, Vector3 global) { return this.Opaque; }
         public virtual bool IsOpaque(Cell cell) { return this.Opaque; }
-        public virtual Material GetMaterial(IMap map, Vector3 global)
+        public virtual Material GetMaterial(MapBase map, Vector3 global)
         {
             return this.GetMaterial(map.GetBlockData(global));
         }
@@ -613,7 +613,7 @@ namespace Start_a_Town_
             {
                 foreach (string name in value.Split(','))
                 {
-                    var token = Block.Atlas.Load("blocks/" + name.Trim(), Map.BlockDepthMap, Block.NormalMap);
+                    var token = Block.Atlas.Load("blocks/" + name.Trim(), MapBase.BlockDepthMap, Block.NormalMap);
                     this.Variations.Add(token);
                 }
             }
@@ -695,11 +695,11 @@ namespace Start_a_Town_
                 return;
             sb.DrawBlock(Block.Atlas.Texture, screenPos, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
         }
-        public virtual void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
+        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
         {
             this.DrawPreview(sb, map, global, cam, Color.White * .5f, data, variation, orientation);
         }
-        public virtual void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
+        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
         {
             var depth = global.GetDrawDepth(map, cam);
             var materialcolor = this.GetColor(data);
@@ -775,7 +775,7 @@ namespace Start_a_Town_
         }
 
         [Obsolete]
-        public virtual List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
+        public virtual List<Interaction> GetAvailableTasks(MapBase map, Vector3 global)
         {
             return new List<Interaction>();
         }
@@ -794,7 +794,7 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
-        static public float GetPathingCost(IMap map, Vector3 global)
+        static public float GetPathingCost(MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
             return cell.Block.GetPathingCost(cell.BlockData);
@@ -857,13 +857,13 @@ namespace Start_a_Town_
             dropped.Spawn(actor.Map, target.Global + target.Face + target.Precise); 
         }
 
-        static public Material GetBlockMaterial(IMap map, Vector3 global)
+        static public Material GetBlockMaterial(MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
             var mat = cell.Block.GetMaterial(cell.BlockData);
             return mat;
         }
-        static public float GetBlockHeight(IMap map, Vector3 global)
+        static public float GetBlockHeight(MapBase map, Vector3 global)
         {
             var offset = global.ToBlock();
             var cell = map.GetCell(global);
@@ -882,7 +882,7 @@ namespace Start_a_Town_
         
         static public readonly AtlasDepthNormals.Node.Token ParticlePixel = Block.Atlas.Load(UI.UIManager.Highlight, "particle");
 
-        static readonly AtlasDepthNormals.Node.Token Token = Block.Atlas.Load("blocks/blockunknown", Map.BlockDepthMap, Block.NormalMap);
+        static readonly AtlasDepthNormals.Node.Token Token = Block.Atlas.Load("blocks/blockunknown", MapBase.BlockDepthMap, Block.NormalMap);
 
         public static MyVertex[] DrawUnknown(MySpriteBatch opaquemesh, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth)
         {
@@ -891,7 +891,7 @@ namespace Start_a_Town_
                 camera.Zoom, fog, tint, Vector4.One, sunlight, blocklight, Vector4.Zero, depth, null, blockCoordinates);
         }
 
-        internal static bool IsBlockSolid(IMap map, Vector3 global)
+        internal static bool IsBlockSolid(MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
             return cell == null || cell.Block.IsSolid(map, global, cell.BlockData);
@@ -902,7 +902,7 @@ namespace Start_a_Town_
             return !this.IsSolid(cell, blockCoords);
         }
 
-        public virtual void GetInterface(IMap map, Vector3 global, WindowTargetManagement window) { }
+        public virtual void GetInterface(MapBase map, Vector3 global, WindowTargetManagement window) { }
         public virtual void ShowUI(Vector3 global)
         {
 
@@ -955,7 +955,7 @@ namespace Start_a_Town_
         }
        
 
-        public Vector3 Front(IMap map, Vector3 global)
+        public Vector3 Front(MapBase map, Vector3 global)
         {
             return Front(map.GetCell(global));
         }
@@ -1016,7 +1016,7 @@ namespace Start_a_Town_
                 yield return p + global;
         }
         [Obsolete]
-        internal virtual void Select(UISelectedInfo uISelectedInfo, IMap map, Vector3 vector3)
+        internal virtual void Select(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
         {
             throw new Exception();
             //return;
@@ -1028,7 +1028,7 @@ namespace Start_a_Town_
             uISelectedInfo.AddInfo(new Label(node.Region.Room.ToString()));
         }
         public virtual IEnumerable<(string name, Action action)> GetInfoTabs() { yield break; }
-        internal virtual void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3)
+        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
             map.GetBlockEntity(vector3)?.GetSelectionInfo(info, map, vector3);
             var node = map.Regions.GetNodeAt(vector3);
@@ -1039,7 +1039,7 @@ namespace Start_a_Town_
             info.AddInfo(new Label(node.Region.Room.ToString()));
         }
         [Obsolete]
-        internal void GetAdvancedInfo(Control container, IMap map, Vector3 global)
+        internal void GetAdvancedInfo(Control container, MapBase map, Vector3 global)
         {
             throw new Exception();
             var node = map.Regions.GetNodeAt(global);
@@ -1049,7 +1049,7 @@ namespace Start_a_Town_
             container.AddControls(new Label(node.Region.ToString()));
             container.AddControls(new Label(node.Region.Room.ToString()));
         }
-        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, IMap map, Vector3 vector3)
+        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
         {
             var e = map.GetBlockEntity(vector3);
             e?.GetQuickButtons(uISelectedInfo, map, vector3);
@@ -1058,11 +1058,11 @@ namespace Start_a_Town_
                 uISelectedInfo.AddTabAction("Room", () => { });
             }
         }
-        internal virtual bool IsValidHaulDestination(IMap map, Vector3 global, GameObject obj)
+        internal virtual bool IsValidHaulDestination(MapBase map, Vector3 global, GameObject obj)
         {
             return false;
         }
-        internal virtual string GetName(IMap map, Vector3 global)
+        internal virtual string GetName(MapBase map, Vector3 global)
         {
             return this.Name;
         }
@@ -1071,11 +1071,11 @@ namespace Start_a_Town_
             return this.GetMaterial(cell.BlockData) == MaterialDefOf.Soil ? 1f : 0;
         }
 
-        internal virtual void OnDrawSelected(MySpriteBatch sb, Camera camera, IMap map, Vector3 global)
+        internal virtual void OnDrawSelected(MySpriteBatch sb, Camera camera, MapBase map, Vector3 global)
         {
 
         }
-        internal void DrawSelected(MySpriteBatch sb, Camera cam, IMap map, Vector3 global)
+        internal void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, Vector3 global)
         {
             var e = map.GetBlockEntity(global);
             if (e != null)

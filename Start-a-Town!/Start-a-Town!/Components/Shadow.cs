@@ -20,7 +20,7 @@ namespace Start_a_Town_.Components
             this.Global = global;
             this.Alpha = Math.Max(0, 1 - (parent.Global.Z - global.Z) / ShadowVisibilityRange);
         }
-        public void Draw(MySpriteBatch sb, IMap map, Camera camera)
+        public void Draw(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (camera.IsCompletelyHiddenByFog(this.Global.Z))
                 return;

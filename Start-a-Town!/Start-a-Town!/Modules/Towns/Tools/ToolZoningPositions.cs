@@ -155,7 +155,7 @@ namespace Start_a_Town_.Towns
         {
             return this.Removing || InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey);
         }
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             var allPositions = new HashSet<Vector3>(this.GetZones());
             var selectedPositions = new HashSet<Vector3>();

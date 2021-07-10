@@ -58,12 +58,12 @@ namespace Start_a_Town_.Towns
 
         public List<TownComponent> TownComponents = new();
 
-        public IMap Map;
+        public MapBase Map;
         public IObjectProvider Net { get { return this.Map.Net; } }
 
         public Dictionary<Utility.Types, HashSet<Vector3>> TownUtilitiesNew = new Dictionary<Utility.Types, HashSet<Vector3>>();
 
-        public Town(IMap map)
+        public Town(MapBase map)
         {
             this.Map = map;
             this.FarmingManager = new(this);
@@ -200,7 +200,7 @@ namespace Start_a_Town_.Towns
                 c.Tick();
         }
 
-        public void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
+        public void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             foreach(var comp in this.TownComponents)
                 comp.DrawBeforeWorld(sb, map, cam);

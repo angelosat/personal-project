@@ -13,7 +13,7 @@ using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
-    public abstract class IMap
+    public abstract class MapBase
     {
         class Packets
         { 
@@ -25,7 +25,7 @@ namespace Start_a_Town_
                 PacketSyncSetCellData = Network.RegisterPacketHandler(SyncSetCellData);
                 PacketSpawn = Network.RegisterPacketHandler(Receive);
             }
-            static public void Send(IObjectProvider net, GameObject entity, IMap map, Vector3 global, Vector3 velocity)
+            static public void Send(IObjectProvider net, GameObject entity, MapBase map, Vector3 global, Vector3 velocity)
             {
                 if (net is Client)
                     return;
@@ -45,7 +45,7 @@ namespace Start_a_Town_
                 map.SyncSpawn(actor, global, velocity);
             }
             
-            public static void SyncSetCellData(IMap map, IntVec3 global, byte data)
+            public static void SyncSetCellData(MapBase map, IntVec3 global, byte data)
             {
                 var net = map.Net;
                 if (net is Server)
@@ -87,6 +87,17 @@ namespace Start_a_Town_
         
         public abstract Vector2 GetOffset();
 
+        static public Texture2D ShaderMouseMap, BlockDepthMap;
+        static public Texture2D Shadow;
+        static internal void Initialize()
+        {
+            Generator.InitGradient3();
+            ShaderMouseMap = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap - Cube");
+            BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19");
+            Shadow = Game1.Instance.Content.Load<Texture2D>("Graphics/shadow");
+        }
+
+
         internal bool IsDeconstructible(Vector3 global)
         {
             return this.GetBlockEntity(global)?.HasComp<BlockEntityCompDeconstructible>() ?? this.GetBlock(global).IsDeconstructible;
@@ -117,7 +128,7 @@ namespace Start_a_Town_
         public abstract IEnumerable<GameObject> GetObjects(Vector3 min, Vector3 max);
         public abstract IEnumerable<GameObject> GetObjects(BoundingBox box);
 
-        public int MaxHeight = 128;
+        public static int MaxHeight = 128;
 
         internal bool IsDesignation(Vector3 global)
         {
@@ -164,6 +175,7 @@ namespace Start_a_Town_
             var global = chunk.GetRandomCellInOrder(cellIndex).ToGlobal(chunk);
             return global;
         }
+
         int RandomChunkIndex, RandomCellIndex;
         public IntVec3 GetNextRandomCell()
         {
@@ -772,14 +784,6 @@ namespace Start_a_Town_
 
         public abstract bool SetBlockLuminance(Vector3 global, byte luminance);
 
-        public virtual bool Contains(GameObject obj)
-        {
-            Chunk chunk;
-            if (this.TryGetChunk(obj.Global, out chunk))
-                return chunk.GetObjects().Contains(obj);
-            return false;
-        }
-
         internal bool IsTraversable(Vector3 source, Vector3 target)
         {
             return this.IsTraversable1Height(source, target);
@@ -1060,7 +1064,7 @@ namespace Start_a_Town_
         }
         internal bool IsVisible(Vector3 global)
         {
-            if (global.Z == this.MaxHeight - 1)
+            if (global.Z == MaxHeight - 1)
                 return true;
             var count = VectorHelper.Adjacent.Length;
             for (int i = 0; i < count; i++)
@@ -1093,7 +1097,7 @@ namespace Start_a_Town_
             obj.Spawn(this.Net);
             Packets.Send(this.Net, obj, this, global, velocity);
         }
-        static IMap()
+        static MapBase()
         {
 
         }

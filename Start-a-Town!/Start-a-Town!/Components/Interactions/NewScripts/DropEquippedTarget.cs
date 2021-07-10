@@ -48,7 +48,7 @@ namespace Start_a_Town_.Components.Interactions
         {
             this.TargetEquipment = new TargetArgs(tag["Target"]);
         }
-        internal override void Synced(IMap map)
+        internal override void Synced(MapBase map)
         {
             this.TargetEquipment.Map = map;
         }

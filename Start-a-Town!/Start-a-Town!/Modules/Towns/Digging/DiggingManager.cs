@@ -56,7 +56,7 @@ namespace Start_a_Town_.Towns.Digging
                     break;
 
                 case Components.Message.Types.BlockChanged:
-                    IMap map;
+                    MapBase map;
                     Vector3 global;
                     EventBlockChanged.Read(e.Parameters, out map, out global);
                     HandleBlocksChanged(new Vector3[] {global});
@@ -133,7 +133,7 @@ namespace Start_a_Town_.Towns.Digging
         {
             this.AllPositions = new HashSet<Vector3>(r.ReadListVector3());
         }
-        public override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
+        public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             cam.DrawGridBlocks(sb, Block.BlockBlueprint, this.AllPositions, Color.White);
         }

@@ -18,7 +18,7 @@ namespace Start_a_Town_.Blocks.Chest
             : base(Block.Types.Chest, opaque: false)
         {
             var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chest").ToGrayscale();
-            this.Variations.Add(Block.Atlas.Load("chestgrayscale", tex, Map.BlockDepthMap, ChestNormalMap));
+            this.Variations.Add(Block.Atlas.Load("chestgrayscale", tex, MapBase.BlockDepthMap, ChestNormalMap));
 
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(

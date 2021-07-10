@@ -12,7 +12,7 @@ namespace Start_a_Town_
         PlayerData CurrentPlayer { get; }
         TimeSpan Clock { get; }
         double CurrentTick { get; }
-        IMap Map { get; }
+        MapBase Map { get; }
         int Speed { get; set; }
 
         GameObject GetNetworkObject(int netID);

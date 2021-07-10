@@ -10,7 +10,7 @@ namespace Start_a_Town_.Modules.Crafting
     class WorkstationInterfaceNew : GroupBox
     {
         Vector3 Global;
-        IMap Map;
+        MapBase Map;
         BlockEntityCompWorkstation Entity;
         Button BtnAddOrder;
 
@@ -21,7 +21,7 @@ namespace Start_a_Town_.Modules.Crafting
         PanelTitled PanelOrders;
         ScrollableBox ListOrders;
 
-        public WorkstationInterfaceNew(IMap map, Vector3 global, BlockEntityCompWorkstation entity)
+        public WorkstationInterfaceNew(MapBase map, Vector3 global, BlockEntityCompWorkstation entity)
         {
             this.Entity = entity;
             this.Global = global;

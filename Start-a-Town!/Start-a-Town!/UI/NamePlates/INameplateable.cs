@@ -15,7 +15,7 @@ namespace Start_a_Town_.UI
         //Rectangle Bounds { get; set; }
         string Name { get; }
         Vector3 Global { get; }
-        IMap Map { get; }
+        MapBase Map { get; }
         Rectangle GetScreenBounds(Camera camera);
         Color GetNameplateColor();
         void OnNameplateCreated(Nameplate plate);

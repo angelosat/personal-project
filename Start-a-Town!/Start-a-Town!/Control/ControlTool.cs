@@ -166,11 +166,8 @@ namespace Start_a_Town_
             if (icon != null)
                 icon.Draw(sb, UI.UIManager.Mouse + new Vector2(icon.SourceRect.Width / 2, 0));
         }
-        internal virtual void DrawWorld(SpriteBatch sb, IMap map, Camera camera)
-        {
-            DrawTileHighlight(sb, map, camera);
-        }
-        internal virtual void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+     
+        internal virtual void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
         }
 
@@ -187,7 +184,7 @@ namespace Start_a_Town_
             return Controller.Input.GetKeyDown(System.Windows.Forms.Keys.LShiftKey);
         }
         
-        public virtual void DrawBlockMouseover(MySpriteBatch sb, IMap map, Camera camera)
+        public virtual void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (this.Target == null)
                 return;
@@ -213,7 +210,7 @@ namespace Start_a_Town_
 
             sb.Flush(); // flush here because i might have to switch textures in an overriden tool draw call
         }
-        public virtual void DrawTileHighlight(MySpriteBatch sb, IMap map, Camera camera)
+        public virtual void DrawTileHighlight(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (this.Target == null) 
                 return;
@@ -237,29 +234,13 @@ namespace Start_a_Town_
             highlight.Draw(sb, screenLoc, Color.White, 0, Vector2.Zero, camera.Zoom, SpriteEffects.None, cd);
             sb.Flush();
         }
-        public virtual void DrawTileHighlight(SpriteBatch sb, IMap map, Camera camera)
-        {
-            if (this.Target == null)
-                return;
-            if (this.Target.Face == Vector3.Zero)
-                return;
-            camera.GetEverything(map, this.Target.FaceGlobal, Block.Bounds, out float cd, out Rectangle screenBounds, out Vector2 screenLoc);
-
-            int x = (int)Math.Abs(this.Target.Face.X), y = (int)Math.Abs(this.Target.Face.Y), r = (int)camera.Rotation;
-            int z = (int)Math.Abs(this.Target.Face.Z);
-            int highlightIndex = (2 * z) + (1 - z) * ((x + r) % 2);
-            int frontback = InputState.IsKeyDown(Keys.RShiftKey) ? 1 : 0;
-
-            sb.Draw(Map.TerrainSprites, screenLoc, Block.TileHighlights[frontback][highlightIndex], Color.White, 0, Vector2.Zero, camera.Zoom, SpriteEffects.None, cd);
-            sb.Draw(Map.TerrainSprites, screenLoc, Block.TileHighlights[frontback][highlightIndex], Color.White * 0.4f, 0, Vector2.Zero, camera.Zoom, SpriteEffects.None, 0);
-        }
-
+       
         internal virtual void OnGameEvent(GameEvent e)
         {
           
         }
 
-        internal virtual void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal virtual void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var camera = map.Camera;
             ToolManager.DrawBlockMouseover(sb, map, camera, this.Target);
@@ -305,7 +286,7 @@ namespace Start_a_Town_
         {
             UIManager.DrawStringOutlined(sb, this.GetType().Name, vector2 + new Vector2(0, UIManager.Cursor.Height));
         }
-        internal virtual void DrawAfterWorldRemote(MySpriteBatch sb, IMap map, Camera camera, PlayerData player)
+        internal virtual void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, PlayerData player)
         {
         }
 

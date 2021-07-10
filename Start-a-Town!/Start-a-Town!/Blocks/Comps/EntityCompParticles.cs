@@ -26,7 +26,7 @@ namespace Start_a_Town_
             foreach (var e in this.Emitters)
                 e.Update();
         }
-        public override void Draw(Camera camera, IMap map, Vector3 global)
+        public override void Draw(Camera camera, MapBase map, Vector3 global)
         {
             foreach (var e in this.Emitters)
                 e.Draw(camera, map, global);

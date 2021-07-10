@@ -58,8 +58,8 @@ namespace Start_a_Town_
         }
 
         static public int LightQueries;
-        static IMap _Map;
-        static public IMap Map
+        static MapBase _Map;
+        static public MapBase Map
         {
             get => _Map;
             set => _Map = value;
@@ -72,8 +72,7 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return "ChunkLoader: " + ChunkLoader.Status +
-                "\nChunks in memory: " + ChunkLoader.Count +
+            return 
                 "\nActive Chunks: " + Engine.Map.GetActiveChunks().Count +
                 "\nLight Queries: " + LightQueries +
                 "\nTile draw time: " + TileDrawTime.Elapsed.ToString("0.00 ns");
@@ -174,7 +173,6 @@ namespace Start_a_Town_
         static public void PlayGame(GameObject mapPlayer)
         {
             Nameplate.Reset();
-            ChunkLoader.Restart();
             GC.Collect();
             PlayerOld.Actor = mapPlayer;
         }

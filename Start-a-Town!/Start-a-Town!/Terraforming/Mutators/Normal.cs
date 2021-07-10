@@ -27,7 +27,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         {
             double gradientSoil, gradientRock, turbulence, tRock, zNormal; //turbpower; //lower? higher turbpower makes floating islands
 
-            zNormal = z / (float)Map.MaxHeight - 0.5f;
+            zNormal = z / (float)MapBase.MaxHeight - 0.5f;
 
             turbulence = 0;
             tRock = 0;
@@ -71,7 +71,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             // if we didn't add a block yet, it means we have air. so add water if below sealevel
             else
             {
-                var seaLevel = Map.MaxHeight/2;
+                var seaLevel = MapBase.MaxHeight/2;
                 if (z <= seaLevel)
                 {
                     if (z < seaLevel)
@@ -89,7 +89,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                 c.Block = BlockDefOf.Stone;
                 return;
             }
-            var maxZ = (float)Map.MaxHeight;
+            var maxZ = (float)MapBase.MaxHeight;
             float zNormal = z / maxZ - 0.5f;
             double gradientSoil = zNormal + gradient;
             var rockTurbulence = 2;//5

@@ -5,7 +5,7 @@ namespace Start_a_Town_
     public abstract class ZoneDef
     {
         public abstract Type ZoneType { get; }
-        public abstract bool IsValidLocation(IMap map, IntVec3 global);
+        public abstract bool IsValidLocation(MapBase map, IntVec3 global);
 
         public ZoneNew Create()
         {

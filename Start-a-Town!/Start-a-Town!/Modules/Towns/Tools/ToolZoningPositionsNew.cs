@@ -157,12 +157,12 @@ namespace Start_a_Town_.Towns
         {
             return this.Removing || InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey);
         }
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             DrawGrid(sb, map, camera, this.IsRemoving() ? Color.Red : Color.Lime);
         }
 
-        private void DrawGrid(MySpriteBatch sb, IMap map, Camera camera, Color color)
+        private void DrawGrid(MySpriteBatch sb, MapBase map, Camera camera, Color color)
         {
             if (!this.Enabled)
                 return;
@@ -170,7 +170,7 @@ namespace Start_a_Town_.Towns
             camera.DrawGridCells(sb, color *.5f, validpositions);
         }
 
-        private IEnumerable<Vector3> GetPositions(IMap map, Vector3 a, Vector3 b)
+        private IEnumerable<Vector3> GetPositions(MapBase map, Vector3 a, Vector3 b)
         {
             var validpositions = a.GetBox(b).Where(v => ZoneNew.IsPositionValid(map, v)).Select(v => v.Above());
             return validpositions;
@@ -186,7 +186,7 @@ namespace Start_a_Town_.Towns
             this.Enabled = r.ReadBoolean();
             this.Begin = r.ReadVector3();
         }
-        internal override void DrawAfterWorldRemote(MySpriteBatch sb, IMap map, Camera camera, Net.PlayerData player)
+        internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
             DrawGrid(sb, map, camera, Color.Red);
         }

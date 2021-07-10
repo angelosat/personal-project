@@ -68,7 +68,7 @@ namespace Start_a_Town_.Blocks
                     TextFunc = () => $"{product.Requirement.Material.Name} {product.Requirement.Def.Label} {0} / {product.Requirement.Amount}"
                 });
             }
-            internal override void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3)
+            internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
             {
                 var product = this.Product;
                 info.AddInfo(new Label() { TextFunc = () => string.Format("{0} {1} {2} / {3}", product.MainMaterial.Name, product.Requirement.Material.Name, product.Requirement.Def.Label, 0, product.Requirement.Amount) });

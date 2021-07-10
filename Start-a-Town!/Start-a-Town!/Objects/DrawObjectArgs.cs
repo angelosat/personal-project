@@ -7,7 +7,7 @@ namespace Start_a_Town_
         public Camera Camera;
         public Controller Controller;
         public PlayerOld Player;
-        public IMap Map;
+        public MapBase Map;
         public Chunk Chunk;
         public Cell Cell;
         public Rectangle ScreenBounds, SpriteBounds;
@@ -18,7 +18,7 @@ namespace Start_a_Town_
         public DrawObjectArgs(Camera camera,
             Controller controller,
             PlayerOld player,
-            IMap map,
+            MapBase map,
             Chunk chunk,
             Cell cell,
             Rectangle spriteBounds,

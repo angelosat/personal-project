@@ -26,7 +26,7 @@ namespace Start_a_Town_.UI
         }
         public override void OnBeforeDraw(SpriteBatch sb, Rectangle viewport)
         {
-            sb.Draw(Map.Shadow, ScreenLocation, null, Color.White, 0, new Vector2(Map.Shadow.Bounds.Width, Map.Shadow.Bounds.Height)/2f, 2, SpriteEffects.None, 0);
+            sb.Draw(MapBase.Shadow, ScreenLocation, null, Color.White, 0, new Vector2(MapBase.Shadow.Bounds.Width, MapBase.Shadow.Bounds.Height)/2f, 2, SpriteEffects.None, 0);
         }
         public override void OnAfterDraw(SpriteBatch sb, Rectangle viewport)
         {

@@ -24,7 +24,7 @@ namespace Start_a_Town_
             {
 
             }
-            public void Apply(IMap map, Vector3 global)
+            public void Apply(MapBase map, Vector3 global)
             {
                 map.SetBlockData(global, (byte)this.Material.ID);
             }
@@ -36,7 +36,7 @@ namespace Start_a_Town_
             {
                 this.Material = Material.Registry[data];
             }
-            public State(IMap map, Vector3 global)
+            public State(MapBase map, Vector3 global)
             {
                 this.Material = Material.Registry[global.GetData(map)];
             }
@@ -91,7 +91,7 @@ namespace Start_a_Town_
             this.AssetNames = "stone5height19";
         }
 
-        public override Material GetMaterial(IMap map, Vector3 global)
+        public override Material GetMaterial(MapBase map, Vector3 global)
         {
             var data = map.GetBlockData(global);
             return Material.Registry[data];
@@ -123,7 +123,7 @@ namespace Start_a_Town_
             return (byte)mat.ID;
         }
 
-        public override List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
+        public override List<Interaction> GetAvailableTasks(MapBase map, Vector3 global)
         {
             return new List<Interaction>(){
                 new InteractionMining()

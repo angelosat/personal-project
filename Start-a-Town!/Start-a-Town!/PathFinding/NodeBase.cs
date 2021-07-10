@@ -6,7 +6,7 @@ namespace Start_a_Town_.PathFinding
 {
     public abstract class NodeBase
     {
-        public IMap Map;
+        public MapBase Map;
         public Vector3 Global;
         public TargetArgs Target;
         public NodeBase Parent;

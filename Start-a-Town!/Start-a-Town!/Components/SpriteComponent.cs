@@ -320,39 +320,6 @@ namespace Start_a_Town_.Components
                 0, Vector2.Zero, camera.Zoom, SpriteEffects.None, 0);
             Game1.Instance.Effect.Parameters["SourceRectangle"].SetValue(new Vector4(0, 0, 1, 1));
         }
-        public override void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global)
-        {
-            DrawPreview(sb, camera, global, Orientation);
-        }
-        public override void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global, float depth)
-        {
-            DrawPreview(sb, camera, global, Orientation, depth);
-        }
-        public void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global, int orientation)
-        {
-            DrawFootprint(sb, camera, global, orientation);
-            Rectangle bounds;
-            Vector2 screenLoc;
-
-            bounds = camera.GetScreenBounds(global, Sprite.GetBounds());
-            screenLoc = new Vector2(bounds.X, bounds.Y);
-
-            sb.Draw(Sprite.Texture, screenLoc,
-                Sprite.SourceRects[0][orientation], Color.White * 0.5f,
-                0, Vector2.Zero, camera.Zoom, SpriteEffects.None, 0);
-            Game1.Instance.Effect.Parameters["SourceRectangle"].SetValue(new Vector4(0, 0, 1, 1));
-        }     
-        public void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global, int orientation, float depth)
-        {
-            Rectangle bounds;
-            Vector2 screenLoc;
-
-            bounds = camera.GetScreenBounds(global, Sprite.GetBounds());
-            screenLoc = new Vector2(bounds.X, bounds.Y);
-
-            this.Sprite.Draw(sb, screenLoc, Color.White * 0.5f, 0, Vector2.Zero, camera.Zoom, SpriteEffects.None, depth);
-            Game1.Instance.Effect.Parameters["SourceRectangle"].SetValue(new Vector4(0, 0, 1, 1));
-        }
 
         public override void DrawMouseover(MySpriteBatch sb, Camera camera, GameObject parent)
         {
@@ -372,21 +339,7 @@ namespace Start_a_Town_.Components
             Game1.Instance.GraphicsDevice.Textures[0] = Sprite.Atlas.Texture;
             sb.Flush();
         }
-        public void DrawFootprint(SpriteBatch sb, Camera camera, Vector3 global, int orientation)
-        {
-            var tileBounds = Block.Bounds;
-            var scrBounds = camera.GetScreenBounds(global, tileBounds);
-            var scr = new Vector2(scrBounds.X, scrBounds.Y);
-            bool check;
-
-            if (!Engine.Map.TryGetCell(global, out Cell cell))
-                check = false;
-            else
-                check = (cell.Block.Type == Block.Types.Air && Engine.Map.IsSolid(global - new Vector3(0, 0, 1)));
-            Color c = check ? Color.White : Color.Red;
-            sb.Draw(Map.TerrainSprites, scr, Block.TileHighlights[0][2], c * 0.5f, 0, Vector2.Zero, camera.Zoom, SpriteEffects.None, 0);
-        }
-
+        
         static public void DrawHighlight(GameObject parent, SpriteBatch sb, Camera camera)
         {
             var sprite = parent.GetComponent<SpriteComponent>().Sprite;
@@ -487,7 +440,7 @@ namespace Start_a_Town_.Components
                 n--;
             }
         }
-        public static void DrawShadow(Camera camera, Rectangle spriteBounds, IMap map, GameObject parent, float depthNear, float depthFar)
+        public static void DrawShadow(Camera camera, Rectangle spriteBounds, MapBase map, GameObject parent, float depthNear, float depthFar)
         {
             var global = parent.Global;
             int n = (int)global.RoundXY().Z;
@@ -508,7 +461,7 @@ namespace Start_a_Town_.Components
                 n--;
             }
         }
-        static public void DrawShadows(MySpriteBatch sb, IMap map, Camera camera)
+        static public void DrawShadows(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (ShadowsEnabled)
                 foreach (Shadow shadow in ShadowList.OrderBy(foo => foo.Global.GetDrawDepth(map, camera)))

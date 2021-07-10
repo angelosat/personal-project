@@ -36,26 +36,10 @@ namespace Start_a_Town_.Components
         public PositionComponent()
             : base()
         {
-            this.Position = new Start_a_Town_.Position();
+            this.Position = new Position();
             this.Direction = Vector2.Zero;
             this.Exists = false;
             this.Parent = null;
-        }
-        public PositionComponent(Position pos)
-            : this()
-        {
-            this.Position = pos;
-        }
-        public PositionComponent(Map map, Vector3 global)
-            : this()
-        {
-            this.Position = new Position(map, global);
-        }
-        public PositionComponent(Map map, Vector3 global, Vector3 velocity, Vector2 direction)
-            : this()
-        {
-            this.Position = new Position(map, global);
-            this.Direction = direction;
         }
         public override string ToString()
         {
@@ -67,7 +51,7 @@ namespace Start_a_Town_.Components
         
         public override object Clone()
         {
-            PositionComponent mov = new PositionComponent(new Position(Position));
+            PositionComponent mov = new();
             return mov;
         }
 
@@ -75,16 +59,6 @@ namespace Start_a_Town_.Components
         {
             Rectangle bounds;
             camera.CullingCheck(global.X, global.Y, global.Z, sprComp.Sprite.GetBounds(), out bounds);
-            return bounds;
-        }
-
-        public Rectangle GetScreenBounds(Camera camera, SpriteComponent sprComp)
-        {
-            Position CurrentPosition = this.Position;
-            Chunk chunk = CurrentPosition.GetChunk();
-            Cell cell = CurrentPosition.GetCell();
-            Rectangle bounds;
-            camera.CullingCheck(CurrentPosition.Global.X, CurrentPosition.Global.Y, CurrentPosition.Global.Z, sprComp.Sprite.GetBounds(), out bounds);
             return bounds;
         }
 

@@ -120,7 +120,7 @@ namespace Start_a_Town_
         
         public void GetContextActions(ContextArgs a) { }
 
-        static public bool IsValidFarmPosition(IMap map, Vector3 arg)
+        static public bool IsValidFarmPosition(MapBase map, Vector3 arg)
         {
             return
                 Block.GetBlockMaterial(map, arg) == MaterialDefOf.Soil

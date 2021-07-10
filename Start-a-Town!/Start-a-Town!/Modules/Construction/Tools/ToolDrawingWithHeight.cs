@@ -115,7 +115,7 @@ namespace Start_a_Town_.Modules.Construction
             return height;
         }
 
-        protected override void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)
+        protected override void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             if (!this.Enabled)
                 return;

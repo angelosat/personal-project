@@ -35,7 +35,7 @@ namespace Start_a_Town_.Blocks
             return new BlockCampfireEntity();
         }
 
-        public override void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             if (!map.GetBlock(global - Vector3.UnitZ).Opaque)
                 return;
@@ -52,7 +52,7 @@ namespace Start_a_Town_.Blocks
             yield return new Vector3(0, 1, 0);
         }
 
-        protected override void OnBlockBelowChanged(IMap map, Vector3 global)
+        protected override void OnBlockBelowChanged(MapBase map, Vector3 global)
         {
             map.GetBlock(global.Below(), out var cell);
             if (cell.Block == BlockDefOf.Air)

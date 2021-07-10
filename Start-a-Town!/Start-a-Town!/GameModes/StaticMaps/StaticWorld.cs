@@ -59,7 +59,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.Name;
         }
-        public IMap GetMap(Vector2 mapCoords)
+        public MapBase GetMap(Vector2 mapCoords)
         {
             return this.Maps.GetValueOrDefault(mapCoords);
         }
@@ -180,7 +180,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return new StaticWorld(a);
         }
-        public IMap CreateMap(Vector2 mapCoords)
+        public MapBase CreateMap(Vector2 mapCoords)
         {
             return new StaticMap(this, mapCoords);
         }

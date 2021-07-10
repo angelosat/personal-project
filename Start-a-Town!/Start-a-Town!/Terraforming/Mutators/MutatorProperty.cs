@@ -13,7 +13,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             get { return _Value; }
             set
             {
-                _Value = Math.Max(0, Math.Min(Map.MaxHeight, value));
+                _Value = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
             }
         }
         public float Step { get; set; }

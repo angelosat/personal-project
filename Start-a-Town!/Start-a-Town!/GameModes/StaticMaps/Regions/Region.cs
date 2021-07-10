@@ -7,7 +7,7 @@ namespace Start_a_Town_
     public class Region
     {
         public Chunk Chunk;
-        public IMap Map { get { return this.Chunk.Map; } }
+        public MapBase Map { get { return this.Chunk.Map; } }
         public int RoomID
         {
             get

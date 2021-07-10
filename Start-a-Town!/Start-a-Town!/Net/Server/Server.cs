@@ -137,9 +137,9 @@ namespace Start_a_Town_.Net
         /// <summary>
         /// TODO: Make it a field
         /// </summary>
-        public IMap Map { get; set; }
+        public MapBase Map { get; set; }
 
-        private void SetMap(IMap map)
+        private void SetMap(MapBase map)
         {
             this.Map = map;
             map.ResolveReferences();
@@ -977,7 +977,7 @@ namespace Start_a_Town_.Net
         {
             // TODO: move to map
             var xy = Vector3.Zero + (Vector3.UnitX + Vector3.UnitY) * (GameModes.StaticMaps.StaticMap.MapSize.Default.Blocks / 2);
-            int z = global::Start_a_Town_.Map.MaxHeight - (int)Math.Ceiling(obj.Physics.Height);
+            int z = MapBase.MaxHeight - (int)Math.Ceiling(obj.Physics.Height);
             while (!Instance.Map.IsSolid(xy + Vector3.UnitZ * z))
                 z--;
 
@@ -1194,7 +1194,7 @@ namespace Start_a_Town_.Net
             return true;
         }
        
-        static public void InstantiateMap(IMap map)
+        static public void InstantiateMap(MapBase map)
         {
             if (map == null)
                 return;
@@ -1469,7 +1469,7 @@ namespace Start_a_Town_.Net
 
         public AI AIHandler = new();
 
-        public void SyncPlaceBlock(IMap map, Vector3 global, Block block, byte data, int variation, int orientation)
+        public void SyncPlaceBlock(MapBase map, Vector3 global, Block block, byte data, int variation, int orientation)
         {
             block.Place(map, global, data, variation, orientation);
             byte[] payload = Network.Serialize(w =>

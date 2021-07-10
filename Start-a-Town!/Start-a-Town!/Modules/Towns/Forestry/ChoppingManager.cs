@@ -180,13 +180,13 @@ namespace Start_a_Town_
             this.ChoppingTasks = new HashSet<int>(r.ReadListInt());
         }
 
-        public override void DrawUI(SpriteBatch sb, IMap map, Camera cam)
+        public override void DrawUI(SpriteBatch sb, MapBase map, Camera cam)
         {
             this.DrawIcons(sb, map, cam, ChopIcon, GetTrees());
             this.DrawIcons(sb, map, cam, ForageIcon, GetPlants());
         }
         
-        private void DrawIcons(SpriteBatch sb, IMap map, Camera camera, Icon icon, IEnumerable<GameObject> objects)
+        private void DrawIcons(SpriteBatch sb, MapBase map, Camera camera, Icon icon, IEnumerable<GameObject> objects)
         {
             foreach (var parent in objects)
                 icon.DrawAboveEntity(sb, camera, parent);

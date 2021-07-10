@@ -18,15 +18,15 @@ namespace Start_a_Town_
         {
             this.Color = ColorHelper.GetRandomColor();
         }
-        public Room(IMap map) : this()
+        public Room(MapBase map) : this()
         {
             this.Map = map;
         }
-        Room(IMap map, HashSet<Vector3> positions) : this(map)
+        Room(MapBase map, HashSet<Vector3> positions) : this(map)
         {
             this.Interior = positions;
         }
-        public Room(IMap map, IEnumerable<IntVec3> positions) : this(map)
+        public Room(MapBase map, IEnumerable<IntVec3> positions) : this(map)
         {
             this.Interior = new();
             this.Border = new();
@@ -107,7 +107,7 @@ namespace Start_a_Town_
         public int ID;
         public int OwnerRef = -1;
         public HashSet<FurnitureDef> Furnitures = new();
-        public IMap Map;
+        public MapBase Map;
         private int workplaceID =-1;
         private Workplace workplace;
         public Workplace Workplace
@@ -176,7 +176,7 @@ namespace Start_a_Town_
             this.Valid = false;
         }
 
-        static public bool TryCreate(IMap map, Vector3 global, out Room room)
+        static public bool TryCreate(MapBase map, Vector3 global, out Room room)
         {
             room = new Room(map);
             var area = EnclosedArea.BeginExclusiveAsList(map, global);
@@ -185,7 +185,7 @@ namespace Start_a_Town_
             room.Interior = area;
             return true;
         }
-        static public Room TryCreate(IMap map, IntVec3 begin)
+        static public Room TryCreate(MapBase map, IntVec3 begin)
         {
             if (map.GetCell(begin) is not Cell cell)
                 return null;
@@ -402,7 +402,7 @@ namespace Start_a_Town_
                 );
             box.SetGetDataAction(o =>
             {
-                var oo = ((IMap map, IntVec3 global))o;
+                var oo = ((MapBase map, IntVec3 global))o;
                 var map = oo.map;
                 var global = oo.global;
                 currentRoom = map.Town.RoomManager.GetRoomAt(global);

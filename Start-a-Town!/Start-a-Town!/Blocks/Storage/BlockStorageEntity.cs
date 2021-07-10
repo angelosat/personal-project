@@ -14,7 +14,7 @@ namespace Start_a_Town_
             readonly int Capacity = 4;
             StorageSettings Settings = new();
             public List<GameObject> Contents = new(4);
-            public IMap Map { get; }
+            public MapBase Map { get; }
             public int ID { get; }
             StorageSettings IStorage.Settings => this.Settings;
             public bool IsFull => this.Contents.Count == Capacity;
@@ -57,12 +57,12 @@ namespace Start_a_Town_
                 this.Contents.Remove(item);
                 item.Net.EventOccured(Components.Message.Types.ContentsChanged, this);
             }
-            public override void Place(IMap map, Vector3 global)
+            public override void Place(MapBase map, Vector3 global)
             {
                 base.Place(map, global);
                 this.Global = global;
             }
-            public override void OnRemove(IMap map, Vector3 global)
+            public override void OnRemove(MapBase map, Vector3 global)
             {
                 foreach (var i in this.Contents)
                     map.Net.PopLoot(i, global, Vector3.Zero);

@@ -19,7 +19,7 @@ namespace Start_a_Town_
             : base(Block.Types.Bin, opaque: false)
         {
             var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chest").ToGrayscale();
-            this.Variations.Add(Block.Atlas.Load("chestgrayscale", tex, Map.BlockDepthMap, ChestNormalMap));
+            this.Variations.Add(Block.Atlas.Load("chestgrayscale", tex, MapBase.BlockDepthMap, ChestNormalMap));
            
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(
@@ -58,12 +58,12 @@ namespace Start_a_Town_
         }
 
         StorageContentsUI ContentsUI = new StorageContentsUI();
-        internal override void Select(UISelectedInfo uISelectedInfo, IMap map, Vector3 vector3)
+        internal override void Select(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
         {
             uISelectedInfo.AddTabAction("Contents", () => ShowContents(map, vector3));
         }
 
-        private void ShowContents(IMap map, Vector3 vector3)
+        private void ShowContents(MapBase map, Vector3 vector3)
         {
             var ent = map.GetBlockEntity(vector3) as BlockStorageEntity;
             this.ContentsUI.Refresh(ent);

@@ -46,7 +46,7 @@ namespace Start_a_Town_
         {
             return o.Global.GetDrawDepth(o.Map, this);
         }
-        internal float GetDrawDepth(IMap map, Vector3 global)
+        internal float GetDrawDepth(MapBase map, Vector3 global)
         {
             return global.GetDrawDepth(map, this);
         }
@@ -59,7 +59,7 @@ namespace Start_a_Town_
         public float ZoomMin = 0.125f;
         public int Width, Height;
         public Vector3 Global = Vector3.Zero;
-        int _DrawLevel = Map.MaxHeight - 1;
+        int _DrawLevel = MapBase.MaxHeight - 1;
         public int DrawLevel
         {
             get { return this._DrawLevel; }
@@ -97,16 +97,6 @@ namespace Start_a_Town_
             {
                 _Coordinates = value;
                 this.Location = Coordinates - new Vector2((int)((Width / 2) / Zoom), (int)((Height / 2) / Zoom));
-            }
-        }
-        Map _Map;
-        public Map Map
-        {
-            get { return this._Map; }
-            set
-            {
-                this._Map = value;
-                // TODO: clear light cache
             }
         }
 
@@ -157,26 +147,26 @@ namespace Start_a_Town_
 
             this.Follow(Global);
         }
-        public void Update(IMap map, Vector3 global)
+        public void Update(MapBase map, Vector3 global)
         {
             this.Global = global + Vector3.UnitZ;
             this.Follow(Global);
 
             this.UpdateFog(map);
         }
-        public void Update(IMap map, Vector2 coords)
+        public void Update(MapBase map, Vector2 coords)
         {
             this.Coordinates = coords;
             this.UpdateFog(map);
         }
-        public void Update(IMap map)
+        public void Update(MapBase map)
         {
             this.Follow();
             this.SmoothZoom(ZoomNext);
             this.UpdateFog(map);
         }
 
-        void UpdateFog(IMap map)
+        void UpdateFog(MapBase map)
         {
             this.FogT = (this.FogT + 0.05f * map.Net.Speed) % 100;
         }
@@ -277,7 +267,7 @@ namespace Start_a_Town_
         }
         public Rectangle ViewPort;
 
-        public void GetEverything(IMap map, Vector3 global, Rectangle spriteRect, out float depth, out Rectangle screenBounds, out Vector2 screenLoc)
+        public void GetEverything(MapBase map, Vector3 global, Rectangle spriteRect, out float depth, out Rectangle screenBounds, out Vector2 screenLoc)
         {
             depth = global.GetDrawDepth(map, this);
             screenBounds = GetScreenBounds(global, spriteRect);
@@ -448,7 +438,7 @@ namespace Start_a_Town_
         {
             this.Rotation = 0;
         }
-        public bool DrawCell(Canvas canvas, IMap map, Vector3 global)
+        public bool DrawCell(Canvas canvas, MapBase map, Vector3 global)
         {
             map.TryGetAll(global, out var chunk, out var cell);
             int z = cell.Z;
@@ -482,7 +472,7 @@ namespace Start_a_Town_
                 block.Draw(canvas, chunk, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell.Variation, cell.Orientation, cell.BlockData);
             return true;
         }
-        public bool DrawCell(Canvas canvas, IMap map, Chunk chunk, Cell cell)
+        public bool DrawCell(Canvas canvas, MapBase map, Chunk chunk, Cell cell)
         {
             int z = cell.Z;
             Block.Types cellTile = cell.Block.Type;
@@ -515,7 +505,7 @@ namespace Start_a_Town_
                 block.Draw(canvas, chunk, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell.Variation, cell.Orientation, cell.BlockData);
             return true;
         }
-        public bool DrawBlockGlobal(MySpriteBatch sb, IMap map, Vector3 global)
+        public bool DrawBlockGlobal(MySpriteBatch sb, MapBase map, Vector3 global)
         {
             int z = (int)global.Z;
             int gx = (int)global.X;
@@ -530,7 +520,7 @@ namespace Start_a_Town_
                 this.Zoom, Color.Transparent, Color.White*.5f, Color.White, Color.White, Vector4.One, Vector4.Zero, depth, null, global);
             return true;
         }
-        public bool DrawUnknown(Canvas canvas, IMap map, Chunk chunk, Cell cell)
+        public bool DrawUnknown(Canvas canvas, MapBase map, Chunk chunk, Cell cell)
         {
             int z = cell.Z;
             int lx = cell.X, ly = cell.Y, gx = (int)chunk.Start.X + lx, gy = (int)chunk.Start.Y + ly;
@@ -546,7 +536,7 @@ namespace Start_a_Town_
 
             return true;
         }
-        public bool DrawUnknown(MySpriteBatch sb, IMap map, Chunk chunk, Cell cell)
+        public bool DrawUnknown(MySpriteBatch sb, MapBase map, Chunk chunk, Cell cell)
         {
             int z = cell.Z;
             int lx = cell.X, ly = cell.Y, gx = (int)chunk.Start.X + lx, gy = (int)chunk.Start.Y + ly;
@@ -580,7 +570,7 @@ namespace Start_a_Town_
         /// <param name="playerGlobal"></param>
         /// <param name="hiddenRects"></param>
         /// <param name="a"></param>
-        public bool DrawCell(MySpriteBatch sb, IMap map, Chunk chunk, Cell cell, Vector3? playerGlobal, List<Rectangle> hiddenRects, EngineArgs a)
+        public bool DrawCell(MySpriteBatch sb, MapBase map, Chunk chunk, Cell cell, Vector3? playerGlobal, List<Rectangle> hiddenRects, EngineArgs a)
         {
             int z = cell.Z;
 
@@ -646,12 +636,12 @@ namespace Start_a_Town_
         public int MaxDrawZ;
         Vector2 CameraOffset;
 
-        internal void DrawChunk(MySpriteBatch sb, IMap map, Chunk chunk, Vector3? playerGlobal, List<Rectangle> hiddenRects, EngineArgs a)
+        internal void DrawChunk(MySpriteBatch sb, MapBase map, Chunk chunk, Vector3? playerGlobal, List<Rectangle> hiddenRects, EngineArgs a)
         {
             throw new Exception();
         }
 
-        public void PrepareShader(IMap map)
+        public void PrepareShader(MapBase map)
         {
             var view =
                 new Matrix(
@@ -678,7 +668,7 @@ namespace Start_a_Town_
             this.Effect.Parameters["OutlineThreshold"].SetValue((1) / (DepthNear - DepthFar));
         }
 
-        private void PrepareShaderTransparent(IMap map)
+        private void PrepareShaderTransparent(MapBase map)
         {
             var view =
                 new Matrix(
@@ -706,7 +696,7 @@ namespace Start_a_Town_
 
         }
 
-        public static LightToken GetFinalLight(Camera camera, IMap map, Chunk chunk, Cell cell, int gx, int gy, int z, bool updateblockfaces = true)
+        public static LightToken GetFinalLight(Camera camera, MapBase map, Chunk chunk, Cell cell, int gx, int gy, int z, bool updateblockfaces = true)
         {
             // UNCOMMENT THIS?
             //if (chunk.LightCache.TryGetValue(new Vector3(gx, gy, z), out color))
@@ -731,7 +721,7 @@ namespace Start_a_Town_
             Chunk.TryGetFinalLight(map, gx + rightx, gy - righty, z, out byte suneast, out byte blockeast);
             Chunk.TryGetFinalLight(map, gx - leftx, gy + lefty, z, out byte sunsouth, out byte blocksouth);
             byte suntop, blocktop;
-            if (z + 1 < map.MaxHeight)
+            if (z + 1 < MapBase.MaxHeight)
             {
                 suntop = Math.Max((byte)0, chunk.GetSunlight(cell.X, cell.Y, z + 1));
                 blocktop = chunk.GetBlockLight(cell.X, cell.Y, z + 1);
@@ -753,7 +743,7 @@ namespace Start_a_Town_
 
         Vector3 LastMouseover = new Vector3(float.MinValue);
 
-        public void CreateMouseover(IMap map, Vector3 global)
+        public void CreateMouseover(MapBase map, Vector3 global)
         {
             if (Controller.Instance.MouseoverBlockNext.Object != null)
             {
@@ -804,7 +794,7 @@ namespace Start_a_Town_
             Controller.Instance.MouseoverBlockNext.Depth = global.GetMouseoverDepth(map, this);
             this.LastMouseover = global;
         }
-        public void CreateMouseover(IMap map, Vector3 global, Rectangle rect, Vector2 point, bool behind)
+        public void CreateMouseover(MapBase map, Vector3 global, Rectangle rect, Vector2 point, bool behind)
         {
             if (Controller.Instance.MouseoverBlockNext.Object != null)
                 return;
@@ -850,7 +840,7 @@ namespace Start_a_Town_
             RenderBeforeFog, LightBeforeFog, DepthBeforeFog, FogBeforeFog,
             FinalScene;
         public RenderTarget2D[] RenderTargets = new RenderTarget2D[5];
-        public void DrawMap(SpriteBatch sb, IMap map, ToolManager toolManager, UIManager ui, SceneState scene)
+        public void DrawMap(SpriteBatch sb, MapBase map, ToolManager toolManager, UIManager ui, SceneState scene)
         {
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;
             if (map == null)
@@ -883,7 +873,7 @@ namespace Start_a_Town_
         float FogT = 0;
         public Effect Effect;
         static public bool DrawnOnce = false;
-        private void NewDraw(IMap map, GraphicsDevice gd, EngineArgs a, SceneState scene, ToolManager toolManager, UIManager ui)
+        private void NewDraw(MapBase map, GraphicsDevice gd, EngineArgs a, SceneState scene, ToolManager toolManager, UIManager ui)
         {
             DrawnOnce = true;
             Effect fx = Game1.Instance.Content.Load<Effect>("blur");
@@ -1285,7 +1275,7 @@ namespace Start_a_Town_
             }
         }
 
-        private void SortEntities(IMap map, List<GameObject> objs)
+        private void SortEntities(MapBase map, List<GameObject> objs)
         {
             objs.Sort((o1, o2) =>
             {
@@ -1296,7 +1286,7 @@ namespace Start_a_Town_
                 else return 1;
             });
         }
-        public void NewDraw(RenderTarget2D target, IMap map, GraphicsDevice gd, EngineArgs a, SceneState scene, ToolManager toolManager)
+        public void NewDraw(RenderTarget2D target, MapBase map, GraphicsDevice gd, EngineArgs a, SceneState scene, ToolManager toolManager)
         {
             if (MapRender == null)
                 MapRender = new RenderTarget2D(gd, target.Width, target.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.DiscardContents);
@@ -1349,15 +1339,15 @@ namespace Start_a_Town_
             DrawMouseoverEntity(fx, mySB);
         }
 
-        private void DrawBlocks(IMap map, GraphicsDevice gd, EngineArgs a, Effect fx, MySpriteBatch mySB)
+        private void DrawBlocks(MapBase map, GraphicsDevice gd, EngineArgs a, Effect fx, MySpriteBatch mySB)
         {
             gd.SetRenderTargets(MapRender, MapLight, MapDepth);
             gd.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, new Color(1f, 1f, 1f, 0), 1, 1);
             fx.CurrentTechnique = fx.Techniques["Combined"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             gd.Textures[0] = Block.Atlas.Texture;
-            gd.Textures[2] = Map.ShaderMouseMap;
-            gd.Textures[3] = Map.BlockDepthMap;
+            gd.Textures[2] = MapBase.ShaderMouseMap;
+            gd.Textures[3] = MapBase.BlockDepthMap;
             DepthNear = float.MinValue;
             DepthFar = float.MaxValue;
             map.DrawBlocks(mySB, this, a);
@@ -1381,7 +1371,7 @@ namespace Start_a_Town_
             mySB.Flush();
         }
 
-        private void DrawEntities(IMap map, GraphicsDevice gd, SceneState scene, Effect fx, MySpriteBatch mySB)
+        private void DrawEntities(MapBase map, GraphicsDevice gd, SceneState scene, Effect fx, MySpriteBatch mySB)
         {
             fx.CurrentTechnique = fx.Techniques["Entities"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
@@ -1401,7 +1391,7 @@ namespace Start_a_Town_
             mySB.Flush();
         }
 
-        private void DrawBlockSelection(IMap map, ToolManager toolManager, Effect fx, MySpriteBatch mySB)
+        private void DrawBlockSelection(MapBase map, ToolManager toolManager, Effect fx, MySpriteBatch mySB)
         {
             fx.CurrentTechnique = fx.Techniques["BlockHighlight"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
@@ -1409,7 +1399,7 @@ namespace Start_a_Town_
             mySB.Flush();
         }
 
-        private void DrawEntityShadows(IMap map, GraphicsDevice gd, Effect fx, MySpriteBatch mySB)
+        private void DrawEntityShadows(MapBase map, GraphicsDevice gd, Effect fx, MySpriteBatch mySB)
         {
             fx.CurrentTechnique = fx.Techniques["EntityShadows"];
             gd.DepthStencilState = new DepthStencilState() { DepthBufferWriteEnable = false };
@@ -1472,7 +1462,7 @@ namespace Start_a_Town_
         public bool HideUnderground { get; set; }
         public bool BorderShading { get; set; }
 
-        public float GetFarDepth(IMap map)
+        public float GetFarDepth(MapBase map)
         {
             var size = map.GetSizeInChunks() * Chunk.Size;// -1;
 
@@ -1493,7 +1483,7 @@ namespace Start_a_Town_
                 default: return 0;
             }
         }
-        public float GetNearDepth(IMap map)
+        public float GetNearDepth(MapBase map)
         {
             var size = map.GetSizeInChunks() * Chunk.Size;// -1;
 
@@ -1518,7 +1508,7 @@ namespace Start_a_Town_
         public int GetMaxDrawLevel()
         {
             var value = (this.HideTerrainAbovePlayer && (PlayerOld.Actor != null)) ? (int)PlayerOld.Actor.Transform.Global.RoundXY().Z + 2 + this.HideTerrainAbovePlayerOffset : this.DrawLevel;
-            value = Math.Min(Map.MaxHeight - 1, Math.Max(0, value));
+            value = Math.Min(MapBase.MaxHeight - 1, Math.Max(0, value));
             return value;
         }
         public bool TopSliceChanged = true;
@@ -1532,7 +1522,7 @@ namespace Start_a_Town_
         internal void AdjustDrawLevel(int p)
         {
             if (!this.HideTerrainAbovePlayer)
-                this.DrawLevel = Math.Min(Map.MaxHeight - 1, Math.Max(0, this.DrawLevel + p));
+                this.DrawLevel = Math.Min(MapBase.MaxHeight - 1, Math.Max(0, this.DrawLevel + p));
             else
                 this.HideTerrainAbovePlayerOffset += p;
         }
@@ -1563,7 +1553,7 @@ namespace Start_a_Town_
             this.WaterComposite = new RenderTarget2D(gfx, w, h, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
         }
 
-        public void BuildChunk(IMap map, Chunk chunk, MySpriteBatch sb, EngineArgs a, int rotation)
+        public void BuildChunk(MapBase map, Chunk chunk, MySpriteBatch sb, EngineArgs a, int rotation)
         {
             Vector3? playerGlobal = null;
             var hiddenRects = new List<Rectangle>();
@@ -1582,7 +1572,7 @@ namespace Start_a_Town_
             chunk.BuildFrontmostBlocks(this);
             chunk.Valid = true;
         }
-        public void MousePicking(IMap map)
+        public void MousePicking(MapBase map)
         {
             foreach (var chunk in (from ch in map.GetActiveChunks().Values where this.ViewPort.Intersects(ch.GetScreenBounds(this)) select ch))
                 chunk.HitTestEntities(this);
@@ -1729,11 +1719,11 @@ namespace Start_a_Town_
             return (int)Math.Max(0, this.LastZTarget - FogZOffset - FogFadeLength);
         }
 
-        public void DrawGrid(MySpriteBatch sb, IMap map, IEnumerable<IntVec3> positions)
+        public void DrawGrid(MySpriteBatch sb, MapBase map, IEnumerable<IntVec3> positions)
         {
             this.DrawGrid(sb, map, positions, Color.Yellow * .5f);
         }
-        public void DrawGrid(MySpriteBatch sb, IMap map, IEnumerable<IntVec3> positions, Color col)
+        public void DrawGrid(MySpriteBatch sb, MapBase map, IEnumerable<IntVec3> positions, Color col)
         {
             var gridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
             Sprite.Atlas.Begin(sb);
@@ -1807,7 +1797,7 @@ namespace Start_a_Town_
                 this.DrawGridBlock(sb, sprite, col, pos);
             sb.Flush();
         }
-        public void DrawBlockMouseover(MySpriteBatch sb, IMap map, Vector3 global, Color color)
+        public void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Vector3 global, Color color)
         {
             if (global.Z > this.DrawLevel)
                 return;

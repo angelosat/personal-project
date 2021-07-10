@@ -8,7 +8,7 @@ namespace Start_a_Town_.Components.Physics
         static public float Friction { get { return PhysicsComponent.Friction; } }
         static float Gravity { get { return PhysicsComponent.Gravity; } }
 
-        static public void Update(float weight, float friction, IMap map, Vector3 global, Vector3 velocity, out Vector3 nextglobal, out Vector3 nextvelocity)
+        static public void Update(float weight, float friction, MapBase map, Vector3 global, Vector3 velocity, out Vector3 nextglobal, out Vector3 nextvelocity)
         {
             if (!map.TryGetCell(global, out var thisCell))
             {
@@ -56,7 +56,7 @@ namespace Start_a_Town_.Components.Physics
             nextglobal = next;
 
         }
-        static private Vector3 ResolveCorner(IMap map, Vector3 current, Vector3 next)
+        static private Vector3 ResolveCorner(MapBase map, Vector3 current, Vector3 next)
         {
             if (next == current)
                 return current;
@@ -73,7 +73,7 @@ namespace Start_a_Town_.Components.Physics
                 newNext = new Vector3(current.X, next.Y, next.Z);
             return newNext;
         }
-        static private float ResolveVertical(IMap map, BoundingBox box, float weight,  ref Vector3 speed, float density)
+        static private float ResolveVertical(MapBase map, BoundingBox box, float weight,  ref Vector3 speed, float density)
         {
             var grav = Gravity * weight;
             Vector3 global = box.Min;
@@ -124,7 +124,7 @@ namespace Start_a_Town_.Components.Physics
             speed.Z += grav;
             return next.Z;
         }
-        private static Vector3 ResolveHorizontal(float friction, IMap map, BoundingBox boxGlobal, ref Vector3 velocity, Vector2 horAxis, float nz, out float zz)
+        private static Vector3 ResolveHorizontal(float friction, MapBase map, BoundingBox boxGlobal, ref Vector3 velocity, Vector2 horAxis, float nz, out float zz)
         {
             zz = nz;
             Vector3 unit = new Vector3(horAxis, 0) * velocity;

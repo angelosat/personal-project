@@ -6,7 +6,7 @@ namespace Start_a_Town_
 {
     static public class FloodFill
     {
-        static public IEnumerable<IntVec3> BeginIncludeEdges(IMap map, IntVec3 begin, Func<Cell, IntVec3, bool> condition)
+        static public IEnumerable<IntVec3> BeginIncludeEdges(MapBase map, IntVec3 begin, Func<Cell, IntVec3, bool> condition)
         {
             var cell = map.GetCell(begin);
             if (!condition(cell, begin))
@@ -32,7 +32,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        static public IEnumerable<IntVec3> BeginExcludeEdges(IMap map, IntVec3 begin, Func<Cell, IntVec3, bool> condition)
+        static public IEnumerable<IntVec3> BeginExcludeEdges(MapBase map, IntVec3 begin, Func<Cell, IntVec3, bool> condition)
         {
             var cell = map.GetCell(begin);
             if (!condition(cell, begin))

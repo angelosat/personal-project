@@ -33,7 +33,7 @@ namespace Start_a_Town_.Modules.Construction
             PacketDesignateConstruction.Send(Client.Instance, a);
         }
        
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (!this.Enabled)
                 return;
@@ -41,7 +41,7 @@ namespace Start_a_Town_.Modules.Construction
                 .Where(v => map.GetBlock(v) != BlockDefOf.Air);
             camera.DrawGridBlocks(sb, Block.BlockBlueprint, positions, Color.Red);
         }
-        internal override void DrawAfterWorldRemote(MySpriteBatch sb, IMap map, Camera camera, PlayerData player)
+        internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, PlayerData player)
         {
             if (!this.Enabled)
                 return;

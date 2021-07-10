@@ -12,7 +12,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             get { return _LandLevel; }
             set
             {
-                _LandLevel = Math.Max(0, Math.Min(Map.MaxHeight, value));
+                _LandLevel = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
             }
         }
 
@@ -20,7 +20,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         {
             this.ID = Terraformer.Types.Land;
             this.Name = "Land";
-            this.LandLevel = Map.MaxHeight / 2;
+            this.LandLevel = MapBase.MaxHeight / 2;
         }
         public override void Initialize(IWorld w, Cell c, int x, int y, int z, double g)
         {
@@ -34,7 +34,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         public override List<MutatorProperty> GetAdjustableParameters()
         {
             List<MutatorProperty> list = new List<MutatorProperty>();
-            list.Add(new MutatorProperty("Land Level", this.LandLevel, 0, Map.MaxHeight, 1));
+            list.Add(new MutatorProperty("Land Level", this.LandLevel, 0, MapBase.MaxHeight, 1));
             return list;
         }
 
@@ -46,7 +46,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         }
         public override Terraformer Load(SaveTag save)
         {
-            this.LandLevel = save.TagValueOrDefault<int>("Level", Map.MaxHeight / 2);
+            this.LandLevel = save.TagValueOrDefault<int>("Level", MapBase.MaxHeight / 2);
             return this;
         }
 

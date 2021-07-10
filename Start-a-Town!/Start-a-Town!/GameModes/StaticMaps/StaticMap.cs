@@ -11,7 +11,7 @@ using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
-    public class StaticMap : IMap, IDisposable, ITooltippable
+    public class StaticMap : MapBase, ITooltippable
     {
         public override float LoadProgress
         {
@@ -62,8 +62,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         { get { return new List<MapSize>() { MapSize.Micro, MapSize.Tiny, MapSize.Small, MapSize.Normal, MapSize.Huge }; } }
 
         public List<GameObject> SavedPlayers = new();
-
-        Queue<Chunk> ChunksToActivate;
 
         public override bool AddChunk(Chunk chunk)
         {
@@ -149,7 +147,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Camera = new Camera((int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y);
             this.Name = name; 
             this.ActiveChunks = new Dictionary<Vector2, Chunk>();
-            ChunksToActivate = new Queue<Chunk>();
             this.Thumbnails = new Texture2D[3];
             this.Town = new Town(this);
             this.Regions = new RegionManager(this);
@@ -191,27 +188,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.CacheObjects();
             this.CacheBlockEntities();
 
-            while (ChunksToActivate.Count > 0)
-            {
-                Chunk chunk = this.ChunksToActivate.Dequeue();
-                ActiveChunks[chunk.MapCoords] = chunk;
-                if (ActiveChunks.Count > ChunkLoader.ChunkMemoryCapacity)
-                {
-                    float maxDist = 0, dist;
-                    var furthestChunkCoords = new Vector2();
-                    foreach (KeyValuePair<Vector2, Chunk> pair in ActiveChunks)
-                    {
-                        dist = Vector2.Distance(chunk.MapCoords, pair.Key);
-                        if (dist > maxDist)
-                        {
-                            maxDist = dist;
-                            furthestChunkCoords = pair.Key;
-                        }
-                    }
-                    ActiveChunks.Remove(furthestChunkCoords);
-                    ChunkLoader.UnloadChunk(furthestChunkCoords);
-                }
-            }
             foreach (var chunk in this.ActiveChunks.Values.ToList())
                 chunk.Update();
             this.Town.Update();
@@ -274,7 +250,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
             {
 
-                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, this.MaxHeight / 2, Chunk.Bounds);
+                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);
                 if (!camera.ViewPort.Intersects(chunkBounds))
                     continue;
                 camera.DrawChunk(sb, this, chunk.Value, playerGlobal, hiddenRects, a);
@@ -307,7 +283,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             foreach (KeyValuePair<Vector2, Chunk> chunk in ActiveChunks)
             {
-                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, this.MaxHeight / 2, Chunk.Bounds); 
+                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds); 
                 if (camera.ViewPort.Intersects(chunkBounds))
                     chunk.Value.DrawObjects(sb, camera, Controller.Instance, PlayerOld.Instance, this, scene);
             }
@@ -318,7 +294,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             Dictionary<Vector2, Chunk> copyOfActiveChunks = new Dictionary<Vector2, Chunk>(ActiveChunks);
             foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
             {
-                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, this.MaxHeight / 2, Chunk.Bounds);  //chunk.Value.GetBounds(camera);
+                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);  //chunk.Value.GetBounds(camera);
                 if (camera.ViewPort.Intersects(chunkBounds))
                 {
                     chunk.Value.DrawInterface(sb, camera);
@@ -331,11 +307,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         #endregion
         
-        public void Dispose()
-        {
-            this.ActiveChunks = new Dictionary<Vector2, Chunk>();
-            ChunksToActivate = new Queue<Chunk>();
-        }
         public override string GetFullPath()
         {
             return GlobalVars.SaveDir + @"Worlds\Static\" + World.Name + @" \" + GetFolderName() + @"\";
@@ -544,7 +515,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             float zoom = 1 / 8f;
             int width = (int)(this.Size.Blocks * Block.Width * zoom);
             Vector2 mapCoords = this.Global;
-            var camera = new Camera(width, width, x: mapCoords.X, y: mapCoords.Y, z: this.MaxHeight / 2, zoom: zoom);
+            var camera = new Camera(width, width, x: mapCoords.X, y: mapCoords.Y, z: MaxHeight / 2, zoom: zoom);
             var final = new RenderTarget2D(gd, width, width);
             camera.NewDraw(final, this, gd, EngineArgs.Default, new SceneState(), ToolManager.Instance);
             gd.SetRenderTarget(null);
@@ -560,11 +531,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override void GetTooltipInfo(Tooltip tooltip)
         {
             tooltip.Controls.Add(ToString().ToLabel());
-        }
-
-        public override bool Contains(GameObject obj)
-        {
-            return this.CachedObjects.Contains(obj);
         }
 
         public void CacheBlockEntities()
@@ -761,7 +727,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         
         public override bool TryGetAll(int gx, int gy, int gz, out Chunk chunk, out Cell cell, out int lx, out int ly)
         {
-            if (gz > Map.MaxHeight - 1 || gz < 0)
+            if (gz > MaxHeight - 1 || gz < 0)
             {
                 lx = 0;
                 ly = 0;

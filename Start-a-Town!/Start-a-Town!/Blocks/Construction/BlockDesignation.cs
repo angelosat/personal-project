@@ -65,22 +65,22 @@ namespace Start_a_Town_.Blocks
             dropped.StackSize -= amount;
         }
         
-        public override void Removed(IMap map, Vector3 global)
+        public override void Removed(MapBase map, Vector3 global)
         {
             this.Remove(map, global);
         }
         
-        internal override bool IsValidHaulDestination(IMap map, Vector3 global, GameObject obj)
+        internal override bool IsValidHaulDestination(MapBase map, Vector3 global, GameObject obj)
         {
             var entity = map.GetBlockEntity(global) as BlockDesignationEntity;
             return entity.IsValidHaulDestination(obj.Def);
         }
        
-        static BlockDesignationEntity GetEntity(IMap map, Vector3 global)
+        static BlockDesignationEntity GetEntity(MapBase map, Vector3 global)
         {
             return map.GetBlockEntity(global) as BlockDesignationEntity;
         }
-        internal override string GetName(IMap map, Vector3 global)
+        internal override string GetName(MapBase map, Vector3 global)
         {
             var e = map.GetBlockEntity<BlockDesignationEntity>(global);
             return string.Format("{0} (Designation)", e.Product.Block.Name);

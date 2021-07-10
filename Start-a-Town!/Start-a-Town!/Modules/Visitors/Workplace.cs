@@ -53,7 +53,7 @@ namespace Start_a_Town_
 
         public IObjectProvider Net => this.Town.Net;
         public Town Town;
-        public IMap Map => this.Town.Map;
+        public MapBase Map => this.Town.Map;
         public int ID;
         public string Name;
         public string DefaultName => $"{this.GetType().Name}{this.ID}";

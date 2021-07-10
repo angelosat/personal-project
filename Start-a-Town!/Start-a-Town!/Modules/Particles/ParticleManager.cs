@@ -10,8 +10,8 @@ namespace Start_a_Town_.Particles
     {
         // HashSet cause we dont want to add the same emitter twice
         readonly HashSet<ParticleEmitter> Emitters = new();
-        readonly IMap Map;
-        public ParticleManager(IMap map)
+        readonly MapBase Map;
+        public ParticleManager(MapBase map)
         {
             this.Map = map;
         }

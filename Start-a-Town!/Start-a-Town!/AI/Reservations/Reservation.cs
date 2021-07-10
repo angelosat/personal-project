@@ -44,7 +44,7 @@ namespace Start_a_Town_.AI
                 w.Write(this.Amount);
                 w.Write(this.TaskID);
             }
-            public Reservation(IMap map, BinaryReader r)
+            public Reservation(MapBase map, BinaryReader r)
             {
                 this.Actor = r.ReadInt32();
                 this.Target =  TargetArgs.Read(map, r);
@@ -59,7 +59,7 @@ namespace Start_a_Town_.AI
                 tag.Add(this.Amount.Save("Amount"));
                 return tag;
             }
-            public Reservation(IMap map, SaveTag tag)
+            public Reservation(MapBase map, SaveTag tag)
             {
                 this.Actor = tag.GetValue<int>("ActorID");
                 this.Target = new TargetArgs(map, tag["Target"]);

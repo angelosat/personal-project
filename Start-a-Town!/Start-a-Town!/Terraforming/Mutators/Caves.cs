@@ -45,7 +45,7 @@ namespace Start_a_Town_.Terraforming.Mutators
 
         private static void CavesVariation(Cell c, int z, double ridged)
         {
-            float sealevel = Map.MaxHeight / 2f;
+            float sealevel = MapBase.MaxHeight / 2f;
             float distanceFromSeaLevel = (sealevel - z) / sealevel;
             if (ridged * distanceFromSeaLevel < -.2f)
                 c.Block = BlockDefOf.Air;

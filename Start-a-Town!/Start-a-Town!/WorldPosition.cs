@@ -6,12 +6,12 @@ namespace Start_a_Town_
     {
         public Vector3 Global { get; private set; }
         public Vector3 Local { get; private set; }
-        public IMap Map { get; private set; }
+        public MapBase Map { get; private set; }
         public Chunk Chunk { get; private set; }
         public Cell Cell { get; private set; }
         public bool Exists { get { return this.Cell != null; } }
 
-        public WorldPosition(IMap map, Vector3 global)
+        public WorldPosition(MapBase map, Vector3 global)
         {
             this.Map = map;
             this.Global = global;

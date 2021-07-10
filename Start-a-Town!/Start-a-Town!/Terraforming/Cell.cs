@@ -69,7 +69,7 @@ namespace Start_a_Town_
         {
             _X = BitVector32.CreateSection((short)(Chunk.Size - 1)); //5 bits
             _Y = BitVector32.CreateSection((short)(Chunk.Size - 1), _X); //5 bits
-            _Z = BitVector32.CreateSection((short)(Map.MaxHeight - 1), _Y); //7 bits
+            _Z = BitVector32.CreateSection((short)(MapBase.MaxHeight - 1), _Y); //7 bits
 
             _HasData = BitVector32.CreateSection(1, _Z); //1 bits
             _Orientation = BitVector32.CreateSection(3); //2 bits

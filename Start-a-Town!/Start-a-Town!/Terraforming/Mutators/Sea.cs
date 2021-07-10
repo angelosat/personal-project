@@ -7,13 +7,13 @@ namespace Start_a_Town_.Terraforming.Mutators
 {
     class Sea : Terraformer
     {
-        int _SeaLevel = Map.MaxHeight / 2;
+        int _SeaLevel = MapBase.MaxHeight / 2;
         public int SeaLevel
         {
             get { return _SeaLevel; }
             set
             {
-                _SeaLevel = Math.Max(0, Math.Min(Map.MaxHeight, value));
+                _SeaLevel = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
             }
         }
 
@@ -57,7 +57,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         public override List<MutatorProperty> GetAdjustableParameters()
         {
             var list = new List<MutatorProperty>();
-            list.Add(new MutatorProperty("Sea Level", Map.MaxHeight / 2, 0, Map.MaxHeight, 1));
+            list.Add(new MutatorProperty("Sea Level", MapBase.MaxHeight / 2, 0, MapBase.MaxHeight, 1));
             return list;
         }
 
@@ -69,7 +69,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         }
         public override Terraformer Load(SaveTag save)
         {
-            this.SeaLevel = save.TagValueOrDefault<int>("Level", Map.MaxHeight / 2 - 1);
+            this.SeaLevel = save.TagValueOrDefault<int>("Level", MapBase.MaxHeight / 2 - 1);
             return this;
         }
 

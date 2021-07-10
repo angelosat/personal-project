@@ -138,8 +138,6 @@ namespace Start_a_Town_.UI
             Tag.GetIcon().Draw(sb, loc + new Vector2(3), sourceRect);
         }
 
-        public Texture2D IconSheet = Map.ItemSheet;
-        public List<Rectangle> IconList = Map.Icons;
         public int IconIndex = -1;
 
         public event EventHandler<DragEventArgs> DragDrop;

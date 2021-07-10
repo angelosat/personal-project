@@ -7,7 +7,7 @@ namespace Start_a_Town_
 {
     public class RegionTracker
     {
-        IMap Map => this.Chunk.Map;
+        MapBase Map => this.Chunk.Map;
         readonly Chunk Chunk;
         public HashSet<Region> Regions = new();
         public RegionTracker(Chunk chunk)

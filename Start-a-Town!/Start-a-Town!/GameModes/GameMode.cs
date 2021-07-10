@@ -72,7 +72,7 @@ namespace Start_a_Town_.GameModes
       
         internal virtual void PlayerConnected(Server server, PlayerData player) { }
         internal virtual void PlayerIDAssigned(Client client) { }
-        internal virtual void MapReceived(IMap map) { }
+        internal virtual void MapReceived(MapBase map) { }
         internal virtual void Update(Client client) { }
         internal virtual void Update(Server server) { }
 

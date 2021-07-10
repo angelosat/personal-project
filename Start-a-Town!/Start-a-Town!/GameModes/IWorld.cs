@@ -12,7 +12,7 @@ namespace Start_a_Town_.GameModes
         string Name { get; set; }
         string GetName();
         string GetPath();
-        IMap GetMap(Vector2 mapCoords);
+        MapBase GetMap(Vector2 mapCoords);
         Random Random { get; set; }
         int GetSeed();
         int Seed { get; }

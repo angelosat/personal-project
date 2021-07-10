@@ -111,7 +111,7 @@ namespace Start_a_Town_.Towns.Farming
             tag.Add(farms);
         }
 
-        public override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
+        public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             if (!cam.DrawZones)
                 return;

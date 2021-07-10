@@ -26,7 +26,6 @@ namespace Start_a_Town_
         public static readonly Terraformer Sea = new Sea();
         public static readonly Terraformer Land = new Land();
         public static readonly Terraformer Normal = new Normal();
-        public static readonly Terraformer Test = new Test();
         public static readonly Terraformer Grass = new Grass();
         public static readonly Terraformer Flowers = new Flowers();
         public static readonly Terraformer Trees = new GeneratorPlants();
@@ -35,7 +34,6 @@ namespace Start_a_Town_
         public static readonly Terraformer Empty = new Empty();
         public static readonly Terraformer PerlinWorms = new PerlinWormGenerator();
 
-        static int _IndexSequence = 0;
         static public Dictionary<Types, Terraformer> Dictionary { get { return _Dictionary; } }
         static readonly Dictionary<Types, Terraformer> _Dictionary = new Dictionary<Types, Terraformer>()
         {
@@ -44,7 +42,6 @@ namespace Start_a_Town_
             {Types.Normal, Normal},
             {Types.Caves, Caves},
             {Types.PerlinWorms, PerlinWorms},
-            {Types.Test, Test},
             {Types.Grass, Grass},
             {Types.Flowers, Flowers},
             {Types.Trees, Trees},
@@ -69,7 +66,7 @@ namespace Start_a_Town_
         {
             return Name;
         }
-        public virtual void Generate(IMap map) { }
+        public virtual void Generate(MapBase map) { }
 
         static public List<Terraformer> All
         {
@@ -84,37 +81,6 @@ namespace Start_a_Town_
             {
                 return new List<Terraformer>() { Normal, PerlinWorms, Minerals, Grass, Flowers, Trees };
             }
-        }
-
-        public Texture2D GetThumbnail(IWorld world, ref float progress)
-        {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            GraphicsDevice gd = Game1.Instance.GraphicsDevice;
-            int size = Map.SizeInBlocks;
-            Texture2D tex = new Texture2D(gd, size, size);
-            float maxProgress = size * size;
-            float p = 0;
-            Color[] data = new Color[size * size];
-            for (int y = 0; y < size; y++)
-                for (int x = 0; x < size; x++)
-                {
-                    for (int z = Map.MaxHeight - 1; z >= 0; z--)
-                    {
-                        Cell cell = new Cell();
-
-                        cell.SetBlockType(this.Initialize(world, cell, x, y, z, Server.Random));
-                        if (cell.Block.Type != Block.Types.Air && cell.Block.Type != Block.Types.Water)
-                        {
-
-                            break;
-                        }
-                    }
-                    progress = (p++ / maxProgress);
-                }
-            tex.SetData(data);
-            watch.Stop();
-            watch.Elapsed.ToConsole();
-            return tex;
         }
 
         static protected int GetRandom(byte[] seedArray, int x, int y, int z, int min, int max)

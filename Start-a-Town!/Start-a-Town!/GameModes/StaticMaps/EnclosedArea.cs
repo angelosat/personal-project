@@ -49,7 +49,7 @@ namespace Start_a_Town_
             area.Positions = new HashSet<Vector3>(tag["Positions"].LoadListVector3());
             return area;
         }
-        static public bool BeginInclusive(IMap map, IntVec3 global, HashSet<Vector3> area, HashSet<Vector3> edges)
+        static public bool BeginInclusive(MapBase map, IntVec3 global, HashSet<Vector3> area, HashSet<Vector3> edges)
         {
             area.Clear();
             edges.Clear();
@@ -88,7 +88,7 @@ namespace Start_a_Town_
             }
             return true;
         }
-        static public EnclosedArea BeginInclusive(IMap map, Vector3 global)
+        static public EnclosedArea BeginInclusive(MapBase map, Vector3 global)
         {
             var area = new EnclosedArea();
             area.Add(global);
@@ -119,7 +119,7 @@ namespace Start_a_Town_
             }
             return area;
         }
-        static public EnclosedArea BeginExclusive(IMap map, Vector3 global)
+        static public EnclosedArea BeginExclusive(MapBase map, Vector3 global)
         {
             var area = new EnclosedArea();
             area.Add(global);
@@ -152,7 +152,7 @@ namespace Start_a_Town_
             }
             return area;
         }
-        static public HashSet<Vector3> BeginExclusiveAsList(IMap map, Vector3 global)
+        static public HashSet<Vector3> BeginExclusiveAsList(MapBase map, Vector3 global)
         {
             var area = new HashSet<Vector3>
             {

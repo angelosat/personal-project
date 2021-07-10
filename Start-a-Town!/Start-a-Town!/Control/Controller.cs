@@ -247,7 +247,7 @@ namespace Start_a_Town_
                 Instance.MouseoverBlockNext.Depth = drawdepth;
             }
         }
-        static public void SetMouseoverBlock(Camera camera, IMap map, Vector3 global, Vector3 face, Vector3 precise)
+        static public void SetMouseoverBlock(Camera camera, MapBase map, Vector3 global, Vector3 face, Vector3 precise)
         {
             var target = new TargetArgs(map, global, face, precise);
 

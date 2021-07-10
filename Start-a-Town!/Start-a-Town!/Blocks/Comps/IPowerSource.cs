@@ -2,7 +2,7 @@
 {
     public interface IPowerSource
     {
-        void ConsumePower(IMap map, float amount);
+        void ConsumePower(MapBase map, float amount);
         bool HasAvailablePower(float amount);
         float GetRemaniningPower();
     }

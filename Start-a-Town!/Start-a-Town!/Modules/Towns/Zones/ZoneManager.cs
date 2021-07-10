@@ -121,7 +121,7 @@ namespace Start_a_Town_
             var global = target.Global;
             return this.GetZoneAt(global);
         }
-        public override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
+        public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             if (!cam.DrawZones)
                 return;

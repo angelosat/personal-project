@@ -291,7 +291,7 @@ namespace Start_a_Town_
             inter.LoadData(tag);
             return inter;
         }
-        internal virtual void Synced(IMap map)
+        internal virtual void Synced(MapBase map)
         {
         }
 

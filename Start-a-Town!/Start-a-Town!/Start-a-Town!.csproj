@@ -776,7 +776,7 @@
     <Compile Include="Control\KeyBinding.cs" />
     <Compile Include="Control\KeyControl.cs" />
     <Compile Include="GameModes\GameMode.cs" />
-    <Compile Include="GameModes\IMap.cs" />
+    <Compile Include="GameModes\MapBase.cs" />
     <Compile Include="GameModes\IWorld.cs" />
     <Compile Include="GameModes\StaticMaps\GameModeStaticMaps.cs" />
     <Compile Include="GameModes\StaticMaps\StaticMap.cs" />
@@ -1035,16 +1035,12 @@
     <Compile Include="Net\Packet.cs" />
     <Compile Include="Net\PlayerData.cs" />
     <Compile Include="Net\Server\Server.cs" />
-    <Compile Include="Terraforming\ChunkLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Terraforming\LightingEngine.cs" />
     <Compile Include="Terraforming\MapCollection.cs" />
     <Compile Include="Terraforming\Mutators\Caves.cs" />
     <Compile Include="Terraforming\Mutators\Empty.cs" />
     <Compile Include="Terraforming\Mutators\Gradient.cs" />
     <Compile Include="Terraforming\Mutators\MineralsSlow.cs" />
-    <Compile Include="Terraforming\Mutators\Terrain.cs" />
     <Compile Include="Terraforming\Mutators\GeneratorPlants.cs" />
     <Compile Include="Terraforming\Mutators\Flowers.cs" />
     <Compile Include="Terraforming\Mutators\Land.cs" />
@@ -1052,10 +1048,8 @@
     <Compile Include="Terraforming\Mutators\Sea.cs" />
     <Compile Include="Terraforming\Mutators\Grass.cs" />
     <Compile Include="Terraforming\Mutators\Normal.cs" />
-    <Compile Include="Terraforming\Mutators\Test.cs" />
     <Compile Include="Terraforming\Mutators\Terraformer.cs" />
     <Compile Include="Terraforming\MapThumb.cs" />
-    <Compile Include="Terraforming\World.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Terraforming\Position.cs" />
     <Compile Include="Objects\GameObjectSlot.cs" />
@@ -1176,7 +1170,6 @@
     <Compile Include="Control\Controller.cs" />
     <Compile Include="Coords.cs" />
     <Compile Include="Terraforming\Generator.cs" />
-    <Compile Include="Terraforming\Map.cs" />
     <Compile Include="Components\EntityComponent.cs" />
     <Compile Include="Control\PlayerOld.cs" />
     <Compile Include="Helpers\PriorityQueue.cs" />

@@ -121,8 +121,8 @@ namespace Start_a_Town_
         
         public IObjectProvider Net;
         
-        IMap _Map;
-        public IMap Map { get { return this.Parent?.Map ?? this._Map; } set { this._Map = value; } }
+        MapBase _Map;
+        public MapBase Map { get { return this.Parent?.Map ?? this._Map; } set { this._Map = value; } }
 
         public Town Town => this.Net.Map.Town;
 
@@ -316,7 +316,7 @@ namespace Start_a_Town_
                 return this;
             }
            
-            this.Map.TryGetChunk(pos.Rounded, out Chunk lastChunk);
+            this.Map.TryGetChunk(pos.Global.Round(), out Chunk lastChunk);
 
             if (nextChunk != lastChunk)
             {
@@ -747,7 +747,7 @@ namespace Start_a_Town_
                 comp.OnSpawn(net, this);
             this.Map.EventOccured(Message.Types.EntitySpawned, this);
         }
-        public void Spawn(IMap map, Vector3 global)
+        public void Spawn(MapBase map, Vector3 global)
         {
             var net = map.Net;
             this.Net = net;
@@ -755,7 +755,7 @@ namespace Start_a_Town_
             this.Map = map;
             this.Spawn(net);
         }
-        public void SyncSpawn(IMap map, Vector3 global)
+        public void SyncSpawn(MapBase map, Vector3 global)
         {
             if (map.Net is not Server)
                 return;
@@ -795,11 +795,6 @@ namespace Start_a_Town_
                 comp.Value.DrawUI(sb, camera, this);
         }
 
-        internal void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global)
-        {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-                comp.Value.DrawPreview(sb, camera, global);
-        }
         public void DrawPreview(MySpriteBatch sb, Camera cam, TargetArgs target, bool precise)
         {
             if (target.Type != TargetType.Position)
@@ -1154,7 +1149,7 @@ namespace Start_a_Town_
             throw new Exception();
         }
         
-        internal void MapLoaded(IMap map)
+        internal void MapLoaded(MapBase map)
         {
             this.Map = map;
             foreach (var comp in this.Components)

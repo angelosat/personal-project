@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public class MapCollection : Dictionary<Vector2, IMap>
+    public class MapCollection : Dictionary<Vector2, MapBase>
     {
         public override string ToString()
         {

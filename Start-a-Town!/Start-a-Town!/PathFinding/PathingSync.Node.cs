@@ -9,7 +9,7 @@ namespace Start_a_Town_
         {
             public RegionNode RegionNodeGlobal;
             public bool IsQueued;
-            public Node(IMap map, Vector3 global, Vector3 goal)
+            public Node(MapBase map, Vector3 global, Vector3 goal)
             {
                 this.Map = map;
                 this.Global = global;

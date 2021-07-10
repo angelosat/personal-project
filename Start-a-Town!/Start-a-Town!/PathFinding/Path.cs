@@ -90,7 +90,7 @@ namespace Start_a_Town_.PathFinding
             return true;
         }
 
-        public void ConformToBlockHeights(IMap map)
+        public void ConformToBlockHeights(MapBase map)
         {
             for (int i = 0; i < this.Steps.Length; i++)
             {

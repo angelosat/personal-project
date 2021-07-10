@@ -59,7 +59,7 @@ namespace Start_a_Town_
             else
                 existing.Amount += actualAmountToAdd;
         }
-        public void ConsumePower(IMap map, float amount)
+        public void ConsumePower(MapBase map, float amount)
         {
             this.Fuel.Value -= amount;
 
@@ -74,7 +74,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        internal override void Remove(IMap map, Vector3 global, BlockEntity parent)
+        internal override void Remove(MapBase map, Vector3 global, BlockEntity parent)
         {
             if (map.Net is Net.Client)
                 return;
@@ -97,7 +97,7 @@ namespace Start_a_Town_
         {
             this.AddFuelNew(item, quantity);
         }
-        public override void OnEntitySpawn(BlockEntity entity, IMap map, Vector3 global)
+        public override void OnEntitySpawn(BlockEntity entity, MapBase map, Vector3 global)
         {
             var material = map.GetBlockMaterial(global);
             this.Fuel.Value += material.Fuel.Value;
@@ -121,7 +121,7 @@ namespace Start_a_Town_
             item.Map.EventOccured(Components.Message.Types.FuelConsumed, this);
         }
 
-        internal override void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
             var bar = new Bar()
             {

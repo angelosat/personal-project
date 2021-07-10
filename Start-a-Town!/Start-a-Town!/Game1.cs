@@ -44,7 +44,6 @@ namespace Start_a_Town_
 
         protected override void OnExiting(object sender, EventArgs args)
         {
-            ChunkLoader.End();
             Server.Stop();
             base.OnExiting(sender, args);
         }
@@ -138,7 +137,7 @@ namespace Start_a_Town_
             UIManager.LoadContent();
             ScreenManager.LoadContent();
             Effect = Game1.Instance.Content.Load<Effect>("Effect3");
-            Map.Initialize();
+            MapBase.Initialize();
             // TODO: use this.Content to load your game content here
             Material.Initialize();
             MaterialType.Initialize();

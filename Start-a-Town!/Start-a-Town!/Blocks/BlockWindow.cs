@@ -20,18 +20,18 @@ namespace Start_a_Town_.Blocks
                 new AtlasDepthNormals.Node.Token[][][] { 
                     new AtlasDepthNormals.Node.Token[][]{
                         new AtlasDepthNormals.Node.Token[]{
-                            Block.Atlas.Load("blocks/windows/windowframebottom", Map.BlockDepthMap, Block.NormalMap),
-                            Block.Atlas.Load("blocks/windows/glassbottom", Map.BlockDepthMap, Block.NormalMap)},
+                            Block.Atlas.Load("blocks/windows/windowframebottom", MapBase.BlockDepthMap, Block.NormalMap),
+                            Block.Atlas.Load("blocks/windows/glassbottom", MapBase.BlockDepthMap, Block.NormalMap)},
                         new AtlasDepthNormals.Node.Token[]{
-                            Block.Atlas.Load("blocks/windows/windowframebottom2", Map.BlockDepthMap, Block.NormalMap),
-                            Block.Atlas.Load("blocks/windows/glassbottom2", Map.BlockDepthMap, Block.NormalMap)}},
+                            Block.Atlas.Load("blocks/windows/windowframebottom2", MapBase.BlockDepthMap, Block.NormalMap),
+                            Block.Atlas.Load("blocks/windows/glassbottom2", MapBase.BlockDepthMap, Block.NormalMap)}},
                     new AtlasDepthNormals.Node.Token[][]{
                         new AtlasDepthNormals.Node.Token[]{
-                            Block.Atlas.Load("blocks/windows/windowframetop", Map.BlockDepthMap, Block.NormalMap),
-                            Block.Atlas.Load("blocks/windows/glasstop", Map.BlockDepthMap, Block.NormalMap)},
+                            Block.Atlas.Load("blocks/windows/windowframetop", MapBase.BlockDepthMap, Block.NormalMap),
+                            Block.Atlas.Load("blocks/windows/glasstop", MapBase.BlockDepthMap, Block.NormalMap)},
                         new AtlasDepthNormals.Node.Token[]{
-                            Block.Atlas.Load("blocks/windows/windowframetop2", Map.BlockDepthMap, Block.NormalMap),
-                            Block.Atlas.Load("blocks/windows/glasstop2", Map.BlockDepthMap, Block.NormalMap)}}
+                            Block.Atlas.Load("blocks/windows/windowframetop2", MapBase.BlockDepthMap, Block.NormalMap),
+                            Block.Atlas.Load("blocks/windows/glasstop2", MapBase.BlockDepthMap, Block.NormalMap)}}
 
             
             };
@@ -65,14 +65,14 @@ namespace Start_a_Town_.Blocks
             return (int)data;
         }
 
-        public override void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             if (!IsPositionValid(map, global))
                 return;
             base.Place(map, global, GetData(0), variation, orientation);
             base.Place(map, global + Vector3.UnitZ, GetData(1), variation, orientation, notify);
         }
-        public override void Remove(IMap map, Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, Vector3 global, bool notify = true)
         {
             var part = map.GetBlockData(global);
             base.Remove(map, global);
@@ -92,7 +92,7 @@ namespace Start_a_Town_.Blocks
             }
         }
 
-        bool IsPositionValid(IMap map, Vector3 global)
+        bool IsPositionValid(MapBase map, Vector3 global)
         {
             if (map.GetBlock(global) != BlockDefOf.Air)
                 return false;
@@ -101,7 +101,7 @@ namespace Start_a_Town_.Blocks
             return true;
         }
 
-        public override void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
+        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
         {
             var orientationindex = (int)(orientation + cam.Rotation) % 2;
             var bottom = this.PartsSeparate[0][orientationindex][0];

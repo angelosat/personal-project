@@ -22,8 +22,8 @@ namespace Start_a_Town_
         readonly Dictionary<Chunk, RegionTracker> Regions = new();
         readonly Dictionary<int, RegionRoom> Rooms = new();
         readonly Queue<Vector3> ChangedBlocksFromLastFrame = new();
-        readonly IMap Map;
-        public RegionManager(IMap map)
+        readonly MapBase Map;
+        public RegionManager(MapBase map)
         {
             this.Map = map;
         }
@@ -84,7 +84,7 @@ namespace Start_a_Town_
 
         internal void OnGameEvent(GameEvent e)
         {
-            IMap map;
+            MapBase map;
             switch (e.Type)
             {
                 case Components.Message.Types.BlocksChanged:

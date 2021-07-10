@@ -17,7 +17,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             var worms = GetWorms(chunk.MapCoords, s, 3);
             var size = Chunk.Size;
             var chunkglobal = chunk.MapCoords * size;
-            var maxz = Map.MaxHeight;
+            var maxz = MapBase.MaxHeight;
             foreach (var worm in worms)
             {
                 var segments = worm.GetBoxes();
@@ -92,7 +92,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             {
                 var x = (int)(Chunk.Size * r.NextDouble());
                 var y = (int)(Chunk.Size * r.NextDouble());
-                var z = (int)((Map.MaxHeight / 2) * r.NextDouble());
+                var z = (int)((MapBase.MaxHeight / 2) * r.NextDouble());
                 var pos = global + new Vector3(x, y, z);
                 var worm = new PerlinWorm(pos, length, seed + pos.GetHashCode());
                 list.Add(worm);
@@ -167,7 +167,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             public void CarveWithin(Vector3 global, Chunk chunk)
             {
                 var chunkglobal = chunk.MapCoords * Chunk.Size;
-                var box = new BoundingBox(new Vector3(chunkglobal, 0), new Vector3(chunkglobal + (Chunk.Size - 1) * Vector2.One, Map.MaxHeight - 1));
+                var box = new BoundingBox(new Vector3(chunkglobal, 0), new Vector3(chunkglobal + (Chunk.Size - 1) * Vector2.One, MapBase.MaxHeight - 1));
 
                 var radius = GetRadius(3, 5, this.Life);
 

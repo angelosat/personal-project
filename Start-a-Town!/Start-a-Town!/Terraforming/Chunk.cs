@@ -39,7 +39,7 @@ namespace Start_a_Town_
             var grad = new GradientLowRes(this.World, this);
             mutators.ForEach(m => m.SetWorld(this.World));
 
-            for (int z = 0; z < Start_a_Town_.Map.MaxHeight; z++)
+            for (int z = 0; z < MapBase.MaxHeight; z++)
                 for (int i = 0; i < Size; i++)
                     for (int j = 0; j < Size; j++)
                     {
@@ -58,7 +58,7 @@ namespace Start_a_Town_
             var world = Map.World;
             int n = 0; ;
             var grad = new GradientLowRes(this.World, this);
-            var maxh = Start_a_Town_.Map.MaxHeight;
+            var maxh = MapBase.MaxHeight;
             for (int z = 0; z < maxh; z++)
                 for (int i = 0; i < Size; i++)
                     for (int j = 0; j < Size; j++)
@@ -72,7 +72,7 @@ namespace Start_a_Town_
         }
         public void InitCells3(Terraformer m, Dictionary<Vector3, double> gradient)
         {
-            var maxh = Start_a_Town_.Map.MaxHeight;
+            var maxh = MapBase.MaxHeight;
             int n = 0;
             for (int z = 0; z < maxh; z++)
                 for (int i = 0; i < Size; i++)
@@ -87,7 +87,7 @@ namespace Start_a_Town_
         public Chunk InitCells()
         {
             int n = 0;
-            for (int z = 0; z < Start_a_Town_.Map.MaxHeight; z++)
+            for (int z = 0; z < MapBase.MaxHeight; z++)
                 for (int i = 0; i < Size; i++)
                     for (int j = 0; j < Size; j++)
                     {
@@ -117,7 +117,7 @@ namespace Start_a_Town_
             {
                 if (this._RandomOrderedCells is null)
                 {
-                    var allPositions = new BoundingBox(Vector3.Zero, new Vector3(Chunk.Size - 1, Chunk.Size - 1, this.Map.MaxHeight - 1)).GetBox();
+                    var allPositions = new BoundingBox(Vector3.Zero, new Vector3(Chunk.Size - 1, Chunk.Size - 1, MapBase.MaxHeight - 1)).GetBox();
                     this._RandomOrderedCells = allPositions.Randomize(this.Map.Random);
                 }
                 return this._RandomOrderedCells;
@@ -169,7 +169,7 @@ namespace Start_a_Town_
 
         public int X, Y;
         public int RectHeight;
-        public IMap Map;
+        public MapBase Map;
         public IWorld World { get { return this.Map.World; } }
         public bool Valid;
 
@@ -190,7 +190,7 @@ namespace Start_a_Town_
         {
             get
             {
-                if (localx < 0 || localx > Chunk.Size - 1 || localy < 0 || localy > Chunk.Size - 1 || localz < 0 || localz > Map.MaxHeight - 1)
+                if (localx < 0 || localx > Chunk.Size - 1 || localy < 0 || localy > Chunk.Size - 1 || localz < 0 || localz > MapBase.MaxHeight - 1)
                     return null; 
 
                 int ind = GetCellIndex(localx, localy, localz);
@@ -201,7 +201,7 @@ namespace Start_a_Town_
         {
             get
             {
-                if (localx < 0 || localx > Chunk.Size - 1 || localy < 0 || localy > Chunk.Size - 1 || localz < 0 || localz > Map.MaxHeight - 1)
+                if (localx < 0 || localx > Chunk.Size - 1 || localy < 0 || localy > Chunk.Size - 1 || localz < 0 || localz > MapBase.MaxHeight - 1)
                     return null; 
 
                 int ind = GetCellIndex(localx, localy, localz);
@@ -235,12 +235,12 @@ namespace Start_a_Town_
         }
         
         static public readonly int Width = Block.Width * Size;
-        static public readonly int Height = Start_a_Town_.Map.MaxHeight * Block.BlockHeight + Chunk.Size * Block.Depth;
+        static public readonly int Height = MapBase.MaxHeight * Block.BlockHeight + Chunk.Size * Block.Depth;
         static public readonly Rectangle Bounds = new(-Width / 2, -Height / 2, Width, Height);
        
         public Rectangle GetScreenBounds(Camera cam)
         {
-            Rectangle chunkBounds = cam.GetScreenBounds(this.Start.X + Chunk.Size / 2, this.Start.Y + Chunk.Size / 2, global::Start_a_Town_.Map.MaxHeight / 2, Bounds);  //chunk.Value.GetBounds(camera);
+            Rectangle chunkBounds = cam.GetScreenBounds(this.Start.X + Chunk.Size / 2, this.Start.Y + Chunk.Size / 2, MapBase.MaxHeight / 2, Bounds);  //chunk.Value.GetBounds(camera);
             return chunkBounds;
         }
         #endregion
@@ -249,7 +249,7 @@ namespace Start_a_Town_
         {
             return BlockObjects.TryGetValue(GetCellIndex(local), out blockObj);
         }
-        public Chunk(IMap map, Vector2 pos)
+        public Chunk(MapBase map, Vector2 pos)
             : this()
         {
             this.Map = map;
@@ -263,7 +263,7 @@ namespace Start_a_Town_
         }
         Chunk()
         {
-            CellGrid2 = new Cell[Chunk.Size * Chunk.Size * Start_a_Town_.Map.MaxHeight];
+            CellGrid2 = new Cell[Chunk.Size * Chunk.Size * MapBase.MaxHeight];
             VisibleIndoorCells = new SortedList<int, Cell>();
             Objects = new List<GameObject>();
             BlockObjects = new Dictionary<int, GameObject>();
@@ -275,28 +275,28 @@ namespace Start_a_Town_
                 this.HeightMap[i] = new int[Size];
             ResetSunlight();
             ResetCellLight();
-            for (int i = 0; i < Start_a_Town_.Map.MaxHeight; i++)
+            for (int i = 0; i < MapBase.MaxHeight; i++)
                 this.Slices[i] = new Slice();
         }
-        static public Chunk Create(IMap map, Vector2 pos)
+        static public Chunk Create(MapBase map, Vector2 pos)
         {
             Chunk chunk = new(pos);
             chunk.Map = map;
             return chunk;
         }
-        static public Chunk Create(IMap map, int x, int y)
+        static public Chunk Create(MapBase map, int x, int y)
         {
             Chunk chunk = new(new Vector2(x, y));
             chunk.Map = map;
             return chunk;
         }
-        static public Chunk Load(IMap map, Vector2 key, SaveTag tag)
+        static public Chunk Load(MapBase map, Vector2 key, SaveTag tag)
         {
             return new Chunk(map, key).LoadFromTag(tag);
         }
 
         #region Adding and removing objects
-        static public bool AddObject(GameObject obj, IMap map, Chunk chunk, Vector3 local)
+        static public bool AddObject(GameObject obj, MapBase map, Chunk chunk, Vector3 local)
         {
             Vector3 global = local + new Vector3(chunk.MapCoords * Size, 0);
 
@@ -306,11 +306,11 @@ namespace Start_a_Town_
             chunk._Saved = false;
             return true;
         }
-        static public bool AddObject(GameObject obj, IMap map)
+        static public bool AddObject(GameObject obj, MapBase map)
         {
             return AddObject(obj, map, obj.Global);
         }
-        static public bool AddObject(GameObject obj, IMap map, Vector3 global)
+        static public bool AddObject(GameObject obj, MapBase map, Vector3 global)
         {
             if (map.TryGetChunk(global.RoundXY(), out Chunk chunk))
             {
@@ -327,7 +327,7 @@ namespace Start_a_Town_
             return true;
         }
 
-        static public bool RemoveObject(IMap map, GameObject obj)
+        static public bool RemoveObject(MapBase map, GameObject obj)
         {
             return RemoveObject(obj, map.GetChunk(obj.Global));
         }
@@ -346,7 +346,7 @@ namespace Start_a_Town_
         {
             return (int)((local.Z * Size + local.X) * Size + local.Y);
         }
-        public static int Volume = Size * Size * Start_a_Town_.Map.MaxHeight;
+        public static int Volume = Size * Size * MapBase.MaxHeight;
         public List<byte> Sunlight;
         public byte[] BlockLight = new byte[Volume];
 
@@ -419,7 +419,7 @@ namespace Start_a_Town_
         {
             int z;
             Cell cell;
-            z = Start_a_Town_.Map.MaxHeight - 1;
+            z = MapBase.MaxHeight - 1;
             bool found = false;
             bool hit = false;
             var oldValue = HeightMap[localx][localy];
@@ -469,7 +469,7 @@ namespace Start_a_Town_
             byte light;
             Cell cell;
             light = 15;
-            z = Start_a_Town_.Map.MaxHeight - 1;
+            z = MapBase.MaxHeight - 1;
             bool hit = false;
             while (z >= 0)
             {
@@ -685,7 +685,7 @@ namespace Start_a_Town_
             this.LightCache2.Clear();
         }
         
-        static public bool InvalidateLight(IMap map, Vector3 global)
+        static public bool InvalidateLight(MapBase map, Vector3 global)
         {
             if (map.TryGetAll((int)global.X, (int)global.Y, (int)global.Z, out Chunk chunk, out Cell cell, out int lx, out int ly))
             {
@@ -712,11 +712,11 @@ namespace Start_a_Town_
             return true;
         }
 
-        static public bool TryGetFinalLight(IMap map, int globalX, int globalY, int globalZ, out byte sky, out byte block)
+        static public bool TryGetFinalLight(MapBase map, int globalX, int globalY, int globalZ, out byte sky, out byte block)
         {
             sky = 0;
             block = 0;
-            if (globalZ > Start_a_Town_.Map.MaxHeight - 1)
+            if (globalZ > MapBase.MaxHeight - 1)
                 return false;
             if (globalZ < 0)
                 return false;
@@ -736,7 +736,7 @@ namespace Start_a_Town_
             return true;
         }
 
-        static public bool TryGetSunlight(IMap map, Vector3 global, out byte sunlight)
+        static public bool TryGetSunlight(MapBase map, Vector3 global, out byte sunlight)
         {
             sunlight = 0;
 
@@ -753,24 +753,7 @@ namespace Start_a_Town_
             sunlight = chunk.GetSunlight(x, y, (int)global.Z);
             return true;
         }
-        static public bool TryGetBlocklight(Map map, Vector3 global, out byte sunlight)
-        {
-            sunlight = 0;
-
-            if (global.Z > Start_a_Town_.Map.MaxHeight - 1)
-                return false;
-            if (global.Z < 0)
-                return false;
-
-            if (!Position.TryGetChunk(map, global, out Chunk chunk))
-                return false;
-
-            int x = (int)(global.X - chunk.Start.X);
-            int y = (int)(global.Y - chunk.Start.Y);
-            sunlight = chunk.GetBlockLight(x, y, (int)global.Z);
-            return true;
-        }
-
+        
         #region Updating
         /// <summary>
         /// pass parent map too?
@@ -799,7 +782,7 @@ namespace Start_a_Town_
                 this.HeightMapUpdates = new HashSet<Vector2>();
             }
         }
-        public void Tick(IMap map)
+        public void Tick(MapBase map)
         {
             this.UpdateEntities(map.Net);
             this.UpdateBlockEntities(map.Net);
@@ -858,7 +841,7 @@ namespace Start_a_Town_
         #endregion
 
         #region Drawing
-        public void DrawObjects(MySpriteBatch sb, Camera camera, Controller controller, PlayerOld player, IMap map, SceneState scene)
+        public void DrawObjects(MySpriteBatch sb, Camera camera, Controller controller, PlayerOld player, MapBase map, SceneState scene)
         {
             foreach (GameObject obj in this.Objects) //make a copy of the list first because currently the player character might be added while drawing
             {
@@ -1028,7 +1011,7 @@ namespace Start_a_Town_
             return distinct;
         }
 
-        static public Chunk Load(IMap map, string fullpath)
+        static public Chunk Load(MapBase map, string fullpath)
         {
             string filename = fullpath.Split('\\').Last();
             string[] c = filename.Split('.');
@@ -1322,22 +1305,22 @@ namespace Start_a_Town_
             HashSet<Vector3> list = new HashSet<Vector3>();
             if ((edges & Edges.East) == Edges.East)
                 for (int i = 0; i < Chunk.Size; i++)
-                    for (int z = 0; z < Start_a_Town_.Map.MaxHeight; z++)
+                    for (int z = 0; z < MapBase.MaxHeight; z++)
                         list.Add(new Vector3(Start.X + Chunk.Size - 1, Start.Y + i, z));
 
             if ((edges & Edges.West) == Edges.West)
                 for (int i = 0; i < Chunk.Size; i++)
-                    for (int z = 0; z < Start_a_Town_.Map.MaxHeight; z++)
+                    for (int z = 0; z < MapBase.MaxHeight; z++)
                         list.Add(new Vector3(Start.X, Start.Y + i, z));
 
             if ((edges & Edges.North) == Edges.North)
                 for (int i = 0; i < Chunk.Size; i++)
-                    for (int z = 0; z < Start_a_Town_.Map.MaxHeight; z++)
+                    for (int z = 0; z < MapBase.MaxHeight; z++)
                         list.Add(new Vector3(Start.X + i, Start.Y, z));
 
             if ((edges & Edges.South) == Edges.South)
                 for (int i = 0; i < Chunk.Size; i++)
-                    for (int z = 0; z < Start_a_Town_.Map.MaxHeight; z++)
+                    for (int z = 0; z < MapBase.MaxHeight; z++)
                         list.Add(new Vector3(Start.X + i, Start.Y + Chunk.Size - 1, z));
 
             return list.ToList();
@@ -1457,7 +1440,7 @@ namespace Start_a_Town_
             writer.Write(this.BlockLight.ToArray());
         }
        
-        static public Chunk Create(IMap map, BinaryReader reader)
+        static public Chunk Create(MapBase map, BinaryReader reader)
         {
             var chunk = new Chunk() { Map = map };
             chunk.Read(reader);
@@ -1727,7 +1710,7 @@ namespace Start_a_Town_
             LoadCellsFromTagCompressed(chunktag);
 
             var n = 0;
-            for (int h = 0; h < Start_a_Town_.Map.MaxHeight; h++)
+            for (int h = 0; h < MapBase.MaxHeight; h++)
                 for (int i = 0; i < Size; i++)
                     for (int j = 0; j < Size; j++)
                     {
@@ -1774,7 +1757,7 @@ namespace Start_a_Town_
             var airCount = 0;
             bool airDiscovered = true;
             var listPosition = 0;
-            var maxn = Size * Size * Start_a_Town_.Map.MaxHeight;
+            var maxn = Size * Size * MapBase.MaxHeight;
             while (listPosition < celllist.Count)
             {
                 var celltag = celllist[listPosition++];
@@ -1830,7 +1813,7 @@ namespace Start_a_Town_
             foreach (var sl in Slices)
                 sl.Valid = true;
         }
-        public void BuildSlice(Slice slice, Camera camera, IMap map, int z)
+        public void BuildSlice(Slice slice, Camera camera, MapBase map, int z)
         {
             var unknown = new List<Cell>();
             var visible = new List<Cell>();

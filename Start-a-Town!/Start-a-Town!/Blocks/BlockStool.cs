@@ -12,7 +12,7 @@ namespace Start_a_Town_
         public BlockStool()
             : base(Block.Types.Stool, opaque: false)
         {
-            this.Variations.Add(Block.Atlas.Load("blocks/furniture/stool", Map.BlockDepthMap, Block.NormalMap));
+            this.Variations.Add(Block.Atlas.Load("blocks/furniture/stool", MapBase.BlockDepthMap, Block.NormalMap));
             this.Furniture = FurnitureDefOf.Table;
             
             this.Recipe = new BlockRecipe(
@@ -25,12 +25,12 @@ namespace Start_a_Town_
 
         }
         
-        public override void Place(IMap map, Microsoft.Xna.Framework.Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, Microsoft.Xna.Framework.Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, data, variation, orientation, notify);
             map.Town.AddUtility(Utility.Types.Eating, global);
         }
-        public override void Remove(IMap map, Microsoft.Xna.Framework.Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, Microsoft.Xna.Framework.Vector3 global, bool notify = true)
         {
             base.Remove(map, global, notify);
             map.Town.RemoveUtility(Utility.Types.Eating, global);

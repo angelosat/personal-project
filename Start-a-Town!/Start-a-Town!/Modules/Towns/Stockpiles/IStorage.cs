@@ -4,7 +4,7 @@ namespace Start_a_Town_
 {
     public interface IStorage
     {
-        IMap Map { get; }
+        MapBase Map { get; }
         int ID { get; }
         StorageSettings Settings { get; }
         bool Accepts(Entity item);

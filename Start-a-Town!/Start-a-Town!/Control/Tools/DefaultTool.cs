@@ -399,14 +399,7 @@ namespace Start_a_Town_.PlayerControl
             this.Target.GetContextAll(args);
         }
 
-        internal override void DrawWorld(SpriteBatch sb, IMap map, Camera camera)
-        {
-            base.DrawWorld(sb, map, camera);
-            if (DragDropManager.Instance.Source is GameObjectSlot drg)
-                if (this.Target != null)
-                    drg.Object.DrawPreview(sb, camera, this.Target.FaceGlobal);
-        }
-        internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
             base.DrawAfterWorld(sb, map);

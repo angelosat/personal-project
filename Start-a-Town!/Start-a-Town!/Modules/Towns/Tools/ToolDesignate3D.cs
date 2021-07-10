@@ -187,7 +187,7 @@ namespace Start_a_Town_
         {
             return this.Removing || InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey);
         }
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             Block.Atlas.Begin(sb);
             this.DrawGrid(sb, camera);

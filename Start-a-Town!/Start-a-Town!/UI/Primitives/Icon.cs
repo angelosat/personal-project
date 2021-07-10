@@ -103,7 +103,7 @@ namespace Start_a_Town_.UI
         public void DrawAboveEntity(SpriteBatch sb, Camera camera, GameObject entity, float scale = .5f)
         {
             var bounds = entity.GetSprite().GetBounds();
-            var offset = IMap.IconOffset;
+            var offset = MapBase.IconOffset;
             scale *= camera.Zoom;
             var pos = camera.GetScreenPosition(entity.Global) - new Vector2(this.SourceRect.Width, this.SourceRect.Height) * scale / 2; ;
             pos.Y -= bounds.Height * camera.Zoom;
@@ -113,7 +113,7 @@ namespace Start_a_Town_.UI
         public void DrawAboveEntity(SpriteBatch sb, Camera camera, Vector3 global, float scale = .5f)
         {
             var bounds = Block.Bounds;
-            var offset = IMap.IconOffset;
+            var offset = MapBase.IconOffset;
             scale *= camera.Zoom;
             var pos = camera.GetScreenPosition(global) - new Vector2(this.SourceRect.Width, this.SourceRect.Height) * scale / 2; ;
             pos.Y -= bounds.Height * camera.Zoom;

@@ -9,8 +9,8 @@ namespace Start_a_Town_
 {
     class UndiscoveredAreaManager
     {
-        IMap Map;
-        public UndiscoveredAreaManager(IMap map)
+        MapBase Map;
+        public UndiscoveredAreaManager(MapBase map)
         {
             this.Map = map;
 
@@ -29,12 +29,12 @@ namespace Start_a_Town_
             }
             this.Valid = true;
         }
-        public void FloodFill(IMap map)
+        public void FloodFill(MapBase map)
         {
-            var current = new Vector3(0, 0, map.MaxHeight - 1);
+            var current = new Vector3(0, 0, MapBase.MaxHeight - 1);
             this.FloodFill(map, current, true);
         }
-        public void FloodFill(IMap map, Vector3 begin, bool value)
+        public void FloodFill(MapBase map, Vector3 begin, bool value)
         {
             var current = begin;
             var cell = map.GetCell(current);
@@ -95,11 +95,11 @@ namespace Start_a_Town_
             {
                 case Components.Message.Types.BlocksChanged:
                     foreach (var pos in e.Parameters[1] as IEnumerable<Vector3>)
-                        Handle(e.Parameters[0] as IMap, pos);
+                        Handle(e.Parameters[0] as MapBase, pos);
                     break;
 
                 case Components.Message.Types.BlockChanged:
-                    Handle(e.Parameters[0] as IMap, (Vector3)e.Parameters[1]);
+                    Handle(e.Parameters[0] as MapBase, (Vector3)e.Parameters[1]);
                     break;
 
                 default:
@@ -107,7 +107,7 @@ namespace Start_a_Town_
             }
         }
 
-        private void Handle(IMap map, Vector3 global)
+        private void Handle(MapBase map, Vector3 global)
         {
             if (map.TryGetCell(global, out Cell gc))
                 if (!gc.Discovered)

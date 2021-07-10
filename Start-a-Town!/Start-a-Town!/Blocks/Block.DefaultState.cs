@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         public class DefaultState : IBlockState
         {
-            public void Apply(IMap map, Vector3 global)
+            public void Apply(MapBase map, Vector3 global)
             { }
             public void Apply(ref byte data)
             {

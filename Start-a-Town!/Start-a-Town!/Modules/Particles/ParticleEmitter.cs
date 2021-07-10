@@ -67,7 +67,7 @@ namespace Start_a_Town_.Particles
         /// </summary>
         /// <param name="map"></param>
         /// <param name="global"></param>
-        public void Update(IMap map, Vector3 global)
+        public void Update(MapBase map, Vector3 global)
         {
             if (map.Net is Server)
                 throw new Exception();
@@ -178,7 +178,7 @@ namespace Start_a_Town_.Particles
         }
 
        
-        public void Draw(Camera cam, IMap map, Vector3 global)
+        public void Draw(Camera cam, MapBase map, Vector3 global)
         {
             // TODO: slow if many emmiters
             SortParticlesByDepth(cam, map);
@@ -191,7 +191,7 @@ namespace Start_a_Town_.Particles
                 foreach (var particle in this.Particles)
                     particle.Draw(cam, cam.BlockParticlesSpriteBatch, map, global + this.Offset);
         }
-        private void SortParticlesByDepth(Camera cam, IMap map)
+        private void SortParticlesByDepth(Camera cam, MapBase map)
         {
             this.Particles.Sort((p1, p2) =>
             {

@@ -15,7 +15,7 @@ namespace Start_a_Town_
             this.Name = "Trees";
             this.Density = 0.3f;
         }
-        public override void Generate(IMap map)
+        public override void Generate(MapBase map)
         {
             var size = Chunk.Size;
             var rand = map.Random;

@@ -7,9 +7,9 @@ namespace Start_a_Town_
 {
     public abstract class BlockEntityComp : IEntityComp, ISerializable
     {
-        public virtual void OnEntitySpawn(BlockEntity entity, IMap map, Vector3 global) { }
+        public virtual void OnEntitySpawn(BlockEntity entity, MapBase map, Vector3 global) { }
         public virtual void Tick(IObjectProvider net, BlockEntity entity, Vector3 global) { }
-        public virtual void Draw(Camera camera, IMap map, Vector3 global) { }
+        public virtual void Draw(Camera camera, MapBase map, Vector3 global) { }
         public virtual void Load(SaveTag tag)
         {
         }
@@ -27,17 +27,17 @@ namespace Start_a_Town_
         {
         }
 
-        internal virtual void DrawSelected(MySpriteBatch sb, Camera cam, IMap map, Vector3 global)
+        internal virtual void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, Vector3 global)
         {
            
         }
 
         internal virtual void OnDrop(GameObject actor, GameObject item, TargetArgs target, int quantity) { }
-        internal virtual void Remove(IMap map, Vector3 global, BlockEntity parent) { }
+        internal virtual void Remove(MapBase map, Vector3 global, BlockEntity parent) { }
 
-        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, IMap map, Vector3 vector3) { }
+        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3) { }
 
-        internal virtual void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3) { }
+        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3) { }
 
         public virtual void Write(BinaryWriter w)
         {
@@ -48,11 +48,11 @@ namespace Start_a_Town_
             return this;
         }
 
-        internal virtual void OnBlockBelowChanged(IMap map, Vector3 global)
+        internal virtual void OnBlockBelowChanged(MapBase map, Vector3 global)
         {
         }
 
-        internal virtual void MapLoaded(IMap map, Vector3 global)
+        internal virtual void MapLoaded(MapBase map, Vector3 global)
         {
         }
 

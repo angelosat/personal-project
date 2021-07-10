@@ -12,7 +12,7 @@ namespace Start_a_Town_
     abstract public class ZoneNew : ISelectable, ISaveable, ISerializable
     {
         public Town Town => this.Manager.Town;
-        public IMap Map { get { return this.Town.Map; } }
+        public MapBase Map { get { return this.Town.Map; } }
         public HashSet<IntVec3> Positions = new();
         public string Name;
         public ZoneManager Manager;
@@ -138,7 +138,7 @@ namespace Start_a_Town_
             return this.Positions.Contains(pos);
         }
 
-        internal static bool IsPositionValid(IMap map, Vector3 pos)
+        internal static bool IsPositionValid(MapBase map, Vector3 pos)
         {
             if (!map.IsSolid(pos))
                 return false;
@@ -175,7 +175,7 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
-        internal void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
+        internal void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             var isselected = UISelectedInfo.IsSelected(this);
             var col = Color.Lerp(this.Color, Color.White, isselected ? .5f : 0) * .5f;

@@ -96,7 +96,7 @@ namespace Start_a_Town_
             dic[top] = topdata;
             return dic;
         }
-        public override List<Vector3> GetParts(IMap map, Vector3 global)
+        public override List<Vector3> GetParts(MapBase map, Vector3 global)
         {
             var data = map.GetBlockData(global);
             Part part;
@@ -180,7 +180,7 @@ namespace Start_a_Town_
         {
             GetState(cell.BlockData, out part, out orientation);
         }
-        static public void GetState(IMap map, Vector3 global, out Part part, out int orientation)
+        static public void GetState(MapBase map, Vector3 global, out Part part, out int orientation)
         {
             GetState(map.GetCell(global), out part, out orientation);
         }
@@ -192,7 +192,7 @@ namespace Start_a_Town_
             return data;
         }
         
-        static public Dictionary<Part, Vector3> GetPartsDic(IMap map, Vector3 global)
+        static public Dictionary<Part, Vector3> GetPartsDic(MapBase map, Vector3 global)
         {
             var parts = new Dictionary<Part, Vector3>();
             var partslist = BlockDefOf.Bed.GetParts(map, global);
@@ -208,17 +208,17 @@ namespace Start_a_Town_
             parts[Part.Bottom] = partslist[1];
             return parts;
         }
-        public override FurnitureDef GetFurnitureRole(IMap map, IntVec3 global)
+        public override FurnitureDef GetFurnitureRole(MapBase map, IntVec3 global)
         {
             return IsTop(map, global) ? this.Furniture : null;
         }
 
-        private bool IsTop(IMap map, IntVec3 global)
+        private bool IsTop(MapBase map, IntVec3 global)
         {
             return map.GetBlockEntity(global) is BlockBedEntity;
         }
 
-        public override void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             if (!IsValidPosition(map, global, orientation))
                 return;
@@ -243,7 +243,7 @@ namespace Start_a_Town_
             map.AddBlockEntity(top, entity);
             map.Town.AddUtility(Utility.Types.Sleeping, top);
         }
-        public override void Remove(IMap map, Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, Vector3 global, bool notify = true)
         {
             // todo: why call this below? i already have the part vectors
             // i have replaced that data during the switch section so the getparts isn't working obviously
@@ -261,7 +261,7 @@ namespace Start_a_Town_
         {
             return global + GetPartsDic(data)[Part.Top];
         }
-        public override bool IsValidPosition(IMap map, IntVec3 global, int orientation)
+        public override bool IsValidPosition(MapBase map, IntVec3 global, int orientation)
         {
             var positions = new List<IntVec3> { global };
             
@@ -287,7 +287,7 @@ namespace Start_a_Town_
             var token = this.Parts[(int)part][(ori + (int)camera.Rotation) % 4];
             return canvas.NonOpaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, col /*Color.White*/, sunlight, blocklight, depth, this, blockCoordinates);
         }
-        public override void DrawPreview(MySpriteBatch sb, IMap map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
+        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
         {
             var top = global;
             var bottom = global + Vector3.UnitX;
@@ -338,20 +338,20 @@ namespace Start_a_Town_
         {
             return new BlockBedEntity();
         }
-        public override BlockEntity GetBlockEntity(IMap map, Vector3 global)
+        public override BlockEntity GetBlockEntity(MapBase map, Vector3 global)
         {
             var parts = GetPartsDic(map, global);
             var entity = map.GetBlockEntity(parts[Part.Top]);
             return entity;
         }
        
-        static public BlockBedEntity GetEntity(IMap map, Vector3 global)
+        static public BlockBedEntity GetEntity(MapBase map, Vector3 global)
         {
             var parts = GetPartsDic(map, global);
             var entity = map.GetBlockEntity<BlockBedEntity>(parts[Part.Top]);
             return entity;
         }
-        public override List<Interaction> GetAvailableTasks(IMap map, Vector3 global)
+        public override List<Interaction> GetAvailableTasks(MapBase map, Vector3 global)
         {
             var list = new List<Interaction>();
             list.Add(new Blocks.Bed.InteractionStartSleep()); // commented out until i figure out how to seperate ai planting job on farmlands and player planting anywher
@@ -389,13 +389,13 @@ namespace Start_a_Town_
         }
         readonly static IconButton ButtonSetVisitor = new(Icon.Construction) { HoverText = "Set to visitor bed" };
         readonly static IconButton ButtonUnsetVisitor = new(Icon.Construction, Icon.Cross) { HoverText = "Set to citizen bed" };
-        internal override void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
             var entity = GetEntity(map, vector3);
             entity.GetSelectionInfo(info, map, vector3);
         }
 
-        private static void UpdateQuickButtons(IMap map, Vector3 vector3, BlockBedEntity.Types t)
+        private static void UpdateQuickButtons(MapBase map, Vector3 vector3, BlockBedEntity.Types t)
         {
             switch (t)
             {
@@ -413,7 +413,7 @@ namespace Start_a_Town_
                     throw new Exception();
             }
         }
-        public static void SetType(IMap map, IntVec3 vector3, BlockBedEntity.Types type)
+        public static void SetType(MapBase map, IntVec3 vector3, BlockBedEntity.Types type)
         {
             GetEntity(map, vector3).Type = type;
             map.InvalidateCell(vector3);

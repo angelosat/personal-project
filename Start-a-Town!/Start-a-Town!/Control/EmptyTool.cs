@@ -35,12 +35,7 @@ namespace Start_a_Town_.PlayerControl
             KeyUp(e);
         }
 
-        internal override void DrawWorld(SpriteBatch sb, IMap map, Camera camera)
-        {
-            base.DrawWorld(sb, map, camera);
-            DrawAction(sb, camera);
-        }
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             base.DrawBeforeWorld(sb, map, camera);
             DrawActionMy(sb, camera);

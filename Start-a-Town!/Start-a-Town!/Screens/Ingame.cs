@@ -44,10 +44,6 @@ namespace Start_a_Town_.Rooms
         public Hud Hud;
         public override void Update(Game1 game, GameTime gt)
         {
-            if (ChunkLoader.Loading)
-                if (!Engine.AsyncLoading)
-                    return;
-
             base.Update(game, gt);
             var map = DrawServer? Server.Instance.Map : Client.Instance.Map;
             ToolManager.Update(map, this.Scene);
@@ -96,12 +92,12 @@ namespace Start_a_Town_.Rooms
             base.OnGameEvent(e);
         } 
  
-        static public IMap GetMap()
+        static public MapBase GetMap()
         {
             return DrawServer ? Server.Instance.Map : Client.Instance.Map;
         }
        
-        static public IMap CurrentMap { get { return DrawServer ? Server.Instance.Map : Client.Instance.Map; } }
+        static public MapBase CurrentMap { get { return DrawServer ? Server.Instance.Map : Client.Instance.Map; } }
         static public bool DrawServer;
         public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {

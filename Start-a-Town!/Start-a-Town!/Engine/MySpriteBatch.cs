@@ -365,7 +365,7 @@ namespace Start_a_Town_
                 new Vector3(screenBounds.X, screenBounds.Y + screenBounds.Height, depth)
                 , fog, tint, sunLight, blockLight, token.BottomLeftUV);
         }
-        public void DrawBlock(Texture2D texture, IMap map, Vector3 global, IAtlasNodeToken token, Camera cam, Color fog, Color tint, Color sunLight, Vector4 blockLight)
+        public void DrawBlock(Texture2D texture, MapBase map, Vector3 global, IAtlasNodeToken token, Camera cam, Color fog, Color tint, Color sunLight, Vector4 blockLight)
         {
             float depth = global.GetDrawDepth(map, cam);
             Rectangle dstRectangle = cam.GetScreenBounds(global, Block.Bounds);
@@ -522,7 +522,7 @@ namespace Start_a_Town_
                 fx.Parameters["AtlasHeight"].SetValue(Block.Atlas.Texture.Height);
                 fx.Parameters["Viewport"].SetValue(new Vector2(Device.Viewport.Width, Device.Viewport.Height));
                 Device.Textures[0] = Block.Atlas.Texture;
-                Device.Textures[2] = Map.ShaderMouseMap;
+                Device.Textures[2] = MapBase.ShaderMouseMap;
                 Device.DepthStencilState = DepthStencilState.Default;
                 fx.CurrentTechnique.Passes["Pass1"].Apply();
                 Device.DrawUserIndexedPrimitives<MyVertex>(

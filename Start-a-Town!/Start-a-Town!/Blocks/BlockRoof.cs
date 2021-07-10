@@ -21,8 +21,8 @@ namespace Start_a_Town_.Blocks
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.Parts[0] = Block.Atlas.Load("blocks/roof/roof1height19", Depth1, Block.NormalMap);
             this.Parts[3] = Block.Atlas.Load("blocks/roof/roof2height19", Depth2, Block.NormalMap);
-            this.Parts[2] = Block.Atlas.Load("blocks/roof/roof3height19", Map.BlockDepthMap, Block.NormalMap);
-            this.Parts[1] = Block.Atlas.Load("blocks/roof/roof4height19", Map.BlockDepthMap, Block.NormalMap);
+            this.Parts[2] = Block.Atlas.Load("blocks/roof/roof3height19", MapBase.BlockDepthMap, Block.NormalMap);
+            this.Parts[1] = Block.Atlas.Load("blocks/roof/roof4height19", MapBase.BlockDepthMap, Block.NormalMap);
             this.Variations.Add(this.Parts.First());
 
             this.Recipe = new BlockRecipe(
@@ -72,7 +72,7 @@ namespace Start_a_Town_.Blocks
             var o = (data + cameraRotation) % 4;
             return this.Parts[o];
         }
-        public override void Place(IMap map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, GetData(orientation), variation, orientation, notify);
         }

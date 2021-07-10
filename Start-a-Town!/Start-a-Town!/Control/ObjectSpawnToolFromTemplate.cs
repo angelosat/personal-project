@@ -84,7 +84,7 @@ namespace Start_a_Town_
         {
             return Messages.Default;
         }
-        internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
             if (InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey))
@@ -111,7 +111,7 @@ namespace Start_a_Town_
             this.Entity = GameObject.Templates[this.TemplateID];
         }
 
-        internal override void DrawAfterWorldRemote(MySpriteBatch sb, IMap map, Camera camera, Net.PlayerData player)
+        internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
             this.Entity.DrawPreview(sb, camera, player.Target, true);
         }

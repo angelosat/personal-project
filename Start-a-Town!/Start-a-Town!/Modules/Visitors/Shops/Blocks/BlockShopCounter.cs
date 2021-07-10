@@ -19,7 +19,7 @@ namespace Start_a_Town_
         {
             return Material.GetMaterial(blockdata);
         }
-        internal override void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
             var shop = map.Town.ShopManager.GetShops().FirstOrDefault(s => s.Counter.HasValue && s.Counter.Value == vector3);
             info.AddInfo(new Label($"Shop: {shop?.Name ?? "none"}"));

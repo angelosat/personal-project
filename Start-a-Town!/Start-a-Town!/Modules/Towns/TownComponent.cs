@@ -11,7 +11,7 @@ namespace Start_a_Town_.Towns
     public abstract class TownComponent
     {
         public Town Town;
-        public IMap Map { get { return this.Town.Map; } }
+        public MapBase Map { get { return this.Town.Map; } }
         public IObjectProvider Net { get { return this.Map.Net; } }
         const float UpdateFrequency = 1; // per second
         float UpdateTimerMax = (float)Engine.TicksPerSecond / UpdateFrequency;
@@ -81,8 +81,8 @@ namespace Start_a_Town_.Towns
         public virtual IContextable QueryPosition(Vector3 global) { return null; }
         public virtual ISelectable QuerySelectable(TargetArgs selected) { return null; }
 
-        public virtual void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam) { }
-        public virtual void DrawUI(SpriteBatch sb, IMap map, Camera cam) { }
+        public virtual void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam) { }
+        public virtual void DrawUI(SpriteBatch sb, MapBase map, Camera cam) { }
 
         internal virtual void UpdateQuickButtons() { }
 

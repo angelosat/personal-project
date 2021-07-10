@@ -9,7 +9,7 @@ namespace Start_a_Town_.GameModes.StaticMaps.UI
         StaticWorld World;
         PanelLabeled PanelMapList;
         Panel PanelInfo;
-        ListBox<IMap, Button> MapList;
+        ListBox<MapBase, Button> MapList;
         Button BtnCreateMap;
         Action<StaticMap> CallBack;
 
@@ -19,7 +19,7 @@ namespace Start_a_Town_.GameModes.StaticMaps.UI
 
             this.PanelMapList = new PanelLabeled("Maps") { AutoSize = true};
 
-            this.MapList = new ListBox<IMap, Button>(new Rectangle(0, 0, 150, 300)) { Location = this.PanelMapList.Label.BottomLeft };
+            this.MapList = new ListBox<MapBase, Button>(new Rectangle(0, 0, 150, 300)) { Location = this.PanelMapList.Label.BottomLeft };
             this.PanelMapList.Controls.Add(this.MapList);
 
             this.PanelInfo = new Panel() { Location = this.PanelMapList.TopRight, Size = this.PanelMapList.Size };
@@ -56,7 +56,7 @@ namespace Start_a_Town_.GameModes.StaticMaps.UI
             this.Refresh();
         }
 
-        void SelectMap(IMap map)
+        void SelectMap(MapBase map)
         {
             this.PanelInfo.Controls.Clear();
             if (map == null)
@@ -65,7 +65,7 @@ namespace Start_a_Town_.GameModes.StaticMaps.UI
             this.PanelInfo.Controls.Add(new Label(map.ToString()), btnEnter);
         }
 
-        private void PlayMap(IMap map)
+        private void PlayMap(MapBase map)
         {
             this.CallBack(map as StaticMap);
         }

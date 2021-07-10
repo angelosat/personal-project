@@ -7,7 +7,7 @@ namespace Start_a_Town_
 {
     public class MapThumb : IContextable, ITooltippable, INameplateable, IDisposable
     {
-        public IMap Map { get; set; }
+        public MapBase Map { get; set; }
         public Sprite[] Sprites;
         bool Valid = true;
         static public int CurrentZoom = 0;
@@ -70,7 +70,7 @@ namespace Start_a_Town_
             Map.LoadThumbnails();
         }
 
-        public MapThumb(IMap map)
+        public MapThumb(MapBase map)
         {
             this.Map = map;
             this.Sprites = new Sprite[3];

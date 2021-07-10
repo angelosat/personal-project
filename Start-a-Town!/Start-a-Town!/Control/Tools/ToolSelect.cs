@@ -52,7 +52,7 @@ namespace Start_a_Town_
             return Messages.Remove;
         }
 
-        internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var camera = map.Camera;
             camera.DrawGridBlocks(sb, this.Begin.GetBox(this.End), Color.White);

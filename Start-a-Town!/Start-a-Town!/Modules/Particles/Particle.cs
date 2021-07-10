@@ -29,7 +29,7 @@ namespace Start_a_Town_.Particles
             this.Lifetime--;
         }
 
-        public void Draw(Camera cam, MySpriteBatch sb, IMap map, Vector3 global)
+        public void Draw(Camera cam, MySpriteBatch sb, MapBase map, Vector3 global)
         {
             var transformedGlobal = this.Offset + global;
             if (transformedGlobal.Z > cam.MaxDrawZ + 1)

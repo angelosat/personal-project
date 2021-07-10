@@ -133,7 +133,7 @@ namespace Start_a_Town_.UI
         {
             Instance.Select(target);
         }
-        static public void Refresh(IMap map, BoundingBox box)
+        static public void Refresh(MapBase map, BoundingBox box)
         {
             Refresh(map.GetObjects(box).Select(s => new TargetArgs(s)));
         }
@@ -401,7 +401,7 @@ namespace Start_a_Town_.UI
             switch (e.Type)
             {
                 case Components.Message.Types.BlockChanged:
-                    var map = e.Parameters[0] as IMap;
+                    var map = e.Parameters[0] as MapBase;
                     var global = (Vector3)e.Parameters[1];
                     var target = new TargetArgs(map, global);
                     if (IsSelected(map, global))
@@ -409,7 +409,7 @@ namespace Start_a_Town_.UI
                     break;
 
                 case Components.Message.Types.BlocksChanged:
-                    map = e.Parameters[0] as IMap;
+                    map = e.Parameters[0] as MapBase;
                     var globals = e.Parameters[1] as Vector3[];
                     var targets = globals.Select(g => new TargetArgs(map, g));
                     if (targets.Any(t => IsSelected(t)))
@@ -425,7 +425,7 @@ namespace Start_a_Town_.UI
                     break;
             }
         }
-        bool IsSelected(IMap map, Vector3 global)
+        bool IsSelected(MapBase map, Vector3 global)
         {
             return this.MultipleSelected.Any(t => (t.Type == TargetType.Position && t.Map == map && t.Global == global) || (this.SelectedSource?.Global == global));
         }

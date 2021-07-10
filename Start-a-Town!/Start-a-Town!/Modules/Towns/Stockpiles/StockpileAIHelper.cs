@@ -108,13 +108,13 @@ namespace Start_a_Town_
             return betterStockpile == null;
         }
 
-        static public IEnumerable<IStorage> GetStoragesByPriority(IMap map)
+        static public IEnumerable<IStorage> GetStoragesByPriority(MapBase map)
         {
             IEnumerable<Stockpile> stockpiles = GetStockpiles(map);
             return stockpiles.OrderByDescending(i => i.Priority);
         }
 
-        public static IEnumerable<Stockpile> GetStockpiles(IMap map)
+        public static IEnumerable<Stockpile> GetStockpiles(MapBase map)
         {
             return map.Town.ZoneManager.GetZones<Stockpile>();
         }

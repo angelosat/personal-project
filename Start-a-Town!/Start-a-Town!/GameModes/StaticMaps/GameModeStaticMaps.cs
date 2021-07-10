@@ -130,7 +130,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var player = server.GetPlayer(playerid);
             player.SentChunks.Remove(vec);
         }
-        internal override void MapReceived(IMap map)
+        internal override void MapReceived(MapBase map)
         {
             this.ChunksPending = new List<Vector2>();
             var size = (map as StaticMap).Size.Chunks;

@@ -29,7 +29,7 @@ namespace Start_a_Town_
             return task;
         }
 
-        static IEnumerable<IntVec3> GetAllTillingLocations(IMap map)
+        static IEnumerable<IntVec3> GetAllTillingLocations(MapBase map)
         {
             foreach (var zone in map.Town.ZoneManager.GetZones<GrowingZone>())
                 foreach (var pos in zone.GetTillingPositions())

@@ -118,7 +118,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             return Messages.Remove;
         }
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             Game1.Instance.GraphicsDevice.Textures[0] = Sprite.Atlas.Texture;
             Game1.Instance.GraphicsDevice.Textures[1] = Sprite.Atlas.DepthTexture;

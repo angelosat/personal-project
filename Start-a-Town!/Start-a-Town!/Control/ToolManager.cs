@@ -44,7 +44,7 @@ namespace Start_a_Town_
             }
         }
         
-        public void Update(IMap map, SceneState scene)
+        public void Update(MapBase map, SceneState scene)
         {
             if (ActiveTool != null)
                 ActiveTool.Update(scene);
@@ -62,13 +62,13 @@ namespace Start_a_Town_
             Tools.Push(tool);
             return true;
         }
-        internal void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (ActiveTool == null)
                 return;
             ActiveTool.DrawBeforeWorld(sb, map, camera);
         }
-        internal void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var camera = map.Camera;
             if (ActiveTool == null)
@@ -77,7 +77,7 @@ namespace Start_a_Town_
             DrawPlayersBlockMouseover(sb, map);
         }
 
-        private static void DrawPlayersBlockMouseover(MySpriteBatch sb, IMap map)
+        private static void DrawPlayersBlockMouseover(MySpriteBatch sb, MapBase map)
         {
             var camera = map.Camera;
             foreach (var pl in GetOtherPlayers(map))
@@ -87,7 +87,7 @@ namespace Start_a_Town_
                 }
         }
         
-        internal void DrawUI(SpriteBatch sb, IMap map)
+        internal void DrawUI(SpriteBatch sb, MapBase map)
         {
             if (ActiveTool == null)
                 return;
@@ -104,7 +104,7 @@ namespace Start_a_Town_
             }}
             sb.End();
         }
-        internal void DrawPlayerMousePointers(SpriteBatch sb, IMap map)
+        internal void DrawPlayerMousePointers(SpriteBatch sb, MapBase map)
         {
             var camera = map.Camera;
             foreach (var pl in GetOtherPlayers(map))
@@ -302,11 +302,11 @@ namespace Start_a_Town_
                 return null;
             }
         }
-        internal static void DrawBlockMouseover(MySpriteBatch sb, IMap map, Camera camera, TargetArgs target)
+        internal static void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera, TargetArgs target)
         {
             DrawBlockMouseover(sb, map, camera, target, Color.White);
         }
-        internal static void DrawBlockMouseover(MySpriteBatch sb, IMap map, Camera camera, TargetArgs target, Color color)
+        internal static void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera, TargetArgs target, Color color)
         {
             if (target == null)
                 return;
@@ -335,7 +335,7 @@ namespace Start_a_Town_
             sb.Flush(); // flush here because i might have to switch textures in an overriden tool draw call
         }
 
-        private static IEnumerable<PlayerData> GetOtherPlayers(IMap map)
+        private static IEnumerable<PlayerData> GetOtherPlayers(MapBase map)
         {
             return map.Net.GetPlayers();
         }

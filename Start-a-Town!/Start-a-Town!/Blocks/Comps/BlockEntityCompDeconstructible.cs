@@ -27,7 +27,7 @@ namespace Start_a_Town_
                 actor.Net.PopLoot(mat.Create(), global, Vector3.Zero);
             }
         }
-        internal override void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
             foreach (var mat in this.Materials)
                 info.AddInfo(new Label(mat));

@@ -104,11 +104,11 @@ namespace Start_a_Town_
             GameModes.GameMode.Current.OnIngameMenuCreated(this.IngameMenu);
 
             this.ContextActions = new UIContextActions() { Location = new Vector2(UIManager.Width / 2, UIManager.Height / 2) };
-            this.ZLevelDrawBar = new ScrollbarVNew(Map.MaxHeight, Map.MaxHeight, 1, 16, 1,
-                 () => Map.MaxHeight - Rooms.Ingame.GetMap().Camera.DrawLevel,
-                 () => 1 / (float)Map.MaxHeight,
-                 () => Rooms.Ingame.GetMap().Camera.DrawLevel / Map.MaxHeight,
-                 v => Rooms.Ingame.GetMap().Camera.DrawLevel = Map.MaxHeight - v);
+            this.ZLevelDrawBar = new ScrollbarVNew(MapBase.MaxHeight, MapBase.MaxHeight, 1, 16, 1,
+                 () => MapBase.MaxHeight - Rooms.Ingame.GetMap().Camera.DrawLevel,
+                 () => 1 / (float)MapBase.MaxHeight,
+                 () => Rooms.Ingame.GetMap().Camera.DrawLevel / MapBase.MaxHeight,
+                 v => Rooms.Ingame.GetMap().Camera.DrawLevel = MapBase.MaxHeight - v);
 
             this.ZLevelDrawBar.Location = this.ZLevelDrawBar.RightCenterScreen;
 

@@ -10,7 +10,7 @@ namespace Start_a_Town_.Blocks
     public abstract class BlockEntity : ICloneable, IDisposable, IEntityCompContainer<BlockEntityComp>//, IHasChildren
     {
         public HashSet<IntVec3> CellsOccupied = new();
-        public IMap Map;
+        public MapBase Map;
         public bool Exists => this.Map is not null;
         public IntVec3 OriginGlobal;
         EntityCompCollection<BlockEntityComp> _Comps = new();
@@ -30,12 +30,12 @@ namespace Start_a_Town_.Blocks
         /// Dipose any children GameObjects here.
         /// </summary>
         public virtual void Dispose() { } // maybe make this abstract so i don't forget it?
-        public virtual void OnRemove(IMap map, Vector3 global) {
+        public virtual void OnRemove(MapBase map, Vector3 global) {
             foreach (var c in this.Comps)
                 c.Remove(map, global, this);
         }
-        public virtual void Break(IMap map, Vector3 global) { }
-        public virtual void Place(IMap map, Vector3 global) 
+        public virtual void Break(MapBase map, Vector3 global) { }
+        public virtual void Place(MapBase map, Vector3 global) 
         {
             foreach (var comp in this.Comps)
                 comp.OnEntitySpawn(this, map, global);
@@ -123,7 +123,7 @@ namespace Start_a_Town_.Blocks
         }
         protected virtual void WriteExtra(BinaryWriter w) { }
         protected virtual void ReadExtra(BinaryReader r) { }
-        internal virtual void HandleRemoteCall(IMap map, Vector3 vector3, ObjectEventArgs e) { }
+        internal virtual void HandleRemoteCall(MapBase map, Vector3 vector3, ObjectEventArgs e) { }
 
         public virtual void Instantiate(Vector3 global, Action<GameObject> instantiator)
         {
@@ -133,39 +133,39 @@ namespace Start_a_Town_.Blocks
             }
         }
 
-        public virtual void Draw(Camera camera, IMap map, Vector3 global) 
+        public virtual void Draw(Camera camera, MapBase map, Vector3 global) 
         {
             foreach (var comp in this.Comps)
                 comp.Draw(camera, map, global);
         }
         public virtual void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera cam, Vector3 global) { }
 
-        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, IMap map, Vector3 vector3)
+        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
         {
             foreach (var c in this.Comps)
                 c.GetQuickButtons(uISelectedInfo, map, vector3);
         }
 
-        internal virtual void GetSelectionInfo(IUISelection info, IMap map, Vector3 vector3)
+        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
             foreach (var c in this.Comps)
                 c.GetSelectionInfo(info, map, vector3);
         }
 
-        internal void OnBlockBelowChanged(IMap map, Vector3 global)
+        internal void OnBlockBelowChanged(MapBase map, Vector3 global)
         {
             foreach (var c in this.Comps)
                 c.OnBlockBelowChanged(map, global);
         }
 
-        internal void MapLoaded(IMap map, Vector3 global)
+        internal void MapLoaded(MapBase map, Vector3 global)
         {
             foreach (var c in this.Comps)
                 c.MapLoaded(map, global);
             this.OnMapLoaded(map, global);
         }
 
-        protected virtual void OnMapLoaded(IMap map, Vector3 global)
+        protected virtual void OnMapLoaded(MapBase map, Vector3 global)
         {
         }
     }

@@ -43,7 +43,7 @@ namespace Start_a_Town_.AI.Behaviors
         {
             return !this.Actor.Map.GetObjects(table.Global).Any();
         }
-        private static bool IsTableSurfaceEmpty(IMap map, Vector3 table)
+        private static bool IsTableSurfaceEmpty(MapBase map, Vector3 table)
         {
             return !map.GetObjects(table).Any();
         }

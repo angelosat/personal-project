@@ -29,7 +29,7 @@ namespace Start_a_Town_.Blocks
             Towns.Constructions.ConstructionsManager.Furniture.Add(this.Recipe);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
-        public override void Place(IMap map, Microsoft.Xna.Framework.Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, Microsoft.Xna.Framework.Vector3 global, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, data, orientation, 0, notify);
         }

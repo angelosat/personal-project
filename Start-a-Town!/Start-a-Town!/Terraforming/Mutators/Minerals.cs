@@ -56,7 +56,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.Name = "Minerals";
         }
         
-        public override void Generate(IMap map)
+        public override void Generate(MapBase map)
         {
             var mapSize = map.GetSizeInChunks() * Chunk.Size;
             var n = 0;

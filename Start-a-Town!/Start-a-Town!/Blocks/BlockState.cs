@@ -25,7 +25,7 @@ namespace Start_a_Town_.Blocks
             return "";
         }
 
-        public void Apply(IMap map, Vector3 global)
+        public void Apply(MapBase map, Vector3 global)
         {
             map.GetCell(global).BlockData = this.Data;
         }

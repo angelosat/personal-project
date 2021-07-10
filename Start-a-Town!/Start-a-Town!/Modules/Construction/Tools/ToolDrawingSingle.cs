@@ -34,7 +34,7 @@ namespace Start_a_Town_.Modules.Construction
             base.Update();
         }
         
-        protected override void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)
+        protected override void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             cam.DrawGridBlock(sb, this.Valid ? Color.Lime : Color.Red, this.Begin);
         }

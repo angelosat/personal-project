@@ -301,7 +301,7 @@ namespace Start_a_Town_.Components
             throw new NotImplementedException();
         }
 
-        public void Draw(Camera camera, IMap map, Vector3 global)
+        public void Draw(Camera camera, MapBase map, Vector3 global)
         {
             throw new NotImplementedException();
         }

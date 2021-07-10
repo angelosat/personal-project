@@ -18,7 +18,7 @@ namespace Start_a_Town_
         public override string Name => "Terrain";
         int CycleIndex;
 
-        Action<IMap, IntVec3>[] SpawnActions;
+        Action<MapBase, IntVec3>[] SpawnActions;
         
         PlantProperties[] ValidPlants;
        
@@ -65,13 +65,13 @@ namespace Start_a_Town_
                 this.CycleIndex++;
             }
 
-            Action<IMap, IntVec3>[] initSpawnActions()
+            Action<MapBase, IntVec3>[] initSpawnActions()
             {
-                return new Action<IMap, IntVec3>[] { SpawnEntity, SpawnBlock };
+                return new Action<MapBase, IntVec3>[] { SpawnEntity, SpawnBlock };
             }
         }
 
-        private void SpawnEntity(IMap map, IntVec3 global)
+        private void SpawnEntity(MapBase map, IntVec3 global)
         {
             var allPlants = this.ValidPlants ??= this.GetValidPlants();
             var randomPlant = allPlants.SelectRandom(map.Random);
@@ -79,7 +79,7 @@ namespace Start_a_Town_
             plant.SyncInstantiate(map.Net);
             map.SyncSpawn(plant, global.Above, Vector3.Zero);
         }
-        private void SpawnBlock(IMap map, IntVec3 global)
+        private void SpawnBlock(MapBase map, IntVec3 global)
         {
             BlockGrass.GrowRandomFlower(map, global);
         }

@@ -131,7 +131,7 @@ namespace Start_a_Town_.Modules.Construction
             return IsReplacing() ? this.Target.Global : this.Target.FaceGlobal;
         }
 
-        internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
             if (!this.Enabled)
@@ -142,7 +142,7 @@ namespace Start_a_Town_.Modules.Construction
             else
                 this.DrawBlockPreviews(sb, map, cam);
         }
-        public override void DrawBlockMouseover(MySpriteBatch sb, IMap map, Camera camera)
+        public override void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
         {
             Sprite.Atlas.Begin();
             if (!this.Enabled)
@@ -153,7 +153,7 @@ namespace Start_a_Town_.Modules.Construction
             }
         }
     
-        protected virtual void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)
+        protected virtual void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             if (!this.Enabled)
                 return;
@@ -187,7 +187,7 @@ namespace Start_a_Town_.Modules.Construction
             return list;
 
         }
-        protected void DrawBlockPreviews(MySpriteBatch sb, IMap map, Camera cam)
+        protected void DrawBlockPreviews(MySpriteBatch sb, MapBase map, Camera cam)
         {
             var atlastoken = this.Block.GetDefault();
             atlastoken.Atlas.Begin(sb);

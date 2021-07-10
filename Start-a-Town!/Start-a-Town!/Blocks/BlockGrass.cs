@@ -42,19 +42,19 @@ namespace Start_a_Town_
             this.AssetNames = "grass/grass1, grass/grass2, grass/grass3, grass/grass4";
 
             foreach (var item in new AtlasDepthNormals.Node.Token[] { 
-                Block.Atlas.Load("blocks/grass/grass1-overlay", Map.BlockDepthMap, Block.BlockMouseMap.Texture),
-                Block.Atlas.Load("blocks/grass/grass2-overlay", Map.BlockDepthMap, Block.BlockMouseMap.Texture),
-                Block.Atlas.Load("blocks/grass/grass3-overlay", Map.BlockDepthMap, Block.BlockMouseMap.Texture)})
+                Block.Atlas.Load("blocks/grass/grass1-overlay", MapBase.BlockDepthMap, Block.BlockMouseMap.Texture),
+                Block.Atlas.Load("blocks/grass/grass2-overlay", MapBase.BlockDepthMap, Block.BlockMouseMap.Texture),
+                Block.Atlas.Load("blocks/grass/grass3-overlay", MapBase.BlockDepthMap, Block.BlockMouseMap.Texture)})
                 this.Overlays.Add(item);
 
-            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlayred", Map.BlockDepthMap, Block.NormalMap));
-            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlayyellow", Map.BlockDepthMap, Block.NormalMap));
-            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlaywhite", Map.BlockDepthMap, Block.NormalMap));
-            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlaypurple", Map.BlockDepthMap, Block.NormalMap));
+            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlayred", MapBase.BlockDepthMap, Block.NormalMap));
+            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlayyellow", MapBase.BlockDepthMap, Block.NormalMap));
+            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlaywhite", MapBase.BlockDepthMap, Block.NormalMap));
+            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlaypurple", MapBase.BlockDepthMap, Block.NormalMap));
           
         }
        
-        internal static void GrowRandomFlower(IMap map, IntVec3 global)
+        internal static void GrowRandomFlower(MapBase map, IntVec3 global)
         {
             var net = map.Net;
             if (net is Client)
@@ -97,7 +97,7 @@ namespace Start_a_Town_
             yield return 3;
             yield return 4;
         }
-        static void Trample(IMap map, IntVec3 global)
+        static void Trample(MapBase map, IntVec3 global)
         {
             var cell = map.GetCell(global);
             BlockDefOf.Soil.Place(map, global, 0, cell.Variation, 0);
@@ -162,7 +162,7 @@ namespace Start_a_Town_
                 PacketGrowRandomFlower = Network.RegisterPacketHandler(GrowRandomFlower);
                 PacketTrample = Network.RegisterPacketHandler(SyncTrample);
             }
-            public static void GrowRandomFlower(IMap map, IntVec3 global)
+            public static void GrowRandomFlower(MapBase map, IntVec3 global)
             {
                 var net = map.Net;
                 if(net is Server)
@@ -178,7 +178,7 @@ namespace Start_a_Town_
                 else
                     GrowRandomFlower(map, global);
             }
-            public static void SyncTrample(IMap map, IntVec3 global)
+            public static void SyncTrample(MapBase map, IntVec3 global)
             {
                 var net = map.Net;
                 if (net is Client)

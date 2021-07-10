@@ -38,7 +38,7 @@ namespace Start_a_Town_.Modules.Construction
             return Messages.Default;
         }
        
-        protected override void DrawGrid(MySpriteBatch sb, IMap map, Camera cam, Color color)
+        protected override void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             if (!this.Enabled)
                 return;
@@ -48,7 +48,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             return new List<Vector3>() { a };
         }
-        internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
             if (this.Target == null && !this.Enabled)
@@ -63,7 +63,7 @@ namespace Start_a_Town_.Modules.Construction
             // show operation position of workstation 
             cam.DrawGridCells(sb, Color.White *.5f, new Vector3[] { global + Block.GetFrontSide(this.Orientation) });
         }
-        internal override void DrawAfterWorldRemote(MySpriteBatch sb, IMap map, Camera camera, Net.PlayerData player)
+        internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
             this.DrawAfterWorld(sb, map);
         }

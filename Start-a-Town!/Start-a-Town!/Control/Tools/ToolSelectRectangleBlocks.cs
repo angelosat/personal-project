@@ -33,7 +33,7 @@ namespace Start_a_Town_
         {
             return Messages.Remove;
         }
-        void Validate(IMap map, Camera camera)
+        void Validate(MapBase map, Camera camera)
         {
             this.Batch = new MySpriteBatch(Game1.Instance.GraphicsDevice);
             var positions = this.Begin.GetBox(this.End)
@@ -43,7 +43,7 @@ namespace Start_a_Town_
             foreach (var pos in positions)
                 camera.DrawBlockGlobal(this.Batch, map, pos);
         }
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (!this.Enabled)
                 return;

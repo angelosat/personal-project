@@ -25,13 +25,13 @@ namespace Start_a_Town_
         public static Vector2 ToVector(this Point point)
         { return new Vector2(point.X, point.Y); }
 
-        public static float GetMouseoverDepth(this Vector3 worldGlobal, IMap map, Camera camera)
+        public static float GetMouseoverDepth(this Vector3 worldGlobal, MapBase map, Camera camera)
         {
             Vector3 local = worldGlobal - new Vector3(map.GetOffset(), 0);
             Vector3 rotated = local.Rotate(camera);
             return (rotated.X + rotated.Y + worldGlobal.Z);
         }
-        public static float GetDrawDepth(this Vector3 worldGlobal, IMap map, Camera camera)
+        public static float GetDrawDepth(this Vector3 worldGlobal, MapBase map, Camera camera)
         {
             Vector3 local = worldGlobal - new Vector3(map.GetOffset(), 0);
             Vector3 rotated = local.Rotate(camera);
@@ -244,41 +244,6 @@ namespace Start_a_Town_
             }
         }
 
-        static public List<Vector3> GetEntityCorners(this Vector3 pos)
-        {
-            var corners = new List<Vector3>()
-            {
-                pos + new Vector3(-.25f, -.25f, 0),
-                pos + new Vector3(.25f, -.25f, 0),
-                pos + new Vector3(-.25f, .25f, 0),
-                pos + new Vector3(.25f, .25f, 0)
-            };
-            return corners;
-        }
-        static public List<Vector3> GetRectangle(this Vector3 begin, int w, int h)
-        {
-            var list = new List<Vector3>();
-            for (int i = 0; i < w; i++)
-                for (int j = 0; j < h; j++)
-                        list.Add(begin + new Vector3(i, j, 0));
-            return list;
-        }
-        
-        static public List<Vector3> GetColumn(this Vector3 global)
-        {
-            var list = new List<Vector3>();
-            for (int i = 0; i < Map.MaxHeight; i++)
-                list.Add(new Vector3(global.X, global.Y, i));
-            return list;
-        }
-        public static Queue<Tuple<T1, T2>> ToTupleQueue<T1, T2>(this object[] p)
-        {
-            var temp = new Queue<object>(p);
-            var queue = new Queue<Tuple<T1, T2>>();
-            while (temp.Count > 0)
-                queue.Enqueue(Tuple.Create((T1)temp.Dequeue(), (T2)temp.Dequeue()));
-            return queue;
-        }
         static public Vector3 Average(this ICollection<IntVec3> positions)
         {
             Vector3 average = default;

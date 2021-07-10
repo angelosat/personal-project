@@ -17,8 +17,8 @@ namespace Start_a_Town_.Blocks
             : base(Types.Farmland)
         {
             this.Textures = new AtlasDepthNormals.Node.Token[2];
-            this.Textures[0] = Block.Atlas.Load("blocks/farmland", Map.BlockDepthMap, Block.NormalMap);
-            this.Textures[1] = Block.Atlas.Load("blocks/farmlandSowed", Map.BlockDepthMap, Block.NormalMap);
+            this.Textures[0] = Block.Atlas.Load("blocks/farmland", MapBase.BlockDepthMap, Block.NormalMap);
+            this.Textures[1] = Block.Atlas.Load("blocks/farmlandSowed", MapBase.BlockDepthMap, Block.NormalMap);
             this.Variations.Add(this.Textures[0]);
         }
 
@@ -43,7 +43,7 @@ namespace Start_a_Town_.Blocks
             else
                 base.OnDrop(actor, dropped, target, amount);
         }
-        static public void Plant(IMap map, Vector3 global, GameObject obj)
+        static public void Plant(MapBase map, Vector3 global, GameObject obj)
         {
             var plantdef = obj.GetComponent<SeedComponent>().Plant;
                 var plant = plantdef.CreatePlant();
@@ -56,7 +56,7 @@ namespace Start_a_Town_.Blocks
             obj.StackSize--;
         }
         
-        static public void Fertilize(IMap map, Vector3 global, float potency)
+        static public void Fertilize(MapBase map, Vector3 global, float potency)
         {
             var entity = map.GetBlockEntity(global) as BlockFarmland.BlockFarmlandEntity;
             if (entity == null)

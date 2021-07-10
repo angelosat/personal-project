@@ -25,7 +25,7 @@ namespace Start_a_Town_
             if(target.Type == TargetType.Position)
             this.End = target.Global;
         }
-        internal override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera camera)
+        internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (!this.Enabled)
                 return;
@@ -33,7 +33,7 @@ namespace Start_a_Town_
                 .Where(v => map.GetBlock(v) != BlockDefOf.Air);
             camera.DrawGridBlocks(sb, Block.BlockBlueprint, positions, Color.White);
         }
-        internal override void DrawAfterWorldRemote(MySpriteBatch sb, IMap map, Camera camera, PlayerData player)
+        internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, PlayerData player)
         {
             if (!this.Enabled)
                 return;

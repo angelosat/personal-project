@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         public override Type ZoneType => typeof(GrowingZone);
 
-        public override bool IsValidLocation(IMap map, IntVec3 global)
+        public override bool IsValidLocation(MapBase map, IntVec3 global)
         {
             if (!map.IsSolid(global))
                 return false;

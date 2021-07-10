@@ -27,7 +27,7 @@ namespace Start_a_Town_.UI
         {
             Create(entity.Map, () => entity.Global + entity.Physics.Height * Vector3.UnitZ, text, initializer);
         }
-        static public void Create(IMap map, Func<Vector3> global, string text, Action<FloatingText> initializer = null)
+        static public void Create(MapBase map, Func<Vector3> global, string text, Action<FloatingText> initializer = null)
         {
             if (Rooms.Ingame.Net != map.Net)
                 return;
@@ -36,7 +36,7 @@ namespace Start_a_Town_.UI
             initializer?.Invoke(ft);
             ft.Show();
         }
-        static public void Create(IMap map, Vector3 global, string text, Action<FloatingText> initializer) => Create(map, () => global, text, initializer);
+        static public void Create(MapBase map, Vector3 global, string text, Action<FloatingText> initializer) => Create(map, () => global, text, initializer);
 
         static readonly Random Random = new Random();
         const float Gravity = 0.05f;// 0.1f;

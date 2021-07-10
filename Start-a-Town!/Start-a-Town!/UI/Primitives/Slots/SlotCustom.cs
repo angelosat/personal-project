@@ -108,8 +108,6 @@ namespace Start_a_Town_.UI
             this.Invalidate();
         }
 
-        public Texture2D IconSheet = Map.ItemSheet;
-        public List<Rectangle> IconList = Map.Icons;
         public int IconIndex = -1;
 
         public event EventHandler<DragEventArgs> DragDrop;

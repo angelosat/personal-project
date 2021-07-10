@@ -69,7 +69,7 @@ namespace Start_a_Town_
                 return;
             HashSet<IntVec3> handled = new();
             var size = map.Size.Blocks;
-            var maxh = map.MaxHeight;
+            var maxh = MapBase.MaxHeight;
             this.Rooms.Clear();
             var sw = Stopwatch.StartNew();
             foreach (var chunk in map.ActiveChunks.Values)
@@ -210,7 +210,7 @@ namespace Start_a_Town_
             return null; // instead of selecting the room itself, add a tab when selecting a block that is contained in the room
         }
 
-        public override void DrawBeforeWorld(MySpriteBatch sb, IMap map, Camera cam)
+        public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             if (!Engine.DrawRooms)
                 return;

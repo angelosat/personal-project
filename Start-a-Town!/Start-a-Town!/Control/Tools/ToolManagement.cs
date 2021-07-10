@@ -385,7 +385,7 @@ namespace Start_a_Town_
         {
             return Messages.Default;
         }
-        internal override void DrawAfterWorld(MySpriteBatch sb, IMap map)
+        internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
             this.DrawBlockMouseover(sb, map, cam);

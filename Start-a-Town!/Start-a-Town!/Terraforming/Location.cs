@@ -7,9 +7,9 @@ namespace Start_a_Town_
     [Obsolete]
     class Location
     {
-        public IMap Map;
+        public MapBase Map;
         public Vector3 Global;
-        public Location(IMap map, Vector3 global)
+        public Location(MapBase map, Vector3 global)
         {
             this.Map = map;
             this.Global = global;

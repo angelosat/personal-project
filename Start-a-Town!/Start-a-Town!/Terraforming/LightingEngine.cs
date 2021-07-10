@@ -12,7 +12,7 @@ namespace Start_a_Town_
         HashSet<Vector3> LightChanges = new();
         HashSet<Vector3> BlockChanges = new();
 
-        public IMap Map;
+        public MapBase Map;
         public Action<Chunk, Cell> OutdoorBlockHandler = (chunk, cell) => { };
         public Action<IEnumerable<Vector3>> LightCallback = vectors => { };
         public Action<IEnumerable<Vector3>> BlockCallback = vectors => { };
@@ -22,18 +22,18 @@ namespace Start_a_Town_
 
         public Queue<Vector3> ToDarken;
 
-        public LightingEngine(IMap map)
+        public LightingEngine(MapBase map)
         {
             this.Map = map;
         }
-        public LightingEngine(IMap map, Action<IEnumerable<Vector3>> batchFinishedCallback, Action<IEnumerable<Vector3>> blockCallback)
+        public LightingEngine(MapBase map, Action<IEnumerable<Vector3>> batchFinishedCallback, Action<IEnumerable<Vector3>> blockCallback)
         {
             this.Map = map;
             this.LightCallback = batchFinishedCallback;
             this.BlockCallback = blockCallback;
         }
 
-        static public LightingEngine StartNew(IMap map, Action<IEnumerable<Vector3>> lightCallback, Action<IEnumerable<Vector3>> blockCallback)
+        static public LightingEngine StartNew(MapBase map, Action<IEnumerable<Vector3>> lightCallback, Action<IEnumerable<Vector3>> blockCallback)
         {
             return new LightingEngine(map, lightCallback, blockCallback);
         }

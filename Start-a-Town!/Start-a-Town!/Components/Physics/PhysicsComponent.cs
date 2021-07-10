@@ -156,7 +156,7 @@ namespace Start_a_Town_.Components
         {
             return new BoundingBox(global - new Vector3(.25f, .25f, 0), global + new Vector3(.25f, .25f, height));
         }
-        private Vector3 GetStandingBlockTransform(IMap map, Vector3 lastGlobal)
+        private Vector3 GetStandingBlockTransform(MapBase map, Vector3 lastGlobal)
         {
             Vector3 blocktransform = Vector3.Zero;
             
@@ -241,7 +241,7 @@ namespace Start_a_Town_.Components
             return blocktransform;
         }
    
-        private float ResolveVertical(GameObject parent, IMap map, BoundingBox box, ref Vector3 speed, float density)
+        private float ResolveVertical(GameObject parent, MapBase map, BoundingBox box, ref Vector3 speed, float density)
         {
             var adjustedGravity = Gravity;
             Vector3 global = parent.Global;
@@ -326,7 +326,7 @@ namespace Start_a_Town_.Components
             return next.Z;
         }
        
-        private static Vector3 ResolveHorizontalCorners(IObjectProvider net, GameObject parent, Vector3 origin, IMap map, BoundingBox boxGlobal, ref Vector3 velocity, Vector2 horAxis, float nz, out float zz)
+        private static Vector3 ResolveHorizontalCorners(IObjectProvider net, GameObject parent, Vector3 origin, MapBase map, BoundingBox boxGlobal, ref Vector3 velocity, Vector2 horAxis, float nz, out float zz)
         {
             zz = nz;
             Vector3 step = new Vector3(horAxis, 0) * velocity;

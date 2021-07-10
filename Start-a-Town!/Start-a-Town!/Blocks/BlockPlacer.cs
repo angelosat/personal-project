@@ -6,7 +6,7 @@
         byte CellData;
         int Orientation;
         int Variation;
-        public void Place(IMap map, IntVec3 global, bool notify = true)
+        public void Place(MapBase map, IntVec3 global, bool notify = true)
         {
             Block.Place(map, global, this.CellData, this.Variation, this.Orientation, notify);
         }

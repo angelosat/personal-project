@@ -25,7 +25,7 @@ namespace Start_a_Town_
         public int ID;
         public Reaction Reaction;
         public Vector3 Workstation;
-        public IMap Map;
+        public MapBase Map;
         public bool HaulOnFinish;
         public bool Enabled;
         public Dictionary<string, IngredientRestrictions> Restrictions = new();
@@ -47,7 +47,7 @@ namespace Start_a_Town_
         {
 
         }
-        public CraftOrderNew(int id, int reactionID, IMap map, Vector3 workstation)
+        public CraftOrderNew(int id, int reactionID, MapBase map, Vector3 workstation)
             : this(Reaction.Dictionary[reactionID])
         {
             this.Map = map;
@@ -151,7 +151,7 @@ namespace Start_a_Town_
         {
             
         }
-        CraftOrderNew(IMap map, SaveTag tag)
+        CraftOrderNew(MapBase map, SaveTag tag)
         {
             tag.TryGetTagValue<int>("ReactionID", p => this.Reaction = Reaction.Dictionary[p]);
             tag.TryGetTagValue<int>("Mode", p => this.Mode = (CraftMode)p);
@@ -201,7 +201,7 @@ namespace Start_a_Town_
             this.Restrictions.Values.Write(w);
         }
 
-        public void Read(IMap map, BinaryReader r)
+        public void Read(MapBase map, BinaryReader r)
         {
             this.Read(r);
             this.Map = map;
@@ -235,7 +235,7 @@ namespace Start_a_Town_
 
             return this;
         }
-        public CraftOrderNew(IMap map, BinaryReader r)
+        public CraftOrderNew(MapBase map, BinaryReader r)
         {
             this.Read(map, r);
         }
@@ -245,7 +245,7 @@ namespace Start_a_Town_
             return this.Map.Town.CraftingManager.GetOrdersNew(this.Workstation).FindIndex(c => c == this);
         }
 
-        internal bool IsValid(IMap map)
+        internal bool IsValid(MapBase map)
         {
             var manager = map.Town.CraftingManager;
             return manager.OrderExists(this) && this.IsActive;
@@ -276,7 +276,7 @@ namespace Start_a_Town_
             return order;
         }
 
-        internal static CraftOrderNew Load(IMap map, SaveTag ordertag)
+        internal static CraftOrderNew Load(MapBase map, SaveTag ordertag)
         {
             var order = Load(ordertag);
             order.Map = map;

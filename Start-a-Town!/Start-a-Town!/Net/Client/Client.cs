@@ -41,7 +41,7 @@ namespace Start_a_Town_.Net
         long RemoteSequence = 0;
         public long RemoteOrderedReliableSequence = 0;
         readonly Dictionary<int, GameObject> NetworkObjects = new();
-        public IMap Map
+        public MapBase Map
         {
             set => Engine.Map = value;
             get => Engine.Map;

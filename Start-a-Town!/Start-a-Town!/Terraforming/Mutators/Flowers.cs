@@ -13,7 +13,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         }
         public override void Finally(Chunk chunk)
         {
-            int zSlice = Map.MaxHeight / 2;
+            int zSlice = MapBase.MaxHeight / 2;
             int varCount = BlockGrass.FlowerOverlays.Count;
             byte[][] seed = new byte[varCount][];
             int s = chunk.Map.World.Seed + "flowers".GetHashCode();

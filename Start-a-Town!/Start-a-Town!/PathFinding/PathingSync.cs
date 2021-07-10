@@ -25,9 +25,9 @@ namespace Start_a_Town_
         public Vector3 Start, Finish, FinishPrecise;
         public TargetArgs FinishTarget;
         Path PathInProgress;
-        IMap Map;
+        MapBase Map;
         Actor Actor;
-        static void ConformPathToTerrain(IMap map, Path path)
+        static void ConformPathToTerrain(MapBase map, Path path)
         {
             return;
         }
@@ -150,7 +150,7 @@ namespace Start_a_Town_
             return (dmax - dmin) * CostStraight + dmin * CostDiag;// +dz * 100; // TODO: find correct cost for climbing
         }
         
-        void UpdateNoPathableCheck(IMap map, Node current, Node next)
+        void UpdateNoPathableCheck(MapBase map, Node current, Node next)
         {
             var costOld = next.CostFromStart;
             ComputeCostTheta(current, next);
@@ -246,7 +246,7 @@ namespace Start_a_Town_
             return cost;
         }
         
-        static public bool IsWalkable(IMap map, Vector3 global)
+        static public bool IsWalkable(MapBase map, Vector3 global)
         {
             if (!map.IsSolid(global - Vector3.UnitZ))
                 return false;
@@ -260,7 +260,7 @@ namespace Start_a_Town_
             return true;
         }
         [Obsolete]
-        static public bool IsPathable2Height(IMap map, Vector3 global)
+        static public bool IsPathable2Height(MapBase map, Vector3 global)
         {
             // WARNING! can't check directly below in case the destination is a halbblock with air underneath.
             // so adjust the vector to above().floor() or below().ceiling() or just ceiling() ??
@@ -276,7 +276,7 @@ namespace Start_a_Town_
 
             return true;
         }
-        static public bool IsPathable(IMap map, Vector3 global)
+        static public bool IsPathable(MapBase map, Vector3 global)
         {
             // WARNING! can't check directly below in case the destination is a halbblock with air underneath.
             // so adjust the vector to above().floor() or below().ceiling() or just ceiling() ??
@@ -291,14 +291,14 @@ namespace Start_a_Town_
             return true;
         }
 
-        static public bool LineOfSight(IMap map, Vector3 a, Vector3 b, out List<Vector3> cells)
+        static public bool LineOfSight(MapBase map, Vector3 a, Vector3 b, out List<Vector3> cells)
         {
             if (a.Z == b.Z)
                 return LineHelper.LineOfSight((int)a.X, (int)a.Y, (int)a.Z, (int)b.X, (int)b.Y, (int)b.Z, p => LosPathableFailCondition(map, p), out cells);
             cells = new List<Vector3>();
             return false;
         }
-        public static bool LosPathableFailCondition(IMap map, Vector3 p)
+        public static bool LosPathableFailCondition(MapBase map, Vector3 p)
         {
             var below = p - Vector3.UnitZ;
             var solidbelow = map.IsSolid(below);

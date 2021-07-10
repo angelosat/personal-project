@@ -79,7 +79,7 @@ namespace Start_a_Town_.UI
         {
             SpriteBatch sb = Game1.Instance.spriteBatch;
             GraphicsDevice gfx = Game1.Instance.GraphicsDevice;
-            using (RenderTarget2D screenshot = new RenderTarget2D(gfx, Block.Width * Chunk.Size, Map.MaxHeight * Block.Height))
+            using (RenderTarget2D screenshot = new RenderTarget2D(gfx, Block.Width * Chunk.Size, MapBase.MaxHeight * Block.Height))
             {
                 gfx.SetRenderTarget(screenshot);
                 gfx.Clear(Color.Transparent);

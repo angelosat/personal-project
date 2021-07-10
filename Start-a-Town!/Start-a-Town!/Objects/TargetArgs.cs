@@ -32,8 +32,8 @@ namespace Start_a_Town_
             this.Map.Town.OnTooltipCreated(tooltip, this);
             return;
         }
-        IMap _Map;
-        public IMap Map
+        MapBase _Map;
+        public MapBase Map
         {
             get { return this._Map; }
             set
@@ -150,7 +150,7 @@ namespace Start_a_Town_
             this.Type = TargetType.Entity;
             this.EntityID = entityID;
         }
-        public TargetArgs(IMap map, int entityID)
+        public TargetArgs(MapBase map, int entityID)
         {
             this.Type = TargetType.Entity;
             this.EntityID = entityID;
@@ -173,7 +173,7 @@ namespace Start_a_Town_
             this.CachedObject = obj;
             this.Map = obj.Map;
         }
-        public TargetArgs(IMap map, Vector3 global)
+        public TargetArgs(MapBase map, Vector3 global)
         {
             this.Map = map;
             this.Type = TargetType.Position;
@@ -197,7 +197,7 @@ namespace Start_a_Town_
             this.Face = face;
             this.Precise = precise;
         }
-        public TargetArgs(IMap map, Vector3 global, Vector3 face, Vector3 precise)
+        public TargetArgs(MapBase map, Vector3 global, Vector3 face, Vector3 precise)
         {
             this.Type = TargetType.Position;
             this.Map = map;
@@ -238,7 +238,7 @@ namespace Start_a_Town_
         {
 
         }
-        public TargetArgs(IMap map, Vector3 global, GameObjectSlot slot)
+        public TargetArgs(MapBase map, Vector3 global, GameObjectSlot slot)
         {
             if (slot == null)
                 throw new Exception();
@@ -376,7 +376,7 @@ namespace Start_a_Town_
                     throw new Exception("Invalid target type " + type.ToString());
             }
         }
-        static public TargetArgs Read(IMap map, BinaryReader reader)
+        static public TargetArgs Read(MapBase map, BinaryReader reader)
         {
             TargetType type = (TargetType)reader.ReadInt32();
             switch (type)
@@ -417,7 +417,7 @@ namespace Start_a_Town_
             }
         }
 
-        public void Load(IMap map, SaveTag tag)
+        public void Load(MapBase map, SaveTag tag)
         {
             this.Map = map;
             this.Type = (TargetType)tag.GetValue<int>("Type");
@@ -462,7 +462,7 @@ namespace Start_a_Town_
             this.Load(null, tag);
         }
 
-        public TargetArgs(IMap map, SaveTag tag)
+        public TargetArgs(MapBase map, SaveTag tag)
         {
             this.Load(map, tag);
         }
@@ -850,7 +850,7 @@ namespace Start_a_Town_
         {
             return new TargetArgs(obj);
         }
-        public static implicit operator TargetArgs((IMap map, Vector3 global) location)
+        public static implicit operator TargetArgs((MapBase map, Vector3 global) location)
         {
             return new TargetArgs(location.map, location.global);
         }

@@ -5,11 +5,13 @@ namespace Start_a_Town_
 {
     class PacketEntityMoveToggle
     {
-        static int PType;
+        static readonly int PType;
+        static PacketEntityMoveToggle()
+        {
+            PType = Network.RegisterPacketHandler(Receive);
+        }
         internal static void Init()
         {
-            // TODO
-            PType = Network.RegisterPacketHandler(Receive);
         }
         internal static void Send(IObjectProvider net, int entityID, bool toggle)
         {

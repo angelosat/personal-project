@@ -38,12 +38,7 @@ namespace Start_a_Town_.UI
                 },
                 EnterFunc = (e) =>
                 {
-                    Packet.Create(Net.Client.Instance.PacketID, PacketType.Chat, Network.Serialize(writer =>
-                    {
-                        Net.Client.Instance.PlayerData.Write(writer);
-                        writer.WriteASCII(Txt_Input.Text);
-                    })).BeginSendTo(Net.Client.Instance.Host, Net.Client.Instance.RemoteIP);
-                    
+                    PacketChat.Send(Net.Client.Instance, Net.Client.Instance.PlayerData.ID, this.Txt_Input.Text);
                     Txt_Input.Text = "";
                 }
             };

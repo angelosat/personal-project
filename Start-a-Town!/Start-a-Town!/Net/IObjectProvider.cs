@@ -38,7 +38,6 @@ namespace Start_a_Town_
         
         void Spawn(GameObject obj);
         void Spawn(GameObject obj, Vector3 global);
-        void Spawn(GameObject obj, GameObject parent, int childID);
 
         void SyncReport(string text);
         /// <summary>
@@ -62,8 +61,6 @@ namespace Start_a_Town_
         void PostLocalEvent(GameObject recipient, Components.Message.Types type, params object[] args);
 
         void EventOccured(Components.Message.Types type, params object[] p);
-
-        void Forward(Packet p);
 
         BinaryWriter GetOutgoingStream();
 

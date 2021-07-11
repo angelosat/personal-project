@@ -5,16 +5,18 @@ namespace Start_a_Town_
 {
     class PacketChat
     {
+        static readonly int p;
+        static PacketChat()
+        {
+            p = Network.RegisterPacketHandler(Receive);
+        }
         internal static void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.Chat, Receive);
-            Client.RegisterPacketHandler(PacketType.Chat, Receive);
         }
         internal static void Send(IObjectProvider net, int playerID, string text)
         {
             var w = net.GetOutgoingStream();
-            w.Write(PacketType.Chat);
+            w.Write(p);
             w.Write(playerID);
             w.WriteASCII(text);
         }

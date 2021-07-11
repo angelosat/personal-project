@@ -5,16 +5,18 @@ namespace Start_a_Town_
 {
     class PacketStorageFiltersNew : Packet
     {
+        static readonly int p;
+        static PacketStorageFiltersNew()
+        {
+            p = Network.RegisterPacketHandler(Receive);
+        }
         static internal void Init()
         {
-            // TODO
-            Server.RegisterPacketHandler(PacketType.StorageFiltersNew, Receive);
-            Client.RegisterPacketHandler(PacketType.StorageFiltersNew, Receive);
         }
         public static void Send(Stockpile stockpile, int[] nodeIndices = null, int[] leafIndices = null)
         {
             var s = stockpile.Map.Net.GetOutgoingStream();
-            s.Write(PacketType.StorageFiltersNew);
+            s.Write(p);
             s.Write(stockpile.ID);
             s.Write(nodeIndices ?? new int[] { });
             s.Write(leafIndices ?? new int[] { });

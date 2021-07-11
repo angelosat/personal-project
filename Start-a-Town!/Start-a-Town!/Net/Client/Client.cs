@@ -172,11 +172,6 @@ namespace Start_a_Town_.Net
             }, state);
         }
        
-        void ReceivePlayerList(byte[] data)
-        {
-            this.Players = Network.Deserialize<PlayerList>(data, r=>PlayerList.Read(this, r));
-        }
-
         public IEnumerable<PlayerData> GetPlayers()
         {
             return Players.GetList();
@@ -497,7 +492,6 @@ namespace Start_a_Town_.Net
                         int netid = r.ReadInt32();
                         if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         obj.GetComponent<MobileComponent>().Jump(obj);
@@ -508,7 +502,6 @@ namespace Start_a_Town_.Net
                     var packet = new PacketPlayerChangeDirection(Instance, msg.Decompressed);
                     if (packet.Entity is null)
                     {
-                        Instance.RequestEntityFromServer(packet.EntityID);
                         return;
                     }
                     packet.Entity.Direction = packet.Direction;
@@ -521,7 +514,6 @@ namespace Start_a_Town_.Net
                         bool toggle = r.ReadBoolean();
                         if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         obj.GetComponent<MobileComponent>().ToggleSprint(toggle);
@@ -534,7 +526,6 @@ namespace Start_a_Town_.Net
                         int netid = r.ReadInt32();
                         if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         TargetArgs target = TargetArgs.Read(Instance, r);
@@ -549,7 +540,6 @@ namespace Start_a_Town_.Net
                         GameObject obj;
                         if (!Instance.TryGetNetworkObject(netid, out obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         TargetArgs target = TargetArgs.Read(Instance, r);
@@ -564,7 +554,6 @@ namespace Start_a_Town_.Net
                         GameObject obj;
                         if (!Instance.TryGetNetworkObject(netid, out obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         TargetArgs target = TargetArgs.Read(Instance, r);
@@ -583,7 +572,6 @@ namespace Start_a_Town_.Net
                         var target = TargetArgs.Read(Instance, r);
                         if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         obj.GetComponent<HaulComponent>().Throw(Vector3.Zero, obj);
@@ -597,7 +585,6 @@ namespace Start_a_Town_.Net
                         TargetArgs target = TargetArgs.Read(Instance, r);
                         if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         var input = new PlayerInput(r);
@@ -605,21 +592,6 @@ namespace Start_a_Town_.Net
                             Start_a_Town_.PlayerInput.GetDefaultInput(obj, target, input);
 
                         obj.GetComponent<WorkComponent>().Perform(obj, interaction, target);
-                    });
-                    return;
-
-                case PacketType.PlayerDropInventory:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        byte slotid = r.ReadByte();
-                        int amount = r.ReadInt32();
-                        if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
-                        {
-                            Instance.RequestEntityFromServer(netid);
-                            return;
-                        }
-                        Instance.PostLocalEvent(obj, Message.Types.DropInventoryItem, (int)slotid, amount);
                     });
                     return;
 
@@ -644,24 +616,9 @@ namespace Start_a_Town_.Net
                         TargetArgs target = TargetArgs.Read(Instance, r);
                         if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         obj.GetComponent<WorkComponent>().Perform(obj, new InteractionHaul(), target);
-                    });
-                    return;
-
-                case PacketType.PlayerUnequip:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
-                        {
-                            Instance.RequestEntityFromServer(netid);
-                            return;
-                        }
-                        PersonalInventoryComponent.Receive(obj, target.Slot, false);
                     });
                     return;
 
@@ -673,7 +630,6 @@ namespace Start_a_Town_.Net
                         var all = r.ReadBoolean();
                         if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         HaulComponent.ThrowHauled(obj, dir, all);
@@ -688,7 +644,6 @@ namespace Start_a_Town_.Net
                         GameObject obj;
                         if (!Instance.TryGetNetworkObject(netid, out obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         obj.GetComponent<AttackComponent>().Start(obj);
@@ -703,7 +658,6 @@ namespace Start_a_Town_.Net
                         GameObject obj;
                         if (!Instance.TryGetNetworkObject(netid, out obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         obj.GetComponent<AttackComponent>().Finish(obj, dir);
@@ -717,7 +671,6 @@ namespace Start_a_Town_.Net
                         GameObject obj;
                         if (!Instance.TryGetNetworkObject(netid, out obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         obj.GetComponent<Components.BlockingComponent>().Start(obj);
@@ -731,7 +684,6 @@ namespace Start_a_Town_.Net
                         GameObject obj;
                         if (!Instance.TryGetNetworkObject(netid, out obj))
                         {
-                            Instance.RequestEntityFromServer(netid);
                             return;
                         }
                         obj.GetComponent<Components.BlockingComponent>().Stop(obj);
@@ -779,25 +731,6 @@ namespace Start_a_Town_.Net
                     ent.Instantiate(Instance.Instantiator);
                     return;
 
-                case PacketType.SyncEntity:
-
-                    Network.Deserialize<GameObject>(msg.Payload, r =>
-                    {
-                        GameObject entity = GameObject.CreatePrefab(r);
-                        GameObject existing;
-                        if (Instance.TryGetNetworkObject(entity.RefID, out existing))
-                        {
-                            // TODO: sync existing entity's values from packet here
-                            return existing;
-                        }
-                        Instance.Instantiate(entity);
-                        if (!entity.IsSpawned)
-                            Instance.Spawn(entity);
-                        return entity;
-                    });
-
-                    break;
-
                 case PacketType.SpawnObject:
                     Network.Deserialize(msg.Payload, r =>
                     {
@@ -837,19 +770,6 @@ namespace Start_a_Town_.Net
                     });
                     break;
 
-                case PacketType.SyncPlaceBlock:
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        var t = TargetArgs.Read(Instance, r);
-                        Block.Types blocktype = (Block.Types)r.ReadInt32();
-                        byte data = r.ReadByte();
-                        int variation = r.ReadInt32();
-                        int orientation = r.ReadInt32();
-                        var block = Block.Registry[blocktype];
-                        block.Place(Instance.Map, t.Global, data, variation, orientation);
-                    });
-                    break;
-
                 case PacketType.EntityInventoryChange:
                     Network.Deserialize(msg.Payload, r =>
                     {
@@ -878,16 +798,6 @@ namespace Start_a_Town_.Net
                         return;
                     });
                     break;
-
-                case PacketType.PlayerSlotRightClick:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        TargetArgs actor = TargetArgs.Read(Instance, r);
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        TargetArgs child = TargetArgs.Read(Instance, r);
-                        target.HandleRemoteCall(Instance, new ObjectEventArgs(Components.Message.Types.PlayerSlotRightClick, actor.Object, child.Object));
-                    });
-                    return;
 
                 case PacketType.PlayerSlotClick:
                     msg.Payload.Deserialize(r =>
@@ -956,14 +866,6 @@ namespace Start_a_Town_.Net
         private void ParseCommand(string command)
         {
             CommandParser.Execute(this, command);
-        }
-
-        public void RequestEntityFromServer(int entityNetID)
-        {
-            Network.Serialize(w =>
-            {
-                w.Write(entityNetID);
-            }).Send(PacketID, PacketType.RequestEntity, Host, RemoteIP);
         }
 
         public void SyncEvent(GameObject recipient, Components.Message.Types msg, Action<BinaryWriter> writer) { }
@@ -1217,10 +1119,7 @@ namespace Start_a_Town_.Net
                 return;
             obj.Spawn(Instance);
         }
-        public void Spawn(GameObject obj, GameObject parent, int childID)
-        {
-        }
-
+     
         /// <summary>
         /// The client can't create objects, must await for a server message
         /// </summary>
@@ -1345,16 +1244,6 @@ namespace Start_a_Town_.Net
                 TargetArgs.Write(writer, slot);
             }).Send(Instance.PacketID, PacketType.PlayerSlotClick, Instance.Host, Instance.RemoteIP);
         }
-        static public void PlayerSlotRightClick(TargetArgs parent, GameObject child)
-        {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(writer =>
-            {
-                TargetArgs.Write(writer, actor);
-                parent.Write(writer);
-                TargetArgs.Write(writer, child);
-            }).Send(Instance.PacketID, PacketType.PlayerSlotRightClick, Instance.Host, Instance.RemoteIP);
-        }
        
         internal static void PlayerSetBlock(Vector3 global, Block.Types type, byte data = 0, int variation = 0, int orientation = 0)
         {
@@ -1426,16 +1315,6 @@ namespace Start_a_Town_.Net
                 target.Write(w);
             }).Send(Instance.PacketID, PacketType.PlayerInteract, Instance.Host, Instance.RemoteIP);
         }
-        
-        internal static void PlayerUnequip(TargetArgs targetArgs)
-        {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-                targetArgs.Write(w);
-            }).Send(Instance.PacketID, PacketType.PlayerUnequip, Instance.Host, Instance.RemoteIP);
-        }
         internal static void PlayerThrow(Vector3 dir, bool all)
         {
             var actor = Instance.GetPlayer().ControllingEntity;
@@ -1477,25 +1356,6 @@ namespace Start_a_Town_.Net
                 w.Write(Instance.GetPlayer().ControllingEntity.RefID);
             }).Send(Instance.PacketID, PacketType.PlayerFinishBlocking, Instance.Host, Instance.RemoteIP);
         }
-       
-        internal static void PlayerDropInventory(byte slotID, int amount)
-        {
-            Network.Serialize(w =>
-            {
-                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
-                w.Write(slotID);
-                w.Write(amount);
-            }).Send(Instance.PacketID, PacketType.PlayerDropInventory, Instance.Host, Instance.RemoteIP);
-        }
-        internal static void PlayerRemoteCall(TargetArgs target, Message.Types types)
-        {
-            Network.Serialize(w =>
-            {
-                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
-                target.Write(w);
-                w.Write((int)types);
-            }).Send(Instance.PacketID, PacketType.PlayerRemoteCall, Instance.Host, Instance.RemoteIP);
-        }
         internal static void PlayerRemoteCall(TargetArgs target, Message.Types type, Action<BinaryWriter> argsWriter)
         {
             Network.Serialize(w =>
@@ -1506,7 +1366,6 @@ namespace Start_a_Town_.Net
                 argsWriter(w);
             }).Send(Instance.PacketID, PacketType.PlayerRemoteCall, Instance.Host, Instance.RemoteIP);
         }
-
         internal static void PlayerInput(TargetArgs targetArgs, PlayerInput input)
         {
             Network.Serialize(w =>
@@ -1545,7 +1404,7 @@ namespace Start_a_Town_.Net
             }).Send(Instance.PacketID, PacketType.PlayerServerCommand, Instance.Host, Instance.RemoteIP);
         }
 
-        public void Send(PacketType packetType, byte[] data)
+        void Send(PacketType packetType, byte[] data)
         {
             data.Send(PacketID, packetType, Host, RemoteIP);
         }
@@ -1577,7 +1436,6 @@ namespace Start_a_Town_.Net
         public void PopLoot(GameObject loot, Vector3 startPosition, Vector3 startVelocity) { }
         public void PopLoot(LootTable table, Vector3 startPosition, Vector3 startVelocity) { }
 
-        [Obsolete]
         public void InventoryOperation(GameObjectSlot sourceSlot, GameObjectSlot targetSlot, int amount)
         {
             var sourceParent = sourceSlot.Parent;
@@ -1622,11 +1480,6 @@ namespace Start_a_Town_.Net
             if (targetSlot.Filter(obj))
                 if (sourceSlot.Filter(targetSlot.Object))
                     targetSlot.Swap(sourceSlot);
-
-        }
-
-        public void Forward(Packet p)
-        {
 
         }
 

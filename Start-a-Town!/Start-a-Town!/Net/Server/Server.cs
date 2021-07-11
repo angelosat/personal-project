@@ -54,19 +54,7 @@ namespace Start_a_Town_.Net
         /// Contains objects that have changed since the last world delta state update
         /// </summary>
         public HashSet<GameObject> ObjectsChangedSinceLastSnapshot = new();
-        public HashSet<Vector3> LightUpdates = new();
 
-        public LightingEngine LightingEngine;
-        readonly Queue<Chunk> ChunksToActivate = new();
-
-        [Obsolete]
-        readonly static Dictionary<PacketType, Action<IObjectProvider, BinaryReader>> PacketHandlersNew = new();
-        [Obsolete]
-        static public void RegisterPacketHandler(PacketType channel, Action<IObjectProvider, BinaryReader> handler)
-        {
-            PacketHandlersNew.Add(channel, handler);
-        }
-        
         [Obsolete]
         readonly static Dictionary<PacketType, Action<IObjectProvider, PlayerData, BinaryReader>> PacketHandlersNewNew = new();
         [Obsolete]
@@ -158,12 +146,8 @@ namespace Start_a_Town_.Net
         static public void Stop()
         {
             Server.ChunkLoaderToken.Cancel();
-            if (Instance.LightingEngine != null)
-                Instance.LightingEngine.Stop();
-            if (Listener != null)
-            {
+            if (Listener is not null)
                 Listener.Close();
-            }
 
             if (Instance.Log != null)
                 Instance.Log.Write("SERVER", "Stopped");
@@ -242,11 +226,6 @@ namespace Start_a_Town_.Net
                 SendSnapshots(ServerClock);
             }
 
-            while (Instance.ChunksToActivate.Count > 0)
-            {
-                var ch = Instance.ChunksToActivate.Dequeue();
-                AddChunk(ch);
-            }
             Instance.MapSaveTimer--;
             if (Instance.MapSaveTimer <= 0)
             {
@@ -431,10 +410,7 @@ namespace Start_a_Town_.Net
             //if (data.Length > 0) // send empty packet anyway to substitute pinging for keeping an active connection
             EnqueueUnreliable(PacketType.MergedPackets, data);
         }
-        public void Forward(Packet p)
-        {
-            this.Enqueue(p.PacketType, p.Payload);
-        }
+       
         internal void EnqueueUnreliable(PacketType packetType, byte[] p)
         {
             this.Enqueue(packetType, p, SendType.Unreliable, true);
@@ -443,8 +419,8 @@ namespace Start_a_Town_.Net
         {
             this.Enqueue(packetType, p, SendType.OrderedReliable, sync);
         }
-        
-        public void Enqueue(PlayerData player, Packet packet)
+
+        internal void Enqueue(PlayerData player, Packet packet)
         {
             if ((packet.SendType & SendType.Reliable) == SendType.Reliable)
             {
@@ -469,11 +445,11 @@ namespace Start_a_Town_.Net
             foreach (var player in Players.GetList())
                 Enqueue(player, Packet.Create(player, type, data, send));
         }
-        public void Enqueue(PacketType type, byte[] data, SendType send, Vector3 global)
+        internal void Enqueue(PacketType type, byte[] data, SendType send, Vector3 global)
         {
             this.Enqueue(type, data, send, player => player.IsWithin(global));
         }
-        public void Enqueue(PacketType type, byte[] data, SendType send, Vector3 global, bool sync)
+        internal void Enqueue(PacketType type, byte[] data, SendType send, Vector3 global, bool sync)
         {
             foreach (var player in Players.GetList().Where(player => player.IsWithin(global)))
             {
@@ -484,7 +460,7 @@ namespace Start_a_Town_.Net
                 Enqueue(player, p);
             }
         }
-        public void Enqueue(PacketType type, byte[] data, SendType send, bool sync)
+        internal void Enqueue(PacketType type, byte[] data, SendType send, bool sync)
         {
             foreach (var player in Players.GetList())
             {
@@ -494,8 +470,7 @@ namespace Start_a_Town_.Net
                 Enqueue(player, p);
             }
         }
-        
-        public void Enqueue(PacketType type, byte[] data, SendType send, Func<PlayerData, bool> filter)
+        internal void Enqueue(PacketType type, byte[] data, SendType send, Func<PlayerData, bool> filter)
         {
             if (data.Length > 60000)
             {
@@ -575,12 +550,6 @@ namespace Start_a_Town_.Net
 
         private static void HandleMessage(Packet msg)
         {
-            if (PacketHandlersNew.TryGetValue(msg.PacketType, out Action<IObjectProvider, BinaryReader> handlerNew))
-            {
-                Network.Deserialize(msg.Payload, r => handlerNew(Instance, r));
-                return;
-            }
-
             switch (msg.PacketType)
             {
                 case PacketType.RequestConnection:
@@ -620,12 +589,6 @@ namespace Start_a_Town_.Net
                     CloseConnection(msg.Connection);
                     break;
 
-                case PacketType.RequestEntity:
-                    int entityID = msg.Payload.Deserialize<int>(r => r.ReadInt32());
-                    var entity = Instance.GetNetworkObject(entityID);
-                    Instance.Enqueue(msg.Player, Packet.Create(msg.Player, PacketType.SyncEntity, Network.Serialize(entity.Write), SendType.OrderedReliable)); //error here when deleting entity
-                    return;
-
                 case PacketType.PlayerServerCommand:
                     msg.Payload.Deserialize(r =>
                     {
@@ -645,16 +608,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
                
-                case PacketType.PlayerSlotRightClick:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        TargetArgs actor = TargetArgs.Read(Instance, r);
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        TargetArgs child = TargetArgs.Read(Instance, r);
-                        target.HandleRemoteCall(Instance, new ObjectEventArgs(Components.Message.Types.PlayerSlotRightClick, actor.Object, child.Object));
-                    });
-                    Instance.Enqueue(PacketType.PlayerSlotRightClick, msg.Payload, SendType.OrderedReliable);
-                    return;
 
                 case PacketType.PlayerSlotClick:
                     msg.Payload.Deserialize(r =>
@@ -769,17 +722,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.PlayerDropInventory:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        byte slotid = r.ReadByte();
-                        int amount = r.ReadInt32();
-                        Instance.PostLocalEvent(msg.Player.ControllingEntity, Message.Types.DropInventoryItem, (int)slotid, amount);
-                        Instance.Enqueue(PacketType.PlayerDropInventory, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
                 case PacketType.PlayerRemoteCall:
                     msg.Payload.Deserialize(r =>
                     {
@@ -816,16 +758,6 @@ namespace Start_a_Town_.Net
                         
                         msg.Player.ControllingEntity.GetComponent<WorkComponent>().Perform(msg.Player.ControllingEntity, new InteractionHaul(), target);
                         Instance.Enqueue(PacketType.PlayerPickUp, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerUnequip:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        PersonalInventoryComponent.Receive(msg.Player.ControllingEntity, target.Slot, false);
-                        Instance.Enqueue(PacketType.PlayerUnequip, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
                     });
                     return;
 
@@ -916,7 +848,6 @@ namespace Start_a_Town_.Net
                     Instance.Instantiate(entity);
                     target.Slot.Object = entity;
                     Instance.SyncChild(entity, target.Slot.Parent, target.Slot.ID);
-
                     break;
 
                 case TargetType.Position:
@@ -1058,7 +989,6 @@ namespace Start_a_Town_.Net
             obj.Map = this.Map;
             this.SpawnObject(obj);
         }
-        
         public void Spawn(GameObject obj, Vector3 global)
         {
             obj.Parent = null;
@@ -1067,29 +997,12 @@ namespace Start_a_Town_.Net
             this.SpawnObject(obj);
         }
         
-        public void Spawn(GameObject obj, GameObject parent, int childID)
-        {
-            if (obj.RefID == 0)
-            {
-                obj.SyncInstantiate(this);
-                SyncChild(obj, parent, childID);
-            }
-            obj.Parent = parent;
-            var slot = parent.GetChildren()[childID];
-            slot.Object = obj;
-        }
-       
         void SpawnObject(GameObject obj)
         {
             if (obj.RefID == 0)
                 obj.SyncInstantiate(this);
             SyncSpawn(obj);
         }
-
-        /// <summary>
-        /// Both removes an object form the game world and releases its networkID
-        /// </summary>
-        /// <param name="objNetID"></param>
 
         /// <summary>
         /// Releases the object's networkID.
@@ -1118,7 +1031,7 @@ namespace Start_a_Town_.Net
        
         static public void InstantiateMap(MapBase map)
         {
-            if (map == null)
+            if (map is null)
                 return;
             World = map.World;
             Instance.Map = map;
@@ -1129,9 +1042,6 @@ namespace Start_a_Town_.Net
             foreach (var obj in Instance.NetworkObjects)
                 obj.Value.MapLoaded(Instance.Map);
             Instance.SetMap(map);
-
-            Instance.LightingEngine = map.LightingEngine;
-
             Random = new RandomThreaded(Instance.Map.Random);
         }
       
@@ -1373,37 +1283,8 @@ namespace Start_a_Town_.Net
             });
             Instance.Enqueue(PacketType.EntityInventoryChange, data, SendType.OrderedReliable); // WARNING!!! TODO: handle case where each slot is owned by a different entity     
         }
-        void SyncSlots(params GameObjectSlot[] slots)
-        {
-            byte[] data = Network.Serialize(w =>
-            {
-                w.Write(slots.Length);
-                foreach (var slot in slots)
-                {
-                    TargetArgs.Write(w, slot);
-                    w.Write(slot.StackSize);
-                    if (slot.StackSize > 0)
-                        w.Write(slot.Object.RefID);
-                }
-            });
-            Instance.Enqueue(PacketType.EntityInventoryChange, data, SendType.OrderedReliable); // WARNING!!! TODO: handle case where each slot is owned by a different entity     
-        }
-
+       
         public AI AIHandler = new();
-
-        public void SyncPlaceBlock(MapBase map, Vector3 global, Block block, byte data, int variation, int orientation)
-        {
-            block.Place(map, global, data, variation, orientation);
-            byte[] payload = Network.Serialize(w =>
-            {
-                new TargetArgs(global).Write(w);
-                w.Write((int)block.Type);
-                w.Write(data);
-                w.Write(variation);
-                w.Write(orientation);
-            });
-            Enqueue(PacketType.SyncPlaceBlock, payload, SendType.OrderedReliable, global);
-        }
 
         private static void UnmergePackets(PlayerData player, byte[] data)
         {
@@ -1416,9 +1297,7 @@ namespace Start_a_Town_.Net
                 var type = (PacketType)typeID;
                 lastPos = mem.Position;
 
-                if (PacketHandlersNew.TryGetValue(type, out Action<IObjectProvider, BinaryReader> handlerAction))
-                    handlerAction(Instance, r);
-                else if (PacketHandlersNewNew.TryGetValue(type, out Action<IObjectProvider, PlayerData, BinaryReader> handlerActionNew))
+                if (PacketHandlersNewNew.TryGetValue(type, out Action<IObjectProvider, PlayerData, BinaryReader> handlerActionNew))
                     handlerActionNew(Instance, player, r);
                 else if (PacketHandlersNewNewNew.TryGetValue(typeID, out var handlerActionNewNew))
                     handlerActionNewNew(Instance, r);

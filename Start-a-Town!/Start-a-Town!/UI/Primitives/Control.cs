@@ -33,7 +33,11 @@ namespace Start_a_Town_.UI
         public Control Parent
         {
             get => _Parent;
-            set => _Parent = value;
+            set
+            {
+                _Parent = value;
+                OnParentChanged();
+            }
         }
 
         internal bool ContainsMouse()

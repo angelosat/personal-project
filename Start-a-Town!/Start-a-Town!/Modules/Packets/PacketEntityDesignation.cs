@@ -16,10 +16,6 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, int type, IEnumerable<GameObject> targets, bool value)
-        {
-            Send(net, type, targets.Select(i => i.RefID).ToList(), value);
-        }
         static public void Send(IObjectProvider net, int type, IEnumerable<TargetArgs> targets, bool value)
         {
             Send(net, type, targets.Select(i => i.Object.RefID).ToList(), value);
@@ -75,23 +71,6 @@ namespace Start_a_Town_
                     throw new Exception();
             }
            
-        }
-        static public byte[] Write(int entityID, Vector3 start, Vector3 end, bool value)
-        {
-            return Network.Serialize(w =>
-            {
-                w.Write(entityID);
-                w.Write(start);
-                w.Write(end);
-                w.Write(value);
-            });
-        }
-        static public void Read(BinaryReader r, out int entityID, out Vector3 start, out Vector3 end, out bool value)
-        {
-            entityID = r.ReadInt32();
-            start = r.ReadVector3();
-            end = r.ReadVector3();
-            value = r.ReadBoolean();
         }
     }
 }

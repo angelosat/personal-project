@@ -9,7 +9,6 @@ namespace Start_a_Town_.Modules.Crafting
         static int p;
         static internal void Init()
         {
-            // TODO
             p = Network.RegisterPacketHandler(Receive);
         }
 

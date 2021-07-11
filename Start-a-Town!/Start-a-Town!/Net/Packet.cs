@@ -9,9 +9,9 @@ namespace Start_a_Town_.Net
     public enum PacketType
     {
         PlayerConnecting = 1, PlayerDisconnected, PlayerEnterWorld, AssignCharacter, RequestConnection,
-        Chat, MapData,
+        MapData,
         WorldInfo, Chunk,
-        InstantiateObject, ObjectEvent, SyncEntity,
+        InstantiateObject, ObjectEvent,
         Ack,
         ServerBroadcast,
         SpawnObject,
@@ -35,21 +35,13 @@ namespace Start_a_Town_.Net
         PlayerFinishAttack,
         PlayerStartBlocking,
         PlayerFinishBlocking,
-        PlayerDropInventory,
         PlayerRemoteCall,
-        RequestEntity,
-        PlayerUnequip,
         PlayerInput,
         EntityInventoryChange,
         RemoteProcedureCall,
         PlayerInventoryOperationNew,
-        PlayerSlotRightClick,
-        SyncPlaceBlock,
         ChangeEntityPosition,
-        StorageFiltersNew,
-        LaborToggle,
         MergedPackets,
-        ChunkReceived,
         SetSaving,
         Acks
     }

@@ -51,13 +51,7 @@ namespace Start_a_Town_.UI
                         return;
 
                     if (gotText.Length > 0)
-                    {
-                        Packet.Create(Net.Client.Instance.PacketID, PacketType.Chat, Network.Serialize(writer =>
-                        {
-                            Net.Client.Instance.PlayerData.Write(writer);
-                            writer.WriteASCII(gotText);
-                        })).BeginSendTo(Net.Client.Instance.Host, Net.Client.Instance.RemoteIP);
-                    }
+                        PacketChat.Send(Net.Client.Instance, Net.Client.Instance.PlayerData.ID, gotText);
                 },
                 EscapeFunc = (a) =>
                 {

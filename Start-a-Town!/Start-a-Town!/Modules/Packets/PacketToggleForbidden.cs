@@ -9,7 +9,6 @@ namespace Start_a_Town_
         static int p;
         static public void Init()
         {
-            // TODO
             p = Network.RegisterPacketHandler(Receive);
         }
         static public void Send(IObjectProvider net, List<int> instanceID)
@@ -22,14 +21,10 @@ namespace Start_a_Town_
         static public void Receive(IObjectProvider net, BinaryReader r)
         {
             var list = r.ReadListInt();
-            Execute(net, list);
+            foreach (var id in list)
+                net.GetNetworkObject(id).ToggleForbidden();
             if (net is Server)
                 Send(net, list);
-        }
-        static void Execute(IObjectProvider net, IEnumerable<int> items)
-        {
-            foreach (var id in items)
-                net.GetNetworkObject(id).ToggleForbidden();
         }
     }
 }

@@ -441,6 +441,7 @@
     <Compile Include="Modules\World\OffsiteAreaDefOf.cs" />
     <Compile Include="Net\Packets\New\PacketEntityCrouchToggle.cs" />
     <Compile Include="Net\Packets\New\PacketEntityDespawn.cs" />
+    <Compile Include="Net\Packets\PacketAcks.cs" />
     <Compile Include="Objects\Actors\ActorDef.cs" />
     <Compile Include="Objects\Actors\ActorDefOf.cs" />
     <Compile Include="Objects\Apparel\ApparelDef.cs" />
@@ -634,7 +635,6 @@
     <Compile Include="Modules\Crafting\CraftOrderNew.cs" />
     <Compile Include="Blocks\Workstations\BlockWorkbenchEntity.cs" />
     <Compile Include="Blocks\Chest\BlockChest.cs" />
-    <Compile Include="Blocks\Chest\ContainerUI.cs" />
     <Compile Include="Blocks\Chest\BlockChestEntity.cs" />
     <Compile Include="Blocks\BlockWoodPaneling.cs" />
     <Compile Include="Components\Combat\AttackComponent.cs" />
@@ -797,10 +797,8 @@
     <Compile Include="Modules\Towns\Forestry\ChoppingManager.cs" />
     <Compile Include="Modules\Packets\PacketEntityDesignation.cs" />
     <Compile Include="Modules\Packets\PacketZoneDelete.cs" />
-    <Compile Include="Modules\Packets\PacketZone.cs" />
     <Compile Include="Modules\Packets\PacketZoneDesignation.cs" />
     <Compile Include="Modules\Towns\Stockpiles\UI\StockpilesListUI.cs" />
-    <Compile Include="Modules\Packets\PacketDesignate.cs" />
     <Compile Include="Modules\Towns\Stockpiles\UI\UIStockpileInventoryIcons.cs" />
     <Compile Include="Modules\Towns\Stockpiles\IStorage.cs" />
     <Compile Include="Modules\Towns\Stockpiles\StockpileAIHelper.cs" />
@@ -1043,7 +1041,6 @@
     <Compile Include="UI\Settings\GraphicsSettings.cs" />
     <Compile Include="UI\Primitives\Slots\SlotCustom.cs" />
     <Compile Include="UI\Primitives\Slots\SlotGeneric.cs" />
-    <Compile Include="UI\Primitives\Slots\SlotDefault.cs" />
     <Compile Include="UI\Context\ContextMenuManager.cs" />
     <Compile Include="UI\Context\ContextMenu2.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarH.cs" />

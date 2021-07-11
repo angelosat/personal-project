@@ -19,8 +19,6 @@ namespace Start_a_Town_
         public virtual void OnContextActionBarCreated(ContextActionBar.ContextActionBarArgs a) { }
         public virtual void OnTooltipCreated(ITooltippable item, Tooltip t) { }
 
-        public virtual void OnUIEvent(UIManager.Events e, object[] p)
-        {
-        }
+        public virtual void OnUIEvent(UIManager.Events e, object[] p) { }
     }
 }

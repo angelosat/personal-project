@@ -48,5 +48,9 @@ namespace UI
         public virtual void Update()
         {
         }
+
+        protected virtual void OnParentChanged()
+        {
+        }
     }
 }

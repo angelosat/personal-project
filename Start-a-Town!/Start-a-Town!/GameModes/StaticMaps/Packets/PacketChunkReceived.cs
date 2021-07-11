@@ -7,14 +7,18 @@ namespace Start_a_Town_
 {
     class PacketChunkReceived
     {
+        static readonly int p;
+        static PacketChunkReceived()
+        {
+            p = Network.RegisterPacketHandler(Receive);
+        }
         internal static void Init()
         {
-            Server.RegisterPacketHandler(PacketType.ChunkReceived, Receive);
         }
         internal static void Send(Client client, PlayerData player, Vector2 chunkCoords)
         {
             var w = client.OutgoingStream;
-            w.Write(PacketType.ChunkReceived);
+            w.Write(p);
             w.Write(player.ID);
             w.Write(chunkCoords);
         }

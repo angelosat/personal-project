@@ -70,8 +70,8 @@ namespace Start_a_Town_.Components
         {
             this.Remove(obj as Entity);
         }
-        
-        public Container Slots { get { return (Container)this["Slots"]; } set { this["Slots"] = value; } }
+
+        public Container Slots;
 
         internal void SyncInsert(GameObject split)
         {
@@ -82,13 +82,8 @@ namespace Start_a_Town_.Components
             Packets.SendSyncInsert(net, actor, split as Entity);
         }
 
-        public override string ComponentName
-        {
-            get
-            {
-                return "PersonalInventory";
-            }
-        }
+        public override string ComponentName => "PersonalInventory";
+          
 
         public bool HasEmptySpace => this.GetEmptySlots().Any();
 
@@ -147,48 +142,6 @@ namespace Start_a_Town_.Components
                     // TODO: maybe create a new message called InventoryInteraction that individual components can respond too?
                 case Message.Types.SlotInteraction:
                     this.SlotInteraction(parent, e.Parameters[0] as GameObject, e.Parameters[1] as GameObjectSlot);
-                    return true;
-
-                case Message.Types.ArrangeInventory:
-                    GameObjectSlot source = e.Parameters[0] as GameObjectSlot;
-                    if (!source.HasValue)
-                        return true;
-
-                    int objSize = (int)source.Object["Physics"]["Size"];
-                    if (objSize > 0)
-                    {
-                        // TODO: code to handle case where object is haulable
-                        e.Network.PopLoot(source.Take(), parent.Global, parent.Velocity); // WARNING!
-                        source.Clear();
-                        return true;
-                    }
-
-                    GameObjectSlot target = e.Parameters[1] as GameObjectSlot;
-                    int amount = (int)e.Parameters[2];
-                    if (source.Object == target.Object)
-                    {
-                        int d = Math.Max(0, target.StackSize + amount - target.StackMax);
-                        int a = amount - d;
-                        target.StackSize += a;
-                        source.StackSize -= a;
-                        return true;
-                    }
-                    if (amount == source.StackSize)
-                    {
-                        source.Swap(target);
-                        return true;
-                    }
-                    if (target.HasValue)
-                        return true;
-                    source.StackSize -= amount;
-                    target.Object = source.Object;
-                    target.StackSize = amount;
-                    return true;
-
-                case Message.Types.DropInventoryItem:
-                    var slotID = (int)e.Parameters[0];
-                    amount = (int)e.Parameters[1];
-                    DropInventoryItem(parent, slotID, amount);
                     return true;
 
                 default:
@@ -275,33 +228,6 @@ namespace Start_a_Town_.Components
             return found;
         }
 
-        internal override void HandleRemoteCall(GameObject parent, ObjectEventArgs e)
-        {
-            switch (e.Type)
-            {
-                case Message.Types.DropInventoryItem:
-                    e.Data.Translate(e.Network, r =>
-                    {
-                        int slotID = (int)r.ReadByte();
-                        int amount = r.ReadInt32();
-                        GameObjectSlot slot = parent.GetChildren()[slotID];
-                        GameObject obj;
-                        if (amount < slot.Object.StackSize)
-                        {
-                            obj = slot.Object.Clone();
-                            obj.StackSize = amount;
-                        }
-                        else
-                            obj = slot.Object;
-                        e.Network.Spawn(obj, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
-                        slot.StackSize -= amount;
-                    });
-                    return;
-                default:
-                    return;
-            }
-        }
-        
         void SlotInteraction(GameObject parent, GameObject actor, GameObjectSlot slot)
         {
             if (!slot.HasValue)

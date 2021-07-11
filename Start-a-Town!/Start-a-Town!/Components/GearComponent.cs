@@ -112,7 +112,7 @@ namespace Start_a_Town_
         {
             string text = "";
             foreach (var slot in this.Equipment.Slots)
-                text += (Types)slot.ID + ": " + (slot.HasValue ? slot.Object.Name : "<empty>") + "\n";
+                text += slot.ID + ": " + (slot.HasValue ? slot.Object.Name : "<empty>") + "\n";
 
             return text.TrimEnd('\n');
         }

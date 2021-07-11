@@ -7,10 +7,9 @@ namespace Start_a_Town_.Components
     class WeaponComponent : EntityComponent
     {
         public override string ComponentName => "Weapon";
-           
 
-        public StatCollection Damage { get { return (StatCollection)this["Damage"]; } set { this["Damage"] = value; } }
-        public float Speed { get { return (float)this["Speed"]; } set { this["Speed"] = value; } }
+        public StatCollection Damage;
+        public float Speed;
 
         public WeaponComponent()
         {

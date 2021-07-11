@@ -8,7 +8,7 @@
             var map = actor.Map;
             if (map.IsStandableIn(cell))
                 return null;
-            var iterator = cell.GetRadial(); // TODO get radial region nodes instead of all cells
+            var iterator = cell.GetRadial();
             foreach(var pos in iterator)
             {
                 if (!map.IsStandableIn(pos))

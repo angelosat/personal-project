@@ -13,7 +13,6 @@ namespace Start_a_Town_.Components
             Initialize,
             Death,
             Attack,
-            Equip,
             Unequip,
             Craft,
             Eat,
@@ -83,12 +82,6 @@ namespace Start_a_Town_.Components
             Order,
             MoveToObject,
             ManageEquipment,
-            /// <summary>
-            /// <para>arg0: source GameObjectSlot</para>
-            /// <para>arg1: target GameObjectSlot</para>
-            /// <para>arg2: int amount to transfer</para>
-            /// </summary>
-            ArrangeInventory,
             ConsumeItem,
             Follow,
             SetPosition,
@@ -150,7 +143,6 @@ namespace Start_a_Town_.Components
             CraftOnBench,
             Wear,
             ExecuteScript,
-            DropInventoryItem,
             StoreCarried,
             ContainerOperation,
             UsedItem,

@@ -9,7 +9,7 @@ namespace Start_a_Town_.Components
     [Obsolete]
     class InventoryComponent : EntityComponent
     {
-        public GameObjectSlot Holding { get { return (GameObjectSlot)this["Holding"]; } set { this["Holding"] = value; } }
+        public GameObjectSlot Holding;
         public List<ItemContainer> Containers = new();
 
         public override string ComponentName
@@ -31,8 +31,7 @@ namespace Start_a_Town_.Components
 
         static public bool TryGetHeldObject(GameObject entity, out GameObjectSlot hauled)
         {
-            hauled = entity["Inventory"]["Holding"] as GameObjectSlot;
-            return hauled.HasValue;
+            throw new Exception();
         }
         static public void TryGetHeldObject(GameObject entity, Action<GameObjectSlot> action)
         {
@@ -92,47 +91,6 @@ namespace Start_a_Town_.Components
                     });
                     return true;
 
-                case Message.Types.ArrangeInventory:
-                    GameObjectSlot source = e.Parameters[0] as GameObjectSlot;
-                    
-                    //int index = (int)e.Parameters[2];
-                    //Give(parent, source, target, index);
-                    if (!source.HasValue)
-                        return true;
-
-                    int objSize = (int)source.Object["Physics"]["Size"];
-                    if (objSize > 0)
-                    {
-                        // TODO: code to handle case where object is haulable
-                        //Loot.PopLoot(parent, source);
-                        e.Network.PopLoot(source.Take(), parent.Global, parent.Velocity); // WARNING!
-                        source.Clear();
-                        return true;
-                    }
-
-                    GameObjectSlot target = e.Parameters[1] as GameObjectSlot;
-                    int amount = (int)e.Parameters[2];
-                    if (source.Object == target.Object)
-                    {
-                        int d = Math.Max(0, target.StackSize + amount - target.StackMax);
-                        int a = amount - d;
-                        target.StackSize += a;
-                        source.StackSize -= a;
-                        return true;
-                    }
-                    if (amount == source.StackSize)
-                    {
-                        source.Swap(target);
-                        return true;
-                    }
-                    if (target.HasValue)
-                        return true;
-                    source.StackSize -= amount;
-                    target.Object = source.Object;
-                    target.StackSize = amount;
-
-                    return true;
-                
                 default:
                     return false;
             }
@@ -403,100 +361,6 @@ namespace Start_a_Town_.Components
             throw new NotImplementedException();
         }
 
-        static public bool CheckWeight(GameObject actor, GameObject obj)
-        {
-            if ((int)obj["Physics"]["Size"] < 1)
-                return true;
-
-            //check if parent can carry weight
-            float str = StatsComponent.GetStat(actor, Stat.Strength.Name);
-            float weight = (float)obj["Physics"]["Weight"];
-            //if (str < weight)
-            //    return false;
-            if (str >= weight)
-                return true;
-            //if already hauling, drop currently hauled object (switch places with new item)
-        //    Hold(actor, obj);
-            return true;
-        }
-
-
-        private static void Hold(IObjectProvider net, GameObject receiver, GameObject obj)
-        {
-            if (obj is null)
-                return;
-            if (receiver == obj)
-                return;
-            GameObjectSlot currentHaul;
-            if (TryGetHeldObject(receiver, out currentHaul))
-            {
-                GameObject currentObj = currentHaul.Object;
-                if (currentObj != null)
-                {
-                    Chunk.AddObject(currentObj, receiver.Map, obj.Global);
-                }
-            }
-            (receiver["Inventory"]["Holding"] as GameObjectSlot).Object = obj;// = new GameObjectSlot(obj);
-            net.Despawn(obj);
-            //obj.Remove();
-        }
-
-        //public void Give(GameObject parent, GameObjectSlot source, GameObjectSlot drag)
-        //{
-        //    GameObjectSlot empty = null;
-        //    foreach (GameObjectSlot slot in Containers.First().Value)
-        //    {
-        //        if (!slot.HasValue)
-        //        {
-        //            if (empty == null)
-        //                empty = slot;
-        //            continue;
-        //        }
-        //        if(slot.Object.ID == GameObject.T
-        //    }
-        //}
-
-        public void Give(GameObject parent, GameObjectSlot source, GameObjectSlot drag, int index)
-        {
-            ItemContainer container = Containers.First();
-            GameObjectSlot target = container[index];
-            if (source == target)
-                return;
-
-            if ((int)drag.Object["Physics"]["Size"] > 0)
-            {
-
-            //    Chunk.AddObject(drag.Object, parent.Global);
-                this.GetProperty<GameObjectSlot>("Holding").Swap(drag);
-
-                return;
-            }
-
-            if (target.Object == drag.Object)
-            {
-                target.StackSize += drag.StackSize;
-                source.StackSize -= drag.StackSize;
-                return;
-            }
-            if (target.Object == null)
-            {
-                target.Object = source.Object;
-                target.StackSize = drag.StackSize;
-                source.StackSize -= drag.StackSize;
-                return;
-            }
-            if (source.Object != target.Object)
-            {
-                if (source.Object == DragDropManager.Instance.Item)
-                    target.Swap(source);
-                else
-                    target.Swap(drag);
-                return;
-            }
-            //container[index].Swap(obj);
-        }
-
-
         internal bool TryRemove(GameObject parent)
         {
             foreach (var container in Containers)
@@ -549,67 +413,7 @@ namespace Start_a_Town_.Components
             //ActorSpriteComponent already does that
          //   ActorSpriteComponent.UpdateHeldObjectSprite(parent, this.Holding.Object);
         }
-        internal override List<SaveTag> Save()
-        {
-            List<SaveTag> data = new List<SaveTag>();// Tag(Tag.Types.Compound, "Inventory");
-            SaveTag containersTag = new SaveTag(SaveTag.Types.Compound, "Containers");
-
-            foreach (var container in Containers)
-            {
-                //SaveTag containerTag = new SaveTag(SaveTag.Types.Compound, "Container");
-                ////    containerTag.Add(new SaveTag(SaveTag.Types.String, "Name", container.Key));
-                //containerTag.Add(new SaveTag(SaveTag.Types.Byte, "Capacity", (byte)container.Capacity));
-                //SaveTag items = new SaveTag(SaveTag.Types.Compound, "Slots");
-                //for (int i = 0; i < container.Count; i++)
-                //{
-                //    GameObjectSlot objSlot = container[i];
-                //    if (objSlot.Object != null)
-                //        items.Add(new SaveTag(SaveTag.Types.Compound, i.ToString(), objSlot.Save()));
-                //}
-                //containerTag.Add(items);
-
-                containersTag.Add(new SaveTag(SaveTag.Types.Compound, "Container", container.Save()));
-            }
-
-            if (this.GetProperty<GameObjectSlot>("Holding").Object != null)
-                data.Add(new SaveTag(SaveTag.Types.Compound, "Holding", this.GetProperty<GameObjectSlot>("Holding").Save()));
-
-            data.Add(containersTag);
-
-            return data;
-        }
-        internal override void Load(SaveTag data)
-        {
-            List<SaveTag> tag = data.Value as List<SaveTag>;
-            Dictionary<string, SaveTag> byName = tag.ToDictionary(foo => foo.Name);
-
-            if (byName.ContainsKey("Holding"))
-            {
-                SaveTag haulTag = byName["Holding"];
-                this["Holding"] = GameObjectSlot.Create(haulTag);
-            }
-            SaveTag containersTag = byName["Containers"];
-            if ((containersTag.Value as List<SaveTag>).Count > 1)
-            {
-                List<SaveTag> containers = containersTag.Value as List<SaveTag>;
-                // WARNING!!! TEMPORARY
-                //for (int i = 0; i < containers.Count - 1; i++)
-                //{
-                    SaveTag containerTag = containers[containers.Count - 2];//[i];
-                    //ItemContainer container = ItemContainer.Create(containerTag);
-                    //container.ID = 0;
-                    //this.Containers[0] = container;
-                    this.Containers = new List<ItemContainer>();
-                    this.Containers.Add(ItemContainer.Create(containerTag));
-                    //this.Containers[0].Load(containerTag);
-               //     Console.WriteLine(this.Containers[0] == this.Parent.GetComponent<ContainerComponent>()[0]);
-
-                    //this.Parent.GetComponent<ContainerComponent>().Add(container);
-                    //this.Containers.Add(container);
-                //}
-            }
-        }
-
+       
         public override void Instantiate(GameObject parent, Action<GameObject> instantiator)
         {
             //this.Holding.Instantiate(instantiator);

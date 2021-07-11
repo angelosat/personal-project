@@ -852,9 +852,6 @@ namespace Start_a_Town_
                 if (!obj.Components.ContainsKey("Sprite"))
                     continue;
 
-                if ((bool)obj["Sprite"]["Hidden"])
-                    continue;
-
                 Sprite sprite = obj.GetComponent<SpriteComponent>().Sprite;
                 Rectangle spriteBounds = sprite.GetBounds();
                 Rectangle screenBounds = camera.GetScreenBounds(global, spriteBounds);

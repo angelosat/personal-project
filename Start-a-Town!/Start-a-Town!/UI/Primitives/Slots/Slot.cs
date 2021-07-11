@@ -160,9 +160,6 @@ namespace Start_a_Town_.UI
             Vector2 loc = new Vector2(destRect.X, destRect.Y);
             Color c = Color.Lerp(Color.Transparent, color, opacity);
             sb.Draw(UIManager.SlotSprite, loc, sourceRect, c, 0, new Vector2(0), 1, SprFx, Depth);
-            if (!Tag.HasValue)
-                return;
-            Tag.Object["Gui"].GetProperty<Icon>("Icon").Draw(sb, loc + new Vector2(3), sourceRect);
         }
 
 
@@ -174,8 +171,6 @@ namespace Start_a_Town_.UI
 
             if (slot.Object == null)
                 return;
-
-            slot.Object["Gui"].GetProperty<Icon>("Icon").Draw(sb, loc + new Vector2(3));
 
             if (text != "")
                 UIManager.DrawStringOutlined(sb, text, loc + new Vector2(Slot.DefaultHeight), Vector2.One);

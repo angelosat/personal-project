@@ -189,7 +189,6 @@
     <Compile Include="Components\AI\Personality\TraitDefOf.cs" />
     <Compile Include="Components\Animations\AnimationBlending.cs" />
     <Compile Include="Components\Animations\AnimationExtensions.cs" />
-    <Compile Include="Components\BuildingPlanComponent.cs" />
     <Compile Include="Components\ColorCustomization\CharacterColor.cs" />
     <Compile Include="Components\Crafting\New\Ingredient.Modifier.cs" />
     <Compile Include="Components\Crafting\Reaction.Product.ProductMaterialPair.cs" />

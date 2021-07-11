@@ -11,7 +11,7 @@ namespace Start_a_Town_.Components
         {
             get { return "StatsNew"; }
         }
-        public Dictionary<Stat.Types, Stat> Stats { get { return (Dictionary<Stat.Types, Stat>)this["Stats"]; } set { this["Stats"] = value; } }
+        public Dictionary<Stat.Types, Stat> Stats;
         
         public StatsComponentNew()
         {

@@ -486,13 +486,6 @@ namespace Start_a_Town_.Components
             return sprite.SourceRects.First().Length > 1;
         }
        
-        static public void ChangeOrientation(GameObject obj)
-        {
-            SpriteComponent spriteComp = obj.GetComponent<SpriteComponent>("Sprite");
-            Sprite sprite = spriteComp.Sprite;
-            int length = sprite.SourceRects.First().Length;
-            spriteComp["Orientation"] = ((int)spriteComp["Orientation"] + 1) % length;
-        }
         public override void DrawUI(SpriteBatch sb, Camera camera, GameObject parent)
         {
             DrawForbidden(sb, camera, parent);
@@ -522,8 +515,6 @@ namespace Start_a_Town_.Components
         }
         internal override void Load(GameObject parent, SaveTag compTag)
         {
-            this.Properties["Variation"] = (int)compTag["Variation"].Value;
-            this.Properties["Orientation"] = (int)compTag["Orientation"].Value;
             this.Customization = new CharacterColors(this.Body).Randomize();
 
             compTag.TryGetTag("Body", t =>

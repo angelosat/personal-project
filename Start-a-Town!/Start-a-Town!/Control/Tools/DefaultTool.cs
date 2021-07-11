@@ -265,30 +265,6 @@ namespace Start_a_Town_.PlayerControl
                 return;
         }
 
-        static public bool CanReach(GameObject obj1, GameObject obj2, float range)
-        {
-            if (range < 0)
-                return true;
-            float height1 = obj1["Physics"].GetProperty<float>("Height");
-            float height2 = obj2.TryGetComponent("Physics", out PhysicsComponent phys) ? (float)phys["Height"] : 1;
-
-            Vector3 global1 = obj1.Global, global2 = obj2.Global;
-            for (int i = 0; i < height1; i++)
-                for (int j = 0; j < height2; j++)
-                {
-                    float dist = Vector3.Distance(global1 + new Vector3(0, 0, i), global2 + new Vector3(0, 0, j));
-                    if (dist < range)
-                        return true;
-                }
-
-            return false;
-        }
-        static public bool CanReach(GameObject obj1, GameObject obj2)
-        {
-            return CanReach(obj1, obj2, 2);
-
-        }
-
         public Messages OnKey(System.Windows.Forms.Keys key)
         {
             if (!Controller.Instance.MouseoverBlock.TryGet(out GameObject _))

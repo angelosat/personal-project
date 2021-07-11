@@ -90,22 +90,7 @@ namespace Start_a_Town_
             this.Control = null;
             base.HandleLButtonUp(e);
         }
-        static public void Create(object item, object source, DragDropEffects effects)
-        {
-            Instance.Item = item;
-            Instance.Source = source;
-            Instance.Effects = effects;
-
-            GameObjectSlot objSlot = item as GameObjectSlot;
-            if (objSlot is null)
-                return;
-            if (!objSlot.HasValue)
-                throw new ArgumentNullException();
-            Instance.Icon = objSlot.Object["Gui"]["Icon"] as Icon;
-            if (Instance.Icon is null)
-                throw new Exception(objSlot.Object.Name + " doesn't have an Icon");
-        }
-
+      
         static public void Create(DragEventArgs action)
         {
             Instance.Action = action;

@@ -454,10 +454,6 @@ namespace Start_a_Town_.Components
         public override object Clone()
         {
             PhysicsComponent phys = new PhysicsComponent(this);
-            foreach (KeyValuePair<string, object> property in Properties)
-            {
-                phys.Properties[property.Key] = property.Value;
-            }
             phys.Size = this.Size;
             phys.Weight = this.Weight;
             phys.Height = this.Height;

@@ -10,82 +10,24 @@ namespace Start_a_Town_.Components
 {
     public abstract class EntityComponent : ICloneable, IEntityComp
     {
-        public enum Types
-        {
-            Camera,
-            Position,
-            Movement,
-            Physics,
-            Tasks,
-            Inventory,
-            Needs
-        }
-
         internal virtual void Initialize(ComponentProps componentProps)
         {
         }
 
-        public abstract string ComponentName{get;}
+        public abstract string ComponentName { get; }
 
-        public virtual void OnNameplateCreated(GameObject parent, UI.Nameplate plate) { }
-        public virtual void OnHealthBarCreated(GameObject parent, UI.Nameplate plate) { }
+        public virtual void OnNameplateCreated(GameObject parent, Nameplate plate) { }
+        public virtual void OnHealthBarCreated(GameObject parent, Nameplate plate) { }
 
-        public EntityComponent SetValue(string name, object value) { this[name] = value; return this; }
-
-        public override string ToString()
-        {
-            return Properties.ToString();
-        }
-        [Obsolete]
-        public ComponentPropertyCollection Properties;
         public GameObject Parent;
-
-        public object this[string propertyName]
-        {
-            set { Properties[propertyName] = value; }
-            get { return this.Properties[propertyName]; }
-        }
 
         public EntityComponent()
         {
-            Properties = new ComponentPropertyCollection();
         }
         public EntityComponent(GameObject parent)
             : this()
         { }
-        public virtual T GetPropertyOrDefault<T>(string propertyName, T defaultValue)
-        {
-            T property;
-            if (!TryGetProperty<T>(propertyName, out property))
-                return defaultValue;
-            return property;
-        }
-        public virtual T GetPropertyOrDefault<T>(string propertyName)
-        {
-            T property;
-            if (!TryGetProperty<T>(propertyName, out property))
-                return default(T);
-            return property;
-        }
-        public virtual T GetProperty<T>(string propertyName)
-        {
-            return (T)this.Properties[propertyName];
-        }
-        public virtual bool TryGetProperty<T>(string propertyName, out T property)
-        {
-            object prop;
-            bool found = Properties.TryGetValue(propertyName, out prop);
-            if (!found)
-            {
-                property = default(T);
-                return false;
-            }
-            property = (T)prop;
-            return property != null;
-
-        }
-
-
+       
         public abstract object Clone();
 
 
@@ -173,17 +115,16 @@ namespace Start_a_Town_.Components
         public virtual void GetChildren(List<GameObjectSlot> list) { }
         public virtual void GetContainers(List<Container> list) { }
         public virtual string GetTooltipText() { return ""; }
-        public virtual void OnTooltipCreated(GameObject parent, UI.Control tooltip) { }
-        public virtual void GetInventoryTooltip(GameObject parent, UI.Control tooltip) { this.OnTooltipCreated(parent, tooltip); }
-        public virtual void GetActorTooltip(GameObject parent, GameObject actor, UI.Tooltip tooltip) { }
-        public virtual void GetUI(GameObject parent, UI.Control ui, List<EventHandler<ObjectEventArgs>> gameEventHandlers) { }
-        public virtual void GetUI(GameObject parent, UI.Control ui, List<EventHandler<GameEvent>> gameEventHandlers) { }
+        public virtual void OnTooltipCreated(GameObject parent, Control tooltip) { }
+        public virtual void GetInventoryTooltip(GameObject parent, Control tooltip) { this.OnTooltipCreated(parent, tooltip); }
+        public virtual void GetActorTooltip(GameObject parent, GameObject actor, Tooltip tooltip) { }
+        public virtual void GetUI(GameObject parent, Control ui, List<EventHandler<ObjectEventArgs>> gameEventHandlers) { }
+        public virtual void GetUI(GameObject parent, Control ui, List<EventHandler<GameEvent>> gameEventHandlers) { }
         public virtual void GetContextActions(GameObject actor, List<GameObject> abilities) { }
         internal virtual ContextAction GetContextRB(GameObject parent, GameObject player)
         {
             return null;
         }
-
         internal virtual ContextAction GetContextActivate(GameObject parent, GameObject player)
         {
             return null;
@@ -253,7 +194,7 @@ namespace Start_a_Town_.Components
         {
         }
 
-        public virtual void Select(UI.UISelectedInfo info, GameObject parent)
+        public virtual void Select(UISelectedInfo info, GameObject parent)
         {
 
         }

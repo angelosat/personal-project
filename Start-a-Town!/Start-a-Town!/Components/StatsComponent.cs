@@ -37,21 +37,6 @@ namespace Start_a_Town_.Components
             get
             {
                 StatsComponent stats = new StatsComponent();
-
-                stats[Stat.Dps.Name] = 0f;
-                stats[Stat.AtkSpeed.Name] = 0f;
-                stats[Stat.Damage.Name] = 0f;
-                stats[Stat.Blunt.Name] = 0f;
-                stats[Stat.Chop.Name] = 0f;
-                stats[Stat.Pierce.Name] = 0f;
-                stats[Stat.Slash.Name] = 0f;
-             //   stats[Stat.Shoveling.Name] = 0f;
-                stats[Stat.Tilling.Name] = 0f;
-                stats[Stat.Strength.Name] = 0f;
-                stats[Stat.WalkSpeed.Name] = 0f;
-                stats[Stat.WorkSpeed.Name] = 0f;
-                
-               // stats.Properties.Add(DamageComponent.DamageTypes[Components.Damage.Types..Name, 0f);
                 return stats;
             }
         }
@@ -63,17 +48,14 @@ namespace Start_a_Town_.Components
                 return "Stats";
             }
         }
-        public StatCollection Stats { get { return (StatCollection)this["Stats"]; } set { this["Stats"] = value; } }
-        public StatCollection BaseStats { get { return (StatCollection)this["BaseStats"]; } set { this["BaseStats"] = value; } }
-
+        public StatCollection Stats;
+        public StatCollection BaseStats;
         static public StatsComponent Skills
         {
             get
             {
                 StatsComponent stats = new StatsComponent();
-                stats.Properties.Add("Digging rate", 0f);
-                stats.Properties.Add("Mining rate", 0f);
-                stats.Properties.Add("Chopping rate", 0f);
+      
                 return stats;
             }
         }
@@ -82,12 +64,7 @@ namespace Start_a_Town_.Components
             get
             {
                 StatsComponent stats = new StatsComponent();
-                stats.Properties.Add(Stat.Chop.Name, 0f);
-                stats.Properties.Add(Stat.Blunt.Name, 0f);
-                stats.Properties.Add(Stat.Slash.Name, 0f);
-                stats.Properties.Add(Stat.Pierce.Name, 0f);
-             //   stats.Properties.Add(Stat.Mining.Name, 0f);
-                //   stats.Parameters.Add("Speed", new ComponentParameter(2f));
+              
                 return stats;
             }
         }
@@ -106,50 +83,19 @@ namespace Start_a_Town_.Components
             return this;
         }
 
-        public override bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
-        {
-            switch (e.Type)
-            {
-                case Message.Types.Buff:
-                    Stat stat = (Stat)e.Parameters[0];
-                    float value = (float)e.Parameters[1];
-                    float oldValue;
-                    if (!this.TryGetProperty<float>(stat.Name, out oldValue))
-                        return true;
-                    this[stat.Name] = oldValue + value;
-                    //this[stat.Name] = (float)this[stat.Name] + value;
-                    return true;
-
-                case Message.Types.Refresh:
-                    Refresh(parent);
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
         public override object Clone()
         {
             StatsComponent comp = new StatsComponent();
-            foreach (var parameter in Properties)
-            {
-                comp[parameter.Key] = parameter.Value;
-                //comp.Properties.Add(parameter.Key, new ComponentProperty((float)parameter.Value.Value));
-            }
             return comp;
         }
 
         public override void OnObjectCreated(GameObject parent)
         {
-            //if (parent.ID == GameObject.Types.Actor)
-            //    "asdasd".ToConsole();
             Refresh(parent);
         }
 
         private void Refresh(GameObject parent)
         {
-            //this.Stats = new StatCollection();
             this.Stats = new StatCollection(this.BaseStats);
             BodyComponent.PollStats(parent, this.Stats);
             InventoryComponent.PollStats(parent, this.Stats);
@@ -177,31 +123,7 @@ namespace Start_a_Town_.Components
                 return value;
             return defaultValue;
         }
-        
-        static public float GetStat(GameObject obj, string statName)
-        {
-            StatsComponent statsComp;
-            if (!obj.TryGetComponent<StatsComponent>("Stats", out statsComp))
-                return 0;
-            float stat;
-            if (statsComp.TryGetProperty<float>(statName, out stat))
-                return stat;
-            return 0;
-        }
-        static public bool TryGetStat(GameObject obj, string statName, out float stat)
-        {
-            
-            StatsComponent statsComp;
-            if (!obj.TryGetComponent<StatsComponent>("Stats", out statsComp))
-            {
-                stat = 0;
-                return false;
-            }
-            if (statsComp.TryGetProperty<float>(statName, out stat))
-                return true;
-            return false;
-        }
-
+       
         public override string ToString()
         {
             return this.Stats.ToString();

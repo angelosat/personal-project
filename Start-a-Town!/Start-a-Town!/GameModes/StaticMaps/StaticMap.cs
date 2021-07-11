@@ -108,31 +108,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public Game1 game;
         public bool hasClicked = false;
         public static float MaxDepth = 0, MinDepth = 0;
-        static public Texture2D TerrainSprites, CharacterSprites, ShaderMouseMap, BlockDepthMap;
         public List<Texture2D> VisibleTileTypes;
         public Vector2 tileLocation = new(16, 8);
         public const double GroundDensity = 0.1;
-        static public Texture2D Shadow;
         static public List<Rectangle> Icons;
-        static public Texture2D ItemSheet;
-
-        static public void Initialize()
-        {
-            Generator.InitGradient3();
-            TerrainSprites = Game1.Instance.Content.Load<Texture2D>("Graphics/spritesheet cubes");// New");//
-            CharacterSprites = Game1.Instance.Content.Load<Texture2D>("Graphics/Characters/best/best2");
-            ShaderMouseMap = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap - Cube");
-            BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09");
-            Shadow = Game1.Instance.Content.Load<Texture2D>("Graphics/shadow");
-
-            ItemSheet = Game1.Instance.Content.Load<Texture2D>("Graphics/ItemSheet");
-            ItemSheet.Name = "Default item sprites";
-            int iconsH = ItemSheet.Width / 32, iconsV = ItemSheet.Height / 32;
-            Icons = new List<Rectangle>(iconsH * iconsV);
-            for (int j = 0; j < iconsV; j++)
-                for (int i = 0; i < iconsH; i++)
-                    Icons.Add(new Rectangle(i * 32, j * 32, 32, 32));
-        }
 
         public string Name;
         public Texture2D[] Thumbnails;

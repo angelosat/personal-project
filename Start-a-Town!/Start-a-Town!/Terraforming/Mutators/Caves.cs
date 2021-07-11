@@ -35,7 +35,6 @@ namespace Start_a_Town_.Terraforming.Mutators
             double ridged = Generator.Perlin3D(x, y, z, this.CaveFrequency, this.RidgedSeed);
 
             double ridged2 = Generator.Perlin3D(x, y, z, this.CaveFrequency, this.RidgedSeed2);
-            //double multi = ridged * ridged2;
 
             if (ridged > -this.Threshold && ridged < this.Threshold && ridged2 > -this.Threshold && ridged2 < this.Threshold)
                 if (z > 0)

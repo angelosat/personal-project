@@ -111,13 +111,13 @@ namespace Start_a_Town_
                 var neighbors = currentNode.GetLinksLazy();
                 foreach (var n in neighbors) // put visibility check here
                 {
-                    var nabove = n.Global.Above();
+                    var nabove = n.Global.Above;
                     if (this.Handled.Contains(nabove))
                         continue;
                     if (!this.CachedNodes.TryGetValue(nabove, out var nnode))
                     {
                         nnode = new Node(this.Map, nabove, this.Finish) { RegionNodeGlobal = n };
-                        this.CachedNodes[n.Global.Above()] = nnode;
+                        this.CachedNodes[n.Global.Above] = nnode;
 
                     }
 

@@ -13,7 +13,7 @@ namespace Start_a_Town_
         {
 
         }
-        public ToolSelectRectangleBlocks(Vector3 origin, Action<Vector3, Vector3, bool> callback) : base(callback)
+        public ToolSelectRectangleBlocks(IntVec3 origin, Action<IntVec3, IntVec3, bool> callback) : base(callback)
         {
             this.Begin = origin;
             this.End = this.Begin;
@@ -48,10 +48,10 @@ namespace Start_a_Town_
             if (!this.Enabled)
                 return;
             
-            if (this.End.Round() != this.PrevEnd)
+            if (this.End != this.PrevEnd)
             {
                 this.Validate(map, camera);
-                this.PrevEnd = this.End.Round();
+                this.PrevEnd = this.End;
             }
             camera.PrepareShader(map);
             float x, y;

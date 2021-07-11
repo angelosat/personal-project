@@ -8,9 +8,8 @@ namespace Start_a_Town_
 {
     class ToolSelect : ControlTool
     {
-        protected Vector3 Begin, End;
-        AtlasDepthNormals.Node.Token SelectionGraphic = Block.BlockHighlight;
-        Action<Vector3, Vector3> SelectAction = (a, b) => { };
+        protected IntVec3 Begin, End;
+        Action<IntVec3, IntVec3> SelectAction = (a, b) => { };
         public ToolSelect()
         {
 
@@ -20,13 +19,13 @@ namespace Start_a_Town_
             this.Begin = target.Type == TargetType.Position ? this.GetBeginFromTarget(target.Global) : target.Object.Global.SnapToBlock();
             this.End = this.Begin;
         }
-        protected virtual Vector3 GetBeginFromTarget(Vector3 a)
+        protected virtual IntVec3 GetBeginFromTarget(IntVec3 a)
         {
-            return a.Above();
+            return a.Above;
         }
-        protected virtual Vector3 GetEndFromTarget(Vector3 a)
+        protected virtual IntVec3 GetEndFromTarget(IntVec3 a)
         {
-            return new Vector3(a.XY(), this.Begin.Z);
+            return new IntVec3(a.XY, this.Begin.Z);
         }
         protected virtual void Select()
         {

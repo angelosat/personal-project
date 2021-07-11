@@ -15,7 +15,7 @@ namespace Start_a_Town_.Modules.Construction
         public abstract string Name { get; }
         private Action<Args> Callback;
         protected bool Valid, Enabled;
-        protected Vector3 Begin, End, Axis;
+        protected IntVec3 Begin, End, Axis;
 
         public Block Block;
         public byte State;
@@ -158,7 +158,7 @@ namespace Start_a_Town_.Modules.Construction
             if (!this.Enabled)
                 return;
 
-            var end = this.End + Vector3.UnitZ * this.Height;
+            var end = this.End + IntVec3.UnitZ * this.Height;
             var col = this.Valid ? Color.Lime : Color.Red;
             int x = (int)Math.Min(this.Begin.X, end.X);
             int y = (int)Math.Min(this.Begin.Y, end.Y);
@@ -168,14 +168,14 @@ namespace Start_a_Town_.Modules.Construction
             int dy = (int)Math.Abs(this.Begin.Y - end.Y);
             int dz = (int)Math.Abs(this.Begin.Z - end.Z);
 
-            var minBegin = new Vector3(x, y, z);
+            var minBegin = new IntVec3(x, y, z);
             for (int i = 0; i <= dx; i++)
             {
                 for (int j = 0; j <= dy; j++)
                 {
                     for (int k = 0; k <= dz; k++)
                     {
-                        Vector3 global = minBegin + new Vector3(i, j, k);
+                        IntVec3 global = minBegin + new IntVec3(i, j, k);
                         cam.DrawGridCell(sb, col, global);
                     }
                 }
@@ -224,8 +224,8 @@ namespace Start_a_Town_.Modules.Construction
             return InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey);
         }
 
-        public virtual List<Vector3> GetPositions() { return new List<Vector3>(); }
-        static public List<Vector3> GetPositions(Modes mode, Vector3 a, Vector3 b)
+        public virtual List<IntVec3> GetPositions() { return new List<IntVec3>(); }
+        static public List<IntVec3> GetPositions(Modes mode, IntVec3 a, IntVec3 b)
         {
             return mode switch
             {
@@ -237,10 +237,10 @@ namespace Start_a_Town_.Modules.Construction
                 Modes.Pyramid => ToolDrawingPyramid.GetPositions(a, b).ToList(),
                 Modes.Roof => ToolDrawingRoof.GetPositions(a, b).ToList(),
                 Modes.BoxFilled => ToolDrawingBoxFilled.GetPositions(a, b),
-                _ => new List<Vector3>(),
+                _ => new List<IntVec3>(),
             };
         }
-        static public List<Vector3> GetPositions(Args a)
+        static public List<IntVec3> GetPositions(Args a)
         {
             return GetPositions(a.Mode, a.Begin, a.End);
         }

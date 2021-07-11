@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
     public class RegionNode
     {
-        public Vector3 Local, Global;
+        public IntVec3 Local, Global;
         public RegionNode North, West, East, South;
 
         public override string ToString()
@@ -19,7 +18,7 @@ namespace Start_a_Town_
         public RegionRoom Room { get { return this.Region.Room; } }
         public Chunk Chunk { get { return this.Region.Chunk; } }
         
-        public RegionNode(Region region, Vector3 local)
+        public RegionNode(Region region, IntVec3 local)
         {
             this.Region = region;
             this.Global = local.ToGlobal(region.Chunk);

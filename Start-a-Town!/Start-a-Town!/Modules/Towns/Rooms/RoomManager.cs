@@ -156,7 +156,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        private void TryConnectRoomsAtNew(Vector3 global)
+        private void TryConnectRoomsAtNew(IntVec3 global)
         {
             // TODO can optimize below
             var adjGlobals = global.GetAdjacentLazy();
@@ -218,12 +218,12 @@ namespace Start_a_Town_
                 cam.DrawGridBlocks(sb, Block.BlockHighlight, room.Value.Interior, room.Value.Color);
         }
 
-        public bool TryGetRoomAt(Vector3 global, out Room room)
+        public bool TryGetRoomAt(IntVec3 global, out Room room)
         {
             room = this.Rooms.Values.FirstOrDefault(r => r.Contains(global));
             return room != null;
         }
-        public Room GetRoomAt(Vector3 global)
+        public Room GetRoomAt(IntVec3 global)
         {
             return this.Rooms.Values.FirstOrDefault(r => r.Contains(global));
         }

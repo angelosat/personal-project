@@ -1718,7 +1718,7 @@ namespace Start_a_Town_
         }
         Sprite GridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
         public float LastZTarget;
-        public void DrawGridCells(MySpriteBatch sb, Color col, IEnumerable<Vector3> globals)
+        public void DrawGridCells(MySpriteBatch sb, Color col, IEnumerable<IntVec3> globals)
         {
             GridSprite.AtlasToken.Atlas.Begin(sb);
             foreach (var pos in globals)
@@ -1738,7 +1738,7 @@ namespace Start_a_Town_
 
             sb.Draw(GridSprite.AtlasToken.Atlas.Texture, pos, GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
         }
-        public void DrawGridBlock(MySpriteBatch sb, Color col, Vector3 global)
+        public void DrawGridBlock(MySpriteBatch sb, Color col, IntVec3 global)
         {
             if (global.Z > this.DrawLevel)
                 return;
@@ -1747,7 +1747,7 @@ namespace Start_a_Town_
             var depth = global.GetDrawDepth(Engine.Map, this);
             sb.Draw(Sprite.Atlas.Texture, pos, Sprite.BlockHighlight.AtlasToken.Rectangle, 0, Vector2.Zero, this.Zoom, col * .5f, SpriteEffects.None, depth);
         }
-        public void DrawGridBlock(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, Color col, Vector3 global)
+        public void DrawGridBlock(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, Color col, IntVec3 global)
         {
             if (global.Z > this.DrawLevel)
                 return;
@@ -1757,7 +1757,7 @@ namespace Start_a_Town_
             var depth = global.GetDrawDepth(Engine.Map, this);
             sb.Draw(Sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col * .5f, SpriteEffects.None, depth);
         }
-        public void DrawGridBlockNoFlush(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, Color col, Vector3 global)
+        public void DrawGridBlockNoFlush(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, Color col, IntVec3 global)
         {
             if (global.Z > this.DrawLevel)
                 return;
@@ -1766,14 +1766,14 @@ namespace Start_a_Town_
             var depth = global.GetDrawDepth(Engine.Map, this);
             sb.Draw(Sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col * .5f, SpriteEffects.None, depth);
         }
-        public void DrawGridBlocks(MySpriteBatch sb, IEnumerable<Vector3> positions, Color col)
+        public void DrawGridBlocks(MySpriteBatch sb, IEnumerable<IntVec3> positions, Color col)
         {
             Sprite.Atlas.Begin(sb);
             foreach (var pos in positions)
                 this.DrawGridBlock(sb, col, pos);
             sb.Flush();
         }
-        public void DrawGridBlocks(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, IEnumerable<Vector3> positions, Color col)
+        public void DrawGridBlocks(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, IEnumerable<IntVec3> positions, Color col)
         {
             sb.Flush();
             sprite.Atlas.Begin(sb);

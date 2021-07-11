@@ -303,16 +303,16 @@ namespace Start_a_Town_
         {
             return BlockObjects[this];
         }
-        public virtual Dictionary<Vector3, byte> GetParts(Vector3 global, int orientation) // TODO: depend on orientation
+        public virtual Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation) // TODO: depend on orientation
         {
-            return new Dictionary<Vector3, byte>() { { global, 0 } };
+            return new Dictionary<IntVec3, byte>() { { global, 0 } };
         }
-        public virtual List<Vector3> GetParts(MapBase map, Vector3 global) { return new List<Vector3> { global }; }
-        public virtual List<Vector3> GetParts(byte data) { return new List<Vector3> { Vector3.Zero }; }
+        public virtual List<IntVec3> GetParts(MapBase map, IntVec3 global) { return new List<IntVec3> { global }; }
+        public virtual List<IntVec3> GetParts(byte data) { return new List<IntVec3> { IntVec3.Zero }; }
         public virtual IEnumerable<IntVec3> GetParts(byte data, IntVec3 global) { return new List<IntVec3> { global }; }
 
-        public IntVec3 GetCenter(MapBase map, Vector3 global) { return this.GetCenter(map.GetCell(global).BlockData, global); }
-        public virtual IntVec3 GetCenter(byte blockData, Vector3 global) { return global; }
+        public IntVec3 GetCenter(MapBase map, IntVec3 global) { return this.GetCenter(map.GetCell(global).BlockData, global); }
+        public virtual IntVec3 GetCenter(byte blockData, IntVec3 global) { return global; }
 
         public virtual bool Multi { get { return false; } }
       
@@ -457,14 +457,14 @@ namespace Start_a_Town_
         /// </summary>
         /// <param name="net"></param>
         /// <param name="global"></param>
-        public virtual void NeighborChanged(IObjectProvider net, Vector3 global) { }
+        public virtual void NeighborChanged(IObjectProvider net, IntVec3 global) { }
         
         public virtual void Removed(MapBase map, Vector3 global)
         {
         }
         public virtual bool IsValidPosition(MapBase map, IntVec3 global, int orientation) { return true; }
         [Obsolete]
-        internal void Place(MapBase map, List<Vector3> positions, byte data, int orientation, bool notify)
+        internal void Place(MapBase map, List<IntVec3> positions, byte data, int orientation, bool notify)
         {
             throw new Exception();
             foreach (var pos in positions)
@@ -472,7 +472,7 @@ namespace Start_a_Town_
             if (notify)
                 map.NotifyBlocksChanged(positions);
         }
-        public virtual void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public virtual void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             map.SetBlock(global, this.Type, data, variation, orientation, notify);
             var entity = this.CreateBlockEntity();
@@ -485,28 +485,28 @@ namespace Start_a_Town_
         }
         
         [Obsolete]
-        public virtual void Remove(MapBase map, Vector3 global, bool notify = true)
+        public virtual void Remove(MapBase map, IntVec3 global, bool notify = true)
         {
             map.RemoveBlockNew(global, notify);
         }
         
-        public void BlockBelowChanged(MapBase map, Vector3 global)
+        public void BlockBelowChanged(MapBase map, IntVec3 global)
         {
             map.GetBlockEntity(global)?.OnBlockBelowChanged(map, global);
             this.OnBlockBelowChanged(map, global);
         }
-        protected virtual void OnBlockBelowChanged(MapBase map, Vector3 global) { }
+        protected virtual void OnBlockBelowChanged(MapBase map, IntVec3 global) { }
         public virtual LootTable GetLootTable(byte data)
         {
             return this.LootTable;
         }
-        public virtual void Break(MapBase map, Vector3 global)
+        public virtual void Break(MapBase map, IntVec3 global)
         {
             var net = map.Net;
             net.PopLoot(this.GetLootTable(net.Map.GetBlockData(global)), global, Vector3.Zero);
             this.Remove(map, global);
         }
-        public virtual void Break(GameObject actor, Vector3 global)
+        public virtual void Break(GameObject actor, IntVec3 global)
         {
             var mat = Block.GetBlockMaterial(actor.Map, global);
             var net = actor.Net;
@@ -514,7 +514,7 @@ namespace Start_a_Town_
             this.Remove(net.Map, global);
 
             var e = this.GetEmitter();
-            e.Source = global + Vector3.UnitZ * 0.5f;
+            e.Source = (Vector3)global + Vector3.UnitZ * 0.5f;
             e.SizeBegin = 1;
             e.SizeEnd = 1;
             e.ParticleWeight = 1;
@@ -949,62 +949,62 @@ namespace Start_a_Town_
         }
        
 
-        public Vector3 Front(MapBase map, Vector3 global)
+        public IntVec3 Front(MapBase map, IntVec3 global)
         {
             return Front(map.GetCell(global));
         }
-        public static Vector3 GetFrontSide(int orientation)
+        public static IntVec3 GetFrontSide(int orientation)
         {
             switch (orientation)
             {
                 case 0:
-                    return new Vector3(0, 1, 0);
+                    return new IntVec3(0, 1, 0);
 
                 case 1:
-                    return new Vector3(-1, 0, 0);
+                    return new IntVec3(-1, 0, 0);
 
                 case 2:
-                    return new Vector3(0, -1, 0);
+                    return new IntVec3(0, -1, 0);
 
                 case 3:
-                    return new Vector3(1, 0, 0);
+                    return new IntVec3(1, 0, 0);
 
                 default:
                     break;
             }
             throw new Exception();
         }
-        public static Vector3 Front(Cell cell)
+        public static IntVec3 Front(Cell cell)
         {
             var orientation = cell.Orientation;
             switch (orientation)
             {
                 case 0:
-                    return new Vector3(0, 1, 0);
+                    return new IntVec3(0, 1, 0);
 
                 case 1:
-                    return new Vector3(-1, 0, 0);
+                    return new IntVec3(-1, 0, 0);
 
                 case 2:
-                    return new Vector3(0, -1, 0);
+                    return new IntVec3(0, -1, 0);
 
                 case 3:
-                    return new Vector3(1, 0, 0);
+                    return new IntVec3(1, 0, 0);
 
                 default:
                     break;
             }
             throw new Exception();
         }
-        public static Vector3 Back(Cell cell)
+        public static IntVec3 Back(Cell cell)
         {
             return -Front(cell);
         }
-        internal virtual IEnumerable<Vector3> GetOperatingPositions(Cell cell)
+        internal virtual IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
         {
             yield break;
         }
-        internal IEnumerable<Vector3> GetOperatingPositions(Cell cell, Vector3 global)
+        internal IEnumerable<IntVec3> GetOperatingPositions(Cell cell, IntVec3 global)
         {
             foreach (var p in this.GetOperatingPositions(cell))
                 yield return p + global;

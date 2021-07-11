@@ -97,16 +97,16 @@ namespace Start_a_Town_.Modules.Construction
                 this.TopCorner = this.End;
             }
         }
-        protected virtual Vector3 GetBottomCorner()
+        protected virtual IntVec3 GetBottomCorner()
         {
             var g = this.Target.FaceGlobal;
-            return new Vector3(g.X, g.Y, this.Begin.Z);
+            return new IntVec3(g.X, g.Y, this.Begin.Z);
         }
         private void SetHeight()
         {
             this.Height = GetHeight(this.End, UIManager.Mouse);
         }
-        static protected int GetHeight(Vector3 end, Vector2 mousePointer)
+        static protected int GetHeight(IntVec3 end, Vector2 mousePointer)
         {
             var endscreenposition = ScreenManager.CurrentScreen.Camera.GetScreenPosition(end);
             var length = (endscreenposition.Y - mousePointer.Y) / ScreenManager.CurrentScreen.Camera.Zoom;
@@ -123,7 +123,7 @@ namespace Start_a_Town_.Modules.Construction
                 .Where(vec => this.Replacing ? map.GetBlock(vec) != BlockDefOf.Air : map.GetBlock(vec) == BlockDefOf.Air);
             cam.DrawGridBlocks(sb, Block.BlockBlueprint, positions, color);
         }
-        protected virtual IEnumerable<Vector3> GetPositionsNew(Vector3 a, Vector3 b) { yield break; }
+        protected virtual IEnumerable<IntVec3> GetPositionsNew(IntVec3 a, IntVec3 b) { yield break; }
         protected override void WriteData(System.IO.BinaryWriter w)
         {
             base.WriteData(w);

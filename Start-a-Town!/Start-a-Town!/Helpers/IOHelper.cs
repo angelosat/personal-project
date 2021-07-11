@@ -39,7 +39,15 @@ namespace Start_a_Town_
                 collection.Add(r.ReadVector3());
             return collection;
         }
-        
+        static public T ReadIntVec3<T>(this T collection, BinaryReader r)
+           where T : ICollection<IntVec3>, new()
+        {
+            var count = r.ReadInt32();
+            for (int i = 0; i < count; i++)
+                collection.Add(r.ReadIntVec3());
+            return collection;
+        }
+
         public static Dictionary<int, int> Write(this Dictionary<int, int> dic, BinaryWriter w)
         {
             w.Write(dic.Count);
@@ -349,6 +357,14 @@ namespace Start_a_Town_
             for (int i = 0; i < count; i++)
                 collection.ElementAt(i).Read(r);
             return collection;
+        }
+        public static List<IntVec3> ReadListIntVec3(this BinaryReader r)
+        {
+            var count = r.ReadInt32();
+            var list = new List<IntVec3>(count);
+            for (int i = 0; i < count; i++)
+                list.Add(r.ReadVector3());
+            return list;
         }
         public static List<Vector3> ReadListVector3(this BinaryReader r)
         {

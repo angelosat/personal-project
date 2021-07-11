@@ -77,17 +77,17 @@ namespace Start_a_Town_
                     );
             return table;
         }
-        public override Dictionary<Vector3, byte> GetParts(Vector3 global, int orientation) // TODO: depend on orientation
+        public override Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation) // TODO: depend on orientation
         {
-            var dic = new Dictionary<Vector3, byte>();
+            var dic = new Dictionary<IntVec3, byte>();
             
             var top = global;
             var bottom = orientation switch
             {
-                0 => global + Vector3.UnitX,
-                1 => global + Vector3.UnitY,
-                2 => global - Vector3.UnitX,
-                3 => global - Vector3.UnitY,
+                0 => global + IntVec3.UnitX,
+                1 => global + IntVec3.UnitY,
+                2 => global - IntVec3.UnitX,
+                3 => global - IntVec3.UnitY,
                 _ => throw new Exception(),
             };
         var bottomdata = GetData(Part.Bottom, orientation);
@@ -96,70 +96,70 @@ namespace Start_a_Town_
             dic[top] = topdata;
             return dic;
         }
-        public override List<Vector3> GetParts(MapBase map, Vector3 global)
+        public override List<IntVec3> GetParts(MapBase map, IntVec3 global)
         {
             var data = map.GetBlockData(global);
             Part part;
             int ori;
             GetState(data, out part, out ori);
-            Vector3 top, bottom;
+            IntVec3 top, bottom;
             switch (ori)
             {
                 case 1:
-                    bottom = part == Part.Bottom ? global : global + Vector3.UnitY;
-                    top = bottom - Vector3.UnitY;
+                    bottom = part == Part.Bottom ? global : global + IntVec3.UnitY;
+                    top = bottom - IntVec3.UnitY;
                     break;
 
                 case 2:
-                    bottom = part == Part.Bottom ? global : global - Vector3.UnitX;
-                    top = bottom + Vector3.UnitX;
+                    bottom = part == Part.Bottom ? global : global - IntVec3.UnitX;
+                    top = bottom + IntVec3.UnitX;
                     break;
 
                 case 3:
-                    bottom = part == Part.Bottom ? global : global - Vector3.UnitY;
-                    top = bottom + Vector3.UnitY;
+                    bottom = part == Part.Bottom ? global : global - IntVec3.UnitY;
+                    top = bottom + IntVec3.UnitY;
                     break;
 
                 default:
-                    bottom = part == Part.Bottom ? global : global + Vector3.UnitX;
-                    top = bottom - Vector3.UnitX;
+                    bottom = part == Part.Bottom ? global : global + IntVec3.UnitX;
+                    top = bottom - IntVec3.UnitX;
                     break;
             }
-            return new List<Vector3>() { top, bottom };
+            return new List<IntVec3>() { top, bottom };
         }
-        public override List<Vector3> GetParts(byte data)
+        public override List<IntVec3> GetParts(byte data)
         {
             GetState(data, out var part, out var ori);
-            Vector3 top, bottom;
-            Vector3 global = Vector3.Zero;
+            IntVec3 top, bottom;
+            IntVec3 global = IntVec3.Zero;
             switch (ori)
             {
                 case 1:
-                    bottom = part == Part.Bottom ? global : global + Vector3.UnitY;
-                    top = bottom - Vector3.UnitY;
+                    bottom = part == Part.Bottom ? global : global + IntVec3.UnitY;
+                    top = bottom - IntVec3.UnitY;
                     break;
 
                 case 2:
-                    bottom = part == Part.Bottom ? global : global - Vector3.UnitX;
-                    top = bottom + Vector3.UnitX;
+                    bottom = part == Part.Bottom ? global : global - IntVec3.UnitX;
+                    top = bottom + IntVec3.UnitX;
                     break;
 
                 case 3:
-                    bottom = part == Part.Bottom ? global : global - Vector3.UnitY;
-                    top = bottom + Vector3.UnitY;
+                    bottom = part == Part.Bottom ? global : global - IntVec3.UnitY;
+                    top = bottom + IntVec3.UnitY;
                     break;
 
                 default:
-                    bottom = part == Part.Bottom ? global : global + Vector3.UnitX;
-                    top = bottom - Vector3.UnitX;
+                    bottom = part == Part.Bottom ? global : global + IntVec3.UnitX;
+                    top = bottom - IntVec3.UnitX;
                     break;
             }
-            return new List<Vector3>() { top, bottom };
+            return new List<IntVec3>() { top, bottom };
         }
         public override IEnumerable<IntVec3> GetParts(byte data, IntVec3 global)
         {
             foreach (var p in this.GetParts(data))
-                yield return global + (IntVec3)p;
+                yield return global + p;
         }
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {
@@ -200,9 +200,9 @@ namespace Start_a_Town_
             parts[Part.Bottom] = partslist[1];
             return parts;
         }
-        public Dictionary<Part, Vector3> GetPartsDic(byte data)
+        public Dictionary<Part, IntVec3> GetPartsDic(byte data)
         {
-            var parts = new Dictionary<Part, Vector3>();
+            var parts = new Dictionary<Part, IntVec3>();
             var partslist = this.GetParts(data);
             parts[Part.Top] = partslist[0];
             parts[Part.Bottom] = partslist[1];
@@ -218,22 +218,18 @@ namespace Start_a_Town_
             return map.GetBlockEntity(global) is BlockBedEntity;
         }
 
-        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             if (!IsValidPosition(map, global, orientation))
                 return;
             var top = global;
-            //Vector3 bottom = default;
-            //orientation switch
-            //{
-            //    == 0 => bottom = top + Vector3.UnitX
-            //};
+           
             var bottom = orientation switch
             {
-                0 => top + Vector3.UnitX,
-                1 => top + Vector3.UnitY,
-                2 => top - Vector3.UnitX,
-                3 => top - Vector3.UnitY,
+                0 => top + IntVec3.UnitX,
+                1 => top + IntVec3.UnitY,
+                2 => top - IntVec3.UnitX,
+                3 => top - IntVec3.UnitY,
                 _ => throw new NotImplementedException()
             };
             
@@ -243,7 +239,7 @@ namespace Start_a_Town_
             map.AddBlockEntity(top, entity);
             map.Town.AddUtility(Utility.Types.Sleeping, top);
         }
-        public override void Remove(MapBase map, Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
         {
             // todo: why call this below? i already have the part vectors
             // i have replaced that data during the switch section so the getparts isn't working obviously
@@ -257,7 +253,7 @@ namespace Start_a_Town_
             map.Town.RemoveUtility(Utility.Types.Sleeping, top);
         }
         
-        public override IntVec3 GetCenter(byte data, Vector3 global)
+        public override IntVec3 GetCenter(byte data, IntVec3 global)
         {
             return global + GetPartsDic(data)[Part.Top];
         }
@@ -358,7 +354,7 @@ namespace Start_a_Town_
             return list;
         }
 
-        internal override IEnumerable<Vector3> GetOperatingPositions(Cell cell)
+        internal override IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
         {
             byte blockData = cell.BlockData;
             var parts = this.GetParts(blockData);
@@ -369,8 +365,8 @@ namespace Start_a_Town_
                 case 0:
                     foreach (var pos in parts)
                     {
-                        yield return pos + Vector3.UnitY;
-                        yield return pos - Vector3.UnitY;
+                        yield return pos + IntVec3.UnitY;
+                        yield return pos - IntVec3.UnitY;
                     }
                     break;
 
@@ -378,8 +374,8 @@ namespace Start_a_Town_
                 case 3:
                     foreach (var pos in parts)
                     {
-                        yield return pos + Vector3.UnitX;
-                        yield return pos - Vector3.UnitX;
+                        yield return pos + IntVec3.UnitX;
+                        yield return pos - IntVec3.UnitX;
                     }
                     break;
 

@@ -9,7 +9,7 @@ namespace Start_a_Town_.Towns.Digging
 {
     public class DiggingManager : TownComponent
     {
-        HashSet<Vector3> AllPositions = new HashSet<Vector3>();
+        HashSet<IntVec3> AllPositions = new HashSet<IntVec3>();
 
         public DiggingManager(Town town)
         {
@@ -17,7 +17,7 @@ namespace Start_a_Town_.Towns.Digging
         }
         public override string Name => "Digging";
 
-        internal HashSet<Vector3> GetPositions()
+        internal HashSet<IntVec3> GetPositions()
         {
             return this.AllPositions;
         }
@@ -36,18 +36,18 @@ namespace Start_a_Town_.Towns.Digging
             switch (e.Type)
             {
                 case Components.Message.Types.BlocksChanged:
-                    HandleBlocksChanged(e.Parameters[1] as IEnumerable<Vector3>);
+                    HandleBlocksChanged(e.Parameters[1] as IEnumerable<IntVec3>);
                     break;
 
                 case Components.Message.Types.BlockChanged:
                     MapBase map;
-                    Vector3 global;
+                    IntVec3 global;
                     EventBlockChanged.Read(e.Parameters, out map, out global);
-                    HandleBlocksChanged(new Vector3[] {global});
+                    HandleBlocksChanged(new IntVec3[] {global});
                     break;
 
                 case Components.Message.Types.MiningDesignation:
-                    var positions = e.Parameters[0] as List<Vector3>;
+                    var positions = e.Parameters[0] as List<IntVec3>;
                     var remove = (bool)e.Parameters[1];
                     if (remove)
                         foreach (var p in positions)
@@ -62,7 +62,7 @@ namespace Start_a_Town_.Towns.Digging
             }
         }
 
-        private void HandleBlocksChanged(IEnumerable<Vector3> globals)
+        private void HandleBlocksChanged(IEnumerable<IntVec3> globals)
         {
             foreach(var global in globals)
                 if(this.AllPositions.Contains(global))
@@ -70,18 +70,18 @@ namespace Start_a_Town_.Towns.Digging
                         this.AllPositions.Remove(global);
         }
 
-        private void HandlePosition(Vector3 p)
+        private void HandlePosition(IntVec3 p)
         {
             if (this.IsMinable(p))
             {
                 this.AllPositions.Add(p);
             }
         }
-        private void RemovePosition(Vector3 p)
+        private void RemovePosition(IntVec3 p)
         {
             this.AllPositions.Remove(p);
         }
-        public HashSet<Vector3> GetAllPendingTasks()
+        public HashSet<IntVec3> GetAllPendingTasks()
         {
             return this.AllPositions;
         }
@@ -107,7 +107,7 @@ namespace Start_a_Town_.Towns.Digging
         }
         public override void Load(SaveTag tag)
         {
-            tag.TryGetTagValue<List<SaveTag>>("Positions", v => this.AllPositions = new HashSet<Vector3>(new List<Vector3>().Load(v)));
+            tag.TryGetTagValue<List<SaveTag>>("Positions", v => this.AllPositions = new HashSet<IntVec3>(new List<IntVec3>().Load(v)));
         }
         public override void Write(System.IO.BinaryWriter w)
         {
@@ -115,7 +115,7 @@ namespace Start_a_Town_.Towns.Digging
         }
         public override void Read(System.IO.BinaryReader r)
         {
-            this.AllPositions = new HashSet<Vector3>(r.ReadListVector3());
+            this.AllPositions = new HashSet<IntVec3>(r.ReadListIntVec3());
         }
         public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {

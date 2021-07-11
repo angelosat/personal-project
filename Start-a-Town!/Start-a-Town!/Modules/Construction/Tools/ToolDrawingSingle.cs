@@ -38,13 +38,13 @@ namespace Start_a_Town_.Modules.Construction
         {
             cam.DrawGridBlock(sb, this.Valid ? Color.Lime : Color.Red, this.Begin);
         }
-        public override List<Vector3> GetPositions()
+        public override List<IntVec3> GetPositions()
         {
-            return new List<Vector3>() { this.Begin };
+            return new List<IntVec3>() { this.Begin };
         }
-        static public List<Vector3> GetPositions(Vector3 a, Vector3 b)
+        static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {
-            return new List<Vector3>() { a };
+            return new List<IntVec3>() { a };
         }
     }
 }

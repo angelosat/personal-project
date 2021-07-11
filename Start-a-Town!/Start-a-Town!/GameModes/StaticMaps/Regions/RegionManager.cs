@@ -58,7 +58,7 @@ namespace Start_a_Town_
                 foreach (var r in ch.Value.Regions.Where(r => r.RoomID == region.RoomID))
                 {
                     var color = region.Color * (r == region ? 1 : .5f);
-                    cam.DrawGridCells(sb, color, r.GetPositions().Select(p => p.Above()));
+                    cam.DrawGridCells(sb, color, r.GetPositions().Select(p => p.Above));
                 }
             }
             region.DrawNode(global, sb, cam);
@@ -88,15 +88,15 @@ namespace Start_a_Town_
             switch (e.Type)
             {
                 case Components.Message.Types.BlocksChanged:
-                    IEnumerable<Vector3> positions;
+                    IEnumerable<IntVec3> positions;
                     GameEvents.EventBlocksChanged.Read(e.Parameters, out map, out positions);
                     this.Update(positions);
                     break;
 
                 case Components.Message.Types.BlockChanged:
-                    Vector3 global;
+                    IntVec3 global;
                     GameEvents.EventBlockChanged.Read(e.Parameters, out map, out global);
-                    this.Update(new List<Vector3>() { global });
+                    this.Update(new List<IntVec3>() { global });
                     return;
 
                 default:
@@ -104,7 +104,7 @@ namespace Start_a_Town_
             }
         }
 
-        private void Update(IEnumerable<Vector3> positions)
+        private void Update(IEnumerable<IntVec3> positions)
         {
             foreach (var pos in positions)
             {

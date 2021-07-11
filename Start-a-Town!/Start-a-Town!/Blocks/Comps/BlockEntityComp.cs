@@ -27,17 +27,17 @@ namespace Start_a_Town_
         {
         }
 
-        internal virtual void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, Vector3 global)
+        internal virtual void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
         {
            
         }
 
         internal virtual void OnDrop(GameObject actor, GameObject item, TargetArgs target, int quantity) { }
-        internal virtual void Remove(MapBase map, Vector3 global, BlockEntity parent) { }
+        internal virtual void Remove(MapBase map, IntVec3 global, BlockEntity parent) { }
 
-        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3) { }
+        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, IntVec3 vector3) { }
 
-        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3) { }
+        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3) { }
 
         public virtual void Write(BinaryWriter w)
         {
@@ -48,11 +48,11 @@ namespace Start_a_Town_
             return this;
         }
 
-        internal virtual void OnBlockBelowChanged(MapBase map, Vector3 global)
+        internal virtual void OnBlockBelowChanged(MapBase map, IntVec3 global)
         {
         }
 
-        internal virtual void MapLoaded(MapBase map, Vector3 global)
+        internal virtual void MapLoaded(MapBase map, IntVec3 global)
         {
         }
 
@@ -60,7 +60,7 @@ namespace Start_a_Town_
         {
         }
 
-        internal virtual void Deconstruct(GameObject actor, Vector3 global)
+        internal virtual void Deconstruct(GameObject actor, IntVec3 global)
         {
         }
     }

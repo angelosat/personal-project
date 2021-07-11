@@ -81,7 +81,7 @@ namespace Start_a_Town_.Blocks
             var o = (data + cameraRotation) % 4;
             return this.Parts[o];
         }
-        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, GetData(orientation), variation, orientation, notify);
         }

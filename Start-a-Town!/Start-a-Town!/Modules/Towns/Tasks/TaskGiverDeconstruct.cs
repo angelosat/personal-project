@@ -13,7 +13,7 @@
                     continue;
                 if (!actor.CanReach(pos))
                     continue;
-                if (!actor.Map.IsEmptyNew(pos.Above()))
+                if (!actor.Map.IsEmptyNew(pos.Above))
                     continue;
                 var task = new AITask()
                 {

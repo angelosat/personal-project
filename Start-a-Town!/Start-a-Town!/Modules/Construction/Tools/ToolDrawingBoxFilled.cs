@@ -20,17 +20,17 @@ namespace Start_a_Town_.Modules.Construction
         {
             if (!this.Enabled)
                 return;
-            var end = this.End + Vector3.UnitZ * this.Height;
+            var end = this.End + IntVec3.UnitZ * this.Height;
 
             var box = this.Begin.GetBox(end);
 
             cam.DrawGridBlocks(sb, Block.BlockBlueprint, box, color);
         }
-        public override List<Vector3> GetPositions()
+        public override List<IntVec3> GetPositions()
         {
             return GetPositions(this.Begin, this.TopCorner);
         }
-        static public List<Vector3> GetPositions(Vector3 a, Vector3 b)
+        static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {
             var box = a.GetBox(b);
             return box;

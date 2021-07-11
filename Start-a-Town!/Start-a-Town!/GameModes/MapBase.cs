@@ -75,7 +75,7 @@ namespace Start_a_Town_
         public ParticleManager ParticleManager;
         public RegionManager Regions;
         protected List<GameObject> CachedObjects = new();
-        protected Dictionary<Vector3, BlockEntity> CachedBlockEntities = new Dictionary<Vector3, BlockEntity>();
+        protected Dictionary<IntVec3, BlockEntity> CachedBlockEntities = new Dictionary<IntVec3, BlockEntity>();
 
         public abstract Color GetAmbientColor();
         public abstract void SetAmbientColor(Color color);
@@ -207,7 +207,7 @@ namespace Start_a_Town_
             this.World.ResolveReferences();
         }
 
-        internal void ReplaceBlocks(IEnumerable<Vector3> positions, Block.Types type, byte data, int variation, int orientation)
+        internal void ReplaceBlocks(IEnumerable<IntVec3> positions, Block.Types type, byte data, int variation, int orientation)
         {
             foreach (var global in positions)
                 this.ReplaceBlock(global, type, data, variation, orientation, false);
@@ -278,7 +278,7 @@ namespace Start_a_Town_
         {
             this.RemoveBlockNew(global, notify);
         }
-        internal void RemoveBlocks(List<Vector3> positions, bool notify = true)
+        internal void RemoveBlocks(List<IntVec3> positions, bool notify = true)
         {
             var nonAirPositions = positions.Where(vec => this.GetBlock(vec) != BlockDefOf.Air).ToList();
             foreach (var global in nonAirPositions)
@@ -342,31 +342,31 @@ namespace Start_a_Town_
             return global + cell.Back;
         }
        
-        public IEnumerable<Vector3> GetBlockEntities()
+        public IEnumerable<IntVec3> GetBlockEntities()
         {
             foreach (var ch in ActiveChunks.Values)
                 foreach (var (local, entity) in ch.GetBlockEntitiesByPosition())
                     yield return local.ToGlobal(ch);
         }
         
-        public Dictionary<Vector3, BlockEntity> GetBlockEntitiesCache()
+        public Dictionary<IntVec3, BlockEntity> GetBlockEntitiesCache()
         {
             return this.CachedBlockEntities;
         }
-        public bool TryGetBlockEntity(Vector3 global, out BlockEntity entity)
+        public bool TryGetBlockEntity(IntVec3 global, out BlockEntity entity)
         {
             entity = null;
             if (this.GetChunk(global) is not Chunk chunk)
                 return false;
             return chunk.TryGetBlockEntity(global.ToLocal(), out entity);
         }
-        public BlockEntity GetBlockEntity(Vector3 global)
+        public BlockEntity GetBlockEntity(IntVec3 global)
         {
             Chunk chunk = this.GetChunk(global);
             chunk.TryGetBlockEntity(global.ToLocal(), out var entity);
             return entity;
         }
-        public T GetBlockEntity<T>(Vector3 global) where T : BlockEntity
+        public T GetBlockEntity<T>(IntVec3 global) where T : BlockEntity
         {
             Chunk chunk = this.GetChunk(global);
             chunk.TryGetBlockEntity(global.ToLocal(), out var entity);
@@ -750,17 +750,17 @@ namespace Start_a_Town_
         }
 
 
-        public void NotifyBlocksChanged(IEnumerable<Vector3> positions)
+        public void NotifyBlocksChanged(IEnumerable<IntVec3> positions)
         {
             this.Net.EventOccured(Components.Message.Types.BlocksChanged, this, positions);
-            this.Town.OnBlocksChanged(positions.Select(i => (IntVec3)i)); // TODO fix
+            this.Town.OnBlocksChanged(positions);
         }
-        private void NotifyBlockChanged(Vector3 pos)
+        private void NotifyBlockChanged(IntVec3 pos)
         {
             this.NotifyBlocksChanged(new[] { pos });
         }
 
-        public abstract bool SetBlockLuminance(Vector3 global, byte luminance);
+        public abstract bool SetBlockLuminance(IntVec3 global, byte luminance);
         [Obsolete]
         internal bool IsTraversable2Height(Vector3 source, Vector3 target)
         {
@@ -1050,7 +1050,7 @@ namespace Start_a_Town_
             return false;
         }
 
-        internal IEnumerable<KeyValuePair<Vector3, Blocks.BlockEntity>> GetBlockEntitiesWithComp<T>() where T : BlockEntityComp
+        internal IEnumerable<KeyValuePair<IntVec3, Blocks.BlockEntity>> GetBlockEntitiesWithComp<T>() where T : BlockEntityComp
         {
             var entities = this.GetBlockEntitiesCache();
             var count = entities.Count;

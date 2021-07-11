@@ -74,7 +74,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        internal override void Remove(MapBase map, Vector3 global, BlockEntity parent)
+        internal override void Remove(MapBase map, IntVec3 global, BlockEntity parent)
         {
             if (map.Net is Net.Client)
                 return;
@@ -121,7 +121,7 @@ namespace Start_a_Town_
             item.Map.EventOccured(Components.Message.Types.FuelConsumed, this);
         }
 
-        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var bar = new Bar()
             {

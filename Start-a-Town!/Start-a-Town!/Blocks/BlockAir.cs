@@ -11,7 +11,7 @@
         {
 
         }
-        public override void Remove(MapBase map, Microsoft.Xna.Framework.Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
         {
         }
     }

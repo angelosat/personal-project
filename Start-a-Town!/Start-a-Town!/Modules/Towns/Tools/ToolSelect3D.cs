@@ -10,14 +10,13 @@ namespace Start_a_Town_.Towns
     class ToolSelect3D : ControlTool
     {
         enum ValidityType { Invalid, Valid, Ignore }
-        protected Vector3 Begin, End;
+        protected IntVec3 Begin, End;
         int Width, Height;
         protected bool Enabled;
-        readonly bool Valid;
         bool Removing;
         protected Action<Vector3, Vector3, bool> Add;
         Func<List<Vector3>> GetZones = () => new List<Vector3>();
-        Vector3 Plane;
+        IntVec3 Plane;
 
         protected ToolSelect3D()
         {
@@ -43,7 +42,7 @@ namespace Start_a_Town_.Towns
             if (this.Target.Type != TargetType.Position)
                 return;
 
-            this.End = this.Target.Global * (Vector3.One - this.Plane) + this.Begin * this.Plane;
+            this.End = (IntVec3)this.Target.Global * (IntVec3.One - this.Plane) + this.Begin * this.Plane;
 
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;
@@ -60,7 +59,7 @@ namespace Start_a_Town_.Towns
             if (this.Target.Type != TargetType.Position)
                 return;
 
-            this.End = this.Target.Global * (Vector3.One - this.Plane) + this.Begin * this.Plane;
+            this.End = (IntVec3)this.Target.Global * (IntVec3.One - this.Plane) + this.Begin * this.Plane;
 
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;

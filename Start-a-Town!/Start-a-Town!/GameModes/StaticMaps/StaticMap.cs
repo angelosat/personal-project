@@ -525,7 +525,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public void CacheBlockEntities()
         {
-            var list = new Dictionary<Vector3, BlockEntity>();
+            var list = new Dictionary<IntVec3, BlockEntity>();
             foreach (var chunk in this.ActiveChunks.Values)
                 foreach (var (local, entity) in chunk.GetBlockEntitiesByPosition())
                     list.Add(local.ToGlobal(chunk), entity);
@@ -589,9 +589,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.UndiscoveredAreaManager.OnGameEvent(e);
         }
 
-        public override bool SetBlockLuminance(Vector3 global, byte luminance)
+        public override bool SetBlockLuminance(IntVec3 global, byte luminance)
         {
-            global = global.RoundXY();
             if (!this.TryGetAll(global, out var chunk, out var cell))
                 return false;
             if (cell.Luminance == luminance)

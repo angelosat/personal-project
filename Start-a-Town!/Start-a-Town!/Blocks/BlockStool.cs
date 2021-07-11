@@ -25,12 +25,12 @@ namespace Start_a_Town_
 
         }
         
-        public override void Place(MapBase map, Microsoft.Xna.Framework.Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, data, variation, orientation, notify);
             map.Town.AddUtility(Utility.Types.Eating, global);
         }
-        public override void Remove(MapBase map, Microsoft.Xna.Framework.Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
         {
             base.Remove(map, global, notify);
             map.Town.RemoveUtility(Utility.Types.Eating, global);

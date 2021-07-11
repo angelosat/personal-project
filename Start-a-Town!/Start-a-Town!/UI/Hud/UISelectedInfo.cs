@@ -540,11 +540,11 @@ namespace Start_a_Town_.UI
                 .Where(tar => tar.Type == TargetType.Entity)
                 .Select(t => t.Object);
         }
-        internal static IEnumerable<Vector3> GetSelectedPositions()
+        internal static IEnumerable<IntVec3> GetSelectedPositions()
         {
             return GetSelected()
                 .Where(tar => tar.Type == TargetType.Position)
-                .Select(t => t.Global);
+                .Select(t => (IntVec3)t.Global);
         }
         internal static Entity GetSingleSelectedEntity()
         {

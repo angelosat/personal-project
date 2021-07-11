@@ -41,12 +41,12 @@ namespace Start_a_Town_
             return true;
         }
         
-        internal override void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
+        internal override void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, IntVec3 vector3)
         {
             uISelectedInfo.AddTabAction("Orders", () => ShowUI(map, vector3));
         }
 
-        public void ShowUI(MapBase map, Vector3 global)
+        public void ShowUI(MapBase map, IntVec3 global)
         {
             if (CraftingWindow != null)
                 CraftingWindow.Hide();
@@ -55,10 +55,10 @@ namespace Start_a_Town_
             CraftingWindow.ToggleSmart();
         }
 
-        internal override void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, Vector3 global)
+        internal override void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
         {
             // draw workstation operating position
-            cam.DrawGridCells(sb, Color.White * .5f, new Vector3[] { global + Block.GetFrontSide(map.GetCell(global).Orientation) });
+            cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + Block.GetFrontSide(map.GetCell(global).Orientation) });
         }
 
         public override void AddSaveData(SaveTag tag)
@@ -80,7 +80,7 @@ namespace Start_a_Town_
             this._Orders.ReadMutable(r);
             return this;
         }
-        internal override void MapLoaded(MapBase map, Vector3 global)
+        internal override void MapLoaded(MapBase map, IntVec3 global)
         {
             foreach (var ord in this._Orders)
                 ord.Map = map;

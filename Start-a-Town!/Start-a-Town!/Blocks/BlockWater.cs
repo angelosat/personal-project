@@ -29,22 +29,22 @@ namespace Start_a_Town_.Blocks
             };
         }
 
-        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, data, variation, orientation, notify);
             var flow = new LiduidFlowProcess(map, global, global);
             LiduidFlowProcess.Add(flow);
         }
 
-        public override void NeighborChanged(IObjectProvider net, Vector3 global)
+        public override void NeighborChanged(IObjectProvider net, IntVec3 global)
         {
-            var above = net.Map.GetBlock(global + Vector3.UnitZ);
+            var above = net.Map.GetBlock(global + IntVec3.UnitZ);
             if (above == BlockDefOf.Water)
             {
                 net.Map.GetCell(global).BlockData = 1;
                 return;
             }
-            var below = net.Map.GetBlock(global - Vector3.UnitZ);
+            var below = net.Map.GetBlock(global - IntVec3.UnitZ);
             if (below == BlockDefOf.Air)
             {
                 LiduidFlowProcess.Add(new LiduidFlowProcess(net.Map, global, global));

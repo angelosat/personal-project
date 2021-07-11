@@ -35,26 +35,26 @@ namespace Start_a_Town_.Blocks
             return new BlockCampfireEntity();
         }
 
-        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
-            if (!map.GetBlock(global - Vector3.UnitZ).Opaque)
+            if (!map.GetBlock(global - IntVec3.UnitZ).Opaque)
                 return;
             base.Place(map, global, data, variation, orientation, notify);
         }
         public override bool IsSwitchable => true;
         public override bool IsRoomBorder => false;
 
-        internal override IEnumerable<Vector3> GetOperatingPositions(Cell cell)
+        internal override IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
         {
-            yield return new Vector3(-1, 0, 0);
-            yield return new Vector3(1, 0, 0);
-            yield return new Vector3(0, -1, 0);
-            yield return new Vector3(0, 1, 0);
+            yield return new IntVec3(-1, 0, 0);
+            yield return new IntVec3(1, 0, 0);
+            yield return new IntVec3(0, -1, 0);
+            yield return new IntVec3(0, 1, 0);
         }
 
-        protected override void OnBlockBelowChanged(MapBase map, Vector3 global)
+        protected override void OnBlockBelowChanged(MapBase map, IntVec3 global)
         {
-            map.GetBlock(global.Below(), out var cell);
+            map.GetBlock(global.Below, out var cell);
             if (cell.Block == BlockDefOf.Air)
                 this.Remove(map, global);
         }

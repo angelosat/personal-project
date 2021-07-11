@@ -474,6 +474,9 @@ namespace Start_a_Town_
                 return this.FaceGlobal + this.Precise;
             }
         }
+        /// <summary>
+        ///  TODO turn to IntVec3
+        /// </summary>
         public Vector3 FaceGlobal
         {
             get

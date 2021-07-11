@@ -53,6 +53,17 @@ namespace Start_a_Town_
             foreach (var n in AdjacentRadialLarge)
                 yield return center + n;
         }
+        static public void GetMinMaxVector3(IntVec3 vec1, IntVec3 vec2, out IntVec3 min, out IntVec3 max)
+        {
+            var xmin = Math.Min(vec1.X, vec2.X);
+            var ymin = Math.Min(vec1.Y, vec2.Y);
+            var zmin = Math.Min(vec1.Z, vec2.Z);
+            var xmax = vec1.X + vec2.X - xmin;
+            var ymax = vec1.Y + vec2.Y - ymin;
+            var zmax = vec1.Z + vec2.Z - zmin;
+            min = new IntVec3(xmin, ymin, zmin);
+            max = new IntVec3(xmax, ymax, zmax);
+        }
         static public void GetMinMaxVector3(Vector3 vec1, Vector3 vec2, out Vector3 min, out Vector3 max)
         {
             var xmin = Math.Min(vec1.X, vec2.X);
@@ -90,11 +101,11 @@ namespace Start_a_Town_
             new IntVec3(0, 0, 1),
             new IntVec3(0, 0, -1)
         };
-        static public readonly Vector3[] AdjacentXY = new Vector3[]{
-            new Vector3(1, 0, 0),
-            new Vector3(-1, 0, 0),
-            new Vector3(0, 1, 0),
-            new Vector3(0, -1, 0)
+        static public readonly IntVec3[] AdjacentXY = new IntVec3[]{
+            new IntVec3(1, 0, 0),
+            new IntVec3(-1, 0, 0),
+            new IntVec3(0, 1, 0),
+            new IntVec3(0, -1, 0)
         };
         static public readonly IntVec3[] AdjacentXYIntVec3 = new IntVec3[]{
             new IntVec3(1, 0, 0),
@@ -102,10 +113,10 @@ namespace Start_a_Town_
             new IntVec3(0, 1, 0),
             new IntVec3(0, -1, 0)
         };
-        static public readonly Vector3[] Column3 = new Vector3[]{
-            new Vector3(0, 0, 1),
-            new Vector3(0, 0, 0),
-            new Vector3(0, 0, -1)
+        static public readonly IntVec3[] Column3 = new IntVec3[]{
+            new IntVec3(0, 0, 1),
+            new IntVec3(0, 0, 0),
+            new IntVec3(0, 0, -1)
         };
         static public Vector3[] GetAdjacent(this Vector3 center)
         {
@@ -223,6 +234,13 @@ namespace Start_a_Town_
                 (float)(pos.X * camera.RotSin + pos.Y * camera.RotCos),
                 pos.Z);
         }
+        public static Vector3 Rotate(this IntVec3 pos, Camera camera)
+        {
+            return new IntVec3(
+                (int)(pos.X * camera.RotCos - pos.Y * camera.RotSin),
+                (int)(pos.X * camera.RotSin + pos.Y * camera.RotCos),
+                pos.Z);
+        }
         public static Vector2 Rotate(this Vector2 pos, Camera camera)
         {
             return new Vector2((float)(pos.X * camera.RotCos - pos.Y * camera.RotSin), (float)(pos.X * camera.RotSin + pos.Y * camera.RotCos));
@@ -237,18 +255,15 @@ namespace Start_a_Town_
             neighbors[3] = (global - new Vector3(0, 1, 0));
             return neighbors;
         }
-        static public Vector3[] GetNeighbors(this Vector3 global)
+        static public IEnumerable<Vector3> GetNeighbors(this Vector3 global)
         {
-            Vector3[] neighbors = new Vector3[6];
-            neighbors[0] = (global + new Vector3(1, 0, 0));
-            neighbors[1] = (global - new Vector3(1, 0, 0));
-            neighbors[2] = (global + new Vector3(0, 1, 0));
-            neighbors[3] = (global - new Vector3(0, 1, 0));
-            neighbors[4] = (global + new Vector3(0, 0, 1));
-            neighbors[5] = (global - new Vector3(0, 0, 1));
-            return neighbors;
+            yield return global + new Vector3(1, 0, 0);
+            yield return global - new Vector3(1, 0, 0);
+            yield return global + new Vector3(0, 1, 0);
+            yield return global - new Vector3(0, 1, 0);
+            yield return global + new Vector3(0, 0, 1);
+            yield return global - new Vector3(0, 0, 1);
         }
-
         static public IEnumerable<Vector2> GetNeighbors(this Vector2 coords)
         {
             yield return coords + new Vector2(1, 0);

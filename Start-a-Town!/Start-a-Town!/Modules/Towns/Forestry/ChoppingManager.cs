@@ -33,22 +33,6 @@ namespace Start_a_Town_
         }
         public HashSet<int> ChoppingTasks = new();
 
-        public List<Vector3> GetPositions()
-        {
-            var list = new List<Vector3>();
-            foreach (var tree in this.GetTrees())
-                if (tree is null) //THE NETWORK RETURNS NULL FOR THE PARTICULAR INSTANCEID if disposed
-                    list.Add(tree.Global.Round() - Vector3.UnitZ);
-            return list;
-        }
-        public List<Vector3> GetForagingPositions()
-        {
-            var list = new List<Vector3>();
-            foreach (var plant in this.Town.Map.Net.GetNetworkObjects(this.QueuedForaging.ToArray()))
-                list.Add(plant.Global.Round());
-            return list;
-        }
-
         public ChoppingManager(Towns.Town town)
         {
             this.Town = town;
@@ -200,14 +184,7 @@ namespace Start_a_Town_
         {
             return this.QueuedForaging.Contains(obj.RefID);
         }
-        public void EditChopping()
-        {
-            ToolManager.SetTool(new ToolDesignatePositions((a, b, c) => this.Add(Types.Chopping, a, b, c), this.GetPositions) { ValidityCheck = IsPositionValid });
-        }
-        private void EditForaging()
-        {
-            ToolManager.SetTool(new ToolDesignatePositions((a, b, c) => this.Add(Types.Foraging, a, b, c), this.GetPositions) { ValidityCheck = IsPositionValid });
-        }
+        
 
         private void Add(Types type, Vector3 start, Vector3 end, bool value)
         {
@@ -217,12 +194,7 @@ namespace Start_a_Town_
         {
             return !Block.IsBlockSolid(this.Map, arg + Vector3.UnitZ);
         }
-        internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
-        {
-            yield return new Tuple<string, Action>("Chop trees", this.EditChopping);
-            yield return new Tuple<string, Action>("Forage", this.EditForaging);
-        }
-
+       
         static readonly IconButton ButtonChopAdd = new(ChopIcon) { HoverText = "Chop down" };
         static readonly IconButton ButtonChopRemove = new(ChopIcon, Icon.Cross) { HoverText = "Cancel chop down" };
 

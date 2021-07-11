@@ -156,9 +156,9 @@ namespace Start_a_Town_.Towns
             camera.DrawGridCells(sb, color *.5f, validpositions);
         }
 
-        private IEnumerable<Vector3> GetPositions(MapBase map, Vector3 a, Vector3 b)
+        private IEnumerable<IntVec3> GetPositions(MapBase map, IntVec3 a, IntVec3 b)
         {
-            var validpositions = a.GetBox(b).Where(v => ZoneNew.IsPositionValid(map, v)).Select(v => v.Above());
+            var validpositions = a.GetBox(b).Where(v => ZoneNew.IsPositionValid(map, v)).Select(v => v.Above);
             return validpositions;
         }
        

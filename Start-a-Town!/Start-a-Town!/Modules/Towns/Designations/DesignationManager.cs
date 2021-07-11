@@ -12,19 +12,19 @@ namespace Start_a_Town_
     {
         public override string Name => "Designation Manager";
 
-        readonly Dictionary<DesignationDef, HashSet<Vector3>> Designations;
+        readonly Dictionary<DesignationDef, HashSet<IntVec3>> Designations;
 
         static DesignationManager()
         {
             PacketDesignation.Init();
         }
 
-        internal HashSet<Vector3> GetDesignations(DesignationDef des)
+        internal HashSet<IntVec3> GetDesignations(DesignationDef des)
         {
             return this.Designations[des];
         }
 
-        internal bool RemoveDesignation(DesignationDef des, Vector3 global)
+        internal bool RemoveDesignation(DesignationDef des, IntVec3 global)
         {
             var removed = this.Designations[des].Remove(global);
             if (removed)
@@ -34,16 +34,16 @@ namespace Start_a_Town_
 
         public DesignationManager(Town town) : base(town)
         {
-            Designations = new Dictionary<DesignationDef, HashSet<Vector3>>();
-            Designations.Add(DesignationDef.Deconstruct, new HashSet<Vector3>());
-            Designations.Add(DesignationDef.Mine, new HashSet<Vector3>());
-            Designations.Add(DesignationDef.Switch, new HashSet<Vector3>());
+            Designations = new Dictionary<DesignationDef, HashSet<IntVec3>>();
+            Designations.Add(DesignationDef.Deconstruct, new HashSet<IntVec3>());
+            Designations.Add(DesignationDef.Mine, new HashSet<IntVec3>());
+            Designations.Add(DesignationDef.Switch, new HashSet<IntVec3>());
         }
-        internal void Add(DesignationDef designation, Vector3 position, bool remove = false)
+        internal void Add(DesignationDef designation, IntVec3 position, bool remove = false)
         {
-            this.Add(designation, new List<Vector3>(1) { position }, remove);
+            this.Add(designation, new List<IntVec3>(1) { position }, remove);
         }
-        internal void Add(DesignationDef designation, List<Vector3> positions, bool remove)
+        internal void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
             if (designation == DesignationDef.Null)
             {
@@ -91,18 +91,18 @@ namespace Start_a_Town_
             switch (e.Type)
             {
                 case Components.Message.Types.BlocksChanged:
-                    HandleBlocksChanged(e.Parameters[1] as IEnumerable<Vector3>);
+                    HandleBlocksChanged(e.Parameters[1] as IEnumerable<IntVec3>);
                     break;
 
                 case Components.Message.Types.BlockChanged:
                     MapBase map;
-                    Vector3 global;
+                    IntVec3 global;
                     GameEvents.EventBlockChanged.Read(e.Parameters, out map, out global);
-                    HandleBlocksChanged(new Vector3[] { global });
+                    HandleBlocksChanged(new IntVec3[] { global });
                     break;
 
                 case Components.Message.Types.ZoneDesignation:
-                    this.Add(e.Parameters[0] as DesignationDef, e.Parameters[1] as List<Vector3>, (bool)e.Parameters[2]);
+                    this.Add(e.Parameters[0] as DesignationDef, e.Parameters[1] as List<IntVec3>, (bool)e.Parameters[2]);
                     break;
 
                 default:
@@ -110,7 +110,7 @@ namespace Start_a_Town_
             }
         }
 
-        private void HandleBlocksChanged(IEnumerable<Vector3> globals)
+        private void HandleBlocksChanged(IEnumerable<IntVec3> globals)
         {
             foreach (var desType in Designations)
             {
@@ -131,7 +131,7 @@ namespace Start_a_Town_
         public override void Load(SaveTag tag)
         {
             foreach (var des in Designations.Keys.ToList())
-                tag.TryGetTagValue<List<SaveTag>>(des.Name, v => Designations[des] = new HashSet<Vector3>(new List<Vector3>().Load(v)));
+                tag.TryGetTagValue<List<SaveTag>>(des.Name, v => Designations[des] = new HashSet<IntVec3>(new List<IntVec3>().Load(v)));
         }
         public override void Write(System.IO.BinaryWriter w)
         {
@@ -141,7 +141,7 @@ namespace Start_a_Town_
         public override void Read(System.IO.BinaryReader r)
         {
             foreach (var des in Designations.Keys.ToList())
-                Designations[des] = new HashSet<Vector3>(r.ReadListVector3());
+                Designations[des] = new HashSet<IntVec3>(r.ReadListIntVec3());
         }
 
         internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
@@ -158,7 +158,7 @@ namespace Start_a_Town_
             if (this.Town.Net is Net.Server)
                 return;
             var selectedCells = UISelectedInfo.GetSelectedPositions();
-            var fromblockentities = selectedCells.Select(this.Map.GetBlockEntity).OfType<Blocks.BlockEntity>().Select(b => (Vector3)b.OriginGlobal);
+            var fromblockentities = selectedCells.Select(this.Map.GetBlockEntity).OfType<Blocks.BlockEntity>().Select(b => b.OriginGlobal);
             selectedCells = selectedCells.Concat(fromblockentities).Distinct();
             
             var areTask = selectedCells.Where(e => this.Designations.Values.Any(t => t.Contains(e)));

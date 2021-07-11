@@ -332,7 +332,7 @@ namespace Start_a_Town_
             operatingPos = poos.Value;
             return poos.HasValue;
         }
-        public IntVec3? FindOperatablePosition(Vector3 facilityGlobal)
+        public IntVec3? FindOperatablePosition(IntVec3 facilityGlobal)
         {
             var operatingPositions = this.Map.GetCell(facilityGlobal).GetOperatingPositions();
             if (!operatingPositions.Any())

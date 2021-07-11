@@ -19,7 +19,7 @@ namespace Start_a_Town_
         {
             this.Regions.Clear();
             var maxz = this.Chunk.Map.GetMaxHeight() - 1;
-            var handled = new HashSet<Vector3>();
+            var handled = new HashSet<IntVec3>();
             var size = Chunk.Size;
             var h = 1; //2
             for (int x = 0; x < size; x++)
@@ -29,7 +29,7 @@ namespace Start_a_Town_
                     var lastSolidZ = 0;
                     for (int z = 0; z < maxz; z++)
                     {
-                        var vec = new Vector3(x, y, z);
+                        var vec = new IntVec3(x, y, z);
                         var global = vec.ToGlobal(this.Chunk);
                         var cell = this.Chunk[x, y, z];
                         if (cell.IsSolid() && cell.Block is not BlockDoor)
@@ -39,7 +39,7 @@ namespace Start_a_Town_
                         }
                         else
                         {
-                            var existing = this.GetRegionAt(global - new Vector3(0, 0, h)); // why 2?
+                            var existing = this.GetRegionAt(global - new IntVec3(0, 0, h)); // why 2?
                             if (foundSolid && lastSolidZ == z - h && existing == null)
                             {
                                 foreach (var region in this.FloodNew(handled, x, y, lastSolidZ))
@@ -65,15 +65,15 @@ namespace Start_a_Town_
             this.Regions.Add(newRegion);
         }
 
-        IEnumerable<Region> FloodNew(HashSet<Vector3> handled, int x, int y, int z)
+        IEnumerable<Region> FloodNew(HashSet<IntVec3> handled, int x, int y, int z)
         {
-            var nextFlood = new Queue<Vector3>();
-            nextFlood.Enqueue(new Vector3(x, y, z));
+            var nextFlood = new Queue<IntVec3>();
+            nextFlood.Enqueue(new IntVec3(x, y, z));
             while (nextFlood.Any())
             {
                 var vec = nextFlood.Dequeue();
                 var currentRegion = new Region(this.Chunk);
-                var toHandle = new Queue<Vector3>();
+                var toHandle = new Queue<IntVec3>();
                 toHandle.Enqueue(vec);
                 handled.Add(vec);
                 var adjZ = VectorHelper.Column3;
@@ -175,7 +175,7 @@ namespace Start_a_Town_
             yield return pos.Above();
         }
         
-        internal Region GetRegionAt(Vector3 global)
+        internal Region GetRegionAt(IntVec3 global)
         {
             return this.Regions.FirstOrDefault(r => r.Contains(global));
         }
@@ -561,7 +561,7 @@ namespace Start_a_Town_
         {
             this.Regions.Clear();
             var maxz = this.Chunk.Map.GetMaxHeight() - 1;
-            var handled = new HashSet<Vector3>();
+            var handled = new HashSet<IntVec3>();
             var size = Chunk.Size;
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
@@ -570,7 +570,7 @@ namespace Start_a_Town_
                     var lastSolidZ = 0;
                     for (int z = 0; z < maxz; z++)
                     {
-                        var vec = new Vector3(x, y, z);
+                        var vec = new IntVec3(x, y, z);
                         var global = vec.ToGlobal(this.Chunk);
                         var cell = this.Chunk[x, y, z];
                         if (cell.IsSolid() && cell.Block is not BlockDoor)
@@ -580,7 +580,7 @@ namespace Start_a_Town_
                         }
                         else
                         {
-                            var existing = this.GetRegionAt(global - new Vector3(0, 0, 2)); // why 2?
+                            var existing = this.GetRegionAt(global - new IntVec3(0, 0, 2)); // why 2?
                             if (foundSolid && lastSolidZ == z - 2 && existing == null)
                             {
                                 foreach (var region in this.FloodNew(handled, x, y, lastSolidZ))

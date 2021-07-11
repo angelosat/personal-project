@@ -61,7 +61,7 @@ namespace Start_a_Town_
                 this.Add(n);
         }
         
-        public void Remove(Vector3 global)
+        public void Remove(IntVec3 global)
         {
             RegionNode node;
             if(this.Nodes.TryGetValue(global, out node))
@@ -72,11 +72,11 @@ namespace Start_a_Town_
         {
             this.Remove(n.Global);
         }
-        public IEnumerable<Vector3> GetPositions()
+        public IEnumerable<IntVec3> GetPositions()
         {
             return this.Nodes.Values.Select(n => n.Global);
         }
-        internal bool Contains(Vector3 global)
+        internal bool Contains(IntVec3 global)
         {
             return this.Nodes.ContainsKey(global);
         }
@@ -88,7 +88,7 @@ namespace Start_a_Town_
         public void LinkNodes()
         {
             var toHandle = new Queue<RegionNode>(this.Nodes.Values);
-            var handled = new HashSet<Vector3>();
+            var handled = new HashSet<IntVec3>();
             while (toHandle.Any())
             {
                 var node = toHandle.Dequeue();
@@ -96,7 +96,7 @@ namespace Start_a_Town_
 
                 if (node.North == null)
                 {
-                    var northColumn = node.Global.North();
+                    var northColumn = node.Global.North;
                     foreach (var north in RegionTracker.GetColumn(northColumn))
                         if (this.Nodes.ContainsKey(north))
                         {
@@ -109,7 +109,7 @@ namespace Start_a_Town_
                 }
                 if (node.South == null)
                 {
-                    var southolumn = node.Global.South();
+                    var southolumn = node.Global.South;
                     foreach (var south in RegionTracker.GetColumn(southolumn))
                         if (this.Nodes.ContainsKey(south))
                         {
@@ -122,7 +122,7 @@ namespace Start_a_Town_
                 }
                 if (node.West == null)
                 {
-                    var westColumn = node.Global.West();
+                    var westColumn = node.Global.West;
                     foreach (var west in RegionTracker.GetColumn(westColumn))
                         if (this.Nodes.ContainsKey(west))
                         {
@@ -135,7 +135,7 @@ namespace Start_a_Town_
                 }
                 if (node.East == null)
                 {
-                    var eastColumn = node.Global.East();
+                    var eastColumn = node.Global.East;
                     foreach (var east in RegionTracker.GetColumn(eastColumn))
                         if (this.Nodes.ContainsKey(east))
                         {
@@ -155,7 +155,7 @@ namespace Start_a_Town_
                 // if one of node's neighbors is null, check all other regions for a neighbor
                 if (node.West == null)
                 {
-                    var adj = node.Global.West();
+                    var adj = node.Global.West;
                     if (this.Map.IsInBounds(adj))
                     {
                         for (int i = 0; i < VectorHelper.Column3.Length; i++)
@@ -179,7 +179,7 @@ namespace Start_a_Town_
                 }
                 if (node.East == null)
                 {
-                    var adj = node.Global.East();
+                    var adj = node.Global.East;
                     if (this.Map.IsInBounds(adj))
                     {
                         for (int i = 0; i < VectorHelper.Column3.Length; i++)
@@ -204,7 +204,7 @@ namespace Start_a_Town_
                 }
                 if (node.North == null)
                 {
-                    var adj = node.Global.North();
+                    var adj = node.Global.North;
                     if (this.Map.IsInBounds(adj))
                     {
                         for (int i = 0; i < VectorHelper.Column3.Length; i++)
@@ -228,7 +228,7 @@ namespace Start_a_Town_
                 }
                 if (node.South == null)
                 {
-                    var adj = node.Global.South();
+                    var adj = node.Global.South;
                     if (this.Map.IsInBounds(adj))
                     {
                         for (int i = 0; i < VectorHelper.Column3.Length; i++)
@@ -309,11 +309,11 @@ namespace Start_a_Town_
                 r.Size = this.Size;
         }
 
-        internal void DrawNode(Vector3 global, MySpriteBatch sb, Camera cam)
+        internal void DrawNode(IntVec3 global, MySpriteBatch sb, Camera cam)
         {
-            cam.DrawGridCell(sb, Color.Lime, global.Above());
+            cam.DrawGridCell(sb, Color.Lime, global.Above);
             var node = this.Nodes[global];//.ToLocal()];
-            cam.DrawGridCells(sb, Color.Lime, node.GetLinks().Select(link=> link.Global.Above()));
+            cam.DrawGridCells(sb, Color.Lime, node.GetLinks().Select(link=> link.Global.Above));
         }
 
         internal void Add(Region r)
@@ -388,7 +388,7 @@ namespace Start_a_Town_
         }
         internal void TrySplitRegion(RegionNode split) // with door handling
         {
-            var isBelowDoor = this.Map.GetBlock(split.Global.Above()) is BlockDoor;
+            var isBelowDoor = this.Map.GetBlock(split.Global.Above) is BlockDoor;
 
             Region doorRegion = null;
             var links = split.GetLinks();

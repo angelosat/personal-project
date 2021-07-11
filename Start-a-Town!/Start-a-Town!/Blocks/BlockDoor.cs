@@ -149,11 +149,11 @@ namespace Start_a_Town_
         }
         public override bool IsRoomBorder => true;
 
-        public override Dictionary<Vector3, byte> GetParts(Vector3 global, int orientation)
+        public override Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation)
         {
-            var dic = new Dictionary<Vector3, byte>();
+            var dic = new Dictionary<IntVec3, byte>();
             for (int i = 0; i < 3; i++)
-                dic.Add(global + new Vector3(0, 0, i), GetData(i));
+                dic.Add(global + new IntVec3(0, 0, i), GetData(i));
             return dic;
         }
 
@@ -171,12 +171,12 @@ namespace Start_a_Town_
             return !IsLocked(cell.BlockData);
         }
         public override bool Multi => true;
-        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
-            var positions = new Vector3[2];
+            var positions = new IntVec3[2];
             for (int i = 0; i < 2; i++)
             {
-                Vector3 g = global + new Vector3(0, 0, i);
+                var g = global + new IntVec3(0, 0, i);
                 positions[i] = g;
                 byte _data = (byte)i;
                 map.SetBlock(g, Block.Types.Door, _data, variation, orientation, false);
@@ -186,8 +186,8 @@ namespace Start_a_Town_
 
             // DETECT HOUSE
             // find which side is enterior by checking heightmap
-            var back = global - Vector3.UnitY;
-            var front = global + Vector3.UnitY;
+            var back = global - IntVec3.UnitY;
+            var front = global + IntVec3.UnitY;
             var backHeightMap = map.GetHeightmapValue(back);
             var frontHeightMap = map.GetHeightmapValue(front);
             var backIsInside = back.Z < backHeightMap;
@@ -197,7 +197,7 @@ namespace Start_a_Town_
                 //flood fill to find all enterior
             }
         }
-        public override void Remove(MapBase map, Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
         {
             var positions = GetChildren(map, global);
             foreach (var g in positions)
@@ -205,20 +205,20 @@ namespace Start_a_Town_
             if (notify)
                 map.NotifyBlocksChanged(positions);
         }
-        private static Vector3 GetBase(MapBase map, Vector3 global)
+        private static Vector3 GetBase(MapBase map, IntVec3 global)
         {
             byte data = map.GetBlockData(global);
             byte masked = data &= 0x1;// 0x3;
             int baseZ = (int)(global.Z - masked);
-            Vector3 baseLoc = new Vector3(global.X, global.Y, baseZ);
+            IntVec3 baseLoc = new IntVec3(global.X, global.Y, baseZ);
             return baseLoc;
         }
-        public static IEnumerable<Vector3> GetChildren(MapBase map, Vector3 global)
+        public static IEnumerable<IntVec3> GetChildren(MapBase map, IntVec3 global)
         {
-            Vector3 baseLoc = GetBase(map, global);
+            IntVec3 baseLoc = GetBase(map, global);
             for (int i = 0; i < 2; i++)
             {
-                Vector3 g = baseLoc + new Vector3(0, 0, i);
+                IntVec3 g = baseLoc + new IntVec3(0, 0, i);
                 yield return g;
             }
         }

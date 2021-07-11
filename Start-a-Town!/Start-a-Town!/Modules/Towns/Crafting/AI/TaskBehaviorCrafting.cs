@@ -15,8 +15,8 @@ namespace Start_a_Town_
         public static TargetIndex IngredientIndex = TargetIndex.B;
         public static TargetIndex WorkstationIndex = TargetIndex.A;
 
-        Vector3[] _CachedOperatingPositions;
-        Vector3[] CachedOperatingPositions
+        IntVec3[] _CachedOperatingPositions;
+        IntVec3[] CachedOperatingPositions
         {
             get
             {

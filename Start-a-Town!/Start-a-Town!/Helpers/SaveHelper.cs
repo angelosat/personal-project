@@ -381,9 +381,23 @@ namespace Start_a_Town_
                 list.Add(new SaveTag(SaveTag.Types.Vector3, "", pos));
             return list;
         }
+        public static SaveTag Save(this ICollection<IntVec3> vectors, string name)
+        {
+            var list = new SaveTag(SaveTag.Types.List, name, SaveTag.Types.Vector3);
+            foreach (var pos in vectors)
+                list.Add(new SaveTag(SaveTag.Types.Vector3, "", pos));
+            return list;
+        }
         public static void Save(this ICollection<Vector3> vectors, SaveTag save, string name)
         {
             save.Add(vectors.Save(name));
+        }
+        public static List<IntVec3> Load(this List<IntVec3> list, List<SaveTag> positions)
+        {
+            list.Clear();
+            foreach (var pos in positions)
+                list.Add((IntVec3)pos.Value);
+            return list;
         }
         public static List<Vector3> Load(this List<Vector3> list, List<SaveTag> positions)
         {
@@ -400,7 +414,14 @@ namespace Start_a_Town_
                 list.Add((Vector3)pos.Value);
             return list;
         }
-        
+        public static T LoadIntVecs<T>(this T list, SaveTag tag) where T : ICollection<IntVec3>, new()
+        {
+            list.Clear();
+            var positions = tag.Value as List<SaveTag>;
+            foreach (var pos in positions)
+                list.Add((Vector3)pos.Value);
+            return list;
+        }
         public static T LoadVectors<T>(this T list, SaveTag tag) where T: ICollection<Vector3>, new()
         {
             list.Clear();

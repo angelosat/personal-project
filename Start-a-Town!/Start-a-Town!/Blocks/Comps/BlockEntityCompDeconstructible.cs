@@ -10,7 +10,7 @@ namespace Start_a_Town_
         {
             this.Materials = itemDefMaterialAmounts;
         }
-        internal override void Deconstruct(GameObject actor, Vector3 global)
+        internal override void Deconstruct(GameObject actor, IntVec3 global)
         {
             // DO I NEED TO DO THIS HERE? or can i do this at the block base class?
             var map = actor.Map;
@@ -22,7 +22,7 @@ namespace Start_a_Town_
             var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
             actor.Net.PopLoot(obj, global, Vector3.Zero);
         }
-        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             foreach (var mat in this.Materials)
                 info.AddInfo(new Label(mat));

@@ -10,25 +10,25 @@ namespace Start_a_Town_
     class ToolDesignate3D : ToolManagement
     {
         enum ValidityType { Invalid, Valid, Ignore }
-        protected Vector3 Begin, End;
+        protected IntVec3 Begin, End;
         protected int Width, Height;
         protected bool Enabled;
         bool Valid;
         bool Removing;
-        protected Action<Vector3, Vector3, bool> Callback;
-        Func<List<Vector3>> GetZones;
-        Vector3 Plane;
+        protected Action<IntVec3, IntVec3, bool> Callback;
+        Func<List<IntVec3>> GetZones;
+        IntVec3 Plane;
         public override bool TargetOnlyBlocks => true;
         public ToolDesignate3D()
         {
 
         }
        
-        public ToolDesignate3D(Action<Vector3, Vector3, bool> callback)
-            : this(callback, () => new List<Vector3>())
+        public ToolDesignate3D(Action<IntVec3, IntVec3, bool> callback)
+            : this(callback, () => new List<IntVec3>())
         {
         }
-        public ToolDesignate3D(Action<Vector3, Vector3, bool> callback, Func<List<Vector3>> zones)
+        public ToolDesignate3D(Action<IntVec3, IntVec3, bool> callback, Func<List<IntVec3>> zones)
         {
             this.Callback = callback;
             this.GetZones = zones;
@@ -43,7 +43,7 @@ namespace Start_a_Town_
             if (this.Target.Type != TargetType.Position)
                 return;
 
-            this.End = this.Target.Global * (Vector3.One - this.Plane) + this.Begin * this.Plane;
+            this.End = (IntVec3)this.Target.Global * (IntVec3.One - this.Plane) + this.Begin * this.Plane;
 
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;
@@ -64,7 +64,7 @@ namespace Start_a_Town_
             {
                 if (Engine.Map.IsSolid(pos))
                     return false;
-                if (!Engine.Map.IsSolid(pos - Vector3.UnitZ))
+                if (!Engine.Map.IsSolid(pos - IntVec3.UnitZ))
                     return false;
             }
             return true;
@@ -107,8 +107,8 @@ namespace Start_a_Town_
 
             var rect = new Rectangle(x, y, this.Width, this.Height);
 
-            var begin = new Vector3(x, y, z);
-            var end = new Vector3(xx, yy, zz);
+            var begin = new IntVec3(x, y, z);
+            var end = new IntVec3(xx, yy, zz);
 
             this.Callback(begin, end, IsRemoving());
 
@@ -130,24 +130,14 @@ namespace Start_a_Town_
                 return Messages.Remove;
         }
 
-        List<Vector3> GetPositions()
+        List<IntVec3> GetPositions(int w, int h)
         {
-            List<Vector3> list = new List<Vector3>();
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            for (int i = x; i < x + this.Width; i++)
-                for (int j = y; j < y + this.Height; j++)
-                    list.Add(new Vector3(i, j, this.Begin.Z));
-            return list;
-        }
-        List<Vector3> GetPositions(int w, int h)
-        {
-            List<Vector3> list = new List<Vector3>();
+            List<IntVec3> list = new List<IntVec3>();
             int x = (int)Math.Min(this.Begin.X, this.End.X);
             int y = (int)Math.Min(this.Begin.Y, this.End.Y);
             for (int i = x; i < x + w; i++)
                 for (int j = y; j < y + h; j++)
-                    list.Add(new Vector3(i, j, this.Begin.Z));
+                    list.Add(new IntVec3(i, j, this.Begin.Z));
             return list;
         }
         Icon Icon = new Icon(UI.UIManager.Icons32, 12, 32);

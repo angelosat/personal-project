@@ -16,7 +16,7 @@ namespace Start_a_Town_
         {
             return Icon.Construction;
         }
-        public ToolDigging(Action<Vector3, Vector3, bool> callback)
+        public ToolDigging(Action<IntVec3, IntVec3, bool> callback)
         {
             this.Callback = callback;
         }

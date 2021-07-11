@@ -37,6 +37,12 @@ namespace Start_a_Town_
             Vector3 rotated = local.Rotate(camera);
             return (rotated.X + rotated.Y);
         }
+        public static float GetDrawDepth(this IntVec3 worldGlobal, MapBase map, Camera camera)
+        {
+            IntVec3 local = worldGlobal - new IntVec3(map.GetOffset(), 0);
+            IntVec3 rotated = local.Rotate(camera);
+            return rotated.X + rotated.Y;
+        }
 
         public static Vector2 XY(this Vector3 vector)
         {
@@ -160,7 +166,22 @@ namespace Start_a_Town_
 
             return new BoundingBox(m, M);
         }
-        
+        static public BoundingBox GetBoundingBox(this IntVec3 vec1, IntVec3 vec2)
+        {
+            int xm = (int)Math.Min(vec1.X, vec2.X);
+            int ym = (int)Math.Min(vec1.Y, vec2.Y);
+            int zm = (int)Math.Min(vec1.Z, vec2.Z);
+
+            int xM = (int)(vec1.X + vec2.X - xm);
+            int yM = (int)(vec1.Y + vec2.Y - ym);
+            int zM = (int)(vec1.Z + vec2.Z - zm);
+
+            var m = new IntVec3(xm, ym, zm);
+            var M = new IntVec3(xM, yM, zM);
+
+            return new BoundingBox(m, M);
+        }
+
         static public List<Vector3> GetBox(this Vector3 begin, int dx, int dy, int dz)
         {
             var list = new List<Vector3>();
@@ -187,7 +208,6 @@ namespace Start_a_Town_
             blockCoords = blockCoords.SnapToBlock(); //necessary? do i need this?
             return new BoundingBox(blockCoords - new Vector3(.5f, .5f, 0), blockCoords + new Vector3(.5f, .5f, 1));
         }
-
         static public List<Vector3> GetBox(this Vector3 begin, Vector3 end)
         {
             var xmin = Math.Min(begin.X, end.X);
@@ -216,6 +236,34 @@ namespace Start_a_Town_
             }
             return list;
         }
+        static public List<IntVec3> GetBox(this IntVec3 begin, IntVec3 end)
+        {
+            var xmin = Math.Min(begin.X, end.X);
+            var ymin = Math.Min(begin.Y, end.Y);
+            var zmin = Math.Min(begin.Z, end.Z);
+            var xmax = begin.X + end.X - xmin;
+            var ymax = begin.Y + end.Y - ymin;
+            var zmax = begin.Z + end.Z - zmin;
+            var dx = xmax - xmin + 1;
+            var dy = ymax - ymin + 1;
+            var dz = zmax - zmin + 1;
+
+            var origin = new IntVec3(xmin, ymin, zmin);
+
+            var list = new List<IntVec3>((int)(dx * dy * dz));
+
+            for (int i = 0; i < dx; i++)
+            {
+                for (int j = 0; j < dy; j++)
+                {
+                    for (int k = 0; k < dz; k++)
+                    {
+                        list.Add(origin + new IntVec3(i, j, k));
+                    }
+                }
+            }
+            return list;
+        }
         static public IEnumerable<IntVec3> GetBoxLazy(this IntVec3 begin, IntVec3 end)
         {
             var xmin = Math.Min(begin.X, end.X);
@@ -229,7 +277,6 @@ namespace Start_a_Town_
             var dz = zmax - zmin + 1;
 
             var origin = new Vector3(xmin, ymin, zmin);
-
 
             for (int i = 0; i < dx; i++)
             {

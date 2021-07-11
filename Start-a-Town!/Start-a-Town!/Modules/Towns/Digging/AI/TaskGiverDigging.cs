@@ -25,7 +25,7 @@ namespace Start_a_Town_
                 if (!actor.CanReach(job))
                     continue;
            
-                if(TaskHelper.TryHaulAside(actor, job.Above(), out var haulAsideTask))
+                if(TaskHelper.TryHaulAside(actor, job.Above, out var haulAsideTask))
                 {
                     if (haulAsideTask != null)
                         return haulAsideTask;

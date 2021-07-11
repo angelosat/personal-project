@@ -145,7 +145,7 @@ namespace Start_a_Town_.Towns.Constructions
         {
         }
 
-        public void Handle(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<Vector3> positions)
+        public void Handle(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<IntVec3> positions)
         {
             var cheat = false;
             var map = this.Map;
@@ -159,7 +159,7 @@ namespace Start_a_Town_.Towns.Constructions
             }
         }
 
-        private void PlaceDesignations(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<Vector3> positions)
+        private void PlaceDesignations(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<IntVec3> positions)
         {
             var map = this.Town.Map;
             if (args.Removing)
@@ -189,7 +189,7 @@ namespace Start_a_Town_.Towns.Constructions
                 }
         }
 
-        private static void PlaceDesignationsGodMode(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<Vector3> positions, MapBase map)
+        private static void PlaceDesignationsGodMode(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<IntVec3> positions, MapBase map)
         {
             if (!args.Removing)
             {

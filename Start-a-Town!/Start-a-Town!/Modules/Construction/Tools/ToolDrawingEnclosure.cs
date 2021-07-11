@@ -20,13 +20,13 @@ namespace Start_a_Town_.Modules.Construction
         {
             if (!this.Enabled)
                 return;
-            var end = this.End + Vector3.UnitZ * this.Height;
+            var end = this.End + IntVec3.UnitZ * this.Height;
 
             var box = this.Begin.GetBox(end);
             if (Math.Abs(this.End.X - this.Begin.X) > 1 && Math.Abs(this.End.Y - this.Begin.Y) > 1)
             {
-                VectorHelper.GetMinMaxVector3(this.Begin, end, out Vector3 a, out Vector3 b);
-                var boxInner = (a + new Vector3(1, 1, 0)).GetBox(b - new Vector3(1, 1, 0));
+                VectorHelper.GetMinMaxVector3(this.Begin, end, out IntVec3 a, out IntVec3 b);
+                var boxInner = (a + new IntVec3(1, 1, 0)).GetBox(b - new IntVec3(1, 1, 0));
                 box = box.Except(boxInner).ToList();
             }
             cam.DrawGridBlocks(sb, Block.BlockBlueprint, box, color);
@@ -35,17 +35,17 @@ namespace Start_a_Town_.Modules.Construction
         {
             this.DrawGrid(sb, map, camera, Color.Red);
         }
-        public override List<Vector3> GetPositions()
+        public override List<IntVec3> GetPositions()
         {
             return GetPositions(this.Begin, this.TopCorner);
         }
-        static new public List<Vector3> GetPositions(Vector3 a, Vector3 b)
+        static new public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {
             var box = a.GetBox(b);
             if (Math.Abs(b.X - a.X) > 1 && Math.Abs(b.Y - a.Y) > 1)
             {
                 VectorHelper.GetMinMaxVector3(a, b, out a, out b);
-                var boxInner = (a + new Vector3(1, 1, 0)).GetBox(b - new Vector3(1, 1, 0));
+                var boxInner = (a + new IntVec3(1, 1, 0)).GetBox(b - new IntVec3(1, 1, 0));
                 box = box.Except(boxInner).ToList();
             }
             return box;

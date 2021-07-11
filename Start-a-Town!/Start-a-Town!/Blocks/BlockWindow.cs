@@ -65,14 +65,14 @@ namespace Start_a_Town_.Blocks
             return (int)data;
         }
 
-        public override void Place(MapBase map, Vector3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             if (!IsPositionValid(map, global))
                 return;
             base.Place(map, global, GetData(0), variation, orientation);
-            base.Place(map, global + Vector3.UnitZ, GetData(1), variation, orientation, notify);
+            base.Place(map, global + IntVec3.UnitZ, GetData(1), variation, orientation, notify);
         }
-        public override void Remove(MapBase map, Vector3 global, bool notify = true)
+        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
         {
             var part = map.GetBlockData(global);
             base.Remove(map, global);
@@ -80,11 +80,11 @@ namespace Start_a_Town_.Blocks
             switch(part)
             {
                 case 0:
-                    base.Remove(map, global + Vector3.UnitZ, notify);
+                    base.Remove(map, global + IntVec3.UnitZ, notify);
                     break;
 
                 case 1:
-                    base.Remove(map, global - Vector3.UnitZ, notify);
+                    base.Remove(map, global - IntVec3.UnitZ, notify);
                     break;
 
                 default:

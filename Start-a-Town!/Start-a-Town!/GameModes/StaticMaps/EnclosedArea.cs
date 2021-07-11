@@ -152,14 +152,14 @@ namespace Start_a_Town_
             }
             return area;
         }
-        static public HashSet<Vector3> BeginExclusiveAsList(MapBase map, Vector3 global)
+        static public HashSet<IntVec3> BeginExclusiveAsList(MapBase map, IntVec3 global)
         {
-            var area = new HashSet<Vector3>
+            var area = new HashSet<IntVec3>
             {
                 global
             };
-            var queue = new Queue<Vector3>();
-            var handled = new HashSet<Vector3>() { global };
+            var queue = new Queue<IntVec3>();
+            var handled = new HashSet<IntVec3>() { global };
             queue.Enqueue(global);
             while (queue.Any())
             {

@@ -55,13 +55,13 @@ namespace Start_a_Town_.Modules.Construction
                 return;
 
             var atlastoken = this.Block.GetDefault();
-            var global = this.Enabled ? this.Begin : this.Target.FaceGlobal;
+            var global = this.Enabled ? this.Begin : (IntVec3)this.Target.FaceGlobal;
             atlastoken.Atlas.Begin(sb);
             this.Block.DrawPreview(sb, map, global, cam, this.State, this.Variation, this.Orientation);
             sb.Flush();
 
             // show operation position of workstation 
-            cam.DrawGridCells(sb, Color.White *.5f, new Vector3[] { global + Block.GetFrontSide(this.Orientation) });
+            cam.DrawGridCells(sb, Color.White *.5f, new IntVec3[] { global + Block.GetFrontSide(this.Orientation) });
         }
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {

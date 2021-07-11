@@ -22,7 +22,7 @@ namespace Start_a_Town_
         {
             this.Map = map;
         }
-        Room(MapBase map, HashSet<Vector3> positions) : this(map)
+        Room(MapBase map, HashSet<IntVec3> positions) : this(map)
         {
             this.Interior = positions;
         }
@@ -39,10 +39,10 @@ namespace Start_a_Town_
                     this.AddPosition(p);
             }
         }
-        public Room(RoomManager manager, ICollection<Vector3> positions) : this(manager.Map, new HashSet<Vector3>(positions)) { }
+        public Room(RoomManager manager, ICollection<IntVec3> positions) : this(manager.Map, new HashSet<IntVec3>(positions)) { }
         private RoomRoleDef roomRole;
-        public HashSet<Vector3> Interior = new();
-        public HashSet<Vector3> Border = new();
+        public HashSet<IntVec3> Interior = new();
+        public HashSet<IntVec3> Border = new();
         public Color Color;
         public bool Exists => true;
 
@@ -127,7 +127,7 @@ namespace Start_a_Town_
         {
             return $"Room {this.ID}";
         }
-        public IEnumerable<Vector3> GetFurniturePositions(FurnitureDef furniture)
+        public IEnumerable<IntVec3> GetFurniturePositions(FurnitureDef furniture)
         {
             return this.Interior.Where(g => this.Map.GetBlock(g).Furniture == furniture);
         }
@@ -140,28 +140,28 @@ namespace Start_a_Town_
             panel.AddInfo(new Label(() => $"Owner: {this.Owner?.Name ?? "none"}"));
             panel.AddInfo(new Label(() => $"Workplace: {this.Workplace?.Name ?? "none"}"));
         }
-        internal void AddEdge(Vector3 global)
+        internal void AddEdge(IntVec3 global)
         {
         }
-        internal void AddPosition(Vector3 global)
+        internal void AddPosition(IntVec3 global)
         {
             this.Interior.Add(global);
         }
-        internal void AddPositions(IEnumerable<Vector3> positions)
+        internal void AddPositions(IEnumerable<IntVec3> positions)
         {
             foreach (var p in positions)
                 this.AddPosition(p);
         }
-        private void RemovePosition(Vector3 global)
+        private void RemovePosition(IntVec3 global)
         {
             this.Interior.Remove(global);
         }
-        private void RemovePositions(IEnumerable<Vector3> globals)
+        private void RemovePositions(IEnumerable<IntVec3> globals)
         {
             foreach (var g in globals)
                 this.RemovePosition(g);
         }
-        internal void AddEdges(IEnumerable<Vector3> edges)
+        internal void AddEdges(IEnumerable<IntVec3> edges)
         {
             foreach (var p in edges)
                 this.AddPosition(p);
@@ -234,7 +234,7 @@ namespace Start_a_Town_
             return this.Interior.Contains(global);
         }
 
-        internal bool TryRemovePosition(Vector3 global, out List<Room> newRooms)
+        internal bool TryRemovePosition(IntVec3 global, out List<Room> newRooms)
         {
             var map = this.Map;
             if (!this.Contains(global))
@@ -273,7 +273,7 @@ namespace Start_a_Town_
             return newRooms.Any();
         }
 
-        internal bool TryExpandInto(Vector3 global)
+        internal bool TryExpandInto(IntVec3 global)
         {
             var map = this.Map;
             var area = EnclosedArea.BeginExclusiveAsList(map, global);
@@ -352,7 +352,7 @@ namespace Start_a_Town_
         public ISaveable Load(SaveTag tag)
         {
             tag.TryGetTagValue<int>("ID", out this.ID);
-            tag.TryGetTag("Positions", t => this.Interior = new HashSet<Vector3>().LoadVectors(t));
+            tag.TryGetTag("Positions", t => this.Interior = new HashSet<IntVec3>().LoadIntVecs(t));
             tag.TryGetTagValue("OwnerRef", out this.OwnerRef);
             tag.TryGetTagValueNew<int>("Workplace", ref this.workplaceID);
             tag.TryGetTagValue<string>("RoomDef", v => this.roomRole = !v.IsNullEmptyOrWhiteSpace() ? Def.GetDef<RoomRoleDef>(v) : null);
@@ -369,7 +369,7 @@ namespace Start_a_Town_
         public ISerializable Read(BinaryReader r)
         {
             this.ID = r.ReadInt32();
-            this.Interior = new HashSet<Vector3>().ReadVector3(r);
+            this.Interior = new HashSet<IntVec3>().ReadIntVec3(r);
             this.OwnerRef = r.ReadInt32();
             this.workplaceID = r.ReadInt32();
             this.roomRole = (r.ReadString() is string s && !s.IsNullEmptyOrWhiteSpace()) ? Def.GetDef<RoomRoleDef>(s) : null;

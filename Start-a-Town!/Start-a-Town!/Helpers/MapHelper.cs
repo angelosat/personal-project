@@ -63,10 +63,18 @@ namespace Start_a_Town_
             return !(local.X < 0 || local.X > Chunk.Size - 1 || local.Y < 0 || local.Y > Chunk.Size - 1 || local.Z < 0 || local.Z > MapBase.MaxHeight - 1);
 
         }
+        static public bool IsWithinChunkBounds(this IntVec3 local)
+        {
+            return !(local.X < 0 || local.X > Chunk.Size - 1 || local.Y < 0 || local.Y > Chunk.Size - 1 || local.Z < 0 || local.Z > MapBase.MaxHeight - 1);
+
+        }
         static public bool IsZWithinBounds(this Vector3 local)
         {
             return !(local.Z < 0 || local.Z > MapBase.MaxHeight - 1);
         }
-
+        static public bool IsZWithinBounds(this IntVec3 local)
+        {
+            return !(local.Z < 0 || local.Z > MapBase.MaxHeight - 1);
+        }
     }
 }

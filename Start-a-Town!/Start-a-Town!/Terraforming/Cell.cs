@@ -255,11 +255,11 @@ namespace Start_a_Town_
         public IntVec3 Front => Block.Front(this);
         public IntVec3 Back => Block.Back(this);
 
-        internal IEnumerable<Vector3> GetOperatingPositions()
+        internal IEnumerable<IntVec3> GetOperatingPositions()
         {
             return this.Block.GetOperatingPositions(this);
         }
-        internal IEnumerable<Vector3> GetOperatingPositionsGlobal(Vector3 global)
+        internal IEnumerable<IntVec3> GetOperatingPositionsGlobal(IntVec3 global)
         {
             return this.Block.GetOperatingPositions(this, global);
         }

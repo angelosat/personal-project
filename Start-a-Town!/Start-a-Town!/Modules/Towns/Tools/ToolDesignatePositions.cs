@@ -9,22 +9,22 @@ namespace Start_a_Town_.Towns
     class ToolDesignatePositions : ToolManagement
     {
         enum ValidityType { Invalid, Valid, Ignore }
-        Vector3 Begin, End;
+        IntVec3 Begin, End;
         int Width, Height;
         bool Enabled;
         bool Valid;
         bool Removing;
 
-        readonly Action<Vector3, Vector3, bool> Add;
-        Func<List<Vector3>> GetZones;
-        public Func<Vector3, bool> ValidityCheck;
-        Vector3 Plane;
+        readonly Action<IntVec3, IntVec3, bool> Add;
+        Func<List<IntVec3>> GetZones;
+        public Func<IntVec3, bool> ValidityCheck;
+        IntVec3 Plane;
 
-        public ToolDesignatePositions(Action<Vector3, Vector3, bool> callback)
-            : this(callback, () => new List<Vector3>())
+        public ToolDesignatePositions(Action<IntVec3, IntVec3, bool> callback)
+            : this(callback, () => new List<IntVec3>())
         {
         }
-        public ToolDesignatePositions(Action<Vector3, Vector3, bool> callback, Func<List<Vector3>> zones)
+        public ToolDesignatePositions(Action<IntVec3, IntVec3, bool> callback, Func<List<IntVec3>> zones)
         {
             this.Add = callback;
             this.GetZones = zones;
@@ -39,7 +39,7 @@ namespace Start_a_Town_.Towns
             if (this.Target.Type != TargetType.Position)
                 return;
 
-            this.End = this.Target.Global * (Vector3.One - this.Plane) + this.Begin * this.Plane;
+            this.End = (IntVec3)this.Target.Global * (IntVec3.One - this.Plane) + this.Begin * this.Plane;
 
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;

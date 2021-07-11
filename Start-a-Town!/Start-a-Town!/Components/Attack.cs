@@ -69,7 +69,6 @@ namespace Start_a_Town_.Components
             {
                 return (actor, target, direction) =>
                 {
-                    throw new NotImplementedException();
                     Vector3 distance = target.Global - actor.Global;
                     distance.Normalize();
                     float angle = (float)Math.Acos(Vector3.Dot(direction, distance));

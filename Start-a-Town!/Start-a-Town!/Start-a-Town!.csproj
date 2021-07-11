@@ -123,8 +123,6 @@
     <Compile Include="AI\Behaviors\Control\BehaviorHandleOrders.cs" />
     <Compile Include="AI\Behaviors\Interactions\BehaviorInteractionNew.cs" />
     <Compile Include="AI\Behaviors\BehaviorIdle.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorFindEquipment.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorFindWeapon.cs" />
     <Compile Include="AI\Behaviors\Inventory\TaskBehaviorHaulFromInventory.cs" />
     <Compile Include="AI\Behaviors\Inventory\TaskBehaviorStoreInInventory.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorCrouch.cs" />
@@ -152,22 +150,12 @@
     <Compile Include="AI\Behaviors\Movement\BehaviorStopMoving.cs" />
     <Compile Include="AI\Behaviors\Observe\BehaviorTaskObserveNew.cs" />
     <Compile Include="AI\Behaviors\Observe\TaskGiverObserve.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorAttackCharge.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorAttackDeliver.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorChaseTarget.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorCombat.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorUnstuck.cs" />
     <Compile Include="AI\Behaviors\BehaviorDequeue.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorFindPath.cs" />
     <Compile Include="AI\Behaviors\Interactions\BehaviorGoInteract.cs" />
     <Compile Include="AI\Behaviors\BehaviorStartInteraction.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorJumpOnBlock.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorChaseThreat.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorFlee.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorInRange.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorLineOfSight.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorResourceCheck.cs" />
-    <Compile Include="AI\Behaviors\CombatOBSOLETE\BehaviorThreatsExist.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorComposite.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorDecorator.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorParallel.cs" />
@@ -217,7 +205,6 @@
     <Compile Include="Control\KeyPressEventArgs2.cs" />
     <Compile Include="Control\Mouseover.cs" />
     <Compile Include="Control\MouseoverEventArgs.cs" />
-    <Compile Include="Engine\Camera\BlockBorderToken.cs" />
     <Compile Include="Engine\Camera\LightToken.cs" />
     <Compile Include="Graphics\Atlas.Node.Token.cs" />
     <Compile Include="Graphics\AtlasDepthNormals.Node.Token.cs" />
@@ -408,7 +395,6 @@
     <Compile Include="Components\Attributes\AttributeDef.cs" />
     <Compile Include="Components\Attributes\AttributeProgressAwarderDef.cs" />
     <Compile Include="Components\ComponentProps.cs" />
-    <Compile Include="Components\Crafting\CraftingIngredients.cs" />
     <Compile Include="Components\Fuel\Fuel.cs" />
     <Compile Include="Components\Fuel\FuelDef.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropEquippedTarget.cs" />
@@ -721,7 +707,6 @@
     <Compile Include="Components\Crafting\ReagentFilters\IsOfMaterialType.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\IsOfMaterial.cs" />
     <Compile Include="Components\Crafting\ReagentFilters\CanProduce.cs" />
-    <Compile Include="Components\Crafting\Site.cs" />
     <Compile Include="Components\Crafting\ReactionDefs.cs" />
     <Compile Include="Components\GearComponent.cs" />
     <Compile Include="Components\HaulComponent.cs">
@@ -732,8 +717,6 @@
     <Compile Include="Components\Interactions\NewScripts\Equip.cs" />
     <Compile Include="Modules\Base\GameManager.cs" />
     <Compile Include="Components\Inventory\Container.cs" />
-    <Compile Include="Components\MaterialsComponent.cs" />
-    <Compile Include="Components\Crafting\ReagentComponent.cs" />
     <Compile Include="Objects\Items\Materials\Material.cs" />
     <Compile Include="Objects\Items\Materials\MaterialType.cs" />
     <Compile Include="Components\MobileComponent.cs" />
@@ -758,7 +741,6 @@
     <Compile Include="Components\Stats\StatModifier.cs" />
     <Compile Include="Components\Stats\StatsComponentNew.cs" />
     <Compile Include="Components\Stats\StatsInterface.cs" />
-    <Compile Include="Components\Factory.cs" />
     <Compile Include="Components\Inventory\ItemContainer.cs" />
     <Compile Include="Components\Message.cs" />
     <Compile Include="Components\Resources\Durability.cs" />
@@ -959,9 +941,6 @@
     <Compile Include="Components\Attack.cs" />
     <Compile Include="Components\Attributes\AttributeStat.cs" />
     <Compile Include="Components\Attributes\AttributesComponent.cs" />
-    <Compile Include="Components\CombatComponent.cs" />
-    <Compile Include="Components\Crafting\Recipe.cs" />
-    <Compile Include="Components\Crafting\Template.cs" />
     <Compile Include="Components\FilterType.cs" />
     <Compile Include="Components\Resources\ResourcesComponent.cs" />
     <Compile Include="Components\Resources\ResourceDef.cs" />
@@ -1001,7 +980,6 @@
     </Compile>
     <Compile Include="Components\Consumables\ConsumableComponent.cs" />
     <Compile Include="Components\BodyComponent.cs" />
-    <Compile Include="Components\PropertyComponent.cs" />
     <Compile Include="Components\Vegetation\PlantComponent.cs" />
     <Compile Include="Components\Vegetation\SeedComponent.cs" />
     <Compile Include="Components\StatsComponent.cs" />
@@ -1150,7 +1128,6 @@
     <Compile Include="Coords.cs" />
     <Compile Include="Terraforming\Generator.cs" />
     <Compile Include="Components\EntityComponent.cs" />
-    <Compile Include="Control\PlayerOld.cs" />
     <Compile Include="Helpers\PriorityQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

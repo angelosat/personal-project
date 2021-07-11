@@ -249,7 +249,6 @@ namespace Start_a_Town_
             obj.AddComponent(new AIComponent().Initialize(
                new BehaviorQueue(
                    new AIMemory(),
-                   new BehaviorCombat(),
                    new BehaviorHandleResources(),
                    new BehaviorHandleOrders(),
                    new AI.Behaviors.Tasks.BehaviorFindTask(),

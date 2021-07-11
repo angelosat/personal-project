@@ -26,23 +26,14 @@ namespace Start_a_Town_.UI
                   + (Parent != null ? Parent.ScreenLocation + Parent.ClientLocation : Vector2.Zero);
             }
         }
-        public int X
-        {
-            get { return (int)ScreenLocation.X; }
-        }
-        public int Y
-        {
-            get { return (int)ScreenLocation.Y; }
-        }
+        public int X => (int)ScreenLocation.X; 
+        public int Y => (int)ScreenLocation.Y;
+
         Control _Parent;
         public Control Parent
         {
-            get { return _Parent; }
-            set
-            {
-                _Parent = value;
-                OnParentChanged();
-            }
+            get => _Parent;
+            set => _Parent = value;
         }
 
         internal bool ContainsMouse()

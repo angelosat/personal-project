@@ -8,13 +8,8 @@ namespace Start_a_Town_.Components
 {
     class EquipComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get
-            {
-                return "Equippable";
-            }
-        }
+        public override string ComponentName => "Equippable";
+          
 
         public Dictionary<Stat.Types, float> Stats;
         public GearType Type;

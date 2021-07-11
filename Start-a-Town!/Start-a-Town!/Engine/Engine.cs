@@ -13,7 +13,6 @@ namespace Start_a_Town_
     public class EngineArgs
     {
         public bool HideWalls, HideTerrain, BlockOutlines;
-        public List<BlockBorderToken> BlockBorders = new List<BlockBorderToken>();
         EngineArgs()
         {
             this.HideWalls = Engine.HideWalls;

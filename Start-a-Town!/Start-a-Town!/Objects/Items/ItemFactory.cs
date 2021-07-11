@@ -30,7 +30,7 @@ namespace Start_a_Town_
         }
         static public Entity CreateToolFromRandomMaterials(ItemDef def)
         {
-            var mats = CraftingIngredients.GetRandomMaterialsFor(def);
+            var mats = GetRandomMaterialsFor(def);
             var obj = CreateTool(def);
             obj.SetMaterials(mats);
             obj.SetQuality(Quality.GetRandom());
@@ -50,6 +50,20 @@ namespace Start_a_Town_
             var obj = CreateItem(def);
             obj.SetMaterial(mat);
             return obj;
+        }
+
+        static public Dictionary<string, Material> GetRandomMaterialsFor(ItemDef def)
+        {
+            var dic = new Dictionary<string, Material>();
+            foreach (var r in def.CraftingProperties.Reagents)
+            {
+                var i = r.Value.Ingredient.GetAllValidItemDefs();
+                var m = i.SelectMany(i => i.GetValidMaterials());
+                var md = m.Distinct();
+                var mat = md.ToArray().SelectRandom(Material.Randomizer);
+                dic[r.Value.Name] = mat;
+            }
+            return dic;
         }
     }
 }

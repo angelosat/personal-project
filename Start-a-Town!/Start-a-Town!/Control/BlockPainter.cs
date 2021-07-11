@@ -14,8 +14,8 @@ namespace Start_a_Town_.PlayerControl
         readonly Random Random;
         int Orientation;
         Vector3 LastPainted = new Vector3(float.MinValue);
-        System.Windows.Forms.Keys KeyReplace = System.Windows.Forms.Keys.ShiftKey;
-        System.Windows.Forms.Keys KeyRemove = System.Windows.Forms.Keys.ControlKey;
+        Keys KeyReplace = Keys.ShiftKey;
+        Keys KeyRemove = Keys.ControlKey;
         public BlockPainter()
         {
 

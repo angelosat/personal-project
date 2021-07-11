@@ -7,10 +7,7 @@ namespace Start_a_Town_.Components
 {
     class AttackComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get { return "Attack"; }
-        }
+        public override string ComponentName => "Attack";
 
         public static float DefaultRange = Interaction.DefaultRange;
         public static double DefaultArc = Math.PI / 6d;
@@ -94,7 +91,6 @@ namespace Start_a_Town_.Components
                 return;
             this.State = Attack.States.Delivering;
             throw new NotImplementedException();
-            AnimationClip hand = null;
 
             Attack attack = Attack.Create(parent, dir, Attack.Ray, this.ChargeFunc);
             float lunge = parent.Velocity.Z == 0 ? this.Lunge(this.ChargeFunc()) : 0;

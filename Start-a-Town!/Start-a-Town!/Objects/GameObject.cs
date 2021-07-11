@@ -458,7 +458,6 @@ namespace Start_a_Town_
             get { return this.Components[componentName]; }
             set
             {
-                Factory.Register(value);
                 Components[value.ComponentName] = value;
                 value.MakeChildOf(this);
             }
@@ -532,19 +531,9 @@ namespace Start_a_Town_
             return true;
         }
         
-        [Obsolete]
-        public bool AddComponent(string name, EntityComponent component)
-        {
-            Components[component.ComponentName] = component;
-            component.MakeChildOf(this);
-            return true;
-        }
         public EntityComponent AddComponent(EntityComponent component)
         {
-            Factory.Register(component);
-            if (component == null)
-                return null;
-            Components[component.ComponentName] = component;
+            this.Components[component.ComponentName] = component;
             component.Parent = this;
             component.MakeChildOf(this);
             return component;
@@ -553,9 +542,8 @@ namespace Start_a_Town_
         public T AddComponent<T>() where T : EntityComponent, new()
         {
             T component = new();
-            Components[component.ComponentName] = component;
+            this.Components[component.ComponentName] = component;
             component.MakeChildOf(this);
-            Factory.Register(component);
             return component;
         }
 
@@ -863,8 +851,6 @@ namespace Start_a_Town_
             for (int i = 0; i < compCount; i++)
             {
                 string compName = r.ReadString();
-                if (!obj.Components.ContainsKey(compName))
-                    obj.AddComponent(Factory.Create(compName));
                 obj[compName].Read(r);
             }
             obj.ObjectSynced();
@@ -881,8 +867,6 @@ namespace Start_a_Town_
             for (int i = 0; i < compCount; i++)
             {
                 string compName = reader.ReadString();
-                if (!obj.Components.ContainsKey(compName))
-                    obj.AddComponent(Factory.Create(compName));
                 obj[compName].Read(reader);
             }
             obj.ObjectSynced();

@@ -4,7 +4,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
-using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components
@@ -131,9 +130,15 @@ namespace Start_a_Town_.Components
         
         public virtual void Instantiate(GameObject parent, Action<GameObject> instantiator) { }
 
-        public virtual void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null) { }
-        public virtual void Tick(GameObject parent)
-        { this.Tick(parent.Net, parent); }
+        public virtual void Tick() { }
+        public void Tick(MapBase map, IEntityCompContainer entity)
+        {
+            throw new NotImplementedException();
+        }
+        public void Tick(MapBase map, IEntityCompContainer entity, Vector3 global)
+        {
+            throw new NotImplementedException();
+        }
 
         public virtual void Initialize(GameObject parent) { }
         public virtual void Initialize(GameObject parent, RandomThreaded random) { this.Initialize(parent); }
@@ -269,16 +274,6 @@ namespace Start_a_Town_.Components
         }
         internal virtual void SyncRead(GameObject parent, BinaryReader r)
         {
-        }
-
-        public void Tick(IObjectProvider net, IEntityCompContainer entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Tick(IObjectProvider net, IEntityCompContainer entity, Vector3 global)
-        {
-            throw new NotImplementedException();
         }
 
         void IEntityComp.Load(SaveTag tag)

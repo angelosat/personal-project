@@ -20,8 +20,10 @@ namespace Start_a_Town_.Particles
         {
             this.Emitters.AddRange(emitters);
         }
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
+            var parent = this.Parent;
+
             foreach (var emitter in this.Emitters)
                 emitter.Update(parent.Map, parent.Global);
         }

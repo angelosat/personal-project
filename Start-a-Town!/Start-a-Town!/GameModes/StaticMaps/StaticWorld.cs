@@ -26,7 +26,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 net.Map.World.CurrentTick++;
             }
         }
-
+        public float Gravity => -0.015f;//-0.04f;// -0.05f; //35f;
         public const int Zenith = 14;
         string _Name;
         public bool Lighting;

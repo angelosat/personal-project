@@ -41,11 +41,12 @@ namespace Start_a_Town_.Components
                 this.NeedsNew.Add(d.Create(this.Parent as Actor));
         }
 
-        public override void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null)
+        public override void Tick()
         {
             Timer -= 1;
             if (Timer > 0)
                 return;
+            var parent = this.Parent;
 
             Timer = Engine.TicksPerSecond;
 

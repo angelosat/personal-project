@@ -105,10 +105,7 @@ namespace Start_a_Town_
 
         public Vector2 Coordinates;
         public abstract string GetName();
-        public float Gravity
-        {
-            get { return PhysicsComponent.Gravity; } // TODO: move gravity to world class
-        }
+        public float Gravity => this.World.Gravity;
         public readonly float PlantDensityTarget = .1f;
         public int ChunkVolume => Chunk.Size * Chunk.Size * this.GetMaxHeight();
 

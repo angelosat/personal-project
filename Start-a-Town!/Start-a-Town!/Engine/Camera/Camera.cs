@@ -10,9 +10,8 @@ using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_
 {
-    public class Camera : EntityComponent
+    public class Camera
     {
-        public override string ComponentName => "Camera";
         public const int FogZOffset = 2, FogFadeLength = 8;
         Vector4 FogColor = Color.SteelBlue.ToVector4();
         GameObject Following;
@@ -138,15 +137,6 @@ namespace Start_a_Town_
         }
         bool RenderTargetsInvalid = true;
 
-        public override void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null)
-        {
-            if (parent == null)
-                return;
-
-            Global = parent.Transform.Global + Vector3.UnitZ;
-
-            this.Follow(Global);
-        }
         public void Update(MapBase map, Vector3 global)
         {
             this.Global = global + Vector3.UnitZ;
@@ -369,11 +359,6 @@ namespace Start_a_Town_
         {
             screenBounds = GetScreenBounds(x, y, z, sourceBounds);
             return ViewPort.Intersects(screenBounds);
-        }
-
-        public override object Clone()
-        {
-            return new Camera(Width, Height);
         }
 
         double _Rotation;

@@ -25,7 +25,6 @@ namespace Start_a_Town_.Components
         public float Weight;
         public bool Enabled = true;
         const float FrictionFactor = .5f;
-        static public float Gravity = -0.015f;//-0.04f;// -0.05f; //35f; // TODO move gravity to world class
         static public float Jump = 0.2f;//-0.04f;// -0.05f; //35f;
         static public float Friction = 0.02f;// 0.005f; // TODO move this to blocks?
         public const int KnockbackMagnitude = 3;
@@ -72,12 +71,14 @@ namespace Start_a_Town_.Components
         /// <param name="net"></param>
         /// <param name="parent"></param>
         /// <param name="chunk"></param>
-        public override void Tick(IObjectProvider net, GameObject parent, Chunk chunk)
+        public override void Tick()
         {
             if (!this.Enabled)
                 return;
+            var parent = this.Parent;
+            var map = parent.Map;
+            var net = parent.Net;
             Vector3 next;
-            var map = parent.Net.Map;
             Vector3 lastGlobal = parent.Transform.Global;
             if (!map.TryGetCell(lastGlobal, out var thisCell))
                 return;
@@ -162,7 +163,7 @@ namespace Start_a_Town_.Components
             
             // if feet on contact with non-air block, get velocity transform of block directly below
 
-            var underfeet = lastGlobal + new Vector3(0, 0, Gravity);
+            var underfeet = lastGlobal + new Vector3(0, 0, map.Gravity);
             var underfeetBlockCoords = underfeet.ToBlock();
             var underfeetCell = map.GetCell(underfeet);
             var underfeetBlock = underfeetCell.Block;
@@ -243,7 +244,8 @@ namespace Start_a_Town_.Components
    
         private float ResolveVertical(GameObject parent, MapBase map, BoundingBox box, ref Vector3 speed, float density)
         {
-            var adjustedGravity = Gravity;
+            var grav = map.Gravity;
+            var adjustedGravity = grav;
             Vector3 global = parent.Global;
             if (speed.Z == 0)
             {
@@ -259,7 +261,7 @@ namespace Start_a_Town_.Components
                     return !map.IsSolid(c + new Vector3(0, 0, adjustedGravity));
                 }))
                 {
-                    speed.Z = Gravity;
+                    speed.Z = grav;
                     return global.Z + adjustedGravity;
                 }
                 
@@ -295,7 +297,7 @@ namespace Start_a_Town_.Components
                             new Vector3(nextbox.Max.X, nextbox.Min.Y, next.Z), 
                             new Vector3(nextbox.Max.X, nextbox.Max.Y, next.Z) 
                         };
-                    if (corners.Any(c => GetDensity(map, c + new Vector3(0, 0, Gravity)) > 0))
+                    if (corners.Any(c => GetDensity(map, c + new Vector3(0, 0, grav)) > 0))
                     {
                         var f = speed.Z;
                         parent.Net.SyncEvent(parent, Message.Types.HitGround, w => w.Write(f));

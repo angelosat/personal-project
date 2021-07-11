@@ -50,8 +50,9 @@ namespace Start_a_Town_.Components
             }
         }
         
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
+            var parent = this.Parent;
             for (int i = 0; i < this.Attributes.Length; i++)
             {
                 this.Attributes[i].Update(parent);

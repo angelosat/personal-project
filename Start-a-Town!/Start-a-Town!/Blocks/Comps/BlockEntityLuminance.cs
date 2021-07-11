@@ -23,9 +23,9 @@ namespace Start_a_Town_
             this.Consumption = consumption;
             this.IsSwitchedOn = isSwitchedOn ?? (() => true);
         }
-        public override void Tick(IObjectProvider net, BlockEntity entity, Vector3 global)
+        public override void Tick(MapBase map, BlockEntity entity, IntVec3 global)
         {
-            base.Tick(net, entity, global);
+            base.Tick(map, entity, global);
             var isOn = this.IsSwitchedOn();
             if (isOn)
             {
@@ -35,21 +35,21 @@ namespace Start_a_Town_
                     if (this.ConsumptionTick >= ConsumptionRate)
                     {
                         this.ConsumptionTick = 0;
-                        this.PowerSource.ConsumePower(net.Map, this.Consumption);
+                        this.PowerSource.ConsumePower(map, this.Consumption);
                         if (!this.PowerSource.HasAvailablePower(this.Consumption))
-                            this.TurnOff(net.Map, global);
+                            this.TurnOff(map, global);
                     }
                 }
                 else
                 {
                     if (this.PowerSource.HasAvailablePower(this.Consumption))
-                        this.TurnOn(net.Map, global);
+                        this.TurnOn(map, global);
                 }
             }
             else
             {
                 if(this.Powered)
-                    this.TurnOff(net.Map, global);
+                    this.TurnOff(map, global);
             }
         }
         

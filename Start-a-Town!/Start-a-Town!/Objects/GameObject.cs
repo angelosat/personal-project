@@ -547,9 +547,9 @@ namespace Start_a_Town_
             return component;
         }
 
-        public virtual void Update(IObjectProvider net, Chunk chunk = null)
+        public virtual void Update()
         {
-            Components.Update(this);
+            this.Components.Update();
         }
 
         public override string ToString()

@@ -40,8 +40,10 @@ namespace Start_a_Town_.Components
             get { return (int)Math.Round(ChargeFunc() * Damage.Values.Aggregate((a, b) => a + b)); }
         }
 
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
+            var parent = this.Parent;
+
             if (this.State == Attack.States.Charging)
                 this.Charge = Math.Min(this.Charge + 1, this.ChargeMax);
             this.NearestEnemyUpdateTimer--;

@@ -6,7 +6,6 @@ namespace Start_a_Town_.Components.Physics
     class Physics
     {
         static public float Friction { get { return PhysicsComponent.Friction; } }
-        static float Gravity { get { return PhysicsComponent.Gravity; } }
 
         static public void Update(float weight, float friction, MapBase map, Vector3 global, Vector3 velocity, out Vector3 nextglobal, out Vector3 nextvelocity)
         {
@@ -75,7 +74,7 @@ namespace Start_a_Town_.Components.Physics
         }
         static private float ResolveVertical(MapBase map, BoundingBox box, float weight,  ref Vector3 speed, float density)
         {
-            var grav = Gravity * weight;
+            var grav = map.Gravity * weight;
             Vector3 global = box.Min;
             if (speed.Z == 0)
             {

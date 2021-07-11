@@ -211,8 +211,9 @@ namespace Start_a_Town_.Components
             return false;
         }
 
-        public override void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null)
+        public override void Tick()
         {
+            var parent = this.Parent;
             bool midair = parent.Velocity.Z != 0;
 
             this.AnimationJump.Weight = midair ? 1 : 0;
@@ -272,11 +273,12 @@ namespace Start_a_Town_.Components
             if (parent.GetPath() != null)
                 return;
             Vector3 global = parent.Global;
-            if (!parent.Map.IsSolid(new Vector3(global.X + walkX, global.Y, global.Z + PhysicsComponent.Gravity)))
+            var g = parent.Map.Gravity;
+            if (!parent.Map.IsSolid(new Vector3(global.X + walkX, global.Y, global.Z + g)))
                 walkX = 0;
-            if (!parent.Map.IsSolid(new Vector3(global.X, global.Y + walkY, global.Z + PhysicsComponent.Gravity)))
+            if (!parent.Map.IsSolid(new Vector3(global.X, global.Y + walkY, global.Z + g)))
                 walkY = 0;
-            if (!parent.Map.IsSolid(new Vector3(global.X + walkX, global.Y + walkY, global.Z + PhysicsComponent.Gravity)))
+            if (!parent.Map.IsSolid(new Vector3(global.X + walkX, global.Y + walkY, global.Z + g)))
                 walkY = walkX = 0;
         }
         static public void EmitDust(GameObject parent)

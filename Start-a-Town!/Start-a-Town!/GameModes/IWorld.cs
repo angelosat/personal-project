@@ -15,6 +15,7 @@ namespace Start_a_Town_.GameModes
         MapBase GetMap(Vector2 mapCoords);
         Random Random { get; set; }
         int GetSeed();
+        float Gravity { get; }
         int Seed { get; }
         int MaxHeight { get; }
         ulong CurrentTick { get; set; }

@@ -773,22 +773,22 @@ namespace Start_a_Town_
         }
         public void Tick(MapBase map)
         {
-            this.UpdateEntities(map.Net);
-            this.UpdateBlockEntities(map.Net);
+            this.UpdateEntities();
+            this.UpdateBlockEntities(map);
         }
-        private void UpdateBlockEntities(IObjectProvider net)
+        private void UpdateBlockEntities(MapBase map)
         {
             foreach (var blockentity in this.BlockEntitiesByPosition.ToList())
-                blockentity.Value.Tick(net, blockentity.Key.ToGlobal(this));
+                blockentity.Value.Tick(map, blockentity.Key.ToGlobal(this));
         }
 
-        private void UpdateEntities(IObjectProvider net)
+        private void UpdateEntities()
         {
             var objectList = this.Objects.ToArray();
             var objCount = objectList.Length;
             for (int i = 0; i < objCount; i++)
             {
-                objectList[i].Update(net, this);
+                objectList[i].Update();
             }
         }
 

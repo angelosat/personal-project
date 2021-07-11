@@ -27,8 +27,10 @@ namespace Start_a_Town_
 
         public float Percentage => Value / Max;
 
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
+            var parent = this.Parent;
+
             if (this.TicksRemaining <= 0)
             {
                 var target = this.ValueTarget;

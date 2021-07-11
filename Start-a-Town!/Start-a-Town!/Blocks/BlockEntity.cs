@@ -18,10 +18,10 @@ namespace Start_a_Town_.Blocks
                 return this._Comps;
             } private set { this._Comps = value as EntityCompCollection<BlockEntityComp>; } }
         
-        public virtual void Tick(IObjectProvider net, Vector3 global)
+        public virtual void Tick(MapBase map, IntVec3 global)
         {
             foreach (var comp in this.Comps)
-                comp.Tick(net, this, global);
+                comp.Tick(map, this, global);
         }
         public virtual void GetTooltip(Control tooltip) { }
         public abstract object Clone();

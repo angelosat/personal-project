@@ -84,8 +84,10 @@ namespace Start_a_Town_.Components
         {
             parent.Body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
         }
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
+            var parent = this.Parent;
+
             Wiggle(parent);
             if (this.GrowthBody.Percentage >= ForageThreshold)
             {

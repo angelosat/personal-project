@@ -95,8 +95,9 @@ namespace Start_a_Town_.Components
         {
         }
 
-        public override void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null)
+        public override void Tick()
         {
+            var parent = this.Parent;
             if (this.Task == null)
                 return;
 

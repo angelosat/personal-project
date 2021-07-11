@@ -27,8 +27,9 @@ namespace Start_a_Town_.Components
             this.Fuse = fuse;
         }
 
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
+            var parent = this.Parent;
             if (this.FuseMax == -1)
                 return;
             if (!this.Exploded)

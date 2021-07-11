@@ -36,8 +36,9 @@ namespace Start_a_Town_.Components
         {
 
         }
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
+            var parent = this.Parent;
             foreach (var e in this.Emitters.ToList())
             {
                 e.Update(parent.Map, e.Source);

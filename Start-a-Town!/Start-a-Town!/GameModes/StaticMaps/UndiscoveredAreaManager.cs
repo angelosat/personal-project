@@ -31,10 +31,10 @@ namespace Start_a_Town_
         }
         public void FloodFill(MapBase map)
         {
-            var current = new Vector3(0, 0, MapBase.MaxHeight - 1);
+            var current = new IntVec3(0, 0, MapBase.MaxHeight - 1);
             this.FloodFill(map, current, true);
         }
-        public void FloodFill(MapBase map, Vector3 begin, bool value)
+        public void FloodFill(MapBase map, IntVec3 begin, bool value)
         {
             var current = begin;
             var cell = map.GetCell(current);
@@ -44,7 +44,7 @@ namespace Start_a_Town_
             map.GetChunk(begin).InvalidateSlice(begin.Z);
             if (cell.Block != BlockDefOf.Air)
                 return;
-            var tohandle = new Queue<Vector3>();
+            var tohandle = new Queue<IntVec3>();
             tohandle.Enqueue(current);
             while (tohandle.Any())
             {
@@ -94,12 +94,12 @@ namespace Start_a_Town_
             switch(e.Type)
             {
                 case Components.Message.Types.BlocksChanged:
-                    foreach (var pos in e.Parameters[1] as IEnumerable<Vector3>)
+                    foreach (var pos in e.Parameters[1] as IEnumerable<IntVec3>)
                         Handle(e.Parameters[0] as MapBase, pos);
                     break;
 
                 case Components.Message.Types.BlockChanged:
-                    Handle(e.Parameters[0] as MapBase, (Vector3)e.Parameters[1]);
+                    Handle(e.Parameters[0] as MapBase, (IntVec3)e.Parameters[1]);
                     break;
 
                 default:
@@ -107,7 +107,7 @@ namespace Start_a_Town_
             }
         }
 
-        private void Handle(MapBase map, Vector3 global)
+        private void Handle(MapBase map, IntVec3 global)
         {
             if (map.TryGetCell(global, out Cell gc))
                 if (!gc.Discovered)
@@ -124,7 +124,7 @@ namespace Start_a_Town_
             }
         }
         
-        public bool IsUndiscovered(Vector3 global)
+        public bool IsUndiscovered(IntVec3 global)
         {
             return !this.Map.GetCell(global).Discovered;
         }

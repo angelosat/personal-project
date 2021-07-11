@@ -47,13 +47,13 @@ namespace Start_a_Town_.Components
             parent.Body.ScaleFunc = () => .25f + .75f * this.GrowthNew.Percentage;
         }
 
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
-            base.Tick(parent);
+            var parent = this.Parent;
             if (this.GrowthNew.IsFinished)
                 return;
             this.GrowthTick++;
-            if(this.GrowthTick>=this.GrowthRate)
+            if (this.GrowthTick >= this.GrowthRate)
             {
                 this.GrowthTick = 0;
                 this.GrowthNew.Value++;

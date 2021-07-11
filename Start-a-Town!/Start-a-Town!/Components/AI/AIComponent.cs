@@ -78,8 +78,10 @@ namespace Start_a_Town_
             return (this.Root as BehaviorQueue).Current;
         }
 
-        public override void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null)
+        public override void Tick()
         {
+            var parent = this.Parent;
+            var net = parent.Net;
             if (net is Client) // do i want to run some deterministic behaviors locally too? UPDATE: NO
                 return;
             if (!Running)

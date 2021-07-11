@@ -73,7 +73,7 @@ namespace Start_a_Town_.Particles
                 throw new Exception();
             if (!HasPhysics)
             {
-                this.Update();
+                this.Update(map);
                 return;
             }
             foreach (var p in this.Particles.ToList())
@@ -94,14 +94,14 @@ namespace Start_a_Town_.Particles
         /// <summary>
         /// Update particles without physics
         /// </summary>
-        public void Update()
+        public void Update(MapBase map)
         {
             Vector3 adjustment;
             foreach (var p in this.Particles.ToList())
             {
                 if (p.Lifetime <= 0)
                     this.Particles.Remove(p);
-                adjustment = new Vector3(0, 0, PhysicsComponent.Gravity * this.ParticleWeight);
+                adjustment = new Vector3(0, 0, map.Gravity * this.ParticleWeight);
                 p.Velocity += adjustment;
                 p.Velocity *= this.Acceleration;
                 p.Offset += p.Velocity;

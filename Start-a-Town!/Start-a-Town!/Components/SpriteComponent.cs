@@ -216,8 +216,9 @@ namespace Start_a_Town_.Components
             Variation = 0;
             Orientation = 0;
         }
-        public override void Tick(IObjectProvider net, GameObject parent, Chunk chunk = null)
+        public override void Tick()
         {
+            var parent = this.Parent;
             if (this.Body == null)
                 this.Body = this.DefaultBody;
             var nextAnimations = new List<Animation>();

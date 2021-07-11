@@ -57,8 +57,9 @@ namespace Start_a_Town_.Components
                 this.Resources[i] = new Resource(props.Defs[i]);
             }
         }
-        public override void Tick(GameObject parent)
+        public override void Tick()
         {
+            var parent = this.Parent;
             foreach (var item in this.Resources)
                 item.Tick(parent);
         }

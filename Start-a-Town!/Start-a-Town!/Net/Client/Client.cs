@@ -1453,7 +1453,7 @@ namespace Start_a_Town_.Net
             {
                 if (amount < sourceSlot.StackSize) // if the amount moved is smaller than the source amount
                 {
-                    sourceSlot.Object.GetInfo().StackSize -= amount;
+                    sourceSlot.Object.StackSize -= amount;
                     // DO NOTHING. WAIT FOR NEW OBJECT FROM SERVER INSTEAD
                     return;
                 }

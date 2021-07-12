@@ -1230,8 +1230,8 @@ namespace Start_a_Town_.Net
                 if (amount < sourceSlot.StackSize) // if the amount moved is smaller than the source amount
                 {
                     obj = sourceSlot.Object.Clone();
-                    obj.GetInfo().StackSize = amount;
-                    sourceSlot.Object.GetInfo().StackSize -= amount;
+                    obj.StackSize = amount;
+                    sourceSlot.Object.StackSize -= amount;
                     this.InstantiateObject(obj);
                 }
                 else

@@ -22,19 +22,7 @@ namespace Start_a_Town_
         }
 
         public string Prefix = "";
-        public bool SaveWithChunk;
-        int _StackSize;
-        public int StackSize
-        {
-            get => this._StackSize; 
-            set
-            {
-                if (value < 0)
-                    throw new Exception();
-                this._StackSize = value;
-            }
-        }
-
+       
         internal override void Initialize(Entity parent, Quality quality)
         {
             this.Quality = quality;
@@ -43,9 +31,7 @@ namespace Start_a_Town_
         public DefComponent()
             : base()
         {
-            this.SaveWithChunk = true;
             Quality = Quality.Common;
-            this.StackSize = 1;
         }
        
         public override object Clone()
@@ -53,22 +39,15 @@ namespace Start_a_Town_
             DefComponent phys = new DefComponent();
             phys.CustomName = this.CustomName;
             phys.Quality = this.Quality;
-            phys.StackSize = this.StackSize;
-            phys.SaveWithChunk = this.SaveWithChunk;
             return phys;
-        }
-
-        public string GetName()
-        {
-            return $"{this.Name}{(this.StackSize > 1 ? $" (x{this.StackSize})" : "")}";
         }
 
         public override void OnTooltipCreated(GameObject parent, UI.Control tooltip)
         {
             tooltip.Color = GetQualityColor();
-            var namelabel = new Label(Vector2.Zero, this.GetName(), tooltip.Color, Color.Black, UIManager.FontBold) { TextColorFunc = () => tooltip.Color, TextFunc = this.GetName };
+            var namelabel = new Label(Vector2.Zero, parent.GetName(), tooltip.Color, Color.Black, UIManager.FontBold) { TextColorFunc = () => tooltip.Color, TextFunc = parent.GetName };
             tooltip.Controls.Add(namelabel);
-            tooltip.Controls.Add(new Label(this.Quality.Label/* + " " + this.ItemSubType.ToString()*/) { Fill = Color.Gold, Location = tooltip.Controls.BottomLeft, TextColorFunc = () => Color.Gold });
+            tooltip.Controls.Add(new Label(this.Quality.Label) { Fill = Color.Gold, Location = tooltip.Controls.BottomLeft, TextColorFunc = () => Color.Gold });
             tooltip.Controls.Add(new Label(parent.Description) { Location = tooltip.Controls.BottomLeft });
         }
       
@@ -77,18 +56,15 @@ namespace Start_a_Town_
             return Quality.Color;
         }
 
-        // TODO: maybe optimize this by a custom name flag so i don't have to send names of default named objects
         public override void Write(BinaryWriter w)
         {
             w.Write(this.CustomName);
-            w.Write(this.StackSize);
             w.Write(this.Quality.Name);
         }
 
         public override void Read(BinaryReader r)
         {
             this.CustomName = r.ReadString();
-            this.StackSize = r.ReadInt32();
             this.Quality = Def.GetDef<Quality>(r.ReadString());
         }
 
@@ -105,54 +81,9 @@ namespace Start_a_Town_
         internal override void Load(SaveTag tag)
         {
             tag.TryGetTagValue<string>("CustomName", v => this.CustomName = v);
-            tag.TryGetTagValue<string>("Quality", s => this.Quality = Start_a_Town_.Def.GetDef<Quality>(s));
+            tag.TryGetTagValue<string>("Quality", s => this.Quality = Def.GetDef<Quality>(s));
         }
-        internal override void GetInterface(GameObject gameObject, Control ui)
-        {
-            if (gameObject.StackMax > 1)
-                ui.AddControls(new Label("Stack Size: " + gameObject.StackSize.ToString() + "/" + gameObject.StackMax.ToString()) { Active = true, LeftClickAction = () => EditStackSize(gameObject) });
-        }
-
-        static private void EditStackSize(GameObject parent)
-        {
-            var win = new WindowSetStackSize((a) => SetStackSize(parent, a));
-            win.ShowDialog();
-        }
-
-        static private void SetStackSize(GameObject parent, int amount)
-        {
-            Net.Client.PlayerRemoteCall(new TargetArgs(parent), Message.Types.DebugSetStackSize, w => w.Write(amount));
-        }
-        internal override void HandleRemoteCall(GameObject parent, ObjectEventArgs e)
-        {
-            switch (e.Type)
-            {
-                case Message.Types.DebugSetStackSize:
-                    e.Data.Translate(parent.Net, r =>
-                    {
-                        var amount = r.ReadInt32();
-                        this.StackSize = amount;
-                    });
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        internal override void HandleRemoteCall(GameObject gameObject, Message.Types type, BinaryReader r)
-        {
-            switch(type)
-            {
-                case Message.Types.DebugSetStackSize:
-                    var amount = r.ReadInt32();
-                    this.StackSize = Math.Min(gameObject.StackMax, Math.Max(0, amount));
-                    break;
-
-                default:
-                    break;
-            }
-        }
-      
+       
         public override void OnNameplateCreated(GameObject parent, Nameplate plate)
         {
             plate.Controls.Add(new Label()
@@ -164,7 +95,6 @@ namespace Start_a_Town_
                 TextBackgroundFunc = () => parent.HasFocus() ? this.Quality.Color * .5f : Color.Black * .5f
 
             });
-
         }
     }
 }

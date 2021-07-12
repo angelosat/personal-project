@@ -60,7 +60,7 @@ namespace Start_a_Town_.Towns
 
         public override void OnContextActionBarCreated(ContextActionBar.ContextActionBarArgs args)
         {
-            foreach (var comp in Engine.Map.GetTown().TownComponents)
+            foreach (var comp in Engine.Map.Town.TownComponents)
                 comp.OnContextActionBarCreated(args);
         }
        
@@ -69,7 +69,7 @@ namespace Start_a_Town_.Towns
             var map = server.Map;
             if (map == null)
                 return;
-            var town = map.GetTown();
+            var town = map.Town;
             if (town == null)
                 return;
             town.HandlePacket(server, msg);
@@ -79,7 +79,7 @@ namespace Start_a_Town_.Towns
             var map = client.Map;
             if (map == null)
                 return;
-            var town = map.GetTown();
+            var town = map.Town;
             if (town == null)
                 return;
             town.HandlePacket(client, msg);
@@ -89,7 +89,7 @@ namespace Start_a_Town_.Towns
             var map = net.Map;
             if (map == null)
                 return;
-            var town = map.GetTown();
+            var town = map.Town;
             if (town == null)
                 return;
             town.HandlePacket(net, type, r);

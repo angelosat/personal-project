@@ -33,7 +33,7 @@ namespace Start_a_Town_
        
         public int StackSize
         {
-            get { return this.HasValue ? this.Object.GetInfo().StackSize : 0; }
+            get { return this.HasValue ? this.Object.StackSize : 0; }
             set
             {
                 if (value == 0)
@@ -42,7 +42,7 @@ namespace Start_a_Town_
                     return;
                 }
                 if (this.HasValue)
-                    this.Object.GetInfo().StackSize = value;
+                    this.Object.StackSize = value;
                 
             }
         }

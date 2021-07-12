@@ -815,11 +815,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.Size.Chunks;
         }
-        public override Town GetTown()
-        {
-            return this.Town;
-        }
-        
+       
         public override int GetMaxHeight()
         {
             return MaxHeight;

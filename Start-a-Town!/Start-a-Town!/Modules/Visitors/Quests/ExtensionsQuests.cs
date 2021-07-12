@@ -2,7 +2,7 @@
 {
     static class ExtensionsQuests
     {
-        static public QuestDef GetQuest(this Towns.Town town, int questID)
+        static public QuestDef GetQuest(this Town town, int questID)
         {
             return town.QuestManager.GetQuest(questID);
         }

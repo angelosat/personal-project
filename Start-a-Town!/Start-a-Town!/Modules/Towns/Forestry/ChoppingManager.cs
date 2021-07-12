@@ -33,7 +33,7 @@ namespace Start_a_Town_
         }
         public HashSet<int> ChoppingTasks = new();
 
-        public ChoppingManager(Towns.Town town)
+        public ChoppingManager(Town town)
         {
             this.Town = town;
         }

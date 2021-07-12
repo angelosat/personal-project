@@ -669,9 +669,7 @@ namespace Start_a_Town_
         public abstract void LoadThumbnails();
         public abstract MapThumb GetThumb();
 
-
-        public abstract Towns.Town GetTown();
-        public Towns.Town Town;
+        public Town Town;
 
         public abstract void WriteData(BinaryWriter w);
 

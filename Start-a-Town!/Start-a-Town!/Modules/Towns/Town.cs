@@ -10,9 +10,10 @@ using Start_a_Town_.Towns.Farming;
 using Start_a_Town_.Towns.Digging;
 using Start_a_Town_.Towns.Crafting;
 using Start_a_Town_.Towns.Constructions;
+using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Towns
+namespace Start_a_Town_
 {
     public partial class Town
     {

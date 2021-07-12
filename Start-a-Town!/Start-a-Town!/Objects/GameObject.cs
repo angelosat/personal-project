@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.AI;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
-using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
@@ -44,7 +43,7 @@ namespace Start_a_Town_
         public Color GetSlotColor()
         { return this.GetInfo().GetQualityColor(); }
         public string GetCornerText()
-        { return this.GetInfo().StackSize.ToString(); }
+        { return this.StackSize.ToString(); }
         public void DrawUI(SpriteBatch sb, Vector2 pos)
         {
             var sprite = this.GetSpriteOrDefault();
@@ -64,7 +63,6 @@ namespace Start_a_Town_
 
         private DefComponent _DefComponent;
         public DefComponent DefComponent => this._DefComponent ??= this.GetComponent<DefComponent>();
-        //public ItemDef Def { get { return this.DefComponent.Def; } set { this.DefComponent.Def = value; } }
         public ItemDef Def;
 
         public Quality Quality { get { return this.DefComponent.Quality; } set { this.DefComponent.Quality = value; } }
@@ -90,10 +88,8 @@ namespace Start_a_Town_
         #region Common Properties
         public virtual string Name
         {
-            get
-            {
-                return this.GetInfo().GetName();
-            }
+            get => $"{this.GetInfo().Name}{(this.StackSize > 1 ? $" (x{this.StackSize})" : "")}";
+            
             set
             {
                 var info = GetInfo();
@@ -263,9 +259,10 @@ namespace Start_a_Town_
         }
         public int StackMax => this.Def.StackCapacity;
 
+        int _StackSize;
         public int StackSize
         {
-            get { return this.GetInfo().StackSize; }
+            get { return this._StackSize; }
             set
             {
                 var oldSize = this.StackSize;
@@ -276,7 +273,7 @@ namespace Start_a_Town_
                 }
 
                 value = newSize;
-                this.GetInfo().StackSize = value;
+                this._StackSize = value;
                 if (value == 0)
                 {
                     if (this.IsSpawned)
@@ -700,26 +697,6 @@ namespace Start_a_Town_
             throw new Exception();
         }
 
-        public UI.Control GetTooltip()
-        {
-            var box = new GroupBox();
-            GetInfo().OnTooltipCreated(this, box);
-            // TODO: LOL fix, i need the object name to be on top
-            foreach (KeyValuePair<string, EntityComponent> comp in Components.Except(new KeyValuePair<string, EntityComponent>[] { new KeyValuePair<string, EntityComponent>("Info", GetInfo()) }))
-            {
-                comp.Value.OnTooltipCreated(this, box);
-            }
-
-            var value = this.GetValue();
-            if (value > 0)
-            {
-                box.AddControlsBottomLeft(new Label(string.Format("Value: {0} ({1})", value * this.StackSize, value)));
-            }
-
-            box.AddControlsBottomLeft(new Label(string.Format("InstanceID: {0}", this.RefID)));
-            box.MouseThrough = true;
-            return box;
-        }
         public void GetTooltip(UI.Control tooltip)//Message msg)
         {
             GetInfo().OnTooltipCreated(this, tooltip);
@@ -906,6 +883,7 @@ namespace Start_a_Town_
         {
             w.Write(this.Def?.Name ?? "");
             w.Write(this.RefID);
+            w.Write(this.StackSize);
             w.Write(this.Components.Count);
             foreach (var comp in this.Components)
             {
@@ -926,6 +904,7 @@ namespace Start_a_Town_
             }
 
             obj = def.Create();
+            obj.StackSize = r.ReadInt32();
             int compCount = r.ReadInt32();
             for (int i = 0; i < compCount; i++)
             {
@@ -942,6 +921,7 @@ namespace Start_a_Town_
             GameObject obj = CloneTemplate(templateID); // WARNING: must figure out way to reconstruct an object without it's creating a prefab
             _ = reader.ReadString();
             obj.RefID = reader.ReadInt32();
+            obj.StackSize = reader.ReadInt32();
             int compCount = reader.ReadInt32();
             for (int i = 0; i < compCount; i++)
             {

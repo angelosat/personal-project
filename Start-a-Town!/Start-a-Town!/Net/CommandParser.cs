@@ -39,7 +39,7 @@ namespace Start_a_Town_.Net
                     var pos = new Vector3(x,y,z);
                     if (!net.Map.IsInBounds(pos))
                         break;
-                    player.ControllingEntity.ChangePosition(pos);
+                    player.ControllingEntity.MoveTo(pos);
                     byte[] data = Network.Serialize(w =>
                     {
                         w.Write(player.ControllingEntity.RefID);

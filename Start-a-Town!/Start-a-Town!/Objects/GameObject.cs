@@ -64,7 +64,9 @@ namespace Start_a_Town_
 
         private DefComponent _DefComponent;
         public DefComponent DefComponent => this._DefComponent ??= this.GetComponent<DefComponent>();
-        public ItemDef Def { get { return this.DefComponent.Def; } set { this.DefComponent.Def = value; } }
+        //public ItemDef Def { get { return this.DefComponent.Def; } set { this.DefComponent.Def = value; } }
+        public ItemDef Def;
+
         public Quality Quality { get { return this.DefComponent.Quality; } set { this.DefComponent.Quality = value; } }
 
 
@@ -99,7 +101,7 @@ namespace Start_a_Town_
             }
         }
 
-        public string Description => this.GetInfo().Description; 
+        public string Description => this.Def.Description; 
         public virtual float Height => this.Physics.Height;
 
         public int RefID;
@@ -206,7 +208,7 @@ namespace Start_a_Town_
         public Vector3 GridCell
         {
             get { return this.Global.SnapToBlock(); }
-            set { this.ChangePosition(value); }
+            set { this.MoveTo(value); }
         }
         public Vector3 GridCellOffset
         {
@@ -217,7 +219,7 @@ namespace Start_a_Town_
             }
             set
             {
-                this.ChangePosition(this.GridCell + value);
+                this.MoveTo(this.GridCell + value);
             }
         }
 
@@ -259,6 +261,7 @@ namespace Start_a_Town_
                 transform.Direction = newdir;
             }
         }
+        public int StackMax => this.Def.StackCapacity;
 
         public int StackSize
         {
@@ -299,10 +302,6 @@ namespace Start_a_Town_
         {
             get { return this.StackSize == this.StackMax; }
         }
-        public int StackMax
-        {
-            get { return this.GetInfo().StackMax; }
-        }
 
         public Bone Body
         {
@@ -312,11 +311,16 @@ namespace Start_a_Town_
 
         public GameObject SetGlobal(Vector3 global)
         {
-            this.ChangePosition(global);
+            this.MoveTo(global);
             return this;
         }
 
-        public GameObject ChangePosition(Vector3 nextGlobal) // TODO: merge this with SetGlobal
+        /// <summary>
+        /// Changes the objects global position, removing the object from the previous chunk's object list and adding it to the new one's accordingly.
+        /// </summary>
+        /// <param name="nextGlobal"></param>
+        /// <returns></returns>
+        public GameObject MoveTo(Vector3 nextGlobal) // TODO: merge this with SetGlobal
         {
             if (this.Map.IsSolid(nextGlobal))// + Vector3.UnitZ * 0.01f))// TODO: FIX THIS
             {
@@ -480,18 +484,13 @@ namespace Start_a_Town_
         }
        
         PhysicsComponent _PhysicsCached;
-        public virtual PhysicsComponent Physics
-        {
-            get => this._PhysicsCached ??= GetComponent<PhysicsComponent>();
-            set { this.AddComponent(value); }
-        }
-        public virtual WorkComponent Work
-        {
-            get { return this.GetComponent<WorkComponent>(); }
-        }
+        public virtual PhysicsComponent Physics => this._PhysicsCached ??= this.GetComponent<PhysicsComponent>();
+
+        WorkComponent _WorkCached;
+        public virtual WorkComponent Work => this._WorkCached ??= this.GetComponent<WorkComponent>(); 
 
         PersonalInventoryComponent _InventoryCached;
-        public PersonalInventoryComponent Inventory => this._InventoryCached ??= GetComponent<PersonalInventoryComponent>();
+        public PersonalInventoryComponent Inventory => this._InventoryCached ??= this.GetComponent<PersonalInventoryComponent>();
 
         public ComponentCollection Components = new();
 
@@ -1014,12 +1013,9 @@ namespace Start_a_Town_
         internal List<SaveTag> SaveInternal()
         {
             var data = new List<SaveTag>();
-            if (this.Def != null)
-            {
-                data.Add(this.Def.Name.Save("Def"));
-            }
-
+            data.Add(this.Def.Name.Save("Def"));
             data.Add(this.RefID.Save("InstanceID"));
+            data.Add(this.StackSize.Save("Stack"));
             var compData = new SaveTag(SaveTag.Types.Compound, "Components");
             foreach (KeyValuePair<string, EntityComponent> comp in this.Components)
             {
@@ -1042,14 +1038,9 @@ namespace Start_a_Town_
         {
             tag.TryGetTagValue("Def", out string defName);
             var def = Start_a_Town_.Def.GetDef<ItemDef>(defName);
-            GameObject obj;
-            if (def is null)
-            {
-                throw new Exception();
-            }
-
-            obj = def.Create();
+            var obj = def.Create();
             tag.TryGetTagValue("InstanceID", out obj.RefID);
+            tag.TryGetTagValue<int>("Stack", v=> obj.StackSize = v);
             Dictionary<string, SaveTag> compData = tag["Components"].Value as Dictionary<string, SaveTag>;
             foreach (SaveTag compTag in compData.Values)
             {

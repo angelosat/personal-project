@@ -18,7 +18,7 @@ namespace Start_a_Town_.Blocks.Bed
         {
             this.PreviousStandingPosition = a.Global;
             var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
-            a.ChangePosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(a.Map, bedPos)));
+            a.MoveTo(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(a.Map, bedPos)));
             a.GetNeed(NeedDef.Energy).AddMod(NeedLetDefOf.Sleeping, 0, 1);
             a.GetNeed(NeedDef.Comfort).AddMod(NeedLetDefOf.Sleeping, 20, 0);
 
@@ -55,7 +55,7 @@ namespace Start_a_Town_.Blocks.Bed
             body.SetEnabled(true, true);
             body.RestingFrame = new Keyframe(0, Vector2.Zero, 0);
             head.RestingFrame = new Keyframe(0, Vector2.Zero, 0);
-            a.ChangePosition(this.PreviousStandingPosition);
+            a.MoveTo(this.PreviousStandingPosition);
         }
         public override object Clone()
         {

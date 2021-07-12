@@ -48,7 +48,7 @@ namespace Start_a_Town_
         }
         public int StackMax
         {
-            get { return this.Object is null ? 1 : Object.GetInfo().StackMax; }
+            get { return this.Object is null ? 1 : Object.StackMax; }
         }
         GameObject _Link;
         public GameObject Link

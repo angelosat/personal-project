@@ -119,7 +119,7 @@ namespace Start_a_Town_.Components
             next = new Vector3(nx, ny, nz);
 
             if (lastGlobal != next)
-                parent.ChangePosition(next);
+                parent.MoveTo(next);
             else if (velocity == Vector3.Zero)
             {
                 this.Enabled = false;

@@ -823,7 +823,7 @@ namespace Start_a_Town_.Net
                         if (!Instance.NetworkObjects.TryGetValue(r.ReadInt32(), out entity))
                             return;
                         var pos = r.ReadVector3();
-                        entity.ChangePosition(pos);
+                        entity.MoveTo(pos);
                     });
                     break;
 
@@ -1217,7 +1217,7 @@ namespace Start_a_Town_.Net
                 ObjectSnapshot previousObjState = prev.ObjectSnapshots.Find(o => o.Object == objSnapshot.Object);
                 if (previousObjState == null)
                     continue;
-                objSnapshot.Object.ChangePosition(objSnapshot.Position);
+                objSnapshot.Object.MoveTo(objSnapshot.Position);
                 objSnapshot.Object.Velocity = objSnapshot.Velocity;
                 objSnapshot.Object.Direction = objSnapshot.Orientation;
                 if (float.IsNaN(objSnapshot.Object.Direction.X) || float.IsNaN(objSnapshot.Object.Direction.Y))

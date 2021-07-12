@@ -1,4 +1,4 @@
-﻿namespace Start_a_Town_.Components.Vegetation
+﻿namespace Start_a_Town_
 {
     static class PlantsExtensions
     {
@@ -11,6 +11,5 @@
         {
             return entity.Def == ItemDefOf.Seeds && entity.GetComp<SeedComponent>().Plant == plant;
         }
-
     }
 }

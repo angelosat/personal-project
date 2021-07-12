@@ -59,7 +59,7 @@ namespace Start_a_Town_
                 headBone.SetEnabled(true, false);
                 headBone.RestingFrame = new Keyframe(0, Vector2.Zero, -(float)(Math.PI / 3f));
                 var bedPos = BlockBed.GetPartsDic(agent.Map, bedGlobal)[BlockBed.Part.Top];
-                agent.ChangePosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(agent.Map, bedPos)));
+                agent.MoveTo(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(agent.Map, bedPos)));
                 agent.GetNeed(NeedDef.Energy).Mod += 1;
             }
         }

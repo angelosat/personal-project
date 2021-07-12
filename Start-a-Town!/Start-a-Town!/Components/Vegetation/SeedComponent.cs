@@ -1,8 +1,9 @@
 ﻿using Start_a_Town_.UI;
 using System;
 using System.IO;
+using Start_a_Town_.Components;
 
-namespace Start_a_Town_.Components
+namespace Start_a_Town_
 {
     class SeedComponent : EntityComponent
     {

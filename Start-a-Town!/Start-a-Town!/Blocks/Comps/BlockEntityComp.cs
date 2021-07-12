@@ -1,14 +1,13 @@
 ﻿using System.IO;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public abstract class BlockEntityComp : IEntityComp, ISerializable
+    public abstract class BlockEntityComp : IBlockEntityComp, ISerializable
     {
         public virtual void OnEntitySpawn(BlockEntity entity, MapBase map, IntVec3 global) { }
-        public virtual void Draw(Camera camera, MapBase map, Vector3 global) { }
+        public virtual void Draw(Camera camera, MapBase map, IntVec3 global) { }
         public virtual void Load(SaveTag tag)
         {
         }
@@ -22,8 +21,8 @@ namespace Start_a_Town_
         {
         }
 
-        public virtual void Tick(MapBase map, BlockEntity entity, IntVec3 global) { }
-        public virtual void Tick(MapBase map, IEntityCompContainer entity) { }
+        public virtual void Tick(BlockEntity entity, MapBase map, IntVec3 global) { }
+        public virtual void Tick(MapBase map, IBlockEntityCompContainer entity) { }
 
         internal virtual void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
         {

@@ -23,9 +23,9 @@ namespace Start_a_Town_
             this.Consumption = consumption;
             this.IsSwitchedOn = isSwitchedOn ?? (() => true);
         }
-        public override void Tick(MapBase map, BlockEntity entity, IntVec3 global)
+        public override void Tick(BlockEntity entity, MapBase map, IntVec3 global)
         {
-            base.Tick(map, entity, global);
+            base.Tick(entity, map, global);
             var isOn = this.IsSwitchedOn();
             if (isOn)
             {

@@ -71,7 +71,7 @@ namespace Start_a_Town_
         internal GameObject CreateSeeds()
         {
             var seeds = ItemDefOf.Seeds.Create();
-            seeds.GetComp<SeedComponent>().SetPlant(this);
+            seeds.GetComponent<SeedComponent>().SetPlant(this);
             return seeds;
         }
     }

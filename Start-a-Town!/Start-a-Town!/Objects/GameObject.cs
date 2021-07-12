@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class GameObject : IEntity, ITooltippable, IContextable, INameplateable, IDebuggable, ISlottable, ISelectable, IEntityCompContainer, ILabeled
+    public class GameObject : IEntity, ITooltippable, IContextable, INameplateable, IDebuggable, ISlottable, ISelectable, ILabeled
     {
         public static Dictionary<int, GameObject> Templates = new();
         public string Label => this.Def.Label;
@@ -1637,18 +1637,7 @@ namespace Start_a_Town_
                 return this.Def.Weight * this.StackSize;
             }
         }
-        public ICollection<IEntityComp> Comps => throw new NotImplementedException();
-
-        public T GetComp<T>() where T : class, IEntityComp
-        {
-            return this.Components.Values.First(c => c is T) as T;
-        }
-
-        public bool HasComp<T>() where T : class, IEntityComp
-        {
-            return this.Components.Values.Any(c => c is T);
-        }
-
+        
         public virtual void TabGetter(Action<string, Action> getter)
         {
 

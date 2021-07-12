@@ -481,8 +481,8 @@
     <Compile Include="Blocks\Comps\EntityCompCollection.cs" />
     <Compile Include="Blocks\Comps\EntityCompParticles.cs" />
     <Compile Include="Blocks\Comps\EntityCompRefuelable.cs" />
-    <Compile Include="Blocks\Comps\IEntityComp.cs" />
-    <Compile Include="Blocks\Comps\IEntityCompContainer.cs" />
+    <Compile Include="Blocks\Comps\IBlockEntityComp.cs" />
+    <Compile Include="Blocks\Comps\IBlockEntityCompContainer.cs" />
     <Compile Include="Blocks\Comps\IPowerSource.cs" />
     <Compile Include="Components\Resources\Resource.cs" />
     <Compile Include="Components\Resources\ResourceRateModifier.cs" />

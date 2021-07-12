@@ -8,7 +8,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components
 {
-    public abstract class EntityComponent : ICloneable, IEntityComp
+    public abstract class EntityComponent : ICloneable
     {
         internal virtual void Initialize(ComponentProps componentProps)
         {
@@ -40,11 +40,8 @@ namespace Start_a_Town_.Components
         public virtual void Instantiate(GameObject parent, Action<GameObject> instantiator) { }
 
         public virtual void Tick() { }
-        public void Tick(MapBase map, IEntityCompContainer entity)
-        {
-            throw new NotImplementedException();
-        }
-        public void Tick(MapBase map, IEntityCompContainer entity, Vector3 global)
+        
+        public void Tick(MapBase map, IBlockEntityCompContainer entity, Vector3 global)
         {
             throw new NotImplementedException();
         }
@@ -126,15 +123,6 @@ namespace Start_a_Town_.Components
         {
 
         }
-        void IEntityComp.Load(SaveTag tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SaveTag Save(string name)
-        {
-            throw new NotImplementedException();
-        }
 
         public virtual void Write(BinaryWriter w) { }
         public virtual void Read(BinaryReader r) { }
@@ -171,11 +159,6 @@ namespace Start_a_Town_.Components
         }
         internal virtual void SyncRead(GameObject parent, BinaryReader r)
         {
-        }
-       
-        public void Draw(Camera camera, MapBase map, Vector3 global)
-        {
-            throw new NotImplementedException();
         }
     }
 }

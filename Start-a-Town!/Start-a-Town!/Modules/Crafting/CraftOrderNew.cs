@@ -250,7 +250,7 @@ namespace Start_a_Town_
             var manager = map.Town.CraftingManager;
             return manager.OrderExists(this) && this.IsActive;
         }
-        internal bool IsCompletable(IEntityCompContainer buildSite)
+        internal bool IsCompletable(IBlockEntityCompContainer buildSite)
         {
             if (this.Reaction.Fuel == 0)
                 return true;

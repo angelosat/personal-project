@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Blocks
@@ -21,7 +22,7 @@ namespace Start_a_Town_.Blocks
         public virtual void Tick(MapBase map, IntVec3 global)
         {
             foreach (var comp in this.Comps)
-                comp.Tick(map, this, global);
+                comp.Tick(this, map, global);
         }
         public virtual void GetTooltip(Control tooltip) { }
         public abstract object Clone();
@@ -51,7 +52,7 @@ namespace Start_a_Town_.Blocks
         /// <returns></returns>
         public virtual List<GameObjectSlot> GetChildren() { return new List<GameObjectSlot>(); }
        
-        public bool HasComp<T>() where T : class, IEntityComp
+        public bool HasComp<T>() where T : class, IBlockEntityComp
         {
             return this.GetComp<T>() != null;
         }
@@ -100,7 +101,7 @@ namespace Start_a_Town_.Blocks
             this.LoadExtra(tag);
         }
         protected virtual void LoadExtra(SaveTag tag) { }
-        public T GetComp<T>() where T : class, IEntityComp
+        public T GetComp<T>() where T : class, IBlockEntityComp
         {
             return this.Comps.FirstOrDefault(c => c is T) as T;
         }
@@ -133,12 +134,12 @@ namespace Start_a_Town_.Blocks
             }
         }
 
-        public virtual void Draw(Camera camera, MapBase map, Vector3 global) 
+        public virtual void Draw(Camera camera, MapBase map, IntVec3 global) 
         {
             foreach (var comp in this.Comps)
                 comp.Draw(camera, map, global);
         }
-        public virtual void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera cam, Vector3 global) { }
+        public virtual void DrawUI(SpriteBatch sb, Camera cam, Vector3 global) { }
 
         internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
         {

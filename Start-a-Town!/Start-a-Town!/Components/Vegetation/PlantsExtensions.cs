@@ -9,7 +9,7 @@
         /// <returns></returns>
         static public bool IsSeedFor(this GameObject entity, PlantProperties plant)
         {
-            return entity.Def == ItemDefOf.Seeds && entity.GetComp<SeedComponent>().Plant == plant;
+            return entity.Def == ItemDefOf.Seeds && entity.GetComponent<SeedComponent>().Plant == plant;
         }
     }
 }

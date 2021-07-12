@@ -973,9 +973,9 @@ namespace Start_a_Town_
             
         }
 
-        internal void Draw(SpriteBatch sb, ToolManager toolManager, UIManager windowManager, SceneState scene)
+        internal void Draw(ToolManager toolManager, UIManager windowManager, SceneState scene)
         {
-            this.Camera.DrawMap(sb, this, toolManager, windowManager, scene);
+            this.Camera.DrawMap(this, toolManager, windowManager, scene);
         }
         internal void MousePicking()
         {

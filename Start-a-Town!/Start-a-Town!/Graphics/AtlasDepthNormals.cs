@@ -151,8 +151,6 @@ namespace Start_a_Town_.Graphics
                     continue;
                 Vector2 loc = new(node.Rectangle.X, node.Rectangle.Y);
                 sb.Draw(node.Texture, loc, Color.White);
-                if (node.Texture.IsDisposed)
-                    "ASDSAD".ToConsole();
             }
             sb.End();
             gfx.SetRenderTarget(null);

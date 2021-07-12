@@ -36,7 +36,7 @@ namespace Start_a_Town_
                     newtext.AppendLine(line);
                     line = "";
                 }
-                line += string.Format("{0} ", word);
+                line += $"{word} ";
             }
             if (line.Length > 0)
                 newtext.Append(line);

@@ -284,8 +284,8 @@ namespace Start_a_Town_
                 return;
             this.Validated = true;
             this.Size = 1;
-                if (this.Nodes.Count == 1 && this.Map.GetBlock(this.Nodes.First().Key.Above()) is BlockDoor) // TODO: FIX LOL
-                    return;
+            if (this.Nodes.Count == 1 && this.Map.GetBlock(this.Nodes.First().Key.Above()) is BlockDoor) // TODO: FIX LOL
+                return;
             var queue = new Queue<Region>();
             foreach (var n in this.Neighbors)
                 queue.Enqueue(n);
@@ -299,8 +299,8 @@ namespace Start_a_Town_
                 this.Size++;
                 foreach (var n in r.Neighbors)
                 {
-                        if (n.Nodes.Count == 1 && this.Map.GetBlock(n.Nodes.First().Key.Above()) is BlockDoor) // TODO: FIX LOL
-                            continue;
+                    if (n.Nodes.Count == 1 && this.Map.GetBlock(n.Nodes.First().Key.Above()) is BlockDoor) // TODO: FIX LOL
+                        continue;
                     if (!counted.Contains(n))
                         queue.Enqueue(n);
                 }

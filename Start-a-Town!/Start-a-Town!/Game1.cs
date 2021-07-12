@@ -220,7 +220,7 @@ namespace Start_a_Town_
                 Block.UpdateBlocks();
                 this.Network.Update(gameTime);
                 Engine.Update(gameTime);
-                ScreenManager.Instance.Update(this, gameTime); // TODO: move client world updating to client update method instead of screen update method
+                ScreenManager.Instance.Update(this, gameTime);
 
                 Log.Update();
                 base.Update(gameTime);

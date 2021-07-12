@@ -60,13 +60,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             getSaveName = new DialogInput("Enter save name", saveNew, 300, map.World.Name);
            
-            groupBox.AddControlsVertically(tablePanel, new Button("Create new save", tablePanel.Width) { LeftClickAction = () => getSaveName.ShowDialog() });
+            groupBox.AddControlsVertically(tablePanel, new Button("Create new save", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
+
             groupBox.ToWindow("Save", true, false).ShowDialog();
 
             void saveNew(string name = "")
             {
                 var tag = new SaveTag(SaveTag.Types.Compound, "Save");
-                var world = map.World as StaticWorld; // TODO: add methods to interface instead of casting them
+                var world = map.World as StaticWorld; // TODO: add methods to interface instead of casting them?
 
                 name = name.IsNullEmptyOrWhiteSpace() ? world.Name : name;
 
@@ -76,7 +77,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var workingDir = Directory.GetCurrentDirectory();
                 if (File.Exists(workingDir + fullPath))
                 {
-                    var msgBoxOverwrite = new MessageBox("", string.Format("{0} already exists. Overwrite?", fullPath), save);
+                    var msgBoxOverwrite = new MessageBox("", $"{fullPath} already exists. Overwrite?", save);
                     msgBoxOverwrite.ShowDialog();
                 }
                 else

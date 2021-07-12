@@ -11,7 +11,7 @@
         
         public override void Perform(GameObject a, TargetArgs t)
         {
-            PersonalInventoryComponent.Equip(a, t.Object);
+            a.Inventory.Equip(t.Object);
         }
 
         public override object Clone()

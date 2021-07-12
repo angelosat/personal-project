@@ -984,7 +984,6 @@
     <Compile Include="Components\DefComponent.cs" />
     <Compile Include="Components\ComponentCollection.cs" />
     <Compile Include="Components\EquipComponent.cs" />
-    <Compile Include="Components\InventoryComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Control\ControlTool.cs" />
     <Compile Include="Engine\Engine.cs" />

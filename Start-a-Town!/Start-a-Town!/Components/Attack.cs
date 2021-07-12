@@ -38,10 +38,10 @@ namespace Start_a_Town_.Components
             this.Momentum = attacker.Velocity;
             this.CollisionType = collisionType;
             throw new Exception();
-            if(attacker.TryGetComponent<InventoryComponent>(c=>{
+            if (attacker.TryGetComponent<PersonalInventoryComponent>(c =>
+            {
                 GameObjectSlot holdSlot = null;// attacker["Inventory"]["Holding"] as GameObjectSlot;
-
-            this.Damage = WeaponComponent.GetDamage(holdSlot.Object) ?? WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);
+                this.Damage = WeaponComponent.GetDamage(holdSlot.Object) ?? WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);
             })) { }
             else
             {

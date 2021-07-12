@@ -83,7 +83,7 @@ namespace Start_a_Town_
         /// <returns></returns>
         static public TargetArgs FindItemAnywhere(Actor actor, Func<GameObject, bool> condition)
         {
-            var inventoryitem = actor.InventoryFirst(condition);
+            var inventoryitem = actor.Inventory.First(condition);
             if (inventoryitem != null)
             {
                 var invitemtarget = new TargetArgs(inventoryitem);

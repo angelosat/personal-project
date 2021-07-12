@@ -98,7 +98,6 @@ namespace Start_a_Town_.Components
         {
             this.Stats = new StatCollection(this.BaseStats);
             BodyComponent.PollStats(parent, this.Stats);
-            InventoryComponent.PollStats(parent, this.Stats);
         }
 
         static public StatCollection GetStats(GameObject obj, Stat.Groups group)

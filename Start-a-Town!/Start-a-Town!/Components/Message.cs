@@ -231,7 +231,6 @@ namespace Start_a_Town_.Components
             ResidenceUpdated,
             ResidenceRemoved,
             DebugSetStackSize,
-            Haul,
             StackSizeChanged,
             NameChanged,
             ItemReserved,

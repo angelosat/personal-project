@@ -26,7 +26,7 @@ namespace Start_a_Town_
         public override BehaviorState Execute(Actor parent, AIState state)
         {
             var item = parent.CurrentTask.GetTarget(this.TargetInd);
-            return parent.InventoryContains(item.Object) ? BehaviorState.Success : BehaviorState.Fail;
+            return parent.Inventory.Contains(item.Object) ? BehaviorState.Success : BehaviorState.Fail;
         }
     }
 }

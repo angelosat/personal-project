@@ -75,16 +75,16 @@ namespace Start_a_Town_
 
         internal bool HasMoney(int amount)
         {
-            var coins = this.InventoryFirst(i => i.Def == ItemDefOf.Coins); // TODO find all ammount instead of find first
+            var coins = this.Inventory.First(i => i.Def == ItemDefOf.Coins); // TODO find all ammount instead of find first
             return coins?.StackSize >= amount;
         }
         internal Entity GetMoney()
         {
-            return this.InventoryFirst(i => i.Def == ItemDefOf.Coins) as Entity;
+            return this.Inventory.First(i => i.Def == ItemDefOf.Coins) as Entity;
         }
         internal int GetMoneyTotal()
         {
-            return PersonalInventoryComponent.Count(this, o => o.Def == ItemDefOf.Coins);
+            return this.Inventory.Count(o => o.Def == ItemDefOf.Coins);
         }
 
         internal void ModifyNeed(NeedDef def, Func<float, float> modOldValue)
@@ -101,7 +101,7 @@ namespace Start_a_Town_
         }
         public int CountItemsInInventory(Func<Entity, bool> filter)
         {
-            return PersonalInventoryComponent.Count(this, filter);
+            return this.Inventory.Count(filter);
         }
         public int CountItemsInInventory(ItemDef def)
         {
@@ -390,15 +390,6 @@ namespace Start_a_Town_
             return givers;
         }
         
-        internal void InsertToInventory(Entity item)
-        {
-            PersonalInventoryComponent.InsertItem(this, item);
-        }
-        internal void RemoveFromInventory(Entity item)
-        {
-            PersonalInventoryComponent.RemoveItem(this, item);
-        }
-       
         internal Trait GetTrait(TraitDef trait)
         {
             return this.GetComponent<PersonalityComponent>().Traits.First(t => t.Def == trait);

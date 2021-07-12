@@ -182,7 +182,7 @@ namespace Start_a_Town_
             if (actor.IsEquipping(item))
             {
                 //unequip
-                actor.InsertToInventory(item);
+                actor.Inventory.Insert(item);
                 actor.GetComponent<GearComponent>().RefreshStats();
                 actor.Net.EventOccured(Message.Types.ActorGearUpdated, actor, null, item);
                 return true;
@@ -199,7 +199,7 @@ namespace Start_a_Town_
             gearSlot.SetObject(item);
             actor.GetComponent<GearComponent>().RefreshStats();
             if (previousItem != null)
-                actor.InsertToInventory(previousItem);
+                actor.Inventory.Insert(previousItem);
             actor.Net.EventOccured(Message.Types.ActorGearUpdated, actor, item, previousItem);
             return true;
         }

@@ -1285,29 +1285,14 @@ namespace Start_a_Town_
             carried.Clear();
             return obj;
         }
-        internal GameObject InventoryFirst(Func<GameObject, bool> condition)
-        {
-            return PersonalInventoryComponent.GetFirstObject(this, condition);
-        }
-        internal bool InventoryContains(GameObject item)
-        {
-            return this.InventoryContains(i => i == item);
-        }
-        internal bool InventoryContains(Func<GameObject, bool> condition)
-        {
-            return PersonalInventoryComponent.HasObject(this, condition);
-        }
+       
         internal void StoreCarried()
         {
-            PersonalInventoryComponent.StoreHauled(this);
+            this.Inventory.StoreHauled();
         }
         internal List<GameObject> GetPossesions()
         {
             return NpcComponent.GetPossesions(this).Select(id => this.Net.GetNetworkObject(id)).ToList();
-        }
-        internal List<GameObject> InventoryAll()
-        {
-            return PersonalInventoryComponent.GetAllItems(this);
         }
 
         internal Need GetNeed(NeedDef def)

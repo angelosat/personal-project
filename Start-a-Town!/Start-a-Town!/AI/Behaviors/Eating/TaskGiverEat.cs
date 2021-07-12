@@ -16,7 +16,7 @@ namespace Start_a_Town_.AI
             if (isHungry)
             {
                 //check inventory for meals
-                var foodInInventory = actor.InventoryFirst(i => i.IsFood);
+                var foodInInventory = actor.Inventory.First(i => i.IsFood);
                 if (foodInInventory != null)
                 {
                     IOrderedEnumerable<Vector3> eatingPlaces = FindEatingPlaces(actor);
@@ -46,7 +46,7 @@ namespace Start_a_Town_.AI
 
             if (!isHungry)
             {// if not currently hungry, and not currently having a food item in inventory, pick up food and store in inventory
-                if (!actor.InventoryContains(i => i.IsFood))
+                if (!actor.Inventory.Contains(i => i.IsFood))
                     return null;
                 return null;
             }

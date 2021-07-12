@@ -89,11 +89,11 @@ namespace Start_a_Town_.Components
 
         public float Distance(GameObject obj1, GameObject obj2)
         {
-            return HasObject(obj1, obj => obj == obj2) ? 0 : -1;
+            return obj1.Inventory.Contains(obj => obj == obj2) ? 0 : -1;
         }
         public Vector3? DistanceVector(GameObject obj1, GameObject obj2)
         {
-            return HasObject(obj1, obj => obj == obj2) ? Vector3.Zero : null;
+            return obj1.Inventory.Contains(obj => obj == obj2) ? Vector3.Zero : null;
         }
 
         public override void MakeChildOf(GameObject parent)
@@ -148,19 +148,21 @@ namespace Start_a_Town_.Components
                     return false;
             }
         }
-        public static void DropInventoryItem(GameObject parent, GameObject item)
+        public void DropInventoryItem(GameObject item)
         {
-            var slots = GetSlots(parent);
+            var slots = this.Slots;
+            var parent = this.Parent;
             var slot = slots.Slots.Where(s => s.Object == item).First();
             slot.Clear();
             item.Spawn(parent.Map, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
         }
-        public static void HaulFromInventory(GameObject parent, GameObject item, int amount = -1)
+        public void HaulFromInventory(GameObject item, int amount = -1)
         {
             if (amount == 0)
                 throw new Exception();
             amount = amount == -1 ? item.StackSize : amount;
-            var slots = GetSlots(parent);
+            var slots = this.Slots;
+            var parent = this.Parent;
             var slot = slots.Slots.Where(s => s.Object == item).First();
             var obj = slot.Object;
             var currentAmount = obj.StackSize;
@@ -168,7 +170,7 @@ namespace Start_a_Town_.Components
                 throw new Exception();
             else if(amount == currentAmount)
             {
-                parent.GetComponent<PersonalInventoryComponent>().Haul(parent, item);
+                this.Haul(item);
             }
             else if(amount < currentAmount)
             {
@@ -179,7 +181,7 @@ namespace Start_a_Town_.Components
                     splitItem.StackSize = amount;
                     splitItem.SyncInstantiate(server);
                     Packets.SyncSetHaulSlot(server, parent as Actor, splitItem as Entity);
-                    parent.GetComponent<PersonalInventoryComponent>().Haul(parent, splitItem);
+                    this.Haul(splitItem);
                 }
             }
         }
@@ -248,17 +250,16 @@ namespace Start_a_Town_.Components
             }
         }
 
-        static public bool StoreHauled(GameObject parent)
+        public bool StoreHauled()
         {
-            var inv = parent.GetComponent<PersonalInventoryComponent>();
-            if (inv.HaulSlot.Object == null)
+            if (this.HaulSlot.Object == null)
                 return false;
-            if (!inv.Slots.InsertObject(inv.HaulSlot))
+            if (!this.Slots.InsertObject(this.HaulSlot))
 
             {
                 // throw? or return false and raise event so we can handle it and display a message : not enough space?
                 //inv.Throw(parent, Vector3.Zero);
-                parent.Net.EventOccured(Message.Types.NotEnoughSpace, parent);
+                this.Parent.Net.EventOccured(Message.Types.NotEnoughSpace, this.Parent);
                 return false;
             }
 
@@ -288,47 +289,35 @@ namespace Start_a_Town_.Components
             }
             return true;
         }
-        static public bool InsertItem(Actor actor, Entity obj)
+        
+        public bool RemoveItem(Entity obj)
         {
-            return actor.Inventory.Insert(obj);
-        }
-        static public bool RemoveItem(Actor actor, Entity obj)
-        {
-            var inv = actor.GetComponent<PersonalInventoryComponent>();
-            if (obj == null)
+            if (obj is null)
                 return false;
-            return inv.Slots.Remove(obj);
+            return this.Slots.Remove(obj);
         }
-       
-        static public bool PickUpNewNew(GameObject parent, GameObject obj, int amount)
+        public bool PickUp(GameObject obj, int amount)
         {
-            if (parent.Net is Net.Client)
-                return false;
-            var server = parent.Net as Net.Server;
-            var inv = parent.GetComponent<PersonalInventoryComponent>();
-            if (inv.HaulSlot.Object != null)
+            var parent = this.Parent;
+            if (this.HaulSlot.Object is GameObject currentHauled)
             {
-                // check if item of same type, and if true, add to stack
-                var haulObj = inv.HaulSlot.Object;
-                if(haulObj.CanAbsorb(obj))
+                if (currentHauled.CanAbsorb(obj))
                 {
-                    var transferAmount = Math.Min(amount == -1 ? obj.StackSize : amount, haulObj.StackMax - haulObj.StackSize);
+                    var transferAmount = Math.Min(amount == -1 ? obj.StackSize : amount, currentHauled.StackMax - currentHauled.StackSize);
                     if (transferAmount == 0)
                         throw new Exception();
-                    haulObj.StackSize += transferAmount;
+                    currentHauled.StackSize += transferAmount;
                     if (transferAmount == obj.StackSize)
                     {
                         parent.Net.Despawn(obj);
                         parent.Net.DisposeObject(obj);
                     }
                     obj.StackSize -= transferAmount;
-
-                    (parent.Net as Net.Server).RemoteProcedureCall(new TargetArgs(parent), Message.Types.Haul, w => { w.Write(obj.RefID); w.Write(obj.RefID); w.Write(amount); });
                     return false;
                 }
                 //else
                 // if we maxed out our hauling stack, but there is some remaining amout of item on the ground, store hauled stack and haul the remaining item stack
-                else if (!StoreHauled(parent))
+                else if (!this.StoreHauled())
                     return false;
             }
             else
@@ -336,43 +325,37 @@ namespace Start_a_Town_.Components
                 if (amount == obj.StackSize)
                 {
                     //parent.Net.Despawn(obj);// i despawn the obj in the next method below
-                    inv.Haul(parent, obj);
-                    server.RemoteProcedureCall(new TargetArgs(parent), Message.Types.Haul, w => { w.Write(obj.RefID); w.Write(obj.RefID); w.Write(amount); });
+                    this.Haul(obj);
                     return true;
                 }
                 else
                 {
-                    var newobj = obj.Clone();
-                    newobj.StackSize = amount;
-                    newobj.SyncInstantiate(parent.Net);
-
-                    if (server != null)
+                    if (parent.Net is Server server)
                     {
+                        var newobj = obj.Clone();
+                        newobj.StackSize = amount;
+                        newobj.SyncInstantiate(parent.Net);
                         obj.StackSize -= amount;
-                        inv.Haul(parent, newobj);
-                        server.RemoteProcedureCall(new TargetArgs(parent), Message.Types.Haul, w => { w.Write(newobj.RefID); w.Write(obj.RefID); w.Write(amount); });
+                        this.Haul(newobj);
+                        Packets.SyncSetHaulSlot(server, parent as Actor, newobj as Entity);
                     }
                     return true;
                 }
             }
             return false;
         }
-        static public bool Unequip(GameObject actor, GearType geartype)
+      
+        public bool Unequip(GameObject item)
         {
-            var slot = GearComponent.GetSlot(actor, geartype);
-            return Receive(actor, slot);
+            var slot = GearComponent.GetSlot(this.Parent, item);
+            return this.Receive(slot);
         }
-        static public bool Unequip(GameObject actor, GameObject item)
+        public bool Receive(GameObjectSlot objSlot, bool report = true)
         {
-            var slot = GearComponent.GetSlot(actor, item);
-            return Receive(actor, slot);
-        }
-        static public bool Receive(GameObject parent, GameObjectSlot objSlot, bool report = true)
-        {
-            var inv = parent.GetComponent<PersonalInventoryComponent>();
             // TODO: if can't receive, haul item instead or drop on ground?
             var obj = objSlot.Object;
-            if(inv.Slots.InsertObject(objSlot))
+            var parent = this.Parent;
+            if(this.Slots.InsertObject(objSlot))
             {
                 if(report)
                     parent.Net.EventOccured(Message.Types.ItemGot, parent, obj);
@@ -382,35 +365,6 @@ namespace Start_a_Town_.Components
             return false;
         }
         
-        /// <summary>
-        /// Returns true if empty slots are found in actor's inventory.
-        /// </summary>
-        /// <param name="actor"></param>
-        /// <param name="emptySlots">A queue containing the empty slots found, if any.</param>
-        /// <returns></returns>
-        static public bool TryGetEmptySlots(GameObject actor, out Queue<GameObjectSlot> emptySlots)
-        {
-            if(!actor.TryGetComponent<InventoryComponent>("Inventory", out var invComp))
-                throw (new Exception(actor.Name + " doesn't have an inventory component."));
-            return invComp.TryGetEmptySlots(out emptySlots);
-        }
-
-        static public bool TryGetEmptySlots(GameObject actor, Queue<GameObjectSlot> emptySlots)
-        {
-            InventoryComponent invComp;
-            if (!actor.TryGetComponent<InventoryComponent>("Inventory", out invComp))
-                throw (new Exception(actor.Name + " doesn't have an inventory component."));
-            return invComp.TryGetEmptySlots(emptySlots);
-        }
-        static public Container GetSlots(GameObject actor)
-        {
-            return actor.GetComponent<PersonalInventoryComponent>().Slots;
-        }
-        static public List<GameObject> GetAllItems(GameObject actor)
-        {
-            var slots = actor.GetComponent<PersonalInventoryComponent>().Slots;
-            return slots.Slots.Where(s => s.Object != null).Select(s => s.Object).ToList();
-        }
         public IEnumerable<Entity> GetItems()
         {
             foreach (var sl in this.Slots.Slots)
@@ -418,34 +372,15 @@ namespace Start_a_Town_.Components
                     yield return sl.Object as Entity;
         }
         public IEnumerable<Entity> All => this.GetItems();
-        /// <summary>
-        /// Returns true if any slots meeting the conditions is found.
-        /// </summary>
-        /// <param name="actor"></param>
-        /// <param name="filter"></param>
-        /// <param name="slots"></param>
-        /// <returns></returns>
-        static public bool GetSlots(GameObject actor, Func<GameObject, bool> filter, Queue<GameObjectSlot> slots)
+       
+        public GameObject First(Func<GameObject, bool> filter)
         {
-            InventoryComponent invComp;
-            if (!actor.TryGetComponent<InventoryComponent>("Inventory", out invComp))
-                throw (new Exception(actor.Name + " doesn't have an inventory component."));
-            foreach (var container in invComp.Containers)
-                foreach (GameObjectSlot slot in container)
-                    if (slot.Object != null)
-                        if (filter(slot.Object))
-                            slots.Enqueue(slot);
-            return slots.Count > 0;
-        }
-        static public GameObject GetFirstObject(GameObject actor, Func<GameObject, bool> filter)
-        {
-            var comp = actor.GetComponent<PersonalInventoryComponent>();
-            foreach (var slot in comp.Slots.Slots)
+            foreach (var slot in this.Slots.Slots)
                 if (slot.Object != null)
                     if (filter(slot.Object))
                         return slot.Object;
-            if (comp.HaulSlot.Object != null && filter(comp.HaulSlot.Object))
-                return comp.HaulSlot.Object;
+            if (this.HaulSlot.Object != null && filter(this.HaulSlot.Object))
+                return this.HaulSlot.Object;
             return null;
         }
         public int Count(ItemDef def, Material mat)
@@ -457,67 +392,39 @@ namespace Start_a_Town_.Components
             return this.FindItems(filter).Sum(i => i.StackSize);
             
         }
-        static public int Count(Actor actor, Func<Entity, bool> filter)
-        {
-            return actor.Inventory.Count(filter);
-            
-        }
-        public bool Contains(Entity item)
+        public bool Contains(GameObject item)
         {
             return this.Slots.Slots.FirstOrDefault(s => s.Object == item) != null;
         }
-        static public bool HasObject(GameObject subject, Func<GameObject, bool> filter)// Predicate<GameObject> filter)
+        public bool Contains(Func<GameObject, bool> filter)// Predicate<GameObject> filter)
         {
-            PersonalInventoryComponent inv;
-            if (!subject.TryGetComponent<PersonalInventoryComponent>("Inventory", out inv))
-                return false;
-
-            return (from slot in inv.Slots.Slots
+            return (from slot in this.Slots.Slots
                         where slot.HasValue
                         where filter(slot.Object)
                         select slot).FirstOrDefault() != null;
-
         }
-        static public bool HasObject(GameObject subject, Predicate<GameObject> filter, out GameObjectSlot objSlot)
+        public bool Equip(GameObject item)
         {
-            objSlot = new GameObjectSlot();
-            InventoryComponent inv;
-            if (!subject.TryGetComponent<InventoryComponent>("Inventory", out inv))
-                return false;
-
-            foreach (var container in inv.Containers)
-                foreach (GameObjectSlot slot in container)
-                    if (slot.Object != null)
-                        if (filter(slot.Object))
-                        {
-                            objSlot = slot;
-                            return true;
-                        }
-            return false;
-        }
-        static public bool Equip(GameObject actor, GameObject item)
-        {
-            var comp = actor.GetComponent<PersonalInventoryComponent>();
-            foreach (var slot in comp.Slots.Slots)
+            foreach (var slot in this.Slots.Slots)
                 if (slot.Object == item)
-                    return GearComponent.Equip(actor, slot);
+                    return GearComponent.Equip(this.Parent, slot);
             return false;
         }
-        static public bool CheckWeight(GameObject actor, GameObject obj)
+        public bool CheckWeight(GameObject obj)
         {
             return true;
         }
 
-        public bool Haul(GameObject parent, GameObject obj)
+        public bool Haul(GameObject obj)
         {
             if (obj is null)
                 return true;
-
+            var parent = this.Parent;
             var current = this.HaulSlot.Object;
 
             if (obj == current)
                 return true;
-            if (!CheckWeight(parent, obj))
+            if (!this.CheckWeight(obj))
                 return true;
             var net = parent.Net;
             // if currently hauling object of same type, increase held stacksize and dispose other object
@@ -669,45 +576,6 @@ namespace Start_a_Town_.Components
         {
             return this.Slots.GetEmpty();
         }
-        internal override void HandleRemoteCall(GameObject parent, Message.Types type, BinaryReader r)
-        {
-            switch (type)
-            {
-                case Message.Types.Haul:
-                    var tohaulobj = parent.Net.GetNetworkObject(r.ReadInt32());
-                    var sourceobj = parent.Net.GetNetworkObject(r.ReadInt32());
-                    var hauledobj = this.HaulSlot.Object;
-                    var amount = r.ReadInt32();
-                    if (hauledobj != null)
-                    {
-                        if (hauledobj.CanAbsorb(tohaulobj))
-                        {
-                            var transferAmount = Math.Min(amount == -1 ? tohaulobj.StackSize : amount, hauledobj.StackMax - hauledobj.StackSize);
-                            hauledobj.StackSize += transferAmount;
-                            if (tohaulobj.StackSize == amount)
-                            {
-                                parent.Net.Despawn(tohaulobj);
-                                parent.Net.DisposeObject(tohaulobj);
-                                return; // if we didn't leave any amount left on the ground, return
-                            }
-                            else
-                                tohaulobj.StackSize -= transferAmount;
-                            break;
-                        }
-                        else if (!StoreHauled(parent))
-                            return;
-                    }
-                    else
-                    {
-                        if (amount != sourceobj.StackSize)
-                            sourceobj.StackSize -= amount;
-                        this.Haul(parent, tohaulobj);
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
+       
     }
 }

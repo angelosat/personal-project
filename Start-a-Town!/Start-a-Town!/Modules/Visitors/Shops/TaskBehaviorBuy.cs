@@ -20,7 +20,7 @@ namespace Start_a_Town_
                 InitAction = () =>
                 {
                     var item = this.Task.TargetA.Object as Entity;
-                    this.Task.SetTarget(TargetIndex.A, this.Actor.InventoryFirst(i => i.Def == ItemDefOf.Coins));
+                    this.Task.SetTarget(TargetIndex.A, this.Actor.Inventory.First(i => i.Def == ItemDefOf.Coins));
                     var totalvalue = item.GetValueTotal();
                     if (totalvalue <= 0)
                         throw new Exception();

@@ -48,7 +48,7 @@ namespace Start_a_Town_.Components.Interactions
                     // error handle!!!
                     if (this.Amount > target.Object.StackSize)
                         throw new Exception();
-                    PersonalInventoryComponent.PickUpNewNew(actor, target.Object, this.Amount == - 1 ? target.Object.StackSize : this.Amount);
+                    actor.Inventory.PickUp(target.Object, this.Amount == - 1 ? target.Object.StackSize : this.Amount);
                     break;
 
                 default:

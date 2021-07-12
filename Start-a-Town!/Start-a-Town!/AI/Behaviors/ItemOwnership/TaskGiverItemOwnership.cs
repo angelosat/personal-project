@@ -9,7 +9,7 @@ namespace Start_a_Town_.AI.Behaviors.ItemOwnership
             var possesions = actor.GetPossesions();
 
             // first see if they need to drop an unowned item
-            var carriedItems = actor.InventoryAll();
+            var carriedItems = actor.Inventory.All;
 
             // drop only items that have another specific owner set, instead of every unowned item
             var itemToDrop = carriedItems.Where(i => !actor.OwnsOrCanClaim(i as Entity)).FirstOrDefault();
@@ -22,7 +22,7 @@ namespace Start_a_Town_.AI.Behaviors.ItemOwnership
             {
                 if (!item.IsSpawned)
                     continue;
-                if (!actor.InventoryContains(item))
+                if (!actor.Inventory.Contains(item))
                 {
                     return new AITask(typeof(BehaviorPickUpItemNew)) { TargetA = new TargetArgs(item) };
                 }

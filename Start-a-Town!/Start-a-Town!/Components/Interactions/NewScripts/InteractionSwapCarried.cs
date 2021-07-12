@@ -28,7 +28,7 @@ namespace Start_a_Town_
             var prevCarried = actor.Carried;
             prevCarried.Slot.Clear();
             prevCarried.Spawn(a.Map, global);
-            actor.Inventory.Haul(actor, item);
+            actor.Inventory.Haul(item);
         }
     }
 }

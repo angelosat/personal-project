@@ -26,7 +26,7 @@
         }
         public override void Perform(GameObject actor, TargetArgs target)
         {
-            PersonalInventoryComponent.DropInventoryItem(actor, target.Object);
+            actor.Inventory.DropInventoryItem(target.Object);
         }
 
         public override object Clone()

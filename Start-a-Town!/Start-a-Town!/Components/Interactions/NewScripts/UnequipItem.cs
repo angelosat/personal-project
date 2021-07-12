@@ -6,7 +6,7 @@
 
         public override void Perform(GameObject a, TargetArgs t)
         {
-            PersonalInventoryComponent.Unequip(a, t.Object);
+            a.Inventory.Unequip(t.Object);
         }
 
         public override object Clone()

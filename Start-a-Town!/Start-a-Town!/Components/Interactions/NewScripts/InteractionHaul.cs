@@ -51,9 +51,9 @@ namespace Start_a_Town_
                 // new: if inventoryable insert to inventory, if carryable carry
                 // dont carry inventoriables (test)
                 case TargetType.Entity:
-                    if (actor.InventoryContains(target.Object))
+                    if (actor.Inventory.Contains(target.Object))
                     {
-                        PersonalInventoryComponent.HaulFromInventory(actor, target.Object, this.Amount);
+                        actor.Inventory.HaulFromInventory(target.Object, this.Amount);
                         break;
                     }
                     var containerGlobal = target.Global;
@@ -63,7 +63,7 @@ namespace Start_a_Town_
                         throw new Exception();
                     if (this.Amount > target.Object.StackSize)
                         throw new Exception();
-                    PersonalInventoryComponent.PickUpNewNew(actor, target.Object, this.Amount == -1 ? target.Object.StackSize : this.Amount);
+                    actor.Inventory.PickUp(target.Object, this.Amount == -1 ? target.Object.StackSize : this.Amount);
 
                     // if target was in container, remove it from its contents
                     if (this.Amount == prevStackSize && actor.Map.GetBlockEntity(containerGlobal) is BlockStorage.BlockStorageEntity container)

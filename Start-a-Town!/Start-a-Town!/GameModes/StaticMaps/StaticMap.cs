@@ -683,7 +683,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public override void UpdateLight(IEnumerable<WorldPosition> positions)
         {
-            this.LightingEngine ??= LightingEngine.StartNew(this, a => { }, a => { });
+            this.LightingEngine ??= new(this);
             this.LightingEngine.Enqueue(positions);
         }
       

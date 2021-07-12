@@ -9,37 +9,13 @@ namespace Start_a_Town_
 {
     public partial class LightingEngine
     {
-        HashSet<IntVec3> LightChanges = new();
-        HashSet<IntVec3> BlockChanges = new();
-
         public MapBase Map;
-        public Action<Chunk, Cell> OutdoorBlockHandler = (chunk, cell) => { };
-        public Action<IEnumerable<IntVec3>> LightCallback = vectors => { };
-        public Action<IEnumerable<IntVec3>> BlockCallback = vectors => { };
-        public BlockingCollection<BatchToken> SkyLight;
-        public BlockingCollection<BatchToken> BlockLight;
-        readonly CancellationTokenSource CancelToken = new();
 
         public Queue<IntVec3> ToDarken;
 
         public LightingEngine(MapBase map)
         {
             this.Map = map;
-        }
-        public LightingEngine(MapBase map, Action<IEnumerable<IntVec3>> batchFinishedCallback, Action<IEnumerable<IntVec3>> blockCallback)
-        {
-            this.Map = map;
-            this.LightCallback = batchFinishedCallback;
-            this.BlockCallback = blockCallback;
-        }
-
-        static public LightingEngine StartNew(MapBase map, Action<IEnumerable<IntVec3>> lightCallback, Action<IEnumerable<IntVec3>> blockCallback)
-        {
-            return new LightingEngine(map, lightCallback, blockCallback);
-        }
-        public void Stop()
-        {
-            this.CancelToken.Cancel();
         }
 
         public void Enqueue(IEnumerable<WorldPosition> vectorBatch)
@@ -71,10 +47,6 @@ namespace Start_a_Town_
                 this.Map.AddBlockLightChanges(blockdeltas);
 
             batch.Callback();
-            this.LightCallback(this.LightChanges);
-            this.BlockCallback(this.BlockChanges);
-            this.BlockChanges = new HashSet<IntVec3>();
-            this.LightChanges = new HashSet<IntVec3>();
         }
         void HandleSkyGlobalNew(IntVec3 global, Queue<IntVec3> queue, HashSet<IntVec3> queued, Dictionary<IntVec3, byte> deltas)
         {
@@ -83,7 +55,7 @@ namespace Start_a_Town_
             if (!this.Map.TryGetAll(gx, gy, z, out Chunk thisChunk, out Cell thisCell, out int lx, out int ly))
                 return;
             var neighbors = global.GetAdjacentLazy();
-            var nextLight = GetNextSunLight(thisCell, thisChunk, gx, gy, z, lx, ly, neighbors, deltas);
+            var nextLight = GetNextSunLight(thisCell, thisChunk, z, lx, ly, neighbors, deltas);
 
             if (!deltas.TryGetValue(global, out byte oldLight))
                 oldLight = thisChunk.GetSunlight(lx, ly, z);
@@ -152,11 +124,9 @@ namespace Start_a_Town_
                 }
             }
         }
-        byte GetNextSunLight(Cell cell, Chunk chunk, int gx, int gy, int z, int lx, int ly, IEnumerable<IntVec3> neighbors, Dictionary<IntVec3, byte> deltas)
+        byte GetNextSunLight(Cell cell, Chunk chunk, int z, int lx, int ly, IEnumerable<IntVec3> neighbors, Dictionary<IntVec3, byte> deltas)
         {
             byte next, maxAdjLight = 0;
-
-            bool visible = false;
             foreach (var n in neighbors)
             {
                 if (!this.Map.TryGetAll(n, out var nchunk, out var ncell))
@@ -166,15 +136,8 @@ namespace Start_a_Town_
                 if (!deltas.TryGetValue(n, out byte l))
                     l = nchunk.GetSunlight(ncell.LocalCoords);
                 maxAdjLight = Math.Max(maxAdjLight, l);
-                visible = true;
             }
-            if (visible)
-                if (!Cell.IsInvisible(cell))
-                {
-                    this.BlockChanges.Add(new(gx, gy, z));
-                    this.OutdoorBlockHandler(chunk, cell);
-                }
-
+           
             if (cell.Opaque)
             {
                 next = 0;
@@ -195,7 +158,7 @@ namespace Start_a_Town_
             var neighbors = global.GetAdjacentLazy();
             if (!deltas.TryGetValue(global, out byte thisLight))
                 thisLight = thisChunk.GetBlockLight(thisCell.LocalCoords);
-            var nextLight = GetNextBlockLight(thisCell, thisChunk, neighbors, deltas);
+            var nextLight = GetNextBlockLight(thisCell, neighbors, deltas);
             deltas[global] = nextLight;
 
             if (nextLight > thisLight) //if the cell became brighter, queue surrounding cells to spread light to them
@@ -230,8 +193,7 @@ namespace Start_a_Town_
                 deltas[current] = 0;
                 handled.Add(current);
                 i++;
-                if (oldLight != 0)
-                    this.LightChanges.Add(current);
+              
                 var neighbors = current.GetNeighbors().ToList();
                 foreach (var n in neighbors)
                 {
@@ -261,7 +223,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        private byte GetNextBlockLight(Cell cell, Chunk chunk, IEnumerable<IntVec3> neighbors, Dictionary<IntVec3, byte> deltas)
+        private byte GetNextBlockLight(Cell cell, IEnumerable<IntVec3> neighbors, Dictionary<IntVec3, byte> deltas)
         {
             byte next;
             byte maxAdjLight = 0;
@@ -350,13 +312,7 @@ namespace Start_a_Town_
                 maxAdjLight = Math.Max(maxAdjLight, l);
                 visible = true;
             }
-            if (visible)
-                if (!Cell.IsInvisible(cell))
-                {
-                    this.BlockChanges.Add(new(gx, gy, z));
-                    this.OutdoorBlockHandler(chunk, cell);
-                }
-
+         
             if (cell.Opaque)
             {
                 next = 0;

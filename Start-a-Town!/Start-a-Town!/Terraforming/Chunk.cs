@@ -397,7 +397,7 @@ namespace Start_a_Town_
             // invalidate heightmap immediately?
             this.UpdateHeightMapColumnWithLightSmart(localx, localy);
         }
-        HashSet<Vector2> HeightMapUpdates = new HashSet<Vector2>();
+        HashSet<IntVec2> HeightMapUpdates = new();
 
         /// <summary>
         /// the current ont
@@ -766,8 +766,8 @@ namespace Start_a_Town_
             if (this.HeightMapUpdates.Any())
             {
                 foreach (var pos in this.HeightMapUpdates)
-                    UpdateHeightMapColumnWithLightSmart((int)pos.X, (int)pos.Y);
-                this.HeightMapUpdates = new HashSet<Vector2>();
+                    UpdateHeightMapColumnWithLightSmart(pos.X, pos.Y);
+                this.HeightMapUpdates = new();
             }
         }
         public void Tick(MapBase map)

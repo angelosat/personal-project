@@ -259,7 +259,7 @@ namespace Start_a_Town_
         }
         public int StackMax => this.Def.StackCapacity;
 
-        int _StackSize;
+        int _StackSize = 1;
         public int StackSize
         {
             get { return this._StackSize; }
@@ -981,7 +981,7 @@ namespace Start_a_Town_
             var data = new List<SaveTag>();
             data.Add(this.Def.Name.Save("Def"));
             data.Add(this.RefID.Save("InstanceID"));
-            data.Add(this.StackSize.Save("Stack"));
+            data.Add(this._StackSize.Save("Stack"));
             var compData = new SaveTag(SaveTag.Types.Compound, "Components");
             foreach (KeyValuePair<string, EntityComponent> comp in this.Components)
             {
@@ -1006,7 +1006,7 @@ namespace Start_a_Town_
             var def = Start_a_Town_.Def.GetDef<ItemDef>(defName);
             var obj = def.Create();
             tag.TryGetTagValue("InstanceID", out obj.RefID);
-            tag.TryGetTagValue<int>("Stack", v=> obj.StackSize = v);
+            tag.TryGetTagValue<int>("Stack", v=> obj._StackSize = v);
             Dictionary<string, SaveTag> compData = tag["Components"].Value as Dictionary<string, SaveTag>;
             foreach (SaveTag compTag in compData.Values)
             {

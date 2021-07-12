@@ -11,6 +11,10 @@ namespace Start_a_Town_.Towns
         int ClickedZoneID;
         int EditingZone { get { return this.CurrentZoneID != 0 ? this.CurrentZoneID : this.ClickedZoneID; } }
         Town Town;
+        public ToolDesignateZone()
+        {
+
+        }
         public ToolDesignateZone(Town town, Type zoneType)
         {
             this.ZoneType = zoneType;

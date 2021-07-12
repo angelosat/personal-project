@@ -1007,7 +1007,7 @@ namespace Start_a_Town_
             this.Effect.Parameters["RotCos"].SetValue((float)this.RotCos);
             this.Effect.Parameters["RotSin"].SetValue((float)this.RotSin);
 
-            var actor = map.Net.GetPlayer().ControllingEntity;
+            var actor = map.Net.GetPlayer()?.ControllingEntity;
             if (actor != null)
             {
                 if (actor.IsSpawned)
@@ -1564,7 +1564,7 @@ namespace Start_a_Town_
         }
         public int GetMaxDrawLevel(MapBase map)
         {
-            var actor = map.Net.GetPlayer().ControllingEntity;
+            var actor = map.Net.GetPlayer()?.ControllingEntity;
             var value = (this.HideTerrainAbovePlayer && (actor != null)) ? (int)actor.Transform.Global.RoundXY().Z + 2 + this.HideTerrainAbovePlayerOffset : this.DrawLevel;
             value = Math.Min(MapBase.MaxHeight - 1, Math.Max(0, value));
             return value;
@@ -1635,7 +1635,7 @@ namespace Start_a_Town_
 
             var controller = Controller.Instance;
             var hidewalls = Engine.HideWalls;
-            var actor = map.Net.GetPlayer().ControllingEntity;
+            var actor = map.Net.GetPlayer()?.ControllingEntity;
             bool playerExists = actor != null;
             Vector3 playerGlobal = playerExists ? actor.Global : default(Vector3);
             float radius = .01f * this.Zoom * this.Zoom; //occlusion radius

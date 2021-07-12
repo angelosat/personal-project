@@ -75,12 +75,12 @@ namespace Start_a_Town_.Towns.Constructions
             {
                 /// I ACTUALLY NEED IT TO ADD PENDING DESIGNATIONS
                 case Components.Message.Types.BlocksChanged:
-                    foreach (var pos in e.Parameters[1] as IEnumerable<Vector3>)
+                    foreach (var pos in e.Parameters[1] as IEnumerable<IntVec3>)
                         this.TryAddPendingDesignation(pos);
                     break;
                
                 case Components.Message.Types.ZoneDesignation:
-                    this.Add(e.Parameters[0] as DesignationDef, e.Parameters[1] as List<Vector3>, (bool)e.Parameters[2]);
+                    this.Add(e.Parameters[0] as DesignationDef, e.Parameters[1] as List<IntVec3>, (bool)e.Parameters[2]);
                     break;
 
                 default:
@@ -88,7 +88,7 @@ namespace Start_a_Town_.Towns.Constructions
             }
         }
 
-        private void Add(DesignationDef designation, List<Vector3> positions, bool remove)
+        private void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
             if (designation == DesignationDef.Null)
             {

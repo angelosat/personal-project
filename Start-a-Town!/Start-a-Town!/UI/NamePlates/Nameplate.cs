@@ -75,7 +75,7 @@ namespace Start_a_Town_.UI
         public override void OnBeforeDraw(SpriteBatch sb, Rectangle viewport)
         {
             var obj = this.Tag as GameObject;
-            var actor = obj.Net.GetPlayer().ControllingEntity;
+            var actor = obj.Net.GetPlayer()?.ControllingEntity;
             if (actor is null)
                 return;
             var playertarget = actor.GetComponent<AttackComponent>().Target;

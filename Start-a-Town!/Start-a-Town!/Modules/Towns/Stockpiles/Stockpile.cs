@@ -21,14 +21,14 @@ namespace Start_a_Town_
                 return this.Settings.Priority.Value;
             }
         }
-        
+
         public override string UniqueName => $"Zone_Stockpile_{this.ID}";
 
         public override string GetName()
         {
             return this.Name;
         }
-      
+
         public void CacheContents()
         {
             this.CacheContentsNew();
@@ -52,7 +52,7 @@ namespace Start_a_Town_
             return contents;
         }
         List<GameObject> Cache = new();
-      
+
         public List<GameObject> ScanExistingStoredItems()
         {
             List<GameObject> list = new List<GameObject>();
@@ -61,13 +61,13 @@ namespace Start_a_Town_
                 list.AddRange(from obj in objects where this.Accepts(obj) where obj.Global - Vector3.UnitZ == (Vector3)pos select obj); // TODO: this is shit
             return list;
         }
-       
+
         internal bool Accepts(GameObject obj)
         {
             var item = obj as Entity;
             return item != null ? this.Accepts(item) : false;
         }
-       
+
         public IEnumerable<IntVec3> GetAvailableCells()
         {
             var emptyCells =
@@ -148,7 +148,7 @@ namespace Start_a_Town_
             }
             return valid;
         }
-       
+
         public IEnumerable<TargetArgs> GetPotentialHaulTargets(GameObject actor, GameObject item)
         {
             foreach (var target in this.DistributeToStorageSpotsNewLazy(actor, item))
@@ -158,24 +158,24 @@ namespace Start_a_Town_
         {
             return this.DistributeToStorageSpotsNew(actor, item, out maxAmount);
         }
-       
+
         public void FilterToggle(params StorageFilter[] filters)
         {
             foreach (var n in filters)
                 this.ToggleFilter(n);
         }
-        
+
         public void ToggleFilter(StorageFilter filter)
         {
             this.Settings.Toggle(filter);
         }
-       
+
         public bool Accepts(Entity obj)
         {
             return this.DefaultFilters.Filter(obj);
-       
+
         }
-        
+
         public override IEnumerable<IntVec3> GetPositions()
         {
             foreach (var p in this.Positions)
@@ -203,8 +203,11 @@ namespace Start_a_Town_
                 }
             }
         }
-       
-        public Stockpile(ZoneManager manager):base(manager)
+        public Stockpile()
+        {
+
+        }
+        public Stockpile(ZoneManager manager) : base(manager)
         {
         }
         public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions) : base(manager)
@@ -224,7 +227,7 @@ namespace Start_a_Town_
             switch (target.Type)
             {
                 case TargetType.Position:
-          
+
                     break;
 
                 case TargetType.Entity:
@@ -241,13 +244,13 @@ namespace Start_a_Town_
 
             return true;
         }
-       
+
         public IEnumerable<Vector3> GetPositionsLazy()
         {
             foreach (var pos in this.Positions)
                 yield return pos;
         }
-        
+
         public override void GetSelectionInfo(IUISelection panel)
         {
             panel.AddTabAction("Stockpile", this.ToggleFiltersUI);
@@ -257,7 +260,7 @@ namespace Start_a_Town_
         private void ToggleFiltersUI()
         {
             // TODO: update controls when selecting another stockpile
-            if(WindowFilters is not null && WindowFilters.Tag != this && WindowFilters.IsOpen)
+            if (WindowFilters is not null && WindowFilters.Tag != this && WindowFilters.IsOpen)
             {
                 WindowFilters.Client.ClearControls();
                 WindowFilters.Client.AddControls(getGUI());
@@ -285,7 +288,7 @@ namespace Start_a_Town_
                     DefaultFilters.GetControl((n, l) => PacketStorageFiltersNew.Send(this, n, l))
                         .ToPanelLabeled("Fitlers"));
                 return box;
-                
+
                 void syncPriority(StoragePriority p)
                 {
                     Packets.SyncPriority(this, p);

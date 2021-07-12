@@ -669,5 +669,45 @@ namespace Start_a_Town_.Components
         {
             return this.Slots.GetEmpty();
         }
+        internal override void HandleRemoteCall(GameObject parent, Message.Types type, BinaryReader r)
+        {
+            switch (type)
+            {
+                case Message.Types.Haul:
+                    var tohaulobj = parent.Net.GetNetworkObject(r.ReadInt32());
+                    var sourceobj = parent.Net.GetNetworkObject(r.ReadInt32());
+                    var hauledobj = this.HaulSlot.Object;
+                    var amount = r.ReadInt32();
+                    if (hauledobj != null)
+                    {
+                        if (hauledobj.CanAbsorb(tohaulobj))
+                        {
+                            var transferAmount = Math.Min(amount == -1 ? tohaulobj.StackSize : amount, hauledobj.StackMax - hauledobj.StackSize);
+                            hauledobj.StackSize += transferAmount;
+                            if (tohaulobj.StackSize == amount)
+                            {
+                                parent.Net.Despawn(tohaulobj);
+                                parent.Net.DisposeObject(tohaulobj);
+                                return; // if we didn't leave any amount left on the ground, return
+                            }
+                            else
+                                tohaulobj.StackSize -= transferAmount;
+                            break;
+                        }
+                        else if (!StoreHauled(parent))
+                            return;
+                    }
+                    else
+                    {
+                        if (amount != sourceobj.StackSize)
+                            sourceobj.StackSize -= amount;
+                        this.Haul(parent, tohaulobj);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 }

@@ -333,8 +333,8 @@ namespace Start_a_Town_.Components
         
         static public void DrawHighlight(GameObject parent, SpriteBatch sb, Camera camera)
         {
-            var sprite = parent.GetComponent<SpriteComponent>().Sprite;
-            var comp = parent.GetComponent<SpriteComponent>();
+            var comp = parent.SpriteComp;
+            var sprite = comp.Sprite;
             var source = sprite.AtlasToken.Rectangle;
             var global = parent.Global;
             var w = source.Width;

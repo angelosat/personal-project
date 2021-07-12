@@ -27,7 +27,7 @@ namespace Start_a_Town_
             var strem = net.GetOutgoingStream();
             strem.Write((int)PckTypeNew);
             strem.Write(templateID);
-            var data = entity.Serialize();
+            var data = entity.Serialize(); // why send it compressed?
             strem.Write(data.Length);
             strem.Write(data);
         }

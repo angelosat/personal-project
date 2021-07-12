@@ -71,11 +71,7 @@ namespace Start_a_Town_
             tooltip.Controls.Add(new Label(this.Quality.Label/* + " " + this.ItemSubType.ToString()*/) { Fill = Color.Gold, Location = tooltip.Controls.BottomLeft, TextColorFunc = () => Color.Gold });
             tooltip.Controls.Add(new Label(parent.Description) { Location = tooltip.Controls.BottomLeft });
         }
-        static public Color GetQualityColor(GameObject obj)
-        {
-            return (obj.GetInfo().Quality).Color;
-        }
-
+      
         public Color GetQualityColor()
         {
             return Quality.Color;
@@ -93,7 +89,7 @@ namespace Start_a_Town_
         {
             this.CustomName = r.ReadString();
             this.StackSize = r.ReadInt32();
-            this.Quality = Start_a_Town_.Def.GetDef<Quality>(r.ReadString());
+            this.Quality = Def.GetDef<Quality>(r.ReadString());
         }
 
         internal override List<SaveTag> Save()

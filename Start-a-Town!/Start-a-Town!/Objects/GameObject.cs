@@ -185,7 +185,7 @@ namespace Start_a_Town_
         public Rectangle GetScreenBounds(Camera camera)
         {
             var g = this.Global;
-            var bounds = camera.GetScreenBounds(g.X, g.Y, g.Z, this.GetComponent<SpriteComponent>().GetSpriteBounds(), 0, 0, this.Body.Scale);
+            var bounds = camera.GetScreenBounds(g.X, g.Y, g.Z, this.SpriteComp.GetSpriteBounds(), 0, 0, this.Body.Scale);
             return bounds;
         }
 
@@ -298,15 +298,8 @@ namespace Start_a_Town_
             }
         }
 
-        public bool Full
-        {
-            get { return this.StackSize == this.StackMax; }
-        }
-
-        public Bone Body
-        {
-            get { return this.GetComponent<SpriteComponent>().Body; }
-        }
+        public bool IsStackFull => this.StackSize == this.StackMax; 
+        public Bone Body => this.SpriteComp.Body;
         internal Material PrimaryMaterial => this.Body.Material;
 
         public GameObject SetGlobal(Vector3 global)
@@ -478,16 +471,20 @@ namespace Start_a_Town_
             }
         }
 
+        DefComponent _Info;
         public DefComponent GetInfo()
         {
-            return GetComponent<DefComponent>("Info");
+            return this._Info ??= GetComponent<DefComponent>("Info");
         }
        
         PhysicsComponent _PhysicsCached;
-        public virtual PhysicsComponent Physics => this._PhysicsCached ??= this.GetComponent<PhysicsComponent>();
+        public PhysicsComponent Physics => this._PhysicsCached ??= this.GetComponent<PhysicsComponent>();
 
         WorkComponent _WorkCached;
-        public virtual WorkComponent Work => this._WorkCached ??= this.GetComponent<WorkComponent>(); 
+        public WorkComponent Work => this._WorkCached ??= this.GetComponent<WorkComponent>();
+
+        SpriteComponent _SpriteCompCached;
+        public SpriteComponent SpriteComp => this._SpriteCompCached ??= this.GetComponent<SpriteComponent>();
 
         PersonalInventoryComponent _InventoryCached;
         public PersonalInventoryComponent Inventory => this._InventoryCached ??= this.GetComponent<PersonalInventoryComponent>();
@@ -884,29 +881,14 @@ namespace Start_a_Town_
             GetTooltip(tooltip);
         }
         Sprite CachedSprite;
-        internal StorageFilter StorageCategory;
 
         public Sprite GetSprite()
         {
-            if (this.CachedSprite == null)
-            {
-                if (!TryGetComponent(out SpriteComponent sprComp))
-                {
-                    return null;
-                }
-
-                this.CachedSprite = sprComp.Sprite;
-            }
-            return this.CachedSprite;
+            return this.CachedSprite ??= this.SpriteComp?.Sprite;
         }
         public Sprite GetSpriteOrDefault()
         {
-            if (!TryGetComponent("Sprite", out SpriteComponent sprComp))
-            {
-                return Sprite.Default;
-            }
-
-            return sprComp.Sprite ?? Sprite.Default;
+            return this.GetSprite() ?? Sprite.Default;
         }
         public Icon GetIcon()
         {
@@ -1009,6 +991,10 @@ namespace Start_a_Town_
             }
 
             return this;
+        }
+        public SaveTag Save(string name = "")
+        {
+            return new SaveTag(SaveTag.Types.Compound, name, this.SaveInternal());
         }
         internal List<SaveTag> SaveInternal()
         {
@@ -1249,12 +1235,12 @@ namespace Start_a_Town_
 
         internal void HitTest(Camera camera)
         {
-            this.GetComponent<SpriteComponent>().HitTest(this, camera);
+            this.SpriteComp.HitTest(this, camera);
         }
 
         public bool HasMatchingBody(GameObject otherItem)
         {
-            return this.GetComponent<SpriteComponent>().HasMatchingBody(otherItem);
+            return this.SpriteComp.HasMatchingBody(otherItem);
         }
 
         public int StackAvailableSpace { get { return this.StackMax - this.StackSize; } }
@@ -1265,7 +1251,7 @@ namespace Start_a_Town_
                 return false;
             }
 
-            if (this.Full)
+            if (this.IsStackFull)
             {
                 return false;
             }
@@ -1388,19 +1374,19 @@ namespace Start_a_Town_
 
         public bool CanReachNew(GameObject obj)
         {
-            return this.Map.Regions.CanReach(this.StandingOn(), obj.Global.SnapToBlock(), this as Actor);
+            return this.Map.Regions.CanReach(this.GetCellStandingOn(), obj.Global.SnapToBlock(), this as Actor);
         }
         internal bool CanReachNew(Vector3 global)
         {
-            return this.Map.Regions.CanReach(this.StandingOn(), global.SnapToBlock(), this as Actor);
+            return this.Map.Regions.CanReach(this.GetCellStandingOn(), global.SnapToBlock(), this as Actor);
         }
         internal bool CanReach(GameObject obj)
         {
-            return this.Map.GetRegionDistance(this.StandingOn(), obj.Global.SnapToBlock(), this as Actor) != -1;
+            return this.Map.GetRegionDistance(this.GetCellStandingOn(), obj.Global.SnapToBlock(), this as Actor) != -1;
         }
         internal bool CanReach(Vector3 global)
         {
-            return this.Map.GetRegionDistance(this.StandingOn(), global.SnapToBlock(), this as Actor) != -1;
+            return this.Map.GetRegionDistance(this.GetCellStandingOn(), global.SnapToBlock(), this as Actor) != -1;
         }
 
         internal BehaviorPerformTask GetLastBehavior()
@@ -1455,23 +1441,7 @@ namespace Start_a_Town_
                 return this.GetComponent<ConsumableComponent>()?.Effects.OfType<NeedEffect>().Any(e => e.Type == NeedDef.Hunger) ?? false;
             }
         }
-        public void DrawIcon(int w, int h, float scale = 1)
-        {
-            // same as Body.RenderNewererest
-            GraphicsDevice gd = Game1.Instance.GraphicsDevice;
-            var body = this.Body;
-            var sprite = body.Sprite;
-            var loc = new Vector2(0, 0);
-            Effect fx = Game1.Instance.Content.Load<Effect>("blur");
-            MySpriteBatch mysb = new MySpriteBatch(gd);
-            fx.CurrentTechnique = fx.Techniques["EntitiesFog"];
-            fx.Parameters["Viewport"].SetValue(new Vector2(w, h));
-            Sprite.Atlas.Begin(gd);
-            fx.CurrentTechnique.Passes["Pass1"].Apply();
-            loc += sprite.OriginGround;
-            body.DrawGhost(this, mysb, loc * scale, Color.White, Color.White, Color.White, Color.Transparent, 0, scale, 0, SpriteEffects.None, 1f, 0.5f);
-            mysb.Flush();
-        }
+        
         public static void DrawIcon(Bone body, int w, int h, float scale = 1)
         {
             // same as Body.RenderNewererest
@@ -1513,22 +1483,15 @@ namespace Start_a_Town_
                 comp.DrawAfter(sb, cam, this);
             }
         }
-
-        internal bool HasLabor(JobDef labor)
-        {
-            return labor == null ? true : AIState.GetState(this).HasJob(labor);
-        }
+       
         internal bool IsIndoors()
         {
             var region = Server.Instance.Map.GetRegionAt(this.Global.Below().SnapToBlock()); // TODO: find first solid block below object
-            return region != null ? !region.Room.IsOutdoors : false;
+            return region != null && !region.Room.IsOutdoors;
         }
 
-        internal bool IsForbiddable()
-        {
-            return !this.HasComponent<NpcComponent>();
-        }
-
+        internal bool IsForbiddable() => !this.HasComponent<NpcComponent>();
+        
         internal void DrawHighlight(SpriteBatch sb, Camera camera)
         {
             SpriteComponent.DrawHighlight(this, sb, camera);
@@ -1541,19 +1504,17 @@ namespace Start_a_Town_
 
         internal byte[] Serialize()
         {
-            byte[] newData = Network.Serialize(w =>
-            {
-                this.Write(w);
-            });
+            byte[] newData = Network.Serialize(this.Write);
             return newData;
         }
-        static readonly Vector3[] Corners = new Vector3[] {
+        static readonly Vector3[] HitboxCorners = new Vector3[] {
                     new Vector3(.25f, .25f, 0),
                     new Vector3(-.25f, .25f, 0),
                     new Vector3(.25f, -.25f, 0),
                     new Vector3(-.25f, -.25f, 0)
                 };
-        internal Vector3 StandingOn()
+
+        internal Vector3 GetCellStandingOn()
         {
             var global = this.Global;
             var below = global.CeilingZ().Below().SnapToBlock();
@@ -1563,11 +1524,11 @@ namespace Start_a_Town_
                 return below;
             }
             //else check corners because it's standing on the edge of a block
-            foreach (var corner in Corners)
+            foreach (var corner in HitboxCorners)
             {
                 var pos = (global + corner).CeilingZ().Below().SnapToBlock();
                 belownode = this.Map.GetNodeAt(pos);
-                if (belownode != null)
+                if (belownode is not null)
                 {
                     return pos;
                 }
@@ -1592,25 +1553,11 @@ namespace Start_a_Town_
             }
         }
 
-        public Material Material
-        {
-            get
-            {
-                return this.GetComp<SpriteComponent>().GetMaterial(this.Body);
-            }
-        }
+        public Material Material => this.SpriteComp.GetMaterial(this.Body);
 
         internal bool HasFocus()
         {
-            if (Rooms.Ingame.Instance.ToolManager.ActiveTool != null)
-            {
-                if (Rooms.Ingame.Instance.ToolManager.ActiveTool.Target != null)
-                {
-                    return (Rooms.Ingame.Instance.ToolManager.ActiveTool.Target.Object == this);
-                }
-            }
-
-            return false;
+            return Rooms.Ingame.Instance.ToolManager.ActiveTool?.Target?.Object == this;
         }
 
         internal void Sync(IObjectProvider net)
@@ -1870,9 +1817,6 @@ namespace Start_a_Town_
         }
         #endregion
 
-        public SaveTag Save(string name = "")
-        {
-            return new SaveTag(SaveTag.Types.Compound, name, this.SaveInternal());
-        }
+        
     }
 }

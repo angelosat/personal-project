@@ -38,7 +38,7 @@ namespace Start_a_Town_.AI.Behaviors
             switch (state.PathFinder.State)
             {
                 case PathingSync.States.Stopped:
-                    state.PathFinder.Begin(parent, parent.StandingOn().Above(), this.Target.Global, this.Range);
+                    state.PathFinder.Begin(parent, parent.GetCellStandingOn().Above(), this.Target.Global, this.Range);
                     state.PathFinder.WorkMode(this.FinishMode);
                     return BehaviorState.Running;
 
@@ -58,7 +58,7 @@ namespace Start_a_Town_.AI.Behaviors
                     }
                     else
                     {
-                        parent.Net.SyncReport($"{parent.Name} failed to find path from {parent.StandingOn().Above()} to {this.Target.Global}! {state.PathFinder.Ticks}");
+                        parent.Net.SyncReport($"{parent.Name} failed to find path from {parent.GetCellStandingOn().Above()} to {this.Target.Global}! {state.PathFinder.Ticks}");
                         return BehaviorState.Fail;
                     }
 

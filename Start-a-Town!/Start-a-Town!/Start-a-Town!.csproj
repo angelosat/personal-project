@@ -216,6 +216,7 @@
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
     <Compile Include="Log.Entry.cs" />
+    <Compile Include="Modules\AI\AIExtensions.cs" />
     <Compile Include="Modules\AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawing.Args.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.Args.cs" />

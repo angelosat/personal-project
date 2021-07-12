@@ -7,98 +7,31 @@ using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
-    public class ObjectType
-    {
-        static public readonly string None = "";
-        static public readonly string Human = "Human";
-        static public readonly string Undead = "Undead";
-        static public readonly string Equipment = "Equipment";
-        static public readonly string BodyPart = "Body part";
-        static public readonly string Consumable = "Consumable";
-        static public readonly string Material = "Material";
-        static public readonly string Bars = "Bars";
-        static public readonly string Block = "Block";
-        static public readonly string Blueprint = "Blueprint";
-        static public readonly string Plant = "Plant";
-        static public readonly string Container = "Container";
-        static public readonly string Construction = "Construction";
-        static public readonly string WorkBench = "Workbench";
-        static public readonly string Furniture = "Furniture";
-        static public readonly string Lightsource = "Lightsource";
-        static public readonly string Package = "Package";
-        static public readonly string Ability = "Ability";
-        static public readonly string Condition = "Condition";
-        public static readonly string Job = "Job";
-        public static readonly string Plan = "Plan";
-        public static readonly string Project = "Project";
-        public static readonly string BuildingPlan = "Building Plan";
-        public static readonly string Entity = "Entity";
-        public static readonly string Schematic = "Schematic";
-        public static readonly string Weapon = "Weapon";
-        public static readonly string Furnace = "Furnace";
-        public static readonly string Fuel = "Fuel";
-        public static readonly string Smeltery = "Smeltery";
-        public static readonly string Shield = "Shield";
-        public static readonly string Armor = "Armor";
-    }
     public class DefComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get
-            {
-                return "Info";
-            }
-        }
-
+        public override string ComponentName => "Info";
+            
         public ItemDef Def;
        
         public bool InCatalogue = true;
         public Quality Quality = Quality.Common;
 
-
-        private int _ID;
-        public int ID
-        {
-            get
-            {
-                return this.Def?.ID ?? this._ID;
-            }
-            set
-            {
-                this._ID = value;
-            }
-        }
-
-
         public string CustomName = "";
         public string Name
         {
-            get { return string.IsNullOrEmpty(this.CustomName) ? this.Def.Label : this.CustomName; }
-            set
-            {
-                this.CustomName = value;
-            }
+            get => string.IsNullOrEmpty(this.CustomName) ? this.Def.Label : this.CustomName; 
+            set => this.CustomName = value;
         }
 
-        private string _Type;
-        public string Type
-        { get { return this.Def?.ObjType ?? this._Type; } set { this._Type = value; } }
-
-        string _Description;
-        public string Description
-        { get { return this.Def?.Description ?? this._Description; } set { this._Description = value; } }
-
-        int _StackCapacity;
-        public int StackMax
-        { get { return this.Def?.StackCapacity ?? this._StackCapacity; } set { this._StackCapacity = value; } }
+        public string Description => this.Def.Description;
+        public int StackMax => this.Def.StackCapacity;
 
         public string Prefix = "";
         public bool SaveWithChunk;
         int _StackSize;
         public int StackSize
         {
-            get { return this._StackSize; }
+            get => this._StackSize; 
             set
             {
                 if (value < 0)
@@ -107,16 +40,6 @@ namespace Start_a_Town_
             }
         }
 
-        public DefComponent Initialize(int id, string objType = "<undefined>", string name = "<undefined>", string description = "<undefined>", Quality quality = null, bool saveName = false)
-        {
-            this.ID = id;
-            this.Name = name;
-            this.Description = description;
-            this.Type = objType;
-            this.Quality = quality ?? Quality.Common;
-            this.StackSize = this.StackMax = 1;
-            return this;
-        }
         internal override void Initialize(Entity parent, Quality quality)
         {
             this.Quality = quality;
@@ -131,11 +54,8 @@ namespace Start_a_Town_
             : base()
         {
             this.SaveWithChunk = true;
-            this.Description = "";
-            this.Type = "";
             Quality = Quality.Common;
             this.StackSize = 1;
-            this.StackMax = 1;// 256; //default items are unstackable
         }
 
        
@@ -144,10 +64,7 @@ namespace Start_a_Town_
             DefComponent phys = new DefComponent();
             phys.Def = this.Def;
             phys.CustomName = this.CustomName;
-            phys.ID = this.ID;
             phys.Quality = this.Quality;
-            phys.Description = this.Description;
-            phys.StackMax = this.StackMax;
             phys.StackSize = this.StackSize;
             phys.SaveWithChunk = this.SaveWithChunk;
             return phys;

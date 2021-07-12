@@ -80,15 +80,7 @@ namespace Start_a_Town_.Components
                 return;
             stat.Modifiers.Remove(modifier);
         }
-        public override void GetUI(GameObject parent, UI.Control ui, List<EventHandler<GameEvent>> gameEventHandlers)
-        {
-            foreach(var stat in this.Stats.Values)
-            {
-                var lbl = new UI.Label(stat.ToString(parent)) { Location = ui.Controls.BottomLeft };
-                lbl.TooltipFunc = stat.GetTooltipInfo;
-                ui.Controls.Add(lbl);
-            }
-        }
+      
         public override object Clone()
         {
             return new StatsComponentNew(this.Stats);

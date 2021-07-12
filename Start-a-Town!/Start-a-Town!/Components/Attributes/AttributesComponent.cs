@@ -64,11 +64,6 @@ namespace Start_a_Town_.Components
             return new AttributesComponent(this.Attributes);
         }
 
-        public override string GetStats()
-        {
-            return this.Attributes.ToString();
-        }
-
         public AttributeStat GetAttribute(AttributeDef def)
         {
             return this.Attributes.FirstOrDefault(att => att.Def == def);

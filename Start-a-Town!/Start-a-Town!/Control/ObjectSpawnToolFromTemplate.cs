@@ -42,15 +42,9 @@ namespace Start_a_Town_
 
                 case TargetType.Entity:
                     if (InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey))
-                    {
                         PacketEntityRequestDispose.Send(Client.Instance, Target.Object.RefID);
-                    }
-                    else
-                    {
-                        if (Entity.GetID() != this.Target.Object.GetID())
-                            break;
+                    else if (this.Target.Object.CanAbsorb(this.Entity))
                         IncreaseQuantity();
-                    }
                     break;
 
                 case TargetType.Slot:

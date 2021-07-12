@@ -227,9 +227,9 @@ namespace Start_a_Town_.Components
         }
         static GameObject FindClosestEnemy(GameObject parent)
         {
-            var list = parent.GetNearbyObjects(r => r <= 5, foo => foo != parent);
-            list = list.Where(foo => foo.HasResource(ResourceDef.Health)).ToList();
-            list.Sort((foo1, foo2) => Vector3.DistanceSquared(parent.Global, foo1.Global) <= Vector3.DistanceSquared(parent.Global, foo2.Global) ? -1 :1);
+            var list = parent.GetNearbyObjects(r => r <= 5, foo => foo != parent)
+                .Where(foo => foo.HasResource(ResourceDef.Health))
+                .OrderBy(f => Vector3.DistanceSquared(parent.Global, f.Global));
             return list.FirstOrDefault();
         }
 

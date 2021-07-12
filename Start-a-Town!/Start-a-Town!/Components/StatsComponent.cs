@@ -145,55 +145,6 @@ namespace Start_a_Town_.Components
         }
 
         
-
-        //internal override List<SaveTag> Save()
-        //{
-        //    List<SaveTag> data = new List<SaveTag>();// Tag(Tag.Types.Compound, "Stats", Tag.Types.Float);
-        //    foreach (KeyValuePair<string, object> parameter in Properties)
-        //    {
-        //        // SAVE BY NAME
-        //        data.Add(new SaveTag(SaveTag.Types.Float, parameter.Key, (float)parameter.Value));
-
-        //        // SAVE BY ID
-        //        //string idString = Stat.StatDB[parameter.Key].ID.ToString();
-        //        //data.Add(new Tag(Tag.Types.Float, idString, (float)parameter.Value));
-        //    }
-        //    return data;
-        //}
-
-        //internal override void Load(SaveTag data)
-        //{
-        //    return;
-        //    List<SaveTag> stats = data.Value as List<SaveTag>;
-        //    //foreach (Tag tag in stats)
-        //    //    this[tag.Name] = (float)tag.Value;
-        //    for (int i = 0; i < stats.Count - 1; i++)
-        //    {
-        //        SaveTag tag = stats[i];
-        //        // LOAD BY NAME
-        //        this[tag.Name] = (float)tag.Value;
-
-        //        // LOAD BY ID
-        //        //this[Stat.Parse(tag.Name).Name] = (float)tag.Value;
-        //    }
-        //}
-
-        public override void GetUI(GameObject parent, UI.Control ui, List<EventHandler<ObjectEventArgs>> handlers)
-        {
-            foreach (var stat in this.Stats)
-            {
-                var s = Stat.GetStat(stat.Key);
-                ui.Controls.Add(
-                    new Label(ui.Controls.BottomLeft, s.ToString(stat.Value))//.TrimStart('+'))
-                    {
-                        HoverFunc = () => (s.Group + "\n" + s.Description).TrimEnd('\n')
-                    });
-            }
-
-            //handlers.Add(
-        }
-
-
         static public StatsComponent Add(GameObject obj, params Tuple<Stat.Types, float>[] stats)
         {
             StatsComponent statsComp;

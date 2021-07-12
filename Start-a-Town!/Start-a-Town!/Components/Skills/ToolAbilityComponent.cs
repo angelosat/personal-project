@@ -53,10 +53,6 @@ namespace Start_a_Town_.Components
                 text += item.Name + "\n";
             return text.TrimEnd('\n');
         }
-        public override void GetEquippedActions(GameObject parent, List<Interaction> actions)
-        {
-            actions.Add(this.Skill.GetInteraction());
-        }
 
         internal override void GetEquippedActionsWithTarget(GameObject gameObject, GameObject actor, TargetArgs t, List<Interaction> list)
         {

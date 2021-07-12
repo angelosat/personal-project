@@ -9,7 +9,6 @@ namespace Start_a_Town_.Components
             Default,
             DropOn,
             Give,
-            Activate,
             Initialize,
             Death,
             Attack,

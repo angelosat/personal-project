@@ -1,32 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Components;
 using Start_a_Town_.AI;
-using Start_a_Town_.UI;
+using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 using Start_a_Town_.Towns;
+using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     public class GameObject : IEntity, ITooltippable, IContextable, INameplateable, IDebuggable, ISlottable, ISelectable, IEntityCompContainer, ILabeled
     {
-        static public Dictionary<int, GameObject> Templates = new();
+        public static Dictionary<int, GameObject> Templates = new();
         public string Label => this.Def.Label;
         static int GetNextTemplateID()
         {
             return Templates.Count + 1;
         }
 
-        static public void AddTemplates(IEnumerable<GameObject> templates)
+        public static void AddTemplates(IEnumerable<GameObject> templates)
         {
             foreach (var o in templates)
+            {
                 AddTemplate(o);
+            }
         }
-        static public int AddTemplate(GameObject obj)
+        public static int AddTemplate(GameObject obj)
         {
             var id = GetNextTemplateID();
             Templates.Add(id, obj);
@@ -59,17 +61,12 @@ namespace Start_a_Town_
         [Obsolete]
         public GameObject Debug() { return this; }
 
-        static public event EventHandler<ObjectEventArgs> MessageHandled;
 
         private DefComponent _DefComponent;
         public DefComponent DefComponent => this._DefComponent ??= this.GetComponent<DefComponent>();
         public ItemDef Def { get { return this.DefComponent.Def; } set { this.DefComponent.Def = value; } }
         public Quality Quality { get { return this.DefComponent.Quality; } set { this.DefComponent.Quality = value; } }
 
-        static void OnMessageHandled(GameObject receiver, ObjectEventArgs e)
-        {
-            MessageHandled?.Invoke(receiver, e);
-        }
 
         public GameObjectSlot ToSlotLink(int amount = 1)
         {
@@ -80,7 +77,7 @@ namespace Start_a_Town_
             return new Memory(this, 100, 100, 1, actor);
         }
 
-        static public void LoadObjects()
+        public static void LoadObjects()
         {
             PlantProperties.Init();
             PlantDefOf.Init();
@@ -101,26 +98,14 @@ namespace Start_a_Town_
                 info.Name = value;
             }
         }
-        
-        public string Description
-        {
-            get { return this.GetInfo().Description; }
-            set { this.GetInfo().Description = value; }
-        }
-        
-        [Obsolete]
-        public string Type
-        {
-            get { return this.GetInfo().Type; }
-            set { this.GetInfo().Type = value; }
-        }
 
+        public string Description => this.GetInfo().Description; 
         public virtual float Height => this.Physics.Height;
 
         public int RefID;
-        
+
         public IObjectProvider Net;
-        
+
         MapBase _Map;
         public MapBase Map { get { return this.Parent?.Map ?? this._Map; } set { this._Map = value; } }
 
@@ -133,10 +118,17 @@ namespace Start_a_Town_
         public IEnumerable<(string name, Action action)> GetInfoTabs()
         {
             foreach (var comp in this.Components.Values)
+            {
                 foreach (var i in comp.GetInfoTabs())
+                {
                     yield return i;
+                }
+            }
+
             foreach (var i in this.GetInfoTabsExtra())
+            {
                 yield return i;
+            }
         }
         protected virtual IEnumerable<(string name, Action action)> GetInfoTabsExtra() { yield break; }
         public virtual void GetSelectionInfo(IUISelection info)
@@ -144,14 +136,21 @@ namespace Start_a_Town_
             info.AddIcon(IconCameraFollow);
             this.Map.World.OnTargetSelected(info, this);
             foreach (var comp in this.Components.Values)
+            {
                 comp.GetSelectionInfo(info, this);
+            }
         }
         public virtual void GetQuickButtons(UISelectedInfo info)
         {
             if (this.IsForbiddable())
+            {
                 info.AddButton(IconForbidden, RequestToggleForbidden, this);
+            }
+
             foreach (var comp in this.Components.Values)
+            {
                 comp.GetQuickButtons(info, this);
+            }
         }
         static readonly IconButton IconForbidden = new QuickButton(Icon.Cross, KeyBind.ToggleForbidden, "Forbid") { HoverText = "Toggle forbidden" };
         static readonly IconButton IconCameraFollow = new(Icon.Replace) { BackgroundTexture = UIManager.Icon16Background, LeftClickAction = FollowCam, HoverText = "Camera follow" };
@@ -164,7 +163,7 @@ namespace Start_a_Town_
         {
             ScreenManager.CurrentScreen.Camera.ToggleFollowing(UISelectedInfo.Instance.SelectedSource.Object);
         }
-       
+
         public void ToggleForbidden()
         {
             this.IsForbidden = !this.IsForbidden;
@@ -176,9 +175,11 @@ namespace Start_a_Town_
         public void OnNameplateCreated(Nameplate plate)
         {
             foreach (var comp in Components.Values)
+            {
                 comp.OnNameplateCreated(this, plate);
+            }
         }
-        
+
         public Rectangle GetScreenBounds(Camera camera)
         {
             var g = this.Global;
@@ -224,7 +225,7 @@ namespace Start_a_Town_
         {
             get => this.GetComponent<MobileComponent>().Acceleration;
             set => this.GetComponent<MobileComponent>().Acceleration = value;
-            
+
         }
         public Vector3 Velocity
         {
@@ -232,10 +233,15 @@ namespace Start_a_Town_
             set
             {
                 if (float.IsNaN(value.X) || float.IsNaN(value.Y))
+                {
                     throw new Exception();
+                }
+
                 this.Transform.Velocity = value;
                 if (value != Vector3.Zero)
+                {
                     PhysicsComponent.Enable(this);
+                }
             }
         }
         public Vector3 Direction
@@ -244,7 +250,10 @@ namespace Start_a_Town_
             set
             {
                 if (float.IsNaN(value.X) || float.IsNaN(value.Y))
+                {
                     throw new Exception();
+                }
+
                 var transform = this.Transform;
                 var newdir = new Vector2(value.X, value.Y);
                 transform.Direction = newdir;
@@ -259,19 +268,30 @@ namespace Start_a_Town_
                 var oldSize = this.StackSize;
                 var newSize = Math.Min(value, this.StackMax);
                 if (oldSize == newSize)
+                {
                     return;
+                }
+
                 value = newSize;
                 this.GetInfo().StackSize = value;
                 if (value == 0)
                 {
                     if (this.IsSpawned)
+                    {
                         this.Net.Despawn(this);
+                    }
+
                     if (this.Slot != null)
+                    {
                         this.Slot.Clear();
+                    }
+
                     this.Dispose();
                 }
                 else if (value < 0)
+                {
                     throw new Exception();
+                }
             }
         }
 
@@ -283,13 +303,13 @@ namespace Start_a_Town_
         {
             get { return this.GetInfo().StackMax; }
         }
-        
+
         public Bone Body
         {
             get { return this.GetComponent<SpriteComponent>().Body; }
         }
         internal Material PrimaryMaterial => this.Body.Material;
-       
+
         public GameObject SetGlobal(Vector3 global)
         {
             this.ChangePosition(global);
@@ -299,15 +319,17 @@ namespace Start_a_Town_
         public GameObject ChangePosition(Vector3 nextGlobal) // TODO: merge this with SetGlobal
         {
             if (this.Map.IsSolid(nextGlobal))// + Vector3.UnitZ * 0.01f))// TODO: FIX THIS
+            {
                 return this; // TODO: FIX: problem when desynced from server, block might be empty on server but solid on client
-          
+            }
+
             this.Map.TryGetChunk(nextGlobal.RoundXY(), out Chunk nextChunk);
 
             if (nextChunk == null)
             {
                 return this;
             }
-           
+
             this.Map.TryGetChunk(this.Global.Round(), out Chunk lastChunk);
             this.Global = nextGlobal;
 
@@ -315,7 +337,10 @@ namespace Start_a_Town_
             {
                 bool removed = Chunk.RemoveObject(this, lastChunk);
                 if (!removed)
+                {
                     throw new Exception("Source chunk is't loaded"); //Could not remove object from previous chunk");
+                }
+
                 nextChunk.Objects.Add(this);
                 this.Net.EventOccured(Message.Types.EntityChangedChunk, this, nextChunk.MapCoords, lastChunk.MapCoords);
             }
@@ -348,7 +373,7 @@ namespace Start_a_Town_
 
         public GameObjectSlot Slot;
         #endregion
-        
+
         public GameObject Clone()
         {
             var obj = this.Def.CreateRandom();
@@ -356,7 +381,9 @@ namespace Start_a_Town_
             {
                 obj = this.Create(); //for derived classes
                 foreach (KeyValuePair<string, EntityComponent> comp in this.Components)
+                {
                     obj.AddComponent(comp.Value.Clone() as EntityComponent);
+                }
             }
             obj.ObjectCreated();
             return obj;
@@ -367,13 +394,6 @@ namespace Start_a_Town_
             return new GameObject();
         }
 
-        public Vector2 Orientation(GameObject target)
-        {
-            var dir = (target.Global - this.Global);
-            var dirr = new Vector2(dir.X, dir.Y);
-            dirr.Normalize();
-            return dirr;
-        }
         public GameObject TrySplitOne()
         {
             throw new NotImplementedException(); // TODO sync instantiate new object
@@ -381,7 +401,10 @@ namespace Start_a_Town_
         public GameObject Split(int amount)
         {
             if (amount >= this.StackSize)
+            {
                 throw new Exception();
+            }
+
             return this.SetStackSize(this.StackSize - amount).Clone().SetStackSize(amount);
         }
         public GameObject SetStackSize(int value)
@@ -389,60 +412,48 @@ namespace Start_a_Town_
             this.StackSize = value;
             return this;
         }
-        /// <summary>
-        /// TODO move to extensions class
-        /// </summary>
-        /// <param name="plant"></param>
-        /// <returns></returns>
-        internal bool IsSeedFor(PlantProperties plant)
-        {
-            return this.Def == ItemDefOf.Seeds && this.GetComp<SeedComponent>().Plant == plant;
-        }
-
+        
         #region Messaging
         public void PostMessage(ObjectEventArgs a)
         {
             GameObject.PostMessage(this, a);
         }
-        public void PostMessage(Message.Types msg) { GameObject.PostMessage(this, msg, null); }
-
-        static public void PostMessage(Message msg)
+        public static void PostMessage(Message msg)
         {
             msg.Receiver.HandleMessage(msg.Args);
-            OnMessageHandled(msg.Receiver, msg.Args);
             if (msg.Callback != null)
+            {
                 msg.Callback(msg.Receiver);
+            }
         }
-        static public void PostMessage(GameObject receiver, ObjectEventArgs e)
+        public static void PostMessage(GameObject receiver, ObjectEventArgs e)
         {
             var msg = new Message(receiver, e);
             PostMessage(msg);
-        }
-        
-        [Obsolete]
-        static public void PostMessage(GameObject receiver, Message.Types msg, Action<GameObject> callback, GameObject source = null, params object[] p)
-        {
-            PostMessage(new Message(receiver, new ObjectEventArgs(msg, source, p), callback));
         }
 
         public void HandleRemoteCall(ObjectEventArgs e)
         {
             foreach (var comp in this.Components.Values)
+            {
                 comp.HandleRemoteCall(this, e);
+            }
         }
-        
+
         bool HandleMessage(ObjectEventArgs e)
         {
             bool ok = false;
             foreach (var comp in this.Components.Values)
+            {
                 ok |= comp.HandleMessage(this, e);
+            }
+
             return ok;
         }
         #endregion
-        [Obsolete]
-        public List<GameObject> GetNearbyObjects(Func<float, bool> range, Func<GameObject, bool> filter = null, Action<GameObject> action = null)
+        public IEnumerable<GameObject> GetNearbyObjects(Func<float, bool> range, Func<GameObject, bool> filter = null)
         {
-            return this.Map.GetNearbyObjects(this.Global, range, filter, action).Except(new GameObject[] { this }).ToList();
+            return this.Map.GetNearbyObjectsNew(this.Global, range, filter).Except(new GameObject[] { this });
         }
 
         public PositionComponent Transform;
@@ -452,7 +463,7 @@ namespace Start_a_Town_
             this.Transform =
                 this.AddComponent<PositionComponent>();
         }
-        
+
         public EntityComponent this[string componentName]
         {
             get { return this.Components[componentName]; }
@@ -467,11 +478,7 @@ namespace Start_a_Town_
         {
             return GetComponent<DefComponent>("Info");
         }
-        public int GetID()
-        {
-            return this.GetInfo().ID;
-        }
-
+       
         PhysicsComponent _PhysicsCached;
         public virtual PhysicsComponent Physics
         {
@@ -526,11 +533,14 @@ namespace Start_a_Town_
         {
             T component = this.GetComponent<T>();
             if (component == null)
+            {
                 return false;
+            }
+
             action(component);
             return true;
         }
-        
+
         public EntityComponent AddComponent(EntityComponent component)
         {
             this.Components[component.ComponentName] = component;
@@ -538,7 +548,7 @@ namespace Start_a_Town_
             component.MakeChildOf(this);
             return component;
         }
-        
+
         public T AddComponent<T>() where T : EntityComponent, new()
         {
             T component = new();
@@ -555,16 +565,25 @@ namespace Start_a_Town_
         public override string ToString()
         {
             if (!GlobalVars.DebugMode)
+            {
                 return Name;
+            }
+
             string info = "";
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
             {
                 if (info.Length > 0)
+                {
                     info += "\n";
+                }
+
                 info += "*" + comp.Key + "\n" + comp.Value.ToString();
             }
             if (info.Length > 0)
+            {
                 info = info.Remove(info.Length - 1);
+            }
+
             return info;
         }
 
@@ -591,15 +610,23 @@ namespace Start_a_Town_
         {
             var list = new List<GameObjectSlot>();
             foreach (var c in this.GetContainers())
+            {
                 foreach (var s in c.Slots)
+                {
                     list.Add(s);
+                }
+            }
+
             return list;
         }
         public List<Container> GetContainers()
         {
             var list = new List<Container>();
             foreach (var comp in this.Components.Values)
+            {
                 comp.GetContainers(list);
+            }
+
             return list;
         }
         public Container GetContainer(int id)
@@ -610,7 +637,10 @@ namespace Start_a_Town_
         {
             var c = this.GetContainer(containerID);
             if (c == null)
+            {
                 return null;
+            }
+
             return c.Slots.FirstOrDefault(s => s.ID == slotID);
         }
         public void RegisterContainer(Container container)
@@ -633,7 +663,10 @@ namespace Start_a_Town_
             this.ChildrenSequence = 0;
             var list = new List<GameObjectSlot>();
             foreach (var comp in this.Components.Values)
+            {
                 comp.GetChildren(list);
+            }
+
             foreach (var child in list)
             {
                 child.ID = this.ChildrenSequence;
@@ -645,7 +678,10 @@ namespace Start_a_Town_
         {
             ui.Title = this.Name;
             foreach (var comp in this.Components)
+            {
                 comp.Value.GetManagementInterface(this, ui.PanelInfo);
+            }
+
             ui.PanelActions.AddControls(
                 new Button("Center Cam") { LeftClickAction = () => { ScreenManager.CurrentScreen.Camera.CenterOn(this.Global); } }
                 );
@@ -654,12 +690,15 @@ namespace Start_a_Town_
         {
             ui.Title = this.Name;
             foreach (var comp in this.Components)
+            {
                 comp.Value.GetManagementInterface(this, ui.PanelInfo);
+            }
+
             ui.PanelActions.AddControls(
                 new Button("Center Cam") { LeftClickAction = () => { ScreenManager.CurrentScreen.Camera.CenterOn(this.Global); } }
                 );
         }
-       
+
         public Window GetUi()
         {
             throw new Exception();
@@ -671,10 +710,16 @@ namespace Start_a_Town_
             GetInfo().OnTooltipCreated(this, box);
             // TODO: LOL fix, i need the object name to be on top
             foreach (KeyValuePair<string, EntityComponent> comp in Components.Except(new KeyValuePair<string, EntityComponent>[] { new KeyValuePair<string, EntityComponent>("Info", GetInfo()) }))
+            {
                 comp.Value.OnTooltipCreated(this, box);
+            }
+
             var value = this.GetValue();
             if (value > 0)
+            {
                 box.AddControlsBottomLeft(new Label(string.Format("Value: {0} ({1})", value * this.StackSize, value)));
+            }
+
             box.AddControlsBottomLeft(new Label(string.Format("InstanceID: {0}", this.RefID)));
             box.MouseThrough = true;
             return box;
@@ -684,14 +729,25 @@ namespace Start_a_Town_
             GetInfo().OnTooltipCreated(this, tooltip);
             // TODO: LOL fix, i need the object name to be on top
             foreach (var comp in Components.Except(new KeyValuePair<string, EntityComponent>[] { new KeyValuePair<string, EntityComponent>("Info", GetInfo()) }))
+            {
                 comp.Value.OnTooltipCreated(this, tooltip);
+            }
+
             var value = this.GetValue();
             if (value > 0)
+            {
                 tooltip.AddControlsBottomLeft(new Label(string.Format("Value: {0} ({1})", value * this.StackSize, value)));
+            }
+
             var stats = this.Def.Category?.Stats;
             if (stats is not null)
+            {
                 foreach (var stat in stats)
+                {
                     tooltip.AddControlsBottomLeft(new Label($"{stat.Label}: {stat.GetValue(this).ToString(stat.StringFormat)}"));
+                }
+            }
+
             tooltip.AddControlsBottomLeft(new Label(string.Format("InstanceID: {0}", this.RefID)));
         }
         public void GetInventoryTooltip(UI.Control tooltip)
@@ -699,19 +755,31 @@ namespace Start_a_Town_
             GetInfo().OnTooltipCreated(this, tooltip);
             // TODO: LOL fix, i need the object name to be on top
             foreach (KeyValuePair<string, EntityComponent> comp in Components.Except(new KeyValuePair<string, EntityComponent>[] { new KeyValuePair<string, EntityComponent>("Info", GetInfo()) }))
+            {
                 comp.Value.GetInventoryTooltip(this, tooltip);
+            }
+
             var value = this.GetValue();
             if (value > 0)
+            {
                 tooltip.AddControlsBottomLeft(new Label(string.Format("Value: {0} ({1})", value * this.StackSize, value)));
+            }
+
             tooltip.AddControlsBottomLeft(new Label(string.Format("InstanceID: {0}", this.RefID)));
         }
-       
+
         public void Despawn()
         {
             if (!this.IsSpawned)
+            {
                 return;
+            }
+
             foreach (var comp in this.Components.Values.ToList())
+            {
                 comp.OnDespawn(this);
+            }
+
             this.Map.EventOccured(Message.Types.EntityDespawned, this);
             //this.Unreserve(); // UNDONE dont unreserve here because the ai might continue manipulating (placing/carrying) the item during the same behavior
         }
@@ -721,7 +789,10 @@ namespace Start_a_Town_
             this.Net = net;
             this.Parent = null;
             foreach (var comp in this.Components.Values)
+            {
                 comp.OnSpawn(net, this);
+            }
+
             this.Map.EventOccured(Message.Types.EntitySpawned, this);
         }
         public void Spawn(MapBase map, Vector3 global)
@@ -735,52 +806,70 @@ namespace Start_a_Town_
         public void SyncSpawn(MapBase map, Vector3 global)
         {
             if (map.Net is not Server)
+            {
                 return;
+            }
+
             map.SyncSpawn(this, global, Vector3.Zero);
         }
-       
+
         public void Focus()
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.Focus(this);
+            }
         }
         public void FocusLost()
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.FocusLost(this);
+            }
         }
-       
+
         public virtual void Draw(MySpriteBatch sb, Camera camera)
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.Draw(sb, this, camera);
+            }
         }
         public virtual void Draw(MySpriteBatch sb, DrawObjectArgs e)
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.Draw(sb, e);
+            }
         }
-       
+
         internal void DrawMouseover(MySpriteBatch sb, Camera camera)
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.DrawMouseover(sb, camera, this);
+            }
         }
         internal void DrawInterface(SpriteBatch sb, Camera camera)
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.DrawUI(sb, camera, this);
+            }
         }
 
         public void DrawPreview(MySpriteBatch sb, Camera cam, TargetArgs target, bool precise)
         {
             if (target.Type != TargetType.Position)
+            {
                 return;
+            }
+
             var blockHeight = Block.GetBlockHeight(target.Map, target.Global);
             var global = target.Global + target.Face * new Vector3(1, 1, blockHeight) + (precise ? target.Precise : Vector3.Zero);
             this.DrawPreview(sb, cam, global);
         }
-        
+
         public void DrawPreview(MySpriteBatch sb, Camera cam, Vector3 global)
         {
             var body = this.Body;
@@ -790,7 +879,7 @@ namespace Start_a_Town_
             var tint = Color.White * .5f;
             body.DrawGhost(this, sb, pos, Color.White, Color.White, tint, Color.Transparent, 0, cam.Zoom, 0, SpriteEffects.None, 0.5f, global.GetDrawDepth(Engine.Map, cam));
         }
-       
+
         public virtual void GetTooltipInfo(Tooltip tooltip)
         {
             GetTooltip(tooltip);
@@ -803,7 +892,10 @@ namespace Start_a_Town_
             if (this.CachedSprite == null)
             {
                 if (!TryGetComponent(out SpriteComponent sprComp))
+                {
                     return null;
+                }
+
                 this.CachedSprite = sprComp.Sprite;
             }
             return this.CachedSprite;
@@ -811,7 +903,10 @@ namespace Start_a_Town_
         public Sprite GetSpriteOrDefault()
         {
             if (!TryGetComponent("Sprite", out SpriteComponent sprComp))
+            {
                 return Sprite.Default;
+            }
+
             return sprComp.Sprite ?? Sprite.Default;
         }
         public Icon GetIcon()
@@ -837,7 +932,7 @@ namespace Start_a_Town_
                 comp.Value.Write(w);
             }
         }
-       
+
         public static GameObject CreatePrefab(BinaryReader r)
         {
             string defName = r.ReadString();
@@ -845,7 +940,10 @@ namespace Start_a_Town_
             var refid = r.ReadInt32();
             GameObject obj;
             if (def is null)
+            {
                 throw new Exception();
+            }
+
             obj = def.Create();
             int compCount = r.ReadInt32();
             for (int i = 0; i < compCount; i++)
@@ -875,7 +973,10 @@ namespace Start_a_Town_
         public GameObject ObjectLoaded()
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.OnObjectLoaded(this);
+            }
+
             return this;
         }
         /// <summary>
@@ -885,34 +986,48 @@ namespace Start_a_Town_
         public GameObject ObjectCreated()
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.OnObjectCreated(this);
+            }
+
             return this;
         }
         public GameObject ObjectSynced()
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.OnObjectSynced(this);
+            }
+
             this.EnumerateChildren();
             return this;
         }
         public GameObject Initialize(RandomThreaded random)
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
+            {
                 comp.Value.Initialize(this, random);
+            }
+
             return this;
         }
         internal List<SaveTag> SaveInternal()
         {
             var data = new List<SaveTag>();
             if (this.Def != null)
+            {
                 data.Add(this.Def.Name.Save("Def"));
+            }
+
             data.Add(this.RefID.Save("InstanceID"));
             var compData = new SaveTag(SaveTag.Types.Compound, "Components");
             foreach (KeyValuePair<string, EntityComponent> comp in this.Components)
             {
                 var compSave = comp.Value.SaveAs(comp.Key);
                 if (compSave != null)
+                {
                     compData.Add(compSave);
+                }
             }
             data.Add(compData);
             return data;
@@ -923,22 +1038,30 @@ namespace Start_a_Town_
         /// </summary>
         /// <param name="tag">A tag with a list of tags as its value.</param>
         /// <returns></returns>
-        internal static GameObject Load(SaveTag tag) 
+        internal static GameObject Load(SaveTag tag)
         {
             tag.TryGetTagValue("Def", out string defName);
             var def = Start_a_Town_.Def.GetDef<ItemDef>(defName);
             GameObject obj;
             if (def is null)
+            {
                 throw new Exception();
+            }
+
             obj = def.Create();
             tag.TryGetTagValue("InstanceID", out obj.RefID);
             Dictionary<string, SaveTag> compData = tag["Components"].Value as Dictionary<string, SaveTag>;
             foreach (SaveTag compTag in compData.Values)
             {
                 if (compTag.Value == null)
+                {
                     continue;
+                }
+
                 if (obj.Components.ContainsKey(compTag.Name))
+                {
                     obj[compTag.Name].Load(obj, compTag);
+                }
             }
             obj.ObjectLoaded();
             return obj;
@@ -947,15 +1070,21 @@ namespace Start_a_Town_
         public IEnumerable<ContextAction> GetInventoryContextActions(GameObject actor)
         {
             if (this.Def.GearType != null)
+            {
                 yield return new ContextAction(() => "Equip", () => PacketInventoryEquip.Send(this.Net, actor.RefID, this.RefID));
+            }
+
             yield return new ContextAction(() => "Drop", () => PacketInventoryDrop.Send(this.Net, actor.RefID, this.RefID, this.StackSize));
         }
-       
+
         public Dictionary<PlayerInput, Interaction> GetPlayerActionsWorld()
         {
             var list = new Dictionary<PlayerInput, Interaction>();
             foreach (var item in this.Components)
+            {
                 item.Value.GetPlayerActionsWorld(this, list);
+            }
+
             return list;
         }
 
@@ -963,18 +1092,24 @@ namespace Start_a_Town_
         {
             var list = new List<ContextAction>();
             foreach (var item in this.Components)
+            {
                 item.Value.GetRightClickActions(this, list);
+            }
+
             return list;
         }
-        
+
         public List<Interaction> GetHauledActions(TargetArgs a)
         {
             var list = new List<Interaction>();
             foreach (var item in this.Components)
+            {
                 item.Value.GetHauledActions(this, a, list);
+            }
+
             return list;
         }
-        
+
         internal ContextAction GetContextRB(GameObject player)
         {
             var list = new List<ContextAction>();
@@ -982,11 +1117,12 @@ namespace Start_a_Town_
             {
                 var a = c.Value.GetContextRB(this, player);
                 if (a != null)
+                {
                     list.Add(a);
+                }
             }
             return list.FirstOrDefault();
         }
-
         internal ContextAction GetContextActivate(GameObject player)
         {
             var list = new List<ContextAction>();
@@ -994,14 +1130,19 @@ namespace Start_a_Town_
             {
                 var a = c.Value.GetContextActivate(this, player);
                 if (a != null)
+                {
                     list.Add(a);
+                }
             }
             return list.FirstOrDefault();
         }
         public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
             if (playerEntity is null)
+            {
                 return;
+            }
+
             foreach (var c in this.Components.Values)
             {
                 c.GetClientActions(this, a.Actions);
@@ -1012,14 +1153,20 @@ namespace Start_a_Town_
         {
             var list = new List<Interaction>();
             foreach (var item in this.Components)
+            {
                 item.Value.GetInteractions(this, list);
+            }
+
             return list;
         }
         public Dictionary<string, Interaction> GetInteractions()
         {
             var list = new Dictionary<string, Interaction>();
             foreach (var item in this.GetInteractionsList())
+            {
                 list.Add(item.Name, item);
+            }
+
             return list;
         }
 
@@ -1027,16 +1174,22 @@ namespace Start_a_Town_
         {
             List<Interaction> list = new List<Interaction>();
             foreach (var c in this.Components.Values)
+            {
                 c.GetAvailableTasks(this, list);
+            }
+
             return list;
         }
 
         public bool IsDisposed => this.Net.GetNetworkObject(this.RefID) is null;
-        
+
         public bool Dispose()
         {
             foreach (var comp in this.Components.Values.ToList())
+            {
                 comp.OnDispose(this);
+            }
+
             this.Net.EventOccured(Message.Types.ObjectDisposed, this);
             return this.Net.DisposeObject(this);
         }
@@ -1051,7 +1204,9 @@ namespace Start_a_Town_
              .ForEach(c => c.Instantiate(instantiator));
 
             foreach (var comp in this.Components.Values)
+            {
                 comp.Instantiate(this, instantiator);
+            }
 
             return this;
         }
@@ -1059,7 +1214,9 @@ namespace Start_a_Town_
         internal void RemoteProcedureCall(Components.Message.Types type, BinaryReader r)
         {
             foreach (var comp in this.Components)
+            {
                 comp.Value.HandleRemoteCall(this, type, r);
+            }
         }
 
         public bool IsInInteractionRange(TargetArgs target)
@@ -1089,12 +1246,14 @@ namespace Start_a_Town_
             }
             throw new Exception();
         }
-        
+
         internal void MapLoaded(MapBase map)
         {
             this.Map = map;
             foreach (var comp in this.Components)
+            {
                 comp.Value.MapLoaded(this);
+            }
         }
 
         internal void HitTest(Camera camera)
@@ -1102,27 +1261,39 @@ namespace Start_a_Town_
             this.GetComponent<SpriteComponent>().HitTest(this, camera);
         }
 
-        internal bool HasMatchingBody(GameObject otherItem)
+        public bool HasMatchingBody(GameObject otherItem)
         {
             return this.GetComponent<SpriteComponent>().HasMatchingBody(otherItem);
         }
-        
-        internal int StackAvailableSpace { get { return this.StackMax - this.StackSize; } }
-        internal bool CanAbsorb(GameObject otherItem, int amount = -1)
+
+        public int StackAvailableSpace { get { return this.StackMax - this.StackSize; } }
+        public bool CanAbsorb(GameObject otherItem, int amount = -1)
         {
             if (this == otherItem)
+            {
                 return false;
+            }
+
             if (this.Full)
+            {
                 return false;
+            }
+
             if (otherItem.Def != null && this.Def != otherItem.Def)
             {
                 return false;
             }
 
             if (!this.HasMatchingBody(otherItem))
+            {
                 return false;
+            }
+
             if (amount == -1)
+            {
                 return true;
+            }
+
             if (this.StackSize + amount > this.StackMax)
             {
                 throw new Exception();
@@ -1135,7 +1306,7 @@ namespace Start_a_Town_
         {
             return ToolAbilityComponent.HasSkill(this, skill);
         }
-        
+
         internal GameObjectSlot GetEquipmentSlot(GearType.Types type)
         {
             return GearComponent.GetSlot(this, GearType.Dictionary[type]);
@@ -1145,7 +1316,7 @@ namespace Start_a_Town_
         {
             return PersonalInventoryComponent.GetHauling(this).Object;
         }
-        
+
         internal GameObject Carried
         {
             get { return PersonalInventoryComponent.GetHauling(this).Object; }
@@ -1181,7 +1352,7 @@ namespace Start_a_Town_
         {
             return PersonalInventoryComponent.GetAllItems(this);
         }
-        
+
         internal Need GetNeed(NeedDef def)
         {
             return this.GetComponent<NeedsComponent>().NeedsNew.First(n => n.NeedDef == def);
@@ -1193,7 +1364,9 @@ namespace Start_a_Town_
         public IEnumerable<Need> GetNeeds()
         {
             foreach (var n in this.GetComponent<NeedsComponent>().NeedsNew)
+            {
                 yield return n;
+            }
         }
         internal Need GetNeed(string needName)
         {
@@ -1203,16 +1376,22 @@ namespace Start_a_Town_
         {
             return StatsComponentNew.GetStatValueOrDefault(this, type);
         }
-       
+
         internal float GetToolWorkAmount(int skillID)
         {
             var tool = this.GetEquipmentSlot(GearType.Types.Mainhand).Object;
             if (tool == null)
+            {
                 return 1;
+            }
+
             var ability = tool.Def.ToolProperties?.Ability;
 
             if (!ability.HasValue)
+            {
                 throw new Exception();
+            }
+
             return ability.Value.Efficiency;
         }
 
@@ -1232,7 +1411,7 @@ namespace Start_a_Town_
         {
             return this.Map.GetRegionDistance(this.StandingOn(), global.SnapToBlock(), this as Actor) != -1;
         }
-       
+
         internal BehaviorPerformTask GetLastBehavior()
         {
             return AIState.GetState(this).LastBehavior;
@@ -1339,7 +1518,9 @@ namespace Start_a_Town_
         internal void DrawAfter(MySpriteBatch sb, Camera cam)
         {
             foreach (var comp in this.Components.Values)
+            {
                 comp.DrawAfter(sb, cam, this);
+            }
         }
 
         internal bool HasLabor(JobDef labor)
@@ -1396,7 +1577,9 @@ namespace Start_a_Town_
                 var pos = (global + corner).CeilingZ().Below().SnapToBlock();
                 belownode = this.Map.GetNodeAt(pos);
                 if (belownode != null)
+                {
                     return pos;
+                }
             }
             throw new Exception(); //throwed when actor was stuck inside a block
         }
@@ -1413,7 +1596,9 @@ namespace Start_a_Town_
         internal void OnGameEvent(GameEvent e)
         {
             foreach (var c in this.Components)
+            {
                 c.Value.OnGameEvent(this, e);
+            }
         }
 
         public Material Material
@@ -1427,8 +1612,13 @@ namespace Start_a_Town_
         internal bool HasFocus()
         {
             if (Rooms.Ingame.Instance.ToolManager.ActiveTool != null)
+            {
                 if (Rooms.Ingame.Instance.ToolManager.ActiveTool.Target != null)
+                {
                     return (Rooms.Ingame.Instance.ToolManager.ActiveTool.Target.Object == this);
+                }
+            }
+
             return false;
         }
 
@@ -1439,13 +1629,17 @@ namespace Start_a_Town_
         internal void SyncWrite(BinaryWriter w)
         {
             foreach (var comp in this.Components)
+            {
                 comp.Value.SyncWrite(w);
+            }
         }
 
         internal void SyncRead(BinaryReader r)
         {
             foreach (var comp in this.Components)
+            {
                 comp.Value.SyncRead(this, r);
+            }
         }
 
         internal void DropInventoryItem(GameObject item, int amount)
@@ -1562,7 +1756,10 @@ namespace Start_a_Town_
         public int GetValue()
         {
             if (this.Def.BaseValue == 0)
+            {
                 return 0;
+            }
+
             var quality = this.DefComponent.Quality;
             var bones = this.Body.GetAllBones();
             var value = 0;
@@ -1577,6 +1774,7 @@ namespace Start_a_Town_
             return this.GetValue() * this.StackSize;
         }
 
+        #region packets
         static readonly int PacketSyncInstantiate, PacketSyncSetStacksize, PacketSyncAbsorb;
         static GameObject()
         {
@@ -1588,9 +1786,15 @@ namespace Start_a_Town_
         public void SyncInstantiate(IObjectProvider net)
         {
             if (net is not Server server)
+            {
                 return;
+            }
+
             if (this.RefID != 0)
+            {
                 throw new Exception();
+            }
+
             net.Instantiate(this);
             var w = server.GetOutgoingStream();
             w.Write(PacketSyncInstantiate);
@@ -1599,7 +1803,10 @@ namespace Start_a_Town_
         private static void SyncInstantiate(IObjectProvider net, BinaryReader r)
         {
             if (net is Server)
+            {
                 throw new Exception();
+            }
+
             var obj = CreatePrefab(r);
             net.Instantiate(obj);
         }
@@ -1607,7 +1814,10 @@ namespace Start_a_Town_
         {
             var net = this.Net;
             if (net is Server)
+            {
                 this.SetStackSize(v);
+            }
+
             var w = net.GetOutgoingStream();
             w.Write(PacketSyncSetStacksize);
             w.Write(this.RefID);
@@ -1618,17 +1828,25 @@ namespace Start_a_Town_
             var obj = net.GetNetworkObject(r.ReadInt32());
             var value = r.ReadInt32();
             if (net is Client)
+            {
                 obj.SetStackSize(value);
+            }
             else
+            {
                 obj.SyncSetStackSize(value);
+            }
         }
         public void Absorb(GameObject obj)
         {
             if (this.IsReserved)
+            {
                 return;
+            }
 
             if (!this.CanAbsorb(obj))
+            {
                 return;
+            }
 
             this.StackSize += obj.StackSize;
             obj.Despawn();
@@ -1638,7 +1856,10 @@ namespace Start_a_Town_
         {
             var net = this.Net;
             if (net is Client)
+            {
                 throw new Exception();
+            }
+
             this.Absorb(obj);
             var w = net.GetOutgoingStream();
             w.Write(PacketSyncAbsorb);
@@ -1648,11 +1869,15 @@ namespace Start_a_Town_
         private static void SyncAbsorb(IObjectProvider net, BinaryReader r)
         {
             if (net is Server)
+            {
                 throw new Exception();
+            }
+
             var master = net.GetNetworkObject(r.ReadInt32());
             var slave = net.GetNetworkObject(r.ReadInt32());
             master.Absorb(slave);
         }
+        #endregion
 
         public SaveTag Save(string name = "")
         {

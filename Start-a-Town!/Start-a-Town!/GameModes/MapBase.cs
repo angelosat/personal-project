@@ -868,26 +868,7 @@ namespace Start_a_Town_
                     yield return o;
                 }
         }
-        public List<GameObject> GetNearbyObjects(Vector3 global, Func<float, bool> range, Func<GameObject, bool> filter = null, Action<GameObject> action = null)
-        {
-            var a = action ?? ((obj) => { });
-            var f = filter ?? ((obj) => { return true; });
-            List<GameObject> nearbies = new List<GameObject>();
-            Chunk chunk = this.GetChunk(global);
-
-            List<GameObject> objects = new List<GameObject>();
-            foreach (Chunk ch in this.GetChunks(chunk.MapCoords))
-                foreach (GameObject obj in ch.GetObjects())
-                {
-                    if (!range(Vector3.Distance(obj.Global, global)))
-                        continue;
-                    if (!f(obj))
-                        continue;
-                    a(obj);
-                    nearbies.Add(obj);
-                }
-            return nearbies;
-        }
+        
         public IEnumerable<GameObject> GetNearbyObjectsNew(Vector3 global, Func<float, bool> range, Func<GameObject, bool> filter = null, Action<GameObject> action = null)
         {
             var a = action ?? ((obj) => { });

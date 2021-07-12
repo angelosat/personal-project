@@ -9,8 +9,6 @@ namespace Start_a_Town_
     {
         public int StackCapacity = 1;
         public int StackDimension = 1;
-        public string ObjType;
-        public int ID;
         public ItemCategory Category;
         public Sprite DefaultSprite;
         public Material DefaultMaterial;

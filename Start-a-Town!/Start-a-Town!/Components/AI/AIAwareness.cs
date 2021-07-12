@@ -37,20 +37,17 @@ namespace Start_a_Town_.AI.Behaviors
             return BehaviorState.Fail;
         }
 
-        List<GameObject> UpdateNearbyObjects(GameObject parent, Knowledge knowledge)
+        void UpdateNearbyObjects(GameObject parent, Knowledge knowledge)
         {
-            return parent.GetNearbyObjects(
-            range: range => range < Chunk.Size,
-            action: obj =>
+            foreach(var obj in parent.GetNearbyObjects(r=> r < Chunk.Size))
             {
-                Memory mem;
-                if (!knowledge.Objects.TryGetValue(obj, out mem))
+                if (!knowledge.Objects.TryGetValue(obj, out Memory mem))
                 {
                     knowledge.Objects[obj] = obj.ToMemory(parent);
                 }
                 else
                     mem.Refresh(parent);
-            });
+            }
         }
 
         public override object Clone()

@@ -297,16 +297,6 @@ namespace Start_a_Town_.Components
             Body.MakeChildOf(parent);
         }
 
-        public override void OnHitTestPass(GameObject parent, Vector3 face, float depth)
-        {
-            if (parent.Components.ContainsKey("Multi"))
-                return;
-            Controller.Instance.MouseoverBlockNext.Target = new TargetArgs(parent, face);
-            Controller.Instance.MouseoverBlockNext.Object = new TargetArgs(parent, face); // parent;
-            Controller.Instance.MouseoverBlockNext.Face = face;
-            Controller.Instance.MouseoverBlockNext.Depth = depth;
-        }
-
         static public void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global, GameObject obj)
         {
             if (!obj.TryGetComponent<SpriteComponent>("Sprite", out var spriteComp))

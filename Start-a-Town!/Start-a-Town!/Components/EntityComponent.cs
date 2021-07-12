@@ -30,46 +30,13 @@ namespace Start_a_Town_.Components
        
         public abstract object Clone();
 
-
-        public virtual bool Drop(GameObject self, GameObject actor, GameObject obj)
-        {
-            return false;
-        }
-
-        public virtual bool Give(GameObject parent, GameObject giver, GameObjectSlot objSlot) { return false; }
-
-        public virtual bool Activate(GameObject actor, GameObject self)
-        {
-            return false;
-        }
-
-        public virtual void OnHitTestPass(GameObject parent, Vector3 face, float depth) { }
-
         public virtual bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
         {
-            switch (e.Type)
-            {
-                case Message.Types.Activate:
-                    return Activate(e.Sender, parent);
-
-                default:
-                    break;
-            }
             return false;
         }
         internal virtual void HandleRemoteCall(GameObject gameObject, ObjectEventArgs e) { }
         internal virtual void HandleRemoteCall(GameObject gameObject, Message.Types type, BinaryReader r) { }
 
-
-        public virtual string GetInventoryText(GameObject parent, GameObject actor)
-        {
-            return "";
-        }
-        public virtual string GetWorldText(GameObject parent, GameObject actor)
-        {
-            return "";
-        }
-        
         public virtual void Instantiate(GameObject parent, Action<GameObject> instantiator) { }
 
         public virtual void Tick() { }
@@ -92,35 +59,24 @@ namespace Start_a_Town_.Components
         public virtual void OnObjectSynced(GameObject parent) { }
         public virtual void Focus(GameObject parent) { }
         public virtual void FocusLost(GameObject parent) { }
-        public virtual void ChunkLoaded(IObjectProvider net, GameObject parent) { }
         public virtual void SetMaterial(Material mat) { }
+
         internal virtual void Initialize(Entity parent, Dictionary<string, Material> materials) { }
         internal virtual void Initialize(Entity parent, Quality quality) { }
 
         public virtual void MakeChildOf(GameObject parent) { this.Parent = parent; }
 
-        public virtual void Draw(SpriteBatch sb, DrawObjectArgs e) { }
         public virtual void Draw(MySpriteBatch sb, DrawObjectArgs e) { }
         public virtual void Draw(MySpriteBatch sb, GameObject parent, Camera camera) { }
 
-        public virtual void DrawMouseover(SpriteBatch sb, Camera camera, GameObject parent) { }
         public virtual void DrawMouseover(MySpriteBatch sb, Camera camera, GameObject parent) { }
         public virtual void DrawUI(SpriteBatch sb, Camera camera, GameObject parent) { }
         public virtual void DrawAfter(MySpriteBatch sb, Camera cam, GameObject parent) { }
-        public virtual void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global) { }
-        public virtual void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global, float depth) { }
-        public virtual void DrawPreview(SpriteBatch sb, Camera camera, Vector3 global, Color color, float depth) { }
-        public virtual void DrawFootprint(SpriteBatch sb, Camera camera, Vector3 global) { }
 
         public virtual void GetChildren(List<GameObjectSlot> list) { }
         public virtual void GetContainers(List<Container> list) { }
-        public virtual string GetTooltipText() { return ""; }
         public virtual void OnTooltipCreated(GameObject parent, Control tooltip) { }
         public virtual void GetInventoryTooltip(GameObject parent, Control tooltip) { this.OnTooltipCreated(parent, tooltip); }
-        public virtual void GetActorTooltip(GameObject parent, GameObject actor, Tooltip tooltip) { }
-        public virtual void GetUI(GameObject parent, Control ui, List<EventHandler<ObjectEventArgs>> gameEventHandlers) { }
-        public virtual void GetUI(GameObject parent, Control ui, List<EventHandler<GameEvent>> gameEventHandlers) { }
-        public virtual void GetContextActions(GameObject actor, List<GameObject> abilities) { }
         internal virtual ContextAction GetContextRB(GameObject parent, GameObject player)
         {
             return null;
@@ -140,14 +96,11 @@ namespace Start_a_Town_.Components
         }
         public virtual void GetInteractions(GameObject parent, List<Interaction> actions) { }
         public virtual void GetRightClickActions(GameObject parent, List<ContextAction> actions) { }
-        public virtual void GetEquippedActions(GameObject parent, List<Interaction> actions) { }
         internal virtual void GetEquippedActionsWithTarget(GameObject parent, GameObject actor, TargetArgs t, List<Interaction> list)
         {
         }
         public virtual void GetHauledActions(GameObject parent, TargetArgs target, List<Interaction> actions) { }
-        public virtual void GetInventoryContext(GameObject actor, List<ContextAction> actions, int inventorySlotID) { }
-        public virtual void GetInventoryActions(GameObject actor, GameObjectSlot parentSlot, List<ContextAction> actions) { }
-        public virtual string GetStats() { return ""; }
+
         internal SaveTag SaveAs(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
@@ -173,6 +126,15 @@ namespace Start_a_Town_.Components
         {
 
         }
+        void IEntityComp.Load(SaveTag tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SaveTag Save(string name)
+        {
+            throw new NotImplementedException();
+        }
 
         public virtual void Write(BinaryWriter w) { }
         public virtual void Read(BinaryReader r) { }
@@ -180,8 +142,6 @@ namespace Start_a_Town_.Components
         {
 
         }
-        
-        internal virtual void GetInteractionsFromSkill(GameObject parent, ToolAbilityDef skill, List<Interaction> list) { }
         
         public virtual void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> actions)
         {
@@ -194,10 +154,6 @@ namespace Start_a_Town_.Components
         {
         }
 
-        public virtual void Select(UISelectedInfo info, GameObject parent)
-        {
-
-        }
         internal virtual void GetQuickButtons(UISelectedInfo info, GameObject parent)
         {
         }
@@ -216,30 +172,10 @@ namespace Start_a_Town_.Components
         internal virtual void SyncRead(GameObject parent, BinaryReader r)
         {
         }
-
-        void IEntityComp.Load(SaveTag tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SaveTag Save(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnEntitySpawn(IEntityCompContainer entity, Vector3 global)
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public void Draw(Camera camera, MapBase map, Vector3 global)
         {
             throw new NotImplementedException();
-        }
-
-        internal virtual IEnumerable<ContextAction> GetInventoryContextActions(GameObject actor)
-        {
-            yield break;
         }
     }
 }

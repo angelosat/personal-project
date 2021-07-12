@@ -198,6 +198,7 @@
     <Compile Include="Components\LootTable.cs" />
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />
     <Compile Include="Components\Stats\Stats\StatsHelper.cs" />
+    <Compile Include="Components\Vegetation\PlantsExtensions.cs" />
     <Compile Include="Components\WindowSetStackSize.cs" />
     <Compile Include="Control\InputState.cs" />
     <Compile Include="Control\KeyEventArgs2.cs" />
@@ -445,7 +446,6 @@
     <Compile Include="Objects\Actors\ActorDefOf.cs" />
     <Compile Include="Objects\Apparel\ApparelDef.cs" />
     <Compile Include="Objects\DrawObjectArgs.cs" />
-    <Compile Include="Objects\GameObjectCollection.cs" />
     <Compile Include="Objects\GameObjectSlotCollection.cs" />
     <Compile Include="Objects\ItemDefAmount.cs" />
     <Compile Include="Objects\ItemDefMaterialAmount.cs" />

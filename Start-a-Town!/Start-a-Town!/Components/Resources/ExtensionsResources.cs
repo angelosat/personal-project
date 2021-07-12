@@ -4,6 +4,10 @@ namespace Start_a_Town_
 {
     static class ExtensionsResources
     {
+        static public bool HasResource(this GameObject entity, ResourceDef type)
+        {
+            return entity.GetResource(type) is not null;
+        }
         static public Resource GetResource(this GameObject entity, ResourceDef def) => entity.GetComponent<ResourcesComponent>()?.GetResource(def);
         static public void SyncAdjustResource(this GameObject entity, ResourceDef def, float val) => entity.GetComponent<ResourcesComponent>()?.GetResource(def).SyncAdjust(entity as Entity, val);
 

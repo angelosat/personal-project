@@ -34,27 +34,11 @@ namespace Start_a_Town_.Components
             return this;
         }
        
-        public override string GetTooltipText()
-        {
-            return "Right click: Equip";
-        }
-
         public override object Clone()
         {
             throw new Exception();
         }
 
-
-        public override string GetStats()
-        {
-            string text = "";
-            foreach(var stat in this.Stats)
-            {
-                var st = Stat.GetStat(stat.Key);
-                text += stat.Value.ToString("##0.##" + (st.Type == Stat.BonusType.Percentile ? "%" : "")) + " " + st.Name;
-            }
-            return text;
-        }
 
         static public void GetStats(GameObjectSlot objSlot, StatCollection stats)
         {
@@ -93,12 +77,7 @@ namespace Start_a_Town_.Components
             actions.Add(new EquipFromInventory());
         }
 
-        public override void GetInventoryActions(GameObject actor, GameObjectSlot parentSlot, List<ContextAction> actions)
-        {
-            var work = new EquipFromInventory();
-            actions.Add(new ContextAction(() => work.Name, () => actor.GetComponent<WorkComponent>().Perform(actor, work, new TargetArgs(parentSlot))));
-        }
-
+      
         public override void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> list)
         {
             list.Add(PlayerInput.ActivateHold, new Equip());

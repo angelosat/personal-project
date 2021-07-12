@@ -9,31 +9,31 @@ namespace Start_a_Town_
 {
     public partial class LightingEngine
     {
-        HashSet<Vector3> LightChanges = new();
-        HashSet<Vector3> BlockChanges = new();
+        HashSet<IntVec3> LightChanges = new();
+        HashSet<IntVec3> BlockChanges = new();
 
         public MapBase Map;
         public Action<Chunk, Cell> OutdoorBlockHandler = (chunk, cell) => { };
-        public Action<IEnumerable<Vector3>> LightCallback = vectors => { };
-        public Action<IEnumerable<Vector3>> BlockCallback = vectors => { };
+        public Action<IEnumerable<IntVec3>> LightCallback = vectors => { };
+        public Action<IEnumerable<IntVec3>> BlockCallback = vectors => { };
         public BlockingCollection<BatchToken> SkyLight;
         public BlockingCollection<BatchToken> BlockLight;
         readonly CancellationTokenSource CancelToken = new();
 
-        public Queue<Vector3> ToDarken;
+        public Queue<IntVec3> ToDarken;
 
         public LightingEngine(MapBase map)
         {
             this.Map = map;
         }
-        public LightingEngine(MapBase map, Action<IEnumerable<Vector3>> batchFinishedCallback, Action<IEnumerable<Vector3>> blockCallback)
+        public LightingEngine(MapBase map, Action<IEnumerable<IntVec3>> batchFinishedCallback, Action<IEnumerable<IntVec3>> blockCallback)
         {
             this.Map = map;
             this.LightCallback = batchFinishedCallback;
             this.BlockCallback = blockCallback;
         }
 
-        static public LightingEngine StartNew(MapBase map, Action<IEnumerable<Vector3>> lightCallback, Action<IEnumerable<Vector3>> blockCallback)
+        static public LightingEngine StartNew(MapBase map, Action<IEnumerable<IntVec3>> lightCallback, Action<IEnumerable<IntVec3>> blockCallback)
         {
             return new LightingEngine(map, lightCallback, blockCallback);
         }
@@ -44,16 +44,17 @@ namespace Start_a_Town_
 
         public void Enqueue(IEnumerable<WorldPosition> vectorBatch)
         {
-            this.HandleBatchSync(vectorBatch.Select(t => t.Global));
+            this.HandleBatchSync(vectorBatch.Select(t => (IntVec3)t.Global));
         }
-        public void HandleBatchSync(IEnumerable<Vector3> vectors)
+
+        public void HandleBatchSync(IEnumerable<IntVec3> vectors)
         {
             var batch = new BatchToken(vectors);
-            var queued = new HashSet<Vector3>(vectors);
+            var queued = new HashSet<IntVec3>(vectors);
             var block = new BatchToken(vectors);
-            var skydeltas = new Dictionary<Vector3, byte>();
-            var blockdeltas = new Dictionary<Vector3, byte>();
-            this.ToDarken = new Queue<Vector3>();
+            var skydeltas = new Dictionary<IntVec3, byte>();
+            var blockdeltas = new Dictionary<IntVec3, byte>();
+            this.ToDarken = new Queue<IntVec3>();
             while (batch.Queue.Count > 0)
             {
                 var current = batch.Queue.Dequeue();
@@ -72,11 +73,10 @@ namespace Start_a_Town_
             batch.Callback();
             this.LightCallback(this.LightChanges);
             this.BlockCallback(this.BlockChanges);
-            this.BlockChanges = new HashSet<Vector3>();
-            this.LightChanges = new HashSet<Vector3>();
+            this.BlockChanges = new HashSet<IntVec3>();
+            this.LightChanges = new HashSet<IntVec3>();
         }
-
-        void HandleSkyGlobalNew(Vector3 global, Queue<Vector3> queue, HashSet<Vector3> queued, Dictionary<Vector3, byte> deltas)
+        void HandleSkyGlobalNew(IntVec3 global, Queue<IntVec3> queue, HashSet<IntVec3> queued, Dictionary<IntVec3, byte> deltas)
         {
             int gx = (int)global.X, gy = (int)global.Y, z = (int)global.Z;
 
@@ -94,7 +94,7 @@ namespace Start_a_Town_
 
             if (d > 1)
             {
-                foreach (Vector3 n in neighbors)
+                foreach (var n in neighbors)
                     if (!queued.Contains(n))
                     {
                         queue.Enqueue(n);// TODO: maybe check if the position is already queued?
@@ -103,18 +103,18 @@ namespace Start_a_Town_
             }
             else if (d < -1)
             {
-                foreach (Vector3 n in neighbors)
+                foreach (var n in neighbors)
                     DarkenNew(n, queue, queued, deltas);// TODO: maybe check if the position is already queued?
             }
         }
-        void DarkenNew(Vector3 global, Queue<Vector3> queue, HashSet<Vector3> queued, Dictionary<Vector3, byte> deltas)
+        void DarkenNew(IntVec3 global, Queue<IntVec3> queue, HashSet<IntVec3> queued, Dictionary<IntVec3, byte> deltas)
         {
             this.ToDarken.Enqueue(global);
-            var handled = new HashSet<Vector3>();
+            var handled = new HashSet<IntVec3>();
             var i = 0;
             while (this.ToDarken.Count > 0)
             {
-                Vector3 current = this.ToDarken.Dequeue();
+                var current = this.ToDarken.Dequeue();
                 int gx = (int)current.X, gy = (int)current.Y, z = (int)current.Z;
                 if (!this.Map.TryGetAll(gx, gy, z, out Chunk chunk, out Cell cell, out int lx, out int ly))
                     continue;
@@ -152,7 +152,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        byte GetNextSunLight(Cell cell, Chunk chunk, int gx, int gy, int z, int lx, int ly, IEnumerable<Vector3> neighbors, Dictionary<Vector3, byte> deltas)
+        byte GetNextSunLight(Cell cell, Chunk chunk, int gx, int gy, int z, int lx, int ly, IEnumerable<IntVec3> neighbors, Dictionary<IntVec3, byte> deltas)
         {
             byte next, maxAdjLight = 0;
 
@@ -171,7 +171,7 @@ namespace Start_a_Town_
             if (visible)
                 if (!Cell.IsInvisible(cell))
                 {
-                    this.BlockChanges.Add(new Vector3(gx, gy, z));
+                    this.BlockChanges.Add(new(gx, gy, z));
                     this.OutdoorBlockHandler(chunk, cell);
                 }
 
@@ -188,7 +188,7 @@ namespace Start_a_Town_
             }
             return next;
         }
-        private void HandleBlockGlobal(Vector3 global, Queue<Vector3> queue, Dictionary<Vector3, byte> deltas)
+        private void HandleBlockGlobal(IntVec3 global, Queue<IntVec3> queue, Dictionary<IntVec3, byte> deltas)
         {
             if (!this.Map.TryGetAll(global, out Chunk thisChunk, out Cell thisCell))
                 return;
@@ -200,25 +200,24 @@ namespace Start_a_Town_
 
             if (nextLight > thisLight) //if the cell became brighter, queue surrounding cells to spread light to them
             {
-                foreach (Vector3 n in neighbors)
+                foreach (var n in neighbors)
                     if (!queue.Contains(n))
                         queue.Enqueue(n);
             }
             else if (nextLight < thisLight)//if the cell became darker, spread darkness surrounding cells
             {
-                Vector3 source = Vector3.Zero;
-                foreach (Vector3 n in neighbors)
+                foreach (var n in neighbors)
                     DarkenBlock(n, queue, deltas);
             }
         }
-        void DarkenBlock(Vector3 global, Queue<Vector3> queue, Dictionary<Vector3, byte> deltas)
+        void DarkenBlock(IntVec3 global, Queue<IntVec3> queue, Dictionary<IntVec3, byte> deltas)
         {
             this.ToDarken.Enqueue(global);
             var i = 0;
-            var handled = new HashSet<Vector3>();
+            var handled = new HashSet<IntVec3>();
             while (this.ToDarken.Count > 0)
             {
-                Vector3 current = this.ToDarken.Dequeue();
+                IntVec3 current = this.ToDarken.Dequeue();
 
                 if (!this.Map.TryGetAll(current, out Chunk chunk, out Cell cell))
                     return;
@@ -233,8 +232,8 @@ namespace Start_a_Town_
                 i++;
                 if (oldLight != 0)
                     this.LightChanges.Add(current);
-                List<Vector3> neighbors = current.GetNeighbors().ToList();
-                foreach (Vector3 n in neighbors)
+                var neighbors = current.GetNeighbors().ToList();
+                foreach (var n in neighbors)
                 {
                     if (handled.Contains(n))
                         continue;
@@ -262,7 +261,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        private byte GetNextBlockLight(Cell cell, Chunk chunk, IEnumerable<Vector3> neighbors, Dictionary<Vector3, byte> deltas)
+        private byte GetNextBlockLight(Cell cell, Chunk chunk, IEnumerable<IntVec3> neighbors, Dictionary<IntVec3, byte> deltas)
         {
             byte next;
             byte maxAdjLight = 0;
@@ -291,21 +290,21 @@ namespace Start_a_Town_
             return next;
         }
 
-        public void HandleImmediate(IEnumerable<Vector3> vectors)
+        public void HandleImmediate(IEnumerable<IntVec3> vectors)
         {
-            var queued = new HashSet<Vector3>(vectors);
+            var queued = new HashSet<IntVec3>(vectors);
             var batch = new BatchToken(vectors);
             var queue = batch.Queue;
             while (queue.Count > 0)
                 HandleSkyGlobalImmediate(queue.Dequeue(), queue, queued);
 
-            queued = new HashSet<Vector3>(vectors);
+            queued = new HashSet<IntVec3>(vectors);
             var block = new BatchToken(vectors);
             queue = block.Queue;
             while (queue.Count > 0)
                 HandleBlockGlobalImmediate(queue.Dequeue(), queue, queued);
         }
-        void HandleSkyGlobalImmediate(Vector3 global, Queue<Vector3> queue, HashSet<Vector3> queued)
+        void HandleSkyGlobalImmediate(IntVec3 global, Queue<IntVec3> queue, HashSet<IntVec3> queued)
         {
             byte oldLight, nextLight;
             int gx = (int)global.X, gy = (int)global.Y, z = (int)global.Z;
@@ -323,7 +322,7 @@ namespace Start_a_Town_
 
             if (d > 1)
             {
-                foreach (Vector3 n in neighbors)
+                foreach (var n in neighbors)
                     if (!queued.Contains(n))
                     {
                         queue.Enqueue(n);// TODO: maybe check if the position is already queued?
@@ -335,7 +334,7 @@ namespace Start_a_Town_
                 DarkenImmediateWorking(global, queue, queued);
             }
         }
-        byte GetNextSunLightImmediate(Cell cell, Chunk chunk, int gx, int gy, int z, int lx, int ly, IEnumerable<Vector3> neighbors)
+        byte GetNextSunLightImmediate(Cell cell, Chunk chunk, int gx, int gy, int z, int lx, int ly, IEnumerable<IntVec3> neighbors)
         {
             byte next, maxAdjLight = 0;
 
@@ -354,7 +353,7 @@ namespace Start_a_Town_
             if (visible)
                 if (!Cell.IsInvisible(cell))
                 {
-                    this.BlockChanges.Add(new Vector3(gx, gy, z));
+                    this.BlockChanges.Add(new(gx, gy, z));
                     this.OutdoorBlockHandler(chunk, cell);
                 }
 
@@ -371,15 +370,15 @@ namespace Start_a_Town_
             }
             return next;
         }
-        void DarkenImmediateWorking(Vector3 global, Queue<Vector3> queue, HashSet<Vector3> queued)
+        void DarkenImmediateWorking(IntVec3 global, Queue<IntVec3> queue, HashSet<IntVec3> queued)
         {
-            var queueToDarken = new Queue<Vector3>();
-            var queueToDarkenQueued = new HashSet<Vector3>();
+            var queueToDarken = new Queue<IntVec3>();
+            var queueToDarkenQueued = new HashSet<IntVec3>();
             queueToDarken.Enqueue(global);
             queueToDarkenQueued.Add(global);
             while (queueToDarken.Count > 0)
             {
-                Vector3 current = queueToDarken.Dequeue();
+                var current = queueToDarken.Dequeue();
                 byte nlight;
                 if (!this.Map.TryGetAll(current, out var chunk, out var cell))
                     continue;
@@ -390,7 +389,7 @@ namespace Start_a_Town_
                 chunk.SetSunlight(local, 0);
 
                 var neighbors = current.GetAdjacentLazy();
-                foreach (Vector3 n in neighbors)
+                foreach (var n in neighbors)
                 {
                     if (!this.Map.TryGetAll(n, out var nchunk, out var ncell))
                         continue;
@@ -415,24 +414,24 @@ namespace Start_a_Town_
                 }
             }
         }
-        private void HandleBlockGlobalImmediate(Vector3 global, Queue<Vector3> queue, HashSet<Vector3> queued)
+        private void HandleBlockGlobalImmediate(IntVec3 global, Queue<IntVec3> queue, HashSet<IntVec3> queued)
         {
             byte nextLight;
             queued.Remove(global);
             if (!this.Map.TryGetAll(global, out var thisChunk, out var thisCell))
                 return;
-            var neighbors = global.GetAdjacent();
             var local = thisCell.LocalCoords;
             var thisLight = thisChunk.GetBlockLight(local);
-           
-            nextLight = GetNextBlockLightImmediate(thisCell, neighbors);
+
+            nextLight = GetNextBlockLightImmediate(thisCell, global);
             thisChunk.SetBlockLight(local, nextLight);
 
             if (nextLight > thisLight) //if the cell became brighter, queue surrounding cells to spread light to them
             {
-                for (int i = 0; i < neighbors.Length; i++)
+                var adj = VectorHelper.AdjacentIntVec3;
+                for (int i = 0; i < adj.Length; i++)
                 {
-                    var n = neighbors[i];
+                    var n = global + adj[i];
                     if (!queued.Contains(n))
                     {
                         queue.Enqueue(n);
@@ -446,13 +445,14 @@ namespace Start_a_Town_
                 DarkenBlockImmediateWorking(global, queue, queued);
             }
         }
-        private byte GetNextBlockLightImmediate(Cell cell, Vector3[] neighbors)
+        private byte GetNextBlockLightImmediate(Cell cell, IntVec3 center)
         {
             byte next;
             byte maxAdjLight = 0;
-            for (int i = 0; i < neighbors.Length; i++)
+            var adj = VectorHelper.AdjacentIntVec3;
+            for (int i = 0; i < adj.Length; i++)
             {
-                var n = neighbors[i];
+                var n = center + adj[i];
                 if (!this.Map.TryGetAll(n, out var nchunk, out var ncell))
                     continue;
                 if (ncell.Opaque)
@@ -474,10 +474,10 @@ namespace Start_a_Town_
             }
             return next;
         }
-        void DarkenBlockImmediateWorking(Vector3 global, Queue<Vector3> queue, HashSet<Vector3> queued)
+        void DarkenBlockImmediateWorking(IntVec3 global, Queue<IntVec3> queue, HashSet<IntVec3> queued)
         {
-            var queueToDarken = new Queue<Vector3>();
-            var queueToDarkenQueued = new HashSet<Vector3>();
+            var queueToDarken = new Queue<IntVec3>();
+            var queueToDarkenQueued = new HashSet<IntVec3>();
             queueToDarken.Enqueue(global);
             queueToDarkenQueued.Add(global);
             while (queueToDarken.Count > 0)
@@ -489,15 +489,14 @@ namespace Start_a_Town_
                 if (cell.Opaque)
                     continue;
                 var local = cell.LocalCoords;
-                
 
                 var prevLight = chunk.GetBlockLight(local);
                 chunk.SetBlockLight(local, cell.Luminance);
 
-                var neighbors = global.GetAdjacent();
-                for (int i = 0; i < neighbors.Length; i++)
+                var adj = VectorHelper.AdjacentIntVec3;
+                for (int i = 0; i < adj.Length; i++)
                 {
-                    var n = neighbors[i];
+                    var n = global + adj[i];
                     if (!this.Map.TryGetAll(n, out var nchunk, out var ncell))
                         continue;
 

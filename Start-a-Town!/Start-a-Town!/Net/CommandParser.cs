@@ -14,24 +14,6 @@ namespace Start_a_Town_.Net
             var type = p[0];
             switch (type)
             {
-                case "resetlight":
-                    foreach (var chunk in net.Map.GetActiveChunks().Values)
-                    {
-                        var items = chunk.ResetHeightMap();
-                        new LightingEngine(net.Map).HandleBatchSync(items);
-                    }
-                    break;
-
-                case "fog":
-                    var client = net as Client;
-                    if (client != null)
-                    {
-                        ScreenManager.CurrentScreen.Camera.FogLevel = int.Parse(p[1]);
-                    }
-                    if (net is Server)
-                        (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
-                    break;
-
                 case "teleport":
                     int x=  int.Parse(p[1]);
                     int y= int.Parse(p[2]);
@@ -63,14 +45,6 @@ namespace Start_a_Town_.Net
             var type = p[0];
             switch (type)
             {
-                case "resetlight":
-                    foreach (var chunk in net.Map.GetActiveChunks().Values)
-                    {
-                        var items = chunk.ResetHeightMap();
-                        new LightingEngine(net.Map).HandleBatchSync(items);
-                    }
-                    break;
-
                 case "fog":
                     var client = net as Client;
                     if(client!=null)

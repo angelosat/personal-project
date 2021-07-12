@@ -31,9 +31,9 @@ namespace Start_a_Town_
         }
 
         #region Initialization
-        public Dictionary<Vector3, double> InitCells(List<Terraformer> mutators)
+        public Dictionary<IntVec3, double> InitCells(List<Terraformer> mutators)
         {
-            var gradientCache = new Dictionary<Vector3, double>();
+            var gradientCache = new Dictionary<IntVec3, double>();
             var world = Map.World;
             int n = 0; ;
             var grad = new GradientLowRes(this.World, this);
@@ -45,17 +45,16 @@ namespace Start_a_Town_
                     {
                         Cell cell = new(i, j, z);
                         double gradient = grad.GetGradient(i, j, z);
-                        gradientCache.Add(new Vector3(i, j, z), gradient);
+                        gradientCache.Add(new IntVec3(i, j, z), gradient);
                         foreach(var m in mutators)
                             m.Initialize(world, cell, (int)Start.X + i, (int)Start.Y + j, z, gradient);
                         this.CellGrid2[n++] = cell;
                     }
             return gradientCache;
         }
-        public Dictionary<Vector3, double> InitCells2(List<Terraformer> mutators)
+        public Dictionary<IntVec3, double> InitCells2(List<Terraformer> mutators)
         {
-            var gradientCache = new Dictionary<Vector3, double>();
-            var world = Map.World;
+            var gradientCache = new Dictionary<IntVec3, double>();
             int n = 0; ;
             var grad = new GradientLowRes(this.World, this);
             var maxh = MapBase.MaxHeight;
@@ -65,12 +64,12 @@ namespace Start_a_Town_
                     {
                         Cell cell = new(i, j, z);
                         double gradient = grad.GetGradient(i, j, z);
-                        gradientCache.Add(new Vector3(i, j, z), gradient);
+                        gradientCache.Add(new IntVec3(i, j, z), gradient);
                         this.CellGrid2[n++] = cell;
                     }
             return gradientCache;
         }
-        public void InitCells3(Terraformer m, Dictionary<Vector3, double> gradient)
+        public void InitCells3(Terraformer m, Dictionary<IntVec3, double> gradient)
         {
             var maxh = MapBase.MaxHeight;
             int n = 0;
@@ -79,7 +78,7 @@ namespace Start_a_Town_
                     for (int j = 0; j < Size; j++)
                     {
                         var cell = this.CellGrid2[n++];
-                        m.Initialize(this.Map.World, cell, (int)Start.X + i, (int)Start.Y + j, z, gradient[new Vector3(i,j,z)]);
+                        m.Initialize(this.Map.World, cell, (int)Start.X + i, (int)Start.Y + j, z, gradient[new IntVec3(i,j,z)]);
                     }
             this.UpdateHeightMap();
 
@@ -110,20 +109,20 @@ namespace Start_a_Town_
             return text.Remove(text.Length - 1);
         }
 
-        List<Vector3> _RandomOrderedCells;
-        List<Vector3> RandomOrderedCells
+        List<IntVec3> _RandomOrderedCells;
+        List<IntVec3> RandomOrderedCells
         {
             get
             {
                 if (this._RandomOrderedCells is null)
                 {
-                    var allPositions = new BoundingBox(Vector3.Zero, new Vector3(Chunk.Size - 1, Chunk.Size - 1, MapBase.MaxHeight - 1)).GetBox();
+                    var allPositions = new BoundingBox(IntVec3.Zero, new IntVec3(Chunk.Size - 1, Chunk.Size - 1, MapBase.MaxHeight - 1)).GetBoxIntVec3();
                     this._RandomOrderedCells = allPositions.Randomize(this.Map.Random);
                 }
                 return this._RandomOrderedCells;
             }
         }
-        public Vector3 GetRandomCellInOrder(int index)
+        public IntVec3 GetRandomCellInOrder(int index)
         {
             if (index >= this.CellGrid2.Length)
                 throw new Exception();
@@ -143,7 +142,7 @@ namespace Start_a_Town_
 
         public List<GameObject> Objects;
         Dictionary<int, GameObject> BlockObjects;
-        Dictionary<Vector3, BlockEntity> BlockEntitiesByPosition = new();
+        Dictionary<IntVec3, BlockEntity> BlockEntitiesByPosition = new();
 
         public bool IsQueuedForLight;
         public const int Size = 16;
@@ -208,7 +207,7 @@ namespace Start_a_Town_
                 return CellGrid2[ind];
             }
         }
-        public Cell this[Vector3 localCoords]
+        public Cell this[IntVec3 localCoords]
         {
             get
             {
@@ -332,9 +331,9 @@ namespace Start_a_Town_
         { return (z * Chunk.Size + x) * Chunk.Size + y; }
         static public int GetCellIndex(float x, float y, float z)
         { return (int)((Math.Round(z) * Chunk.Size + Math.Round(x)) * Chunk.Size + Math.Round(y)); }
-        static public int GetCellIndex(Vector3 local)
+        static public int GetCellIndex(IntVec3 local)
         {
-            return (int)((local.Z * Size + local.X) * Size + local.Y);
+            return (local.Z * Size + local.X) * Size + local.Y;
         }
         public static int Volume = Size * Size * MapBase.MaxHeight;
         public List<byte> Sunlight;
@@ -342,7 +341,7 @@ namespace Start_a_Town_
 
         void ResetSunlight()
         {
-            this.LightCache = new Dictionary<Vector3, Color>();
+            this.LightCache = new Dictionary<IntVec3, Color>();
         }
 
         void ResetCellLight()
@@ -369,21 +368,21 @@ namespace Start_a_Town_
             return localz > HeightMap[localx][localy];
         }
 
-        Queue<Vector3> LightChanges = new Queue<Vector3>();
+        Queue<IntVec3> LightChanges = new Queue<IntVec3>();
 
         /// <summary>
         /// Recalculates the skylight of a chunk and returns a list of cells whose skylight that changed.
         /// </summary>
         /// <returns>A list of cells whose skylight has changed</returns>
-        public Queue<Vector3> ResetHeightMap()
+        public Queue<IntVec3> ResetHeightMap()
         {
             this.ResetSunlight();
             for (int j = 0; j < Size; j++)
                 for (int i = 0; i < Size; i++)
                     foreach (var pos in ResetHeightMapColumn(i, j))
                         this.LightChanges.Enqueue(pos);
-            Queue<Vector3> toReturn = new Queue<Vector3>(this.LightChanges);
-            this.LightChanges = new Queue<Vector3>();
+            Queue<IntVec3> toReturn = new Queue<IntVec3>(this.LightChanges);
+            this.LightChanges = new Queue<IntVec3>();
             return toReturn;
         }
 
@@ -502,8 +501,8 @@ namespace Start_a_Town_
                         Cell cell = this[pos];
                         if (cell.IsInvisible())
                             continue;
-                        this.UpdateBlockFaces(cell, Edges.All, VerticalEdges.All);
-                        if (cell.HorizontalEdges != 0 || cell.VerticalEdges != 0)
+                        this.UpdateBlockFaces(cell, Edges.All, VerticalSides.All);
+                        if (cell.HorizontalSides != 0 || cell.VerticalSides != 0)
                             this.CellsToActivate.Enqueue(cell);
                     }
                 }
@@ -556,7 +555,7 @@ namespace Start_a_Town_
                 while (this.CellsToValidate.Count > 0)
                 {
                     Cell cell = this.CellsToValidate.Dequeue();
-                    this.Map.LightingEngine.HandleImmediate(new Vector3[] { cell.LocalCoords.ToGlobal(this) });
+                    this.Map.LightingEngine.HandleImmediate(new IntVec3[] { cell.LocalCoords.ToGlobal(this) });
                     cell.Valid = true;
                     this.InvalidateSlice(cell.Z);
                     this.InvalidateMesh();
@@ -590,7 +589,7 @@ namespace Start_a_Town_
             return true;
         }
         
-        public byte GetBlockLight(Vector3 local)
+        public byte GetBlockLight(IntVec3 local)
         {
             return BlockLight[GetCellIndex(local)];
         }
@@ -600,7 +599,7 @@ namespace Start_a_Town_
             byte l = BlockLight[index];
             return l;
         }
-        public byte GetSunlight(Vector3 local)
+        public byte GetSunlight(IntVec3 local)
         {
             var id = GetCellIndex(local);
             return Sunlight[id];
@@ -614,17 +613,17 @@ namespace Start_a_Town_
             return Sunlight[index];
         }
 
-        public void SetSunlight(Vector3 local, byte value)
+        public void SetSunlight(IntVec3 local, byte value)
         {
             Sunlight[GetCellIndex(local)] = value;
-            var global = local + new Vector3(this.Start.X, this.Start.Y, 0);
+            var global = local + new IntVec3(this.Start.X, this.Start.Y, 0);
             this.InvalidateLight(global);
             _Saved = false;
         }
         public void SetSunlight(int x, int y, int z, byte value) 
         {
             Sunlight[GetCellIndex(x, y, z)] = value;
-            var global = new Vector3(this.Start.X + x, this.Start.Y + y, z);
+            var global = new IntVec3(this.Start.X + x, this.Start.Y + y, z);
             this.InvalidateLight(global);
             _Saved = false; 
         }
@@ -633,28 +632,28 @@ namespace Start_a_Town_
             int index = GetCellIndex(x, y, z);
             oldValue = Sunlight[index];
             this.Sunlight[index] = newValue;
-            foreach (var n in new Vector3(Start.X + x, Start.Y + y, z).GetNeighbors())
+            foreach (var n in new IntVec3(Start.X + x, Start.Y + y, z).GetNeighbors())
             {
                 InvalidateLight(Map, n);
             }
             _Saved = false;
         }
 
-        public void SetBlockLight(Vector3 local, byte value, out byte oldValue)
+        public void SetBlockLight(IntVec3 local, byte value, out byte oldValue)
         {
             int index = GetCellIndex(local);
             oldValue = BlockLight[index];
             BlockLight[index] = value;
-            foreach (var adj in new Vector3(Start.X + local.X, Start.Y + local.Y, local.Z).GetAdjacentLazy())
+            foreach (var adj in new IntVec3(Start.X + local.X, Start.Y + local.Y, local.Z).GetAdjacentLazy())
                 InvalidateLight(Map, adj);
             _Saved = false;
         }
        
-        public void SetBlockLight(Vector3 local, byte value)
+        public void SetBlockLight(IntVec3 local, byte value)
         {
             var index = GetCellIndex(local);
             BlockLight[index] = value;
-            var global = local + new Vector3(this.Start.X, this.Start.Y, 0);
+            var global = local + new IntVec3(this.Start.X, this.Start.Y, 0);
             this.InvalidateLight(global);
             _Saved = false;
         }
@@ -662,21 +661,21 @@ namespace Start_a_Town_
         /// <summary>
         /// TODO: Move light cache to camera class
         /// </summary>
-        public Dictionary<Vector3, Color> LightCache = new Dictionary<Vector3, Color>();
+        public Dictionary<IntVec3, Color> LightCache = new();
         
         /// <summary>
         /// TODO: optimize: convert to dictionary for speed
         /// </summary>
-        public Dictionary<Vector3, LightToken> LightCache2 = new Dictionary<Vector3, LightToken>();
+        public Dictionary<IntVec3, LightToken> LightCache2 = new();
 
         public void ClearLightCache()
         {
             this.LightCache2.Clear();
         }
         
-        static public bool InvalidateLight(MapBase map, Vector3 global)
+        static public bool InvalidateLight(MapBase map, IntVec3 global)
         {
-            if (map.TryGetAll((int)global.X, (int)global.Y, (int)global.Z, out Chunk chunk, out Cell cell, out int lx, out int ly))
+            if (map.TryGetAll(global.X, global.Y, global.Z, out Chunk chunk, out Cell cell, out int lx, out int ly))
             {
                 return chunk.LightCache2.Remove(global);
             }
@@ -686,7 +685,7 @@ namespace Start_a_Town_
         {
             return this.LightCache2.Remove(cell.GetGlobalCoords(this));
         }
-        public bool InvalidateLight(Vector3 global)
+        public bool InvalidateLight(IntVec3 global)
         {
             this.LightCache2.Clear();
             if (this.Slices.Any())
@@ -710,7 +709,7 @@ namespace Start_a_Town_
             if (globalZ < 0)
                 return false;
 
-            var global = new Vector3(globalX, globalY, globalZ);
+            var global = new IntVec3(globalX, globalY, globalZ);
             if (!map.TryGetChunk(global, out Chunk chunk))
             {
                 // return full skylight if adjacent neighbor chunk doesn't exist?
@@ -725,7 +724,7 @@ namespace Start_a_Town_
             return true;
         }
 
-        static public bool TryGetSunlight(MapBase map, Vector3 global, out byte sunlight)
+        static public bool TryGetSunlight(MapBase map, IntVec3 global, out byte sunlight)
         {
             sunlight = 0;
 
@@ -1197,118 +1196,118 @@ namespace Start_a_Town_
         /// <param name="verEdgesToCheck"></param>
         /// <returns></returns>
         [Obsolete]
-        public bool UpdateBlockFaces(Cell cell, Edges horEdgesToCheck, VerticalEdges verEdgesToCheck)
+        public bool UpdateBlockFaces(Cell cell, Edges horEdgesToCheck, VerticalSides verEdgesToCheck)
         {
             if (cell == null)
                 return false;
             var local = cell.LocalCoords;
-            Edges lastEdges = cell.HorizontalEdges;
-            VerticalEdges lastVerticalEdges = cell.VerticalEdges;
+            Edges lastEdges = cell.HorizontalSides;
+            VerticalSides lastVerticalEdges = cell.VerticalSides;
 
             if ((horEdgesToCheck & Edges.West) == Edges.West)
             {
-                if (this.TryGetCell(local - new Vector3(1, 0, 0), out Cell west))
+                if (this.TryGetCell(local - new IntVec3(1, 0, 0), out Cell west))
                 {
                     if (west.Opaque || (cell.Block == BlockDefOf.Water && (west.Block == BlockDefOf.Water && west.BlockData == 1))) //if current block is water and neightbor block is water and is full, hide face
-                        cell.HorizontalEdges &= ~Edges.West;
+                        cell.HorizontalSides &= ~Edges.West;
                     else
-                        cell.HorizontalEdges |= Edges.West;
+                        cell.HorizontalSides |= Edges.West;
                 }
                 else
-                    cell.HorizontalEdges &= ~Edges.West;
+                    cell.HorizontalSides &= ~Edges.West;
             }
             if ((horEdgesToCheck & Edges.North) == Edges.North)
             {
                 Cell north;
-                if (TryGetCell((local - new Vector3(0, 1, 0)), out north))
+                if (TryGetCell((local - new IntVec3(0, 1, 0)), out north))
                 {
                     if (north.Opaque || (cell.Block == BlockDefOf.Water && (north.Block == BlockDefOf.Water && north.BlockData == 1)))
-                        cell.HorizontalEdges &= ~Edges.North;
+                        cell.HorizontalSides &= ~Edges.North;
                     else
-                        cell.HorizontalEdges |= Edges.North;
+                        cell.HorizontalSides |= Edges.North;
                 }
                 else
-                    cell.HorizontalEdges &= ~Edges.North;
+                    cell.HorizontalSides &= ~Edges.North;
             }
             if ((horEdgesToCheck & Edges.South) == Edges.South)
             {
                 Cell south;
-                if (this.TryGetCell((local + new Vector3(0, 1, 0)), out south))
+                if (this.TryGetCell((local + new IntVec3(0, 1, 0)), out south))
                 {
                     if (south.Opaque || (cell.Block == BlockDefOf.Water && (south.Block == BlockDefOf.Water && south.BlockData == 1)))
-                        cell.HorizontalEdges &= ~Edges.South;
+                        cell.HorizontalSides &= ~Edges.South;
                     else
-                        cell.HorizontalEdges |= Edges.South;
+                        cell.HorizontalSides |= Edges.South;
                 }
                 else
-                    cell.HorizontalEdges &= ~Edges.South;
+                    cell.HorizontalSides &= ~Edges.South;
             }
             if ((horEdgesToCheck & Edges.East) == Edges.East)
             {
                 Cell east;
-                if (this.TryGetCell((local + new Vector3(1, 0, 0)), out east))
+                if (this.TryGetCell((local + new IntVec3(1, 0, 0)), out east))
                 {
                     if (east.Opaque || (cell.Block == BlockDefOf.Water && (east.Block == BlockDefOf.Water && east.BlockData == 1)))
-                        cell.HorizontalEdges &= ~Edges.East;
+                        cell.HorizontalSides &= ~Edges.East;
                     else
-                        cell.HorizontalEdges |= Edges.East;
+                        cell.HorizontalSides |= Edges.East;
                 }
                 else
-                    cell.HorizontalEdges &= ~Edges.East;
+                    cell.HorizontalSides &= ~Edges.East;
             }
-            if ((verEdgesToCheck & VerticalEdges.Top) == VerticalEdges.Top)
+            if ((verEdgesToCheck & VerticalSides.Top) == VerticalSides.Top)
             {
                 Cell top;
-                if (this.TryGetCell((local + new Vector3(0, 0, 1)), out top))
+                if (this.TryGetCell((local + new IntVec3(0, 0, 1)), out top))
                 {
                     if (top.Opaque || (cell.Block == BlockDefOf.Water && (top.Block == BlockDefOf.Water && top.BlockData == 1)))
-                        cell.VerticalEdges &= ~VerticalEdges.Top;
+                        cell.VerticalSides &= ~VerticalSides.Top;
                     else
-                        cell.VerticalEdges |= VerticalEdges.Top;
+                        cell.VerticalSides |= VerticalSides.Top;
                 }
                 else
-                    cell.VerticalEdges &= ~VerticalEdges.Top;
+                    cell.VerticalSides &= ~VerticalSides.Top;
             }
-            if ((verEdgesToCheck & VerticalEdges.Bottom) == VerticalEdges.Bottom)
+            if ((verEdgesToCheck & VerticalSides.Bottom) == VerticalSides.Bottom)
             {
                 Cell bottom;
-                if (this.TryGetCell((local - new Vector3(0, 0, 1)), out bottom))
+                if (this.TryGetCell((local - new IntVec3(0, 0, 1)), out bottom))
                 {
                     if (bottom.Opaque || (cell.Block == BlockDefOf.Water && (bottom.Block == BlockDefOf.Water && bottom.BlockData == 1)))
-                        cell.VerticalEdges &= ~VerticalEdges.Bottom;
+                        cell.VerticalSides &= ~VerticalSides.Bottom;
                     else
-                        cell.VerticalEdges |= VerticalEdges.Bottom;
+                        cell.VerticalSides |= VerticalSides.Bottom;
                 }
                 else
-                    cell.VerticalEdges &= ~VerticalEdges.Bottom;
+                    cell.VerticalSides &= ~VerticalSides.Bottom;
             }
-            if (cell.VerticalEdges != lastVerticalEdges || cell.HorizontalEdges != lastEdges)
+            if (cell.VerticalSides != lastVerticalEdges || cell.HorizontalSides != lastEdges)
                 this.InvalidateLight(local.ToGlobal(this));
             return true;
         }
 
-        public List<Vector3> GetEdges(Edges edges)
+        public List<IntVec3> GetEdges(Edges edges)
         {
-            HashSet<Vector3> list = new HashSet<Vector3>();
+            var list = new HashSet<IntVec3>();
             if ((edges & Edges.East) == Edges.East)
                 for (int i = 0; i < Chunk.Size; i++)
                     for (int z = 0; z < MapBase.MaxHeight; z++)
-                        list.Add(new Vector3(Start.X + Chunk.Size - 1, Start.Y + i, z));
+                        list.Add(new IntVec3(Start.X + Chunk.Size - 1, Start.Y + i, z));
 
             if ((edges & Edges.West) == Edges.West)
                 for (int i = 0; i < Chunk.Size; i++)
                     for (int z = 0; z < MapBase.MaxHeight; z++)
-                        list.Add(new Vector3(Start.X, Start.Y + i, z));
+                        list.Add(new IntVec3(Start.X, Start.Y + i, z));
 
             if ((edges & Edges.North) == Edges.North)
                 for (int i = 0; i < Chunk.Size; i++)
                     for (int z = 0; z < MapBase.MaxHeight; z++)
-                        list.Add(new Vector3(Start.X + i, Start.Y, z));
+                        list.Add(new IntVec3(Start.X + i, Start.Y, z));
 
             if ((edges & Edges.South) == Edges.South)
                 for (int i = 0; i < Chunk.Size; i++)
                     for (int z = 0; z < MapBase.MaxHeight; z++)
-                        list.Add(new Vector3(Start.X + i, Start.Y + Chunk.Size - 1, z));
+                        list.Add(new IntVec3(Start.X + i, Start.Y + Chunk.Size - 1, z));
 
             return list.ToList();
         }
@@ -1325,7 +1324,7 @@ namespace Start_a_Town_
         public void OnCameraRotated(Camera camera)
         {
             this.ClearLightCache();
-            LightCache = new Dictionary<Vector3, Color>();
+            LightCache = new Dictionary<IntVec3, Color>();
             this.LightCache2.Clear();
         }
 
@@ -1350,8 +1349,8 @@ namespace Start_a_Town_
                 }
                 w.Write((int)cell.Block.Type);
 
-                w.Write((byte)cell.HorizontalEdges);
-                w.Write((byte)cell.VerticalEdges);
+                w.Write((byte)cell.HorizontalSides);
+                w.Write((byte)cell.VerticalSides);
 
                 w.Write(cell.Data2.Data);
                 w.Write(cell.Discovered);
@@ -1392,8 +1391,8 @@ namespace Start_a_Town_
                     Cell cell = this.CellGrid2[cellIndex++];
                     cell.SetBlockType(type);
 
-                    cell.HorizontalEdges = (Edges)r.ReadByte();
-                    cell.VerticalEdges = (VerticalEdges)r.ReadByte();
+                    cell.HorizontalSides = (Edges)r.ReadByte();
+                    cell.VerticalSides = (VerticalSides)r.ReadByte();
 
                     cell.Data2 = new BitVector32(r.ReadInt32());
                     cell.Discovered = r.ReadBoolean();
@@ -1734,7 +1733,7 @@ namespace Start_a_Town_
 
             this.LoadBlockEntitiesDistinct(chunktag);
 
-            chunktag.TryGetTag("RandomOrderedCells", t => this._RandomOrderedCells = new List<Vector3>().Load(t));
+            chunktag.TryGetTag("RandomOrderedCells", t => this._RandomOrderedCells = new List<IntVec3>().Load(t));
             return this;
         }
         private void LoadCellsFromTagCompressed(SaveTag chunktag)
@@ -1768,7 +1767,7 @@ namespace Start_a_Town_
             }
         }
 
-        internal bool IsSolid(Vector3 local)
+        internal bool IsSolid(IntVec3 local)
         {
             if (local.Z > this.Map.GetMaxHeight() - 1)
                 return false;
@@ -1810,7 +1809,7 @@ namespace Start_a_Town_
                 for (int j = 0; j < Chunk.Size; j++)
                 {
                     Cell cell;
-                    var local = new Vector3(i, j, z);
+                    var local = new IntVec3(i, j, z);
                     
                     cell = this.CellGrid2[GetCellIndex(local)];
                     var global = local.ToGlobal(this);
@@ -1892,16 +1891,16 @@ namespace Start_a_Town_
                     {
                         {
                             Cell cell;
-                            Vector3 pos = new Vector3(Chunk.Size - 1, i, j);
+                            var pos = new IntVec3(Chunk.Size - 1, i, j);
                             switch ((int)camera.Rotation)
                             {
                                 case 0:
                                 case 1:
-                                    pos = new Vector3(Chunk.Size - 1, i, j);
+                                    pos = new IntVec3(Chunk.Size - 1, i, j);
                                     break;
                                 case 2:
                                 case 3:
-                                    pos = new Vector3(0, i, j);
+                                    pos = new IntVec3(0, i, j);
                                     break;
 
                                 default:
@@ -1930,16 +1929,16 @@ namespace Start_a_Town_
                     {
                         {
                             Cell cell;
-                            Vector3 pos = new Vector3(i, Chunk.Size - 1, j);
+                            var pos = new IntVec3(i, Chunk.Size - 1, j);
                             switch ((int)camera.Rotation)
                             {
                                 case 0:
                                 case 3:
-                                    pos = new Vector3(i, Chunk.Size - 1, j);
+                                    pos = new IntVec3(i, Chunk.Size - 1, j);
                                     break;
                                 case 2:
                                 case 1:
-                                    pos = new Vector3(i, 0, j);
+                                    pos = new IntVec3(i, 0, j);
                                     break;
 
                                 default:

@@ -474,7 +474,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
        
         void ResetLight(Chunk chunk)
         {
-            Queue<Vector3> cellList = chunk.ResetHeightMap();
+            Queue<IntVec3> cellList = chunk.ResetHeightMap();
             this.UpdateLight(cellList);
         }
         
@@ -598,7 +598,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var mutatorlist = this.World.GetMutators().ToList();
             mutatorlist.ForEach(m => m.SetWorld(this.World));
             var watch = new Stopwatch();
-            Dictionary<Chunk, Dictionary<Vector3, double>> gradCache = new Dictionary<Chunk, Dictionary<Vector3, double>>();
+            Dictionary<Chunk, Dictionary<IntVec3, double>> gradCache = new();
             tasks.Add(("Initializing Chunks", () =>
              {
                  watch.Start();
@@ -687,7 +687,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.LightingEngine.Enqueue(positions);
         }
       
-        public void UpdateLight(IEnumerable<Vector3> positions)
+        public void UpdateLight(IEnumerable<IntVec3> positions)
         {
             this.LightingEngine.HandleImmediate(positions);
         }
@@ -728,10 +728,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.ActiveChunks;
         }
-        public override void SetSkyLight(Vector3 global, byte value)
+        public override void SetSkyLight(IntVec3 global, byte value)
         {
-            Chunk ch = this.GetChunk(global);
-            Vector3 loc = global.ToLocal();
+            var ch = this.GetChunk(global);
+            var loc = global.ToLocal();
             ch.SetSunlight(loc, value);
             ch.InvalidateLight(global);
             foreach(var n in global.GetNeighbors())
@@ -741,12 +741,12 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
             return;
         }
-        public override void SetBlockLight(Vector3 global, byte value)
+        public override void SetBlockLight(IntVec3 global, byte value)
         {
-            Chunk ch = this.GetChunk(global);
+            var ch = this.GetChunk(global);
             if (ch is null)
                 return;
-            Vector3 loc = global.ToLocal();
+            var loc = global.ToLocal();
             ch.SetBlockLight(loc, value);
             ch.InvalidateLight(global);
             foreach (var n in global.GetNeighbors())
@@ -757,15 +757,15 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return;
         }
 
-        readonly Queue<Dictionary<Vector3, byte>> SkyLightChanges = new();
-        public override void AddSkyLightChanges(Dictionary<Vector3, byte> changes)
+        readonly Queue<Dictionary<IntVec3, byte>> SkyLightChanges = new();
+        public override void AddSkyLightChanges(Dictionary<IntVec3, byte> changes)
         {
             this.SkyLightChanges.Enqueue(changes);
             this.ApplyLightChanges();
         }
 
-        readonly Queue<Dictionary<Vector3, byte>> BlockLightChanges = new();
-        public override void AddBlockLightChanges(Dictionary<Vector3, byte> changes)
+        readonly Queue<Dictionary<IntVec3, byte>> BlockLightChanges = new();
+        public override void AddBlockLightChanges(Dictionary<IntVec3, byte> changes)
         {
             this.BlockLightChanges.Enqueue(changes);
             this.ApplyLightChanges();

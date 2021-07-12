@@ -66,7 +66,7 @@ namespace Start_a_Town_
         public Camera Camera;
         public static float IconOffset = 0;
         public Biome Biome = new();
-        protected Queue<Vector3> RandomBlockUpdateQueue = new();
+        protected Queue<IntVec3> RandomBlockUpdateQueue = new();
         public LightingEngine LightingEngine;
         public IWorld World;
         public Dictionary<Vector2, Chunk> ActiveChunks;
@@ -75,7 +75,7 @@ namespace Start_a_Town_
         public ParticleManager ParticleManager;
         public RegionManager Regions;
         protected List<GameObject> CachedObjects = new();
-        protected Dictionary<IntVec3, BlockEntity> CachedBlockEntities = new Dictionary<IntVec3, BlockEntity>();
+        protected Dictionary<IntVec3, BlockEntity> CachedBlockEntities = new();
 
         public abstract Color GetAmbientColor();
         public abstract void SetAmbientColor(Color color);
@@ -629,11 +629,11 @@ namespace Start_a_Town_
 
         public abstract bool IsInBounds(Vector3 global);
 
-        public abstract void SetSkyLight(Vector3 global, byte value);
-        public abstract void SetBlockLight(Vector3 global, byte value);
+        public abstract void SetSkyLight(IntVec3 global, byte value);
+        public abstract void SetBlockLight(IntVec3 global, byte value);
 
-        public abstract void AddSkyLightChanges(Dictionary<Vector3, byte> List);
-        public abstract void AddBlockLightChanges(Dictionary<Vector3, byte> List);
+        public abstract void AddSkyLightChanges(Dictionary<IntVec3, byte> List);
+        public abstract void AddBlockLightChanges(Dictionary<IntVec3, byte> List);
         public abstract void ApplyLightChanges();
 
         /// <summary>

@@ -129,12 +129,12 @@ namespace Start_a_Town_
         }
         static public IEnumerable<Vector3> GetAdjacentLazy(this Vector3 global)
         {
-            yield return (global + new Vector3(1, 0, 0));
-            yield return (global - new Vector3(1, 0, 0));
-            yield return (global + new Vector3(0, 1, 0));
-            yield return (global - new Vector3(0, 1, 0));
-            yield return (global + new Vector3(0, 0, 1));
-            yield return (global - new Vector3(0, 0, 1));
+            yield return global + new Vector3(1, 0, 0);
+            yield return global - new Vector3(1, 0, 0);
+            yield return global + new Vector3(0, 1, 0);
+            yield return global - new Vector3(0, 1, 0);
+            yield return global + new Vector3(0, 0, 1);
+            yield return global - new Vector3(0, 0, 1);
         }
         static public IEnumerable<IntVec3> GetAdjacentLazy(this IntVec3 global)
         {

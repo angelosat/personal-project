@@ -12,7 +12,7 @@ namespace Start_a_Town_
     [Flags]
     public enum Edges { None = 0x0, West = 0x1, North = 0x2, East = 0x4, South = 0x8, All = 0xF }
     [Flags]
-    public enum VerticalEdges { None = 0x0, Top = 0x1, Bottom = 0x2, All = 0x3 }
+    public enum VerticalSides { None = 0x0, Top = 0x1, Bottom = 0x2, All = 0x3 }
     public class Cell : ISlottable
     {
         public string GetName()
@@ -54,8 +54,8 @@ namespace Start_a_Town_
             return
                 "Local: " + LocalCoords +
                 "\nTile ID: " + this.Block.Type +
-                "\nHorizontal Edges: " + HorizontalEdges +
-                "\nVertical Edges: " + VerticalEdges +
+                "\nHorizontal Sides: " + HorizontalSides +
+                "\nVertical Sides: " + VerticalSides +
                 "\nStyle: " + Variation +
                 "\nOrientation: " + Orientation +
                 "\nVisible: " + Visible;
@@ -105,15 +105,15 @@ namespace Start_a_Town_
             get { return this.ValidDiscovered[_Discovered] == 1; }
             set { this.ValidDiscovered[_Discovered] = value ? 1 : 0; }
         }
-        public Edges HorizontalEdges
+        public Edges HorizontalSides
         {
             get { return (Edges)this.ValidDiscovered[_HorizontalEdges]; }
             set { this.ValidDiscovered[_HorizontalEdges] = (int)value; }
 
         }
-        public VerticalEdges VerticalEdges
+        public VerticalSides VerticalSides
         {
-            get { return (VerticalEdges)this.ValidDiscovered[_VerticalEdges]; }
+            get { return (VerticalSides)this.ValidDiscovered[_VerticalEdges]; }
             set {this.ValidDiscovered[_VerticalEdges] = (int)value; }
         }
 
@@ -155,9 +155,9 @@ namespace Start_a_Town_
         {
             get { return this.Block.GetFertility(this); }
         }
-        public Vector3 LocalCoords
+        public IntVec3 LocalCoords
         {
-            get { return new Vector3(X, Y, Z); }
+            get { return new IntVec3(X, Y, Z); }
             set
             {
                 X = (byte)value.X;
@@ -173,7 +173,7 @@ namespace Start_a_Town_
         {
             get
             {
-                return (byte)(((int)this.VerticalEdges << 4) + this.HorizontalEdges);
+                return (byte)(((int)this.VerticalSides << 4) + this.HorizontalSides);
             }
         }
 
@@ -183,8 +183,8 @@ namespace Start_a_Town_
         public Cell()
         {
             this.Valid = true;
-            this.HorizontalEdges = Edges.All; // 4 bytes
-            this.VerticalEdges = VerticalEdges.All; // 4 bytes
+            this.HorizontalSides = Edges.All; // 4 bytes
+            this.VerticalSides = VerticalSides.All; // 4 bytes
         }
         public Cell(int localX, int localY, int localZ):this()
         {
@@ -193,9 +193,9 @@ namespace Start_a_Town_
             this.Z = (byte)localZ;
         }
 
-        public Vector3 GetGlobalCoords(Chunk chunk)
+        public IntVec3 GetGlobalCoords(Chunk chunk)
         {
-            return new Vector3(chunk.Start.X + X, chunk.Start.Y + Y, Z);
+            return new IntVec3(chunk.Start.X + X, chunk.Start.Y + Y, Z);
         }
         public bool IsSolid()
         {

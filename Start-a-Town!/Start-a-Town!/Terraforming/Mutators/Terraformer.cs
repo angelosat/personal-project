@@ -57,7 +57,7 @@ namespace Start_a_Town_
         public virtual Block.Types Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r) { return c.Block.Type; }
         public virtual void Initialize(IWorld w, Cell c, int x, int y, int z, double g) { }
         public virtual void Finally(Chunk chunk) { }
-        internal virtual void Finally(Chunk newChunk, Dictionary<Vector3, double> gradients)
+        internal virtual void Finally(Chunk newChunk, Dictionary<IntVec3, double> gradients)
         {
             this.Finally(newChunk);
         }

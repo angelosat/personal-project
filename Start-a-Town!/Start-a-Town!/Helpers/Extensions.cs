@@ -202,7 +202,10 @@ namespace Start_a_Town_
         {
             return box.Min.GetBox(box.Max);
         }
-        
+        static public List<IntVec3> GetBoxIntVec3(this BoundingBox box)
+        {
+            return ((IntVec3)box.Min).GetBox(box.Max);
+        }
         static public BoundingBox GetBoundingBox(this Vector3 blockCoords)
         {
             blockCoords = blockCoords.SnapToBlock(); //necessary? do i need this?
@@ -236,6 +239,7 @@ namespace Start_a_Town_
             }
             return list;
         }
+
         static public List<IntVec3> GetBox(this IntVec3 begin, IntVec3 end)
         {
             var xmin = Math.Min(begin.X, end.X);

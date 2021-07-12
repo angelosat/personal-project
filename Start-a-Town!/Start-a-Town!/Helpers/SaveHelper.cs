@@ -414,6 +414,14 @@ namespace Start_a_Town_
                 list.Add((Vector3)pos.Value);
             return list;
         }
+        public static List<IntVec3> Load(this List<IntVec3> list, SaveTag tag)
+        {
+            list.Clear();
+            var positions = tag.Value as List<SaveTag>;
+            foreach (var pos in positions)
+                list.Add((Vector3)pos.Value);
+            return list;
+        }
         public static T LoadIntVecs<T>(this T list, SaveTag tag) where T : ICollection<IntVec3>, new()
         {
             list.Clear();

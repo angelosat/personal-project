@@ -1033,6 +1033,7 @@
     <Compile Include="UI\RandomizeButton.cs" />
     <Compile Include="UI\Settings\CameraSettings.cs" />
     <Compile Include="UI\Settings\ControlsSettings.cs" />
+    <Compile Include="UI\Settings\GameSettings.cs" />
     <Compile Include="UI\Settings\InterfaceSettings.cs" />
     <Compile Include="UI\Settings\VideoSettings.cs" />
     <Compile Include="UI\Settings\GraphicsSettings.cs" />

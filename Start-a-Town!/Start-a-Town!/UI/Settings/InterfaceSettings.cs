@@ -1,17 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.UI;
 
-namespace Start_a_Town_.UI.Settings
+namespace Start_a_Town_
 {
-    class InterfaceSettings : GroupBox
+    class InterfaceSettings : GameSettings
     {
-        readonly SliderNew Sldr_UIScale, Sldr_TooltipDelay;
-        readonly CheckBox 
-         Chkbox_MouseTooltip;
-        readonly Label Lbl_UIScale;
+        SliderNew Sldr_UIScale, Sldr_TooltipDelay;
+        CheckBox Chkbox_MouseTooltip;
+        Label Lbl_UIScale;
+        GroupBox _Gui;
+        internal GroupBox Gui => this._Gui ??= this.CreateGui();
 
-        public InterfaceSettings()
+        GroupBox CreateGui()
         {
-            this.Name = "Interface";
+            var box = new GroupBox();
+            box.Name = "Interface";
 
             this.Lbl_UIScale = new Label(Vector2.Zero, "UI Scale: " + UIManager.Scale);
             this.Sldr_UIScale = new SliderNew(new Vector2(0, Lbl_UIScale.Bottom), 100, 1, 2, 0.1f, UIManager.Scale) { Name = "UI Scale: {0}" };
@@ -23,10 +26,11 @@ namespace Start_a_Town_.UI.Settings
             this.Chkbox_MouseTooltip.Checked = TooltipManager.MouseTooltips;
             this.Chkbox_MouseTooltip.HoverText = "Anchor tooltips to the mouse.";
 
-            this.Controls.Add(Lbl_UIScale, Sldr_UIScale, Chkbox_MouseTooltip, lbl_delay, Sldr_TooltipDelay);
+            box.Controls.Add(Lbl_UIScale, Sldr_UIScale, Chkbox_MouseTooltip, lbl_delay, Sldr_TooltipDelay);
+            return box;
         }
 
-        public void Apply()
+        internal override void Apply()
         {
             UIManager.Scale = Sldr_UIScale.Value;
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Interface").GetOrCreateElement("UIScale").Value = UIManager.Scale.ToString();

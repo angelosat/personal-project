@@ -1,19 +1,25 @@
-﻿namespace Start_a_Town_.UI.Settings
+﻿using Start_a_Town_.UI;
+
+namespace Start_a_Town_
 {
-    class CameraSettings : GroupBox
+    class CameraSettings : GameSettings
     {
         CheckBox Chk_Fog;
         bool Changed;
+        GroupBox _Gui;
+        internal GroupBox Gui => this._Gui ??= this.CreateGui();
 
-        public CameraSettings()
+        GroupBox CreateGui()
         {
-            this.Name = "Camera";
+            var box = new GroupBox();
+            box.Name = "Camera";
 
             this.Chk_Fog = new CheckBox("Fog", Camera.Fog);
-            this.Controls.Add(this.Chk_Fog);
+            box.Controls.Add(this.Chk_Fog);
+            return box;
         }
 
-        public void Apply()
+        internal override void Apply()
         {
             if (!Changed)
                 return;

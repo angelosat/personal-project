@@ -28,7 +28,7 @@ namespace Start_a_Town_.UI
                 this.ClientSize = new Rectangle(0, 0, Width - 2 * UIManager.BorderPx, Height - 2 * UIManager.BorderPx);
             }
         }
-
+        
         public Panel(Vector2 location)
             : base(location)
         {

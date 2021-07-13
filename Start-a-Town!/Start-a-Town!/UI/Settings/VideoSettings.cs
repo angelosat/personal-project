@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.UI;
 
-namespace Start_a_Town_.UI.Settings
+namespace Start_a_Town_
 {
-    class VideoSettings
+    class VideoSettings : GameSettings
     {
         ComboBoxNewNew<DisplayMode> Combo_Resolutions;
         CheckBox Chk_Fullscreen;
@@ -35,7 +36,7 @@ namespace Start_a_Town_.UI.Settings
             box.Controls.Add(this.Combo_Resolutions, this.Chk_Fullscreen);
             return box;
         }
-        internal void Apply()
+        internal override void Apply()
         {
             Game1.Instance.graphics.PreferredBackBufferHeight = this.TempResolution.Height;
             Game1.Instance.graphics.PreferredBackBufferWidth = this.TempResolution.Width;

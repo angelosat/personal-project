@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.GameModes;
+using System.Linq;
 
 namespace Start_a_Town_.UI
 {
@@ -10,23 +9,23 @@ namespace Start_a_Town_.UI
         MessageBox quitbox;
         public MainMenuWindow(Game1 game)
         {
-            AutoSize = true;
-            Closable = false;
-            Panel panel = new Panel() { AutoSize = true, Color = Color.Black };
-            Button newgame = new Button("Play", 100) { LeftClickAction = newgame_Click };
-            Button load = new Button("Load", 100) { LeftClickAction = Load };
-            Button online = new Button("Multiplayer", 100) { LeftClickAction = online_LeftClick };
-            Button settings = new Button("Settings", 100) { LeftClickAction = settings_Click };
-            Button quit = new Button("Quit", 100) { LeftClickAction = quit_Click };
+            this.AutoSize = true;
+            this.Closable = false;
+            Panel panel = new() { AutoSize = true, Color = Color.Black };
+            Button newgame = new("Play", this.Newgame, 100);
+            Button load = new("Load", this.Load, 100);
+            Button online = new("Multiplayer", this.Online, 100);
+            Button settings = new("Settings", this.Settings, 100);
+            Button quit = new("Quit", this.Quit, 100);
 
             panel.AddControlsVertically(newgame, load, online, settings, quit);
-            
-            Client.Controls.Add(panel);
+
+            this.Client.Controls.Add(panel);
             this.SnapToScreenCenter();
-            Title = "Start-a-Town!";
+            this.Title = "Start-a-Town!";
         }
 
-        void online_LeftClick()
+        void Online()
         {
             if (GameMode.Registry.Count == 1)
             {
@@ -35,19 +34,18 @@ namespace Start_a_Town_.UI
             }
         }
 
-
-        void settings_Click()
+        void Settings()
         {
             SettingsWindow.Instance.ShowFrom(this);
         }
 
-        void quit_Click()
+        void Quit()
         {
-            quitbox = new MessageBox("Quit game", "Are you sure you want to quit?", new ContextAction(() => "Yes", () => Game1.Instance.Exit()), new ContextAction(() => "No", () => { }));
-                quitbox.ShowDialog();
+            this.quitbox = new MessageBox("Quit game", "Are you sure you want to quit?", new ContextAction(() => "Yes", () => Game1.Instance.Exit()), new ContextAction(() => "No", () => { }));
+            this.quitbox.ShowDialog();
         }
 
-        void newgame_Click()
+        void Newgame()
         {
             GameMode.Current = GameMode.Registry.First();
             this.Hide();
@@ -55,16 +53,16 @@ namespace Start_a_Town_.UI
             var client = new GroupBox();
             client.AddControlsVertically(
                     GameMode.Registry.First().NewGame(),
-                    new Button("Back")
-                    {
-                        LeftClickAction = () => { this.Show(); client.GetWindow().Hide(); }
-                    });
+                    new Button("Back", () => { this.Show(); client.GetWindow().Hide(); }));
+
             var win = new Window("New Game", client)
             {
                 Movable = false,
                 Closable = false
-            }.AnchorToScreenCenter().Show();
+            }
+            .AnchorToScreenCenter().Show();
         }
+
         private void Load()
         {
             if (GameMode.Registry.Count == 1)

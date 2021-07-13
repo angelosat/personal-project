@@ -123,6 +123,14 @@ namespace Start_a_Town_
         {
             return control.ToWindow(title, movable: false).SetLocation(screenLoc).HideOnAnyClick();
         }
+        static public GroupBox Wrap(params ButtonBase[] controls)
+        {
+            return Wrap(controls as IEnumerable<ButtonBase>);
+        }
+        static public GroupBox Wrap(int width, params ButtonBase[] controls)
+        {
+            return Wrap(controls, width);
+        }
         static public GroupBox Wrap(IEnumerable<ButtonBase> labels, int width = int.MaxValue)
         {
             var box = new GroupBox();

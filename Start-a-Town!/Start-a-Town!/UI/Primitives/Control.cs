@@ -813,7 +813,7 @@ namespace Start_a_Town_.UI
             if (this.AutoSize)
             {
                 this.ClientSize = PreferredClientSize;
-                ResizeToClientSize();
+                ConformToClientSize();
             }
             if (Parent != null)
                 Parent.OnControlAdded(control);
@@ -821,7 +821,7 @@ namespace Start_a_Town_.UI
             this.ControlsChangedAction();
         }
 
-        public void ResizeToClientSize()
+        public void ConformToClientSize()
         {
             if (this.BackgroundStyle != null)
             {
@@ -836,7 +836,7 @@ namespace Start_a_Town_.UI
             {
                 ClientSize = PreferredClientSize;
 
-                ResizeToClientSize();
+                ConformToClientSize();
             }
             if (Parent != null)
                 Parent.OnControlRemoved(control);

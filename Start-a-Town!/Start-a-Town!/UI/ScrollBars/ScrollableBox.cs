@@ -103,7 +103,7 @@ namespace Start_a_Town_.UI
         {
             this.Client.Controls.AlignVertically();
             this.Client.ClientSize = this.Client.PreferredClientSize;
-            this.Client.ResizeToClientSize();
+            this.Client.ConformToClientSize();
             this.Remeasure();
         }
     }

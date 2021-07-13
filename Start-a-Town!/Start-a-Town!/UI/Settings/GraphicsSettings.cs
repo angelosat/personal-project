@@ -1,8 +1,9 @@
 ﻿using Start_a_Town_.Particles;
+using Start_a_Town_.UI;
 
-namespace Start_a_Town_.UI.Settings
+namespace Start_a_Town_
 {
-    class GraphicsSettings
+    class GraphicsSettings : GameSettings
     {
         ComboBoxNewNew<ParticleDensityLevel> Combo_Particles;
         bool Changed;
@@ -24,7 +25,7 @@ namespace Start_a_Town_.UI.Settings
             box.Controls.Add(this.Combo_Particles);
             return box;
         }
-        public void Apply()
+        internal override void Apply()
         {
             if (!Changed)
                 return;

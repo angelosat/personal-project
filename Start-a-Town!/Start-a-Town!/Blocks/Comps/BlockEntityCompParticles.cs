@@ -4,10 +4,10 @@ using Start_a_Town_.Particles;
 
 namespace Start_a_Town_
 {
-    class EntityCompParticles : BlockEntityComp
+    class BlockEntityCompParticles : BlockEntityComp
     {
         readonly HashSet<ParticleEmitter> Emitters = new();
-        public EntityCompParticles(params ParticleEmitter[] emitters)
+        public BlockEntityCompParticles(params ParticleEmitter[] emitters)
         {
             for (int i = 0; i < emitters.Length; i++)
             {

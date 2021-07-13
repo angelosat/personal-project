@@ -49,6 +49,5 @@ namespace Start_a_Town_
                 max = (int)Math.Max(max, Math.Ceiling(UI.UIManager.Font.MeasureString(item).X));
             return max;
         }
-
     }
 }

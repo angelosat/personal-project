@@ -415,7 +415,7 @@ namespace Start_a_Town_
             for (int i = 0; i < count; i++)
             {
                 var kv = entities.ElementAt(i);
-                if (kv.Value.HasComp<EntityCompRefuelable>())
+                if (kv.Value.HasComp<BlockEntityCompRefuelable>())
                     yield return kv;
             }
         }

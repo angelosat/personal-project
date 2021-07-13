@@ -12,7 +12,7 @@ namespace Start_a_Town_
             {
                 if (!actor.CanReserve(destination.Key))
                     continue;
-                var refComp = destination.Value.GetComp<EntityCompRefuelable>();
+                var refComp = destination.Value.GetComp<BlockEntityCompRefuelable>();
                 if (refComp?.Fuel.Percentage > .5f)
                     continue;
                 var fuelProgress = refComp.Fuel;
@@ -40,7 +40,7 @@ namespace Start_a_Town_
             }
             return null;
         }
-        static IEnumerable<KeyValuePair<GameObject, int>> CollectUntilFull(Actor actor, EntityCompRefuelable refComp, GameObject center, float fuelMissing, HashSet<GameObject> handled)
+        static IEnumerable<KeyValuePair<GameObject, int>> CollectUntilFull(Actor actor, BlockEntityCompRefuelable refComp, GameObject center, float fuelMissing, HashSet<GameObject> handled)
         {
             var similarNearby = center.Map.GetNearbyObjectsNew(center.Global, r => r <= 5, f => f.IsFuel);
             int stackEnduranceLimit = actor.GetHaulStackLimitFromEndurance(center);

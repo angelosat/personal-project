@@ -14,10 +14,10 @@ namespace Start_a_Town_.Blocks
         public MapBase Map;
         public bool Exists => this.Map is not null;
         public IntVec3 OriginGlobal;
-        EntityCompCollection<BlockEntityComp> _Comps = new();
+        BlockEntityCompCollection<BlockEntityComp> _Comps = new();
         public ICollection<BlockEntityComp> Comps { get {
                 return this._Comps;
-            } private set { this._Comps = value as EntityCompCollection<BlockEntityComp>; } }
+            } private set { this._Comps = value as BlockEntityCompCollection<BlockEntityComp>; } }
         
         public virtual void Tick(MapBase map, IntVec3 global)
         {

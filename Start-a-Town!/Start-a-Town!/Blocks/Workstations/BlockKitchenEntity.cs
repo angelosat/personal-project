@@ -8,7 +8,7 @@ namespace Start_a_Town_
         {
             this.Comps.Add(new BlockEntityCompWorkstation(IsWorkstation.Types.Baking, IsWorkstation.Types.PlantProcessing));
             this.Comps.Add(new BlockEntityCompDeconstructible());
-            this.Comps.Add(new EntityCompRefuelable());
+            this.Comps.Add(new BlockEntityCompRefuelable());
         }
         public override object Clone()
         {

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class EntityCompCollection<T> : List<T> where T : IBlockEntityComp
+    public class BlockEntityCompCollection<T> : List<T> where T : IBlockEntityComp
     {
         public virtual SaveTag Save(string name)
         {

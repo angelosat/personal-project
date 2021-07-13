@@ -254,13 +254,13 @@ namespace Start_a_Town_
         {
             if (this.Reaction.Fuel == 0)
                 return true;
-            return buildSite.GetComp<EntityCompRefuelable>()?.Fuel.Value > this.Reaction.Fuel;
+            return buildSite.GetComp<BlockEntityCompRefuelable>()?.Fuel.Value > this.Reaction.Fuel;
         }
         internal bool IsCompletable(Blocks.BlockEntity buildSite)
         {
             if (this.Reaction.Fuel == 0)
                 return true;
-            return buildSite.GetComp<EntityCompRefuelable>()?.Fuel.Value > this.Reaction.Fuel;
+            return buildSite.GetComp<BlockEntityCompRefuelable>()?.Fuel.Value > this.Reaction.Fuel;
         }
         internal bool IsCompletable()
         {

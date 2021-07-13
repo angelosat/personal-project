@@ -13,7 +13,7 @@ namespace Start_a_Town_
         {
             bool failOnInvalidRefuelable()
             {
-                return !this.Actor.Map.GetBlockEntity(this.RefualableGlobal)?.GetComp<EntityCompRefuelable>()?.Accepts(this.Fuel) ?? true;
+                return !this.Actor.Map.GetBlockEntity(this.RefualableGlobal)?.GetComp<BlockEntityCompRefuelable>()?.Accepts(this.Fuel) ?? true;
             };
             var extract = BehaviorHelper.ExtractNextTargetAmount(SourceIndex);
             yield return extract;

@@ -7,7 +7,7 @@ namespace Start_a_Town_.UI
     class LobbyWindow : Window
     {
         Panel Panel_Players, Panel_Chat, Panel_Input;
-        ListBox<PlayerData, Label> Players;
+        ListBoxNew<PlayerData, Label> Players;
         TextBox Txt_Input;
         public ConsoleBoxAsync Console;
         static LobbyWindow _Instance;
@@ -22,7 +22,7 @@ namespace Start_a_Town_.UI
             Movable = false;
 
             Panel_Players = new Panel() { Dimensions = new Vector2(100, 200) };
-            Players = new ListBox<PlayerData, Label>(Panel_Players.ClientSize);
+            Players = new ListBoxNew<PlayerData, Label>(Panel_Players.ClientSize);
             Panel_Players.Controls.Add(Players);
 
             Panel_Chat = new Panel(Panel_Players.TopRight) { Dimensions = new Vector2(400, 200) };

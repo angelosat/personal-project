@@ -19,7 +19,7 @@ namespace Start_a_Town_.Animations
         public AnimationStates State;
         public WarpMode WarpMode;
      
-        public Dictionary<float, Action<GameObject>> Actions = new Dictionary<float, Action<GameObject>>();
+        public Dictionary<float, Action<GameObject>> Actions = new();
 
         public AnimationClip(WarpMode loop, params Keyframe[] kfs)
             : base()
@@ -51,10 +51,6 @@ namespace Start_a_Town_.Animations
         public Keyframe this[int id]
         {
             get { return this.Keyframes[id]; }
-        }
-
-        public void Update(Bone bone)
-        {
         }
 
         public void GetValue(float frame, float fade, out Vector2 offset, out float angle)
@@ -96,7 +92,5 @@ namespace Start_a_Town_.Animations
             angle = this.WarpMode == WarpMode.Loop ? this[0].Angle : this[count - 1].Angle;
             offset = this.WarpMode == WarpMode.Loop ? this[0].Offset : this[count - 1].Offset;
         }
-
-        public int Count { get { return this.Keyframes.Count; } }
     }
 }

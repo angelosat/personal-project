@@ -478,9 +478,9 @@
     <Compile Include="Blocks\Comps\BlockEntityCompSwitchable.cs" />
     <Compile Include="Blocks\Comps\BlockEntityCompWorkstation.cs" />
     <Compile Include="Blocks\Comps\BlockEntityLuminance.cs" />
-    <Compile Include="Blocks\Comps\EntityCompCollection.cs" />
-    <Compile Include="Blocks\Comps\EntityCompParticles.cs" />
-    <Compile Include="Blocks\Comps\EntityCompRefuelable.cs" />
+    <Compile Include="Blocks\Comps\BlockEntityCompCollection.cs" />
+    <Compile Include="Blocks\Comps\BlockEntityCompParticles.cs" />
+    <Compile Include="Blocks\Comps\BlockEntityCompRefuelable.cs" />
     <Compile Include="Blocks\Comps\IBlockEntityComp.cs" />
     <Compile Include="Blocks\Comps\IBlockEntityCompContainer.cs" />
     <Compile Include="Blocks\Comps\IPowerSource.cs" />
@@ -758,7 +758,6 @@
     <Compile Include="GameModes\StaticMaps\StaticMapLoader.cs" />
     <Compile Include="GameModes\StaticMaps\StaticWorld.cs" />
     <Compile Include="GameModes\StaticMaps\UI\PanelMapSizes.cs" />
-    <Compile Include="GameModes\StaticMaps\UI\StaticMapBrowser.cs" />
     <Compile Include="Blocks\Workstations\BlockWorkstation.cs" />
     <Compile Include="Blocks\Workstations\BlockEntityWorkstation.cs" />
     <Compile Include="Modules\Towns\Constructions\Categories\ConstructionCategoryDoors.cs" />
@@ -798,7 +797,6 @@
     <Compile Include="Modules\Packets\PacketEntityDesignation.cs" />
     <Compile Include="Modules\Packets\PacketZoneDelete.cs" />
     <Compile Include="Modules\Packets\PacketZoneDesignation.cs" />
-    <Compile Include="Modules\Towns\Stockpiles\UI\StockpilesListUI.cs" />
     <Compile Include="Modules\Towns\Stockpiles\UI\UIStockpileInventoryIcons.cs" />
     <Compile Include="Modules\Towns\Stockpiles\IStorage.cs" />
     <Compile Include="Modules\Towns\Stockpiles\StockpileAIHelper.cs" />

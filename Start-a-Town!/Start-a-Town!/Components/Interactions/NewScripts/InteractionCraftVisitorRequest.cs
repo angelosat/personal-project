@@ -77,7 +77,7 @@ namespace Start_a_Town_
             var reaction = order.Reaction;
             var product = reaction.Products.First().Make(actor as Actor, reaction, ingr);
             product.ConsumeMaterials();
-            actor.Map.GetBlockEntity(global)?.GetComp<EntityCompRefuelable>()?.ConsumePower(actor.Map, order.Reaction.Fuel);
+            actor.Map.GetBlockEntity(global)?.GetComp<BlockEntityCompRefuelable>()?.ConsumePower(actor.Map, order.Reaction.Fuel);
 
             actor.Net.Map.EventOccured(Components.Message.Types.CraftingComplete, actor, global);
 

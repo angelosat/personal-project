@@ -106,9 +106,6 @@ namespace Start_a_Town_.Components
             StatsComponent statsComp;
             if (!obj.TryGetComponent<StatsComponent>("Stats", out statsComp))
                 return stats;
-            //foreach (var stat in statsComp.Stats)
-            //    if (Stat.GetStat(stat.Key).Group == group)
-            //        stats[stat.Key] = stat.Value;
             return new StatCollection(stats.Where(stat => Stat.GetStat(stat.Key).Group == group));
         }
 

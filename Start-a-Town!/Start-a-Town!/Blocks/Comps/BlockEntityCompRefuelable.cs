@@ -9,10 +9,10 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    class EntityCompRefuelable : BlockEntityComp, IPowerSource
+    class BlockEntityCompRefuelable : BlockEntityComp, IPowerSource
     {
         static int p;
-        static EntityCompRefuelable()
+        static BlockEntityCompRefuelable()
         {
             p = Network.RegisterPacketHandler(ChangeFilters);
         }
@@ -29,8 +29,8 @@ namespace Start_a_Town_
             var entity = r.ReadVector3();
             var nodes = r.ReadIntArray();
             var items = r.ReadIntArray();
-            net.Map.GetBlockEntity(entity).GetComp<EntityCompRefuelable>().ToggleItemFiltersCategories(nodes);
-            net.Map.GetBlockEntity(entity).GetComp<EntityCompRefuelable>().ToggleItemFilters(items);
+            net.Map.GetBlockEntity(entity).GetComp<BlockEntityCompRefuelable>().ToggleItemFiltersCategories(nodes);
+            net.Map.GetBlockEntity(entity).GetComp<BlockEntityCompRefuelable>().ToggleItemFilters(items);
             if (net is Server)
                 ChangeFiltersSend(net, entity, nodes, items);
         }
@@ -38,7 +38,7 @@ namespace Start_a_Town_
         public Progress Fuel = new();
         readonly List<ItemDefMaterialAmount> StoredFuelItems = new();
         
-        public EntityCompRefuelable(int storedFuelCapacity = 100)
+        public BlockEntityCompRefuelable(int storedFuelCapacity = 100)
         {
             this.Fuel.Max = storedFuelCapacity;
         }
@@ -132,10 +132,10 @@ namespace Start_a_Town_
             bar.TextFunc = () => bar.Percentage.ToString("##0%");
             info.AddInfo(bar);
 
-            var boxcontents = new ListBox<ItemDefMaterialAmount, Label>(150, Label.DefaultHeight * 3);
+            var boxcontents = new ListBoxNew<ItemDefMaterialAmount, Label>(150, Label.DefaultHeight * 3);
             void refreshContents()
             {
-                boxcontents.Build(this.StoredFuelItems);
+                boxcontents.AddItems(this.StoredFuelItems);
             }
             refreshContents();
             boxcontents.OnGameEventAction = e =>

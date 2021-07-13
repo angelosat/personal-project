@@ -70,6 +70,50 @@ namespace Start_a_Town_.UI
                 this.ListControl.TopLevelControl.Hide();
             }
         }
+
+        public ComboBoxNewNew(IEnumerable<T> list, int width, string label, Func<T, string> nameGetter, Func<string> currentlySelectedGetter, Action<T> callBack)
+        {
+            this.Button = new Button(() =>
+                $"{label}: {currentlySelectedGetter?.Invoke() ?? "undefined"}", BtnPress, width);
+
+            var maxVisibleItems = list.Count();
+            var height = maxVisibleItems * Button.DefaultHeight;
+
+            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollableBoxNew.ScrollModes.None)
+                .AddItems(list);
+            this.ListControl.ToPanel()
+                .HideOnAnyClick();
+
+            this.Controls.Add(this.Button);
+
+            void onSelect(T i)
+            {
+                callBack(i);
+                this.ListControl.Hide();
+            }
+        }
+        public ComboBoxNewNew(IEnumerable<T> list, int width, string label, Func<T, string> nameGetter, Func<T> currentlySelectedGetter, Action<T> callBack)
+        {
+            this.Button = new Button(() =>
+                $"{label}: {(currentlySelectedGetter() is T item ? nameGetter(item) : "none")}", BtnPress, width);
+
+            var maxVisibleItems = list.Count();
+            var height = maxVisibleItems * Button.DefaultHeight;
+
+            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollableBoxNew.ScrollModes.None)
+                .AddItems(list);
+            this.ListControl.ToPanel()
+                .HideOnAnyClick();
+
+            this.Controls.Add(this.Button);
+
+            void onSelect(T i)
+            {
+                callBack(i);
+                this.ListControl.Hide();
+            }
+        }
+
         private void BtnPress()
         {
             if (this.ItemsGetter is not null)

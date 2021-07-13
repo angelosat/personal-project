@@ -7,9 +7,9 @@ namespace Start_a_Town_.UI.Settings
 {
     class VideoSettings : GroupBox
     {
-        ComboBox<DisplayMode> Combo_Resolutions;
+        ComboBoxNewNew<DisplayMode> Combo_Resolutions;
         CheckBox Chk_Fullscreen;
-        bool Changed;
+        Rectangle TempResolution;
 
         public VideoSettings()
         {
@@ -18,44 +18,30 @@ namespace Start_a_Town_.UI.Settings
             var modes = Game1.Instance.graphics.GraphicsDevice.Adapter.SupportedDisplayModes;
 
             var colormodes = modes.TakeWhile(mode => mode.Format.ToString() == "Color");
-            List<DisplayMode> gamw = colormodes.ToList();
 
-            Label label_resolutions = new Label(Vector2.Zero, "Resolution", HorizontalAlignment.Left);
-            string currentResolution = Game1.Instance.Window.ClientBounds.Width + "x" + Game1.Instance.Window.ClientBounds.Height; 
 
-            ListBox<DisplayMode, Button> resolutions = new ListBox<DisplayMode, Button>(new Rectangle(0, 0, 150, 10 * Button.DefaultHeight));
-            resolutions.Build(colormodes, foo => foo.Width.ToString() + "x" + foo.Height.ToString());
-            Combo_Resolutions = new ComboBox<DisplayMode>(resolutions, res => res.Width.ToString() + "x" + res.Height.ToString()) { Location = label_resolutions.BottomLeft, Text = currentResolution };
-            this.Combo_Resolutions.ItemChangedFunction = OnResolutionChanged;
+            this.TempResolution = Game1.Instance.Window.ClientBounds;
+            Rectangle getCurrentClientBounds() => this.TempResolution;
+            string getClientBoundsString(Rectangle dm) => $"{dm.Width} x {dm.Height}";
+            this.Combo_Resolutions = new ComboBoxNewNew<DisplayMode>(
+               colormodes, 150, "Resolution",
+               res => $"{res.Width} x {res.Height}",
+               () => getClientBoundsString(getCurrentClientBounds()), res => this.TempResolution = new Rectangle(0, 0, res.Width, res.Height));
 
-            Chk_Fullscreen = new CheckBox("Fullscreen", new Vector2(0, Combo_Resolutions.Bottom));
-            Chk_Fullscreen.Checked = Game1.Instance.graphics.IsFullScreen;
-            Chk_Fullscreen.LeftClickAction = () => this.Changed = true;
+            this.Chk_Fullscreen = new CheckBox("Fullscreen", new Vector2(0, Combo_Resolutions.Bottom));
+            this.Chk_Fullscreen.Checked = Game1.Instance.graphics.IsFullScreen;
 
-            this.Controls.Add(Combo_Resolutions, label_resolutions, Chk_Fullscreen);
+            this.Controls.Add(this.Combo_Resolutions, this.Chk_Fullscreen);
         }
 
-        private void OnResolutionChanged(DisplayMode obj)
+        internal void Apply()
         {
-            this.Changed = true;
-        }
+            Game1.Instance.graphics.PreferredBackBufferHeight = this.TempResolution.Height;
+            Game1.Instance.graphics.PreferredBackBufferWidth = this.TempResolution.Width;
 
-        public void Apply()
-        {
-            if (!Changed)
-                return;
-            this.Changed = false;
-            DisplayMode displayMode = Combo_Resolutions.SelectedItem;
-            if (displayMode != null)
-            {
-                Game1.Instance.graphics.PreferredBackBufferHeight = displayMode.Height;
-                Game1.Instance.graphics.PreferredBackBufferWidth = displayMode.Width;
-
-                Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Width").Value = displayMode.Width.ToString();
-                Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Height").Value = displayMode.Height.ToString();
-            }
+            Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Width").Value = this.TempResolution.Width.ToString();
+            Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Height").Value = this.TempResolution.Height.ToString();
             Game1.Instance.graphics.IsFullScreen = this.Chk_Fullscreen.Checked;
-            Combo_Resolutions.SelectedItem = null;
             Game1.Instance.graphics.ApplyChanges();
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Fullscreen").Value = this.Chk_Fullscreen.Checked.ToString();
             Engine.Config.Save("config.xml");

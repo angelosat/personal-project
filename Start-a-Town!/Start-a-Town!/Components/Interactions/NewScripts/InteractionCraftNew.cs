@@ -79,7 +79,7 @@ namespace Start_a_Town_.Crafting
             actor.AwardSkillXP(reaction.CraftSkill, skillAwardAmount);
 
             product.ConsumeMaterials();
-            actor.Map.GetBlockEntity(global)?.GetComp<EntityCompRefuelable>()?.ConsumePower(actor.Map, order.Reaction.Fuel);
+            actor.Map.GetBlockEntity(global)?.GetComp<BlockEntityCompRefuelable>()?.ConsumePower(actor.Map, order.Reaction.Fuel);
 
             actor.Net.Map.EventOccured(Components.Message.Types.CraftingComplete, actor, global);
 

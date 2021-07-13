@@ -8,16 +8,15 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
-    class UINewGame : GroupBox
+    class GuiNewGame : GroupBox
     {
         public Action<IWorld> Callback { get; set; }
         TextBox Txt_Seed;
-        Panel
-            Panel_Main;
-        GroupBox 
-            Tab_World;
+        Panel Panel_Main;
+        GroupBox Tab_World;
         private StaticMap.MapSize SelectedSize;
-        public UINewGame()
+
+        public GuiNewGame()
         {
             AutoSize = true;
 
@@ -117,7 +116,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             Task.Factory.StartNew(() =>
             {
-
                 int chunksCount = map.Size.Chunks * map.Size.Chunks;
                 int maxTasks = chunksCount * 2;
                 map.GenerateWithNotificationsNew(loadingDialog.Refresh);
@@ -129,9 +127,11 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 map.CameraRecenter();
 
                 Net.Server.InstantiateMap(map); // is this needed??? YES!!! it enumerates all existing entities in the network
+                foreach (var a in actors)
+                    map.Net.Instantiate(a);
                 map.SpawnStartingActors(actors);
 
-                Net.Client.Instance.Connect(localHost, "host", a => { LobbyWindow.Instance.Console.Write("Connected to " + localHost); });
+                Net.Client.Instance.Connect(localHost, "host", a => { LobbyWindow.Instance.Console.Write("Connected to " + localHost); }); // TODO dont manipulate the gui in concurrent threads!!!!!
 
                 loadingDialog.Close();
             });

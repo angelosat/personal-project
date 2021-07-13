@@ -88,7 +88,7 @@ namespace Start_a_Town_.UI
                 control.Parent = Parent;
                 Parent.OnControlAdded(control);
             }
-            this.Parent.Validate();
+            //this.Parent.Validate();
         }
 
         public new void Insert(int index, Control control)

@@ -77,7 +77,7 @@ namespace Start_a_Town_.GameModes
         internal virtual void Update(Server server) { }
 
         internal abstract Control Load();
-        internal virtual Control NewGame() { return null; }
+        internal virtual Control GetNewGameGui() { return null; }
 
         internal virtual void ChunkReceived(Server server, int playerid, Vector2 vec) { }
         internal virtual void HandleEvent(IObjectProvider net, GameEvent e) { }

@@ -578,7 +578,7 @@
     <Compile Include="UI\Hud\QuickButtonBar.cs" />
     <Compile Include="UI\Hud\UIToolHelp.cs" />
     <Compile Include="GameEvents\EventBlocksChanged.cs" />
-    <Compile Include="GameModes\StaticMaps\Screens\NewGame\UINewGame.cs" />
+    <Compile Include="GameModes\StaticMaps\Screens\NewGame\GuiNewGame.cs" />
     <Compile Include="Modules\Towns\Rooms\RoomManager.cs" />
     <Compile Include="GameModes\StaticMaps\SaveFile.cs" />
     <Compile Include="GameModes\StaticMaps\Dialogs\UIDialogLoad.cs" />

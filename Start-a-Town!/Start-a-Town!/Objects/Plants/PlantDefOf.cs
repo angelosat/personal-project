@@ -38,11 +38,11 @@ namespace Start_a_Town_
 
             var bush = PlantProperties.Berry.CreatePlant();
             bush.GetComponent<PlantComponent>().SetProperties(PlantProperties.Berry);
-            bush.GetComponent<PlantComponent>().GrowthBody.Percentage = 1;
+            bush.Growth = 1;
             GameObject.AddTemplate(bush);
 
             var tree = PlantProperties.LightTree.CreatePlant();
-            tree.GetComponent<PlantComponent>().GrowthBody.Percentage = 1;
+            tree.Growth = 1;
             GameObject.AddTemplate(tree);
             GameObject.AddTemplate(PlantProperties.Berry.CreateSeeds());
         }

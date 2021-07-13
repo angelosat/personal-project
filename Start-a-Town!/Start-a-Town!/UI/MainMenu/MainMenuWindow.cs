@@ -52,7 +52,7 @@ namespace Start_a_Town_.UI
 
             var client = new GroupBox();
             client.AddControlsVertically(
-                    GameMode.Registry.First().NewGame(),
+                    GameMode.Registry.First().GetNewGameGui(),
                     new Button("Back", () => { this.Show(); client.GetWindow().Hide(); }));
 
             var win = new Window("New Game", client)

@@ -408,11 +408,7 @@ namespace Start_a_Town_.Components
                 net.EventOccured(Message.Types.SpawnChunkNotLoaded, parent.Global.GetChunkCoords());
                 throw new Exception("Chunk not loaded");
             }
-            if (net.Map.GetChunk(parent.Global).GetObjects().FirstOrDefault(o => o.RefID == parent.RefID) != null)
-            {
-                throw new Exception("Tried to spawn already spawned object: " + parent.Name);
-            }
-
+           
             Chunk.AddObject(parent, net.Map);
             parent.GetComponent<PositionComponent>().Exists = true;
             this.Enabled = true;

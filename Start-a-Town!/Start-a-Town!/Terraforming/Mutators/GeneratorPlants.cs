@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
     class GeneratorPlants : Terraformer
     {
+        PlantProperties[] ValidPlants;
         public GeneratorPlants()
         {
             this.ID = Terraformer.Types.Trees;
@@ -28,8 +29,10 @@ namespace Start_a_Town_
                     if (
                         cell.Block == BlockDefOf.Grass)
                     {
-                        throw new NotImplementedException();
-                        GameObject plant = null;// rand.Next(2) < 1 ? Plant.CreateTree(PlantDefOf.Tree, map.Biome.Wood,1) : Plant.CreateBush(PlantDefOf.Bush,1,1);
+                        var allPlants = this.ValidPlants ??= this.GetValidPlants();
+                        var randomPlant = allPlants.SelectRandom(map.Random);
+                        var plant = randomPlant.CreatePlant();
+                        plant.Growth = 1;
                         int gx = x + (int)chunk.Start.X, gy = y + (int)chunk.Start.Y;
                         plant.Global = new Vector3(gx, gy, z + 1);
                         chunk.Objects.Add(plant);
@@ -41,6 +44,9 @@ namespace Start_a_Town_
         {
             return new GeneratorPlants();
         }
-
+        PlantProperties[] GetValidPlants()
+        {
+            return Def.GetDefs<PlantProperties>().ToArray();
+        }
     }
 }

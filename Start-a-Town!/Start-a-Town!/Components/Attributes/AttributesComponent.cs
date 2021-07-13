@@ -110,18 +110,12 @@ namespace Start_a_Town_.Components
         
         internal Control GetUI()
         {
-            throw new Exception();
             var table = new TableScrollableCompactNew<AttributeStat>(this.Attributes.Length)
                .AddColumn(null, "name", 80, s => new Label(s.Def.Name), 0)
                .AddColumn(null, "value", 16, s => new Label() { TextFunc = () => s.Level.ToString() }, 0);
 
             table.AddItems(this.Attributes);
             return table;
-
-            var container = new GroupBox();
-            foreach (var a in this.Attributes)
-                container.AddControlsBottomLeft(a.GetControl());
-            return container;
         }
         public AttributesComponent Randomize()
         {

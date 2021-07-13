@@ -180,9 +180,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             DialogLoad.Populate();
             return DialogLoad;
         }
-        internal override Control NewGame()
+        internal override Control GetNewGameGui()
         {
-            return new UINewGame();
+            return new GuiNewGame();
         }
         static string SavePath = GlobalVars.SaveDir + "/Worlds/";
         internal static FileInfo[] GetSaves()

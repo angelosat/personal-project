@@ -36,7 +36,8 @@ namespace Start_a_Town_.UI
             this.Box_Graphics = new GraphicsSettings();
             this.Box_Video = new VideoSettings();
             this.Box_Controls = new ControlsSettings();
-            this.Tabs = new List<GroupBox>() { Box_Camera, Box_Graphics, this.Box_Video, Box_UI, Box_Controls };
+
+            this.Tabs = new List<GroupBox>() { Box_Camera, Box_Graphics.Gui, this.Box_Video.Gui, Box_UI, Box_Controls };
             int w = 0, h = 0;
             foreach (var foo in this.Tabs)
             {

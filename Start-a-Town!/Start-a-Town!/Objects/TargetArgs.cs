@@ -59,7 +59,7 @@ namespace Start_a_Town_
                     if (this.Slot.Object != null)
                         return this.Slot.Object.Global;
                 if (this.Type == TargetType.Entity)
-                    return this.Object.Transform.Global;
+                    return this.Object.Global;
                 return this._Global;
             }
         }

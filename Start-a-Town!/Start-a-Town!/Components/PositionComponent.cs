@@ -20,8 +20,12 @@ namespace Start_a_Town_.Components
         public Vector2 Direction;
         public bool Exists;
         public Vector3 Velocity;
-        public Vector3 Global;
-       
+        Vector3 _Global;
+        public Vector3 Global
+        {
+            get => this.ParentEntity?.Global ?? this._Global;
+            set => this._Global = value;
+        }
 
         public override void MakeChildOf(GameObject parent)
         {
@@ -50,7 +54,7 @@ namespace Start_a_Town_.Components
 
         internal override List<SaveTag> Save()
         {
-            List<SaveTag> data = new List<SaveTag>();
+            var data = new List<SaveTag>();
 
             data.Add(this.Global.SaveOld("Global"));
             data.Add(this.Velocity.SaveOld("Velocity"));

@@ -34,8 +34,8 @@ namespace Start_a_Town_.Modules.Construction
             public Args(BinaryReader r)
             {
                 this.Mode = (Modes)r.ReadByte();
-                this.Begin = r.ReadVector3();
-                this.End = r.ReadVector3();
+                this.Begin = r.ReadIntVec3();
+                this.End = r.ReadIntVec3();
                 this.Removing = r.ReadBoolean();
                 this.Replacing = r.ReadBoolean();
                 this.Orientation = r.ReadInt32();

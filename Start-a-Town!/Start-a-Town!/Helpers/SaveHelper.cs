@@ -682,6 +682,7 @@ namespace Start_a_Town_
                 new SaveTag(SaveTag.Types.Float, "Z", pos.Z),
             };
         }
+        [Obsolete]
         public static SaveTag SaveOld(this Vector3 pos, string name = "")
         {
             return new SaveTag(SaveTag.Types.Compound, name, new List<SaveTag>() {
@@ -690,7 +691,7 @@ namespace Start_a_Town_
                 new SaveTag(SaveTag.Types.Float, "Z", pos.Z),
             });
         }
-        public static SaveTag Save(this Vector3 pos, string name = "") => new SaveTag(SaveTag.Types.Vector3, name, pos);
+        public static SaveTag Save(this Vector3 pos, string name = "") => new(SaveTag.Types.Vector3, name, pos);
         public static SaveTag Save(this Vector2 pos, string name)
         {
             return new SaveTag(SaveTag.Types.Compound, name, new List<SaveTag>() {

@@ -4,7 +4,7 @@
     {
         public InteractionTilling() : base("Till") { }
 
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
             a.Map.SetBlock(t.Global, Block.Types.Farmland, 0);
             this.Finish(a, t);

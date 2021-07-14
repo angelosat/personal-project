@@ -24,7 +24,7 @@
                 return conds;
             }
         }
-        public override void Perform(GameObject actor, TargetArgs target)
+        public override void Perform(Actor actor, TargetArgs target)
         {
             actor.Inventory.DropInventoryItem(target.Object);
         }

@@ -10,14 +10,13 @@ namespace Start_a_Town_.Interactions
         {
         }
 
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             base.Start(a, t);
             var entity = a.Map.GetBlockEntity(t.Global) as IConstructible;
             this.BuildProgress = entity.BuildProgress;
             var speed = a.GetStat(Stat.Types.Building);
-            var actor = a as Actor;
-            var tool = actor.GetEquipmentSlot(GearType.Mainhand);
+            var tool = a.GetEquipmentSlot(GearType.Mainhand);
             var toolspeed = tool is null ? 0 : StatDefOf.ToolSpeed.GetValue(tool);
             speed *= (1 + toolspeed);
             this.Animation.Speed = speed;
@@ -26,7 +25,7 @@ namespace Start_a_Town_.Interactions
         {
             return this.BuildProgress.IsFinished;
         }
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
             var workAmount = a.GetToolWorkAmount(ToolAbilityDef.Building.ID);
             this.BuildProgress.Value += workAmount;
@@ -36,7 +35,7 @@ namespace Start_a_Town_.Interactions
                 return;
             }
         }
-        public void Done(GameObject a, TargetArgs t)
+        public void Done(Actor a, TargetArgs t)
         {
             var global = t.Global;
             var map = a.Map;

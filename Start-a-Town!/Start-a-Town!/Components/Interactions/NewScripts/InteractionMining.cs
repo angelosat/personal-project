@@ -8,7 +8,7 @@ namespace Start_a_Town_.Components.Interactions
 {
     class InteractionMining : InteractionPerpetual
     {
-        static float SpeedFormula(GameObject actor)
+        static float SpeedFormula(Actor actor)
         {
             var fromSkill = actor.GetSkill(SkillDef.Digging).Level * .1f + 1; //+.5f 
             var fromTool = StatDefOf.WorkSpeed.GetValue(actor);
@@ -30,7 +30,7 @@ namespace Start_a_Town_.Components.Interactions
         ParticleEmitterSphere EmitterBreak;
         List<Rectangle> ParticleTextures;
 
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             base.Start(a, t);
             this.Animation.Speed = SpeedFormula(a);
@@ -69,7 +69,7 @@ namespace Start_a_Town_.Components.Interactions
 
             this.ParticleTextures = this.Block.GetParticleRects(25);
         }
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
             var actor = a as Actor;
             this.EmitStrike(actor);

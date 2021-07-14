@@ -477,9 +477,7 @@ namespace Start_a_Town_
         PhysicsComponent _PhysicsCached;
         public PhysicsComponent Physics => this._PhysicsCached ??= this.GetComponent<PhysicsComponent>();
 
-        WorkComponent _WorkCached;
-        public WorkComponent Work => this._WorkCached ??= this.GetComponent<WorkComponent>();
-
+        
         SpriteComponent _SpriteCompCached;
         public SpriteComponent SpriteComp => this._SpriteCompCached ??= this.GetComponent<SpriteComponent>();
 
@@ -1350,22 +1348,7 @@ namespace Start_a_Town_
         {
             return AIState.GetState(this).LastBehavior;
         }
-        internal void Interact(Interaction interaction)
-        {
-            AIManager.Interact(this, interaction, TargetArgs.Null);
-        }
-        internal void Interact(Interaction interaction, TargetArgs targetArgs)
-        {
-            AIManager.Interact(this, interaction, targetArgs);
-        }
-        internal void Interact(Interaction interaction, Vector3 target)
-        {
-            AIManager.Interact(this, interaction, new TargetArgs(this.Map, target));
-        }
-        internal void Interact(Interaction interaction, GameObject target)
-        {
-            AIManager.Interact(this, interaction, new TargetArgs(target));
-        }
+        
         internal BoundingBox GetBoundingBox(Vector3 global)
         {
             return this.Physics.GetBoundingBox(global);
@@ -1565,28 +1548,7 @@ namespace Start_a_Town_
             return this.GetComponent<NpcSkillsComponent>().GetSkill(skill);
         }
 
-        internal AITask CurrentTask
-        {
-            get
-            {
-                return AIComponent.GetState(this).CurrentTask;
-            }
-            set
-            {
-                AIComponent.GetState(this).CurrentTask = value;
-            }
-        }
-        internal BehaviorPerformTask CurrentTaskBehavior
-        {
-            get
-            {
-                return AIComponent.GetState(this).CurrentTaskBehavior;
-            }
-            set
-            {
-                AIComponent.GetState(this).CurrentTaskBehavior = value;
-            }
-        }
+       
 
         public float Fuel
         {

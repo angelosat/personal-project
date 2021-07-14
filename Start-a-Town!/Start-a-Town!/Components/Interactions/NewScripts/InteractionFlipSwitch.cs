@@ -1,8 +1,8 @@
 ﻿namespace Start_a_Town_
 {
-    class InteractionSwitch : Interaction
+    class InteractionFlipSwitch : Interaction
     {
-        public override void Perform(GameObject a, TargetArgs t)
+        public override void Perform(Actor a, TargetArgs t)
         {
             var e = a.Map.GetBlockEntity(t.Global);
             e.GetComp<BlockEntityCompSwitchable>().Toggle(a, t);
@@ -10,7 +10,7 @@
         }
         public override object Clone()
         {
-            return new InteractionSwitch();
+            return new InteractionFlipSwitch();
         }
     }
 }

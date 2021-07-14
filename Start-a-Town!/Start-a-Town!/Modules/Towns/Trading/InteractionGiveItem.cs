@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Start_a_Town_.Animations;
+
 namespace Start_a_Town_
 {
     class InteractionGiveItem : Interaction
@@ -16,20 +17,19 @@ namespace Start_a_Town_
         public InteractionGiveItem() : base("GiveItem", seconds: .4f)
         {
         }
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             this.Animation = new Animation(AnimationDef.TouchItem);
             a.CrossFade(this.Animation, false, 25);
         }
-        public override void Perform(GameObject a, TargetArgs t)
+        public override void Perform(Actor a, TargetArgs t)
         {
-            var actor = a as Actor;
             var item = a.Carried as Entity;
             var seller = t.Object as Actor;
             var sellerCarriedItem = seller.Carried as Entity;
             seller.Carry(item);
             if(this.Trade)
-                actor.Carry(sellerCarriedItem);
+                a.Carry(sellerCarriedItem);
         }
         protected override void WriteExtra(BinaryWriter w)
         {

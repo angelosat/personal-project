@@ -181,19 +181,6 @@ namespace Start_a_Town_.Components
             this.Progress.Value = this.Progress.Max = this.Length;
         }
 
-        internal override void GetAvailableTasks(GameObject parent, List<Interaction> list)
-        {
-            list.Add(new InteractionHarvest(parent, this));
-        }
-        public override void GetInteractions(GameObject parent, List<Interaction> actions)
-        {
-            actions.Add(new InteractionHarvest(parent, this));
-        }
-        public override void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> actions)
-        {
-            actions.Add(PlayerInput.Activate, new InteractionHarvest(parent, this));
-        }
-
         public override bool HandleMessage(GameObject parent, ObjectEventArgs e)
         {
             Message.Types msg = e.Type;

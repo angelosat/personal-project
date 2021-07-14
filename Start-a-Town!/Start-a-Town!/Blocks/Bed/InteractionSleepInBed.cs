@@ -14,7 +14,7 @@ namespace Start_a_Town_.Blocks.Bed
             this.RunningType = RunningTypes.Continuous;
             this.Animation = null;
         }
-        internal override void InitAction(GameObject a, TargetArgs t)
+        internal override void InitAction(Actor a, TargetArgs t)
         {
             this.PreviousStandingPosition = a.Global;
             var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
@@ -35,15 +35,12 @@ namespace Start_a_Town_.Blocks.Bed
             if (room is not null)
             {
                 if (room.Owner is null)
-                {
-                    var actor = a as Actor;
-                    actor.Ownership.Claim(room);
-                }
+                    a.Ownership.Claim(room);
                 else if (room.Owner != a || room.Workplace != null)
                     throw new Exception();
             }
         }
-        internal override void FinishAction(GameObject a, TargetArgs t)
+        internal override void FinishAction(Actor a, TargetArgs t)
         {
             a.GetNeed(NeedDef.Energy).RemoveMod(NeedLetDefOf.Sleeping);
             a.GetNeed(NeedDef.Comfort).RemoveMod(NeedLetDefOf.Sleeping);

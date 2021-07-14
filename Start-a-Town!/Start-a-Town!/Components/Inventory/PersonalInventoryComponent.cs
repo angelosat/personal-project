@@ -243,7 +243,7 @@ namespace Start_a_Town_.Components
             var obj = slot.Object;
 
             if (obj.HasComponent<EquipComponent>())
-                parent.GetComponent<WorkComponent>().Perform(parent, new Interactions.EquipFromInventory(), new TargetArgs(slot));
+                (parent as Actor).Work.Perform(new Interactions.EquipFromInventory(), new TargetArgs(slot));
             else
             {
                 this.HaulSlot.Swap(slot);

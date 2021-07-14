@@ -27,7 +27,7 @@ namespace Start_a_Town_
             Factory[typeof(T).FullName] = () => new T();
         }
         
-        internal virtual void OnToolContact(GameObject parent, TargetArgs target)
+        internal virtual void OnToolContact(Actor parent, TargetArgs target)
         {
         }
 
@@ -58,10 +58,6 @@ namespace Start_a_Town_
             {
                 return this.Conditions.GetAllChildren().FirstOrDefault(c => c is RangeCheck) as RangeCheck;
             }
-        }
-        public virtual bool InRange(GameObject a, TargetArgs t)
-        {
-            return this.RangeCheckCached.Condition(a, t);
         }
         
         public virtual ScriptTaskCondition CancelState { get; set; }
@@ -118,7 +114,7 @@ namespace Start_a_Town_
             this.CurrentTick = this.Length = seconds * Engine.TicksPerSecond;
         }
         
-        public virtual void Interrupt(GameObject parent, bool success)
+        public virtual void Interrupt(Actor parent, bool success)
         {
             if(!success)
                 parent.Net.EventOccured(Message.Types.InteractionInterrupted, parent, this);
@@ -127,18 +123,18 @@ namespace Start_a_Town_
 
         }
 
-        public virtual void Perform(GameObject a, TargetArgs t)
+        public virtual void Perform(Actor a, TargetArgs t)
         {
             this.Callback(a, t);
         }
 
-        public virtual void Start(GameObject a, TargetArgs t)
+        public virtual void Start(Actor a, TargetArgs t)
         {
             if (this.Animation != null)
                 a.AddAnimation(this.Animation);
         }
 
-        public virtual void Update(GameObject actor, TargetArgs target)
+        public virtual void Update(Actor actor, TargetArgs target)
         {
             if (this.State == States.Finished) // TODO: maybe check for failed state too?
             {
@@ -203,11 +199,6 @@ namespace Start_a_Town_
             this.Animation.FadeOutAndRemove();
         }
         
-        public virtual bool AvailabilityCondition(GameObject actor, TargetArgs target)
-        {
-            return this.Conditions.GetFailedCondition(actor, target) == null;
-        }
-
         public void GetTooltip(Control tooltip)
         {
             var panel = new PanelLabeled("Interact") { AutoSize = true, Location = tooltip.Controls.BottomLeft };
@@ -243,12 +234,12 @@ namespace Start_a_Town_
         }
         public abstract object Clone();
         
-        public bool IsValid(GameObject actor, TargetArgs target)
+        public bool IsValid(Actor actor, TargetArgs target)
         {
             return (this.Conditions.Evaluate(actor, target) && !this.IsCancelled(actor, target));
         }
 
-        public virtual string GetCompletedText(GameObject actor, TargetArgs target)
+        public virtual string GetCompletedText(Actor actor, TargetArgs target)
         {
             return this.Name + ": " + target.ToString();
         }
@@ -295,7 +286,7 @@ namespace Start_a_Town_
         {
         }
 
-        internal virtual void InitAction(GameObject actor, TargetArgs target)
+        internal virtual void InitAction(Actor actor, TargetArgs target)
         {
             if (this.Length == 0)
             {
@@ -303,15 +294,15 @@ namespace Start_a_Town_
                 this.Finish(actor, target);
             }
         }
-        internal virtual void FinishAction(GameObject actor, TargetArgs target)
+        internal virtual void FinishAction(Actor actor, TargetArgs target)
         {
         }
-        public void Finish(GameObject actor, TargetArgs target)
+        public void Finish(Actor actor, TargetArgs target)
         {
             this.State = States.Finished;
             actor.Net.Map.EventOccured(Message.Types.InteractionSuccessful, actor, this);
         }
-        internal virtual void AfterLoad(GameObject actor, TargetArgs target)
+        internal virtual void AfterLoad(Actor actor, TargetArgs target)
         {
             this.Animation.Entity = actor;
         }

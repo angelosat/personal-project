@@ -22,13 +22,13 @@ namespace Start_a_Town_.Components.Interactions
             return "Haul " + (this.Amount == -1 ? " All" : " x" + this.Amount.ToString());
         }
        
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             this.Animation = new Animation(AnimationDef.TouchItem);
             a.CrossFade(this.Animation, false, 25);
         }
         
-        public override void Perform(GameObject actor, TargetArgs target)
+        public override void Perform(Actor actor, TargetArgs target)
         {
             switch (target.Type)
             {

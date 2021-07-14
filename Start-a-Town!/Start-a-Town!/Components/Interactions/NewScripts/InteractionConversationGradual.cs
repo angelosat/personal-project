@@ -20,14 +20,13 @@ namespace Start_a_Town_
             return new InteractionConversationGradual(this.Topic);
         }
 
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
-            var actor = a as Actor;
-            this.Topic.ApplyNew(actor, t.Object as Actor);
+            this.Topic.ApplyNew(a, t.Object as Actor);
             this.CurrentTickInt++;
             if (this.CurrentTickInt >= this.Topic.MaxTicks)
             {
-                actor.FinishConversation();
+                a.FinishConversation();
                 this.Finish(a, t);
             }
         }

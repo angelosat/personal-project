@@ -136,29 +136,26 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
             return true;
         }
 
-        private void CleanUp(GameObject parent)
+        private void CleanUp(Actor parent)
         {
             this.CleanUp(parent, parent.GetState());
         }
-        private void CleanUp(GameObject parent, AIState state)
+        private void CleanUp(Actor parent, AIState state)
         {
-            var actor = parent as Actor;
             if(parent.Carried is not null)
                 parent.Interact(new InteractionThrow(true));
            
-            if (actor.GetEquipmentSlot(GearType.Mainhand) is Entity item)
+            if (parent.GetEquipmentSlot(GearType.Mainhand) is Entity item)
             {
-                if (actor.ItemPreferences.IsPreference(item))
+                if (parent.ItemPreferences.IsPreference(item))
                     parent.Interact(new Equip(), new TargetArgs(item)); // equip() currently toggles gear. if target is currently equipped, it unequips it
                 else
                     parent.Interact(new InteractionDropEquipped(GearType.Mainhand));
             }
 
             parent.Unreserve();
-            state.CurrentTask = null;
-            state.LastBehavior = null;
-            state.Path = null;
-            state.CurrentTaskBehavior = null;
+            
+            state.Reset();
             this.CurrentTaskGiver = null;
         }
 

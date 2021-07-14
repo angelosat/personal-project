@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
@@ -32,11 +33,11 @@ namespace Start_a_Town_.Crafting
 
         readonly int BaseWorkAmount = 5;//25;
         
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             base.Start(a, t);
         }
-        public override void Perform(GameObject a, TargetArgs t)
+        public override void Perform(Actor a, TargetArgs t)
         {
             if (this.Progress.Value >= this.Progress.Max)
             {
@@ -46,7 +47,7 @@ namespace Start_a_Town_.Crafting
                 var product = ProduceWithMaterialsOnTopNew(a, t.Global, order);
 
 
-                if (a.Net is Net.Server)
+                if (a.Net is Server)
                 {
                     var task = a.CurrentTask;
                     if (task != null)
@@ -55,7 +56,7 @@ namespace Start_a_Town_.Crafting
                 this.Finish(a, t);
             }
         }
-        internal override void OnToolContact(GameObject a, TargetArgs t)
+        internal override void OnToolContact(Actor a, TargetArgs t)
         {
             var work = StatDefOf.ToolEfficiency.GetValue(a);
             this.Progress.Value += work * BaseWorkAmount;// 25;
@@ -68,7 +69,7 @@ namespace Start_a_Town_.Crafting
 
         }
 
-        GameObject ProduceWithMaterialsOnTopNew(GameObject a, Vector3 global, CraftOrderNew order)
+        GameObject ProduceWithMaterialsOnTopNew(Actor a, Vector3 global, CraftOrderNew order)
         {
             var actor = a as Actor;
             var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
@@ -108,20 +109,20 @@ namespace Start_a_Town_.Crafting
             this.Progress = new Progress(tag["CraftProgress"]);
             this.PlacedObjects.TryLoadMutable(tag, "PlacedItems");
         }
-        protected override void WriteExtra(System.IO.BinaryWriter w)
+        protected override void WriteExtra(BinaryWriter w)
         {
             w.Write(this.OrderID);
             this.Progress.Write(w);
             this.PlacedObjects.Write(w);
         }
-        protected override void ReadExtra(System.IO.BinaryReader r)
+        protected override void ReadExtra(BinaryReader r)
         {
             this.OrderID = r.ReadInt32();
             this.Progress = new Progress(r);
             this.PlacedObjects.ReadMutable(r);
         }
 
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
             throw new NotImplementedException();
         }

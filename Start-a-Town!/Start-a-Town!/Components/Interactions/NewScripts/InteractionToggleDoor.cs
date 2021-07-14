@@ -4,7 +4,7 @@
     {
         public InteractionToggleDoor() : base("Open/close") { }
        
-        internal override void InitAction(GameObject actor, TargetArgs target)
+        internal override void InitAction(Actor actor, TargetArgs target)
         {
             base.InitAction(actor, target);
             BlockDoor.Toggle(actor.Map, target.Global);

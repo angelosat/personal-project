@@ -40,7 +40,7 @@ namespace Start_a_Town_
         ParticleEmitterSphere EmitterBreak;
         List<Rectangle> ParticleTextures;
 
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             base.Start(a, t);
             this.Animation.Speed = SpeedFormula(a);
@@ -79,7 +79,7 @@ namespace Start_a_Town_
 
             this.ParticleTextures = this.Block.GetParticleRects(25);
         }
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
             var actor = a as Actor;
             this.EmitStrike(actor);
@@ -97,18 +97,18 @@ namespace Start_a_Town_
                 this.Finish(actor, t);
             }
         }
-        public void Done(GameObject a, TargetArgs t)
+        public void Done(Actor a, TargetArgs t)
         {
             this.Block.Break(a.Map, t.Global);
             var tool = GearComponent.GetSlot(a, GearType.Mainhand).Object;
             this.EmitBreak(a);
         }
-        private void EmitStrike(GameObject a)
+        private void EmitStrike(Actor a)
         {
             this.EmitterStrike.Emit(Block.Atlas.Texture, this.ParticleTextures, Vector3.Zero);
             a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
         }
-        private void EmitBreak(GameObject a)
+        private void EmitBreak(Actor a)
         {
             this.EmitterBreak.Emit(Block.Atlas.Texture, this.ParticleTextures, Vector3.Zero);
             a.Map.ParticleManager.AddEmitter(this.EmitterBreak);

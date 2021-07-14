@@ -402,7 +402,7 @@
     <Compile Include="Components\Interactions\NewScripts\InteractionDropEquipped.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropInventoryItem.cs" />
     <Compile Include="Components\Interactions\NewScripts\HaulNew.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionSwitch.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionFlipSwitch.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionToggleDoor.cs" />
     <Compile Include="Components\Interactions\NewScripts\UnequipItem.cs" />
     <Compile Include="Components\Interactions\NewScripts\UseHauledOnTargetNew.cs" />
@@ -671,7 +671,6 @@
     <Compile Include="LineHelper.cs" />
     <Compile Include="Modules\AI\AIManager.cs" />
     <Compile Include="Modules\AI\AITarget.cs" />
-    <Compile Include="Modules\AI\Net\Packets\PacketDialogueOptions.cs" />
     <Compile Include="Blocks\BlockEntity.cs" />
     <Compile Include="Blocks\BlockMineral.cs">
       <SubType>Code</SubType>
@@ -919,10 +918,8 @@
     <Compile Include="Net\Packets\IPacketHandler.cs" />
     <Compile Include="Net\Packets\PacketEntityBoolean.cs" />
     <Compile Include="Net\Packets\PacketEntityVector3.cs" />
-    <Compile Include="Net\Packets\PacketEntity.cs" />
     <Compile Include="Net\Packets\Player\PacketPlayerChangeDirection.cs" />
     <Compile Include="Net\RandomThreaded.cs" />
-    <Compile Include="Net\Server\AI.cs" />
     <Compile Include="Net\Server\ServerCommandParser.cs" />
     <Compile Include="Net\Server\ServerConsole.cs" />
     <Compile Include="Net\UdpConnection.cs" />

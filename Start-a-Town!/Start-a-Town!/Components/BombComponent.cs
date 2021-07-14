@@ -123,7 +123,7 @@ namespace Start_a_Town_.Components
                 this.Name = "Set fuse";
                 this.FuseSet = callback;
             }
-            public override void Perform(GameObject a, TargetArgs t)
+            public override void Perform(Actor a, TargetArgs t)
             {
                 var fuse = this.FuseSet();
                 var client = a.Net as Net.Client;

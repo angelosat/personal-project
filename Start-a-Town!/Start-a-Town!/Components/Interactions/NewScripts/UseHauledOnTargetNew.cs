@@ -31,16 +31,12 @@ namespace Start_a_Town_
 
         public override TaskConditions Conditions => conds;
 
-        public override bool AvailabilityCondition(GameObject actor, TargetArgs target)
-        {
-            return actor.GetComponent<HaulComponent>().GetObject() != null;
-        }
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             a.CrossFade(this.Animation, false, 25);
         }
         
-        public override void Perform(GameObject actor, TargetArgs target)
+        public override void Perform(Actor actor, TargetArgs target)
         {
             var hauled = PersonalInventoryComponent.GetHauling(actor);
             var hauledObj = hauled.Object;
@@ -86,7 +82,8 @@ namespace Start_a_Town_
         {
             return this.Name + (this.Amount != -1 ? " x" + this.Amount.ToString() : "All");
         }
-        public override bool InRange(GameObject a, TargetArgs t)
+        [Obsolete]
+        public bool InRange(Actor a, TargetArgs t)
         {
             var actorCoords = a.Global;
             var actorBox = new BoundingBox(actorCoords - new Vector3(1, 1, 0), actorCoords + new Vector3(1, 1, a.Physics.Height));

@@ -19,7 +19,7 @@ namespace Start_a_Town_.Components.Interactions
 
         public override TaskConditions Conditions => conds;
         public override Dictionary<Need.Types, float> NeedSatisfaction => satisfyneed;
-        public override void Perform(GameObject a, TargetArgs t)
+        public override void Perform(Actor a, TargetArgs t)
         {
             throw new NotImplementedException();
         }

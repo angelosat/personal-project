@@ -9,7 +9,7 @@
             
         { }
         
-        public override void Perform(GameObject a, TargetArgs t)
+        public override void Perform(Actor a, TargetArgs t)
         {
             a.Inventory.Equip(t.Object);
         }

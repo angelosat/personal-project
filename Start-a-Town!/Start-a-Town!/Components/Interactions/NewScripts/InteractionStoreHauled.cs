@@ -16,11 +16,11 @@ namespace Start_a_Town_
             ));
 
         public override TaskConditions Conditions => conds;
-        public override void Perform(GameObject actor, TargetArgs target)
+        public override void Perform(Actor actor, TargetArgs target)
         {
             var cachedObject = target.Object;
             actor.StoreCarried();
-            (actor as Actor).Log.Write(string.Format("Stored {0} in inventory", cachedObject));
+            actor.Log.Write(string.Format("Stored {0} in inventory", cachedObject));
         }
 
         public override object Clone()

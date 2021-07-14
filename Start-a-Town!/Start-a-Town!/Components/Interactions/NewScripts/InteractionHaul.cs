@@ -29,11 +29,11 @@ namespace Start_a_Town_
             return "Haul " + (this.Amount == -1 ? " All" : " x" + this.Amount.ToString());
         }
 
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             a.CrossFade(this.Animation, false, 25);
         }
-        public override void OnUpdate(GameObject actor, TargetArgs target)
+        public override void OnUpdate(Actor actor, TargetArgs target)
         {
             if (target.Object is Actor)
                 throw new Exception();

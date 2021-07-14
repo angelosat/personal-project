@@ -13,7 +13,7 @@ namespace Start_a_Town_
             Packets.Init();
         }
 
-        public StorageSettings Settings = new StorageSettings();
+        public StorageSettings Settings = new();
         public int Priority
         {
             get
@@ -81,17 +81,7 @@ namespace Start_a_Town_
         {
             return this.Accepts(item) && this.GetAvailableCells().Any();
         }
-        public TargetArgs GetBestHaulTarget(GameObject actor, GameObject item)
-        {
-            var emptyCells = this.Positions.Where(pos => !this.Town.Map.GetObjects(pos.Above).Any()).Select(p => p.Above);
-            foreach (var pos in emptyCells)
-            {
-                if (!actor.CanReserve(pos))
-                    continue;
-                return new TargetArgs(pos);
-            }
-            return null;
-        }
+        
         public IEnumerable<TargetArgs> DistributeToStorageSpotsNewLazy(GameObject actor, GameObject obj)
         {
             var emptyCells = new List<Vector3>();
@@ -118,7 +108,7 @@ namespace Start_a_Town_
                 yield return new TargetArgs(this.Map, cell);
             }
         }
-        public Dictionary<TargetArgs, int> DistributeToStorageSpotsNew(GameObject actor, GameObject obj, out int maxamount)
+        public Dictionary<TargetArgs, int> DistributeToStorageSpotsNew(Actor actor, GameObject obj, out int maxamount)
         {
             var valid = new Dictionary<TargetArgs, int>();
             var currentSimilarContents = this.ScanExistingStoredItems().Where(o => o.CanAbsorb(obj) && this.Accepts(o) && o.StackSize < o.StackMax);
@@ -149,12 +139,12 @@ namespace Start_a_Town_
             return valid;
         }
 
-        public IEnumerable<TargetArgs> GetPotentialHaulTargets(GameObject actor, GameObject item)
+        public IEnumerable<TargetArgs> GetPotentialHaulTargets(Actor actor, GameObject item)
         {
             foreach (var target in this.DistributeToStorageSpotsNewLazy(actor, item))
                 yield return target;
         }
-        public Dictionary<TargetArgs, int> GetPotentialHaulTargets(GameObject actor, GameObject item, out int maxAmount)
+        public Dictionary<TargetArgs, int> GetPotentialHaulTargets(Actor actor, GameObject item, out int maxAmount)
         {
             return this.DistributeToStorageSpotsNew(actor, item, out maxAmount);
         }

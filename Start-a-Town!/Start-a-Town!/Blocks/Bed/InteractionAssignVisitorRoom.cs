@@ -13,7 +13,7 @@ namespace Start_a_Town_
         {
             this.RoomID = roomID;
         }
-        public override void Perform(GameObject a, TargetArgs t)
+        public override void Perform(Actor a, TargetArgs t)
         {
             var roomOwner = t.Object as Actor;
             var room = a.Map.Town.RoomManager.GetRoom(this.RoomID);

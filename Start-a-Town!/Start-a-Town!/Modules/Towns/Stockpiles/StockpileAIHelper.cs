@@ -70,7 +70,7 @@ namespace Start_a_Town_
             
         }
 
-        static public Dictionary<TargetArgs, int> GetAllValidHaulDestinations(GameObject actor, GameObject item, out int maxamount)
+        static public Dictionary<TargetArgs, int> GetAllValidHaulDestinations(Actor actor, GameObject item, out int maxamount)
         {
             Dictionary<TargetArgs, int> all = new Dictionary<TargetArgs, int>();
             var stockpiles = GetStoragesByPriority(item.Map);
@@ -84,7 +84,7 @@ namespace Start_a_Town_
             }
             return all;
         }
-        static public TargetArgs GetBestHaulDestination(GameObject actor, GameObject item)
+        static public TargetArgs GetBestHaulDestination(Actor actor, GameObject item)
         {
             int maxAmount;
             var all = GetAllValidHaulDestinations(actor, item, out maxAmount).Keys.Select(k => new TargetArgs(actor.Map, k.Global + Vector3.UnitZ));

@@ -29,7 +29,7 @@ namespace Start_a_Town_
             return this.GetTarget((TargetIndex)targetInd);
         }
 
-        internal bool ReserveAll(GameObject actor, TargetIndex sourceIndex)
+        internal bool ReserveAll(Actor actor, TargetIndex sourceIndex)
         {
             var targets = this.GetTargetQueue(sourceIndex);
             var amounts = this.GetAmountQueue(sourceIndex);
@@ -45,7 +45,7 @@ namespace Start_a_Town_
             }
             return true;
         }
-        internal bool Reserve(GameObject actor, TargetIndex index)
+        internal bool Reserve(Actor actor, TargetIndex index)
         {
             return actor.Town.ReservationManager.Reserve(actor, this.GetTarget(index), this.GetAmount(index));
         }

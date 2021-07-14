@@ -46,6 +46,13 @@ namespace Start_a_Town_.Net
                 return this._Console;
             }
         }
+
+        [Obsolete]
+        internal void AIInteract(Actor parent, Interaction goal, TargetArgs target)
+        {
+            AI.AIManager.Interact(parent, goal, target);
+        }
+        
         public const int SnapshotIntervalMS = 10;// send 60 snapshots per second to clients
         public const int LightIntervalMS = 10;// send 60 light updates per second to clients
         readonly Dictionary<int, GameObject> NetworkObjects;
@@ -647,18 +654,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.PlayerStartMoving:
-                    throw new Exception();
-
-                case PacketType.PlayerStopMoving:
-                    throw new Exception();
-
-                case PacketType.PlayerJump:
-                    throw new Exception();
-
-                case PacketType.PlayerChangeDirection:
-                    throw new Exception();
-
                 case PacketType.PlayerToggleWalk:
                     msg.Payload.Deserialize(r =>
                     {
@@ -689,39 +684,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.PlayerUse:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        msg.Player.ControllingEntity.GetComponent<WorkComponent>().Perform(msg.Player.ControllingEntity, target.GetAvailableTasks(Instance).FirstOrDefault(), target);
-                        Instance.Enqueue(PacketType.PlayerUse, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerUseHauled:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        var hauled = msg.Player.ControllingEntity.GetComponent<HaulComponent>().GetObject();
-                        if (hauled is null)
-                            return;
-                        msg.Player.ControllingEntity.GetComponent<WorkComponent>().Perform(msg.Player.ControllingEntity, hauled.GetHauledActions(target).FirstOrDefault(), target);
-                        Instance.Enqueue(PacketType.PlayerUseHauled, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerDropHauled:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        msg.Player.ControllingEntity.GetComponent<HaulComponent>().Throw(Vector3.Zero, msg.Player.ControllingEntity);
-                        Instance.Enqueue(PacketType.PlayerDropHauled, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
                 case PacketType.PlayerRemoteCall:
                     msg.Payload.Deserialize(r =>
                     {
@@ -744,20 +706,9 @@ namespace Start_a_Town_.Net
                         var interaction = PlayerInput.GetDefaultInput(msg.Player.ControllingEntity, target, input);
                         if (interaction == null)
                             return;
-                        msg.Player.ControllingEntity.GetComponent<WorkComponent>().Perform(msg.Player.ControllingEntity, interaction, target);
+                        msg.Player.ControllingEntity.Work.Perform(interaction, target);
                         if (interaction.Conditions.Evaluate(msg.Player.ControllingEntity, target))
                             Instance.Enqueue(PacketType.PlayerInput, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerPickUp:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        
-                        msg.Player.ControllingEntity.GetComponent<WorkComponent>().Perform(msg.Player.ControllingEntity, new InteractionHaul(), target);
-                        Instance.Enqueue(PacketType.PlayerPickUp, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
                     });
                     return;
 
@@ -875,21 +826,6 @@ namespace Start_a_Town_.Net
             return spawnPosition;
         }
        
-        [Obsolete]
-        public void SyncSpawn(GameObject obj)
-        {
-            throw new Exception();
-            obj.Spawn(this);
-            byte[] newData = Network.Serialize(w =>
-            {
-                w.Write(obj.RefID);
-                w.Write(obj.Global);
-                w.Write(obj.Velocity);
-            });
-            foreach (var player in Players.GetList())
-                Enqueue(player, Packet.Create(player, PacketType.SpawnObject, newData, SendType.Ordered | SendType.Reliable));
-        }
-        
         void SyncChild(GameObject obj, GameObject parent, int childIndex)
         {
             byte[] data = Network.Serialize(w =>
@@ -984,26 +920,7 @@ namespace Start_a_Town_.Net
         {
             obj.Despawn();
         }
-        public void Spawn(GameObject obj)
-        {
-            obj.Map = this.Map;
-            this.SpawnObject(obj);
-        }
-        public void Spawn(GameObject obj, Vector3 global)
-        {
-            obj.Parent = null;
-            obj.Map = this.Map;
-            obj.Global = global;
-            this.SpawnObject(obj);
-        }
-        
-        void SpawnObject(GameObject obj)
-        {
-            if (obj.RefID == 0)
-                obj.SyncInstantiate(this);
-            SyncSpawn(obj);
-        }
-
+      
         /// <summary>
         /// Releases the object's networkID.
         /// </summary>
@@ -1284,7 +1201,6 @@ namespace Start_a_Town_.Net
             Instance.Enqueue(PacketType.EntityInventoryChange, data, SendType.OrderedReliable); // WARNING!!! TODO: handle case where each slot is owned by a different entity     
         }
        
-        public AI AIHandler = new();
 
         private static void UnmergePackets(PlayerData player, byte[] data)
         {
@@ -1371,6 +1287,16 @@ namespace Start_a_Town_.Net
         public void WriteToStream(params object[] args)
         {
             this.GetOutgoingStream().Write(args);
+        }
+
+        public void Spawn(GameObject obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Spawn(GameObject obj, Vector3 global)
+        {
+            throw new NotImplementedException();
         }
     }
 }

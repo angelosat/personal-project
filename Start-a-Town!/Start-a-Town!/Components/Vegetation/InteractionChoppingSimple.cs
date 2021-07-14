@@ -13,32 +13,8 @@ namespace Start_a_Town_.Components
         public InteractionChoppingSimple()
             : base("Chopping")
         { }
-        static readonly ScriptTaskCondition cancel = new Exists();
-        static readonly TaskConditions conds = new TaskConditions(
-                    new AllCheck(
-                        new Exists(),
-                        new RangeCheck()
-                ));
-        public override ScriptTaskCondition CancelState
-        {
-            get
-            {
-                return cancel;
-            }
-            set
-            {
-                base.CancelState = value;
-            }
-        }
-        public override TaskConditions Conditions
-        {
-            get
-            {
-                return conds;
-            }
-        }
-
-        public override void Start(GameObject a, TargetArgs t)
+       
+        public override void Start(Actor a, TargetArgs t)
         {
             base.Start(a, t);
 
@@ -59,7 +35,7 @@ namespace Start_a_Town_.Components
             this.ParticleRects = ItemContent.LogsGrayscale.AtlasToken.Rectangle.Divide(25);
         }
 
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
             if (a.Net is Net.Client)
             {

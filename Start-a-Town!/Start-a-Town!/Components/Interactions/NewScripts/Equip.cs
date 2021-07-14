@@ -9,7 +9,7 @@
         {
         }
 
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             a.CrossFade(this.Animation, false, 25);
         }
@@ -22,7 +22,7 @@
                 return conds;
             }
         }
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
             GearComponent.EquipToggle(a as Actor, t.Object as Entity);
             this.Finish(a, t);

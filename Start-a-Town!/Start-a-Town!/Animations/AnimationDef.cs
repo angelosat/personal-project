@@ -71,7 +71,7 @@ namespace Start_a_Town_.Animations
                         new Keyframe(20, Vector2.Zero, (float)Math.PI / 2f),
                         new Keyframe(60, Vector2.Zero, 0, Interpolation.Exp)
                 ))
-            .AddEvent(10, e => e.Work.OnToolContact(e));
+            .AddEvent(10, e => (e as Actor).Work.OnToolContact());
 
         static public readonly AnimationDef Work = new AnimationDef("AnimationWork", 2)
             .AddClip(BoneDef.RightHand, WarpMode.Loop,
@@ -165,7 +165,7 @@ namespace Start_a_Town_.Animations
                 new Keyframe(0, Vector2.Zero, (float)Math.PI / 4f, Interpolation.Sine),
                 new Keyframe(25, Vector2.Zero, (float)Math.PI / 4f, Interpolation.Sine)
                 ))
-            .AddEvent(25, e => e.Work.OnToolContact(e));
+            .AddEvent(25, e => (e as Actor).Work.OnToolContact());
 
         static AnimationDef()
         {

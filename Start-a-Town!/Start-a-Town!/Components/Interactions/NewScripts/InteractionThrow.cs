@@ -18,21 +18,7 @@ namespace Start_a_Town_
             this.All = all;
         }
 
-        static readonly TaskConditions conds = new(new AllCheck(
-                new ScriptTaskCondition("IsCarrying", Test, Message.Types.InteractionFailed)));
-        public override TaskConditions Conditions => conds;
-
-        static bool Test(GameObject a, TargetArgs target)
-        {
-            return a.GetComponent<HaulComponent>().GetObject() != null;
-        }
-
-        public override bool AvailabilityCondition(GameObject actor, TargetArgs target)
-        {
-            return actor.GetComponent<HaulComponent>().GetObject() != null;
-        }
-
-        internal override void InitAction(GameObject actor, TargetArgs target)
+        internal override void InitAction(Actor actor, TargetArgs target)
         {
             base.InitAction(actor, target);
             

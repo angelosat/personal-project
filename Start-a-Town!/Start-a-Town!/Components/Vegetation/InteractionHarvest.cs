@@ -2,39 +2,21 @@
 {
     public class InteractionHarvest : Interaction
     {
-        GameObject Plant;
-        PlantComponent PlantComp;
-        public InteractionHarvest(GameObject parent)
-            : base(
-                "Harvest", 2)
-        {
-            this.Plant = parent;
-            this.PlantComp = parent.GetComponent<PlantComponent>();
-            this.Verb = "Harvesting";
-        }
-        public InteractionHarvest(GameObject parent, PlantComponent comp)
-            : base(
-                "Harvest", 2)
-        {
-            this.Plant = parent;
-            this.PlantComp = comp;
-            this.Verb = "Harvesting";
-        }
         public InteractionHarvest()
-            : base(
-                "Harvest", 2)
+            : base("Harvest", 2)
         {
             this.Verb = "Harvesting";
         }
         
-        public override void Perform(GameObject a, TargetArgs t)
+        public override void Perform(Actor a, TargetArgs t)
         {
-            var comp = t.Object.GetComponent<PlantComponent>();
-            comp.Harvest(t.Object, a);
+            if (t.Object is not Plant plant)
+                throw new System.Exception();
+            plant.PlantComponent.Harvest(t.Object, a);
         }
         public override object Clone()
         {
-            return new InteractionHarvest(this.Plant, this.PlantComp);
+            return new InteractionHarvest();
         }
     }
 }

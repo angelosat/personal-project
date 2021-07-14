@@ -186,7 +186,15 @@ namespace Start_a_Town_.AI
 
             tag.TryGetTag("ItemPreferences", t => this.ItemPreferences.Load(t));
         }
-       
+
+        internal void Reset()
+        {
+            this.CurrentTask = null;
+            this.LastBehavior = null;
+            this.Path = null;
+            this.CurrentTaskBehavior = null;
+        }
+
         internal T1 GetBlackboardValue<T1>(string p)
         {
             return (T1)this.Blackboard[p];

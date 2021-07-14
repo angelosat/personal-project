@@ -16,15 +16,15 @@ namespace Start_a_Town_
             this.Animation = new Animation(AnimationDef.Tool);
         }
         
-        public abstract void OnUpdate(GameObject a, TargetArgs t);
-        internal override void InitAction(GameObject actor, TargetArgs target)
+        public abstract void OnUpdate(Actor a, TargetArgs t);
+        internal override void InitAction(Actor actor, TargetArgs target)
         {
         }
-        internal override void AfterLoad(GameObject actor, TargetArgs target)
+        internal override void AfterLoad(Actor actor, TargetArgs target)
         {
             base.AfterLoad(actor, target);
         }
-        internal override void OnToolContact(GameObject parent, TargetArgs target)
+        internal override void OnToolContact(Actor parent, TargetArgs target)
         {
             this.OnUpdate(parent, target);
         }

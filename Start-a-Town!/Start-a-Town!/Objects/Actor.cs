@@ -27,16 +27,30 @@ namespace Start_a_Town_
         internal NpcComponent Npc => this.GetComponent<NpcComponent>();
         PossessionsComponent _Ownership;
         public PossessionsComponent Ownership => this._Ownership ??= this.GetComponent<PossessionsComponent>();
-        public Interaction CurrentInteraction => this.GetComponent<WorkComponent>().Task;
+
+        WorkComponent _WorkCached;
+        public WorkComponent Work => this._WorkCached ??= this.GetComponent<WorkComponent>();
+        public Interaction CurrentInteraction => this.Work.Task;
+
         AIState _CachedState;
         public AIState State => this._CachedState ??= this.GetComponent<AIComponent>().State;
+        internal AITask CurrentTask
+        {
+            get => this.State.CurrentTask;
+            set => this.State.CurrentTask = value;
+        }
+        internal BehaviorPerformTask CurrentTaskBehavior
+        {
+            get => this.State.CurrentTaskBehavior;
+            set => this.State.CurrentTaskBehavior = value;
+        }
         internal Workplace Workplace => this.Town.ShopManager.GetShop(this);
         internal PersonalityComponent Personality => this.GetComponent<PersonalityComponent>();
         public AILog Log => AIState.GetState(this).History;
         public Room AssignedRoom => this.Town.RoomManager.FindRoom(this.RefID);
         public bool IsCitizen => this.Town.Agents.Contains(this.RefID);
         public IItemPreferencesManager ItemPreferences => this.GetState().ItemPreferences;
-
+        
         internal T GetWorkplace<T>() where T : Workplace
         {
             return this.Town.ShopManager.GetShop(this) as T;
@@ -182,7 +196,22 @@ namespace Start_a_Town_
             state.CommunicationPending.Remove(target);
             return topic;
         }
-
+        internal void Interact(Interaction interaction)
+        {
+            AIManager.Interact(this, interaction, TargetArgs.Null);
+        }
+        internal void Interact(Interaction interaction, TargetArgs targetArgs)
+        {
+            AIManager.Interact(this, interaction, targetArgs);
+        }
+        internal void Interact(Interaction interaction, Vector3 target)
+        {
+            AIManager.Interact(this, interaction, new TargetArgs(this.Map, target));
+        }
+        internal void Interact(Interaction interaction, GameObject target)
+        {
+            AIManager.Interact(this, interaction, new TargetArgs(target));
+        }
         internal void CancelInteraction()
         {
             AIManager.EndInteraction(this);
@@ -507,5 +536,7 @@ namespace Start_a_Town_
         {
             this.GetComponent<NpcSkillsComponent>().AwardSkillXP(this, skill, v);
         }
+
+
     }
 }

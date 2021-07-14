@@ -14,7 +14,6 @@ namespace Start_a_Town_.Net
         InstantiateObject, ObjectEvent,
         Ack,
         ServerBroadcast,
-        SpawnObject,
         PlayerSlotClick,
         SpawnChildObject,
         PlayerSetBlock,
@@ -25,10 +24,6 @@ namespace Start_a_Town_.Net
         PlayerToggleWalk,
         PlayerToggleSprint,
         PlayerInteract,
-        PlayerUse,
-        PlayerUseHauled,
-        PlayerDropHauled,
-        PlayerPickUp,
         PlayerServerCommand,
         EntityThrow,
         PlayerStartAttack,
@@ -40,7 +35,6 @@ namespace Start_a_Town_.Net
         EntityInventoryChange,
         RemoteProcedureCall,
         PlayerInventoryOperationNew,
-        ChangeEntityPosition,
         MergedPackets,
         SetSaving,
         Acks
@@ -101,17 +95,6 @@ namespace Start_a_Town_.Net
             double tick = reader.ReadDouble();
             return new Packet(id, type, length, payload) { SendType = sendType, Decompressed = decompressed, OrderedReliableID = orderReliableseq, Tick = tick, Synced = synced };
         }
-        static public Packet Read(BinaryReader reader)
-        {
-            long id = reader.ReadInt64();
-            SendType sendType = (SendType)reader.ReadInt32(); //read and write sendtype as 2 bits
-            PacketType type = (PacketType)reader.ReadByte();
-            int length = reader.ReadInt32();
-            byte[] payload = reader.ReadBytes(length);
-            bool synced = reader.ReadBoolean();
-            double tick = reader.ReadDouble();
-            return new Packet(id, type, length, payload) { SendType = sendType, Tick = tick, Synced = synced };
-        }
         static public Packet Create(PlayerData reciepient, PacketType type, byte[] data, SendType sendType = SendType.Unreliable)
         {
             return new Packet(reciepient.PacketSequence, type, data.Length, data) { 
@@ -119,18 +102,6 @@ namespace Start_a_Town_.Net
                 SendType = sendType,
                 OrderedReliableID = sendType == SendType.OrderedReliable ? reciepient.OrderedReliableSequence++ : 0
             };
-        }
-        static public Packet Create(long id, PacketType type, byte[] data, SendType sendType)
-        {
-            return new Packet(id, type, data.Length, data) { SendType = sendType };
-        }
-        static public Packet Create(long id, PacketType type, byte[] data, PlayerData reciepient, SendType sendType)
-        {
-            return new Packet(id, type, data.Length, data) { Player = reciepient, SendType = sendType };
-        }
-        static public Packet Create(long id, PacketType type, byte[] data, PlayerData reciepient)
-        {
-            return new Packet(id, type, data.Length, data) { Player = reciepient };
         }
         static public Packet Create(long id, PacketType type, byte[] data)
         {
@@ -193,19 +164,14 @@ namespace Start_a_Town_.Net
         {
             Create(id, type, payload).BeginSendTo(socket, remoteIP);
         }
-
         public virtual void Send(Socket socket, EndPoint remoteIP)
         {
             Network.Serialize(this.Write).Send(this.ID, this.PacketType, socket, remoteIP);
         }
+
         public virtual void Write(BinaryWriter w) { }
-        public virtual Packet Create(IObjectProvider net, byte[] data) { return null; }
+
         public virtual void Read(IObjectProvider net, byte[] data) { }
         public virtual void Read(IObjectProvider net, BinaryReader r) { }
-        public virtual byte[] Write()
-        {
-            return Network.Serialize(this.Write);
-        }
-        public virtual void Handle(IObjectProvider net) { }
     }
 }

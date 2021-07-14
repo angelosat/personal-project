@@ -24,11 +24,11 @@ namespace Start_a_Town_.AI
         }
 
 
-        public bool Reserve(GameObject actor, TargetArgs target, int stackCount = -1)
+        public bool Reserve(Actor actor, TargetArgs target, int stackCount = -1)
         {
             return this.Reserve(actor, actor.CurrentTask, target, stackCount);
         }
-        internal bool Reserve(GameObject actor, AITask task, TargetArgs target, int stackCount)
+        internal bool Reserve(Actor actor, AITask task, TargetArgs target, int stackCount)
         {
             if (target.Type == TargetType.Null)
                 throw new Exception();
@@ -122,7 +122,7 @@ namespace Start_a_Town_.AI
 
         private void CancelReservation(Reservation r)
         {
-            var actor = this.Map.Net.GetNetworkObject(r.Actor);
+            var actor = this.Map.Net.GetNetworkObject<Actor>(r.Actor);
             var task = actor.CurrentTask;
             if (task.ID != r.TaskID)
                 throw new Exception();

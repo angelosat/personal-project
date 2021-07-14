@@ -9,7 +9,7 @@ namespace Start_a_Town_
         {
             this.FailOnNoDesignation(TargetIndex.A, DesignationDef.Switch);
             yield return new BehaviorGetAtNewNew(TargetIndex.A);
-            yield return new BehaviorInteractionNew(TargetIndex.A, () => new InteractionSwitch());
+            yield return new BehaviorInteractionNew(TargetIndex.A, () => new InteractionFlipSwitch());
         }
     }
 }

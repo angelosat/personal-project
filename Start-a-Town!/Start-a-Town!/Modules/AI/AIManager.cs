@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
-using Start_a_Town_.Net.Packets;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 using Start_a_Town_.Modules.AI.Net.Packets;
@@ -20,52 +19,6 @@ namespace Start_a_Town_.AI
             PacketNeedModify.Init();
             PacketTaskUpdate.Init();
             AITask.Initialize();
-        }
-        [Obsolete]
-        static public void AIMove(GameObject entity, Vector3 dir)
-        {
-            var acc = entity.Acceleration;
-            entity.Direction = dir;
-            if (acc == 0)
-            {
-                AIToggleWalk(entity, false);
-                AIStartMove(entity);
-            }
-        }
-        [Obsolete]
-        static public void AIStopMove(GameObject entity)
-        {
-            var acc = entity.Acceleration;
-            if (acc == 0)
-                return;
-            AIState.GetState(entity).Path = null;
-            entity.GetComponent<MobileComponent>().Stop(entity);
-            byte[] data = Network.Serialize(new PacketEntity(entity.RefID).Write);
-            Server.Instance.Enqueue(PacketType.PlayerStopMoving, data, SendType.OrderedReliable, entity.Global, true);
-        }
-        [Obsolete]
-        static public void AIStopMoveNew(GameObject entity)
-        {
-            var acc = entity.Acceleration;
-            if (acc == 0)
-                return;
-            entity.GetComponent<MobileComponent>().Stop(entity);
-            byte[] data = Network.Serialize(new PacketEntity(entity.RefID).Write);
-            Server.Instance.Enqueue(PacketType.PlayerStopMoving, data, SendType.OrderedReliable, entity.Global, true);
-        }
-        [Obsolete]
-        static public void AIStartMove(GameObject entity)
-        {
-            entity.GetComponent<MobileComponent>().Start(entity);
-            byte[] data = Network.Serialize(new PacketEntity(entity.RefID).Write);
-            Server.Instance.Enqueue(PacketType.PlayerStartMoving, data, SendType.OrderedReliable, entity.Global, true);
-        }
-        [Obsolete]
-        static public void AIToggleWalk(GameObject entity, bool toggle)
-        {
-            entity.GetComponent<MobileComponent>().ToggleWalk(toggle);
-            byte[] data = Network.Serialize(new PacketEntityBoolean(entity.RefID, toggle).Write);
-            Server.Instance.Enqueue(PacketType.PlayerToggleWalk, data, SendType.OrderedReliable, entity.Global, true);
         }
         
         public override void OnGameEvent(GameEvent e)
@@ -110,18 +63,18 @@ namespace Start_a_Town_.AI
                 return;
         }
 
-        internal static void Interact(GameObject entity, Interaction action, TargetArgs target)
+        internal static void Interact(Actor entity, Interaction action, TargetArgs target)
         {
             if (entity.Net is Server) // interactions only initiated server-side?
             {
-                entity.TryGetComponent<WorkComponent>(c => c.Perform(entity, action, target));
+                entity.Work.Perform(action, target);
                 PacketEntityInteract.Send(Server.Instance, entity, action, target);
             }
         }
 
-        internal static void EndInteraction(GameObject entity, bool success = false)
+        internal static void EndInteraction(Actor entity, bool success = false)
         {
-            WorkComponent.End(entity, success);
+            entity.Work.End(success);
             PacketEntityInteract.EndInteraction(Server.Instance, entity, success);
         }
     }

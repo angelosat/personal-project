@@ -29,12 +29,8 @@ namespace Start_a_Town_.Components.Interactions
 		         return conds;
 	        }
         }
-        public override bool AvailabilityCondition(GameObject actor, TargetArgs target)
-        {
-            return actor.GetComponent<HaulComponent>().GetObject() != null;
-        }
-
-        public override void Perform(GameObject actor, TargetArgs target)
+      
+        public override void Perform(Actor actor, TargetArgs target)
         {
             actor.GetComponent<HaulComponent>().Throw(Vector3.Zero, actor, this.All);
         }

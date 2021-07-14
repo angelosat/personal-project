@@ -11,7 +11,7 @@
             this.Verb = "Consuming";
             this.Comp = comp;
         }
-        public override void Perform(GameObject actor, TargetArgs target)
+        public override void Perform(Actor actor, TargetArgs target)
         {
             var slot = target.Slot;
             if(slot==null)

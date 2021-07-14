@@ -81,7 +81,7 @@ namespace Start_a_Town_
             switch (goal.State)
             {
                 case Interaction.States.Unstarted:
-                    (net as Server).AIHandler.AIInteract(parent, goal, target);
+                    (net as Server).AIInteract(parent, goal, target);
                     return BehaviorState.Running;
 
                 case Interaction.States.Running:

@@ -40,11 +40,11 @@ namespace Start_a_Town_
             this.IngredientsUsed = ingredientsUsed;
         }
 
-        public override void Start(GameObject a, TargetArgs t)
+        public override void Start(Actor a, TargetArgs t)
         {
             base.Start(a, t);
         }
-        public override void Perform(GameObject a, TargetArgs t)
+        public override void Perform(Actor a, TargetArgs t)
         {
             if (this.Progress.Value < this.Progress.Max)
                 return;
@@ -61,7 +61,7 @@ namespace Start_a_Town_
             }
             this.Finish(a, t);
         }
-        internal override void OnToolContact(GameObject a, TargetArgs t)
+        internal override void OnToolContact(Actor a, TargetArgs t)
         {
             this.Progress.Value += 25;
         }
@@ -71,7 +71,7 @@ namespace Start_a_Town_
             return new InteractionCraftNew(this.OrderID, this.PlacedObjects);
         }
 
-        GameObject ProduceWithMaterialsOnTopNew(GameObject actor, Vector3 global, CraftOrderNew order)
+        GameObject ProduceWithMaterialsOnTopNew(Actor actor, Vector3 global, CraftOrderNew order)
         {
             var ingr = this.IngredientsUsed.ToDictionary(vk => vk.Key, vk => new ObjectAmount(actor.Net.GetNetworkObject(vk.Value.Object), vk.Value.Amount));
             var reaction = order.Reaction;
@@ -127,7 +127,7 @@ namespace Start_a_Town_
             this.IngredientsUsed.ReadNew(r, r => r.ReadString(), r => new ObjectRefIDsAmount().Read(r) as ObjectRefIDsAmount);
         }
 
-        public override void OnUpdate(GameObject a, TargetArgs t)
+        public override void OnUpdate(Actor a, TargetArgs t)
         {
             throw new NotImplementedException();
         }

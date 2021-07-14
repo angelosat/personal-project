@@ -24,7 +24,7 @@ namespace Start_a_Town_.Components
             {
                 case Message.Types.Jumped:
                 case Message.Types.Walk:
-                    this.Interrupt(parent);
+                    this.Interrupt();
                     break;
 
                 default:
@@ -33,45 +33,40 @@ namespace Start_a_Town_.Components
             return false;
         }
 
-        public void Interrupt(GameObject parent, bool success = false)
+        public void Interrupt(bool success = false)
         {
             if (this.Task == null)
                 return;
-            this.Task.Interrupt(parent, success);
-            this.Task.FinishAction(parent, this.Target);
+            this.Task.Interrupt(this.Parent as Actor, success);
+            this.Task.FinishAction(this.Parent as Actor, this.Target);
             this.Task = null;
             this.Target = null;
         }
 
 
-        internal void OnToolContact(GameObject parent)
+        internal void OnToolContact()
         {
-            this.Task.OnToolContact(parent, this.Target);
+            this.Task.OnToolContact(this.Parent as Actor, this.Target);
         }
 
-        public void Perform(GameObject parent, Interaction task, TargetArgs target)
+        public void Perform(Interaction task, TargetArgs target)
         {
+            var parent = this.Parent as Actor;
             if (task == null)
                 throw new ArgumentException();
-            this.Interrupt(parent);
+            this.Interrupt();
             this.Task = task;
             this.Target = target;
             this.Task.InitAction(parent, target);
             if (this.Task.HasFinished)
                 this.Task = null;
         }
-        public static void Start(GameObject parent, Interaction task, TargetArgs target)
+      
+        public void End(bool success = false)
         {
-            var comp = parent.GetComponent<WorkComponent>();
-            comp.Perform(parent, task, target);
+            this.Interrupt(success);
         }
-
-        public static void End(GameObject parent, bool success = false)
-        {
-            var comp = parent.GetComponent<WorkComponent>();
-            comp.Interrupt(parent, success);
-        }
-        internal void UseTool(GameObject parent, TargetArgs target)
+        internal void UseTool(Actor parent, TargetArgs target)
         {
             var tool = parent.GetComponent<HaulComponent>().Holding.Object;//.EquipmentSlots[GearType.Mainhand].Object;
 
@@ -88,7 +83,7 @@ namespace Start_a_Town_.Components
             var work = skill.GetInteraction(parent, target);
             if (work == null)
                 return;
-            this.Perform(parent, work, target);
+            this.Perform(work, target);
         }
 
         private void UseHands(GameObject parent, TargetArgs target)
@@ -101,7 +96,7 @@ namespace Start_a_Town_.Components
             if (this.Task == null)
                 return;
 
-            this.Task.Update(parent, this.Target);
+            this.Task.Update(parent as Actor, this.Target);
 
             if (this.Task.State == Interaction.States.Running)
             {
@@ -114,7 +109,7 @@ namespace Start_a_Town_.Components
                 // WARNING: i had to move this here because if the interaction target was this entity itself, then the direction vector became zero and its normal became NaN
                 return;
             }
-            this.Task.FinishAction(parent, this.Target);
+            this.Task.FinishAction(parent as Actor, this.Target);
             this.Task = null;
             this.Target = null;
         }
@@ -186,7 +181,7 @@ namespace Start_a_Town_.Components
                 if (this.Task.Animation != null)
                 {
                     parent.AddAnimation(this.Task.Animation);
-                    this.Task.AfterLoad(parent, this.Target);
+                    this.Task.AfterLoad(parent as Actor, this.Target);
                 }
             }
         }

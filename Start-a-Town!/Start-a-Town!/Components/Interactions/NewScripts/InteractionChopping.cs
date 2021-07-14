@@ -11,13 +11,8 @@
             this.Verb = "Chopping";
             this.Skill = ToolAbilityDef.Chopping;
         }
-       
-        public override bool AvailabilityCondition(GameObject actor, TargetArgs target)
-        {
-            return this.Conditions.GetFailedCondition(actor, target) == null;
-        }
-
-        public override void Perform(GameObject a, TargetArgs t)
+      
+        public override void Perform(Actor a, TargetArgs t)
         {
             var cell = a.Map.GetCell(t.Global);
             var block = cell.Block;

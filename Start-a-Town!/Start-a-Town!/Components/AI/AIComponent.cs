@@ -1,33 +1,26 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.AI;
+using Start_a_Town_.AI.Behaviors;
+using Start_a_Town_.Components;
+using Start_a_Town_.Net;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.Net;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
-using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.UI;
-using Start_a_Town_.AI;
 
 namespace Start_a_Town_
 {
     class AIComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get
-            {
-                return "AI";
-            }
-        }
-
-        readonly Behavior Current;
+        public override string ComponentName => "AI";
+        
         public Guid Guid = Guid.NewGuid();
-        static public Dictionary<Guid, GameObject> Registry = new Dictionary<Guid, GameObject>();
-        static public Guid GetGuid(GameObject agent)
+        public static Dictionary<Guid, GameObject> Registry = new();
+        public static Guid GetGuid(GameObject agent)
         {
             return agent.GetComponent<AIComponent>().Guid;
         }
-        static public GameObject GetAgent(Guid guid)
+        public static GameObject GetAgent(Guid guid)
         {
             return Registry[guid];
         }
@@ -36,13 +29,13 @@ namespace Start_a_Town_
             this.State.InSync = true;
         }
 
-        static public void Invalidate(GameObject obj)
+        public static void Invalidate(GameObject obj)
         {
             // TODO: signal each npc that remembers obj, that obj's state has changed, so that they evaluate it again next time they see it
             throw new NotImplementedException();
         }
         Behavior Root;
-        Knowledge Knowledge;
+        readonly Knowledge Knowledge;
         bool Running;
         public AIState State;
         public bool Enabled = true;
@@ -83,11 +76,20 @@ namespace Start_a_Town_
             var parent = this.Parent;
             var net = parent.Net;
             if (net is Client) // do i want to run some deterministic behaviors locally too? UPDATE: NO
+            {
                 return;
-            if (!Running)
+            }
+
+            if (!this.Running)
+            {
                 return;
-            if(this.Enabled)
-                Root.Execute(parent as Actor, this.State);
+            }
+
+            if (this.Enabled)
+            {
+                this.Root.Execute(parent as Actor, this.State);
+            }
+
             return;
         }
 
@@ -103,7 +105,10 @@ namespace Start_a_Town_
         public override bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
         {
             if (parent.Net as Server == null) // why did i do this?
+            {
                 return true;
+            }
+
             switch (e.Type)
             {
                 case Message.Types.SyncAI:
@@ -115,13 +120,13 @@ namespace Start_a_Town_
                     throw new NotImplementedException();
 
                 case Message.Types.AIStart:
-                    Running = true;
+                    this.Running = true;
                     return true;
                 case Message.Types.AIStop:
-                    Running = false;
+                    this.Running = false;
                     return true;
                 case Message.Types.AIToggle:
-                    Running = !Running;
+                    this.Running = !this.Running;
                     return true;
 
                 case Message.Types.ObjectStateChanged:
@@ -135,14 +140,17 @@ namespace Start_a_Town_
                     }
                     return true;
 
-             
+
 
                 case Message.Types.Remember:
                     var memObj = e.Parameters[0] as GameObject;
                     var a = e.Parameters[1] as Action<Memory>;
                     Memory m;
-                    if (!Knowledge.Objects.TryGetValue(memObj, out m))
+                    if (!this.Knowledge.Objects.TryGetValue(memObj, out m))
+                    {
                         return true;
+                    }
+
                     a(m);
                     return true;
 
@@ -157,10 +165,12 @@ namespace Start_a_Town_
             if (e.Type == Message.Types.BlockChanged || e.Type == Message.Types.BlocksChanged)
             {
                 if (!this.State.Path?.IsValid(gameObject as Actor) ?? false)
+                {
                     this.State.Path = null;
+                }
             }
         }
-        
+
         public override object Clone()
         {
             AIComponent ai = new AIComponent().Initialize(
@@ -168,33 +178,14 @@ namespace Start_a_Town_
             return ai;
         }
 
-        public override void OnTooltipCreated(GameObject parent, UI.Control tooltip)
-        {
-            if(Current!=null)
-                tooltip.Controls.Add(new UI.Label(tooltip.Controls.Last().BottomLeft, Current.ToString(), fill: Color.Lime)
-                {
-                    TextFunc = () => Current.ToString(),
-                });
-        }
-
-        public override string ToString()
-        {
-            return
-               (Current != null ? "Current: " + Current.ToString() : "<null>") +
-                "\n" + base.ToString();
-        }
-
-        static public AIState GetState(GameObject entity)
-        {
-            return entity.GetComponent<AIComponent>().State;
-        }
-
         internal override List<SaveTag> Save()
         {
-            var save = new List<SaveTag>();
-            save.Add(new SaveTag(SaveTag.Types.ByteArray, "Guid", this.Guid.ToByteArray()));
-            save.Add(this.State.Save("State"));
-            save.Add(this.Root.Save("Root"));
+            var save = new List<SaveTag>
+            {
+                new SaveTag(SaveTag.Types.ByteArray, "Guid", this.Guid.ToByteArray()),
+                this.State.Save("State"),
+                this.Root.Save("Root")
+            };
             return save;
         }
         internal override void Load(SaveTag save)
@@ -235,8 +226,8 @@ namespace Start_a_Town_
         class Interface : GroupBox
         {
             readonly Label Label;
-            AIState State;
-            int EntityID;
+            readonly AIState State;
+            readonly int EntityID;
             string GetText()
             {
                 return "OBSOLETE";
@@ -260,12 +251,18 @@ namespace Start_a_Town_
                 {
                     case Message.Types.JobAccepted:
                         if ((int)e.Parameters[0] == this.EntityID)
+                        {
                             this.Label.Text = "Behavior: " + (string)e.Parameters[1];
+                        }
+
                         break;
 
                     case Message.Types.JobComplete:
                         if ((int)e.Parameters[0] == this.EntityID)
+                        {
                             this.Label.Text = "Behavior: ";
+                        }
+
                         break;
 
 
@@ -284,10 +281,16 @@ namespace Start_a_Town_
             var serverentity = parent;
             var state = AIState.GetState(serverentity);
             if (state is null)
+            {
                 return; // we are in client
+            }
+
             var path = state.Path;
             if (!UISelectedInfo.IsSelected(parent))
+            {
                 return;
+            }
+
             var first = true;
             if (path is not null)
             {
@@ -303,7 +306,9 @@ namespace Start_a_Town_
                 }
             }
             foreach (var target in state.MoveOrders)
+            {
                 cam.DrawBlockMouseover(sb, parent.Map, target.Global.Above(), Color.Yellow);
+            }
         }
 
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)

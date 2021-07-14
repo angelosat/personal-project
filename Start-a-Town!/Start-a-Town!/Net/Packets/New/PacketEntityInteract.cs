@@ -42,22 +42,21 @@ namespace Start_a_Town_
         {
             if (net is Server)
                 throw new Exception();
-            var entity = net.GetNetworkObject(r.ReadInt32());
+            var entity = net.GetNetworkObject<Actor>(r.ReadInt32());
             var map = net.Map;
             if(!r.ReadBoolean())
             {
-                WorkComponent.End(entity, r.ReadBoolean());
+                entity.Work.End(r.ReadBoolean());
                 return;
             }
             var target = TargetArgs.Read(net.Map, r);
-
             var action = Activator.CreateInstance(Type.GetType(r.ReadString())) as Interaction;
             action.Read(r);
             var global = r.ReadVector3();
             var velocity = r.ReadVector3();
             var dir = r.ReadVector3();
             action.Synced(net.Map);
-            entity.TryGetComponent<WorkComponent>(c => c.Perform(entity, action, target));
+            entity.Work.Perform(action, target);
         }
     }
 }

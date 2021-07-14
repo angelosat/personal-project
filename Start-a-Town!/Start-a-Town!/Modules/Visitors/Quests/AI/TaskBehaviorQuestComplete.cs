@@ -30,7 +30,7 @@ namespace Start_a_Town_
             {
                 this.QuestID = qID;
             }
-            public override void Perform(GameObject a, TargetArgs t)
+            public override void Perform(Actor a, TargetArgs t)
             {
                 var actor = a as Actor;
                 var q = actor.Town.GetQuest(this.QuestID);

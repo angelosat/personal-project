@@ -97,7 +97,7 @@ namespace Start_a_Town_.Components
                 }
             }
 
-            public override void Perform(GameObject actor, TargetArgs target)
+            public override void Perform(Actor actor, TargetArgs target)
             {
                 var consumable = target.Object as Entity;
 
@@ -109,7 +109,7 @@ namespace Start_a_Town_.Components
                     actor.Net.PopLoot(seeds, actor.Global, actor.Velocity);
 
                 consumable.SetStackSize(target.Object.StackSize - 1);
-                (actor as Actor).AddMoodlet(MoodletDef.JustAte.Create());
+                actor.AddMoodlet(MoodletDef.JustAte.Create());
             }
             public override object Clone()
             {

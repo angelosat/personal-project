@@ -16,7 +16,7 @@ namespace Start_a_Town_
       
         public abstract string Name { get; }
         public ToolDrawing Tool;
-        public HashSet<BlockRecipe> List = new HashSet<BlockRecipe>();
+        public HashSet<BlockRecipe> List = new();
 
         public void Add(BlockRecipe constr)
         {

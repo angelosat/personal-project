@@ -9,7 +9,7 @@ namespace Start_a_Town_
     {
         internal static void Init()
         {
-            Client.RegisterPacketHandler(PacketType.WorldInfo, Receive);
+            Client.RegisterPacketHandler(PacketType.WorldData, Receive);
         }
         internal static void Send(IObjectProvider net, PlayerData player)
         {
@@ -19,10 +19,10 @@ namespace Start_a_Town_
             if (player == null)
             {
                 foreach (var p in server.Players.GetList())
-                    server.Enqueue(p, Packet.Create(player, PacketType.WorldInfo, data, SendType.OrderedReliable));
+                    server.Enqueue(p, Packet.Create(player, PacketType.WorldData, data, SendType.OrderedReliable));
             }
             else
-                server.Enqueue(player, Packet.Create(player, PacketType.WorldInfo, data, SendType.OrderedReliable));
+                server.Enqueue(player, Packet.Create(player, PacketType.WorldData, data, SendType.OrderedReliable));
         }
         internal static void Receive(IObjectProvider net, BinaryReader r)
         {

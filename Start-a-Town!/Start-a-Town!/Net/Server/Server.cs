@@ -630,7 +630,7 @@ namespace Start_a_Town_.Net
                     msg.Payload.Deserialize(r =>
                     {
                         Vector3 global = r.ReadVector3();
-                        var type = (Start_a_Town_.Block.Types)r.ReadInt32();
+                        var type = (Block.Types)r.ReadInt32();
                         var data = r.ReadByte();
                         var variation = r.ReadInt32();
                         var orientation = r.ReadInt32();
@@ -651,36 +651,6 @@ namespace Start_a_Town_.Net
                             block.Place(Instance.Map, global, data, variation, orientation);
                         }
                         Instance.Enqueue(PacketType.PlayerSetBlock, msg.Payload, SendType.OrderedReliable, global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerToggleWalk:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        bool toggle = r.ReadBoolean();
-                        msg.Player.ControllingEntity.GetComponent<MobileComponent>().ToggleWalk(toggle);
-                        Instance.Enqueue(PacketType.PlayerToggleWalk, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerToggleSprint:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        bool toggle = r.ReadBoolean();
-                        msg.Player.ControllingEntity.GetComponent<MobileComponent>().ToggleSprint(toggle);
-                        Instance.Enqueue(PacketType.PlayerToggleSprint, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerInteract:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        msg.Player.ControllingEntity.GetComponent<WorkComponent>().UseTool(msg.Player.ControllingEntity, target);
-                        Instance.Enqueue(PacketType.PlayerInteract, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
                     });
                     return;
 
@@ -709,54 +679,6 @@ namespace Start_a_Town_.Net
                         msg.Player.ControllingEntity.Work.Perform(interaction, target);
                         if (interaction.Conditions.Evaluate(msg.Player.ControllingEntity, target))
                             Instance.Enqueue(PacketType.PlayerInput, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.EntityThrow:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        var dir = r.ReadVector3();
-                        var all = r.ReadBoolean();
-                        HaulComponent.ThrowHauled(msg.Player.ControllingEntity, dir, all);
-                        Instance.Enqueue(PacketType.EntityThrow, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerStartAttack:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        msg.Player.ControllingEntity.GetComponent<AttackComponent>().Start(msg.Player.ControllingEntity);
-                        Instance.Enqueue(PacketType.PlayerStartAttack, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerFinishAttack:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        var dir = r.ReadVector3();
-                        msg.Player.ControllingEntity.GetComponent<AttackComponent>().Finish(msg.Player.ControllingEntity, dir);
-                        Instance.Enqueue(PacketType.PlayerFinishAttack, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerStartBlocking:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        msg.Player.ControllingEntity.GetComponent<Components.BlockingComponent>().Start(msg.Player.ControllingEntity);
-                        Instance.Enqueue(PacketType.PlayerStartBlocking, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
-                case PacketType.PlayerFinishBlocking:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        msg.Player.ControllingEntity.GetComponent<Components.BlockingComponent>().Stop(msg.Player.ControllingEntity);
-                        Instance.Enqueue(PacketType.PlayerFinishBlocking, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
                     });
                     return;
 
@@ -899,6 +821,7 @@ namespace Start_a_Town_.Net
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
+        [Obsolete]
         public GameObject InstantiateObject(GameObject obj)
         {
             if (obj.RefID > 0)
@@ -1125,7 +1048,7 @@ namespace Start_a_Town_.Net
                 Instance.Parser = new ServerCommandParser(Instance);
             Instance.Parser.Command(command);
         }
-
+        [Obsolete]
         public void InventoryOperation(GameObjectSlot sourceSlot, GameObjectSlot targetSlot, int amount)
         {
             var sourceParent = sourceSlot.Parent;
@@ -1177,14 +1100,6 @@ namespace Start_a_Town_.Net
 
         }
         
-        internal void RemoteProcedureCall(TargetArgs target, Message.Types type, Action<BinaryWriter> writer)
-        {
-            this.OutgoingStream.Write((int)PacketType.RemoteProcedureCall);
-            target.Write(this.OutgoingStream);
-            this.OutgoingStream.Write((int)type);
-            writer(this.OutgoingStream);
-        }
-
         public void SyncSlots(params TargetArgs[] slots)
         {
             byte[] data = Network.Serialize(w =>

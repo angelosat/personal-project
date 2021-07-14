@@ -10,8 +10,6 @@ using System.IO.Compression;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.GameModes;
-using Start_a_Town_.Net.Packets;
-using Start_a_Town_.Net.Packets.Player;
 
 namespace Start_a_Town_.Net
 {
@@ -439,19 +437,6 @@ namespace Start_a_Town_.Net
                     Rooms.Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, "Map saved");
                     break;
 
-                case PacketType.RemoteProcedureCall:
-                    TargetArgs recipient = TargetArgs.Read(Instance.Map, r);
-                    Components.Message.Types arg = (Components.Message.Types)r.ReadInt32();
-                        if (recipient.Type == TargetType.Position)
-                            Instance.Map.GetBlock(recipient.Global).RemoteProcedureCall(Instance, recipient.Global, arg, r); // TODO: FIX: CAN RECEIVE PACKET BEFORE INITIALIZING MAP!!!
-                        else
-                        {
-                            GameObject obj = recipient.Object;
-                            obj.RemoteProcedureCall(arg, r);
-                        }
-                    
-                    break;
-
                 default:
                     GameMode.Current.HandlePacket(Instance, type, r);
                     break;
@@ -487,53 +472,6 @@ namespace Start_a_Town_.Net
                     Instance.PlayerDisconnected(plid);
                     break;
 
-                case PacketType.PlayerJump:
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        int netid = r.ReadInt32();
-                        if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
-                        {
-                            return;
-                        }
-                        obj.GetComponent<MobileComponent>().Jump(obj);
-                    });
-                    break;
-
-                case PacketType.PlayerChangeDirection:
-                    var packet = new PacketPlayerChangeDirection(Instance, msg.Decompressed);
-                    if (packet.Entity is null)
-                    {
-                        return;
-                    }
-                    packet.Entity.Direction = packet.Direction;
-                    break;
-
-                case PacketType.PlayerToggleSprint:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        bool toggle = r.ReadBoolean();
-                        if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
-                        {
-                            return;
-                        }
-                        obj.GetComponent<MobileComponent>().ToggleSprint(toggle);
-                    });
-                    return;
-
-                case PacketType.PlayerInteract:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
-                        {
-                            return;
-                        }
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        obj.GetComponent<WorkComponent>().UseTool(obj as Actor, target);
-                    });
-                    return;
-
                 case PacketType.PlayerInput:
                     msg.Payload.Deserialize(r =>
                     {
@@ -560,89 +498,6 @@ namespace Start_a_Town_.Net
                         target.HandleRemoteCall(Instance, ObjectEventArgs.Create(call, args));
                     });
                     return;
-
-                case PacketType.EntityThrow:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        var dir = r.ReadVector3();
-                        var all = r.ReadBoolean();
-                        if (!Instance.TryGetNetworkObject(netid, out GameObject obj))
-                        {
-                            return;
-                        }
-                        HaulComponent.ThrowHauled(obj, dir, all);
-
-                    });
-                    return;
-
-                case PacketType.PlayerStartAttack:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        GameObject obj;
-                        if (!Instance.TryGetNetworkObject(netid, out obj))
-                        {
-                            return;
-                        }
-                        obj.GetComponent<AttackComponent>().Start(obj);
-                    });
-                    return;
-
-                case PacketType.PlayerFinishAttack:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        var dir = r.ReadVector3();
-                        GameObject obj;
-                        if (!Instance.TryGetNetworkObject(netid, out obj))
-                        {
-                            return;
-                        }
-                        obj.GetComponent<AttackComponent>().Finish(obj, dir);
-                    });
-                    return;
-
-                case PacketType.PlayerStartBlocking:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        GameObject obj;
-                        if (!Instance.TryGetNetworkObject(netid, out obj))
-                        {
-                            return;
-                        }
-                        obj.GetComponent<Components.BlockingComponent>().Start(obj);
-                    });
-                    return;
-
-                case PacketType.PlayerFinishBlocking:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        GameObject obj;
-                        if (!Instance.TryGetNetworkObject(netid, out obj))
-                        {
-                            return;
-                        }
-                        obj.GetComponent<Components.BlockingComponent>().Stop(obj);
-                    });
-                    return;
-
-                case PacketType.RemoteProcedureCall:
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        TargetArgs recipient = TargetArgs.Read(Instance, r);
-                        Components.Message.Types type = (Components.Message.Types)r.ReadInt32();
-                        if (recipient.Type == TargetType.Position)
-                            Instance.Map.GetBlock(recipient.Global).RemoteProcedureCall(Instance, recipient.Global, type, r); // TODO: FIX: CAN RECEIVE PACKET BEFORE INITIALIZING MAP!!!
-                        else
-                        {
-                            GameObject obj = recipient.Object;
-                            obj.RemoteProcedureCall(type, r);
-                        }
-                    });
-                    break;
 
                 case PacketType.SpawnChildObject:
                     Network.Deserialize(msg.Payload, r =>
@@ -1162,113 +1017,62 @@ namespace Start_a_Town_.Net
         [Obsolete]
         internal static void PlayerStartMoving()
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-            }).Send(Instance.PacketID, PacketType.PlayerStartMoving, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerStopMoving()
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-            }).Send(Instance.PacketID, PacketType.PlayerStopMoving, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerChangeDirection(Vector3 direction)
         {
-            // assign direction directly for prediction?
-            var actor = Instance.GetPlayer().ControllingEntity;
-            actor.Direction = direction;
-            new PacketPlayerChangeDirection(actor, direction).Send(Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerJump()
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-            }).Send(Instance.PacketID, PacketType.PlayerJump, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerToggleWalk(bool toggle)
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-                w.Write(toggle);
-            }).Send(Instance.PacketID, PacketType.PlayerToggleWalk, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerToggleSprint(bool toggle)
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-                w.Write(toggle);
-            }).Send(Instance.PacketID, PacketType.PlayerToggleSprint, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerInteract(TargetArgs target)
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-                target.Write(w);
-            }).Send(Instance.PacketID, PacketType.PlayerInteract, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerThrow(Vector3 dir, bool all)
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-                w.Write(dir);
-                w.Write(all);
-            }).Send(Instance.PacketID, PacketType.EntityThrow, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerAttack()
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-            }).Send(Instance.PacketID, PacketType.PlayerStartAttack, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerFinishAttack(Vector3 vector3)
         {
-            var actor = Instance.GetPlayer().ControllingEntity;
-            Network.Serialize(w =>
-            {
-                w.Write(actor.RefID);
-                w.Write(vector3);
-            }).Send(Instance.PacketID, PacketType.PlayerFinishAttack, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerStartBlocking()
         {
-            Network.Serialize(w =>
-            {
-                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
-            }).Send(Instance.PacketID, PacketType.PlayerStartBlocking, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerFinishBlocking()
         {
-            Network.Serialize(w =>
-            {
-                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
-            }).Send(Instance.PacketID, PacketType.PlayerFinishBlocking, Instance.Host, Instance.RemoteIP);
+            throw new NotImplementedException();
         }
         [Obsolete]
         internal static void PlayerInput(TargetArgs targetArgs, PlayerInput input)

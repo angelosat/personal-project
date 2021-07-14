@@ -918,7 +918,6 @@
     <Compile Include="Net\Packets\IPacketHandler.cs" />
     <Compile Include="Net\Packets\PacketEntityBoolean.cs" />
     <Compile Include="Net\Packets\PacketEntityVector3.cs" />
-    <Compile Include="Net\Packets\Player\PacketPlayerChangeDirection.cs" />
     <Compile Include="Net\RandomThreaded.cs" />
     <Compile Include="Net\Server\ServerCommandParser.cs" />
     <Compile Include="Net\Server\ServerConsole.cs" />
@@ -1186,6 +1185,7 @@
     <Folder Include="Modules\AI\Behaviors\Dialogue\" />
     <Folder Include="Modules\AI\Control\" />
     <Folder Include="Modules\Towns\Farming\AI\" />
+    <Folder Include="Net\Packets\Player\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

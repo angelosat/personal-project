@@ -11,8 +11,7 @@ namespace Start_a_Town_
         public BlockStone()
             : base(Block.Types.Cobblestone, 0, 1, true, true)
         {
-            this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks), Reaction.Reagent.IsOfMaterial(MaterialDefOf.Stone)));
-            this.AssetNames = "stone5height19";
+            this.LoadVariations("stone5height19");
 
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(new Reaction.Reagent("Base", Reaction.Reagent.IsOfMaterial(MaterialDefOf.Stone), Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),

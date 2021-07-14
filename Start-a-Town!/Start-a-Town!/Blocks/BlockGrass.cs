@@ -39,7 +39,7 @@ namespace Start_a_Town_
                         new Loot(()=>ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), chance: 1f, count: 1)
                         );
 
-            this.AssetNames = "grass/grass1, grass/grass2, grass/grass3, grass/grass4";
+            this.LoadVariations("grass/grass1", "grass/grass2", "grass/grass3", "grass/grass4");
 
             foreach (var item in new AtlasDepthNormals.Node.Token[] { 
                 Block.Atlas.Load("blocks/grass/grass1-overlay", MapBase.BlockDepthMap, Block.BlockMouseMap.Texture),

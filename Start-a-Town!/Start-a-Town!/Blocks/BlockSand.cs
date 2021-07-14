@@ -15,13 +15,7 @@ namespace Start_a_Town_.Blocks
         public BlockSand()
             : base(Block.Types.Sand)
         {
-            this.AssetNames = "sand1";
-
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(new Reaction.Reagent("Base", Reaction.Reagent.IsOfMaterialType(MaterialType.Soil), Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
-                new BlockRecipe.Product(this)
-                );
-
+            this.LoadVariations("sand1");
             this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Sand, null, 1);
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(

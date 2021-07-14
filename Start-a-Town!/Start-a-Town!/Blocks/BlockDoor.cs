@@ -250,7 +250,6 @@ namespace Start_a_Town_
         public BlockDoor()
             : base(Block.Types.Door, 0, 1, false, true)
         {
-            this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks), Reaction.Reagent.IsOfMaterial(MaterialDefOf.LightWood)));
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
 
             var ndepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorndepth");

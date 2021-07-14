@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Graphics;
+using Start_a_Town_.Blocks;
 using Start_a_Town_.Components;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Components.Interactions;
+using Start_a_Town_.Graphics;
 using Start_a_Town_.Particles;
-using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
-    abstract public partial class Block : ISlottable, ITooltippable
+    public abstract partial class Block : ISlottable, ITooltippable
     {
         static Block()
         {
@@ -30,16 +28,16 @@ namespace Start_a_Town_
 
         static readonly Dictionary<Block, GameObject> BlockObjects = new();
 
-        static public Color[] BlockCoordinatesFull,
+        public static Color[] BlockCoordinatesFull,
             BlockCoordinatesHalf,
             BlockCoordinatesQuarter;
 
-        static public AtlasDepthNormals.Node.Token BlockShadow;
-        static public AtlasDepthNormals.Node.Token BlockBlueprint;
-        static public AtlasDepthNormals.Node.Token BlockHighlight;
-        static public AtlasDepthNormals.Node.Token BlockBlueprintGrayscale;
+        public static AtlasDepthNormals.Node.Token BlockShadow;
+        public static AtlasDepthNormals.Node.Token BlockBlueprint;
+        public static AtlasDepthNormals.Node.Token BlockHighlight;
+        public static AtlasDepthNormals.Node.Token BlockBlueprintGrayscale;
 
-        static public void Initialize()
+        public static void Initialize()
         {
             BlockCoordinatesFull = new Color[32 * 40];
             Game1.Instance.Content.Load<Texture2D>("Graphics/goodUV").GetData<Color>(BlockCoordinatesFull, 0, 32 * 40);
@@ -82,30 +80,30 @@ namespace Start_a_Town_
             return Block.Atlas.Load("graphics/items/blocks/" + localfilepath, Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/" + localfilepath).ToGrayscale(), Block.BlockDepthMap, Block.NormalMap);
         }
 
-        static public readonly Texture2D MouseMapSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube");
-        static public readonly Texture2D HalfBlockMouseMapTexture = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube half");
-        static public readonly Texture2D QuarterBlockMouseMapTexture = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube quarter");
+        public static readonly Texture2D MouseMapSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube");
+        public static readonly Texture2D HalfBlockMouseMapTexture = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube half");
+        public static readonly Texture2D QuarterBlockMouseMapTexture = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube quarter");
 
-        static public readonly Texture2D NormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsFilled19");
-        static public readonly Texture2D BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19");
+        public static readonly Texture2D NormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsFilled19");
+        public static readonly Texture2D BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19");
 
-        static public readonly Texture2D HalfBlockNormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfNormalsFilled");
-        static public readonly Texture2D HalfBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfDepth09");
+        public static readonly Texture2D HalfBlockNormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfNormalsFilled");
+        public static readonly Texture2D HalfBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfDepth09");
 
-        static public readonly Texture2D QuarterBlockMapNormal = Game1.Instance.Content.Load<Texture2D>("Graphics/blockQuarterNormalsFilled");
-        static public readonly Texture2D QuarterBlockMapDepth = Game1.Instance.Content.Load<Texture2D>("Graphics/blockQuarterDepth09");
+        public static readonly Texture2D QuarterBlockMapNormal = Game1.Instance.Content.Load<Texture2D>("Graphics/blockQuarterNormalsFilled");
+        public static readonly Texture2D QuarterBlockMapDepth = Game1.Instance.Content.Load<Texture2D>("Graphics/blockQuarterDepth09");
 
-        static public readonly Texture2D SliceBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockOneDepth09");
+        public static readonly Texture2D SliceBlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockOneDepth09");
 
-        static public readonly Texture2D MouseMapSpriteOpposite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube - back");
+        public static readonly Texture2D MouseMapSpriteOpposite = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap cube - back");
 
-        static public readonly MouseMap BlockMouseMap = new(MouseMapSprite, MouseMapSpriteOpposite, MouseMapSprite.Bounds, true);
-        static public readonly MouseMap BlockHalfMouseMap = new(HalfBlockMouseMapTexture, MouseMapSpriteOpposite, HalfBlockMouseMapTexture.Bounds, true);
-        static public readonly MouseMap BlockQuarterMouseMap = new(QuarterBlockMouseMapTexture, MouseMapSpriteOpposite, QuarterBlockMouseMapTexture.Bounds, true);
+        public static readonly MouseMap BlockMouseMap = new(MouseMapSprite, MouseMapSpriteOpposite, MouseMapSprite.Bounds, true);
+        public static readonly MouseMap BlockHalfMouseMap = new(HalfBlockMouseMapTexture, MouseMapSpriteOpposite, HalfBlockMouseMapTexture.Bounds, true);
+        public static readonly MouseMap BlockQuarterMouseMap = new(QuarterBlockMouseMapTexture, MouseMapSpriteOpposite, QuarterBlockMouseMapTexture.Bounds, true);
 
-        static public AtlasDepthNormals Atlas = new("Blocks") { DefaultDepthMask = MapBase.BlockDepthMap, DefaultNormalMask = Block.NormalMap }; ///Sprite.Atlas;//
+        public static AtlasDepthNormals Atlas = new("Blocks") { DefaultDepthMask = MapBase.BlockDepthMap, DefaultNormalMask = Block.NormalMap }; ///Sprite.Atlas;//
 
-        static public readonly AtlasDepthNormals.Node.Token[] TexturesCounter = 
+        public static readonly AtlasDepthNormals.Node.Token[] TexturesCounter =
             new AtlasDepthNormals.Node.Token[4] {
                 LoadTexture("counter1grayscale", "/counters/counter1"),
                 LoadTexture("counter4grayscale", "/counters/counter4"),
@@ -134,7 +132,7 @@ namespace Start_a_Town_
         public void GetTooltipInfo(UI.Tooltip tooltip)
         {
         }
-        
+
         public virtual void GetTooltip(Control tooltip, MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
@@ -143,13 +141,15 @@ namespace Start_a_Town_
             tooltip.Controls.Add(new Label("Chunk: " + map.GetChunk(global).MapCoords.ToString()) { Location = tooltip.Controls.BottomLeft });
             if (map.Camera.HideUnknownBlocks && (cell.IsHidden() || map.IsUndiscovered(global)))
             {
-                    tooltip.AddControlsBottomLeft(new Label("Undiscovered area") { Font = UI.UIManager.FontBold, TextColor = Color.Goldenrod });
+                tooltip.AddControlsBottomLeft(new Label("Undiscovered area") { Font = UI.UIManager.FontBold, TextColor = Color.Goldenrod });
                 return;
             }
             tooltip.Controls.Add(new UI.Label(this.Name) { Location = tooltip.Controls.BottomLeft, Font = UI.UIManager.FontBold, TextColor = Color.Goldenrod });
             var mat = this.GetMaterial(map.GetBlockData(global));
-            if(mat!=null)
+            if (mat != null)
+            {
                 tooltip.Controls.Add(new UI.Label(mat.ToString()) { TextColorFunc = () => mat.Color, Location = tooltip.Controls.BottomLeft });
+            }
 
             var data = cell.BlockData;
             var binary = Convert.ToString(data, 2);
@@ -160,7 +160,9 @@ namespace Start_a_Town_
 
             var blockentity = map.GetBlockEntity(global);
             if (blockentity != null)
+            {
                 blockentity.GetTooltip(tooltip);
+            }
         }
 
         public virtual void DrawUI(SpriteBatch sb, Vector2 pos)
@@ -190,12 +192,12 @@ namespace Start_a_Town_
         }
 
         public virtual string Name { get { return this.Type.ToString(); } }
-        static public readonly int Width = 32, Depth = 16, Height = 40, BlockHeight = 20;
-        static public readonly int HeightQuarter = Height / 4;
+        public static readonly int Width = 32, Depth = 16, Height = 40, BlockHeight = 20;
+        public static readonly int HeightQuarter = Height / 4;
 
 
-        static public readonly Vector2 OriginCenter = new(Width / 2f, Height - Depth / 2f);
-        static public readonly Vector2 Joint = new(Block.Width / 2, Block.Height);
+        public static readonly Vector2 OriginCenter = new(Width / 2f, Height - Depth / 2f);
+        public static readonly Vector2 Joint = new(Block.Width / 2, Block.Height);
         public enum Types : byte
         {
             Air,
@@ -247,40 +249,43 @@ namespace Start_a_Town_
             Construction,
             ShopCounter
         }
-        static public Rectangle Bounds = new(-(int)Block.OriginCenter.X, -(int)Block.OriginCenter.Y, Block.Width, Block.Height);
+        public static Rectangle Bounds = new(-(int)Block.OriginCenter.X, -(int)Block.OriginCenter.Y, Block.Width, Block.Height);
 
-        static public Rectangle[][] Create(int x, int y, int vars)
+        public static Rectangle[][] Create(int x, int y, int vars)
         {
             Rectangle[][] rects = new Rectangle[][] { new Rectangle[vars] };
             for (int i = 0; i < vars; i++)
+            {
                 rects[0][i] = new Rectangle((x + i) * Block.Width, y * Block.Height, Block.Width, Block.Height);
+            }
+
             return rects;
         }
 
-        static public Rectangle[][] TileHighlights;
+        public static Rectangle[][] TileHighlights;
 
-        static public MouseMap WallMouseMap, WallHalfMouseMap, WallQuarterMouseMap;
+        public static MouseMap WallMouseMap, WallHalfMouseMap, WallQuarterMouseMap;
 
-        static public SortedList<Types, Rectangle[][]> SourceRects;
+        public static SortedList<Types, Rectangle[][]> SourceRects;
 
 
-        static public void DrawHighlight(SpriteBatch sb, Rectangle bounds)
+        public static void DrawHighlight(SpriteBatch sb, Rectangle bounds)
         {
             sb.Draw(UI.UIManager.Highlight, bounds, null, Color.Lerp(Color.White, Color.Transparent, 0.5f), 0, Vector2.Zero, SpriteEffects.None, 0);
         }
-        static public bool HitTest(Sprite tileSprite, Rectangle bounds, Camera camera, Controller controller, out Vector3 face)
+        public static bool HitTest(Sprite tileSprite, Rectangle bounds, Camera camera, Controller controller, out Vector3 face)
         {
             //TODO optimize get_MouseRect
             if (bounds.Intersects(controller.MouseRect))
             {
-                int xx = (int)((controller.msCurrent.X - bounds.X) / (float)camera.Zoom);
-                int yy = (int)((controller.msCurrent.Y - bounds.Y) / (float)camera.Zoom);
+                int xx = (int)((controller.msCurrent.X - bounds.X) / camera.Zoom);
+                int yy = (int)((controller.msCurrent.Y - bounds.Y) / camera.Zoom);
                 return tileSprite.MouseMap.HitTest(xx, yy, out face);
             }
             face = Vector3.Zero;
             return false;
         }
-       
+
         public virtual Color[] UV
         {
             get { return BlockCoordinatesFull; }
@@ -296,8 +301,8 @@ namespace Start_a_Town_
         public virtual BlockEntity GetBlockEntity(MapBase map, Vector3 global)
         { return null; }
         public virtual T GetBlockEntityNew<T>(MapBase map, IntVec3 global) where T : BlockEntity
-        { 
-            return map.GetBlockEntity<T>(global); 
+        {
+            return map.GetBlockEntity<T>(global);
         }
         public GameObject GetEntity()
         {
@@ -315,7 +320,7 @@ namespace Start_a_Town_
         public virtual IntVec3 GetCenter(byte blockData, IntVec3 global) { return global; }
 
         public virtual bool Multi { get { return false; } }
-      
+
         public readonly Block.Types Type;
         /// <summary>
         /// Defines the alpha channel of the block's sprite during drawing.
@@ -367,7 +372,7 @@ namespace Start_a_Town_
         }
         protected virtual ParticleEmitterSphere GetDustEmitter()
         {
-            var emitter = new ParticleEmitterSphere() 
+            var emitter = new ParticleEmitterSphere()
             {
                 Lifetime = Engine.TicksPerSecond / 2f,
                 Offset = Vector3.Zero,
@@ -385,7 +390,7 @@ namespace Start_a_Town_
         protected virtual ParticleEmitterSphere GetDirtEmitter()
         {
             var dustcolor = this.DirtColor;
-            var emitter = new ParticleEmitterSphere() 
+            var emitter = new ParticleEmitterSphere()
             {
                 Lifetime = Engine.TicksPerSecond / 2f,
                 Offset = Vector3.Zero,
@@ -409,8 +414,13 @@ namespace Start_a_Town_
             var w = rect.Width / sqrt;
             var h = rect.Height / sqrt;
             for (int i = 0; i < sqrt; i++)
+            {
                 for (int j = 0; j < sqrt; j++)
+                {
                     list.Add(new Rectangle(rect.X + i * w, rect.Y + j * h, w, h));
+                }
+            }
+
             return list;
         }
 
@@ -422,30 +432,38 @@ namespace Start_a_Town_
         }
         [Obsolete]
         public BlockRecipe Recipe;
-        public List<Reaction.Reagent> Reagents = new();
-        
+
         public BuildProperties BuildProperties;
-        public Ingredient Ingredient { 
+        public Ingredient Ingredient
+        {
             get => this.BuildProperties?.Ingredient;
             set
             {
-                if (this.BuildProperties == null)
+                if (this.BuildProperties is null)
+                {
                     this.BuildProperties = new BuildProperties(value, 1);
-                else 
+                }
+                else
+                {
                     this.BuildProperties.Ingredient = value;
+                }
             }
         }
         public readonly bool HasData;
 
-        static public void UpdateBlocks()
+        public static void UpdateBlocks()
         {
             foreach (var block in Registry.Values)
+            {
                 block.Update();
+            }
         }
         internal static void UpdateBlocks(MapBase map)
         {
             foreach (var block in Registry.Values)
+            {
                 block.Update(map);
+            }
         }
 
 
@@ -458,7 +476,7 @@ namespace Start_a_Town_
         /// <param name="net"></param>
         /// <param name="global"></param>
         public virtual void NeighborChanged(IObjectProvider net, IntVec3 global) { }
-        
+
         public virtual void Removed(MapBase map, Vector3 global)
         {
         }
@@ -468,9 +486,14 @@ namespace Start_a_Town_
         {
             throw new Exception();
             foreach (var pos in positions)
+            {
                 this.Place(map, pos, data, 0, orientation, false);
+            }
+
             if (notify)
+            {
                 map.NotifyBlocksChanged(positions);
+            }
         }
         public virtual void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
@@ -483,13 +506,13 @@ namespace Start_a_Town_
             }
             map.SetBlockLuminance(global, this.Luminance);
         }
-        
+
         [Obsolete]
         public virtual void Remove(MapBase map, IntVec3 global, bool notify = true)
         {
             map.RemoveBlockNew(global, notify);
         }
-        
+
         public void BlockBelowChanged(MapBase map, IntVec3 global)
         {
             map.GetBlockEntity(global)?.OnBlockBelowChanged(map, global);
@@ -591,33 +614,22 @@ namespace Start_a_Town_
         }
         internal virtual void RemoteProcedureCall(IObjectProvider net, Vector3 vector3, Message.Types type, System.IO.BinaryReader r) { }
 
-        static public Dictionary<Block.Types, Block> Registry = new();
-        
+        public static Dictionary<Block.Types, Block> Registry = new();
+
         /// <summary>
         /// The index to the block's variation is stored within a cell. Add variations to this list so they can be picked at random whenever a block is placed.
         /// </summary>
         public List<AtlasDepthNormals.Node.Token> Variations = new();
         public List<Sprite> Sprites = new();
 
-        /// <summary>
-        /// TODO: turn this into a method SetVariations(param string[] names)
-        /// </summary>
-        protected string AssetNames
+        protected void LoadVariations(params string[] assetNames)
         {
-            set
+            foreach (string name in assetNames)
             {
-                foreach (string name in value.Split(','))
-                {
-                    var token = Block.Atlas.Load("blocks/" + name.Trim(), MapBase.BlockDepthMap, Block.NormalMap);
-                    this.Variations.Add(token);
-                }
+                var token = Block.Atlas.Load("blocks/" + name.Trim(), MapBase.BlockDepthMap, Block.NormalMap);
+                this.Variations.Add(token);
             }
         }
-        //[Obsolete]
-        //protected Block(Block.Types type, GameObject.Types entityType, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
-        //    : this(type, transparency, density, opaque, solid)
-        //{
-        //}
         protected Block(Block.Types type, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
         {
             this.Type = type;
@@ -632,26 +644,37 @@ namespace Start_a_Town_
         public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
+            {
                 return;
+            }
+
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, tint, sunlight, blocklight, depth);
         }
         public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
+            {
                 return;
+            }
+
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth);
         }
         public virtual void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
+            {
                 return;
+            }
+
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth, this);
         }
         public virtual MyVertex[] Draw(MySpriteBatch sb, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             if (this == BlockDefOf.Air)
+            {
                 return null;
-            
+            }
+
             var material = this.GetColorVector(data);
 
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
@@ -663,8 +686,10 @@ namespace Start_a_Town_
         public virtual MyVertex[] Draw(Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             if (this == BlockDefOf.Air)
+            {
                 return null;
-         
+            }
+
             var material = this.GetColorVector(data);
 
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
@@ -675,8 +700,10 @@ namespace Start_a_Town_
         public virtual MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             if (this == BlockDefOf.Air)
+            {
                 return null;
-           
+            }
+
             var material = this.GetColorVector(data);
             MySpriteBatch mesh = this.Opaque ? canvas.Opaque : canvas.NonOpaque;
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
@@ -687,7 +714,10 @@ namespace Start_a_Town_
         public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
             if (cell.Block.Type == Types.Air)
+            {
                 return;
+            }
+
             sb.DrawBlock(Block.Atlas.Texture, screenPos, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
         }
         public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
@@ -733,7 +763,7 @@ namespace Start_a_Town_
             return c;
         }
         static Vector4 DefaultColorVector = Vector4.One;
-       
+
         public virtual byte GetDataFromMaterial(GameObject craftingReagent)
         {
             return (byte)craftingReagent.Body.Material.ID;
@@ -779,7 +809,7 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
-        
+
         public virtual void GetPlayerActionsWorld(GameObject player, Vector3 global, Dictionary<PlayerInput, ContextAction> list)
         {
             throw new NotImplementedException();
@@ -788,7 +818,7 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
-        static public float GetPathingCost(MapBase map, Vector3 global)
+        public static float GetPathingCost(MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
             return cell.Block.GetPathingCost(cell.BlockData);
@@ -798,23 +828,8 @@ namespace Start_a_Town_
             return 1;
         }
 
-        public const int EntityIDRange = 50000;
-        public int EntityID { get { return EntityIDRange + (int)this.Type; } }
-
-        public Material DefaultMaterial
-        {
-            get
-            {
-                return this.GetAllValidConstructionMaterials().First();
-            }
-        }
-
         public bool RequiresConstruction = true;
 
-        internal IEnumerable<Material> GetAllValidConstructionMaterials()
-        {
-            return this.Ingredient.GetAllValidMaterials();
-        }
         internal IEnumerable<ItemDefMaterialAmount> GetAllValidConstructionMaterialsNew()
         {
             return this.Ingredient.GetAllValidMaterialsNew();
@@ -822,7 +837,10 @@ namespace Start_a_Town_
         internal void IngredientRequirements(Material mainMaterial, out ItemDef def, out int amount)
         {
             if (!this.Ingredient.ItemDef.DefaultMaterialType.SubTypes.Contains(mainMaterial))
+            {
                 throw new Exception();
+            }
+
             def = this.Ingredient.ItemDef;
             amount = this.Ingredient.Amount;
         }
@@ -830,12 +848,12 @@ namespace Start_a_Town_
         {
             return this.Ingredient.GetLabel();
         }
-        
+
         public virtual GameObject Create(List<GameObjectSlot> reagents)
         {
             return this.GetEntity().Clone();
         }
-        
+
 
         public virtual void OnSteppedOn(GameObject actor, Vector3 global) { }
 
@@ -843,21 +861,23 @@ namespace Start_a_Town_
         {
             dropped.Global = target.Global + target.Face + target.Precise;
             if (dropped.Slot != null)
+            {
                 dropped.Slot.Clear(); // ugly
+            }
             // TODO: handle case where we split the stack when dropping it. instantiate new object with server etc...
             actor.Map.EventOccured(Message.Types.EntityPlacedItem, actor, dropped);
 
             // WARNING spawning the item locally by calling its own method because we dont want the server to syncspawn, as is the case my calling server.spawn at the moment
-            dropped.Spawn(actor.Map, target.Global + target.Face + target.Precise); 
+            dropped.Spawn(actor.Map, target.Global + target.Face + target.Precise);
         }
 
-        static public Material GetBlockMaterial(MapBase map, Vector3 global)
+        public static Material GetBlockMaterial(MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
             var mat = cell.Block.GetMaterial(cell.BlockData);
             return mat;
         }
-        static public float GetBlockHeight(MapBase map, Vector3 global)
+        public static float GetBlockHeight(MapBase map, Vector3 global)
         {
             var offset = global.ToBlock();
             var cell = map.GetCell(global);
@@ -873,8 +893,8 @@ namespace Start_a_Town_
         public virtual Vector3 GetVelocityTransform(byte data, Vector3 blockcoords) { return Vector3.Zero; }
         public float GetHeight(Vector3 blockcoords) { return this.GetHeight(blockcoords.X, blockcoords.Y); }
         public float GetHeight(byte data, Vector3 blockcoords) { return this.GetHeight(data, blockcoords.X, blockcoords.Y); }
-        
-        static public readonly AtlasDepthNormals.Node.Token ParticlePixel = Block.Atlas.Load(UI.UIManager.Highlight, "particle");
+
+        public static readonly AtlasDepthNormals.Node.Token ParticlePixel = Block.Atlas.Load(UI.UIManager.Highlight, "particle");
 
         static readonly AtlasDepthNormals.Node.Token Token = Block.Atlas.Load("blocks/blockunknown", MapBase.BlockDepthMap, Block.NormalMap);
 
@@ -937,7 +957,7 @@ namespace Start_a_Town_
             gd.Textures[0] = Block.Atlas.Texture;
             gd.Textures[1] = Block.Atlas.DepthTexture;
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            var bounds = new Vector4(0,0, w, h);
+            var bounds = new Vector4(0, 0, w, h);
             var cam = new Camera
             {
                 SpriteBatch = mysb
@@ -947,7 +967,7 @@ namespace Start_a_Town_
             gd.SetRenderTarget(null);
             return renderTarget;
         }
-       
+
 
         public IntVec3 Front(MapBase map, IntVec3 global)
         {
@@ -1007,21 +1027,26 @@ namespace Start_a_Town_
         internal IEnumerable<IntVec3> GetOperatingPositions(Cell cell, IntVec3 global)
         {
             foreach (var p in this.GetOperatingPositions(cell))
+            {
                 yield return p + global;
+            }
         }
-       
+
         public virtual IEnumerable<(string name, Action action)> GetInfoTabs() { yield break; }
         internal virtual void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
             map.GetBlockEntity(vector3)?.GetSelectionInfo(info, map, vector3);
             var node = map.Regions.GetNodeAt(vector3);
             if (node == null)
+            {
                 return;
+            }
+
             info.AddInfo(new Label(node.ToString()));
             info.AddInfo(new Label(node.Region.ToString()));
             info.AddInfo(new Label(node.Region.Room.ToString()));
         }
-      
+
         internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
         {
             var e = map.GetBlockEntity(vector3);
@@ -1052,8 +1077,13 @@ namespace Start_a_Town_
         {
             var e = map.GetBlockEntity(global);
             if (e != null)
+            {
                 foreach (var c in e.Comps)
+                {
                     c.DrawSelected(sb, cam, map, global);
+                }
+            }
+
             this.OnDrawSelected(sb, cam, map, global);
         }
     }

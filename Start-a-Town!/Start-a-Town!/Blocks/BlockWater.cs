@@ -19,7 +19,7 @@ namespace Start_a_Town_.Blocks
         public BlockWater()
             : base(Block.Types.Water, opaque: false, density: 0.2f, solid: false)
         {
-            this.AssetNames = "water/water1, water/water2, water/water3, water/water4";
+            this.LoadVariations("water/water1", "water/water2", "water/water3", "water/water4");
             this.Assets = new AtlasDepthNormals.Node.Token[2][];
             this.Assets[(int)Fullness.Half] = new AtlasDepthNormals.Node.Token[1]{
                 Block.Atlas.Load("blocks/water/water1half", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap)

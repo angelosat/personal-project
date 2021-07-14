@@ -31,9 +31,8 @@ namespace Start_a_Town_
             : base(Block.Types.Soil)
         {
             this.RequiresConstruction = false;
-            this.AssetNames = "soil/soil1, soil/soil2, soil/soil3, soil/soil4";
+            this.LoadVariations("soil/soil1", "soil/soil2", "soil/soil3", "soil/soil4");
             
-            this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.IsOfMaterialType(MaterialType.Soil), Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks)));
             this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Soil, null, 1);
 
             this.Recipe = new BlockRecipe(

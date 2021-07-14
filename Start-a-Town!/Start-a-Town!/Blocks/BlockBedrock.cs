@@ -9,7 +9,7 @@
         public BlockBedrock()
             : base(Block.Types.Stone)
         {
-            AssetNames = "smoothstone";
+            this.LoadVariations("smoothstone");
         }
     }
 }

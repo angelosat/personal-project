@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Components;
+using Start_a_Town_.Blocks;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Graphics;
-using Start_a_Town_.Blocks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -27,7 +26,7 @@ namespace Start_a_Town_
             {
                 return Material.Registry[d].Name;
             }
-            
+
             public State()
             {
 
@@ -36,11 +35,11 @@ namespace Start_a_Town_
             {
                 this.Material = material;
             }
-            static public void Read(byte data, out Material material)
+            public static void Read(byte data, out Material material)
             {
                 material = Material.Registry[data];
             }
-           
+
             public override void FromCraftingReagent(GameObject reagent)
             {
                 this.Material = reagent.Body.Sprite.Material;
@@ -68,12 +67,12 @@ namespace Start_a_Town_
         { get { return new State(); } }
 
         public override bool IsDeconstructible => true;
-        AtlasDepthNormals.Node.Token GrayScale;
-        
+
+        readonly AtlasDepthNormals.Node.Token GrayScale;
+
         public BlockWoodenDeck()
             : base(Block.Types.WoodenDeck, 0, 1, true, true)
         {
-            this.Reagents.Add(new Reaction.Reagent("Base", Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks), Reaction.Reagent.IsOfMaterial(MaterialDefOf.LightWood)));
             this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
             this.Variations.Add(this.GrayScale);
 
@@ -83,11 +82,12 @@ namespace Start_a_Town_
                 Reaction.Reagent.Create(
                     new Reaction.Reagent()),
                     new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building) { WorkAmount = 2 };// 20 };
+                    ToolAbilityDef.Building)
+            { WorkAmount = 2 };// 20 };
             Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
 
         }
-       
+
         public override LootTable GetLootTable(byte data)
         {
             var table =
@@ -99,8 +99,8 @@ namespace Start_a_Town_
         public override IEnumerable<byte> GetCraftingVariations()
         {
             return (from mat in Material.Registry.Values
-                        where mat.Type == MaterialType.Wood
-                        select (byte)mat.ID);
+                    where mat.Type == MaterialType.Wood
+                    select (byte)mat.ID);
 
         }
         public override Material GetMaterial(byte blockdata)
@@ -114,7 +114,7 @@ namespace Start_a_Town_
             list.Add(new InteractionChopping());
             return list;
         }
-        
+
         public override void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
             Rectangle sourceRect = this.GrayScale.Rectangle;
@@ -122,7 +122,7 @@ namespace Start_a_Town_
             tint = tint.Multiply(mat.Color);
             sb.DrawBlock(Block.Atlas.Texture, screenPos, this.GrayScale.Rectangle, zoom, tint, sunlight, blocklight, depth);
         }
-        
+
         public override void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             State.Read(cell.BlockData, out var mat);
@@ -150,7 +150,7 @@ namespace Start_a_Town_
             var c = mat.ColorVector;
             return c;
         }
-        
+
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraOrientation, byte data)
         {
             return this.GrayScale;

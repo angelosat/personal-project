@@ -88,7 +88,7 @@ namespace Start_a_Town_
         public BlockMineral()
             : base(Block.Types.Mineral,  0, 1, true, true)
         {
-            this.AssetNames = "stone5height19";
+            this.LoadVariations("stone5height19");
         }
 
         public override Material GetMaterial(MapBase map, Vector3 global)

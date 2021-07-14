@@ -9,7 +9,7 @@
         public BlockWoodPaneling()
             : base(Block.Types.WoodPaneling, 0, 1, true, true)
         {
-            this.AssetNames = "woodvertical";
+            this.LoadVariations("woodvertical");
         }
     }
 }

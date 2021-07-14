@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Blocks;
+using Start_a_Town_.Components.Crafting;
+using Start_a_Town_.Graphics;
+using Start_a_Town_.Net;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Graphics;
-using Start_a_Town_.UI;
-using Start_a_Town_.Net;
-using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_
 {
@@ -20,9 +20,10 @@ namespace Start_a_Town_
             // TODO: implement
             return MaterialDefOf.LightWood;
         }
-        AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
-        AtlasDepthNormals.Node.Token[][] Parts;
-        public BlockBed():base(Block.Types.Bed, 0f, 1f, false, true)
+
+        readonly AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
+        readonly AtlasDepthNormals.Node.Token[][] Parts;
+        public BlockBed() : base(Block.Types.Bed, 0f, 1f, false, true)
         {
             this.Furniture = FurnitureDefOf.Bed;
             this.BuildProperties = new BuildProperties(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
@@ -30,7 +31,6 @@ namespace Start_a_Town_
                 Reaction.Reagent.Create(
                     new Reaction.Reagent(
                         "Base",
-                        //Reaction.Reagent.IsOfSubType(ItemSubType.Planks),
                         Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
                     new BlockRecipe.Product(this),
                     ToolAbilityDef.Building);
@@ -47,7 +47,7 @@ namespace Start_a_Town_
                 Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
                 Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal")
             };
-            
+
             this.Variations.Add(this.BottomParts.First());
 
             this.Parts = new AtlasDepthNormals.Node.Token[2][];
@@ -80,7 +80,7 @@ namespace Start_a_Town_
         public override Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation) // TODO: depend on orientation
         {
             var dic = new Dictionary<IntVec3, byte>();
-            
+
             var top = global;
             var bottom = orientation switch
             {
@@ -90,7 +90,7 @@ namespace Start_a_Town_
                 3 => global - IntVec3.UnitY,
                 _ => throw new Exception(),
             };
-        var bottomdata = GetData(Part.Bottom, orientation);
+            var bottomdata = GetData(Part.Bottom, orientation);
             var topdata = GetData(Part.Top, orientation);
             dic[bottom] = bottomdata;
             dic[top] = topdata;
@@ -99,9 +99,7 @@ namespace Start_a_Town_
         public override List<IntVec3> GetParts(MapBase map, IntVec3 global)
         {
             var data = map.GetBlockData(global);
-            Part part;
-            int ori;
-            GetState(data, out part, out ori);
+            GetState(data, out Part part, out int ori);
             IntVec3 top, bottom;
             switch (ori)
             {
@@ -159,7 +157,9 @@ namespace Start_a_Town_
         public override IEnumerable<IntVec3> GetParts(byte data, IntVec3 global)
         {
             foreach (var p in this.GetParts(data))
+            {
                 yield return global + p;
+            }
         }
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {
@@ -167,32 +167,32 @@ namespace Start_a_Town_
             var token = this.Parts[(int)part][(ori + cameraRotation) % 4];
             return token;
         }
-        static public void GetState(byte data, out Part part, out int orientation)
+        public static void GetState(byte data, out Part part, out int orientation)
         {
             part = (Part)(data & 0x1);
-            orientation = (int)(data & 0x6) >> 1;
+            orientation = (data & 0x6) >> 1;
         }
-        static public int GetOrientation(byte data)
+        public static int GetOrientation(byte data)
         {
-            return (int)(data & 0x6) >> 1;
+            return (data & 0x6) >> 1;
         }
-        static public void GetState(Cell cell, out Part part, out int orientation)
+        public static void GetState(Cell cell, out Part part, out int orientation)
         {
             GetState(cell.BlockData, out part, out orientation);
         }
-        static public void GetState(MapBase map, Vector3 global, out Part part, out int orientation)
+        public static void GetState(MapBase map, Vector3 global, out Part part, out int orientation)
         {
             GetState(map.GetCell(global), out part, out orientation);
         }
-        static public byte GetData(Part part, int orientation)
+        public static byte GetData(Part part, int orientation)
         {
             byte data = 0;
             data = (byte)(data | (byte)part);
             data = (byte)(data | ((byte)orientation << 1));
             return data;
         }
-        
-        static public Dictionary<Part, Vector3> GetPartsDic(MapBase map, Vector3 global)
+
+        public static Dictionary<Part, Vector3> GetPartsDic(MapBase map, Vector3 global)
         {
             var parts = new Dictionary<Part, Vector3>();
             var partslist = BlockDefOf.Bed.GetParts(map, global);
@@ -221,9 +221,12 @@ namespace Start_a_Town_
         public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             if (!IsValidPosition(map, global, orientation))
+            {
                 return;
+            }
+
             var top = global;
-           
+
             var bottom = orientation switch
             {
                 0 => top + IntVec3.UnitX,
@@ -232,7 +235,7 @@ namespace Start_a_Town_
                 3 => top - IntVec3.UnitY,
                 _ => throw new NotImplementedException()
             };
-            
+
             map.SetBlock(bottom, Block.Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
             map.SetBlock(top, Block.Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
             var entity = new BlockBedEntity();
@@ -246,13 +249,13 @@ namespace Start_a_Town_
             var parts = GetPartsDic(map, global);
             var top = parts[Part.Top];
             var bottom = parts[Part.Bottom];
-            map.SetBlock(top, Types.Air, 0, raiseEvent: notify); 
+            map.SetBlock(top, Types.Air, 0, raiseEvent: notify);
             map.SetBlock(bottom, Types.Air, 0, raiseEvent: notify);
             map.RemoveBlockEntity(top);
             map.RemoveBlockEntity(bottom);
             map.Town.RemoveUtility(Utility.Types.Sleeping, top);
         }
-        
+
         public override IntVec3 GetCenter(byte data, IntVec3 global)
         {
             return global + GetPartsDic(data)[Part.Top];
@@ -260,7 +263,7 @@ namespace Start_a_Town_
         public override bool IsValidPosition(MapBase map, IntVec3 global, int orientation)
         {
             var positions = new List<IntVec3> { global };
-            
+
             positions.Add(orientation switch
             {
                 0 => global + IntVec3.UnitX,
@@ -270,11 +273,16 @@ namespace Start_a_Town_
                 _ => throw new Exception()
             });
             foreach (var pos in positions)
+            {
                 if (map.GetBlock(pos).Type != Types.Air)
+                {
                     return false;
+                }
+            }
+
             return true;
         }
-        
+
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             GetState(data, out var part, out var ori);
@@ -294,14 +302,14 @@ namespace Start_a_Town_
             {
                 case 1:
                     bottom = global + Vector3.UnitY;
-                    bottomSecIndex += 1; 
-                    topSrcIndex += 1; 
+                    bottomSecIndex += 1;
+                    topSrcIndex += 1;
                     break;
 
                 case 2:
                     bottom = global - Vector3.UnitX;
                     bottomSecIndex += 2;
-                    topSrcIndex += 2; 
+                    topSrcIndex += 2;
                     break;
 
                 case 3:
@@ -340,8 +348,8 @@ namespace Start_a_Town_
             var entity = map.GetBlockEntity(parts[Part.Top]);
             return entity;
         }
-       
-        static public BlockBedEntity GetEntity(MapBase map, Vector3 global)
+
+        public static BlockBedEntity GetEntity(MapBase map, Vector3 global)
         {
             var parts = GetPartsDic(map, global);
             var entity = map.GetBlockEntity<BlockBedEntity>(parts[Part.Top]);
@@ -383,8 +391,8 @@ namespace Start_a_Town_
                     throw new Exception();
             }
         }
-        readonly static IconButton ButtonSetVisitor = new(Icon.Construction) { HoverText = "Set to visitor bed" };
-        readonly static IconButton ButtonUnsetVisitor = new(Icon.Construction, Icon.Cross) { HoverText = "Set to citizen bed" };
+        static readonly IconButton ButtonSetVisitor = new(Icon.Construction) { HoverText = "Set to visitor bed" };
+        static readonly IconButton ButtonUnsetVisitor = new(Icon.Construction, Icon.Cross) { HoverText = "Set to citizen bed" };
         internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
         {
             var entity = GetEntity(map, vector3);
@@ -414,8 +422,12 @@ namespace Start_a_Town_
             GetEntity(map, vector3).Type = type;
             map.InvalidateCell(vector3);
             if (map.IsActive)
+            {
                 if (UISelectedInfo.GetSelected().SingleOrDefault() is TargetArgs target && target.Type == TargetType.Position && (IntVec3)target.Global == vector3)
+                {
                     UpdateQuickButtons(map, vector3, type);
+                }
+            }
         }
         static class Packets
         {
@@ -428,19 +440,26 @@ namespace Start_a_Town_
             internal static void SetType(IObjectProvider net, PlayerData playerData, IntVec3 vector3, BlockBedEntity.Types type)
             {
                 if (net is Server)
+                {
                     BlockBed.SetType(net.Map, vector3, type);
+                }
+
                 net.GetOutgoingStream().Write(PacketChangeType, playerData.ID, vector3, (int)type);
             }
-           
+
             private static void SetType(IObjectProvider net, BinaryReader r)
             {
                 var player = net.GetPlayer(r.ReadInt32());
                 var vec = r.ReadIntVec3();
                 var type = (BlockBedEntity.Types)r.ReadInt32();
                 if (net is Client)
+                {
                     BlockBed.SetType(net.Map, vec, type);
+                }
                 else
+                {
                     SetType(net, player, vec, type);
+                }
             }
         }
     }

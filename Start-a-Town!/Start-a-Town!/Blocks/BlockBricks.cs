@@ -11,7 +11,7 @@ namespace Start_a_Town_
         public BlockBricks()
             : base(Types.Bricks)
         {
-            this.AssetNames = "bricks/bricks";
+            this.LoadVariations("bricks/bricks");
             this.Recipe = new BlockRecipe(
                 Reaction.Reagent.Create(
                     new Reaction.Reagent()),

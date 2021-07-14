@@ -272,7 +272,6 @@ namespace Start_a_Town_
             this.HeightMap = new int[Size][];
             for (int i = 0; i < Size; i++)
                 this.HeightMap[i] = new int[Size];
-            ResetSunlight();
             ResetCellLight();
             for (int i = 0; i < MapBase.MaxHeight; i++)
                 this.Slices[i] = new Slice();
@@ -339,11 +338,6 @@ namespace Start_a_Town_
         public List<byte> Sunlight;
         public byte[] BlockLight = new byte[Volume];
 
-        void ResetSunlight()
-        {
-            this.LightCache = new Dictionary<IntVec3, Color>();
-        }
-
         void ResetCellLight()
         {
             BlockLight = new byte[Volume];
@@ -376,12 +370,11 @@ namespace Start_a_Town_
         /// <returns>A list of cells whose skylight has changed</returns>
         public Queue<IntVec3> ResetHeightMap()
         {
-            this.ResetSunlight();
             for (int j = 0; j < Size; j++)
                 for (int i = 0; i < Size; i++)
                     foreach (var pos in ResetHeightMapColumn(i, j))
                         this.LightChanges.Enqueue(pos);
-            Queue<IntVec3> toReturn = new Queue<IntVec3>(this.LightChanges);
+            var toReturn = new Queue<IntVec3>(this.LightChanges);
             this.LightChanges = new Queue<IntVec3>();
             return toReturn;
         }
@@ -659,19 +652,10 @@ namespace Start_a_Town_
         }
 
         /// <summary>
-        /// TODO: Move light cache to camera class
-        /// </summary>
-        public Dictionary<IntVec3, Color> LightCache = new();
-        
-        /// <summary>
         /// TODO: optimize: convert to dictionary for speed
         /// </summary>
         public Dictionary<IntVec3, LightToken> LightCache2 = new();
 
-        public void ClearLightCache()
-        {
-            this.LightCache2.Clear();
-        }
         
         static public bool InvalidateLight(MapBase map, IntVec3 global)
         {
@@ -1323,8 +1307,6 @@ namespace Start_a_Town_
        
         public void OnCameraRotated(Camera camera)
         {
-            this.ClearLightCache();
-            LightCache = new Dictionary<IntVec3, Color>();
             this.LightCache2.Clear();
         }
 

@@ -143,7 +143,7 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
         private void CleanUp(GameObject parent, AIState state)
         {
             var actor = parent as Actor;
-            if(parent.Carried != null)
+            if(parent.Carried is not null)
                 parent.Interact(new InteractionThrow(true));
            
             if (actor.GetEquipmentSlot(GearType.Mainhand) is Entity item)

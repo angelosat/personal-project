@@ -1388,7 +1388,6 @@ namespace Start_a_Town_.Net
                 case "rebuildchunks":
                     foreach (var chunk in Instance.Map.GetActiveChunks().Values)
                     {
-                        chunk.LightCache.Clear();
                         chunk.LightCache2.Clear();
                         chunk.InvalidateMesh();
                     }

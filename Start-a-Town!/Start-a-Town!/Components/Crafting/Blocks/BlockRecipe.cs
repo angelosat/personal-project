@@ -7,7 +7,7 @@ namespace Start_a_Town_.Components.Crafting
 {
     public partial class BlockRecipe : ISlottable
     {
-        public Towns.Constructions.ConstructionCategory Category;
+        public ConstructionCategory Category;
 
         public string Name;
         public List<Reaction.Reagent> Reagents;

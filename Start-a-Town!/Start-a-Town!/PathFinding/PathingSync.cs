@@ -246,19 +246,6 @@ namespace Start_a_Town_
             return cost;
         }
         
-        static public bool IsWalkable(MapBase map, Vector3 global)
-        {
-            if (!map.IsSolid(global - Vector3.UnitZ))
-                return false;
-
-            // TODO: check both at the same time          
-            if (map.IsSolid(global))
-                return false;
-            if (map.IsSolid(global + Vector3.UnitZ)) // replace this with height check?
-                return false;
-
-            return true;
-        }
         [Obsolete]
         static public bool IsPathable2Height(MapBase map, Vector3 global)
         {

@@ -5,8 +5,9 @@ using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
+using Start_a_Town_.Towns.Constructions;
 
-namespace Start_a_Town_.Towns.Constructions
+namespace Start_a_Town_
 {
     public abstract class ConstructionCategory : INamed
     {

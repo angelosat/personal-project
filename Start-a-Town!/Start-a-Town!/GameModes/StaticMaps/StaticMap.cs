@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
-using Start_a_Town_.UI;
-using Start_a_Town_.Towns;
 using Start_a_Town_.Blocks;
+using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
@@ -27,8 +26,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
             public MapSize(
                 string name, int blocks)
             {
-                Name = name;
-                Blocks = blocks;
+                this.Name = name;
+                this.Blocks = blocks;
                 this.Chunks = blocks / Chunk.Size;
             }
             public static readonly MapSize Micro = new("Micro", 32);
@@ -39,7 +38,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             public static MapSize Default = Micro;
 
-            static public List<MapSize> GetList()
+            public static List<MapSize> GetList()
             {
                 return new List<MapSize>() { Micro, Tiny, Small, Normal, Huge };
             }
@@ -80,38 +79,33 @@ namespace Start_a_Town_.GameModes.StaticMaps
             double normal = (clock.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
             double nn = normal * 2 * Math.PI;
             nn = 3 * Math.Cos(nn);
-            DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
+            this.DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
 
-            byte oldDarkness = SkyDarkness;
-            SkyDarkness = 0;
-            if (SkyDarkness != oldDarkness)
-                foreach (var ch in ActiveChunks)
-                    ch.Value.LightCache.Clear();
+            byte oldDarkness = this.SkyDarkness;
+            this.SkyDarkness = 0;
         }
         [Obsolete]
         public void SetHour(int t)
         {
             throw new Exception();
-            foreach (var ch in this.ActiveChunks)
-                ch.Value.LightCache.Clear();
         }
-       
+
         public byte SkyDarkness = 0, SkyDarknessMax = 13;
         public Color AmbientColor = Color.Blue;//Color.MidnightBlue; //Color.RoyalBlue;//Color.MidnightBlue; //Color.MediumPurple; //Color.Lerp(Color.White, Color.Cornsilk, 0.5f);
-        
+
         internal void Despawn(Actor actor)
         {
             actor.Despawn();
             PacketEntityDespawn.Send(this.Net, actor);
         }
-        public static int  VisibleCellCount = 0;
+        public static int VisibleCellCount = 0;
         public Game1 game;
         public bool hasClicked = false;
         public static float MaxDepth = 0, MinDepth = 0;
         public List<Texture2D> VisibleTileTypes;
         public Vector2 tileLocation = new(16, 8);
         public const double GroundDensity = 0.1;
-        static public List<Rectangle> Icons;
+        public static List<Rectangle> Icons;
 
         public string Name;
         public Texture2D[] Thumbnails;
@@ -124,7 +118,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             this.LightingEngine = new LightingEngine(this);
             this.Camera = new Camera((int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y);
-            this.Name = name; 
+            this.Name = name;
             this.ActiveChunks = new Dictionary<Vector2, Chunk>();
             this.Thumbnails = new Texture2D[3];
             this.Town = new Town(this);
@@ -138,7 +132,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.World = world;
             this.Coordinates = coords;
             this.Size = MapSize.Default;// MapSize.Normal;
-            this.Global = Coordinates * this.Size.Blocks;
+            this.Global = this.Coordinates * this.Size.Blocks;
             this.Thumb = new MapThumb(this);
         }
         public StaticMap(StaticWorld world, string name, Vector2 coords, MapSize size)
@@ -147,12 +141,12 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.World = world;
             this.Coordinates = coords;
             this.Size = size;
-            this.Global = Coordinates * this.Size.Blocks;
+            this.Global = this.Coordinates * this.Size.Blocks;
             this.Thumb = new MapThumb(this);
         }
 
         #endregion
-        
+
         #region Updating
         public override void Update(IObjectProvider net)
         {
@@ -161,14 +155,17 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public void Update()
         {
-            TryPerformQueuedRandomBlockUpdates();
+            this.TryPerformQueuedRandomBlockUpdates();
             this.CachedAmbientColor = this.UpdateAmbientColor();
 
             this.CacheObjects();
             this.CacheBlockEntities();
 
             foreach (var chunk in this.ActiveChunks.Values.ToList())
+            {
                 chunk.Update();
+            }
+
             this.Town.Update();
             Block.UpdateBlocks(this);
             this.ApplyLightChanges();
@@ -181,23 +178,29 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var global = this.RandomBlockUpdateQueue.Peek();
                 var cell = this.GetCell(global);
                 if (cell == null)
+                {
                     continue;
+                }
+
                 cell.Block.RandomBlockUpdate(this.Net, global, cell);
                 this.RandomBlockUpdateQueue.Dequeue();
             }
         }
         public override void Tick(IObjectProvider net)
         {
-            AddTime();
+            this.AddTime();
             this.Regions.Update();
             foreach (var chunk in this.ActiveChunks.Values.ToList())
+            {
                 chunk.Tick(this);
+            }
+
             this.Town.Tick();
         }
-        
+
         public bool Running = true;
 
-      
+
         #endregion
 
         #region Drawing
@@ -208,24 +211,29 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public override void DrawBlocks(MySpriteBatch sb, Camera camera, EngineArgs a)
         {
-            Redraw = false;
-            var copyOfActiveChunks = new Dictionary<Vector2, Chunk>(ActiveChunks);
+            this.Redraw = false;
+            var copyOfActiveChunks = new Dictionary<Vector2, Chunk>(this.ActiveChunks);
             Vector3? playerGlobal = null;
             var hiddenRects = new List<Rectangle>();
-           
+
             camera.UpdateMaxDrawLevel(this);
-            Mouseover = null;
-            
+            this.Mouseover = null;
+
             foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
             {
 
                 Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);
                 if (!camera.ViewPort.Intersects(chunkBounds))
+                {
                     continue;
+                }
+
                 camera.DrawChunk(sb, this, chunk.Value, playerGlobal, hiddenRects, a);
             }
-            if (Mouseover != null)
-                camera.CreateMouseover(this, Mouseover.Global);
+            if (this.Mouseover != null)
+            {
+                camera.CreateMouseover(this, this.Mouseover.Global);
+            }
         }
 
         internal void SpawnStartingActors(Actor[] actors)
@@ -238,7 +246,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             for (int i = 0; i < actors.Length; i++)
             {
                 var actor = actors[i];
-                IntVec3 current; 
+                IntVec3 current;
                 do
                 {
                     radial.MoveNext();
@@ -250,17 +258,19 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public override void DrawObjects(MySpriteBatch sb, Camera camera, SceneState scene)
         {
-            foreach (KeyValuePair<Vector2, Chunk> chunk in ActiveChunks)
+            foreach (KeyValuePair<Vector2, Chunk> chunk in this.ActiveChunks)
             {
-                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds); 
+                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);
                 if (camera.ViewPort.Intersects(chunkBounds))
+                {
                     chunk.Value.DrawObjects(sb, camera, Controller.Instance, this, scene);
+                }
             }
         }
 
         public override void DrawInterface(SpriteBatch sb, Camera camera)
         {
-            Dictionary<Vector2, Chunk> copyOfActiveChunks = new Dictionary<Vector2, Chunk>(ActiveChunks);
+            Dictionary<Vector2, Chunk> copyOfActiveChunks = new Dictionary<Vector2, Chunk>(this.ActiveChunks);
             foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
             {
                 Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);  //chunk.Value.GetBounds(camera);
@@ -275,10 +285,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
 
         #endregion
-        
+
         public override string GetFullPath()
         {
-            return GlobalVars.SaveDir + @"Worlds\Static\" + World.Name + @" \" + GetFolderName() + @"\";
+            return GlobalVars.SaveDir + @"Worlds\Static\" + this.World.Name + @" \" + this.GetFolderName() + @"\";
         }
         public override string GetFolderName()
         {
@@ -334,7 +344,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public void LoadChunks(SaveTag tag)
         {
             var list = tag.Value as List<SaveTag>;
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 var key = item["Key"].LoadVector2();
                 var chunk = Chunk.Load(this, key, item["Chunk"]);
@@ -350,10 +360,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override void GenerateThumbnails(string fullMapDir)
         {
             if (!Directory.Exists(fullMapDir))
-                Directory.CreateDirectory(fullMapDir);
-            if (ActiveChunks.Count > 0)
             {
-                using Texture2D thumbnail = GetThumbnail();
+                Directory.CreateDirectory(fullMapDir);
+            }
+
+            if (this.ActiveChunks.Count > 0)
+            {
+                using Texture2D thumbnail = this.GetThumbnail();
                 using (FileStream stream = new FileStream(fullMapDir + "thumbnailSmall.png", FileMode.OpenOrCreate))
                 {
                     thumbnail.SaveAsPng(stream, thumbnail.Width, thumbnail.Height);
@@ -389,7 +402,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             return map;
         }
-        
+
         public override void LoadThumbnails()
         {
             this.LoadThumbnails(this.GetFullPath());
@@ -400,20 +413,22 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             int i = 0;
             foreach (FileInfo thumbFile in thumbFiles)
+            {
                 using (FileStream stream = new(thumbFile.FullName, FileMode.Open))
                 {
                     Texture2D tex = Texture2D.FromStream(Game1.Instance.GraphicsDevice, stream);
                     this.Thumbnails[i] = tex;
-                    Thumb.Sprites[i++] = new Sprite(tex, new Rectangle[][] { new Rectangle[] { tex.Bounds } }, tex.Bounds.Center.ToVector());
+                    this.Thumb.Sprites[i++] = new Sprite(tex, new Rectangle[][] { new Rectangle[] { tex.Bounds } }, tex.Bounds.Center.ToVector());
                 }
+            }
         }
 
         public bool InitChunks(Action<string, float> callback = null)
         {
             callback?.Invoke("Post processing chunks", 0);
             var sw = Stopwatch.StartNew();
-          
-            ResetChunkEdges();
+
+            this.ResetChunkEdges();
             string.Format("chunk edges reset in {0} ms", sw.ElapsedMilliseconds).ToConsole();
 
             this.Regions.Init();
@@ -428,18 +443,21 @@ namespace Start_a_Town_.GameModes.StaticMaps
             yield return ("Post processing chunks", () =>
             {
                 var sw = Stopwatch.StartNew();
-                ResetChunkEdges();
+                this.ResetChunkEdges();
                 string.Format("chunk edges reset in {0} ms", sw.ElapsedMilliseconds).ToConsole();
-            });
+            }
+            );
 
             yield return ("Initializing Regions", () =>
             {
                 this.Regions.Init();
-            });
+            }
+            );
             yield return ("Caching objects", () =>
             {
                 this.FinishLoading();
-            });
+            }
+            );
         }
         void ResetChunkEdges()
         {
@@ -447,14 +465,16 @@ namespace Start_a_Town_.GameModes.StaticMaps
             {
                 if (!ch.LightValid)
                 {
-                    ResetLight(ch);
+                    this.ResetLight(ch);
                     ch.LightValid = true;
-                    UpdateChunkNeighborsLight(ch);
+                    this.UpdateChunkNeighborsLight(ch);
                 }
                 foreach (var vector in ch.MapCoords.GetNeighbors())
                 {
                     if (this.ActiveChunks.TryGetValue(vector, out Chunk neighbor))
+                    {
                         neighbor.InvalidateEdges();
+                    }
                 }
             }
         }
@@ -463,21 +483,32 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var actives = this.GetActiveChunks();
 
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(1, 0), out Chunk neighbor))
+            {
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.West));
+            }
+
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(-1, 0), out neighbor))
+            {
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.East));
+            }
+
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, 1), out neighbor))
+            {
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.North));
+            }
+
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, -1), out neighbor))
+            {
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.South));
+            }
         }
-       
+
         void ResetLight(Chunk chunk)
         {
             Queue<IntVec3> cellList = chunk.ResetHeightMap();
             this.UpdateLight(cellList);
         }
-        
+
         public override Texture2D GetThumbnail()
         {
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;
@@ -491,7 +522,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return final;
         }
 
-        static public StaticMap Create(StaticWorld world, Vector2 coords)
+        public static StaticMap Create(StaticWorld world, Vector2 coords)
         {
             var map = new StaticMap(world, coords);//a);
             world.Maps[coords] = map;
@@ -499,22 +530,30 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public override void GetTooltipInfo(Tooltip tooltip)
         {
-            tooltip.Controls.Add(ToString().ToLabel());
+            tooltip.Controls.Add(this.ToString().ToLabel());
         }
 
         public void CacheBlockEntities()
         {
             var list = new Dictionary<IntVec3, BlockEntity>();
             foreach (var chunk in this.ActiveChunks.Values)
+            {
                 foreach (var (local, entity) in chunk.GetBlockEntitiesByPosition())
+                {
                     list.Add(local.ToGlobal(chunk), entity);
+                }
+            }
+
             this.CachedBlockEntities = list;
         }
         public void CacheObjects()
         {
             var list = new List<GameObject>();
             foreach (var chunk in this.ActiveChunks)
+            {
                 list.AddRange(chunk.Value.GetObjects());
+            }
+
             this.CachedObjects = list;
         }
         public override IEnumerable<GameObject> GetObjects()
@@ -527,11 +566,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public override IEnumerable<GameObject> GetObjects(BoundingBox box)
         {
-            foreach(var o in this.CachedObjects)
+            foreach (var o in this.CachedObjects)
             {
                 var type = box.Contains(o.Global);
                 if (type != ContainmentType.Disjoint)
+                {
                     yield return o;
+                }
             }
         }
 
@@ -545,7 +586,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.UndiscoveredAreaManager.Write(w);
         }
 
-        static public StaticMap ReadData(IObjectProvider net, BinaryReader r)
+        public static StaticMap ReadData(IObjectProvider net, BinaryReader r)
         {
             var map = new StaticMap
             {
@@ -571,9 +612,15 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override bool SetBlockLuminance(IntVec3 global, byte luminance)
         {
             if (!this.TryGetAll(global, out var chunk, out var cell))
+            {
                 return false;
+            }
+
             if (cell.Luminance == luminance)
+            {
                 return true;
+            }
+
             cell.Luminance = luminance;
             this.InvalidateCell(global);
             return true;
@@ -586,7 +633,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override bool InvalidateCell(Vector3 global)
         {
             if (!this.TryGetAll(global, out Chunk chunk, out Cell cell))
+            {
                 return false;
+            }
+
             return chunk.InvalidateCell(cell);
         }
 
@@ -607,16 +657,16 @@ namespace Start_a_Town_.GameModes.StaticMaps
                      for (int j = 0; j < size; j++)
                      {
                          var pos = new Vector2(i, j);
-                          var chunk = Chunk.Create(this, pos);
-                          gradCache[chunk] = chunk.InitCells2(mutatorlist);// WARNING!
-                          this.ActiveChunks.Add(pos, chunk);
-                      }
+                         var chunk = Chunk.Create(this, pos);
+                         gradCache[chunk] = chunk.InitCells2(mutatorlist);// WARNING!
+                         this.ActiveChunks.Add(pos, chunk);
+                     }
                  }
                  watch.Stop();
                  string.Format("chunks initialized in {0} ms", watch.ElapsedMilliseconds).ToConsole();
              }
             ));
-           
+
             foreach (var m in mutatorlist)
             {
                 tasks.Add(("Applying " + m.Name, () =>
@@ -632,13 +682,20 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     watch.Stop();
 
                     string.Format("{0} finished in in {1} ms", m.ToString(), watch.ElapsedMilliseconds).ToConsole();
-                }));
+                }
+                ));
             }
-           
+
             foreach (var a in this.InitChunksNew())
+            {
                 tasks.Add(a);
+            }
+
             foreach (var a in this.FinishCreatingNew())
+            {
                 tasks.Add(a);
+            }
+
             tasks.Add(("Detecting undiscovered areas", () => this.InitUndiscoveredAreas(null)));
 
             for (int i = 0; i < tasks.Count; i++)
@@ -656,13 +713,20 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             this.Town.DrawBeforeWorld(mySB, this, camera);
         }
-       
+
         public override bool ChunkNeighborsExist(Vector2 chunkCoords)
         {
             foreach (var n in chunkCoords.GetNeighbors())
+            {
                 if (!this.ActiveChunks.ContainsKey(n))
+                {
                     if (this.IsChunkWithinBounds(n))
+                    {
                         return false;
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -686,13 +750,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.LightingEngine ??= new(this);
             this.LightingEngine.Enqueue(positions);
         }
-      
+
         public void UpdateLight(IEnumerable<IntVec3> positions)
         {
             this.LightingEngine.HandleImmediate(positions);
         }
         #region IMap implementation
-        
+
         public override bool TryGetAll(int gx, int gy, int gz, out Chunk chunk, out Cell cell, out int lx, out int ly)
         {
             if (gz > MaxHeight - 1 || gz < 0)
@@ -734,10 +798,12 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var loc = global.ToLocal();
             ch.SetSunlight(loc, value);
             ch.InvalidateLight(global);
-            foreach(var n in global.GetNeighbors())
+            foreach (var n in global.GetNeighbors())
             {
                 if (this.TryGetChunk(n, out Chunk nchunk))
+                {
                     nchunk.InvalidateLight(n);
+                }
             }
             return;
         }
@@ -745,14 +811,19 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             var ch = this.GetChunk(global);
             if (ch is null)
+            {
                 return;
+            }
+
             var loc = global.ToLocal();
             ch.SetBlockLight(loc, value);
             ch.InvalidateLight(global);
             foreach (var n in global.GetNeighbors())
             {
                 if (this.TryGetChunk(n, out Chunk nchunk))
+                {
                     nchunk.InvalidateLight(n);
+                }
             }
             return;
         }
@@ -773,14 +844,22 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override void ApplyLightChanges()
         {
             while (this.SkyLightChanges.Any())
+            {
                 foreach (var item in this.SkyLightChanges.Dequeue())
+                {
                     this.SetSkyLight(item.Key, item.Value);
+                }
+            }
 
             while (this.BlockLightChanges.Any())
+            {
                 foreach (var item in this.BlockLightChanges.Dequeue())
+                {
                     this.SetBlockLight(item.Key, item.Value);
+                }
+            }
         }
-        
+
         public override byte GetSkyDarkness()
         {
             return this.SkyDarkness;
@@ -798,29 +877,31 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public override byte GetSunLight(Vector3 global)
         {
-            byte sunlight;
-            Chunk.TryGetSunlight(this, global, out sunlight);
+            Chunk.TryGetSunlight(this, global, out byte sunlight);
             return sunlight;
         }
-       
+
         public override List<GameObject> GetObjectsAtChunk(Vector3 global)
         {
-            var chunks = GetChunks(global.GetChunkCoords(), 1);
+            var chunks = this.GetChunks(global.GetChunkCoords(), 1);
             var entities = new List<GameObject>();
             foreach (var ch in chunks)
+            {
                 entities.AddRange(ch.GetObjects());
+            }
+
             return entities;
         }
         public override int GetSizeInChunks()
         {
             return this.Size.Chunks;
         }
-       
+
         public override int GetMaxHeight()
         {
             return MaxHeight;
         }
-       
+
         static readonly Color ColorMidnight = new(21, 27, 84);
         static readonly Color ColorMango = new(255, 128, 64);
         static readonly Color ColorBronze = new(205, 127, 50);
@@ -853,7 +934,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     return Color.Lerp(ab, bc, t);
                 }
                 else if (nightAmount == c.Key)
+                {
                     return c.Value;
+                }
             }
 
             return Color.Lime;
@@ -868,7 +951,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public override double GetDayTimeNormal()
         {
-            double normal = (Clock.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
+            double normal = (this.Clock.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
             double nn = normal * 2 * Math.PI;
             nn = 3 * Math.Cos(nn);
             return Math.Max(0, Math.Min(1, (1 + nn) / 2f));
@@ -922,17 +1005,22 @@ namespace Start_a_Town_.GameModes.StaticMaps
         internal override bool IsUndiscovered(Vector3 global)
         {
             if (!this.UndiscoveredAreaManager.IsUndiscovered(global))
+            {
                 return false;
+            }
+
             foreach (var n in global.GetAdjacentLazy())
             {
                 if (this.IsAir(n) && !this.UndiscoveredAreaManager.IsUndiscovered(n))
+                {
                     return false;
+                }
             }
             return true;
         }
         internal override void AreaDiscovered(HashSet<Vector3> hashSet)
         {
-            foreach(var global in hashSet)
+            foreach (var global in hashSet)
             {
                 var chunk = this.GetChunk(global);
                 chunk.InvalidateMesh();

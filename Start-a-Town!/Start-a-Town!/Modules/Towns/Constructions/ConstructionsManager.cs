@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Blocks;
-using Start_a_Town_.Net;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Modules.Construction;
 using System.IO;

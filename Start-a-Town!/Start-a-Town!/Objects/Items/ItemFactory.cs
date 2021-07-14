@@ -1,5 +1,4 @@
 ﻿using Start_a_Town_.Components;
-using Start_a_Town_.Components.Crafting;
 using System;
 using System.Collections.Generic;
 using System.Linq;

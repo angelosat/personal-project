@@ -14,7 +14,6 @@ namespace Start_a_Town_
             this.Movable = true;
             this.Browser = new BlockBrowserNewNew(category);
             this.Client.Controls.Add(Browser);
-            
         }
         public TerrainWindowNew()
         {

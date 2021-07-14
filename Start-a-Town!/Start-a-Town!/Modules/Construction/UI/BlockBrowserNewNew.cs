@@ -10,12 +10,12 @@ namespace Start_a_Town_
 {
     class BlockBrowserNewNew : GroupBox
     {
-        Dictionary<Block, BlockRecipe.ProductMaterialPair> LastSelectedVariant = new Dictionary<Block, BlockRecipe.ProductMaterialPair>();
+        Dictionary<Block, BlockRecipe.ProductMaterialPair> LastSelectedVariant = new();
         ConstructionCategory SelectedCategory;
         Panel Panel_Blocks;
         UIToolsBox ToolBox;
         Block CurrentSelected;
-        Dictionary<ConstructionCategory, ButtonGridIcons<Block>> Categories = new Dictionary<ConstructionCategory, ButtonGridIcons<Block>>();
+        Dictionary<ConstructionCategory, ButtonGridIcons<Block>> Categories = new();
         public BlockBrowserNewNew(ConstructionCategory category)
         {
 
@@ -26,7 +26,7 @@ namespace Start_a_Town_
 
             var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air LOL FIX THIS
             this.ToolBox = new UIToolsBox(null, OnToolSelected);
-            var categories = Start_a_Town_.Towns.Constructions.ConstructionsManager.AllCategories;
+            var categories = ConstructionsManager.AllCategories;
             foreach (var cat in categories)
             {
                 var list = cat.List.Select(r => r.Block).Where(b => b.Ingredient != null);
@@ -34,7 +34,10 @@ namespace Start_a_Town_
                 var grid = new ButtonGridIcons<Block>(4, 6, list, (slot, block) =>
                 {
                     slot.Tag = block;
-                    slot.IsToggledFunc = () => { var drawing = ToolManager.Instance.ActiveTool as ToolDrawing; return drawing != null ? drawing.Block == block : false; };
+                    slot.IsToggledFunc = () =>
+                    {
+                        return ToolManager.Instance.ActiveTool is ToolDrawing drawing && drawing.Block == block;
+                    };
                     slot.PaintAction = () =>
                     {
                         block.PaintIcon(slot.Width, slot.Height, block.GetDataFromMaterial(GetLastSelectedVariantOrDefault(block).MainMaterial));
@@ -47,9 +50,9 @@ namespace Start_a_Town_
                         var tools = product.Recipe.Category.GetAvailableTools(() => GetLastSelectedVariantOrDefault(this.CurrentSelected));
 
                         this.ToolBox.SetProduct(product, OnToolSelected);
-                            OnToolSelected(this.ToolBox.LastSelectedTool.GetType());
+                        this.OnToolSelected(this.ToolBox.LastSelectedTool.GetType());
                         var win = this.ToolBox.GetWindow();
-                        if (win == null)
+                        if (win is null)
                         {
                             win = this.ToolBox.ToWindow("Brushes");
                             win.HideAction = () => ToolManager.SetTool(null);
@@ -95,7 +98,7 @@ namespace Start_a_Town_
 
         void OnToolSelected(Type toolType)
         {
-            var tool = this.SelectedCategory.CreateTool(toolType, this.GetLastSelectedVariantOrDefault(this.CurrentSelected));// this.LastSelectedVariant[this.CurrentSelected.Block]);
+            var tool = this.SelectedCategory.CreateTool(toolType, this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
             this.ToolBox.LastSelectedTool = tool;
             ToolManager.SetTool(tool);
         }
@@ -109,7 +112,7 @@ namespace Start_a_Town_
         }
         private void OnVariationSelected(BlockRecipe.ProductMaterialPair product)
         {
-            if (product == null)
+            if (product is null)
                 return;
             this.LastSelectedVariant[product.Block] = product;
             this.CurrentSelected = product.Block;

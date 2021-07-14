@@ -6,9 +6,9 @@ namespace Start_a_Town_.Components.Crafting
     {
         public partial class Product
         {
-            public Block Block { get; set; }
-            public Block.Data State { get; set; }
-            public List<Modifier> Modifiers { get; set; }
+            public Block Block;
+            public Block.Data State;
+            public List<Modifier> Modifiers;
             public Product(Block block, params Modifier[] modifiers)
             {
                 this.Block = block;

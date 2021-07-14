@@ -36,8 +36,7 @@ namespace Start_a_Town_.Towns.Constructions
         static public UITools PanelTools;
         public UITools GetPanelTools(Func<BlockRecipe.ProductMaterialPair> itemGetter)
         {
-            if (PanelTools == null)
-                PanelTools = new UITools();
+            PanelTools ??= new UITools();
             PanelTools.Refresh(this.GetAvailableTools(itemGetter), itemGetter);
             return PanelTools;
         }

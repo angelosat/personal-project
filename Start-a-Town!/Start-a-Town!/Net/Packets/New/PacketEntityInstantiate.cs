@@ -13,7 +13,7 @@ namespace Start_a_Town_
 
         static public void Init()
         {
-            PckType = Network.RegisterPacketHandler( Receive);
+            PckType = Network.RegisterPacketHandler(Receive);
             PckTypeNew = Network.RegisterPacketHandler(ReceiveTemplate);
         }
         static public void Send(IObjectProvider net, GameObject entity)
@@ -25,7 +25,7 @@ namespace Start_a_Town_
             if (net is Client)
                 throw new Exception();
             var strem = net.GetOutgoingStream();
-            strem.Write((int)PckTypeNew);
+            strem.Write(PckTypeNew);
             strem.Write(templateID);
             var data = entity.Serialize(); // why send it compressed?
             strem.Write(data.Length);
@@ -48,7 +48,7 @@ namespace Start_a_Town_
             if (net is Client)
                 throw new Exception();
             var strem = net.GetOutgoingStream();
-            strem.Write((int)PckType);
+            strem.Write(PckType);
             strem.Write(entities.Count());
             foreach(var entity in entities)
             {

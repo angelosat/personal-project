@@ -319,7 +319,7 @@ namespace Start_a_Town_
 
             this.Map.TryGetChunk(nextGlobal.RoundXY(), out Chunk nextChunk);
 
-            if (nextChunk == null)
+            if (nextChunk is null)
             {
                 return this;
             }
@@ -371,10 +371,11 @@ namespace Start_a_Town_
         public GameObject Clone()
         {
             var obj = this.Def.CreateRandom();
-            if (obj == null)
+            if (obj is null)
             {
                 obj = this.Create(); //for derived classes
-                foreach (KeyValuePair<string, EntityComponent> comp in this.Components)
+                obj.Def = this.Def;
+                foreach (var comp in this.Components)
                 {
                     obj.AddComponent(comp.Value.Clone() as EntityComponent);
                 }
@@ -454,8 +455,7 @@ namespace Start_a_Town_
 
         public GameObject()
         {
-            this.Transform =
-                this.AddComponent<PositionComponent>();
+            this.Transform = this.AddComponent<PositionComponent>();
         }
 
         public EntityComponent this[string componentName]
@@ -525,7 +525,7 @@ namespace Start_a_Town_
         public bool TryGetComponent<T>(Action<T> action) where T : EntityComponent
         {
             T component = this.GetComponent<T>();
-            if (component == null)
+            if (component is null)
             {
                 return false;
             }
@@ -629,7 +629,7 @@ namespace Start_a_Town_
         public GameObjectSlot GetChild(int containerID, int slotID)
         {
             var c = this.GetContainer(containerID);
-            if (c == null)
+            if (c is null)
             {
                 return null;
             }
@@ -881,7 +881,7 @@ namespace Start_a_Town_
 
         public void Write(BinaryWriter w)
         {
-            w.Write(this.Def?.Name ?? "");
+            w.Write(this.Def.Name);
             w.Write(this.RefID);
             w.Write(this.StackSize);
             w.Write(this.Components.Count);
@@ -896,14 +896,8 @@ namespace Start_a_Town_
         {
             string defName = r.ReadString();
             var def = Start_a_Town_.Def.GetDef<ItemDef>(defName);
-            var refid = r.ReadInt32();
-            GameObject obj;
-            if (def is null)
-            {
-                throw new Exception();
-            }
-
-            obj = def.Create();
+            var obj = def.Create();
+            obj.RefID = r.ReadInt32();
             obj.StackSize = r.ReadInt32();
             int compCount = r.ReadInt32();
             for (int i = 0; i < compCount; i++)
@@ -912,14 +906,12 @@ namespace Start_a_Town_
                 obj[compName].Read(r);
             }
             obj.ObjectSynced();
-            obj.RefID = refid;
             return obj;
         }
         public static GameObject CloneTemplate(int templateID, BinaryReader reader)
         {
-            _ = reader.ReadInt32(); // because the unnecessary ID field has been written
-            GameObject obj = CloneTemplate(templateID); // WARNING: must figure out way to reconstruct an object without it's creating a prefab
-            _ = reader.ReadString();
+            GameObject obj = CloneTemplate(templateID);
+            _ = reader.ReadString(); // def name not necessary because we copy it from the existing cloned object
             obj.RefID = reader.ReadInt32();
             obj.StackSize = reader.ReadInt32();
             int compCount = reader.ReadInt32();
@@ -986,7 +978,7 @@ namespace Start_a_Town_
             foreach (KeyValuePair<string, EntityComponent> comp in this.Components)
             {
                 var compSave = comp.Value.SaveAs(comp.Key);
-                if (compSave != null)
+                if (compSave is null)
                 {
                     compData.Add(compSave);
                 }
@@ -1073,7 +1065,7 @@ namespace Start_a_Town_
             foreach (var c in this.Components)
             {
                 var a = c.Value.GetContextRB(this, player);
-                if (a != null)
+                if (a is null)
                 {
                     list.Add(a);
                 }
@@ -1086,7 +1078,7 @@ namespace Start_a_Town_
             foreach (var c in this.Components)
             {
                 var a = c.Value.GetContextActivate(this, player);
-                if (a != null)
+                if (a is null)
                 {
                     list.Add(a);
                 }
@@ -1322,7 +1314,7 @@ namespace Start_a_Town_
         internal float GetToolWorkAmount(int skillID)
         {
             var tool = this.GetEquipmentSlot(GearType.Types.Mainhand).Object;
-            if (tool == null)
+            if (tool is null)
             {
                 return 1;
             }
@@ -1484,7 +1476,7 @@ namespace Start_a_Town_
             var global = this.Global;
             var below = global.CeilingZ().Below().SnapToBlock();
             var belownode = this.Map.GetNodeAt(below);
-            if (belownode != null)
+            if (belownode is null)
             {
                 return below;
             }

@@ -19,7 +19,7 @@ namespace Start_a_Town_.Towns.Constructions
             this.Name = "Brushes";
             this.PanelButtons = new Panel()
             {
-                AutoSize = true//,
+                AutoSize = true
             };
             this.AddControls(
                 this.PanelButtons);
@@ -27,7 +27,7 @@ namespace Start_a_Town_.Towns.Constructions
 
         public void SetProduct(BlockRecipe.ProductMaterialPair product, Action<Type> onToolSelected)
         {
-            if (product != null)
+            if (product is not null)
             {
                 if (product.Recipe.Category != this.CurrentCategory)
                     this.Refresh(product.Recipe.Category.GetAvailableTools(() => product), onToolSelected);

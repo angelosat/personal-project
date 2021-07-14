@@ -8,15 +8,9 @@ namespace Start_a_Town_.Components.Crafting
 {
     public partial class BlockRecipe : ISlottable
     {
-        static int _IDSequence = 0;
-        public static int IDSequence { get { return _IDSequence++; } }
         public Towns.Constructions.ConstructionCategory Category;
 
-        static Dictionary<int, BlockRecipe> _Dictionary;
-        public static Dictionary<int, BlockRecipe> Dictionary => _Dictionary ??= new Dictionary<int, BlockRecipe>();
-       
-        public int ID { get; set; }
-        public string Name { get; set; }
+        public string Name;
         public List<Reaction.Reagent> Reagents;
         public BlockRecipe.Product BlockProduct;
         public ToolAbilityDef Skill;
@@ -25,7 +19,6 @@ namespace Start_a_Town_.Components.Crafting
 
         public BlockRecipe(List<Reaction.Reagent> reagents, BlockRecipe.Product product, ToolAbilityDef skill = null)
         {
-            this.ID = IDSequence;
             this.Name = product.Block.ToString();
             this.Skill = skill;
             this.Reagents = reagents;

@@ -13,7 +13,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, IEnumerable<Vector3> list)
+        static public void Send(INetwork net, IEnumerable<Vector3> list)
         {
             if (net is Client)
                 throw new Exception();
@@ -21,7 +21,7 @@ namespace Start_a_Town_
             strem.Write(p);
             strem.Write(list);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             if (net is Server)
                 throw new Exception();

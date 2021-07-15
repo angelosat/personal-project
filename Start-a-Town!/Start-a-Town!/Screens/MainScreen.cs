@@ -16,7 +16,7 @@ namespace Start_a_Town_.Rooms
             Background = Game1.Instance.Content.Load<Texture2D>("Graphics/bg");
         }
 
-        public override GameScreen Initialize(IObjectProvider net)
+        public override GameScreen Initialize(INetwork net)
         {
             base.Initialize(net);
             WindowManager.Initialize();

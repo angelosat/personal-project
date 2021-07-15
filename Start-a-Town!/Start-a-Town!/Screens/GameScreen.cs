@@ -135,7 +135,7 @@ namespace Start_a_Town_.Rooms
             OnKeyPress(sender, e);
         }
 
-        virtual public GameScreen Initialize(IObjectProvider net)
+        virtual public GameScreen Initialize(INetwork net)
         {
             return this;
         }

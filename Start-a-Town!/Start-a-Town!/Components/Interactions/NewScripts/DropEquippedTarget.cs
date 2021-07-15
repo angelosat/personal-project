@@ -38,7 +38,7 @@ namespace Start_a_Town_.Components.Interactions
         }
         protected override void ReadExtra(System.IO.BinaryReader r)
         {
-            this.TargetEquipment = TargetArgs.Read((IObjectProvider)null, r);
+            this.TargetEquipment = TargetArgs.Read((INetwork)null, r);
         }
         protected override void AddSaveData(SaveTag tag)
         {

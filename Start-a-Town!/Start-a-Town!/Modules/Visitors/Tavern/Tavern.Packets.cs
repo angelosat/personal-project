@@ -17,7 +17,7 @@ namespace Start_a_Town_
                 PacketOrderRemove = Network.RegisterPacketHandler(HandleRemoveOrder);
                 PacketOrderUpdateIngredients = Network.RegisterPacketHandler(UpdateOrderIngredients);
             }
-            private static void HandleRemoveOrder(IObjectProvider net, BinaryReader r)
+            private static void HandleRemoveOrder(INetwork net, BinaryReader r)
             {
                 var pl = net.GetPlayer(r.ReadInt32());
                 var tavern = net.Map.Town.ShopManager.GetShop(r.ReadInt32()) as Tavern;
@@ -28,13 +28,13 @@ namespace Start_a_Town_
                 else
                     SendRemoveOrder(net, pl, tavern, order);
             }
-            public static void SendRemoveOrder(IObjectProvider net, PlayerData player, Tavern tavern, CraftOrderNew order)
+            public static void SendRemoveOrder(INetwork net, PlayerData player, Tavern tavern, CraftOrderNew order)
             {
                 if (net is Server)
                     tavern.RemoveOrder(order);
                 net.GetOutgoingStream().Write(PacketOrderRemove, player.ID, tavern.ID, order.ID);
             }
-            private static void HandleAddOrder(IObjectProvider net, BinaryReader r)
+            private static void HandleAddOrder(INetwork net, BinaryReader r)
             {
                 var pl = net.GetPlayer(r.ReadInt32());
                 var tavern = net.Map.Town.ShopManager.GetShop(r.ReadInt32()) as Tavern;
@@ -46,7 +46,7 @@ namespace Start_a_Town_
                     SendAddMenuItem(net, pl, tavern, reaction, id);
             }
 
-            static public void SendAddMenuItem(IObjectProvider net, PlayerData player, Tavern tavern, Reaction reaction, int id = -1)
+            static public void SendAddMenuItem(INetwork net, PlayerData player, Tavern tavern, Reaction reaction, int id = -1)
             {
                 if (net is Server)
                 {
@@ -56,7 +56,7 @@ namespace Start_a_Town_
                 net.GetOutgoingStream().Write(PacketOrderAdd, player.ID, tavern.ID, reaction.ID, id);
             }
 
-            static public void SendOrderSync(IObjectProvider net, PlayerData player, Tavern tavern, CraftOrderNew order, bool enabled)
+            static public void SendOrderSync(INetwork net, PlayerData player, Tavern tavern, CraftOrderNew order, bool enabled)
             {
                 if (net is Server)
                 {
@@ -64,7 +64,7 @@ namespace Start_a_Town_
                 }
                 net.GetOutgoingStream().Write(PacketOrderSync, player.ID, tavern.ID, order.ID, enabled);
             }
-            private static void HandleSyncOrder(IObjectProvider net, BinaryReader r)
+            private static void HandleSyncOrder(INetwork net, BinaryReader r)
             {
                 var pl = net.GetPlayer(r.ReadInt32());
                 var tavern = net.Map.Town.ShopManager.GetShop(r.ReadInt32()) as Tavern;
@@ -78,7 +78,7 @@ namespace Start_a_Town_
                     net.GetOutgoingStream().Write(PacketOrderSync, pl.ID, tavern.ID, order.ID, enabled);
             }
 
-            public static void UpdateOrderIngredients(IObjectProvider net, PlayerData player, Tavern tavern, CraftOrderNew order, string reagent, ItemDef[] defs, Material[] mats, MaterialType[] matTypes)
+            public static void UpdateOrderIngredients(INetwork net, PlayerData player, Tavern tavern, CraftOrderNew order, string reagent, ItemDef[] defs, Material[] mats, MaterialType[] matTypes)
             {
                 if (net is Server)
                     order.ToggleReagentRestrictions(reagent, defs, mats, matTypes);
@@ -92,7 +92,7 @@ namespace Start_a_Town_
                 w.Write(mats?.Select(d => d.ID).ToArray());
                 w.Write(matTypes?.Select(d => d.ID).ToArray());
             }
-            private static void UpdateOrderIngredients(IObjectProvider net, BinaryReader r)
+            private static void UpdateOrderIngredients(INetwork net, BinaryReader r)
             {
                 var player = net.GetPlayer(r.ReadInt32());
                 var tavern = net.Map.Town.GetShop<Tavern>(r.ReadInt32());

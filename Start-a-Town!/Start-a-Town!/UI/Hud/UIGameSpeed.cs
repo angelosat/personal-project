@@ -8,7 +8,7 @@ namespace Start_a_Town_.UI
     {
         ButtonTogglable BtnPause, Btn1x, Btn2x, Btn3x;
         
-        public UIGameSpeed(IObjectProvider net)
+        public UIGameSpeed(INetwork net)
         {
             this.AutoSize = true;
             var w = Button.GetWidth(UIManager.Font, "►►►");
@@ -45,7 +45,7 @@ namespace Start_a_Town_.UI
             }
             return text.TrimEnd('\n');
         }
-        void SetSpeed(IObjectProvider net, int s)
+        void SetSpeed(INetwork net, int s)
         {
             PacketPlayerSetSpeed.Send(net, net.GetPlayer().ID, s);
         }

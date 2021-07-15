@@ -6,7 +6,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 {
     class CommandParser
     {
-        public void Execute(IObjectProvider net, string command)
+        public void Execute(INetwork net, string command)
         {
             try
             {

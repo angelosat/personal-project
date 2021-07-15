@@ -11,7 +11,7 @@ namespace Start_a_Town_
         {
             PckType = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, GameObject entity)
+        static public void Send(INetwork net, GameObject entity)
         {
             if (net is Client)
                 throw new Exception();
@@ -20,7 +20,7 @@ namespace Start_a_Town_
             w.Write(entity.RefID);
             entity.SyncWrite(w);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             if (net is Server)
                 throw new Exception();

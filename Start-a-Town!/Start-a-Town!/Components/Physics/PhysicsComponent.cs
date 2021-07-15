@@ -324,7 +324,7 @@ namespace Start_a_Town_.Components
             return next.Z;
         }
 
-        private static Vector3 ResolveHorizontalCorners(IObjectProvider net, GameObject parent, Vector3 origin, MapBase map, BoundingBox boxGlobal, ref Vector3 velocity, Vector2 horAxis, float nz, out float zz)
+        private static Vector3 ResolveHorizontalCorners(INetwork net, GameObject parent, Vector3 origin, MapBase map, BoundingBox boxGlobal, ref Vector3 velocity, Vector2 horAxis, float nz, out float zz)
         {
             zz = nz;
             Vector3 step = new Vector3(horAxis, 0) * velocity;

@@ -22,7 +22,7 @@ namespace Start_a_Town_.Modules.Crafting
             w.Write(order.ID);
             w.Write(value);
         }
-        private static void Receive(IObjectProvider net, BinaryReader r)
+        private static void Receive(INetwork net, BinaryReader r)
         {
             var station = r.ReadVector3();
             var id = r.ReadInt32();

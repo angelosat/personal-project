@@ -19,7 +19,7 @@ namespace Start_a_Town_
                 PacketUpdateWorkerRoles = Network.RegisterPacketHandler(UpdateWorkerRoles);
             }
             
-            static void UpdateWorkerRoles(IObjectProvider net, BinaryReader r)
+            static void UpdateWorkerRoles(INetwork net, BinaryReader r)
             {
                 var player = net.GetPlayer(r.ReadInt32());
                 var tavern = net.Map.Town.GetShop(r.ReadInt32());
@@ -30,7 +30,7 @@ namespace Start_a_Town_
                 else
                     UpdateWorkerRoles(net, player, tavern, role, actor);
             }
-            public static void UpdateWorkerRoles(IObjectProvider net, PlayerData player, Workplace tavern, JobDef role, Actor actor)
+            public static void UpdateWorkerRoles(INetwork net, PlayerData player, Workplace tavern, JobDef role, Actor actor)
             {
                 if (net is Server)
                     tavern.ToggleJob(actor, role);
@@ -51,7 +51,7 @@ namespace Start_a_Town_
 
         readonly protected Dictionary<WorkerRoleDef, WorkerRole> Roles;
 
-        public IObjectProvider Net => this.Town.Net;
+        public INetwork Net => this.Town.Net;
         public Town Town;
         public MapBase Map => this.Town.Map;
         public int ID;

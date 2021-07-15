@@ -12,11 +12,11 @@ namespace Start_a_Town_
             p = Network.RegisterPacketHandler(Receive);
         }
 
-        static void Receive(IObjectProvider arg1, BinaryReader arg2)
+        static void Receive(INetwork arg1, BinaryReader arg2)
         {
             throw new NotImplementedException();
         }
-        internal static void Send(IObjectProvider net)
+        internal static void Send(INetwork net)
         {
             throw new NotImplementedException();
         }

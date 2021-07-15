@@ -475,7 +475,7 @@ namespace Start_a_Town_
         /// </summary>
         /// <param name="net"></param>
         /// <param name="global"></param>
-        public virtual void NeighborChanged(IObjectProvider net, IntVec3 global) { }
+        public virtual void NeighborChanged(INetwork net, IntVec3 global) { }
 
         public virtual void Removed(MapBase map, Vector3 global)
         {
@@ -593,7 +593,7 @@ namespace Start_a_Town_
             var h = this.GetHeight(cell.BlockData, withinBlock.X, withinBlock.Y);
             return this.Solid && withinBlock.Z < h;
         }
-        public virtual bool IsOpaque(IObjectProvider net, Vector3 global) { return this.Opaque; }
+        public virtual bool IsOpaque(INetwork net, Vector3 global) { return this.Opaque; }
         public virtual bool IsOpaque(Cell cell) { return this.Opaque; }
         public virtual Material GetMaterial(MapBase map, Vector3 global)
         {
@@ -601,18 +601,18 @@ namespace Start_a_Town_
         }
         public abstract Material GetMaterial(byte blockdata);
 
-        public virtual float GetTransparency(IObjectProvider net, Vector3 global) { return 0; }
-        public virtual float GetDensity(IObjectProvider net, Vector3 global) { return 0; }
+        public virtual float GetTransparency(INetwork net, Vector3 global) { return 0; }
+        public virtual float GetDensity(INetwork net, Vector3 global) { return 0; }
         public virtual void OnMessage(GameObject parent, ObjectEventArgs args) { }
-        public virtual void RandomBlockUpdate(IObjectProvider net, IntVec3 global, Cell cell) { }
+        public virtual void RandomBlockUpdate(INetwork net, IntVec3 global, Cell cell) { }
         protected virtual void HandleMessage(Vector3 global, ObjectEventArgs e) { }
 
-        public static void HandleMessage(IObjectProvider net, Vector3 global, ObjectEventArgs e)
+        public static void HandleMessage(INetwork net, Vector3 global, ObjectEventArgs e)
         {
             net.Map.GetBlock(global).HandleMessage(global, e);
 
         }
-        internal virtual void RemoteProcedureCall(IObjectProvider net, Vector3 vector3, Message.Types type, System.IO.BinaryReader r) { }
+        internal virtual void RemoteProcedureCall(INetwork net, Vector3 vector3, Message.Types type, System.IO.BinaryReader r) { }
 
         public static Dictionary<Block.Types, Block> Registry = new();
 

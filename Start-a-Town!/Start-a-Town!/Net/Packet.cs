@@ -164,7 +164,7 @@ namespace Start_a_Town_.Net
 
         public virtual void Write(BinaryWriter w) { }
 
-        public virtual void Read(IObjectProvider net, byte[] data) { }
-        public virtual void Read(IObjectProvider net, BinaryReader r) { }
+        public virtual void Read(INetwork net, byte[] data) { }
+        public virtual void Read(INetwork net, BinaryReader r) { }
     }
 }

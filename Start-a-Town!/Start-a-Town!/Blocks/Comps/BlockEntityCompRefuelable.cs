@@ -16,7 +16,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(ChangeFilters);
         }
-        private static void ChangeFiltersSend(IObjectProvider net, Vector3 entity, int[] nodeIndices = null, int[] leafIndices = null)
+        private static void ChangeFiltersSend(INetwork net, Vector3 entity, int[] nodeIndices = null, int[] leafIndices = null)
         {
             var s = net.GetOutgoingStream();
             s.Write(p);
@@ -24,7 +24,7 @@ namespace Start_a_Town_
             s.Write(nodeIndices ?? new int[] { });
             s.Write(leafIndices ?? new int[] { });
         }
-        private static void ChangeFilters(IObjectProvider net, BinaryReader r)
+        private static void ChangeFilters(INetwork net, BinaryReader r)
         {
             var entity = r.ReadVector3();
             var nodes = r.ReadIntArray();

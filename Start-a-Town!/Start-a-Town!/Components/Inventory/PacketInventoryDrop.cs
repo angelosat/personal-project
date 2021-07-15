@@ -10,7 +10,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, int actorID, int itemID, int amount)
+        static public void Send(INetwork net, int actorID, int itemID, int amount)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(p);
@@ -18,7 +18,7 @@ namespace Start_a_Town_
             stream.Write(itemID);
             stream.Write(amount);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var actorID = r.ReadInt32();
             var itemID = r.ReadInt32();

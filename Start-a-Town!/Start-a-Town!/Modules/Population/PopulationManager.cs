@@ -30,7 +30,7 @@ namespace Start_a_Town_
                 var w = Server.Instance.GetOutgoingStream();
                 w.Write(PacketAdventurerCreated, actor.RefID);
             }
-            private static void ReceiveNotifyAdventurerCreated(IObjectProvider net, BinaryReader r)
+            private static void ReceiveNotifyAdventurerCreated(INetwork net, BinaryReader r)
             {
                 var client = net as Client;
                 var actorID = r.ReadInt32();
@@ -38,7 +38,7 @@ namespace Start_a_Town_
                 var world = client.Map.World as StaticWorld;
                 world.Population.RegisterActor(client, actor);
             }
-            private static void ReceiveNotifyVisit(IObjectProvider net, BinaryReader r)
+            private static void ReceiveNotifyVisit(INetwork net, BinaryReader r)
             {
                 if (net is Server)
                     throw new Exception();
@@ -47,7 +47,7 @@ namespace Start_a_Town_
                 ReportVisit(net, actor);
             }
 
-            private static void ReportVisit(IObjectProvider net, Actor actor)
+            private static void ReportVisit(INetwork net, Actor actor)
             {
                 var props = actor.GetVisitorProperties();
                 net.Report($"{actor.Name} is {(!actor.Exists ? ("visiting" + (props.Discovered ? "" : " for the first time!")) : "departing")}");
@@ -73,7 +73,7 @@ namespace Start_a_Town_
         {
             this.World = world;
         }
-        public void Update(IObjectProvider net)
+        public void Update(INetwork net)
         {
             if (net is Server)
                 this.HandleErrors();
@@ -106,12 +106,12 @@ namespace Start_a_Town_
             }
         }
 
-        void Tick(IObjectProvider net)
+        void Tick(INetwork net)
         {
             this.PopulateNew(net);
         }
 
-        private void PopulateNew(IObjectProvider net)
+        private void PopulateNew(INetwork net)
         {
             if (net is Client)
                 return;
@@ -131,7 +131,7 @@ namespace Start_a_Town_
             return visitor;
         }
 
-        private void RegisterActor(IObjectProvider net, Actor actor)
+        private void RegisterActor(INetwork net, Actor actor)
         {
             var props = new VisitorProperties(net.Map.World as StaticWorld, actor, InitialChance, InitialApproval) { OffsiteArea = OffsiteAreaDefOf.Forest };
             this.ActorsAdventuring.Add(props);

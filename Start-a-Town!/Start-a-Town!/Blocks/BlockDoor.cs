@@ -22,7 +22,7 @@ namespace Start_a_Town_
                 this.Open = open;
                 this.Part = part;
             }
-            public State(IObjectProvider net, Vector3 global)
+            public State(INetwork net, Vector3 global)
             {
                 Cell cell = net.Map.GetCell(global);
 

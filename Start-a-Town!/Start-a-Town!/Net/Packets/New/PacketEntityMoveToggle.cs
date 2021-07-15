@@ -13,14 +13,14 @@ namespace Start_a_Town_
         internal static void Init()
         {
         }
-        internal static void Send(IObjectProvider net, int entityID, bool toggle)
+        internal static void Send(INetwork net, int entityID, bool toggle)
         {
             var w = net.GetOutgoingStream();
             w.Write(PType);
             w.Write(entityID);
             w.Write(toggle);
         }
-        internal static void Receive(IObjectProvider net, BinaryReader r)
+        internal static void Receive(INetwork net, BinaryReader r)
         {
             var id = r.ReadInt32();
             var entity = net.GetNetworkObject(id) as Actor;

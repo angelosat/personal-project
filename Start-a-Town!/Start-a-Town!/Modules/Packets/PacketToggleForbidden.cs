@@ -11,14 +11,14 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, List<int> instanceID)
+        static public void Send(INetwork net, List<int> instanceID)
         {
            
             var w = net.GetOutgoingStream();
             w.Write(p);
             w.Write(instanceID);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var list = r.ReadListInt();
             foreach (var id in list)

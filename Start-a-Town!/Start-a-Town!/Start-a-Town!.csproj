@@ -928,7 +928,7 @@
     <Compile Include="Objects\TargetArgs.cs" />
     <Compile Include="Helpers\Progress.cs" />
     <Compile Include="SceneState.cs" />
-    <Compile Include="Net\IObjectProvider.cs" />
+    <Compile Include="Net\INetwork.cs" />
     <Compile Include="Net\Client\Client.cs" />
     <Compile Include="Components\Attack.cs" />
     <Compile Include="Components\Attributes\AttributeStat.cs" />

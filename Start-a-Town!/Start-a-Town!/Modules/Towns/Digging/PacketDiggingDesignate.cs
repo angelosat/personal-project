@@ -12,7 +12,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, Vector3 begin, Vector3 end, bool remove)
+        static public void Send(INetwork net, Vector3 begin, Vector3 end, bool remove)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(p);
@@ -20,7 +20,7 @@ namespace Start_a_Town_
             stream.Write(end);
             stream.Write(remove);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var begin = r.ReadVector3();
             var end = r.ReadVector3();

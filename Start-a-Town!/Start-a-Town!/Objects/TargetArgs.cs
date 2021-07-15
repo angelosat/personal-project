@@ -41,7 +41,7 @@ namespace Start_a_Town_
             }
         }
 
-        public IObjectProvider Network
+        public INetwork Network
         {
             get { return this.Map.Net; }
         }
@@ -144,7 +144,7 @@ namespace Start_a_Town_
             this.SlotID = -1;
             this.ContainerName = "";
         }
-        public TargetArgs(IObjectProvider network, int entityID)
+        public TargetArgs(INetwork network, int entityID)
         {
             this.Type = TargetType.Entity;
             this.EntityID = entityID;
@@ -336,7 +336,7 @@ namespace Start_a_Town_
             return tag;
         }
 
-        static public TargetArgs Read(IObjectProvider objects, BinaryReader reader)
+        static public TargetArgs Read(INetwork objects, BinaryReader reader)
         {
 
             TargetType type = (TargetType)reader.ReadInt32();
@@ -516,7 +516,7 @@ namespace Start_a_Town_
                 _ => this.Type.ToString(),
             };
         }
-        public Dictionary<string, Interaction> GetInteractions(IObjectProvider net)
+        public Dictionary<string, Interaction> GetInteractions(INetwork net)
         {
             switch (this.Type)
             {
@@ -561,7 +561,7 @@ namespace Start_a_Town_
                     return null;
             }
         }
-        internal List<Interaction> GetAvailableTasks(IObjectProvider net)
+        internal List<Interaction> GetAvailableTasks(INetwork net)
         {
             switch (this.Type)
             {
@@ -674,7 +674,7 @@ namespace Start_a_Town_
             }
         }
 
-        public void HandleRemoteCall(IObjectProvider net, ObjectEventArgs e)
+        public void HandleRemoteCall(INetwork net, ObjectEventArgs e)
         {
             switch (this.Type)
             {

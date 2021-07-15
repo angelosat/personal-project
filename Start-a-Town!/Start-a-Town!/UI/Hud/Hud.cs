@@ -45,7 +45,7 @@ namespace Start_a_Town_
             this.Box_Buttons.Anchor = Vector2.One;
         }
 
-        public Hud(IObjectProvider net, Camera camera)
+        public Hud(INetwork net, Camera camera)
         {
             this.SetMousethrough(true);
             
@@ -121,7 +121,7 @@ namespace Start_a_Town_
             FloatingBars = new Dictionary<GameObject, FloatingBar>();
         }
 
-        private void TogglePlayerList(IObjectProvider net)
+        private void TogglePlayerList(INetwork net)
         {
             if (this.WindowPlayers is null)
             {

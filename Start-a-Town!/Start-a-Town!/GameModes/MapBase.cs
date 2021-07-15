@@ -25,7 +25,7 @@ namespace Start_a_Town_
                 PacketSyncSetCellData = Network.RegisterPacketHandler(SyncSetCellData);
                 PacketSpawn = Network.RegisterPacketHandler(ReceiveSpawnEntity);
             }
-            static public void SendSpawnEntity(IObjectProvider net, GameObject entity, MapBase map, Vector3 global, Vector3 velocity)
+            static public void SendSpawnEntity(INetwork net, GameObject entity, MapBase map, Vector3 global, Vector3 velocity)
             {
                 if (net is Client)
                     return;
@@ -35,7 +35,7 @@ namespace Start_a_Town_
                 w.Write(global);
                 w.Write(velocity);
             }
-            static void ReceiveSpawnEntity(IObjectProvider net, BinaryReader r)
+            static void ReceiveSpawnEntity(INetwork net, BinaryReader r)
             {
                 var client = net as Client;
                 var actor = client.GetNetworkObject(r.ReadInt32());
@@ -52,7 +52,7 @@ namespace Start_a_Town_
                     map.SetCellData(global, data);
                 net.WriteToStream(PacketSyncSetCellData, global, data);
             }
-            private static void SyncSetCellData(IObjectProvider net, BinaryReader r)
+            private static void SyncSetCellData(INetwork net, BinaryReader r)
             {
                 var global = r.ReadIntVec3();
                 var data = r.ReadByte();
@@ -70,8 +70,8 @@ namespace Start_a_Town_
         public LightingEngine LightingEngine;
         public IWorld World;
         public Dictionary<Vector2, Chunk> ActiveChunks;
-        IObjectProvider _net;
-        public IObjectProvider Net => this._net ??= this.World.Net;
+        INetwork _net;
+        public INetwork Net => this._net ??= this.World.Net;
         public GameObject PlayerCharacter;
         public ParticleManager ParticleManager;
         public RegionManager Regions;

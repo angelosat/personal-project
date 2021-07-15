@@ -41,7 +41,7 @@ namespace Start_a_Town_.Components
         }
 
 
-        bool Throw(IObjectProvider net, Vector3 velocity, GameObject parent, bool all)
+        bool Throw(INetwork net, Vector3 velocity, GameObject parent, bool all)
         {
             // throws hauled object, if hauling nothing throws equipped object, make it so it only throws hauled object?
            

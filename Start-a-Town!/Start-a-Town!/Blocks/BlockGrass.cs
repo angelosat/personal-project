@@ -138,7 +138,7 @@ namespace Start_a_Town_
                     BlockGrass.GrowRandomFlower(map, global);
                 net.GetOutgoingStream().Write(PacketGrowRandomFlower, global);
             }
-            private static void GrowRandomFlower(IObjectProvider net, BinaryReader r)
+            private static void GrowRandomFlower(INetwork net, BinaryReader r)
             {
                 var map = net.Map;
                 var global = r.ReadIntVec3();
@@ -155,7 +155,7 @@ namespace Start_a_Town_
                 Trample(map, global);
                 net.WriteToStream(PacketTrample, global);
             }
-            private static void SyncTrample(IObjectProvider net, BinaryReader r)
+            private static void SyncTrample(INetwork net, BinaryReader r)
             {
                 var global = r.ReadIntVec3();
                 if (net is Server)

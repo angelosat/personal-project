@@ -12,7 +12,7 @@ namespace Start_a_Town_
         private Action _Fail = () => { };
 
         public Stack<ObjectEventArgs> Trace = new Stack<ObjectEventArgs>();
-        public IObjectProvider Network;
+        public INetwork Network;
         public byte[] Data;
         public Message.Types Type;
         public GameObject Sender, Target;
@@ -81,7 +81,7 @@ namespace Start_a_Town_
              argsWriter(writer);
          }
 
-        public ObjectEventArgs Read(IObjectProvider net, BinaryReader reader)
+        public ObjectEventArgs Read(INetwork net, BinaryReader reader)
         {
             this.Type = (Message.Types)reader.ReadByte();
             // WARNING!!! better prefix manually

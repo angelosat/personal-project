@@ -13,14 +13,14 @@ namespace Start_a_Town_
             p = Network.RegisterPacketHandler(Receive);
         }
 
-        internal static void Send(IObjectProvider net, Vector3 global, int reactionID)
+        internal static void Send(INetwork net, Vector3 global, int reactionID)
         {
             var w = net.GetOutgoingStream();
             w.Write(p);
             w.Write(global);
             w.Write(reactionID);
         }
-        private static void Receive(IObjectProvider net, BinaryReader r)
+        private static void Receive(INetwork net, BinaryReader r)
         {
             var station = r.ReadVector3();
             var reactionID = r.ReadInt32();

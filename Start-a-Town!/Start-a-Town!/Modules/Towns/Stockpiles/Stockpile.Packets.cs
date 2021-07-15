@@ -22,7 +22,7 @@ namespace Start_a_Town_
                 w.Write(stockpile.ID);
                 w.Write(p.Value);
             }
-            private static void Receive(IObjectProvider net, BinaryReader r)
+            private static void Receive(INetwork net, BinaryReader r)
             {
                 var stockpileID = r.ReadInt32();
                 var p = r.ReadInt32();

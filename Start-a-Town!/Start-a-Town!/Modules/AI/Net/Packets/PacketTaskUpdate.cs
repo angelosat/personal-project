@@ -17,7 +17,7 @@ namespace Start_a_Town_.Modules.AI.Net
             server.OutgoingStream.Write(agentID);
             server.OutgoingStream.Write(taskString);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var entity = net.GetNetworkObject(r.ReadInt32());
             if (entity == null)

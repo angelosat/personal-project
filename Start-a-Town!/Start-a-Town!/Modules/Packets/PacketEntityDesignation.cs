@@ -16,11 +16,11 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, int type, IEnumerable<TargetArgs> targets, bool value)
+        static public void Send(INetwork net, int type, IEnumerable<TargetArgs> targets, bool value)
         {
             Send(net, type, targets.Select(i => i.Object.RefID).ToList(), value);
         }
-        static public void Send(IObjectProvider net, int type, List<int> targets, bool value)
+        static public void Send(INetwork net, int type, List<int> targets, bool value)
         {
             var strem = net.GetOutgoingStream();
             strem.Write(p);
@@ -29,7 +29,7 @@ namespace Start_a_Town_
             strem.Write(targets);
             strem.Write(value);
         }
-        static public void Send(IObjectProvider net, int type, Vector3 start, Vector3 end, bool value)
+        static public void Send(INetwork net, int type, Vector3 start, Vector3 end, bool value)
         {
             var strem = net.GetOutgoingStream();
             strem.Write(p);
@@ -39,7 +39,7 @@ namespace Start_a_Town_
             strem.Write(end);
             strem.Write(value);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var manager = net.Map.Town.ChoppingManager;
             var type = r.ReadInt32();

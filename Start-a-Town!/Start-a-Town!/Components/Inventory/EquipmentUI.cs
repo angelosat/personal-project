@@ -30,7 +30,7 @@ namespace Start_a_Town_
                 btn.LeftClickAction = () => {
                     ContextMenuManager.PopUp(new ContextAction(() => "Unequip", (System.Action)(() =>
                     {
-                        PacketInventoryEquip.Send((IObjectProvider)actor.Net, actor.RefID, o.RefID);
+                        PacketInventoryEquip.Send((INetwork)actor.Net, actor.RefID, o.RefID);
                     })));
                 };
                 return btn;

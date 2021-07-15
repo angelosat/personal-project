@@ -15,7 +15,7 @@ namespace Start_a_Town_.Net
 {
     enum PlayerSavingState { Saved, Changed, Saving }
 
-    public class Client : IObjectProvider
+    public class Client : INetwork
     {
         static Client _Instance;
         static public Client Instance => _Instance ??= new Client();
@@ -323,15 +323,15 @@ namespace Start_a_Town_.Net
         }
        
         [Obsolete]
-        readonly static Dictionary<PacketType, Action<IObjectProvider, BinaryReader>> PacketHandlersNew = new();
+        readonly static Dictionary<PacketType, Action<INetwork, BinaryReader>> PacketHandlersNew = new();
         [Obsolete]
-        static public void RegisterPacketHandler(PacketType channel, Action<IObjectProvider, BinaryReader> handler)
+        static public void RegisterPacketHandler(PacketType channel, Action<INetwork, BinaryReader> handler)
         {
             PacketHandlersNew.Add(channel, handler);
         }
       
-        readonly static Dictionary<int, Action<IObjectProvider, BinaryReader>> PacketHandlersNewNewNew = new();
-        internal static void RegisterPacketHandler(int id, Action<IObjectProvider, BinaryReader> handler)
+        readonly static Dictionary<int, Action<INetwork, BinaryReader>> PacketHandlersNewNewNew = new();
+        internal static void RegisterPacketHandler(int id, Action<INetwork, BinaryReader> handler)
         {
             PacketHandlersNewNewNew.Add(id, handler);
         }
@@ -417,7 +417,7 @@ namespace Start_a_Town_.Net
                 var type = (PacketType)id;
                 lastPos = mem.Position;
 
-                if (PacketHandlersNew.TryGetValue(type, out Action<IObjectProvider, BinaryReader> handlerAction))
+                if (PacketHandlersNew.TryGetValue(type, out Action<INetwork, BinaryReader> handlerAction))
                     handlerAction(Instance, r);
                 else if (PacketHandlersNewNewNew.TryGetValue(id, out var handlerActionNewNew))
                     handlerActionNewNew(Instance, r);
@@ -445,7 +445,7 @@ namespace Start_a_Town_.Net
 
         private void HandleMessage(Packet msg)
         {
-            if (PacketHandlersNew.TryGetValue(msg.PacketType, out Action<IObjectProvider, BinaryReader> handlerNew))
+            if (PacketHandlersNew.TryGetValue(msg.PacketType, out Action<INetwork, BinaryReader> handlerNew))
             {
                 Network.Deserialize(msg.Payload, r=> handlerNew(Instance, r));
                 return;

@@ -36,7 +36,7 @@ namespace Start_a_Town_.Blocks
             LiduidFlowProcess.Add(flow);
         }
 
-        public override void NeighborChanged(IObjectProvider net, IntVec3 global)
+        public override void NeighborChanged(INetwork net, IntVec3 global)
         {
             var above = net.Map.GetBlock(global + IntVec3.UnitZ);
             if (above == BlockDefOf.Water)

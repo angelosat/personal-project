@@ -1,26 +1,25 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Linq;
 using UI;
 
 namespace Start_a_Town_
 {
     public enum MouseButtons { Left, Right, Middle }
-    public enum MessageID{KeyDown, KeyUp}
+    public enum MessageID { KeyDown, KeyUp }
 
     public class Controller
     {
-        static public bool GetMouseover<T>(out T obj) where T : GameObject
+        public static bool GetMouseover<T>(out T obj) where T : GameObject
         {
-            return Instance.MouseoverBlock.TryGet<T>(out obj);
+            return Instance.MouseoverBlock.TryGet(out obj);
         }
 
-        static public event EventHandler<MouseoverEventArgs> MouseoverObjectChanged;
+        public static event EventHandler<MouseoverEventArgs> MouseoverObjectChanged;
         public void OnMouseoverObjectChanged(MouseoverEventArgs e)
         {
-            if (MouseoverObjectChanged != null)
-                MouseoverObjectChanged(this, e);
+            MouseoverObjectChanged?.Invoke(this, e);
         }
 
         public Mouseover MouseoverEntity, MouseoverEntityNext;
@@ -31,11 +30,11 @@ namespace Start_a_Town_
         }
         public Mouseover MouseoverBlock;
         public Mouseover MouseoverBlockNext;
-        
+
         public bool BuildMode;
 
         public Rectangle MouseRect;
-        
+
         public KeyboardState ksCurrent, ksPrevious;
         public MouseState msCurrent, msPrevious;
         public Game1 game;
@@ -46,9 +45,12 @@ namespace Start_a_Town_
             get
             {
                 if (_Instance == null)
+                {
                     _Instance = new Controller();
+                }
+
                 return _Instance;
-            }            
+            }
         }
 
         public static event InputEvent MouseLeftPress, MouseLeftRelease, MouseLeftDown, MouseWheelUp, MouseWheelDown,
@@ -88,13 +90,13 @@ namespace Start_a_Town_
             MouseOverEntityChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        static public InputState Input = new InputState();
+        public static InputState Input = new InputState();
         public Controller()
         {
-            MouseoverBlock = new Mouseover();
-            MouseoverBlockNext = new Mouseover();
-            MouseoverEntity = new();
-            MouseoverEntityNext = new();
+            this.MouseoverBlock = new Mouseover();
+            this.MouseoverBlockNext = new Mouseover();
+            this.MouseoverEntity = new();
+            this.MouseoverEntityNext = new();
         }
 
         public void OnMouseLeftPress()
@@ -125,121 +127,163 @@ namespace Start_a_Town_
 
         void GetInputStates()
         {
-            ksCurrent = Keyboard.GetState();
-            msCurrent = Mouse.GetState();
+            this.ksCurrent = Keyboard.GetState();
+            this.msCurrent = Mouse.GetState();
         }
-        
+
         public Vector2 MouseLocation
-        { get { return new Vector2(msCurrent.X, msCurrent.Y); } }
+        { get { return new Vector2(this.msCurrent.X, this.msCurrent.Y); } }
         public Mouseover GetMouseover()
         {
-            return MouseoverEntity.Target != null ? MouseoverEntity : MouseoverBlock;
+            return this.MouseoverEntity.Target != null ? this.MouseoverEntity : this.MouseoverBlock;
         }
         public void Update()
         {
             AltDown = InputState.IsKeyDown(System.Windows.Forms.Keys.LMenu);
-            UpdateMousovers();
+            this.UpdateMousovers();
 
-            GetInputStates();
-            this.MouseRect = new Rectangle(msCurrent.X, msCurrent.Y, 1, 1);
-
-
-            if (ksCurrent.GetPressedKeys().Count() > 0)
-                OnKeyPressed();
+            this.GetInputStates();
+            this.MouseRect = new Rectangle(this.msCurrent.X, this.msCurrent.Y, 1, 1);
 
 
-            if (msCurrent.LeftButton == ButtonState.Pressed)
+            if (this.ksCurrent.GetPressedKeys().Count() > 0)
             {
-                if (msPrevious.LeftButton == ButtonState.Released)
-                    OnMouseLeftPress();
-                else
-                    OnMouseLeftDown();
+                this.OnKeyPressed();
             }
-            else if (msCurrent.LeftButton == ButtonState.Released && msPrevious.LeftButton == ButtonState.Pressed)
-                OnMouseLeftRelease();
 
-            if (msCurrent.RightButton == ButtonState.Pressed)
+            if (this.msCurrent.LeftButton == ButtonState.Pressed)
             {
-                if (msPrevious.RightButton == ButtonState.Released)
-                    OnMouseRightPress();
+                if (this.msPrevious.LeftButton == ButtonState.Released)
+                {
+                    this.OnMouseLeftPress();
+                }
                 else
-                    OnMouseRightDown();
+                {
+                    this.OnMouseLeftDown();
+                }
             }
-            else if (msCurrent.RightButton == ButtonState.Released && msPrevious.RightButton == ButtonState.Pressed)
-                OnMouseRightRelease();
+            else if (this.msCurrent.LeftButton == ButtonState.Released && this.msPrevious.LeftButton == ButtonState.Pressed)
+            {
+                this.OnMouseLeftRelease();
+            }
 
-            if (msCurrent.ScrollWheelValue > msPrevious.ScrollWheelValue)
-                OnMouseWheelUp();
-            else if (msCurrent.ScrollWheelValue < msPrevious.ScrollWheelValue)
-                OnMouseWheelDown();
+            if (this.msCurrent.RightButton == ButtonState.Pressed)
+            {
+                if (this.msPrevious.RightButton == ButtonState.Released)
+                {
+                    this.OnMouseRightPress();
+                }
+                else
+                {
+                    this.OnMouseRightDown();
+                }
+            }
+            else if (this.msCurrent.RightButton == ButtonState.Released && this.msPrevious.RightButton == ButtonState.Pressed)
+            {
+                this.OnMouseRightRelease();
+            }
 
-            if (ksCurrent.IsKeyDown(Keys.LeftAlt) || ksCurrent.IsKeyDown(Keys.RightAlt))
-                if (KeyPressCheck(Keys.Enter))
+            if (this.msCurrent.ScrollWheelValue > this.msPrevious.ScrollWheelValue)
+            {
+                this.OnMouseWheelUp();
+            }
+            else if (this.msCurrent.ScrollWheelValue < this.msPrevious.ScrollWheelValue)
+            {
+                this.OnMouseWheelDown();
+            }
+
+            if (this.ksCurrent.IsKeyDown(Keys.LeftAlt) || this.ksCurrent.IsKeyDown(Keys.RightAlt))
+            {
+                if (this.KeyPressCheck(Keys.Enter))
+                {
                     Game1.Instance.graphics.ToggleFullScreen();
+                }
+            }
 
-            Keys[] keysnew = ksCurrent.GetPressedKeys();
-            Keys[] keysold = ksPrevious.GetPressedKeys();
+            Keys[] keysnew = this.ksCurrent.GetPressedKeys();
+            Keys[] keysold = this.ksPrevious.GetPressedKeys();
             if (keysnew.Length > 0)
-                OnKeyDown(keysnew, keysold);
+            {
+                this.OnKeyDown(keysnew, keysold);
+            }
+
             if (keysnew.Length < keysold.Length)
-                OnKeyUp(keysnew, keysold);
-            ksPrevious = ksCurrent;
-            msPrevious = msCurrent;
+            {
+                this.OnKeyUp(keysnew, keysold);
+            }
+
+            this.ksPrevious = this.ksCurrent;
+            this.msPrevious = this.msCurrent;
         }
         private void UpdateMousovers()
         {
-            object mouseover, mouseoverNext;
-            MouseoverBlock.TryGet(out mouseover);
-            MouseoverBlockNext.TryGet(out mouseoverNext);
+            this.MouseoverBlock.TryGet(out object mouseover);
+            this.MouseoverBlockNext.TryGet(out object mouseoverNext);
 
             if (mouseover != mouseoverNext)
             {
-                OnMouseoverObjectChanged(new MouseoverEventArgs(mouseoverNext, mouseover));
+                this.OnMouseoverObjectChanged(new MouseoverEventArgs(mouseoverNext, mouseover));
                 if (mouseover is GameObject objLast)
+                {
                     objLast.FocusLost();
+                }
+
                 if (mouseoverNext is GameObject objNext)
+                {
                     objNext.Focus();
+                }
             }
-            
-            MouseoverBlock = MouseoverBlockNext;
-            MouseoverBlockNext = new Mouseover();
+
+            this.MouseoverBlock = this.MouseoverBlockNext;
+            this.MouseoverBlockNext = new Mouseover();
         }
 
         void OnMouseWheelUp()
         {
             if (MouseWheelUp != null)
+            {
                 MouseWheelUp();
+            }
         }
         void OnMouseWheelDown()
         {
             if (MouseWheelDown != null)
+            {
                 MouseWheelDown();
+            }
         }
         public bool KeyPressCheck(Keys key)
         {
-            return ksCurrent.IsKeyDown(key) && ksPrevious.IsKeyUp(key);
+            return this.ksCurrent.IsKeyDown(key) && this.ksPrevious.IsKeyUp(key);
         }
 
         public Keys[] GetKeys()
         {
-            return ksCurrent.GetPressedKeys();
+            return this.ksCurrent.GetPressedKeys();
         }
 
-        static public void TrySetMouseoverEntity(Camera camera, GameObject entity, Vector3 face, float drawdepth)
+        public static void TrySetMouseoverEntity(Camera camera, GameObject entity, Vector3 face, float drawdepth)
         {
             var global = entity.Global;
             if (!camera.IsDrawable(entity.Map, global))
+            {
                 return;
+            }
+
             float mouseoverDepth = drawdepth;
             if (mouseoverDepth >= Instance.MouseoverBlockNext.Depth)
             {
                 if (Instance.MouseoverBlock.Object is TargetArgs target)
                 {
                     if (target.Object != entity)
+                    {
                         target = new TargetArgs(entity, face) { Map = Engine.Map };
+                    }
                 }
                 else
+                {
                     target = new TargetArgs(entity, face) { Map = Engine.Map };
+                }
 
                 Instance.MouseoverBlockNext.Target = target;
                 Instance.MouseoverBlockNext.Object = target;
@@ -247,14 +291,19 @@ namespace Start_a_Town_
                 Instance.MouseoverBlockNext.Depth = drawdepth;
             }
         }
-        static public void SetMouseoverBlock(Camera camera, MapBase map, Vector3 global, Vector3 face, Vector3 precise)
+        public static void SetMouseoverBlock(Camera camera, MapBase map, Vector3 global, Vector3 face, Vector3 precise)
         {
             var target = new TargetArgs(map, global, face, precise);
 
             if (global != _LastMouseoverBlockGlobal || Instance.MouseoverBlock.Object is Element) // very hacky
+            {
                 Instance.MouseoverBlockNext.Object = target;
+            }
             else
+            {
                 Instance.MouseoverBlockNext.Object = Instance.MouseoverBlock.Object;
+            }
+
             Instance.MouseoverBlockNext.Face = face;
             Instance.MouseoverBlockNext.Precise = precise;
             Instance.MouseoverBlockNext.Target = target;
@@ -262,10 +311,10 @@ namespace Start_a_Town_
             _LastMouseoverBlockGlobal = global;
         }
         static Vector3 _LastMouseoverBlockGlobal;
-        static public bool BlockTargeting;
-        
+        public static bool BlockTargeting;
+
         static bool AltDown;
-        static public bool IsBlockTargeting()
+        public static bool IsBlockTargeting()
         {
             bool keydown = AltDown;
             return keydown ^ BlockTargeting;

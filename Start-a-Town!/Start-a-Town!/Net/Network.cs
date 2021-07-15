@@ -19,7 +19,7 @@ namespace Start_a_Town_.Net
                 PacketTimestamped = RegisterPacketHandler(ReceiveTimestamped);
             }
 
-            private static void ReceiveTimestamped(IObjectProvider net, BinaryReader r)
+            private static void ReceiveTimestamped(INetwork net, BinaryReader r)
             {
                 if(net is Client client)
                     client.HandleTimestamped(r);
@@ -29,7 +29,7 @@ namespace Start_a_Town_.Net
             {
                 server.GetOutgoingStream().Write(PacketSyncReport, text);
             }
-            private static void HandleSyncReport(IObjectProvider net, BinaryReader r)
+            private static void HandleSyncReport(INetwork net, BinaryReader r)
             {
                 if (net is not Net.Client)
                     throw new Exception();
@@ -42,7 +42,7 @@ namespace Start_a_Town_.Net
         public Server Server;
 
         static int PacketIDSequence = 10000;
-        public static int RegisterPacketHandler(Action<IObjectProvider, BinaryReader> handler)
+        public static int RegisterPacketHandler(Action<INetwork, BinaryReader> handler)
         {
             var id = PacketIDSequence++;
             Server.RegisterPacketHandler(id, handler);

@@ -1,6 +1,7 @@
 ﻿using System;
+using UI;
 
-namespace UI
+namespace Start_a_Town_.UI
 {
     public class UIEventArgs : EventArgs
     {

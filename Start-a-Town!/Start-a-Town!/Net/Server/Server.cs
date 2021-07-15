@@ -13,7 +13,7 @@ using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Net
 {
-    public partial class Server : IObjectProvider
+    public partial class Server : INetwork
     {
         public double CurrentTick => ServerClock.TotalMilliseconds;
       
@@ -57,22 +57,22 @@ namespace Start_a_Town_.Net
         public HashSet<GameObject> ObjectsChangedSinceLastSnapshot = new();
 
         [Obsolete]
-        readonly static Dictionary<PacketType, Action<IObjectProvider, PlayerData, BinaryReader>> PacketHandlersNewNew = new();
+        readonly static Dictionary<PacketType, Action<INetwork, PlayerData, BinaryReader>> PacketHandlersNewNew = new();
         [Obsolete]
-        static public void RegisterPacketHandler(PacketType channel, Action<IObjectProvider, PlayerData, BinaryReader> handler)
+        static public void RegisterPacketHandler(PacketType channel, Action<INetwork, PlayerData, BinaryReader> handler)
         {
             PacketHandlersNewNew.Add(channel, handler);
         }
 
         static int PacketSequence = 1;
-        readonly static Dictionary<int, Action<IObjectProvider, BinaryReader>> PacketHandlersNewNewNew = new();
-        internal static int RegisterPacketHandler(Action<IObjectProvider, BinaryReader> handler)
+        readonly static Dictionary<int, Action<INetwork, BinaryReader>> PacketHandlersNewNewNew = new();
+        internal static int RegisterPacketHandler(Action<INetwork, BinaryReader> handler)
         {
             var id = PacketSequence++;
             PacketHandlersNewNewNew.Add(id, handler);
             return id;
         }
-        internal static void RegisterPacketHandler(int id, Action<IObjectProvider, BinaryReader> handler)
+        internal static void RegisterPacketHandler(int id, Action<INetwork, BinaryReader> handler)
         {
             PacketHandlersNewNewNew.Add(id, handler);
         }
@@ -1084,7 +1084,7 @@ namespace Start_a_Town_.Net
                 var type = (PacketType)typeID;
                 lastPos = mem.Position;
 
-                if (PacketHandlersNewNew.TryGetValue(type, out Action<IObjectProvider, PlayerData, BinaryReader> handlerActionNew))
+                if (PacketHandlersNewNew.TryGetValue(type, out Action<INetwork, PlayerData, BinaryReader> handlerActionNew))
                     handlerActionNew(Instance, player, r);
                 else if (PacketHandlersNewNewNew.TryGetValue(typeID, out var handlerActionNewNew))
                     handlerActionNewNew(Instance, r);
@@ -1126,7 +1126,7 @@ namespace Start_a_Town_.Net
         {
         }
 
-        void ReceiveAcks(IObjectProvider net, PlayerData player, BinaryReader r)
+        void ReceiveAcks(INetwork net, PlayerData player, BinaryReader r)
         {
             var acksCount = r.ReadInt32();
             for (int i = 0; i < acksCount; i++)

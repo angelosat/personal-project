@@ -15,7 +15,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, DesignationDef designation, List<TargetArgs> targets, bool remove)
+        static public void Send(INetwork net, DesignationDef designation, List<TargetArgs> targets, bool remove)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(p);
@@ -24,7 +24,7 @@ namespace Start_a_Town_
             stream.Write((int)SelectionType.List);
             stream.Write(targets);
         }
-        static public void Send(IObjectProvider net, DesignationDef designation, Vector3 begin, Vector3 end, bool remove)
+        static public void Send(INetwork net, DesignationDef designation, Vector3 begin, Vector3 end, bool remove)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(p);
@@ -34,7 +34,7 @@ namespace Start_a_Town_
             stream.Write(begin);
             stream.Write(end);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var typeName = r.ReadString();
             var designation = DesignationDef.Dictionary[typeName];

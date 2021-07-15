@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public interface IObjectProvider
+    public interface INetwork
     {
-        UI.ConsoleBoxAsync Log { get; }
+        ConsoleBoxAsync Log { get; }
         PlayerData CurrentPlayer { get; }
         TimeSpan Clock { get; }
         double CurrentTick { get; }

@@ -437,7 +437,7 @@ namespace Start_a_Town_
                 PacketChangeType = Network.RegisterPacketHandler(SetType);
             }
 
-            internal static void SetType(IObjectProvider net, PlayerData playerData, IntVec3 vector3, BlockBedEntity.Types type)
+            internal static void SetType(INetwork net, PlayerData playerData, IntVec3 vector3, BlockBedEntity.Types type)
             {
                 if (net is Server)
                 {
@@ -447,7 +447,7 @@ namespace Start_a_Town_
                 net.GetOutgoingStream().Write(PacketChangeType, playerData.ID, vector3, (int)type);
             }
 
-            private static void SetType(IObjectProvider net, BinaryReader r)
+            private static void SetType(INetwork net, BinaryReader r)
             {
                 var player = net.GetPlayer(r.ReadInt32());
                 var vec = r.ReadIntVec3();

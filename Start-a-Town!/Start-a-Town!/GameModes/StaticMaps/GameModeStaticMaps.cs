@@ -113,7 +113,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return true;
         }
 
-        public override void ParseCommand(IObjectProvider net, string command)
+        public override void ParseCommand(INetwork net, string command)
         {
             this.Parser.Execute(net, command);
         }
@@ -160,7 +160,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
         }
 
-        internal override void AllChunksReceived(IObjectProvider net)
+        internal override void AllChunksReceived(INetwork net)
         {
             // all chunks received, enter world
             "all chunks loaded!".ToConsole();
@@ -206,7 +206,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return directory.GetFiles().OrderByDescending(s => s.CreationTime).ToArray();
         }
 
-        public override Rooms.GameScreen GetWorldSelectScreen(IObjectProvider net)
+        public override Rooms.GameScreen GetWorldSelectScreen(INetwork net)
         {
             throw new System.NotImplementedException();
         }

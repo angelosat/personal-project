@@ -10,7 +10,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(ReceiveTemplate);
         }
-        internal static void SendTemplate(IObjectProvider net, int templateID, TargetArgs target)
+        internal static void SendTemplate(INetwork net, int templateID, TargetArgs target)
         {
             var w = net.GetOutgoingStream();
             w.Write(p);
@@ -18,7 +18,7 @@ namespace Start_a_Town_
             target.Write(w);
         }
         
-        internal static void ReceiveTemplate(IObjectProvider net, BinaryReader r)
+        internal static void ReceiveTemplate(INetwork net, BinaryReader r)
         {
             var server = net as Server;
             var templateID = r.ReadInt32();

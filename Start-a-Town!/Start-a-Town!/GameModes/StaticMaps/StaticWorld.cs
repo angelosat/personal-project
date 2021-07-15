@@ -19,7 +19,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 PacketClockAdvanced = Network.RegisterPacketHandler(ReceiveClockAdvanced);
             }
 
-            private static void ReceiveClockAdvanced(IObjectProvider net, BinaryReader r)
+            private static void ReceiveClockAdvanced(INetwork net, BinaryReader r)
             {
                 if (net is Server)
                     throw new Exception();
@@ -49,10 +49,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
         ulong currentTick;
         public ulong CurrentTick { get => this.currentTick; set => this.currentTick = value; }
 
-        public IObjectProvider Net { get; set; }
+        public INetwork Net { get; set; }
 
         PopulationManager PopulationManager;
-        public void Tick(IObjectProvider net)
+        public void Tick(INetwork net)
         {
             this.PopulationManager.Update(net);
             this.CurrentTick++;

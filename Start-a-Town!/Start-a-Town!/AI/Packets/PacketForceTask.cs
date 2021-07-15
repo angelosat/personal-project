@@ -20,7 +20,7 @@ namespace Start_a_Town_
             w.Write(def.GetType().FullName);
             target.Write(w);
         }
-        private static void Receive(IObjectProvider net, BinaryReader r)
+        private static void Receive(INetwork net, BinaryReader r)
         {
             var actor = net.GetNetworkObject(r.ReadInt32()) as Actor;
             var typeName = r.ReadString();

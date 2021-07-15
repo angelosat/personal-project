@@ -12,7 +12,7 @@ namespace Start_a_Town_.Towns
     {
         public Town Town;
         public MapBase Map { get { return this.Town.Map; } }
-        public IObjectProvider Net { get { return this.Map.Net; } }
+        public INetwork Net { get { return this.Map.Net; } }
         const float UpdateFrequency = 1; // per second
         float UpdateTimerMax = (float)Engine.TicksPerSecond / UpdateFrequency;
         float UpdateTimer;
@@ -43,8 +43,8 @@ namespace Start_a_Town_.Towns
             return null;
         }
 
-        public virtual void Handle(IObjectProvider net, Net.Packet msg) { }
-        public virtual void HandlePacket(IObjectProvider net, Net.PacketType type, BinaryReader r) { }
+        public virtual void Handle(INetwork net, Net.Packet msg) { }
+        public virtual void HandlePacket(INetwork net, Net.PacketType type, BinaryReader r) { }
 
         public virtual void HandlePacket(Server server, Packet msg)
         {

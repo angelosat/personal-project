@@ -21,7 +21,7 @@ namespace Start_a_Town_
             server.Players.Write(w);
             w.Write(server.Speed);
         }
-        internal static void Receive(IObjectProvider net, BinaryReader r)
+        internal static void Receive(INetwork net, BinaryReader r)
         {
             throw new NotImplementedException();
             var client = net as Client;

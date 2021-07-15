@@ -16,7 +16,7 @@ namespace Start_a_Town_.Components
             static public void Init()
             {
                 PacketSyncInsert = Network.RegisterPacketHandler(HandleSyncInsert);
-                void handleSetHaulSlot(IObjectProvider net, BinaryReader r)
+                void handleSetHaulSlot(INetwork net, BinaryReader r)
                 {
                     var actor = net.GetNetworkObject(r.ReadInt32()) as Actor;
                     var item = net.GetNetworkObject(r.ReadInt32()) as Entity;
@@ -26,13 +26,13 @@ namespace Start_a_Town_.Components
                 PacketSetHaulSlot = Network.RegisterPacketHandler(handleSetHaulSlot);
             }
 
-            public static void SendSyncInsert(IObjectProvider net, Actor actor, Entity item)
+            public static void SendSyncInsert(INetwork net, Actor actor, Entity item)
             {
                 if(net is Server)
                     actor.Inventory.Insert(item);
                 net.GetOutgoingStream().Write(PacketSyncInsert, actor.RefID, item.RefID);
             }
-            private static void HandleSyncInsert(IObjectProvider net, BinaryReader r)
+            private static void HandleSyncInsert(INetwork net, BinaryReader r)
             {
                 var actor = net.GetNetworkObject(r.ReadInt32()) as Actor;
                 var item = net.GetNetworkObject(r.ReadInt32()) as Entity;
@@ -42,7 +42,7 @@ namespace Start_a_Town_.Components
                     actor.Inventory.Insert(item);
             }
 
-            public static void SyncSetHaulSlot(IObjectProvider net, Actor actor, Entity item)
+            public static void SyncSetHaulSlot(INetwork net, Actor actor, Entity item)
             {
                 var server = net as Server;
                 var w = server.GetOutgoingStream();
@@ -457,7 +457,7 @@ namespace Start_a_Town_.Components
             Vector3 velocity = direction * 0.1f + parent.Velocity;
             return this.Throw(parent.Net, velocity, parent, all);
         }
-        bool Throw(IObjectProvider net, Vector3 velocity, GameObject parent, bool all)
+        bool Throw(INetwork net, Vector3 velocity, GameObject parent, bool all)
         {
             // throws hauled object, if hauling nothing throws equipped object, make it so it only throws hauled object?
             

@@ -42,7 +42,7 @@ namespace Start_a_Town_
             Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
         }
        
-        public override void RandomBlockUpdate(IObjectProvider net, IntVec3 global, Cell celll)
+        public override void RandomBlockUpdate(INetwork net, IntVec3 global, Cell celll)
         {
             if (net.Map.GetBlock(global + IntVec3.UnitZ) != BlockDefOf.Air)
                 return;

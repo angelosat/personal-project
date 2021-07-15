@@ -21,7 +21,7 @@ namespace Start_a_Town_.Modules.Crafting
             w.Write(order.GetIndex());
             order.Write(w);
         }
-        private static void Receive(IObjectProvider net, BinaryReader r)
+        private static void Receive(INetwork net, BinaryReader r)
         {
             var station = r.ReadVector3();
             var index = r.ReadInt32();

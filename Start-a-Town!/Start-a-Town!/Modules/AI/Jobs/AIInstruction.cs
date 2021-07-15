@@ -138,7 +138,7 @@ namespace Start_a_Town_.AI
             //w.Write(this.Interaction.Name);
             w.Write(this.InteractionName);
         }
-        public void Read(IObjectProvider net, BinaryReader r)
+        public void Read(INetwork net, BinaryReader r)
         {
             this.Target = TargetArgs.Read(net, r);
             //this.Interaction = this.Target.GetInteraction(net, r.ReadString());
@@ -155,17 +155,17 @@ namespace Start_a_Town_.AI
             //tag.Add(new SaveTag(SaveTag.Types.Compound, "InteractionArgs", this.Interaction.Save()));
             return tag;
         }
-        public void Load(IObjectProvider net, SaveTag tag)
+        public void Load(INetwork net, SaveTag tag)
         {
             throw new Exception();
             //this.Target = new TargetArgs(net, tag);
             //this.InteractionName = tag.GetValue<string>("InteractionName");
         }
-        public AIInstruction(IObjectProvider net, SaveTag tag)
+        public AIInstruction(INetwork net, SaveTag tag)
         {
             this.Load(net, tag);
         }
-        public AIInstruction(IObjectProvider net, BinaryReader r)
+        public AIInstruction(INetwork net, BinaryReader r)
         {
             this.Read(net, r);
         }

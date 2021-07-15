@@ -18,7 +18,7 @@ namespace Start_a_Town_.Towns
                 PacketPlayerAssignWorkerToShop = Network.RegisterPacketHandler(HandlePlayerAssignWorkerToShop);
                 PacketPlayerShopAssignCounter = Network.RegisterPacketHandler(ReceivePlayerShopAssignCounter);
             }
-            public static void SendPlayerDeleteShop(IObjectProvider net, PlayerData player, int shopid)
+            public static void SendPlayerDeleteShop(INetwork net, PlayerData player, int shopid)
             {
                 if(net is Server)
                 {
@@ -26,7 +26,7 @@ namespace Start_a_Town_.Towns
                 }
                 net.GetOutgoingStream().Write(PacketPlayerDeleteShop, player.ID, shopid);
             }
-            private static void ReceivePlayerDeleteShop(IObjectProvider net, BinaryReader r)
+            private static void ReceivePlayerDeleteShop(INetwork net, BinaryReader r)
             {
                 var pl = net.GetPlayer(r.ReadInt32());
                 var shopid = r.ReadInt32();
@@ -36,7 +36,7 @@ namespace Start_a_Town_.Towns
                     SendPlayerDeleteShop(net, pl, shopid);
             }
 
-            static public void SendPlayerShopAssignCounter(IObjectProvider net, PlayerData player, Workplace shop, IntVec3 global)
+            static public void SendPlayerShopAssignCounter(INetwork net, PlayerData player, Workplace shop, IntVec3 global)
             {
                 var w = net.GetOutgoingStream();
                 w.Write(PacketPlayerShopAssignCounter);
@@ -44,7 +44,7 @@ namespace Start_a_Town_.Towns
                 w.Write(shop?.ID ?? -1);
                 w.Write(global);
             }
-            static void ReceivePlayerShopAssignCounter(IObjectProvider net, BinaryReader r)
+            static void ReceivePlayerShopAssignCounter(INetwork net, BinaryReader r)
             {
                 var player = net.GetPlayer(r.ReadInt32());
                 var manager = net.Map.Town.ShopManager;
@@ -64,7 +64,7 @@ namespace Start_a_Town_.Towns
                     SendPlayerShopAssignCounter(net, player, shop, global);
             }
 
-            static public void SendPlayerAssignWorkerToShop(IObjectProvider net, PlayerData player, Actor actor, Workplace shop)
+            static public void SendPlayerAssignWorkerToShop(INetwork net, PlayerData player, Actor actor, Workplace shop)
             {
                 var w = net.GetOutgoingStream();
                 w.Write(PacketPlayerAssignWorkerToShop);
@@ -72,7 +72,7 @@ namespace Start_a_Town_.Towns
                 w.Write(actor.RefID);
                 w.Write(shop.ID);
             }
-            private static void HandlePlayerAssignWorkerToShop(IObjectProvider net, BinaryReader r)
+            private static void HandlePlayerAssignWorkerToShop(INetwork net, BinaryReader r)
             {
                 var playerID = r.ReadInt32();
                 var actorID = r.ReadInt32();
@@ -85,7 +85,7 @@ namespace Start_a_Town_.Towns
                     SendPlayerAssignWorkerToShop(net, net.GetPlayer(playerID), actor, shop);
             }
 
-            static public void SendPlayerAddStockpileToShop(IObjectProvider net, int playerID, int shopID, int stockpileID)
+            static public void SendPlayerAddStockpileToShop(INetwork net, int playerID, int shopID, int stockpileID)
             {
                 if (shopID < 0)
                     return;
@@ -95,7 +95,7 @@ namespace Start_a_Town_.Towns
                 w.Write(shopID);
                 w.Write(stockpileID);
             }
-            private static void ReceivePlayerAddStockpileToShop(IObjectProvider net, BinaryReader r)
+            private static void ReceivePlayerAddStockpileToShop(INetwork net, BinaryReader r)
             {
                 var playerID = r.ReadInt32();
                 var shopid = r.ReadInt32();
@@ -110,7 +110,7 @@ namespace Start_a_Town_.Towns
                     SendPlayerAddStockpileToShop(net, playerID, shopid, stockpileid);
             }
 
-            static public void SendPlayerCreateShop(IObjectProvider net, int playerID, Type shopType, int shopID = 0)
+            static public void SendPlayerCreateShop(INetwork net, int playerID, Type shopType, int shopID = 0)
             {
                 var w = net.GetOutgoingStream();
                 w.Write(PacketPlayerCreateShop);
@@ -118,7 +118,7 @@ namespace Start_a_Town_.Towns
                 w.Write(shopType.FullName);
                 w.Write(shopID);
             }
-            private static void ReceivePlayerCreateShop(IObjectProvider net, BinaryReader r)
+            private static void ReceivePlayerCreateShop(INetwork net, BinaryReader r)
             {
                 var playerID = r.ReadInt32();
                 var shoptypename = r.ReadString();

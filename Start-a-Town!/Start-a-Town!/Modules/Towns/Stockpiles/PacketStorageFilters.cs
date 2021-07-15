@@ -20,7 +20,7 @@ namespace Start_a_Town_
             w.Write(storage.ID);
             w.Write(filters.Select(r => r.Name).ToArray());
         }
-        private static void Receive(IObjectProvider net, BinaryReader r)
+        private static void Receive(INetwork net, BinaryReader r)
         {
             var storageID = r.ReadInt32();
             var filters = r.ReadStringArray().Select(s => Def.GetDef<StorageFilter>(s)).ToArray();

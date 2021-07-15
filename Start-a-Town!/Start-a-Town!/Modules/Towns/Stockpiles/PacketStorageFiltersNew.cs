@@ -21,7 +21,7 @@ namespace Start_a_Town_
             s.Write(nodeIndices ?? new int[] { });
             s.Write(leafIndices ?? new int[] { });
         }
-        static void Receive(IObjectProvider net, BinaryReader r)
+        static void Receive(INetwork net, BinaryReader r)
         {
             var stockpileID = r.ReadInt32();
             var nodes = r.ReadIntArray();

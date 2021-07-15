@@ -138,7 +138,7 @@ namespace Start_a_Town_.Components
             var isinteracting = r.ReadBoolean();
             if (!isinteracting)
                 return;
-            this.Target = TargetArgs.Read((IObjectProvider)null, r);
+            this.Target = TargetArgs.Read((INetwork)null, r);
             var interactionType = r.ReadString();
             var interaction = Interaction.Create(interactionType);
             interaction.Read(r);

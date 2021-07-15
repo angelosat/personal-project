@@ -16,14 +16,14 @@ namespace Start_a_Town_
         static public void Init()
         {
         }
-        static public void Send(IObjectProvider net, int itemID, int ownerID)
+        static public void Send(INetwork net, int itemID, int ownerID)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(PacketIDPlayerSetItemOwner);
             stream.Write(itemID);
             stream.Write(ownerID);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var itemID = r.ReadInt32();
             var ownerID = r.ReadInt32();

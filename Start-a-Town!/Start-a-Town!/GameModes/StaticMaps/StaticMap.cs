@@ -579,7 +579,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.UndiscoveredAreaManager.Write(w);
         }
 
-        public static StaticMap ReadData(IObjectProvider net, BinaryReader r)
+        public static StaticMap ReadData(INetwork net, BinaryReader r)
         {
             var map = new StaticMap
             {

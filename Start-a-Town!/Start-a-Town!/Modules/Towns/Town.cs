@@ -58,7 +58,7 @@ namespace Start_a_Town_
         public List<TownComponent> TownComponents = new();
 
         public MapBase Map;
-        public IObjectProvider Net { get { return this.Map.Net; } }
+        public INetwork Net { get { return this.Map.Net; } }
 
         public Dictionary<Utility.Types, HashSet<Vector3>> TownUtilitiesNew = new Dictionary<Utility.Types, HashSet<Vector3>>();
 
@@ -315,7 +315,7 @@ namespace Start_a_Town_
             foreach (var comp in this.TownComponents)
                 comp.HandlePacket(client, msg);
         }
-        internal void HandlePacket(IObjectProvider net, PacketType type, BinaryReader r)
+        internal void HandlePacket(INetwork net, PacketType type, BinaryReader r)
         {
             foreach (var comp in this.TownComponents)
                 comp.HandlePacket(net, type, r);

@@ -31,13 +31,13 @@ namespace Start_a_Town_.GameModes
         
         internal abstract void OnMainMenuCreated(MainMenuWindow mainmenu);
 
-        public virtual void ParseCommand(IObjectProvider net, string command)
+        public virtual void ParseCommand(INetwork net, string command)
         {
 
         }
 
         protected List<GameComponent> GameComponents = new List<GameComponent>();
-        public abstract GameScreen GetWorldSelectScreen(IObjectProvider net);
+        public abstract GameScreen GetWorldSelectScreen(INetwork net);
         public static readonly GameMode StaticMaps = new GameModeStaticMaps();
 
         public virtual void OnIngameMenuCreated(IngameMenu menu) { }
@@ -52,7 +52,7 @@ namespace Start_a_Town_.GameModes
                 comp.OnUIEvent(e, p);
         }
         
-        internal virtual void HandlePacket(IObjectProvider net, PacketType type, System.IO.BinaryReader r)
+        internal virtual void HandlePacket(INetwork net, PacketType type, System.IO.BinaryReader r)
         {
             foreach (var gc in this.GameComponents)
                 gc.HandlePacket(net, type, r);
@@ -80,8 +80,8 @@ namespace Start_a_Town_.GameModes
         internal virtual Control GetNewGameGui() { return null; }
 
         internal virtual void ChunkReceived(Server server, int playerid, Vector2 vec) { }
-        internal virtual void HandleEvent(IObjectProvider net, GameEvent e) { }
-        internal virtual void HandleEvent(IObjectProvider net, object e, object[] p) { }
-        internal virtual void AllChunksReceived(IObjectProvider net) { }
+        internal virtual void HandleEvent(INetwork net, GameEvent e) { }
+        internal virtual void HandleEvent(INetwork net, object e, object[] p) { }
+        internal virtual void AllChunksReceived(INetwork net) { }
     }
 }

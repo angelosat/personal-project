@@ -435,7 +435,7 @@ namespace Start_a_Town_.UI
                 }
             } while (posFrom != -1);
         }
-        static public IEnumerable<Label> ParseOld(IObjectProvider net, string text)
+        static public IEnumerable<Label> ParseOld(INetwork net, string text)
         {
             var array = text.Split(' ');
             for (int i = 0; i < array.Length; i++)

@@ -20,7 +20,7 @@ namespace Start_a_Town_.GameModes
         int MaxHeight { get; }
         ulong CurrentTick { get; set; }
         TimeSpan Clock { get; }
-        IObjectProvider Net { get; set; }
+        INetwork Net { get; set; }
 
         byte[] GetSeedArray();
 
@@ -34,7 +34,7 @@ namespace Start_a_Town_.GameModes
         MapCollection GetMaps();
 
         void Draw(SpriteBatch sb, Camera cam);
-        void Tick(IObjectProvider net);
+        void Tick(INetwork net);
         void OnHudCreated(Hud hud);
         void OnTargetSelected(IUISelection info, ISelectable selection);
 

@@ -102,7 +102,7 @@ namespace Start_a_Town_
 
         public int RefID;
 
-        public IObjectProvider Net;
+        public INetwork Net;
 
         MapBase _map;
         public MapBase Map { get { return this.Parent?.Map ?? this._map; } set { this._map = value; } }
@@ -1485,7 +1485,7 @@ namespace Start_a_Town_
             return Rooms.Ingame.Instance.ToolManager.ActiveTool?.Target?.Object == this;
         }
 
-        internal void Sync(IObjectProvider net)
+        internal void Sync(INetwork net)
         {
             PacketEntitySync.Send(net, this);
         }
@@ -1614,7 +1614,7 @@ namespace Start_a_Town_
             PacketSyncAbsorb = Network.RegisterPacketHandler(SyncAbsorb);
         }
 
-        public void SyncInstantiate(IObjectProvider net)
+        public void SyncInstantiate(INetwork net)
         {
             if (net is not Server server)
             {
@@ -1631,7 +1631,7 @@ namespace Start_a_Town_
             w.Write(PacketSyncInstantiate);
             this.Write(w);
         }
-        private static void SyncInstantiate(IObjectProvider net, BinaryReader r)
+        private static void SyncInstantiate(INetwork net, BinaryReader r)
         {
             if (net is Server)
             {
@@ -1654,7 +1654,7 @@ namespace Start_a_Town_
             w.Write(this.RefID);
             w.Write(v);
         }
-        private static void SyncSetStacksize(IObjectProvider net, BinaryReader r)
+        private static void SyncSetStacksize(INetwork net, BinaryReader r)
         {
             var obj = net.GetNetworkObject(r.ReadInt32());
             var value = r.ReadInt32();
@@ -1697,7 +1697,7 @@ namespace Start_a_Town_
             w.Write(this.RefID);
             w.Write(obj.RefID);
         }
-        private static void SyncAbsorb(IObjectProvider net, BinaryReader r)
+        private static void SyncAbsorb(INetwork net, BinaryReader r)
         {
             if (net is Server)
             {

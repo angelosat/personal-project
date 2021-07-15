@@ -11,7 +11,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, Actor actor, Entity item, OffsiteAreaDef area)
+        static public void Send(INetwork net, Actor actor, Entity item, OffsiteAreaDef area)
         {
             if (net is Client)
                 throw new Exception();
@@ -22,7 +22,7 @@ namespace Start_a_Town_
             stream.Write(item.RefID);
             stream.Write(area.Name);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             if (net is Server)
                 throw new Exception();

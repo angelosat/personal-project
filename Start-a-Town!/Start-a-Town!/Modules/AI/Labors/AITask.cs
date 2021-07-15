@@ -415,8 +415,8 @@ namespace Start_a_Town_
         protected virtual void Read(BinaryReader r)
         {
             this.ID = r.ReadInt32();
-            this.Tool = TargetArgs.Read((IObjectProvider)null, r);
-            this.TargetA = TargetArgs.Read((IObjectProvider)null, r);
+            this.Tool = TargetArgs.Read((INetwork)null, r);
+            this.TargetA = TargetArgs.Read((INetwork)null, r);
             this.AmountA = r.ReadInt32();
             this.TargetsA = r.ReadListTargets();
             this.AmountsA = r.ReadListInt();

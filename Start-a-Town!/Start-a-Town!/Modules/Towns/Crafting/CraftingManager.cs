@@ -60,7 +60,7 @@ namespace Start_a_Town_.Towns.Crafting
             w.Write(mats?.Select(d => d.ID).ToArray());
             w.Write(matTypes?.Select(d => d.ID).ToArray());
         }
-        private static void SetOrderRestrictions(IObjectProvider net, BinaryReader r)
+        private static void SetOrderRestrictions(INetwork net, BinaryReader r)
         {
             var benchEntity = net.Map.Town.CraftingManager.GetWorkstation(r.ReadIntVec3());
             var order = benchEntity.GetOrder(r.ReadInt32());
@@ -76,7 +76,7 @@ namespace Start_a_Town_.Towns.Crafting
         }
 
 
-        static void CraftingOrderToggleReagent(IObjectProvider net, BinaryReader r)
+        static void CraftingOrderToggleReagent(INetwork net, BinaryReader r)
         {
             var global = r.ReadIntVec3();
             var orderID = r.ReadInt32();
@@ -92,7 +92,7 @@ namespace Start_a_Town_.Towns.Crafting
             if (net is Server server)
                 WriteOrderToggleReagent(server.OutgoingStream, order, reagent, itemID, add);
         }
-        static void CraftingOrderModifyPriority(IObjectProvider net, BinaryReader r)
+        static void CraftingOrderModifyPriority(INetwork net, BinaryReader r)
         {
             var global = r.ReadIntVec3();
             var orderIndex = r.ReadInt32();
@@ -105,7 +105,7 @@ namespace Start_a_Town_.Towns.Crafting
             if (net is Server server)
                 WriteOrderModifyPriority(server.OutgoingStream, order, increase);
         }
-        static void CraftingOrderModifyQuantity(IObjectProvider net, BinaryReader r)
+        static void CraftingOrderModifyQuantity(INetwork net, BinaryReader r)
         {
             var global = r.ReadIntVec3();
             var orderid = r.ReadString();

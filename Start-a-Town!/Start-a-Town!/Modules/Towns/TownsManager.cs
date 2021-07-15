@@ -76,7 +76,7 @@ namespace Start_a_Town_.Towns
                 return;
             town.HandlePacket(client, msg);
         }
-        internal override void HandlePacket(IObjectProvider net, PacketType type, System.IO.BinaryReader r)
+        internal override void HandlePacket(INetwork net, PacketType type, System.IO.BinaryReader r)
         {
             var map = net.Map;
             if (map == null)

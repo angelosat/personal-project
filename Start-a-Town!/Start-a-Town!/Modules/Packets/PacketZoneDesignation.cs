@@ -15,7 +15,7 @@ namespace Start_a_Town_.Towns
         static public void Init()
         {
         }
-        static public void Send(IObjectProvider net, Type zonetype, int zoneID, Vector3 begin, int w, int h, bool remove)
+        static public void Send(INetwork net, Type zonetype, int zoneID, Vector3 begin, int w, int h, bool remove)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(PacketPlayerZoneDesignation);
@@ -26,7 +26,7 @@ namespace Start_a_Town_.Towns
             stream.Write(h);
             stream.Write(remove);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var zoneType = Type.GetType(r.ReadString());
             var zoneID = r.ReadInt32();

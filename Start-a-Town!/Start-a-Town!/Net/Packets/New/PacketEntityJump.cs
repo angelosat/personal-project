@@ -10,13 +10,13 @@ namespace Start_a_Town_
         {
             PType = Network.RegisterPacketHandler(Receive);
         }
-        internal static void Send(IObjectProvider net, int entityID)
+        internal static void Send(INetwork net, int entityID)
         {
             var w = net.GetOutgoingStream();
             w.Write(PType);
             w.Write(entityID);
         }
-        internal static void Receive(IObjectProvider net, BinaryReader r)
+        internal static void Receive(INetwork net, BinaryReader r)
         {
             var id = r.ReadInt32();
             var entity = net.GetNetworkObject(id) as Actor;

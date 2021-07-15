@@ -11,7 +11,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(IObjectProvider net, List<int> npcIDs, TargetArgs target, bool enqueue)
+        static public void Send(INetwork net, List<int> npcIDs, TargetArgs target, bool enqueue)
         {
             var w = net.GetOutgoingStream();
             w.Write(p);
@@ -19,7 +19,7 @@ namespace Start_a_Town_
             target.Write(w);
             w.Write(enqueue);
         }
-        static public void Receive(IObjectProvider net, BinaryReader r)
+        static public void Receive(INetwork net, BinaryReader r)
         {
             var npcids = r.ReadListInt();
             var target = TargetArgs.Read(net, r);

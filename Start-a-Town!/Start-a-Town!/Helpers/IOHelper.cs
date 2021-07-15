@@ -460,7 +460,7 @@ namespace Start_a_Town_
             var list = new List<TargetArgs>(count);
             for (int i = 0; i < count; i++)
             {
-                list.Add(TargetArgs.Read((IObjectProvider)null, r));
+                list.Add(TargetArgs.Read((INetwork)null, r));
             }
             return list;
         }

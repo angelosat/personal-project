@@ -12,7 +12,7 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        internal static void Send(IObjectProvider net, Vector2 direction)
+        internal static void Send(INetwork net, Vector2 direction)
         {
             if (net is Server)
                 throw new NotImplementedException();
@@ -21,7 +21,7 @@ namespace Start_a_Town_
             w.Write(net.GetPlayer().ID);
             w.Write(direction);
         }
-        private static void Receive(IObjectProvider net, BinaryReader r)
+        private static void Receive(INetwork net, BinaryReader r)
         {
             if(net is Client)
                 throw new NotImplementedException();

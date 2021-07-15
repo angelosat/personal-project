@@ -265,7 +265,7 @@ namespace Start_a_Town_
                     if (e.Parameters[0] == Client.Instance.GetPlayer())
                     {
                         var actor = e.Parameters[1] as GameObject;
-                        e.Net.Map.Camera.ToggleFollowing(actor);
+                        actor.Net.Map.Camera.ToggleFollowing(actor);
                         if (actor != null)
                             SetTool(new ToolControlActor());
                     }

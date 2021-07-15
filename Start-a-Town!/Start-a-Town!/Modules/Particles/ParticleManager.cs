@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Particles
@@ -40,19 +41,19 @@ namespace Start_a_Town_.Particles
 
         public void OnGameEvent(GameEvent e)
         {
-            if (e.Net is Server)
+            if (this.Map.Net is Server)
                 return;
             switch (e.Type)
             {
-                case Components.Message.Types.EntityHitCeiling:
+                case Message.Types.EntityHitCeiling:
                     this.EntityHitCeiling(e);
                     break;
 
-                case Components.Message.Types.EntityHitGround:
+                case Message.Types.EntityHitGround:
                     this.EntityHitGround(e);
                     break;
 
-                case Components.Message.Types.EntityFootStep:
+                case Message.Types.EntityFootStep:
                     this.EntityFootStep(e);
                     break;
 

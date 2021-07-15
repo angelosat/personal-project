@@ -338,7 +338,7 @@ namespace Start_a_Town_.Net
 
         public void EventOccured(Message.Types type, params object[] p)
         {
-            var e = new GameEvent(this, ClientClock.TotalMilliseconds, type, p);
+            var e = new GameEvent(ClientClock.TotalMilliseconds, type, p);
             OnGameEvent(e);
         }
        

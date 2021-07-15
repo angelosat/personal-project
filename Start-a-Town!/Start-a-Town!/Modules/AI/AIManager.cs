@@ -23,12 +23,12 @@ namespace Start_a_Town_.AI
         
         public override void OnGameEvent(GameEvent e)
         {
-            if (e.Net is Client)
-                return;
             switch (e.Type)
             {
                 case Message.Types.EntityAttacked:
                     var attacker = e.Parameters[0] as GameObject;
+                    if (attacker.Net is Client)
+                        break;
                     var target = e.Parameters[1] as GameObject;
                     var dmg = (int)e.Parameters[2];
                     if (!target.HasComponent<AIComponent>())

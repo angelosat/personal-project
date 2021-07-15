@@ -1,4 +1,5 @@
-﻿using Start_a_Town_.UI;
+﻿using Start_a_Town_.Components;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_.AI
 {
@@ -33,7 +34,7 @@ namespace Start_a_Town_.AI
         {
             switch (e.Type)
             {
-                case Components.Message.Types.AILogUpdated:
+                case Message.Types.AILogUpdated:
                     this.Refresh(this.Agent);
                     break;
 

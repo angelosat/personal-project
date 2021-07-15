@@ -1127,7 +1127,6 @@
     <Compile Include="Blocks\Block.cs" />
     <Compile Include="UI\Primitives\Buttons\Button.cs" />
     <Compile Include="UI\ComboBox\ComboBox.cs" />
-    <Compile Include="UI\UIEventArgs.cs" />
     <Compile Include="UI\UIManager.cs" />
     <Compile Include="UI\Primitives\Window.cs" />
     <Compile Include="UI\UICloseButton.cs" />

@@ -3,7 +3,7 @@ using UI;
 
 namespace Start_a_Town_.UI
 {
-    public delegate void UIEvent(Object sender, EventArgs e);
+    public delegate void UIEvent(object sender, EventArgs e);
 
     public class UIEventArgs : EventArgs
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Start_a_Town_.Components;
 
 namespace Start_a_Town_.UI
 {
@@ -392,7 +393,7 @@ namespace Start_a_Town_.UI
         {
             switch (e.Type)
             {
-                case Components.Message.Types.BlockChanged:
+                case Message.Types.BlockChanged:
                     var map = e.Parameters[0] as MapBase;
                     var global = (Vector3)e.Parameters[1];
                     var target = new TargetArgs(map, global);
@@ -400,7 +401,7 @@ namespace Start_a_Town_.UI
                     ClearTargets();
                     break;
 
-                case Components.Message.Types.BlocksChanged:
+                case Message.Types.BlocksChanged:
                     map = e.Parameters[0] as MapBase;
                     var globals = e.Parameters[1] as Vector3[];
                     var targets = globals.Select(g => new TargetArgs(map, g));
@@ -408,7 +409,7 @@ namespace Start_a_Town_.UI
                     ClearTargets();
                     break;
 
-                case Components.Message.Types.EntityDespawned:
+                case Message.Types.EntityDespawned:
                     // TODO: deselect entity on despawn?
                     break;
 

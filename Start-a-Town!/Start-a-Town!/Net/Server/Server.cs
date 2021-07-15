@@ -85,9 +85,9 @@ namespace Start_a_Town_.Net
 
             Instance.Map.OnGameEvent(e);
         }
-        public void EventOccured(Components.Message.Types type, params object[] p)
+        public void EventOccured(Message.Types type, params object[] p)
         {
-            var e = new GameEvent(this, ServerClock.TotalMilliseconds, type, p);
+            var e = new GameEvent(ServerClock.TotalMilliseconds, type, p);
             OnGameEvent(e);
         }
         

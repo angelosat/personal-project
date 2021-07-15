@@ -119,14 +119,13 @@ namespace Start_a_Town_.UI
         public static Window MouseOverWindow;
         public Window ActiveWindow => this.ActiveControl?.GetWindow();
 
-        public Dictionary<LayerTypes, List<Control>> Layers = new();
         public static readonly GuiLayer
             LayerNameplates = new(),
             LayerSpeechbubbles = new(),
             LayerHud = new(),
             LayerWindows = new(),
             LayerDialog = new();
-        readonly Dictionary<GuiLayer, List<Control>> LayersNew = new()
+        public readonly Dictionary<GuiLayer, List<Control>> Layers = new()
         {
             { LayerNameplates, new() },
             { LayerSpeechbubbles, new() },
@@ -135,8 +134,7 @@ namespace Start_a_Town_.UI
             { LayerDialog, new() }
         };
 
-        public List<Control> this[LayerTypes layer] { get { return this.Layers[layer]; } }
-        public List<Control> this[GuiLayer layer] { get { return this.LayersNew[layer]; } }
+        public List<Control> this[GuiLayer layer] { get { return this.Layers[layer]; } }
 
         public int LastScreenWidth, LastScreenHeight;
         public Window Dialog;
@@ -259,14 +257,6 @@ namespace Start_a_Town_.UI
         static RenderTarget2D UITexture;
         public UIManager()
         {
-            this.Layers[LayerTypes.Nameplates] = new List<Control>();
-            this.Layers[LayerTypes.Speechbubbles] = new List<Control>();
-            this.Layers[LayerTypes.Hud] = new List<Control>();
-            this.Layers[LayerTypes.Windows] = new List<Control>();
-            this.Layers[LayerTypes.Dialog] = new List<Control>();
-
-
-
             WindowManagers.Add(this);
 
             Game1.Instance.GraphicsDevice.DeviceReset += new EventHandler<EventArgs>(this.graphics_DeviceReset);
@@ -544,16 +534,16 @@ namespace Start_a_Town_.UI
             /// if the window was a dialog, move the dialogblock behind the next topmost window, or remove it if there are no other dialogs
             if (this.Layers[window.Layer].Remove(window))
             {
-                if (window.Layer == LayerTypes.Dialog)
+                if (window.Layer == LayerDialog)
                 {
-                    this.Layers[LayerTypes.Dialog].Remove(DialogBlock.Instance);
-                    int index = this.Layers[LayerTypes.Dialog].Count - 1;
+                    this.Layers[LayerDialog].Remove(DialogBlock.Instance);
+                    int index = this.Layers[LayerDialog].Count - 1;
                     if (index < 0)
                     {
                         return true;
                     }
 
-                    this.Layers[LayerTypes.Dialog].Insert(index, DialogBlock.Instance);
+                    this.Layers[LayerDialog].Insert(index, DialogBlock.Instance);
                 }
                 return true;
             }
@@ -564,16 +554,16 @@ namespace Start_a_Town_.UI
             /// if the window was a dialog, move the dialogblock behind the next topmost window, or remove it if there are no other dialogs
             if (this.Layers[control.Layer].Remove(control))
             {
-                if (control.Layer == LayerTypes.Dialog)
+                if (control.Layer == LayerDialog)
                 {
-                    this.Layers[LayerTypes.Dialog].Remove(DialogBlock.Instance);
-                    int index = this.Layers[LayerTypes.Dialog].Count - 1;
+                    this.Layers[LayerDialog].Remove(DialogBlock.Instance);
+                    int index = this.Layers[LayerDialog].Count - 1;
                     if (index < 0)
                     {
                         return true;
                     }
 
-                    this.Layers[LayerTypes.Dialog].Insert(index, DialogBlock.Instance);
+                    this.Layers[LayerDialog].Insert(index, DialogBlock.Instance);
                 }
                 return true;
             }
@@ -636,11 +626,6 @@ namespace Start_a_Town_.UI
                     ctrl.Dispose();
                 }
             }
-
-            this.Layers[LayerTypes.Nameplates] = new List<Control>();
-            this.Layers[LayerTypes.Speechbubbles] = new List<Control>();
-            this.Layers[LayerTypes.Windows] = new List<Control>();
-            this.Layers[LayerTypes.Dialog] = new List<Control>();
         }
 
         public void OnGotFocus() { }
@@ -848,7 +833,7 @@ namespace Start_a_Town_.UI
         {
             List<Rectangle> freeRects = new List<Rectangle>() { UIManager.Bounds };
             var divided = true;
-            var windows = this.Layers[LayerTypes.Windows].Where(c => c is Window).ToList();
+            var windows = this.Layers[LayerWindows].Where(c => c is Window).ToList();
             windows.Reverse();
             while (divided)
             {

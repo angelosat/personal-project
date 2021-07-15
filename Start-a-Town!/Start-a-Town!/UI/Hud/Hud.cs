@@ -129,8 +129,7 @@ namespace Start_a_Town_
                     .ToWindow("Players")
                     .Transparent()
                     .AnchorTo(this.BtnPlayers.ScreenLocation + this.BtnPlayers.TopRight, Vector2.One);
-                this.WindowPlayers.Layer = LayerTypes.Hud;
-                this.WindowPlayers.LayerNew = UIManager.LayerHud;
+                this.WindowPlayers.Layer = UIManager.LayerHud;
             }
             this.WindowPlayers.Toggle();
         }
@@ -311,7 +310,7 @@ namespace Start_a_Town_
                     break;
 
                 case System.Windows.Forms.Keys.Escape:
-                    var winds = (from control in this.WindowManager.Layers[LayerTypes.Windows] where control is Window select control).ToList();
+                    var winds = (from control in this.WindowManager.Layers[UIManager.LayerWindows] where control is Window select control).ToList();
                     UISelectedInfo.ClearTargets();
                     if (winds.Count == 0)
                         this.IngameMenu.ToggleDialog();

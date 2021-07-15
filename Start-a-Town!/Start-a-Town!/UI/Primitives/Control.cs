@@ -109,9 +109,7 @@ namespace Start_a_Town_.UI
         {
             get { return this.MouseThrough; }
         }
-        LayerTypes _layer = LayerTypes.Windows;
-        public LayerTypes Layer { get { return this.Parent?.Layer ?? this._layer; } set { this._layer = value; } }
-        public GuiLayer LayerNew = UIManager.LayerWindows;
+        public GuiLayer Layer = UIManager.LayerWindows;
 
         public DrawMode DrawMode = DrawMode.Normal;
       
@@ -1314,7 +1312,7 @@ namespace Start_a_Town_.UI
         {
             return this.Toggle(this.Layer);
         }
-        public virtual bool Toggle(LayerTypes layer)
+        public virtual bool Toggle(GuiLayer layer)
         {
             this.Layer = layer;
 
@@ -1394,7 +1392,7 @@ namespace Start_a_Town_.UI
         {
             return this.Show(this.Layer);
         }
-        public virtual bool Show(LayerTypes layer)
+        public virtual bool Show(GuiLayer layer)
         {
             this.Layer = layer;
             this.OnShow();
@@ -1607,9 +1605,9 @@ namespace Start_a_Town_.UI
         protected DialogBlock DialogBlock;
         public virtual bool ShowDialog()
         {
-            this.WindowManager.Layers[LayerTypes.Dialog].Remove(DialogBlock.Instance);
-            this.WindowManager.Layers[LayerTypes.Dialog].Add(DialogBlock.Instance);
-            this.Layer = LayerTypes.Dialog;
+            this.WindowManager[UIManager.LayerDialog].Remove(DialogBlock.Instance);
+            this.WindowManager[UIManager.LayerDialog].Add(DialogBlock.Instance);
+            this.Layer = UIManager.LayerDialog;
 
             this.SnapToScreenCenter();
 

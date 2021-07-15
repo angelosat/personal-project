@@ -40,7 +40,7 @@ namespace Start_a_Town_.UI
         }
         SpeechBubbleOld(GameObject obj, string text)
         {
-            this.Layer = LayerTypes.Speechbubbles;
+            this.Layer = UIManager.LayerSpeechbubbles;
             this.Tag = obj;
             this.AutoSize = true;
             Graphic = new Panel() { Color = Color.White, MouseThrough = true };

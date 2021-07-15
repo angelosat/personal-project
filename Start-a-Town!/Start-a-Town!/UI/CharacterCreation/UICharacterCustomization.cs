@@ -81,7 +81,7 @@ namespace Start_a_Town_
                new CharacterColor("Shoes", "Shoes"),
                new CharacterColor("Shirt", "Shirt"));
             Randomize(this.Colors);
-            this.Picker = new ColorPickerWindow() { Layer = LayerTypes.Dialog, LayerNew = UIManager.LayerDialog };
+            this.Picker = new ColorPickerWindow() { Layer = UIManager.LayerDialog };
             this.Picker.SnapToScreenCenter();
 
             foreach (var item in this.Colors.Colors.Values)

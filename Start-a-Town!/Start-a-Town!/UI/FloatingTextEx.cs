@@ -37,8 +37,7 @@ namespace Start_a_Town_.UI
         Vector2 Position;
         public FloatingTextEx(GameObject parent, params Segment[] segments)
         {
-            Layer = LayerTypes.Speechbubbles;
-            this.LayerNew = UIManager.LayerSpeechbubbles;
+            this.Layer = UIManager.LayerSpeechbubbles;
             foreach (var s in segments)
             {
                 var label = new Label(s.Text) { Location = this.Controls.TopRight, Font = UIManager.FontBold, TextColorFunc = () => s.Color };
@@ -54,8 +53,7 @@ namespace Start_a_Town_.UI
         }
         public FloatingTextEx(Func<Vector3> global, params Segment[] segments)
         {
-            Layer = LayerTypes.Speechbubbles;
-            this.LayerNew = UIManager.LayerSpeechbubbles;
+            this.Layer = UIManager.LayerSpeechbubbles;
             foreach (var s in segments)
             {
                 var label = new Label(s.Text) { Location = this.Controls.TopRight, Font = UIManager.FontBold, TextColorFunc = () => s.Color };

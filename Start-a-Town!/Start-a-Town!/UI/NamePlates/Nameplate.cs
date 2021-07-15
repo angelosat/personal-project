@@ -16,7 +16,7 @@ namespace Start_a_Town_.UI
 
         static public void Reset()
         {
-            ScreenManager.CurrentScreen.WindowManager[LayerTypes.Nameplates].Clear();
+            ScreenManager.CurrentScreen.WindowManager[UIManager.LayerNameplates].Clear();
         }
 
         static public Nameplate Create(INameplateable obj)
@@ -61,7 +61,7 @@ namespace Start_a_Town_.UI
         public INameplateable Object;
         Nameplate(INameplateable obj)
         {
-            this.Layer = LayerTypes.Nameplates;
+            this.Layer = UIManager.LayerNameplates;
             this.Object = obj;
             this.Active = true;
             this.LocationFunc = () =>

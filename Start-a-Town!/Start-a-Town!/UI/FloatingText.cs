@@ -58,8 +58,7 @@ namespace Start_a_Town_.UI
         public FloatingText(GameObject obj, string text)
             : base(Vector2.Zero, text)
         {
-            Layer = LayerTypes.Speechbubbles;
-            this.LayerNew = UIManager.LayerSpeechbubbles;
+            this.Layer = UIManager.LayerSpeechbubbles;
             Text = text;
             CurrentLife = Life;
             ScaleTime = ScaleLength = 20;
@@ -72,8 +71,7 @@ namespace Start_a_Town_.UI
         public FloatingText(Func<Vector3> global, string text)
             : base(Vector2.Zero, text)
         {
-            Layer = LayerTypes.Speechbubbles;
-            this.LayerNew = UIManager.LayerSpeechbubbles;
+            this.Layer = UIManager.LayerSpeechbubbles;
             Text = text;
             CurrentLife = Life;
             ScaleTime = ScaleLength = 20;

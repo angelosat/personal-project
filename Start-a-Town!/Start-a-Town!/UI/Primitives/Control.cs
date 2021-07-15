@@ -104,6 +104,9 @@ namespace Start_a_Town_.UI
         public virtual object Tag { get => this._tag; set { this._tag = value; this.OnTagChanged(); } }
         UIManager _windowManager;
         public UIManager WindowManager { get => this._windowManager ?? ScreenManager.CurrentScreen.WindowManager; set => this._windowManager = value; }
+        //IWindowManager _windowManager;
+        //public IWindowManager WindowManager { get => this._windowManager; set => this._windowManager = value; }
+
         public bool AllowDrop, ClipToBounds = true;
         public Action LostFocusAction = () => { };
         public Action ControlsChangedAction = () => { };
@@ -544,7 +547,7 @@ namespace Start_a_Town_.UI
             this.WindowManager.FocusedControl = this;
             this.OnGotFocus();
         }
-        public virtual void Unselect()
+        public override void Unselect()
         {
             this.OnLostFocus();
         }
@@ -1126,8 +1129,8 @@ namespace Start_a_Town_.UI
         {
             if (this.Parent == null)
             {
-                if (this.WindowManager.Layers[this.Layer].Remove(this))
-                    this.WindowManager.Layers[this.Layer].Add(this);
+                if (this.WindowManager.Remove(this))
+                    this.WindowManager.Add(this);
                 return;
             }
             if (this.Parent.Controls.Remove(this))
@@ -1169,11 +1172,9 @@ namespace Start_a_Town_.UI
             this.OnShow();
 
             this.ShowAction();
-            if (!this.WindowManager.Layers[this.Layer].Contains(this))
+            if (!this.WindowManager.Contains(this))
             {
-                if (!this.WindowManager.ControlsInMemory.Contains(this))
-                    this.WindowManager.ControlsInMemory.Add(this);
-                this.WindowManager[this.Layer].Add(this);
+                this.WindowManager.Add(this);
                 this.ConformToScreen();
                 return true;
             }
@@ -1187,15 +1188,13 @@ namespace Start_a_Town_.UI
             foreach (var c in this.Controls)
                 c.OnShow();
         }
-        public bool IsOpen => this.WindowManager[this.Layer].Contains(this);
+        public bool IsOpen => this.WindowManager.Contains(this);
 
         public virtual bool Show(UIManager manager)
         {
-            if (!manager[this.Layer].Contains(this))
+            if (!manager.Contains(this))
             {
-                if (!manager.ControlsInMemory.Contains(this))
-                    manager.ControlsInMemory.Add(this);
-                manager[this.Layer].Add(this);
+                manager.Add(this);
                 return true;
             }
 
@@ -1225,23 +1224,12 @@ namespace Start_a_Town_.UI
 
             return false;
         }
-        public virtual bool HideOld()
-        {
-            if (this.WindowManager[this.Layer].Contains(this))
-            {
-                this.WindowManager[this.Layer].Remove(this);
-                return true;
-            }
-            return false;
-        }
-
+      
         public virtual bool Remove()
         {
             this.Dispose();
             this.Hide();
-            if (this.WindowManager.ControlsInMemory.Contains(this))
-                this.WindowManager.ControlsInMemory.Remove(this);
-
+            
             return false;
         }
 
@@ -1331,12 +1319,8 @@ namespace Start_a_Town_.UI
 
         public virtual bool ShowDialog()
         {
-            this.WindowManager[UIManager.LayerDialog].Remove(this.WindowManager.DialogBlock);
-            this.WindowManager[UIManager.LayerDialog].Add(this.WindowManager.DialogBlock);
             this.Layer = UIManager.LayerDialog;
-
             this.SnapToScreenCenter();
-
             return this.Show();
         }
         internal virtual void OnControlResized(ButtonBase buttonBase)

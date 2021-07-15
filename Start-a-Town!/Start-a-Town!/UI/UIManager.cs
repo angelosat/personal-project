@@ -124,7 +124,7 @@ namespace Start_a_Town_.UI
             LayerHud = new(),
             LayerWindows = new(),
             LayerDialog = new();
-        public readonly Dictionary<GuiLayer, List<Control>> Layers = new()
+        readonly Dictionary<GuiLayer, List<Control>> _layers = new()
         {
             { LayerNameplates, new() },
             { LayerSpeechbubbles, new() },
@@ -132,7 +132,7 @@ namespace Start_a_Town_.UI
             { LayerWindows, new() },
             { LayerDialog, new() }
         };
-
+        public Dictionary<GuiLayer, List<Control>> Layers => this._layers;
         public List<Control> this[GuiLayer layer] { get { return this.Layers[layer]; } }
 
         public int LastScreenWidth, LastScreenHeight;
@@ -268,7 +268,7 @@ namespace Start_a_Town_.UI
             Game1.Instance.GraphicsDevice.SetRenderTarget(null);
         }
 
-        public List<Control> ControlsInMemory = new List<Control>();
+        public List<Control> ControlsInMemory = new();
         void graphics_DeviceReset(object sender, EventArgs e)
         {
             this.Reset();
@@ -830,7 +830,7 @@ namespace Start_a_Town_.UI
         }
         List<Rectangle> GetFreeRectangles()
         {
-            List<Rectangle> freeRects = new List<Rectangle>() { UIManager.Bounds };
+            var freeRects = new List<Rectangle>() { UIManager.Bounds };
             var divided = true;
             var windows = this.Layers[LayerWindows].Where(c => c is Window).ToList();
             windows.Reverse();
@@ -864,7 +864,7 @@ namespace Start_a_Town_.UI
         {
             int w = (int)dimensions.X, h = (int)dimensions.Y;
             var freeRects = this.GetFreeRectangles();
-            Rectangle bestRect = new Rectangle(0, 0, w, h);
+            var bestRect = new Rectangle(0, 0, w, h);
             var size = w * h;
             var ordered = freeRects.OrderBy(r => new Vector2(r.X, r.Y).LengthSquared()).ToList();
             foreach (var rect in ordered)
@@ -876,6 +876,30 @@ namespace Start_a_Town_.UI
             }
             return bestRect;
         }
-
+        public void Add(Element element)
+        {
+            var control = element as Control;
+            this.Layers[control.Layer].Add(control);
+            if (!this.ControlsInMemory.Contains(control))
+                this.ControlsInMemory.Add(control);
+        }
+        public bool Remove(Element element)
+        {
+            var control = element as Control;
+            if (this.ControlsInMemory.Contains(control)) // TODO: why do i remove it immediately? maintain a fixed size buffer?
+                this.ControlsInMemory.Remove(control);
+            return this.Layers[control.Layer].Remove(control);
+        }
+        public bool Contains(Element element)
+        {
+            var control = element as Control;
+            return this.Layers[control.Layer].Contains(control);
+        }
+        public void Block(bool enabled)
+        {
+            this.Remove(this.DialogBlock);
+            if (enabled)
+                this.Add(this.DialogBlock);
+        }
     }
 }

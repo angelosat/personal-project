@@ -52,5 +52,7 @@ namespace UI
         protected virtual void OnParentChanged()
         {
         }
+
+        public abstract void Unselect();
     }
 }

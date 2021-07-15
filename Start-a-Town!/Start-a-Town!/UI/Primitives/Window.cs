@@ -282,7 +282,6 @@ namespace Start_a_Town_.UI
                 this.Client.OnWindowHidden(this);
                 return true;
             }
-
             return false;
         }
 

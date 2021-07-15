@@ -383,6 +383,10 @@ namespace Start_a_Town_.Components
                 return this.HaulSlot.Object;
             return null;
         }
+        public int Count(ItemDef def)
+        {
+            return this.Count(e => e.Def == def);
+        }
         public int Count(ItemDef def, Material mat)
         {
             return this.Count(e => e.Def == def && e.PrimaryMaterial == mat);

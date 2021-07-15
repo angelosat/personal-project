@@ -202,6 +202,7 @@ namespace Start_a_Town_.Components
             switch (e.Type)
             {
                 case Message.Types.HitGround:
+                case Message.Types.EntityHitGround:
                     this.AnimationWalk.Frame = 0;
                     break;
 

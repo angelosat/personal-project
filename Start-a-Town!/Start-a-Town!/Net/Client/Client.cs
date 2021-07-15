@@ -638,8 +638,6 @@ namespace Start_a_Town_.Net
             CommandParser.Execute(this, command);
         }
 
-        public void SyncEvent(GameObject recipient, Components.Message.Types msg, Action<BinaryWriter> writer) { }
-
         readonly int OrderedPacketsHistoryCapacity = 32;
         readonly Queue<Packet> OrderedPacketsHistory = new(32);
         void HandleOrderedPackets()

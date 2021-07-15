@@ -8,7 +8,7 @@ namespace Start_a_Town_
         protected override AITask TryAssignTask(Actor actor)
         {
             // check available money
-            var money = actor.CountItemsInInventory(ItemDefOf.Coins);
+            var money = actor.Inventory.Count(ItemDefOf.Coins);
             if (money == 0)
                 return null;
 

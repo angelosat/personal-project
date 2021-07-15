@@ -46,12 +46,6 @@ namespace Start_a_Town_
         /// <param name="obj"></param>
         void Despawn(GameObject obj);
 
-        /// <summary>
-        /// syncs an object over the network
-        /// </summary>
-        /// <param name="obj"></param>
-        [Obsolete]
-        void SyncEvent(GameObject recipient, Components.Message.Types msg, Action<BinaryWriter> writer);
         bool LogStateChange(int netID);
 
         void PopLoot(GameObject loot, Vector3 startPosition, Vector3 startVelocity);

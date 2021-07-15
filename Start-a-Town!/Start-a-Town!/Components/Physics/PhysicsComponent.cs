@@ -1,32 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Interactions;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_.Components
 {
     public enum ObjectSize { Immovable = -1, Inventoryable, Haulable }
     public class PhysicsComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get
-            {
-                return "Physics";
-            }
-        }
-
+        public override string ComponentName => "Physics";
         public ObjectSize Size;
         public bool Solid;
         public float Height;
         public float Weight;
         public bool Enabled = true;
         const float FrictionFactor = .5f;
-        static public float Jump = 0.2f;//-0.04f;// -0.05f; //35f;
-        static public float Friction = 0.02f;// 0.005f; // TODO move this to blocks?
+        public static float Jump = 0.2f;//-0.04f;// -0.05f; //35f;
+        public static float Friction = 0.02f;// 0.005f; // TODO move this to blocks?
         public const int KnockbackMagnitude = 3;
 
         public PhysicsComponent()
@@ -38,22 +30,7 @@ namespace Start_a_Town_.Components
         {
             this.Height = toCopy.Height;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="size">-1: can't pick up, 0: inventory, 1: haulable</param>
-        /// <param name="solid"></param>
-        /// <param name="height"></param>
-        /// <param name="weight"></param>
-        public PhysicsComponent(int size = 0, bool solid = false, float height = 1, float weight = 1)//, bool sticky = false)
-            : this()
-        {
-            this.Height = height;
-            this.Size = (ObjectSize)size;
-            this.Solid = solid;
-            this.Weight = weight;
-        }
-
+       
         public PhysicsComponent Initialize(int size = 0, bool solid = false, float height = 1, float weight = 1)
         {
             this.Size = (ObjectSize)size;
@@ -75,6 +52,7 @@ namespace Start_a_Town_.Components
         {
             if (!this.Enabled)
                 return;
+
             var parent = this.Parent;
             var map = parent.Map;
             var net = parent.Net;
@@ -82,44 +60,59 @@ namespace Start_a_Town_.Components
             Vector3 lastGlobal = parent.Transform.Global;
             if (!map.TryGetCell(lastGlobal, out var thisCell))
                 return;
+
             Vector3 velocity = parent.Velocity;
 
             var feetposition = lastGlobal + Vector3.UnitZ * .1f;
             var feetcell = map.GetCell(feetposition);
             Block feetblock = feetcell.Block;
             if (!this.Enabled)
+            {
                 return;
+            }
 
             // TODO: make getdensity method on block that takes into account its height
             float density = feetblock.GetDensity(feetcell.BlockData, feetposition);
             velocity *= (1 - density);
 
             float nx, ny, nz;
-            BoundingBox box = GetBoundingBox(parent, lastGlobal);
+            BoundingBox box = this.GetBoundingBox(parent, lastGlobal);
 
-            nz = ResolveVertical(parent, map, box, ref velocity, density);
+            nz = this.ResolveVertical(parent, map, box, ref velocity, density);
 
             velocity = new Vector3(velocity.X * FrictionFactor, velocity.Y * FrictionFactor, velocity.Z);
-                if (velocity.LengthSquared() < .0001f)
-                    velocity = Vector3.Zero;
+            if (velocity.LengthSquared() < .0001f)
+            {
+                velocity = Vector3.Zero;
+            }
 
             Vector3 blocktransform = this.GetStandingBlockTransform(map, lastGlobal);
             var origin = parent.Global + blocktransform;
 
             if (velocity.X != 0 || blocktransform.X != 0)
+            {
                 nx = ResolveHorizontalCorners(net, parent, origin, map, box, ref velocity, Vector2.UnitX, nz, out nz).X;
+            }
             else
+            {
                 nx = lastGlobal.X;
+            }
 
             if (velocity.Y != 0 || blocktransform.Y != 0)
+            {
                 ny = ResolveHorizontalCorners(net, parent, origin, map, box, ref velocity, Vector2.UnitY, nz, out nz).Y;
+            }
             else
+            {
                 ny = lastGlobal.Y;
+            }
 
             next = new Vector3(nx, ny, nz);
 
             if (lastGlobal != next)
+            {
                 parent.MoveTo(next);
+            }
             else if (velocity == Vector3.Zero)
             {
                 this.Enabled = false;
@@ -130,6 +123,7 @@ namespace Start_a_Town_.Components
 
             // log state change 
             if (parent.IsSpawned) // must check because entity might have despawned itself during it's update 
+            {
                 if (lastGlobal != parent.Global)
                 {
                     // send a "step on" message on next block
@@ -144,10 +138,11 @@ namespace Start_a_Town_.Components
                         bl.OnSteppedOn(parent, blockGlobal);
                     }
                 }
+            }
         }
         public BoundingBox GetBoundingBox(Vector3 global)
         {
-            return new BoundingBox(global - new Vector3(.25f, .25f, 0), global + new Vector3(.25f, .25f, Height));
+            return new BoundingBox(global - new Vector3(.25f, .25f, 0), global + new Vector3(.25f, .25f, this.Height));
         }
         public BoundingBox GetBoundingBox(GameObject parent, Vector3 global)
         {
@@ -160,7 +155,7 @@ namespace Start_a_Town_.Components
         private Vector3 GetStandingBlockTransform(MapBase map, Vector3 lastGlobal)
         {
             Vector3 blocktransform = Vector3.Zero;
-            
+
             // if feet on contact with non-air block, get velocity transform of block directly below
 
             var underfeet = lastGlobal + new Vector3(0, 0, map.Gravity);
@@ -168,7 +163,9 @@ namespace Start_a_Town_.Components
             var underfeetCell = map.GetCell(underfeet);
             var underfeetBlock = underfeetCell.Block;
             if (underfeetBlock != BlockDefOf.Air)
+            {
                 blocktransform = underfeetCell.Block.GetVelocityTransform(underfeetCell.BlockData, underfeetBlockCoords);
+            }
             else
             {
                 var tocheck = new Vector3[3];
@@ -228,20 +225,23 @@ namespace Start_a_Town_.Components
                     }
                     tocheck[2] = new Vector3(-1, 1, 0);
                 }
-               
+
                 Cell contactCell;
                 foreach (var check in tocheck)
                 {
                     var cellglobal = (underfeet + check).Round();
                     contactCell = map.GetCell(cellglobal);
                     if (contactCell == null || contactCell.Block == BlockDefOf.Air)
+                    {
                         continue;
+                    }
+
                     blocktransform = contactCell.Block.GetVelocityTransform(contactCell.BlockData, (underfeetBlockCoords + check * .25f).Round());
                 }
             }
             return blocktransform;
         }
-   
+
         private float ResolveVertical(GameObject parent, MapBase map, BoundingBox box, ref Vector3 speed, float density)
         {
             var grav = map.Gravity;
@@ -250,11 +250,11 @@ namespace Start_a_Town_.Components
             if (speed.Z == 0)
             {
                 // TODO: maybe instead of checking the corners, i check if the box intersects with nearby block boxes?
-                var corners = new Vector3[] { 
-                    box.Min, 
-                    new Vector3(box.Min.X, box.Max.Y, global.Z), 
-                    new Vector3(box.Max.X, box.Min.Y, global.Z), 
-                    new Vector3(box.Max.X, box.Max.Y, global.Z) 
+                var corners = new Vector3[] {
+                    box.Min,
+                    new Vector3(box.Min.X, box.Max.Y, global.Z),
+                    new Vector3(box.Max.X, box.Min.Y, global.Z),
+                    new Vector3(box.Max.X, box.Max.Y, global.Z)
                 };
                 if (corners.All(c =>
                 {
@@ -264,7 +264,7 @@ namespace Start_a_Town_.Components
                     speed.Z = grav;
                     return global.Z + adjustedGravity;
                 }
-                
+
                 return global.Z;
             }
             Vector3 offset = new Vector3(0, 0, speed.Z);
@@ -277,12 +277,12 @@ namespace Start_a_Town_.Components
                     for (int i = 0; i < (int)Math.Ceiling(fallheight); i++)
                     {
                         Vector3 check = global - new Vector3(0, 0, 1 + i);
-                        if(IsStandable(map, check))
+                        if (IsStandable(map, check))
                         {
                             parent.Net.PostLocalEvent(parent, Message.Types.HitGround, Math.Abs(speed.Z));
                             speed.Z = 0;
                             // land
-                            HitGround(parent, check);
+                            this.HitGround(parent, check);
                             return (int)check.Z + Block.GetBlockHeight(map, check);
                         }
                     }
@@ -291,19 +291,18 @@ namespace Start_a_Town_.Components
                 {
                     var nextbox = new BoundingBox(next - new Vector3(.25f, .25f, 0), next + new Vector3(.25f, .25f, this.Height));
                     var corners =
-                        new Vector3[] { 
-                            nextbox.Min, 
-                            new Vector3(nextbox.Min.X, nextbox.Max.Y, next.Z), 
-                            new Vector3(nextbox.Max.X, nextbox.Min.Y, next.Z), 
-                            new Vector3(nextbox.Max.X, nextbox.Max.Y, next.Z) 
+                        new Vector3[] {
+                            nextbox.Min,
+                            new Vector3(nextbox.Min.X, nextbox.Max.Y, next.Z),
+                            new Vector3(nextbox.Max.X, nextbox.Min.Y, next.Z),
+                            new Vector3(nextbox.Max.X, nextbox.Max.Y, next.Z)
                         };
                     if (corners.Any(c => GetDensity(map, c + new Vector3(0, 0, grav)) > 0))
                     {
                         var f = speed.Z;
-                        parent.Net.SyncEvent(parent, Message.Types.HitGround, w => w.Write(f));
                         speed.Z = 0;
                         // land
-                        HitGround(parent, next);
+                        this.HitGround(parent, next);
 
                         float blockheightbelow = 0;
                         blockheightbelow = corners.Max(c => Block.GetBlockHeight(map, c));
@@ -326,7 +325,7 @@ namespace Start_a_Town_.Components
             speed.Z += adjustedGravity;
             return next.Z;
         }
-       
+
         private static Vector3 ResolveHorizontalCorners(IObjectProvider net, GameObject parent, Vector3 origin, MapBase map, BoundingBox boxGlobal, ref Vector3 velocity, Vector2 horAxis, float nz, out float zz)
         {
             zz = nz;
@@ -383,12 +382,19 @@ namespace Start_a_Town_.Components
         void DetectEntityCollisions(GameObject parent, Vector3 last, Vector3 next)
         {
             if (next == last)
+            {
                 return;
+            }
+
             foreach (Chunk ch in parent.Map.GetChunks(parent.Map.GetChunk(last).MapCoords)) // TODO: optimize, search for entities on nearby chunks only if entity is on current chunk edge
+            {
                 foreach (GameObject obj in ch.GetObjects())
                 {
                     if (obj == parent)
+                    {
                         continue;
+                    }
+
                     var lastDistance = Vector3.Distance(obj.Global, last);
                     var nextDistance = Vector3.Distance(obj.Global, next);
                     if (lastDistance >= 1 && nextDistance < 1) // changed the inequality so the item doesn't combine if freefalling on an adjacent block
@@ -399,6 +405,7 @@ namespace Start_a_Town_.Components
                     }
                     // TODO: combine items only when an item enters another stationary item's cell?
                 }
+            }
         }
 
         public override void OnSpawn(IObjectProvider net, GameObject parent)
@@ -408,7 +415,7 @@ namespace Start_a_Town_.Components
                 net.EventOccured(Message.Types.SpawnChunkNotLoaded, parent.Global.GetChunkCoords());
                 throw new Exception("Chunk not loaded");
             }
-           
+
             Chunk.AddObject(parent, net.Map);
             parent.GetComponent<PositionComponent>().Exists = true;
             this.Enabled = true;
@@ -417,8 +424,13 @@ namespace Start_a_Town_.Components
         public override void OnDespawn(GameObject parent)
         {
             if (parent.IsSpawned)
+            {
                 if (!Chunk.RemoveObject(parent.Map, parent))
+                {
                     throw new Exception();
+                }
+            }
+
             parent.IsSpawned = false;
         }
         public override bool HandleMessage(GameObject parent, ObjectEventArgs e)
@@ -439,7 +451,10 @@ namespace Start_a_Town_.Components
 
                 case Message.Types.EntityCollision:
                     if (parent.Net is Server)
+                    {
                         (e.Parameters[0] as GameObject).SyncAbsorb(parent);
+                    }
+
                     return true;
 
                 default:
@@ -460,7 +475,10 @@ namespace Start_a_Town_.Components
         public override void OnTooltipCreated(GameObject parent, UI.Control tooltip)
         {
             if (this.Size == ObjectSize.Immovable)
+            {
                 return;
+            }
+
             tooltip.AddControlsBottomLeft(
                 new GroupBox().AddControlsHorizontally(
                     new Label("Weight: ") { TextColor = Color.LightGray },
@@ -470,7 +488,9 @@ namespace Start_a_Town_.Components
         public override void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> list)
         {
             if (this.Size == ObjectSize.Immovable)
+            {
                 return;
+            }
 
             list.Add(PlayerInput.RButton, new InteractionHaul());
             list.Add(PlayerInput.Activate, new InteractionHaul());
@@ -478,16 +498,19 @@ namespace Start_a_Town_.Components
         internal override ContextAction GetContextRB(GameObject parent, GameObject player)
         {
             if (this.Size == ObjectSize.Immovable)
+            {
                 return null;
+            }
+
             return new ContextAction(new InteractionHaul()) { Shortcut = PlayerInput.RButton, Available = () => this.Size != ObjectSize.Immovable };
         }
-      
+
         public override string ToString()
         {
             return "Enabled: " + this.Enabled.ToString() + "\n" + base.ToString();
         }
 
-        static public void Enable(GameObject parent)
+        public static void Enable(GameObject parent)
         {
             parent.TryGetComponent<PhysicsComponent>(f => f.Enabled = true);
         }
@@ -504,34 +527,34 @@ namespace Start_a_Town_.Components
         {
             parent.Map.EventOccured(Message.Types.EntityHitCeiling, parent, vector3);
         }
-        
-        static public bool IsStanding(GameObject parent)
+
+        public static bool IsStanding(GameObject parent)
         {
             var global = parent.Global;
             var height = parent.Physics.Height;
             var map = parent.Map;
             var gravity = map.Gravity;
             var box = new BoundingBox(global - new Vector3(.25f, .25f, 0), global + new Vector3(.25f, .25f, height));
-            var corners = new Vector3[] { 
-                    box.Min, 
-                    new Vector3(box.Min.X, box.Max.Y, global.Z), 
-                    new Vector3(box.Max.X, box.Min.Y, global.Z), 
-                    new Vector3(box.Max.X, box.Max.Y, global.Z) 
+            var corners = new Vector3[] {
+                    box.Min,
+                    new Vector3(box.Min.X, box.Max.Y, global.Z),
+                    new Vector3(box.Max.X, box.Min.Y, global.Z),
+                    new Vector3(box.Max.X, box.Max.Y, global.Z)
                 };
             return corners.Any(c => map.GetBlock(c + new Vector3(0, 0, gravity)).Density > 0);
         }
-        
+
         public static Vector3 Decelerate(Vector3 velocity)
         {
             return velocity *= FrictionFactor;// .5f;
         }
 
-        static public float GetDensity(MapBase map, Vector3 global)
+        public static float GetDensity(MapBase map, Vector3 global)
         {
             var cell = map.GetCell(global);
             return cell.Block.GetDensity(cell.BlockData, global);
         }
-        static public bool IsStandable(MapBase map, Vector3 global)
+        public static bool IsStandable(MapBase map, Vector3 global)
         {
             var gravity = map.Gravity;
             var box = new BoundingBox(global - new Vector3(.25f, .25f, 0), global + new Vector3(.25f, .25f, 1));

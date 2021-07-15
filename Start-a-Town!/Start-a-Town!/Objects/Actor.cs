@@ -20,20 +20,22 @@ namespace Start_a_Town_
         public override float Height => this.Physics.Height - (this.Mobile.Crouching ? 1 : 0);
         public override bool IsHaulable => false;
 
-        MobileComponent _Mobile;
-        public MobileComponent Mobile => this._Mobile ??= this.GetComponent<MobileComponent>();
+        MobileComponent _mobile;
+        public MobileComponent Mobile => this._mobile ??= this.GetComponent<MobileComponent>();
+
         internal NpcSkillsComponent Skills => this.GetComponent<NpcSkillsComponent>();
         internal AttributesComponent Attributes => this.GetComponent<AttributesComponent>();
         internal NpcComponent Npc => this.GetComponent<NpcComponent>();
-        PossessionsComponent _Ownership;
-        public PossessionsComponent Ownership => this._Ownership ??= this.GetComponent<PossessionsComponent>();
 
-        WorkComponent _WorkCached;
-        public WorkComponent Work => this._WorkCached ??= this.GetComponent<WorkComponent>();
+        PossessionsComponent _ownership;
+        public PossessionsComponent Ownership => this._ownership ??= this.GetComponent<PossessionsComponent>();
+
+        WorkComponent _work;
+        public WorkComponent Work => this._work ??= this.GetComponent<WorkComponent>();
         public Interaction CurrentInteraction => this.Work.Task;
 
-        AIState _CachedState;
-        public AIState State => this._CachedState ??= this.GetComponent<AIComponent>().State;
+        AIState _state;
+        public AIState State => this._state ??= this.GetComponent<AIComponent>().State;
         internal AITask CurrentTask
         {
             get => this.State.CurrentTask;
@@ -51,11 +53,6 @@ namespace Start_a_Town_
         public bool IsCitizen => this.Town.Agents.Contains(this.RefID);
         public IItemPreferencesManager ItemPreferences => this.GetState().ItemPreferences;
         
-        internal T GetWorkplace<T>() where T : Workplace
-        {
-            return this.Town.ShopManager.GetShop(this) as T;
-        }
-
         public override string Name { get => this.Npc.FullName; }
         internal override GameObject SetName(string name)
         {
@@ -113,14 +110,7 @@ namespace Start_a_Town_
         {
             PersonalInventoryComponent.GetHauling(this).Object = item;
         }
-        public int CountItemsInInventory(Func<Entity, bool> filter)
-        {
-            return this.Inventory.Count(filter);
-        }
-        public int CountItemsInInventory(ItemDef def)
-        {
-            return this.CountItemsInInventory(o => o.Def == def);
-        }
+       
         /// <summary>
         /// if force is true, target actor drops current carried item and replaces it with the given one
         /// </summary>

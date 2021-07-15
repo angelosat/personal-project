@@ -781,26 +781,6 @@ namespace Start_a_Town_.Net
             PacketPlayerDisconnected.Send(Instance, existing.Player.ID);
         }
 
-        public void SyncEvent(GameObject recipient, Message.Types msg, Action<BinaryWriter> writer)
-        {
-            byte[] data;
-            using (var w = new BinaryWriter(new MemoryStream()))
-            {
-                writer(w);
-                data = (w.BaseStream as MemoryStream).ToArray();
-            }
-            byte[] payload = Network.Serialize(w =>
-            {
-                w.Write(ServerClock.TotalMilliseconds);
-                TargetArgs.Write(w, recipient);
-                w.Write((int)msg);
-                w.Write(data.Length);
-                w.Write(data);
-            });
-            recipient.HandleRemoteCall(ObjectEventArgs.Create(msg, writer));
-            Enqueue(PacketType.ObjectEvent, payload, SendType.Ordered | SendType.Reliable);
-        }
-
         public GameObject Instantiate(GameObject obj)
         {
             obj.Instantiate(Instantiator);

@@ -24,10 +24,6 @@ namespace Start_a_Town_
         {
             return base.GetDustEmitter();
         }
-        public override ContextAction GetRightClickAction(Vector3 global)
-        {
-            return new ContextAction(() => "Mine", () => { Net.Client.PlayerInteract(new TargetArgs(global)); });
-        }
         public override Material GetMaterial(byte data)
         {
             return MaterialDefOf.Stone;

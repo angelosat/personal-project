@@ -73,7 +73,6 @@ namespace Start_a_Town_
                     parent.MoveToggle(false);
                 return BehaviorState.Running;
             }
-            var net = parent.Net;
 
             TargetArgs target = this.Target;
             Interaction goal = this.Interaction;
@@ -81,7 +80,7 @@ namespace Start_a_Town_
             switch (goal.State)
             {
                 case Interaction.States.Unstarted:
-                    (net as Server).AIInteract(parent, goal, target);
+                    AIManager.Interact(parent, goal, target);
                     return BehaviorState.Running;
 
                 case Interaction.States.Running:

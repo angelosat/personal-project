@@ -47,12 +47,6 @@ namespace Start_a_Town_.Net
             }
         }
 
-        [Obsolete]
-        internal void AIInteract(Actor parent, Interaction goal, TargetArgs target)
-        {
-            AI.AIManager.Interact(parent, goal, target);
-        }
-        
         public const int SnapshotIntervalMS = 10;// send 60 snapshots per second to clients
         public const int LightIntervalMS = 10;// send 60 light updates per second to clients
         readonly Dictionary<int, GameObject> NetworkObjects;

@@ -1043,11 +1043,6 @@ namespace Start_a_Town_.Net
             throw new NotImplementedException();
         }
         [Obsolete]
-        internal static void PlayerInteract(TargetArgs target)
-        {
-            throw new NotImplementedException();
-        }
-        [Obsolete]
         internal static void PlayerThrow(Vector3 dir, bool all)
         {
             throw new NotImplementedException();

@@ -81,11 +81,5 @@ namespace Start_a_Town_
         {
             return MaterialDefOf.Soil;
         }
-        
-        public override ContextAction GetRightClickAction(Vector3 global)
-        {
-            return new ContextAction(() => "Dig", () => { Net.Client.PlayerInteract(new TargetArgs(global)); });
-        }
-      
     }
 }

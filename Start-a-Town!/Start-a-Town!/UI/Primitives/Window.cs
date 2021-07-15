@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
@@ -12,7 +12,7 @@ namespace Start_a_Town_.UI
         }
         private string title = "<undefined>";
         private Rectangle contentArea = new Rectangle();
-        bool isResizable = false;
+        readonly bool isResizable = false;
         public bool FocusLast = false, isMouseOverCurrent = false, isMouseOverPrevious = false;
         public Window Previous;
         public bool Movable, IsDragged;
@@ -21,19 +21,26 @@ namespace Start_a_Town_.UI
         protected bool _Closable = true;
         public bool Closable
         {
-            get { return _Closable; }
-            set 
+            get { return this._Closable; }
+            set
             {
-                bool oldClosable = Closable;
-                _Closable = value;
-                if(_Closable != oldClosable)
+                bool oldClosable = this.Closable;
+                this._Closable = value;
+                if (this._Closable != oldClosable)
                 {
-                    if (_Closable)
-                        Controls.Add(CloseButton);
+                    if (this._Closable)
+                    {
+                        this.Controls.Add(this.CloseButton);
+                    }
                     else
-                        Controls.Remove(CloseButton);
-                    if(AutoSize)
-                        ClientSize = PreferredClientSize;
+                    {
+                        this.Controls.Remove(this.CloseButton);
+                    }
+
+                    if (this.AutoSize)
+                    {
+                        this.ClientSize = this.PreferredClientSize;
+                    }
                 }
             }
         }
@@ -44,12 +51,15 @@ namespace Start_a_Town_.UI
 
         public override void OnPaint(SpriteBatch sb)
         {
-            DrawOuterPadding(sb, Vector2.Zero);
+            this.DrawOuterPadding(sb, Vector2.Zero);
         }
         public override Control AddControls(params Control[] controls)
         {
             foreach (var ctrl in controls)
+            {
                 this.Client.Controls.Add(ctrl);
+            }
+
             return this;
         }
         public Label Label_Title;
@@ -57,13 +67,13 @@ namespace Start_a_Town_.UI
         protected UICloseButton CloseButton;
         protected override void OnClientSizeChanged()
         {
-            Size = new Rectangle(0, 0, ClientSize.Width + 2 * UIManager.BorderPx, ClientSize.Height + 2 * UIManager.BorderPx + (int)UIManager.Font.MeasureString(Title).Y);
+            this.Size = new Rectangle(0, 0, this.ClientSize.Width + 2 * UIManager.BorderPx, this.ClientSize.Height + 2 * UIManager.BorderPx + (int)UIManager.Font.MeasureString(this.Title).Y);
             base.OnClientSizeChanged();
         }
         protected virtual void OnClosed()
         {
         }
-        
+
         public virtual bool Close()
         {
             return this.Hide();
@@ -88,17 +98,17 @@ namespace Start_a_Town_.UI
 
         public Vector2 CenterMouseOnControl(Control control)
         {
-            Location = Vector2.Zero;
+            this.Location = Vector2.Zero;
             Vector2 controlLoc = control.GetLocation();
             return UIManager.Mouse - controlLoc - new Vector2(control.Width, control.Height) / 2;
         }
-       
+
         public Window(Control child, bool closable = true) : this("", child, closable)
         {
         }
         public Window(string name, Control child, bool closable = true) : this()
         {
-            this.Title = name; 
+            this.Title = name;
             this.Movable = true;
             this.AutoSize = true;
             this.Closable = closable;
@@ -107,24 +117,24 @@ namespace Start_a_Town_.UI
         public Window()
         {
             this.Color = UIManager.Tint;
-            ClientLocation = new Vector2(UIManager.BorderPx, UIManager.BorderPx);// + (int)UIManager.Font.MeasureString(Title).Y);
+            this.ClientLocation = new Vector2(UIManager.BorderPx, UIManager.BorderPx);// + (int)UIManager.Font.MeasureString(Title).Y);
             this.Client = new GroupBox() { Name = "Window client area", MouseThrough = true, Size = ClientSize, Location = new Vector2(0, Label.DefaultHeight) };
-            CloseButton = new UICloseButton();
-            CloseButton.Location = new Vector2(Width - 16 - UIManager.BorderPx - ClientLocation.X, UIManager.BorderPx - ClientLocation.Y);
-            CloseButton.LeftClick += new UIEvent(close_button_Click);
-            this.Label_Title = new Label() { Font = UIManager.FontBold, MouseThrough = true};//false, Active = true };//true };
-            Label_Title.MouseLBActionOld = StartDragging;
-            AutoSize = true;
-            Controls.Add(Label_Title, CloseButton, Client);
-            AutoSize = false;
-            Select();
+            this.CloseButton = new UICloseButton();
+            this.CloseButton.Location = new Vector2(this.Width - 16 - UIManager.BorderPx - this.ClientLocation.X, UIManager.BorderPx - this.ClientLocation.Y);
+            this.CloseButton.LeftClick += new UIEvent(this.close_button_Click);
+            this.Label_Title = new Label() { Font = UIManager.FontBold, MouseThrough = true };//false, Active = true };//true };
+            this.Label_Title.MouseLBActionOld = this.StartDragging;
+            this.AutoSize = true;
+            this.Controls.Add(this.Label_Title, this.CloseButton, this.Client);
+            this.AutoSize = false;
+            this.Select();
         }
 
         void close_button_Click(Object sender, EventArgs e)
         {
             this.Hide();
         }
- 
+
         public override void Update()
         {
             base.Update();
@@ -138,20 +148,25 @@ namespace Start_a_Town_.UI
                 }
                 this.LastTitle = nowTitle;
             }
-            Drag();
-            ScreenClientBounds = new Rectangle((int)ScreenClientLocation.X - UIManager.BorderPx, (int)ScreenClientLocation.Y - UIManager.BorderPx, ClientSize.Width + 2 * UIManager.BorderPx, ClientSize.Height + 2 * UIManager.BorderPx);
-            if (Focused != FocusLast)
+            this.Drag();
+            this.ScreenClientBounds = new Rectangle((int)this.ScreenClientLocation.X - UIManager.BorderPx, (int)this.ScreenClientLocation.Y - UIManager.BorderPx, this.ClientSize.Width + 2 * UIManager.BorderPx, this.ClientSize.Height + 2 * UIManager.BorderPx);
+            if (this.Focused != this.FocusLast)
+            {
                 if (FocusChanged != null)
+                {
                     FocusChanged();
-            FocusLast = Focused;
+                }
+            }
+
+            this.FocusLast = this.Focused;
         }
 
         private void Drag()
         {
-            if (IsDragged)
+            if (this.IsDragged)
             {
-                Location.X = Math.Max(0, Math.Min(UIManager.Width - Width, UIManager.Mouse.X - (int)MouseOffset.X));
-                Location.Y = Math.Max(0, Math.Min(UIManager.Height - Height, UIManager.Mouse.Y - (int)MouseOffset.Y));
+                this.Location.X = Math.Max(0, Math.Min(UIManager.Width - this.Width, UIManager.Mouse.X - (int)this.MouseOffset.X));
+                this.Location.Y = Math.Max(0, Math.Min(UIManager.Height - this.Height, UIManager.Mouse.Y - (int)this.MouseOffset.Y));
             }
         }
         public override bool MouseThrough
@@ -166,28 +181,28 @@ namespace Start_a_Town_.UI
                 this.Client.MouseThrough = value;
             }
         }
-        static protected Vector2 TitleLocation = new Vector2(UIManager.BorderPx * 2, UIManager.BorderPx);
+        protected static Vector2 TitleLocation = new Vector2(UIManager.BorderPx * 2, UIManager.BorderPx);
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);
         }
-        
+
         private void DrawOuterPadding(SpriteBatch sb, Vector2 loc)
         {
             Color color = this.Color;
             sb.Draw(UIManager.frameSprite, loc, OuterPadding.TopLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, loc + new Vector2( - 11 + Width, 0), OuterPadding.TopRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, loc + new Vector2(0,  - 11 + Height), OuterPadding.BottomLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, loc + new Vector2( - 11 + Width,  - 11 + Height), OuterPadding.BottomRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.frameSprite, loc + new Vector2(-11 + this.Width, 0), OuterPadding.TopRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.frameSprite, loc + new Vector2(0, -11 + this.Height), OuterPadding.BottomLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.frameSprite, loc + new Vector2(-11 + this.Width, -11 + this.Height), OuterPadding.BottomRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
 
             //top, left, right, bottom
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y, Width - 22, 11), OuterPadding.Top, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X, (int)loc.Y + 11, 11, Height - 22), OuterPadding.Left, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + Width - 11, (int)loc.Y + 11, 11, Height - 22), OuterPadding.Right, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y - 11 + Height, Width - 22, 11), OuterPadding.Bottom, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y, this.Width - 22, 11), OuterPadding.Top, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X, (int)loc.Y + 11, 11, this.Height - 22), OuterPadding.Left, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + this.Width - 11, (int)loc.Y + 11, 11, this.Height - 22), OuterPadding.Right, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y - 11 + this.Height, this.Width - 22, 11), OuterPadding.Bottom, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
 
             //center
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y + 11, Width - 22, Height - 22), OuterPadding.Center, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y + 11, this.Width - 22, this.Height - 22), OuterPadding.Center, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
         }
 
         internal Window SetTitle(string text)
@@ -200,30 +215,30 @@ namespace Start_a_Town_.UI
         public Func<string> TitleFunc;
         public string Title
         {
-            get { return this.TitleFunc != null ? this.TitleFunc() : title; }
+            get { return this.TitleFunc != null ? this.TitleFunc() : this.title; }
             set
             {
-                title = value;
-                OnTitleChanged();
+                this.title = value;
+                this.OnTitleChanged();
             }
         }
         public bool IsResizable
-        { get { return isResizable; } }
-       
+        { get { return this.isResizable; } }
+
         public void SizeToControl(Control control)
         {
-            Size = new Rectangle(0, 0, control.Width + 2 * UIManager.BorderPx, control.Height + 2 * UIManager.BorderPx + (int)UIManager.Font.MeasureString(Title).Y);
+            this.Size = new Rectangle(0, 0, control.Width + 2 * UIManager.BorderPx, control.Height + 2 * UIManager.BorderPx + (int)UIManager.Font.MeasureString(this.Title).Y);
         }
         public void OnTitleChanged()
         {
-            if (Title.Length == 0)
+            if (this.Title.Length == 0)
             {
-                this.Controls.Remove(Label_Title);
+                this.Controls.Remove(this.Label_Title);
                 this.Client.Location = Vector2.Zero;
             }
             else
             {
-                this.Label_Title.Text = Title;
+                this.Label_Title.Text = this.Title;
                 if (!this.Controls.Contains(this.Label_Title))
                 {
                     this.Controls.Add(this.Label_Title);
@@ -232,7 +247,7 @@ namespace Start_a_Town_.UI
 
             }
             this.Controls.Remove(this.CloseButton);
-            ClientSize = PreferredClientSize;
+            this.ClientSize = this.PreferredClientSize;
             if (this._Closable)
             {
                 this.Controls.Add(this.CloseButton);
@@ -251,7 +266,7 @@ namespace Start_a_Town_.UI
             {
                 base.Dimensions = value;
 
-                Client.Dimensions = new Vector2(Width, Height) - new Vector2(UIManager.BorderPx * 2) - new Vector2(0, (int)UIManager.Font.MeasureString(Title).Y);
+                this.Client.Dimensions = new Vector2(this.Width, this.Height) - new Vector2(UIManager.BorderPx * 2) - new Vector2(0, (int)UIManager.Font.MeasureString(this.Title).Y);
             }
         }
 
@@ -260,7 +275,7 @@ namespace Start_a_Town_.UI
             if (this.ShowDialog())
                 return true;
             else
-                return !Hide();
+                return !this.Hide();
         }
         public override bool Show()
         {
@@ -269,18 +284,11 @@ namespace Start_a_Town_.UI
         }
         public override bool Hide()
         {
-            if (WindowManager.RemoveWindow(this))
+            if (this.WindowManager.RemoveWindow(this))
             {
-                if (DialogBlock is not null)
-                {
-                    DialogBlock = null;
-                }
-                OnHidden();
-
-                Previous?.Show(WindowManager);
-
+                this.OnHidden();
+                this.Previous?.Show(this.WindowManager);
                 this.Client.OnWindowHidden(this);
-
                 return true;
             }
 
@@ -290,14 +298,14 @@ namespace Start_a_Town_.UI
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
             e.Handled = true;
-            StartDragging();
+            this.StartDragging();
             base.OnMouseLeftPress(e);
         }
 
         private void StartDragging()
         {
-            IsDragged = Movable;
-            MouseOffset = UIManager.Mouse - ScreenLocation;
+            this.IsDragged = this.Movable;
+            this.MouseOffset = UIManager.Mouse - this.ScreenLocation;
         }
 
         public override Rectangle PreferredClientSize
@@ -306,23 +314,26 @@ namespace Start_a_Town_.UI
             {
                 int width = 0;
                 foreach (Control control in this.Controls)
+                {
                     width = Math.Max(width, (int)control.Location.X + control.Width - (int)control.Origin.X);
+                }
+
                 int height = 0;
                 foreach (Control control in this.Client.Controls)
                 {
-                    if (control != CloseButton)
+                    if (control != this.CloseButton)
                     {
                         width = Math.Max(width, (int)control.Location.X + control.Width - (int)control.Origin.X);
                         height = Math.Max(height, (int)control.Location.Y + control.Height - (int)control.Origin.Y);
                     }
                 }
-                CloseButton.Location = new Vector2(Width - 16 - UIManager.BorderPx - ClientLocation.X, UIManager.BorderPx - ClientLocation.Y);
+                this.CloseButton.Location = new Vector2(this.Width - 16 - UIManager.BorderPx - this.ClientLocation.X, UIManager.BorderPx - this.ClientLocation.Y);
                 return new Rectangle(0, 0, width, height);
             }
         }
         public void AlignToMouse(Vector2 loc)
         {
-            Location = UIManager.Mouse - ClientLocation - loc;
+            this.Location = UIManager.Mouse - this.ClientLocation - loc;
         }
 
         internal Window Transparent()
@@ -336,12 +347,12 @@ namespace Start_a_Town_.UI
 
         private void StopDragging()
         {
-            IsDragged = false;
+            this.IsDragged = false;
         }
 
         protected override void OnMouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            StopDragging();
+            this.StopDragging();
             base.OnMouseLeftUp(e);
         }
     }

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
-    class NotificationArea : DrawableInterfaceElement
+    class NotificationArea
     {
         static List<Notification> Notifications;
 
@@ -21,7 +21,7 @@ namespace Start_a_Town_.UI
                 not.Validate();
         }
 
-        public override void Update()
+        public void Update()
         {
             List<Notification> temp = Notifications.ToList();
             foreach (Notification not in temp)
@@ -45,7 +45,7 @@ namespace Start_a_Town_.UI
             Notifications.Remove(sender as Notification);
         }
 
-        public override void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb)
         {
             sb.Begin();
             foreach (Notification not in Notifications)

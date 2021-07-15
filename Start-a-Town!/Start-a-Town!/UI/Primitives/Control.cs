@@ -115,10 +115,8 @@ namespace Start_a_Town_.UI
       
         object _tag;
         public virtual Object Tag { get { return this._tag; } set { this._tag = value; this.OnTagChanged(); } }
-        public event EventHandler<EventArgs> GotFocus, MouseEnter, MouseLeave, LostFocus, TooltipChanged, TagChanged;
-        public event EventHandler<KeyPressEventArgs2> KeyPress, KeyRelease;
-        UIManager _WindowManager;
-        public UIManager WindowManager { get { return this._WindowManager ?? ScreenManager.CurrentScreen.WindowManager; } set { this._WindowManager = value; } }
+        UIManager _windowManager;
+        public UIManager WindowManager { get { return this._windowManager ?? ScreenManager.CurrentScreen.WindowManager; } set { this._windowManager = value; } }
         public bool AllowDrop, ClipToBounds = true;
         public Action LostFocusAction = () => { };
         public Action ControlsChangedAction = () => { };
@@ -128,8 +126,7 @@ namespace Start_a_Town_.UI
         public string NameFormat;
         public virtual Func<string> NameFunc { get; set; }
         public virtual string Name { get { return this.NameFunc == null ? this._Name : this.NameFunc(); } set { this._Name = value; } }
-        public UIManager ui;
-        public Dictionary<Components.Message.Types, Action<Control, GameEvent>> GameEventHandlers = new Dictionary<Components.Message.Types, Action<Control, GameEvent>>();
+        public Dictionary<Components.Message.Types, Action<Control, GameEvent>> GameEventHandlers = new();
         public int ID;
         public float t = 0, dt = -0.05f;
         public Color Alpha, Blend;
@@ -442,11 +439,10 @@ namespace Start_a_Town_.UI
         }
 
         internal bool isPressed = false, Active = true;
-        public event UIEvent LeftClick, RightClick,
-            MouseUp, MouseWheelDown, MouseWheelUp,
-            TopMostControlChanged;
-        public event EventHandler<System.Windows.Forms.HandledMouseEventArgs> MouseDown, MouseLeftUp, MouseLeftDown, MouseRightPress, MouseRightUp, MouseScroll, MouseMUp, MouseMDown;
-        public event EventHandler<System.Windows.Forms.HandledMouseEventArgs> MouseWheel, MouseMove, MouseLeftPress;
+        [Obsolete]
+        public event UIEvent LeftClick;
+        [Obsolete]
+        public event EventHandler<System.Windows.Forms.HandledMouseEventArgs> MouseScroll, MouseLeftPress;
 
         public Control TopLevelControl
         {
@@ -515,19 +511,15 @@ namespace Start_a_Town_.UI
         #region Raise Events
         protected virtual void OnTagChanged()
         {
-            TagChanged?.Invoke(this, EventArgs.Empty);
         }
         protected virtual void OnTooltipChanged()
         {
-            TooltipChanged?.Invoke(this, new EventArgs());
         }
         protected virtual void OnMouseWheelUp()
         {
-            MouseWheelUp?.Invoke(this, new EventArgs());
         }
         protected virtual void OnMouseWheelDown()
         {
-            MouseWheelDown?.Invoke(this, new EventArgs());
         }
         protected virtual void OnMouseMove()
         {
@@ -535,19 +527,15 @@ namespace Start_a_Town_.UI
         }
         protected virtual void OnMouseMove(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseMove?.Invoke(this, e);
         }
         protected virtual void OnMouseDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseDown?.Invoke(this, e);
         }
         protected virtual void OnMouseUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseUp?.Invoke(this, e);
         }
         protected virtual void OnTopMostControlChanged()
         {
-            TopMostControlChanged?.Invoke(this, new UIEventArgs(this));
         }
         protected virtual void OnLeftClick()
         {
@@ -555,15 +543,12 @@ namespace Start_a_Town_.UI
         }
         protected virtual void OnRightClick()
         {
-            RightClick?.Invoke(this, new UIEventArgs(this));
         }
         protected virtual void OnKeyPress(KeyPressEventArgs2 e)
         {
-            KeyPress?.Invoke(this, e);
         }
         protected virtual void OnKeyRelease(KeyPressEventArgs2 e)
         {
-            KeyRelease?.Invoke(this, e);
         }
         #endregion
 
@@ -574,16 +559,10 @@ namespace Start_a_Town_.UI
 
         protected virtual void OnGotFocus()
         {
-            GotFocus?.Invoke(this, EventArgs.Empty);
-
         }
         public virtual void OnLostFocus()
         {
             this.LostFocusAction();
-            if (LostFocus != null)
-            {
-                LostFocus(this, EventArgs.Empty);
-            }
         }
 
         readonly Action MouseEnterAction = () => { }, MouseLeaveAction = () => { };
@@ -595,19 +574,11 @@ namespace Start_a_Town_.UI
         {
             this.MouseEnterAction();
             this.MouseHover = true;
-            if (MouseEnter != null)
-            {
-                MouseEnter(this, EventArgs.Empty);
-            }
         }
         public virtual void OnMouseLeave()
         {
             this.MouseLeaveAction();
             this.MouseHover = false;
-            if (MouseLeave != null)
-            {
-                MouseLeave(this, EventArgs.Empty);
-            }
         }
         protected virtual void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -620,31 +591,24 @@ namespace Start_a_Town_.UI
         }
         protected virtual void OnMouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseLeftUp?.Invoke(this, e);
         }
         protected virtual void OnMouseRightPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseRightPress?.Invoke(this, e);
         }
         protected virtual void OnMouseRightUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseRightUp?.Invoke(this, e);
         }
         protected virtual void OnMouseLeftDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseLeftDown?.Invoke(this, e);
         }
         protected virtual void OnMouseMDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseMDown?.Invoke(this, e);
         }
         protected virtual void OnMouseMUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseMUp?.Invoke(this, e);
         }
         protected virtual void OnMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            MouseWheel?.Invoke(this, e);
         }
         protected virtual void OnMouseScroll(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -1464,10 +1428,6 @@ namespace Start_a_Town_.UI
         {
             if (this.WindowManager.Remove(this))
             {
-                if (this.DialogBlock != null)
-                {
-                    this.DialogBlock = null;
-                }
                 this.OnHidden();
                 return true;
             }
@@ -1602,11 +1562,10 @@ namespace Start_a_Town_.UI
             return null;
         }
 
-        protected DialogBlock DialogBlock;
         public virtual bool ShowDialog()
         {
-            this.WindowManager[UIManager.LayerDialog].Remove(DialogBlock.Instance);
-            this.WindowManager[UIManager.LayerDialog].Add(DialogBlock.Instance);
+            this.WindowManager[UIManager.LayerDialog].Remove(this.WindowManager.DialogBlock);
+            this.WindowManager[UIManager.LayerDialog].Add(this.WindowManager.DialogBlock);
             this.Layer = UIManager.LayerDialog;
 
             this.SnapToScreenCenter();

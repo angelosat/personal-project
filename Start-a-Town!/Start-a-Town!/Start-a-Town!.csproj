@@ -1136,7 +1136,6 @@
   <ItemGroup>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
-    <Compile Include="UI\DrawableInterfaceElement.cs" />
     <Compile Include="Net\Packets\New\PacketRandomBlockUpdates.cs" />
   </ItemGroup>
   <ItemGroup>

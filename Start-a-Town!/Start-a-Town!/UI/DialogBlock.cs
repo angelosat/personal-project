@@ -6,8 +6,8 @@ namespace Start_a_Town_.UI
     {
         static DialogBlock _Instance;
         static public DialogBlock Instance => _Instance ??= new DialogBlock();
-      
-        DialogBlock() { }
+
+        public DialogBlock() { }
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
             e.Handled = true;

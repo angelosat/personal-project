@@ -78,6 +78,7 @@ namespace Start_a_Town_.UI
         }
 
 
+        public readonly Control DialogBlock = new DialogBlock();
 
         public static Rectangle Bounds
         { get { return new Rectangle(0, 0, Width, Height); } }
@@ -111,8 +112,6 @@ namespace Start_a_Town_.UI
         public static int DefaultButtonHeight = 23, LineHeight;
         public static int BorderPx = 5, TitlePx = 26;
         public static Color DefaultTextColor = Color.LightGray;
-
-        public DialogBlock DialogBlock;
 
         public static List<UIManager> WindowManagers = new();
 
@@ -536,14 +535,14 @@ namespace Start_a_Town_.UI
             {
                 if (window.Layer == LayerDialog)
                 {
-                    this.Layers[LayerDialog].Remove(DialogBlock.Instance);
+                    this.Layers[LayerDialog].Remove(this.DialogBlock);
                     int index = this.Layers[LayerDialog].Count - 1;
                     if (index < 0)
                     {
                         return true;
                     }
 
-                    this.Layers[LayerDialog].Insert(index, DialogBlock.Instance);
+                    this.Layers[LayerDialog].Insert(index, this.DialogBlock);
                 }
                 return true;
             }
@@ -556,14 +555,14 @@ namespace Start_a_Town_.UI
             {
                 if (control.Layer == LayerDialog)
                 {
-                    this.Layers[LayerDialog].Remove(DialogBlock.Instance);
+                    this.Layers[LayerDialog].Remove(this.DialogBlock);
                     int index = this.Layers[LayerDialog].Count - 1;
                     if (index < 0)
                     {
                         return true;
                     }
 
-                    this.Layers[LayerDialog].Insert(index, DialogBlock.Instance);
+                    this.Layers[LayerDialog].Insert(index, this.DialogBlock);
                 }
                 return true;
             }

@@ -198,7 +198,7 @@ namespace Start_a_Town_.Components
             return stat;
         }
 
-        public void GetTooltipInfo(Tooltip tip)
+        public void GetTooltipInfo(Control tip)
         {
             tip.Controls.Add(new Label("Modifiers:") { Location = tip.Controls.BottomLeft });
             foreach(var mod in this.Modifiers)

@@ -1,24 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
-    public class TooltipEventArgs : EventArgs
-    {
-        public List<GroupBox> TooltipGroups;
-        public object Source;
-        public TooltipEventArgs(object source, List<GroupBox> tooltipGroups)
-        {
-            Source = source;
-            TooltipGroups = tooltipGroups;
-        }
-    }
-
     public class Tooltip : Control
     {
-        Vector2 Offset = new Vector2(16);
+        Vector2 Offset = new(16);
 
         public Tooltip(ITooltippable obj)
         {

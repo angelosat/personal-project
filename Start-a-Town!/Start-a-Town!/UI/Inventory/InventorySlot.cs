@@ -1,6 +1,4 @@
-﻿using Start_a_Town_.Components;
-
-namespace Start_a_Town_.UI
+﻿namespace Start_a_Town_.UI
 {
     class InventorySlot : Slot
     {
@@ -44,11 +42,9 @@ namespace Start_a_Town_.UI
                 return DragDropEffects.Move;
             };
         }
-        public override void GetTooltipInfo(Tooltip tooltip)
+        public override void GetTooltipInfo(Control tooltip)
         {
-            if (this.Tag.Object == null)
-                return;
-            this.Tag.Object.GetInventoryTooltip(tooltip);
+            this.Tag.Object?.GetInventoryTooltip(tooltip);
         }
     }
 }

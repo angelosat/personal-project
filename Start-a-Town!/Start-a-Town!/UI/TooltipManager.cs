@@ -1,22 +1,13 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
-    public class TooltipArgs : EventArgs
-    {
-        public Tooltip Tooltip;
-        public TooltipArgs(Tooltip tooltip)
-        {
-            Tooltip = tooltip;
-        }
-    }
-
     public class TooltipManager
     {
-        static public bool MouseTooltips = true;
-        static public float DelayInterval = Engine.TicksPerSecond / 4;
+        public static bool MouseTooltips = true;
+        public static float DelayInterval = Engine.TicksPerSecond / 4;
         float DelayValue;
         public static int Width = 300;
         protected static TooltipManager _Instance;
@@ -25,12 +16,15 @@ namespace Start_a_Town_.UI
         Tooltip _Tooltip;
         public Tooltip Tooltip
         {
-            get { return _Tooltip; }
+            get { return this._Tooltip; }
             set
             {
-                if (_Tooltip is not null)
-                    _Tooltip.Dispose();
-                _Tooltip = value;
+                if (this._Tooltip is not null)
+                {
+                    this._Tooltip.Dispose();
+                }
+
+                this._Tooltip = value;
             }
         }
 
@@ -39,70 +33,69 @@ namespace Start_a_Town_.UI
 
         public void Update()
         {
-
             if (this.Object is null)
                 return;
+
             this.DelayValue -= 1;
 
-            if (DelayValue <= 0)
+            if (this.DelayValue <= 0)
             {
-                DelayValue = DelayInterval;
+                this.DelayValue = DelayInterval;
                 if (this.Tooltip is null)
-                    Build();
+                    this.Build();
                 else
-                {
                     this.Tooltip.Update();
-                }
             }
-            if (this.Tooltip != null)
-                this.Tooltip.Update();
+            this.Tooltip?.Update();
         }
 
         void Build()
         {
-            Tooltip = new Tooltip(Object);
-            Tooltip.AutoSize = true;
-            Object.GetTooltipInfo(Tooltip);
+            this.Tooltip = new(this.Object);
+            this.Tooltip.AutoSize = true;
+            this.Object.GetTooltipInfo(this.Tooltip);
             foreach (var comp in Game1.Instance.GameComponents)
+            {
                 comp.OnTooltipCreated(this.Object, this.Tooltip);
+            }
 
-            if (Tooltip.Controls.Count > 0)
+            if (this.Tooltip.Controls.Count > 0)
             {
                 this.Tooltip.Update();
-                Tooltip.SetMousethrough(true, true);
+                this.Tooltip.SetMousethrough(true, true);
             }
             else
-                Tooltip = null;
+                this.Tooltip = null;
         }
 
         void Object_TooltipChanged(object sender, EventArgs e)
         {
-            Build();
+            this.Build();
         }
 
         TooltipManager()
         {
-            Controller.MouseoverObjectChanged += new EventHandler<MouseoverEventArgs>(Controller_MouseoverObjectChanged);
+            Controller.MouseoverObjectChanged += new EventHandler<MouseoverEventArgs>(this.Controller_MouseoverObjectChanged);
         }
 
         void Controller_MouseoverObjectChanged(object sender, MouseoverEventArgs e)
         {
-            Tooltip = null;
+            this.Tooltip = null;
             ITooltippable obj = e.ObjectNext as ITooltippable;
             this.DelayValue = DelayInterval;
-            Object = Controller.Instance.MouseoverBlockNext.Object as ITooltippable;//.Target;// 
+            this.Object = Controller.Instance.MouseoverBlockNext.Object as ITooltippable;//.Target;// 
         }
 
         public Vector2 ScreenLocation
         {
             get
             {
-                return new Vector2(Math.Max(Math.Min(Controller.Instance.msCurrent.X + 16, Game1.Instance.graphics.PreferredBackBufferWidth - Tooltip.Width), 0), Math.Max(Math.Min(Controller.Instance.msCurrent.Y, Game1.Instance.graphics.PreferredBackBufferHeight - Tooltip.Height), 0));
+                return new(Math.Max(Math.Min(Controller.Instance.msCurrent.X + 16, Game1.Instance.graphics.PreferredBackBufferWidth - this.Tooltip.Width), 0), Math.Max(Math.Min(Controller.Instance.msCurrent.Y, Game1.Instance.graphics.PreferredBackBufferHeight - this.Tooltip.Height), 0));
             }
         }
         public void Draw(SpriteBatch sb)
         {
-            Tooltip?.Draw(sb);
+            this.Tooltip?.Draw(sb);
         }
 
         internal static void OnGameEvent(GameEvent e)

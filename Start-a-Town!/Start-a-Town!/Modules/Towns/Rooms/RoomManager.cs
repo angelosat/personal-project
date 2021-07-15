@@ -228,7 +228,7 @@ namespace Start_a_Town_
             return this.Rooms.Values.FirstOrDefault(r => r.Contains(global));
         }
 
-        internal override void OnTooltipCreated(Tooltip tooltip, TargetArgs targetArgs)
+        internal override void OnTooltipCreated(Control tooltip, TargetArgs targetArgs)
         {
             if (targetArgs.Type != TargetType.Position)
                 return;

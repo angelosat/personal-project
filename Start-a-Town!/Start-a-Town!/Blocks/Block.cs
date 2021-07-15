@@ -129,7 +129,7 @@ namespace Start_a_Town_
         {
             return Color.White;
         }
-        public void GetTooltipInfo(UI.Tooltip tooltip)
+        public void GetTooltipInfo(Control tooltip)
         {
         }
 

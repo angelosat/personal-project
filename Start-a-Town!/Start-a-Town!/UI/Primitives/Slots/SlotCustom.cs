@@ -114,7 +114,7 @@ namespace Start_a_Town_.UI
             return DragDropAction(args);
         }
 
-        public override void GetTooltipInfo(Tooltip tooltip)
+        public override void GetTooltipInfo(Control tooltip)
         {
             if (CustomTooltip)
                 base.GetTooltipInfo(tooltip);

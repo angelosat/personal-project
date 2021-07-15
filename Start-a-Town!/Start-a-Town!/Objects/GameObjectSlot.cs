@@ -224,7 +224,7 @@ namespace Start_a_Town_
             return obj;
         }
 
-        public void GetTooltipInfo(Tooltip tooltip)
+        public void GetTooltipInfo(Control tooltip)
         {
             if (Object is not null)
             {

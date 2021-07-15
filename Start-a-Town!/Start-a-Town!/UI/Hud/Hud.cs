@@ -8,6 +8,7 @@ using Start_a_Town_.Net;
 using Start_a_Town_.AI;
 using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.UI;
+using UI;
 
 namespace Start_a_Town_
 {
@@ -129,6 +130,7 @@ namespace Start_a_Town_
                     .Transparent()
                     .AnchorTo(this.BtnPlayers.ScreenLocation + this.BtnPlayers.TopRight, Vector2.One);
                 this.WindowPlayers.Layer = LayerTypes.Hud;
+                this.WindowPlayers.LayerNew = UIManager.LayerHud;
             }
             this.WindowPlayers.Toggle();
         }

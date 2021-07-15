@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UI;
 
 namespace Start_a_Town_.UI
@@ -45,47 +45,61 @@ namespace Start_a_Town_.UI
             Bottom = new Rectangle(19, 19, 1, 19),
             Center = new Rectangle(18, 18, 1, 1);
     }
-    public enum LayerTypes { Nameplates, Speechbubbles, Hud, Windows, Dialog }
     public class UIManager : IDisposable, IKeyEventHandler
     {
-        public enum Events { NpcUICreated,
+        public enum Events
+        {
+            NpcUICreated,
             SelectedChanged
         }
-           
+
         static float _Scale = 1;
-        static public float Scale
+        public static float Scale
         {
             get { return _Scale; }
             set
             {
                 UIScaleEventArgs e = new UIScaleEventArgs(_Scale, value);
                 foreach (UIManager manager in WindowManagers)
+                {
                     foreach (var layer in manager.Layers)
+                    {
                         foreach (var ctrl in layer.Value)
                         {
                             ctrl.Reposition(e);
                         }
+                    }
+                }
+
                 _Scale = value;
                 UITexture = new RenderTarget2D(Game1.Instance.GraphicsDevice, Width, Height);
-                
+
             }
         }
 
 
 
-        static public Rectangle Bounds
+        public static Rectangle Bounds
         { get { return new Rectangle(0, 0, Width, Height); } }
-        static public Vector2 Center { get { return Game1.ScreenSize / (2 * Scale); } }
-        static public int Width { get { 
-            return (int)( Game1.Instance.graphics.PreferredBackBufferWidth / Scale); 
-        } }
-        static public int Height { get { 
-            return (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale); 
-        } }
+        public static Vector2 Center { get { return Game1.ScreenSize / (2 * Scale); } }
+        public static int Width
+        {
+            get
+            {
+                return (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
+            }
+        }
+        public static int Height
+        {
+            get
+            {
+                return (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
+            }
+        }
 
-        static public Vector2 Size { get { return new Vector2(Width, Height); } }
-        static public Vector2 Mouse { get { return Controller.Instance.MouseLocation / Scale; } }
-        static public Rectangle MouseRect { get { return new Rectangle((int)Mouse.X, (int)Mouse.Y, 1, 1); } }
+        public static Vector2 Size { get { return new Vector2(Width, Height); } }
+        public static Vector2 Mouse { get { return Controller.Instance.MouseLocation / Scale; } }
+        public static Rectangle MouseRect { get { return new Rectangle((int)Mouse.X, (int)Mouse.Y, 1, 1); } }
         public static SortedList<float, Control> MouseOverList;
         public static SpriteFont Font = Game1.Instance.Content.Load<SpriteFont>("DefaultFont");
         public static SpriteFont FontBold = Game1.Instance.Content.Load<SpriteFont>("BoldFont");
@@ -100,18 +114,35 @@ namespace Start_a_Town_.UI
 
         public DialogBlock DialogBlock;
 
-        static public List<UIManager> WindowManagers = new();
+        public static List<UIManager> WindowManagers = new();
 
         public static Window MouseOverWindow;
-        public Window ActiveWindow => ActiveControl?.GetWindow();
+        public Window ActiveWindow => this.ActiveControl?.GetWindow();
 
         public Dictionary<LayerTypes, List<Control>> Layers = new();
+        public static readonly GuiLayer
+            LayerNameplates = new(),
+            LayerSpeechbubbles = new(),
+            LayerHud = new(),
+            LayerWindows = new(),
+            LayerDialog = new();
+        readonly Dictionary<GuiLayer, List<Control>> LayersNew = new()
+        {
+            { LayerNameplates, new() },
+            { LayerSpeechbubbles, new() },
+            { LayerHud, new() },
+            { LayerWindows, new() },
+            { LayerDialog, new() }
+        };
+
         public List<Control> this[LayerTypes layer] { get { return this.Layers[layer]; } }
+        public List<Control> this[GuiLayer layer] { get { return this.LayersNew[layer]; } }
+
         public int LastScreenWidth, LastScreenHeight;
         public Window Dialog;
 
         static Texture2D _Highlight;
-        static public Texture2D Highlight
+        public static Texture2D Highlight
         {
             get
             {
@@ -124,7 +155,7 @@ namespace Start_a_Town_.UI
             }
         }
         static Texture2D _TransparentHighlight;
-        static public Texture2D TransparentHighlight
+        public static Texture2D TransparentHighlight
         {
             get
             {
@@ -138,7 +169,7 @@ namespace Start_a_Town_.UI
         }
 
         static Texture2D _Shade;
-        static public Texture2D Shade
+        public static Texture2D Shade
         {
             get
             {
@@ -151,29 +182,29 @@ namespace Start_a_Town_.UI
             }
         }
 
-        static public Texture2D Cursor;
+        public static Texture2D Cursor;
         public RenderTarget2D DimScreen;
 
-        static public Atlas Atlas = new Atlas("UI");
-        static public readonly Atlas.Node.Token Btn16 = Atlas.Load("Graphics/Gui/gui-icon");
-        static public readonly Atlas.Node.Token ArrowUp = Atlas.Load("Graphics/Gui/gui-up1");
-        static public readonly Atlas.Node.Token ArrowDown = Atlas.Load("Graphics/Gui/gui-down1");
-        static public readonly Atlas.Node.Token ArrowLeft = Atlas.Load("Graphics/Gui/gui-left1");
-        static public readonly Atlas.Node.Token ArrowRight = Atlas.Load("Graphics/Gui/gui-right1");
-        static public readonly Atlas.Node.Token IconX = Atlas.Load("Graphics/Gui/gui-x");
-        static public readonly Atlas.Node.Token IconSave = Atlas.Load("Graphics/Gui/gui-save");
-        static public readonly Atlas.Node.Token IconLoad = Atlas.Load("Graphics/Gui/gui-load");
-        static public readonly Atlas.Node.Token IconDisk = Atlas.Load("Graphics/Gui/gui-saveload");
-        static public readonly Atlas.Node.Token Tickbox = Atlas.Load("Graphics/Gui/gui-tickbox2a");
-        static public readonly Atlas.Node.Token MousePointer = Atlas.Load("Graphics/cursor-default");
-        static public readonly Atlas.Node.Token MousePointerGrayscale = Atlas.Load("Graphics/cursor-default", true);
-        static public readonly Atlas.Node.Token SpriteConstruction = Atlas.Load("Graphics/Icons/spr-constr");
+        public static Atlas Atlas = new Atlas("UI");
+        public static readonly Atlas.Node.Token Btn16 = Atlas.Load("Graphics/Gui/gui-icon");
+        public static readonly Atlas.Node.Token ArrowUp = Atlas.Load("Graphics/Gui/gui-up1");
+        public static readonly Atlas.Node.Token ArrowDown = Atlas.Load("Graphics/Gui/gui-down1");
+        public static readonly Atlas.Node.Token ArrowLeft = Atlas.Load("Graphics/Gui/gui-left1");
+        public static readonly Atlas.Node.Token ArrowRight = Atlas.Load("Graphics/Gui/gui-right1");
+        public static readonly Atlas.Node.Token IconX = Atlas.Load("Graphics/Gui/gui-x");
+        public static readonly Atlas.Node.Token IconSave = Atlas.Load("Graphics/Gui/gui-save");
+        public static readonly Atlas.Node.Token IconLoad = Atlas.Load("Graphics/Gui/gui-load");
+        public static readonly Atlas.Node.Token IconDisk = Atlas.Load("Graphics/Gui/gui-saveload");
+        public static readonly Atlas.Node.Token Tickbox = Atlas.Load("Graphics/Gui/gui-tickbox2a");
+        public static readonly Atlas.Node.Token MousePointer = Atlas.Load("Graphics/cursor-default");
+        public static readonly Atlas.Node.Token MousePointerGrayscale = Atlas.Load("Graphics/cursor-default", true);
+        public static readonly Atlas.Node.Token SpriteConstruction = Atlas.Load("Graphics/Icons/spr-constr");
 
-        static public readonly Texture2D UpArrow = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-up1");
-        static public readonly Texture2D DownArrow = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-down1");
+        public static readonly Texture2D UpArrow = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-up1");
+        public static readonly Texture2D DownArrow = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-down1");
 
-        
-        static public void LoadContent()
+
+        public static void LoadContent()
         {
             Cursor = Game1.Instance.Content.Load<Texture2D>("Graphics/cursor-default");
             LineHeight = (int)Font.MeasureString("(gA1,|)").Y;
@@ -202,41 +233,48 @@ namespace Start_a_Town_.UI
             Atlas.Bake();
 
             var scaleNode = Engine.Config.Descendants("UIScale").FirstOrDefault();
-            float scale;
-            if(float.TryParse(scaleNode.Value, out scale)) // do i need to check for scalenode == null?
+            if (float.TryParse(scaleNode.Value, out float scale)) // do i need to check for scalenode == null?
+            {
                 Scale = scale;
+            }
             else
+            {
                 Scale = 1;
+            }
         }
 
         internal void OnSelectedTargetChanged(TargetArgs target)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.OnSelectedTargetChanged(target);
+                }
             }
         }
 
         static RenderTarget2D UITexture;
         public UIManager()
         {
-            Layers[LayerTypes.Nameplates] = new List<Control>();
-            Layers[LayerTypes.Speechbubbles] = new List<Control>();
-            Layers[LayerTypes.Hud] = new List<Control>();
-            Layers[LayerTypes.Windows] = new List<Control>();
-            Layers[LayerTypes.Dialog] = new List<Control>();
+            this.Layers[LayerTypes.Nameplates] = new List<Control>();
+            this.Layers[LayerTypes.Speechbubbles] = new List<Control>();
+            this.Layers[LayerTypes.Hud] = new List<Control>();
+            this.Layers[LayerTypes.Windows] = new List<Control>();
+            this.Layers[LayerTypes.Dialog] = new List<Control>();
+
+
 
             WindowManagers.Add(this);
 
-           Game1.Instance.GraphicsDevice.DeviceReset += new EventHandler<EventArgs>(graphics_DeviceReset);
-            LastScreenWidth = Game1.Instance.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            LastScreenHeight = Game1.Instance.GraphicsDevice.PresentationParameters.BackBufferHeight;
+            Game1.Instance.GraphicsDevice.DeviceReset += new EventHandler<EventArgs>(this.graphics_DeviceReset);
+            this.LastScreenWidth = Game1.Instance.GraphicsDevice.PresentationParameters.BackBufferWidth;
+            this.LastScreenHeight = Game1.Instance.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
-            DimScreen = new RenderTarget2D(Game1.Instance.GraphicsDevice, 1, 1);
-            Game1.Instance.GraphicsDevice.SetRenderTarget(DimScreen);
+            this.DimScreen = new RenderTarget2D(Game1.Instance.GraphicsDevice, 1, 1);
+            Game1.Instance.GraphicsDevice.SetRenderTarget(this.DimScreen);
             Game1.Instance.GraphicsDevice.Clear(Color.Black);
             Game1.Instance.GraphicsDevice.SetRenderTarget(null);
         }
@@ -244,36 +282,37 @@ namespace Start_a_Town_.UI
         public List<Control> ControlsInMemory = new List<Control>();
         void graphics_DeviceReset(object sender, EventArgs e)
         {
-            Reset();
+            this.Reset();
         }
 
         private void Reset()
         {
             int newWidth = Game1.Instance.graphics.PreferredBackBufferWidth;
             int newHeight = Game1.Instance.graphics.PreferredBackBufferHeight;
-          
-            float wRatio = newWidth / (float)LastScreenWidth;
-            float hRatio = newHeight / (float)LastScreenHeight;
-          
-            LastScreenWidth = newWidth;
-            LastScreenHeight = newHeight;
+
+            float wRatio = newWidth / (float)this.LastScreenWidth;
+            float hRatio = newHeight / (float)this.LastScreenHeight;
+
+            this.LastScreenWidth = newWidth;
+            this.LastScreenHeight = newHeight;
 
             UITexture = new RenderTarget2D(Game1.Instance.GraphicsDevice, newWidth, newHeight);
-            foreach (Control ctrl in ControlsInMemory)
+            foreach (Control ctrl in this.ControlsInMemory)
             {
                 ctrl.Reposition(new Vector2(wRatio, hRatio));
                 ctrl.Invalidate(true);
             }
-           
-            DimScreen = new RenderTarget2D(Game1.Instance.GraphicsDevice, 1, 1);
-            Game1.Instance.GraphicsDevice.SetRenderTarget(DimScreen);
+
+            this.DimScreen = new RenderTarget2D(Game1.Instance.GraphicsDevice, 1, 1);
+            Game1.Instance.GraphicsDevice.SetRenderTarget(this.DimScreen);
             Game1.Instance.GraphicsDevice.Clear(Color.Black);
             Game1.Instance.GraphicsDevice.SetRenderTarget(null);
         }
 
         public Control FocusedControl;
 
-        public Control ActiveControl { 
+        public Control ActiveControl
+        {
             get { return Controller.Instance.MouseoverBlock.Object as Control; }
             set { Controller.Instance.MouseoverBlock.Object = value; }
         }
@@ -287,12 +326,14 @@ namespace Start_a_Town_.UI
         {
 
             Control lastactive = Controller.Instance.MouseoverBlock.Object as Control;// ActiveControl;
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
+            {
                 foreach (var ctrl in layer.Value.ToList())
                 {
                     ctrl.Update();
                     ctrl.Update(new Rectangle(0, 0, (int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y));
                 }
+            }
 
             Control nextactive = Controller.Instance.MouseoverBlockNext.Object as Control;
 
@@ -308,17 +349,24 @@ namespace Start_a_Town_.UI
 
             bool closedsomething = false;
             List<Control> toclose = new List<Control>();
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
+            {
                 toclose.AddRange(layer.Value.FindAll(foo => foo is Window));
+            }
+
             if (toclose.Count > 0)
             {
                 foreach (Control c in toclose)
+                {
                     if (c is Window)
+                    {
                         if ((c as Window).Closable)
                         {
                             (c as Window).Close();
                             closedsomething = true;
                         }
+                    }
+                }
             }
 
             return closedsomething;
@@ -326,16 +374,24 @@ namespace Start_a_Town_.UI
 
         public void DrawOnCamera(SpriteBatch sb, Camera camera)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
+            {
                 foreach (var ctrl in layer.Value.ToList())
+                {
                     ctrl.DrawOnCamera(sb, camera);
+                }
+            }
         }
 
         public void DrawWorld(MySpriteBatch sb, Camera camera)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
+            {
                 foreach (var ctrl in layer.Value.ToList())
+                {
                     ctrl.DrawWorld(sb, camera);
+                }
+            }
         }
 
         public void Draw(SpriteBatch sb, Camera camera)
@@ -346,10 +402,18 @@ namespace Start_a_Town_.UI
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
             if (camera != null)
+            {
                 this.DrawOnCamera(sb, camera);
-            foreach (var layer in Layers)
+            }
+
+            foreach (var layer in this.Layers)
+            {
                 foreach (var ctrl in layer.Value.ToList())
+                {
                     ctrl.Draw(sb, Bounds);
+                }
+            }
+
             TooltipManager.Instance.Draw(sb);
             DragDropManager.Instance.Draw(sb);
             sb.End();
@@ -358,37 +422,45 @@ namespace Start_a_Town_.UI
             sb.Draw(uiTexture, new Rectangle(0, 0, (int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y), Color.White);
             sb.End();
         }
-        static public void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline, SpriteFont font)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline, SpriteFont font)
         {
             if (text == null)
+            {
                 return;
+            }
+
             if (text == "")
+            {
                 return;
+            }
+
             position = position.Round();
             Vector2 origin = font.MeasureString(text) * texOrigin;
             origin = new Vector2((int)origin.X, (int)origin.Y);
             foreach (var n in Vector2.Zero.GetNeighbors8())
+            {
                 sb.DrawString(font, text, position + n, outline, 0, origin, 1, SpriteEffects.None, 0);
+            }
 
             sb.DrawString(font, text, position, fill, 0, origin, 1, SpriteEffects.None, 0);
         }
-        static public void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline)
         {
             DrawStringOutlined(sb, text, position, texOrigin, fill, outline, UIManager.Font);
         }
-        static public void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin)
         {
             DrawStringOutlined(sb, text, position, texOrigin, DefaultTextColor, Color.Black);
         }
-        static public void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, SpriteFont font)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, SpriteFont font)
         {
             DrawStringOutlined(sb, text, position, texOrigin, DefaultTextColor, Color.Black, font);
         }
-        static public void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f, float depth = 0f)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f, float depth = 0f)
         {
             DrawStringOutlined(sb, text, position, Color.Black, DefaultTextColor, hAlign, vAlign, opacity, depth);
         }
-        static public void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f, float depth = 0)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f, float depth = 0)
         {
             Vector2 origin = Vector2.Zero;
             Vector2 size = UIManager.Font.MeasureString(text);
@@ -417,12 +489,14 @@ namespace Start_a_Town_.UI
             }
             origin = new Vector2(xx, yy);
 
-            foreach(var n in Vector2.Zero.GetNeighbors8() )
+            foreach (var n in Vector2.Zero.GetNeighbors8())
+            {
                 sb.DrawString(Font, text, position + n, new Color(0f, 0f, 0f, opacity), 0, origin, 1, SpriteEffects.None, depth);
+            }
 
             sb.DrawString(Font, text, position, new Color(1f, 1f, 1f, opacity), 0, origin, 1, SpriteEffects.None, depth);
         }
-        static public void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, float scale, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, float scale, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f)
         {
             Vector2 size = UIManager.Font.MeasureString(text);
             int xx = 0, yy = 0;
@@ -450,7 +524,9 @@ namespace Start_a_Town_.UI
             }
             var origin = new Vector2(xx, yy);
             foreach (var n in Vector2.Zero.GetNeighbors8())
+            {
                 sb.DrawString(Font, text, position + n, new Color(0f, 0f, 0f, opacity), 0, origin, scale, SpriteEffects.None, 0);
+            }
 
             sb.DrawString(Font, text, position, new Color(1f, 1f, 1f, opacity), 0, origin, scale, SpriteEffects.None, 0);
         }
@@ -466,15 +542,18 @@ namespace Start_a_Town_.UI
         public bool RemoveWindow(Window window)
         {
             /// if the window was a dialog, move the dialogblock behind the next topmost window, or remove it if there are no other dialogs
-            if (Layers[window.Layer].Remove(window))
+            if (this.Layers[window.Layer].Remove(window))
             {
                 if (window.Layer == LayerTypes.Dialog)
                 {
-                    Layers[LayerTypes.Dialog].Remove(DialogBlock.Instance);
-                    int index = Layers[LayerTypes.Dialog].Count - 1;
+                    this.Layers[LayerTypes.Dialog].Remove(DialogBlock.Instance);
+                    int index = this.Layers[LayerTypes.Dialog].Count - 1;
                     if (index < 0)
+                    {
                         return true;
-                    Layers[LayerTypes.Dialog].Insert(index, DialogBlock.Instance);
+                    }
+
+                    this.Layers[LayerTypes.Dialog].Insert(index, DialogBlock.Instance);
                 }
                 return true;
             }
@@ -483,15 +562,18 @@ namespace Start_a_Town_.UI
         public bool Remove(Control control)
         {
             /// if the window was a dialog, move the dialogblock behind the next topmost window, or remove it if there are no other dialogs
-            if (Layers[control.Layer].Remove(control))
+            if (this.Layers[control.Layer].Remove(control))
             {
                 if (control.Layer == LayerTypes.Dialog)
                 {
-                    Layers[LayerTypes.Dialog].Remove(DialogBlock.Instance);
-                    int index = Layers[LayerTypes.Dialog].Count - 1;
+                    this.Layers[LayerTypes.Dialog].Remove(DialogBlock.Instance);
+                    int index = this.Layers[LayerTypes.Dialog].Count - 1;
                     if (index < 0)
+                    {
                         return true;
-                    Layers[LayerTypes.Dialog].Insert(index, DialogBlock.Instance);
+                    }
+
+                    this.Layers[LayerTypes.Dialog].Insert(index, DialogBlock.Instance);
                 }
                 return true;
             }
@@ -542,18 +624,23 @@ namespace Start_a_Town_.UI
         public void Dispose()
         {
             WindowManagers.Remove(this);
-            Game1.Instance.graphics.DeviceReset -= graphics_DeviceReset;
+            Game1.Instance.graphics.DeviceReset -= this.graphics_DeviceReset;
         }
 
         public void Initialize()
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
+            {
                 foreach (Control ctrl in layer.Value)
+                {
                     ctrl.Dispose();
-            Layers[LayerTypes.Nameplates] = new List<Control>();
-            Layers[LayerTypes.Speechbubbles] = new List<Control>();
-            Layers[LayerTypes.Windows] = new List<Control>();
-            Layers[LayerTypes.Dialog] = new List<Control>();
+                }
+            }
+
+            this.Layers[LayerTypes.Nameplates] = new List<Control>();
+            this.Layers[LayerTypes.Speechbubbles] = new List<Control>();
+            this.Layers[LayerTypes.Windows] = new List<Control>();
+            this.Layers[LayerTypes.Dialog] = new List<Control>();
         }
 
         public void OnGotFocus() { }
@@ -561,139 +648,172 @@ namespace Start_a_Town_.UI
 
         public void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
         {
-            foreach (var layer in Layers.Reverse())
+            foreach (var layer in this.Layers.Reverse())
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleKeyPress(e);
+                }
             }
         }
         public void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
-            foreach (var layer in Layers.Reverse())
+            foreach (var layer in this.Layers.Reverse())
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleKeyDown(e);
+                }
             }
         }
         public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             if (e.Handled)
+            {
                 return;
+            }
 
-            foreach (var layer in Layers.Reverse())
+            foreach (var layer in this.Layers.Reverse())
             {
                 List<Control> wins = layer.Value.ToList();
                 foreach (Control c in wins)
+                {
                     c.HandleKeyUp(e);
+                }
             }
         }
         public virtual void HandleMouseMove(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (this.ActiveControl == null)
+            {
                 return;
-            ActiveControl.HandleMouseMove(e);
+            }
+
+            this.ActiveControl.HandleMouseMove(e);
             e.Handled = true;
         }
         public virtual void HandleLButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleLButtonDown(e);
+                }
             }
 
             if (this.ActiveControl != null)
+            {
                 e.Handled = true;
+            }
         }
         public virtual void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleLButtonUp(e);
+                }
             }
         }
         public virtual void HandleRButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleRButtonDown(e);
+                }
             }
             if (this.ActiveControl is not null)
+            {
                 e.Handled = true;
+            }
         }
         public virtual void HandleRButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleRButtonUp(e);
+                }
             }
         }
         public virtual void HandleMiddleUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleMiddleUp(e);
+                }
             }
         }
         public virtual void HandleMiddleDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleMiddleDown(e);
+                }
             }
         }
         public virtual void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleMouseWheel(e);
+                }
             }
         }
         public virtual void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.HandleLButtonDoubleClick(e);
+                }
             }
         }
         internal void OnGameEvent(GameEvent e)
         {
-            foreach (var layer in Layers)
+            foreach (var layer in this.Layers)
             {
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
+                {
                     c.OnGameEvent(e);
+                }
             }
         }
-       
+
         static List<Rectangle> DivideScreenQuad(Rectangle screen, Rectangle rect)
         {
             var right = rect.X + rect.Width;
@@ -702,14 +822,25 @@ namespace Start_a_Town_.UI
             var dy = screen.Y + screen.Height - bottom;
 
             var list = new List<Rectangle>();
-            if (rect.Y > screen.Y) 
+            if (rect.Y > screen.Y)
+            {
                 list.Add(new Rectangle(screen.X, screen.Y, screen.Width, rect.Y - screen.Y));
-            if (bottom < screen.Y + screen.Height) 
+            }
+
+            if (bottom < screen.Y + screen.Height)
+            {
                 list.Add(new Rectangle(screen.X, bottom, screen.Width, dy));
-            if (rect.X > screen.X) 
+            }
+
+            if (rect.X > screen.X)
+            {
                 list.Add(new Rectangle(screen.X, screen.Y, rect.X - screen.X, screen.Height));
-            if (right < screen.X + screen.Width) 
+            }
+
+            if (right < screen.X + screen.Width)
+            {
                 list.Add(new Rectangle(right, screen.Y, dx, screen.Height));
+            }
 
             return list;
         }
@@ -722,7 +853,7 @@ namespace Start_a_Town_.UI
             while (divided)
             {
                 divided = false;
-               
+
                 foreach (var control in windows) // TODO: fix HUD being a control itself
                 {
                     foreach (var rect in freeRects.ToList())
@@ -733,8 +864,12 @@ namespace Start_a_Town_.UI
                             freeRects.Remove(rect);
                             var divisions = DivideScreenQuad(rect, bounds);
                             foreach (var div in divisions)
+                            {
                                 if (!freeRects.Contains(div))
+                                {
                                     freeRects.Add(div);
+                                }
+                            }
                         }
                     }
                 }
@@ -746,12 +881,14 @@ namespace Start_a_Town_.UI
             int w = (int)dimensions.X, h = (int)dimensions.Y;
             var freeRects = this.GetFreeRectangles();
             Rectangle bestRect = new Rectangle(0, 0, w, h);
-            var size = w*h;
+            var size = w * h;
             var ordered = freeRects.OrderBy(r => new Vector2(r.X, r.Y).LengthSquared()).ToList();
             foreach (var rect in ordered)
             {
                 if (w <= rect.Width && h <= rect.Height)
+                {
                     return rect;
+                }
             }
             return bestRect;
         }

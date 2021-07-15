@@ -31,7 +31,7 @@ namespace Start_a_Town_
         {
             return Color.White;
         }
-        public void GetTooltipInfo(UI.Tooltip tooltip)
+        public void GetTooltipInfo(Control tooltip)
         {
             tooltip.Controls.Add(new UI.Label(this.Block.GetName(this.BlockData)) { Location = tooltip.Controls.BottomLeft });
         }

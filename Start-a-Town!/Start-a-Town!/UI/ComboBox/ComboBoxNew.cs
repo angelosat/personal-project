@@ -62,6 +62,7 @@ namespace Start_a_Town_.UI
             if (!Open)
             {
                 this.Panel.Layer = this.Layer;
+                this.Panel.LayerNew = this.LayerNew;
                 this.Panel.Show();
 
             }

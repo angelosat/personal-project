@@ -848,7 +848,7 @@ namespace Start_a_Town_
             body.DrawGhost(this, sb, pos, Color.White, Color.White, tint, Color.Transparent, 0, cam.Zoom, 0, SpriteEffects.None, 0.5f, global.GetDrawDepth(Engine.Map, cam));
         }
 
-        public virtual void GetTooltipInfo(Tooltip tooltip)
+        public virtual void GetTooltipInfo(Control tooltip)
         {
             GetTooltip(tooltip);
         }

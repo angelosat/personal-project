@@ -521,9 +521,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             world.Maps[coords] = map;
             return map;
         }
-        public override void GetTooltipInfo(Tooltip tooltip)
+        public override void GetTooltipInfo(Control tooltip)
         {
-            tooltip.Controls.Add(this.ToString().ToLabel());
+            tooltip.AddControls(this.ToString().ToLabel());
         }
 
         public void CacheBlockEntities()

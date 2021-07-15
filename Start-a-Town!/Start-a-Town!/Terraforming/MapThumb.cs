@@ -116,7 +116,7 @@ namespace Start_a_Town_
             ));
         }
 
-        public void GetTooltipInfo(Tooltip tooltip)
+        public void GetTooltipInfo(Control tooltip)
         {
             this.Map.GetTooltipInfo(tooltip);
         }

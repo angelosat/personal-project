@@ -5,7 +5,6 @@
     /// </summary>
     public interface ITooltippable
     {
-
-        void GetTooltipInfo(Tooltip tooltip);
+        void GetTooltipInfo(Control tooltip);
     }
 }

@@ -146,7 +146,7 @@ namespace Start_a_Town_
             this.Sync(net.GetOutgoingStream());
         }
 
-        public void GetTooltipInfo(Tooltip tooltip)
+        public void GetTooltipInfo(Control tooltip)
         {
         }
 

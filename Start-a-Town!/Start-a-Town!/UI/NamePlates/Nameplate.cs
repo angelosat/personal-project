@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
+using UI;
 
 namespace Start_a_Town_.UI
 {
@@ -138,7 +138,7 @@ namespace Start_a_Town_.UI
             return true;
         }
 
-        public override void GetTooltipInfo(Tooltip tooltip)
+        public override void GetTooltipInfo(Control tooltip)
         {
             if (this.Object is not ITooltippable tooltippable)
                 return;

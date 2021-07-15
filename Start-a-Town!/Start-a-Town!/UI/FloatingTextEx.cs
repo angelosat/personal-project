@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using UI;
 
 namespace Start_a_Town_.UI
 {
@@ -37,6 +38,7 @@ namespace Start_a_Town_.UI
         public FloatingTextEx(GameObject parent, params Segment[] segments)
         {
             Layer = LayerTypes.Speechbubbles;
+            this.LayerNew = UIManager.LayerSpeechbubbles;
             foreach (var s in segments)
             {
                 var label = new Label(s.Text) { Location = this.Controls.TopRight, Font = UIManager.FontBold, TextColorFunc = () => s.Color };
@@ -53,6 +55,7 @@ namespace Start_a_Town_.UI
         public FloatingTextEx(Func<Vector3> global, params Segment[] segments)
         {
             Layer = LayerTypes.Speechbubbles;
+            this.LayerNew = UIManager.LayerSpeechbubbles;
             foreach (var s in segments)
             {
                 var label = new Label(s.Text) { Location = this.Controls.TopRight, Font = UIManager.FontBold, TextColorFunc = () => s.Color };

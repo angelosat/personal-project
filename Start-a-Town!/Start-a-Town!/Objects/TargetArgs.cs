@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
 using Start_a_Town_.Components.Interactions;
 using Start_a_Town_.UI;
 
@@ -13,7 +12,7 @@ namespace Start_a_Town_
 
     public class TargetArgs : ITooltippable, IContextable, ISelectable, ILabeled
     {
-        public void GetTooltipInfo(UI.Tooltip tooltip)
+        public void GetTooltipInfo(Control tooltip)
         {
             switch (this.Type)
             {

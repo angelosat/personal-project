@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Element.cs" />
+    <Compile Include="GuiLayer.cs" />
+    <Compile Include="IBounded.cs" />
     <Compile Include="IKeyEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

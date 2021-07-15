@@ -59,6 +59,7 @@ namespace Start_a_Town_.UI
             : base(Vector2.Zero, text)
         {
             Layer = LayerTypes.Speechbubbles;
+            this.LayerNew = UIManager.LayerSpeechbubbles;
             Text = text;
             CurrentLife = Life;
             ScaleTime = ScaleLength = 20;
@@ -72,6 +73,7 @@ namespace Start_a_Town_.UI
             : base(Vector2.Zero, text)
         {
             Layer = LayerTypes.Speechbubbles;
+            this.LayerNew = UIManager.LayerSpeechbubbles;
             Text = text;
             CurrentLife = Life;
             ScaleTime = ScaleLength = 20;

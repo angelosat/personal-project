@@ -684,7 +684,7 @@ namespace Start_a_Town_
         public abstract void DrawWorld(MySpriteBatch sb, Camera cam);
         public abstract void DrawBeforeWorld(MySpriteBatch sb, Camera cam);
 
-        public abstract void GetTooltipInfo(Tooltip tooltip);
+        public abstract void GetTooltipInfo(Control tooltip);
 
         public virtual bool SetBlock(IntVec3 global, Block.Types type, byte data, int variation = 0, int orientation = 0, bool raiseEvent = true)
         {

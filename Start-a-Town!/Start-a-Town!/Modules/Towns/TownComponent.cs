@@ -97,7 +97,7 @@ namespace Start_a_Town_.Towns
         internal virtual void OnTargetSelected(IUISelection info, TargetArgs targetArgs)
         {
         }
-        internal virtual void OnTooltipCreated(Tooltip tooltip, TargetArgs targetArgs)
+        internal virtual void OnTooltipCreated(Control tooltip, TargetArgs targetArgs)
         {
         }
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
+using UI;
 
 namespace Start_a_Town_
 {
@@ -80,7 +81,7 @@ namespace Start_a_Town_
                new CharacterColor("Shoes", "Shoes"),
                new CharacterColor("Shirt", "Shirt"));
             Randomize(this.Colors);
-            this.Picker = new ColorPickerWindow() { Layer = LayerTypes.Dialog };
+            this.Picker = new ColorPickerWindow() { Layer = LayerTypes.Dialog, LayerNew = UIManager.LayerDialog };
             this.Picker.SnapToScreenCenter();
 
             foreach (var item in this.Colors.Colors.Values)

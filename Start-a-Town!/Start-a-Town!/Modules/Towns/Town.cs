@@ -19,7 +19,7 @@ namespace Start_a_Town_
     {
         UIQuickMenu QuickMenu;
 
-        internal void OnTooltipCreated(Tooltip tooltip, TargetArgs targetArgs)
+        internal void OnTooltipCreated(Control tooltip, TargetArgs targetArgs)
         {
             foreach (var c in this.TownComponents)
                 c.OnTooltipCreated(tooltip, targetArgs);

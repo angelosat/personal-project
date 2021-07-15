@@ -412,7 +412,6 @@
     <Compile Include="Helpers\RectangleHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\XmlHelper.cs" />
-    <Compile Include="Interfaces\IBounded.cs" />
     <Compile Include="Interfaces\ILabeled.cs" />
     <Compile Include="Interfaces\IUISelection.cs" />
     <Compile Include="IntVec2.cs" />
@@ -558,6 +557,8 @@
     <Compile Include="Terraforming\Map.MapSize.cs" />
     <Compile Include="Terraforming\Mutators\GradientLowRes.cs" />
     <Compile Include="Terraforming\Mutators\MutatorProperty.cs" />
+    <Compile Include="UI\ITooltippable.cs" />
+    <Compile Include="UI\LayerTypes.cs" />
     <Compile Include="UI\Primitives\Anchor.cs" />
     <Compile Include="UI\Primitives\Buttons\ButtonHelper.cs" />
     <Compile Include="UI\Primitives\Buttons\ButtonNew.cs" />
@@ -876,7 +877,6 @@
     <Compile Include="UI\Hud\UIGameSpeed.cs" />
     <Compile Include="UI\Hud\UISelectedInfo.cs" />
     <Compile Include="UI\ItemText\EntityTextManager.cs" />
-    <Compile Include="UI\ITooltippable.cs" />
     <Compile Include="UI\Lists\Collapsible\ListBoxCollapsible.cs" />
     <Compile Include="UI\Lists\Collapsible\ListBoxCollapsibleNode.cs" />
     <Compile Include="UI\Lists\IListSearchable.cs" />

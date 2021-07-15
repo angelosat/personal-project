@@ -44,7 +44,7 @@ namespace Start_a_Town_.Components.Crafting
         {
             this.BlockProduct.Block.DrawUI(sb, pos);
         }
-        public void GetTooltipInfo(Tooltip tooltip)
+        public void GetTooltipInfo(Control tooltip)
         {
 
         }

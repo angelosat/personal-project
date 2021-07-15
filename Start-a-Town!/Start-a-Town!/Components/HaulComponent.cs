@@ -56,7 +56,7 @@ namespace Start_a_Town_.Components
             newobj.Global = parent.Global + new Vector3(0, 0, parent.Physics.Height);
             newobj.Velocity = velocity;
             newobj.Physics.Enabled = true;
-            net.Spawn(newobj);
+            newobj.Spawn(parent.Map);
 
             if (all)
                 hauling.Clear();

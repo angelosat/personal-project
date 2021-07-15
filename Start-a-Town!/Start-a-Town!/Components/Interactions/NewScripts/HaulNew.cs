@@ -38,7 +38,7 @@ namespace Start_a_Town_.Components.Interactions
 
                     if (held == null)
                         return;
-                    actor.Net.Spawn(held, target.FinalGlobal);
+                    held.Spawn(actor.Map, target.FinalGlobal);
                     break;
 
                     // new: if inventoryable insert to inventory, if carryable carry

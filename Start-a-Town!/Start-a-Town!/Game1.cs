@@ -16,8 +16,6 @@ using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
 {
-    public delegate void UIEvent(Object sender, EventArgs e);
-    public delegate void InputEvent();
     
     /// <summary>
     /// This is the main type for your game

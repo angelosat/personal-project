@@ -11,13 +11,11 @@ namespace Start_a_Town_.UI
             return "Window: " + this.title;
         }
         private string title = "<undefined>";
-        private Rectangle contentArea = new Rectangle();
         readonly bool isResizable = false;
         public bool FocusLast = false, isMouseOverCurrent = false, isMouseOverPrevious = false;
         public Window Previous;
         public bool Movable, IsDragged;
         protected Rectangle ScreenClientBounds = new Rectangle();
-        public event InputEvent FocusChanged;
         protected bool _Closable = true;
         public bool Closable
         {
@@ -150,14 +148,7 @@ namespace Start_a_Town_.UI
             }
             this.Drag();
             this.ScreenClientBounds = new Rectangle((int)this.ScreenClientLocation.X - UIManager.BorderPx, (int)this.ScreenClientLocation.Y - UIManager.BorderPx, this.ClientSize.Width + 2 * UIManager.BorderPx, this.ClientSize.Height + 2 * UIManager.BorderPx);
-            if (this.Focused != this.FocusLast)
-            {
-                if (FocusChanged != null)
-                {
-                    FocusChanged();
-                }
-            }
-
+           
             this.FocusLast = this.Focused;
         }
 

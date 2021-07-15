@@ -167,7 +167,7 @@ namespace Start_a_Town_
             GameObjectSlot gearSlot = a.GetComponent<GearComponent>().Equipment.Slots[geartype];
 
             // despawn item's entity from world (if it's spawned in the world)
-            t.Object.Net.Despawn(objSlot.Object);
+            objSlot.Object.Despawn();
 
             // attempt to store current equipped item in inventory, otherwise drop it if inventory is full
 

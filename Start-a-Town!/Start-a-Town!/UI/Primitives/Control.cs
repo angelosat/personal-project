@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using UI;
 
 namespace Start_a_Town_.UI
@@ -17,15 +18,9 @@ namespace Start_a_Town_.UI
         {
             return this.Location + (this.Parent != null ? this.Parent.ClientLocation + this.Parent.GetLocation() : Vector2.Zero);
         }
-        public virtual Vector2 ScreenLocation
-        {
-            get
-            {
-                return this.LocationFunc() + this.Location
+        public virtual Vector2 ScreenLocation => this.LocationFunc() + this.Location
                - this.Dimensions * this.Anchor
                   + (this.Parent != null ? this.Parent.ScreenLocation + this.Parent.ClientLocation : Vector2.Zero);
-            }
-        }
         public int X => (int)this.ScreenLocation.X;
         public int Y => (int)this.ScreenLocation.Y;
 
@@ -76,21 +71,15 @@ namespace Start_a_Town_.UI
         }
         public Control CenterLeftScreen()
         {
-            this.Location = new Vector2(0, (UIManager.Height - this.Height) / 2);
+            this.Location = new(0, (UIManager.Height - this.Height) / 2);
             return this;
         }
-        public Vector2 LeftCenterScreen
-        { get { return new Vector2(0, (UIManager.Height - this.Height) / 2); } }
-        public Vector2 RightCenterScreen
-        { get { return new Vector2(UIManager.Width - this.Width, (UIManager.Height - this.Height) / 2); } }
-        public Vector2 BottomLeftScreen
-        { get { return new Vector2(0, UIManager.Height - this.Height); } }
-        public Vector2 BottomRightScreen
-        { get { return new Vector2(UIManager.Width - this.Width, UIManager.Height - this.Height); } }
-        public Vector2 BottomCenterScreen
-        { get { return new Vector2((UIManager.Width - this.Width) / 2, UIManager.Height - this.Height); } }
-        public Vector2 TopRightScreen
-        { get { return new Vector2(UIManager.Width - this.Width, 0); } }
+        public Vector2 LeftCenterScreen => new(0, (UIManager.Height - this.Height) / 2);
+        public Vector2 RightCenterScreen => new(UIManager.Width - this.Width, (UIManager.Height - this.Height) / 2);
+        public Vector2 BottomLeftScreen => new(0, UIManager.Height - this.Height);
+        public Vector2 BottomRightScreen => new(UIManager.Width - this.Width, UIManager.Height - this.Height);
+        public Vector2 BottomCenterScreen => new((UIManager.Width - this.Width) / 2, UIManager.Height - this.Height);
+        public Vector2 TopRightScreen => new(UIManager.Width - this.Width, 0);
 
         public virtual void ConformToScreen()
         {
@@ -99,80 +88,59 @@ namespace Start_a_Town_.UI
         }
 
         public float Rotation = 0;
-        bool _MouseThrough = false;
+        bool _mouseThrough = false;
         public virtual bool MouseThrough
         {
-            get { return this._MouseThrough; }
-            set { this._MouseThrough = value; }
+            get => this._mouseThrough;
+            set => this._mouseThrough = value;
         }
-        public bool IsMouseThrough
-        {
-            get { return this.MouseThrough; }
-        }
+        public bool IsMouseThrough => this.MouseThrough;
         public GuiLayer Layer = UIManager.LayerWindows;
 
         public DrawMode DrawMode = DrawMode.Normal;
-      
+        public Vector2 ClientLocation = Vector2.Zero;
+
         object _tag;
-        public virtual Object Tag { get { return this._tag; } set { this._tag = value; this.OnTagChanged(); } }
+        public virtual object Tag { get => this._tag; set { this._tag = value; this.OnTagChanged(); } }
         UIManager _windowManager;
-        public UIManager WindowManager { get { return this._windowManager ?? ScreenManager.CurrentScreen.WindowManager; } set { this._windowManager = value; } }
+        public UIManager WindowManager { get => this._windowManager ?? ScreenManager.CurrentScreen.WindowManager; set => this._windowManager = value; }
         public bool AllowDrop, ClipToBounds = true;
         public Action LostFocusAction = () => { };
         public Action ControlsChangedAction = () => { };
         public Action OnUpdate = () => { };
         public Action<SpriteBatch, Rectangle> OnDrawAction = (sb, bounds) => { };
-        string _Name;
+        string _name;
         public string NameFormat;
         public virtual Func<string> NameFunc { get; set; }
-        public virtual string Name { get { return this.NameFunc == null ? this._Name : this.NameFunc(); } set { this._Name = value; } }
+        public virtual string Name { get => this.NameFunc?.Invoke() ?? this._name; set => this._name = value; }
         public Dictionary<Components.Message.Types, Action<Control, GameEvent>> GameEventHandlers = new();
         public int ID;
         public float t = 0, dt = -0.05f;
         public Color Alpha, Blend;
-        Color _BackgroundColor = Color.Transparent;
+        Color _backgroundColor = Color.Transparent;
         public Func<Color> BackgroundColorFunc;
         public virtual Color BackgroundColor
         {
-            get
+            get => this.BackgroundColorFunc?.Invoke() ?? this._backgroundColor;
+            set
             {
-                if (this.BackgroundColorFunc == null)
-                {
-                    return this._BackgroundColor;
-                }
-                else
-                {
-                    return this.BackgroundColorFunc();
-                }
+                this._backgroundColor = value;
+                this.Invalidate();
             }
-            set { this._BackgroundColor = value; this.Invalidate(); }
         }
 
         public override Vector2 Dimensions { get => base.Dimensions; set { base.Dimensions = value; this.OnSizeChanged(); } }
-        float _Opacity = 1;
+        float _opacity = 1;
         public virtual float Opacity
         {
-            get
-            {
-                return this._Opacity;
-            }
-            set { this._Opacity = value; }
+            get => this._opacity;
+            set => this._opacity = value;
         }
         public virtual RenderTarget2D Texture { get; set; }
-        public bool Focused { get { return Controller.Instance.MouseoverBlock.Object == this; } } //return WindowManager.ActiveControl == this; } }
-        ControlCollection _Controls;
-        public ControlCollection Controls
-        {
-            get
-            {
-                if (this._Controls == null)
-                {
-                    this._Controls = new ControlCollection(this);
-                }
-
-                return this._Controls;
-            }
-        }
+        public bool Focused => Controller.Instance.MouseoverBlock.Object == this;  //return WindowManager.ActiveControl == this; } }
+        ControlCollection _controls;
+        public ControlCollection Controls => this._controls ??= new ControlCollection(this);
+        
         public virtual void AlignTopToBottom()
         {
             this.Controls.AlignVertically();
@@ -184,27 +152,19 @@ namespace Start_a_Town_.UI
         public Control SetControls(params Control[] controls)
         {
             foreach (Control ctrl in controls)
-            {
                 this.Controls.Add(ctrl);
-            }
-
             return this;
         }
 
         protected bool Valid = false;
-        public bool IsValidated { get { return this.Valid; } }
+        public bool IsValidated => this.Valid;
         public virtual Control Invalidate(bool invalidateChildren = false)
         {
 
             this.Valid = false;
             if (invalidateChildren)
-            {
                 foreach (Control ctrl in this.Controls)
-                {
                     ctrl.Invalidate(invalidateChildren);
-                }
-            }
-
             return this;
         }
 
@@ -290,24 +250,10 @@ namespace Start_a_Town_.UI
             var temp = this.Controls.ToList();
             this.Controls.Clear();
             foreach (var c in temp)
-            {
                 this.Controls.Add(c);
-            }
         }
 
-        public bool HasChildren
-        {
-            get
-            {
-                if (this.Controls != null)
-                {
-                    return this.Controls.Count > 0;
-                }
-
-                return false;
-            }
-        }
-        public Vector2 ClientLocation = Vector2.Zero;
+        public bool HasChildren => this.Controls.Any();
 
         internal Control SnapToMouse()
         {
@@ -320,39 +266,26 @@ namespace Start_a_Town_.UI
             return this;
         }
 
-        Color _Tint = Color.White;
+        Color _tint = Color.White;
         public Func<Color> TintFunc;
         public virtual Color Tint
         {
-            get
-            {
-                return this.TintFunc?.Invoke() ?? this._Tint;
-            }
+            get => this.TintFunc?.Invoke() ?? this._tint;
             set
             {
-                this._Tint = value;
+                this._tint = value;
                 this.Invalidate();
             }
         }
 
-        Color _Color = Color.White * .5f;
+        Color _color = Color.White * .5f;
         public Func<Color> ColorFunc;
         public virtual Color Color
         {
-            get
-            {
-                if (this.ColorFunc == null)
-                {
-                    return this._Color;
-                }
-                else
-                {
-                    return this.ColorFunc();
-                }
-            }
+            get => this.ColorFunc?.Invoke() ?? this._color;
             set
             {
-                this._Color = value;
+                this._color = value;
                 this.Invalidate();
             }
         }
@@ -383,12 +316,8 @@ namespace Start_a_Town_.UI
             this.Valid = true;
 
             if (cascade)
-            {
                 foreach (var c in this.Controls)
-                {
                     c.Validate(cascade);
-                }
-            }
         }
         public virtual void PreparingPaint() { }
         public virtual void OnPaint(SpriteBatch sb) { }
@@ -417,7 +346,7 @@ namespace Start_a_Town_.UI
         }
         public virtual Texture2D BackgroundTexture
         {
-            get { return this._BackgroundTexture; }
+            get => this._BackgroundTexture;
             set
             {
                 this._BackgroundTexture = value;
@@ -428,7 +357,7 @@ namespace Start_a_Town_.UI
         protected BackgroundStyle _BackgroundStyle;
         public virtual BackgroundStyle BackgroundStyle
         {
-            get { return this._BackgroundStyle; }
+            get => this._BackgroundStyle;
             set
             {
                 this._BackgroundStyle = value;
@@ -442,17 +371,15 @@ namespace Start_a_Town_.UI
         [Obsolete]
         public event UIEvent LeftClick;
         [Obsolete]
-        public event EventHandler<System.Windows.Forms.HandledMouseEventArgs> MouseScroll, MouseLeftPress;
+        public event EventHandler<HandledMouseEventArgs> MouseScroll, MouseLeftPress;
 
         public Control TopLevelControl
         {
             get
             {
                 Control parent = this;
-                while (parent.Parent != null)
-                {
+                while (parent.Parent is not null)
                     parent = parent.Parent;
-                }
 
                 return parent;
             }
@@ -461,12 +388,10 @@ namespace Start_a_Town_.UI
         public Window GetWindow()
         {
             Control window = this;
-            while (window != null)
+            while (window is not null)
             {
                 if (window is Window)
-                {
                     return window as Window;
-                }
 
                 window = window.Parent;
             }
@@ -477,10 +402,8 @@ namespace Start_a_Town_.UI
             get
             {
                 Control parent = this;
-                while (parent.Parent != null)
-                {
+                while (parent.Parent is not null)
                     parent = parent.Parent;
-                }
 
                 return parent;
             }
@@ -525,13 +448,13 @@ namespace Start_a_Town_.UI
         {
 
         }
-        protected virtual void OnMouseMove(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseMove(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseDown(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseDown(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseUp(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseUp(HandledMouseEventArgs e)
         {
         }
         protected virtual void OnTopMostControlChanged()
@@ -552,10 +475,7 @@ namespace Start_a_Town_.UI
         }
         #endregion
 
-        public bool IsTopMost
-        {
-            get { return this.WindowManager.ActiveControl == this; }
-        }
+        public bool IsTopMost => this.WindowManager.ActiveControl == this;
 
         protected virtual void OnGotFocus()
         {
@@ -580,53 +500,46 @@ namespace Start_a_Town_.UI
             this.MouseLeaveAction();
             this.MouseHover = false;
         }
-        protected virtual void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseLeftPress(HandledMouseEventArgs e)
         {
             this.MouseLBActionOld();
             this.Root.BringToFront();
-            if (MouseLeftPress != null)
-            {
-                MouseLeftPress(this, e);
-            }
+            this.MouseLeftPress?.Invoke(this, e);
         }
-        protected virtual void OnMouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseLeftUp(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseRightPress(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseRightPress(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseRightUp(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseRightUp(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseLeftDown(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseLeftDown(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseMDown(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseMDown(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseMUp(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseMUp(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseWheel(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseScroll(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnMouseScroll(HandledMouseEventArgs e)
         {
             MouseScroll?.Invoke(this, e);
         }
-        protected virtual void OnLButtonDblClk(System.Windows.Forms.HandledMouseEventArgs e)
+        protected virtual void OnLButtonDblClk(HandledMouseEventArgs e)
         {
             this.OnMouseLeftPress(e);
         }
         public virtual void Select()
         {
             if (this.WindowManager.FocusedControl != null)
-            {
                 if (this.WindowManager.FocusedControl != this)
-                {
                     this.WindowManager.FocusedControl.Unselect();
-                }
-            }
 
             this.WindowManager.FocusedControl = this;
             this.OnGotFocus();
@@ -640,51 +553,30 @@ namespace Start_a_Town_.UI
         {
 
             if (this.HasChildren)
-            {
                 foreach (Control control in this.Controls)
-                {
                     control.Dispose();
-                }
-            }
         }
         public int Top
         {
-            get { return (int)this.Location.Y; }
-            set { this.Location.Y = value; }
+            get => (int)this.Location.Y;
+            set => this.Location.Y = value;
         }
-        public int Left
-        { get { return (int)this.Location.X; } }
+        public int Left => (int)this.Location.X;
 
-        public virtual int Bottom
-        { get { return (int)this.Location.Y + this.Height; } }
-        public int Right
-        { get { return (int)this.Location.X + this.Width; } }
-        public Vector2 Center
-        { get { return new Vector2(this.Width / 2, this.Height / 2); } }
-        public Vector2 BottomCenter
-        {
-            get
-            {
-                return this.TopLeft + new Vector2(this.Width / 2, this.Height);
-            }
-        }
+        public virtual int Bottom => (int)this.Location.Y + this.Height;
+        public int Right => (int)this.Location.X + this.Width;
+        public Vector2 Center => new Vector2(this.Width / 2, this.Height / 2);
+        public Vector2 BottomCenter => this.TopLeft + new Vector2(this.Width / 2, this.Height);
 
-        public Vector2 BottomLeft
-        {
-            get { return this.TopLeft + Vector2.UnitY * this.Height; }
-        }
-        public Vector2 BottomRight
-        { get { return this.TopLeft + new Vector2(this.Width, this.Height); } }
-        public Vector2 TopLeft
-        { get { return this.Location + this.LocationFunc() - this.Dimensions * this.Anchor; } }
-        public Vector2 TopRight
-        { get { return this.TopLeft + Vector2.UnitX * this.Width; } }
-        public Vector2 CenterRight
-        { get { return new Vector2(this.Right, this.Top + this.Height / 2); } }
+        public Vector2 BottomLeft => this.TopLeft + Vector2.UnitY * this.Height;
+        public Vector2 BottomRight => this.TopLeft + new Vector2(this.Width, this.Height);
+        public Vector2 TopLeft => this.Location + this.LocationFunc() - this.Dimensions * this.Anchor;
+        public Vector2 TopRight => this.TopLeft + Vector2.UnitX * this.Width;
+        public Vector2 CenterRight => new Vector2(this.Right, this.Top + this.Height / 2);
 
         public Rectangle ClientRectangle
         {
-            get { return new Rectangle((int)this.ClientLocation.X, (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height); }
+            get => new Rectangle((int)this.ClientLocation.X, (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height);
             set
             {
                 this.ClientLocation.X = value.X; this.ClientLocation.Y = value.Y;
@@ -701,30 +593,15 @@ namespace Start_a_Town_.UI
             return ((!this.IsMouseThrough) && this.BoundsScreen.Intersects(new Rectangle((int)(Controller.Instance.msCurrent.X / UIManager.Scale), (int)(Controller.Instance.msCurrent.Y / UIManager.Scale), 1, 1)));
         }
 
-        public Vector2 ScreenClientLocation
-        {
-            get { return new Vector2(this.X + this.ClientLocation.X, this.Y + this.ClientLocation.Y); }
-        }
-        public Rectangle ScreenClientRectangle
-        {
-            get { return new Rectangle(this.X + (int)this.ClientLocation.X, this.Y + (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height); }
-        }
-        public virtual Rectangle BoundsScreen
-        {
-            get { return new Rectangle((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height); }
-        }
-        public virtual Rectangle BoundsLocal
-        {
-            get { return new Rectangle((int)this.Location.X, (int)this.Location.Y, this.Width, this.Height); }
-        }
+        public Vector2 ScreenClientLocation => new Vector2(this.X + this.ClientLocation.X, this.Y + this.ClientLocation.Y);
+        public Rectangle ScreenClientRectangle => new Rectangle(this.X + (int)this.ClientLocation.X, this.Y + (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height);
+        public virtual Rectangle BoundsScreen => new Rectangle((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
+        public virtual Rectangle BoundsLocal => new Rectangle((int)this.Location.X, (int)this.Location.Y, this.Width, this.Height);
 
         protected Rectangle _ClientSize;
         public virtual Rectangle ClientSize
         {
-            get
-            {
-                return this._ClientSize;
-            }
+            get => this._ClientSize;
             set
             {
                 this._ClientSize = value;
@@ -745,12 +622,8 @@ namespace Start_a_Town_.UI
         {
             this.ClipToBounds = value;
             if (children)
-            {
                 foreach (Control control in this.Controls.Except(exclude))
-                {
                     control.SetClipToBounds(value, children, exclude);
-                }
-            }
         }
         public virtual Control SetLocation(Vector2 value)
         {
@@ -761,45 +634,30 @@ namespace Start_a_Town_.UI
         public virtual void SetOpacity(float value, bool children = false, params Control[] exclude)
         {
             if (!exclude.Contains(this))
-            {
                 this.Opacity = value;
-            }
 
             if (children)
-            {
                 foreach (Control control in this.Controls)
-                {
                     control.SetOpacity(value, children, exclude);
-                }
-            }
         }
         public virtual Control SetMousethrough(bool value, bool children = false)
         {
             this.MouseThrough = value;
             if (children)
-            {
                 foreach (Control control in this.Controls)
-                {
                     control.SetMousethrough(value, children);
-                }
-            }
 
             return this;
         }
 
         public virtual Vector2 ClientDimensions
         {
-            get
-            { return new Vector2(this.ClientSize.Width, this.ClientSize.Height); }
-            set
-            {
-                this.ClientSize = new Rectangle(0, 0, (int)value.X, (int)value.Y);
-            }
+            get => new Vector2(this.ClientSize.Width, this.ClientSize.Height);
+            set => this.ClientSize = new Rectangle(0, 0, (int)value.X, (int)value.Y);
         }
         public virtual Rectangle Size
         {
-            get
-            { return new Rectangle(0, 0, this.Width, this.Height); }
+            get => new Rectangle(0, 0, this.Width, this.Height);
             set
             {
                 var oldheight = this.Height;
@@ -845,11 +703,7 @@ namespace Start_a_Town_.UI
                 this.ClientSize = this.PreferredClientSize;
                 this.ConformToClientSize();
             }
-            if (this.Parent != null)
-            {
-                this.Parent.OnControlAdded(control);
-            }
-
+            this.Parent?.OnControlAdded(control);
             this.ControlsChangedAction();
         }
 
@@ -867,14 +721,9 @@ namespace Start_a_Town_.UI
             if (this.AutoSize)
             {
                 this.ClientSize = this.PreferredClientSize;
-
                 this.ConformToClientSize();
             }
-            if (this.Parent != null)
-            {
-                this.Parent.OnControlRemoved(control);
-            }
-
+            this.Parent?.OnControlRemoved(control);
             this.ControlsChangedAction();
         }
 
@@ -924,9 +773,7 @@ namespace Start_a_Town_.UI
             {
                 // TODO: this is no use because if i add something outside the window's client area and the window has autosize, it expands the client area screwing up hittesting
                 if (!this.ClipToBounds)
-                {
                     sb.Draw(this.Texture, this.BoundsScreen, null, c * this.Opacity, this.Rotation, this.Origin, SpriteEffects.None, 0);
-                }
                 else
                 {
                     this.BoundsScreen.Clip(this.Texture.Bounds, viewport, out Rectangle final, out Rectangle source);
@@ -988,7 +835,7 @@ namespace Start_a_Town_.UI
                     return this.HoverFunc();
                 }
             }
-            set { this._HoverText = value; }
+            set => this._HoverText = value;
         }
 
         public Action<Control> TooltipFunc;
@@ -1106,28 +953,28 @@ namespace Start_a_Town_.UI
                 this.Controls.Remove(ctrl);
             }
         }
-        public virtual void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
+        public virtual void HandleKeyUp(KeyEventArgs e)
         {
             foreach (Control control in this.Controls.ToList())
             {
                 control.HandleKeyUp(e);
             }
         }
-        public virtual void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
+        public virtual void HandleKeyDown(KeyEventArgs e)
         {
             foreach (Control control in this.Controls.ToList())
             {
                 control.HandleKeyDown(e);
             }
         }
-        public virtual void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
+        public virtual void HandleKeyPress(KeyPressEventArgs e)
         {
             foreach (Control control in this.Controls.ToList())
             {
                 control.HandleKeyPress(e);
             }
         }
-        public virtual void HandleMouseMove(System.Windows.Forms.HandledMouseEventArgs e, Rectangle viewport)
+        public virtual void HandleMouseMove(HandledMouseEventArgs e, Rectangle viewport)
         {
             if (this.HasChildren)
             {
@@ -1139,26 +986,22 @@ namespace Start_a_Town_.UI
                 }
             }
         }
-        public virtual void HandleMouseMove(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleMouseMove(HandledMouseEventArgs e)
         {
             if (this.HasChildren)
             {
                 List<Control> controls = this.Controls.ToList();
                 controls.Reverse();
                 foreach (Control c in controls)
-                {
                     c.HandleMouseMove(e);
-                }
             }
         }
-        public virtual void HandleLButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleLButtonDown(HandledMouseEventArgs e)
         {
             this.MouseLBAction?.Invoke();
 
             foreach (var c in this.Controls.ToList())
-            {
                 c.HandleLButtonDown(e);
-            }
 
             if (this.WindowManager.ActiveControl == this)
             {
@@ -1167,54 +1010,44 @@ namespace Start_a_Town_.UI
                 return;
             }
         }
-        public virtual void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleLButtonUp(HandledMouseEventArgs e)
         {
             if (this.HasChildren)
             {
                 List<Control> controls = this.Controls.ToList();
                 controls.Reverse();
                 foreach (Control c in controls)
-                {
                     c.HandleLButtonUp(e);
-                }
             }
             this.OnMouseLeftUp(e);
         }
-        public virtual void HandleMiddleUp(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleMiddleUp(HandledMouseEventArgs e)
         {
-
             if (this.HasChildren)
             {
                 List<Control> controls = this.Controls.ToList();
                 controls.Reverse();
                 foreach (Control c in controls)
-                {
                     c.HandleMiddleUp(e);
-                }
             }
             this.OnMouseMUp(e);
         }
-        public virtual void HandleMiddleDown(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleMiddleDown(HandledMouseEventArgs e)
         {
-
             if (this.HasChildren)
             {
                 List<Control> controls = this.Controls.ToList();
                 controls.Reverse();
                 foreach (Control c in controls)
-                {
                     c.HandleMiddleDown(e);
-                }
             }
             this.OnMouseMDown(e);
         }
-        public virtual void HandleRButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleRButtonDown(HandledMouseEventArgs e)
         {
             this.MouseRBAction?.Invoke();
             foreach (var c in this.Controls.ToList())
-            {
                 c.HandleRButtonDown(e);
-            }
 
             if (this.WindowManager.ActiveControl == this)
             {
@@ -1222,42 +1055,36 @@ namespace Start_a_Town_.UI
                 return;
             }
         }
-        public virtual void HandleRButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleRButtonUp(HandledMouseEventArgs e)
         {
             if (this.HasChildren)
             {
                 List<Control> controls = this.Controls.ToList();
                 controls.Reverse();
                 foreach (Control c in controls)
-                {
                     c.HandleRButtonUp(e);
-                }
             }
             this.OnMouseRightUp(e);
         }
-        public virtual void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleMouseWheel(HandledMouseEventArgs e)
         {
             if (this.HasChildren)
             {
                 List<Control> controls = this.Controls.ToList();
                 controls.Reverse();
                 foreach (Control c in controls)
-                {
                     c.HandleMouseWheel(e);
-                }
             }
             this.OnMouseWheel(e);
         }
-        public virtual void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
+        public virtual void HandleLButtonDoubleClick(HandledMouseEventArgs e)
         {
             if (this.HasChildren)
             {
                 List<Control> controls = this.Controls.ToList();
                 controls.Reverse();
                 foreach (Control c in controls)
-                {
                     c.HandleLButtonDoubleClick(e);
-                }
             }
             if (this.WindowManager.ActiveControl == this)
             {
@@ -1281,45 +1108,30 @@ namespace Start_a_Town_.UI
             this.Layer = layer;
 
             if (this.Show(layer))
-            {
                 return true;
-            }
             else
-            {
                 return !this.Hide();
-            }
         }
         public virtual bool ToggleSmart()
         {
             if (!this.IsOpen)
-            {
                 this.SmartPosition();
-            }
 
             if (this.Show())
-            {
                 return true;
-            }
             else
-            {
                 return !this.Hide();
-            }
         }
         public virtual void BringToFront()
         {
             if (this.Parent == null)
             {
                 if (this.WindowManager.Layers[this.Layer].Remove(this))
-                {
                     this.WindowManager.Layers[this.Layer].Add(this);
-                }
-
                 return;
             }
             if (this.Parent.Controls.Remove(this))
-            {
                 this.Parent.Controls.Add(this);
-            }
 
             this.Parent.BringToFront();
         }
@@ -1336,13 +1148,8 @@ namespace Start_a_Town_.UI
             this.DataSource = dataSource;
             this.GetDataAction?.Invoke(dataSource);
             if (cascade)
-            {
                 foreach (var c in this.Controls)
-                {
                     c.GetData(dataSource, cascade);
-                }
-            }
-
             return this;
         }
         public Control SetGetDataAction(Action<object> action)
@@ -1365,10 +1172,7 @@ namespace Start_a_Town_.UI
             if (!this.WindowManager.Layers[this.Layer].Contains(this))
             {
                 if (!this.WindowManager.ControlsInMemory.Contains(this))
-                {
                     this.WindowManager.ControlsInMemory.Add(this);
-                }
-
                 this.WindowManager[this.Layer].Add(this);
                 this.ConformToScreen();
                 return true;
@@ -1381,36 +1185,25 @@ namespace Start_a_Town_.UI
         {
             this.OnShowAction();
             foreach (var c in this.Controls)
-            {
                 c.OnShow();
-            }
         }
-        public bool IsOpen
-        {
-            get
-            {
-                return this.WindowManager[this.Layer].Contains(this);
-            }
-        }
+        public bool IsOpen => this.WindowManager[this.Layer].Contains(this);
 
         public virtual bool Show(UIManager manager)
         {
             if (!manager[this.Layer].Contains(this))
             {
                 if (!manager.ControlsInMemory.Contains(this))
-                {
                     manager.ControlsInMemory.Add(this);
-                }
-
                 manager[this.Layer].Add(this);
                 return true;
             }
 
             return false;
         }
-        Action _HideAction = () => { };
+        Action _hideAction = () => { };
         public virtual Action HideAction
-        { get { return this._HideAction; } set { this._HideAction = value; } }
+        { get => this._hideAction; set => this._hideAction = value; }
 
         public virtual Rectangle Bounds => this.BoundsLocal;
         public virtual Rectangle ContainerSize => this.BoundsLocal;
@@ -1420,9 +1213,7 @@ namespace Start_a_Town_.UI
         {
             this.HideAction();
             foreach (var ch in this.Controls)
-            {
                 ch.OnHidden();
-            }
         }
         public virtual bool Hide()
         {
@@ -1449,9 +1240,7 @@ namespace Start_a_Town_.UI
             this.Dispose();
             this.Hide();
             if (this.WindowManager.ControlsInMemory.Contains(this))
-            {
                 this.WindowManager.ControlsInMemory.Remove(this);
-            }
 
             return false;
         }
@@ -1459,24 +1248,18 @@ namespace Start_a_Town_.UI
         public virtual void DrawOnCamera(SpriteBatch sb, Camera camera)
         {
             foreach (var ch in this.Controls)
-            {
                 ch.DrawOnCamera(sb, camera);
-            }
         }
         public virtual void DrawWorld(MySpriteBatch sb, Camera camera)
         {
             foreach (var ch in this.Controls)
-            {
                 ch.DrawWorld(sb, camera);
-            }
         }
 
         public virtual Window ToWindow(string name = "", bool closable = true, bool movable = true)
         {
             if (this is Window)
-            {
                 return this as Window;
-            }
 
             Window window = new Window()
             {
@@ -1499,9 +1282,7 @@ namespace Start_a_Town_.UI
             this.OnGameEventAction(e);
             this.Listeners.TryGetValue(e.Type, a => a(e));
             foreach (var child in this.Controls)
-            {
                 child.OnGameEvent(e);
-            }
         }
         internal Control AnchorTo(Vector2 location, Vector2 anchor)
         {
@@ -1512,9 +1293,7 @@ namespace Start_a_Town_.UI
         public void SmartPosition()
         {
             if (this.IsOpen)
-            {
                 return;
-            }
 
             var rect = this.WindowManager.FindBestUncoveredRectangle(new Vector2(this.BoundsScreen.Width, this.BoundsScreen.Height));
             this.Location = new Vector2(rect.X, rect.Y);
@@ -1523,41 +1302,29 @@ namespace Start_a_Town_.UI
         internal virtual void OnWindowHidden(Window window)
         {
             foreach (var c in this.Controls)
-            {
                 c.OnWindowHidden(window);
-            }
         }
 
         public virtual void Update(Rectangle rectangle)
         {
             if (this.HitTest(rectangle))
-            {
                 this.OnHitTestPass();
-            }
 
             foreach (var c in this.Controls)
-            {
                 c.Update(Rectangle.Intersect(rectangle, this.BoundsScreen));
-            }
         }
 
         public virtual Control FindChild(Func<Control, bool> predicate)
         {
             foreach (var chi in this.Controls)
-            {
                 if (predicate(chi))
-                {
                     return chi;
-                }
-            }
 
             foreach (var chi in this.Controls)
             {
                 var found = chi.FindChild(predicate);
-                if (found != null)
-                {
+                if (found is not null)
                     return found;
-                }
             }
             return null;
         }

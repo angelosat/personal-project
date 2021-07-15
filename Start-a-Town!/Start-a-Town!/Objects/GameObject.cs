@@ -277,21 +277,15 @@ namespace Start_a_Town_
                 if (value == 0)
                 {
                     if (this.IsSpawned)
-                    {
-                        this.Net.Despawn(this);
-                    }
+                        this.Despawn();
 
                     if (this.Slot != null)
-                    {
                         this.Slot.Clear();
-                    }
 
                     this.Dispose();
                 }
                 else if (value < 0)
-                {
                     throw new Exception();
-                }
             }
         }
 

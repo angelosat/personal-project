@@ -165,7 +165,7 @@ namespace Start_a_Town_.Components
                 var product = plantdef.ProductCutDown.CreateFrom(plant.Body.Material ?? MaterialDefOf.LightWood).SetStackSize(yield);                                                                                                                           //,new Loot(ItemTemplate.Sapling.Factory.Create, 1, 1, 1, 3)
                 actor.Net.PopLoot(product, plant.Global, plant.Velocity);
             }
-            actor.Net.Despawn(plant);
+            plant.Despawn();
             actor.Net.DisposeObject(plant);
         }
 

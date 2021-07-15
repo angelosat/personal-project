@@ -754,7 +754,7 @@ namespace Start_a_Town_.Net
             "connection closed".ToConsole();
             Instance.Players.Remove(existing.Player);
             if (existing.Player.IsActive)
-                Instance.Despawn(existing.Player.ControllingEntity);
+                existing.Player.ControllingEntity.Despawn();
             Instance.DisposeObject(existing.Player.CharacterID);
             PacketPlayerDisconnected.Send(Instance, existing.Player.ID);
         }
@@ -793,15 +793,6 @@ namespace Start_a_Town_.Net
             return obj;
         }
 
-        /// <summary>
-        /// Removes an object from the game world without releasing its NetworkID.
-        /// </summary>
-        /// <param name="obj"></param>
-        public void Despawn(GameObject obj)
-        {
-            obj.Despawn();
-        }
-      
         /// <summary>
         /// Releases the object's networkID.
         /// </summary>
@@ -1158,16 +1149,6 @@ namespace Start_a_Town_.Net
         public void WriteToStream(params object[] args)
         {
             this.GetOutgoingStream().Write(args);
-        }
-
-        public void Spawn(GameObject obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Spawn(GameObject obj, Vector3 global)
-        {
-            throw new NotImplementedException();
         }
     }
 }

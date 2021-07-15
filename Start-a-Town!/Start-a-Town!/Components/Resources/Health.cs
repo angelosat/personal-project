@@ -80,7 +80,7 @@ namespace Start_a_Town_.Components.Resources
                     if (resource.Value <= 0)
                     {
                         e.Network.PostLocalEvent(parent, Message.Types.Death);
-                        e.Network.Despawn(parent);
+                        parent.Despawn();
                         e.Network.DisposeObject(parent);// if i call syncdispose on the server, the entity might be disposed on the client before the attack message comes
                     }
                     resource.Rec.Value = resource.Rec.Max;

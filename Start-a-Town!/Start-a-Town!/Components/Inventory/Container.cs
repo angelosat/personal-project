@@ -12,7 +12,7 @@ namespace Start_a_Town_.Components
         GameObject _Parent;
         public GameObject Parent
         {
-            get { return this._Parent; }
+            get => this._Parent;
             set
             {
                 this._Parent = value;
@@ -27,12 +27,12 @@ namespace Start_a_Town_.Components
         }
         public Container(int capacity)
         {
-            Initialize(capacity);
+            this.Initialize(capacity);
         }
         public Container(int capacity, Func<GameObject, bool> filter)
         {
             this.Filter = filter;
-            Initialize(capacity, filter);
+            this.Initialize(capacity, filter);
         }
         private void Initialize(int capacity)
         {
@@ -48,7 +48,7 @@ namespace Start_a_Town_.Components
                 this.Slots.Add(new GameObjectSlot((byte)i) { ContainerNew = this, Filter = filter });
             }
         }
-        
+
         public bool Contains(Predicate<GameObject> filter)
         {
             return (from slot in this.Slots
@@ -70,7 +70,7 @@ namespace Start_a_Town_.Components
         {
             return (from slot in this.Slots where slot.Object != null select slot).ToList();
         }
-        
+
         public IEnumerable<GameObjectSlot> GetEmpty()
         {
             return (from slot in this.Slots where slot.Object == null select slot);
@@ -82,7 +82,7 @@ namespace Start_a_Town_.Components
                 a += found.StackSize;
             return a;
         }
-        public int Capacity { get { return this.Slots.Count; } }
+        public int Capacity => this.Slots.Count;
 
         public void Write(System.IO.BinaryWriter writer)
         {
@@ -104,7 +104,7 @@ namespace Start_a_Town_.Components
                 slot.Read(reader);
             }
         }
-        
+
         public override string ToString()
         {
             return this.ID.ToString() + ":" + this.Name + ":" + this.Slots.Count.ToString();
@@ -118,7 +118,7 @@ namespace Start_a_Town_.Components
             }
             return text;
         }
-        
+
         public bool InsertObject(Entity obj)
         {
             var net = obj.Net;
@@ -142,7 +142,7 @@ namespace Start_a_Town_.Components
                 // TODO: handle case where stacksize exceeds stackmax
                 firstStack.StackSize += obj.StackSize;
                 // merge objects to existins object in slot, despawn and dispose old one
-                net?.Despawn(obj);
+                obj.Despawn();
                 net.DisposeObject(obj);
                 return true;
             }
@@ -158,7 +158,7 @@ namespace Start_a_Town_.Components
                 return false;
             }
             firstEmpty.SetObject(obj);
-            net?.Despawn(obj);
+            obj.Despawn();
             return true;
 
         }
@@ -188,7 +188,7 @@ namespace Start_a_Town_.Components
                 // TODO: handle case where stacksize exceeds stackmax
                 firstStack.StackSize += obj.StackSize;
                 // merge objects to existins object in slot, despawn and dispose old one
-                net?.Despawn(obj);
+                obj.Despawn();
                 net.DisposeObject(obj);
                 objSlot.Clear();
                 return true;
@@ -199,20 +199,17 @@ namespace Start_a_Town_.Components
                  where !slot.HasValue
                  select slot)
                  .FirstOrDefault();
-            if (firstEmpty == null)
-            {
-                // drop item?
+            if (firstEmpty is null)
                 return false;
-            }
             firstEmpty.SetObject(obj);
-            net?.Despawn(obj);
+            obj.Despawn();
             objSlot.Clear();
             return true;
         }
         public bool Remove(Entity item)
         {
             var slot = this.Slots.FirstOrDefault(s => s.Object == item);
-            if (slot == null)
+            if (slot is null)
                 return false;
             slot.Clear();
             return true;

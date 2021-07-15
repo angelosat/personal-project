@@ -21,9 +21,6 @@ namespace Start_a_Town_.Rooms
             set { }
         }
         
-        public event InputEvent MouseMove, MouseLeftPress, MouseRightPress, MouseLeftUp, MouseLeftDown;
-        
-
         public GameScreen()
         {
             this.WindowManager = new UIManager();
@@ -103,33 +100,7 @@ namespace Start_a_Town_.Rooms
             if (KeyPress != null)
                 KeyPress(sender, e);
         }
-        void OnMouseMove()
-        {
-            if (MouseMove != null)
-                MouseMove();
-        }
-        void OnMouseLeftPress()
-        {
-            if (MouseLeftPress != null)
-                MouseLeftPress();
-        }
-        void OnMouseRightPress()
-        {
-            if (MouseRightPress != null)
-                MouseRightPress();
-        }
-        void OnMouseLeftUp()
-        {
-            if (MouseLeftUp != null)
-                MouseLeftUp();
-        }
-        void OnMouseLeftDown()
-        {
-            if (MouseLeftDown != null)
-                MouseLeftDown();
-        }
-
-
+      
         void Controller_KeyPress(object sender, KeyPressEventArgs2 e)
         {
             OnKeyPress(sender, e);

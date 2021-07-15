@@ -37,16 +37,8 @@ namespace Start_a_Town_
         GameObject InstantiateObject(GameObject obj);
         void Instantiator(GameObject o);
         
-        void Spawn(GameObject obj);
-        void Spawn(GameObject obj, Vector3 global);
-
         void SyncReport(string text);
-        /// <summary>
-        /// Removes an entity from the map, but doesn't destroy it (it retains its networkID and can be referenced)
-        /// </summary>
-        /// <param name="obj"></param>
-        void Despawn(GameObject obj);
-
+       
         bool LogStateChange(int netID);
 
         void PopLoot(GameObject loot, Vector3 startPosition, Vector3 startVelocity);

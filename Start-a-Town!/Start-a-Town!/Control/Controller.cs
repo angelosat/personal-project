@@ -6,9 +6,6 @@ using UI;
 
 namespace Start_a_Town_
 {
-    public enum MouseButtons { Left, Right, Middle }
-    public enum MessageID { KeyDown, KeyUp }
-
     public class Controller
     {
         public static bool GetMouseover<T>(out T obj) where T : GameObject
@@ -31,30 +28,14 @@ namespace Start_a_Town_
         public Mouseover MouseoverBlock;
         public Mouseover MouseoverBlockNext;
 
-        public bool BuildMode;
-
         public Rectangle MouseRect;
 
         public KeyboardState ksCurrent, ksPrevious;
         public MouseState msCurrent, msPrevious;
         public Game1 game;
 
-        static Controller _Instance;
-        public static Controller Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                {
-                    _Instance = new Controller();
-                }
-
-                return _Instance;
-            }
-        }
-
-        public static event InputEvent MouseLeftPress, MouseLeftRelease, MouseLeftDown, MouseWheelUp, MouseWheelDown,
-            MouseRightPress, MouseRightDown, MouseRightRelease;
+        static Controller _instance;
+        public static Controller Instance => _instance ??= new Controller();
 
         public static event EventHandler<EventArgs> MouseOverEntityChanged, MouseOverTileChanged, KeyPressed;
         public static event EventHandler<KeyEventArgs2> KeyDown, KeyUp;
@@ -99,32 +80,6 @@ namespace Start_a_Town_
             this.MouseoverEntityNext = new();
         }
 
-        public void OnMouseLeftPress()
-        {
-            MouseLeftPress?.Invoke();
-        }
-
-        public void OnMouseLeftDown()
-        {
-            MouseLeftDown?.Invoke();
-        }
-        public void OnMouseLeftRelease()
-        {
-            MouseLeftRelease?.Invoke();
-        }
-        public void OnMouseRightPress()
-        {
-            MouseRightPress?.Invoke();
-        }
-        public void OnMouseRightDown()
-        {
-            MouseRightDown?.Invoke();
-        }
-        public void OnMouseRightRelease()
-        {
-            MouseRightRelease?.Invoke();
-        }
-
         void GetInputStates()
         {
             this.ksCurrent = Keyboard.GetState();
@@ -145,51 +100,9 @@ namespace Start_a_Town_
             this.GetInputStates();
             this.MouseRect = new Rectangle(this.msCurrent.X, this.msCurrent.Y, 1, 1);
 
-
             if (this.ksCurrent.GetPressedKeys().Count() > 0)
             {
                 this.OnKeyPressed();
-            }
-
-            if (this.msCurrent.LeftButton == ButtonState.Pressed)
-            {
-                if (this.msPrevious.LeftButton == ButtonState.Released)
-                {
-                    this.OnMouseLeftPress();
-                }
-                else
-                {
-                    this.OnMouseLeftDown();
-                }
-            }
-            else if (this.msCurrent.LeftButton == ButtonState.Released && this.msPrevious.LeftButton == ButtonState.Pressed)
-            {
-                this.OnMouseLeftRelease();
-            }
-
-            if (this.msCurrent.RightButton == ButtonState.Pressed)
-            {
-                if (this.msPrevious.RightButton == ButtonState.Released)
-                {
-                    this.OnMouseRightPress();
-                }
-                else
-                {
-                    this.OnMouseRightDown();
-                }
-            }
-            else if (this.msCurrent.RightButton == ButtonState.Released && this.msPrevious.RightButton == ButtonState.Pressed)
-            {
-                this.OnMouseRightRelease();
-            }
-
-            if (this.msCurrent.ScrollWheelValue > this.msPrevious.ScrollWheelValue)
-            {
-                this.OnMouseWheelUp();
-            }
-            else if (this.msCurrent.ScrollWheelValue < this.msPrevious.ScrollWheelValue)
-            {
-                this.OnMouseWheelDown();
             }
 
             if (this.ksCurrent.IsKeyDown(Keys.LeftAlt) || this.ksCurrent.IsKeyDown(Keys.RightAlt))
@@ -238,20 +151,6 @@ namespace Start_a_Town_
             this.MouseoverBlockNext = new Mouseover();
         }
 
-        void OnMouseWheelUp()
-        {
-            if (MouseWheelUp != null)
-            {
-                MouseWheelUp();
-            }
-        }
-        void OnMouseWheelDown()
-        {
-            if (MouseWheelDown != null)
-            {
-                MouseWheelDown();
-            }
-        }
         public bool KeyPressCheck(Keys key)
         {
             return this.ksCurrent.IsKeyDown(key) && this.ksPrevious.IsKeyUp(key);

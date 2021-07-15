@@ -25,7 +25,7 @@ namespace Start_a_Town_.Components.Interactions
             var slot = a.GetComponent<GearComponent>().Equipment.Slots.First(s => s.Object == this.TargetEquipment.Object);
             if (slot == null)
                 throw new Exception();
-            a.Net.Spawn(slot.Object, a.Global + new Vector3(0, 0, a.Physics.Height));
+            slot.Object.Spawn(a.Map, a.Global + new Vector3(0, 0, a.Physics.Height));
             slot.Clear();
         }
         public override object Clone()

@@ -198,28 +198,10 @@ namespace Start_a_Town_.Components
             }
             else
                 obj = childslot.Object;
-            parent.Net.Spawn(obj, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
+            obj.Spawn(parent.Map, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
             childslot.StackSize -= amount;
             return obj;
         }
-        private static GameObject DropInventoryItem(GameObject parent, int slotID, int amount)
-        {
-            GameObject obj;
-            var children = parent.GetChildren();
-            GameObjectSlot childslot = children[slotID];
-            
-            if (amount < childslot.Object.StackSize)
-            {
-                obj = childslot.Object.Clone();
-                obj.StackSize = amount;
-            }
-            else
-                obj = childslot.Object;
-            parent.Net.Spawn(obj, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
-            childslot.StackSize -= amount;
-            return obj;
-        }
-
         static public GameObjectSlot FindFirst(GameObject parent, Func<GameObject, bool> condition)
         {
             PersonalInventoryComponent comp;
@@ -309,7 +291,7 @@ namespace Start_a_Town_.Components
                     currentHauled.StackSize += transferAmount;
                     if (transferAmount == obj.StackSize)
                     {
-                        parent.Net.Despawn(obj);
+                        obj.Despawn();
                         parent.Net.DisposeObject(obj);
                     }
                     obj.StackSize -= transferAmount;
@@ -443,7 +425,7 @@ namespace Start_a_Town_.Components
             
             this.Throw(Vector3.Zero, parent); //or store carried object in backpack? (if available)
 
-            net.Despawn(obj);
+            obj.Despawn();
             this.HaulSlot.Object = obj;
             return true;
         }
@@ -470,7 +452,7 @@ namespace Start_a_Town_.Components
             newobj.Global = parent.Global + new Vector3(0, 0, parent.Physics.Height);
             newobj.Velocity = velocity;
             newobj.Physics.Enabled = true;
-            net.Spawn(newobj);
+            newobj.Spawn(parent.Map);
 
             if (all)
                 hauling.Clear();

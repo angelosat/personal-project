@@ -732,7 +732,7 @@ namespace Start_a_Town_.Net
             this.Players.Remove(player);
             if (Instance.Map != null && player.ControllingEntity != null)
             {
-                Instance.Despawn(Instance.NetworkObjects[player.CharacterID]);
+                Instance.NetworkObjects[player.CharacterID].Despawn();
                 Instance.DisposeObject(player.CharacterID);
             }
             Network.Console.Write(Color.Yellow, player.Name + " disconnected");
@@ -858,15 +858,6 @@ namespace Start_a_Town_.Net
             return;
         }
 
-        /// <summary>
-        /// Removes an object from the game world without releasing its NetworkID.
-        /// </summary>
-        /// <param name="obj"></param>
-        public void Despawn(GameObject obj)
-        {
-            obj.Despawn();
-        }
-        
         /// <summary>
         /// The client can't create objects, must await for a server message
         /// </summary>
@@ -1219,16 +1210,6 @@ namespace Start_a_Town_.Net
         public void WriteToStream(params object[] args)
         {
             this.GetOutgoingStream().Write(args);
-        }
-
-        public void Spawn(GameObject obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Spawn(GameObject obj, Vector3 global)
-        {
-            throw new NotImplementedException();
         }
     }
 }

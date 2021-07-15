@@ -68,7 +68,7 @@ namespace Start_a_Town_.Blocks.Bed
         }
         protected override void AddSaveData(SaveTag tag)
         {
-            tag.Add(this.PreviousStandingPosition.SaveOld("PreviousStandingPosition"));
+            tag.Add(this.PreviousStandingPosition.Save("PreviousStandingPosition"));
         }
         public override void LoadData(SaveTag tag)
         {

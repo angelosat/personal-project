@@ -82,8 +82,6 @@ namespace Start_a_Town_.Crafting
             product.ConsumeMaterials();
             actor.Map.GetBlockEntity(global)?.GetComp<BlockEntityCompRefuelable>()?.ConsumePower(actor.Map, order.Reaction.Fuel);
 
-            actor.Net.Map.EventOccured(Components.Message.Types.CraftingComplete, actor, global);
-
             order.Complete(actor);
 
             if (actor.Net is not Server server)

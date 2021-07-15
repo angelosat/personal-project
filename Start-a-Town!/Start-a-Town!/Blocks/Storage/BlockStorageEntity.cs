@@ -82,7 +82,7 @@ namespace Start_a_Town_
 
             protected override void AddSaveData(SaveTag save)
             {
-                save.Add(this.Global.SaveOld("Global"));
+                save.Add(this.Global.Save("Global"));
                 var contents = new SaveTag(SaveTag.Types.List, "Contents", SaveTag.Types.Compound);
                 foreach (var obj in this.Contents)
                 {

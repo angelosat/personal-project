@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
+﻿using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -12,10 +11,8 @@ namespace Start_a_Town_
     {
         static readonly Dictionary<int, CraftOrderNew> References = new();
 
-        public static CraftOrderNew GetOrder(int id)
-        {
-            return References[id];
-        }
+        public static CraftOrderNew GetOrder(int id) => References[id];
+
         public string Name => this.Reaction.Name;
 
         enum CraftMode { XTimes, UntilX, Forever }
@@ -24,7 +21,7 @@ namespace Start_a_Town_
         CraftMode Mode = CraftMode.XTimes;
         public int ID;
         public Reaction Reaction;
-        public Vector3 Workstation;
+        public IntVec3 Workstation;
         public MapBase Map;
         public bool HaulOnFinish;
         public bool Enabled;
@@ -38,7 +35,10 @@ namespace Start_a_Town_
             get
             {
                 if (!this.GetWorkstation().Orders.Contains(this))
+                {
                     return false;
+                }
+
                 return this.FinishMode.IsActive(this);
             }
         }
@@ -47,7 +47,7 @@ namespace Start_a_Town_
         {
 
         }
-        public CraftOrderNew(int id, int reactionID, MapBase map, Vector3 workstation)
+        public CraftOrderNew(int id, int reactionID, MapBase map, IntVec3 workstation)
             : this(Reaction.Dictionary[reactionID])
         {
             this.Map = map;
@@ -58,7 +58,9 @@ namespace Start_a_Town_
         {
             this.Reaction = reaction;
             foreach (var r in this.Reaction.Reagents)
+            {
                 this.Restrictions.Add(r.Name, new IngredientRestrictions(r.Ingredient.DefaultRestrictions));
+            }
         }
 
         internal bool IsRestricted(string name, ItemDef i)
@@ -76,17 +78,24 @@ namespace Start_a_Town_
         public bool IsAllowed(Material mat)
         {
             if (this.IsRestricted(mat))
+            {
                 return false;
+            }
+
             foreach (var r in this.Reaction.Reagents)
             {
                 var items = r.Ingredient.GetAllValidItemDefs();
                 foreach (var i in items)
+                {
                     if (i.GetValidMaterials().Contains(mat))
+                    {
                         return true;
+                    }
+                }
             }
             return false;
         }
-       
+
         public void ToggleReagentRestriction(string reagentName, int itemID)
         {
             if (!this.ReagentRestrictions.TryGetValue(reagentName, out HashSet<int> list))
@@ -95,48 +104,50 @@ namespace Start_a_Town_
                 this.ReagentRestrictions.Add(reagentName, list);
             }
             if (!list.Remove(itemID))
+            {
                 list.Add(itemID);
+            }
         }
         public void ToggleReagentRestriction(string reagentName, int itemID, bool add)
         {
             if (!this.ReagentRestrictions.TryGetValue(reagentName, out HashSet<int> list))
             {
                 if (!add)
+                {
                     return;
+                }
+
                 list = new HashSet<int>();
                 this.ReagentRestrictions.Add(reagentName, list);
             }
             if (!add)
+            {
                 list.Remove(itemID);
+            }
             else
+            {
                 list.Add(itemID);
+            }
         }
 
-        public bool IsReagentAllowed(string reagentName, int itemID)
-        {
-            if (!this.ReagentRestrictions.TryGetValue(reagentName, out HashSet<int> list))
-                return true;
-            return !list.Contains(itemID);
-        }
         public bool IsItemAllowed(string reagentName, Entity item)
         {
             return
                 !this.Restrictions[reagentName].IsRestricted(item) &&
                 this.Reaction.Reagents.Find(r => r.Name == reagentName).Filter(item);
         }
-        
+
         public void Complete(GameObject agent)
         {
             this.FinishMode.OnComplete(this);
             agent.Net.EventOccured(Components.Message.Types.OrdersUpdatedNew, this.Workstation);
         }
-        
+
         public BlockEntityCompWorkstation GetWorkstation()
         {
             return this.Map.GetBlockEntity(this.Workstation).GetComp<BlockEntityCompWorkstation>();
         }
-        
-        
+
         internal void ToggleReagentRestrictions(string reagent, ItemDef[] defs, Material[] mats, MaterialType[] matTypes)
         {
             this.Restrictions[reagent].ToggleRestrictions(defs, mats, matTypes);
@@ -146,10 +157,10 @@ namespace Start_a_Town_
         {
             return new UI(this);
         }
-        
-        CraftOrderNew(SaveTag tag):this(null, tag)
+
+        CraftOrderNew(SaveTag tag) : this(null, tag)
         {
-            
+
         }
         CraftOrderNew(MapBase map, SaveTag tag)
         {
@@ -158,17 +169,17 @@ namespace Start_a_Town_
             tag.TryGetTagValue<int>("FinishMode", p => this.FinishMode = CraftOrderFinishMode.GetMode(p));
 
             tag.TryGetTagValue<int>("Quantity", p => this.Quantity = p);
-            tag.TryGetTagValue<Vector3>("Bench", p => this.Workstation = p);
+            tag.TryGetTagValue<IntVec3>("Bench", p => this.Workstation = p);
             this.ReagentRestrictions.Clear();
             tag.TryGetTagValue<List<SaveTag>>("Restrictions", restrictionsTag =>
             {
-                
-                foreach(var rTag in restrictionsTag)
+
+                foreach (var rTag in restrictionsTag)
                 {
                     var name = rTag.GetValue<string>("Reagent");
                     rTag.TryGetTagValue<List<SaveTag>>("Items", list =>
                         {
-                            foreach(var itemTag in list)
+                            foreach (var itemTag in list)
                             {
                                 var item = (int)itemTag.Value;
                                 this.ToggleReagentRestriction(name, item);
@@ -189,18 +200,19 @@ namespace Start_a_Town_
             w.Write(this.Workstation);
             w.Write(this.ReagentRestrictions.Count);
             w.Write(this.HaulOnFinish);
-            foreach(var r in this.ReagentRestrictions)
+            foreach (var r in this.ReagentRestrictions)
             {
                 w.Write(r.Key);
                 w.Write(r.Value.Count);
                 foreach (var i in r.Value)
+                {
                     w.Write(i);
+                }
             }
 
             w.Write(this.Restrictions.Keys.ToArray());
             this.Restrictions.Values.Write(w);
         }
-
         public void Read(MapBase map, BinaryReader r)
         {
             this.Read(r);
@@ -213,7 +225,7 @@ namespace Start_a_Town_
             this.Mode = (CraftMode)r.ReadInt32();
             this.FinishMode = CraftOrderFinishMode.GetMode(r.ReadInt32());
             this.Quantity = r.ReadInt32();
-            this.Workstation = r.ReadVector3();
+            this.Workstation = r.ReadIntVec3();
             var rCount = r.ReadInt32();
             this.ReagentRestrictions.Clear();
             this.HaulOnFinish = r.ReadBoolean();
@@ -239,47 +251,36 @@ namespace Start_a_Town_
         {
             this.Read(map, r);
         }
-       
+
         internal int GetIndex()
         {
             return this.Map.Town.CraftingManager.GetOrdersNew(this.Workstation).FindIndex(c => c == this);
         }
 
-        internal bool IsValid(MapBase map)
-        {
-            var manager = map.Town.CraftingManager;
-            return manager.OrderExists(this) && this.IsActive;
-        }
-        internal bool IsCompletable(IBlockEntityCompContainer buildSite)
-        {
-            if (this.Reaction.Fuel == 0)
-                return true;
-            return buildSite.GetComp<BlockEntityCompRefuelable>()?.Fuel.Value > this.Reaction.Fuel;
-        }
         internal bool IsCompletable(Blocks.BlockEntity buildSite)
         {
             if (this.Reaction.Fuel == 0)
+            {
                 return true;
+            }
+
             return buildSite.GetComp<BlockEntityCompRefuelable>()?.Fuel.Value > this.Reaction.Fuel;
         }
         internal bool IsCompletable()
         {
             return this.IsCompletable(this.Map.GetBlockEntity(this.Workstation));
         }
+
         internal static CraftOrderNew Load(SaveTag t)
         {
             var order = new CraftOrderNew(t);
             var id = order.ID;
             if (References.TryGetValue(order.ID, out var existing))
+            {
                 return existing;
-            References[id] = order;
-            return order;
-        }
+            }
 
-        internal static CraftOrderNew Load(MapBase map, SaveTag ordertag)
-        {
-            var order = Load(ordertag);
-            order.Map = map;
+            References[id] = order;
             return order;
         }
 
@@ -306,7 +307,10 @@ namespace Start_a_Town_
                 tagReagent.Add(new SaveTag(SaveTag.Types.String, "Reagent", rest.Key));
                 var tagItems = new SaveTag(SaveTag.Types.List, "Items", SaveTag.Types.Int);
                 foreach (var item in rest.Value)
+                {
                     tagItems.Add(new SaveTag(SaveTag.Types.Int, "", item));
+                }
+
                 tagReagent.Add(tagItems);
                 tagRestrictions.Add(tagReagent);
             }
@@ -326,7 +330,7 @@ namespace Start_a_Town_
             tag.TryGetTagValue<int>("FinishMode", p => this.FinishMode = CraftOrderFinishMode.GetMode(p));
             tag.TryGetTagValue<int>("ID", out this.ID);
             tag.TryGetTagValue<int>("Quantity", p => this.Quantity = p);
-            tag.TryGetTagValue<Vector3>("Bench", p => this.Workstation = p);
+            tag.TryGetTagValue<IntVec3>("Bench", p => this.Workstation = p);
             tag.TryGetTagValue("Enabled", out this.Enabled);
             tag.TryGetTag("RestrictionsNew", t =>
                 {
@@ -402,13 +406,20 @@ namespace Start_a_Town_
                 .SetGameEventAction(e =>
                 {
                     if (e.Type == Components.Message.Types.OrderDeleted && e.Parameters[0] == DetailsUIContainer.Tag)
+                    {
                         DetailsUIContainer.Hide();
+                    }
                 });
 
             if (container.Tag == this)
+            {
                 container.Toggle();
+            }
             else
+            {
                 container.Show();
+            }
+
             container.Tag = this;
             container.GetWindow().SetTitle($"\"{this.Name}\" details");
         }

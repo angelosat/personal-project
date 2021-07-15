@@ -20,8 +20,6 @@ namespace Start_a_Town_
                         .AddOverlay("Hair", new Sprite("bodyparts/hair1") { OverlayName = "Hair" })
                         .AddOverlay("Eyes", new Sprite("bodyparts/head/eyes") { OverlayName = "Eyes" });
 
-        static readonly int distanceofbodyfromground = 23;
-
         static readonly Sprite spriteRibCage = new Sprite("mobs/skeleton/ribcage") { OverlayName = "Bone", OriginGround = new Vector2(8, 13) };                
         static readonly Sprite spriteSkull = new Sprite("mobs/skeleton/skull") { OverlayName = "Bone", OriginGround = new Vector2(4, 8) };
         static readonly Sprite spriteArm = new Sprite("mobs/skeleton/hand") { OverlayName = "Bone", OriginGround = new Vector2(2, 1) };

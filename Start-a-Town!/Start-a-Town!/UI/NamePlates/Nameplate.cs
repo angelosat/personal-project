@@ -154,24 +154,6 @@ namespace Start_a_Town_.UI
             contextable.GetContextActions(playerEntity, a);
         }
 
-        internal override void OnGameEvent(GameEvent e)
-        {
-            switch (e.Type)
-            {
-                case Message.Types.NameChanged:
-                case Message.Types.StackSizeChanged:
-                    var entity = e.Parameters[0] as GameObject;
-                    Nameplate plate;
-                    if (!Plates.TryGetValue(entity, out plate))
-                        break;
-                    plate.ClearControls();
-                    entity.OnNameplateCreated(plate);
-                    break;
-
-                default:
-                    break;
-            }
-        }
         public override Control Invalidate(bool invalidateChildren = false)
         {
             return base.Invalidate(invalidateChildren);

@@ -26,18 +26,7 @@ namespace Start_a_Town_.Towns
         {
             PacketZoneDesignation.Send(Town.Net, this.ZoneType, this.EditingZone, arg1, arg2, arg3, arg4);
         }
-        internal override void OnGameEvent(GameEvent e)
-        {
-            switch (e.Type)
-            {
-                case Components.Message.Types.ZoneRemoved:
-                    // TODO make the town have a common zone ID sequence instaed of each manager having each own?
-                    throw new Exception();
-
-                default:
-                    break;
-            }
-        }
+       
         public override ControlTool.Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
         {
             base.MouseLeftPressed(e);

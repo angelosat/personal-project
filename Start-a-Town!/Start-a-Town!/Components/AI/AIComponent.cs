@@ -102,64 +102,6 @@ namespace Start_a_Town_
             base.OnDespawn(parent);
         }
 
-        public override bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
-        {
-            if (parent.Net as Server == null) // why did i do this?
-            {
-                return true;
-            }
-
-            switch (e.Type)
-            {
-                case Message.Types.SyncAI:
-                    var seed = (int)e.Parameters[0];
-                    this.Sync(seed);
-                    break;
-
-                case Message.Types.ManageEquipment:
-                    throw new NotImplementedException();
-
-                case Message.Types.AIStart:
-                    this.Running = true;
-                    return true;
-                case Message.Types.AIStop:
-                    this.Running = false;
-                    return true;
-                case Message.Types.AIToggle:
-                    this.Running = !this.Running;
-                    return true;
-
-                case Message.Types.ObjectStateChanged:
-                    GameObject obj = e.Sender;
-                    Memory mem;
-                    if (this.Knowledge.Objects.TryGetValue(obj, out mem))
-                    {
-
-                        mem.State = Memory.States.Invalid;
-                        throw new NotImplementedException();
-                    }
-                    return true;
-
-
-
-                case Message.Types.Remember:
-                    var memObj = e.Parameters[0] as GameObject;
-                    var a = e.Parameters[1] as Action<Memory>;
-                    Memory m;
-                    if (!this.Knowledge.Objects.TryGetValue(memObj, out m))
-                    {
-                        return true;
-                    }
-
-                    a(m);
-                    return true;
-
-                default:
-                    bool result = false;
-                    return result;
-            }
-            return false;
-        }
         internal override void OnGameEvent(GameObject gameObject, GameEvent e)
         {
             if (e.Type == Message.Types.BlockChanged || e.Type == Message.Types.BlocksChanged)
@@ -211,7 +153,7 @@ namespace Start_a_Town_
         internal override void GetInterface(GameObject gameObject, Control box)
         {
             base.GetInterface(gameObject, box);
-            box.AddControls(new Interface(gameObject.RefID));
+            box.AddControls(new Interface());
         }
         internal override void MapLoaded(GameObject parent)
         {
@@ -226,49 +168,10 @@ namespace Start_a_Town_
         class Interface : GroupBox
         {
             readonly Label Label;
-            readonly AIState State;
-            readonly int EntityID;
-            string GetText()
-            {
-                return "OBSOLETE";
-                //return "Behavior: " + (this.State.Job != null ? this.State.Job.ToString() : "none");
-            }
-            public Interface(AIState state)
-            {
-                this.State = state;
-                this.Label = new Label("Behavior: ") { Width = 300, TextFunc = this.GetText };
-                this.AddControls(this.Label);
-            }
-            public Interface(int entity)
+            public Interface()
             {
                 this.Label = new Label("Behavior: ") { Width = 300 };
                 this.AddControls(this.Label);
-                this.EntityID = entity;
-            }
-            internal override void OnGameEvent(GameEvent e)
-            {
-                switch (e.Type)
-                {
-                    case Message.Types.JobAccepted:
-                        if ((int)e.Parameters[0] == this.EntityID)
-                        {
-                            this.Label.Text = "Behavior: " + (string)e.Parameters[1];
-                        }
-
-                        break;
-
-                    case Message.Types.JobComplete:
-                        if ((int)e.Parameters[0] == this.EntityID)
-                        {
-                            this.Label.Text = "Behavior: ";
-                        }
-
-                        break;
-
-
-                    default:
-                        break;
-                }
             }
         }
 

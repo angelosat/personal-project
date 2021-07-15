@@ -180,21 +180,12 @@ namespace Start_a_Town_
                 case Message.Types.InteractionInterrupted:
                     target = e.Parameters[0] as GameObject;
                     var interaction = e.Parameters[1] as Interaction;
-                    //SpeechBubble.Create(target, "Interrupted");
-                    //FloatingText.Manager.Create(target, "Interrupted" + " " + interaction.Name, ft => ft.Font = UIManager.FontBold);
                     FloatingText.Manager.Create(target, interaction.Name + " interrupted!", ft => ft.Font = UIManager.FontBold);
-                    break;
-
-                case Message.Types.ChatEntity:
-                    var entity = e.Parameters[0] as GameObject;
-                    string txt = (string)e.Parameters[1];
-                    this.Chat.Write(new Log.Entry(Log.EntryTypes.Chat, entity, txt));
-                    SpeechBubble.ShowNew(entity, txt);
                     break;
 
                 case Message.Types.ChatPlayer:
                     var name = e.Parameters[0] as string;
-                    txt = (string)e.Parameters[1];
+                    var txt = (string)e.Parameters[1];
                     this.Chat.Write(new Log.Entry(Log.EntryTypes.ChatPlayer, name, txt));
                     break;
 

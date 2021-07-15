@@ -1013,7 +1013,6 @@
     <Compile Include="Modules\Towns\Stockpiles\StockpileManager.cs" />
     <Compile Include="Modules\Towns\Town.cs" />
     <Compile Include="Modules\Towns\TownsManager.cs" />
-    <Compile Include="Modules\Towns\UI\UITowns.cs" />
     <Compile Include="UI\Primitives\Bars\Bar.cs" />
     <Compile Include="UI\CharacterCreation\ButtonColor.cs" />
     <Compile Include="Components\ColorCustomization\CharacterColors.cs" />

@@ -25,17 +25,6 @@ namespace Start_a_Town_.Towns
             this.AddControls(this.Table);
             this.SetMousethrough(true, true);
         }
-        internal override void OnGameEvent(GameEvent e)
-        {
-            switch (e.Type)
-            {
-                case Components.Message.Types.StockpileContentsUpdated:
-                    break;
-
-                default:
-                    break;
-            }
-        }
 
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Microsoft.Xna.Framework.Rectangle viewport)
         {

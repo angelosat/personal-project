@@ -68,20 +68,6 @@ namespace Start_a_Town_
             return byte.Parse(data);
         }
 
-        public override void OnMessage(GameObject parent, ObjectEventArgs e)
-        {
-            switch (e.Type)
-            {
-                case Message.Types.Shovel:
-                    this.Break(parent.Map, parent.Global);
-                    
-                    return;
-
-                default:
-                    break;
-            }
-        }
-
         AtlasDepthNormals.Node.Token GetFlowerOverlay(byte data)
         {
             var flowerIndex = data - 1; //because 0 is no flowers

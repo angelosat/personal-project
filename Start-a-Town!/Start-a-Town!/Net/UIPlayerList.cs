@@ -35,11 +35,11 @@ namespace Start_a_Town_.Net
             switch(e.Type)
             {
                 case Components.Message.Types.PlayerConnected:
-                    this.List_Players.AddItem(e.Parameters[1] as PlayerData);
+                    this.List_Players.AddItem(e.Parameters[0] as PlayerData);
                     break;
 
                 case Components.Message.Types.PlayerDisconnected:
-                    this.List_Players.RemoveItem(e.Parameters[1] as PlayerData);
+                    this.List_Players.RemoveItem(e.Parameters[0] as PlayerData);
                     break;
 
                 default:

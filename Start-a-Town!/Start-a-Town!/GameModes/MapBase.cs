@@ -271,7 +271,7 @@ namespace Start_a_Town_
                 this.GetBlock(above)?.BlockBelowChanged(this, above);
             }
         }
-        public void RemoveBlock(Vector3 global, bool notify = true)
+        public void RemoveBlock(IntVec3 global, bool notify = true)
         {
             this.RemoveBlockNew(global, notify);
         }
@@ -294,14 +294,14 @@ namespace Start_a_Town_
             return cell.Block;
         }
         
-        public Block GetBlock(Vector3 global, out Cell cell)
+        public Block GetBlock(IntVec3 global, out Cell cell)
         {
             if (!this.TryGetCell(global, out cell))
                 return null;
             return cell.Block;
         }
 
-        public BlockEntity RemoveBlockEntity(Vector3 global)
+        public BlockEntity RemoveBlockEntity(IntVec3 global)
         {
             Chunk chunk = this.GetChunk(global);
             var local = global.ToLocal();
@@ -311,7 +311,7 @@ namespace Start_a_Town_
             return null;
         }
         
-        public void AddBlockEntity(Vector3 global, BlockEntity entity)
+        public void AddBlockEntity(IntVec3 global, BlockEntity entity)
         {
             entity.CellsOccupied.Add(global);
             Chunk chunk = this.GetChunk(global);
@@ -319,21 +319,21 @@ namespace Start_a_Town_
             var local = global.ToLocal();
             chunk.AddBlockEntity(entity, local);
         }
-        public IEnumerable<KeyValuePair<Vector3, T>> GetBlockEntities<T>() where T : BlockEntity
+        public IEnumerable<KeyValuePair<IntVec3, T>> GetBlockEntities<T>() where T : BlockEntity
         {
             foreach (var be in this.GetBlockEntitiesCache())
             {
                 if (be.Value is T e)
-                    yield return new KeyValuePair<Vector3, T>(be.Key, e);
+                    yield return new KeyValuePair<IntVec3, T>(be.Key, e);
             }
         }
 
-        internal Vector3 GetFrontOfBlock(IntVec3 global)
+        internal IntVec3 GetFrontOfBlock(IntVec3 global)
         {
             var cell = this.GetCell(global);
             return global + cell.Front;
         }
-        internal Vector3 GetBehindOfBlock(IntVec3 global)
+        internal IntVec3 GetBehindOfBlock(IntVec3 global)
         {
             var cell = this.GetCell(global);
             return global + cell.Back;
@@ -613,7 +613,7 @@ namespace Start_a_Town_
                     yield return e;
             }
         }
-        public bool IsEmptyNew(Vector3 global)
+        public bool IsCellEmptyNew(IntVec3 global)
         {
             return !this.GetObjects(global).Any();
         }

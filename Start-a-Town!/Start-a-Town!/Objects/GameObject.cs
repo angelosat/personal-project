@@ -336,7 +336,6 @@ namespace Start_a_Town_
                 }
 
                 nextChunk.Objects.Add(this);
-                this.Net.EventOccured(Message.Types.EntityChangedChunk, this, nextChunk.MapCoords, lastChunk.MapCoords);
             }
 
             this.Physics.Enabled = true;

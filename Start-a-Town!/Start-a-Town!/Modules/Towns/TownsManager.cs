@@ -6,8 +6,6 @@ namespace Start_a_Town_.Towns
 {
     class TownsManager : GameComponent
     {
-        TownsUI TownsUI;
-        
         public override void Initialize()
         {
             PacketInventoryDrop.Init();
@@ -40,12 +38,6 @@ namespace Start_a_Town_.Towns
             ZoneManager.Init();
             StockpileManager.Init();
             FarmingManager.Initialize();
-        }
-
-        public override void InitHUD(Hud hud)
-        {
-            this.TownsUI = new Towns.TownsUI();
-            this.TownsUI.InitHud(hud);
         }
 
         public override void OnGameEvent(GameEvent e)

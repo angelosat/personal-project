@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
-using Start_a_Town_.Net;
 using Start_a_Town_.Crafting;
+using Start_a_Town_.Net;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -9,13 +9,13 @@ namespace Start_a_Town_
     {
         public class UI : GroupBox
         {
-            CraftOrderNew Order;
-            Label OrderName;
-            IconButton BtnClose;
-            ButtonIcon BtnUp, BtnDown;
-            Button BtnPlus, BtnMinus, BtnDetails;
-            CraftOrderDetailsInterface PanelDetails;
-            ComboBoxNewNew<CraftOrderFinishMode> ComboFinishMode;
+            readonly CraftOrderNew Order;
+            readonly Label OrderName;
+            readonly IconButton BtnClose;
+            readonly ButtonIcon BtnUp, BtnDown;
+            readonly Button BtnPlus, BtnMinus, BtnDetails;
+            readonly CraftOrderDetailsInterface PanelDetails;
+            readonly ComboBoxNewNew<CraftOrderFinishMode> ComboFinishMode;
             public UI(CraftOrderNew order)
             {
                 this.Order = order;
@@ -25,14 +25,14 @@ namespace Start_a_Town_
                 this.AddControls(this.BtnUp, this.BtnDown);
 
                 this.OrderName = new Label(order.Reaction.Name) { Location = this.BtnUp.TopRight };
-                this.ComboFinishMode = new ComboBoxNewNew<CraftOrderFinishMode>(CraftOrderFinishMode.AllModes, 100, c => c.GetString(this.Order), ChangeFinishMode, ()=>this.Order.FinishMode) { Location = this.OrderName.BottomLeft };
+                this.ComboFinishMode = new ComboBoxNewNew<CraftOrderFinishMode>(CraftOrderFinishMode.AllModes, 100, c => c.GetString(this.Order), this.ChangeFinishMode, () => this.Order.FinishMode) { Location = this.OrderName.BottomLeft };
 
-                this.AddControls(this.OrderName, 
+                this.AddControls(this.OrderName,
                     this.ComboFinishMode);
 
                 this.BtnClose = new IconButton(Icon.X) { LocationFunc = () => new Vector2(PanelTitled.GetClientLength(290), 0), BackgroundTexture = UIManager.Icon16Background };
                 this.BtnClose.Anchor = Vector2.UnitX;
-                this.BtnClose.LeftClickAction = RemoveOrder;
+                this.BtnClose.LeftClickAction = this.RemoveOrder;
                 this.AddControls(this.BtnClose);
 
                 this.BtnMinus = new Button("-", Button.DefaultHeight) { Location = this.ComboFinishMode.TopRight, LeftClickAction = Minus };

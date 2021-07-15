@@ -1,25 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
+﻿using System.IO;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components
 {
     public class PositionComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get
-            {
-                return "Position";
-            }
-        }
+        public override string ComponentName => "Position";
 
-        public float Spin;
         public GameObject ParentEntity;
         public Vector2 Direction;
         public bool Exists;
         public Vector3 Velocity;
+
         Vector3 _Global;
         public Vector3 Global
         {
@@ -47,22 +39,16 @@ namespace Start_a_Town_.Components
 
         static public Rectangle GetScreenBounds(Camera camera, SpriteComponent sprComp, Vector3 global)
         {
-            Rectangle bounds;
-            camera.CullingCheck(global.X, global.Y, global.Z, sprComp.Sprite.GetBounds(), out bounds);
+            camera.CullingCheck(global.X, global.Y, global.Z, sprComp.Sprite.GetBounds(), out Rectangle bounds);
             return bounds;
         }
 
-        internal override List<SaveTag> Save()
+        internal override void AddSaveData(SaveTag tag)
         {
-            var data = new List<SaveTag>();
-
-            data.Add(this.Global.SaveOld("Global"));
-            data.Add(this.Velocity.SaveOld("Velocity"));
-            data.Add(this.Direction.Save("Direction"));
-
-            return data;
+            this.Global.Save(tag, "Global");
+            this.Velocity.Save(tag, "Velocity");
+            this.Direction.Save(tag, "Direction");
         }
-
         internal override void Load(SaveTag data)
         {
             data.TryGetTag("Global", t => this.Global = t.LoadVector3());

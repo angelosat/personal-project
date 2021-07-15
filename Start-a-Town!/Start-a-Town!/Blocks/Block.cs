@@ -865,8 +865,7 @@ namespace Start_a_Town_
                 dropped.Slot.Clear(); // ugly
             }
             // TODO: handle case where we split the stack when dropping it. instantiate new object with server etc...
-            actor.Map.EventOccured(Message.Types.EntityPlacedItem, actor, dropped);
-
+            
             // WARNING spawning the item locally by calling its own method because we dont want the server to syncspawn, as is the case my calling server.spawn at the moment
             dropped.Spawn(actor.Map, target.Global + target.Face + target.Precise);
         }

@@ -62,21 +62,7 @@ namespace Start_a_Town_
                 return;
             }
         }
-        internal override void RemoteProcedureCall(IObjectProvider net, Vector3 vector3, Message.Types type, System.IO.BinaryReader r)
-        {
-            switch(type)
-            {
-                // TODO: move this to base Block class
-                case Message.Types.SetBlockVariation:
-                    var variation = r.ReadByte();
-                    net.Map.GetCell(vector3).Variation = variation;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
+      
         public override Material GetMaterial(byte blockdata)
         {
             return MaterialDefOf.Soil;

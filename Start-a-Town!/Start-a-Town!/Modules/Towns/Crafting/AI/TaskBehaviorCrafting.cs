@@ -139,10 +139,10 @@ namespace Start_a_Town_
         {
             var task = this.Task;
             var actor = this.Actor;
-            var benchGlobal = this.Workstation.Global;
-            var benchGlobalAbove = this.Workstation.Global.Above();
+            var benchGlobal = (IntVec3)this.Workstation.Global;
+            var benchGlobalAbove = benchGlobal.Above;
             var operatingPos = actor.Map.GetFrontOfBlock(benchGlobal);
-            var operatingPosBelow = operatingPos.Below();
+            var operatingPosBelow = operatingPos.Below;
             return task.ReserveAll(actor, IngredientIndex)
                 && actor.Reserve(benchGlobal)
                 && actor.Reserve(benchGlobalAbove)

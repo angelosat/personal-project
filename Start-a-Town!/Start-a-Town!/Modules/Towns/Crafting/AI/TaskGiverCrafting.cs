@@ -65,12 +65,12 @@ namespace Start_a_Town_
                         continue;
                     if (!actor.CanReserve(benchglobal))
                         continue;
-                    if (!actor.CanReserve(benchglobal.Above()))
+                    if (!actor.CanReserve(benchglobal.Above))
                         continue;
                     var operatingPos = map.GetFrontOfBlock(benchglobal);
                     if (!actor.CanReserve(operatingPos))
                         continue;
-                    if (!actor.CanReserve(operatingPos.Below()))
+                    if (!actor.CanReserve(operatingPos.Below))
                         continue;
                     if (order.IsActive && order.IsCompletable())
                         if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))

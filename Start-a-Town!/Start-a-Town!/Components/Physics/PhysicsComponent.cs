@@ -131,8 +131,6 @@ namespace Start_a_Town_.Components
                     Vector3 nextRounded = next.RoundXY();
                     if (nextRounded != lastGlobal.RoundXY())
                     {
-                        net.PostLocalEvent(parent, Message.Types.EntityMovedCell, lastGlobal.RoundXY(), nextRounded);
-                        net.EventOccured(Message.Types.EntityMovedCell, parent);
                         Vector3 blockGlobal = nextRounded - Vector3.UnitZ;
                         var bl = parent.Map.GetBlock(blockGlobal);
                         bl.OnSteppedOn(parent, blockGlobal);
@@ -364,7 +362,6 @@ namespace Start_a_Town_.Components
                                 return stepon;
                             }
                         }
-                        BlockCollision(net, parent, next);
                         var block = map.GetBlock(next);
                         return origin;
                     }
@@ -372,11 +369,6 @@ namespace Start_a_Town_.Components
             }
             velocity = velocity * (Vector3.One - step) + step * (step);
             return origin + step;
-        }
-
-        static void BlockCollision(IObjectProvider net, GameObject parent, Vector3 next)
-        {
-            net.PostLocalEvent(parent, Message.Types.BlockCollision, next);
         }
 
         void DetectEntityCollisions(GameObject parent, Vector3 last, Vector3 next)
@@ -412,7 +404,6 @@ namespace Start_a_Town_.Components
         {
             if (!net.Map.TryGetChunk(parent.Global, out var chunk))
             {
-                net.EventOccured(Message.Types.SpawnChunkNotLoaded, parent.Global.GetChunkCoords());
                 throw new Exception("Chunk not loaded");
             }
 

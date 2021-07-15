@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 using Start_a_Town_.Crafting;
@@ -28,11 +27,11 @@ namespace Start_a_Town_.Towns.Crafting
             PacketCraftOrderChangeMode.Init();
         }
         
-        internal IEnumerable<KeyValuePair<Vector3, List<CraftOrderNew>>> ByWorkstationNew()
+        internal IEnumerable<KeyValuePair<IntVec3, List<CraftOrderNew>>> ByWorkstationNew()
         {
-            return this.Map.GetBlockEntitiesCache().Where(e => e.Value.HasComp<BlockEntityCompWorkstation>()).Select(r => new KeyValuePair<Vector3, List<CraftOrderNew>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
+            return this.Map.GetBlockEntitiesCache().Where(e => e.Value.HasComp<BlockEntityCompWorkstation>()).Select(r => new KeyValuePair<IntVec3, List<CraftOrderNew>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
         }
-        internal BlockEntityCompWorkstation GetWorkstation(Vector3 global)
+        internal BlockEntityCompWorkstation GetWorkstation(IntVec3 global)
         {
             return this.Map.GetBlockEntity(global)?.GetComp<BlockEntityCompWorkstation>();
         }
@@ -41,7 +40,7 @@ namespace Start_a_Town_.Towns.Crafting
         int OrderSequence = 1;
 
         // TODO: add order priorities
-        readonly Dictionary<Vector3, List<CraftOrderNew>> OrdersNew = new();
+        readonly Dictionary<IntVec3, List<CraftOrderNew>> OrdersNew = new();
         readonly List<CraftOrderNew> OrdersNewNew = new();
 
         public CraftingManager(Town town)
@@ -63,7 +62,7 @@ namespace Start_a_Town_.Towns.Crafting
         }
         private static void SetOrderRestrictions(IObjectProvider net, BinaryReader r)
         {
-            var benchEntity = net.Map.Town.CraftingManager.GetWorkstation(r.ReadVector3());
+            var benchEntity = net.Map.Town.CraftingManager.GetWorkstation(r.ReadIntVec3());
             var order = benchEntity.GetOrder(r.ReadInt32());
             var reagent = r.ReadString();
             var defs = r.ReadStringArray().Select(Def.GetDef<ItemDef>).ToArray();
@@ -79,7 +78,7 @@ namespace Start_a_Town_.Towns.Crafting
 
         static void CraftingOrderToggleReagent(IObjectProvider net, BinaryReader r)
         {
-            var global = r.ReadVector3();
+            var global = r.ReadIntVec3();
             var orderID = r.ReadInt32();
             var benchEntity = net.Map.Town.CraftingManager.GetWorkstation(global);
             var order = benchEntity.GetOrder(orderID);
@@ -95,7 +94,7 @@ namespace Start_a_Town_.Towns.Crafting
         }
         static void CraftingOrderModifyPriority(IObjectProvider net, BinaryReader r)
         {
-            var global = r.ReadVector3();
+            var global = r.ReadIntVec3();
             var orderIndex = r.ReadInt32();
             var benchEntity = net.Map.Town.CraftingManager.GetWorkstation(global);
             var order = benchEntity.GetOrder(orderIndex);
@@ -108,7 +107,7 @@ namespace Start_a_Town_.Towns.Crafting
         }
         static void CraftingOrderModifyQuantity(IObjectProvider net, BinaryReader r)
         {
-            var global = r.ReadVector3();
+            var global = r.ReadIntVec3();
             var orderid = r.ReadString();
             var benchEntity = net.Map.Town.CraftingManager.GetWorkstation(global);
             var order = benchEntity.GetOrder(orderid);
@@ -120,7 +119,6 @@ namespace Start_a_Town_.Towns.Crafting
             if (order.Quantity == lastquantity)
                 return;
 
-            net.EventOccured(Message.Types.OrdersUpdated, benchEntity);
             if (net is Server server)
                 WriteOrderModifyQuantityParams(server.OutgoingStream, order, quantity);
         }
@@ -149,34 +147,14 @@ namespace Start_a_Town_.Towns.Crafting
             w.Write(order.ID);
             w.Write(increase);
         }
-        
-        public bool GetClosestFreeStation(Vector3 global, out Vector3 closest)
-        {
-            var benches = (from k in this.OrdersNew.Keys
-                       let e = this.Town.Map.GetBlockEntity(k) as BlockEntityWorkstation
-                       where e.CurrentWorker == null // does this work?
-                       orderby Vector3.DistanceSquared(k, global)
-                       select k).ToList();
-            if (benches.Count == 0)
-            {
-                closest = Vector3.Zero;
-                return false;
-            }
-            closest = benches.First();
-            return true;
-        }
-
-
-        
-        
-        
+       
         public void AddOrderNew(CraftOrderNew order)
         {
             this.OrdersNewNew.Add(order);
             this.Town.Map.EventOccured(Message.Types.OrdersUpdatedNew, order.Workstation);
         }
         
-        internal bool RemoveOrder(Vector3 station, string orderID)
+        internal bool RemoveOrder(IntVec3 station, string orderID)
         {
             var bench = this.GetWorkstation(station);
             if (bench.Orders.RemoveAll(r => r.GetUniqueLoadID() == orderID) > 0)
@@ -185,19 +163,15 @@ namespace Start_a_Town_.Towns.Crafting
                 return true;
             }
             return false;
-        }
-        
+        }    
        
         internal override void OnGameEvent(GameEvent e)
         {
             switch(e.Type)
             {
-                
-
                 case Message.Types.BlockChanged:
-                    var global = (Vector3)e.Parameters[1];
-                    if(this.OrdersNew.Remove(global)) //if a block containing a workstation is changed to another type, immediately clear all corresponding orders, no need to check for anything
-                        this.Town.Map.EventOccured(Message.Types.OrdersUpdated); // is this necessary?
+                    var global = (IntVec3)e.Parameters[1];
+                    this.OrdersNew.Remove(global); //if a block containing a workstation is changed to another type, immediately clear all corresponding orders, no need to check for anything
                     // TODO: close crafting window if it's open for the removed station
                     break;
 
@@ -205,22 +179,8 @@ namespace Start_a_Town_.Towns.Crafting
                     break;
             }
         }
-        
-        internal List<CraftOrderNew> GetOrdersNew(Vector3 workstationGlobal)
-        {
-            var benchEntity = this.Map.GetBlockEntity(workstationGlobal).GetComp<BlockEntityCompWorkstation>();
-            return benchEntity.Orders.ToList();
-        }
-
-        internal IEnumerable<Vector3> GetWorkstations()
-        {
-            return this.OrdersNew.Keys;
-        }
-        public IEnumerable<IGrouping<Vector3, CraftOrderNew>> ByWorkstation()
-        {
-            return this.OrdersNewNew.GroupBy(i => i.Workstation);
-        }
-        internal void AddOrder(Vector3 station, int reactionID)
+       
+        internal void AddOrder(IntVec3 station, int reactionID)
         {
             var order = new CraftOrderNew(this.OrderSequence++, reactionID, this.Town.Map, station);
             var benchEntity = this.Map.GetBlockEntity(station).GetComp<BlockEntityCompWorkstation>();
@@ -235,9 +195,14 @@ namespace Start_a_Town_.Towns.Crafting
                 return false;
             return orders.Contains(craftOrderNew);
         }
-        public CraftOrderNew GetOrder(Vector3 benchGlobal, int orderIndex)
+        public CraftOrderNew GetOrder(IntVec3 benchGlobal, int orderIndex)
         {
             return this.OrdersNew[benchGlobal][orderIndex];
+        }
+        internal List<CraftOrderNew> GetOrdersNew(IntVec3 workstationGlobal)
+        {
+            var benchEntity = this.Map.GetBlockEntity(workstationGlobal).GetComp<BlockEntityCompWorkstation>();
+            return benchEntity.Orders.ToList();
         }
 
         protected override void AddSaveData(SaveTag tag)

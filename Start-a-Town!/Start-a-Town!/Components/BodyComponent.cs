@@ -40,10 +40,6 @@ namespace Start_a_Town_.Components
             GameObject sender = e.Sender;
             switch (msg)
             {
-                case Message.Types.ChunkLoaded:
-                    Initialize(parent);
-                    return true;
-
                 case Message.Types.Death:
                     foreach (BodyPart slot in this.BodyParts.Values)
                         if (slot.Wearing.HasValue)

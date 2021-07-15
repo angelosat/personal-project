@@ -20,6 +20,8 @@ namespace Start_a_Town_.GameModes
         int MaxHeight { get; }
         ulong CurrentTick { get; set; }
         TimeSpan Clock { get; }
+        IObjectProvider Net { get; set; }
+
         byte[] GetSeedArray();
 
         Block.Types DefaultTile { get; set; }
@@ -37,5 +39,6 @@ namespace Start_a_Town_.GameModes
         void OnTargetSelected(IUISelection info, ISelectable selection);
 
         void ResolveReferences();
+
     }
 }

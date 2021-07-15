@@ -148,13 +148,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
         #endregion
 
         #region Updating
-        public override void Update(IObjectProvider net)
+        public override void Update()
         {
-            IconOffset = (float)Math.Sin(net.Clock.TotalMilliseconds / Engine.TicksPerSecond);
-            this.Update();
-        }
-        public void Update()
-        {
+            IconOffset = (float)Math.Sin(this.Net.Clock.TotalMilliseconds / Engine.TicksPerSecond);
+
             this.TryPerformQueuedRandomBlockUpdates();
             this.CachedAmbientColor = this.UpdateAmbientColor();
 
@@ -162,9 +159,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.CacheBlockEntities();
 
             foreach (var chunk in this.ActiveChunks.Values.ToList())
-            {
                 chunk.Update();
-            }
 
             this.Town.Update();
             Block.UpdateBlocks(this);
@@ -186,14 +181,12 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 this.RandomBlockUpdateQueue.Dequeue();
             }
         }
-        public override void Tick(IObjectProvider net)
+        public override void Tick()
         {
             this.AddTime();
             this.Regions.Update();
             foreach (var chunk in this.ActiveChunks.Values.ToList())
-            {
                 chunk.Tick(this);
-            }
 
             this.Town.Tick();
         }
@@ -558,7 +551,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public override IEnumerable<GameObject> GetObjects()
         {
-            return this.CachedObjects.Where(o => o.IsSpawned); // because an object might have despawned during an earlier operation on the current frame
+            return this.CachedObjects.Where(o => o.Exists); // because an object might have despawned during an earlier operation on the current frame
         }
         public override IEnumerable<GameObject> GetObjects(Vector3 min, Vector3 max)
         {
@@ -590,7 +583,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             var map = new StaticMap
             {
-                Net = net,
                 Name = r.ReadString(),
                 Coordinates = new Vector2(r.ReadSingle(), r.ReadSingle()),
             };
@@ -625,12 +617,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.InvalidateCell(global);
             return true;
         }
-        public override bool SetBlock(Vector3 global, Block.Types type)
-        {
-            // WARNING!!! set block with default data and variation or retain previous values?
-            return this.SetBlock(global, type, 0, 0);
-        }
-        public override bool InvalidateCell(Vector3 global)
+      
+        public override bool InvalidateCell(IntVec3 global)
         {
             if (!this.TryGetAll(global, out Chunk chunk, out Cell cell))
             {
@@ -864,18 +852,18 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.SkyDarkness;
         }
-        public override byte GetBlockData(Vector3 global)
+        public override byte GetBlockData(IntVec3 global)
         {
             return this.TryGetCell(global, out Cell cell) ? cell.BlockData : (byte)0;
         }
-        public override byte SetBlockData(Vector3 global, byte data = 0)
+        public override byte SetBlockData(IntVec3 global, byte data = 0)
         {
             Cell cell = this.GetCell(global);
             byte old = cell.BlockData;
             cell.BlockData = data;
             return old;
         }
-        public override byte GetSunLight(Vector3 global)
+        public override byte GetSunLight(IntVec3 global)
         {
             Chunk.TryGetSunlight(this, global, out byte sunlight);
             return sunlight;

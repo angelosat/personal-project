@@ -15,7 +15,7 @@ namespace Start_a_Town_
         {
             var server = net as Server;
             byte[] data = Network.Serialize(server.Map.WriteData); // why does it let me do that?
-            if (player == null)
+            if (player is null)
             {
                 foreach (var p in server.Players.GetList())
                     server.Enqueue(p, Packet.Create(player, PacketType.MapData, data, SendType.OrderedReliable));
@@ -26,19 +26,18 @@ namespace Start_a_Town_
         internal static void Receive(IObjectProvider net, BinaryReader r)
         {
             var client = net as Client;
-            if (client.Map != null)
+            if (client.Map is not null)
             {
                 // create new empty map? or throw?
                 throw new Exception("map already received");
                 //"map already received, dropping packet".ToConsole();
             }
-            if (client.World == null)
+            if (client.World is null)
                 throw new Exception("map received before world");
 
             StaticMap map = StaticMap.ReadData(client, r);
             map.World = client.World as StaticWorld;
             map.World.GetMaps().Add(map.Coordinates, map);
-            map.Net = client;
             client.Map = map;
             GameModes.GameMode.Current.MapReceived(map);
         }

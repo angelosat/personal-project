@@ -206,8 +206,6 @@ namespace Start_a_Town_.Net
         }
         int _Speed = 0;// 1;
         public int Speed { get { return this._Speed; } set { this._Speed = value; } }
-        readonly float MapSaveInterval = Engine.TicksPerSecond * 60f;
-        float MapSaveTimer = 0;
         readonly float BlockUpdateTimerMax = 1;
         float BlockUpdateTimer = 0;
 
@@ -216,21 +214,15 @@ namespace Start_a_Town_.Net
             if (!IsRunning)
                 return;
             HandleIncoming();
-            if (GameMode.Current != null)
+            if (GameMode.Current is not null)
                 GameMode.Current.Update(Instance);
-            if (Instance.Map == null)
+            if (Instance.Map is null)
                 return;
             if (!Instance.IsSaving)
             {
-                TickMap();
-                UpdateMap();
+                SendTimeStampedPackets();
+                this.Map.Update();
                 SendSnapshots(ServerClock);
-            }
-
-            Instance.MapSaveTimer--;
-            if (Instance.MapSaveTimer <= 0)
-            {
-                Instance.MapSaveTimer = Instance.MapSaveInterval;
             }
 
             /// THESE MUST BE CALLED FROM WITHIN THE GAMESPEED LOOP
@@ -256,17 +248,9 @@ namespace Start_a_Town_.Net
             Instance.OutgoingStreamUnreliable = new BinaryWriter(new MemoryStream());
             Instance.OutgoingStreamReliable = new BinaryWriter(new MemoryStream());
         }
-        
-        private static void UpdateMap()
-        {
-            if (Instance.Map != null)
-                Instance.Map.Update(Instance);
-        }
-        private void TickMap()
-        {
-            if (this.Map is null)
-                return;
 
+        private void SendTimeStampedPackets()
+        {
             var auxStream = new BinaryWriter(new MemoryStream());
             for (int i = 0; i < this.Speed; i++)
             {
@@ -274,7 +258,7 @@ namespace Start_a_Town_.Net
                 auxStream.Write(this.Map.World.CurrentTick);
                 auxStream.Write(this.CurrentTick);
                 this.Map.World.Tick(Instance);
-                this.Map.Tick(Instance);
+                this.Map.Tick();
                 var length = this.OutgoingStreamTimestamped.BaseStream.Position;
                 auxStream.Write(length);// write length
                 if (length > 0)
@@ -836,7 +820,7 @@ namespace Start_a_Town_.Net
                 return false;
             NetworkObjects.Remove(netID);
 
-            if (o.IsSpawned)
+            if (o.Exists)
                 o.Despawn();
             foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)
                 this.DisposeObject(child);
@@ -845,11 +829,9 @@ namespace Start_a_Town_.Net
        
         static public void InstantiateMap(MapBase map)
         {
-            if (map is null)
-                return;
             World = map.World;
+            World.Net = Instance;
             Instance.Map = map;
-            Instance.Map.Net = Instance;
 
             foreach (var ch in map.GetActiveChunks().Values)
                 InstantiateChunk(ch);

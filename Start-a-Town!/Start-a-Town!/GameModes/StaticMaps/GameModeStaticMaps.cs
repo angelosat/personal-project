@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Collections.Concurrent;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
-using Start_a_Town_.Towns;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
+using Start_a_Town_.Towns;
+using Start_a_Town_.UI;
 using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
     class GameModeStaticMaps : GameMode
     {
-        CommandParser Parser = new CommandParser();
+        readonly CommandParser Parser = new CommandParser();
 
         UIDialogLoad DialogLoad;
 
@@ -29,10 +27,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             PacketWorld.Init();
         }
 
-        
         public override void OnIngameMenuCreated(IngameMenu menu)
         {
-            Button btn_save = new Button("Save", width: menu.PanelButtons.ClientSize.Width) { LeftClickAction = IngameSave };
+            var btn_save = new Button("Save", width: menu.PanelButtons.ClientSize.Width) { LeftClickAction = IngameSave };
             menu.PanelButtons.Controls.Insert(0, btn_save);
             menu.PanelButtons.AlignVertically();
             menu.SizeToControl(menu.PanelButtons);
@@ -59,7 +56,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var tablePanel = table.ToPanel();
 
             getSaveName = new DialogInput("Enter save name", saveNew, 300, map.World.Name);
-           
+
             groupBox.AddControlsVertically(tablePanel, new Button("Create new save", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
 
             groupBox.ToWindow("Save", true, false).ShowDialog();
@@ -81,7 +78,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     msgBoxOverwrite.ShowDialog();
                 }
                 else
+                {
                     save();
+                }
 
                 void save()
                 {
@@ -94,7 +93,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
                         tag.WriteWithRefs(writer);
 
                         if (!Directory.Exists(directory))
+                        {
                             Directory.CreateDirectory(directory);
+                        }
 
                         Chunk.Compress(stream, workingDir + fullPath);
 
@@ -111,7 +112,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return true;
         }
-    
+
         public override void ParseCommand(IObjectProvider net, string command)
         {
             this.Parser.Execute(net, command);
@@ -131,19 +132,25 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var player = server.GetPlayer(playerid);
             player.SentChunks.Remove(vec);
         }
-        
+
         internal override void Update(Server server)
         {
-            SendPendingChunks(server);
+            this.SendPendingChunks(server);
         }
         private void SendPendingChunks(Server server)
         {
             foreach (var pl in server.Players.GetList())
             {
                 if (pl.SentChunks.Count > 0)
+                {
                     continue;
+                }
+
                 if (pl.PendingChunks.Count == 0)
+                {
                     continue;
+                }
+
                 var pending = pl.PendingChunks;
                 var first = pending.First();
                 pending.Remove(first.Key);
@@ -175,21 +182,27 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         internal override Control Load()
         {
-            if (DialogLoad == null)
-                DialogLoad = new UIDialogLoad();
-            DialogLoad.Populate();
-            return DialogLoad;
+            if (this.DialogLoad == null)
+            {
+                this.DialogLoad = new UIDialogLoad();
+            }
+
+            this.DialogLoad.Populate();
+            return this.DialogLoad;
         }
         internal override Control GetNewGameGui()
         {
             return new GuiNewGame();
         }
-        static string SavePath = GlobalVars.SaveDir + "/Worlds/";
+        static readonly string SavePath = GlobalVars.SaveDir + "/Worlds/";
         internal static FileInfo[] GetSaves()
         {
             DirectoryInfo directory = new DirectoryInfo(SavePath);
             if (!Directory.Exists(directory.FullName))
+            {
                 Directory.CreateDirectory(directory.FullName);
+            }
+
             return directory.GetFiles().OrderByDescending(s => s.CreationTime).ToArray();
         }
 

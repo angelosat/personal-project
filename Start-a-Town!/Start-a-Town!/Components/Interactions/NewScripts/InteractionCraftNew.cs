@@ -86,7 +86,7 @@ namespace Start_a_Town_.Crafting
 
             if (actor.Net is not Server server)
                 return null;
-            if (!product.Product.IsSpawned) // HACK for when the product is one of the ingredients (already existing on top of the workstation)
+            if (!product.Product.Exists) // HACK for when the product is one of the ingredients (already existing on top of the workstation)
             {
                 product.Product.Global = global + Vector3.UnitZ;
                 product.Product.SyncInstantiate(server);

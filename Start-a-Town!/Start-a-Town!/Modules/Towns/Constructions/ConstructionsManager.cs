@@ -10,11 +10,9 @@ using System.IO;
 
 namespace Start_a_Town_.Towns.Constructions
 {
-    public class ConstructionsManager : TownComponent, ISelectable
+    public class ConstructionsManager : TownComponent
     {
         public override string Name => "Constructions";
-
-        public bool Exists => true;
 
         static public ConstructionCategoryWalls Walls = new();
         static public ConstructionCategoryDoors Doors = new();

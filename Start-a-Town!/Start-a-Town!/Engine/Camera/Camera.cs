@@ -1010,7 +1010,7 @@ namespace Start_a_Town_
             var actor = map.Net.GetPlayer()?.ControllingEntity;
             if (actor != null)
             {
-                if (actor.IsSpawned)
+                if (actor.Exists)
                 {
                     Sprite sprite = actor.GetSprite();
                     Rectangle spriteBounds = sprite.GetBounds();
@@ -1202,7 +1202,7 @@ namespace Start_a_Town_
                     GameObject mouseover = toolManager.ActiveTool.Target.Object;
                     if (mouseover != null)
                     {
-                        if (mouseover.IsSpawned)
+                        if (mouseover.Exists)
                         {
                             mouseover.DrawMouseover(SpriteBatch, this);
                         }

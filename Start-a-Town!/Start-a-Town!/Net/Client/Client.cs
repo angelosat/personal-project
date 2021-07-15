@@ -212,7 +212,7 @@ namespace Start_a_Town_.Net
                             //ProcessEvents();
                             //ClientClock = ClientClock.Add(TimeSpan.FromMilliseconds(Server.ClockIntervalMS));
                         }
-                        this.Map.Update(Instance);
+                        this.Map.Update();
                         //ProcessEvents();
                         UpdateWorldState();
                     }
@@ -272,7 +272,7 @@ namespace Start_a_Town_.Net
             this.HandleTimestamped();
             this.Map.UpdateParticles();
             this.Map.World.Tick(Instance);
-            this.Map.Tick(Instance);
+            this.Map.Tick();
         }
 
         private void SendAcks()
@@ -693,7 +693,7 @@ namespace Start_a_Town_.Net
             if (!NetworkObjects.TryGetValue(netID, out GameObject o))
                 return false;
             NetworkObjects.Remove(netID);
-            if (o.IsSpawned)
+            if (o.Exists)
                 o.Despawn();
             foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)
                 this.DisposeObject(child);
@@ -867,13 +867,6 @@ namespace Start_a_Town_.Net
             obj.Despawn();
         }
         
-        void SpawnObject(GameObject obj)
-        {
-            if (obj.RefID == 0)
-                return;
-            obj.Spawn(Instance);
-        }
-     
         /// <summary>
         /// The client can't create objects, must await for a server message
         /// </summary>

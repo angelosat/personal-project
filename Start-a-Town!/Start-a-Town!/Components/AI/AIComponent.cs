@@ -76,32 +76,20 @@ namespace Start_a_Town_
             var parent = this.Parent;
             var net = parent.Net;
             if (net is Client) // do i want to run some deterministic behaviors locally too? UPDATE: NO
-            {
                 return;
-            }
 
             if (!this.Running)
-            {
                 return;
-            }
 
             if (this.Enabled)
-            {
                 this.Root.Execute(parent as Actor, this.State);
-            }
-
-            return;
         }
 
-        public override void OnSpawn(IObjectProvider net, GameObject parent)
+        public override void OnSpawn()
         {
-            this.State.Leash = parent.Global;
+            this.State.Leash = this.Parent.Global;
         }
-        public override void OnDespawn(GameObject parent)
-        {
-            base.OnDespawn(parent);
-        }
-
+      
         internal override void OnGameEvent(GameObject gameObject, GameEvent e)
         {
             if (e.Type == Message.Types.BlockChanged || e.Type == Message.Types.BlocksChanged)

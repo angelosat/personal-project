@@ -28,7 +28,7 @@ namespace Start_a_Town_.AI.Behaviors
             state.NearbyEntities = (
                 from memory in state.Knowledge.Objects.Values
                 let obj = memory.Object
-                where obj.IsSpawned
+                where obj.Exists
                 // filter by range in relation to personality (for example, a function of determination and need score?)
                 orderby Vector3.Distance(parent.Global, obj.Global)
                 select obj).ToList();

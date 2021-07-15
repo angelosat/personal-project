@@ -49,6 +49,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
         ulong currentTick;
         public ulong CurrentTick { get => this.currentTick; set => this.currentTick = value; }
 
+        public IObjectProvider Net { get; set; }
+
         PopulationManager PopulationManager;
         public void Tick(IObjectProvider net)
         {
@@ -89,7 +91,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 (byte)this.Seed};
         }
 
-        public StaticWorld()
+        StaticWorld()
         {
             this.MaxHeight = 128;
             this.DefaultTile = Block.Types.Soil;
@@ -99,16 +101,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.PopulationManager = new PopulationManager(this);
         }
 
-        public StaticWorld(WorldArgs a)
-            : this()
-        {
-            this.Name = a.Name;
-            this.Seed = a.Seed;
-            this.Random = new Random(a.Seed);
-            Lighting = a.Lighting;
-            this.Mutators = a.Mutators;
-            this.DefaultTile = a.DefaultTile;
-        }
         [Obsolete]
         public StaticWorld(string name, int seed, IEnumerable<Terraformer> mutators, Block.Types defaultTile = Block.Types.Soil)
             : this()
@@ -176,10 +168,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
         }
 
-        static public StaticWorld Create(WorldArgs a)
-        {
-            return new StaticWorld(a);
-        }
         public MapBase CreateMap(Vector2 mapCoords)
         {
             return new StaticMap(this, mapCoords);

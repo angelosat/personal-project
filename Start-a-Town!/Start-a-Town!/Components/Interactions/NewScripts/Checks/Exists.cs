@@ -10,7 +10,7 @@
 
         public override bool Condition(GameObject actor, TargetArgs target)
         {
-            return target.Object.IsSpawned;
+            return target.Object.Exists;
         }
     }
 }

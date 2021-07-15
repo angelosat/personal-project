@@ -808,7 +808,7 @@ namespace Start_a_Town_
                 switch (this.Type)
                 {
                     case TargetType.Entity:
-                        return this.Object != null && this.Object.IsSpawned;
+                        return this.Object != null && this.Object.Exists;
 
                     case TargetType.Position:
                         return this.GetBlock() != BlockDefOf.Air;

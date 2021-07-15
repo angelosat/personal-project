@@ -15,7 +15,7 @@ namespace Start_a_Town_
                 var plant = target.Object as Plant;
                 if (plant == null)
                     return true;
-                if (!plant.IsSpawned)
+                if (!plant.Exists)
                     return true;
                 if (!plant.IsHarvestable)
                     return true;

@@ -132,7 +132,7 @@ namespace Start_a_Town_
 
         static public bool IsValidStorage(GameObject item, TargetArgs destination)
         {
-            if (destination.HasObject && (destination.Object == null || !destination.Object.IsSpawned || destination.Object.IsStackFull))
+            if (destination.HasObject && (destination.Object == null || !destination.Object.Exists || destination.Object.IsStackFull))
                 return false;
             var global = destination.Global;
             var targetStockpile = destination.Map.Town.ZoneManager.GetZoneAt<Stockpile>(global - Vector3.UnitZ);

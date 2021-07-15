@@ -157,13 +157,12 @@ namespace Start_a_Town_
             tag.TryGetTagValue<string>("LastName", v => this.LastName = v);
         }
        
-        public override void OnDespawn(
-                    GameObject parent)
+        public override void OnDespawn()
         {
-            NpcDirectory.Remove(parent);
+            NpcDirectory.Remove(this.Parent);
         }
 
-        internal override void GetQuickButtons(UI.UISelectedInfo info, GameObject parent)
+        internal override void GetQuickButtons(UISelectedInfo info, GameObject parent)
         {
             if (parent.IsPlayerControlled)
                 return;

@@ -39,11 +39,10 @@ namespace Start_a_Town_
             }
         }
 
-        public override void OnSpawn(IObjectProvider net, GameObject parent)
+        public override void OnSpawn()
         {
-            base.OnSpawn(net, parent);
-            ResetBones(parent);
-
+            base.OnSpawn();
+            ResetBones(this.Parent);
         }
 
         public Container Equipment = new Container() { Name = "Equipment" };
@@ -155,7 +154,7 @@ namespace Start_a_Town_
                 return false;
 
             GameObjectSlot objSlot =
-                t.Object.IsSpawned ?
+                t.Object.Exists ?
                 t.Object.ToSlotLink() :
                 (from slot in a.GetChildren() where slot.HasValue select slot).FirstOrDefault(foo => foo.Object == t.Object);
 

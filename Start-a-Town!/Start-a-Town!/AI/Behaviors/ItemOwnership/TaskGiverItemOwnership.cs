@@ -20,7 +20,7 @@ namespace Start_a_Town_.AI.Behaviors.ItemOwnership
             // then continue to try and go pick up any owned items in the world
             foreach (var item in possesions)
             {
-                if (!item.IsSpawned)
+                if (!item.Exists)
                     continue;
                 if (!actor.Inventory.Contains(item))
                 {

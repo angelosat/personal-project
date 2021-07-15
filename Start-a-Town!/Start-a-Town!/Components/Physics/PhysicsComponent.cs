@@ -122,7 +122,7 @@ namespace Start_a_Town_.Components
             parent.Velocity = velocity;
 
             // log state change 
-            if (parent.IsSpawned) // must check because entity might have despawned itself during it's update 
+            if (parent.Exists) // must check because entity might have despawned itself during it's update 
             {
                 if (lastGlobal != parent.Global)
                 {
@@ -400,34 +400,14 @@ namespace Start_a_Town_.Components
             }
         }
 
-        public override void OnSpawn(IObjectProvider net, GameObject parent)
+        public override void OnSpawn()
         {
-            if (!net.Map.TryGetChunk(parent.Global, out var chunk))
-            {
-                throw new Exception("Chunk not loaded");
-            }
-
-            Chunk.AddObject(parent, net.Map);
-            parent.GetComponent<PositionComponent>().Exists = true;
             this.Enabled = true;
         }
 
-        public override void OnDespawn(GameObject parent)
-        {
-            if (parent.IsSpawned)
-            {
-                if (!Chunk.RemoveObject(parent.Map, parent))
-                {
-                    throw new Exception();
-                }
-            }
-
-            parent.IsSpawned = false;
-        }
         public override bool HandleMessage(GameObject parent, ObjectEventArgs e)
         {
             Message.Types msg = e.Type;
-            GameObject sender = e.Sender;
             switch (msg)
             {
                 case Message.Types.Attacked:

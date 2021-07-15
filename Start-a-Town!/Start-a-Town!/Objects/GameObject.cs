@@ -104,8 +104,8 @@ namespace Start_a_Town_
 
         public IObjectProvider Net;
 
-        MapBase _Map;
-        public MapBase Map { get { return this.Parent?.Map ?? this._Map; } set { this._Map = value; } }
+        MapBase _map;
+        public MapBase Map { get { return this.Parent?.Map ?? this._map; } set { this._map = value; } }
 
         public Town Town => this.Net.Map.Town;
 
@@ -342,17 +342,7 @@ namespace Start_a_Town_
             return this;
         }
         public bool IsForbidden;
-        public bool IsSpawned
-        {
-            get
-            {
-                return this.Transform.Exists;
-            }
-            set
-            {
-                this.Transform.Exists = value;
-            }
-        }
+        public bool IsSpawned => this._map is not null;
         public bool IsReserved { get { return this.Town.ReservationManager.IsReserved(this); } }
         public bool IsPlayerControlled { get { return this.Net.GetPlayers().Any(p => p.ControllingEntity == this); } }
         public virtual bool IsHaulable
@@ -741,37 +731,45 @@ namespace Start_a_Town_
         public void Despawn()
         {
             if (!this.IsSpawned)
-            {
                 return;
-            }
-
+            if (!Chunk.RemoveObject(this.Map, this))
+                throw new Exception();
+            this._map = null;
             foreach (var comp in this.Components.Values.ToList())
             {
-                comp.OnDespawn(this);
+                comp.OnDespawn();
             }
 
             this.Map.EventOccured(Message.Types.EntityDespawned, this);
             //this.Unreserve(); // UNDONE dont unreserve here because the ai might continue manipulating (placing/carrying) the item during the same behavior
         }
 
-        public virtual void Spawn(IObjectProvider net)
+        protected virtual void OnSpawn(MapBase map)
         {
-            this.Net = net;
+            this.Net = map.Net;
             this.Parent = null;
+
+            if (!map.TryGetChunk(this.Global, out var chunk))
+                throw new Exception("Chunk not loaded");
+
+            Chunk.AddObject(this, map);
+
             foreach (var comp in this.Components.Values)
-            {
-                comp.OnSpawn(net, this);
-            }
+                comp.OnSpawn();
 
             this.Map.EventOccured(Message.Types.EntitySpawned, this);
         }
         public void Spawn(MapBase map, Vector3 global)
         {
+            this.Global = global;
+            this.Spawn(map);
+        }
+        public void Spawn(MapBase map)
+        {
             var net = map.Net;
             this.Net = net;
-            this.Global = global;
             this.Map = map;
-            this.Spawn(net);
+            this.OnSpawn(map);
         }
         public void SyncSpawn(MapBase map, Vector3 global)
         {
@@ -1118,12 +1116,9 @@ namespace Start_a_Town_
 
         public List<Interaction> GetAvailableTasks()
         {
-            List<Interaction> list = new List<Interaction>();
+            var list = new List<Interaction>();
             foreach (var c in this.Components.Values)
-            {
                 c.GetAvailableTasks(this, list);
-            }
-
             return list;
         }
 
@@ -1131,10 +1126,8 @@ namespace Start_a_Town_
 
         public bool Dispose()
         {
-            foreach (var comp in this.Components.Values.ToList())
-            {
-                comp.OnDispose(this);
-            }
+            foreach (var comp in this.Components.Values)
+                comp.OnDispose();
 
             this.Net.EventOccured(Message.Types.ObjectDisposed, this);
             return this.Net.DisposeObject(this);
@@ -1150,9 +1143,7 @@ namespace Start_a_Town_
              .ForEach(c => c.Instantiate(instantiator));
 
             foreach (var comp in this.Components.Values)
-            {
-                comp.Instantiate(this, instantiator);
-            }
+                comp.Instantiate(instantiator);
 
             return this;
         }
@@ -1398,13 +1389,8 @@ namespace Start_a_Town_
             mysb.Flush();
         }
 
-        public bool Exists
-        {
-            get
-            {
-                return this.IsSpawned;
-            }
-        }
+        public bool Exists => this.IsSpawned;
+       
 
         internal void MoveOrder(TargetArgs target, bool enqueue)
         {

@@ -515,9 +515,9 @@ namespace Start_a_Town_
         {
             return this.GetVisitorProperties().AcceptQuest(quest);
         }
-        public override void Spawn(IObjectProvider net)
+        protected override void OnSpawn(MapBase map)
         {
-            base.Spawn(net);
+            base.OnSpawn(map);
             if (this.GetVisitorProperties() is VisitorProperties props)
                 props.OffsiteArea = null;
         }

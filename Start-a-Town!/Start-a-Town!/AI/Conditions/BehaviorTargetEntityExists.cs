@@ -18,7 +18,7 @@ namespace Start_a_Town_.AI.Behaviors
             var target = state[this.TargetKey] as TargetArgs;
             if (target.Type == TargetType.Position)
                 return BehaviorState.Success;
-            var exists = target.Object != null ? target.Object.IsSpawned : false;
+            var exists = target.Object != null ? target.Object.Exists : false;
             return exists ? BehaviorState.Success : BehaviorState.Fail;
         }
         public override object Clone()

@@ -19,7 +19,7 @@ namespace Start_a_Town_
             var isvalid =
                 !this.Task.Tool.IsForbidden &&
                 !tree.IsForbidden &&
-                tree != null && tree.IsSpawned &&
+                tree != null && tree.Exists &&
                 this.Actor.Map.Town.ChoppingManager.IsChoppingTask(tree);
             return !isvalid;
         }

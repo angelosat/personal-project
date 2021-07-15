@@ -1,30 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
     class GuiNewGame : GroupBox
     {
         public Action<IWorld> Callback { get; set; }
-        TextBox Txt_Seed;
-        Panel Panel_Main;
-        GroupBox Tab_World;
+
+        readonly TextBox Txt_Seed;
+        readonly Panel Panel_Main;
+        readonly GroupBox Tab_World;
         private StaticMap.MapSize SelectedSize;
 
         public GuiNewGame()
         {
-            AutoSize = true;
+            this.AutoSize = true;
 
-            Tab_World = new GroupBox();
-            Label label_mapsize = new Label("Map size");
+            this.Tab_World = new GroupBox();
+            var label_mapsize = new Label("Map size");
 
-            Label lbl_seed = new Label("Seed");
-            Txt_Seed = new TextBox(150);
+            var lbl_seed = new Label("Seed");
+            this.Txt_Seed = new(150);
             this.Txt_Seed.Text = Path.GetRandomFileName().Replace(".", "");
             this.Txt_Seed.InputFilter = char.IsLetterOrDigit;
 
@@ -33,13 +34,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 HoverText = "Randomize",
                 BackgroundTexture = UIManager.Icon16Background,
                 Name = "Randomize seed",
-                Location = Txt_Seed.TopRight,
+                Location = this.Txt_Seed.TopRight,
                 Icon = new Icon(UIManager.Icons16x16, 1, 16),
-                LeftClickAction = () => this.Txt_Seed.Text = Path.GetRandomFileName().Replace(".", "")  
+                LeftClickAction = () => this.Txt_Seed.Text = Path.GetRandomFileName().Replace(".", "")
             };
             var seedBox = new GroupBox();
             seedBox.AddControls(
-                Txt_Seed, btn_random);
+                this.Txt_Seed, btn_random);
 
 
             var defaultSizes = StaticMap.MapSize.GetList();
@@ -47,14 +48,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => this.SelectedSize = s, (c) => this.SelectedSize);
 
             this.Tab_World.AddControlsVertically(
-                seedBox.ToPanelLabeled("Seed"), 
+                seedBox.ToPanelLabeled("Seed"),
                 comboSize.ToPanelLabeled("Map Size"));
 
-            Panel_Main = new Panel() { AutoSize = true };
-            
-            Panel_Main.Controls.Add(Tab_World);
+            this.Panel_Main = new Panel() { AutoSize = true };
 
-            Panel panel_button = new Panel() { Location = Panel_Main.BottomLeft, AutoSize = true };
+            this.Panel_Main.Controls.Add(this.Tab_World);
+
+            Panel panel_button = new Panel() { Location = this.Panel_Main.BottomLeft, AutoSize = true };
             panel_button.AutoSize = true;
             Button btn_create = new Button(Vector2.Zero, panel_button.ClientSize.Width, "Create");
             btn_create.LeftClickAction = () =>
@@ -62,8 +63,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
                 var actorsui = new UIActorCreation(actors);
-                var btnstart = new Button("Start") { LeftClickAction = () => btn_Create_Click(actors.ToArray()) };
-                var btnback = new Button("Back") { LeftClickAction = ()=> { actorsui.GetWindow().Hide(); this.GetWindow().Show(); } };
+                var btnstart = new Button("Start") { LeftClickAction = () => this.btn_Create_Click(actors.ToArray()) };
+                var btnback = new Button("Back") { LeftClickAction = () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); } };
                 actorsCreateBox.AddControlsVertically(actorsui, btnstart, btnback);
                 var createActorsWindow = new Window(actorsCreateBox) { Closable = false, Movable = false, Previous = this.GetWindow() };
                 createActorsWindow.LocationFunc = () => UIManager.Center;
@@ -71,39 +72,45 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 createActorsWindow.Show();
                 this.GetWindow().Hide();
             };
-            
+
             panel_button.Controls.Add(btn_create);
 
             this.Controls.Add(
-                panel_button, Panel_Main
-            
+                panel_button, this.Panel_Main
+
                 );
         }
 
-        static public DirectoryInfo[] GetWorlds()
+        public static DirectoryInfo[] GetWorlds()
         {
             DirectoryInfo directory = new DirectoryInfo(GlobalVars.SaveDir + "/Worlds/Static/");
             if (!Directory.Exists(directory.FullName))
+            {
                 Directory.CreateDirectory(directory.FullName);
+            }
+
             return directory.GetDirectories();
         }
 
         void tab_Click(object sender, EventArgs e)
         {
-            Panel_Main.Controls.Clear();
+            this.Panel_Main.Controls.Clear();
             global::Start_a_Town_.UI.Control panel = (sender as global::Start_a_Town_.UI.Control).Tag as Control;
             if (panel == null)
+            {
                 return;
-            Panel_Main.AddControls(panel);
+            }
+
+            this.Panel_Main.AddControls(panel);
         }
 
         void btn_Create_Click(Actor[] actors)
         {
             StaticWorld world;
-            var seedString = Txt_Seed.Text;
+            var seedString = this.Txt_Seed.Text;
             world = new StaticWorld(seedString, Terraformer.Defaults);
 
-            Tag = world;
+            this.Tag = world;
 
             var size = this.SelectedSize;
 
@@ -111,7 +118,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var loadingToken = new StaticMapLoadingProgressToken();
             var loadingDialog = new DialogLoading();
             loadingDialog.ShowDialog();
-            Hide();
+            this.Hide();
             Net.Server.Start();
 
             Task.Factory.StartNew(() =>
@@ -128,7 +135,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
                 Net.Server.InstantiateMap(map); // is this needed??? YES!!! it enumerates all existing entities in the network
                 foreach (var a in actors)
+                {
                     map.Net.Instantiate(a);
+                }
+
                 map.SpawnStartingActors(actors);
 
                 Net.Client.Instance.Connect(localHost, "host", a => { LobbyWindow.Instance.Console.Write("Connected to " + localHost); }); // TODO dont manipulate the gui in concurrent threads!!!!!

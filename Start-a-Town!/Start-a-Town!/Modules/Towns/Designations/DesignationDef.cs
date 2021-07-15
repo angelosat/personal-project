@@ -39,9 +39,9 @@ namespace Start_a_Town_
             Register(Switch);
             Register(Null);
         }
-        public Func<MapBase, Vector3, bool> IsValid = (map, global) => true;
+        public Func<MapBase, IntVec3, bool> IsValid = (map, global) => true;
 
-        public DesignationDef(string name, QuickButton icon, Func<MapBase, Vector3, bool> isValid) : base(name)
+        public DesignationDef(string name, QuickButton icon, Func<MapBase, IntVec3, bool> isValid) : base(name)
         {
             this.IconAdd = icon;
             this.IsValid = isValid;

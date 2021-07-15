@@ -78,7 +78,7 @@ namespace Start_a_Town_
         public void Tick()
         {
             var actor = this.Actor;
-            if (actor.IsSpawned)
+            if (actor.Exists)
                 return;
             if (this.OffsiteTick < OffsiteTickLength)
             {
@@ -88,7 +88,7 @@ namespace Start_a_Town_
             this.OffsiteTick = 0;
 
             this.TryVisitTown();
-            if (actor.IsSpawned) // return if the actor is now spawned as result of the tryvisit function
+            if (actor.Exists) // return if the actor is now spawned as result of the tryvisit function
                 return;
 
             var net = actor.Net;
@@ -110,7 +110,7 @@ namespace Start_a_Town_
                 return;
 
 
-            var isVisiting = actor.IsSpawned;
+            var isVisiting = actor.Exists;
             var map = Net.Server.Instance.Map as StaticMap;
             var world = this.World;
             if (isVisiting)
@@ -284,8 +284,8 @@ namespace Start_a_Town_
         public void Write(BinaryWriter w)
         {
             w.Write(this.Actor.RefID);
-            w.Write(this.Actor.IsSpawned);
-            if (!this.Actor.IsSpawned)
+            w.Write(this.Actor.Exists);
+            if (!this.Actor.Exists)
                 this.Actor.Write(w);
             w.Write(this.TownApprovalRating);
             w.Write(this.ShopBlacklist);
@@ -334,7 +334,7 @@ namespace Start_a_Town_
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             this.Actor.RefID.Save(tag, "ActorID");
-            if (!this.Actor.IsSpawned)
+            if (!this.Actor.Exists)
                 tag.Add(this.Actor.Save("ActorObject"));
             this.TownApprovalRating.Save(tag, "TownApprovalRating");
             this.ShopBlacklist.Save(tag, "ShopBlacklist");

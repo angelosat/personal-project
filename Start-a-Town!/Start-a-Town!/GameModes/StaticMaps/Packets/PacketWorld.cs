@@ -34,6 +34,7 @@ namespace Start_a_Town_
             }
             StaticWorld world = StaticWorld.ReadData(r);
             client.World = world;
+            world.Net = client;
         }
     }
 }

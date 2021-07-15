@@ -37,7 +37,7 @@ namespace Start_a_Town_.Components
         internal virtual void HandleRemoteCall(GameObject gameObject, ObjectEventArgs e) { }
         internal virtual void HandleRemoteCall(GameObject gameObject, Message.Types type, BinaryReader r) { }
 
-        public virtual void Instantiate(GameObject parent, Action<GameObject> instantiator) { }
+        public virtual void Instantiate(Action<GameObject> instantiator) { }
 
         public virtual void Tick() { }
         
@@ -48,9 +48,9 @@ namespace Start_a_Town_.Components
 
         public virtual void Initialize(GameObject parent) { }
         public virtual void Initialize(GameObject parent, RandomThreaded random) { this.Initialize(parent); }
-        public virtual void OnSpawn(IObjectProvider net, GameObject parent) { }
-        public virtual void OnDespawn(GameObject parent) { }
-        public virtual void OnDispose(GameObject parent) { }
+        public virtual void OnSpawn() { }
+        public virtual void OnDespawn() { }
+        public virtual void OnDispose() { }
         public virtual void OnObjectCreated(GameObject parent) { }
         public virtual void OnObjectLoaded(GameObject parent) { }
         public virtual void OnObjectSynced(GameObject parent) { }

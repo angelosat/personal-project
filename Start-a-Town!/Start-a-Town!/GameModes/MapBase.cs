@@ -23,9 +23,9 @@ namespace Start_a_Town_
             static Packets()
             {
                 PacketSyncSetCellData = Network.RegisterPacketHandler(SyncSetCellData);
-                PacketSpawn = Network.RegisterPacketHandler(Receive);
+                PacketSpawn = Network.RegisterPacketHandler(ReceiveSpawnEntity);
             }
-            static public void Send(IObjectProvider net, GameObject entity, MapBase map, Vector3 global, Vector3 velocity)
+            static public void SendSpawnEntity(IObjectProvider net, GameObject entity, MapBase map, Vector3 global, Vector3 velocity)
             {
                 if (net is Client)
                     return;
@@ -35,7 +35,7 @@ namespace Start_a_Town_
                 w.Write(global);
                 w.Write(velocity);
             }
-            static void Receive(IObjectProvider net, BinaryReader r)
+            static void ReceiveSpawnEntity(IObjectProvider net, BinaryReader r)
             {
                 var client = net as Client;
                 var actor = client.GetNetworkObject(r.ReadInt32());
@@ -70,7 +70,8 @@ namespace Start_a_Town_
         public LightingEngine LightingEngine;
         public IWorld World;
         public Dictionary<Vector2, Chunk> ActiveChunks;
-        public IObjectProvider Net;
+        IObjectProvider _net;
+        public IObjectProvider Net => this._net ??= this.World.Net;
         public GameObject PlayerCharacter;
         public ParticleManager ParticleManager;
         public RegionManager Regions;
@@ -97,8 +98,7 @@ namespace Start_a_Town_
             Shadow = Game1.Instance.Content.Load<Texture2D>("Graphics/shadow");
         }
 
-
-        internal bool IsDeconstructible(Vector3 global)
+        internal bool IsDeconstructible(IntVec3 global)
         {
             return this.GetBlockEntity(global)?.HasComp<BlockEntityCompDeconstructible>() ?? this.GetBlock(global).IsDeconstructible;
         }
@@ -655,15 +655,15 @@ namespace Start_a_Town_
             return Chunk.TryGetFinalLight(this, x, y, z, out sky, out block);
         } 
         public abstract byte GetSkyDarkness();
-        public abstract byte GetSunLight(Vector3 global);
-        public abstract byte GetBlockData(Vector3 global);
-        public abstract byte SetBlockData(Vector3 global, byte data = 0);
+        public abstract byte GetSunLight(IntVec3 global);
+        public abstract byte GetBlockData(IntVec3 global);
+        public abstract byte SetBlockData(IntVec3 global, byte data = 0);
 
-        public abstract void Update(IObjectProvider net);
-        public virtual void Tick(IObjectProvider net) { }
+        public abstract void Update();
+        public virtual void Tick() { }
         public abstract SaveTag Save();
 
-        public abstract bool InvalidateCell(Vector3 global);
+        public abstract bool InvalidateCell(IntVec3 global);
         public abstract void GenerateThumbnails();
         public abstract void GenerateThumbnails(string fullpath);
         public abstract void LoadThumbnails();
@@ -678,7 +678,6 @@ namespace Start_a_Town_
 
         public abstract void UpdateLight(IEnumerable<WorldPosition> positions);
 
-
         public abstract void DrawBlocks(MySpriteBatch sb, Camera cam, EngineArgs a);
         public abstract void DrawObjects(MySpriteBatch sb, Camera cam, SceneState scene);
         public abstract void DrawInterface(SpriteBatch sb, Camera cam);
@@ -687,17 +686,16 @@ namespace Start_a_Town_
 
         public abstract void GetTooltipInfo(Tooltip tooltip);
 
-        public abstract bool SetBlock(Vector3 global, Block.Types type);
-        public virtual bool SetBlock(Vector3 global, Block.Types type, byte data, int variation = 0, int orientation = 0, bool raiseEvent = true)
+        public virtual bool SetBlock(IntVec3 global, Block.Types type, byte data, int variation = 0, int orientation = 0, bool raiseEvent = true)
         {
             if (global.Z == 0)
                 return false;
-            Cell cell = this.GetCell(global);
+            var cell = this.GetCell(global);
 
-            if (cell == null)
+            if (cell is null)
                 return false;
 
-            Chunk chunk = this.GetChunk(global);
+            var chunk = this.GetChunk(global);
             cell.SetBlockType(type);
             cell.Variation = (byte)variation;
             cell.BlockData = data;
@@ -992,7 +990,7 @@ namespace Start_a_Town_
             {
                 var entities = chunk.Objects;
                 foreach (var e in entities)
-                    if (e.IsSpawned)
+                    if (e.Exists)
                         yield return e;
             }
         }
@@ -1026,7 +1024,7 @@ namespace Start_a_Town_
             return false;
         }
 
-        internal IEnumerable<KeyValuePair<IntVec3, Blocks.BlockEntity>> GetBlockEntitiesWithComp<T>() where T : BlockEntityComp
+        internal IEnumerable<KeyValuePair<IntVec3, BlockEntity>> GetBlockEntitiesWithComp<T>() where T : BlockEntityComp
         {
             var entities = this.GetBlockEntitiesCache();
             var count = entities.Count;
@@ -1042,10 +1040,8 @@ namespace Start_a_Town_
         {
             obj.Global = global;
             obj.Velocity = velocity;
-            obj.Map = this;
-            obj.Parent = null;
-            obj.Spawn(this.Net);
-            Packets.Send(this.Net, obj, this, global, velocity);
+            obj.Spawn(this);
+            Packets.SendSpawnEntity(this.Net, obj, this, global, velocity);
         }
         static MapBase()
         {

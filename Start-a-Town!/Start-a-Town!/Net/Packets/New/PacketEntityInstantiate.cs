@@ -40,8 +40,8 @@ namespace Start_a_Town_
             var data = r.ReadBytes(length);
             var entity = Network.Deserialize<GameObject>(data, reader=> GameObject.CloneTemplate(templateID, reader));
             entity.Instantiate(net.Instantiator); // move this to client class
-            if (entity.IsSpawned)// move this to client class
-                entity.Spawn(net);// move this to client class
+            if (entity.Exists)// move this to client class
+                entity.Spawn(net.Map);// move this to client class
         }
         static public void Send(IObjectProvider net, IEnumerable<GameObject> entities)
         {
@@ -55,7 +55,7 @@ namespace Start_a_Town_
                 if (entity.RefID != 0)
                     throw new Exception();
                 net.Instantiate(entity);
-                entity.Spawn(net);
+                entity.Spawn(net.Map);
                 var data = entity.Serialize();
                 strem.Write(data.Length);
                 strem.Write(data);
@@ -72,8 +72,8 @@ namespace Start_a_Town_
                 var data = r.ReadBytes(length);
                 var entity = Network.Deserialize<GameObject>(data, GameObject.CreatePrefab);
                 entity.Instantiate(net.Instantiator);//.ObjectCreated();
-                if (entity.IsSpawned)
-                    entity.Spawn(net);
+                if (entity.Exists)
+                    entity.Spawn(net.Map);
             }
         }
     }

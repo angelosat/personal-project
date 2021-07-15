@@ -6,27 +6,27 @@ namespace Start_a_Town_.UI
 {
     public class Icon
     {
-        static public readonly Icon X = new Icon(UIManager.IconX);
-        static public readonly Icon ArrowUp = new Icon(UIManager.ArrowUp);
-        static public readonly Icon ArrowDown = new Icon(UIManager.ArrowDown);
-        static public readonly Icon ArrowLeft = new Icon(UIManager.ArrowLeft);
-        static public readonly Icon ArrowRight = new Icon(UIManager.ArrowRight);
-        static public readonly Icon Cursor = new Icon(UIManager.MousePointer);
-        static public readonly Icon CursorGrayscale = new Icon(UIManager.MousePointerGrayscale);
-        static public readonly Icon Construction = new Icon(UIManager.SpriteConstruction);
-        static public readonly Icon Cross = new Icon(UI.UIManager.Icons16x16, 0, 16);
-        static public readonly Icon Replace = new Icon(UI.UIManager.Icons16x16, 3, 16);
-        static public readonly Icon Dice = new Icon(UIManager.Icons16x16, 1, 16);
+        public static readonly Icon X = new(UIManager.IconX);
+        public static readonly Icon ArrowUp = new(UIManager.ArrowUp);
+        public static readonly Icon ArrowDown = new(UIManager.ArrowDown);
+        public static readonly Icon ArrowLeft = new(UIManager.ArrowLeft);
+        public static readonly Icon ArrowRight = new(UIManager.ArrowRight);
+        public static readonly Icon Cursor = new(UIManager.MousePointer);
+        public static readonly Icon CursorGrayscale = new(UIManager.MousePointerGrayscale);
+        public static readonly Icon Construction = new(UIManager.SpriteConstruction);
+        public static readonly Icon Cross = new(UIManager.Icons16x16, 0, 16);
+        public static readonly Icon Replace = new(UIManager.Icons16x16, 3, 16);
+        public static readonly Icon Dice = new(UIManager.Icons16x16, 1, 16);
 
         public Color Tint = Color.White;
         public Texture2D SpriteSheet;
         public Rectangle SourceRect;
         public IAtlasNodeToken AtlasToken { get; set; }
-      
+
         public Icon(Texture2D spritesheet, uint index, int size)
         {
-            SpriteSheet = spritesheet;
-            SourceRect = new Rectangle(((int)index % (SpriteSheet.Width / size)) * size, ((int)index / (SpriteSheet.Width / size)) * size, size, size);
+            this.SpriteSheet = spritesheet;
+            this.SourceRect = new Rectangle((int)index % (this.SpriteSheet.Width / size) * size, ((int)index / (this.SpriteSheet.Width / size)) * size, size, size);
         }
         public Icon(string assetName)
         {
@@ -61,23 +61,31 @@ namespace Start_a_Town_.UI
         }
         public override string ToString()
         {
-            return "Sprite sheet: " + SpriteSheet.Name;
+            return "Sprite sheet: " + this.SpriteSheet.Name;
         }
 
 
         public void Draw(SpriteBatch sb, Vector2 loc, Rectangle? sourceRect)
         {
             if (this.AtlasToken == null)
-                sb.Draw(SpriteSheet, loc, sourceRect.HasValue ? Rectangle.Intersect(this.SourceRect, new Rectangle(this.SourceRect.X + sourceRect.Value.X, this.SourceRect.Y + sourceRect.Value.Y, sourceRect.Value.Width, sourceRect.Value.Height)) : this.SourceRect, Color.White);
+            {
+                sb.Draw(this.SpriteSheet, loc, sourceRect.HasValue ? Rectangle.Intersect(this.SourceRect, new Rectangle(this.SourceRect.X + sourceRect.Value.X, this.SourceRect.Y + sourceRect.Value.Y, sourceRect.Value.Width, sourceRect.Value.Height)) : this.SourceRect, Color.White);
+            }
             else
+            {
                 sb.Draw(this.AtlasToken.Atlas.Texture, loc, this.AtlasToken.Rectangle, Color.White);
+            }
         }
         public void Draw(SpriteBatch sb, Vector2 loc, Vector2 originPercentage)
         {
             if (this.AtlasToken == null)
-                sb.Draw(SpriteSheet, new Vector2((int)loc.X, (int)loc.Y), SourceRect, Color.White, 0, new Vector2(SourceRect.Width * originPercentage.X, SourceRect.Height * originPercentage.Y), 1, SpriteEffects.None, 0);
+            {
+                sb.Draw(this.SpriteSheet, new Vector2((int)loc.X, (int)loc.Y), this.SourceRect, Color.White, 0, new Vector2(this.SourceRect.Width * originPercentage.X, this.SourceRect.Height * originPercentage.Y), 1, SpriteEffects.None, 0);
+            }
             else
-                sb.Draw(this.AtlasToken.Atlas.Texture, loc.Floor(), this.AtlasToken.Rectangle, Color.White, 0, new Vector2(SourceRect.Width * originPercentage.X, SourceRect.Height * originPercentage.Y), 1, SpriteEffects.None, 0);
+            {
+                sb.Draw(this.AtlasToken.Atlas.Texture, loc.Floor(), this.AtlasToken.Rectangle, Color.White, 0, new Vector2(this.SourceRect.Width * originPercentage.X, this.SourceRect.Height * originPercentage.Y), 1, SpriteEffects.None, 0);
+            }
         }
 
         public void Draw(SpriteBatch sb, Vector2 loc, float scale = 1, float alpha = 1)
@@ -87,9 +95,13 @@ namespace Start_a_Town_.UI
         public void Draw(SpriteBatch sb, Vector2 loc, Color color, float scale = 1)
         {
             if (this.AtlasToken == null)
-                sb.Draw(SpriteSheet, loc, SourceRect, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            {
+                sb.Draw(this.SpriteSheet, loc, this.SourceRect, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            }
             else
+            {
                 sb.Draw(this.AtlasToken.Atlas.Texture, loc, this.AtlasToken.Rectangle, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            }
         }
         /// <summary>
         /// Draws near mouse
@@ -99,7 +111,7 @@ namespace Start_a_Town_.UI
         {
             this.Draw(sb, UI.UIManager.Mouse + new Vector2(16, 0));
         }
-        
+
         public void DrawAboveEntity(SpriteBatch sb, Camera camera, GameObject entity, float scale = .5f)
         {
             var bounds = entity.GetSprite().GetBounds();

@@ -50,7 +50,7 @@ namespace Start_a_Town_
             private static void ReportVisit(IObjectProvider net, Actor actor)
             {
                 var props = actor.GetVisitorProperties();
-                net.Report($"{actor.Name} is {(!actor.IsSpawned ? ("visiting" + (props.Discovered ? "" : " for the first time!")) : "departing")}");
+                net.Report($"{actor.Name} is {(!actor.Exists ? ("visiting" + (props.Discovered ? "" : " for the first time!")) : "departing")}");
                 props.Discovered = true;
             }
         }
@@ -170,14 +170,14 @@ namespace Start_a_Town_
             var list = new ListBoxNew<VisitorProperties, ButtonNew>(200, UIManager.LargeButton.Height * 8, (props, container) => 
             {
                 var npc = props.Actor;
-                var btn = ButtonNew.CreateBig(()=>UI.UISelectedInfo.Refresh(npc), container.Client.Width, npc.RenderIcon(), () => npc.Npc.FullName, () => npc.IsSpawned ? "Visiting" : (props.Discovered ? "" : "Unknown"));
+                var btn = ButtonNew.CreateBig(()=>UI.UISelectedInfo.Refresh(npc), container.Client.Width, npc.RenderIcon(), () => npc.Npc.FullName, () => npc.Exists ? "Visiting" : (props.Discovered ? "" : "Unknown"));
                 return btn; 
             });
 
             var filters = new GroupBox().AddControlsLineWrap(new[]{
                 new Button("All", ()=>list.Filter(i=>true)),
-                new Button("Visiting", ()=>list.Filter(i=>i.Actor.IsSpawned)),
-                new Button("Away", ()=>list.Filter(i=>!i.Actor.IsSpawned && i.Discovered)),
+                new Button("Visiting", ()=>list.Filter(i=>i.Actor.Exists)),
+                new Button("Away", ()=>list.Filter(i=>!i.Actor.Exists && i.Discovered)),
                 new Button("Unknown", ()=>list.Filter(i=>!i.Discovered)),
             });
 
@@ -213,7 +213,7 @@ namespace Start_a_Town_
                 if(this.World.Map.Net is Server) 
                     if (!actor.GetNeeds(VisitorNeedsDefOf.NeedCategoryVisitor).Any())
                             MakeVisitor(actor);
-                if (!actor.IsSpawned) // hacky. in progress of finding best way to save unspawned actors
+                if (!actor.Exists) // hacky. in progress of finding best way to save unspawned actors
                     this.World.Map.Net.Instantiate(actor);
             }
         }

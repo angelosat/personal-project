@@ -7,7 +7,6 @@ using Start_a_Town_.Graphics;
 
 namespace Start_a_Town_
 {
-
     public class Sprite : IDisposable
     {
         static public AtlasWithDepth Atlas = new("Entities");
@@ -72,7 +71,6 @@ namespace Start_a_Town_
         /// this is not currently used. maybe use it as a point of origin for when the sprite is attached to a parent bone? and have the origin field seperately for when it's not attached?
         /// </summary>
         public Vector2 Joint;
-        public Rectangle this[int variation, int orientation] { get { return SourceRects[variation][orientation]; } }
         public int Variation = 0, Orientation = 0;
         public Vector2 AtlasCoords;
         public AtlasWithDepth.Node.Token AtlasToken;
@@ -82,10 +80,11 @@ namespace Start_a_Town_
                 this.Texture.Dispose();
         }
 
-        static Dictionary<string, Atlas.Node.Token> _Dictionary;
-        
+        static Sprite _default = new("default", new Vector2(16, 24), new Vector2(16, 24));
+        static public Sprite Default => _default;
+
         public static Sprite Shadow;
-        static public Dictionary<Vector3, Sprite> BlockFaceHighlights = new Dictionary<Vector3, Sprite>();
+        static public Dictionary<Vector3, Sprite> BlockFaceHighlights = new();
         static public Sprite BlockHighlight, BlockHightlightBack;
         static public readonly Texture2D CubeDepth = Game1.Instance.Content.Load<Texture2D>("Graphics/cubedepth9");
         static public readonly Texture2D HalfCubeDepth = Game1.Instance.Content.Load<Texture2D>("Graphics/cubehalfdepth9");
@@ -98,7 +97,7 @@ namespace Start_a_Town_
             BlockFaceHighlights[Vector3.UnitZ] = new Sprite("blocks/highlightdown", "blockDepthFarRight", Block.OriginCenter);
             BlockHighlight = new Sprite("blocks/highlightfull", MapBase.BlockDepthMap) { OriginGround = Block.OriginCenter };
             BlockHightlightBack = new Sprite("blocks/highlightfullback", Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09back")) { OriginGround = Block.OriginCenter };
-            Sprite.Atlas.Initialize();
+            Atlas.Initialize();
         }
 
         public Rectangle GetSourceRect()
@@ -269,10 +268,7 @@ namespace Start_a_Town_
             return list;
         }
 
-        static Sprite _Default = new("default", new Vector2(16, 24), new Vector2(16, 24));
-        static public Sprite Default => _Default;
-
-        public bool HitTest(Camera camera, float zoom, Rectangle bounds, Rectangle hitRect)
+        public bool HitTest(float zoom, Rectangle bounds, Rectangle hitRect)
         {
             if (!bounds.Intersects(hitRect))
                 return false;

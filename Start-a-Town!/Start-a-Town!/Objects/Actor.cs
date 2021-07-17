@@ -455,22 +455,6 @@ namespace Start_a_Town_
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="trueIfNoOwner">If true, then returns true even if the item has no set owner</param>
-        /// <returns></returns>
-        internal bool Owns(Entity item, bool trueIfNoOwner)
-        {
-            OwnershipComponent ownership;
-            if (!item.TryGetComponent<OwnershipComponent>("Ownership", out ownership))
-                return true; // items that can't be owned return true
-            if (trueIfNoOwner)
-                return ownership.Owner == this.RefID || ownership.Owner == -1;
-            else
-                return ownership.Owner == this.RefID;
-        }
         internal bool OwnsOrCanClaim(Entity item)
         {
             return this.GetPossesions().Contains(item) ? true : !this.Town.GetAgents().Any(a => a.Owns(item));

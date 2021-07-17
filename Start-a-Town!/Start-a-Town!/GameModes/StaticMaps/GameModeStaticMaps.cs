@@ -11,7 +11,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
     {
         readonly CommandParser Parser = new CommandParser();
 
-        UIDialogLoad DialogLoad;
+        GuiDialogLoad DialogLoad;
 
         public GameModeStaticMaps()
         {
@@ -91,14 +91,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     {
                         BinaryWriter writer = new(stream);
                         tag.WriteWithRefs(writer);
-
                         if (!Directory.Exists(directory))
-                        {
                             Directory.CreateDirectory(directory);
-                        }
-
                         Chunk.Compress(stream, workingDir + fullPath);
-
                         stream.Close();
                     }
                     Server.FinishSaving();
@@ -182,10 +177,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         internal override Control Load()
         {
-            if (this.DialogLoad == null)
-            {
-                this.DialogLoad = new UIDialogLoad();
-            }
+            if (this.DialogLoad is null)
+                this.DialogLoad = new GuiDialogLoad();
 
             this.DialogLoad.Populate();
             return this.DialogLoad;

@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    class UIActorCreation : GroupBox
+    class GuiActorCreation : GroupBox
     {
-        public UIActorCreation(List<Actor> actors)
+        public GuiActorCreation(List<Actor> actors)
         {
             actors.AddRange(new[] { Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc) });
 

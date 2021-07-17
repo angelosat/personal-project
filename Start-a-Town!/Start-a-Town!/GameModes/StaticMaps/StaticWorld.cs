@@ -101,30 +101,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.PopulationManager = new PopulationManager(this);
         }
 
-        [Obsolete]
-        public StaticWorld(string name, int seed, IEnumerable<Terraformer> mutators, Block.Types defaultTile = Block.Types.Soil)
-            : this()
-        {
-            this.Name = name;
-            this.Seed = seed;
-            this.Random = new Random(seed);
-            this.Mutators = new SortedSet<Terraformer>(mutators);
-            this.DefaultTile = defaultTile;
-        }
         public StaticWorld(string seedString, IEnumerable<Terraformer> mutators, Block.Types defaultTile = Block.Types.Soil)
             : this()
         {
             if(seedString.IsNullEmptyOrWhiteSpace())
                 seedString = Path.GetRandomFileName().Replace(".","");
             this.Name = seedString;
-            int seed;
-            if (!int.TryParse(seedString, out seed))
-            {
-                if (seedString.Length > 0)
-                    seed = seedString.GetHashCode();
-                else
-                    seed = (new Random()).Next(int.MinValue, int.MaxValue);
-            }
+            if (!int.TryParse(seedString, out var seed))
+                seed = seedString.Length > 0 ? seedString.GetHashCode() : new Random().Next(int.MinValue, int.MaxValue);
             this.Seed = seed;
             this.Random = new Random(seed);
             this.Mutators = new SortedSet<Terraformer>(mutators);
@@ -316,7 +300,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             var box = new GroupBox();
             var winPop = new Lazy<Window>(() => new Window(this.PopulationManager.GetUI()) { Title = "Population", Movable = true, Closable = true });
-            var btnPop = new Button("Population").SetLeftClickAction(b => winPop.Value.Toggle());//.SetGameEventAction(winPop.Value.OnGameEvent);
+            var btnPop = new Button("Population").SetLeftClickAction(b => winPop.Value.Toggle());
             box.AddControls(btnPop);
             return box;
         }

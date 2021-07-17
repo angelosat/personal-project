@@ -87,9 +87,7 @@ namespace Start_a_Town_
             screenLoc = Coords.GetScreenCoords(new Vector3(Map.GetOffset(), 0), camera, ObjectDimensions) - new Vector2(tex.Width / 2, tex.Height / 2);
             screenBounds = new Rectangle((int)screenLoc.X, (int)screenLoc.Y, tex.Width, tex.Height);
             sb.Draw(tex, screenLoc, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, new Vector3(Map.GetOffset(), 0).GetDrawDepth(this.Map, camera));
-            //if (Rooms.WorldScreen.Instance.Map == Map)
-            //    sb.Draw(tex, screenLoc, new Color(1, 1, 1, 0.5f));
-            if (thumb.HitTest(camera, 1, screenBounds, UIManager.MouseRect))
+            if (thumb.HitTest(1, screenBounds, UIManager.MouseRect))
             {
                 Controller.Instance.MouseoverBlockNext.Object = this;
                 sb.Draw(tex, screenLoc, new Color(1, 1, 1, 0.5f));

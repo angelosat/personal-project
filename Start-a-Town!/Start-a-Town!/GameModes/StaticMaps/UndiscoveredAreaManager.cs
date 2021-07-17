@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
     class UndiscoveredAreaManager
     {
-        MapBase Map;
+        readonly MapBase Map;
         public UndiscoveredAreaManager(MapBase map)
         {
             this.Map = map;
-
         }
         bool Valid;// = true;
         public void Init()
         {
-            if (this.Map.Net is Net.Client)
+            if (this.Map.Net is Client)
                 return; // if i'm saving the discovered property of cells, it means that i load and send the data to clients. no need for clients to initialize undiscovered areas themselves
             if (!this.Valid)
             {
@@ -50,22 +49,13 @@ namespace Start_a_Town_
             {
                 current = tohandle.Dequeue();
                 foreach(var n in current.GetAdjacentLazy())
-                {
-                    if (map.TryGetCell(n, out Cell ncell))
+                    if (map.TryGetCell(n, out var ncell) && !ncell.Discovered)
                     {
-                        if (!ncell.Discovered)
-                        {
-                            ncell.Discovered = true;
-                            map.GetChunk(n).InvalidateSlice(n.Z);
-                            if(!ncell.IsRoomBorder)
-                                tohandle.Enqueue(n);
-                        }
+                        ncell.Discovered = true;
+                        map.GetChunk(n).InvalidateSlice(n.Z);
+                        if(!ncell.IsRoomBorder)
+                            tohandle.Enqueue(n);
                     }
-                    else
-                    {
-
-                    }
-                }
             }
         }
 
@@ -109,19 +99,12 @@ namespace Start_a_Town_
 
         private void Handle(MapBase map, IntVec3 global)
         {
-            if (map.TryGetCell(global, out Cell gc))
+            if (map.TryGetCell(global, out var gc))
                 if (!gc.Discovered)
                     return;
             foreach (var n in global.GetNeighbors())
-            {
-                if (map.TryGetCell(n, out Cell nc))
-                {
-                    if (!nc.Discovered)
-                    {
-                        this.FloodFill(map, n, true);
-                    }
-                }
-            }
+                if (map.TryGetCell(n, out var nc) && !nc.Discovered)
+                    this.FloodFill(map, n, true);
         }
         
         public bool IsUndiscovered(IntVec3 global)

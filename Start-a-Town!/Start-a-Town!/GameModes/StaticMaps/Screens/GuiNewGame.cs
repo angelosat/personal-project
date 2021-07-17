@@ -29,7 +29,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Txt_Seed.Text = Path.GetRandomFileName().Replace(".", "");
             this.Txt_Seed.InputFilter = char.IsLetterOrDigit;
 
-            IconButton btn_random = new IconButton()
+            IconButton btn_random = new()
             {
                 HoverText = "Randomize",
                 BackgroundTexture = UIManager.Icon16Background,
@@ -45,24 +45,23 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             var defaultSizes = StaticMap.MapSize.GetList();
             this.SelectedSize = defaultSizes.First();
-            var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => this.SelectedSize = s, (c) => this.SelectedSize);
+            var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => this.SelectedSize = s, c => this.SelectedSize);
 
             this.Tab_World.AddControlsVertically(
                 seedBox.ToPanelLabeled("Seed"),
                 comboSize.ToPanelLabeled("Map Size"));
 
             this.Panel_Main = new Panel() { AutoSize = true };
-
             this.Panel_Main.Controls.Add(this.Tab_World);
 
-            Panel panel_button = new Panel() { Location = this.Panel_Main.BottomLeft, AutoSize = true };
+            var panel_button = new Panel() { Location = this.Panel_Main.BottomLeft, AutoSize = true };
             panel_button.AutoSize = true;
-            Button btn_create = new Button(Vector2.Zero, panel_button.ClientSize.Width, "Create");
+            var btn_create = new Button(Vector2.Zero, panel_button.ClientSize.Width, "Create");
             btn_create.LeftClickAction = () =>
             {
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
-                var actorsui = new UIActorCreation(actors);
+                var actorsui = new GuiActorCreation(actors);
                 var btnstart = new Button("Start") { LeftClickAction = () => this.btn_Create_Click(actors.ToArray()) };
                 var btnback = new Button("Back") { LeftClickAction = () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); } };
                 actorsCreateBox.AddControlsVertically(actorsui, btnstart, btnback);
@@ -77,7 +76,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             this.Controls.Add(
                 panel_button, this.Panel_Main
-
                 );
         }
 
@@ -115,7 +113,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var size = this.SelectedSize;
 
             var map = new StaticMap(world, "test", Vector2.Zero, size);
-            var loadingToken = new StaticMapLoadingProgressToken();
             var loadingDialog = new DialogLoading();
             loadingDialog.ShowDialog();
             this.Hide();
@@ -135,9 +132,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
                 Net.Server.InstantiateMap(map); // is this needed??? YES!!! it enumerates all existing entities in the network
                 foreach (var a in actors)
-                {
                     map.Net.Instantiate(a);
-                }
 
                 map.SpawnStartingActors(actors);
 

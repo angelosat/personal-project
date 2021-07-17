@@ -59,7 +59,7 @@ namespace Start_a_Town_
                         UIBlockVariationPickerNew.Refresh(block, this.OnVariationSelected);
                     };
                    
-                    slot.HoverFunc = () => string.Format("{0}\n{1}\nTool necessity: {2}\nRight click to select variation", block.Name, GetLastSelectedVariantOrDefault(block).Requirement.ToString(), block.BuildProperties.ToolSensitivity.ToString("##0%"));// this.CurrentSelected.GetName());
+                    slot.HoverFunc = () => $"{block.Name}\n{GetLastSelectedVariantOrDefault(block).Requirement}\nTool necessity: {block.BuildProperties.ToolSensitivity:##0%}\nRight click to select variation";
                 })
                 { Location = this.Panel_Blocks.Controls.BottomLeft };
                 this.Categories[cat] = grid;
@@ -67,9 +67,7 @@ namespace Start_a_Town_
             this.SelectedCategory = this.Categories.First().Key;
             this.Panel_Blocks.Controls.Add(this.Categories[SelectedCategory]);
 
-            var dropdownpanel = new Panel() { AutoSize = true }
-                .AddControls(
-                    new ComboBoxNew<ConstructionCategory>(
+            var cbox = new ComboBoxNew<ConstructionCategory>(
                         new ButtonGridGenericNew<ConstructionCategory>(
                             categories,
                             (c, b) =>
@@ -82,10 +80,10 @@ namespace Start_a_Town_
                                 };
                             }),
                         this.SelectedCategory.Name,
-                        this.Categories[SelectedCategory].Width));
+                        this.Categories[SelectedCategory].Width);
 
             this.AddControlsVertically(
-                dropdownpanel,
+                cbox.ToPanel(),
                 this.Panel_Blocks
                 );
         }

@@ -1,13 +1,13 @@
-﻿using Start_a_Town_.UI;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.UI;
 using System.IO;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
-    class UIDialogLoad : GroupBox
+    class GuiDialogLoad : GroupBox
     {
-        ListBoxNew<FileInfo, ButtonNew> List;
-        public UIDialogLoad()
+        readonly ListBoxNew<FileInfo, ButtonNew> List;
+        public GuiDialogLoad()
         {
             this.AutoSize = true;
             this.List = new ListBoxNew<FileInfo, ButtonNew>(200, 300);
@@ -16,11 +16,17 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public void Populate()
         {
             var saves = GameModeStaticMaps.GetSaves();
-           
+
             void delete(FileInfo save)
             {
-                var msgbox = new MessageBox("", string.Format("Delete {0}?", save.Name), () => { save.Delete(); this.List.RemoveItem(save); });
+                var msgbox = new MessageBox("", $"Delete {save.Name}?", () => delete(save));
                 msgbox.ShowDialog();
+
+                void delete(FileInfo save)
+                {
+                    save.Delete();
+                    this.List.RemoveItem(save);
+                }
             }
 
             for (int i = 0; i < saves.Length; i++)
@@ -28,7 +34,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var save = saves[i];
                 this.List.AddItem(save, s =>
                 {
-                    var btn = ButtonNew.CreateBig(() => Load(s), this.List.Client.Width, () => Path.GetFileNameWithoutExtension(save.Name), () => save.CreationTime.ToString("R"));
+                    var btn = ButtonNew.CreateBig(() => this.Load(s), this.List.Client.Width, () => Path.GetFileNameWithoutExtension(save.Name), () => save.CreationTime.ToString("R"));
                     btn.AddControls(IconButton.CreateCloseButton().SetLeftClickAction(b => delete(save)).SetLocation(btn.TopRight).SetAnchor(Vector2.UnitX));
                     return btn;
                 });

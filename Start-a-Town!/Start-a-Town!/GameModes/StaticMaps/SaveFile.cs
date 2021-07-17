@@ -18,8 +18,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         static public void Delete(FileInfo save, Action callback = null)
         {
-            var msgbox = new MessageBox("", string.Format("Delete {0}?", save.Name), () => { save.Delete(); callback?.Invoke(); });
+            var msgbox = new MessageBox("", $"Delete {save.Name}?", () => delete(save, callback));
             msgbox.ShowDialog();
+
+            static void delete(FileInfo save, Action callback)
+            {
+                save.Delete(); 
+                callback?.Invoke();
+            }
         }
     }
 }

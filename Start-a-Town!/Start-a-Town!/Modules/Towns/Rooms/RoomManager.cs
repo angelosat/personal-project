@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using Start_a_Town_.Towns;
 using Microsoft.Xna.Framework;
@@ -58,7 +54,7 @@ namespace Start_a_Town_
             if (!this.Valid)
             {
                 this.Valid = true;
-            this.ScanMap();
+                this.ScanMap();
             }
         }
 

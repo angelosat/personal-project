@@ -176,15 +176,6 @@ namespace Start_a_Town_
             this.Valid = false;
         }
 
-        static public bool TryCreate(MapBase map, Vector3 global, out Room room)
-        {
-            room = new Room(map);
-            var area = EnclosedArea.BeginExclusiveAsList(map, global);
-            if (area == null)
-                return false;
-            room.Interior = area;
-            return true;
-        }
         static public Room TryCreate(MapBase map, IntVec3 begin)
         {
             if (map.GetCell(begin) is not Cell cell)
@@ -250,7 +241,7 @@ namespace Start_a_Town_
                 if (cell.IsRoomBorder)
                     continue;
                 //check if still connected
-                var area = EnclosedArea.BeginExclusiveAsList(map, n);
+                var area = FloodFill.BeginExclusiveAsList(map, n);
                 if(area is not null)
                     if (this.Interior.Any(p => !area.Contains(p)))
                     {
@@ -273,17 +264,6 @@ namespace Start_a_Town_
             return newRooms.Any();
         }
 
-        internal bool TryExpandInto(IntVec3 global)
-        {
-            var map = this.Map;
-            var area = EnclosedArea.BeginExclusiveAsList(map, global);
-            if (area == null)
-                return false;
-            if (this.Interior.Any(p => !area.Contains(p)))
-                throw new Exception();
-            this.Interior = area;
-            return true;
-        }
         void Validate()
         {
             this.Valid = true;

@@ -52,14 +52,6 @@ namespace Start_a_Town_.Components
             }
         }
 
-        static public void PollStats(GameObject obj, StatCollection list)
-        {
-            BodyComponent body;
-            if (!obj.TryGetComponent<BodyComponent>("Equipment", out body))
-                return;
-            body.BodyParts.Values.ToList().ForEach(foo => (foo as BodyPart).GetStats(list));
-        }
-
         internal override List<SaveTag> Save()
         {
             List<SaveTag> data = new List<SaveTag>();

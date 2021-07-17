@@ -134,7 +134,6 @@
     <Compile Include="AI\Behaviors\Eating\TaskBehaviorEating.cs" />
     <Compile Include="AI\Behaviors\Eating\TaskGiverEat.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorDropCarried.cs" />
-    <Compile Include="AI\Behaviors\ItemOwnership\BehaviorDropEquippedNew.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorEquipItemNew.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorCarryItem.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorPickUpItemNew.cs" />
@@ -153,7 +152,6 @@
     <Compile Include="AI\Behaviors\Movement\BehaviorUnstuck.cs" />
     <Compile Include="AI\Behaviors\BehaviorDequeue.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorFindPath.cs" />
-    <Compile Include="AI\Behaviors\BehaviorStartInteraction.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorJumpOnBlock.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorComposite.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorDecorator.cs" />
@@ -196,7 +194,7 @@
     <Compile Include="Objects\Loot.cs" />
     <Compile Include="Objects\LootTable.cs" />
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />
-    <Compile Include="Components\Stats\Stats\StatsHelper.cs" />
+    <Compile Include="Components\Stats\StatsHelper.cs" />
     <Compile Include="Components\Vegetation\PlantsExtensions.cs" />
     <Compile Include="Components\WindowSetStackSize.cs" />
     <Compile Include="Control\InputState.cs" />
@@ -215,8 +213,8 @@
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
     <Compile Include="Log.Entry.cs" />
-    <Compile Include="Modules\AI\AIExtensions.cs" />
-    <Compile Include="Modules\AI\Labors\JobDefOf.cs" />
+    <Compile Include="AI\AIExtensions.cs" />
+    <Compile Include="AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawing.Args.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.Args.cs" />
     <Compile Include="Modules\Crafting\CraftOrderNew.UI.cs" />
@@ -231,7 +229,7 @@
     <Compile Include="Objects\Quality.cs" />
     <Compile Include="Components\Vegetation\InteractionChoppingSimple.cs" />
     <Compile Include="Components\Vegetation\InteractionHarvest.cs" />
-    <Compile Include="Modules\AI\Labors\ExtensionsJobs.cs" />
+    <Compile Include="AI\Labors\ExtensionsJobs.cs" />
     <Compile Include="Modules\Towns\Labors\TaskGiverEquipSelf.cs" />
     <Compile Include="Modules\Towns\Rooms\Room.Packets.cs" />
     <Compile Include="Modules\Towns\Rooms\RoomRoleDef.cs" />
@@ -254,7 +252,7 @@
     <Compile Include="Components\Resources\ExtensionsResources.cs" />
     <Compile Include="Helpers\CollectionExtensions.cs" />
     <Compile Include="Interfaces\ISyncable.cs" />
-    <Compile Include="Modules\AI\Labors\Job.cs" />
+    <Compile Include="AI\Labors\Job.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\TaskBehaviorDepart.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\TaskGiverDepart.cs" />
     <Compile Include="Modules\Visitors\AI\InteractionDepart.cs" />
@@ -438,9 +436,9 @@
     <Compile Include="Modules\Visitors\VisitorProperties.cs" />
     <Compile Include="Modules\World\OffsiteAreaDef.cs" />
     <Compile Include="Modules\World\OffsiteAreaDefOf.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityCrouchToggle.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityDespawn.cs" />
-    <Compile Include="Net\Packets\PacketAcks.cs" />
+    <Compile Include="Network\Packets\PacketEntityCrouchToggle.cs" />
+    <Compile Include="Network\Packets\PacketEntityDespawn.cs" />
+    <Compile Include="Network\Packets\PacketAcks.cs" />
     <Compile Include="Objects\Actors\ActorDef.cs" />
     <Compile Include="Objects\Actors\ActorDefOf.cs" />
     <Compile Include="Objects\Apparel\ApparelDef.cs" />
@@ -489,12 +487,9 @@
     <Compile Include="Components\Skills\Best\NpcSkill.cs" />
     <Compile Include="Components\Skills\SkillDef.cs" />
     <Compile Include="Components\Skills\ToolAbility.cs" />
-    <Compile Include="Components\Stats\StatModifierCarrying.cs" />
     <Compile Include="Components\Stats\StatNewModifier.cs" />
     <Compile Include="Components\Stats\StatNewModifierDef.cs" />
     <Compile Include="Components\Stats\StatNewDef.cs" />
-    <Compile Include="Components\Stats\Stats\StatBuilding.cs" />
-    <Compile Include="Components\Stats\Stats\StatWalkSpeed.cs" />
     <Compile Include="Components\Vegetation\Growth.cs" />
     <Compile Include="Control\Tools\ToolControlActor.cs" />
     <Compile Include="Control\Tools\ToolSelect.cs" />
@@ -590,10 +585,10 @@
     <Compile Include="GameModes\StaticMaps\UI\WindowSelectedWorldNew.cs" />
     <Compile Include="GameModes\StaticMaps\EnclosedArea.cs" />
     <Compile Include="GameModes\StaticMaps\UndiscoveredAreaManager.cs" />
-    <Compile Include="Modules\AI\Labors\AITask.cs" />
-    <Compile Include="Modules\AI\Net\Packets\PacketAILogWrite.cs" />
-    <Compile Include="Modules\AI\Net\Packets\PacketTaskUpdate.cs" />
-    <Compile Include="Modules\AI\NpcUIStatic.cs" />
+    <Compile Include="AI\Labors\AITask.cs" />
+    <Compile Include="AI\Net\Packets\PacketAILogWrite.cs" />
+    <Compile Include="AI\Net\Packets\PacketTaskUpdate.cs" />
+    <Compile Include="Modules\Towns\Labors\NpcUIStatic.cs" />
     <Compile Include="Modules\Construction\Packets\PacketDesignateConstruction.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawing.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawingBoxFilled.cs" />
@@ -627,10 +622,10 @@
     <Compile Include="GameEvents\EventEntityDespawned.cs" />
     <Compile Include="GameEvents\EventBlockChanged.cs" />
     <Compile Include="Helpers\PriorityListQueue.cs" />
-    <Compile Include="Modules\AI\JobsManager.cs" />
-    <Compile Include="Modules\AI\Labors\JobDef.cs" />
-    <Compile Include="Modules\AI\NpcUI.cs" />
-    <Compile Include="Modules\AI\NpcLogUINew.cs" />
+    <Compile Include="Modules\Towns\Labors\JobsManager.cs" />
+    <Compile Include="AI\Labors\JobDef.cs" />
+    <Compile Include="Modules\Towns\Labors\NpcUI.cs" />
+    <Compile Include="Modules\Towns\Labors\NpcLogUINew.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.cs" />
     <Compile Include="Modules\Crafting\CraftOrderNew.cs" />
     <Compile Include="Blocks\Workstations\BlockWorkbenchEntity.cs" />
@@ -665,8 +660,7 @@
     <Compile Include="Animations\Joint.cs" />
     <Compile Include="Graphics\AtlasDepthNormals.Node.cs" />
     <Compile Include="LineHelper.cs" />
-    <Compile Include="Modules\AI\AIManager.cs" />
-    <Compile Include="Modules\AI\AITarget.cs" />
+    <Compile Include="AI\AIManager.cs" />
     <Compile Include="Blocks\BlockEntity.cs" />
     <Compile Include="Blocks\BlockMineral.cs">
       <SubType>Code</SubType>
@@ -689,8 +683,6 @@
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorQueue.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorSequence.cs" />
     <Compile Include="AI\Components\AIState.cs" />
-    <Compile Include="Modules\AI\Jobs\AIInstruction.cs" />
-    <Compile Include="Components\Attributes\AttributesInterface.cs" />
     <Compile Include="Modules\Crafting\Crafting\Blocks\BlockRecipe.cs" />
     <Compile Include="Modules\Crafting\Crafting\Blocks\Modifier.cs" />
     <Compile Include="Modules\Crafting\Crafting\Blocks\Product.cs" />
@@ -725,10 +717,9 @@
     <Compile Include="Components\Interactions\NewScripts\Interaction.cs" />
     <Compile Include="Components\Skills\ToolAbilityComponent.cs" />
     <Compile Include="Components\Skills\ToolAbilityDef.cs" />
-    <Compile Include="Components\Stats\StatMaxWeight.cs" />
     <Compile Include="Components\Stats\StatModifier.cs" />
     <Compile Include="Components\Stats\StatsComponentNew.cs" />
-    <Compile Include="Components\Stats\StatsInterface.cs" />
+    <Compile Include="Components\Stats\StatsGui.cs" />
     <Compile Include="Components\Inventory\ItemContainer.cs" />
     <Compile Include="Components\Message.cs" />
     <Compile Include="Components\Resources\Durability.cs" />
@@ -803,27 +794,26 @@
     <Compile Include="Modules\Towns\UI\UIQuickMenu.cs" />
     <Compile Include="Modules\Towns\Utility.cs" />
     <Compile Include="Modules\Towns\Zones\ZoneNew.cs" />
-    <Compile Include="Net\CommandParser.cs" />
-    <Compile Include="Net\Packets\New\PacketChat.cs" />
-    <Compile Include="Net\Packets\New\PacketChunk.cs" />
-    <Compile Include="Net\Packets\New\PacketEntitySync.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityJump.cs" />
-    <Compile Include="Net\Packets\New\PacketEntitySprintToggle.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityWalkToggle.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityMoveToggle.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityRequestSpawn.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityRequestDispose.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityInteract.cs" />
-    <Compile Include="Net\Packets\New\PacketEntityInstantiate.cs" />
-    <Compile Include="Net\Packets\New\PacketMousePosition.cs" />
-    <Compile Include="Net\Packets\New\PacketPlayerConnecting.cs" />
-    <Compile Include="Net\Packets\New\PacketPlayerDisconnected.cs" />
-    <Compile Include="Net\Packets\New\PacketPlayerToolSwitch.cs" />
-    <Compile Include="Net\Packets\New\PacketServerHandshake.cs" />
-    <Compile Include="Net\Packets\New\PacketSnapshots.cs" />
-    <Compile Include="Net\Packets\PacketIntInt.cs" />
-    <Compile Include="Net\PlayerList.cs" />
-    <Compile Include="Net\UI\UIConnecting.cs" />
+    <Compile Include="Network\CommandParser.cs" />
+    <Compile Include="Network\Packets\PacketChat.cs" />
+    <Compile Include="Network\Packets\PacketChunk.cs" />
+    <Compile Include="Network\Packets\PacketEntitySync.cs" />
+    <Compile Include="Network\Packets\PacketEntityJump.cs" />
+    <Compile Include="Network\Packets\PacketEntitySprintToggle.cs" />
+    <Compile Include="Network\Packets\PacketEntityWalkToggle.cs" />
+    <Compile Include="Network\Packets\PacketEntityMoveToggle.cs" />
+    <Compile Include="Network\Packets\PacketEntityRequestSpawn.cs" />
+    <Compile Include="Network\Packets\PacketEntityRequestDispose.cs" />
+    <Compile Include="Network\Packets\PacketEntityInteract.cs" />
+    <Compile Include="Network\Packets\PacketEntityInstantiate.cs" />
+    <Compile Include="Network\Packets\PacketMousePosition.cs" />
+    <Compile Include="Network\Packets\PacketPlayerConnecting.cs" />
+    <Compile Include="Network\Packets\PacketPlayerDisconnected.cs" />
+    <Compile Include="Network\Packets\PacketPlayerToolSwitch.cs" />
+    <Compile Include="Network\Packets\PacketServerHandshake.cs" />
+    <Compile Include="Network\Packets\PacketSnapshots.cs" />
+    <Compile Include="Network\PlayerList.cs" />
+    <Compile Include="Network\Gui\UIConnecting.cs" />
     <Compile Include="Objects\Actor.cs" />
     <Compile Include="Objects\Entity.cs" />
     <Compile Include="Objects\EntityDef.cs" />
@@ -897,34 +887,28 @@
     <Compile Include="Interfaces\IProgressBar.cs" />
     <Compile Include="Engine\MySpriteBatch.cs" />
     <Compile Include="Engine\MyVertex.cs" />
-    <Compile Include="Net\GameEvent.cs" />
-    <Compile Include="Net\ObjectSnapshot.cs">
+    <Compile Include="Network\GameEvent.cs" />
+    <Compile Include="Network\ObjectSnapshot.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Net\Packets\IServerPacketHandler.cs" />
-    <Compile Include="Net\Packets\IClientPacketHandler.cs" />
-    <Compile Include="Net\Packets\IPacketHandler.cs" />
-    <Compile Include="Net\Packets\PacketEntityBoolean.cs" />
-    <Compile Include="Net\Packets\PacketEntityVector3.cs" />
-    <Compile Include="Net\RandomThreaded.cs" />
-    <Compile Include="Net\Server\ServerCommandParser.cs" />
-    <Compile Include="Net\Server\ServerConsole.cs" />
-    <Compile Include="Net\UdpConnection.cs" />
-    <Compile Include="Net\UIPlayerList.cs" />
-    <Compile Include="Net\WorldSnapshot.cs" />
+    <Compile Include="Network\RandomThreaded.cs" />
+    <Compile Include="Network\Server\ServerCommandParser.cs" />
+    <Compile Include="Network\Server\ServerConsole.cs" />
+    <Compile Include="Network\UdpConnection.cs" />
+    <Compile Include="Network\UIPlayerList.cs" />
+    <Compile Include="Network\WorldSnapshot.cs" />
     <Compile Include="Objects\ObjectEventArgs.cs" />
     <Compile Include="Objects\TargetArgs.cs" />
     <Compile Include="Helpers\Progress.cs" />
     <Compile Include="SceneState.cs" />
-    <Compile Include="Net\INetwork.cs" />
-    <Compile Include="Net\Client\Client.cs" />
+    <Compile Include="Network\INetwork.cs" />
+    <Compile Include="Network\Client\Client.cs" />
     <Compile Include="Components\Combat\Attack.cs" />
     <Compile Include="Components\Attributes\AttributeStat.cs" />
     <Compile Include="Components\Attributes\AttributesComponent.cs" />
     <Compile Include="Components\FilterType.cs" />
     <Compile Include="Components\Resources\ResourcesComponent.cs" />
     <Compile Include="Components\Resources\ResourceDef.cs" />
-    <Compile Include="Components\Stats\Stat.cs" />
     <Compile Include="Components\WeaponComponent.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Components\Needs\Need.cs" />
@@ -955,14 +939,10 @@
     <Compile Include="Components\Needs\NeedsComponent.cs" />
     <Compile Include="Components\NpcComponent.cs" />
     <Compile Include="Components\BodyPart.cs" />
-    <Compile Include="Components\ComponentParameterCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Objects\Items\Consumables\ConsumableComponent.cs" />
     <Compile Include="Components\BodyComponent.cs" />
     <Compile Include="Components\Vegetation\PlantComponent.cs" />
     <Compile Include="Components\Vegetation\SeedComponent.cs" />
-    <Compile Include="Components\StatsComponent.cs" />
     <Compile Include="Components\DefComponent.cs" />
     <Compile Include="Components\ComponentCollection.cs" />
     <Compile Include="Components\EquipComponent.cs" />
@@ -971,10 +951,10 @@
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Interfaces\IUndoable.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="Net\Network.cs" />
-    <Compile Include="Net\Packet.cs" />
-    <Compile Include="Net\PlayerData.cs" />
-    <Compile Include="Net\Server\Server.cs" />
+    <Compile Include="Network\Network.cs" />
+    <Compile Include="Network\Packet.cs" />
+    <Compile Include="Network\PlayerData.cs" />
+    <Compile Include="Network\Server\Server.cs" />
     <Compile Include="Terrain\LightingEngine.cs" />
     <Compile Include="Terrain\MapCollection.cs" />
     <Compile Include="Terrain\Mutators\Caves.cs" />
@@ -1046,7 +1026,7 @@
     <Compile Include="UI\WindowTargetManagement.cs" />
     <Compile Include="UI\ScrollBars\ScrollableBox.cs" />
     <Compile Include="UI\Primitives\Slots\SlotGrid.cs" />
-    <Compile Include="Net\Server\ServerUI.cs" />
+    <Compile Include="Network\Server\ServerUI.cs" />
     <Compile Include="UI\Hud\UnitFrame.cs" />
     <Compile Include="UI\ScrollBars\ScrollbarV.cs" />
     <Compile Include="UI\LogWindow.cs" />
@@ -1123,7 +1103,7 @@
   <ItemGroup>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
-    <Compile Include="Net\Packets\New\PacketRandomBlockUpdates.cs" />
+    <Compile Include="Network\Packets\PacketRandomBlockUpdates.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UI\UI.csproj">
@@ -1167,10 +1147,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Modules\AI\Behaviors\Dialogue\" />
-    <Folder Include="Modules\AI\Control\" />
     <Folder Include="Modules\Towns\Farming\AI\" />
-    <Folder Include="Net\Packets\Player\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

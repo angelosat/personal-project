@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Start_a_Town_.UI;
 
@@ -7,92 +6,8 @@ namespace Start_a_Town_.Components
 {
     class StatsComponentNew : EntityComponent
     {
-        public override string ComponentName
-        {
-            get { return "StatsNew"; }
-        }
-        public Dictionary<Stat.Types, Stat> Stats;
+        public override string ComponentName => "StatsNew";
         
-        public StatsComponentNew()
-        {
-            this.Stats = new Dictionary<Stat.Types, Stat>();
-        }
-        public StatsComponentNew(Dictionary<Stat.Types, Stat> stats)
-        {
-            this.Stats = new Dictionary<Stat.Types, Stat>();
-            foreach (var st in stats)
-                this.Stats[st.Key] = st.Value.Clone();
-        }
-        public StatsComponentNew Initialize(params Stat.Types[] types)
-        {
-            this.Stats.Clear();
-            foreach (var t in types)
-                this.Stats.Add(t, Stat.Create(t));
-            return this;
-        }
-        public StatsComponentNew Initialize(params Stat[] stats)
-        {
-            this.Stats = new Dictionary<Stat.Types, Stat>();
-            foreach (var t in stats)
-                this.Stats.Add(t.ID, t);
-            return this;
-        }
-        static public Stat GetStat(GameObject obj, Stat.Types type)
-        {
-            StatsComponentNew comp;
-            if (obj.TryGetComponent<StatsComponentNew>(out comp))
-                return comp.Stats.GetValueOrDefault(type);
-            return null;
-        }
-        static public float GetStatValueOrDefault(GameObject obj, Stat.Types type, int defaultVal)
-        {
-            StatsComponentNew comp;
-            if (obj.TryGetComponent<StatsComponentNew>(out comp))
-            {
-                Stat stat;
-                if (comp.Stats.TryGetValue(type, out stat))
-                    return stat.GetFinalValue(obj);
-            }
-            return defaultVal;
-        }
-        static public float GetStatValueOrDefault(GameObject obj, Stat.Types type)
-        {
-            StatsComponentNew comp;
-            if (obj.TryGetComponent<StatsComponentNew>(out comp))
-            {
-                Stat stat;
-                if (comp.Stats.TryGetValue(type, out stat))
-                    return stat.GetFinalValue(obj);
-            }
-            return Stat.Registry.First(s=>s.ID == type).DefaultValue;
-        }
-        static public void AddModifier(GameObject obj, Stat.Types type, ValueModifier modifier)
-        {
-            Stat stat = GetStat(obj, type);
-            if (stat == null)
-                return;
-            stat.Modifiers.Add(modifier);
-        }
-        static public void RemoveModifier(GameObject obj, Stat.Types type, ValueModifier modifier)
-        {
-            Stat stat = GetStat(obj, type);
-            if (stat == null)
-                return;
-            stat.Modifiers.Remove(modifier);
-        }
-      
-        public override object Clone()
-        {
-            return new StatsComponentNew(this.Stats);
-        }
-        public string ToString(GameObject parent)
-        {
-            string t = "";
-            foreach (var stat in this.Stats.Values)
-                t += stat.ToString(parent) + '\n';
-            return t.TrimEnd('\n');
-        }
-
         readonly Dictionary<StatNewDef, List<StatNewModifier>> Modifiers = new();
         internal List<StatNewModifier> GetModifiers(StatNewDef statNewDef)
         {
@@ -142,6 +57,11 @@ namespace Start_a_Town_.Components
             gui.ClearItems();
             gui.AddItems(StatDefOf.NpcStatPackage);
             return GUITable;
+        }
+
+        public override object Clone()
+        {
+            return new StatsComponentNew();
         }
     }
 }

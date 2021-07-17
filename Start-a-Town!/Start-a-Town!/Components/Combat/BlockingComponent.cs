@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Start_a_Town_.Animations;
-using Start_a_Town_.Components.Stats;
 
 namespace Start_a_Town_.Components
 {
+    [Obsolete]
     class BlockingComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get { return "Blocking"; }
-        }
+        public override string ComponentName => "Blocking"; 
         public override object Clone()
         {
             return new BlockingComponent();
@@ -25,9 +18,7 @@ namespace Start_a_Town_.Components
             if (this.Active)
                 return;
             this.Active = true;
-            var stat = StatsComponentNew.GetStat(parent, Stat.Types.DmgReduction);
-            stat.Value += .5f;
-            throw new NotImplementedException();
+            // TODO apply damage reduction
             this.Animation = Animation.Block;
             parent.AddAnimation(this.Animation);
             parent.GetComponent<MobileComponent>().ToggleBlock(true); // TODO: create a new movement state and set it in the mobile component?
@@ -35,10 +26,8 @@ namespace Start_a_Town_.Components
         public void Stop(GameObject parent)
         {
             this.Active = false;
-            var stat = StatsComponentNew.GetStat(parent, Stat.Types.DmgReduction);
-            stat.Value -= .5f;
+            // TODO remove damage reduction
             this.Animation.FadeOut();
-
             parent.GetComponent<MobileComponent>().ToggleBlock(false);
         }
     }

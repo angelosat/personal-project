@@ -2,7 +2,7 @@
 using Start_a_Town_.Net;
 using Start_a_Town_.AI;
 
-namespace Start_a_Town_.Modules.AI.Net
+namespace Start_a_Town_
 {
     class PacketTaskUpdate
     {

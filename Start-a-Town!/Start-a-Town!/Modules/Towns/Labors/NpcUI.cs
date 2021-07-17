@@ -30,7 +30,7 @@ namespace Start_a_Town_.AI
             panelInv.AddControls(this.Inventory);
 
             this.PanelStats = new Panel() { AutoSize = true , Location = panelInv.TopRight};
-            var statsui = new StatsInterface(npc);
+            var statsui = new StatsGui(npc);
             this.PanelStats.AddControls(statsui);
             
 

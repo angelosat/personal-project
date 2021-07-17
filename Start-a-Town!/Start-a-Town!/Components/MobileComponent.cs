@@ -154,16 +154,13 @@ namespace Start_a_Town_.Components
                 {
                     if (parent.Velocity.Z <= 0)// only allow jumping in water when sinking
                     {
-                        force = Vector3.UnitZ * PhysicsComponent.Jump * (1 + StatsComponent.GetStatOrDefault(parent, Stat.Types.JumpHeight, 0f));
+                        force = Vector3.UnitZ * PhysicsComponent.Jump;// * (1 + StatsComponent.GetStatOrDefault(parent, Stat.Types.JumpHeight, 0f));
                         var density = BlockDefOf.Water.GetDensity(cell.BlockData, feetposition);
                         force *= (1 + 3 * density);
                     }
                 }
-                else
-                    if (parent.Velocity.Z == 0 && isStanding)// parent.Net.Map.IsSolid(parent.Global - Vector3.UnitZ * 0.1f)) // TODO: FIX: doesnt jump if on block edge
-                    {
-                        force = Vector3.UnitZ * PhysicsComponent.Jump * (1 + StatsComponent.GetStatOrDefault(parent, Stat.Types.JumpHeight, 0f));
-                    }
+                else if (parent.Velocity.Z == 0 && isStanding)// parent.Net.Map.IsSolid(parent.Global - Vector3.UnitZ * 0.1f)) // TODO: FIX: doesnt jump if on block edge
+                    force = Vector3.UnitZ * PhysicsComponent.Jump;// * (1 + StatsComponent.GetStatOrDefault(parent, Stat.Types.JumpHeight, 0f));
 
                 if (force == Vector3.Zero)
                     return;

@@ -33,14 +33,6 @@ namespace Start_a_Town_.Components
             parent.AddAnimation(this.AnimationHaul);
         }
         
-        static public bool CheckWeight(GameObject a, GameObject t)
-        {
-            float w = t.Physics.Weight;
-            float maxW = StatsComponentNew.GetStatValueOrDefault(a, Stat.Types.MaxWeight, 0);
-            return maxW >= w;
-        }
-
-
         bool Throw(INetwork net, Vector3 velocity, GameObject parent, bool all)
         {
             // throws hauled object, if hauling nothing throws equipped object, make it so it only throws hauled object?

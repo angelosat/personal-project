@@ -329,7 +329,7 @@ namespace Start_a_Town_
             yield return ("Gear", () => InventoryUI.GetUI(this).Toggle());
             yield return ("Personality", () => PersonalityComponent.GetGUI(this).Toggle());
             yield return ("Needs", () => NeedsUI.GetUI(this).Toggle());
-            yield return ("Stats", () => StatsInterface.GetUI(this).Toggle());
+            yield return ("Stats", () => StatsGui.GetGui(this).Toggle());
             if (!this.IsCitizen)
                 yield return ("Visitor", this.GetVisitorProperties().ShowGUI);
         }

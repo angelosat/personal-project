@@ -15,10 +15,9 @@ namespace Start_a_Town_.Interactions
             base.Start(a, t);
             var entity = a.Map.GetBlockEntity(t.Global) as IConstructible;
             this.BuildProgress = entity.BuildProgress;
-            var speed = a.GetStat(Stat.Types.Building);
             var tool = a.GetEquipmentSlot(GearType.Mainhand);
             var toolspeed = tool is null ? 0 : StatDefOf.ToolSpeed.GetValue(tool);
-            speed *= (1 + toolspeed);
+            var speed = 1 + toolspeed;
             this.Animation.Speed = speed;
         }
         bool SuccessCondition()

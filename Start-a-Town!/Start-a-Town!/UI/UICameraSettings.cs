@@ -17,10 +17,12 @@ namespace Start_a_Town_.UI
             this.Camera = camera;
             
             Chk_HideWalls = new CheckBoxNew("Hide Walls", Vector2.Zero, Engine.HideWalls) { HoverText = "Hides blocks obscuring an entity when the camera is following it" };
-            Chk_HideWalls.LeftClick += new UIEvent(HideWalls_Click);
+            Chk_HideWalls.LeftClickAction = ()=> Engine.HideWalls = !Engine.HideWalls;
+            Chk_HideWalls.TickedFunc = () => Engine.HideWalls;
             Chk_HideTerrain = new CheckBoxNew("Hide Terrain", Chk_HideWalls.BottomLeft, camera.HideTerrainAbovePlayer) { LeftClickAction = () => camera.ToggleHideBlocksAbove() };
             Chk_BlockOutlines = new CheckBoxNew("Block Outlines", Chk_HideTerrain.BottomLeft, Engine.BlockOutlines);
-            Chk_BlockOutlines.LeftClick += new UIEvent(Chk_BlockOutlines_Click);
+            Chk_BlockOutlines.LeftClickAction = ()=> Engine.BlockOutlines = !Engine.BlockOutlines;
+            Chk_BlockOutlines.TickedFunc = () => Engine.BlockOutlines;
             Chk_Fog = new CheckBoxNew("Fog", Camera.Fog) { HoverText = "Toggles drawing fog at lower elevation levels than the one under the mouse cursor", Location = Chk_HideTerrain.BottomLeft, LeftClickAction = () => Camera.Fog = !Camera.Fog };
             Chk_Unknown = new CheckBoxNew("Hide blocks", this.GetCamera().HideUnknownBlocks) {HoverText = "Toggles blocks not exposed to air being drawn as unknown blocks", Location = Chk_Fog.BottomLeft, LeftClickAction = () => this.GetCamera().HideUnknownBlocks = !this.GetCamera().HideUnknownBlocks };
             Chk_TopSlice = new CheckBoxNew("Map boundaries", this.Camera.DrawTopSlice) { HoverText = "Draws blocks at the boundaries of the map", Location = Chk_Unknown.BottomLeft, LeftClickAction = () => this.Camera.DrawTopSlice = !this.Camera.DrawTopSlice };
@@ -37,15 +39,7 @@ namespace Start_a_Town_.UI
                 rooms
                 );
         }
-        void Chk_BlockOutlines_Click(object sender, EventArgs e)
-        {
-            Engine.BlockOutlines = !Engine.BlockOutlines;
-        }
-        void HideWalls_Click(object sender, EventArgs e)
-        {
-            Engine.HideWalls = !Engine.HideWalls;
-        }
-
+       
         void BorderShading_Click(object sender, EventArgs e)
         {
             this.Camera.BorderShading = !this.Camera.BorderShading;

@@ -20,7 +20,7 @@ namespace Start_a_Town_.AI
         Panel PanelInventory;
         Label LabelTask;
         PersonalityUI PersonalityUI;
-        StatsInterface StatsUI;
+        StatsGui StatsUI;
         GroupBox SkillsUI;
         public NpcUIStatic()
         {
@@ -37,7 +37,7 @@ namespace Start_a_Town_.AI
             this.PanelInventory.AddControls(this.Inventory);
 
             this.PanelStats = new Panel() { AutoSize = true, Location = this.PanelInventory.TopRight };
-            this.StatsUI = new StatsInterface();
+            this.StatsUI = new StatsGui();
             this.PanelStats.AddControls(this.StatsUI);
 
             this.PanelSkills = new Panel() { AutoSize = true, Location = this.PanelStats.TopRight };

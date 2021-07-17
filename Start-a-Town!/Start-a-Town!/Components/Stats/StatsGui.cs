@@ -1,62 +1,48 @@
-﻿using System;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    class StatsInterface : GroupBox
+    class StatsGui : GroupBox
     {
-        PanelLabeledNew PanelAttributes;
-        PanelLabeledNew PanelStats;
-        public StatsInterface()
+        readonly PanelLabeledNew PanelAttributes;
+        readonly PanelLabeledNew PanelStats;
+        public StatsGui()
         {
             this.PanelAttributes = new PanelLabeledNew("Attributes") { AutoSize = true };
             this.PanelStats = new PanelLabeledNew("Stats") { AutoSize = true };
-
         }
-        public StatsInterface(GameObject actor)
+        public StatsGui(GameObject actor)
         {
-            throw new NotImplementedException();
             var comp = actor.GetComponent<StatsComponentNew>();
-            var stats = comp.Stats;
-            foreach (var stat in stats)
-            {
-                this.AddControlsBottomLeft(stat.Value.GetUI());
-            }
-
             var attsComp = actor.GetComponent<AttributesComponent>();
             this.PanelAttributes = attsComp.GetGUI().ToPanelLabeled("Attributes");
             this.AddControlsTopRight(this.PanelAttributes);
-            this.PanelStats = actor.GetComponent<StatsComponentNew>().GetGUI().ToPanelLabeled("Stats");
+            this.PanelStats = comp.GetGUI().ToPanelLabeled("Stats");
             this.AddControlsBottomLeft(this.PanelStats);
         }
         public void Refresh(GameObject actor)
         {
             var comp = actor.GetComponent<StatsComponentNew>();
-            var stats = comp.Stats;
             this.ClearControls();
-            foreach (var stat in stats)
-            {
-                this.AddControlsBottomLeft(stat.Value.GetUI());
-            }
-
+          
             this.PanelAttributes.Client.ClearControls();
             actor.GetComponent<AttributesComponent>().GetInterface(actor, this.PanelAttributes.Client);
             this.AddControlsTopRight(this.PanelAttributes);
 
             this.PanelStats.Client.ClearControls();
-            actor.GetComponent<StatsComponentNew>().GetInterface(actor, this.PanelStats.Client);
+            comp.GetInterface(actor, this.PanelStats.Client);
             this.AddControlsBottomLeft(this.PanelStats);
             this.Validate(true);
         }
-        static StatsInterface Instance;
-        internal static Window GetUI(Actor actor)
+        static StatsGui Instance;
+        internal static Window GetGui(Actor actor)
         {
             Window window;
 
-            if (Instance == null)
+            if (Instance is null)
             {
-                Instance = new StatsInterface();
+                Instance = new StatsGui();
                 window = new Window(Instance) { Movable = true, Closable = true };
             }
             else
@@ -71,7 +57,7 @@ namespace Start_a_Town_
             var actor = target.Object as Actor;
             if (!actor?.Equals(this.Tag) ?? false)
             {
-                GetUI(actor);
+                GetGui(actor);
             }
         }
     }

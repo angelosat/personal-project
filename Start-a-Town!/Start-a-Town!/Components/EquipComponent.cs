@@ -10,13 +10,10 @@ namespace Start_a_Town_.Components
     {
         public override string ComponentName => "Equippable";
           
-
-        public Dictionary<Stat.Types, float> Stats;
         public GearType Type;
         public Resource Durability;
         public EquipComponent()
         {
-            this.Stats = new Dictionary<Stat.Types, float>();
             this.Type = null;
             this.Durability = new Resource(ResourceDef.Durability);
         }
@@ -27,35 +24,12 @@ namespace Start_a_Town_.Components
             return this;
         }
 
-        public EquipComponent Initialize(params Tuple<Stat.Types, float>[] stats)
-        {
-            foreach (var stat in stats)
-                this.Stats[stat.Item1] = stat.Item2;
-            return this;
-        }
-       
         public override object Clone()
         {
             throw new Exception();
         }
 
-
-        static public void GetStats(GameObjectSlot objSlot, StatCollection stats)
-        {
-            if (!objSlot.HasValue)
-                return;
-            GetStats(objSlot.Object, stats);
-        }
-        static public void GetStats(GameObject obj, StatCollection stats)
-        {
-            EquipComponent eq;
-            if (!obj.TryGetComponent<EquipComponent>("Equip", out eq))
-                return;
-            foreach (var stat in eq.Stats)
-                stats[stat.Key] = stats.GetValueOrDefault(stat.Key) + stat.Value;
-        }
-
-        public override void OnTooltipCreated(GameObject parent, UI.Control tooltip)
+        public override void OnTooltipCreated(GameObject parent, Control tooltip)
         {
             tooltip.Controls.Add(new Label(this.Durability.ToString())
             {
@@ -76,7 +50,6 @@ namespace Start_a_Town_.Components
             actions.Add(new Equip());
             actions.Add(new EquipFromInventory());
         }
-
       
         public override void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> list)
         {

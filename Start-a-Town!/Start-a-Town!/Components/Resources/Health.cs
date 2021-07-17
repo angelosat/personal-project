@@ -68,7 +68,7 @@ namespace Start_a_Town_.Components.Resources
                 case Message.Types.Attacked:
                     GameObject attacker = e.Parameters[0] as GameObject;
                     Attack attack = e.Parameters[1] as Attack;
-                    float reduction = 1 - StatsComponentNew.GetStatValueOrDefault(parent, Stat.Types.DmgReduction);
+                    float reduction = 1;// - StatsComponentNew.GetStatValueOrDefault(parent, Stat.Types.DmgReduction);
 
                     int finalValue = (int)(attack.Value * reduction);
                     this.Add(-finalValue, resource);

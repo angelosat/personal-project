@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using System.Linq;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
@@ -10,7 +8,7 @@ using Start_a_Town_.Modules.AI.Net;
 
 namespace Start_a_Town_.AI
 {
-    class AIManager : GameComponent
+    sealed class AIManager : GameComponent
     {
         public override void Initialize()
         {

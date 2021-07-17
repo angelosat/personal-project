@@ -61,10 +61,10 @@ namespace Start_a_Town_.UI
             Button chunkshot = new Button("Render current chunk to file");
             Panel_Buttons.Controls.Add(chunkshot);
             Client.Controls.Add(Panel_Tabs, Panel_Mouseover);
-            chunkshot.LeftClick += new UIEvent(chunkshot_Click);
+            chunkshot.LeftClickAction = chunkshot_Click;
         }
 
-        void chunkshot_Click(object sender, EventArgs e)
+        void chunkshot_Click()
         {
             SpriteBatch sb = Game1.Instance.spriteBatch;
             GraphicsDevice gfx = Game1.Instance.GraphicsDevice;

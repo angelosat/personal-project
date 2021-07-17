@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components
 {
+    [Obsolete]
     class Attack
     {
         public enum States { Ready, Charging, Charged, Delivering }
         public static double DefaultArc = Math.PI / 6d;
 
-        public StatCollection Damage;
         public Vector3 Direction, Momentum;
         public GameObject Attacker;
         public bool Critical;
@@ -21,7 +21,7 @@ namespace Start_a_Town_.Components
             get
             {
                 var charge = Math.Max(.1f, this.Charge); // maybe change range of charge to never be 0?
-                return (int)Math.Ceiling(charge * Damage.Values.Aggregate((a, b) => a + b)); 
+                return (int)Math.Ceiling(charge);// * Damage.Values.Aggregate((a, b) => a + b)); 
             }
         }
 
@@ -39,12 +39,12 @@ namespace Start_a_Town_.Components
             throw new Exception();
             if (attacker.TryGetComponent<PersonalInventoryComponent>(c =>
             {
-                GameObjectSlot holdSlot = null;// attacker["Inventory"]["Holding"] as GameObjectSlot;
-                this.Damage = WeaponComponent.GetDamage(holdSlot.Object) ?? WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);
+                GameObjectSlot holdSlot = null;
+                //this.Damage = WeaponComponent.GetDamage(holdSlot.Object) ?? WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);
             })) { }
             else
             {
-                this.Damage = WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);
+                //this.Damage = WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);
             }
             Charge = charge;
         }
@@ -78,7 +78,7 @@ namespace Start_a_Town_.Components
 
         internal Vector3 GetMomentum()
         {
-            float coef =  this.Charge * (1 + StatsComponent.GetStatOrDefault(this.Attacker, Stat.Types.Knockback, 0));
+            float coef = this.Charge;// * (1 + StatsComponent.GetStatOrDefault(this.Attacker, Stat.Types.Knockback, 0));
             return this.Momentum * coef;
         }
     }

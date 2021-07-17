@@ -1,79 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_.AI
 {
-    public class AIState
+    public sealed class AIState
     {
         public SortedSet<Threat> Threats = new();
         public PathingSync PathFinder = new();
         public bool Autonomy = true;
         public Queue<AITask> TaskQueue = new();
 
-        private AITask currentTask;
-        public AITask CurrentTask { get => currentTask;
-            set
-            {
-                currentTask = value;
-            }
+        private AITask _currentTask;
+        public AITask CurrentTask
+        {
+            get => this._currentTask;
+            set => this._currentTask = value;
         }
 
-        private BehaviorPerformTask currentTaskBehavior;
+        private BehaviorPerformTask _currentTaskBehavior;
         public BehaviorPerformTask CurrentTaskBehavior
         {
-            get => currentTaskBehavior;
-            set {
+            get => this._currentTaskBehavior;
+            set
+            {
                 if (this.Parent.Net is Server)
-                    Start_a_Town_.Modules.AI.Net.PacketTaskUpdate.Send(this.Parent.Net as Net.Server, this.Parent.RefID, value?.GetType().Name ?? "Idle");
-                currentTaskBehavior = value;
+                    PacketTaskUpdate.Send(this.Parent.Net as Net.Server, this.Parent.RefID, value?.GetType().Name ?? "Idle");
+                this._currentTaskBehavior = value;
             }
         }
 
-        [Obsolete]
-        public AITask Task; // remove
         public string TaskString = "none";
         public override string ToString()
         {
-            return this.Task != null ? "Task: " + this.Task.ToString() : this.TaskString;
+            return this.CurrentTask != null ? "Task: " + this.CurrentTask.ToString() : this.TaskString;
         }
-        
-        public void SetTask(AITask task)
-        {
-            this.Task = task;
-            task.Reserve(this.Parent);
-            Start_a_Town_.Modules.AI.Net.PacketTaskUpdate.Send(this.Parent.Net as Server, this.Parent.RefID, this.Task.Name);
-        }
-        static public void SetTask(GameObject actor, AITask task)
-        {
-            AIState.GetState(actor).SetTask(task);
-        }
-        
-        public HashSet<JobDef> Labors = JobDefOf.All;
+
         readonly Dictionary<JobDef, Job> Jobs = JobDefOf.All.ToDictionary(i => i, i => new Job(i));
 
         public Dictionary<string, object> Blackboard = new();
         public object this[string key]
         {
-            get { return this.Blackboard[key]; }
-            set { this.Blackboard[key] = value; }
+            get => this.Blackboard[key];
+            set => this.Blackboard[key] = value;
         }
 
-        static public AIConversationManager ConversationManager = new();
+        public static AIConversationManager ConversationManager = new();
         public AIConversationManager.Conversation CurrentConversation;
-        
-        public Stack<AITarget> AIPath = new();
+
         public IItemPreferencesManager ItemPreferences;
 
         public GameObject Parent; //use this?
-        public Queue<AIInstruction> Commands = new();
         public Dictionary<string, object> Properties = new();
-        public AITarget MoveTarget;
         public Knowledge Knowledge;
         public AILog History = new();
 
@@ -97,21 +79,20 @@ namespace Start_a_Town_.AI
             this.NearbyEntities = new List<GameObject>();
             this.ItemPreferences = new ItemPreferencesManager(actor);
         }
-       
-        static public bool TryGetState(GameObject entity, out AIState state)
+
+        public static bool TryGetState(GameObject entity, out AIState state)
         {
-            AIComponent ai;
-            if (entity.TryGetComponent<AIComponent>(out ai))
+            if (entity.TryGetComponent<AIComponent>(out AIComponent ai))
                 state = ai.State;
             else
                 state = null;
             return state != null;
         }
-        static public AIState GetState(GameObject entity)
+        public static AIState GetState(GameObject entity)
         {
             return entity.GetComponent<AIComponent>().State;
         }
-        
+
         public bool HasJob(JobDef job)
         {
             return this.Jobs.TryGetValue(job, out var j) ? j.Enabled : false;
@@ -136,7 +117,7 @@ namespace Start_a_Town_.AI
         internal void Generate(GameObject npc, RandomThreaded random)
         {
         }
-        
+
         public void Write(BinaryWriter w)
         {
             this.Jobs.Sync(w);
@@ -149,9 +130,9 @@ namespace Start_a_Town_.AI
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             tag.Add(new SaveTag(SaveTag.Types.Vector3, "Leash", this.Leash));
-            
+
             tag.Add((this.CurrentTask != null).Save("HasTask"));
-            if(this.CurrentTask!=null)
+            if (this.CurrentTask != null)
             {
                 tag.Add(this.CurrentTask.Save("Task"));
             }
@@ -162,7 +143,7 @@ namespace Start_a_Town_.AI
                 tag.Add(bhavtag);
             }
             this.Path.TrySave(tag, "Path");
-            this.Jobs.Save(tag, "Jobs", SaveTag.Types.String, key=>key.Name);
+            this.Jobs.Save(tag, "Jobs", SaveTag.Types.String, key => key.Name);
             this.ItemPreferences.Save(tag, "ItemPreferences");
             return tag;
         }
@@ -172,8 +153,8 @@ namespace Start_a_Town_.AI
             tag.TryGetTagValue<bool>("HasTask", out var hastask);
             if (hastask)
             {
-                    var task = AITask.Load(tag["Task"]);
-                    this.CurrentTask = task;
+                var task = AITask.Load(tag["Task"]);
+                this.CurrentTask = task;
             }
             tag.TryGetTag("Behavior", t =>
             {
@@ -236,13 +217,7 @@ namespace Start_a_Town_.AI
         public Queue<TargetArgs> MoveOrders = new();
         public AITask ForcedTask;
 
-        public TargetArgs MoveOrder
-        {
-            get
-            {
-                return this.MoveOrders.Any() ? this.MoveOrders.Peek() : TargetArgs.Null;
-            }
-        }
+        public TargetArgs MoveOrder => this.MoveOrders.Any() ? this.MoveOrders.Peek() : TargetArgs.Null;
 
         internal void AddMoveOrder(TargetArgs target, bool enqueue)
         {

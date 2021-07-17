@@ -371,8 +371,7 @@ namespace Start_a_Town_.UI
         }
 
         internal bool isPressed = false, Active = true;
-        [Obsolete]
-        public event UIEvent LeftClick;
+       
         [Obsolete]
         public event EventHandler<HandledMouseEventArgs> MouseScroll, MouseLeftPress;
 
@@ -465,7 +464,6 @@ namespace Start_a_Town_.UI
         }
         protected virtual void OnLeftClick()
         {
-            LeftClick?.Invoke(this, new UIEventArgs(this));
         }
         protected virtual void OnRightClick()
         {

@@ -1,4 +1,4 @@
-﻿using Start_a_Town_.Components;
+﻿using System;
 
 namespace Start_a_Town_
 {
@@ -18,18 +18,7 @@ namespace Start_a_Town_
                 switch (Type)
                 {
                     case EntryTypes.Damage:
-                        Attack attack = Values[2] as Attack;
-                        StatCollection dmg = attack.Damage;
-                        string text = (Values[0] as GameObject).Name + " hits " + (Values[1] as GameObject).Name + " for " + attack.Value + " damage";
-                        bool first = true;
-                        foreach (var d in dmg)
-                        {
-                            if (d.Value == 0)
-                                continue;
-                            text += " (" + d.Value + " " + d.Key + ")";
-                            first = false;
-                        }
-                        return text;
+                        throw new NotImplementedException();
                     case EntryTypes.Death:
                         return (Values[1] as GameObject).Name + " slain by " + (Values[0] as GameObject).Name;
                     case EntryTypes.Equip:

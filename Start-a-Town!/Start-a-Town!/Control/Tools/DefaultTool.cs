@@ -388,20 +388,6 @@ namespace Start_a_Town_.PlayerControl
             }
         }
 
-        readonly Action RepeatAction = () => { };
-        internal override void OnGameEvent(GameEvent e)
-        {
-            switch(e.Type)
-            {
-                case Message.Types.InteractionSuccessful:
-                    this.RepeatAction();
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
         internal override void SlotRightClick(GameObjectSlot slot)
         {
             Client.PlayerSlotInteraction(slot);

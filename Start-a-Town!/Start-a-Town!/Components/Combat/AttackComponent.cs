@@ -5,6 +5,7 @@ using Start_a_Town_.Animations;
 
 namespace Start_a_Town_.Components
 {
+    [Obsolete]
     class AttackComponent : EntityComponent
     {
         public override string ComponentName => "Attack";
@@ -13,31 +14,20 @@ namespace Start_a_Town_.Components
         public static double DefaultArc = Math.PI / 6d;
         public static float LungeMax = 0.2f;
 
-        public StatCollection Damage;
-        public Vector3 Direction, Momentum;
-        public GameObject Source;
-        public bool Critical;
         public int Charge { get; set; }
         public int ChargeMax { get; set; }
         public Func<float> ChargeFunc { get; set; }
         public Attack.States State;
-        public Func<GameObject, GameObject, Vector3, bool> CollisionType;
         public Animation AttackAnimation;
 
         public GameObject Target;
         const float NearestEnemyIntervalSeconds = 0.5f;// in seconds TODO: store nearest entities with gameobject so individual components can access them without calculating them by themselves each time
         int NearestEnemyUpdateTimer = 0;
-        public int NearestEnemyUpdateTimerMax
-        {
-            get
-            {
-                return (int)(NearestEnemyIntervalSeconds * Engine.TicksPerSecond);
-            }
-        }
+        public int NearestEnemyUpdateTimerMax =>(int)(NearestEnemyIntervalSeconds * Engine.TicksPerSecond);
 
         public int DamageValue
         {
-            get { return (int)Math.Round(ChargeFunc() * Damage.Values.Aggregate((a, b) => a + b)); }
+            get { return (int)Math.Round(ChargeFunc()); }// * Damage.Values.Aggregate((a, b) => a + b)); }
         }
 
         public override void Tick()
@@ -160,8 +150,8 @@ namespace Start_a_Town_.Components
         }
         static public bool LineOfSight(MapBase map, Vector3 start, Vector3 end)
         {
-            Vector3 difference = end - start;
-            float maxlength = difference.LengthSquared();
+            var difference = end - start;
+            var maxlength = difference.LengthSquared();
             var direction = difference;
             direction.Normalize();
             var precision = .5f;
@@ -179,52 +169,7 @@ namespace Start_a_Town_.Components
             }
             return true;
         }
-        [Obsolete]
-        static public bool LineOfSightOld(MapBase map, Vector3 start, Vector3 end)
-        {
-            Vector3 difference = end - start;
-            float length = difference.Length();
-            difference.Normalize();
-            if (Math.Abs(difference.X) > Math.Abs(difference.Y))
-            {
-                if (difference.X > 0)
-                    for (int i = 1; i < difference.X + 1; i++)
-                    {
-                        float t = i / difference.X;
-                        Vector3 check = start + new Vector3(i, t * difference.Y, t * difference.Z);
-                        if (map.IsSolid(check))
-                            return false;
-                    }
-                else
-                    for (int i = -1; i > difference.X - 1; i--)
-                    {
-                        float t = i / Math.Abs(difference.X);
-                        Vector3 check = start + new Vector3(i, t * difference.Y, t * difference.Z);
-                        if (map.IsSolid(check))
-                            return false;
-                    }
-            }
-            else
-            {
-                if (difference.Y > 0)
-                    for (int i = 1; i < difference.Y + 1; i++)
-                    {
-                        float t = i / difference.Y;
-                        Vector3 check = start + new Vector3(t * difference.X, i, t * difference.Z);
-                        if (map.IsSolid(check))
-                            return false;
-                    }
-                else
-                    for (int i = -1; i > difference.Y - 1; i--)
-                    {
-                        float t = i / Math.Abs(difference.Y);
-                        Vector3 check = start + new Vector3(t * difference.X, i, t * difference.Z);
-                        if (map.IsSolid(check))
-                            return false;
-                    }
-            }
-            return true;
-        }
+        
         static GameObject FindClosestEnemy(GameObject parent)
         {
             var list = parent.GetNearbyObjects(r => r <= 5, foo => foo != parent)

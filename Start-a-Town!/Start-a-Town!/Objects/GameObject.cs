@@ -1279,11 +1279,7 @@ namespace Start_a_Town_
         {
             return this.GetComponent<NeedsComponent>().NeedsNew.First(n => n.NeedDef.Name == needName);
         }
-        internal float GetStat(Stat.Types type)
-        {
-            return StatsComponentNew.GetStatValueOrDefault(this, type);
-        }
-
+     
         internal float GetToolWorkAmount(int skillID)
         {
             var tool = this.GetEquipmentSlot(GearType.Types.Mainhand).Object;

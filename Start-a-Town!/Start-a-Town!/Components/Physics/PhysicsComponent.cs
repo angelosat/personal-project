@@ -414,7 +414,7 @@ namespace Start_a_Town_.Components
                     GameObject attacker = e.Parameters[0] as GameObject;
                     Attack attack = e.Parameters[1] as Attack;
 
-                    float knockResistance = 1 - Math.Min(1, StatsComponent.GetStatOrDefault(parent, Stat.Types.KnockbackResistance, 0f));
+                    float knockResistance = 1;// - Math.Min(1, StatsComponent.GetStatOrDefault(parent, Stat.Types.KnockbackResistance, 0f));
 
                     Vector3 knockback = attack.GetMomentum() * knockResistance;
                     parent.Velocity += knockback * KnockbackMagnitude;

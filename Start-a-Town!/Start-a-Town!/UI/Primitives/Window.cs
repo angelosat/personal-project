@@ -15,7 +15,7 @@ namespace Start_a_Town_.UI
         public bool FocusLast = false, isMouseOverCurrent = false, isMouseOverPrevious = false;
         public Window Previous;
         public bool Movable, IsDragged;
-        protected Rectangle ScreenClientBounds = new Rectangle();
+        protected Rectangle ScreenClientBounds = new();
         protected bool _Closable = true;
         public bool Closable
         {
@@ -115,22 +115,17 @@ namespace Start_a_Town_.UI
         public Window()
         {
             this.Color = UIManager.Tint;
-            this.ClientLocation = new Vector2(UIManager.BorderPx, UIManager.BorderPx);// + (int)UIManager.Font.MeasureString(Title).Y);
+            this.ClientLocation = new Vector2(UIManager.BorderPx, UIManager.BorderPx);
             this.Client = new GroupBox() { Name = "Window client area", MouseThrough = true, Size = ClientSize, Location = new Vector2(0, Label.DefaultHeight) };
             this.CloseButton = new UICloseButton();
             this.CloseButton.Location = new Vector2(this.Width - 16 - UIManager.BorderPx - this.ClientLocation.X, UIManager.BorderPx - this.ClientLocation.Y);
-            this.CloseButton.LeftClick += new UIEvent(this.close_button_Click);
-            this.Label_Title = new Label() { Font = UIManager.FontBold, MouseThrough = true };//false, Active = true };//true };
+            this.CloseButton.LeftClickAction = () => this.Hide();
+            this.Label_Title = new Label() { Font = UIManager.FontBold, MouseThrough = true };
             this.Label_Title.MouseLBActionOld = this.StartDragging;
             this.AutoSize = true;
             this.Controls.Add(this.Label_Title, this.CloseButton, this.Client);
             this.AutoSize = false;
             this.Select();
-        }
-
-        void close_button_Click(Object sender, EventArgs e)
-        {
-            this.Hide();
         }
 
         public override void Update()

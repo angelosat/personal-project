@@ -27,14 +27,6 @@ namespace Start_a_Town_.Components
             }
         }
 
-        public void GetStats(StatCollection stats)
-        {
-            if (Wearing.HasValue)
-                EquipComponent.GetStats(Wearing.Object, stats);
-            if (Base.HasValue) 
-                EquipComponent.GetStats(Base.Object, stats);
-        }
-
         public List<SaveTag> Save()
         {
             List<SaveTag> data = new List<SaveTag>();

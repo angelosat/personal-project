@@ -129,16 +129,13 @@ namespace Start_a_Town_
                 Stop(actor);
                 return;
             }
-            var instr = new AIInstruction(target, this);
 
             if (this.State == States.Unstarted)
                 this.Start(actor, target);
             else if (this.State == States.Finished)
             {
                 Stop(actor);
-                actor.Net.Map.EventOccured(Message.Types.InteractionSuccessful, actor, instr);
                 AILog.TryWrite(actor, "Success: " + this.GetCompletedText(actor, target));
-
                 return;
             }
 
@@ -149,9 +146,7 @@ namespace Start_a_Town_
                 if (this.State == States.Finished)
                 {
                     Stop(actor);
-                    actor.Net.Map.EventOccured(Message.Types.InteractionSuccessful, actor, instr);
                     AILog.TryWrite(actor, "Success: " + this.GetCompletedText(actor, target));
-
                 }
                 return;
             }
@@ -264,7 +259,6 @@ namespace Start_a_Town_
         public void Finish(Actor actor, TargetArgs target)
         {
             this.State = States.Finished;
-            actor.Net.Map.EventOccured(Message.Types.InteractionSuccessful, actor, this);
         }
         internal virtual void AfterLoad(Actor actor, TargetArgs target)
         {

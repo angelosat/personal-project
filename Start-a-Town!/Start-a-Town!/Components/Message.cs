@@ -28,7 +28,6 @@ namespace Start_a_Town_.Components
             AttackTelegraph,
             BlockEntityRemoved,
             BlockChanged,
-            InteractionSuccessful,
             ItemGot,
             ItemLost,
             NotEnoughSpace,

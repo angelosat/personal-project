@@ -948,7 +948,7 @@ namespace Start_a_Town_
             gd.Textures[0] = Sprite.Atlas.Texture;
             gd.Textures[1] = Sprite.Atlas.DepthTexture;
             this.DrawEntities(scene, objs);
-            map.DrawParticles(this.SpriteBatch, this);
+            map.DrawParticles(this);
 
             //  // draw entity shadows
             MySpriteBatch shadowsSB = new MySpriteBatch(gd);

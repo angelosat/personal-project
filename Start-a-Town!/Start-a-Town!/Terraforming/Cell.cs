@@ -9,10 +9,6 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    [Flags]
-    public enum Edges { None = 0x0, West = 0x1, North = 0x2, East = 0x4, South = 0x8, All = 0xF }
-    [Flags]
-    public enum VerticalSides { None = 0x0, Top = 0x1, Bottom = 0x2, All = 0x3 }
     public class Cell : ISlottable
     {
         public string GetName()
@@ -54,8 +50,6 @@ namespace Start_a_Town_
             return
                 "Local: " + LocalCoords +
                 "\nTile ID: " + this.Block.Type +
-                "\nHorizontal Sides: " + HorizontalSides +
-                "\nVertical Sides: " + VerticalSides +
                 "\nStyle: " + Variation +
                 "\nOrientation: " + Orientation +
                 "\nVisible: " + Visible;
@@ -63,7 +57,9 @@ namespace Start_a_Town_
 
         static BitVector32.Section _X, _Y, _Z, _HasData, _Orientation, _Visible;
         static BitVector32.Section _Variation, _HorEdges, _VerEdges, _Luminance, _BlockData;
-        static BitVector32.Section _Valid, _Discovered, _HorizontalEdges, _VerticalEdges;
+        static BitVector32.Section _Valid, _Discovered, 
+            _HorizontalEdges, // TODO remove
+            _VerticalEdges; // TODO remove
 
         static public void Initialize()
         {
@@ -86,14 +82,12 @@ namespace Start_a_Town_
             _VerticalEdges = BitVector32.CreateSection(3, _HorizontalEdges); //1 bits
         }
 
-        #region fields
         public byte X; // 1 byte
         public byte Y; // 1 byte
         public byte Z; // 1 byte
         public Block Block = BlockDefOf.Air; // 4 bytes
         public BitVector32 Data2; // 4 bytes
         public BitVector32 ValidDiscovered; // 4 bytes
-        #endregion
 
         public bool Valid
         {
@@ -105,19 +99,6 @@ namespace Start_a_Town_
             get { return this.ValidDiscovered[_Discovered] == 1; }
             set { this.ValidDiscovered[_Discovered] = value ? 1 : 0; }
         }
-        public Edges HorizontalSides
-        {
-            get { return (Edges)this.ValidDiscovered[_HorizontalEdges]; }
-            set { this.ValidDiscovered[_HorizontalEdges] = (int)value; }
-
-        }
-        public VerticalSides VerticalSides
-        {
-            get { return (VerticalSides)this.ValidDiscovered[_VerticalEdges]; }
-            set {this.ValidDiscovered[_VerticalEdges] = (int)value; }
-        }
-
-        #region properties
         public byte BlockData
         {
             get { return (byte)Data2[_BlockData]; }
@@ -165,17 +146,12 @@ namespace Start_a_Town_
                 Z = (byte)value.Z;
             }
         }
-        internal bool IsExposed => this.AllEdges != 0; 
-        byte AllEdges => (byte)(((int)this.VerticalSides << 4) + this.HorizontalSides);
-
+       
         public Material Material => this.Block.GetMaterial(this.BlockData);
-        #endregion
 
         public Cell()
         {
             this.Valid = true;
-            this.HorizontalSides = Edges.All; // 4 bytes
-            this.VerticalSides = VerticalSides.All; // 4 bytes
         }
         public Cell(int localX, int localY, int localZ):this()
         {
@@ -265,10 +241,6 @@ namespace Start_a_Town_
         internal IEnumerable<IntVec3> GetOperatingPositionsGlobal(IntVec3 global)
         {
             return this.Block.GetOperatingPositions(this, global);
-        }
-        internal bool IsHidden()
-        {
-            return !this.IsExposed && Rooms.Ingame.CurrentMap.Camera.HideUnknownBlocks;
         }
     }
 }

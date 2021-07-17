@@ -104,7 +104,7 @@ namespace Start_a_Town_
 
         int GetTotalFertileCells()
         {
-            var total = this.Map.GetAllCells().Where(c => c.Fertility > 0).Count();
+            var total = this.Map.AllCells.Where(c => c.Fertility > 0).Count();
             return total;
         }
         protected override void AddSaveData(SaveTag tag)

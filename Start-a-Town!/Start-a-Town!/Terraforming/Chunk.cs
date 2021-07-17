@@ -14,6 +14,8 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
+    [Flags]
+    public enum Edges { None = 0x0, West = 0x1, North = 0x2, East = 0x4, South = 0x8, All = 0xF }
     public class Chunk
     {
         public Chunk Clone()
@@ -452,29 +454,7 @@ namespace Start_a_Town_
             if (light > 0)
                 this.HeightMap[localx][localy] = z;
         }
-        [Obsolete]
-        internal void ResetVisibleOuterBlocks()
-        {
-            for (int i = 0; i < Chunk.Size; i++)
-                for (int z = 0; z < this.Map.GetMaxHeight(); z++)
-                {
-                    Vector3[] cellCoords = new Vector3[]{
-                        new Vector3(Chunk.Size - 1, i, z),
-                        new Vector3(i, 0, z),
-                        new Vector3(0, i, z),
-                        new Vector3(i, Chunk.Size - 1, z)};
-                    foreach (var pos in cellCoords)
-                    {
-                        Cell cell = this[pos];
-                        if (cell.IsInvisible())
-                            continue;
-                        this.UpdateBlockFaces(cell, Edges.All, VerticalSides.All);
-                        if (cell.HorizontalSides != 0 || cell.VerticalSides != 0)
-                            this.CellsToActivate.Enqueue(cell);
-                    }
-                }
-        }
-
+       
         public Queue<Vector3> ResetHeightMapColumn(int localx, int localy)
         {
             Queue<Vector3> lightsourcesToHandle = new Queue<Vector3>();
@@ -679,7 +659,6 @@ namespace Start_a_Town_
         public void Update()
         {
             this.UpdateSkyLight();
-            this.UpdateChunkBoundaries();
             this.ValidateHeightmap();
             this.ValidateCells();
         }
@@ -719,18 +698,7 @@ namespace Start_a_Town_
                 objectList[i].Update();
             }
         }
-
-        public void UpdateChunkBoundaries()
-        {
-            if (!this.ChunkBoundariesUpdated)
-                return;
-            if (!this.Map.ChunkNeighborsExist(this.MapCoords))
-                return;
-            this.ChunkBoundariesUpdated = false;
-            this.ResetVisibleOuterBlocks();
-            this.LightCache2.Clear();
-        }
-
+       
         public void UpdateSkyLight(bool force = false)
         {
             if (this.SkylightUpdated || force)
@@ -1113,99 +1081,6 @@ namespace Start_a_Town_
             return this.CellGrid2[GetCellIndex(local)];
         }
 
-        /// <summary>
-        /// Do this on chunk loading or after it's been added to the map's active chunks?
-        /// </summary>
-        /// <param name="local"></param>
-        /// <param name="horEdgesToCheck"></param>
-        /// <param name="verEdgesToCheck"></param>
-        /// <returns></returns>
-        [Obsolete]
-        public bool UpdateBlockFaces(Cell cell, Edges horEdgesToCheck, VerticalSides verEdgesToCheck)
-        {
-            if (cell == null)
-                return false;
-            var local = cell.LocalCoords;
-            Edges lastEdges = cell.HorizontalSides;
-            VerticalSides lastVerticalEdges = cell.VerticalSides;
-
-            if ((horEdgesToCheck & Edges.West) == Edges.West)
-            {
-                if (this.TryGetCell(local - new IntVec3(1, 0, 0), out Cell west))
-                {
-                    if (west.Opaque || (cell.Block == BlockDefOf.Water && (west.Block == BlockDefOf.Water && west.BlockData == 1))) //if current block is water and neightbor block is water and is full, hide face
-                        cell.HorizontalSides &= ~Edges.West;
-                    else
-                        cell.HorizontalSides |= Edges.West;
-                }
-                else
-                    cell.HorizontalSides &= ~Edges.West;
-            }
-            if ((horEdgesToCheck & Edges.North) == Edges.North)
-            {
-                if (this.TryGetCell((local - new IntVec3(0, 1, 0)), out Cell north))
-                {
-                    if (north.Opaque || (cell.Block == BlockDefOf.Water && (north.Block == BlockDefOf.Water && north.BlockData == 1)))
-                        cell.HorizontalSides &= ~Edges.North;
-                    else
-                        cell.HorizontalSides |= Edges.North;
-                }
-                else
-                    cell.HorizontalSides &= ~Edges.North;
-            }
-            if ((horEdgesToCheck & Edges.South) == Edges.South)
-            {
-                if (this.TryGetCell((local + new IntVec3(0, 1, 0)), out Cell south))
-                {
-                    if (south.Opaque || (cell.Block == BlockDefOf.Water && (south.Block == BlockDefOf.Water && south.BlockData == 1)))
-                        cell.HorizontalSides &= ~Edges.South;
-                    else
-                        cell.HorizontalSides |= Edges.South;
-                }
-                else
-                    cell.HorizontalSides &= ~Edges.South;
-            }
-            if ((horEdgesToCheck & Edges.East) == Edges.East)
-            {
-                if (this.TryGetCell((local + new IntVec3(1, 0, 0)), out Cell east))
-                {
-                    if (east.Opaque || (cell.Block == BlockDefOf.Water && (east.Block == BlockDefOf.Water && east.BlockData == 1)))
-                        cell.HorizontalSides &= ~Edges.East;
-                    else
-                        cell.HorizontalSides |= Edges.East;
-                }
-                else
-                    cell.HorizontalSides &= ~Edges.East;
-            }
-            if ((verEdgesToCheck & VerticalSides.Top) == VerticalSides.Top)
-            {
-                if (this.TryGetCell((local + new IntVec3(0, 0, 1)), out Cell top))
-                {
-                    if (top.Opaque || (cell.Block == BlockDefOf.Water && (top.Block == BlockDefOf.Water && top.BlockData == 1)))
-                        cell.VerticalSides &= ~VerticalSides.Top;
-                    else
-                        cell.VerticalSides |= VerticalSides.Top;
-                }
-                else
-                    cell.VerticalSides &= ~VerticalSides.Top;
-            }
-            if ((verEdgesToCheck & VerticalSides.Bottom) == VerticalSides.Bottom)
-            {
-                if (this.TryGetCell((local - new IntVec3(0, 0, 1)), out Cell bottom))
-                {
-                    if (bottom.Opaque || (cell.Block == BlockDefOf.Water && (bottom.Block == BlockDefOf.Water && bottom.BlockData == 1)))
-                        cell.VerticalSides &= ~VerticalSides.Bottom;
-                    else
-                        cell.VerticalSides |= VerticalSides.Bottom;
-                }
-                else
-                    cell.VerticalSides &= ~VerticalSides.Bottom;
-            }
-            if (cell.VerticalSides != lastVerticalEdges || cell.HorizontalSides != lastEdges)
-                this.InvalidateLight(local.ToGlobal(this));
-            return true;
-        }
-
         public List<IntVec3> GetEdges(Edges edges)
         {
             var list = new HashSet<IntVec3>();
@@ -1266,8 +1141,6 @@ namespace Start_a_Town_
                     consecutiveAirblocks = 0;
                 }
                 w.Write((int)cell.Block.Type);
-                w.Write((byte)cell.HorizontalSides);
-                w.Write((byte)cell.VerticalSides);
                 w.Write(cell.Data2.Data);
                 w.Write(cell.Discovered);
             }
@@ -1306,9 +1179,6 @@ namespace Start_a_Town_
                 {
                     Cell cell = this.CellGrid2[cellIndex++];
                     cell.SetBlockType(type);
-
-                    cell.HorizontalSides = (Edges)r.ReadByte();
-                    cell.VerticalSides = (VerticalSides)r.ReadByte();
 
                     cell.Data2 = new BitVector32(r.ReadInt32());
                     cell.Discovered = r.ReadBoolean();

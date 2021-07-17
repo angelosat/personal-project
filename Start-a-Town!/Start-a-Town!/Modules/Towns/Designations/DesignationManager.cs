@@ -58,11 +58,8 @@ namespace Start_a_Town_
                 {
                     if (remove)
                         list.Remove(pos);
-                    else
-                    {
-                        if (designation.IsValid(this.Town.Map, pos))
-                            list.Add(pos);
-                    }
+                    else if (designation.IsValid(this.Town.Map, pos))
+                        list.Add(pos);
                 }
             }
             this.UpdateQuickButtons();
@@ -73,15 +70,15 @@ namespace Start_a_Town_
             foreach (var des in Designations)
                     cam.DrawGridBlocks(sb, Block.BlockBlueprint, des.Value, Color.White);
         }
-        public DesignationDef GetDesignation(Vector3 global)
+        public DesignationDef GetDesignation(IntVec3 global)
         {
             return this.Designations.FirstOrDefault(d => d.Value.Contains(global)).Key; // will this return null if no designation?
         }
-        internal bool IsDesignation(Vector3 global)
+        internal bool IsDesignation(IntVec3 global)
         {
             return Designations.Values.Any(v => v.Contains(global));
         }
-        internal bool IsDesignation(Vector3 global, DesignationDef desType)
+        internal bool IsDesignation(IntVec3 global, DesignationDef desType)
         {
             var contains = Designations[desType].Contains(global);
             return contains;
@@ -183,7 +180,7 @@ namespace Start_a_Town_
                     UISelectedInfo.AddButton(s.IconAdd, targets => MineAdd(targets, s), list.Select(i => new TargetArgs(this.Map, i)));
             }
         }
-        static public readonly Icon MineIcon = new Icon(ItemContent.PickaxeFull);
+        static public readonly Icon MineIcon = new(ItemContent.PickaxeFull);
 
         static void MineAdd(List<TargetArgs> targets, DesignationDef des)
         {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
@@ -27,14 +26,7 @@ namespace Start_a_Town_
         {
             this.Furniture = FurnitureDefOf.Bed;
             this.BuildProperties = new BuildProperties(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
-            Towns.Constructions.ConstructionsManager.Furniture.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.TopParts = new AtlasDepthNormals.Node.Token[] {
                 Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
                 Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),

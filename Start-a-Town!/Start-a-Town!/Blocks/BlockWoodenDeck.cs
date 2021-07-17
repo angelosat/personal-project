@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Blocks;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Graphics;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,17 +74,9 @@ namespace Start_a_Town_
         {
             this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
             this.Variations.Add(this.GrayScale);
-
             this.Ingredient = new Ingredient(RawMaterialDef.Planks, null, null, 1);// 4);
-
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent()),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building)
-            { WorkAmount = 2 };// 20 };
-            Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
-
+            this.BuildProperties.WorkAmount = 2;
+            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
 
         public override LootTable GetLootTable(byte data)

@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.Particles;
 using Start_a_Town_.UI;
@@ -326,12 +325,8 @@ namespace Start_a_Town_
             var w = rect.Width / sqrt;
             var h = rect.Height / sqrt;
             for (int i = 0; i < sqrt; i++)
-            {
                 for (int j = 0; j < sqrt; j++)
-                {
                     list.Add(new Rectangle(rect.X + i * w, rect.Y + j * h, w, h));
-                }
-            }
 
             return list;
         }
@@ -342,25 +337,15 @@ namespace Start_a_Town_
         {
             return 0;
         }
-        [Obsolete]
-        public BlockRecipe Recipe;
-
-        public BuildProperties BuildProperties;
+      
+        public BuildProperties BuildProperties = new();
         public Ingredient Ingredient
         {
-            get => this.BuildProperties?.Ingredient;
-            set
-            {
-                if (this.BuildProperties is null)
-                {
-                    this.BuildProperties = new BuildProperties(value, 1);
-                }
-                else
-                {
-                    this.BuildProperties.Ingredient = value;
-                }
-            }
+            get => this.BuildProperties.Ingredient;
+            set => this.BuildProperties.Ingredient = value;
         }
+        public int WorkAmount => this.BuildProperties.WorkAmount;
+        public ConstructionCategory ConstructionCategory => this.BuildProperties.Category;
         public readonly bool HasData;
 
         public static void UpdateBlocks()
@@ -902,6 +887,14 @@ namespace Start_a_Town_
                     c.DrawSelected(sb, cam, map, global);
 
             this.OnDrawSelected(sb, cam, map, global);
+        }
+
+        protected void ToggleConstructionCategory(ConstructionCategory category, bool v)
+        {
+            if (v)
+                category.Add(this);
+            else
+                category.Remove(this);
         }
     }
 }

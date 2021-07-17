@@ -13,15 +13,15 @@ namespace Start_a_Town_.Towns.Constructions
 
         Panel Panel = new Panel();
 
-        static public void Refresh(Block block, Action<BlockRecipe.ProductMaterialPair> action)
+        static public void Refresh(Block block, Action<ProductMaterialPair> action)
         {
-            var variants = block.GetAllValidConstructionMaterialsNew().Select(m => new BlockRecipe.ProductMaterialPair(block, m)).GroupBy(p => p.Requirement.Material);
+            var variants = block.GetAllValidConstructionMaterialsNew().Select(m => new ProductMaterialPair(block, m)).GroupBy(p => p.Requirement.Material);
 
             Instance.Panel.Controls.Clear();
             Instance.Panel.AutoSize = true;
             Instance.ClearControls();
 
-            var list = new ListBoxNew<BlockRecipe.ProductMaterialPair, ButtonNew>(200, 300);
+            var list = new ListBoxNew<ProductMaterialPair, ButtonNew>(200, 300);
             foreach (var group in variants)
                 foreach (var variant in group)
                     list.AddItem(variant, v => "", (item, btn) => //v.Requirement.ToString()

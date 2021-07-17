@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
 {
@@ -12,12 +11,8 @@ namespace Start_a_Town_
             : base(Types.Bricks)
         {
             this.LoadVariations("bricks/bricks");
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent()),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building) { WorkAmount = 20 };
-            Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
+            this.BuildProperties.WorkAmount = 20;
+            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
             this.Ingredient = new Ingredient(RawMaterialDef.Boulders, null, null, 1);
         }
 
@@ -26,7 +21,6 @@ namespace Start_a_Town_
             return (from mat in Material.Registry.Values
                     where mat.Type == MaterialType.Stone
                     select (byte)mat.ID);
-
         }
         public override Material GetMaterial(byte data)
         {

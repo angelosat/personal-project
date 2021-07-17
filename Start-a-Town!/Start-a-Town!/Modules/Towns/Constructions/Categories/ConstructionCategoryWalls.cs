@@ -4,7 +4,7 @@ using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Towns.Constructions
+namespace Start_a_Town_.Towns
 {
     public class ConstructionCategoryWalls : ConstructionCategory
     {
@@ -22,11 +22,11 @@ namespace Start_a_Town_.Towns.Constructions
             return btn_Construct;
         }
       
-        public override ToolDrawing GetTool(Func<BlockRecipe.ProductMaterialPair> itemGetter)
+        public override ToolDrawing GetTool(Func<ProductMaterialPair> itemGetter)
         {
             return new ToolDrawingEnclosure(a => CallBack(itemGetter, a));
         }
-        public override List<ToolDrawing> GetAvailableTools(Func<BlockRecipe.ProductMaterialPair> itemGetter)
+        public override List<ToolDrawing> GetAvailableTools(Func<ProductMaterialPair> itemGetter)
         {
             var item = itemGetter();
 

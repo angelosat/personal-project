@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Particles;
 
 namespace Start_a_Town_.Blocks
@@ -17,15 +16,7 @@ namespace Start_a_Town_.Blocks
         {
             this.LoadVariations("sand1");
             this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Sand, null, 1);
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.IsOfMaterial(MaterialDefOf.Sand)
-                        )),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
-            Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
         public override IEnumerable<byte> GetCraftingVariations()
         {

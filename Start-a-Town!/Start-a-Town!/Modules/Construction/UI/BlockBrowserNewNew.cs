@@ -10,7 +10,7 @@ namespace Start_a_Town_
 {
     class BlockBrowserNewNew : GroupBox
     {
-        Dictionary<Block, BlockRecipe.ProductMaterialPair> LastSelectedVariant = new();
+        Dictionary<Block, ProductMaterialPair> LastSelectedVariant = new();
         ConstructionCategory SelectedCategory;
         Panel Panel_Blocks;
         UIToolsBox ToolBox;
@@ -29,25 +29,19 @@ namespace Start_a_Town_
             var categories = ConstructionsManager.AllCategories;
             foreach (var cat in categories)
             {
-                var list = cat.List.Select(r => r.Block).Where(b => b.Ingredient != null);
+                var list = cat.List.Where(b => b.Ingredient != null);
 
                 var grid = new ButtonGridIcons<Block>(4, 6, list, (slot, block) =>
                 {
                     slot.Tag = block;
-                    slot.IsToggledFunc = () =>
-                    {
-                        return ToolManager.Instance.ActiveTool is ToolDrawing drawing && drawing.Block == block;
-                    };
-                    slot.PaintAction = () =>
-                    {
-                        block.PaintIcon(slot.Width, slot.Height, block.GetDataFromMaterial(GetLastSelectedVariantOrDefault(block).MainMaterial));
-                    };
+                    slot.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDrawing drawing && drawing.Block == block;
+                    slot.PaintAction = () => block.PaintIcon(slot.Width, slot.Height, block.GetDataFromMaterial(GetLastSelectedVariantOrDefault(block).Requirement.Material));
                     slot.LeftClickAction = () =>
                     {
                         this.CurrentSelected = block;
-                        BlockRecipe.ProductMaterialPair product = GetLastSelectedVariantOrDefault(block);
+                        var product = GetLastSelectedVariantOrDefault(block);
                         this.ToolBox.SetProduct(product, OnToolSelected);
-                        var tools = product.Recipe.Category.GetAvailableTools(() => GetLastSelectedVariantOrDefault(this.CurrentSelected));
+                        var tools = product.Block.ConstructionCategory.GetAvailableTools(() => GetLastSelectedVariantOrDefault(this.CurrentSelected));
 
                         this.ToolBox.SetProduct(product, OnToolSelected);
                         this.OnToolSelected(this.ToolBox.LastSelectedTool.GetType());
@@ -103,14 +97,14 @@ namespace Start_a_Town_
             ToolManager.SetTool(tool);
         }
         
-        private BlockRecipe.ProductMaterialPair GetLastSelectedVariantOrDefault(Block block)
+        private ProductMaterialPair GetLastSelectedVariantOrDefault(Block block)
         {
             if (this.LastSelectedVariant.ContainsKey(block))
                 return this.LastSelectedVariant[block];
             else
-                return new BlockRecipe.ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First()); // store last selected variant instead of getting first in list
+                return new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First()); // store last selected variant instead of getting first in list
         }
-        private void OnVariationSelected(BlockRecipe.ProductMaterialPair product)
+        private void OnVariationSelected(ProductMaterialPair product)
         {
             if (product is null)
                 return;

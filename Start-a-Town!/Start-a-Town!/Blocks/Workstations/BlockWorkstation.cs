@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Graphics;
+
 namespace Start_a_Town_
 {
     sealed class BlockWorkstation : BlockWithEntity, IBlockWorkstation
@@ -16,17 +16,7 @@ namespace Start_a_Town_
         {
             this.BlockEntityType = blockEntityType;
             this.Variations.Add(this.Orientations.First());
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.IsOfMaterialType(MaterialType.Wood),
-                        Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building)
-            { WorkAmount = 20 };
-
-            Towns.Constructions.ConstructionsManager.Production.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Production, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
 

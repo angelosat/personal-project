@@ -1,5 +1,4 @@
-﻿using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Graphics;
+﻿using Start_a_Town_.Graphics;
 
 namespace Start_a_Town_.Blocks
 {
@@ -19,14 +18,7 @@ namespace Start_a_Town_.Blocks
             Orientations[2] = Block.Atlas.Load("blocks/furniture/chairback2", Block.HalfBlockDepthMap, Block.NormalMap);
             Orientations[3] = Block.Atlas.Load("blocks/furniture/chairback", Block.HalfBlockDepthMap, Block.NormalMap);
 
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent(
-                        "Base",
-                        Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
-            Towns.Constructions.ConstructionsManager.Furniture.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
         public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)

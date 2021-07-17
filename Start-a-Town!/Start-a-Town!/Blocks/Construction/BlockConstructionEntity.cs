@@ -11,7 +11,7 @@ namespace Start_a_Town_
 {
     class BlockConstructionEntity : BlockEntity, IConstructible
     {
-        public BlockRecipe.ProductMaterialPair Product;
+        public ProductMaterialPair Product;
         public List<ItemDefMaterialAmount> Container = new();
         public Progress BuildProgress { get; set; }
         public Vector3 Origin { get; set; }
@@ -20,14 +20,14 @@ namespace Start_a_Town_
         {
 
         }
-        public BlockConstructionEntity(BlockRecipe.ProductMaterialPair product, Vector3 origin, GameObject initialMaterial, int amount)
+        public BlockConstructionEntity(ProductMaterialPair product, Vector3 origin, GameObject initialMaterial, int amount)
         {
             this.Product = product;
             if (amount > initialMaterial.StackSize)
                 throw new Exception();
             this.Container.Add(new ItemDefMaterialAmount(initialMaterial.Def, initialMaterial.PrimaryMaterial, amount));
 
-            this.BuildProgress = new Progress(0, product.Recipe.WorkAmount, 0);
+            this.BuildProgress = new Progress(0, product.Block.WorkAmount, 0);
             this.Origin = origin;
         }
 
@@ -122,7 +122,7 @@ namespace Start_a_Town_
         }
         protected override void LoadExtra(SaveTag tag)
         {
-            tag.TryGetTag("Product", t => this.Product = new BlockRecipe.ProductMaterialPair(t));
+            tag.TryGetTag("Product", t => this.Product = new ProductMaterialPair(t));
             tag.TryGetTagValue<Vector3>("Origin", t => this.Origin = t);
             tag.TryGetTagValue<List<SaveTag>>("Children", t => this.Children.Load(t));
             this.Container.TryLoadMutable(tag, "Container");
@@ -139,7 +139,7 @@ namespace Start_a_Town_
         }
         protected override void ReadExtra(BinaryReader r)
         {
-            this.Product = new BlockRecipe.ProductMaterialPair(r);
+            this.Product = new ProductMaterialPair(r);
             this.BuildProgress = new Progress(r);
             this.Origin = r.ReadVector3();
             this.Children = r.ReadListVector3();

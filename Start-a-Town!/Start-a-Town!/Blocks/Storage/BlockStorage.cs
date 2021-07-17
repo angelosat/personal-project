@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Blocks;
 
@@ -19,15 +18,9 @@ namespace Start_a_Town_
         {
             var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chest").ToGrayscale();
             this.Variations.Add(Block.Atlas.Load("chestgrayscale", tex, MapBase.BlockDepthMap, ChestNormalMap));
-           
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent()),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
-            Towns.Constructions.ConstructionsManager.Furniture.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
         }
-       
+
         public override IEnumerable<byte> GetCraftingVariations()
         {
             var vars = (from mat in Material.Registry.Values

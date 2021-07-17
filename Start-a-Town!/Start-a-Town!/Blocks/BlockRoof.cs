@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Graphics;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_.Blocks
 {
@@ -25,12 +24,7 @@ namespace Start_a_Town_.Blocks
             this.Parts[1] = Block.Atlas.Load("blocks/roof/roof4height19", MapBase.BlockDepthMap, Block.NormalMap);
             this.Variations.Add(this.Parts.First());
 
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent()),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
-            Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
         public override float GetHeight(byte data, float x, float y)
         {

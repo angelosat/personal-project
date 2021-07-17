@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_.Blocks
 {
@@ -10,13 +9,8 @@ namespace Start_a_Town_.Blocks
         {
             var txt = Block.Atlas.Load("blocks/slab", Block.QuarterBlockMapDepth, Block.QuarterBlockMapNormal);
             this.Variations.Add(txt);
-
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
             this.Ingredient = new Ingredient(RawMaterialDef.Ingots, null, null, 1);
-            Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
         public override float GetPathingCost(byte data)
         {

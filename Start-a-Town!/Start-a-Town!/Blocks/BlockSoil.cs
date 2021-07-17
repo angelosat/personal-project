@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Components.Crafting;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
 
 namespace Start_a_Town_
@@ -15,13 +11,8 @@ namespace Start_a_Town_
         }
 
         public override bool IsMinable => true;
-        public override Color DirtColor
-        {
-            get
-            {
-                return Color.SaddleBrown;
-            }
-        }
+        public override Color DirtColor => Color.SaddleBrown;
+           
         public override ParticleEmitterSphere GetEmitter()
         {
             return base.GetDirtEmitter();
@@ -32,16 +23,10 @@ namespace Start_a_Town_
         {
             this.RequiresConstruction = false;
             this.LoadVariations("soil/soil1", "soil/soil2", "soil/soil3", "soil/soil4");
-            
             this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Soil, null, 1);
-
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(new Reaction.Reagent("Base", Reaction.Reagent.IsOfMaterialType(MaterialType.Soil), Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
-                new BlockRecipe.Product(this)
-                );
-            Towns.Constructions.ConstructionsManager.Walls.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
-       
+
         public override void RandomBlockUpdate(INetwork net, IntVec3 global, Cell celll)
         {
             if (net.Map.GetBlock(global + IntVec3.UnitZ) != BlockDefOf.Air)

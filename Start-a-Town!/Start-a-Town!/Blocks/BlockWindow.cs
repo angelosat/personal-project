@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_.Blocks
 {
@@ -37,14 +36,7 @@ namespace Start_a_Town_.Blocks
             };
 
             this.Variations.Add(this.PartsSeparate.First().First().First());
-
-
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent()),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
-            Towns.Constructions.ConstructionsManager.Doors.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
         }
 
 

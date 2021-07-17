@@ -23,7 +23,7 @@ namespace Start_a_Town_.Towns.Constructions
             this.PanelButtons.Client.BackgroundStyle = BackgroundStyle.TickBox;
             this.Client.AddControls(this.PanelButtons);
         }
-        public void Refresh(List<ToolDrawing> tools, Func<BlockRecipe.ProductMaterialPair> itemGetter)
+        public void Refresh(List<ToolDrawing> tools, Func<ProductMaterialPair> itemGetter)
         {
             this.Tools = tools;
             var item = itemGetter();

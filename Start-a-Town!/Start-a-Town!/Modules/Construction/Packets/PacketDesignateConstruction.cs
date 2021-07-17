@@ -18,7 +18,7 @@ namespace Start_a_Town_
             Send(net, null, a);
         }
         
-        static public void Send(INetwork net, BlockRecipe.ProductMaterialPair item, ToolDrawing.Args a)
+        static public void Send(INetwork net, ProductMaterialPair item, ToolDrawing.Args a)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(p);
@@ -30,7 +30,7 @@ namespace Start_a_Town_
         static public void Receive(INetwork net, BinaryReader r)
         {
             var args = new ToolDrawing.Args(r);
-            var product = args.Removing ? null : new BlockRecipe.ProductMaterialPair(r);
+            var product = args.Removing ? null : new ProductMaterialPair(r);
             var positions = ToolDrawing.GetPositions(args);
             net.Map.Town.ConstructionsManager.Handle(args, product, positions);
             

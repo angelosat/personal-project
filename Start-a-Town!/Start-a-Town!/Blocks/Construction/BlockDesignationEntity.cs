@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Components;
-using System;
 
 namespace Start_a_Town_.Blocks
 {
@@ -13,15 +11,15 @@ namespace Start_a_Town_.Blocks
     {
         public class BlockDesignationEntity : BlockEntity, IConstructible
         {
-            BlockRecipe.ProductMaterialPair _Product;
-            public BlockRecipe.ProductMaterialPair Product
+            ProductMaterialPair _product;
+            public ProductMaterialPair Product
             {
-                get { return this._Product; }
+                get => this._product;
                 set
                 {
-                    if (this._Product == null)
-                        this.BuildProgress = new Progress(0, value.Recipe.WorkAmount, 0);
-                    this._Product = value;
+                    if (this._product is null)
+                        this.BuildProgress = new Progress(0, value.Block.WorkAmount, 0);
+                    this._product = value;
                 }
             }
             public Container Material;
@@ -30,7 +28,7 @@ namespace Start_a_Town_.Blocks
             public BlockDesignationEntity()
             {
             }
-            public BlockDesignationEntity(BlockRecipe.ProductMaterialPair product, Vector3 origin)
+            public BlockDesignationEntity(ProductMaterialPair product, Vector3 origin)
             {
                 this.OriginGlobal = origin;
                 this.Product = product;
@@ -59,7 +57,7 @@ namespace Start_a_Town_.Blocks
             {
                 return new BlockDesignationEntity(this.Product, this.OriginGlobal);
             }
-            public override void GetTooltip(UI.Control tooltip)
+            public override void GetTooltip(Control tooltip)
             {
                 var product = this.Product;
                 var req = product.Requirement;
@@ -71,7 +69,8 @@ namespace Start_a_Town_.Blocks
             internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
             {
                 var product = this.Product;
-                info.AddInfo(new Label() { TextFunc = () => string.Format("{0} {1} {2} / {3}", product.MainMaterial.Name, product.Requirement.Material.Name, product.Requirement.Def.Label, 0, product.Requirement.Amount) });
+                var req = product.Requirement;
+                info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Name} {req.Def.Label} {0} / {req.Amount}" });
             }
             public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera cam, Vector3 global)
             {
@@ -89,7 +88,7 @@ namespace Start_a_Town_.Blocks
             }
             protected override void LoadExtra(SaveTag tag)
             {
-                tag.TryGetTag("Product", t => this.Product = new BlockRecipe.ProductMaterialPair(t));
+                tag.TryGetTag("Product", t => this.Product = new ProductMaterialPair(t));
                 tag.TryGetTagValue<List<SaveTag>>("Children", t => this.Children.Load(t));
                 tag.TryGetTag("BuildProgress", v => this.BuildProgress = new Progress(v));
             }
@@ -103,7 +102,7 @@ namespace Start_a_Town_.Blocks
             }
             protected override void ReadExtra(BinaryReader r)
             {
-                this.Product = new BlockRecipe.ProductMaterialPair(r);
+                this.Product = new ProductMaterialPair(r);
                 this.BuildProgress = new Progress(r);
                 this.Children = r.ReadListVector3();
             }

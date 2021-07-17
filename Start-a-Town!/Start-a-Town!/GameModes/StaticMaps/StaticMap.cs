@@ -188,8 +188,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         #region Drawing
 
-        public WorldPosition Mouseover;
-
         public override void DrawBlocks(MySpriteBatch sb, Camera camera, EngineArgs a)
         {
             var copyOfActiveChunks = new Dictionary<Vector2, Chunk>(this.ActiveChunks);
@@ -197,7 +195,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var hiddenRects = new List<Rectangle>();
 
             camera.UpdateMaxDrawLevel(this);
-            this.Mouseover = null;
 
             foreach (var chunk in copyOfActiveChunks)
             {
@@ -206,8 +203,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     continue;
                 camera.DrawChunk(sb, this, chunk.Value, playerGlobal, hiddenRects, a);
             }
-            if (this.Mouseover is not null)
-                camera.CreateMouseover(this, this.Mouseover.Global);
         }
 
         public override void DrawObjects(MySpriteBatch sb, Camera camera, SceneState scene)

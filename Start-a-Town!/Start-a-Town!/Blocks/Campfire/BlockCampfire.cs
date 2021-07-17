@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_.Blocks
 {
@@ -15,12 +13,8 @@ namespace Start_a_Town_.Blocks
         {
             this.BuildProperties = new BuildProperties(new Ingredient(item: RawMaterialDef.Logs), 0);
             this.Variations.Add(Block.Atlas.Load("blocks/campfire", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap));
-
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(),
-                    new BlockRecipe.Product(this))
-            { WorkAmount = 2 };
-            Towns.Constructions.ConstructionsManager.Production.Add(this.Recipe);
+            this.BuildProperties.WorkAmount = 2;
+            this.ToggleConstructionCategory(ConstructionsManager.Production, true);
         }
         public override LootTable GetLootTable(byte data)
         {

@@ -13,7 +13,7 @@ namespace Start_a_Town_.Towns.Constructions
         public List<ToolDrawing> Tools;
         public ToolDrawing LastSelectedTool;
         ConstructionCategory CurrentCategory;
-        public UIToolsBox(BlockRecipe.ProductMaterialPair product, Action<Type> onToolSelected)
+        public UIToolsBox(ProductMaterialPair product, Action<Type> onToolSelected)
         {
 
             this.Name = "Brushes";
@@ -25,18 +25,17 @@ namespace Start_a_Town_.Towns.Constructions
                 this.PanelButtons);
         }
 
-        public void SetProduct(BlockRecipe.ProductMaterialPair product, Action<Type> onToolSelected)
+        public void SetProduct(ProductMaterialPair product, Action<Type> onToolSelected)
         {
             if (product is not null)
             {
-                if (product.Recipe.Category != this.CurrentCategory)
-                    this.Refresh(product.Recipe.Category.GetAvailableTools(() => product), onToolSelected);
-                this.CurrentCategory = product.Recipe.Category;
+                var cat = product.Block.ConstructionCategory;
+                if (cat != this.CurrentCategory)
+                    this.Refresh(cat.GetAvailableTools(() => product), onToolSelected);
+                this.CurrentCategory = cat;
             }
             else
-            {
                 this.CurrentCategory = null;
-            }
         }
         public void Refresh(List<ToolDrawing> tools, Action<Type> onToolSelected)
         {

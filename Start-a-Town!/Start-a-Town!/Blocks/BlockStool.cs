@@ -1,6 +1,4 @@
-﻿using Start_a_Town_.Components.Crafting;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     class BlockStool : Block
     {
@@ -14,15 +12,8 @@ namespace Start_a_Town_
         {
             this.Variations.Add(Block.Atlas.Load("blocks/furniture/stool", MapBase.BlockDepthMap, Block.NormalMap));
             this.Furniture = FurnitureDefOf.Table;
-            
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(
-                    new Reaction.Reagent()),
-                    new BlockRecipe.Product(this),
-                    ToolAbilityDef.Building);
-            Towns.Constructions.ConstructionsManager.Furniture.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
-
         }
         
         public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)

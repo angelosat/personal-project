@@ -6,9 +6,10 @@ using Start_a_Town_.UI;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Modules.Construction;
+using Start_a_Town_.Towns;
 using System.IO;
 
-namespace Start_a_Town_.Towns.Constructions
+namespace Start_a_Town_
 {
     public class ConstructionsManager : TownComponent
     {
@@ -142,21 +143,17 @@ namespace Start_a_Town_.Towns.Constructions
         {
         }
 
-        public void Handle(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<IntVec3> positions)
+        public void Handle(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
             var cheat = false;
             var map = this.Map;
             if (cheat)
-            {
                 PlaceDesignationsGodMode(args, product, positions, map);
-            }
             else
-            {
                 PlaceDesignations(args, product, positions);
-            }
         }
 
-        private void PlaceDesignations(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<IntVec3> positions)
+        private void PlaceDesignations(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
             var map = this.Town.Map;
             if (args.Removing)
@@ -186,7 +183,7 @@ namespace Start_a_Town_.Towns.Constructions
                 }
         }
 
-        private static void PlaceDesignationsGodMode(ToolDrawing.Args args, BlockRecipe.ProductMaterialPair product, List<IntVec3> positions, MapBase map)
+        private static void PlaceDesignationsGodMode(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions, MapBase map)
         {
             if (!args.Removing)
             {
@@ -207,7 +204,7 @@ namespace Start_a_Town_.Towns.Constructions
         {
             throw new NotImplementedException();
         }
-        public void PlaceDesignation(Vector3 global, byte data, int variation, int orientation, BlockRecipe.ProductMaterialPair product)
+        public void PlaceDesignation(Vector3 global, byte data, int variation, int orientation, ProductMaterialPair product)
         {
             var map = this.Map;
             var entity = new BlockDesignation.BlockDesignationEntity(product, global);
@@ -242,12 +239,12 @@ namespace Start_a_Town_.Towns.Constructions
         {
             public IntVec3 Global;
             public int Orientation;
-            public BlockRecipe.ProductMaterialPair Product;
+            public ProductMaterialPair Product;
             public ConstructionParams()
             {
 
             }
-            public ConstructionParams(IntVec3 global, int orientation, BlockRecipe.ProductMaterialPair product)
+            public ConstructionParams(IntVec3 global, int orientation, ProductMaterialPair product)
             {
                 this.Global = global;
                 Orientation = orientation;
@@ -265,7 +262,7 @@ namespace Start_a_Town_.Towns.Constructions
             public ISaveable Load(SaveTag tag)
             {
                 this.Global = tag.LoadIntVec3("Global");
-                this.Product = new BlockRecipe.ProductMaterialPair(tag["Product"]);
+                this.Product = new ProductMaterialPair(tag["Product"]);
                 this.Orientation = tag.GetValue<int>("Orientation");
                 return this;
             }

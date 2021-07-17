@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
 using Start_a_Town_.Graphics;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -255,11 +253,7 @@ namespace Start_a_Town_
             Orientations[2] = Block.Atlas.Load("blocks/doors/doorn", ndepth, Block.NormalMap);
             Orientations[3] = Block.Atlas.Load("blocks/doors/doore", MapBase.BlockDepthMap, Block.NormalMap);
 
-            this.Recipe = new BlockRecipe(
-                Reaction.Reagent.Create(new Reaction.Reagent("Base", Reaction.Reagent.IsOfMaterialType(MaterialType.Wood), Reaction.Reagent.CanProduce(Reaction.Product.Types.Blocks))),
-                new BlockRecipe.Product(this)
-                );
-            Towns.Constructions.ConstructionsManager.Doors.Add(this.Recipe);
+            this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
         }
         public override Icon GetIcon()
         {

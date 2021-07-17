@@ -5,7 +5,11 @@
         public Ingredient Ingredient;
         public float ToolSensitivity;
         public ConstructionCategory Category;
+        public int WorkAmount = 1;
+        public BuildProperties()
+        {
 
+        }
         public BuildProperties(Ingredient ingredient, float toolContribution)
         {
             this.Ingredient = ingredient;

@@ -13,7 +13,7 @@ namespace Start_a_Town_.UI
         public Func<TObject, string> ItemNameFunc;
         public Action<TObject, TControl> OnControlInit;
         Func<TObject, TControl> ControlGetter;
-        public TObject SelectedItem { get { return (SelectedControl == null ? default(TObject) : SelectedControl.Tag as TObject); } }
+        public TObject SelectedItem { get { return SelectedControl == null ? default : SelectedControl.Tag as TObject; } }
         TControl SelectedControl;
         Func<TObject, bool> CurrentFilter = i => true;
 
@@ -67,7 +67,7 @@ namespace Start_a_Town_.UI
                 btn.LeftClickAction = () =>
                 {
                     action();
-                    btn_Click(btn);
+                    Btn_Click(btn);
                 };
                 this.Client.Controls.Add(btn);
             }
@@ -118,17 +118,38 @@ namespace Start_a_Town_.UI
             btn.LeftClickAction = () =>
             {
                 action();
-                btn_Click(btn);
+                Btn_Click(btn);
             };
             this.Items.Add(btn);
-            //this.Client.Controls.Add(btn);
             this.Client.AddControlsBottomLeft(btn);
             this.UpdateClientSize();
-            //this.Client.ClientSize = this.Client.PreferredClientSize;
-            //this.UpdateScrollbars();
             return this;
         }
-        
+        public ListBoxNew<TObject, TControl> AddItem(TObject obj, string label, Action callback)
+        {
+            if (obj == null)
+                return this;
+            var btn = new TControl()
+            {
+                AutoSize = false, // latest addition
+                Location = Client.Controls.BottomLeft,
+                Tag = obj,
+                Text = label,
+                Name = label,
+                TooltipFunc = (tt) => { if (obj is ITooltippable) (obj as ITooltippable).GetTooltipInfo(tt); },
+                Width = Client.Width,
+                Active = true
+            };
+            btn.LeftClickAction = () =>
+            {
+                callback();
+                Btn_Click(btn);
+            };
+            this.Items.Add(btn);
+            this.Client.AddControlsBottomLeft(btn);
+            this.UpdateClientSize();
+            return this;
+        }
 
         /// <summary>
         /// Adds a control that doesn't use the lists default name getter and control initializer
@@ -186,7 +207,7 @@ namespace Start_a_Town_.UI
             btn.LeftClickAction = () =>
             {
                 action();
-                btn_Click(btn);
+                Btn_Click(btn);
             };
             this.Items.Add(btn);
             if (this.CurrentFilter(obj))
@@ -242,7 +263,7 @@ namespace Start_a_Town_.UI
         public void SelectItem(int index)
         {
             this.SelectedControl = this.Client.Controls[index] as TControl;
-            this.btn_Click(this.SelectedControl);
+            this.Btn_Click(this.SelectedControl);
         }
         void OnSelectedItemChanged(object control)
         {
@@ -323,7 +344,7 @@ namespace Start_a_Town_.UI
             }
         }
         
-        void btn_Click(TControl ctrl)
+        void Btn_Click(TControl ctrl)
         {
             if (this.SelectedControl != null)
                 this.SelectedControl.BackgroundColor = Color.Transparent;
@@ -331,7 +352,6 @@ namespace Start_a_Town_.UI
             ctrl.BackgroundColor = Color.White * 0.5f;
             OnSelectedItemChanged(ctrl);
         }
-       
         
         public void Filter(Func<TObject, bool> filter)
         {

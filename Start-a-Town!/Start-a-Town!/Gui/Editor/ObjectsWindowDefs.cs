@@ -14,15 +14,7 @@
             var items = GameObject.Templates;
             var list = new ListBoxNew<GameObject, Label>(200, 400);
             foreach (var obj in items)
-            {
-                list.AddItem(obj.Value, o => o.Name, (o, label) =>
-                      {
-                          label.LeftClickAction = () =>
-                          {
-                              ScreenManager.CurrentScreen.ToolManager.ActiveTool = new ObjectSpawnToolFromTemplate(obj.Value, obj.Key);
-                          };
-                      });
-            }
+                list.AddItem(obj.Value, obj.Value.Name, () => ScreenManager.CurrentScreen.ToolManager.ActiveTool = new ObjectSpawnToolFromTemplate(obj.Value, obj.Key));
 
             this.Client.AddControlsBottomLeft(list.ToPanelLabeled("Templates"));
             this.Client.AddControlsBottomLeft(new SearchBar<GameObject>(200).BindTo(list).ToPanelLabeled("Search"));

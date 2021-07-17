@@ -14,7 +14,7 @@ namespace Start_a_Town_
             var gotomine = new BehaviorGetAtNewNew(MineInd);
             yield return gotomine;
             // TODO: check if another npc is standing on the target block to be digged
-            yield return new BehaviorInteractionNew(MineInd, () => this.Actor.Map.GetBlockMaterial(this.Task.GetTarget(0).Global).GetSkillToExtract().GetInteraction());
+            yield return new BehaviorInteractionNew(MineInd, () => this.Actor.Map.GetBlockMaterial(this.Task.GetTarget(0).Global).Type.SkillToExtract.GetInteraction());
             // no need to find next task here, just finish and let taskgiver give next one
         }
 

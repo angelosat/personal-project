@@ -85,7 +85,7 @@ namespace Start_a_Town_
             this.EmitStrike(actor);
            
             var material = actor.Map.GetBlockMaterial(t.Global);
-            var skill = material.GetSkillToExtract();
+            var skill = material.Type.SkillToExtract;
             var workAmount = actor.GetToolWorkAmount(skill.ID);
             actor.AwardSkillXP(SkillDef.Digging, (int)workAmount);
 

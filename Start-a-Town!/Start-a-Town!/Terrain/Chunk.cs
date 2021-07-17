@@ -1120,7 +1120,7 @@ namespace Start_a_Town_
                     consecutiveAirblocks = 0;
                 }
                 w.Write((int)cell.Block.Type);
-                w.Write(cell.Data2.Data);
+                w.Write(cell.Data.Data);
                 w.Write(cell.Discovered);
             }
             if (consecutiveAirblocks > 0)
@@ -1156,10 +1156,10 @@ namespace Start_a_Town_
                 }
                 else if (type > 0)
                 {
-                    Cell cell = this.CellGrid2[cellIndex++];
+                    var cell = this.CellGrid2[cellIndex++];
                     cell.SetBlockType(type);
 
-                    cell.Data2 = new BitVector32(r.ReadInt32());
+                    cell.Data = new BitVector32(r.ReadInt32());
                     cell.Discovered = r.ReadBoolean();
                 }
             } while (type > -1);

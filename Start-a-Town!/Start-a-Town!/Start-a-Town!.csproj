@@ -550,13 +550,13 @@
     <Compile Include="PathFinding\PathingSync.FinishMode.cs" />
     <Compile Include="PathFinding\PathingSync.Node.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
-    <Compile Include="Terraforming\Biome.cs" />
+    <Compile Include="Terrain\Biome.cs" />
     <Compile Include="Modules\Population\PopulationManager.cs" />
-    <Compile Include="Terraforming\LightingEngine.BatchToken.cs" />
-    <Compile Include="Terraforming\LightingEngine.BatchTokenWorldPositions.cs" />
-    <Compile Include="Terraforming\Map.MapSize.cs" />
-    <Compile Include="Terraforming\Mutators\GradientLowRes.cs" />
-    <Compile Include="Terraforming\Mutators\MutatorProperty.cs" />
+    <Compile Include="Terrain\LightingEngine.BatchToken.cs" />
+    <Compile Include="Terrain\LightingEngine.BatchTokenWorldPositions.cs" />
+    <Compile Include="Terrain\Map.MapSize.cs" />
+    <Compile Include="Terrain\Mutators\GradientLowRes.cs" />
+    <Compile Include="Terrain\Mutators\MutatorProperty.cs" />
     <Compile Include="UI\ITooltippable.cs" />
     <Compile Include="UI\LayerTypes.cs" />
     <Compile Include="UI\Primitives\Anchor.cs" />
@@ -845,7 +845,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PathFinding\PathingSync.cs" />
-    <Compile Include="Terraforming\Mutators\PerlinWorm.cs" />
+    <Compile Include="Terrain\Mutators\PerlinWorm.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\Region.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\RegionManager.cs" />
     <Compile Include="GameModes\StaticMaps\Regions\RegionNodeCollection.cs" />
@@ -987,25 +987,25 @@
     <Compile Include="Net\Packet.cs" />
     <Compile Include="Net\PlayerData.cs" />
     <Compile Include="Net\Server\Server.cs" />
-    <Compile Include="Terraforming\LightingEngine.cs" />
-    <Compile Include="Terraforming\MapCollection.cs" />
-    <Compile Include="Terraforming\Mutators\Caves.cs" />
-    <Compile Include="Terraforming\Mutators\Empty.cs" />
-    <Compile Include="Terraforming\Mutators\Gradient.cs" />
-    <Compile Include="Terraforming\Mutators\MineralsSlow.cs" />
-    <Compile Include="Terraforming\Mutators\GeneratorPlants.cs" />
-    <Compile Include="Terraforming\Mutators\Flowers.cs" />
-    <Compile Include="Terraforming\Mutators\Land.cs" />
-    <Compile Include="Terraforming\Mutators\Minerals.cs" />
-    <Compile Include="Terraforming\Mutators\Sea.cs" />
-    <Compile Include="Terraforming\Mutators\Grass.cs" />
-    <Compile Include="Terraforming\Mutators\Normal.cs" />
-    <Compile Include="Terraforming\Mutators\Terraformer.cs" />
-    <Compile Include="Terraforming\MapThumb.cs" />
+    <Compile Include="Terrain\LightingEngine.cs" />
+    <Compile Include="Terrain\MapCollection.cs" />
+    <Compile Include="Terrain\Mutators\Caves.cs" />
+    <Compile Include="Terrain\Mutators\Empty.cs" />
+    <Compile Include="Terrain\Mutators\Gradient.cs" />
+    <Compile Include="Terrain\Mutators\MineralsSlow.cs" />
+    <Compile Include="Terrain\Mutators\GeneratorPlants.cs" />
+    <Compile Include="Terrain\Mutators\Flowers.cs" />
+    <Compile Include="Terrain\Mutators\Land.cs" />
+    <Compile Include="Terrain\Mutators\Minerals.cs" />
+    <Compile Include="Terrain\Mutators\Sea.cs" />
+    <Compile Include="Terrain\Mutators\Grass.cs" />
+    <Compile Include="Terrain\Mutators\Normal.cs" />
+    <Compile Include="Terrain\Mutators\Terraformer.cs" />
+    <Compile Include="Terrain\MapThumb.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Objects\GameObjectSlot.cs" />
     <Compile Include="SaveTag.cs" />
-    <Compile Include="Terraforming\WorldArgs.cs" />
+    <Compile Include="Terrain\WorldArgs.cs" />
     <Compile Include="TextInput.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1073,7 +1073,7 @@
     <Compile Include="UI\SplitStackWindow.cs" />
     <Compile Include="Helpers\VectorHelper.cs" />
     <Compile Include="WindowsHook.cs" />
-    <Compile Include="Terraforming\Cell.cs" />
+    <Compile Include="Terrain\Cell.cs" />
     <Compile Include="Screens\LoadingScreen.cs" />
     <Compile Include="Interfaces\ISlottable.cs" />
     <Compile Include="Graphics\Sprite.cs" />
@@ -1093,7 +1093,7 @@
     <Compile Include="Control\ToolManager.cs" />
     <Compile Include="Screens\MainScreen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
-    <Compile Include="Terraforming\PerlinArgs.cs" />
+    <Compile Include="Terrain\PerlinArgs.cs" />
     <Compile Include="UI\InteractionBar.cs" />
     <Compile Include="UI\BackgroundStyle.cs" />
     <Compile Include="UI\Primitives\CheckBox\CheckBox.cs" />
@@ -1113,10 +1113,10 @@
     <Compile Include="UI\TooltipManager.cs" />
     <Compile Include="Screens\IngameMenu.cs" />
     <Compile Include="Engine\Camera\Camera.cs" />
-    <Compile Include="Terraforming\Chunk.cs" />
+    <Compile Include="Terrain\Chunk.cs" />
     <Compile Include="Control\Controller.cs" />
     <Compile Include="Coords.cs" />
-    <Compile Include="Terraforming\Generator.cs" />
+    <Compile Include="Terrain\Generator.cs" />
     <Compile Include="Components\EntityComponent.cs" />
     <Compile Include="Helpers\PriorityQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

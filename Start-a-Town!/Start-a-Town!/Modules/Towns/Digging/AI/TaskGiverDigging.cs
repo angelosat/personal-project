@@ -35,7 +35,7 @@ namespace Start_a_Town_
 
                 var block = map.GetBlock(job);
                 var material = map.GetBlockMaterial(job);
-                var skill = material.GetSkillToExtract();
+                var skill = material.Type.SkillToExtract;
 
                 if (skill == null)
                     throw new Exception();
@@ -60,7 +60,7 @@ namespace Start_a_Town_
             if (!actor.CanReach(target))
                 return false;
             var material = actor.Map.GetBlockMaterial(global);
-            var skill = material.GetSkillToExtract();
+            var skill = material.Type.SkillToExtract;
 
             if (skill == null)
                 throw new Exception();

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Specialized;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -48,121 +48,88 @@ namespace Start_a_Town_
         public override string ToString()
         {
             return
-                "Local: " + LocalCoords +
+                "Local: " + this.LocalCoords +
                 "\nTile ID: " + this.Block.Type +
-                "\nStyle: " + Variation +
-                "\nOrientation: " + Orientation +
-                "\nVisible: " + Visible;
+                "\nStyle: " + this.Variation +
+                "\nOrientation: " + this.Orientation;
         }
+        public static void Initialize()
+        {
 
-        static BitVector32.Section _X, _Y, _Z, _HasData, _Orientation, _Visible;
-        static BitVector32.Section _Variation, _HorEdges, _VerEdges, _Luminance, _BlockData;
-        static BitVector32.Section _Valid, _Discovered, 
-            _HorizontalEdges, // TODO remove
-            _VerticalEdges; // TODO remove
+        }
+        static readonly BitVector32.Section _orientation, _visible, _variation, _horEdges, _verEdges, _luminance, _blockData, _valid, _discovered;
+        static Cell()
+        {
+            _orientation = BitVector32.CreateSection(3); //2 bits
+            _variation = BitVector32.CreateSection(3, _orientation); //2 bits
+            _visible = BitVector32.CreateSection(1, _variation);//_QueuedForActivation); //1 bit
+            _horEdges = BitVector32.CreateSection(15, _visible); //4 bits
+            _verEdges = BitVector32.CreateSection(3, _horEdges); //2 bits
+            _luminance = BitVector32.CreateSection(15, _verEdges); //4 bits
+            _blockData = BitVector32.CreateSection(15, _luminance); //4 bits
 
-        static public void Initialize()
-        {
-            _X = BitVector32.CreateSection((short)(Chunk.Size - 1)); //5 bits
-            _Y = BitVector32.CreateSection((short)(Chunk.Size - 1), _X); //5 bits
-            _Z = BitVector32.CreateSection((short)(MapBase.MaxHeight - 1), _Y); //7 bits
-
-            _HasData = BitVector32.CreateSection(1, _Z); //1 bits
-            _Orientation = BitVector32.CreateSection(3); //2 bits
-            _Variation = BitVector32.CreateSection(3, _Orientation); //2 bits
-            _Visible = BitVector32.CreateSection(1, _Variation);//_QueuedForActivation); //1 bit
-            _HorEdges = BitVector32.CreateSection(15, _Visible); //4 bits
-            _VerEdges = BitVector32.CreateSection(3, _HorEdges); //2 bits
-            _Luminance = BitVector32.CreateSection(15, _VerEdges); //4 bits
-            _BlockData = BitVector32.CreateSection(15, _Luminance); //4 bits
-
-            _Valid = BitVector32.CreateSection(1); //1 bits
-            _Discovered = BitVector32.CreateSection(1, _Valid); //1 bits
-            _HorizontalEdges = BitVector32.CreateSection(15, _Discovered); //1 bits
-            _VerticalEdges = BitVector32.CreateSection(3, _HorizontalEdges); //1 bits
+            _valid = BitVector32.CreateSection(1); //1 bits
+            _discovered = BitVector32.CreateSection(1, _valid); //1 bits
         }
-
-        public byte X; // 1 byte
-        public byte Y; // 1 byte
-        public byte Z; // 1 byte
-        public Block Block = BlockDefOf.Air; // 4 bytes
-        public BitVector32 Data2; // 4 bytes
-        public BitVector32 ValidDiscovered; // 4 bytes
-
-        public bool Valid
-        {
-            get { return this.ValidDiscovered[_Valid] == 1; }
-            set { this.ValidDiscovered[_Valid] = value ? 1 : 0; }
-        }
-        public bool Discovered
-        {
-            get { return this.ValidDiscovered[_Discovered] == 1; }
-            set { this.ValidDiscovered[_Discovered] = value ? 1 : 0; }
-        }
-        public byte BlockData
-        {
-            get { return (byte)Data2[_BlockData]; }
-            set { Data2[_BlockData] = value; }
-        }
-        public bool Opaque
-        {
-            get 
-            { 
-                return this.Block.IsOpaque(this);
-            }
-        }
-        public bool Visible
-        {
-            get { return Data2[_Visible] == 1; }
-            set { Data2[_Visible] = value ? 1 : 0; }
-        }
-        public int Orientation
-        {
-            get { return Data2[_Orientation]; }
-            set { Data2[_Orientation] = value; }
-        }
-        public int Variation
-        {
-            get { return Data2[_Variation]; }
-            set { Data2[_Variation] = value; }
-        }
-        public bool IsRoomBorder => this.Block.IsRoomBorder;
-        public byte Luminance
-        {
-            get { return (byte)Data2[_Luminance]; }
-            set { Data2[_Luminance] = value; }
-        }
-        public float Fertility
-        {
-            get { return this.Block.GetFertility(this); }
-        }
-        public IntVec3 LocalCoords
-        {
-            get { return new IntVec3(X, Y, Z); }
-            set
-            {
-                X = (byte)value.X;
-                Y = (byte)value.Y;
-                Z = (byte)value.Z;
-            }
-        }
-       
-        public Material Material => this.Block.GetMaterial(this.BlockData);
 
         public Cell()
         {
             this.Valid = true;
         }
-        public Cell(int localX, int localY, int localZ):this()
+        public Cell(int localX, int localY, int localZ) : this()
         {
             this.X = (byte)localX;
             this.Y = (byte)localY;
             this.Z = (byte)localZ;
         }
 
+        public byte X; // 1 byte
+        public byte Y; // 1 byte
+        public byte Z; // 1 byte
+        public Block Block = BlockDefOf.Air; // 4 bytes
+        public BitVector32 Data; // 4 bytes
+        public BitVector32 ValidDiscovered; // 4 bytes
+
+        public bool Valid
+        {
+            get => this.ValidDiscovered[_valid] == 1;
+            set => this.ValidDiscovered[_valid] = value ? 1 : 0;
+        }
+        public bool Discovered
+        {
+            get => this.ValidDiscovered[_discovered] == 1;
+            set => this.ValidDiscovered[_discovered] = value ? 1 : 0;
+        }
+        public byte BlockData
+        {
+            get => (byte)this.Data[_blockData];
+            set => this.Data[_blockData] = value;
+        }
+        public bool Opaque => this.Block.IsOpaque(this);
+        public int Orientation
+        {
+            get => this.Data[_orientation];
+            set => this.Data[_orientation] = value;
+        }
+        public int Variation
+        {
+            get => this.Data[_variation];
+            set => this.Data[_variation] = value;
+        }
+        public bool IsRoomBorder => this.Block.IsRoomBorder;
+        public byte Luminance
+        {
+            get => (byte)this.Data[_luminance];
+            set => this.Data[_luminance] = value;
+        }
+        public float Fertility => this.Block.GetFertility(this);
+        public IntVec3 LocalCoords => new(this.X, this.Y, this.Z);
+
+        public Material Material => this.Block.GetMaterial(this.BlockData);
+
         public IntVec3 GetGlobalCoords(Chunk chunk)
         {
-            return new IntVec3(chunk.Start.X + X, chunk.Start.Y + Y, Z);
+            return new IntVec3(chunk.Start.X + this.X, chunk.Start.Y + this.Y, this.Z);
         }
         public bool IsSolid()
         {
@@ -172,16 +139,16 @@ namespace Start_a_Town_
         {
             return !this.Opaque;
         }
-        static public bool IsInvisible(Cell cell)
+        public static bool IsInvisible(Cell cell)
         {
             return cell.IsInvisible();
         }
-       
+
         public SaveTag Save()
         {
             SaveTag data = new SaveTag(SaveTag.Types.Compound);
             data.Add(new SaveTag(SaveTag.Types.Byte, "Tile", (byte)this.Block.Type));
-            data.Add(new SaveTag(SaveTag.Types.Int, "Data", this.Data2.Data));
+            data.Add(new SaveTag(SaveTag.Types.Int, "Data", this.Data.Data));
             this.ValidDiscovered.Data.Save(data, "Extra");
             data.Add(new SaveTag(SaveTag.Types.Int, "ValidDiscovered", this.ValidDiscovered.Data));
             return data;
@@ -189,7 +156,7 @@ namespace Start_a_Town_
         public Cell Load(SaveTag data)
         {
             this.SetBlockType((Block.Types)data["Tile"].Value);
-            this.Data2 = new BitVector32((int)data["Data"].Value);
+            this.Data = new BitVector32((int)data["Data"].Value);
             data.TryGetTagValue<int>("ValidDiscovered", v => this.ValidDiscovered = new(v));
             return this;
         }
@@ -201,10 +168,10 @@ namespace Start_a_Town_
             writer.Write(this.Y);
             writer.Write(this.Z);
             writer.Write(this.Variation);
-            writer.Write(Data2.Data);
-            writer.Write(this.BlockData);
+            writer.Write(this.Data.Data);
+            //writer.Write(this.BlockData);
             writer.Write(this.Discovered);
-            
+
         }
         public Cell Read(BinaryReader reader)
         {
@@ -213,8 +180,8 @@ namespace Start_a_Town_
             this.Y = reader.ReadByte();
             this.Z = reader.ReadByte();
             this.Variation = reader.ReadByte();
-            this.Data2 = new BitVector32(reader.ReadInt32());
-            this.BlockData = reader.ReadByte();
+            this.Data = new BitVector32(reader.ReadInt32());
+            //this.BlockData = reader.ReadByte();
             this.Discovered = reader.ReadBoolean();
             return this;
         }

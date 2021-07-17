@@ -8,7 +8,7 @@ namespace Start_a_Town_.AI.Behaviors
         {
             this.Children = new List<Behavior>()
             {
-                new BehaviorDomain(new IsAt(targetKey, range),
+                new BehaviorDomain(new IsAt(targetKey),
                     new BehaviorStopMoving()),
                 new BehaviorGetAtNewNew(targetKey)//, range)
             };
@@ -18,7 +18,7 @@ namespace Start_a_Town_.AI.Behaviors
         {
             this.Children = new List<Behavior>()
             {
-                new BehaviorDomain(new IsAt(targetArgs, range),
+                new BehaviorDomain(new IsAt(targetArgs),
                     new BehaviorStopMoving()),
                 new BehaviorGetAtNewNew(targetArgs)
             };

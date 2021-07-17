@@ -22,19 +22,7 @@ namespace Start_a_Town_
             this.Skill = ToolAbilityDef.Digging;
         }
         static public int ID = "Dig".GetHashCode();
-        static readonly ScriptTaskCondition cancel = new ScriptTaskCondition("IsSoil", (a, t) =>
-        {
-            var blockmat = Block.GetBlockMaterial(a.Map, t.Global);
-            return blockmat.Type == MaterialType.Soil;
-        });
-        public override ScriptTaskCondition CancelState
-        {
-            get
-            {
-                return cancel;
-            }
-        }
-        
+       
         Block Block;
         ParticleEmitterSphere EmitterStrike;
         ParticleEmitterSphere EmitterBreak;

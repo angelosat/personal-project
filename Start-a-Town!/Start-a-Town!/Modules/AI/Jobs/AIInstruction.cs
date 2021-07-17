@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.AI
 {
+    [Obsolete]
     public class AIInstruction
     {
         public override string ToString()
@@ -43,94 +44,6 @@ namespace Start_a_Town_.AI
             //        throw new Exception();
             this.InteractionName = work.Name;
         }
-
-        public AITarget GetTargetRange()
-        {
-            if (this.Interaction == null)
-                return new AITarget(this.Target, 0, 0.1f);
-            var range = this.Interaction.Conditions.GetConditions().FirstOrDefault(c => c is RangeCheck) as RangeCheck;
-            if (range != null)
-                return new AITarget(this.Target, range.Min, range.Max);
-            else return null;
-        }
-
-        //List<AIInstruction> GetRequiredSteps(GameObject agent, TargetArgs target, Components.AI.AIState state)
-        //{
-        //    var conditions = this.Interaction.Conditions.GetConditions();
-        //    var steps = new List<AIInstruction>();
-        //    foreach (var cond in conditions)
-        //    {
-        //        // if condition evaluates, continue, otherwise try to get instruction and if it's null, return
-        //        if (cond.Condition(agent, target))// == null)
-        //            continue;
-        //        AIInstruction instruction;
-        //        if (cond.AITrySolve(agent, target, state, out instruction))
-        //            continue;
-
-        //        // if the condition didn't evaluate and it did output null, it didn't find a solution so return null
-        //        if (instruction == null)
-        //            return null;
-        //        steps.Add(instruction);
-        //    }
-        //    //steps.Add(new AIInstruction(target, this.Interaction));
-        //    return steps;
-        //}
-
-        //public bool CanExecuteOld(GameObject agent, TargetArgs target, Components.AI.AIState state, out List<AIInstruction> steps)
-        //{
-        //    var conditions = this.Interaction.Conditions.GetConditions();
-        //    steps = new List<AIInstruction>();
-        //    foreach (var cond in conditions)
-        //    {
-        //        // if condition evaluates, continue, otherwise try to get instruction and if it's null, return
-        //        if (cond.Condition(agent, target))// == null)
-        //            continue;
-        //        AIInstruction instruction;
-        //        if (cond.AITrySolve(agent, target, state, out instruction))
-        //            continue;
-
-        //        // if the condition didn't evaluate and it did output null, it didn't find a solution so return null
-        //        if (instruction == null)
-        //            return false;
-        //        steps.Add(instruction);
-        //    }
-        //    //steps.Add(new AIInstruction(target, this.Interaction));
-        //    return true;// steps.Count == 0;
-        //}
-
-        /// <summary>
-        /// TODO: make it non-recursive
-        /// </summary>
-        /// <param name="agent"></param>
-        /// <param name="target"></param>
-        /// <param name="state"></param>
-        /// <param name="steps"></param>
-        /// <returns></returns>
-        //public bool FindPlanOld(GameObject agent, TargetArgs target, Components.AI.AIState state, List<AIInstruction> steps)
-        //{
-        //    var conditions = this.Interaction.Conditions.GetConditions();
-        //    //steps = new List<AIInstruction>();
-        //    foreach (var cond in conditions)
-        //    {
-        //        // if condition evaluates, continue, otherwise try to get instruction and if it's null, return
-        //        if (cond.Condition(agent, target))// == null)
-        //            continue;
-        //        AIInstruction instruction;
-        //        if (cond.AITrySolve(agent, target, state, out instruction))
-        //            continue;
-
-        //        // if the condition didn't evaluate and it did output null, it didn't find a solution so return null
-        //        if (instruction == null)
-        //            return false;
-        //        if (!instruction.FindPlanOld(agent, target, state, steps))
-        //            return false;
-        //        steps.Add(instruction);
-
-        //    }
-        //    //steps.Add(new AIInstruction(target, this.Interaction));
-        //    return true;// steps.Count == 0;
-        //}
-
 
         public void Write(BinaryWriter w)
         {

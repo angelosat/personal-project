@@ -26,11 +26,6 @@ namespace Start_a_Town_
             this.Animation = new Animation(AnimationDef.TouchItem);
         }
 
-        static readonly TaskConditions conds = new TaskConditions(new AllCheck(
-            new RangeCheck(t => t.Global, RangeCheck.DefaultRange)));
-
-        public override TaskConditions Conditions => conds;
-
         public override void Start(Actor a, TargetArgs t)
         {
             a.CrossFade(this.Animation, false, 25);

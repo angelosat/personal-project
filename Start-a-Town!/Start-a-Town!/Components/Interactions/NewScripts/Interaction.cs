@@ -13,9 +13,9 @@ namespace Start_a_Town_
 {
     public abstract class Interaction : ICloneable
     {
-        public const float DefaultRange = 2;
         public bool IsFinished => this.State == States.Finished;
-        
+        public static readonly float DefaultRange = (float)Math.Sqrt(2);
+
         readonly static Dictionary<string, Func<Interaction>> Factory = new();
         
         static public void AddInteraction<T>(Func<Interaction> factory)
@@ -52,21 +52,7 @@ namespace Start_a_Town_
         {
             return this.Name.GetHashCode();
         }
-        public RangeCheck RangeCheckCached
-        {
-            get
-            {
-                return this.Conditions.GetAllChildren().FirstOrDefault(c => c is RangeCheck) as RangeCheck;
-            }
-        }
-        
-        public virtual ScriptTaskCondition CancelState { get; set; }
-
-        public bool IsCancelled(GameObject a, TargetArgs t)
-        {
-            return this.CancelState != null && !this.CancelState.Condition(a, t);
-        }
-
+       
         public States State { get; protected set; } = States.Unstarted;
 
         public RunningTypes RunningType = RunningTypes.Once;
@@ -75,9 +61,6 @@ namespace Start_a_Town_
         public string Verb { get; set; }
         public Action<GameObject, TargetArgs> Callback { get; set; }
         
-        readonly TaskConditions defConditions = new();
-        // TODO: use an static readonly empty condition collection to return in the virtual method
-        public virtual TaskConditions Conditions { get { return defConditions; } }
         public float Length { get; set; }
         public float CurrentTick;
         public ToolAbilityDef Skill { get; set; }
@@ -95,9 +78,9 @@ namespace Start_a_Town_
         {
             this.Callback = (a, t) => { };
         }
-        public Interaction(string name, Action<GameObject, TargetArgs> callback) : this(name, 0, callback, new TaskConditions(), null) { }
-        public Interaction(string name, float seconds, Action<GameObject, TargetArgs> callback) : this(name, seconds, callback, new TaskConditions(), null) { }
-        public Interaction(string name, float seconds, Action<GameObject, TargetArgs> callback, TaskConditions conditions, ToolAbilityDef skill)
+        public Interaction(string name, Action<GameObject, TargetArgs> callback) : this(name, 0, callback, null) { }
+        public Interaction(string name, float seconds, Action<GameObject, TargetArgs> callback) : this(name, seconds, callback, null) { }
+        public Interaction(string name, float seconds, Action<GameObject, TargetArgs> callback, ToolAbilityDef skill)
         {
             this.Name = name;
             this.Callback = callback;
@@ -134,6 +117,11 @@ namespace Start_a_Town_
                 a.AddAnimation(this.Animation);
         }
 
+        internal bool Evaluate(Actor a, TargetArgs t)
+        {
+            return true;
+        }
+
         public virtual void Update(Actor actor, TargetArgs target)
         {
             if (this.State == States.Finished) // TODO: maybe check for failed state too?
@@ -143,24 +131,6 @@ namespace Start_a_Town_
             }
             var instr = new AIInstruction(target, this);
 
-            if (this.IsCancelled(actor, target))
-            {
-                Stop(actor);
-                this.State = States.Failed;
-                actor.Net.Map.EventOccured(Message.Types.InteractionFailed, actor, instr , this.CancelState);
-                AILog.TryWrite(actor, "Failed: " + this.GetCompletedText(actor, target) + " (cancelled)");
-                return;
-            }
-
-            if (!this.Conditions.Evaluate(actor, target))
-            {
-                ScriptTaskCondition failed = this.Conditions.GetFailedCondition(actor, target);
-                this.State = States.Failed;
-                actor.Net.Map.EventOccured(Message.Types.InteractionFailed, actor, instr, failed);
-                AILog.TryWrite(actor, "Failed: " + this.GetCompletedText(actor, target) + string.Format("({0})", failed.ToString()));
-                Stop(actor);
-                return;
-            }
             if (this.State == States.Unstarted)
                 this.Start(actor, target);
             else if (this.State == States.Finished)
@@ -203,7 +173,6 @@ namespace Start_a_Town_
         {
             var panel = new PanelLabeled("Interact") { AutoSize = true, Location = tooltip.Controls.BottomLeft };
             panel.Controls.Add(new Label(this.Name + (this.Length > 0 ? TimeSpan.FromMilliseconds(this.Length).TotalSeconds.ToString(" #0.##s")  : "")) { Location = panel.Controls.BottomLeft }); //this.Length.ToString("#0.##s")
-            this.Conditions.GetTooltip(panel);
             tooltip.Controls.Add(panel);
         }
 
@@ -234,11 +203,6 @@ namespace Start_a_Town_
         }
         public abstract object Clone();
         
-        public bool IsValid(Actor actor, TargetArgs target)
-        {
-            return (this.Conditions.Evaluate(actor, target) && !this.IsCancelled(actor, target));
-        }
-
         public virtual string GetCompletedText(Actor actor, TargetArgs target)
         {
             return this.Name + ": " + target.ToString();

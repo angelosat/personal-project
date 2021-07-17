@@ -7,7 +7,6 @@ namespace Start_a_Town_.Components
     class Attack
     {
         public enum States { Ready, Charging, Charged, Delivering }
-        public const float DefaultRange = Interaction.DefaultRange;
         public static double DefaultArc = Math.PI / 6d;
 
         public StatCollection Damage;

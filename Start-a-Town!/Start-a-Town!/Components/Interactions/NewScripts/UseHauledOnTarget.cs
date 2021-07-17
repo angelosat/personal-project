@@ -23,10 +23,6 @@ namespace Start_a_Town_
             this.Amount = amount;
         }
 
-        static readonly TaskConditions conds = new(new AllCheck(
-            new RangeCheck(t => t.Global, RangeCheck.DefaultRange)));
-        public override TaskConditions Conditions => conds;
-
         public override void Start(Actor a, TargetArgs t)
         {
             this.Animation = new Animation(AnimationDef.TouchItem);

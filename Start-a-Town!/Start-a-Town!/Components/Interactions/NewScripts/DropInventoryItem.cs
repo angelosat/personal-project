@@ -11,19 +11,6 @@
 
         }
        
-        static readonly TaskConditions conds = new TaskConditions(new AllCheck(
-                new RangeCheck(t => t.Global, Interaction.DefaultRange),
-                new AnyCheck(
-                    new TargetTypeCheck(TargetType.Position),
-                    new TargetTypeCheck(TargetType.Entity)))
-            );
-        public override TaskConditions Conditions
-        {
-            get
-            {
-                return conds;
-            }
-        }
         public override void Perform(Actor actor, TargetArgs target)
         {
             actor.Inventory.DropInventoryItem(target.Object);

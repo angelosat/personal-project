@@ -89,7 +89,7 @@ namespace Start_a_Town_.Components
             var t = new TargetArgs(parent);
             var a = parent.Net.GetPlayer().ControllingEntity;
             foreach (var i in list)
-                    actions.Add(new ContextAction(i.Key.ToString() + ": " + i.Value.Name, null) { Available = () => i.Value.Conditions.Evaluate(a, t) });// () => true));
+                    actions.Add(new ContextAction(i.Key.ToString() + ": " + i.Value.Name, null) { Available = () => i.Value.Evaluate(a, t) });// () => true));
         }
         public virtual void GetInteractions(GameObject parent, List<Interaction> actions) { }
         public virtual void GetRightClickActions(GameObject parent, List<ContextAction> actions) { }

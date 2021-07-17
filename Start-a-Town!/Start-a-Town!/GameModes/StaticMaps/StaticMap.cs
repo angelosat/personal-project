@@ -41,6 +41,27 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
         }
 
+        public byte SkyDarkness = 0, SkyDarknessMax = 13;
+        public Color AmbientColor = Color.Blue;//Color.MidnightBlue; //Color.RoyalBlue;//Color.MidnightBlue; //Color.MediumPurple; //Color.Lerp(Color.White, Color.Cornsilk, 0.5f);
+
+        public bool Lighting = true;
+        public int TickLengthSeconds = (int)(60 * 1.44f); // one tick is 1.44 ingame minutes
+        public const int Zenith = 14;
+        public double DayTimeNormal = 0;
+        public Vector2 Global;
+
+        public static int VisibleCellCount = 0;
+        public Game1 game;
+        public bool hasClicked = false;
+        public static float MaxDepth = 0, MinDepth = 0;
+        public List<Texture2D> VisibleTileTypes;
+        public Vector2 tileLocation = new(16, 8);
+        public const double GroundDensity = 0.1;
+        public static List<Rectangle> Icons;
+
+        public string Name;
+        public Texture2D[] Thumbnails;
+        public MapThumb Thumb;
         internal void Init()
         {
             this.Town.Init();
@@ -66,50 +87,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.ActiveChunks = this.ActiveChunks.OrderBy(c => c.Key.X + c.Key.Y).ToDictionary(i => i.Key, i => i.Value);
             return true;
         }
-        public bool Lighting = true;
-        public int TickLengthSeconds = (int)(60 * 1.44f); // one tick is 1.44 ingame minutes
-        public const int Zenith = 14;
-        public double DayTimeNormal = 0;
-        public void AddTime()
-        {
-            var clock = this.Clock;
-            double normal = (clock.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
-            double nn = normal * 2 * Math.PI;
-            nn = 3 * Math.Cos(nn);
-            this.DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
-
-            byte oldDarkness = this.SkyDarkness;
-            this.SkyDarkness = 0;
-        }
-        [Obsolete]
-        public void SetHour(int t)
-        {
-            throw new Exception();
-        }
-
-        public byte SkyDarkness = 0, SkyDarknessMax = 13;
-        public Color AmbientColor = Color.Blue;//Color.MidnightBlue; //Color.RoyalBlue;//Color.MidnightBlue; //Color.MediumPurple; //Color.Lerp(Color.White, Color.Cornsilk, 0.5f);
-
-        internal void Despawn(Actor actor)
-        {
-            actor.Despawn();
-            PacketEntityDespawn.Send(this.Net, actor);
-        }
-        public static int VisibleCellCount = 0;
-        public Game1 game;
-        public bool hasClicked = false;
-        public static float MaxDepth = 0, MinDepth = 0;
-        public List<Texture2D> VisibleTileTypes;
-        public Vector2 tileLocation = new(16, 8);
-        public const double GroundDensity = 0.1;
-        public static List<Rectangle> Icons;
-
-        public string Name;
-        public Texture2D[] Thumbnails;
-        public MapThumb Thumb;
-        #region Initialization
-
-        public Vector2 Global;
 
         public StaticMap(string name = "")
         {
@@ -142,7 +119,26 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Thumb = new MapThumb(this);
         }
 
-        #endregion
+        public void AddTime()
+        {
+            var clock = this.Clock;
+            double normal = (clock.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
+            double nn = normal * 2 * Math.PI;
+            nn = 3 * Math.Cos(nn);
+            this.DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
+            this.SkyDarkness = 0;
+        }
+        [Obsolete]
+        public void SetHour(int t)
+        {
+            throw new Exception();
+        }
+
+        internal void Despawn(Actor actor)
+        {
+            actor.Despawn();
+            PacketEntityDespawn.Send(this.Net, actor);
+        }
 
         #region Updating
         public override void Update()
@@ -205,33 +201,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             foreach (var chunk in copyOfActiveChunks)
             {
-                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);
+                var chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);
                 if (!camera.ViewPort.Intersects(chunkBounds))
                     continue;
                 camera.DrawChunk(sb, this, chunk.Value, playerGlobal, hiddenRects, a);
             }
             if (this.Mouseover is not null)
                 camera.CreateMouseover(this, this.Mouseover.Global);
-        }
-
-        internal void SpawnStartingActors(Actor[] actors)
-        {
-            var x = this.Size.Blocks / 2;
-            var y = x;
-            var z = this.GetHeightmapValue(x, y);
-            var center = new IntVec3(x, y, z);
-            var radial = VectorHelper.GetRadialLarge(center).GetEnumerator();
-            for (int i = 0; i < actors.Length; i++)
-            {
-                var actor = actors[i];
-                IntVec3 current;
-                do
-                {
-                    radial.MoveNext();
-                    current = radial.Current;
-                } while (!this.IsStandableIn(current));
-                actor.Spawn(this, current);
-            }
         }
 
         public override void DrawObjects(MySpriteBatch sb, Camera camera, SceneState scene)
@@ -901,5 +877,33 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             this.Camera.CenterOn(this);
         }
+
+        internal void SpawnStartingActors(Actor[] actors)
+        {
+            var x = this.Size.Blocks / 2;
+            var y = x;
+            var z = this.GetHeightmapValue(x, y);
+            var center = new IntVec3(x, y, z);
+            for (int i = 0; i < actors.Length; i++)
+            {
+                var actor = actors[i];
+                var cell = findStandableCellNear(center);
+                actor.Spawn(this, cell);
+                this.Town.AddCitizen(actor);
+            }
+
+            IntVec3 findStandableCellNear(IntVec3 center)
+            {
+                var radial = VectorHelper.GetRadialLarge(center).GetEnumerator();
+                IntVec3 current;
+                do
+                {
+                    radial.MoveNext();
+                    current = radial.Current;
+                } while (!this.IsStandableIn(current));
+                return current;
+            }
+        }
+
     }
 }

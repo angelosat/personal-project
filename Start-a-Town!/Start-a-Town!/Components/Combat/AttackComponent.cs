@@ -140,7 +140,7 @@ namespace Start_a_Town_.Components
 
         void Perform(GameObject actor, Vector3 direction, Attack attack)
         {
-            float range = Attack.DefaultRange;
+            float range = Interaction.DefaultRange;
             double halfArc = Attack.DefaultArc;
 
             var attackOrigin = actor.Global + actor.Physics.Height * .5f * Vector3.UnitZ;

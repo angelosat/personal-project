@@ -647,7 +647,7 @@ namespace Start_a_Town_.Net
                         if (interaction == null)
                             return;
                         msg.Player.ControllingEntity.Work.Perform(interaction, target);
-                        if (interaction.Conditions.Evaluate(msg.Player.ControllingEntity, target))
+                        if (interaction.Evaluate(msg.Player.ControllingEntity, target))
                             Instance.Enqueue(PacketType.PlayerInput, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
                     });
                     return;

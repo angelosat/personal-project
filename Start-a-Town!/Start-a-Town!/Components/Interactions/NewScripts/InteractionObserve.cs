@@ -11,13 +11,6 @@ namespace Start_a_Town_.Components.Interactions
         }
 
         static readonly Dictionary<Need.Types, float> satisfyneed = new Dictionary<Need.Types, float>() { { Need.Types.Curiosity, 50 } };
-        static readonly TaskConditions conds = new TaskConditions(
-                new AllCheck(
-                    RangeCheck.Sqrt2,
-                    new Exists()
-                    ));
-
-        public override TaskConditions Conditions => conds;
         public override Dictionary<Need.Types, float> NeedSatisfaction => satisfyneed;
         public override void Perform(Actor a, TargetArgs t)
         {

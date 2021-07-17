@@ -11,11 +11,7 @@ namespace Start_a_Town_
             )
         {
         }
-        static readonly TaskConditions conds = new(new AllCheck(
-                new ScriptTaskCondition("Is Hauling", (a, t) => a.GetComponent<HaulComponent>().GetObject() != null)
-            ));
-
-        public override TaskConditions Conditions => conds;
+        
         public override void Perform(Actor actor, TargetArgs target)
         {
             var cachedObject = target.Object;

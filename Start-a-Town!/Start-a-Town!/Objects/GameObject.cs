@@ -1158,7 +1158,7 @@ namespace Start_a_Town_
             else if (target.Type == TargetType.Entity)
             {
                 var cylinderTarget = new BoundingCylinder(target.Global, .5f, target.Object.Physics.Height);
-                var cylinderActor = new BoundingCylinder(this.Global - Vector3.UnitZ, RangeCheck.DefaultRange, this.Physics.Height + 2);
+                var cylinderActor = new BoundingCylinder(this.Global - Vector3.UnitZ, Interaction.DefaultRange, this.Physics.Height + 2);
                 var result = cylinderActor.Intersects(cylinderTarget);
                 if (!result)
                 {

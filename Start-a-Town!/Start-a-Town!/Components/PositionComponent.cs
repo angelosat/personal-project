@@ -1,9 +1,9 @@
-﻿using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System.IO;
 
 namespace Start_a_Town_.Components
 {
-    public class PositionComponent : EntityComponent
+    public sealed class PositionComponent : EntityComponent
     {
         public override string ComponentName => "Position";
 
@@ -12,11 +12,11 @@ namespace Start_a_Town_.Components
         public bool Exists;
         public Vector3 Velocity;
 
-        Vector3 _Global;
+        Vector3 _global;
         public Vector3 Global
         {
-            get => this.ParentEntity?.Global ?? this._Global;
-            set => this._Global = value;
+            get => this.ParentEntity?.Global ?? this._global;
+            set => this._global = value;
         }
 
         public override void MakeChildOf(GameObject parent)
@@ -30,14 +30,14 @@ namespace Start_a_Town_.Components
                 "Direction: " + this.Direction.ToString() + "\n" +
                 base.ToString();
         }
-        
+
         public override object Clone()
         {
             PositionComponent mov = new();
             return mov;
         }
 
-        static public Rectangle GetScreenBounds(Camera camera, SpriteComponent sprComp, Vector3 global)
+        public static Rectangle GetScreenBounds(Camera camera, SpriteComponent sprComp, Vector3 global)
         {
             camera.CullingCheck(global.X, global.Y, global.Z, sprComp.Sprite.GetBounds(), out Rectangle bounds);
             return bounds;
@@ -55,7 +55,7 @@ namespace Start_a_Town_.Components
             data.TryGetTag("Velocity", t => this.Velocity = t.LoadVector3());
             data.TryGetTag("Direction", t => this.Direction = t.LoadVector2());
         }
-        
+
         public override void Write(BinaryWriter w)
         {
             w.Write(this.Exists);

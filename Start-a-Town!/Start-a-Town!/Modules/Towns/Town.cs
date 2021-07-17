@@ -179,14 +179,17 @@ namespace Start_a_Town_
             else
                 this.RemoveAgent(entity);
         }
-
-        private void AddCitizen(int id)
+        public void AddCitizen(Actor actor)
+        {
+            this.AddCitizen(actor.RefID);
+        }
+        public void AddCitizen(int id)
         {
             this.Agents.Add(id);
             foreach (var c in this.TownComponents)
                 c.OnCitizenAdded(id);
         }
-        private void RemoveCitizen(int id)
+        public void RemoveCitizen(int id)
         {
             this.Agents.Remove(id);
             foreach (var c in this.TownComponents)

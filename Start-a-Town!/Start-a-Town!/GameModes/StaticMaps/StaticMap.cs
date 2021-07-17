@@ -183,7 +183,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.AddTime();
             this.Regions.Update();
             foreach (var chunk in this.ActiveChunks.Values.ToList())
-                chunk.Tick(this);
+                chunk.Tick();
 
             this.Town.Tick();
         }
@@ -650,13 +650,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 global.Z >= 0 && global.Z < maxz;
         }
 
-        public override void UpdateLight(IEnumerable<WorldPosition> positions)
-        {
-            this.LightingEngine ??= new(this);
-            this.LightingEngine.Enqueue(positions);
-        }
+        
 
-        public void UpdateLight(IEnumerable<IntVec3> positions)
+        public override void UpdateLight(IEnumerable<IntVec3> positions)
         {
             this.LightingEngine.HandleImmediate(positions);
         }
@@ -860,21 +856,17 @@ namespace Start_a_Town_.GameModes.StaticMaps
             {
                 watch = Stopwatch.StartNew();
                 foreach (var ch in this.ActiveChunks)
-                {
-                    ch.Value.UpdateSkyLight(true);
-                }
+                    ch.Value.UpdateSkyLight();
                 watch.Stop();
                 string.Format("light updated in {0} ms", watch.ElapsedMilliseconds).ToConsole();
-            }
-            );
+            });
             yield return ("Generating plants", () =>
             {
                 watch = Stopwatch.StartNew();
                 Terraformer.Trees.Generate(this);
                 watch.Stop();
                 string.Format("plants generated in {0} ms", watch.ElapsedMilliseconds).ToConsole();
-            }
-            );
+            });
         }
         internal void FinishLoading()
         {

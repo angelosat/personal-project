@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -9,12 +8,12 @@ namespace Start_a_Town_
     public class RegionManager
     {
         int RoomIDSequence = 0;
-        public int GetRoomID()
+        internal int GetRoomID()
         {
             return RoomIDSequence++;
         }
         int RegionIDSequence = 0;
-        public int GetRegionID()
+        internal int GetRegionID()
         {
             return RegionIDSequence++;
         }
@@ -27,7 +26,6 @@ namespace Start_a_Town_
         {
             this.Map = map;
         }
-        //bool Validated = true;
 
         internal void Init()
         {
@@ -48,10 +46,10 @@ namespace Start_a_Town_
             string.Format("regions initialized in {0} ms", watch.ElapsedMilliseconds).ToConsole();
         }
 
-        internal void Draw(Vector3 global, MySpriteBatch sb, Camera cam)
+        internal void Draw(IntVec3 global, MySpriteBatch sb, Camera cam)
         {
             var region = this.GetRegionAt(global);
-            if (region == null)
+            if (region is null)
                 return;
             foreach (var ch in this.Regions)
             {

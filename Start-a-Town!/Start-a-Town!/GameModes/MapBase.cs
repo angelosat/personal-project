@@ -582,7 +582,7 @@ namespace Start_a_Town_
         public abstract string GetFolderName();
         public abstract string GetFullPath();
 
-        public abstract void UpdateLight(IEnumerable<WorldPosition> positions);
+        public abstract void UpdateLight(IEnumerable<IntVec3> positions);
 
         public abstract void DrawBlocks(MySpriteBatch sb, Camera cam, EngineArgs a);
         public abstract void DrawObjects(MySpriteBatch sb, Camera cam, SceneState scene);

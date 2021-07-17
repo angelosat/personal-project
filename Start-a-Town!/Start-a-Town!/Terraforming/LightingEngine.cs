@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
-using System.Threading;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -23,7 +21,7 @@ namespace Start_a_Town_
             this.HandleBatchSync(vectorBatch.Select(t => (IntVec3)t.Global));
         }
 
-        public void HandleBatchSync(IEnumerable<IntVec3> vectors)
+        void HandleBatchSync(IEnumerable<IntVec3> vectors)
         {
             var batch = new BatchToken(vectors);
             var queued = new HashSet<IntVec3>(vectors);

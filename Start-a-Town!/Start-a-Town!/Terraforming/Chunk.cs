@@ -169,9 +169,7 @@ namespace Start_a_Town_
         public IWorld World => this.Map.World;
         public bool Valid;
         readonly Queue<Cell> CellsToValidate = new Queue<Cell>();
-        readonly Queue<Cell> CellsToActivate = new Queue<Cell>();
 
-        public bool SkylightUpdated = false;
         public bool ChunkBoundariesUpdated = true;
         public bool LightValid = false;
         public bool EdgesValid = false;
@@ -652,13 +650,8 @@ namespace Start_a_Town_
         }
 
         #region Updating
-        /// <summary>
-        /// pass parent map too?
-        /// </summary>
-        /// <param name="net"></param>
         public void Update()
         {
-            this.UpdateSkyLight();
             this.ValidateHeightmap();
             this.ValidateCells();
         }
@@ -678,17 +671,17 @@ namespace Start_a_Town_
                 this.HeightMapUpdates = new();
             }
         }
-        public void Tick(MapBase map)
+        public void Tick()
         {
             this.UpdateEntities();
-            this.UpdateBlockEntities(map);
-        }
-        private void UpdateBlockEntities(MapBase map)
-        {
-            foreach (var blockentity in this.BlockEntitiesByPosition.ToList())
-                blockentity.Value.Tick(map, blockentity.Key.ToGlobal(this));
+            this.UpdateBlockEntities();
         }
 
+        private void UpdateBlockEntities()
+        {
+            foreach (var blockentity in this.BlockEntitiesByPosition.ToList())
+                blockentity.Value.Tick(this.Map, blockentity.Key.ToGlobal(this));
+        }
         private void UpdateEntities()
         {
             var objectList = this.Objects.ToArray();
@@ -698,31 +691,21 @@ namespace Start_a_Town_
                 objectList[i].Update();
             }
         }
-       
-        public void UpdateSkyLight(bool force = false)
+
+        public void UpdateSkyLight()
         {
-            if (this.SkylightUpdated || force)
+            var items = new Queue<IntVec3>();
+            for (int i = 0; i < Size; i++)
             {
-                this.SkylightUpdated = false;
-                Queue<WorldPosition> items = new Queue<WorldPosition>();
-                for (int i = 0; i < Chunk.Size; i++)
+                for (int j = 0; j < Size; j++)
                 {
-                    for (int j = 0; j < Chunk.Size; j++)
-                    {
-                        var h = this.GetHeightMapValue(i, j);
-                        for (int z = 0; z < h; z++)
-                        {
-                            // schedule updating of each block's neighbor blocks
-                            var pos = new WorldPosition(this.Map, new Vector3(i, j, z).ToGlobal(this));
-                            items.Enqueue(pos);
-                        }
-
-                    }
+                    var h = this.GetHeightMapValue(i, j);
+                    for (int z = 0; z < h; z++)
+                        items.Enqueue(new IntVec3(i, j, z).ToGlobal(this));
                 }
-                this.Map.UpdateLight(items);
             }
+            this.Map.UpdateLight(items);
         }
-
         #endregion
 
         #region Drawing
@@ -771,7 +754,6 @@ namespace Start_a_Town_
                 scene.ObjectBounds.Add(obj, screenBounds);
             }
         }
-
         public void DrawInterface(SpriteBatch sb, Camera cam)
         {
             foreach (GameObject obj in this.Objects.ToList().Concat(this.BlockObjects.Values.ToList()))
@@ -779,18 +761,17 @@ namespace Start_a_Town_
             foreach (var blockentity in this.BlockEntitiesByPosition)
                 blockentity.Value.DrawUI(sb, cam, blockentity.Key.ToGlobal(this));
         }
-
-
         public void DrawHighlight(SpriteBatch sb, Rectangle bounds)
         {
             sb.Draw(UI.UIManager.Highlight, bounds, null, Color.Lerp(Color.White, Color.Transparent, 0.5f), 0, Vector2.Zero, SpriteEffects.None, 0);
         }
         #endregion
+
+        #region Saving and Loading
         public string GetDirectoryPath()
         {
             return this.Map.GetFullPath() + "/chunks/" + this.DirectoryName;
         }
-        #region Saving and Loading
         internal void SaveToFile()
         {
             Chunk copy = this.Clone();
@@ -822,7 +803,6 @@ namespace Start_a_Town_
 
             Net.Server.Instance.Log.Write(Color.Lime, "SERVER", "Chunk " + copy.MapCoords.ToString() + " saved succesfully \"" + directory + filename + "\"");
         }
-
         internal string SaveToFile(string filename)
         {
             string directory = this.FullDirPath;
@@ -839,7 +819,6 @@ namespace Start_a_Town_
             Console.WriteLine(filename + " saved in " + (DateTime.Now - now).ToString());
             return directory + GetFilename(this.MapCoords);
         }
-
         private void SaveCellsToTagCompressed(SaveTag chunktag)
         {
             SaveTag cellstag = new(SaveTag.Types.List, "Cells", SaveTag.Types.Compound);

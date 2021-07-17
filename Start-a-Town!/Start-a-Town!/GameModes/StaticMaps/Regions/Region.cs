@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
@@ -6,14 +7,11 @@ namespace Start_a_Town_
 {
     public class Region
     {
-        public Chunk Chunk;
-        public MapBase Map { get { return this.Chunk.Map; } }
-        public int RoomID
+        internal Chunk Chunk;
+        MapBase Map => this.Chunk.Map;
+        internal int RoomID
         {
-            get
-            {
-                return this.Room.ID;
-            }
+            get => this.Room.ID;
             set
             {
                 if (value == this.Room.ID)
@@ -24,15 +22,15 @@ namespace Start_a_Town_
                 this.Room = newRoom;
             }
         }
-        public int RegionID;
-        public RegionNodeCollection Nodes;
+        internal int RegionID;
+        internal RegionNodeCollection Nodes;
 
-        public Color Color { get { return this.Room.Color; } }
-        public int Size = 1;
-        public HashSet<Region> Neighbors = new();
-        public bool Validated;
-        public RegionRoom Room;
-        public Region(Chunk chunk)
+        internal Color Color => this.Room.Color;
+        int Size = 1;
+        internal HashSet<Region> Neighbors = new();
+        bool Validated;
+        internal RegionRoom Room;
+        internal Region(Chunk chunk)
         {
             this.Nodes = new RegionNodeCollection(this);
             this.Chunk = chunk;
@@ -42,29 +40,28 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return string.Format("Region: {0} Room: {1} Nodes: {2} Neighbors: {3}", this.RegionID, this.RoomID, this.Nodes.Count, this.Neighbors.Count);
+            return $"Region: {this.RegionID} Room: {this.RoomID} Nodes: {this.Nodes.Count} Neighbors: {this.Neighbors.Count}";
         }
-        
-        public RegionNode Add(Vector3 local)
+
+        internal RegionNode Add(Vector3 local)
         {
             var node = new RegionNode(this, local);
             this.Nodes.Add(node);
             return node;
         }
-        public void Add(RegionNode node)
+        internal void Add(RegionNode node)
         {
             this.Nodes.Add(node);
         }
-        private void Add(IEnumerable<RegionNode> nodes)
+        void Add(IEnumerable<RegionNode> nodes)
         {
             foreach (var n in nodes)
                 this.Add(n);
         }
-        
-        public void Remove(IntVec3 global)
+
+        void Remove(IntVec3 global)
         {
-            RegionNode node;
-            if(this.Nodes.TryGetValue(global, out node))
+            if(this.Nodes.TryGetValue(global, out var node))
                 node.ClearLinks();
             this.Nodes.Remove(global);
         }
@@ -72,7 +69,7 @@ namespace Start_a_Town_
         {
             this.Remove(n.Global);
         }
-        public IEnumerable<IntVec3> GetPositions()
+        internal IEnumerable<IntVec3> GetPositions()
         {
             return this.Nodes.Values.Select(n => n.Global);
         }
@@ -85,7 +82,7 @@ namespace Start_a_Town_
             return this.Nodes.ContainsKey(newNode.Global);
         }
 
-        public void LinkNodes()
+        internal void LinkNodes()
         {
             var toHandle = new Queue<RegionNode>(this.Nodes.Values);
             var handled = new HashSet<IntVec3>();
@@ -94,7 +91,7 @@ namespace Start_a_Town_
                 var node = toHandle.Dequeue();
                 handled.Add(node.Local);
 
-                if (node.North == null)
+                if (node.North is null)
                 {
                     var northColumn = node.Global.North;
                     foreach (var north in RegionTracker.GetColumn(northColumn))
@@ -107,7 +104,7 @@ namespace Start_a_Town_
                                 toHandle.Enqueue(nNode);
                         }
                 }
-                if (node.South == null)
+                if (node.South is null)
                 {
                     var southolumn = node.Global.South;
                     foreach (var south in RegionTracker.GetColumn(southolumn))
@@ -120,7 +117,7 @@ namespace Start_a_Town_
                                 toHandle.Enqueue(sNode);
                         }
                 }
-                if (node.West == null)
+                if (node.West is null)
                 {
                     var westColumn = node.Global.West;
                     foreach (var west in RegionTracker.GetColumn(westColumn))
@@ -133,7 +130,7 @@ namespace Start_a_Town_
                                 toHandle.Enqueue(wNode);
                         }
                 }
-                if (node.East == null)
+                if (node.East is null)
                 {
                     var eastColumn = node.Global.East;
                     foreach (var east in RegionTracker.GetColumn(eastColumn))
@@ -148,12 +145,12 @@ namespace Start_a_Town_
                 }
             }
         }
-        public void FindEdges()
+        internal void FindEdges()
         {
             foreach (var node in this.Nodes.Values)
             {
                 // if one of node's neighbors is null, check all other regions for a neighbor
-                if (node.West == null)
+                if (node.West is null)
                 {
                     var adj = node.Global.West;
                     if (this.Map.IsInBounds(adj))
@@ -177,7 +174,7 @@ namespace Start_a_Town_
                         }
                     }
                 }
-                if (node.East == null)
+                if (node.East is null)
                 {
                     var adj = node.Global.East;
                     if (this.Map.IsInBounds(adj))
@@ -202,7 +199,7 @@ namespace Start_a_Town_
                         }
                     }
                 }
-                if (node.North == null)
+                if (node.North is null)
                 {
                     var adj = node.Global.North;
                     if (this.Map.IsInBounds(adj))
@@ -226,7 +223,7 @@ namespace Start_a_Town_
                         }
                     }
                 }
-                if (node.South == null)
+                if (node.South is null)
                 {
                     var adj = node.Global.South;
                     if (this.Map.IsInBounds(adj))
@@ -260,7 +257,7 @@ namespace Start_a_Town_
                 r.RoomID = sourceRegion.RoomID;
             }
         }
-        public IEnumerable<Region> GetConnected()
+        internal IEnumerable<Region> GetConnected()
         {
             var queue = new Queue<Region>();
             foreach (var n in this.Neighbors)
@@ -278,7 +275,7 @@ namespace Start_a_Town_
             }
             return counted;
         }
-        public void Refresh()
+        internal void Refresh()
         {
             if (this.Validated)
                 return;
@@ -339,7 +336,7 @@ namespace Start_a_Town_
             this.Map.Regions.GetRegions(this.Chunk).Regions.Remove(this);
         }
 
-        internal bool TryGetSubRegionNodesNew(RegionNode startNode, IEnumerable<HashSet<RegionNode>> existing, out HashSet<RegionNode> nodes, out HashSet<Region> neighbors, out int size)
+        bool TryGetSubRegionNodesNew(RegionNode startNode, IEnumerable<HashSet<RegionNode>> existing, out HashSet<RegionNode> nodes, out HashSet<Region> neighbors, out int size)
         {
             var toCount = new Queue<RegionNode>();
             var toCountAdded = new HashSet<RegionNode>();
@@ -379,10 +376,10 @@ namespace Start_a_Town_
             return n < this.Nodes.Count;
         }
 
-        internal void TrySplitRegion(Vector3 split)
+        internal void TrySplitRegion(IntVec3 split)
         {
             var node = this.Nodes.GetValueOrDefault(split);
-            if (node == null)
+            if (node is null)
                 return;
             this.TrySplitRegion(node);
         }
@@ -399,9 +396,7 @@ namespace Start_a_Town_
                 this.Map.Regions.Add(doorRegion);
             }
             else
-            {
                 split.ClearLinks();
-            }
 
             this.Nodes.Remove(split.Global);
 
@@ -410,10 +405,7 @@ namespace Start_a_Town_
             IEnumerable<RegionNode> biggest = null;
             foreach (var link in links.Where(l => l.Chunk == this.Chunk))
             {
-                HashSet<Region> neighbors;
-                int size;
-                HashSet<RegionNode> nodes;
-                if (!this.TryGetSubRegionNodesNew(link, subRegions.Keys, out nodes, out neighbors, out size))
+                if (!this.TryGetSubRegionNodesNew(link, subRegions.Keys, out var nodes, out var neighbors, out var size))
                     continue;
                 if (size > maxSize)
                 {
@@ -441,29 +433,27 @@ namespace Start_a_Town_
                 }
                 this.Map.Regions.Add(newRegion);
                 if (isBelowDoor)
-                {
                     LinkNoPaint(newRegion, doorRegion);
-                }
             }
         }
-        private static void LinkNoPaint(Region master, Region slave)
+        static void LinkNoPaint(Region master, Region slave)
         {
             master.Neighbors.Add(slave);
             slave.Neighbors.Add(master);
         }
-        private static void Link(Region master, Region slave)
+        static void Link(Region master, Region slave)
         {
             slave.Paint(master);
             master.Neighbors.Add(slave);
             slave.Neighbors.Add(master);
         }
-        private static void UnLink(Region region1, Region region2)
+        static void UnLink(Region region1, Region region2)
         {
             region1.Neighbors.Remove(region2);
             region2.Neighbors.Remove(region1);
         }
 
-        public bool IsOutdoors()
+        internal bool IsOutdoors()
         {
             foreach(var node in this.Nodes)
             {
@@ -474,7 +464,7 @@ namespace Start_a_Town_
             return false;
         }
 
-        internal void Write(System.IO.BinaryWriter w)
+        internal void Write(BinaryWriter w)
         {
             this.Nodes.Write(w);
         }

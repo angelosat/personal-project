@@ -82,11 +82,6 @@ namespace Start_a_Town_.Net
                                 ch.SaveToFile();
                             break;
 
-                        case "save":
-                            Server.Log.Write("SERVER", "Saving...");
-                            Save();
-                            break;
-
                         case "savethumb":
                             Instance.Map.GenerateThumbnails();
                             break;

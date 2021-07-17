@@ -165,17 +165,8 @@ namespace Start_a_Town_
                 Z = (byte)value.Z;
             }
         }
-        internal bool IsExposed
-        {
-            get { return this.AllEdges != 0; }
-        }
-        public byte AllEdges
-        {
-            get
-            {
-                return (byte)(((int)this.VerticalSides << 4) + this.HorizontalSides);
-            }
-        }
+        internal bool IsExposed => this.AllEdges != 0; 
+        byte AllEdges => (byte)(((int)this.VerticalSides << 4) + this.HorizontalSides);
 
         public Material Material => this.Block.GetMaterial(this.BlockData);
         #endregion
@@ -252,8 +243,20 @@ namespace Start_a_Town_
             return this;
         }
 
-        public IntVec3 Front => Block.Front(this);
-        public IntVec3 Back => Block.Back(this);
+        public IntVec3 Front => GetFront(this.Orientation);
+        public IntVec3 Back => -this.Front;
+
+        public static IntVec3 GetFront(int orientation)
+        {
+            return orientation switch
+            {
+                0 => new IntVec3(0, 1, 0),
+                1 => new IntVec3(-1, 0, 0),
+                2 => new IntVec3(0, -1, 0),
+                3 => new IntVec3(1, 0, 0),
+                _ => throw new Exception(),
+            };
+        }
 
         internal IEnumerable<IntVec3> GetOperatingPositions()
         {

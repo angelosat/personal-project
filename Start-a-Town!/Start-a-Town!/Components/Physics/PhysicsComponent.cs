@@ -111,7 +111,7 @@ namespace Start_a_Town_.Components
 
             if (lastGlobal != next)
             {
-                parent.MoveTo(next);
+                parent.SetPosition(next);
             }
             else if (velocity == Vector3.Zero)
             {

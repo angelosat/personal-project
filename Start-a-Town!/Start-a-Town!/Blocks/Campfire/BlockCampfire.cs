@@ -41,7 +41,6 @@ namespace Start_a_Town_.Blocks
                 return;
             base.Place(map, global, data, variation, orientation, notify);
         }
-        public override bool IsSwitchable => true;
         public override bool IsRoomBorder => false;
 
         internal override IEnumerable<IntVec3> GetOperatingPositions(Cell cell)

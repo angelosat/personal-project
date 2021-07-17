@@ -342,20 +342,14 @@ namespace Start_a_Town_
         {
             return new BlockBedEntity();
         }
-        public override BlockEntity GetBlockEntity(MapBase map, Vector3 global)
-        {
-            var parts = GetPartsDic(map, global);
-            var entity = map.GetBlockEntity(parts[Part.Top]);
-            return entity;
-        }
-
+       
         public static BlockBedEntity GetEntity(MapBase map, Vector3 global)
         {
             var parts = GetPartsDic(map, global);
             var entity = map.GetBlockEntity<BlockBedEntity>(parts[Part.Top]);
             return entity;
         }
-        public override List<Interaction> GetAvailableTasks(MapBase map, Vector3 global)
+        public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
         {
             var list = new List<Interaction>();
             list.Add(new Blocks.Bed.InteractionStartSleep()); // commented out until i figure out how to seperate ai planting job on farmlands and player planting anywher
@@ -393,7 +387,7 @@ namespace Start_a_Town_
         }
         static readonly IconButton ButtonSetVisitor = new(Icon.Construction) { HoverText = "Set to visitor bed" };
         static readonly IconButton ButtonUnsetVisitor = new(Icon.Construction, Icon.Cross) { HoverText = "Set to citizen bed" };
-        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var entity = GetEntity(map, vector3);
             entity.GetSelectionInfo(info, map, vector3);

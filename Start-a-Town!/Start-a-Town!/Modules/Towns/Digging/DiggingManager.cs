@@ -22,15 +22,6 @@ namespace Start_a_Town_.Towns.Digging
             return this.AllPositions;
         }
 
-        public override void HandlePacket(Server server, Packet msg)
-        {
-            this.Handle(server, msg);
-        }
-        public override void HandlePacket(Client client, Packet msg)
-        {
-            this.Handle(client, msg);
-        }
-
         internal override void OnGameEvent(GameEvent e)
         {
             switch (e.Type)

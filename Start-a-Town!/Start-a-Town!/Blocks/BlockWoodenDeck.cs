@@ -108,7 +108,7 @@ namespace Start_a_Town_
             return Material.Registry[blockdata];
         }
 
-        public override List<Interaction> GetAvailableTasks(MapBase map, Vector3 global)
+        public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
         {
             var list = new List<Interaction>();
             list.Add(new InteractionChopping());

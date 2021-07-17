@@ -177,7 +177,6 @@ namespace Start_a_Town_
                     items.Add(new T().Load(list[i]) as T);
             });
         }
-        
         static public bool TryLoadMutable<T>(this SaveTag save, string name, ref T[] array) where T : class, ISaveable, new()
         {
             var list = save.Value as List<SaveTag>;

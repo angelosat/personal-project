@@ -227,10 +227,8 @@ namespace Start_a_Town_.UI
                     {
                         this.SelectedStack = selectables.GetEnumerator();
                         CycleTargets();
-                        if (target.Map.IsHidden(target.Global))
-                        {
+                        if (target.Map.GetCell(target.Global).IsHidden())
                             this.LabelName.TextFunc = () => "Unknown block";
-                        }
                     }
                     break;
 

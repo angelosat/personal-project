@@ -305,22 +305,6 @@ namespace Start_a_Town_
                 this.TownUtilitiesNew[ut] = new HashSet<Vector3>(r.ReadListVector3());
         }
 
-        internal void HandlePacket(Server server, Packet msg)
-        {
-            foreach (var comp in this.TownComponents)
-                comp.HandlePacket(server, msg);
-        }
-        internal void HandlePacket(Client client, Packet msg)
-        {
-            foreach (var comp in this.TownComponents)
-                comp.HandlePacket(client, msg);
-        }
-        internal void HandlePacket(INetwork net, PacketType type, BinaryReader r)
-        {
-            foreach (var comp in this.TownComponents)
-                comp.HandlePacket(net, type, r);
-        }
-
         public void GetContextActions(GameObject playerEntity, Vector3 pos, ContextArgs a)
         {
             var zone = this.QueryPosition(pos);

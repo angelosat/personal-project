@@ -8,7 +8,7 @@ namespace Start_a_Town_.Blocks
         public BlockDesignation()
             : base(Types.Designation, 1, 0, false, false)
         {
-            this.Variations.Add(Block.Atlas.Load("blocks/blockblueprint"));
+            this.Variations.Add(Atlas.Load("blocks/blockblueprint"));
         }
         public override bool IsStandableIn => true;
         public override Material GetMaterial(byte blockdata)
@@ -76,11 +76,7 @@ namespace Start_a_Town_.Blocks
             return entity.IsValidHaulDestination(obj.Def);
         }
        
-        static BlockDesignationEntity GetEntity(MapBase map, Vector3 global)
-        {
-            return map.GetBlockEntity(global) as BlockDesignationEntity;
-        }
-        internal override string GetName(MapBase map, Vector3 global)
+        internal override string GetName(MapBase map, IntVec3 global)
         {
             var e = map.GetBlockEntity<BlockDesignationEntity>(global);
             return string.Format("{0} (Designation)", e.Product.Block.Name);

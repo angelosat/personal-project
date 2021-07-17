@@ -52,22 +52,6 @@ namespace Start_a_Town_.GameModes
                 comp.OnUIEvent(e, p);
         }
         
-        internal virtual void HandlePacket(INetwork net, PacketType type, System.IO.BinaryReader r)
-        {
-            foreach (var gc in this.GameComponents)
-                gc.HandlePacket(net, type, r);
-        }
-        public virtual void HandlePacket(Server server, Packet msg)
-        {
-            foreach (var gc in this.GameComponents)
-                gc.HandlePacket(server, msg);
-        }
-        public virtual void HandlePacket(Client client, Packet msg)
-        {
-            foreach (var gc in this.GameComponents)
-                gc.HandlePacket(client, msg);
-        }
-
         public abstract bool IsPlayerWithinRangeForPacket(PlayerData playerData, Vector3 packetEventGlobal);
       
         internal virtual void PlayerConnected(Server server, PlayerData player) { }

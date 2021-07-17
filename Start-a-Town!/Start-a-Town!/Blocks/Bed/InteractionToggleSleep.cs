@@ -21,7 +21,7 @@ namespace Start_a_Town_.Blocks.Bed
             headBone.SetEnabled(true, false);
             headBone.RestingFrame = new Keyframe(0, Vector2.Zero, -(float)(Math.PI / 3f));
             var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
-            a.MoveTo(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(a.Map, bedPos)));
+            a.SetPosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(a.Map, bedPos)));
             a.GetNeed(NeedDef.Energy).Mod += 1;
         }
        

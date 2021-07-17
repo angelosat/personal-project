@@ -61,7 +61,7 @@ namespace Start_a_Town_.Modules.Construction
             sb.Flush();
 
             // show operation position of workstation 
-            cam.DrawGridCells(sb, Color.White *.5f, new IntVec3[] { global + Block.GetFrontSide(this.Orientation) });
+            cam.DrawGridCells(sb, Color.White *.5f, new IntVec3[] { global + Cell.GetFront(this.Orientation) });
         }
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {

@@ -13,18 +13,14 @@ namespace Start_a_Town_.UI
         protected static TooltipManager _Instance;
         public static TooltipManager Instance => _Instance ??= new TooltipManager();
 
-        Tooltip _Tooltip;
+        Tooltip _tooltip;
         public Tooltip Tooltip
         {
-            get { return this._Tooltip; }
+            get => this._tooltip;
             set
             {
-                if (this._Tooltip is not null)
-                {
-                    this._Tooltip.Dispose();
-                }
-
-                this._Tooltip = value;
+                this._tooltip?.Dispose();
+                this._tooltip = value;
             }
         }
 
@@ -55,9 +51,7 @@ namespace Start_a_Town_.UI
             this.Tooltip.AutoSize = true;
             this.Object.GetTooltipInfo(this.Tooltip);
             foreach (var comp in Game1.Instance.GameComponents)
-            {
                 comp.OnTooltipCreated(this.Object, this.Tooltip);
-            }
 
             if (this.Tooltip.Controls.Count > 0)
             {
@@ -81,9 +75,8 @@ namespace Start_a_Town_.UI
         void Controller_MouseoverObjectChanged(object sender, MouseoverEventArgs e)
         {
             this.Tooltip = null;
-            ITooltippable obj = e.ObjectNext as ITooltippable;
             this.DelayValue = DelayInterval;
-            this.Object = Controller.Instance.MouseoverBlockNext.Object as ITooltippable;//.Target;// 
+            this.Object = Controller.Instance.MouseoverBlockNext.Object as ITooltippable;
         }
 
         public Vector2 ScreenLocation

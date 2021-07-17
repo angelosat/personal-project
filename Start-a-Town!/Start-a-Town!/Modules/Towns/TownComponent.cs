@@ -43,19 +43,6 @@ namespace Start_a_Town_.Towns
             return null;
         }
 
-        public virtual void Handle(INetwork net, Net.Packet msg) { }
-        public virtual void HandlePacket(INetwork net, Net.PacketType type, BinaryReader r) { }
-
-        public virtual void HandlePacket(Server server, Packet msg)
-        {
-            this.Handle(server, msg);
-        }
-
-        public virtual void HandlePacket(Client client, Packet msg)
-        {
-            this.Handle(client, msg);
-        }
-
         internal virtual IEnumerable<Tuple<string, Action>> OnQuickMenuCreated() { yield break; }
         internal virtual void OnContextMenuCreated(IContextable obj, ContextArgs a) { }
         internal virtual void OnContextActionBarCreated(ContextActionBar.ContextActionBarArgs a) { }

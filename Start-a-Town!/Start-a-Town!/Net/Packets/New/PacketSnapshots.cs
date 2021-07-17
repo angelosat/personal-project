@@ -12,13 +12,13 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(INetwork net, IEnumerable<GameObject> entities)
+        static public void Send(INetwork net, ICollection<GameObject> entities)
         {
             var server = net as Server;
             var strem = server.OutgoingStreamUnreliable;
             strem.Write(p);
-            strem.Write(Server.ServerClock.TotalMilliseconds);
-            strem.Write(entities.Count());
+            strem.Write(server.Clock.TotalMilliseconds);
+            strem.Write(entities.Count);
             foreach (var obj in entities)
             {
                 strem.Write(obj.RefID);

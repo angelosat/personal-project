@@ -8,31 +8,23 @@ namespace Start_a_Town_.UI
     {
         bool IsToggled;
         public Func<bool> IsToggledFunc = () => false;
-        SpriteFont _Font = UIManager.Font;
+        SpriteFont _font = UIManager.Font;
         public SpriteFont Font
         {
-            get { return _Font; }
+            get => this._font;
             set
             {
-                _Font = value;
-                OnTextChanged();
+                this._font = value;
+                this.OnTextChanged();
             }
         }
-        public virtual SpriteEffects SprFx
-        {
-            get
-            {
-                return IsPressed ? SpriteEffects.FlipVertically : SpriteEffects.None;
-            }
-        }
+        public virtual SpriteEffects SprFx => this.IsPressed ? SpriteEffects.FlipVertically : SpriteEffects.None;
 
         public Action
-            LeftClickAction = () => { }
-        ,
+            LeftClickAction = () => { },
             RightClickAction = () => { };
         public Action<ButtonBase>
-            LeftClickActionNew = bb => { }
-        ,
+            LeftClickActionNew = bb => { },
             RightClickActionNew = bb => { };
 
         public Func<Color> TextColorFunc;
@@ -41,43 +33,37 @@ namespace Start_a_Town_.UI
         {
             get
             {
-                if (TextColorFunc == null)
-                {
-                    return _TextColor;
-                }
+                if (this.TextColorFunc == null)
+                    return this._TextColor;
                 else
-                {
-                    return TextColorFunc();
-                }
+                    return this.TextColorFunc();
             }
-            set { this._TextColor = value; }
+            set => this._TextColor = value;
         }
 
         public virtual void PerformLeftClick()
         {
             this.Pressed = false;
-            OnLeftClick();
+            this.OnLeftClick();
         }
 
         public virtual void PerformRightClick()
         {
             this.Pressed = false;
-            RightClickAction();
-            OnRightClick();
+            this.RightClickAction();
+            this.OnRightClick();
         }
 
         public string TextFormat;
-        Func<string> _TextFunc;
+        Func<string> _textFunc;
         public virtual Func<string> TextFunc
         {
-            get { return _TextFunc; }
+            get => this._textFunc;
             set
             {
-                _TextFunc = value;
-                if (value != null)
-                {
+                this._textFunc = value;
+                if (value is not null)
                     this.Text = value();
-                }
             }
         }
         public virtual ButtonBase SetText(string text)
@@ -85,19 +71,16 @@ namespace Start_a_Town_.UI
             this.Text = text;
             return this;
         }
-        protected string _Text = "";
+        protected string _text = "";
         public virtual string Text
         {
-            get
-            {
-                return _Text;
-            }
+            get => this._text;
             set
             {
-                if (value != _Text)
+                if (value != this._text)
                 {
-                    _Text = value;
-                    OnTextChanged();
+                    this._text = value;
+                    this.OnTextChanged();
                 }
             }
         }
@@ -105,11 +88,10 @@ namespace Start_a_Town_.UI
         public override void Update()
         {
 
-            var newToggled = IsToggledFunc();
+            var newToggled = this.IsToggledFunc();
             if (this.IsToggled != newToggled)
             {
                 this.IsToggled = newToggled;
-
                 this.Invalidate();
             }
 
@@ -131,48 +113,33 @@ namespace Start_a_Town_.UI
             this.Invalidate();
             string txt = this.Text;
             if (txt == null)
-            {
                 txt = "";
-            }
-            if (TextFormat != null)
-            {
+            if (this.TextFormat != null)
                 return;
-            }
 
             Vector2 textsize = this.Font.MeasureString(txt);
             var maxw = (int)textsize.X + 2;
             var oldw = this.Width;
 
-            if (AutoSize)
-            {
+            if (this.AutoSize)
                 this.Width = maxw;
-            }
             else
-            {
-                this.Width = Math.Max(maxw, Width);
-            }
+                this.Width = Math.Max(maxw, this.Width);
 
             var lineCount = string.IsNullOrEmpty(this.Text) ? 1 : this.Text.Split('\n').Length;
             var oldh = this.Height;
-            Height = (int)textsize.Y;// + 2 * lineCount; WARNING commented this out because measurestring returns height = 17 while font linespacing = 15
+            this.Height = (int)textsize.Y;// + 2 * lineCount; WARNING commented this out because measurestring returns height = 17 while font linespacing = 15
             if (this.Height != oldh || this.Width != oldw)
-            {
-                if (this.Parent != null)
-                {
+                if (this.Parent is not null)
                     this.Parent.OnControlResized(this);
-                }
-            }
         }
 
         protected bool LeftPressed, RightPressed;
-        public virtual bool IsPressed
-        {
-            get { return LeftPressed || RightPressed || IsToggled; }
-        }
+        public virtual bool IsPressed => this.LeftPressed || this.RightPressed || this.IsToggled;
         bool _Pressed;
         public virtual bool Pressed
         {
-            get { return _Pressed; }
+            get => this._Pressed;
             set
             {
                 this._Pressed = value;
@@ -182,10 +149,7 @@ namespace Start_a_Town_.UI
 
         public override int Width
         {
-            get
-            {
-                return base.Width;
-            }
+            get => base.Width;
             set
             {
                 base.Width = value;
@@ -195,10 +159,7 @@ namespace Start_a_Town_.UI
 
         public override int Height
         {
-            get
-            {
-                return base.Height;
-            }
+            get => base.Height;
             set
             {
                 base.Height = value;
@@ -216,8 +177,8 @@ namespace Start_a_Town_.UI
 
         public override void OnLostFocus()
         {
-            Pressed = false;
-            Alpha = Color.Lerp(Color.Transparent, Color.White, 0.5f);
+            this.Pressed = false;
+            this.Alpha = Color.Lerp(Color.Transparent, Color.White, 0.5f);
             base.OnLostFocus();
         }
 
@@ -225,28 +186,22 @@ namespace Start_a_Town_.UI
         public override void OnMouseEnter()
         {
             base.OnMouseEnter();
-            if (Active)
-            {
+            if (this.Active)
                 this.Invalidate();
-            }
         }
         public override void OnMouseLeave()
         {
-            Pressed = false;
-            RightPressed = false;
+            this.Pressed = false;
+            this.RightPressed = false;
             base.OnMouseLeave();
-            if (Active)
-            {
+            if (this.Active)
                 this.Invalidate();
-            }
         }
 
         protected override void OnMouseRightPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (e.Handled)
-            {
                 return;
-            }
 
             e.Handled = true;
             this.RightPressed = true;
@@ -259,31 +214,25 @@ namespace Start_a_Town_.UI
             {
                 this.Invalidate();
                 e.Handled = true;
-                RightPressed = false;
+                this.RightPressed = false;
                 this.Pressed = false;
-                OnRightClick();
+                this.OnRightClick();
                 base.OnMouseRightUp(e);
             }
         }
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (e.Handled)
-            {
                 return;
-            }
 
-            if (!MouseHover)
-            {
+            if (!this.MouseHover)
                 return;
-            }
 
             if (!this.Active)
-            {
                 return;
-            }
 
             this.LeftPressed = true;
-            Pressed = true;
+            this.Pressed = true;
             e.Handled = true;
             base.OnMouseLeftPress(e);
         }
@@ -292,35 +241,32 @@ namespace Start_a_Town_.UI
             if (this.LeftPressed && this.Active)
             {
                 this.LeftPressed = false;
-                Pressed = false;
+                this.Pressed = false;
                 if (!e.Handled)
-                {
-                    OnLeftClick();
-                }
+                    this.OnLeftClick();
 
                 e.Handled = true;
                 base.OnMouseLeftUp(e);
             }
         }
 
-
         protected override void OnLeftClick()
         {
-            LeftClickAction();
+            this.LeftClickAction();
             this.LeftClickActionNew(this);
             base.OnLeftClick();
         }
 
         protected override void OnRightClick()
         {
-            RightClickAction();
+            this.RightClickAction();
             this.RightClickActionNew(this);
             base.OnRightClick();
         }
 
         public override string ToString()
         {
-            return "ButtonBase: " + Text;
+            return "ButtonBase: " + this.Text;
         }
 
         public virtual void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity) { }

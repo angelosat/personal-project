@@ -58,7 +58,7 @@ namespace Start_a_Town_
         internal override void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
         {
             // draw workstation operating position
-            cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + Block.GetFrontSide(map.GetCell(global).Orientation) });
+            cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + map.GetCell(global).Front });
         }
 
         public override void AddSaveData(SaveTag tag)

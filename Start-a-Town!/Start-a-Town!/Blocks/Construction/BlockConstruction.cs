@@ -51,7 +51,7 @@ namespace Start_a_Town_
                 map.SetBlock(g, Block.Types.Air, 0, raiseEvent: false);
             }
         }
-        internal override string GetName(MapBase map, Vector3 global)
+        internal override string GetName(MapBase map, IntVec3 global)
         {
             return map.GetBlockEntity<BlockConstructionEntity>(global).Product.Block.Name + " (Construction)";
         }

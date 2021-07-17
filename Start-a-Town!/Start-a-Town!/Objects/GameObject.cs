@@ -204,7 +204,7 @@ namespace Start_a_Town_
         public Vector3 GridCell
         {
             get { return this.Global.SnapToBlock(); }
-            set { this.MoveTo(value); }
+            set { this.SetPosition(value); }
         }
         public Vector3 GridCellOffset
         {
@@ -215,7 +215,7 @@ namespace Start_a_Town_
             }
             set
             {
-                this.MoveTo(this.GridCell + value);
+                this.SetPosition(this.GridCell + value);
             }
         }
 
@@ -295,7 +295,7 @@ namespace Start_a_Town_
 
         public GameObject SetGlobal(Vector3 global)
         {
-            this.MoveTo(global);
+            this.SetPosition(global);
             return this;
         }
 
@@ -304,32 +304,26 @@ namespace Start_a_Town_
         /// </summary>
         /// <param name="nextGlobal"></param>
         /// <returns></returns>
-        public GameObject MoveTo(Vector3 nextGlobal) // TODO: merge this with SetGlobal
+        public GameObject SetPosition(Vector3 nextGlobal) // TODO: merge this with SetGlobal
         {
             if (this.Map.IsSolid(nextGlobal))// + Vector3.UnitZ * 0.01f))// TODO: FIX THIS
-            {
                 return this; // TODO: FIX: problem when desynced from server, block might be empty on server but solid on client
-            }
 
-            this.Map.TryGetChunk(nextGlobal.RoundXY(), out Chunk nextChunk);
+            this.Map.TryGetChunk(nextGlobal.RoundXY(), out var nextChunk);
 
             if (nextChunk is null)
-            {
                 return this;
-            }
 
-            this.Map.TryGetChunk(this.Global.Round(), out Chunk lastChunk);
+            this.Map.TryGetChunk(this.Global.Round(), out var lastChunk);
             this.Global = nextGlobal;
 
             if (nextChunk != lastChunk)
             {
-                bool removed = Chunk.RemoveObject(this, lastChunk);
+                bool removed = lastChunk.Remove(this);
                 if (!removed)
-                {
                     throw new Exception("Source chunk is't loaded"); //Could not remove object from previous chunk");
-                }
 
-                nextChunk.Objects.Add(this);
+                nextChunk.Add(this);
             }
 
             this.Physics.Enabled = true;
@@ -726,13 +720,11 @@ namespace Start_a_Town_
         {
             if (!this.IsSpawned)
                 return;
-            if (!Chunk.RemoveObject(this.Map, this))
+            if (!this.Map.Remove(this))
                 throw new Exception();
             this._map = null;
             foreach (var comp in this.Components.Values.ToList())
-            {
                 comp.OnDespawn();
-            }
 
             this.Map.EventOccured(Message.Types.EntityDespawned, this);
             //this.Unreserve(); // UNDONE dont unreserve here because the ai might continue manipulating (placing/carrying) the item during the same behavior
@@ -746,8 +738,7 @@ namespace Start_a_Town_
             if (!map.TryGetChunk(this.Global, out var chunk))
                 throw new Exception("Chunk not loaded");
 
-            Chunk.AddObject(this, map);
-
+            map.Add(this);
             foreach (var comp in this.Components.Values)
                 comp.OnSpawn();
 

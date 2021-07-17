@@ -99,12 +99,9 @@ namespace Start_a_Town_.PlayerControl
             base.DrawAfterWorld(sb, map);
             if (this.Painting)
                 return;
-            if (InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey))
-            {
-                Vector2 loc = Controller.Instance.MouseLocation / UIManager.Scale;
+            if (InputState.IsKeyDown(Keys.ControlKey))
                 return;
-            }
-            if (this.Target == null)
+            if (this.Target is null)
                 return;
 
             var atlastoken = this.Block.GetDefault();

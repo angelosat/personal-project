@@ -55,36 +55,5 @@ namespace Start_a_Town_.Towns
             foreach (var comp in Engine.Map.Town.TownComponents)
                 comp.OnContextActionBarCreated(args);
         }
-       
-        public override void HandlePacket(Server server, Packet msg)
-        {
-            var map = server.Map;
-            if (map == null)
-                return;
-            var town = map.Town;
-            if (town == null)
-                return;
-            town.HandlePacket(server, msg);
-        }
-        public override void HandlePacket(Client client, Packet msg)
-        {
-            var map = client.Map;
-            if (map == null)
-                return;
-            var town = map.Town;
-            if (town == null)
-                return;
-            town.HandlePacket(client, msg);
-        }
-        internal override void HandlePacket(INetwork net, PacketType type, System.IO.BinaryReader r)
-        {
-            var map = net.Map;
-            if (map == null)
-                return;
-            var town = map.Town;
-            if (town == null)
-                return;
-            town.HandlePacket(net, type, r);
-        }
     }
 }

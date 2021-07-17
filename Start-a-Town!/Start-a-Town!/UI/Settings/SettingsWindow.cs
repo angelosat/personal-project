@@ -51,9 +51,6 @@ namespace Start_a_Town_.UI
                 this.Panel,
                 UIHelper.Wrap(this.Panel.ClientSize.Width, ok, cancel).ToPanel());
 
-            this.SnapToScreenCenter();
-            this.Anchor = new Vector2(0.5f);
-
             void apply()
             {
                 this.GraphicSettings.Apply();

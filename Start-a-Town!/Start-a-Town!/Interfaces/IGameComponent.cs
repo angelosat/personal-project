@@ -9,10 +9,6 @@ namespace Start_a_Town_
         public virtual void InitHUD(Hud hud) { }
         public virtual void OnGameEvent(GameEvent e) { }
 
-        public virtual void HandlePacket(Server server, Packet msg) { }
-        public virtual void HandlePacket(Client client, Packet msg) { }
-        internal virtual void HandlePacket(INetwork net, PacketType type, System.IO.BinaryReader r) { }
-
         public virtual void OnHudCreated(Hud hud) { }
         public virtual void OnContextMenuCreated(IContextable obj, ContextArgs a) { }
         public virtual void OnTargetInterfaceCreated(TargetArgs t, Control ui) { }

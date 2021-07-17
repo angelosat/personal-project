@@ -406,13 +406,9 @@ namespace Start_a_Town_
         
         public Cell GetCell(Vector3 global)
         {
-            Vector3 globalRound = new Vector3((int)Math.Round(global.X), (int)Math.Round(global.Y), (int)Math.Floor(global.Z));
-            Chunk chunk;
-            if (this.TryGetChunk(globalRound, out chunk))
-            {
-                Cell cell = chunk[globalRound.X - chunk.Start.X, globalRound.Y - chunk.Start.Y, globalRound.Z];
-                return cell;
-            }
+            var globalRound = new Vector3((int)Math.Round(global.X), (int)Math.Round(global.Y), (int)Math.Floor(global.Z));
+            if (this.TryGetChunk(globalRound, out var chunk))
+                return chunk[globalRound.X - chunk.Start.X, globalRound.Y - chunk.Start.Y, globalRound.Z];
             return null;
         }
         public Chunk GetChunkAt(Vector2 chunkCoords)
@@ -541,11 +537,7 @@ namespace Start_a_Town_
 
         public abstract bool ChunkNeighborsExist(Vector2 chunkCoords);
         public abstract bool TryGetAll(int gx, int gy, int gz, out Chunk chunk, out Cell cell, out int lx, out int ly);
-        public virtual bool IsHidden(Vector3 global)
-        {
-            var cell = this.GetCell(global);
-            return cell.IsHidden();
-        }
+        
         public virtual bool IsSolid(Vector3 global)
         {
             if (!this.TryGetCell(global, out Cell cell))
@@ -599,6 +591,15 @@ namespace Start_a_Town_
                     list.Add(entity);
             }
             return list;
+        }
+
+        internal bool Remove(GameObject obj)
+        {
+            return this.GetChunk(obj.Global).Remove(obj);
+        }
+        internal void Add(GameObject obj)
+        {
+            this.GetChunk(obj.Global).Add(obj);
         }
         public IEnumerable<GameObject> GetObjects(Vector3 global)
         {

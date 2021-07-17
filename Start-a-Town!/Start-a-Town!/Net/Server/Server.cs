@@ -1,22 +1,22 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Components;
+using Start_a_Town_.GameModes;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.IO;
-using System.IO.Compression;
-using System.Collections.Concurrent;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Net
 {
     public partial class Server : INetwork
     {
         public double CurrentTick => ServerClock.TotalMilliseconds;
-      
+
         static Server()
         {
             RegisterPacketHandler(PacketType.Acks, Instance.ReceiveAcks);
@@ -24,18 +24,13 @@ namespace Start_a_Town_.Net
 
         // TODO: figure out why it's glitching out if I set it lower than 10
         public const int ClockIntervalMS = 10;// 10 is working
-        public TimeSpan Clock { get { return ServerClock; } }
-        public static TimeSpan ServerClock;
+        public TimeSpan Clock => ServerClock;
+        static TimeSpan ServerClock;
 
-        internal static void ConnectAsHost()
-        {
-            Instance.PlayerData = new PlayerData("host test");
-        }
-        
         static bool IsRunning;
 
         bool IsSaving;
-        
+
         UI.ConsoleBoxAsync _Console;
         public UI.ConsoleBoxAsync Log
         {
@@ -57,15 +52,15 @@ namespace Start_a_Town_.Net
         public HashSet<GameObject> ObjectsChangedSinceLastSnapshot = new();
 
         [Obsolete]
-        readonly static Dictionary<PacketType, Action<INetwork, PlayerData, BinaryReader>> PacketHandlersNewNew = new();
+        static readonly Dictionary<PacketType, Action<INetwork, PlayerData, BinaryReader>> PacketHandlersNewNew = new();
         [Obsolete]
-        static public void RegisterPacketHandler(PacketType channel, Action<INetwork, PlayerData, BinaryReader> handler)
+        public static void RegisterPacketHandler(PacketType channel, Action<INetwork, PlayerData, BinaryReader> handler)
         {
             PacketHandlersNewNew.Add(channel, handler);
         }
 
         static int PacketSequence = 1;
-        readonly static Dictionary<int, Action<INetwork, BinaryReader>> PacketHandlersNewNewNew = new();
+        static readonly Dictionary<int, Action<INetwork, BinaryReader>> PacketHandlersNewNewNew = new();
         internal static int RegisterPacketHandler(Action<INetwork, BinaryReader> handler)
         {
             var id = PacketSequence++;
@@ -90,11 +85,11 @@ namespace Start_a_Town_.Net
             var e = new GameEvent(ServerClock.TotalMilliseconds, type, p);
             OnGameEvent(e);
         }
-        
-        static public CancellationTokenSource ChunkLoaderToken = new();
+
+        public static CancellationTokenSource ChunkLoaderToken = new();
         static Server _Instance;
-        static public Server Instance => _Instance ??= new Server();
-        public NetworkSideType Type { get { return NetworkSideType.Server; } }
+        public static Server Instance => _Instance ??= new Server();
+        public NetworkSideType Type => NetworkSideType.Server;
 
         static int _objID = 1;
 
@@ -103,13 +98,10 @@ namespace Start_a_Town_.Net
             return _objID++;
         }
         static int _playerID = 1;
-        public static int PlayerID
-        {
-            get { return _playerID++; }
-        }
+        public static int PlayerID => _playerID++;
         public Server()
         {
-            NetworkObjects = new Dictionary<int, GameObject>();
+            this.NetworkObjects = new Dictionary<int, GameObject>();
         }
         private void AdvanceClock()
         {
@@ -130,8 +122,8 @@ namespace Start_a_Town_.Net
         static IWorld _World;
         static IWorld World
         {
-            get { return _World; }
-            set { _World = value; }
+            get => _World;
+            set => _World = value;
         }
         public static int Port = 5541;
         static Socket Listener;
@@ -139,12 +131,12 @@ namespace Start_a_Town_.Net
 
         public IEnumerable<PlayerData> GetPlayers()
         {
-            return Players.GetList();
+            return this.Players.GetList();
         }
 
-        static public RandomThreaded Random;
+        public static RandomThreaded Random;
 
-        static public void Stop()
+        public static void Stop()
         {
             Server.ChunkLoaderToken.Cancel();
             if (Listener is not null)
@@ -163,7 +155,7 @@ namespace Start_a_Town_.Net
             ServerClock = new TimeSpan();
             Instance.Speed = 0;
         }
-        static public void Start()
+        public static void Start()
         {
             Instance.Speed = 0;
             IsRunning = true;
@@ -205,7 +197,7 @@ namespace Start_a_Town_.Net
             Instance.Log.Write(Color.Yellow, "SERVER", "Listening to port " + Port + "...");
         }
         int _Speed = 0;// 1;
-        public int Speed { get { return this._Speed; } set { this._Speed = value; } }
+        public int Speed { get => this._Speed; set => this._Speed = value; }
         readonly float BlockUpdateTimerMax = 1;
         float BlockUpdateTimer = 0;
 
@@ -220,27 +212,27 @@ namespace Start_a_Town_.Net
                 return;
             if (!Instance.IsSaving)
             {
-                SendTimeStampedPackets();
+                this.SendTimeStampedPackets();
                 this.Map.Update();
                 SendSnapshots(ServerClock);
             }
 
             /// THESE MUST BE CALLED FROM WITHIN THE GAMESPEED LOOP
-            CreatePacketsFromAllStreams();
+            this.CreatePacketsFromAllStreams();
             ResetOutgoingStreams();
             Instance.AdvanceClock();
-            SendPackets();
+            this.SendPackets();
         }
         private void SendPackets()
         {
-            SendUnreliable();
-            TryResendPacketsFirst(); //try resend first or all?
-            SendOrderedReliable();
+            this.SendUnreliable();
+            this.TryResendPacketsFirst(); //try resend first or all?
+            this.SendOrderedReliable();
         }
         private void CreatePacketsFromAllStreams()
         {
-            CreatePacketsFromStreamUnreliable();
-            CreatePacketsFromStream();
+            this.CreatePacketsFromStreamUnreliable();
+            this.CreatePacketsFromStream();
         }
         private static void ResetOutgoingStreams()
         {
@@ -288,7 +280,7 @@ namespace Start_a_Town_.Net
             }
         }
 
-        static public int RandomBlockUpdatesCount = 1;
+        public static int RandomBlockUpdatesCount = 1;
         static int RandomBlockUpdateIndex = 0;
         void SendRandomBlockUpdates() // TODO move this to map class. server object shouldn't contain map logic
         {
@@ -313,10 +305,10 @@ namespace Start_a_Town_.Net
                 while (player.Incoming.TryDequeue(out Packet msg))
                     HandleMessage(msg);
         }
-        
+
         void SendUnreliable()
         {
-            foreach (var player in Players.GetList())
+            foreach (var player in this.Players.GetList())
                 while (player.OutUnreliable.Any())
                 {
                     if (!player.OutUnreliable.TryDequeue(out Packet p))
@@ -324,11 +316,11 @@ namespace Start_a_Town_.Net
                     p.BeginSendTo(Listener, player.IP);
                 }
         }
-        
+
         const int RTT = 20000;// 5000;
         void SendOrderedReliable()
         {
-            foreach (var player in Players.GetList())
+            foreach (var player in this.Players.GetList())
                 while (player.OutReliable.Any())
                 {
                     if (!player.OutReliable.TryDequeue(out Packet packet))
@@ -341,10 +333,10 @@ namespace Start_a_Town_.Net
                     packet.BeginSendTo(Listener, player.IP);
                 }
         }
-        
+
         void TryResendPacketsFirst()
         {
-            foreach (var player in Players.GetList())
+            foreach (var player in this.Players.GetList())
             {
                 var packet = player.WaitingForAck.Values.FirstOrDefault();
                 if (packet != null)
@@ -354,8 +346,8 @@ namespace Start_a_Town_.Net
                     if (packet.Retries-- <= 0)
                     {
                         player.WaitingForAck.TryRemove(packet.ID, out _);
-                        Log.Write(UI.ConsoleMessageTypes.Acks, Color.Orange, "SERVER", "Send retries exceeded maximum for packet " + packet);
-                        Log.Write(Color.Red, "SERVER", player.Name + " timed out");
+                        this.Log.Write(UI.ConsoleMessageTypes.Acks, Color.Orange, "SERVER", "Send retries exceeded maximum for packet " + packet);
+                        this.Log.Write(Color.Red, "SERVER", player.Name + " timed out");
                         CloseConnection(player.Connection);
                         //send player disconnected packet to rest of players
                         break;
@@ -364,7 +356,7 @@ namespace Start_a_Town_.Net
                 }
             }
         }
-        
+
         private void CreatePacketsFromStream()
         {
             byte[] data;
@@ -372,13 +364,13 @@ namespace Start_a_Town_.Net
             {
                 using (var zip = new GZipStream(output, CompressionMode.Compress))
                 {
-                    OutgoingStream.BaseStream.Position = 0;
-                    OutgoingStream.BaseStream.CopyTo(zip);
+                    this.OutgoingStream.BaseStream.Position = 0;
+                    this.OutgoingStream.BaseStream.CopyTo(zip);
                 }
                 data = output.ToArray();
             }
             //if (data.Length > 0) // send empty packet anyway to substitute pinging for keeping an active connection
-            Enqueue(PacketType.MergedPackets, data);
+            this.Enqueue(PacketType.MergedPackets, data);
         }
         private void CreatePacketsFromStreamUnreliable()
         {
@@ -387,15 +379,15 @@ namespace Start_a_Town_.Net
             {
                 using (var zip = new GZipStream(output, CompressionMode.Compress))
                 {
-                    OutgoingStreamUnreliable.BaseStream.Position = 0;
-                    OutgoingStreamUnreliable.BaseStream.CopyTo(zip);
+                    this.OutgoingStreamUnreliable.BaseStream.Position = 0;
+                    this.OutgoingStreamUnreliable.BaseStream.CopyTo(zip);
                 }
                 data = output.ToArray();
             }
             //if (data.Length > 0) // send empty packet anyway to substitute pinging for keeping an active connection
-            EnqueueUnreliable(PacketType.MergedPackets, data);
+            this.EnqueueUnreliable(PacketType.MergedPackets, data);
         }
-       
+
         internal void EnqueueUnreliable(PacketType packetType, byte[] p)
         {
             this.Enqueue(packetType, p, SendType.Unreliable, true);
@@ -420,15 +412,15 @@ namespace Start_a_Town_.Net
         {
             if (data.Length > 60000)
             {
-                foreach (var player in Players.GetList())
+                foreach (var player in this.Players.GetList())
                 {
                     throw new NotImplementedException();
-                    
+
                 }
                 return;
             }
-            foreach (var player in Players.GetList())
-                Enqueue(player, Packet.Create(player, type, data, send));
+            foreach (var player in this.Players.GetList())
+                this.Enqueue(player, Packet.Create(player, type, data, send));
         }
         internal void Enqueue(PacketType type, byte[] data, SendType send, Vector3 global)
         {
@@ -436,44 +428,44 @@ namespace Start_a_Town_.Net
         }
         internal void Enqueue(PacketType type, byte[] data, SendType send, Vector3 global, bool sync)
         {
-            foreach (var player in Players.GetList().Where(player => player.IsWithin(global)))
+            foreach (var player in this.Players.GetList().Where(player => player.IsWithin(global)))
             {
                 var p = Packet.Create(player, type, data, send);
                 var t = this.Clock.TotalMilliseconds;
                 p.Synced = sync;
                 p.Tick = this.Clock.TotalMilliseconds;
-                Enqueue(player, p);
+                this.Enqueue(player, p);
             }
         }
         internal void Enqueue(PacketType type, byte[] data, SendType send, bool sync)
         {
-            foreach (var player in Players.GetList())
+            foreach (var player in this.Players.GetList())
             {
                 var p = Packet.Create(player, type, data, send);
                 p.Synced = sync;
                 p.Tick = this.Clock.TotalMilliseconds;
-                Enqueue(player, p);
+                this.Enqueue(player, p);
             }
         }
         internal void Enqueue(PacketType type, byte[] data, SendType send, Func<PlayerData, bool> filter)
         {
             if (data.Length > 60000)
             {
-                foreach (var player in Players.GetList().Where(filter))
+                foreach (var player in this.Players.GetList().Where(filter))
                 {
                     throw new NotImplementedException();
                 }
                 return;
             }
-            foreach (var player in Players.GetList().Where(filter))
-                Enqueue(player, Packet.Create(player, type, data, send));
+            foreach (var player in this.Players.GetList().Where(filter))
+                this.Enqueue(player, Packet.Create(player, type, data, send));
         }
 
         public BinaryWriter OutgoingStream = new(new MemoryStream());
         public BinaryWriter OutgoingStreamUnreliable = new(new MemoryStream());
         public BinaryWriter OutgoingStreamReliable = new(new MemoryStream());
         public BinaryWriter OutgoingStreamTimestamped = new(new MemoryStream());
-        
+
         public BinaryWriter GetOutgoingStream()
         {
             return this.OutgoingStream;
@@ -592,7 +584,7 @@ namespace Start_a_Town_.Net
                         return;
                     });
                     return;
-               
+
 
                 case PacketType.PlayerSlotClick:
                     msg.Payload.Deserialize(r =>
@@ -681,8 +673,6 @@ namespace Start_a_Town_.Net
                     break;
 
                 default:
-                    GameMode.Current.HandlePacket(Instance, msg);
-
                     break;
             }
         }
@@ -712,7 +702,7 @@ namespace Start_a_Town_.Net
                     break;
             }
         }
-       
+
         public static Vector3 FindValidSpawnPosition(GameObject obj)
         {
             // TODO: move to map
@@ -725,7 +715,7 @@ namespace Start_a_Town_.Net
             var spawnPosition = xy + zz;
             return spawnPosition;
         }
-       
+
         void SyncChild(GameObject obj, GameObject parent, int childIndex)
         {
             byte[] data = Network.Serialize(w =>
@@ -734,15 +724,15 @@ namespace Start_a_Town_.Net
                 w.Write(parent.RefID);
                 w.Write(childIndex);
             });
-            foreach (var player in Players.GetList())
-                Enqueue(player, Packet.Create(player, PacketType.SpawnChildObject, data, SendType.Ordered | SendType.Reliable));
+            foreach (var player in this.Players.GetList())
+                this.Enqueue(player, Packet.Create(player, PacketType.SpawnChildObject, data, SendType.Ordered | SendType.Reliable));
         }
-        
+
         private static void KickPlayer(int plid)
         {
             CloseConnection(Instance.Players.GetList().First(p => p.ID == plid).Connection);
         }
-        
+
         static void CloseConnection(UdpConnection connection)
         {
             connection.Ping.Stop();
@@ -761,7 +751,7 @@ namespace Start_a_Town_.Net
 
         public GameObject Instantiate(GameObject obj)
         {
-            obj.Instantiate(Instantiator);
+            obj.Instantiate(this.Instantiator);
             return obj;
         }
         public void Instantiator(GameObject obj)
@@ -784,11 +774,11 @@ namespace Start_a_Town_.Net
         {
             if (obj.RefID > 0)
                 throw new Exception("object already has a network id");
-            obj.Instantiate(Instantiator);
+            obj.Instantiate(this.Instantiator);
             byte[] data = Network.Serialize(obj.Write);
-            foreach (var player in Players.GetList())
+            foreach (var player in this.Players.GetList())
             {
-                Enqueue(player, Packet.Create(player, PacketType.InstantiateObject, data, SendType.Ordered | SendType.Reliable));
+                this.Enqueue(player, Packet.Create(player, PacketType.InstantiateObject, data, SendType.Ordered | SendType.Reliable));
             }
             return obj;
         }
@@ -799,7 +789,7 @@ namespace Start_a_Town_.Net
         /// <param name="objNetID"></param>
         public bool DisposeObject(GameObject obj)
         {
-            return DisposeObject(obj.RefID);
+            return this.DisposeObject(obj.RefID);
         }
         /// <summary>
         /// Releases the object's networkID.
@@ -807,9 +797,9 @@ namespace Start_a_Town_.Net
         /// <param name="objNetID"></param>
         public bool DisposeObject(int netID)
         {
-            if (!NetworkObjects.TryGetValue(netID, out GameObject o))
+            if (!this.NetworkObjects.TryGetValue(netID, out GameObject o))
                 return false;
-            NetworkObjects.Remove(netID);
+            this.NetworkObjects.Remove(netID);
 
             if (o.Exists)
                 o.Despawn();
@@ -817,8 +807,8 @@ namespace Start_a_Town_.Net
                 this.DisposeObject(child);
             return true;
         }
-       
-        static public void InstantiateMap(MapBase map)
+
+        public static void InstantiateMap(MapBase map)
         {
             World = map.World;
             World.Net = Instance;
@@ -831,12 +821,6 @@ namespace Start_a_Town_.Net
             Instance.SetMap(map);
             Random = new RandomThreaded(Instance.Map.Random);
         }
-      
-        private static void AddChunk(Chunk chunk)
-        {
-            var actives = Instance.Map.GetActiveChunks();
-            actives.Add(chunk.MapCoords, chunk);
-        }
         private static void InstantiateChunk(Chunk chunk)
         {
             chunk.GetObjects().ForEach(obj =>
@@ -846,7 +830,7 @@ namespace Start_a_Town_.Net
                 obj.Map = Instance.Map;
                 obj.Transform.Exists = true;
             });
-           
+
             foreach (var (local, entity) in chunk.GetBlockEntitiesByPosition())
             {
                 var global = local.ToGlobal(chunk);
@@ -857,15 +841,15 @@ namespace Start_a_Town_.Net
 
         public GameObject GetNetworkObject(int netID)
         {
-            NetworkObjects.TryGetValue(netID, out var obj);
+            this.NetworkObjects.TryGetValue(netID, out var obj);
             return obj;
         }
         public T GetNetworkObject<T>(int netID) where T : GameObject
         {
-            NetworkObjects.TryGetValue(netID, out var obj);
+            this.NetworkObjects.TryGetValue(netID, out var obj);
             return obj as T;
         }
-        
+
         public IEnumerable<GameObject> GetNetworkObjects()
         {
             foreach (var o in this.NetworkObjects.Values)
@@ -877,7 +861,7 @@ namespace Start_a_Town_.Net
         }
         public bool TryGetNetworkObject(int netID, out GameObject obj)
         {
-            return NetworkObjects.TryGetValue(netID, out obj);
+            return this.NetworkObjects.TryGetValue(netID, out obj);
         }
 
         public void PostLocalEvent(GameObject recipient, ObjectEventArgs args)
@@ -891,17 +875,7 @@ namespace Start_a_Town_.Net
             a.Network = Instance;
             recipient.PostMessage(a);
         }
-        static void Save()
-        {
-            if (Instance.Map is null)
-                return;
-            foreach (var chunk in Instance.Map.GetActiveChunks().Values)
-            {
-                if (chunk.Saved)
-                    continue;
-            }
-        }
-
+      
         private static void SendSnapshots(TimeSpan gt)
         {
             if (Instance.ObjectsChangedSinceLastSnapshot.Count > 0)
@@ -910,19 +884,17 @@ namespace Start_a_Town_.Net
                 Instance.ObjectsChangedSinceLastSnapshot.Clear();
             }
         }
-        
+
         public bool LogStateChange(int netID)
         {
-            return this.ObjectsChangedSinceLastSnapshot.Add(NetworkObjects[netID]);
+            return this.ObjectsChangedSinceLastSnapshot.Add(this.NetworkObjects[netID]);
         }
 
         #region Loot
         public void PopLoot(LootTable table, Vector3 startPosition, Vector3 startVelocity)
         {
-            foreach (var obj in GenerateLoot(table))
-            {
-                PopLoot(obj, startPosition, startVelocity);
-            }
+            foreach (var obj in this.GenerateLoot(table))
+                this.PopLoot(obj, startPosition, startVelocity);
         }
         public void PopLoot(GameObject obj, Vector3 startPosition, Vector3 startVelocity)
         {
@@ -960,18 +932,10 @@ namespace Start_a_Town_.Net
         public static void SetWorld(IWorld world)
         {
             if (!UnloadWorld())
-            {
                 return;
-            }
             World = world;
-            if (World != null)
-            {
+            if (World is not null)
                 Instance.Log.Write(Color.Lime, "SERVER", "World " + World.GetName() + " loaded");
-                var map = World.GetMap(Vector2.Zero);
-                if (map is not null)
-                {
-                }
-            }
         }
         private static bool UnloadWorld()
         {
@@ -989,7 +953,7 @@ namespace Start_a_Town_.Net
         }
 
         ServerCommandParser Parser;
-        static public void Command(string command)
+        public static void Command(string command)
         {
             if (Instance.Parser == null)
                 Instance.Parser = new ServerCommandParser(Instance);
@@ -1039,14 +1003,14 @@ namespace Start_a_Town_.Net
             }
             else
                 if (amount < sourceSlot.StackSize)
-                    return;
+                return;
 
             if (targetSlot.Filter(obj))
                 if (sourceSlot.Filter(targetSlot.Object))
                     targetSlot.Swap(sourceSlot);
 
         }
-        
+
         public void SyncSlots(params TargetArgs[] slots)
         {
             byte[] data = Network.Serialize(w =>
@@ -1062,7 +1026,6 @@ namespace Start_a_Town_.Net
             });
             Instance.Enqueue(PacketType.EntityInventoryChange, data, SendType.OrderedReliable); // WARNING!!! TODO: handle case where each slot is owned by a different entity     
         }
-       
 
         private static void UnmergePackets(PlayerData player, byte[] data)
         {
@@ -1075,23 +1038,21 @@ namespace Start_a_Town_.Net
                 var type = (PacketType)typeID;
                 lastPos = mem.Position;
 
-                if (PacketHandlersNewNew.TryGetValue(type, out Action<INetwork, PlayerData, BinaryReader> handlerActionNew))
+                if (PacketHandlersNewNew.TryGetValue(type, out var handlerActionNew))
                     handlerActionNew(Instance, player, r);
                 else if (PacketHandlersNewNewNew.TryGetValue(typeID, out var handlerActionNewNew))
                     handlerActionNewNew(Instance, r);
-                else
-                    GameMode.Current.HandlePacket(Instance, type, r);
 
                 if (mem.Position == lastPos)
                     break;
             }
         }
-        static public void StartSaving()
+        public static void StartSaving()
         {
             Instance.IsSaving = true;
             Instance.Enqueue(PacketType.SetSaving, Network.Serialize(w => { w.Write(true); }));
         }
-        static public void FinishSaving()
+        public static void FinishSaving()
         {
             Instance.IsSaving = false;
             Instance.Enqueue(PacketType.SetSaving, Network.Serialize(w => { w.Write(false); }));
@@ -1100,7 +1061,7 @@ namespace Start_a_Town_.Net
         PlayerData PlayerData;
         public PlayerData GetPlayer()
         {
-            return PlayerData;
+            return this.PlayerData;
         }
         public PlayerData GetPlayer(int id)
         {
@@ -1108,8 +1069,8 @@ namespace Start_a_Town_.Net
         }
         public void SetSpeed(int playerID, int speed)
         {
-            GetPlayer(playerID).SuggestedSpeed = speed;
-            var newspeed = Players.GetLowestSpeed();
+            this.GetPlayer(playerID).SuggestedSpeed = speed;
+            var newspeed = this.Players.GetLowestSpeed();
             this.Speed = newspeed;
         }
 

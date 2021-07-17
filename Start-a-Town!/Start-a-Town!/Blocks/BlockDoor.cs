@@ -166,7 +166,7 @@ namespace Start_a_Town_
         {
             return !IsOpen(cell.BlockData);
         }
-        internal override bool IsPathable(Cell cell, Vector3 blockCoords)
+        internal override bool IsPathable(Cell cell, IntVec3 blockCoords)
         {
             return !IsLocked(cell.BlockData);
         }
@@ -223,11 +223,6 @@ namespace Start_a_Town_
             }
         }
 
-        public override bool IsSolid(MapBase map, Vector3 global)
-        {
-            var cell = map.GetCell(global);
-            return this.IsSolid(cell);
-        }
         public override bool IsSolid(Cell cell)
         {
             Read(cell.BlockData, out var locked, out var open, out var part);

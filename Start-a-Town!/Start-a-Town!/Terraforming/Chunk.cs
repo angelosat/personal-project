@@ -1,25 +1,25 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.Blocks;
+using Start_a_Town_.Components;
+using Start_a_Town_.GameModes;
+using Start_a_Town_.Terraforming;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Diagnostics;
-using Start_a_Town_.Components;
-using Start_a_Town_.Terraforming;
-using Start_a_Town_.Blocks;
-using Start_a_Town_.GameModes;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     public class Chunk
     {
         public Chunk Clone()
-        {        
+        {
             Chunk chunk;
-            using(BinaryWriter w = new(new MemoryStream()))
+            using (BinaryWriter w = new(new MemoryStream()))
             {
                 this.Write(w);
                 w.BaseStream.Position = 0;
@@ -34,7 +34,7 @@ namespace Start_a_Town_
         public Dictionary<IntVec3, double> InitCells(List<Terraformer> mutators)
         {
             var gradientCache = new Dictionary<IntVec3, double>();
-            var world = Map.World;
+            var world = this.Map.World;
             int n = 0; ;
             var grad = new GradientLowRes(this.World, this);
             mutators.ForEach(m => m.SetWorld(this.World));
@@ -46,8 +46,8 @@ namespace Start_a_Town_
                         Cell cell = new(i, j, z);
                         double gradient = grad.GetGradient(i, j, z);
                         gradientCache.Add(new IntVec3(i, j, z), gradient);
-                        foreach(var m in mutators)
-                            m.Initialize(world, cell, (int)Start.X + i, (int)Start.Y + j, z, gradient);
+                        foreach (var m in mutators)
+                            m.Initialize(world, cell, (int)this.Start.X + i, (int)this.Start.Y + j, z, gradient);
                         this.CellGrid2[n++] = cell;
                     }
             return gradientCache;
@@ -78,7 +78,7 @@ namespace Start_a_Town_
                     for (int j = 0; j < Size; j++)
                     {
                         var cell = this.CellGrid2[n++];
-                        m.Initialize(this.Map.World, cell, (int)Start.X + i, (int)Start.Y + j, z, gradient[new IntVec3(i,j,z)]);
+                        m.Initialize(this.Map.World, cell, (int)this.Start.X + i, (int)this.Start.Y + j, z, gradient[new IntVec3(i, j, z)]);
                     }
             this.UpdateHeightMap();
 
@@ -100,12 +100,12 @@ namespace Start_a_Town_
         public override string ToString()
         {
             string text =
-                "Local: " + MapCoords.ToString() +
-                  "\nGlobal: " + Start.ToString() +
-                   "\nObjects: " + Objects.Count +
+                "Local: " + this.MapCoords.ToString() +
+                  "\nGlobal: " + this.Start.ToString() +
+                   "\nObjects: " + this.Objects.Count +
                 "\nCells to validate: " + this.CellsToValidate.Count;
-        
-            text += "Objects: " + Objects.Count.ToString() + "\n";
+
+            text += "Objects: " + this.Objects.Count.ToString() + "\n";
             return text.Remove(text.Length - 1);
         }
 
@@ -141,23 +141,18 @@ namespace Start_a_Town_
         }
 
         public List<GameObject> Objects;
-        Dictionary<int, GameObject> BlockObjects;
-        Dictionary<IntVec3, BlockEntity> BlockEntitiesByPosition = new();
+        readonly Dictionary<int, GameObject> BlockObjects;
+        readonly Dictionary<IntVec3, BlockEntity> BlockEntitiesByPosition = new();
 
         public bool IsQueuedForLight;
         public const int Size = 16;
         public SortedList<int, Cell> VisibleIndoorCells;
 
         public Vector2 Start, bottomRight;
-        bool _Saved = false;
-        public bool Saved
-        {
-            get { return _Saved; }
-        }
         public void Invalidate()
         {
             foreach (var slice in this.Slices)
-                if(slice != null)
+                if (slice != null)
                     slice.Valid = false;
             this.Valid = false;
         }
@@ -169,11 +164,10 @@ namespace Start_a_Town_
         public int X, Y;
         public int RectHeight;
         public MapBase Map;
-        public IWorld World { get { return this.Map.World; } }
+        public IWorld World => this.Map.World;
         public bool Valid;
-
-        Queue<Cell> CellsToValidate = new Queue<Cell>();
-        Queue<Cell> CellsToActivate = new Queue<Cell>();
+        readonly Queue<Cell> CellsToValidate = new Queue<Cell>();
+        readonly Queue<Cell> CellsToActivate = new Queue<Cell>();
 
         public bool SkylightUpdated = false;
         public bool ChunkBoundariesUpdated = true;
@@ -190,10 +184,10 @@ namespace Start_a_Town_
             get
             {
                 if (localx < 0 || localx > Chunk.Size - 1 || localy < 0 || localy > Chunk.Size - 1 || localz < 0 || localz > MapBase.MaxHeight - 1)
-                    return null; 
+                    return null;
 
                 int ind = GetCellIndex(localx, localy, localz);
-                return CellGrid2[ind];
+                return this.CellGrid2[ind];
             }
         }
         public Cell this[float localx, float localy, float localz]
@@ -201,10 +195,10 @@ namespace Start_a_Town_
             get
             {
                 if (localx < 0 || localx > Chunk.Size - 1 || localy < 0 || localy > Chunk.Size - 1 || localz < 0 || localz > MapBase.MaxHeight - 1)
-                    return null; 
+                    return null;
 
                 int ind = GetCellIndex(localx, localy, localz);
-                return CellGrid2[ind];
+                return this.CellGrid2[ind];
             }
         }
         public Cell this[IntVec3 localCoords]
@@ -214,29 +208,26 @@ namespace Start_a_Town_
                 if (!localCoords.IsWithinChunkBounds())
                     return null;
 
-                return CellGrid2[GetCellIndex(localCoords)];
+                return this.CellGrid2[GetCellIndex(localCoords)];
             }
         }
-        public Cell this[int cellIndex]
-        {
-            get { return CellGrid2[cellIndex]; }
-        }
-       
+        public Cell this[int cellIndex] => this.CellGrid2[cellIndex];
+
         public Vector2 MapCoords
         {
-            get { return new Vector2(X, Y); }
+            get => new Vector2(this.X, this.Y);
             set
             {
-                X = (int)value.X;
-                Y = (int)value.Y;
-                Start = this.MapCoords * Chunk.Size;
+                this.X = (int)value.X;
+                this.Y = (int)value.Y;
+                this.Start = this.MapCoords * Chunk.Size;
             }
         }
-        
-        static public readonly int Width = Block.Width * Size;
-        static public readonly int Height = MapBase.MaxHeight * Block.BlockHeight + Chunk.Size * Block.Depth;
-        static public readonly Rectangle Bounds = new(-Width / 2, -Height / 2, Width, Height);
-       
+
+        public static readonly int Width = Block.Width * Size;
+        public static readonly int Height = MapBase.MaxHeight * Block.BlockHeight + Chunk.Size * Block.Depth;
+        public static readonly Rectangle Bounds = new(-Width / 2, -Height / 2, Width, Height);
+
         public Rectangle GetScreenBounds(Camera cam)
         {
             Rectangle chunkBounds = cam.GetScreenBounds(this.Start.X + Chunk.Size / 2, this.Start.Y + Chunk.Size / 2, MapBase.MaxHeight / 2, Bounds);  //chunk.Value.GetBounds(camera);
@@ -246,7 +237,7 @@ namespace Start_a_Town_
 
         public bool TryGetBlockObject(Vector3 local, out GameObject blockObj)
         {
-            return BlockObjects.TryGetValue(GetCellIndex(local), out blockObj);
+            return this.BlockObjects.TryGetValue(GetCellIndex(local), out blockObj);
         }
         public Chunk(MapBase map, Vector2 pos)
             : this()
@@ -258,79 +249,62 @@ namespace Start_a_Town_
         Chunk(Vector2 pos)
             : this()
         {
-            MapCoords = pos;
+            this.MapCoords = pos;
         }
         Chunk()
         {
-            CellGrid2 = new Cell[Chunk.Size * Chunk.Size * MapBase.MaxHeight];
-            VisibleIndoorCells = new SortedList<int, Cell>();
-            Objects = new List<GameObject>();
-            BlockObjects = new Dictionary<int, GameObject>();
+            this.CellGrid2 = new Cell[Chunk.Size * Chunk.Size * MapBase.MaxHeight];
+            this.VisibleIndoorCells = new SortedList<int, Cell>();
+            this.Objects = new List<GameObject>();
+            this.BlockObjects = new Dictionary<int, GameObject>();
             this.Sunlight = new List<byte>(Volume);
             for (int i = 0; i < Volume; i++)
                 this.Sunlight.Add(15);
             this.HeightMap = new int[Size][];
             for (int i = 0; i < Size; i++)
                 this.HeightMap[i] = new int[Size];
-            ResetCellLight();
+            this.ResetCellLight();
             for (int i = 0; i < MapBase.MaxHeight; i++)
                 this.Slices[i] = new Slice();
         }
-        static public Chunk Create(MapBase map, Vector2 pos)
+        public static Chunk Create(MapBase map, Vector2 pos)
         {
             Chunk chunk = new(pos);
             chunk.Map = map;
             return chunk;
         }
-        static public Chunk Create(MapBase map, int x, int y)
+        public static Chunk Create(MapBase map, int x, int y)
         {
             Chunk chunk = new(new Vector2(x, y));
             chunk.Map = map;
             return chunk;
         }
-        static public Chunk Load(MapBase map, Vector2 key, SaveTag tag)
+        public static Chunk Load(MapBase map, Vector2 key, SaveTag tag)
         {
             return new Chunk(map, key).LoadFromTag(tag);
         }
 
-        #region Adding and removing objects
-        static public bool AddObject(GameObject obj, MapBase map)
+        public void Add(GameObject obj)
         {
-            return AddObject(obj, map, obj.Global);
+            this.Objects.Add(obj);
         }
-        static public bool AddObject(GameObject obj, MapBase map, Vector3 global)
+        public bool Remove(GameObject obj)
         {
-            if (map.TryGetChunk(global.RoundXY(), out Chunk chunk))
-            {
-                chunk.Objects.Add(obj);
-                return true;
-            }
-            return false;
-        }
-
-        static public bool RemoveObject(GameObject obj, Chunk chunk)
-        {
-            if (!chunk.Objects.Remove(obj))
+            if (!this.Objects.Remove(obj))
                 throw new Exception();
             return true;
         }
-
-        static public bool RemoveObject(MapBase map, GameObject obj)
-        {
-            return RemoveObject(obj, map.GetChunk(obj.Global));
-        }
-        #endregion
 
         #region Dunno
         public Cell GetLocalCell(int x, int y, int z)
         {
             return this.CellGrid2[GetCellIndex(x, y, z)];
         }
-        static public int GetCellIndex(int x, int y, int z)
+        public static int GetCellIndex(int x, int y, int z)
         { return (z * Chunk.Size + x) * Chunk.Size + y; }
-        static public int GetCellIndex(float x, float y, float z)
+        public static int GetCellIndex(float x, float y, float z)
         { return (int)((Math.Round(z) * Chunk.Size + Math.Round(x)) * Chunk.Size + Math.Round(y)); }
-        static public int GetCellIndex(IntVec3 local)
+        public static int GetCellIndex(IntVec3 local)
         {
             return (local.Z * Size + local.X) * Size + local.Y;
         }
@@ -340,7 +314,7 @@ namespace Start_a_Town_
 
         void ResetCellLight()
         {
-            BlockLight = new byte[Volume];
+            this.BlockLight = new byte[Volume];
         }
 
         public int[][] HeightMap;
@@ -351,15 +325,15 @@ namespace Start_a_Town_
         }
         public int GetHeightMapValue(int localx, int localy)
         {
-            return HeightMap[localx][localy];
+            return this.HeightMap[localx][localy];
         }
         public bool IsAboveHeightMap(Vector3 local)
         {
-            return local.Z > HeightMap[(int)local.X][(int)local.Y];
+            return local.Z > this.HeightMap[(int)local.X][(int)local.Y];
         }
         public bool IsAboveHeightMap(int localx, int localy, int localz)
         {
-            return localz > HeightMap[localx][localy];
+            return localz > this.HeightMap[localx][localy];
         }
 
         Queue<IntVec3> LightChanges = new Queue<IntVec3>();
@@ -372,7 +346,7 @@ namespace Start_a_Town_
         {
             for (int j = 0; j < Size; j++)
                 for (int i = 0; i < Size; i++)
-                    foreach (var pos in ResetHeightMapColumn(i, j))
+                    foreach (var pos in this.ResetHeightMapColumn(i, j))
                         this.LightChanges.Enqueue(pos);
             var toReturn = new Queue<IntVec3>(this.LightChanges);
             this.LightChanges = new Queue<IntVec3>();
@@ -383,7 +357,7 @@ namespace Start_a_Town_
         {
             for (int j = 0; j < Size; j++)
                 for (int i = 0; i < Size; i++)
-                    UpdateHeightMapColumn(i, j, false);
+                    this.UpdateHeightMapColumn(i, j, false);
         }
         public void InvalidateHeightmap(int localx, int localy)
         {
@@ -404,11 +378,11 @@ namespace Start_a_Town_
             z = MapBase.MaxHeight - 1;
             bool found = false;
             bool hit = false;
-            var oldValue = HeightMap[localx][localy];
+            var oldValue = this.HeightMap[localx][localy];
             int minVal = 0, maxVal = this.Map.GetMaxHeight();
             while (z >= 0)
             {
-                cell = GetLocalCell(localx, localy, z);
+                cell = this.GetLocalCell(localx, localy, z);
                 if (!hit)
                     if (cell.Block.Type != Block.Types.Air)
                     {
@@ -420,7 +394,7 @@ namespace Start_a_Town_
                     {
                         found = true;
                         int newValue = z;
-                        HeightMap[localx][localy] = newValue;
+                        this.HeightMap[localx][localy] = newValue;
                         if (newValue > oldValue)
                         {
                             minVal = oldValue;
@@ -442,7 +416,7 @@ namespace Start_a_Town_
             }
 
             if (!found)
-                HeightMap[localx][localy] = 0;
+                this.HeightMap[localx][localy] = 0;
         }
 
         public void UpdateHeightMapColumn(int localx, int localy, bool invalidate = true)
@@ -455,7 +429,7 @@ namespace Start_a_Town_
             bool hit = false;
             while (z >= 0)
             {
-                cell = GetLocalCell(localx, localy, z);
+                cell = this.GetLocalCell(localx, localy, z);
                 if (!hit)
                     if (cell.Block.Type != Block.Types.Air)
                     {
@@ -465,18 +439,18 @@ namespace Start_a_Town_
                 {
                     if (light > 0)
                     {
-                        HeightMap[localx][localy] = z;
+                        this.HeightMap[localx][localy] = z;
                         light = 0;
                     }
                 }
-                SetSunlight(localx, localy, z, light);
-                if(invalidate)
+                this.SetSunlight(localx, localy, z, light);
+                if (invalidate)
                     this.InvalidateCell(cell);
                 z--;
             }
 
             if (light > 0)
-                HeightMap[localx][localy] = z;
+                this.HeightMap[localx][localy] = z;
         }
         [Obsolete]
         internal void ResetVisibleOuterBlocks()
@@ -485,8 +459,8 @@ namespace Start_a_Town_
                 for (int z = 0; z < this.Map.GetMaxHeight(); z++)
                 {
                     Vector3[] cellCoords = new Vector3[]{
-                        new Vector3(Chunk.Size - 1, i, z), 
-                        new Vector3(i, 0, z), 
+                        new Vector3(Chunk.Size - 1, i, z),
+                        new Vector3(i, 0, z),
                         new Vector3(0, i, z),
                         new Vector3(i, Chunk.Size - 1, z)};
                     foreach (var pos in cellCoords)
@@ -513,8 +487,8 @@ namespace Start_a_Town_
             bool hit = false;
             while (z >= 0)
             {
-                cell = GetLocalCell(localx, localy, z);
-                if(!hit)
+                cell = this.GetLocalCell(localx, localy, z);
+                if (!hit)
                     if (cell.Block.Type != Block.Types.Air)
                     {
                         hit = true;
@@ -524,19 +498,19 @@ namespace Start_a_Town_
                 {
                     if (light > 0)
                     {
-                        HeightMap[localx][localy] = z;
+                        this.HeightMap[localx][localy] = z;
                         light = 0;
                     }
                 }
-                
-                SetSunlight(localx, localy, z, light);
+
+                this.SetSunlight(localx, localy, z, light);
                 if (z <= firstContact)
                     lightsourcesToHandle.Enqueue(cell.LocalCoords.ToGlobal(this));
                 z--;
             }
 
             if (light > 0)
-                HeightMap[localx][localy] = z;
+                this.HeightMap[localx][localy] = z;
             return lightsourcesToHandle;
         }
         #endregion
@@ -561,11 +535,9 @@ namespace Start_a_Town_
             this.Slices[z].Valid = false;
             this.InvalidateMesh();
         }
-        
-        public void InvalidateSlice(float z)
+        public void InvalidateSlice(int z)
         {
-            this.Slices[(int)z].Valid = false;
-            this.InvalidateMesh();
+            this.InvalidateSlice((byte)z);
         }
 
         public bool InvalidateCell(Cell cell)
@@ -573,82 +545,55 @@ namespace Start_a_Town_
             if (cell is null)
                 throw new Exception();
             this.InvalidateLight(cell);
-            
-            if(!cell.Valid)
+
+            if (!cell.Valid)
                 return false;
 
             this.CellsToValidate.Enqueue(cell);
             cell.Valid = false;
             return true;
         }
-        
+
         public byte GetBlockLight(IntVec3 local)
         {
-            return BlockLight[GetCellIndex(local)];
+            return this.GetBlockLight(local.X, local.Y, local.Z);
         }
         public byte GetBlockLight(int x, int y, int z)
         {
             int index = GetCellIndex(x, y, z);
-            byte l = BlockLight[index];
+            byte l = this.BlockLight[index];
             return l;
         }
+
         public byte GetSunlight(IntVec3 local)
         {
-            var id = GetCellIndex(local);
-            return Sunlight[id];
+            return this.GetSunlight(local.X, local.Y, local.Z);
         }
-
         public byte GetSunlight(int x, int y, int z)
         {
-            if (z >= Map.GetMaxHeight())
+            if (z >= this.Map.GetMaxHeight())
                 return 15;
             int index = GetCellIndex(x, y, z);
-            return Sunlight[index];
+            return this.Sunlight[index];
         }
 
         public void SetSunlight(IntVec3 local, byte value)
         {
-            Sunlight[GetCellIndex(local)] = value;
-            var global = local + new IntVec3(this.Start.X, this.Start.Y, 0);
-            this.InvalidateLight(global);
-            _Saved = false;
+            this.SetSunlight(local.X, local.Y, local.Z, value);
         }
-        public void SetSunlight(int x, int y, int z, byte value) 
+        public void SetSunlight(int x, int y, int z, byte value)
         {
-            Sunlight[GetCellIndex(x, y, z)] = value;
+            this.Sunlight[GetCellIndex(x, y, z)] = value;
             var global = new IntVec3(this.Start.X + x, this.Start.Y + y, z);
             this.InvalidateLight(global);
-            _Saved = false; 
-        }
-        public void SetSunlight(int x, int y, int z, byte newValue, out byte oldValue)
-        {
-            int index = GetCellIndex(x, y, z);
-            oldValue = Sunlight[index];
-            this.Sunlight[index] = newValue;
-            foreach (var n in new IntVec3(Start.X + x, Start.Y + y, z).GetNeighbors())
-            {
-                InvalidateLight(Map, n);
-            }
-            _Saved = false;
         }
 
-        public void SetBlockLight(IntVec3 local, byte value, out byte oldValue)
-        {
-            int index = GetCellIndex(local);
-            oldValue = BlockLight[index];
-            BlockLight[index] = value;
-            foreach (var adj in new IntVec3(Start.X + local.X, Start.Y + local.Y, local.Z).GetAdjacentLazy())
-                InvalidateLight(Map, adj);
-            _Saved = false;
-        }
-       
         public void SetBlockLight(IntVec3 local, byte value)
         {
             var index = GetCellIndex(local);
-            BlockLight[index] = value;
+            this.BlockLight[index] = value;
             var global = local + new IntVec3(this.Start.X, this.Start.Y, 0);
             this.InvalidateLight(global);
-            _Saved = false;
         }
 
         /// <summary>
@@ -656,8 +601,7 @@ namespace Start_a_Town_
         /// </summary>
         public Dictionary<IntVec3, LightToken> LightCache2 = new();
 
-        
-        static public bool InvalidateLight(MapBase map, IntVec3 global)
+        public static bool InvalidateLight(MapBase map, IntVec3 global)
         {
             if (map.TryGetAll(global.X, global.Y, global.Z, out Chunk chunk, out Cell cell, out int lx, out int ly))
             {
@@ -667,7 +611,8 @@ namespace Start_a_Town_
         }
         public bool InvalidateLight(Cell cell)
         {
-            return this.LightCache2.Remove(cell.GetGlobalCoords(this));
+            //return this.LightCache2.Remove(cell.GetGlobalCoords(this));
+            return this.InvalidateLight(cell.GetGlobalCoords(this));
         }
         public bool InvalidateLight(IntVec3 global)
         {
@@ -684,7 +629,7 @@ namespace Start_a_Town_
             return true;
         }
 
-        static public bool TryGetFinalLight(MapBase map, int globalX, int globalY, int globalZ, out byte sky, out byte block)
+        public static bool TryGetFinalLight(MapBase map, int globalX, int globalY, int globalZ, out byte sky, out byte block)
         {
             sky = 0;
             block = 0;
@@ -708,7 +653,7 @@ namespace Start_a_Town_
             return true;
         }
 
-        static public bool TryGetSunlight(MapBase map, IntVec3 global, out byte sunlight)
+        public static bool TryGetSunlight(MapBase map, IntVec3 global, out byte sunlight)
         {
             sunlight = 0;
 
@@ -717,15 +662,15 @@ namespace Start_a_Town_
             if (global.Z < 0)
                 return false;
 
-            if (!map.TryGetChunk(global, out Chunk chunk))
+            if (!map.TryGetChunk(global, out var chunk))
                 return false;
 
             int x = (int)(global.X - chunk.Start.X);
             int y = (int)(global.Y - chunk.Start.Y);
-            sunlight = chunk.GetSunlight(x, y, (int)global.Z);
+            sunlight = chunk.GetSunlight(x, y, global.Z);
             return true;
         }
-        
+
         #region Updating
         /// <summary>
         /// pass parent map too?
@@ -750,7 +695,7 @@ namespace Start_a_Town_
             if (this.HeightMapUpdates.Any())
             {
                 foreach (var pos in this.HeightMapUpdates)
-                    UpdateHeightMapColumnWithLightSmart(pos.X, pos.Y);
+                    this.UpdateHeightMapColumnWithLightSmart(pos.X, pos.Y);
                 this.HeightMapUpdates = new();
             }
         }
@@ -844,7 +789,7 @@ namespace Start_a_Town_
                     continue;
                 float cd = global.GetDrawDepth(map, camera);
 
-                byte light = Math.Max((byte)(GetSunlight(cell.LocalCoords) - map.GetSkyDarkness()), GetBlockLight(cell.LocalCoords));
+                byte light = Math.Max((byte)(this.GetSunlight(cell.LocalCoords) - map.GetSkyDarkness()), this.GetBlockLight(cell.LocalCoords));
                 float l = (light + 1) / 16f;
                 Color color = new Color(l, l, l, 1);
                 Game1.Instance.Effect.Parameters["SourceRectangle"].SetValue(new Vector4(0, 0, 1, 1));
@@ -861,7 +806,7 @@ namespace Start_a_Town_
 
         public void DrawInterface(SpriteBatch sb, Camera cam)
         {
-            foreach (GameObject obj in Objects.ToList().Concat(BlockObjects.Values.ToList()))
+            foreach (GameObject obj in this.Objects.ToList().Concat(this.BlockObjects.Values.ToList()))
                 obj.DrawInterface(sb, cam);
             foreach (var blockentity in this.BlockEntitiesByPosition)
                 blockentity.Value.DrawUI(sb, cam, blockentity.Key.ToGlobal(this));
@@ -880,12 +825,12 @@ namespace Start_a_Town_
         #region Saving and Loading
         internal void SaveToFile()
         {
-            Chunk copy = this.Clone() as Chunk;
+            Chunk copy = this.Clone();
             string filename = GetFilename(this.MapCoords);
             string newFile = "_" + filename;
 
             string directory = this.GetDirectoryPath();
-            directory = @"/Saves/Worlds/" + Map.World.GetName() + "/" + Map.GetFolderName() + "/chunks/";
+            directory = @"/Saves/Worlds/" + this.Map.World.GetName() + "/" + this.Map.GetFolderName() + "/chunks/";
 
             string working = Directory.GetCurrentDirectory();
             string fullpath = this.Map.GetFullPath() + "/chunks/" + this.DirectoryName;
@@ -908,18 +853,17 @@ namespace Start_a_Town_
                 File.Move(fullpath + newFile, fullpath + filename);
 
             Net.Server.Instance.Log.Write(Color.Lime, "SERVER", "Chunk " + copy.MapCoords.ToString() + " saved succesfully \"" + directory + filename + "\"");
-            this._Saved = true;
         }
 
         internal string SaveToFile(string filename)
         {
-            string directory = FullDirPath;
+            string directory = this.FullDirPath;
             DateTime now = DateTime.Now;
             SaveTag chunktag;
             using (var stream = new MemoryStream())
             {
                 var writer = new BinaryWriter(stream);
-                chunktag = SaveToTag();
+                chunktag = this.SaveToTag();
                 chunktag.WriteTo(writer);
                 Compress(stream, directory + filename);
                 stream.Close();
@@ -933,7 +877,7 @@ namespace Start_a_Town_
             SaveTag cellstag = new(SaveTag.Types.List, "Cells", SaveTag.Types.Compound);
             var airLength = 0;
             bool airIsDiscovered = false;
-            foreach (var cell in CellGrid2)
+            foreach (var cell in this.CellGrid2)
             {
                 if (cell.Block == BlockDefOf.Air)
                 {
@@ -981,7 +925,7 @@ namespace Start_a_Town_
             return distinct;
         }
 
-        static public Chunk Load(MapBase map, string fullpath)
+        public static Chunk Load(MapBase map, string fullpath)
         {
             string filename = fullpath.Split('\\').Last();
             string[] c = filename.Split('.');
@@ -999,7 +943,6 @@ namespace Start_a_Town_
                 chunk.LoadFromTag(chunktag);
                 reader.Close();
             }
-            chunk._Saved = true;
             return chunk;
         }
 
@@ -1016,13 +959,11 @@ namespace Start_a_Town_
                 if (this.Contains(origin)) // ONLY SAVE BLOCKENTITY IF THE ORIGIN IS IN THIS CHUNK
                 {
                     var entitysavetag = ent.Key.Save("Entity");
-                    if (entitysavetag != null)
+                    if (entitysavetag is not null)
                         tag.Add(entitysavetag);
                 }
                 else
-                {
                     tag.Add(ent.Value.Save("PositionsLocal")); // all local positions where the entity is occupying (NOT INCLUDING POSITIONS IN NEIGHBORING CHUNKS)
-                }
                 blockEntitiesTag.Add(tag); // the block entity is saved ONCE in the chunk the origin is contained, and all occupied cells are saved with it (global positions)
                                            // secondary blockentity positions save only the global origin position and retrieve the blockentity on chunk load,
                                            // or if the origin chunk hasn't loaded yet, when it loads it registers the blockentity using the saved occupiedcells in the blockentity class
@@ -1117,7 +1058,7 @@ namespace Start_a_Town_
             }
         }
 
-        static public void Compress(Stream stream, string filename)
+        public static void Compress(Stream stream, string filename)
         {
             using (stream)
             {
@@ -1127,7 +1068,7 @@ namespace Start_a_Town_
                 stream.CopyTo(zip);
             }
         }
-        static public MemoryStream Decompress(FileStream compressed)
+        public static MemoryStream Decompress(FileStream compressed)
         {
             using (compressed)
             {
@@ -1138,7 +1079,7 @@ namespace Start_a_Town_
                 return memory;
             }
         }
-        static public byte[] DecompressAll(FileStream compressed)
+        public static byte[] DecompressAll(FileStream compressed)
         {
             byte[] buffer;
             using (GZipStream decompress = new(compressed, CompressionMode.Decompress))
@@ -1151,11 +1092,11 @@ namespace Start_a_Town_
             }
             return buffer;
         }
-        static public string GetFilename(Vector2 pos)
+        public static string GetFilename(Vector2 pos)
         {
             return pos.X.ToString() + "." + pos.Y.ToString() + ".chunk.sat";
         }
-        static public string GetDirName(Vector2 pos)
+        public static string GetDirName(Vector2 pos)
         {
             return pos.X.ToString() + "." + pos.Y.ToString() + "/";
         }
@@ -1202,8 +1143,7 @@ namespace Start_a_Town_
             }
             if ((horEdgesToCheck & Edges.North) == Edges.North)
             {
-                Cell north;
-                if (TryGetCell((local - new IntVec3(0, 1, 0)), out north))
+                if (this.TryGetCell((local - new IntVec3(0, 1, 0)), out Cell north))
                 {
                     if (north.Opaque || (cell.Block == BlockDefOf.Water && (north.Block == BlockDefOf.Water && north.BlockData == 1)))
                         cell.HorizontalSides &= ~Edges.North;
@@ -1215,8 +1155,7 @@ namespace Start_a_Town_
             }
             if ((horEdgesToCheck & Edges.South) == Edges.South)
             {
-                Cell south;
-                if (this.TryGetCell((local + new IntVec3(0, 1, 0)), out south))
+                if (this.TryGetCell((local + new IntVec3(0, 1, 0)), out Cell south))
                 {
                     if (south.Opaque || (cell.Block == BlockDefOf.Water && (south.Block == BlockDefOf.Water && south.BlockData == 1)))
                         cell.HorizontalSides &= ~Edges.South;
@@ -1228,8 +1167,7 @@ namespace Start_a_Town_
             }
             if ((horEdgesToCheck & Edges.East) == Edges.East)
             {
-                Cell east;
-                if (this.TryGetCell((local + new IntVec3(1, 0, 0)), out east))
+                if (this.TryGetCell((local + new IntVec3(1, 0, 0)), out Cell east))
                 {
                     if (east.Opaque || (cell.Block == BlockDefOf.Water && (east.Block == BlockDefOf.Water && east.BlockData == 1)))
                         cell.HorizontalSides &= ~Edges.East;
@@ -1241,8 +1179,7 @@ namespace Start_a_Town_
             }
             if ((verEdgesToCheck & VerticalSides.Top) == VerticalSides.Top)
             {
-                Cell top;
-                if (this.TryGetCell((local + new IntVec3(0, 0, 1)), out top))
+                if (this.TryGetCell((local + new IntVec3(0, 0, 1)), out Cell top))
                 {
                     if (top.Opaque || (cell.Block == BlockDefOf.Water && (top.Block == BlockDefOf.Water && top.BlockData == 1)))
                         cell.VerticalSides &= ~VerticalSides.Top;
@@ -1254,8 +1191,7 @@ namespace Start_a_Town_
             }
             if ((verEdgesToCheck & VerticalSides.Bottom) == VerticalSides.Bottom)
             {
-                Cell bottom;
-                if (this.TryGetCell((local - new IntVec3(0, 0, 1)), out bottom))
+                if (this.TryGetCell((local - new IntVec3(0, 0, 1)), out Cell bottom))
                 {
                     if (bottom.Opaque || (cell.Block == BlockDefOf.Water && (bottom.Block == BlockDefOf.Water && bottom.BlockData == 1)))
                         cell.VerticalSides &= ~VerticalSides.Bottom;
@@ -1276,22 +1212,22 @@ namespace Start_a_Town_
             if ((edges & Edges.East) == Edges.East)
                 for (int i = 0; i < Chunk.Size; i++)
                     for (int z = 0; z < MapBase.MaxHeight; z++)
-                        list.Add(new IntVec3(Start.X + Chunk.Size - 1, Start.Y + i, z));
+                        list.Add(new IntVec3(this.Start.X + Chunk.Size - 1, this.Start.Y + i, z));
 
             if ((edges & Edges.West) == Edges.West)
                 for (int i = 0; i < Chunk.Size; i++)
                     for (int z = 0; z < MapBase.MaxHeight; z++)
-                        list.Add(new IntVec3(Start.X, Start.Y + i, z));
+                        list.Add(new IntVec3(this.Start.X, this.Start.Y + i, z));
 
             if ((edges & Edges.North) == Edges.North)
                 for (int i = 0; i < Chunk.Size; i++)
                     for (int z = 0; z < MapBase.MaxHeight; z++)
-                        list.Add(new IntVec3(Start.X + i, Start.Y, z));
+                        list.Add(new IntVec3(this.Start.X + i, this.Start.Y, z));
 
             if ((edges & Edges.South) == Edges.South)
                 for (int i = 0; i < Chunk.Size; i++)
                     for (int z = 0; z < MapBase.MaxHeight; z++)
-                        list.Add(new IntVec3(Start.X + i, Start.Y + Chunk.Size - 1, z));
+                        list.Add(new IntVec3(this.Start.X + i, this.Start.Y + Chunk.Size - 1, z));
 
             return list.ToList();
         }
@@ -1302,9 +1238,9 @@ namespace Start_a_Town_
         }
         internal List<GameObject> GetObjects()
         {
-            return new List<GameObject>(Objects);
+            return new List<GameObject>(this.Objects);
         }
-       
+
         public void OnCameraRotated(Camera camera)
         {
             this.LightCache2.Clear();
@@ -1315,7 +1251,7 @@ namespace Start_a_Town_
             var w = writer;
             int consecutiveAirblocks = 0;
             bool lastDiscovered = false;
-            foreach (var cell in CellGrid2)
+            foreach (var cell in this.CellGrid2)
             {
                 if (cell.Block.Type == Block.Types.Air)
                 {
@@ -1330,14 +1266,12 @@ namespace Start_a_Town_
                     consecutiveAirblocks = 0;
                 }
                 w.Write((int)cell.Block.Type);
-
                 w.Write((byte)cell.HorizontalSides);
                 w.Write((byte)cell.VerticalSides);
-
                 w.Write(cell.Data2.Data);
                 w.Write(cell.Discovered);
             }
-            if(consecutiveAirblocks>0)
+            if (consecutiveAirblocks > 0)
                 writeAir(w, consecutiveAirblocks, lastDiscovered);
 
             w.Write(-1);
@@ -1394,11 +1328,11 @@ namespace Start_a_Town_
             foreach (var obj in this.Objects.ToList())
                 obj.Write(writer);
 
-            writer.Write(BlockObjects.Count);
-            foreach (var obj in BlockObjects.Values.ToList())
+            writer.Write(this.BlockObjects.Count);
+            foreach (var obj in this.BlockObjects.Values.ToList())
                 obj.Write(writer);
 
-            WriteBlockEntitiesDistinct(writer);
+            this.WriteBlockEntitiesDistinct(writer);
 
             for (int i = 0; i < Size; i++)
                 for (int j = 0; j < Size; j++)
@@ -1407,14 +1341,14 @@ namespace Start_a_Town_
             writer.Write(this.Sunlight.ToArray());
             writer.Write(this.BlockLight.ToArray());
         }
-       
-        static public Chunk Create(MapBase map, BinaryReader reader)
+
+        public static Chunk Create(MapBase map, BinaryReader reader)
         {
             var chunk = new Chunk() { Map = map };
             chunk.Read(reader);
             return chunk;
         }
-        static public Chunk Create(BinaryReader reader)
+        public static Chunk Create(BinaryReader reader)
         {
             Chunk chunk = new();
             chunk.Read(reader);
@@ -1455,108 +1389,12 @@ namespace Start_a_Town_
         }
         #endregion
 
-        public string FullDirPath { get { return this.Map.GetFullPath() + "/chunks/" + this.DirectoryName; } }
+        public string FullDirPath => this.Map.GetFullPath() + "/chunks/" + this.DirectoryName;
 
-        public string DirectoryName { get { return (((int)(this.MapCoords.X)).ToString() + "." + ((int)(this.MapCoords.Y)).ToString()) + "/"; } }
-       
+        public string DirectoryName => (((int)(this.MapCoords.X)).ToString() + "." + ((int)(this.MapCoords.Y)).ToString()) + "/";
+
         public Canvas Canvas, CanvasTopSlice;
 
-        public void BuildFrontmostBlocks(Camera camera)
-        {
-            var chunkX = (int)this.MapCoords.X;
-            var chunkY = (int)this.MapCoords.Y;
-            var mapSizeInChunks = this.Map.GetSizeInChunks();
-            int edgeX = 0, edgeY = 0;
-            switch ((int)camera.Rotation)
-            {
-                case 0:
-                    edgeX = mapSizeInChunks - 1;
-                    edgeY = mapSizeInChunks - 1;
-                    break;
-                case 1:
-                    edgeX = mapSizeInChunks - 1;
-                    edgeY = 0;
-                    break;
-                case 2:
-                    edgeX = 0;
-                    edgeY = 0;
-                    break;
-                case 3:
-                    edgeX = 0;
-                    edgeY = mapSizeInChunks - 1;
-                    break;
-                default:
-                    break;
-            }
-            var maxheight = this.Map.GetMaxHeight();
-            var map = this.Map;
-            if (chunkX == edgeX)
-            {
-                for (int i = 0; i < Chunk.Size; i++)
-                    for (int j = 0; j < maxheight; j++)
-                    {
-                        {
-                            Cell cell;
-                            Vector3 pos = new Vector3(Chunk.Size - 1, i, j);
-                            switch ((int)camera.Rotation)
-                            {
-                                case 0:
-                                case 1:
-                                    pos = new Vector3(Chunk.Size - 1, i, j);
-                                    break;
-                                case 2:
-                                case 3:
-                                    pos = new Vector3(0, i, j);
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                            var cellIndex = Chunk.GetCellIndex((int)pos.X, (int)pos.Y, (int)pos.Z);// FASTER WITH INTS
-                            cell = this.CellGrid2[cellIndex];
-
-                            if (camera.HideUnknownBlocks && map.IsUndiscovered(pos.ToGlobal(this)))
-                                camera.DrawUnknown(this.Canvas, map, this, cell);
-                            else if (cell.Block.Type != Block.Types.Air)
-                                camera.DrawCell(this.Canvas, map, this, cell);
-                        }
-                    }
-            }
-            if (chunkY == edgeY)
-            {
-                for (int i = 0; i < Chunk.Size; i++)
-                    for (int j = 0; j < maxheight; j++)
-                    {
-                        {
-                            Cell cell;
-                            Vector3 pos = new Vector3(i, Chunk.Size - 1, j);
-                            switch ((int)camera.Rotation)
-                            {
-                                case 0:
-                                case 3:
-                                    pos = new Vector3(i, Chunk.Size - 1, j);
-                                    break;
-                                case 2:
-                                case 1:
-                                    pos = new Vector3(i, 0, j);
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                            var cellIndex = Chunk.GetCellIndex((int)pos.X, (int)pos.Y, (int)pos.Z);// FASTER WITH INTS
-
-                            cell = this.CellGrid2[cellIndex];
-
-
-                            if (camera.HideUnknownBlocks && map.IsUndiscovered(pos.ToGlobal(this)))
-                                camera.DrawUnknown(this.Canvas, map, this, cell);
-                            else if (cell.Block.Type != Block.Types.Air)
-                                camera.DrawCell(this.Canvas, map, this, cell);
-                        }
-                    }
-            }
-        }
         public void Build(Camera cam)
         {
             this.ValidateSlices(cam);
@@ -1630,15 +1468,15 @@ namespace Start_a_Town_
             SaveTag lightTag = new SaveTag(SaveTag.Types.List, "Light", SaveTag.Types.Byte);
 
             var sw = Stopwatch.StartNew();
-            SaveCellsToTagCompressed(chunktag);
+            this.SaveCellsToTagCompressed(chunktag);
             sw.Stop();
             string.Format("cells saved in {0} ms", sw.ElapsedMilliseconds).ToConsole();
 
             sw.Restart();
             int n = 0;
-            foreach (Cell cell in CellGrid2)
+            foreach (Cell cell in this.CellGrid2)
             {
-                byte light = (byte)((Sunlight[n] << 4) + BlockLight[n++]);
+                byte light = (byte)((this.Sunlight[n] << 4) + this.BlockLight[n++]);
                 lightTag.Add(new SaveTag(SaveTag.Types.Byte, "", light));
             }
             sw.Stop();
@@ -1647,14 +1485,14 @@ namespace Start_a_Town_
             sw.Restart();
             for (int j = 0; j < Size; j++)
                 for (int i = 0; i < Size; i++)
-                    heightTag.Add(new SaveTag(SaveTag.Types.Byte, "", (byte)HeightMap[i][j]));
+                    heightTag.Add(new SaveTag(SaveTag.Types.Byte, "", (byte)this.HeightMap[i][j]));
             sw.Stop();
             string.Format("heightmap saved in {0} ms", sw.ElapsedMilliseconds).ToConsole();
 
-            foreach (GameObject obj in Objects)
+            foreach (GameObject obj in this.Objects)
                 entitiestag.Add(new SaveTag(SaveTag.Types.Compound, obj.Name, obj.SaveInternal()));
 
-            SaveTag blockEntitiesTag = SaveBlockEntitiesDistinct();
+            SaveTag blockEntitiesTag = this.SaveBlockEntitiesDistinct();
 
             chunktag.Add(new SaveTag(SaveTag.Types.Bool, "LightValid", this.LightValid));
             chunktag.Add(new SaveTag(SaveTag.Types.Bool, "EdgesValid", this.EdgesValid));
@@ -1675,7 +1513,7 @@ namespace Start_a_Town_
 
             List<SaveTag> lightTag = chunktag["Light"].Value as List<SaveTag>;
 
-            LoadCellsFromTagCompressed(chunktag);
+            this.LoadCellsFromTagCompressed(chunktag);
 
             var n = 0;
             for (int h = 0; h < MapBase.MaxHeight; h++)
@@ -1704,8 +1542,7 @@ namespace Start_a_Town_
                     this.Objects.Add(obj);
             }
 
-            SaveTag blobjTag;
-            if (chunktag.TryGetTag("Block Objects", out blobjTag))
+            if (chunktag.TryGetTag("Block Objects", out SaveTag blobjTag))
                 foreach (SaveTag tag in blobjTag.Value as List<SaveTag>)
                 {
                     int index = (int)tag["Index"].Value;
@@ -1737,11 +1574,11 @@ namespace Start_a_Town_
                     {
                         var c = this.CellGrid2[i];
                         c.Discovered = airDiscovered;
-                        
+
                     }
 
                     n += airCount;
-                   
+
                     continue;
                 }
                 var cell = this.CellGrid2[n++];
@@ -1765,20 +1602,20 @@ namespace Start_a_Town_
         {
             var count = this.Slices.Length;
             for (int i = 0; i < count; i++)
-			{
-			    var slice = this.Slices[i];
-                if(slice is null)
+            {
+                var slice = this.Slices[i];
+                if (slice is null)
                 {
                     slice = new Slice();
                     this.Slices[i] = slice;
                 }
-                if(slice.Valid)
+                if (slice.Valid)
                     continue;
                 this.BuildSlice(slice, cam, this.Map, i);
-			}
+            }
             //TESTING IF REMOVING THIS BREAKS ANYTHING
             this.BuildFrontmostBlocksNewSlices(cam);
-            foreach (var sl in Slices)
+            foreach (var sl in this.Slices)
                 sl.Valid = true;
         }
         public void BuildSlice(Slice slice, Camera camera, MapBase map, int z)
@@ -1792,7 +1629,7 @@ namespace Start_a_Town_
                 {
                     Cell cell;
                     var local = new IntVec3(i, j, z);
-                    
+
                     cell = this.CellGrid2[GetCellIndex(local)];
                     var global = local.ToGlobal(this);
 
@@ -1800,7 +1637,7 @@ namespace Start_a_Town_
                     if (!camera.HideUnknownBlocks)
                     {
                         if (cell.Block != BlockDefOf.Air && map.IsVisible(global)) // did i need visibleoutercells list afterall?
-                                visible.Add(cell);
+                            visible.Add(cell);
                     }
                     else
                     {
@@ -1888,7 +1725,7 @@ namespace Start_a_Town_
                                 default:
                                     break;
                             }
-                            var cellIndex = Chunk.GetCellIndex((int)pos.X, (int)pos.Y, (int)pos.Z);// FASTER WITH INTS
+                            var cellIndex = Chunk.GetCellIndex(pos.X, pos.Y, pos.Z);// FASTER WITH INTS
                             cell = this.CellGrid2[cellIndex];
 
                             if (camera.HideUnknownBlocks && map.IsUndiscovered(pos.ToGlobal(this)))
@@ -1906,7 +1743,7 @@ namespace Start_a_Town_
                 {
                     var slice = this.Slices[j];
                     if (slice.Valid == true)
-                        continue; 
+                        continue;
                     for (int i = 0; i < Chunk.Size; i++)
                     {
                         {
@@ -1926,7 +1763,7 @@ namespace Start_a_Town_
                                 default:
                                     break;
                             }
-                            var cellIndex = Chunk.GetCellIndex((int)pos.X, (int)pos.Y, (int)pos.Z);// FASTER WITH INTS
+                            var cellIndex = Chunk.GetCellIndex(pos.X, pos.Y, pos.Z);// FASTER WITH INTS
                             cell = this.CellGrid2[cellIndex];
                             if (camera.HideUnknownBlocks && map.IsUndiscovered(pos.ToGlobal(this)))
                                 camera.DrawUnknown(slice.Canvas, map, this, cell);
@@ -1961,7 +1798,7 @@ namespace Start_a_Town_
                 this.BlockEntitiesByPosition.Remove(local);
             return entity is not null;
         }
-       
+
         public IEnumerable<(IntVec3 local, BlockEntity entity)> GetBlockEntitiesByPosition()
         {
             foreach (var be in this.BlockEntitiesByPosition)

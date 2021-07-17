@@ -12,10 +12,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 {
     public class StaticMap : MapBase, ITooltippable
     {
-        public override float LoadProgress
-        {
-            get { return this.ActiveChunks.Count / (float)(this.Size.Chunks * this.Size.Chunks); }
-        }
+        public override float LoadProgress => this.ActiveChunks.Count / (float)(this.Size.Chunks * this.Size.Chunks); 
 
         public MapSize Size;
         public class MapSize : INamed
@@ -212,21 +209,16 @@ namespace Start_a_Town_.GameModes.StaticMaps
             camera.UpdateMaxDrawLevel(this);
             this.Mouseover = null;
 
-            foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
+            foreach (var chunk in copyOfActiveChunks)
             {
-
                 Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);
                 if (!camera.ViewPort.Intersects(chunkBounds))
-                {
                     continue;
-                }
 
                 camera.DrawChunk(sb, this, chunk.Value, playerGlobal, hiddenRects, a);
             }
-            if (this.Mouseover != null)
-            {
+            if (this.Mouseover is not null)
                 camera.CreateMouseover(this, this.Mouseover.Global);
-            }
         }
 
         internal void SpawnStartingActors(Actor[] actors)
@@ -251,13 +243,11 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public override void DrawObjects(MySpriteBatch sb, Camera camera, SceneState scene)
         {
-            foreach (KeyValuePair<Vector2, Chunk> chunk in this.ActiveChunks)
+            foreach (var chunk in this.ActiveChunks)
             {
-                Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);
+                var chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);
                 if (camera.ViewPort.Intersects(chunkBounds))
-                {
                     chunk.Value.DrawObjects(sb, camera, Controller.Instance, this, scene);
-                }
             }
         }
 
@@ -464,10 +454,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 }
                 foreach (var vector in ch.MapCoords.GetNeighbors())
                 {
-                    if (this.ActiveChunks.TryGetValue(vector, out Chunk neighbor))
-                    {
+                    if (this.ActiveChunks.TryGetValue(vector, out var neighbor))
                         neighbor.InvalidateEdges();
-                    }
                 }
             }
         }
@@ -476,29 +464,21 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var actives = this.GetActiveChunks();
 
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(1, 0), out Chunk neighbor))
-            {
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.West));
-            }
 
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(-1, 0), out neighbor))
-            {
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.East));
-            }
 
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, 1), out neighbor))
-            {
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.North));
-            }
 
             if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, -1), out neighbor))
-            {
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.South));
-            }
         }
 
         void ResetLight(Chunk chunk)
         {
-            Queue<IntVec3> cellList = chunk.ResetHeightMap();
+            var cellList = chunk.ResetHeightMap();
             this.UpdateLight(cellList);
         }
 
@@ -832,20 +812,12 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public override void ApplyLightChanges()
         {
             while (this.SkyLightChanges.Any())
-            {
                 foreach (var item in this.SkyLightChanges.Dequeue())
-                {
                     this.SetSkyLight(item.Key, item.Value);
-                }
-            }
 
             while (this.BlockLightChanges.Any())
-            {
                 foreach (var item in this.BlockLightChanges.Dequeue())
-                {
                     this.SetBlockLight(item.Key, item.Value);
-                }
-            }
         }
 
         public override byte GetSkyDarkness()
@@ -858,8 +830,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public override byte SetBlockData(IntVec3 global, byte data = 0)
         {
-            Cell cell = this.GetCell(global);
-            byte old = cell.BlockData;
+            var cell = this.GetCell(global);
+            var old = cell.BlockData;
             cell.BlockData = data;
             return old;
         }
@@ -874,10 +846,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var chunks = this.GetChunks(global.GetChunkCoords(), 1);
             var entities = new List<GameObject>();
             foreach (var ch in chunks)
-            {
                 entities.AddRange(ch.GetObjects());
-            }
-
             return entities;
         }
         public override int GetSizeInChunks()

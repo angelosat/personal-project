@@ -22,10 +22,10 @@ namespace Start_a_Town_
         bool _HideUnknownBlocks = true;
         public bool HideUnknownBlocks // TODO: make it static
         {
-            get { return _HideUnknownBlocks; }
+            get => this._HideUnknownBlocks;
             set
             {
-                _HideUnknownBlocks = value;
+                this._HideUnknownBlocks = value;
                 Rooms.Ingame.CurrentMap.InvalidateChunks();
                 this.TopSliceChanged = true;
             }
@@ -33,10 +33,10 @@ namespace Start_a_Town_
         bool _DrawTopSlice = true;
         public bool DrawTopSlice
         {
-            get { return _DrawTopSlice; }
+            get => this._DrawTopSlice;
             set
             {
-                _DrawTopSlice = value;
+                this._DrawTopSlice = value;
                 Rooms.Ingame.CurrentMap.InvalidateChunks();
             }
         }
@@ -52,7 +52,7 @@ namespace Start_a_Town_
         int _DrawLevel = MapBase.MaxHeight - 1;
         public int DrawLevel
         {
-            get { return this._DrawLevel; }
+            get => this._DrawLevel;
             set
             {
                 var oldvalue = this._DrawLevel;
@@ -78,7 +78,6 @@ namespace Start_a_Town_
         public bool BorderShading;
         readonly Sprite GridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
         public float FogLevel = 0;
-        float maxd = float.MinValue, mind = float.MaxValue;
         public int MaxDrawZ;
         Vector2 CameraOffset;
         Vector3 LastMouseover = new Vector3(float.MinValue);
@@ -90,50 +89,45 @@ namespace Start_a_Town_
           RenderBeforeFog, LightBeforeFog, DepthBeforeFog, FogBeforeFog,
           FinalScene;
         public Rectangle ViewPort;
-        double _Rotation;
+        double _rotation;
         public double RotCos, RotSin;
         public float LastZTarget;
         bool RenderTargetsInvalid = true;
         float DepthFar, DepthNear;
         public MySpriteBatch SpriteBatch;
-        public MySpriteBatch WaterSpriteBatch, ParticlesSpriteBatch, BlockParticlesSpriteBatch,
-            TransparentBlocksSpriteBatch;
+        public MySpriteBatch WaterSpriteBatch, ParticlesSpriteBatch, BlockParticlesSpriteBatch, TransparentBlocksSpriteBatch;
         float FogT = 0;
         public Effect Effect;
         public static bool DrawnOnce = false;
         public RenderTarget2D[] RenderTargets = new RenderTarget2D[5];
         public double Rotation
         {
-            get { return _Rotation; }
+            get => this._rotation;
             set
             {
-                double oldRot = _Rotation;
-                _Rotation = value % 4;
+                double oldRot = this._rotation;
+                this._rotation = value % 4;
 
-                if (_Rotation < 0)
-                {
-                    _Rotation = 4 + value;
-                }
+                if (this._rotation < 0)
+                    this._rotation = 4 + value;
 
-                RotCos = Math.Cos((Math.PI / 2f) * _Rotation);
-                RotSin = Math.Sin((Math.PI / 2f) * _Rotation);
+                this.RotCos = Math.Cos((Math.PI / 2f) * this._rotation);
+                this.RotSin = Math.Sin((Math.PI / 2f) * this._rotation);
 
-                RotCos = Math.Round(RotCos + RotCos) / 2f;
-                RotSin = Math.Round(RotSin + RotSin) / 2f;
+                this.RotCos = Math.Round(this.RotCos + this.RotCos) / 2f;
+                this.RotSin = Math.Round(this.RotSin + this.RotSin) / 2f;
 
-                if (_Rotation != oldRot)
-                {
-                    OnRotationChanged();
-                }
+                if (this._rotation != oldRot)
+                    this.OnRotationChanged();
             }
         }
         public Vector2 Coordinates
         {
-            get { return _Coordinates; }
+            get => this._Coordinates;
             set
             {
-                _Coordinates = value;
-                this.Location = Coordinates - new Vector2((int)((Width / 2) / Zoom), (int)((Height / 2) / Zoom));
+                this._Coordinates = value;
+                this.Location = this.Coordinates - new Vector2((int)((this.Width / 2) / this.Zoom), (int)((this.Height / 2) / this.Zoom));
             }
         }
         public bool TopSliceChanged = true;
@@ -152,21 +146,16 @@ namespace Start_a_Town_
             this.Zoom = zoom;
             this.ZoomNext = zoom;
             this.Rotation = rotation;
-            CenterOn(new Vector3(x, y, z));
-            Game1.Instance.graphics.DeviceReset += new EventHandler<EventArgs>(gfx_DeviceReset);
+            this.CenterOn(new Vector3(x, y, z));
+            Game1.Instance.graphics.DeviceReset += new EventHandler<EventArgs>(this.gfx_DeviceReset);
         }
 
         public override string ToString()
         {
-            string text = Location.ToString();
-            text += "\nZoom: " + Zoom +
-                "\nRotation: " + Rotation;
+            string text = this.Location.ToString();
+            text += "\nZoom: " + this.Zoom +
+                "\nRotation: " + this.Rotation;
             return text;
-        }
-        public void HandleInput(InputState i)
-        {
-
-
         }
 
         protected void OnRotationChanged()
@@ -176,39 +165,21 @@ namespace Start_a_Town_
                 chunk.Value.OnCameraRotated(this);
                 chunk.Value.Invalidate();
             }
-            CenterOn(Global);
-        }
-
-        public void Initialize()
-        {
-
+            this.CenterOn(this.Global);
         }
 
         void gfx_DeviceReset(object sender, EventArgs e)
         {
-            Width = (sender as GraphicsDeviceManager).PreferredBackBufferWidth;
-            Height = (sender as GraphicsDeviceManager).PreferredBackBufferHeight;
+            this.Width = (sender as GraphicsDeviceManager).PreferredBackBufferWidth;
+            this.Height = (sender as GraphicsDeviceManager).PreferredBackBufferHeight;
             this.ViewPort = new Rectangle(0, 0, this.Width, this.Height);
-            GraphicsDevice gd = Game1.Instance.GraphicsDevice;
             this.RenderTargetsInvalid = true;
         }
 
-        public void Update(MapBase map, Vector3 global)
-        {
-            this.Global = global + Vector3.UnitZ;
-            this.Follow(Global);
-
-            this.UpdateFog(map);
-        }
-        public void Update(MapBase map, Vector2 coords)
-        {
-            this.Coordinates = coords;
-            this.UpdateFog(map);
-        }
         public void Update(MapBase map)
         {
             this.Follow();
-            this.SmoothZoom(ZoomNext);
+            this.SmoothZoom(this.ZoomNext);
             this.UpdateFog(map);
         }
 
@@ -221,27 +192,10 @@ namespace Start_a_Town_
             this.Following = null;
             this.Coordinates = coords;
         }
-        public void Update(GameTime gt)
-        {
-            this.SmoothZoom(ZoomNext);
-            if (!this.Dragging)
-            {
-                return;
-            }
-
-            if (DragDelay < DragDelayMax)
-            {
-                DragDelay += 1;
-                return;
-            }
-            this.Coordinates += DragVector / (Zoom * 10f);
-
-        }
 
         void SetZoom(float value)
         {
             this.Zoom = value;
-
             var offset = new Vector2(this.Width / 2, this.Height / 2);
             offset /= this.Zoom;
             this.Location = this.Coordinates - offset;
@@ -249,52 +203,41 @@ namespace Start_a_Town_
         public void SmoothZoom(float next)
         {
             float diff = next - this.Zoom;
-
             var zoomSpeed = 0.1f;
             var n = zoomSpeed * diff;
-
             if (Math.Abs(n) < 0.001f)
-            {
                 this.SetZoom(next);
-            }
             else
-            {
                 this.SetZoom(this.Zoom + n);
-            }
         }
 
         public void CenterOn(Vector3 global)
         {
-            Global = global;
+            this.Global = global;
             Coords.Iso(this, global.X, global.Y, global.Z, out int xx, out int yy);
             this.Coordinates = new Vector2(xx, yy);
             this.DrawLevel = (int)Math.Max(this.DrawLevel, global.Z + 1);
         }
         public void Follow()
         {
-            if (this.Following == null)
-            {
+            if (this.Following is null)
                 return;
-            }
 
             if (this.Following.IsIndoors())
-            {
                 this.DrawLevel = (int)(this.Following.Global.CeilingZ().Z + this.Following.Physics.Height - 1);
-            }
             else
-            {
                 this.DrawLevel = this.Following.Map.GetMaxHeight();
-            }
             this.Follow(this.Following.Global);
         }
         public void Follow(Vector3 global)
         {
-            Global = global;
+            this.Global = global;
             Coords.Iso(this, global.X, global.Y, global.Z, out float xx, out float yy);
 
-            Vector2 currentLoc = this.Coordinates
-                , nextLoc = new Vector2(xx, yy);
-            Vector2 diff = nextLoc - currentLoc;
+            Vector2 
+                currentLoc = this.Coordinates,
+                nextLoc = new(xx, yy),
+                diff = nextLoc - currentLoc;
 
             diff *= 100;
             diff = diff.Round();
@@ -314,34 +257,29 @@ namespace Start_a_Town_
         public void GetEverything(MapBase map, Vector3 global, Rectangle spriteRect, out float depth, out Rectangle screenBounds, out Vector2 screenLoc)
         {
             depth = global.GetDrawDepth(map, this);
-            screenBounds = GetScreenBounds(global, spriteRect);
+            screenBounds = this.GetScreenBounds(global, spriteRect);
             screenLoc = new Vector2(screenBounds.X, screenBounds.Y);
         }
         public Rectangle GetScreenBounds(float x, float y, float z, Rectangle spriteRectangle)
         {
             return this.GetScreenBounds(x, y, z, spriteRectangle, 0, 0);
         }
-        public Rectangle GetScreenBounds(float x, float y, float z, Rectangle spriteRectangle, Vector2 origin)
-        {
-            Coords.Iso(this, x, y, z, out int xx, out int yy);
-            return new Rectangle((int)(Zoom * (xx + spriteRectangle.X - this.Location.X - origin.X)), (int)(Zoom * (yy + spriteRectangle.Y - this.Location.Y - origin.Y)), (int)(Zoom * spriteRectangle.Width), (int)(Zoom * spriteRectangle.Height));
-        }
         public Rectangle GetScreenBounds(float x, float y, float z, Rectangle spriteRectangle, int originx, int originy)
         {
             Coords.Iso(this, x, y, z, out int xx, out int yy);
             return new Rectangle(
-                (int)(Zoom * (xx + spriteRectangle.X - this.Location.X - originx)),
-                (int)(Zoom * (yy + spriteRectangle.Y - this.Location.Y - originy)),
-                (int)(Zoom * spriteRectangle.Width),
-                (int)(Zoom * spriteRectangle.Height));
+                (int)(this.Zoom * (xx + spriteRectangle.X - this.Location.X - originx)),
+                (int)(this.Zoom * (yy + spriteRectangle.Y - this.Location.Y - originy)),
+                (int)(this.Zoom * spriteRectangle.Width),
+                (int)(this.Zoom * spriteRectangle.Height));
         }
         public Rectangle GetScreenBounds(float x, float y, float z, Rectangle spriteRectangle, int originx, int originy, float scale)
         {
             Coords.Iso(this, x, y, z, out int xx, out int yy);
-            var scalezoom = scale * Zoom;
+            var scalezoom = scale * this.Zoom;
             return new Rectangle(
-                (int)(Zoom * (xx + scale * spriteRectangle.X - this.Location.X - originx)),
-                (int)(Zoom * (yy + scale * spriteRectangle.Y - this.Location.Y - originy)),
+                (int)(this.Zoom * (xx + scale * spriteRectangle.X - this.Location.X - originx)),
+                (int)(this.Zoom * (yy + scale * spriteRectangle.Y - this.Location.Y - originy)),
                 (int)(scalezoom * spriteRectangle.Width),
                 (int)(scalezoom * spriteRectangle.Height));
         }
@@ -349,8 +287,8 @@ namespace Start_a_Town_
         {
             Coords.Iso(this, x, y, z, out float xx, out float yy);
             var loc = this.Location;
-            float xxx = (float)((xx + scale * spriteRectangle.X - loc.X - origin.X));
-            float yyy = (float)((yy + scale * spriteRectangle.Y - loc.Y - origin.Y));
+            float xxx = (float)xx + scale * spriteRectangle.X - loc.X - origin.X;
+            float yyy = (float)yy + scale * spriteRectangle.Y - loc.Y - origin.Y;
             float w = scale * spriteRectangle.Width;
             float h = scale * spriteRectangle.Height;
             var vector = new Vector4(xxx, yyy, w, h);
@@ -367,9 +305,8 @@ namespace Start_a_Town_
             var vector = new Vector4(xxx, yyy, w, h);
             return vector;
         }
-        public Vector2 GetScreenPosition(TargetArgs target)
+        public Vector2 GetScreenPosition(TargetArgs t)
         {
-            var t = target;
             var fx = t.Face.X * .5f;
             var fy = t.Face.Y * .5f;
             var yx = fx + fy;
@@ -379,19 +316,19 @@ namespace Start_a_Town_
         public Vector2 GetScreenPosition(Vector3 pos)
         {
             Coords.Iso(this, pos.X, pos.Y, pos.Z, out int xx, out int yy);
-            return new Vector2(Zoom * (xx - Location.X), Zoom * (yy - Location.Y));
+            return new Vector2(this.Zoom * (xx - this.Location.X), this.Zoom * (yy - this.Location.Y));
         }
         public Vector2 GetScreenPositionFloat(Vector3 pos)
         {
             Coords.Iso(this, pos.X, pos.Y, pos.Z, out float xx, out float yy);
             var loc = this.Location;
-            var screenpos = new Vector2(Zoom * (xx - loc.X), Zoom * (yy - loc.Y));
+            var screenpos = new Vector2(this.Zoom * (xx - loc.X), this.Zoom * (yy - loc.Y));
             return screenpos;
         }
 
         public Rectangle GetScreenBounds(Vector3 global, Rectangle spriteRectangle)
         {
-            return GetScreenBounds(global.X, global.Y, global.Z, spriteRectangle);
+            return this.GetScreenBounds(global.X, global.Y, global.Z, spriteRectangle);
         }
 
         internal float GetDrawDepth(GameObject o)
@@ -405,8 +342,8 @@ namespace Start_a_Town_
 
         public bool CullingCheck(float x, float y, float z, Rectangle sourceBounds, out Rectangle screenBounds)
         {
-            screenBounds = GetScreenBounds(x, y, z, sourceBounds);
-            return ViewPort.Intersects(screenBounds);
+            screenBounds = this.GetScreenBounds(x, y, z, sourceBounds);
+            return this.ViewPort.Intersects(screenBounds);
         }
 
         /// <summary>
@@ -424,45 +361,6 @@ namespace Start_a_Town_
         {
             this.Rotation = 0;
         }
-        public bool DrawCell(Canvas canvas, MapBase map, Vector3 global)
-        {
-            map.TryGetAll(global, out var chunk, out var cell);
-            int z = cell.Z;
-            Block block = cell.Block;
-            if (block == BlockDefOf.Air)
-            {
-                chunk.InvalidateCell(cell);
-                ("tried to draw air at " + cell.GetGlobalCoords(chunk).ToString()).ToConsole();
-                return false;
-            }
-
-            int lx = cell.X, ly = cell.Y, gx = (int)chunk.Start.X + lx, gy = (int)chunk.Start.Y + ly;
-            LightToken light = GetFinalLight(this, map, chunk, cell, gx, gy, z);
-
-            var mapOffset = map.GetOffset();
-            Coords.Rotate(this, gx - mapOffset.X, gy - mapOffset.Y, out int rgx, out int rgy);
-
-            //Vector3 globalRotated = new Vector3(rgx, rgy, z);
-            //float cd = new Vector3(gx, gy, z).GetDrawDepth(map, this);
-
-            var screenBoundsVector4 = GetScreenBoundsVector4NoOffset(gx, gy, z, Block.Bounds, Vector2.Zero);// GetScreenBoundsVector4NoOffset(lx, ly, z, Block.Bounds, Vector2.Zero);
-            //Coords.Rotate(this, lx, ly, out int rlx, out int rly);
-            var depth = rgx + rgy;
-
-            Color finalFogColor = Color.Transparent; // i calculate fog inside the shader from now on
-
-            if ((cell.AllEdges == 0 && HideUnknownBlocks))
-            {
-                //|| map.IsUndiscovered(global))
-                Block.DrawUnknown(canvas.Opaque, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth);
-            }
-            else
-            {
-                block.Draw(canvas, chunk, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell.Variation, cell.Orientation, cell.BlockData);
-            }
-
-            return true;
-        }
         public bool DrawCell(Canvas canvas, MapBase map, Chunk chunk, Cell cell)
         {
             int z = cell.Z;
@@ -474,30 +372,23 @@ namespace Start_a_Town_
                 return false;
             }
 
-            Block block = cell.Block;
+            var block = cell.Block;
 
             int lx = cell.X, ly = cell.Y, gx = (int)chunk.Start.X + lx, gy = (int)chunk.Start.Y + ly;
-            LightToken light = GetFinalLight(this, map, chunk, cell, gx, gy, z);
+            var light = GetFinalLight(this, map, chunk, cell, gx, gy, z);
 
-            var mapOffset = map.GetOffset();
-            Coords.Rotate(this, gx - mapOffset.X, gy - mapOffset.Y, out int rgx, out int rgy);
-
-            var screenBoundsVector4 = GetScreenBoundsVector4NoOffset(lx, ly, z, Block.Bounds, Vector2.Zero);
+            var screenBoundsVector4 = this.GetScreenBoundsVector4NoOffset(lx, ly, z, Block.Bounds, Vector2.Zero);
             Coords.Rotate(this, lx, ly, out int rlx, out int rly);
             var depth = rlx + rly;
 
-            Color finalFogColor = Color.Transparent; // i calculate fog inside the shader from now on
+            var finalFogColor = Color.Transparent; // i calculate fog inside the shader from now on
             var isDiscovered = !map.IsUndiscovered(new Vector3(gx, gy, z));
             /// DONT ERASE
             ///if (cell.AllEdges == 0 && HideUnknownBlocks)  // do i want cells that have already been discoverd, to remain visible even if they become obstructed again?
-            if (!isDiscovered && HideUnknownBlocks)// && isAir) // do i want cells that have already been discoverd, to remain visible even if they become obstructed again?
-            {
+            if (!isDiscovered && this.HideUnknownBlocks)// && isAir) // do i want cells that have already been discoverd, to remain visible even if they become obstructed again?
                 Block.DrawUnknown(canvas.Opaque, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth);
-            }
             else
-            {
                 block.Draw(canvas, chunk, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell.Variation, cell.Orientation, cell.BlockData);
-            }
 
             return true;
         }
@@ -507,7 +398,7 @@ namespace Start_a_Town_
             int gx = (int)global.X;
             int gy = (int)global.Y;
 
-            var screenBoundsVector4 = GetScreenBoundsVector4NoOffset(gx, gy, z, Block.Bounds, Vector2.Zero);
+            var screenBoundsVector4 = this.GetScreenBoundsVector4NoOffset(gx, gy, z, Block.Bounds, Vector2.Zero);
             Coords.Rotate(this, gx, gy, out int rlx, out int rly);
             var depth = rlx + rly;
 
@@ -522,9 +413,9 @@ namespace Start_a_Town_
             int lx = cell.X, ly = cell.Y, gx = (int)chunk.Start.X + lx, gy = (int)chunk.Start.Y + ly;
             var mapOffset = map.GetOffset();
             Coords.Rotate(this, gx - mapOffset.X, gy - mapOffset.Y, out int rgx, out int rgy);
-            LightToken light = GetFinalLight(this, map, chunk, cell, gx, gy, z, false);
+            var light = GetFinalLight(this, map, chunk, cell, gx, gy, z, false);
 
-            var screenBoundsVector4 = GetScreenBoundsVector4NoOffset(lx, ly, z, Block.Bounds, Vector2.Zero);
+            var screenBoundsVector4 = this.GetScreenBoundsVector4NoOffset(lx, ly, z, Block.Bounds, Vector2.Zero);
             Coords.Rotate(this, lx, ly, out int rlx, out int rly);
             var depth = rlx + rly;
 
@@ -539,9 +430,9 @@ namespace Start_a_Town_
 
             var mapOffset = map.GetOffset();
             Coords.Rotate(this, gx - mapOffset.X, gy - mapOffset.Y, out int rgx, out int rgy);
-            LightToken light = GetFinalLight(this, map, chunk, cell, gx, gy, z, false);
+            var light = GetFinalLight(this, map, chunk, cell, gx, gy, z, false);
 
-            var screenBoundsVector4 = GetScreenBoundsVector4NoOffset(lx, ly, z, Block.Bounds, Vector2.Zero);
+            var screenBoundsVector4 = this.GetScreenBoundsVector4NoOffset(lx, ly, z, Block.Bounds, Vector2.Zero);
             Coords.Rotate(this, lx, ly, out int rlx, out int rly);
             var depth = rlx + rly;
 
@@ -549,72 +440,11 @@ namespace Start_a_Town_
 
             return true;
         }
-        /// <summary>
-        /// TODO: OPTIMIZE: 
-        /// convert lightcache to dictionary,
-        /// reduce vector3.rotate calls,
-        /// pass controller instance instead of accessing singleton getter,
-        /// remove vector3 ctor from getdrawdepth,
-        /// create vertexes at getscreenbounds to reduce rect ctors,
-        /// create field for color.white instead of getting it from getter each time,
-        /// make gameobject.global a field
-        /// </summary>
-        /// <param name="sb"></param>
-        /// <param name="map"></param>
-        /// <param name="chunk"></param>
-        /// <param name="cell"></param>
-        /// <param name="playerGlobal"></param>
-        /// <param name="hiddenRects"></param>
-        /// <param name="a"></param>
-        public bool DrawCell(MySpriteBatch sb, MapBase map, Chunk chunk, Cell cell, Vector3? playerGlobal, List<Rectangle> hiddenRects, EngineArgs a)
-        {
-            int z = cell.Z;
-
-            if (z > this.MaxDrawZ)// i'm cacheing that in the beginning of the drawchunk method
-            {
-                return false;
-            }
-
-            Block.Types cellTile = cell.Block.Type;
-            if (cellTile == Block.Types.Air)
-            {
-                chunk.InvalidateCell(cell);
-                ("tried to draw air at " + cell.GetGlobalCoords(chunk).ToString()).ToConsole();
-                return false;
-            }
-
-            Block block = cell.Block;
-
-            int lx = cell.X, ly = cell.Y, gx = (int)chunk.Start.X + lx, gy = (int)chunk.Start.Y + ly;
-
-            LightToken light = GetFinalLight(this, map, chunk, cell, gx, gy, z);
-
-            var mapOffset = map.GetOffset();
-            Coords.Rotate(this, gx - mapOffset.X, gy - mapOffset.Y, out int rgx, out int rgy);
-
-            float cd = new Vector3(gx, gy, z).GetDrawDepth(map, this);
-
-            DepthFar = Math.Min(DepthFar, cd);
-            DepthNear = Math.Max(DepthNear, cd);
-
-            var screenBoundsVector4 = GetScreenBoundsVector4NoOffset(lx, ly, z, Block.Bounds, Vector2.Zero);
-
-            var depth = lx + ly;
-
-            maxd = Math.Max(maxd, depth);
-            mind = Math.Min(mind, depth);
-            Color finalFogColor = Color.Transparent; // i calculate fog inside the shader from now on
-            block.Draw(chunk.Canvas, chunk, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell.Variation, cell.Orientation, cell.BlockData);
-
-            return true;
-        }
 
         public Color GetFogColorNew(int z)
         {
             if (!Fog)
-            {
                 return Color.Transparent;
-            }
 
             if (this.LastZTarget > 1)
             {
@@ -648,20 +478,20 @@ namespace Start_a_Town_
             float camerax = this.Coordinates.X;
             float cameray = this.Coordinates.Y;
             view = view * Matrix.CreateTranslation(new Vector3(-camerax, cameray, 0)) * Matrix.CreateScale(this.Zoom) * Matrix.CreateTranslation(new Vector3(this.Width / 2, -this.Height / 2, 0));
-            var near = -GetFarDepth(map) * this.Zoom;
-            var far = -GetNearDepth(map) * this.Zoom;
+            var near = -this.GetFarDepth(map) * this.Zoom;
+            var far = -this.GetNearDepth(map) * this.Zoom;
             var projection = Matrix.CreateOrthographicOffCenter(
                 0, this.Width, -this.Height, 0, near, far);
             this.Effect.CurrentTechnique = this.Effect.Techniques["Chunks"];
             this.Effect.Parameters["View"].SetValue(view);
             this.Effect.Parameters["Projection"].SetValue(projection);
 
-            DepthNear = this.GetNearDepth(map);
-            DepthFar = this.GetFarDepth(map);
-            this.Effect.Parameters["FarDepth"].SetValue(DepthFar);
-            this.Effect.Parameters["NearDepth"].SetValue(DepthNear);
-            this.Effect.Parameters["DepthResolution"].SetValue((2) / (DepthNear - DepthFar));
-            this.Effect.Parameters["OutlineThreshold"].SetValue((1) / (DepthNear - DepthFar));
+            this.DepthNear = this.GetNearDepth(map);
+            this.DepthFar = this.GetFarDepth(map);
+            this.Effect.Parameters["FarDepth"].SetValue(this.DepthFar);
+            this.Effect.Parameters["NearDepth"].SetValue(this.DepthNear);
+            this.Effect.Parameters["DepthResolution"].SetValue((2) / (this.DepthNear - this.DepthFar));
+            this.Effect.Parameters["OutlineThreshold"].SetValue((1) / (this.DepthNear - this.DepthFar));
         }
 
         private void PrepareShaderTransparent(MapBase map)
@@ -675,20 +505,20 @@ namespace Start_a_Town_
             float camerax = this.Coordinates.X;
             float cameray = this.Coordinates.Y;
             view = view * Matrix.CreateTranslation(new Vector3(-camerax, cameray, 0)) * Matrix.CreateScale(this.Zoom) * Matrix.CreateTranslation(new Vector3(this.Width / 2, -this.Height / 2, 0));
-            var near = -GetFarDepth(map) * this.Zoom;
-            var far = -GetNearDepth(map) * this.Zoom;
+            var near = -this.GetFarDepth(map) * this.Zoom;
+            var far = -this.GetNearDepth(map) * this.Zoom;
             var projection = Matrix.CreateOrthographicOffCenter(
                 0, this.Width, -this.Height, 0, near, far);
             this.Effect.CurrentTechnique = this.Effect.Techniques["CombinedWater"];
             this.Effect.Parameters["View"].SetValue(view);
             this.Effect.Parameters["Projection"].SetValue(projection);
 
-            DepthNear = this.GetNearDepth(map);
-            DepthFar = this.GetFarDepth(map);
-            this.Effect.Parameters["FarDepth"].SetValue(DepthFar);
-            this.Effect.Parameters["NearDepth"].SetValue(DepthNear);
-            this.Effect.Parameters["DepthResolution"].SetValue((2) / (DepthNear - DepthFar));
-            this.Effect.Parameters["OutlineThreshold"].SetValue((1) / (DepthNear - DepthFar));
+            this.DepthNear = this.GetNearDepth(map);
+            this.DepthFar = this.GetFarDepth(map);
+            this.Effect.Parameters["FarDepth"].SetValue(this.DepthFar);
+            this.Effect.Parameters["NearDepth"].SetValue(this.DepthNear);
+            this.Effect.Parameters["DepthResolution"].SetValue((2) / (this.DepthNear - this.DepthFar));
+            this.Effect.Parameters["OutlineThreshold"].SetValue((1) / (this.DepthNear - this.DepthFar));
 
         }
 
@@ -702,9 +532,7 @@ namespace Start_a_Town_
             var global = new Vector3(gx, gy, z);
 
             if (chunk.LightCache2.TryGetValue(global, out LightToken cached))
-            {
                 return cached;
-            }
 
             // update block exposed faces too here?
             // TESTING IF REMOVING THIS BREAKS ANYTHING
@@ -731,8 +559,7 @@ namespace Start_a_Town_
             Color sun = new((suneast + 1) / 16f, (sunsouth + 1) / 16f, (suntop + 1) / 16f);
             Vector4 block = new((blockeast + 1) / 16f, (blocksouth + 1) / 16f, (blocktop + 1) / 16f, 1f);
 
-            Engine.LightQueries++;
-            LightToken light = new LightToken() { Global = global, Sun = sun, Block = block };
+            var light = new LightToken(global, sun, block);
             chunk.LightCache2[global] = light;
             return light;
         }
@@ -740,26 +567,22 @@ namespace Start_a_Town_
         public void CreateMouseover(MapBase map, Vector3 global)
         {
             if (Controller.Instance.MouseoverBlockNext.Object != null)
-            {
                 return;
-            }
             if (!map.TryGetAll(global, out var chunk, out var cell))
-            {
                 return;
-            }
 
-            Rectangle texbounds = Block.Bounds;
+            var texbounds = Block.Bounds;
 
-            Rectangle cellScreenBounds = GetScreenBounds(global, texbounds);
-            Vector2 uvCoords = new Vector2((Controller.Instance.msCurrent.X - cellScreenBounds.X) / Zoom, (Controller.Instance.msCurrent.Y - cellScreenBounds.Y) / Zoom);
+            var cellScreenBounds = this.GetScreenBounds(global, texbounds);
+            var uvCoords = new Vector2((Controller.Instance.msCurrent.X - cellScreenBounds.X) / this.Zoom, (Controller.Instance.msCurrent.Y - cellScreenBounds.Y) / this.Zoom);
             int faceIndex = (int)uvCoords.Y * Block.MouseMapSprite.Width + (int)uvCoords.X;
 
             // find block coordinates
-            Color sample = Block.BlockCoordinatesFull[faceIndex];
+            var sample = Block.BlockCoordinatesFull[faceIndex];
             float u = sample.R / 255f;
             float v = sample.G / 255f;
             float w = sample.B / 255f;
-            Vector3 precise = new Vector3(u, v, w);
+            var precise = new Vector3(u, v, w);
             precise.X -= 0.5f;
             precise.Y -= 0.5f; // compensate for (0,0) being at the center of the block
 
@@ -773,27 +596,17 @@ namespace Start_a_Town_
             precise = precise.Rotate(-this.Rotation);
             // TODO: find more elegant way to do this
             if (rotVec == Vector3.UnitX || rotVec == -Vector3.UnitX)
-            {
                 precise.X = 0;
-            }
             else if (rotVec == Vector3.UnitY || rotVec == -Vector3.UnitY)
-            {
                 precise.Y = 0;
-            }
             else if (rotVec == Vector3.UnitZ || rotVec == -Vector3.UnitZ)
-            {
                 precise.Z = 0;
-            }
 
             var target = new TargetArgs(map, global, rotVec, precise);
             if (global != this.LastMouseover)
-            {
                 Controller.Instance.MouseoverBlockNext.Object = target;
-            }
             else
-            {
                 Controller.Instance.MouseoverBlockNext.Object = Controller.Instance.MouseoverBlock.Object;
-            }
 
             Controller.Instance.MouseoverBlockNext.Face = rotVec;
             Controller.Instance.MouseoverBlockNext.Precise = precise;
@@ -804,20 +617,16 @@ namespace Start_a_Town_
         public void CreateMouseover(MapBase map, Vector3 global, Rectangle rect, Vector2 point, bool behind)
         {
             if (Controller.Instance.MouseoverBlockNext.Object != null)
-            {
                 return;
-            }
 
             if (!map.TryGetAll(global, out var chunk, out var cell))
-            {
                 return;
-            }
 
-            var uvCoords = new Vector2((point.X - rect.X) / Zoom, (point.Y - rect.Y) / Zoom);
+            var uvCoords = new Vector2((point.X - rect.X) / this.Zoom, (point.Y - rect.Y) / this.Zoom);
             int faceIndex = (int)uvCoords.Y * cell.Block.MouseMap.Texture.Width + (int)uvCoords.X;
 
             // find block coordinates
-            Color sample = cell.Block.UV[faceIndex];
+            var sample = cell.Block.UV[faceIndex];
             float u = sample.R / 255f;
             float v = sample.G / 255f;
             float w = sample.B / 255f;
@@ -835,28 +644,20 @@ namespace Start_a_Town_
             precise = precise.Rotate(-this.Rotation);
             // TODO: find more elegant way to do this
             if (rotVec == Vector3.UnitX || rotVec == -Vector3.UnitX)
-            {
                 precise.X = 0;
-            }
             else if (rotVec == Vector3.UnitY || rotVec == -Vector3.UnitY)
-            {
                 precise.Y = 0;
-            }
             else if (rotVec == Vector3.UnitZ || rotVec == -Vector3.UnitZ)
-            {
                 precise.Z = 0;
-            }
 
             Controller.SetMouseoverBlock(this, map, global, rotVec, precise);
         }
 
         public void DrawMap(MapBase map, ToolManager toolManager, UIManager ui, SceneState scene)
         {
-            GraphicsDevice gd = Game1.Instance.GraphicsDevice;
-            if (map == null)
-            {
+            var gd = Game1.Instance.GraphicsDevice;
+            if (map is null)
                 return;
-            }
 
             if (this.RenderTargetsInvalid)
             {
@@ -864,19 +665,19 @@ namespace Start_a_Town_
                 this.RenderTargetsInvalid = false;
             }
 
-            RenderTargets[0] = MapRender;
-            RenderTargets[1] = MapDepth;
-            RenderTargets[2] = MapLight;
+            this.RenderTargets[0] = this.MapRender;
+            this.RenderTargets[1] = this.MapDepth;
+            this.RenderTargets[2] = this.MapLight;
             this.RenderTargets[3] = this.TextureFogWater;
 
-            gd.SetRenderTargets(MapRender, MapDepth, MapLight, TextureFogWater);
+            gd.SetRenderTargets(this.MapRender, this.MapDepth, this.MapLight, this.TextureFogWater);
 
             var a = EngineArgs.Default;
 
             gd.SetRenderTargets(null);
             gd.Clear(Color.Transparent);
             gd.RasterizerState = RasterizerState.CullNone;
-            NewDraw(map, gd, a, scene, toolManager, ui);
+            this.NewDraw(map, gd, a, scene, toolManager, ui);
         }
 
         private void NewDraw(MapBase map, GraphicsDevice gd, EngineArgs a, SceneState scene, ToolManager toolManager, UIManager ui)
@@ -938,11 +739,11 @@ namespace Start_a_Town_
                 fx.Parameters["PlayerRotXY"].SetValue((float)(
                     this.Following.Global.X * this.RotCos - this.Following.Global.Y * this.RotSin +
                     this.Following.Global.X * this.RotSin + this.Following.Global.Y * this.RotCos));
-                fx.Parameters["PlayerCenterOffset"].SetValue(this.GetScreenPositionFloat(this.Following.Global + this.Following.Physics.Height * Vector3.UnitZ / 2) / new Vector2(ViewPort.Width, ViewPort.Height) - Vector2.One * .5f);
+                fx.Parameters["PlayerCenterOffset"].SetValue(this.GetScreenPositionFloat(this.Following.Global + this.Following.Physics.Height * Vector3.UnitZ / 2) / new Vector2(this.ViewPort.Width, this.ViewPort.Height) - Vector2.One * .5f);
             }
 
-            fx.Parameters["FogLevel"].SetValue(FogLevel);
-            this.MaxDrawZ = GetMaxDrawLevel(map);
+            fx.Parameters["FogLevel"].SetValue(this.FogLevel);
+            this.MaxDrawZ = this.GetMaxDrawLevel(map);
             this.Effect.Parameters["FogEnabled"].SetValue(Fog);
             this.Effect.Parameters["MaxDrawLevel"].SetValue(this.MaxDrawZ);
             this.Effect.Parameters["HideWalls"].SetValue(Engine.HideWalls);
@@ -957,7 +758,7 @@ namespace Start_a_Town_
 
             if (this.SpriteBatch == null)
             {
-                SpriteBatch = new MySpriteBatch(gd);
+                this.SpriteBatch = new MySpriteBatch(gd);
             }
 
             if (this.WaterSpriteBatch == null)
@@ -986,12 +787,12 @@ namespace Start_a_Town_
             gd.SetRenderTargets(this.TextureFogWater);
             gd.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Transparent, 1, 1);
             // PROBLEM clearing the texturefogwater with the same parameters as the other rendertargets, causes the problem with the background being drawn over the toolmanager preview blocks
-            gd.SetRenderTargets(MapRender, MapLight, MapDepth);
+            gd.SetRenderTargets(this.MapRender, this.MapLight, this.MapDepth);
             //var clearcol = new Color(1f, 1f, 0, 0); // 3rd component is 0 in order to not draw water on background
             gd.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, clearcol, 1, 1);
 
             // after clearing each target with the appropriate parameters for each one, set them all together
-            gd.SetRenderTargets(MapRender, MapLight, MapDepth, this.TextureFogWater);
+            gd.SetRenderTargets(this.MapRender, this.MapLight, this.MapDepth, this.TextureFogWater);
 
             // use new technique to draw both color and light in one pass in multiple rendertargets
             fx.CurrentTechnique = fx.Techniques["Combined"];
@@ -1001,8 +802,8 @@ namespace Start_a_Town_
             gd.Textures[2] = Block.Atlas.NormalTexture;
             gd.Textures[3] = Block.Atlas.DepthTexture;
 
-            DepthNear = float.MinValue;
-            DepthFar = float.MaxValue;
+            this.DepthNear = float.MinValue;
+            this.DepthFar = float.MaxValue;
 
             this.Effect.Parameters["RotCos"].SetValue((float)this.RotCos);
             this.Effect.Parameters["RotSin"].SetValue((float)this.RotSin);
@@ -1036,32 +837,26 @@ namespace Start_a_Town_
             foreach (var chunk in visibleChunks)
             {
                 // TODO: DONT BUILD TOP SLICE TWICE!
-
                 if (!chunk.Valid)
-                {
                     chunk.Build(this);
-                }
 
                 chunk.DrawOpaqueLayers(this, this.Effect); // TODO: is it faster to pass only the effectparameters?
                 continue;
             }
             this.TopSliceChanged = false;
-            DepthFar--;
-            DepthNear++;
 
             // TODO: these temporarily only work with static maps
-            DepthNear = this.GetNearDepth(map);
-            DepthFar = this.GetFarDepth(map);
+            this.DepthNear = this.GetNearDepth(map);
+            this.DepthFar = this.GetFarDepth(map);
 
+            fx.Parameters["FarDepth"].SetValue(this.DepthFar);
+            fx.Parameters["NearDepth"].SetValue(this.DepthNear);
 
-            fx.Parameters["FarDepth"].SetValue(DepthFar);
-            fx.Parameters["NearDepth"].SetValue(DepthNear);
-
-            fx.Parameters["DepthResolution"].SetValue((2) / (DepthNear - DepthFar));
-            fx.Parameters["OutlineThreshold"].SetValue((1) / (DepthNear - DepthFar));
+            fx.Parameters["DepthResolution"].SetValue(2 / (this.DepthNear - this.DepthFar));
+            fx.Parameters["OutlineThreshold"].SetValue(1 / (this.DepthNear - this.DepthFar));
 
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             var objs = map.GetObjects().ToList();
 
@@ -1069,18 +864,16 @@ namespace Start_a_Town_
             //gd.DepthStencilState = new DepthStencilState() { DepthBufferWriteEnable = true }; // this broke depth on block highlights
             fx.CurrentTechnique.Passes["Pass1"].Apply();
 
-            toolManager.DrawBeforeWorld(SpriteBatch, map, this);
+            toolManager.DrawBeforeWorld(this.SpriteBatch, map, this);
 
             fx.CurrentTechnique = fx.Techniques["BlockHighlight"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            map.DrawBeforeWorld(SpriteBatch, this);
-            ui.DrawWorld(SpriteBatch, this);
+            map.DrawBeforeWorld(this.SpriteBatch, this);
+            ui.DrawWorld(this.SpriteBatch, this);
             foreach (var entity in objs)
-            {
-                entity.DrawAfter(SpriteBatch, this); // cull non visible entities
-            }
+                entity.DrawAfter(this.SpriteBatch, this); // cull non visible entities
 
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             gd.Textures[0] = Block.Atlas.Texture;
             gd.Textures[2] = Block.Atlas.NormalTexture;
@@ -1088,10 +881,10 @@ namespace Start_a_Town_
             fx.CurrentTechnique = fx.Techniques["CombinedWater"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
 
-            gd.SetRenderTargets(WaterRender, WaterLight, WaterDepth, WaterFog);
+            gd.SetRenderTargets(this.WaterRender, this.WaterLight, this.WaterDepth, this.WaterFog);
             gd.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, clearcol, 1, 1);
 
-            PrepareShaderTransparent(map);
+            this.PrepareShaderTransparent(map);
 
             foreach (var chunk in visibleChunks)
             {
@@ -1126,10 +919,10 @@ namespace Start_a_Town_
             wateroffset = (this.Coordinates - wateroffset) / (watertxt.Height);
             fx.Parameters["WaterOffset2"].SetValue(offset2 - wateroffset);
 
-            SpriteBatch.Draw(MapRender, MapRender.Bounds, gd.Viewport.Bounds, Color.White);
+            this.SpriteBatch.Draw(this.MapRender, this.MapRender.Bounds, gd.Viewport.Bounds, Color.White);
             fx.CurrentTechnique = fx.Techniques["FinalInsideBorders"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             gd.SetRenderTarget(this.WaterComposite);
             gd.Clear(Color.Transparent);
@@ -1142,19 +935,19 @@ namespace Start_a_Town_
             gd.Textures[4] = watertxt;
             gd.SamplerStates[4] = SamplerState.PointWrap;
             fx.Parameters["WaterTextureSize"].SetValue(new Vector2(watertxt.Width, watertxt.Height));
-            SpriteBatch.Draw(WaterRender, WaterRender.Bounds, gd.Viewport.Bounds, Color.White);
+            this.SpriteBatch.Draw(this.WaterRender, this.WaterRender.Bounds, gd.Viewport.Bounds, Color.White);
             // TODO: Must draw entities before final composition, so fog is applied over them accordingly
             fx.CurrentTechnique = fx.Techniques["CompositeWater"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             //sort objects back to front for proper semitraspanrent rendering
             // TODO: culling
-            SortEntities(map, objs);
+            this.SortEntities(map, objs);
             // TODO: have the particle manager set textures because different emitters might use different atlases (blocks vs entities)
             gd.Textures[0] = Sprite.Atlas.Texture;
             gd.Textures[1] = Sprite.Atlas.DepthTexture;
-            DrawEntities(scene, objs);
+            this.DrawEntities(scene, objs);
             map.DrawParticles(this.SpriteBatch, this);
 
             //  // draw entity shadows
@@ -1171,15 +964,15 @@ namespace Start_a_Town_
             gd.DepthStencilState = new DepthStencilState() { DepthBufferWriteEnable = true };
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             gd.SetRenderTargets(this.MapComposite, this.TextureFogWater, this.MapDepth);
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             //  draw particles drawn by entities
             fx.CurrentTechnique = fx.Techniques["Particles"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             gd.Textures[0] = Block.Atlas.Texture;// 
-            BlockParticlesSpriteBatch.Flush();
+            this.BlockParticlesSpriteBatch.Flush();
             gd.Textures[0] = Sprite.Atlas.Texture;// 
-            ParticlesSpriteBatch.Flush();
+            this.ParticlesSpriteBatch.Flush();
 
             // draw block mouseover highlight, here or after fog?
             // set textures here or in tool draw method?
@@ -1189,8 +982,8 @@ namespace Start_a_Town_
             fx.CurrentTechnique = fx.Techniques["BlockHighlight"];
             // gd.DepthStencilState = new DepthStencilState() { DepthBufferWriteEnable = true }; // this broke depth on block highlights
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            toolManager.DrawAfterWorld(SpriteBatch, map);
-            SpriteBatch.Flush();
+            toolManager.DrawAfterWorld(this.SpriteBatch, map);
+            this.SpriteBatch.Flush();
 
             // draw entity mouseover highlight
             fx.CurrentTechnique = fx.Techniques["EntityMouseover"];
@@ -1204,13 +997,13 @@ namespace Start_a_Town_
                     {
                         if (mouseover.Exists)
                         {
-                            mouseover.DrawMouseover(SpriteBatch, this);
+                            mouseover.DrawMouseover(this.SpriteBatch, this);
                         }
                     }
                 }
             }
 
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             // draw non-water on pre-final texture
             gd.SetRenderTargets(this.RenderBeforeFog, this.FogBeforeFog);
@@ -1224,19 +1017,19 @@ namespace Start_a_Town_
             gd.Textures[1] = this.TextureFogWater;
             gd.Textures[2] = fogtxt;
             gd.Textures[3] = this.MapDepth;
-            SpriteBatch.Draw(this.MapComposite, this.MapComposite.Bounds, gd.Viewport.Bounds, Color.White);
+            this.SpriteBatch.Draw(this.MapComposite, this.MapComposite.Bounds, gd.Viewport.Bounds, Color.White);
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             // draw water on pre-final texture
             gd.Textures[0] = this.WaterComposite;
             gd.Textures[1] = this.WaterFog;
             gd.Textures[2] = fogtxt;
             gd.Textures[3] = this.WaterDepth;
-            SpriteBatch.Draw(this.WaterComposite, this.WaterComposite.Bounds, gd.Viewport.Bounds, Color.White);
+            this.SpriteBatch.Draw(this.WaterComposite, this.WaterComposite.Bounds, gd.Viewport.Bounds, Color.White);
             fx.CurrentTechnique = fx.Techniques["Water"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             // draw block highlight now so it's correctly placed over water according to depth
             gd.Textures[0] = Sprite.Atlas.Texture;
@@ -1254,10 +1047,10 @@ namespace Start_a_Town_
             gd.Textures[2] = fogtxt;
             gd.Textures[3] = this.MapDepth; // i added this here because i'm using s3 in the shader to read depth and this index was set to waterdepth from the previous draw operation
 
-            SpriteBatch.Draw(this.RenderBeforeFog, this.RenderBeforeFog.Bounds, gd.Viewport.Bounds, Color.White);
+            this.SpriteBatch.Draw(this.RenderBeforeFog, this.RenderBeforeFog.Bounds, gd.Viewport.Bounds, Color.White);
             fx.CurrentTechnique = fx.Techniques["ApplyFog"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             ///test
             ///i moved this here from ingame.cs's draw method
@@ -1269,7 +1062,7 @@ namespace Start_a_Town_
             ///
 
             // draw final scene to backbuffer
-            RenderTarget2D[] targets = new RenderTarget2D[] { this.FinalScene, this.RenderBeforeFog, FogBeforeFog,
+            RenderTarget2D[] targets = new RenderTarget2D[] { this.FinalScene, this.RenderBeforeFog, this.FogBeforeFog,
                 this.WaterRender, this.WaterDepth, this.WaterLight, this.WaterFog,
                 this.WaterComposite,
                 this.MapRender,
@@ -1282,14 +1075,14 @@ namespace Start_a_Town_
             fx.CurrentTechnique = fx.Techniques["Normal"];
 
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            SpriteBatch.Draw(this.FinalScene, this.FinalScene.Bounds, gd.Viewport.Bounds, Color.White);
+            this.SpriteBatch.Draw(this.FinalScene, this.FinalScene.Bounds, gd.Viewport.Bounds, Color.White);
 
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
 
             // draw ui and other elements
-            map.DrawWorld(SpriteBatch, this);
+            map.DrawWorld(this.SpriteBatch, this);
 
-            SpriteBatch.Flush();
+            this.SpriteBatch.Flush();
         }
 
         private void DrawEntities(SceneState scene, List<GameObject> objs)
@@ -1297,18 +1090,14 @@ namespace Start_a_Town_
             foreach (var obj in objs)
             {
                 if (obj.Global.Z > this.MaxDrawZ + 1)
-                {
                     continue;
-                }
 
                 // TODO: check bounding box intersection instead of single point to avoid entity pop-in
                 var bounds = obj.GetScreenBounds(this); // TODO: cache bounds?
                 if (!this.ViewPort.Intersects(bounds))
-                {
                     continue;
-                }
 
-                obj.Draw(SpriteBatch, this);
+                obj.Draw(this.SpriteBatch, this);
                 scene.ObjectsDrawn.Add(obj);
             }
         }
@@ -1320,37 +1109,20 @@ namespace Start_a_Town_
                 float d1 = o1.Global.GetDrawDepth(map, this);
                 float d2 = o2.Global.GetDrawDepth(map, this);
                 if (d1 < d2)
-                {
                     return -1;
-                }
                 else if (d1 == d2)
-                {
                     return 0;
-                }
                 else
-                {
                     return 1;
-                }
             });
         }
         public void NewDraw(RenderTarget2D target, MapBase map, GraphicsDevice gd, EngineArgs a, SceneState scene, ToolManager toolManager)
         {
-            if (MapRender == null)
-            {
-                MapRender = new RenderTarget2D(gd, target.Width, target.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.DiscardContents);
-            }
+            this.MapRender ??= new RenderTarget2D(gd, target.Width, target.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.DiscardContents);
+            this.MapDepth ??= new RenderTarget2D(gd, target.Width, target.Height, false, SurfaceFormat.Rg32, DepthFormat.Depth16, 0, RenderTargetUsage.DiscardContents);
+            this.MapLight ??= new RenderTarget2D(gd, target.Width, target.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.DiscardContents);
 
-            if (MapDepth == null)
-            {
-                MapDepth = new RenderTarget2D(gd, target.Width, target.Height, false, SurfaceFormat.Rg32, DepthFormat.Depth16, 0, RenderTargetUsage.DiscardContents);
-            }
-
-            if (MapLight == null)
-            {
-                MapLight = new RenderTarget2D(gd, target.Width, target.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.DiscardContents);
-            }
-
-            Effect fx = Game1.Instance.Content.Load<Effect>("blur");
+            var fx = Game1.Instance.Content.Load<Effect>("blur");
 
             fx.Parameters["BlockWidth"].SetValue(Block.Width + 2 * Graphics.Borders.Thickness);
             fx.Parameters["BlockHeight"].SetValue(Block.Height + 2 * Graphics.Borders.Thickness);
@@ -1376,50 +1148,50 @@ namespace Start_a_Town_
             MySpriteBatch mySB = new MySpriteBatch(gd);
 
             // use new technique to draw both color and light in one pass in multiple rendertargets
-            DrawBlocks(map, gd, a, fx, mySB);
+            this.DrawBlocks(map, gd, a, fx, mySB);
 
             // combine scenes
             gd.SetRenderTarget(target);
-            DrawScene(target, gd, fx, mySB);
+            this.DrawScene(target, gd, fx, mySB);
 
             // draw objects
-            DrawEntities(map, gd, scene, fx, mySB);
+            this.DrawEntities(map, gd, scene, fx, mySB);
 
             // draw entity shadows
-            DrawEntityShadows(map, gd, fx, mySB);
+            this.DrawEntityShadows(map, gd, fx, mySB);
 
             // draw block selection, using shadow shader for projected textures
-            DrawBlockSelection(map, toolManager, fx, mySB);
+            this.DrawBlockSelection(map, toolManager, fx, mySB);
 
-            DrawMouseoverEntity(fx, mySB);
+            this.DrawMouseoverEntity(fx, mySB);
         }
 
         private void DrawBlocks(MapBase map, GraphicsDevice gd, EngineArgs a, Effect fx, MySpriteBatch mySB)
         {
-            gd.SetRenderTargets(MapRender, MapLight, MapDepth);
+            gd.SetRenderTargets(this.MapRender, this.MapLight, this.MapDepth);
             gd.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, new Color(1f, 1f, 1f, 0), 1, 1);
             fx.CurrentTechnique = fx.Techniques["Combined"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             gd.Textures[0] = Block.Atlas.Texture;
             gd.Textures[2] = MapBase.ShaderMouseMap;
             gd.Textures[3] = MapBase.BlockDepthMap;
-            DepthNear = float.MinValue;
-            DepthFar = float.MaxValue;
+            this.DepthNear = float.MinValue;
+            this.DepthFar = float.MaxValue;
             map.DrawBlocks(mySB, this, a);
-            fx.Parameters["FarDepth"].SetValue(DepthFar);
-            fx.Parameters["NearDepth"].SetValue(DepthNear);
-            fx.Parameters["DepthResolution"].SetValue((2) / (DepthNear - DepthFar));
-            fx.Parameters["OutlineThreshold"].SetValue((1) / (DepthNear - DepthFar));
+            fx.Parameters["FarDepth"].SetValue(this.DepthFar);
+            fx.Parameters["NearDepth"].SetValue(this.DepthNear);
+            fx.Parameters["DepthResolution"].SetValue((2) / (this.DepthNear - this.DepthFar));
+            fx.Parameters["OutlineThreshold"].SetValue((1) / (this.DepthNear - this.DepthFar));
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             mySB.Flush();
         }
         private void DrawScene(RenderTarget2D target, GraphicsDevice gd, Effect fx, MySpriteBatch mySB)
         {
             gd.Clear(Color.Transparent);
-            gd.Textures[0] = MapRender;
-            gd.Textures[1] = MapLight;
-            gd.Textures[2] = MapDepth;
-            mySB.Draw(MapRender, MapRender.Bounds, target.Bounds, Color.White);
+            gd.Textures[0] = this.MapRender;
+            gd.Textures[1] = this.MapLight;
+            gd.Textures[2] = this.MapDepth;
+            mySB.Draw(this.MapRender, this.MapRender.Bounds, target.Bounds, Color.White);
             fx.CurrentTechnique = fx.Techniques["FinalInsideBorders"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             mySB.Flush();
@@ -1439,10 +1211,7 @@ namespace Start_a_Town_
             fx.CurrentTechnique = fx.Techniques["Default"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             if (mouseover is not null)
-            {
                 mouseover.DrawMouseover(mySB, this);
-            }
-
             mySB.Flush();
         }
         private void DrawBlockSelection(MapBase map, ToolManager toolManager, Effect fx, MySpriteBatch mySB)
@@ -1465,37 +1234,25 @@ namespace Start_a_Town_
         public void HandleKeyDown(KeyEventArgs e)
         {
             if (e.Handled)
-            {
                 return;
-            }
 
             if (e.KeyValue == (int)GlobalVars.KeyBindings.RotateMapLeft)
-            {
                 this.Rotation += 1;
-            }
             if (e.KeyValue == (int)GlobalVars.KeyBindings.RotateMapRight)
-            {
                 this.Rotation -= 1;
-            }
-            if (e.KeyValue == (int)System.Windows.Forms.Keys.W)
-            {
-                if (InputState.IsKeyDown(System.Windows.Forms.Keys.LMenu))
-                {
+            if (e.KeyValue == (int)Keys.W)
+                if (InputState.IsKeyDown(Keys.LMenu))
                     Engine.HideWalls = !Engine.HideWalls;
-                }
-            }
         }
         public void HandleKeyUp(KeyEventArgs e)
         {
             if (e.Handled)
-            {
                 return;
-            }
 
-            if (e.KeyValue == (int)System.Windows.Forms.Keys.F4)
+            if (e.KeyValue == (int)Keys.F4)
             {
                 var max = this.RenderTargets.GetUpperBound(0) + 1;
-                this.RenderIndex = (RenderIndex + 1) % max;// 3;
+                this.RenderIndex = (this.RenderIndex + 1) % max;// 3;
                 e.Handled = true;
             }
         }
@@ -1503,59 +1260,42 @@ namespace Start_a_Town_
         public void ZoomIncrease()
         {
             this.ZoomNext *= 2;
-            this.ZoomNext = MathHelper.Clamp(this.ZoomNext, ZoomMin, ZoomMax);
+            this.ZoomNext = MathHelper.Clamp(this.ZoomNext, this.ZoomMin, this.ZoomMax);
 
         }
         public void ZoomDecrease()
         {
             this.ZoomNext /= 2;
-            this.ZoomNext = MathHelper.Clamp(this.ZoomNext, ZoomMin, ZoomMax);
-
+            this.ZoomNext = MathHelper.Clamp(this.ZoomNext, this.ZoomMin, this.ZoomMax);
         }
-
         public void ZoomReset()
         {
             this.ZoomNext = InitialZoom;
         }
-        public void HandleLButtonDblClk(HandledMouseEventArgs e) { }
 
         public float GetFarDepth(MapBase map)
         {
             var size = map.GetSizeInChunks() * Chunk.Size;// -1;
-
-            switch ((int)this.Rotation)
+            return (int)this.Rotation switch
             {
-                case 0:
-                    return Vector3.Zero.GetDrawDepth(map, this);
-
-                case 1:
-                    return new Vector3(0, size, 0).GetDrawDepth(map, this);
-
-                case 2:
-                    return new Vector3(size, size, 0).GetDrawDepth(map, this);
-
-                case 3:
-                    return new Vector3(size, 0, 0).GetDrawDepth(map, this);
-
-                default: return 0;
-            }
+                0 => Vector3.Zero.GetDrawDepth(map, this),
+                1 => new Vector3(0, size, 0).GetDrawDepth(map, this),
+                2 => new Vector3(size, size, 0).GetDrawDepth(map, this),
+                3 => new Vector3(size, 0, 0).GetDrawDepth(map, this),
+                _ => 0,
+            };
         }
         public float GetNearDepth(MapBase map)
         {
             var size = map.GetSizeInChunks() * Chunk.Size;// -1;
-
-            switch ((int)this.Rotation)
+            return (int)this.Rotation switch
             {
-                case 0:
-                    return new Vector3(size, size, 0).GetDrawDepth(map, this);
-                case 1:
-                    return new Vector3(size, 0, 0).GetDrawDepth(map, this);
-                case 2:
-                    return Vector3.Zero.GetDrawDepth(map, this);
-                case 3:
-                    return new Vector3(0, size, 0).GetDrawDepth(map, this);
-                default: return 0;
-            }
+                0 => new Vector3(size, size, 0).GetDrawDepth(map, this),
+                1 => new Vector3(size, 0, 0).GetDrawDepth(map, this),
+                2 => Vector3.Zero.GetDrawDepth(map, this),
+                3 => new Vector3(0, size, 0).GetDrawDepth(map, this),
+                _ => 0,
+            };
         }
 
         public void UpdateMaxDrawLevel(MapBase map)
@@ -1565,7 +1305,7 @@ namespace Start_a_Town_
         public int GetMaxDrawLevel(MapBase map)
         {
             var actor = map.Net.GetPlayer()?.ControllingEntity;
-            var value = (this.HideTerrainAbovePlayer && (actor != null)) ? (int)actor.Transform.Global.RoundXY().Z + 2 + this.HideTerrainAbovePlayerOffset : this.DrawLevel;
+            var value = (this.HideTerrainAbovePlayer && (actor is not null)) ? (int)actor.Transform.Global.RoundXY().Z + 2 + this.HideTerrainAbovePlayerOffset : this.DrawLevel;
             value = Math.Min(MapBase.MaxHeight - 1, Math.Max(0, value));
             return value;
         }
@@ -1573,21 +1313,15 @@ namespace Start_a_Town_
         {
             this.HideTerrainAbovePlayer = !this.HideTerrainAbovePlayer;
             if (this.HideTerrainAbovePlayer)
-            {
                 this.HideTerrainAbovePlayerOffset = 0;
-            }
         }
 
         internal void AdjustDrawLevel(int p)
         {
             if (!this.HideTerrainAbovePlayer)
-            {
                 this.DrawLevel = Math.Min(MapBase.MaxHeight - 1, Math.Max(0, this.DrawLevel + p));
-            }
             else
-            {
                 this.HideTerrainAbovePlayerOffset += p;
-            }
         }
 
         public void OnDeviceLost()
@@ -1608,7 +1342,6 @@ namespace Start_a_Town_
 
             this.FinalScene = new RenderTarget2D(gfx, w, h, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.DiscardContents);
 
-
             this.WaterRender = new RenderTarget2D(gfx, w, h, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
             this.WaterDepth = new RenderTarget2D(gfx, w, h, false, SurfaceFormat.Rg32, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
             this.WaterLight = new RenderTarget2D(gfx, w, h, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
@@ -1618,87 +1351,72 @@ namespace Start_a_Town_
 
         public void MousePicking(MapBase map)
         {
-            foreach (var chunk in (from ch in map.GetActiveChunks().Values where this.ViewPort.Intersects(ch.GetScreenBounds(this)) select ch))
-            {
+            var visibleChunks = map.GetActiveChunks().Values.Where(ch => this.ViewPort.Intersects(ch.GetScreenBounds(this)));
+            foreach (var chunk in visibleChunks)
                 chunk.HitTestEntities(this);
-            }
 
-            if (Controller.Instance.MouseoverBlockNext.Object != null)
-            {
+            if (Controller.Instance.MouseoverBlockNext.Object is not null)
                 return;
-            }
 
             if (!BlockTargeting)
-            {
                 return;
-            }
 
             var controller = Controller.Instance;
             var hidewalls = Engine.HideWalls;
             var actor = map.Net.GetPlayer()?.ControllingEntity;
             bool playerExists = actor != null;
-            Vector3 playerGlobal = playerExists ? actor.Global : default(Vector3);
+            Vector3 playerGlobal = playerExists ? actor.Global : default;
             float radius = .01f * this.Zoom * this.Zoom; //occlusion radius
             bool found = false;
             var foundDepth = float.MinValue;
-            Vector3 foundGlobal = Vector3.Zero;
-            Vector2 foundMouse = Vector2.Zero;
+            var foundGlobal = Vector3.Zero;
+            var foundMouse = Vector2.Zero;
             Block foundBlock;
-            Rectangle foundRect = Rectangle.Empty;
+            var foundRect = Rectangle.Empty;
             var camx = this.Coordinates.X - (this.Width / 2f) / this.Zoom;
             var camy = this.Coordinates.Y - (this.Height / 2f) / this.Zoom;
             var mouse = UIManager.Mouse;
             var mousex = (int)mouse.X;
             var mousey = (int)mouse.Y;
-            bool behind = InputState.IsKeyDown(System.Windows.Forms.Keys.Menu);
-            var visibleChunks = (from ch in map.GetActiveChunks().Values.Reverse() where this.ViewPort.Intersects(ch.GetScreenBounds(this)) select ch).ToList();
+            bool behind = InputState.IsKeyDown(Keys.Menu);
 
-            int rectw = (int)(32 * this.Zoom);
-            int recth = (int)(40 * this.Zoom);
+            int rectw = (int)(Block.Width * this.Zoom);
+            int recth = (int)(Block.Height * this.Zoom);
             foreach (var chunk in visibleChunks)
             {
                 var chunkBounds = chunk.GetScreenBounds(this);
                 if (!chunkBounds.Contains(mousex, mousey))
-                {
                     continue;
-                }
 
                 Coords.Iso(this, chunk.X * Chunk.Size, chunk.Y * Chunk.Size, 0, out float chunkx, out float chunky);
                 chunkx -= camx;
                 chunky -= camy;
 
-                var foglvl = GetFogLevel();
+                var foglvl = this.GetFogLevel();
                 for (int j = this.MaxDrawZ; j >= foglvl; j--)
                 {
                     var slice = chunk.Slices[j];
-                    if (slice == null)
-                    {
+                    if (slice is null)
                         continue;
-                    }
 
                     if (!slice.Valid)
-                    {
                         continue;
-                    }
 
                     var arrays = new List<MyVertex[]>(3) {
                         slice.Canvas.Opaque.vertices,
                         slice.Canvas.NonOpaque.vertices,
                         slice.Canvas.Designations.vertices };
+
                     if (j == this.MaxDrawZ)
-                    {
                         arrays.Add(slice.Unknown.vertices);
-                    }
 
                     foreach (var array in arrays)
                     {
                         var count = array.Length;
                         for (int i = count - 4; i >= 0; i -= 4)
                         {
-                            if (!EarlyOutMousePicking(array, i, mousex, mousey, chunkx, chunky, rectw, recth, out int rectx, out int recty, out Vector3 global))
-                            {
+                            if (!this.EarlyOutMousePicking(array, i, mousex, mousey, chunkx, chunky, rectw, recth, out int rectx, out int recty, out Vector3 global))
                                 continue;
-                            }
 
                             // TODO: check intersection in previous stages
                             //if (rectx <= mousex && mousex < rectx + rectw && recty <= mousey && mousey < recty + recth)
@@ -1706,9 +1424,7 @@ namespace Start_a_Town_
                             var block = chunk.GetBlockFromGlobal(global.X, global.Y, global.Z);
 
                             if (!block.IsTargetable(global))
-                            {
                                 continue;
-                            }
 
                             if (hidewalls)
                             {
@@ -1728,21 +1444,17 @@ namespace Start_a_Town_
                                                 d /= new Vector2(this.Width / 2f, this.Height / 2f);
                                                 var l = d.LengthSquared();
                                                 if (l < radius)
-                                                {
                                                     continue;
-                                                }
                                             }
                                         }
                                     }
                                 }
                             }
 
-                            var xx = (int)((mousex - rectx) / Zoom);
-                            var yy = (int)((mousey - recty) / Zoom);
+                            var xx = (int)((mousex - rectx) / this.Zoom);
+                            var yy = (int)((mousey - recty) / this.Zoom);
                             if (!block.MouseMap.HitTestEarly(xx, yy))
-                            {
                                 continue;
-                            }
 
                             Coords.Rotate(this, global.X, global.Y, out int rx, out int ry);
                             var currentDepth = rx + ry + global.Z;
@@ -1765,7 +1477,7 @@ namespace Start_a_Town_
             if (found)
             {
                 // create mouseover anyway even if air in case of undiscovered area? or check drawunknownblocks?
-                CreateMouseover(map, foundGlobal, foundRect, foundMouse, behind);
+                this.CreateMouseover(map, foundGlobal, foundRect, foundMouse, behind);
             }
         }
         public bool EarlyOutMousePicking(MyVertex[] array, int i, float mousex, float mousey, float chunkx, float chunky, int rectw, int recth, out int rectx, out int recty, out Vector3 global)
@@ -1777,33 +1489,23 @@ namespace Start_a_Town_
 
             var br = array[i + 2].Position;
             if (br.X - tl.X == 0)
-            {
                 return false;
-            }
 
             var xxx = tl.X + chunkx;
             rectx = (int)(xxx * this.Zoom);
             if (mousex < rectx)
-            {
                 return false;
-            }
 
             var yyy = tl.Y + chunky;
             recty = (int)(yyy * this.Zoom);
             if (mousey < recty)
-            {
                 return false;
-            }
 
             if (mousex >= rectx + rectw)
-            {
                 return false;
-            }
 
             if (mousey >= recty + recth)
-            {
                 return false;
-            }
 
             return true;
         }
@@ -1815,48 +1517,36 @@ namespace Start_a_Town_
 
         public void DrawGrid(MySpriteBatch sb, MapBase map, IEnumerable<IntVec3> positions, Color col)
         {
-            var gridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
             Sprite.Atlas.Begin(sb);
 
             foreach (var pos in positions)
-            {
                 this.DrawGridCell(sb, col, pos);
-            }
 
             sb.Flush();
         }
         public void DrawGridCells(MySpriteBatch sb, Color col, IEnumerable<IntVec3> globals)
         {
-            GridSprite.AtlasToken.Atlas.Begin(sb);
+            this.GridSprite.AtlasToken.Atlas.Begin(sb);
             foreach (var pos in globals)
-            {
                 this.DrawGridCell(sb, col, pos);
-            }
 
             sb.Flush();
         }
         public void DrawGridCell(MySpriteBatch sb, Color col, Vector3 global)
         {
             if (global.Z > this.DrawLevel + 1)
-            {
                 return;
-            }
 
             var bounds = this.GetScreenBounds(global, Block.Bounds);
             var pos = new Vector2(bounds.X, bounds.Y);
             var depth = global.GetDrawDepth(Engine.Map, this);
 
-            // is this slow?
-            //GridSprite.AtlasToken.Atlas.Begin(sb);
-
-            sb.Draw(GridSprite.AtlasToken.Atlas.Texture, pos, GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
+            sb.Draw(this.GridSprite.AtlasToken.Atlas.Texture, pos, this.GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
         }
         public void DrawGridBlock(MySpriteBatch sb, Color col, IntVec3 global)
         {
             if (global.Z > this.DrawLevel)
-            {
                 return;
-            }
 
             var bounds = this.GetScreenBounds(global, Block.Bounds);
             var pos = new Vector2(bounds.X, bounds.Y);
@@ -1866,9 +1556,7 @@ namespace Start_a_Town_
         public void DrawGridBlock(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, Color col, IntVec3 global)
         {
             if (global.Z > this.DrawLevel)
-            {
                 return;
-            }
 
             sprite.Atlas.Begin(sb);
             var bounds = this.GetScreenBounds(global, Block.Bounds);
@@ -1880,10 +1568,7 @@ namespace Start_a_Town_
         {
             Sprite.Atlas.Begin(sb);
             foreach (var pos in positions)
-            {
                 this.DrawGridBlock(sb, col, pos);
-            }
-
             sb.Flush();
         }
         public void DrawGridBlocks(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, IEnumerable<IntVec3> positions, Color col)
@@ -1891,18 +1576,13 @@ namespace Start_a_Town_
             sb.Flush();
             sprite.Atlas.Begin(sb);
             foreach (var pos in positions)
-            {
                 this.DrawGridBlock(sb, sprite, col, pos);
-            }
-
             sb.Flush();
         }
         public void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Vector3 global, Color color)
         {
             if (global.Z > this.DrawLevel)
-            {
                 return;
-            }
 
             Rectangle bounds = Block.Bounds;
             this.GetEverything(map, global, bounds, out float cd, out Rectangle screenBounds, out Vector2 screenLoc);

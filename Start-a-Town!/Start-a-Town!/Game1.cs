@@ -82,7 +82,12 @@ namespace Start_a_Town_
 
         void graphics_DeviceCreated(object sender, EventArgs e)
         {
-            var resolution = Engine.Config.Descendants("Graphics").FirstOrDefault();
+            this.ApplyVideoSettings();
+        }
+
+        internal void ApplyVideoSettings()
+        {
+            var resolution = Engine.Config.Descendants("Video").FirstOrDefault();
             graphics.PreferredBackBufferWidth = (int?)resolution.Element("Resolution").Element("Width") ?? graphics.PreferredBackBufferWidth;
             graphics.PreferredBackBufferHeight = (int?)resolution.Element("Resolution").Element("Height") ?? graphics.PreferredBackBufferHeight;
             graphics.IsFullScreen = (bool?)resolution.Element("Fullscreen") ?? true;
@@ -217,7 +222,6 @@ namespace Start_a_Town_
 
                 Block.UpdateBlocks();
                 this.Network.Update(gameTime);
-                Engine.Update(gameTime);
                 ScreenManager.Instance.Update(this, gameTime);
 
                 Log.Update();

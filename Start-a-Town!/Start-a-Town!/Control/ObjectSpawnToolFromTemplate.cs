@@ -82,11 +82,8 @@ namespace Start_a_Town_
         {
             var cam = map.Camera;
             if (InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey))
-            {
-                Vector2 loc = Controller.Instance.MouseLocation / UIManager.Scale;
                 return;
-            }
-            if (this.Target == null || this.Target.Type == TargetType.Null)
+            if (this.Target is null || this.Target.Type == TargetType.Null)
                 return;
             this.Entity.DrawPreview(sb, cam, this.Target, InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey));
         }

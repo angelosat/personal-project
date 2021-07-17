@@ -23,11 +23,8 @@ namespace Start_a_Town_
         static public EngineArgs Default
         { get { return new EngineArgs(); } }
     }
-    public class Engine// : EntityComponent
+    public class Engine
     {
-        static Engine _Instance;
-        static public Engine Instance => _Instance ??= new Engine();
-
         static Engine()
         {
             try { Config = XDocument.Load("config.xml"); }
@@ -36,7 +33,7 @@ namespace Start_a_Town_
                 GenerateDefaultConfigFile(Game1.Instance.graphics.GraphicsDevice);
                 Config = XDocument.Load("config.xml");
             }
-            _DrawRooms = Config.GetOrCreateElement("Settings").GetOrCreateElement("Engine").GetOrCreateElement("DrawRooms", false);
+            _drawRooms = Config.GetOrCreateElement("Settings").GetOrCreateElement("Engine").GetOrCreateElement("DrawRooms", false);
         }
         public const int ChunkRadius = 2;
         public static XDocument Config;
@@ -45,18 +42,8 @@ namespace Start_a_Town_
             Config.Save("config.xml");
         }
         static XmlDocument _Settings;
-        public static XmlDocument Settings
-        {
-            get
-            {
-                if (_Settings == null)
-                    _Settings = InitSettings();
-                return _Settings;
-            }
-            set { _Settings = value; }
-        }
-
-        static public int LightQueries;
+        public static XmlDocument Settings => _Settings ??= InitSettings();
+       
         static MapBase _Map;
         static public MapBase Map
         {
@@ -73,7 +60,6 @@ namespace Start_a_Town_
         {
             return 
                 "\nActive Chunks: " + Engine.Map.GetActiveChunks().Count +
-                "\nLight Queries: " + LightQueries +
                 "\nTile draw time: " + TileDrawTime.Elapsed.ToString("0.00 ns");
         }
 
@@ -86,13 +72,13 @@ namespace Start_a_Town_
         static public bool MouseTooltip;
         public static bool DrawRegions;
 
-        static XElement _DrawRooms;
+        static XElement _drawRooms;
         public static bool DrawRooms
         {
-            get => bool.Parse(_DrawRooms.Value);
+            get => bool.Parse(_drawRooms.Value);
             set
             {
-                _DrawRooms.SetValue(value);
+                _drawRooms.SetValue(value);
                 SaveConfig();
             }
         }
@@ -101,7 +87,7 @@ namespace Start_a_Town_
         {
             XmlDocument settings = new XmlDocument();
             try { settings.Load("config.xml"); }
-            catch (System.IO.FileNotFoundException e)
+            catch (System.IO.FileNotFoundException)
             {
                 GenerateDefaultConfigFile(Game1.Instance.graphics.GraphicsDevice);
                 settings.Load("config.xml");
@@ -116,11 +102,6 @@ namespace Start_a_Town_
             HideOccludedBlocks = false;
             DrawRooms = bool.Parse(settings["Settings"]["Engine"]["DrawRooms"]?.InnerText ?? bool.TrueString);
             return settings;
-        }
-
-        static public void Update(GameTime gt)
-        {
-            LightQueries = 0;
         }
 
         static void GenerateDefaultConfigFile(GraphicsDevice gfx)
@@ -155,18 +136,12 @@ namespace Start_a_Town_
 
         static public void Init(Game1 game)
         {
-            var resolution = Engine.Config.Descendants("Graphics").FirstOrDefault();
-            game.graphics.PreferredBackBufferWidth = (int?)resolution.Element("Resolution").Element("Width") ?? game.graphics.PreferredBackBufferWidth;
-            game.graphics.PreferredBackBufferHeight = (int?)resolution.Element("Resolution").Element("Height") ?? game.graphics.PreferredBackBufferHeight;
-            game.graphics.IsFullScreen = (bool?)resolution.Element("Fullscreen") ?? true;
+            //var resolution = Engine.Config.Descendants("Video").FirstOrDefault();
+            //game.graphics.PreferredBackBufferWidth = (int?)resolution.Element("Resolution").Element("Width") ?? game.graphics.PreferredBackBufferWidth;
+            //game.graphics.PreferredBackBufferHeight = (int?)resolution.Element("Resolution").Element("Height") ?? game.graphics.PreferredBackBufferHeight;
+            //game.graphics.IsFullScreen = (bool?)resolution.Element("Fullscreen") ?? true;
+            game.ApplyVideoSettings();
             game.graphics.ApplyChanges();
-
-        }
-
-
-        internal static void InitializeComponents()
-        {
-            
         }
 
         static public void PlayGame()

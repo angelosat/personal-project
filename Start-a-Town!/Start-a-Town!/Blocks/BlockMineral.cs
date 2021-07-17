@@ -77,41 +77,19 @@ namespace Start_a_Town_
             sb.Draw(token.Atlas.Texture, pos - new Vector2(token.Rectangle.Width, token.Rectangle.Height) * 0.5f, token.Rectangle, this.BlockState.GetTint(state));
         }
 
-        public override IBlockState BlockState
-        {
-            get
-            {
-                return new State();
-            }
-        }
+        public override IBlockState BlockState => new State();
+            
 
         public BlockMineral()
             : base(Block.Types.Mineral,  0, 1, true, true)
         {
             this.LoadVariations("stone5height19");
         }
-
-        public override Material GetMaterial(MapBase map, Vector3 global)
-        {
-            var data = map.GetBlockData(global);
-            return Material.Registry[data];
-        }
+        
         public override Material GetMaterial(byte data)
         {
             return Material.Registry[data];
         }
-
-
-        //public override void Break(IMap map, Vector3 global)
-        //{
-        //    var net = map.Net;
-        //    var state = new State(map, global);
-        //    var material = state.Material;
-        //    var rawmaterialentity = material.ProcessingChain.First().IDType;
-        //    var loottable = new LootTable(new Loot(rawmaterialentity, 0.75f, 4));
-        //    net.PopLoot(loottable, global, Vector3.Zero);
-        //    net.SetBlock(global, Block.Types.Air);
-        //}
 
         public override byte ParseData(string data)
         {
@@ -123,7 +101,7 @@ namespace Start_a_Town_
             return (byte)mat.ID;
         }
 
-        public override List<Interaction> GetAvailableTasks(MapBase map, Vector3 global)
+        public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
         {
             return new List<Interaction>(){
                 new InteractionMining()

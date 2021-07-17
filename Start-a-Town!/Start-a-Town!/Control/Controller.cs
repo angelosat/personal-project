@@ -32,7 +32,6 @@ namespace Start_a_Town_
 
         public KeyboardState ksCurrent, ksPrevious;
         public MouseState msCurrent, msPrevious;
-        public Game1 game;
 
         static Controller _instance;
         public static Controller Instance => _instance ??= new Controller();
@@ -165,9 +164,7 @@ namespace Start_a_Town_
         {
             var global = entity.Global;
             if (!camera.IsDrawable(entity.Map, global))
-            {
                 return;
-            }
 
             float mouseoverDepth = drawdepth;
             if (mouseoverDepth >= Instance.MouseoverBlockNext.Depth)

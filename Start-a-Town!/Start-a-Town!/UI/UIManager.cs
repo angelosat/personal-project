@@ -22,28 +22,28 @@ namespace Start_a_Town_.UI
     public struct OuterPadding
     {
         public static Rectangle
-            TopLeft = new Rectangle(0, 0, 11, 11),
-            TopRight = new Rectangle(12, 0, 11, 11),
-            BottomLeft = new Rectangle(0, 12, 11, 11),
-            BottomRight = new Rectangle(12, 12, 11, 11),
-            Top = new Rectangle(12, 0, 1, 11),
-            Left = new Rectangle(0, 12, 11, 1),
-            Right = new Rectangle(12, 11, 11, 1),
-            Bottom = new Rectangle(11, 12, 1, 11),
-            Center = new Rectangle(11, 11, 1, 1);
+            TopLeft = new(0, 0, 11, 11),
+            TopRight = new(12, 0, 11, 11),
+            BottomLeft = new(0, 12, 11, 11),
+            BottomRight = new(12, 12, 11, 11),
+            Top = new(12, 0, 1, 11),
+            Left = new(0, 12, 11, 1),
+            Right = new(12, 11, 11, 1),
+            Bottom = new(11, 12, 1, 11),
+            Center = new(11, 11, 1, 1);
     }
     public struct InnerPadding
     {
         public static Rectangle
-            TopLeft = new Rectangle(0, 0, 19, 19),
-            TopRight = new Rectangle(19, 0, 19, 19),
-            BottomLeft = new Rectangle(0, 19, 19, 19),
-            BottomRight = new Rectangle(19, 19, 19, 19),
-            Top = new Rectangle(19, 0, 1, 19),
-            Left = new Rectangle(0, 19, 19, 1),
-            Right = new Rectangle(19, 19, 19, 1),
-            Bottom = new Rectangle(19, 19, 1, 19),
-            Center = new Rectangle(18, 18, 1, 1);
+            TopLeft = new(0, 0, 19, 19),
+            TopRight = new(19, 0, 19, 19),
+            BottomLeft = new(0, 19, 19, 19),
+            BottomRight = new(19, 19, 19, 19),
+            Top = new(19, 0, 1, 19),
+            Left = new(0, 19, 19, 1),
+            Right = new(19, 19, 19, 1),
+            Bottom = new(19, 19, 1, 19),
+            Center = new(18, 18, 1, 1);
     }
     public class UIManager : IDisposable, IKeyEventHandler
     {
@@ -59,44 +59,23 @@ namespace Start_a_Town_.UI
             get { return _Scale; }
             set
             {
-                UIScaleEventArgs e = new UIScaleEventArgs(_Scale, value);
-                foreach (UIManager manager in WindowManagers)
-                {
+                var e = new UIScaleEventArgs(_Scale, value);
+                foreach (var manager in WindowManagers)
                     foreach (var layer in manager.Layers)
-                    {
                         foreach (var ctrl in layer.Value)
-                        {
                             ctrl.Reposition(e);
-                        }
-                    }
-                }
-
                 _Scale = value;
                 UITexture = new RenderTarget2D(Game1.Instance.GraphicsDevice, Width, Height);
-
             }
         }
-
 
         public readonly Control DialogBlock = new DialogBlock();
 
         public static Rectangle Bounds
         { get { return new Rectangle(0, 0, Width, Height); } }
         public static Vector2 Center { get { return Game1.ScreenSize / (2 * Scale); } }
-        public static int Width
-        {
-            get
-            {
-                return (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
-            }
-        }
-        public static int Height
-        {
-            get
-            {
-                return (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
-            }
-        }
+        public static int Width => (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
+        public static int Height => (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
 
         public static Vector2 Size { get { return new Vector2(Width, Height); } }
         public static Vector2 Mouse { get { return Controller.Instance.MouseLocation / Scale; } }
@@ -138,44 +117,44 @@ namespace Start_a_Town_.UI
         public int LastScreenWidth, LastScreenHeight;
         public Window Dialog;
 
-        static Texture2D _Highlight;
+        static Texture2D _highlight;
         public static Texture2D Highlight
         {
             get
             {
-                if (_Highlight == null)
+                if (_highlight is null)
                 {
-                    _Highlight = new Texture2D(Game1.Instance.GraphicsDevice, 1, 1);
-                    _Highlight.SetData(new Color[] { Color.White });
+                    _highlight = new Texture2D(Game1.Instance.GraphicsDevice, 1, 1);
+                    _highlight.SetData(new Color[] { Color.White });
                 }
-                return _Highlight;
+                return _highlight;
             }
         }
-        static Texture2D _TransparentHighlight;
+        static Texture2D _transparentHighlight;
         public static Texture2D TransparentHighlight
         {
             get
             {
-                if (_TransparentHighlight is null)
+                if (_transparentHighlight is null)
                 {
-                    _TransparentHighlight = new Texture2D(Game1.Instance.GraphicsDevice, 3, 3);
-                    _TransparentHighlight.SetData(new Color[] { Color.White, Color.White, Color.White, Color.White, Color.Transparent, Color.White, Color.White, Color.White, Color.White });
+                    _transparentHighlight = new Texture2D(Game1.Instance.GraphicsDevice, 3, 3);
+                    _transparentHighlight.SetData(new Color[] { Color.White, Color.White, Color.White, Color.White, Color.Transparent, Color.White, Color.White, Color.White, Color.White });
                 }
-                return _TransparentHighlight;
+                return _transparentHighlight;
             }
         }
 
-        static Texture2D _Shade;
+        static Texture2D _shade;
         public static Texture2D Shade
         {
             get
             {
-                if (_Shade is null)
+                if (_shade is null)
                 {
-                    _Shade = new Texture2D(Game1.Instance.GraphicsDevice, 1, 1);
-                    _Shade.SetData(new Color[] { Color.Black });
+                    _shade = new Texture2D(Game1.Instance.GraphicsDevice, 1, 1);
+                    _shade.SetData(new Color[] { Color.Black });
                 }
-                return _Shade;
+                return _shade;
             }
         }
 
@@ -199,7 +178,6 @@ namespace Start_a_Town_.UI
 
         public static readonly Texture2D UpArrow = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-up1");
         public static readonly Texture2D DownArrow = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-down1");
-
 
         public static void LoadContent()
         {
@@ -231,13 +209,9 @@ namespace Start_a_Town_.UI
 
             var scaleNode = Engine.Config.Descendants("UIScale").FirstOrDefault();
             if (float.TryParse(scaleNode.Value, out float scale)) // do i need to check for scalenode == null?
-            {
                 Scale = scale;
-            }
             else
-            {
                 Scale = 1;
-            }
         }
 
         internal void OnSelectedTargetChanged(TargetArgs target)
@@ -247,9 +221,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.OnSelectedTargetChanged(target);
-                }
             }
         }
 
@@ -337,21 +309,19 @@ namespace Start_a_Town_.UI
         {
 
             bool closedsomething = false;
-            List<Control> toclose = new List<Control>();
+            var toclose = new List<Control>();
             foreach (var layer in this.Layers)
-            {
                 toclose.AddRange(layer.Value.FindAll(foo => foo is Window));
-            }
 
             if (toclose.Count > 0)
             {
                 foreach (Control c in toclose)
                 {
-                    if (c is Window)
+                    if (c is Window win)
                     {
-                        if ((c as Window).Closable)
+                        if (win.Closable)
                         {
-                            (c as Window).Close();
+                            win.Close();
                             closedsomething = true;
                         }
                     }
@@ -364,23 +334,15 @@ namespace Start_a_Town_.UI
         public void DrawOnCamera(SpriteBatch sb, Camera camera)
         {
             foreach (var layer in this.Layers)
-            {
                 foreach (var ctrl in layer.Value.ToList())
-                {
                     ctrl.DrawOnCamera(sb, camera);
-                }
-            }
         }
 
         public void DrawWorld(MySpriteBatch sb, Camera camera)
         {
             foreach (var layer in this.Layers)
-            {
                 foreach (var ctrl in layer.Value.ToList())
-                {
                     ctrl.DrawWorld(sb, camera);
-                }
-            }
         }
 
         public void Draw(SpriteBatch sb, Camera camera)
@@ -390,18 +352,12 @@ namespace Start_a_Town_.UI
             gd.SetRenderTarget(uiTexture);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-            if (camera != null)
-            {
+            if (camera is not null)
                 this.DrawOnCamera(sb, camera);
-            }
 
             foreach (var layer in this.Layers)
-            {
                 foreach (var ctrl in layer.Value.ToList())
-                {
                     ctrl.Draw(sb, Bounds);
-                }
-            }
 
             TooltipManager.Instance.Draw(sb);
             DragDropManager.Instance.Draw(sb);
@@ -413,23 +369,17 @@ namespace Start_a_Town_.UI
         }
         public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline, SpriteFont font)
         {
-            if (text == null)
-            {
+            if (text is null)
                 return;
-            }
 
             if (text == "")
-            {
                 return;
-            }
 
             position = position.Round();
-            Vector2 origin = font.MeasureString(text) * texOrigin;
+            var origin = font.MeasureString(text) * texOrigin;
             origin = new Vector2((int)origin.X, (int)origin.Y);
             foreach (var n in Vector2.Zero.GetNeighbors8())
-            {
                 sb.DrawString(font, text, position + n, outline, 0, origin, 1, SpriteEffects.None, 0);
-            }
 
             sb.DrawString(font, text, position, fill, 0, origin, 1, SpriteEffects.None, 0);
         }
@@ -451,8 +401,7 @@ namespace Start_a_Town_.UI
         }
         public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f, float depth = 0)
         {
-            Vector2 origin = Vector2.Zero;
-            Vector2 size = UIManager.Font.MeasureString(text);
+            var size = UIManager.Font.MeasureString(text);
             int xx = 0, yy = 0;
             switch (hAlign)
             {
@@ -476,12 +425,10 @@ namespace Start_a_Town_.UI
                 default:
                     break;
             }
-            origin = new Vector2(xx, yy);
+            var origin = new Vector2(xx, yy);
 
             foreach (var n in Vector2.Zero.GetNeighbors8())
-            {
                 sb.DrawString(Font, text, position + n, new Color(0f, 0f, 0f, opacity), 0, origin, 1, SpriteEffects.None, depth);
-            }
 
             sb.DrawString(Font, text, position, new Color(1f, 1f, 1f, opacity), 0, origin, 1, SpriteEffects.None, depth);
         }
@@ -513,9 +460,7 @@ namespace Start_a_Town_.UI
             }
             var origin = new Vector2(xx, yy);
             foreach (var n in Vector2.Zero.GetNeighbors8())
-            {
                 sb.DrawString(Font, text, position + n, new Color(0f, 0f, 0f, opacity), 0, origin, scale, SpriteEffects.None, 0);
-            }
 
             sb.DrawString(Font, text, position, new Color(1f, 1f, 1f, opacity), 0, origin, scale, SpriteEffects.None, 0);
         }
@@ -538,9 +483,7 @@ namespace Start_a_Town_.UI
                     this.Layers[LayerDialog].Remove(this.DialogBlock);
                     int index = this.Layers[LayerDialog].Count - 1;
                     if (index < 0)
-                    {
                         return true;
-                    }
 
                     this.Layers[LayerDialog].Insert(index, this.DialogBlock);
                 }
@@ -558,9 +501,7 @@ namespace Start_a_Town_.UI
                     this.Layers[LayerDialog].Remove(this.DialogBlock);
                     int index = this.Layers[LayerDialog].Count - 1;
                     if (index < 0)
-                    {
                         return true;
-                    }
 
                     this.Layers[LayerDialog].Insert(index, this.DialogBlock);
                 }
@@ -619,12 +560,8 @@ namespace Start_a_Town_.UI
         public void Initialize()
         {
             foreach (var layer in this.Layers)
-            {
                 foreach (Control ctrl in layer.Value)
-                {
                     ctrl.Dispose();
-                }
-            }
         }
 
         public void OnGotFocus() { }
@@ -637,9 +574,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleKeyPress(e);
-                }
             }
         }
         public void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
@@ -649,33 +584,25 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleKeyDown(e);
-                }
             }
         }
         public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             if (e.Handled)
-            {
                 return;
-            }
 
             foreach (var layer in this.Layers.Reverse())
             {
                 List<Control> wins = layer.Value.ToList();
                 foreach (Control c in wins)
-                {
                     c.HandleKeyUp(e);
-                }
             }
         }
         public virtual void HandleMouseMove(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveControl == null)
-            {
+            if (this.ActiveControl is null)
                 return;
-            }
 
             this.ActiveControl.HandleMouseMove(e);
             e.Handled = true;
@@ -687,15 +614,11 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleLButtonDown(e);
-                }
             }
 
             if (this.ActiveControl != null)
-            {
                 e.Handled = true;
-            }
         }
         public virtual void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -704,9 +627,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleLButtonUp(e);
-                }
             }
         }
         public virtual void HandleRButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
@@ -716,14 +637,10 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleRButtonDown(e);
-                }
             }
             if (this.ActiveControl is not null)
-            {
                 e.Handled = true;
-            }
         }
         public virtual void HandleRButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -732,9 +649,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleRButtonUp(e);
-                }
             }
         }
         public virtual void HandleMiddleUp(System.Windows.Forms.HandledMouseEventArgs e)
@@ -744,9 +659,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleMiddleUp(e);
-                }
             }
         }
         public virtual void HandleMiddleDown(System.Windows.Forms.HandledMouseEventArgs e)
@@ -756,9 +669,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleMiddleDown(e);
-                }
             }
         }
         public virtual void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
@@ -768,9 +679,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleMouseWheel(e);
-                }
             }
         }
         public virtual void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
@@ -780,9 +689,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.HandleLButtonDoubleClick(e);
-                }
             }
         }
         internal void OnGameEvent(GameEvent e)
@@ -792,9 +699,7 @@ namespace Start_a_Town_.UI
                 List<Control> wins = layer.Value.ToList();
                 wins.Reverse();
                 foreach (Control c in wins)
-                {
                     c.OnGameEvent(e);
-                }
             }
         }
 
@@ -807,24 +712,16 @@ namespace Start_a_Town_.UI
 
             var list = new List<Rectangle>();
             if (rect.Y > screen.Y)
-            {
                 list.Add(new Rectangle(screen.X, screen.Y, screen.Width, rect.Y - screen.Y));
-            }
 
             if (bottom < screen.Y + screen.Height)
-            {
                 list.Add(new Rectangle(screen.X, bottom, screen.Width, dy));
-            }
 
             if (rect.X > screen.X)
-            {
                 list.Add(new Rectangle(screen.X, screen.Y, rect.X - screen.X, screen.Height));
-            }
 
             if (right < screen.X + screen.Width)
-            {
                 list.Add(new Rectangle(right, screen.Y, dx, screen.Height));
-            }
 
             return list;
         }
@@ -850,9 +747,7 @@ namespace Start_a_Town_.UI
                             foreach (var div in divisions)
                             {
                                 if (!freeRects.Contains(div))
-                                {
                                     freeRects.Add(div);
-                                }
                             }
                         }
                     }
@@ -870,9 +765,7 @@ namespace Start_a_Town_.UI
             foreach (var rect in ordered)
             {
                 if (w <= rect.Width && h <= rect.Height)
-                {
                     return rect;
-                }
             }
             return bestRect;
         }

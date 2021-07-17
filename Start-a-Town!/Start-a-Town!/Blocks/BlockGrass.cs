@@ -89,14 +89,13 @@ namespace Start_a_Town_
             BlockDefOf.Soil.Place(map, global, 0, cell.Variation, 0);
         }
        
-        public override void OnSteppedOn(GameObject actor, Vector3 global)
+        public override void OnSteppedOn(GameObject actor, IntVec3 global)
         {
             var net = actor.Net;
             if (net is Client)
                 return;
             if (actor.Map.Random.Chance(TramplingChance))
                 Packets.SyncTrample(actor.Map, global);
-            
         }
        
         internal override float GetFertility(Cell cell)

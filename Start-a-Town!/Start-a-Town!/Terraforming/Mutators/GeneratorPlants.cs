@@ -35,7 +35,7 @@ namespace Start_a_Town_
                         plant.Growth = 1;
                         int gx = x + (int)chunk.Start.X, gy = y + (int)chunk.Start.Y;
                         plant.Global = new Vector3(gx, gy, z + 1);
-                        chunk.Objects.Add(plant);
+                        chunk.Add(plant);
                     }
                 }
             }

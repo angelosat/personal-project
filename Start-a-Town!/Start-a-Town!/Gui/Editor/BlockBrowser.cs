@@ -18,10 +18,7 @@ namespace Start_a_Town_.UI.Editor
             var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air
             this.GridBlocks = new SlotGrid<Slot<Block>, Block>(blocks, 8, (slot, bl) =>
             {
-                slot.LeftClickAction = () =>
-                {
-                    this.RefreshVariations(bl);
-                };
+                slot.LeftClickAction = () => this.RefreshVariations(bl);
             })
             { Location = this.Panel_Blocks.Controls.BottomLeft };
             this.Panel_Blocks.Controls.Add(this.GridBlocks);

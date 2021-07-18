@@ -9,9 +9,12 @@ namespace Start_a_Town_.UI
         public Func<GameObject, bool> DragDropCondition = o => true;
         public Func<T, string> CornerTextFunc = (slot) => "";
         public Action<SpriteBatch, T> PaintAction = (s, t) => { };
-        Func<DragEventArgs, DragDropEffects> _DragDropAction = (args) => DragDropEffects.None;
+        Func<DragEventArgs, DragDropEffects> _dragDropAction = (args) => DragDropEffects.None;
         public Func<DragEventArgs, DragDropEffects> DragDropAction
-        { get => this._DragDropAction; set => this._DragDropAction = value; }
+        { 
+            get => this._dragDropAction; 
+            set => this._dragDropAction = value; 
+        }
         protected override void OnTextChanged()
         {
 
@@ -92,7 +95,7 @@ namespace Start_a_Town_.UI
             this.Height = UIManager.SlotSprite.Height;
             this.BottomRightLabel = new Label(new Vector2(UIManager.SlotSprite.Width), "", HorizontalAlignment.Right, VerticalAlignment.Bottom);
             this.Controls.Add(this.BottomRightLabel);
-            this.Tag = default(T);
+            this.Tag = default;
             this.Text = "";
         }
         public bool AutoText = true;

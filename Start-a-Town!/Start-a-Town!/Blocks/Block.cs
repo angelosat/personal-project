@@ -110,6 +110,7 @@ namespace Start_a_Town_
         }
         public void GetTooltipInfo(Control tooltip)
         {
+            tooltip.AddControls(this.Name.ToLabel());
         }
 
         public virtual void GetTooltip(Control tooltip, MapBase map, Vector3 global)

@@ -25,7 +25,6 @@ namespace Start_a_Town_
             a.Write(stream);
             if(!a.Removing)
                 item.Write(stream);
-            
         }
         static public void Receive(INetwork net, BinaryReader r)
         {
@@ -33,7 +32,6 @@ namespace Start_a_Town_
             var product = args.Removing ? null : new ProductMaterialPair(r);
             var positions = ToolDrawing.GetPositions(args);
             net.Map.Town.ConstructionsManager.Handle(args, product, positions);
-            
 
             if (net is Server)
                 Send(net, product, args);

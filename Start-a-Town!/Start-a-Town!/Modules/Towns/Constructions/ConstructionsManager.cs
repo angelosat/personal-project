@@ -95,7 +95,7 @@ namespace Start_a_Town_
                     if(this.Map.GetBlockEntity<BlockDesignation.BlockDesignationEntity>(pos) is BlockDesignation.BlockDesignationEntity blockEntity)
                     {
                         var origin = blockEntity.OriginGlobal;
-                        this.Map.RemoveBlockNew(origin);
+                        this.Map.RemoveBlock(origin);
                     }
                     else if (this.PendingDesignations.ContainsKey(pos))
                         this.PendingDesignations.Remove(pos);
@@ -165,7 +165,7 @@ namespace Start_a_Town_
                         this.Designations.Remove(desEntity.OriginGlobal);
                     }
                 }
-                map.RemoveBlocks(positions.Where(vec => map.GetBlock(vec) == BlockDefOf.Designation).ToList(), false);
+                map.RemoveBlocks(positions.Where(vec => map.GetBlock(vec) == BlockDefOf.Designation), false);
             }
             else
                 foreach (var pos in positions)

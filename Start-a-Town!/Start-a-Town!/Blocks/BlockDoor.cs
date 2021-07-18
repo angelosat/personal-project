@@ -85,7 +85,7 @@ namespace Start_a_Town_
         }
         static public BoundingBox GetBoundingBox(MapBase map, Vector3 global)
         {
-            var children = GetChildren(map, global);
+            var children = BlockDefOf.Door.GetParts(map, global);
             var minx = children.Min(c => c.X);
             var miny = children.Min(c => c.Y);
             var minz = children.Min(c => c.Z);
@@ -195,32 +195,21 @@ namespace Start_a_Town_
                 //flood fill to find all enterior
             }
         }
-        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
+        
+        private static IntVec3 GetCenter(byte data)
         {
-            var positions = GetChildren(map, global);
-            foreach (var g in positions)
-                map.SetBlock(g, Block.Types.Air, 0, 0, 0, false);
-            if (notify)
-                map.NotifyBlocksChanged(positions);
-        }
-        private static Vector3 GetBase(MapBase map, IntVec3 global)
-        {
-            byte data = map.GetBlockData(global);
-            byte masked = data &= 0x1;// 0x3;
-            int baseZ = (int)(global.Z - masked);
-            IntVec3 baseLoc = new IntVec3(global.X, global.Y, baseZ);
+            byte masked = data &= 0x1;
+            int baseZ = -masked;
+            var baseLoc = new IntVec3(0, 0, baseZ);
             return baseLoc;
         }
-        public static IEnumerable<IntVec3> GetChildren(MapBase map, IntVec3 global)
-        {
-            IntVec3 baseLoc = GetBase(map, global);
-            for (int i = 0; i < 2; i++)
-            {
-                IntVec3 g = baseLoc + new IntVec3(0, 0, i);
-                yield return g;
-            }
-        }
 
+        public override IEnumerable<IntVec3> GetParts(byte data)
+        {
+            var center = GetCenter(data);
+            for (int i = 0; i < 2; i++)
+                yield return center + new IntVec3(0, 0, i);
+        }
         public override bool IsSolid(Cell cell)
         {
             Read(cell.BlockData, out var locked, out var open, out var part);
@@ -289,7 +278,7 @@ namespace Start_a_Town_
 
         public static void Toggle(MapBase map, Vector3 global)
         {
-            var children = GetChildren(map, global);
+            var children = BlockDefOf.Door.GetParts(map, global);
             var chunk = map.GetChunk(global);
             foreach (var g in children)
             {

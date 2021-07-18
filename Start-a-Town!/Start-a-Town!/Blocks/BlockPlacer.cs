@@ -8,7 +8,7 @@
         int Variation;
         public void Place(MapBase map, IntVec3 global, bool notify = true)
         {
-            Block.Place(map, global, this.CellData, this.Variation, this.Orientation, notify);
+            this.Block.Place(map, global, this.CellData, this.Variation, this.Orientation, notify);
         }
     }
 }

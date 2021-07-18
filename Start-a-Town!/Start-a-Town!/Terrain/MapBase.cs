@@ -185,12 +185,12 @@ namespace Start_a_Town_
 
         internal void ReplaceBlock(Vector3 global, Block.Types type, byte data, int variation, int orientation, bool raiseEvent = true)
         {
-            this.GetBlock(global).Removed(this, global);
+            this.RemoveBlock(global);
 
             var blockentity = this.RemoveBlockEntity(global);
             if (blockentity != null)
             {
-                blockentity.OnRemove(this, global);
+                blockentity.OnRemoved(this, global);
                 blockentity.Dispose();
                 this.Net.EventOccured(Components.Message.Types.BlockEntityRemoved, blockentity, global);
             }
@@ -212,7 +212,7 @@ namespace Start_a_Town_
             this.GetCell(global).BlockData = v;
             this.InvalidateCell(global);
         }
-        public void RemoveBlockNew(IntVec3 global, bool notify = true)
+        public void RemoveBlock(IntVec3 global, bool notify = true)
         {
             var cell = this.GetCell(global);
             var block = cell.Block;
@@ -222,13 +222,13 @@ namespace Start_a_Town_
                 this.Town.RemoveUtility(u, center);
             var blockentity = this.GetBlockEntity(global);
             var parts = block.GetParts(data, global);
-
+            this.GetBlock(global).PreRemove(this, global); // preremove only center part or all parts?
             if (blockentity != null)
             {
                 parts = blockentity.CellsOccupied;
                 foreach (var g in parts)
                     this.RemoveBlockEntity(g);
-                blockentity.OnRemove(this, center);
+                blockentity.OnRemoved(this, center);
                 blockentity.Dispose();
                 if (notify)
                     this.Net.EventOccured(Message.Types.BlockEntityRemoved, blockentity, global);
@@ -244,11 +244,8 @@ namespace Start_a_Town_
                 this.GetBlock(above)?.BlockBelowChanged(this, above);
             }
         }
-        public void RemoveBlock(IntVec3 global, bool notify = true)
-        {
-            this.RemoveBlockNew(global, notify);
-        }
-        internal void RemoveBlocks(List<IntVec3> positions, bool notify = true)
+        
+        internal void RemoveBlocks(IEnumerable<IntVec3> positions, bool notify = true)
         {
             var nonAirPositions = positions.Where(vec => this.GetBlock(vec) != BlockDefOf.Air).ToList();
             foreach (var global in nonAirPositions)
@@ -636,7 +633,7 @@ namespace Start_a_Town_
             var parts = block.GetParts(data, global);
             foreach (var pos in parts)
             {
-                if (!this.SetBlock(global, type, data, variation, orientation, notify))
+                if (!this.SetBlock(pos, type, data, variation, orientation, notify))
                     return;
             }
             var entity = block.CreateBlockEntity();

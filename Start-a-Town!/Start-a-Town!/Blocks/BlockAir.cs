@@ -11,8 +11,5 @@
         {
 
         }
-        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
-        {
-        }
     }
 }

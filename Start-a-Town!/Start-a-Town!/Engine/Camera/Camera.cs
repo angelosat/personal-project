@@ -14,10 +14,6 @@ namespace Start_a_Town_
         public const int FogZOffset = 2, FogFadeLength = 8;
         Vector4 FogColor = Color.SteelBlue.ToVector4();
         GameObject Following;
-        private float DragDelay = 0;
-        private readonly float DragDelayMax = Engine.TicksPerSecond / 4;
-        readonly bool Dragging;
-        Vector2 DragVector;
         Vector2 _Coordinates;
         bool _HideUnknownBlocks = true;
         public bool HideUnknownBlocks // TODO: make it static
@@ -80,7 +76,7 @@ namespace Start_a_Town_
         public float FogLevel = 0;
         public int MaxDrawZ;
         Vector2 CameraOffset;
-        Vector3 LastMouseover = new Vector3(float.MinValue);
+        Vector3 LastMouseover = new(float.MinValue);
         public int RenderIndex = 0;
         public RenderTarget2D MapRender,
           WaterRender, WaterDepth, WaterLight, WaterFog,
@@ -234,7 +230,7 @@ namespace Start_a_Town_
             this.Global = global;
             Coords.Iso(this, global.X, global.Y, global.Z, out float xx, out float yy);
 
-            Vector2 
+            Vector2
                 currentLoc = this.Coordinates,
                 nextLoc = new(xx, yy),
                 diff = nextLoc - currentLoc;

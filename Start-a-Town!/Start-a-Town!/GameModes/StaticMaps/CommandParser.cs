@@ -61,7 +61,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                         foreach (var ch in net.Map.GetActiveChunks())
                             foreach (var cell in ch.Value.CellGrid2)
                                 if (cell.Block == toremove)
-                                    cell.Block.Remove(net.Map, cell.LocalCoords.ToGlobal(ch.Value));
+                                    net.Map.RemoveBlock(cell.LocalCoords.ToGlobal(ch.Value));
                         if (net is Server)
                             (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
                         break;

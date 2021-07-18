@@ -65,11 +65,6 @@ namespace Start_a_Town_.Blocks
             dropped.StackSize -= amount;
         }
         
-        public override void Removed(MapBase map, Vector3 global)
-        {
-            this.Remove(map, global);
-        }
-        
         internal override bool IsValidHaulDestination(MapBase map, Vector3 global, GameObject obj)
         {
             var entity = map.GetBlockEntity(global) as BlockDesignationEntity;

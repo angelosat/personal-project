@@ -107,7 +107,7 @@ namespace Start_a_Town_.Components.Interactions
                 server.PopLoot(byproduct, t.Global, Vector3.Zero);
             }
 
-            block.Remove(a.Map, t.Global);
+            a.Map.RemoveBlock(t.Global);
 
             this.EmitBreak(a);
         }

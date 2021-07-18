@@ -27,28 +27,19 @@ namespace Start_a_Town_
             var color = Color.White;
             return canvas.Designations.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, color, sunlight, blocklight, depth, this, blockCoordinates);
         }
-        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
-        {
-            base.Place(map, global, data, variation, orientation, notify);
-        }
-        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
+        internal override void PreRemove(MapBase map, IntVec3 global)
         {
             var entity = map.GetBlockEntity(global) as BlockConstructionEntity;
             foreach (var mat in entity.Container)
             {
                 var remaining = mat.Amount;
-                while(remaining>0)
+                while (remaining > 0)
                 {
                     var obj = this.Ingredient.ItemDef.Create();
                     obj.StackSize = Math.Min(obj.StackMax, remaining);
                     remaining -= obj.StackSize;
                     map.Net.PopLoot(obj, global, Vector3.Zero);
                 }
-            }
-            foreach (var g in entity.Children)
-            {
-                map.RemoveBlockEntity(g);
-                map.SetBlock(g, Block.Types.Air, 0, raiseEvent: false);
             }
         }
         internal override string GetName(MapBase map, IntVec3 global)

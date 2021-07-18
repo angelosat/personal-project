@@ -59,9 +59,7 @@ namespace Start_a_Town_.Components
             
                         var d = Vector3.DistanceSquared(pos, origin);
                         if (d < rsquared)
-                        {
-                            block.Remove(map, pos);
-                        }
+                            map.RemoveBlock(pos);
                     }
             parent.GetComponent<SpriteComponent>().Hidden = true;
             var emitter = ParticleEmitter.Dust;

@@ -88,36 +88,7 @@ namespace Start_a_Town_
             dic[top] = topdata;
             return dic;
         }
-        public override List<IntVec3> GetParts(MapBase map, IntVec3 global)
-        {
-            var data = map.GetBlockData(global);
-            GetState(data, out Part part, out int ori);
-            IntVec3 top, bottom;
-            switch (ori)
-            {
-                case 1:
-                    bottom = part == Part.Bottom ? global : global + IntVec3.UnitY;
-                    top = bottom - IntVec3.UnitY;
-                    break;
-
-                case 2:
-                    bottom = part == Part.Bottom ? global : global - IntVec3.UnitX;
-                    top = bottom + IntVec3.UnitX;
-                    break;
-
-                case 3:
-                    bottom = part == Part.Bottom ? global : global - IntVec3.UnitY;
-                    top = bottom + IntVec3.UnitY;
-                    break;
-
-                default:
-                    bottom = part == Part.Bottom ? global : global + IntVec3.UnitX;
-                    top = bottom - IntVec3.UnitX;
-                    break;
-            }
-            return new List<IntVec3>() { top, bottom };
-        }
-        public override List<IntVec3> GetParts(byte data)
+        public override IEnumerable<IntVec3> GetParts(byte data)
         {
             GetState(data, out var part, out var ori);
             IntVec3 top, bottom;
@@ -144,15 +115,10 @@ namespace Start_a_Town_
                     top = bottom - IntVec3.UnitX;
                     break;
             }
-            return new List<IntVec3>() { top, bottom };
+            yield return top;
+            yield return bottom;
         }
-        public override IEnumerable<IntVec3> GetParts(byte data, IntVec3 global)
-        {
-            foreach (var p in this.GetParts(data))
-            {
-                yield return global + p;
-            }
-        }
+       
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {
             GetState(data, out var part, out var ori);
@@ -187,7 +153,7 @@ namespace Start_a_Town_
         public static Dictionary<Part, Vector3> GetPartsDic(MapBase map, Vector3 global)
         {
             var parts = new Dictionary<Part, Vector3>();
-            var partslist = BlockDefOf.Bed.GetParts(map, global);
+            var partslist = BlockDefOf.Bed.GetParts(map, global).ToList();
             parts[Part.Top] = partslist[0];
             parts[Part.Bottom] = partslist[1];
             return parts;
@@ -195,7 +161,7 @@ namespace Start_a_Town_
         public Dictionary<Part, IntVec3> GetPartsDic(byte data)
         {
             var parts = new Dictionary<Part, IntVec3>();
-            var partslist = this.GetParts(data);
+            var partslist = this.GetParts(data).ToList();
             parts[Part.Top] = partslist[0];
             parts[Part.Bottom] = partslist[1];
             return parts;
@@ -234,20 +200,7 @@ namespace Start_a_Town_
             map.AddBlockEntity(top, entity);
             map.Town.AddUtility(Utility.Types.Sleeping, top);
         }
-        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
-        {
-            // todo: why call this below? i already have the part vectors
-            // i have replaced that data during the switch section so the getparts isn't working obviously
-            var parts = GetPartsDic(map, global);
-            var top = parts[Part.Top];
-            var bottom = parts[Part.Bottom];
-            map.SetBlock(top, Types.Air, 0, raiseEvent: notify);
-            map.SetBlock(bottom, Types.Air, 0, raiseEvent: notify);
-            map.RemoveBlockEntity(top);
-            map.RemoveBlockEntity(bottom);
-            map.Town.RemoveUtility(Utility.Types.Sleeping, top);
-        }
-
+        
         public override IntVec3 GetCenter(byte data, IntVec3 global)
         {
             return global + GetPartsDic(data)[Part.Top];

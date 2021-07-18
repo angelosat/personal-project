@@ -49,7 +49,7 @@ namespace Start_a_Town_.Blocks
         {
             map.GetBlock(global.Below, out var cell);
             if (cell.Block == BlockDefOf.Air)
-                this.Remove(map, global);
+                map.RemoveBlock(global);
         }
     }
 }

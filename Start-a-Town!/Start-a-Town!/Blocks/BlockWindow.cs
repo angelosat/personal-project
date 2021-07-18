@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
@@ -54,41 +55,34 @@ namespace Start_a_Town_.Blocks
 
         static int GetPartIndex(byte data)
         {
-            return (int)data;
+            return data;
         }
 
         public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
-            if (!IsPositionValid(map, global))
-                return;
             base.Place(map, global, GetData(0), variation, orientation);
             base.Place(map, global + IntVec3.UnitZ, GetData(1), variation, orientation, notify);
         }
-        public override void Remove(MapBase map, IntVec3 global, bool notify = true)
+        public override IEnumerable<IntVec3> GetParts(byte data)
         {
-            var part = map.GetBlockData(global);
-            base.Remove(map, global);
-
-            switch(part)
+            yield return IntVec3.Zero;
+            switch (data)
             {
                 case 0:
-                    base.Remove(map, global + IntVec3.UnitZ, notify);
+                    yield return IntVec3.UnitZ;
                     break;
-
                 case 1:
-                    base.Remove(map, global - IntVec3.UnitZ, notify);
+                    yield return -IntVec3.UnitZ;
                     break;
-
                 default:
-                    throw new ArgumentException();
+                    throw new Exception();
             }
         }
-
-        bool IsPositionValid(MapBase map, Vector3 global)
+        bool IsPositionValid(MapBase map, IntVec3 global)
         {
             if (map.GetBlock(global) != BlockDefOf.Air)
                 return false;
-            if (map.GetBlock(global + Vector3.UnitZ) != BlockDefOf.Air)
+            if (map.GetBlock(global.Above) != BlockDefOf.Air)
                 return false;
             return true;
         }

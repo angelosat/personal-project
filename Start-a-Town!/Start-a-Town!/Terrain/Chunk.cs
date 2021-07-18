@@ -362,6 +362,7 @@ namespace Start_a_Town_
         public void InvalidateHeightmap(int localx, int localy)
         {
             // invalidate heightmap immediately?
+            // TODO: invalidate coordinates and update heightmap at the next tick, so as to prevent updating the same column multiple times in case of multiple block changes
             this.UpdateHeightMapColumnWithLightSmart(localx, localy);
         }
         HashSet<IntVec2> HeightMapUpdates = new();

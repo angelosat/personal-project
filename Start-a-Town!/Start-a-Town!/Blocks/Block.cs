@@ -216,6 +216,11 @@ namespace Start_a_Town_
             Construction,
             ShopCounter
         }
+
+        internal virtual void PreRemove(MapBase mapBase, IntVec3 p)
+        {
+        }
+
         public static Rectangle Bounds = new(-(int)OriginCenter.X, -(int)OriginCenter.Y, Width, Height);
 
         public virtual Color[] UV => BlockCoordinatesFull;
@@ -227,13 +232,25 @@ namespace Start_a_Town_
         {
             return BlockObjects[this];
         }
+
         public virtual Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation) // TODO: depend on orientation
         {
             return new Dictionary<IntVec3, byte>() { { global, 0 } };
         }
-        public virtual List<IntVec3> GetParts(MapBase map, IntVec3 global) { return new List<IntVec3> { global }; }
-        public virtual List<IntVec3> GetParts(byte data) { return new List<IntVec3> { IntVec3.Zero }; }
-        public virtual IEnumerable<IntVec3> GetParts(byte data, IntVec3 global) { return new List<IntVec3> { global }; }
+        public IEnumerable<IntVec3> GetParts(MapBase map, IntVec3 global) 
+        {
+            foreach (var part in this.GetParts(map.GetBlockData(global), global))
+                yield return part;
+        }
+        public IEnumerable<IntVec3> GetParts(byte data, IntVec3 global)
+        {
+            foreach (var part in this.GetParts(data))
+                yield return global + part;
+        }
+        public virtual IEnumerable<IntVec3> GetParts(byte data)
+        {
+            yield return IntVec3.Zero;
+        }
 
         public virtual IntVec3 GetCenter(byte blockData, IntVec3 global) { return global; }
 
@@ -368,7 +385,6 @@ namespace Start_a_Town_
         /// <param name="global"></param>
         public virtual void NeighborChanged(INetwork net, IntVec3 global) { }
 
-
         public void Deconstruct(GameObject actor, Vector3 global)
         {
             var map = actor.Map;
@@ -385,24 +401,14 @@ namespace Start_a_Town_
         }
         protected virtual void OnDeconstruct(GameObject actor, Vector3 global) { }
 
-
-        public virtual void Removed(MapBase map, Vector3 global)
-        {
-        }
         public virtual bool IsValidPosition(MapBase map, IntVec3 global, int orientation) { return true; }
-        [Obsolete]
-        internal void Place(MapBase map, List<IntVec3> positions, byte data, int orientation, bool notify)
+        internal void Place(MapBase map, IEnumerable<IntVec3> positions, byte data, int orientation, bool notify)
         {
-            throw new Exception();
             foreach (var pos in positions)
-            {
                 this.Place(map, pos, data, 0, orientation, false);
-            }
 
             if (notify)
-            {
                 map.NotifyBlocksChanged(positions);
-            }
         }
         public virtual void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
@@ -414,12 +420,6 @@ namespace Start_a_Town_
                 map.EventOccured(Message.Types.BlockEntityAdded, entity, global);
             }
             map.SetBlockLuminance(global, this.Luminance);
-        }
-
-        [Obsolete]
-        public virtual void Remove(MapBase map, IntVec3 global, bool notify = true)
-        {
-            map.RemoveBlockNew(global, notify);
         }
 
         public void BlockBelowChanged(MapBase map, IntVec3 global)
@@ -436,14 +436,14 @@ namespace Start_a_Town_
         {
             var net = map.Net;
             net.PopLoot(this.GetLootTable(net.Map.GetBlockData(global)), global, Vector3.Zero);
-            this.Remove(map, global);
+            map.RemoveBlock(global);
         }
         public virtual void Break(GameObject actor, IntVec3 global)
         {
             var mat = GetBlockMaterial(actor.Map, global);
             var net = actor.Net;
             net.PopLoot(this.GetLootTable(actor.Map.GetBlockData(global)), global, Vector3.Zero);
-            this.Remove(net.Map, global);
+            net.Map.RemoveBlock(global);
 
             var e = this.GetEmitter();
             e.Source = (Vector3)global + Vector3.UnitZ * 0.5f;

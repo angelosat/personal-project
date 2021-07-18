@@ -31,7 +31,7 @@ namespace Start_a_Town_.Blocks
         /// Dipose any children GameObjects here.
         /// </summary>
         public virtual void Dispose() { } // maybe make this abstract so i don't forget it?
-        public virtual void OnRemove(MapBase map, Vector3 global) {
+        public virtual void OnRemoved(MapBase map, Vector3 global) {
             foreach (var c in this.Comps)
                 c.Remove(map, global, this);
         }

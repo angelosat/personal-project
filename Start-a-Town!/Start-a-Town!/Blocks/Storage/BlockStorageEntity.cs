@@ -72,7 +72,7 @@ namespace Start_a_Town_
                 base.Place(map, global);
                 this.Global = global;
             }
-            public override void OnRemove(MapBase map, Vector3 global)
+            public override void OnRemoved(MapBase map, Vector3 global)
             {
                 foreach (var i in this.Contents)
                 {

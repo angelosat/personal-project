@@ -20,7 +20,7 @@ namespace Start_a_Town_.Blocks.Chest
             this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
         }
 
-        public override IEnumerable<byte> GetCraftingVariations()
+        public override IEnumerable<byte> GetMaterialVariations()
         {
             var vars = (from mat in Material.Registry.Values
                         where mat.Type == MaterialType.Wood || mat.Type == MaterialType.Metal

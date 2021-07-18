@@ -12,7 +12,7 @@ namespace Start_a_Town_
     public abstract class ConstructionCategory : INamed
     {
         TerrainWindowNew _window;
-        protected TerrainWindowNew Window => this._window ??= new TerrainWindowNew(this);
+        protected TerrainWindowNew Window => this._window ??= new TerrainWindowNew();
       
         public abstract string Name { get; }
         public ToolDrawing Tool;

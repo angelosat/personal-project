@@ -110,7 +110,7 @@ namespace Start_a_Town_.UI
             }
 
             this.ColumnLabels.Controls.AlignCenterHorizontally();
-            this.BoxItems = new(offset + ScrollbarV.Width, ItemHeight * this.MaxVisibleItems, (TObject item) =>
+            this.BoxItems = new(offset + ScrollbarV.DefaultWidth, ItemHeight * this.MaxVisibleItems, (TObject item) =>
             {
                 var panel = new GroupBox() { BackgroundColor = this.ClientBoxColor };
                 panel.AutoSize = true;

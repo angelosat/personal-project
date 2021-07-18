@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
@@ -9,10 +8,10 @@ namespace Start_a_Town_.UI
     {
         public Func<GameObject, bool> DragDropCondition = o => true;
         public Func<T, string> CornerTextFunc = (slot) => "";
-        public Action<SpriteBatch, T> PaintAction = (s,t) => { };
+        public Action<SpriteBatch, T> PaintAction = (s, t) => { };
         Func<DragEventArgs, DragDropEffects> _DragDropAction = (args) => DragDropEffects.None;
-        public Func<DragEventArgs, DragDropEffects> DragDropAction 
-        { get { return _DragDropAction; } set { _DragDropAction = value; } }
+        public Func<DragEventArgs, DragDropEffects> DragDropAction
+        { get => this._DragDropAction; set => this._DragDropAction = value; }
         protected override void OnTextChanged()
         {
 
@@ -20,16 +19,16 @@ namespace Start_a_Town_.UI
 
         public override void OnPaint(SpriteBatch sb)
         {
-            float a = (this.MouseHover && Active) ? 1 : 0.5f;
+            float a = (this.MouseHover && this.Active) ? 1 : 0.5f;
 
-            sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, this.Color * a, 0, new Vector2(0), 1, SprFx, Depth);
+            sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, this.Color * a, 0, new Vector2(0), 1, this.SprFx, this.Depth);
             if (this.Tag == null)
             {
-                sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, this.Color * a, 0, new Vector2(0), 1, SprFx, Depth);
+                sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, this.Color * a, 0, new Vector2(0), 1, this.SprFx, this.Depth);
                 return;
             }
             var color = Color.White;
-            sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, color * a, 0, new Vector2(0), 1, SprFx, Depth);
+            sb.Draw(UIManager.SlotSprite, Vector2.Zero, null, color * a, 0, new Vector2(0), 1, this.SprFx, this.Depth);
         }
 
         public override void OnAfterPaint(SpriteBatch sb)
@@ -37,7 +36,7 @@ namespace Start_a_Town_.UI
             if (this.Tag is null)
                 return;
             this.PaintAction(sb, this.Tag);
-            UIManager.DrawStringOutlined(sb, CornerTextFunc(Tag), new Vector2(SlotCustom<T>.DefaultHeight), Vector2.One, UIManager.FontBold);
+            UIManager.DrawStringOutlined(sb, this.CornerTextFunc(this.Tag), new Vector2(SlotCustom<T>.DefaultHeight), Vector2.One, UIManager.FontBold);
         }
 
         T LastObject = default;
@@ -54,10 +53,10 @@ namespace Start_a_Town_.UI
         Action<ContextArgs> _ContextAction = (args) => { };
         public Action<ContextArgs> ContextAction
         {
-            get { return _ContextAction; }
-            set { _ContextAction = value; }
+            get => this._ContextAction;
+            set => this._ContextAction = value;
         }
-        
+
         public static int DefaultHeight = 38;
 
         public override void Draw(SpriteBatch sb, Rectangle viewport)
@@ -68,26 +67,34 @@ namespace Start_a_Town_.UI
         T _Tag;
         public new T Tag
         {
-            get { return this._Tag; }
-            set
-            {
-                this._Tag = value;
-            }
+            get => this._Tag;
+            set => this._Tag = value;
         }
         public void Clear()
         {
-            Tag = default;
-            IconIndex = -1;
+            this.Tag = default;
+            this.IconIndex = -1;
         }
 
         public SlotCustom<T> SetBottomRightText(string text)
         {
-            BottomRightLabel.Text = text;
+            this.BottomRightLabel.Text = text;
             return this;
         }
 
-        Label BottomRightLabel;
-        
+        readonly Label BottomRightLabel;
+        public SlotCustom()
+        {
+            this.Blend = Color.White;
+            this.BackgroundTexture = UIManager.SlotSprite;
+            this.Alpha = Color.Lerp(Color.Transparent, this.Blend, 0.5f);
+            this.Width = UIManager.SlotSprite.Width;
+            this.Height = UIManager.SlotSprite.Height;
+            this.BottomRightLabel = new Label(new Vector2(UIManager.SlotSprite.Width), "", HorizontalAlignment.Right, VerticalAlignment.Bottom);
+            this.Controls.Add(this.BottomRightLabel);
+            this.Tag = default(T);
+            this.Text = "";
+        }
         public bool AutoText = true;
 
         public override void OnMouseEnter()
@@ -110,16 +117,16 @@ namespace Start_a_Town_.UI
         }
         public virtual DragDropEffects Drop(DragEventArgs args)
         {
-            OnDragDrop(args);
-            return DragDropAction(args);
+            this.OnDragDrop(args);
+            return this.DragDropAction(args);
         }
 
         public override void GetTooltipInfo(Control tooltip)
         {
-            if (CustomTooltip)
+            if (this.CustomTooltip)
                 base.GetTooltipInfo(tooltip);
             else
-                Tag.GetTooltipInfo(tooltip);
+                this.Tag.GetTooltipInfo(tooltip);
         }
 
         public void GetContextActions(GameObject playerEntity, ContextArgs a)

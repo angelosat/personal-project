@@ -41,7 +41,6 @@ namespace Start_a_Town_
         }
 
         public StockpileManager StockpileManager;
-        public FarmingManager FarmingManager;
         public ZoneManager ZoneManager;
         public ConstructionsManager ConstructionsManager;
         public ChoppingManager ChoppingManager;
@@ -58,14 +57,13 @@ namespace Start_a_Town_
         public List<TownComponent> TownComponents = new();
 
         public MapBase Map;
-        public INetwork Net { get { return this.Map.Net; } }
+        public INetwork Net => this.Map.Net;
 
-        public Dictionary<Utility.Types, HashSet<Vector3>> TownUtilitiesNew = new Dictionary<Utility.Types, HashSet<Vector3>>();
+        public Dictionary<Utility.Types, HashSet<Vector3>> TownUtilitiesNew = new();
 
         public Town(MapBase map)
         {
             this.Map = map;
-            this.FarmingManager = new(this);
             this.ZoneManager = new(this);
             this.ConstructionsManager = new(this);
             this.ChoppingManager = new(this);
@@ -80,7 +78,6 @@ namespace Start_a_Town_
             this.QuestManager = new(this);
 
             this.TownComponents.AddRange(new TownComponent[]{
-                this.FarmingManager,
                 this.ZoneManager,
                 this.ConstructionsManager,
                 this.ChoppingManager,
@@ -97,9 +94,7 @@ namespace Start_a_Town_
             
             var utilities = (Utility.Types[])Enum.GetValues(typeof(Utility.Types));
             foreach(var u in utilities)
-            {
                 this.TownUtilitiesNew[u] = new HashSet<Vector3>();
-            }
         }
 
         public void Update()

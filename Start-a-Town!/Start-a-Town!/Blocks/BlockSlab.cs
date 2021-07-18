@@ -38,7 +38,7 @@ namespace Start_a_Town_.Blocks
         {
             return .25f;
         }
-        public override IEnumerable<byte> GetCraftingVariations()
+        public override IEnumerable<byte> GetMaterialVariations()
         {
             yield return (byte)MaterialDefOf.Stone.ID;
         }

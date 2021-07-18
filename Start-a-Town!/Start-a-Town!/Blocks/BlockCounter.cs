@@ -21,7 +21,7 @@ namespace Start_a_Town_.Blocks
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
 
         }
-        public override IEnumerable<byte> GetCraftingVariations()
+        public override IEnumerable<byte> GetMaterialVariations()
         {
             yield return 0;
         }

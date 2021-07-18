@@ -37,7 +37,6 @@ namespace Start_a_Town_.Towns
 
             ZoneManager.Init();
             StockpileManager.Init();
-            FarmingManager.Initialize();
         }
 
         public override void OnGameEvent(GameEvent e)

@@ -73,9 +73,9 @@ namespace Start_a_Town_
             var flowerIndex = data - 1; //because 0 is no flowers
             return FlowerOverlays[flowerIndex];
         }
-        public override IEnumerable<byte> GetCraftingVariations()
+        public override IEnumerable<byte> GetMaterialVariations()
         {
-            var list = base.GetCraftingVariations();
+            var list = base.GetMaterialVariations();
             foreach (var i in list)
                 yield return i;
             yield return 1;

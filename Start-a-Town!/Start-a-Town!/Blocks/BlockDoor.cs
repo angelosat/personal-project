@@ -259,7 +259,7 @@ namespace Start_a_Town_
         {
             return new Icon(this.GetDefault());
         }
-        public override IEnumerable<byte> GetCraftingVariations()
+        public override IEnumerable<byte> GetMaterialVariations()
         {
             yield return 0;
         }

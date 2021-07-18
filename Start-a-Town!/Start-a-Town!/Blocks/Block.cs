@@ -642,7 +642,7 @@ namespace Start_a_Town_
         {
             return (byte)mat.ID;
         }
-        public virtual IEnumerable<byte> GetCraftingVariations()
+        public virtual IEnumerable<byte> GetMaterialVariations()
         {
             yield break;
             //var list = new List<byte>();

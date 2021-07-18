@@ -4,7 +4,7 @@
     {
         static TerrainWindow _Instance;
         public static TerrainWindow Instance => _Instance ??= new TerrainWindow();
-        
+
         TerrainWindow()
         {
             this.Title = "Block Browser";

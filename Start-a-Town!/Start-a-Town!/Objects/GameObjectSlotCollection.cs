@@ -18,17 +18,17 @@ namespace Start_a_Town_
         {
             string text = "";
             for (int i = 0; i < this.Count; i++)
-                text += "[" + i + "]: " + this[i].ToString() + "\n";
+                text += $"[{i}]: {this[i]}\n";
             return text.TrimEnd('\n');
         }
 
-        public void GetUI(UI.Control ui)
+        public void GetUI(Control ui)
         {
             int i = 0;
             foreach (var obj in this)
             {
-                Slot slot = new Slot(new Vector2(0, i * Slot.DefaultHeight)) { Tag = obj };
-                Label label = new Label(slot.CenterRight, obj.HasValue ? obj.Object.Name : "<empty>", HorizontalAlignment.Left, VerticalAlignment.Center);
+                var slot = new Slot(new Vector2(0, i * Slot.DefaultHeight)) { Tag = obj };
+                var label = new Label(slot.CenterRight, obj.HasValue ? obj.Object.Name : "<empty>", HorizontalAlignment.Left, VerticalAlignment.Center);
                 ui.Controls.Add(slot, label);
             }
         }

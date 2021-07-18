@@ -16,7 +16,7 @@ namespace Start_a_Town_
             this.Ingredient = new Ingredient(RawMaterialDef.Boulders, null, null, 1);
         }
 
-        public override IEnumerable<byte> GetCraftingVariations()
+        public override IEnumerable<byte> GetMaterialVariations()
         {
             return (from mat in Material.Registry.Values
                     where mat.Type == MaterialType.Stone

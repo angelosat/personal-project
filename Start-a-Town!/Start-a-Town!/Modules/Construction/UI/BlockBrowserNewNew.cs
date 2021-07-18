@@ -1,31 +1,28 @@
-﻿using System;
+﻿using Start_a_Town_.Components.Crafting;
+using Start_a_Town_.Modules.Construction;
+using Start_a_Town_.Towns.Constructions;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.UI;
-using Start_a_Town_.Towns.Constructions;
-using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Modules.Construction;
 
 namespace Start_a_Town_
 {
     class BlockBrowserNewNew : GroupBox
     {
-        Dictionary<Block, ProductMaterialPair> LastSelectedVariant = new();
+        readonly Dictionary<Block, ProductMaterialPair> LastSelectedVariant = new();
         ConstructionCategory SelectedCategory;
-        Panel Panel_Blocks;
-        UIToolsBox ToolBox;
+        readonly Panel Panel_Blocks;
+        readonly UIToolsBox ToolBox;
         Block CurrentSelected;
-        Dictionary<ConstructionCategory, ButtonGridIcons<Block>> Categories = new();
-        public BlockBrowserNewNew(ConstructionCategory category)
-        {
-
-        }
+        readonly Dictionary<ConstructionCategory, ButtonGridIcons<Block>> Categories = new();
+       
         public BlockBrowserNewNew()
         {
             this.Panel_Blocks = new Panel() { AutoSize = true };
 
             var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air LOL FIX THIS
-            this.ToolBox = new UIToolsBox(null, OnToolSelected);
+            this.ToolBox = new UIToolsBox(null, this.OnToolSelected);
             var categories = ConstructionsManager.AllCategories;
             foreach (var cat in categories)
             {
@@ -35,15 +32,15 @@ namespace Start_a_Town_
                 {
                     slot.Tag = block;
                     slot.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDrawing drawing && drawing.Block == block;
-                    slot.PaintAction = () => block.PaintIcon(slot.Width, slot.Height, block.GetDataFromMaterial(GetLastSelectedVariantOrDefault(block).Requirement.Material));
+                    slot.PaintAction = () => block.PaintIcon(slot.Width, slot.Height, block.GetDataFromMaterial(this.GetLastSelectedVariantOrDefault(block).Requirement.Material));
                     slot.LeftClickAction = () =>
                     {
                         this.CurrentSelected = block;
-                        var product = GetLastSelectedVariantOrDefault(block);
-                        this.ToolBox.SetProduct(product, OnToolSelected);
-                        var tools = product.Block.ConstructionCategory.GetAvailableTools(() => GetLastSelectedVariantOrDefault(this.CurrentSelected));
+                        var product = this.GetLastSelectedVariantOrDefault(block);
+                        this.ToolBox.SetProduct(product, this.OnToolSelected);
+                        var tools = product.Block.ConstructionCategory.GetAvailableTools(() => this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
 
-                        this.ToolBox.SetProduct(product, OnToolSelected);
+                        this.ToolBox.SetProduct(product, this.OnToolSelected);
                         this.OnToolSelected(this.ToolBox.LastSelectedTool.GetType());
                         var win = this.ToolBox.GetWindow();
                         if (win is null)
@@ -58,14 +55,14 @@ namespace Start_a_Town_
                     {
                         UIBlockVariationPickerNew.Refresh(block, this.OnVariationSelected);
                     };
-                   
-                    slot.HoverFunc = () => $"{block.Name}\n{GetLastSelectedVariantOrDefault(block).Requirement}\nTool necessity: {block.BuildProperties.ToolSensitivity:##0%}\nRight click to select variation";
+
+                    slot.HoverFunc = () => $"{block.Name}\n{this.GetLastSelectedVariantOrDefault(block).Requirement}\nTool necessity: {block.BuildProperties.ToolSensitivity:##0%}\nRight click to select variation";
                 })
                 { Location = this.Panel_Blocks.Controls.BottomLeft };
                 this.Categories[cat] = grid;
             }
             this.SelectedCategory = this.Categories.First().Key;
-            this.Panel_Blocks.Controls.Add(this.Categories[SelectedCategory]);
+            this.Panel_Blocks.Controls.Add(this.Categories[this.SelectedCategory]);
 
             var cbox = new ComboBoxNew<ConstructionCategory>(
                         new ButtonGridGenericNew<ConstructionCategory>(
@@ -80,7 +77,7 @@ namespace Start_a_Town_
                                 };
                             }),
                         this.SelectedCategory.Name,
-                        this.Categories[SelectedCategory].Width);
+                        this.Categories[this.SelectedCategory].Width);
 
             this.AddControlsVertically(
                 cbox.ToPanel(),
@@ -94,7 +91,7 @@ namespace Start_a_Town_
             this.ToolBox.LastSelectedTool = tool;
             ToolManager.SetTool(tool);
         }
-        
+
         private ProductMaterialPair GetLastSelectedVariantOrDefault(Block block)
         {
             if (this.LastSelectedVariant.ContainsKey(block))

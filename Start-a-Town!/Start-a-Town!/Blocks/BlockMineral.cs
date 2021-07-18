@@ -59,7 +59,7 @@ namespace Start_a_Town_
         {
             return base.GetDustEmitter();
         }
-        public override IEnumerable<byte> GetCraftingVariations()
+        public override IEnumerable<byte> GetMaterialVariations()
         {
             var vars = (from mat in Material.Registry.Values
                         where mat.Type == MaterialType.Stone || mat.Type == MaterialType.Metal 

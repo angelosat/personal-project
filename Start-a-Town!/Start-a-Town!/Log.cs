@@ -189,6 +189,7 @@ List of available commands:
                     catch (Exception)
                     {
                     }
+
                     try
                     {
                         int r = int.Parse(words.Dequeue()),
@@ -196,7 +197,7 @@ List of available commands:
                             b = int.Parse(words.Dequeue());
                         Engine.Map.SetAmbientColor(new Color(r, g, b));
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         Enqueue(EntryTypes.System, "Invalid color");
                     }

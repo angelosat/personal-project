@@ -63,6 +63,8 @@ namespace Start_a_Town_.UI.Editor
                     tag.Block.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, tag.BlockData);
                     mysb.Flush();
                 };
+                slot.CustomTooltip = true;
+                slot.HoverText = $"{cell.Block.Name}:{Material.GetMaterial(cell.BlockData)}";
             })
             { Location = this.Panel_Variants.Controls.BottomLeft };
             this.Panel_Variants.Controls.Add(this.GridVariations2);

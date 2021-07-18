@@ -11,15 +11,14 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.LightWood;
         }
         AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
-        public BlockCounter():base(Block.Types.Counter, opaque: false)
+        public BlockCounter():base(Types.Counter, opaque: false)
         {
-            this.Orientations[0] = Block.Atlas.Load("blocks/counters/counter1");
-            this.Orientations[1] = Block.Atlas.Load("blocks/counters/counter4");
-            this.Orientations[2] = Block.Atlas.Load("blocks/counters/counter3");
-            this.Orientations[3] = Block.Atlas.Load("blocks/counters/counter2");
+            this.Orientations[0] = Atlas.Load("blocks/counters/counter1");
+            this.Orientations[1] = Atlas.Load("blocks/counters/counter4");
+            this.Orientations[2] = Atlas.Load("blocks/counters/counter3");
+            this.Orientations[3] = Atlas.Load("blocks/counters/counter2");
             this.Variations.Add(this.Orientations.First());
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
-
         }
         public override IEnumerable<byte> GetEditorVariations()
         {

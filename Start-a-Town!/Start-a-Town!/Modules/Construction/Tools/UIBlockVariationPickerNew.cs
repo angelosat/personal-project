@@ -24,22 +24,18 @@ namespace Start_a_Town_.Towns.Constructions
             var list = new ListBoxNew<ProductMaterialPair, ButtonNew>(200, 300);
             foreach (var group in variants)
                 foreach (var variant in group)
-                    list.AddItem(variant, v => "", (item, btn) => //v.Requirement.ToString()
+                    list.AddItem(variant, v => "", (item, btn) =>
                     {
-                    //btn.BackgroundStyle = UI.BackgroundStyle.LargeButton;
-                    //btn.AddControls(new PictureBox(variant.Block.PaintIcon(variant.Data)) { MouseThrough = true, Location = new Vector2(btn.BackgroundStyle.Left.Width, btn.Height / 2), Anchor = new Vector2(0, .5f) });//) { DrawAction = () => block.PaintIcon(Block.Width, Block.Height, variant.Data) });
-                    //btn.AddControlsTopRight(new Label(item.Requirement.ToString()) { MouseThrough = true });
-
-                    btn.BackgroundStyle = UI.BackgroundStyle.LargeButton;
-                    //btn.AddControls(new PictureBox(variant.Block.PaintIcon(variant.Data)) { MouseThrough = true, Location = new Vector2(btn.BackgroundStyle.Left.Width, btn.Height / 2), Anchor = new Vector2(0, .5f) });//) { DrawAction = () => block.PaintIcon(Block.Width, Block.Height, variant.Data) });
-                    //btn.AddControlsTopRight(new Label(item.Requirement.ToString()) { MouseThrough = true });
-                    var padding = btn.BackgroundStyle.Left.Width;
-                        var picbox = new PictureBox(variant.Block.PaintIcon(variant.Data)) { MouseThrough = true, Location = new Vector2(padding, btn.Height / 2), Anchor = new Vector2(0, .5f) };//) { DrawAction = () => block.PaintIcon(Block.Width, Block.Height, variant.Data) });
-                    var label = new Label(item.Requirement.ToString()) { Location = picbox.TopRight + Vector2.UnitX * padding, MouseThrough = true };
+                        btn.BackgroundStyle = UI.BackgroundStyle.LargeButton;
+                        var padding = btn.BackgroundStyle.Left.Width;
+                        var picbox = new PictureBox(variant.Block.PaintIcon(variant.Data)) { MouseThrough = true, Location = new Vector2(padding, btn.Height / 2), Anchor = new Vector2(0, .5f) };
+                        var label = new Label(item.Requirement.ToString()) { Location = picbox.TopRight + Vector2.UnitX * padding, MouseThrough = true };
                         btn.AddControls(picbox, label);
-                        btn.LeftClickAction = () => { 
-                            action(variant); 
-                            Instance.Hide(); };
+                        btn.LeftClickAction = () =>
+                        {
+                            action(variant);
+                            Instance.Hide();
+                        };
                     });
             Instance.Panel.AddControls(list);
 

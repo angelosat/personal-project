@@ -7,6 +7,7 @@ using Start_a_Town_.Particles;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -14,7 +15,6 @@ namespace Start_a_Town_
     {
         static Block()
         {
-            BlockDefOf.Init();
         }
         public class Data
         {
@@ -644,10 +644,7 @@ namespace Start_a_Town_
         {
             return (byte)mat.ID;
         }
-        public virtual IEnumerable<byte> GetEditorVariations()
-        {
-            yield break;
-        }
+        
         public string GetName(byte p)
         {
             var statename = this.BlockState.GetName(p);
@@ -688,9 +685,14 @@ namespace Start_a_Town_
 
         public bool RequiresConstruction = true;
 
+        public virtual IEnumerable<byte> GetEditorVariations()
+        {
+            return this.Ingredient.GetAllValidMaterials().Select(m => (byte)m.ID);
+            //return this.GetAllValidConstructionMaterialsNew().Select(m => (byte)m.Material.ID).Distinct();
+        }
         internal IEnumerable<ItemDefMaterialAmount> GetAllValidConstructionMaterialsNew()
         {
-            return this.Ingredient.GetAllValidMaterialsNew();
+            return this.Ingredient?.GetAllValidMaterialsNew() ?? Enumerable.Empty<ItemDefMaterialAmount>();
         }
         internal void IngredientRequirements(Material mainMaterial, out ItemDef def, out int amount)
         {

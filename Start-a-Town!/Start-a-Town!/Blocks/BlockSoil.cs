@@ -23,7 +23,10 @@ namespace Start_a_Town_
         {
             this.RequiresConstruction = false;
             this.LoadVariations("soil/soil1", "soil/soil2", "soil/soil3", "soil/soil4");
-            this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Soil, null, 1);
+            this.Ingredient = 
+                new Ingredient()
+                .SetAllow(RawMaterialDef.Bags, true)
+                .SetAllow(MaterialDefOf.Soil, true);
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
 

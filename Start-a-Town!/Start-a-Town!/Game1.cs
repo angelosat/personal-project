@@ -153,8 +153,10 @@ namespace Start_a_Town_
             GameObject.LoadObjects();
 
             Sprite.Initialize(); // why did i put it before the precious call? i have to bake the sprite atlas after initializing item templates
+            BlockDefOf.Init();
 
             Block.Initialize();
+
             Start_a_Town_.Components.Crafting.Reaction.Initialize();
           
             Cell.Initialize();

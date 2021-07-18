@@ -19,7 +19,6 @@ namespace Start_a_Town_
             this.ToggleConstructionCategory(ConstructionsManager.Production, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
-
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {
             return this.Orientations[orientation];
@@ -33,10 +32,7 @@ namespace Start_a_Town_
         {
             return Material.Registry[blockdata];
         }
-        public override IEnumerable<byte> GetEditorVariations()
-        {
-            return this.Ingredient.AllowedMaterials.Select(m => (byte)m.ID);
-        }
+       
         public override Vector4 GetColorVector(byte data)
         {
             return this.GetColorFromMaterial(data);

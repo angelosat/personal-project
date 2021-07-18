@@ -13,6 +13,7 @@ namespace Start_a_Town_
         {
             this.Variations.Add(this.Orientations.First());
             this.Furniture = FurnitureDefOf.Counter;
+            this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
 
         public override Material GetMaterial(byte blockdata)

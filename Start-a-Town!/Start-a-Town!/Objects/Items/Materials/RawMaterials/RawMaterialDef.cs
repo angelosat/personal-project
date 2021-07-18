@@ -59,7 +59,7 @@ namespace Start_a_Town_
             Body = new Bone(BoneDef.Item, ItemContent.BarsGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools },
             DefaultMaterialType = MaterialType.Metal,
-            CraftingProperties = new CraftingProperties() { IsCraftingMaterial = true },
+            CraftingProperties = new CraftingProperties() { IsCraftingMaterial = true, IsBuildingMaterial = true },
         }.SetMadeFrom(MaterialType.Metal);
 
         static public readonly ItemDef Ore = new ItemDef("Ore")
@@ -73,7 +73,7 @@ namespace Start_a_Town_
             DefaultMaterialType = MaterialType.Metal,
         }.SetMadeFrom(MaterialToken.Metal);
 
-        static public readonly ItemDef Boulders = new("Boulders")
+        static public readonly ItemDef Boulders = new ItemDef("Boulders")
         {
             BaseValue = 1,
             Description = "Chunks of rock",
@@ -83,7 +83,7 @@ namespace Start_a_Town_
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks },
             DefaultMaterialType = MaterialType.Stone,
             CraftingProperties = new CraftingProperties() { IsBuildingMaterial = true, IsCraftingMaterial = true },
-        };
+        }.SetMadeFrom(MaterialType.Stone);
         static public readonly ItemDef Scraps = new ItemDef("Scraps")
         {
             StackDimension = 4,

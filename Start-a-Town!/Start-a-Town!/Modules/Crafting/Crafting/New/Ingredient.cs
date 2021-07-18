@@ -35,49 +35,19 @@ namespace Start_a_Town_
             MaterialType = materialType;
             Amount = amount;
         }
+
+        IEnumerable<Material> _cachedMaterials;
         public IEnumerable<Material> GetAllValidMaterials()
         {
-            if (this.Material != null)
+            if (_cachedMaterials is null)
             {
-                yield return this.Material;
+                var defs = this.GetAllValidItemDefs().ToList();
+                _cachedMaterials = defs.SelectMany(d => d.GetValidMaterials()).Distinct().Intersect(this.AllowedMaterials);
             }
-            else if (this.MaterialType != null)
-            {
-                foreach (var m in this.MaterialType.SubTypes)
-                    yield return m;
-            }
-            else if (this.ItemDef != null)
-            {
-                if (this.MaterialType != null && this.ItemDef.DefaultMaterialType != this.MaterialType)
-                    throw new Exception();
-                if (this.Material != null)
-                {
-                    if (!this.ItemDef.DefaultMaterialType.SubTypes.Contains(this.Material))
-                        throw new Exception();
-                    yield return this.Material;
-                }
-                else
-                {
-                    foreach (var m in this.ItemDef.DefaultMaterialType.SubTypes)
-                        yield return m;
-                }
-            }
-            else
-            {
-                var all = Def.Database.Values.OfType<ItemDef>();
-                foreach (var item in all)
-                {
-                    if (!this.Modifiers.All(m => m.Evaluate(item)))
-                        continue;
-                    if (item.DefaultMaterial != null)
-                        yield return item.DefaultMaterial;
-                    else
-                        foreach (var m in item.DefaultMaterialType.SubTypes)
-                            yield return m;
-                }
-            }
+            foreach (var i in _cachedMaterials)
+                yield return i;
         }
-        
+
         public IEnumerable<ItemDefMaterialAmount> GetAllValidMaterialsNew()
         {
             if (this.ItemDef != null)
@@ -147,6 +117,8 @@ namespace Start_a_Town_
         }
         public Ingredient SetAllow(Material mat, bool allow)
         {
+            if (mat is null)
+                throw new Exception(); 
             if (allow)
                 this.AllowedMaterials.Add(mat);
             else
@@ -155,42 +127,58 @@ namespace Start_a_Town_
         }
         public Ingredient SetAllow(MaterialType matType, bool allow)
         {
+            if (matType is null)
+                throw new Exception(); 
             foreach (var m in matType.SubTypes)
                 this.SetAllow(m, allow);
             return this;
         }
         public Ingredient SetAllow(ItemDef def, bool allow)
         {
+            if (def is null)
+                throw new Exception();
             if (allow)
                 this.SpecifiedItemDefs.Add(def);
             else
                 this.SpecifiedItemDefs.Remove(def);
             return this;
         }
+        HashSet<ItemDef> _resolvedItemDefs;
         private HashSet<ItemDef> ResolveItemDefs()
         {
             var allDefs = Def.GetDefs<ItemDef>();
-            var list =
-                new HashSet<ItemDef>(
-                    this.SpecifiedItemDefs.Concat(
-                    allDefs.Where(d =>
-                        this.AllowedCategories.Contains(d.Category)
-                        &&
-                        // TODO find better way to imply that all materials are allowed when allowedmaterials is empty
-                        (!this.AllowedMaterials.Any() || d.ValidMaterialTypes.Any(t => this.AllowedMaterials.Any(m => m.Type == t)))
-                        )));
+            //var list =
+            //    new HashSet<ItemDef>(
+            //        this.SpecifiedItemDefs.Concat(
+            //        allDefs.Where(d =>
+            //            this.AllowedCategories.Contains(d.Category)
+            //            &&
+            //            // TODO find better way to imply that all materials are allowed when allowedmaterials is empty
+            //            (!this.AllowedMaterials.Any() || d.ValidMaterialTypes.Any(t => this.AllowedMaterials.Any(m => m.Type == t)))
+            //            )));
+            //ResolveAllowedMaterials(list);
+            //return list;
 
-            ResolveAllowedMaterials(list);
-            return list;
+            if (this.SpecifiedItemDefs.Any())
+                this._resolvedItemDefs = this.SpecifiedItemDefs;
+            else
+            {
+                if (this.Modifiers.Any())
+                    this._resolvedItemDefs = new(allDefs.Where(d => this.Modifiers.All(m => m.Evaluate(d))));
+                else if (this.AllowedMaterials.Any())
+                    this._resolvedItemDefs = new(allDefs.Where(d => d.ValidMaterialTypes.Any(t => this.AllowedMaterials.Any(m => m.Type == t))));
+            }
+            if (!this.AllowedMaterials.Any())
+                ResolveAllowedMaterials(this._resolvedItemDefs);
+            return this._resolvedItemDefs;
         }
-
         private void ResolveAllowedMaterials(HashSet<ItemDef> allowedItemDefs)
         {
             if (!this.AllowedMaterials.Any())
                 foreach (var m in allowedItemDefs.SelectMany(i => i.GetValidMaterials()))
                     this.AllowedMaterials.Add(m);
         }
-
+      
         internal string GetLabel()
         {
             return $"{this.Amount}x {this.Material?.Name ?? ""} {this.ItemDef?.Label ?? ""} {this.Modifiers.FirstOrDefault()?.Label ?? ""}";

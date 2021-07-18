@@ -33,7 +33,7 @@ namespace Start_a_Town_
         {
             return Material.Registry[blockdata];
         }
-        public override IEnumerable<byte> GetMaterialVariations()
+        public override IEnumerable<byte> GetEditorVariations()
         {
             return this.Ingredient.AllowedMaterials.Select(m => (byte)m.ID);
         }

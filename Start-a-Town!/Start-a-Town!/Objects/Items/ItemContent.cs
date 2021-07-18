@@ -34,9 +34,9 @@ namespace Start_a_Town_
         static public readonly Sprite HowHead = new Sprite("hoe/hoeHead", 0.5f) { OriginGround = new Vector2(16, 16) };
 
         static public readonly Sprite PlanksGrayscale = new Sprite("planksbw", new Vector2(16, 32), new Vector2(16, 24));//, new Vector2(16, 28), new Vector2(16, 24));
-        static public readonly Sprite BagsGrayscale = new Sprite("soilbagbw", MapBase.BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(16, 24), Joint = new Vector2(16, 24) };
-        static public readonly Sprite BarsGrayscale = new Sprite("metalbars", MapBase.BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(16, 24), Joint = new Vector2(16, 24) };
-        static public readonly Sprite OreGrayscale = new Sprite("boulder", MapBase.BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(16, 24) };
+        static public readonly Sprite BagsGrayscale = new Sprite("soilbagbw", Block.BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(16, 24), Joint = new Vector2(16, 24) };
+        static public readonly Sprite BarsGrayscale = new Sprite("metalbars", Block.BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(16, 24), Joint = new Vector2(16, 24) };
+        static public readonly Sprite OreGrayscale = new Sprite("boulder", Block.BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(16, 24) };
         static public readonly Sprite LogsGrayscale = new Sprite("logsbw", BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(16, 24) };//, Joint = new Vector2(16, 24) }; //OriginGround = new Vector2(16, 24), Joint = new Vector2(16, 24) };
 
         static public readonly Sprite BerriesFull = new Sprite("berries", new Vector2(16, 32), new Vector2(16, 24));

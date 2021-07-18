@@ -1169,8 +1169,8 @@ namespace Start_a_Town_
             fx.CurrentTechnique = fx.Techniques["Combined"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             gd.Textures[0] = Block.Atlas.Texture;
-            gd.Textures[2] = MapBase.ShaderMouseMap;
-            gd.Textures[3] = MapBase.BlockDepthMap;
+            gd.Textures[2] = Block.ShaderMouseMap;
+            gd.Textures[3] = Block.BlockDepthMap;
             this.DepthNear = float.MinValue;
             this.DepthFar = float.MaxValue;
             map.DrawBlocks(mySB, this, a);

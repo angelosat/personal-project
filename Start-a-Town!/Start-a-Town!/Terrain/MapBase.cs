@@ -88,13 +88,10 @@ namespace Start_a_Town_
         
         public abstract Vector2 GetOffset();
 
-        static public Texture2D ShaderMouseMap, BlockDepthMap; // TODO: move these to block class
         static public Texture2D Shadow;
         static internal void Initialize()
         {
             Generator.InitGradient3();
-            ShaderMouseMap = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap - Cube");
-            BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19");
             Shadow = Game1.Instance.Content.Load<Texture2D>("Graphics/shadow");
         }
 

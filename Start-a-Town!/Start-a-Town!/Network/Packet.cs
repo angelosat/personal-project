@@ -22,7 +22,6 @@ namespace Start_a_Town_.Net
         ServerBroadcast,
         PlayerSlotClick,
         SpawnChildObject,
-        PlayerSetBlock,
         PlayerServerCommand,
         PlayerRemoteCall,
         PlayerInput,

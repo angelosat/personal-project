@@ -1,6 +1,4 @@
 ﻿using Start_a_Town_.UI;
-using Start_a_Town_.Net;
-using Start_a_Town_.Towns.Farming;
 
 namespace Start_a_Town_.Towns
 {
@@ -27,6 +25,8 @@ namespace Start_a_Town_.Towns
             PacketPlayerToggleWalk.Init();
             PacketPlayerToggleSprint.Init();
             PacketPlayerJump.Init();
+
+            PacketPlayerSetBlock.Init();
 
             PacketDiggingDesignate.Init();
             PacketEntityDesignation.Init();

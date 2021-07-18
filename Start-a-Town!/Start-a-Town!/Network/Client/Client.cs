@@ -527,24 +527,6 @@ namespace Start_a_Town_.Net
                     });
                     break;
 
-                case PacketType.PlayerSetBlock:
-                    Network.Deserialize(msg.Payload, r =>
-                    {
-                        Vector3 global = r.ReadVector3();
-                        var type = (Start_a_Town_.Block.Types)r.ReadInt32();
-                        var data = r.ReadByte();
-                        var variation = r.ReadInt32();
-                        var orientation = r.ReadInt32();
-
-                        if (!Instance.Map.IsInBounds(global))
-                            return;
-                        Instance.Map.RemoveBlock(global);
-                        var block = Block.Registry[type];
-                        if (block != BlockDefOf.Air)
-                            block.Place(Instance.Map, global, data, variation, orientation);
-                    });
-                    break;
-
                 case PacketType.EntityInventoryChange:
                     Network.Deserialize(msg.Payload, r =>
                     {
@@ -971,19 +953,7 @@ namespace Start_a_Town_.Net
                 TargetArgs.Write(writer, slot);
             }).Send(Instance.PacketID, PacketType.PlayerSlotClick, Instance.Host, Instance.RemoteIP);
         }
-        [Obsolete]
-        internal static void PlayerSetBlock(Vector3 global, Block.Types type, byte data = 0, int variation = 0, int orientation = 0)
-        {
-            //send variation or let server decide on random variation? send -1 if want to let server?
-            Network.Serialize(w =>
-            {
-                w.Write(global);
-                w.Write((int)type);
-                w.Write(data);
-                w.Write(variation);
-                w.Write(orientation);
-            }).Send(Instance.PacketID, PacketType.PlayerSetBlock, Instance.Host, Instance.RemoteIP);
-        }
+       
         [Obsolete]
         internal static void PlayerStartMoving()
         {

@@ -1,34 +1,35 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Graphics;
+using System;
+using System.Linq;
 
 namespace Start_a_Town_.Blocks
 {
     class BlockRoof : Block
     {
-        static Texture2D Depth1 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth1height19");
-        static Texture2D Depth2 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth2height19");
+        static readonly Texture2D Depth1 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth1height19");
+        static readonly Texture2D Depth2 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth2height19");
         public override Material GetMaterial(byte blockdata)
         {
             return MaterialDefOf.LightWood;
         }
-        AtlasDepthNormals.Node.Token[] Parts = new AtlasDepthNormals.Node.Token[4];
-        public BlockRoof():base(Block.Types.Roof, opaque: false)
+
+        readonly AtlasDepthNormals.Node.Token[] Parts = new AtlasDepthNormals.Node.Token[4];
+        public BlockRoof() : base(Types.Roof, opaque: false)
         {
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
-            this.Parts[0] = Block.Atlas.Load("blocks/roof/roof1height19", Depth1, Block.NormalMap);
-            this.Parts[3] = Block.Atlas.Load("blocks/roof/roof2height19", Depth2, Block.NormalMap);
-            this.Parts[2] = Block.Atlas.Load("blocks/roof/roof3height19", MapBase.BlockDepthMap, Block.NormalMap);
-            this.Parts[1] = Block.Atlas.Load("blocks/roof/roof4height19", MapBase.BlockDepthMap, Block.NormalMap);
+            this.Parts[0] = Atlas.Load("blocks/roof/roof1height19", Depth1, NormalMap);
+            this.Parts[3] = Atlas.Load("blocks/roof/roof2height19", Depth2, NormalMap);
+            this.Parts[2] = Atlas.Load("blocks/roof/roof3height19", BlockDepthMap, NormalMap);
+            this.Parts[1] = Atlas.Load("blocks/roof/roof4height19", BlockDepthMap, NormalMap);
             this.Variations.Add(this.Parts.First());
 
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
         public override float GetHeight(byte data, float x, float y)
         {
-            switch(data)
+            switch (data)
             {
                 case 0:
                     return (1 - y);
@@ -38,7 +39,7 @@ namespace Start_a_Town_.Blocks
 
                 case 2:
                     return y;
-                    
+
                 case 3:
                     return x;
 
@@ -55,7 +56,7 @@ namespace Start_a_Town_.Blocks
         {
             return (byte)rotation;
         }
-        
+
         public override AtlasDepthNormals.Node.Token GetPreviewToken(int variation, int orientation, int cameraRotation, byte data)
         {
             var o = (orientation + cameraRotation) % 4;

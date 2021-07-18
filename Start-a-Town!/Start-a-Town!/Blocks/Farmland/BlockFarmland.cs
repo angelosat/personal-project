@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 
 namespace Start_a_Town_.Blocks
@@ -8,7 +6,7 @@ namespace Start_a_Town_.Blocks
     partial class BlockFarmland : Block
     {
         public override bool IsMinable => true;
-        AtlasDepthNormals.Node.Token[] Textures;
+        readonly AtlasDepthNormals.Node.Token[] Textures;
         public override Material GetMaterial(byte blockdata)
         {
             return MaterialDefOf.Soil;
@@ -17,8 +15,8 @@ namespace Start_a_Town_.Blocks
             : base(Types.Farmland)
         {
             this.Textures = new AtlasDepthNormals.Node.Token[2];
-            this.Textures[0] = Block.Atlas.Load("blocks/farmland", MapBase.BlockDepthMap, Block.NormalMap);
-            this.Textures[1] = Block.Atlas.Load("blocks/farmlandSowed", MapBase.BlockDepthMap, Block.NormalMap);
+            this.Textures[0] = Atlas.Load("blocks/farmland", BlockDepthMap, NormalMap);
+            this.Textures[1] = Atlas.Load("blocks/farmlandSowed", BlockDepthMap, NormalMap);
             this.Variations.Add(this.Textures[0]);
         }
 

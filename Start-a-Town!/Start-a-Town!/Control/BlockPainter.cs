@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
+using Start_a_Town_.Net;
 
 namespace Start_a_Town_.PlayerControl
 {
@@ -66,7 +67,7 @@ namespace Start_a_Town_.PlayerControl
             byte state = isDelete ? (byte)0 : this.State;
 
             if (global != this.LastPainted)
-                Net.Client.PlayerSetBlock(global, block.Type, state, this.Variation, this.Orientation);
+                PacketPlayerSetBlock.Send(Client.Instance, Client.Instance.GetPlayer(), global, block.Type, state, this.Variation, this.Orientation);
             this.LastPainted = global;
 
             this.Variation = this.Random.Next(block.Variations.Count);

@@ -87,7 +87,7 @@ namespace Start_a_Town_
                     );
             return table;
         }
-        public override IEnumerable<byte> GetMaterialVariations()
+        public override IEnumerable<byte> GetEditorVariations()
         {
             return (from mat in Material.Registry.Values
                     where mat.Type == MaterialType.Wood

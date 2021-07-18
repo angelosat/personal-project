@@ -8,9 +8,9 @@
         }
 
         public BlockStool()
-            : base(Block.Types.Stool, opaque: false)
+            : base(Types.Stool, opaque: false)
         {
-            this.Variations.Add(Block.Atlas.Load("blocks/furniture/stool", MapBase.BlockDepthMap, Block.NormalMap));
+            this.Variations.Add(Atlas.Load("blocks/furniture/stool", BlockDepthMap, NormalMap));
             this.Furniture = FurnitureDefOf.Table;
             this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();

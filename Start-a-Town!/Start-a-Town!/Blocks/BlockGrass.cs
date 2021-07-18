@@ -1,59 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
-using Start_a_Town_.Components.Interactions;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.Particles;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     class BlockGrass : Block
     {
         public override bool IsMinable => true;
-
-        public override Color DirtColor
-        {
-            get
-            {
-                return Color.DarkOliveGreen;
-            }
-        }
+        public override Color DirtColor => Color.DarkOliveGreen;
         public override ParticleEmitterSphere GetEmitter()
         {
             return base.GetDirtEmitter();
         }
 
-        List<AtlasDepthNormals.Node.Token> Overlays = new List<AtlasDepthNormals.Node.Token>(3);
-        public static List<AtlasDepthNormals.Node.Token> FlowerOverlays = new List<AtlasDepthNormals.Node.Token>();
+        readonly List<AtlasDepthNormals.Node.Token> Overlays = new(3);
+        public static List<AtlasDepthNormals.Node.Token> FlowerOverlays = new();
 
-        static public readonly double TramplingChance = 0.1f;
+        public static readonly double TramplingChance = 0.1f;
 
         public BlockGrass()
             : base(Block.Types.Grass, 0, 1, true, true)
         {
             this.LootTable = new LootTable(
-                       
-                        new Loot(()=>ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), chance: 1f, count: 1)
+                        new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), chance: 1f, count: 1)
                         );
 
             this.LoadVariations("grass/grass1", "grass/grass2", "grass/grass3", "grass/grass4");
 
-            foreach (var item in new AtlasDepthNormals.Node.Token[] { 
-                Block.Atlas.Load("blocks/grass/grass1-overlay", MapBase.BlockDepthMap, Block.BlockMouseMap.Texture),
-                Block.Atlas.Load("blocks/grass/grass2-overlay", MapBase.BlockDepthMap, Block.BlockMouseMap.Texture),
-                Block.Atlas.Load("blocks/grass/grass3-overlay", MapBase.BlockDepthMap, Block.BlockMouseMap.Texture)})
+            foreach (var item in new AtlasDepthNormals.Node.Token[] {
+                Atlas.Load("blocks/grass/grass1-overlay", BlockDepthMap, BlockMouseMap.Texture),
+                Atlas.Load("blocks/grass/grass2-overlay", BlockDepthMap, BlockMouseMap.Texture),
+                Atlas.Load("blocks/grass/grass3-overlay", BlockDepthMap, BlockMouseMap.Texture)})
                 this.Overlays.Add(item);
 
-            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlayred", MapBase.BlockDepthMap, Block.NormalMap));
-            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlayyellow", MapBase.BlockDepthMap, Block.NormalMap));
-            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlaywhite", MapBase.BlockDepthMap, Block.NormalMap));
-            FlowerOverlays.Add(Block.Atlas.Load("blocks/grass/flowersoverlaypurple", MapBase.BlockDepthMap, Block.NormalMap));
-          
+            FlowerOverlays.Add(Atlas.Load("blocks/grass/flowersoverlayred", BlockDepthMap, NormalMap));
+            FlowerOverlays.Add(Atlas.Load("blocks/grass/flowersoverlayyellow", BlockDepthMap, NormalMap));
+            FlowerOverlays.Add(Atlas.Load("blocks/grass/flowersoverlaywhite", BlockDepthMap, NormalMap));
+            FlowerOverlays.Add(Atlas.Load("blocks/grass/flowersoverlaypurple", BlockDepthMap, NormalMap));
         }
-       
+
         internal static void GrowRandomFlower(MapBase map, IntVec3 global)
         {
             var net = map.Net;
@@ -73,22 +63,16 @@ namespace Start_a_Town_
             var flowerIndex = data - 1; //because 0 is no flowers
             return FlowerOverlays[flowerIndex];
         }
-        public override IEnumerable<byte> GetMaterialVariations()
+        public override IEnumerable<byte> GetEditorVariations()
         {
-            var list = base.GetMaterialVariations();
-            foreach (var i in list)
-                yield return i;
-            yield return 1;
-            yield return 2;
-            yield return 3;
-            yield return 4;
+            return Enumerable.Range(0, 5).Select(i => (byte)i);
         }
         static void Trample(MapBase map, IntVec3 global)
         {
             var cell = map.GetCell(global);
             BlockDefOf.Soil.Place(map, global, 0, cell.Variation, 0);
         }
-       
+
         public override void OnSteppedOn(GameObject actor, IntVec3 global)
         {
             var net = actor.Net;
@@ -97,7 +81,7 @@ namespace Start_a_Town_
             if (actor.Map.Random.Chance(TramplingChance))
                 Packets.SyncTrample(actor.Map, global);
         }
-       
+
         internal override float GetFertility(Cell cell)
         {
             if (cell.BlockData > 0) // if there are flowers grown, dont grow anything else (return fertility = 0)
@@ -108,7 +92,7 @@ namespace Start_a_Town_
         {
             return MaterialDefOf.Soil;
         }
-       
+
         public override MyVertex[] Draw(Chunk chunk, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             return base.Draw(chunk, blockcoords, camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data);
@@ -121,7 +105,6 @@ namespace Start_a_Town_
             var fl = this.GetFlowerOverlay(data);
             return canvas.Opaque.DrawBlock(fl.Atlas.Texture, screenBounds, fl, camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
         }
-        static BlockGrass() { }
         public class Packets
         {
             static readonly int PacketGrowRandomFlower, PacketTrample;
@@ -133,7 +116,7 @@ namespace Start_a_Town_
             public static void GrowRandomFlower(MapBase map, IntVec3 global)
             {
                 var net = map.Net;
-                if(net is Server)
+                if (net is Server)
                     BlockGrass.GrowRandomFlower(map, global);
                 net.GetOutgoingStream().Write(PacketGrowRandomFlower, global);
             }

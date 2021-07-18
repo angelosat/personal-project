@@ -522,7 +522,7 @@ namespace Start_a_Town_
                 fx.Parameters["AtlasHeight"].SetValue(Block.Atlas.Texture.Height);
                 fx.Parameters["Viewport"].SetValue(new Vector2(Device.Viewport.Width, Device.Viewport.Height));
                 Device.Textures[0] = Block.Atlas.Texture;
-                Device.Textures[2] = MapBase.ShaderMouseMap;
+                Device.Textures[2] = Block.ShaderMouseMap;
                 Device.DepthStencilState = DepthStencilState.Default;
                 fx.CurrentTechnique.Passes["Pass1"].Apply();
                 Device.DrawUserIndexedPrimitives<MyVertex>(

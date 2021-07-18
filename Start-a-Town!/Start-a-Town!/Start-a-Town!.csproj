@@ -963,6 +963,7 @@
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Objects\GameObjectSlot.cs" />
     <Compile Include="SaveTag.cs" />
+    <Compile Include="Terrain\PacketPlayerSetBlock.cs" />
     <Compile Include="Terrain\WorldArgs.cs" />
     <Compile Include="TextInput.cs">
       <SubType>Code</SubType>

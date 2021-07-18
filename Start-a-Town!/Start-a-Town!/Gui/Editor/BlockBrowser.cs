@@ -39,7 +39,7 @@ namespace Start_a_Town_.UI.Editor
             if (this.GridVariations2 is not null)
                 this.Panel_Variants.Controls.Remove(this.GridVariations2);
             var variations = new List<Cell>();
-            foreach (var item in block.GetMaterialVariations())
+            foreach (var item in block.GetEditorVariations())
                 variations.Add(new Cell() { Block = block, BlockData = item });
             this.GridVariations2 = new SlotGridCustom<SlotCustom<Cell>, Cell>(variations, 8, (slot, cell) =>
             {

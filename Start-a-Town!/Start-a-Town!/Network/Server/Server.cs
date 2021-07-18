@@ -596,34 +596,6 @@ namespace Start_a_Town_.Net
                     Instance.Enqueue(PacketType.PlayerSlotClick, msg.Payload, SendType.OrderedReliable);
                     return;
 
-                case PacketType.PlayerSetBlock:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        Vector3 global = r.ReadVector3();
-                        var type = (Block.Types)r.ReadInt32();
-                        var data = r.ReadByte();
-                        var variation = r.ReadInt32();
-                        var orientation = r.ReadInt32();
-
-                        if (!Instance.Map.IsInBounds(global))
-                            return;
-                        // DONT CALL PREVIOUS BLOCK'S REMOVE METHOD
-                        // when in block editing mode, we don't want to call block's remove method, so for example they don't pop out their contents or have any other effects to the world
-                        // HOWEVER we want to dispose their contents (gameobjects) if any! 
-                        // so 1) query their contents and dispose them here? 
-                        //    2) call something like dispose() on them and let them dispose them themselves?
-                        // TODO: DECIDE!
-                        Instance.Map.RemoveBlock(global);
-
-                        if (type != Block.Types.Air)
-                        {
-                            var block = Block.Registry[type];
-                            block.Place(Instance.Map, global, data, variation, orientation);
-                        }
-                        Instance.Enqueue(PacketType.PlayerSetBlock, msg.Payload, SendType.OrderedReliable, global, true);
-                    });
-                    return;
-
                 case PacketType.PlayerRemoteCall:
                     msg.Payload.Deserialize(r =>
                     {

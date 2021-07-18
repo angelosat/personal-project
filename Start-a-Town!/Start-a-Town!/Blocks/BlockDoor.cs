@@ -230,17 +230,17 @@ namespace Start_a_Town_
         }
 
         public BlockDoor()
-            : base(Block.Types.Door, 0, 1, false, true)
+            : base(Types.Door, 0, 1, false, true)
         {
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
 
             var ndepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorndepth");
             var wdepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwdepth");
 
-            Orientations[0] = Block.Atlas.Load("blocks/doors/doors", MapBase.BlockDepthMap, Block.NormalMap);
-            Orientations[1] = Block.Atlas.Load("blocks/doors/doorw", wdepth, Block.NormalMap);
-            Orientations[2] = Block.Atlas.Load("blocks/doors/doorn", ndepth, Block.NormalMap);
-            Orientations[3] = Block.Atlas.Load("blocks/doors/doore", MapBase.BlockDepthMap, Block.NormalMap);
+            Orientations[0] = Atlas.Load("blocks/doors/doors", BlockDepthMap, NormalMap);
+            Orientations[1] = Atlas.Load("blocks/doors/doorw", wdepth, NormalMap);
+            Orientations[2] = Atlas.Load("blocks/doors/doorn", ndepth, NormalMap);
+            Orientations[3] = Atlas.Load("blocks/doors/doore", BlockDepthMap, NormalMap);
 
             this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
         }
@@ -248,7 +248,7 @@ namespace Start_a_Town_
         {
             return new Icon(this.GetDefault());
         }
-        public override IEnumerable<byte> GetMaterialVariations()
+        public override IEnumerable<byte> GetEditorVariations()
         {
             yield return 0;
         }

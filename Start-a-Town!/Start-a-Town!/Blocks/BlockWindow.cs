@@ -20,18 +20,18 @@ namespace Start_a_Town_.Blocks
                 new AtlasDepthNormals.Node.Token[][][] { 
                     new AtlasDepthNormals.Node.Token[][]{
                         new AtlasDepthNormals.Node.Token[]{
-                            Block.Atlas.Load("blocks/windows/windowframebottom", MapBase.BlockDepthMap, Block.NormalMap),
-                            Block.Atlas.Load("blocks/windows/glassbottom", MapBase.BlockDepthMap, Block.NormalMap)},
+                            Atlas.Load("blocks/windows/windowframebottom", BlockDepthMap, NormalMap),
+                            Atlas.Load("blocks/windows/glassbottom", BlockDepthMap, NormalMap)},
                         new AtlasDepthNormals.Node.Token[]{
-                            Block.Atlas.Load("blocks/windows/windowframebottom2", MapBase.BlockDepthMap, Block.NormalMap),
-                            Block.Atlas.Load("blocks/windows/glassbottom2", MapBase.BlockDepthMap, Block.NormalMap)}},
+                            Atlas.Load("blocks/windows/windowframebottom2", BlockDepthMap, NormalMap),
+                            Atlas.Load("blocks/windows/glassbottom2", BlockDepthMap, NormalMap)}},
                     new AtlasDepthNormals.Node.Token[][]{
                         new AtlasDepthNormals.Node.Token[]{
-                            Block.Atlas.Load("blocks/windows/windowframetop", MapBase.BlockDepthMap, Block.NormalMap),
-                            Block.Atlas.Load("blocks/windows/glasstop", MapBase.BlockDepthMap, Block.NormalMap)},
+                            Atlas.Load("blocks/windows/windowframetop", BlockDepthMap, NormalMap),
+                            Atlas.Load("blocks/windows/glasstop", BlockDepthMap, NormalMap)},
                         new AtlasDepthNormals.Node.Token[]{
-                            Block.Atlas.Load("blocks/windows/windowframetop2", MapBase.BlockDepthMap, Block.NormalMap),
-                            Block.Atlas.Load("blocks/windows/glasstop2", MapBase.BlockDepthMap, Block.NormalMap)}}
+                            Atlas.Load("blocks/windows/windowframetop2", BlockDepthMap, NormalMap),
+                            Atlas.Load("blocks/windows/glasstop2", BlockDepthMap, NormalMap)}}
 
             
             };

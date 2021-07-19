@@ -72,9 +72,9 @@ namespace Start_a_Town_.Net
             PacketHandlersNewNewNew.Add(id, handler);
         }
 
-        static void OnGameEvent(GameEvent e)
+        void OnGameEvent(GameEvent e)
         {
-            GameMode.Current.HandleEvent(Instance, e);
+            GameMode.Current.HandleEvent(this, e);
             foreach (var item in Game1.Instance.GameComponents)
                 item.OnGameEvent(e);
 
@@ -83,7 +83,7 @@ namespace Start_a_Town_.Net
         public void EventOccured(Message.Types type, params object[] p)
         {
             var e = new GameEvent(ServerClock.TotalMilliseconds, type, p);
-            OnGameEvent(e);
+            this.OnGameEvent(e);
         }
 
         public static CancellationTokenSource ChunkLoaderToken = new();

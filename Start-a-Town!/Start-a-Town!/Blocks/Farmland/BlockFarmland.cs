@@ -43,7 +43,6 @@ namespace Start_a_Town_.Blocks
             var plant = plantdef.CreatePlant();
             plant.SyncInstantiate(map.Net);
             plant.SyncSpawn(map, global.Above());
-
             var placer = new BlockSoil.Placer();
             placer.Place(map, global);
             map.Town.ZoneManager.GetZoneAt(global)?.Invalidate();

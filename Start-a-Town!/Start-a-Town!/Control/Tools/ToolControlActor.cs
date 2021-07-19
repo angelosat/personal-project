@@ -238,8 +238,8 @@ namespace Start_a_Town_
                     {
                         var entity = e.Parameters[1] as GameObject;
                         Net.Client.Instance.Map.Camera.ToggleFollowing(entity);
-                        if (entity == null)
-                            ToolManager.SetTool(null);//e.Parameters[1] as GameObject));
+                        if (entity is null)
+                            ToolManager.SetTool(null);
                     }
                     break;
 

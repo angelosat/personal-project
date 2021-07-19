@@ -92,9 +92,7 @@ namespace Start_a_Town_
                     break;
 
                 case Components.Message.Types.BlockChanged:
-                    MapBase map;
-                    IntVec3 global;
-                    GameEvents.EventBlockChanged.Read(e.Parameters, out map, out global);
+                    GameEvents.EventBlockChanged.Read(e.Parameters, out var map, out var global);
                     HandleBlocksChanged(new IntVec3[] { global });
                     break;
 

@@ -11,8 +11,7 @@ namespace Start_a_Town_.UI
         where TControl : ButtonBase, new()
         where TObject : class
     {
-        
-        public TObject SelectedItem { get { return (SelectedControl == null ? default(TObject) : SelectedControl.Tag as TObject); } }
+        public TObject SelectedItem => SelectedControl == null ? default(TObject) : SelectedControl.Tag as TObject;
         TControl SelectedControl;
 
         public void SelectItem(TObject obj)
@@ -21,15 +20,7 @@ namespace Start_a_Town_.UI
             this.btn_Click(this.SelectedControl);
         }
 
-        public List<TControl> Items
-        {
-            get
-            {
-                return this.Client.Controls.Cast<TControl>().ToList();
-            }
-        }
-
-        public Action<TObject> ItemChangedFunc = (item) => { };
+        public Action<TObject> ItemChangedFunc = item => { };
         public IEnumerable<TObject> List = new List<TObject>();
         public ListBox(int width, int height) : base(new Rectangle(0,0,width,height)) { }
         public ListBox(Rectangle bounds) : base(bounds) { }

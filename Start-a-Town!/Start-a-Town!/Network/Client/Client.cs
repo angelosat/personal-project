@@ -313,9 +313,8 @@ namespace Start_a_Town_.Net
             UI.TooltipManager.OnGameEvent(e);
             ScreenManager.CurrentScreen.OnGameEvent(e);
 
-            ToolManager.OnGameEvent(e);
-            if (this.Map != null)
-                this.Map.OnGameEvent(e);
+            ToolManager.OnGameEvent(this, e);
+            this.Map?.OnGameEvent(e);
         }
 
         [Obsolete]

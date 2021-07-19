@@ -405,6 +405,9 @@ namespace Start_a_Town_
                 return tired;
             }
         }
+
+        public GameObject Target => null;//.GetComponent<AttackComponent>().Target;
+
         public IEnumerable<TaskGiver> GetTaskGivers()
         {
             var givers = this.GetComponent<NeedsComponent>().NeedsNew.Select(n => n.TaskGiver);

@@ -254,8 +254,8 @@ namespace Start_a_Town_
         {
             this.ActiveTool = null;
         }
-
-        internal static void OnGameEvent(GameEvent e)
+        static readonly ToolControlActor ToolControlActor = new();
+        internal static void OnGameEvent(INetwork net, GameEvent e)
         {
             if (Instance.ActiveTool != null)
                 Instance.ActiveTool.OnGameEvent(e); 
@@ -265,9 +265,9 @@ namespace Start_a_Town_
                     if (e.Parameters[0] == Client.Instance.GetPlayer())
                     {
                         var actor = e.Parameters[1] as GameObject;
-                        actor.Net.Map.Camera.ToggleFollowing(actor);
-                        if (actor != null)
-                            SetTool(new ToolControlActor());
+                        net.Map.Camera.ToggleFollowing(actor);
+                        if (actor is not null)
+                            SetTool(ToolControlActor);
                     }
                     break;
 

@@ -6,11 +6,11 @@ namespace Start_a_Town_
     class PacketInventoryDrop
     {
         static int p;
-        static public void Init()
+        internal static void Init()
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(INetwork net, int actorID, int itemID, int amount)
+        internal static void Send(INetwork net, int actorID, int itemID, int amount)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(p);
@@ -18,7 +18,7 @@ namespace Start_a_Town_
             stream.Write(itemID);
             stream.Write(amount);
         }
-        static public void Receive(INetwork net, BinaryReader r)
+        static void Receive(INetwork net, BinaryReader r)
         {
             var actorID = r.ReadInt32();
             var itemID = r.ReadInt32();

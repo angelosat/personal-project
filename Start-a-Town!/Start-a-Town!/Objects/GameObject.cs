@@ -748,55 +748,41 @@ namespace Start_a_Town_
 
         public void Focus()
         {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-            {
-                comp.Value.Focus(this);
-            }
+            foreach (var comp in this.Components.Values)
+                comp.Focus(this);
         }
         public void FocusLost()
         {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-            {
-                comp.Value.FocusLost(this);
-            }
+            foreach (var comp in this.Components.Values)
+                comp.FocusLost(this);
         }
 
         public virtual void Draw(MySpriteBatch sb, Camera camera)
         {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-            {
-                comp.Value.Draw(sb, this, camera);
-            }
+            foreach (var comp in this.Components.Values)
+                comp.Draw(sb, this, camera);
         }
         public virtual void Draw(MySpriteBatch sb, DrawObjectArgs e)
         {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-            {
-                comp.Value.Draw(sb, e);
-            }
+            foreach (var comp in this.Components.Values)
+                comp.Draw(sb, e);
         }
 
         internal void DrawMouseover(MySpriteBatch sb, Camera camera)
         {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-            {
-                comp.Value.DrawMouseover(sb, camera, this);
-            }
+            foreach (var comp in this.Components.Values)
+                comp.DrawMouseover(sb, camera, this);
         }
         internal void DrawInterface(SpriteBatch sb, Camera camera)
         {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-            {
-                comp.Value.DrawUI(sb, camera, this);
-            }
+            foreach (var comp in this.Components.Values)
+                comp.DrawUI(sb, camera, this);
         }
 
         public void DrawPreview(MySpriteBatch sb, Camera cam, TargetArgs target, bool precise)
         {
             if (target.Type != TargetType.Position)
-            {
                 return;
-            }
 
             var blockHeight = Block.GetBlockHeight(target.Map, target.Global);
             var global = target.Global + target.Face * new Vector3(1, 1, blockHeight) + (precise ? target.Precise : Vector3.Zero);
@@ -1091,9 +1077,6 @@ namespace Start_a_Town_
 
         public bool Dispose()
         {
-            foreach (var comp in this.Components.Values)
-                comp.OnDispose();
-
             this.Net.EventOccured(Message.Types.ObjectDisposed, this);
             return this.Net.DisposeObject(this);
         }

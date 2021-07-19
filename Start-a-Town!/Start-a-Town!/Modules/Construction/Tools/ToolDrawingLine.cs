@@ -8,7 +8,7 @@ namespace Start_a_Town_.Modules.Construction
     class ToolDrawingLine : ToolDrawing
     {
         public override string Name => "Line";
-        public override Modes Mode { get { return Modes.Line; } }
+        public override Modes Mode => Modes.Line;
         public ToolDrawingLine()
         {
         }
@@ -16,7 +16,7 @@ namespace Start_a_Town_.Modules.Construction
             : base(callback)
         {
         }
-        public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
+        public override Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (!this.Enabled)
                 return Messages.Default;

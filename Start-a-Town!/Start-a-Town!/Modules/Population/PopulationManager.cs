@@ -11,7 +11,7 @@ namespace Start_a_Town_
 {
     public class PopulationManager : ISaveable, ISerializable
     {
-        static public class Packets
+        static internal class Packets
         {
             static int PacketVisitorArrived, PacketAdventurerCreated;
             public static void Init()
@@ -54,7 +54,7 @@ namespace Start_a_Town_
                 props.Discovered = true;
             }
         }
-        static public void Init()
+        static internal void Init()
         {
             Packets.Init();
             OffsiteAreaDefOf.Init();

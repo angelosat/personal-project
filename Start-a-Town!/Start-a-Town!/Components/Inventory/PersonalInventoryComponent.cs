@@ -226,7 +226,7 @@ namespace Start_a_Town_.Components
         {
             if (this.HaulSlot.Object == null)
                 return false;
-            if (!this.Slots.InsertObject(this.HaulSlot))
+            if (!this.Slots.Insert(this.HaulSlot))
 
             {
                 // throw? or return false and raise event so we can handle it and display a message : not enough space?
@@ -251,7 +251,7 @@ namespace Start_a_Town_.Components
             var actor = this.Parent as Actor;
             if (obj == null)
                 return false;
-            if (!this.Slots.InsertObject(obj))
+            if (!this.Slots.Insert(obj))
 
             {
                 // throw? or return false and raise event so we can handle it and display a message : not enough space?
@@ -321,7 +321,7 @@ namespace Start_a_Town_.Components
             // TODO: if can't receive, haul item instead or drop on ground?
             var obj = objSlot.Object;
             var parent = this.Parent;
-            if(this.Slots.InsertObject(objSlot))
+            if(this.Slots.Insert(objSlot))
             {
                 if(report)
                     parent.Net.EventOccured(Message.Types.ItemGot, parent, obj);

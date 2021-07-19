@@ -49,7 +49,7 @@ namespace Start_a_Town_.Crafting
 
         public bool Insert(Entity material)
         {
-            return this.Input.InsertObject(material);
+            return this.Input.Insert(material);
         }
 
         protected override void AddSaveData(SaveTag tag)

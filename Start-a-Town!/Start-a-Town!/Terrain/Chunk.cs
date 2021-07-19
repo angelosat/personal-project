@@ -286,6 +286,7 @@ namespace Start_a_Town_
 
         public void Add(GameObject obj)
         {
+            obj.Map = this.Map;
             this.Objects.Add(obj);
         }
         public bool Remove(GameObject obj)
@@ -1389,7 +1390,7 @@ namespace Start_a_Town_
             {
                 GameObject obj = GameObject.Load(tag);
                 if (obj is not null)
-                    this.Objects.Add(obj);
+                    this.Add(obj);
             }
 
             if (chunktag.TryGetTag("Block Objects", out SaveTag blobjTag))

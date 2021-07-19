@@ -6,5 +6,9 @@
         {
             return actor.Map.World.Population.GetVisitorProperties(actor);
         }
+        internal static void VisitOffsiteArea(this Actor actor, OffsiteAreaDef area)
+        {
+            actor.GetVisitorProperties().OffsiteArea = area;
+        }
     }
 }

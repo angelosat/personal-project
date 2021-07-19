@@ -6,9 +6,9 @@ namespace Start_a_Town_
     {
         public override void Perform(Actor a, TargetArgs t)
         {
+            var area = OffsiteAreaDefOf.Forest; //TODO store target visitor area in the visitorproperites class when the decision to depart occurs and fetch it from there
+            a.VisitOffsiteArea(area);
             a.Despawn();
-            if(a.GetVisitorProperties() is VisitorProperties props)
-                props.OffsiteArea = OffsiteAreaDefOf.Forest;
             a.Net.Report($"{a.Name} has departed!");
         }
         public override object Clone()

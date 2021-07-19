@@ -78,9 +78,9 @@ namespace Start_a_Town_.UI
             var actor = obj.Net.GetPlayer()?.ControllingEntity;
             if (actor is null)
                 return;
-            var playertarget = actor.GetComponent<AttackComponent>().Target;
-            if (this.Object is GameObject entity && playertarget != null)
-                if (entity.RefID == playertarget.RefID)
+            if (this.Object is GameObject entity && 
+                actor.Target is GameObject playertarget &&
+                entity.RefID == playertarget.RefID)
                 {
                     var border = this.BoundsScreen;
                     border.Inflate(1, 1);

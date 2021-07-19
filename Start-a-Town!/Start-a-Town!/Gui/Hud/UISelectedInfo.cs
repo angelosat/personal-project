@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
-    public class UISelectedInfo : GroupBox, IUISelection
+    public sealed class UISelectedInfo : GroupBox, IUISelection
     {
         public static UISelectedInfo Instance = new();
         readonly GroupBox BoxTabs, BoxButtons, BoxIcons, BoxInfo;

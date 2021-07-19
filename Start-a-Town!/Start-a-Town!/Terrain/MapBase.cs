@@ -634,7 +634,7 @@ namespace Start_a_Town_
                     return;
             }
             var entity = block.CreateBlockEntity();
-            if (entity != null)
+            if (entity is not null)
             {
                 this.AddBlockEntity(global, entity);
                 this.EventOccured(Message.Types.BlockEntityAdded, entity, global);

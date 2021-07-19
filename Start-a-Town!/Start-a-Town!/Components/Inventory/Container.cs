@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Start_a_Town_.Components
@@ -20,7 +21,7 @@ namespace Start_a_Town_.Components
                     slot.Parent = value;
             }
         }
-        public List<GameObjectSlot> Slots = new List<GameObjectSlot>();
+        public List<GameObjectSlot> Slots = new();
         public Container()
         {
 
@@ -29,43 +30,16 @@ namespace Start_a_Town_.Components
         {
             this.Initialize(capacity);
         }
-        public Container(int capacity, Func<GameObject, bool> filter)
-        {
-            this.Filter = filter;
-            this.Initialize(capacity, filter);
-        }
         private void Initialize(int capacity)
         {
             for (int i = 0; i < capacity; i++)
-            {
                 this.Slots.Add(new GameObjectSlot((byte)i) { ContainerNew = this });
-            }
         }
-        private void Initialize(int capacity, Func<GameObject, bool> filter)
-        {
-            for (int i = 0; i < capacity; i++)
-            {
-                this.Slots.Add(new GameObjectSlot((byte)i) { ContainerNew = this, Filter = filter });
-            }
-        }
-
-        public bool Contains(Predicate<GameObject> filter)
-        {
-            return (from slot in this.Slots
-                    where slot.HasValue
-                    where filter(slot.Object)
-                    select slot).FirstOrDefault() != null;
-        }
-
+        
         public GameObjectSlot GetSlot(int id)
         {
             return this.Slots.FirstOrDefault(f => f.ID == id);
         }
-        public GameObjectSlot GetSlot(string name)
-        {
-            return this.Slots.FirstOrDefault(f => f.Name == name);
-        }
-
         public List<GameObjectSlot> GetNonEmpty()
         {
             return (from slot in this.Slots where slot.Object != null select slot).ToList();
@@ -84,7 +58,7 @@ namespace Start_a_Town_.Components
         }
         public int Capacity => this.Slots.Count;
 
-        public void Write(System.IO.BinaryWriter writer)
+        public void Write(BinaryWriter writer)
         {
             var haveObjects = from slot in this.Slots where slot.Object != null select slot;
             writer.Write(haveObjects.Count());
@@ -94,7 +68,7 @@ namespace Start_a_Town_.Components
                 slot.Write(writer);
             }
         }
-        public void Read(System.IO.BinaryReader reader)
+        public void Read(BinaryReader reader)
         {
             int haveObjects = reader.ReadInt32();
             for (int i = 0; i < haveObjects; i++)
@@ -113,13 +87,11 @@ namespace Start_a_Town_.Components
         {
             var text = this.ToString();
             foreach (var slot in this.Slots)
-            {
                 text += '\n' + slot.ToString();
-            }
             return text;
         }
 
-        public bool InsertObject(Entity obj)
+        public bool Insert(Entity obj)
         {
             var net = obj.Net;
 
@@ -162,7 +134,7 @@ namespace Start_a_Town_.Components
             return true;
 
         }
-        public bool InsertObject(GameObjectSlot objSlot)
+        public bool Insert(GameObjectSlot objSlot)
         {
             if (objSlot.Object == null)
                 return false;
@@ -214,27 +186,15 @@ namespace Start_a_Town_.Components
             slot.Clear();
             return true;
         }
-        public int Count(Func<GameObject, bool> condition)
-        {
-            int amount = 0;
-            (from slot in this.Slots
-             where slot.HasValue
-             where condition(slot.Object)
-             select slot)
-             .ToList()
-             .ForEach(slot => amount += slot.StackSize);
-            return amount;
-        }
-
+      
         public List<SaveTag> Save()
         {
-            List<SaveTag> containerTag = new List<SaveTag>();
+            var containerTag = new List<SaveTag>();
             containerTag.Add(new SaveTag(SaveTag.Types.Int, "ID", this.ID));
-            containerTag.Add(new SaveTag(SaveTag.Types.Int, "Count", this.Slots.Count));
-            SaveTag items = new SaveTag(SaveTag.Types.Compound, "Items");
+            var items = new SaveTag(SaveTag.Types.Compound, "Items");
             for (int i = 0; i < this.Slots.Count; i++)
             {
-                GameObjectSlot objSlot = this.Slots[i];
+                var objSlot = this.Slots[i];
                 if (objSlot.Object != null)
                     items.Add(new SaveTag(SaveTag.Types.Compound, i.ToString(), objSlot.Save()));
             }
@@ -243,16 +203,15 @@ namespace Start_a_Town_.Components
         }
         public Container Load(SaveTag containerTag)
         {
-            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;
+            var shit = containerTag.Value as Dictionary<string, SaveTag>;
             containerTag.TryGetTagValue<int>("ID", out this.ID);
-            int count = (int)shit["Count"].Value;
-            Dictionary<string, SaveTag> itemList = shit["Items"].Value as Dictionary<string, SaveTag>;
+            var itemList = shit["Items"].Value as Dictionary<string, SaveTag>;
             foreach (SaveTag itemTag in itemList.Values)
             {
                 if (itemTag.Value == null)
                     continue;
                 int index = byte.Parse(itemTag.Name);
-                GameObjectSlot slot = GameObjectSlot.Create(itemTag);
+                var slot = GameObjectSlot.Create(itemTag);
                 slot.ContainerNew = this;
                 slot.ID = (byte)index;
                 this.Slots[index].Object = slot.Object;

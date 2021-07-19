@@ -50,7 +50,6 @@ namespace Start_a_Town_.Components
         public virtual void Initialize(GameObject parent, RandomThreaded random) { this.Initialize(parent); }
         public virtual void OnSpawn() { }
         public virtual void OnDespawn() { }
-        public virtual void OnDispose() { }
         public virtual void OnObjectCreated(GameObject parent) { }
         public virtual void OnObjectLoaded(GameObject parent) { }
         public virtual void OnObjectSynced(GameObject parent) { }

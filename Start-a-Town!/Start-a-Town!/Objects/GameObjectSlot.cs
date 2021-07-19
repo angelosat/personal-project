@@ -158,13 +158,12 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return this.ID.ToString() + ":" + (!string.IsNullOrWhiteSpace(this.Name) ? this.Name + ":" : "") + (Object != null ? Object.Name + " (" + StackSize + ")" : "<empty>");
+            return $"{this.ID}: {(!string.IsNullOrWhiteSpace(this.Name) ? this.Name + ":" : "")} + {(Object is not null ? Object.Name + $" ({StackSize})" : "<empty>")}";
         }
 
         public void Instantiate(Action<GameObject> instantiator)
         {
-            if (this.HasValue)
-                this.Object.Instantiate(instantiator);
+            this.Object?.Instantiate(instantiator);
         }
 
         public void Write(System.IO.BinaryWriter writer)

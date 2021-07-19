@@ -11,7 +11,7 @@ namespace Start_a_Town_
         {
             PType = Network.RegisterPacketHandler(Receive);
         }
-        public static void Send(TaskGiver def, Actor actor, TargetArgs target)
+        internal static void Send(TaskGiver def, Actor actor, TargetArgs target)
         {
             var client = actor.Map.Net as Client;
             var w = client.GetOutgoingStream();
@@ -20,13 +20,12 @@ namespace Start_a_Town_
             w.Write(def.GetType().FullName);
             target.Write(w);
         }
-        private static void Receive(INetwork net, BinaryReader r)
+        static void Receive(INetwork net, BinaryReader r)
         {
             var actor = net.GetNetworkObject(r.ReadInt32()) as Actor;
             var typeName = r.ReadString();
             var taskGiver = Activator.CreateInstance(Type.GetType(typeName)) as TaskGiver;
             var target = TargetArgs.Read(actor.Map, r);
-
             actor.ForceTask(taskGiver, target);
         }
     }

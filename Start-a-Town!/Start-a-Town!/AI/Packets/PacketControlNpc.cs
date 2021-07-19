@@ -6,12 +6,12 @@ namespace Start_a_Town_
 {
     class PacketControlNpc
     {
-        static int PType;
-        internal static void Init()
+        static readonly int PType;
+        static PacketControlNpc()
         {
-            // TODO: update
             PType = Network.RegisterPacketHandler(Receive);
         }
+        internal static void Init() { }
         internal static void Send(INetwork net, int entityid)
         {
             if (net is Server)
@@ -37,16 +37,16 @@ namespace Start_a_Town_
             player.ControllingEntity = entity;
             net.EventOccured(Components.Message.Types.PlayerControlNpc, player, entity, lastEntity);
 
-            if (entity != null)
-                net.Write(string.Format("{0} is controlling over {1}", player.Name, entity.Name));
+            if (entity is not null)
+                net.Write($"{player.Name} is controlling {entity.Name}");
             else
-                net.Write(string.Format("{0} no longer controlling {1}", player.Name, lastEntity.Name));
+                net.Write($"{player.Name} no longer controlling {lastEntity.Name}");
 
             if (net is Server)
             {
-                if (lastEntity != null)
+                if (lastEntity is not null)
                     lastEntity.GetComponent<AIComponent>().Enabled = true;
-                if (entity != null)
+                if (entity is not null)
                     entity.GetComponent<AIComponent>().Enabled = false;
                 Send(net, player.ID, entityid);
             }

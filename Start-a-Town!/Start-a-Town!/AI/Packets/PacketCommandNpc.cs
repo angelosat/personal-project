@@ -7,11 +7,11 @@ namespace Start_a_Town_
     class PacketCommandNpc
     {
         static int p;
-        static public void Init()
+        static internal void Init()
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(INetwork net, List<int> npcIDs, TargetArgs target, bool enqueue)
+        static internal void Send(INetwork net, List<int> npcIDs, TargetArgs target, bool enqueue)
         {
             var w = net.GetOutgoingStream();
             w.Write(p);
@@ -19,7 +19,7 @@ namespace Start_a_Town_
             target.Write(w);
             w.Write(enqueue);
         }
-        static public void Receive(INetwork net, BinaryReader r)
+        static void Receive(INetwork net, BinaryReader r)
         {
             var npcids = r.ReadListInt();
             var target = TargetArgs.Read(net, r);

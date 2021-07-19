@@ -373,13 +373,11 @@ namespace Start_a_Town_
             this.QuickMenu.Location = UIManager.Mouse;
         }
 
-        public IEnumerable<(string name, Action action)> GetInfoTabs(ISelectable selected)
+        public IEnumerable<Button> GetTabs(ISelectable selected)
         {
             foreach (var comp in this.TownComponents)
-            {
-                foreach (var i in comp.GetInfoTabs(selected))
+                foreach (var i in comp.GetTabs(selected))
                     yield return i;
-            }
         }
         internal void Select(ISelectable target, UISelectedInfo info)
         {

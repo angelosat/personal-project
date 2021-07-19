@@ -543,9 +543,10 @@ namespace Start_a_Town_.Components
                 return text;
         }
 
+        readonly Label CachedGuiLabelCarrying = new();
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)
         {
-            info.AddInfo(new Label() { TextFunc = () => string.Format("Carrying: {0}", this.HaulSlot.Object != null ? this.HaulSlot.Object.ToString() : "Nothing") });
+            info.AddInfo(this.CachedGuiLabelCarrying.SetTextFunc(() => $"Carrying: {this.HaulSlot.Object?.ToString() ?? "Nothing"}"));
         }
 
         public IEnumerable<Entity> FindItems(Func<Entity, bool> p)

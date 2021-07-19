@@ -201,10 +201,10 @@ namespace Start_a_Town_
                 cam.DrawBlockMouseover(sb, parent.Map, target.Global.Above(), Color.Yellow);
             }
         }
-
+        readonly Label CachedGuiLabelCurrentTask = new();
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)
         {
-            info.AddInfo(new Label() { TextFunc = () => string.Format("Current Task: {0}", this.State.TaskString) });
+            info.AddInfo(this.CachedGuiLabelCurrentTask.SetTextFunc(()=> $"Current Task: {this.State.TaskString}"));
         }
     }
 }

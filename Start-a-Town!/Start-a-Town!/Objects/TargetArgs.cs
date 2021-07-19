@@ -746,8 +746,9 @@ namespace Start_a_Town_
             switch (this.Type)
             {
                 case TargetType.Entity:
-                    foreach (var i in this.Object.GetInfoTabs())
-                        yield return i;
+                    throw new Exception();
+                    //foreach (var i in this.Object.GetInfoTabs())
+                    //    yield return i;
                     break;
 
                 case TargetType.Position:

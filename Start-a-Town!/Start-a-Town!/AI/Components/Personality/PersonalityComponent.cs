@@ -10,7 +10,7 @@ namespace Start_a_Town_
     public class PersonalityComponent : EntityComponent
     {
         static readonly Random Randomizer = new Random();
-        
+
         public override object Clone()
         {
             return new PersonalityComponent(this.Traits.Select(d => d.Def).ToArray());
@@ -69,7 +69,7 @@ namespace Start_a_Town_
         }
         public IEnumerable<Material> GetFavorites()
         {
-            foreach(var i in this.Favorites)
+            foreach (var i in this.Favorites)
                 yield return i;
         }
         /// <summary>
@@ -77,11 +77,11 @@ namespace Start_a_Town_
         /// </summary>
         public PersonalityComponent Randomize()
         {
-            int  budget = 0; //placeholder
+            int budget = 0; //placeholder
             var random = Randomizer;
             var count = this.Traits.Length;
             double sum = 0;
-            double [] values = new double[count];
+            double[] values = new double[count];
             double min = -1, max = 1;
             for (int i = 0; i < count - 1; i++)
             {
@@ -102,12 +102,12 @@ namespace Start_a_Town_
             var totalSum = values.Sum();
             if (totalSum != budget)
                 throw new Exception();
-            
+
 
             for (int i = 0; i < count; i++)
             {
                 var value = values[i];
-                this.Traits[i].Value = (int)(value*Trait.ValueRange);
+                this.Traits[i].Value = (int)(value * Trait.ValueRange);
                 if (Math.Abs(value) > Trait.ValueRange)
                     throw new Exception();
             }
@@ -137,11 +137,11 @@ namespace Start_a_Town_
         internal override void Load(SaveTag tag)
         {
             this.Traits.TryLoadImmutable(tag, "Traits");
-            if(!this.Favorites.TryLoadDefs(tag, "Favorites"))
+            if (!this.Favorites.TryLoadDefs(tag, "Favorites"))
                 this.Favorites = GenerateMaterialPreferences();
         }
         static Control GUI;
-        internal static Window GetGUI(Actor actor)
+        internal static Window GetGui(Actor actor)
         {
             Window win;
             if (GUI == null)
@@ -171,14 +171,9 @@ namespace Start_a_Town_
             {
                 var box = UIHelper.Wrap(p.Favorites.Select(m => new Button(m.Label) { TextColorFunc = () => m.Color }), width);
                 return box.ToPanelLabeled("Favorite Materials");
+            }
         }
-    }
-        
-        internal override void GetSelectionInfo(IUISelection info, GameObject parent)
-        {
-            base.GetSelectionInfo(info, parent);
-            GetGUI(parent as Actor);
-        }
+
         public class Props : ComponentProps
         {
             public override Type CompType => typeof(NpcSkillsComponent);

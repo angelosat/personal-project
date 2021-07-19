@@ -47,7 +47,7 @@ namespace Start_a_Town_
             this.Validate(true);
         }
         static NeedsUI Instance;
-        internal static Window GetUI(Actor actor)
+        internal static Window GetGui(Actor actor)
         {
             Window window;
 
@@ -68,7 +68,7 @@ namespace Start_a_Town_
             var actor = target.Object as Actor;
             if (!actor?.Equals(this.Tag) ?? false)
             {
-                GetUI(actor);
+                GetGui(actor);
             }
         }
     }

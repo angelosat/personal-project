@@ -115,7 +115,9 @@ namespace Start_a_Town_
             var win = this.UIWindowQuests;
             yield return new Tuple<string, Action>("Quests", () => win.Value.Toggle());
         }
-        internal override IEnumerable<(string name, Action action)> GetInfoTabs(ISelectable selected)
+
+        static readonly Button BtnQuests = new("Quests");
+        internal override IEnumerable<Button> GetTabs(ISelectable selected)
         {
             if (selected is not TargetArgs target)
                 yield break;
@@ -123,7 +125,8 @@ namespace Start_a_Town_
                 yield break;
             if (actor.IsCitizen)
             {
-                yield return("Quests", () => ShowUI(this.UIAssignQuests, $"Assign quests to {actor.Name}"));
+                //yield return("Quests", () => ShowUI(this.UIAssignQuests, $"Assign quests to {actor.Name}"));
+                yield return BtnQuests.SetLeftClickAction(() => ShowUI(this.UIAssignQuests, $"Assign quests to {actor.Name}")) as Button;
             }
             else
             {

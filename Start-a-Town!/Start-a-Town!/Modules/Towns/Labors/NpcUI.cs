@@ -49,8 +49,6 @@ namespace Start_a_Town_.AI
                 this.PanelStats,
                 panelInv,
                 this.Buttons);
-
-            GameMode.Current.OnUIEvent(UIManager.Events.NpcUICreated, this);
         }
 
         public void AddButton(Button btn)

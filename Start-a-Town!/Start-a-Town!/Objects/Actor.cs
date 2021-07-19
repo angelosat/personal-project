@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.AI;
 using Start_a_Town_.AI.Behaviors;
+using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
-using Start_a_Town_.AI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -52,8 +52,8 @@ namespace Start_a_Town_
         public Room AssignedRoom => this.Town.RoomManager.FindRoom(this.RefID);
         public bool IsCitizen => this.Town.Agents.Contains(this.RefID);
         public IItemPreferencesManager ItemPreferences => this.GetState().ItemPreferences;
-        
-        public override string Name { get => this.Npc.FullName; }
+
+        public override string Name => this.Npc.FullName;
         internal override GameObject SetName(string name)
         {
             // HACK
@@ -110,7 +110,7 @@ namespace Start_a_Town_
         {
             PersonalInventoryComponent.GetHauling(this).Object = item;
         }
-       
+
         /// <summary>
         /// if force is true, target actor drops current carried item and replaces it with the given one
         /// </summary>
@@ -240,7 +240,7 @@ namespace Start_a_Town_
             this.GetComponent<NeedsComponent>().AddNeed(defs);
         }
 
-        static public Actor Create(ItemDef def)
+        public static Actor Create(ItemDef def)
         {
             var obj = new Actor
             {
@@ -286,7 +286,7 @@ namespace Start_a_Town_
         {
             return this.IsCitizen ? Color.White : Color.Cyan;
         }
-       
+
         internal void EndCurrentTask()
         {
             this.GetComponent<AIComponent>().FindBehavior<global::Start_a_Town_.AI.Behaviors.Tasks.BehaviorFindTask>().EndCurrentTask(this);
@@ -310,7 +310,7 @@ namespace Start_a_Town_
         {
             return this.GetComponent<MoodComp>().Contains(mdef);
         }
-        
+
         public float GetMood()
         {
             return this.GetComponent<MoodComp>().Mood;
@@ -321,19 +321,26 @@ namespace Start_a_Town_
             var manager = this.Map.Town.RoomManager;
             return manager.FindRoom(this.RefID) != null;
         }
-        
-        protected override IEnumerable<(string name, Action action)> GetInfoTabsExtra()
+
+        readonly Button btnLog = new("Log");
+        readonly Button btnSkills = new("Skills");
+        readonly Button btnGear = new("Gear");
+        readonly Button btnPersonality = new("Personality");
+        readonly Button btnNeeds = new("Needs");
+        readonly Button btnStats = new("Stats");
+        readonly Button btnVisitor = new("Visitor");
+
+        protected override IEnumerable<Button> GetInfoTabsExtraNew()
         {
-            yield return ("Log", () => NpcLogUINew.GetUI(this).Toggle());
-            yield return ("Skills", () => NpcSkillsComponent.GetUI(this).Toggle());
-            yield return ("Gear", () => InventoryUI.GetUI(this).Toggle());
-            yield return ("Personality", () => PersonalityComponent.GetGUI(this).Toggle());
-            yield return ("Needs", () => NeedsUI.GetUI(this).Toggle());
-            yield return ("Stats", () => StatsGui.GetGui(this).Toggle());
+            yield return this.btnLog.SetLeftClickAction(b => NpcLogUINew.GetGui(this).Toggle()) as Button;
+            yield return this.btnSkills.SetLeftClickAction(b => NpcSkillsComponent.GetGui(this).Toggle()) as Button;
+            yield return this.btnGear.SetLeftClickAction(b => InventoryUI.GetGui(this).Toggle()) as Button;
+            yield return this.btnPersonality.SetLeftClickAction(b => PersonalityComponent.GetGui(this).Toggle()) as Button;
+            yield return this.btnNeeds.SetLeftClickAction(b => NeedsUI.GetGui(this).Toggle()) as Button;
+            yield return this.btnStats.SetLeftClickAction(b => StatsGui.GetGui(this).Toggle()) as Button;
             if (!this.IsCitizen)
-                yield return ("Visitor", this.GetVisitorProperties().ShowGUI);
+                yield return this.btnVisitor.SetLeftClickAction(b => this.GetVisitorProperties().ShowGui()) as Button;
         }
-        
         public bool CanOperate(TargetArgs target)
         {
             if (target.Type != TargetType.Position)
@@ -379,7 +386,7 @@ namespace Start_a_Town_
         {
             return this.GetHaulStackLimitFromEndurance(haulable.Def);
         }
-        
+
         internal float GetOpportunisticHaulSearchRange(int baseSearchRange)
         {
             var organizationValue = this.GetTrait(TraitDefOf.Planning)?.Normalized ?? 0;
@@ -408,7 +415,7 @@ namespace Start_a_Town_
             givers = this.IsCitizen ? givers.Concat(jobTaskGivers) : givers.Concat(TaskGiver.VisitorTaskGivers);
             return givers;
         }
-        
+
         internal Trait GetTrait(TraitDef trait)
         {
             return this.GetComponent<PersonalityComponent>().Traits.First(t => t.Def == trait);
@@ -449,8 +456,8 @@ namespace Start_a_Town_
                 yield break;
             var givers = TaskGiver.CitizenTaskGivers.Concat(TaskGiver.EssentialTaskGivers);
             foreach (var giver in givers)
-                {
-                    var task = giver.TryTaskOn(this, target);
+            {
+                var task = giver.TryTaskOn(this, target);
                 if (task != null) yield return new TaskGiverResult(task, giver);// task;
             }
         }
@@ -466,11 +473,11 @@ namespace Start_a_Town_
 
         internal GearType[] GetGearTypes()
         {
-            return this.GetComponent<GearComponent>().Equipment.Slots.Select(s=>GearType.Dictionary[(GearType.Types)s.ID]).ToArray();
+            return this.GetComponent<GearComponent>().Equipment.Slots.Select(s => GearType.Dictionary[(GearType.Types)s.ID]).ToArray();
         }
         internal Entity[] GetGear()
         {
-            return this.GetComponent<GearComponent>().Equipment.Slots.Where(sl=>sl.Object != null).Select(sl=>sl.Object as Entity).ToArray();
+            return this.GetComponent<GearComponent>().Equipment.Slots.Where(sl => sl.Object != null).Select(sl => sl.Object as Entity).ToArray();
         }
         internal Entity GetEquipmentSlot(GearType type)
         {
@@ -486,7 +493,7 @@ namespace Start_a_Town_
             var score = ItemUsefulnessEvaluator.Evaluate(this, item);
             return score;
         }
-      
+
         internal bool CanAcceptQuest(QuestDef quest)
         {
             return !this.GetVisitorProperties().HasQuest(quest);
@@ -505,7 +512,7 @@ namespace Start_a_Town_
             if (this.GetVisitorProperties() is VisitorProperties props)
                 props.OffsiteArea = null;
         }
-        
+
         internal void AwardSkillXP(SkillDef skill, float v)
         {
             this.GetComponent<NpcSkillsComponent>().AwardSkillXP(this, skill, v);

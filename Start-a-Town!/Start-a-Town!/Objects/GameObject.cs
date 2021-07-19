@@ -23,9 +23,7 @@ namespace Start_a_Town_
         public static void AddTemplates(IEnumerable<GameObject> templates)
         {
             foreach (var o in templates)
-            {
                 AddTemplate(o);
-            }
         }
         public static int AddTemplate(GameObject obj)
         {
@@ -113,30 +111,24 @@ namespace Start_a_Town_
         {
             return this.GetState().Path;
         }
-        public IEnumerable<(string name, Action action)> GetInfoTabs()
+       
+        public IEnumerable<Button> GetTabs()
         {
             foreach (var comp in this.Components.Values)
-            {
-                foreach (var i in comp.GetInfoTabs())
-                {
+                foreach (var i in comp.GetTabs())
                     yield return i;
-                }
-            }
-
-            foreach (var i in this.GetInfoTabsExtra())
-            {
+            foreach (var i in this.GetInfoTabsExtraNew())
                 yield return i;
-            }
         }
         protected virtual IEnumerable<(string name, Action action)> GetInfoTabsExtra() { yield break; }
+        protected virtual IEnumerable<Button> GetInfoTabsExtraNew() { yield break; }
+
         public virtual void GetSelectionInfo(IUISelection info)
         {
             info.AddIcon(IconCameraFollow);
             this.Map.World.OnTargetSelected(info, this);
             foreach (var comp in this.Components.Values)
-            {
                 comp.GetSelectionInfo(info, this);
-            }
         }
         public virtual void GetQuickButtons(UISelectedInfo info)
         {
@@ -720,13 +712,14 @@ namespace Start_a_Town_
         {
             if (!this.IsSpawned)
                 return;
+            var oldmap = this.Map;
             if (!this.Map.Remove(this))
                 throw new Exception();
             this._map = null;
             foreach (var comp in this.Components.Values.ToList())
                 comp.OnDespawn();
 
-            this.Map.EventOccured(Message.Types.EntityDespawned, this);
+            oldmap.EventOccured(Message.Types.EntityDespawned, this);
             //this.Unreserve(); // UNDONE dont unreserve here because the ai might continue manipulating (placing/carrying) the item during the same behavior
         }
 
@@ -1689,8 +1682,13 @@ namespace Start_a_Town_
             var slave = net.GetNetworkObject(r.ReadInt32());
             master.Absorb(slave);
         }
+
+        IEnumerable<(string name, Action action)> ISelectable.GetInfoTabs()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
-        
+
     }
 }

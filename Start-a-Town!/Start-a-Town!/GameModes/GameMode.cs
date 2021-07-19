@@ -46,11 +46,6 @@ namespace Start_a_Town_.GameModes
             foreach (var comp in this.GameComponents)
                 comp.OnHudCreated(hud);
         }
-        public virtual void OnUIEvent(UIManager.Events e, params object[] p)
-        {
-            foreach (var comp in this.GameComponents)
-                comp.OnUIEvent(e, p);
-        }
         
         public abstract bool IsPlayerWithinRangeForPacket(PlayerData playerData, Vector3 packetEventGlobal);
       

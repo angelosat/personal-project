@@ -47,12 +47,6 @@ namespace Start_a_Town_.UI
     }
     public class UIManager : IDisposable, IKeyEventHandler
     {
-        public enum Events
-        {
-            NpcUICreated,
-            SelectedChanged
-        }
-
         static float _Scale = 1;
         public static float Scale
         {

@@ -76,7 +76,7 @@ namespace Start_a_Town_.Towns
         public virtual void Tick()
         {
         }
-        internal virtual IEnumerable<(string name, Action action)> GetInfoTabs(ISelectable selected) { yield break; }
+        internal virtual IEnumerable<Button> GetTabs(ISelectable selected) { yield break; }
 
         internal virtual void OnTargetSelected(IUISelection info, ISelectable target)
         {

@@ -129,17 +129,19 @@ namespace Start_a_Town_
         {
             info.AddInfo(new Label() { TextFunc = () => string.Format("Assigned to {0}", parent.Town.GetAgents().FirstOrDefault(a => a.GetPossesions().Contains(parent))?.Name ?? "none") });
         }
-        internal override IEnumerable<(string name, Action action)> GetInfoTabs()
+        readonly Button BtnOwner = new("Owner");
+        internal override IEnumerable<Button> GetTabs()
         {
             var parent = this.Parent;
-            ActorList = new ListBoxNew<Actor, Button>(200, 200, a => new Button(a?.Name ?? "none", () => PacketPlayerSetItemOwner.Send(Net.Client.Instance, parent.RefID, a?.RefID ?? -1)))
-                                                               .AddItems(parent.Town.GetAgents().Prepend(null))
-                                                               .ToPanelLabeled("Select owner")
-                                                               .HideOnRightClick()
-                                                               .HideOnLeftClick()
-                                                               ;
-
-            yield return ("Owner", () => ActorList.SetLocation(UIManager.Mouse).Toggle());
+            if(ActorList is null)
+                ActorList = new ListBoxNew<Actor, Button>(200, 200, a => new Button(a?.Name ?? "none", () => PacketPlayerSetItemOwner.Send(Net.Client.Instance, parent.RefID, a?.RefID ?? -1)))
+                                                                   .AddItems(parent.Town.GetAgents().Prepend(null))
+                                                                   .ToPanelLabeled("Select owner")
+                                                                   .HideOnRightClick()
+                                                                   .HideOnLeftClick()
+                                                                   ;
+            yield return BtnOwner.SetLeftClickAction(() => ActorList.SetLocation(UIManager.Mouse).Toggle()) as Button;
+            //yield return ("Owner", () => ActorList.SetLocation(UIManager.Mouse).Toggle());
         }
     }
 }

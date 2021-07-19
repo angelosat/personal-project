@@ -151,6 +151,7 @@ namespace Start_a_Town_
         {
             return $"{resource.Value} / {resource.Max}";
         }
+
         public virtual Control GetControl(Resource resource)
         {
             var bar = new Bar()

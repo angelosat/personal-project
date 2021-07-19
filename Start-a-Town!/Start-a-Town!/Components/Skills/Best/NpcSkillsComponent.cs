@@ -88,7 +88,7 @@ namespace Start_a_Town_
                 container.AddControlsBottomLeft(skill.GetControl());
             return container;
         }
-        public static Control GetUI(GameObject actor)
+        public static Control GetGui(GameObject actor)
         {
             var a = actor as Actor;
             var win = GUI.GetWindow();
@@ -98,11 +98,6 @@ namespace Start_a_Town_
             GUI.AddItems(a.Skills.SkillsNew);
             win.Validate(true);
             return win;
-        }
-        internal override void GetSelectionInfo(IUISelection info, GameObject parent)
-        {
-            base.GetSelectionInfo(info, parent);
-                GetUI(parent as Actor);
         }
 
         internal void AwardSkillXP(GameObject actor, SkillDef skill, float v)

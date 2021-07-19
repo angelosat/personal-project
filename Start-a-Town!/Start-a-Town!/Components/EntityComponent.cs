@@ -145,7 +145,7 @@ namespace Start_a_Town_.Components
         internal virtual void GetQuickButtons(UISelectedInfo info, GameObject parent)
         {
         }
-        internal virtual IEnumerable<(string name, Action action)> GetInfoTabs() { yield break; }
+        internal virtual IEnumerable<Button> GetTabs() { yield break; }
         internal virtual void GetSelectionInfo(IUISelection info, GameObject parent)
         {
         }

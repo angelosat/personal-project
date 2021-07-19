@@ -1,23 +1,21 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_.UI
 {
     public class UISelectedInfo : GroupBox, IUISelection
     {
-        public static UISelectedInfo Instance = new UISelectedInfo();
-
-        GroupBox BoxTabs, BoxButtons, BoxIcons, BoxInfo;
+        public static UISelectedInfo Instance = new();
+        readonly GroupBox BoxTabs, BoxButtons, BoxIcons, BoxInfo;
         public Panel PanelInfo;
         public Label LabelName;
-        IconButton IconInfo, IconCenter;
-        IconButton IconCycle;
+        readonly IconButton IconInfo, IconCenter;
+        readonly IconButton IconCycle;
         int PreviousDrawLevel = -1;
-
-        QuickButton IconSlice = new QuickButton(Icon.ArrowDown, KeyBind.SliceZ)
+        readonly QuickButton IconSlice = new(Icon.ArrowDown, KeyBind.SliceZ)
         {
             BackgroundTexture = UIManager.Icon16Background,
             LeftClickAction = Slice,
@@ -31,7 +29,7 @@ namespace Start_a_Town_.UI
 
         int MultipleSelectedCount
         {
-            get { return this.MultipleSelected.Count(); }
+            get => this.MultipleSelected.Count();
             set
             {
             }
@@ -65,23 +63,23 @@ namespace Start_a_Town_.UI
                 LeftClickAction = this.CycleTargets,
                 HoverText = "Cycle targets"
             };
-           
+
             this.BoxIcons = new GroupBox();
             this.PopulateBoxIcons();
-            
+
             this.BoxButtons = new GroupBox();
-            BoxButtons.BackgroundColorFunc = () => Color.Black * .5f;
+            this.BoxButtons.BackgroundColorFunc = () => Color.Black * .5f;
             this.BoxButtons.LocationFunc = () => this.BottomRight;
             this.BoxButtons.Anchor = new Vector2(0, 1);
             this.BoxButtons.ControlsChangedAction = this.BoxButtons.AlignLeftToRight;
 
-            this.BoxInfo = new GroupBox() { Location = this.LabelName.BottomLeft};
+            this.BoxInfo = new GroupBox() { Location = this.LabelName.BottomLeft };
             this.PanelInfo.AddControls(
                 this.LabelName,
                 this.BoxIcons,
                 this.BoxInfo
                 );
-            
+
             this.AddControls(
                 this.BoxTabs,
                 this.PanelInfo
@@ -120,21 +118,21 @@ namespace Start_a_Town_.UI
         {
             this.LabelName.TextFunc = () => text;
         }
-        static private void ToggleInfo()
+        private static void ToggleInfo()
         {
-            if(Instance.WindowInfo is null)
+            if (Instance.WindowInfo is null)
                 Instance.WindowInfo = WindowTargetManagementStatic.Refresh(Instance.SelectedSource);
             else
             {
                 Instance.WindowInfo.Toggle();
             }
         }
-        
-        static public void Refresh(TargetArgs target)
+
+        public static void Refresh(TargetArgs target)
         {
             Instance.Select(target);
         }
-        static public void Refresh(MapBase map, BoundingBox box)
+        public static void Refresh(MapBase map, BoundingBox box)
         {
             Refresh(map.GetObjects(box).Select(s => new TargetArgs(s)));
         }
@@ -142,7 +140,7 @@ namespace Start_a_Town_.UI
         {
             Refresh(entities.Select(e => new TargetArgs(e)));
         }
-        static public void Refresh(IEnumerable<TargetArgs> targets)
+        public static void Refresh(IEnumerable<TargetArgs> targets)
         {
             Instance.Select(targets);
         }
@@ -174,7 +172,7 @@ namespace Start_a_Town_.UI
                 return targets.Where(i => i.Type == TargetType.Entity && i.Object.HasComponent<NpcComponent>());
             return targets;
         }
-        
+
         private void Select(IEnumerable<TargetArgs> targets)
         {
             this.Select(TargetArgs.Null);
@@ -198,7 +196,7 @@ namespace Start_a_Town_.UI
         {
             if (this.SelectedSource.IsEqual(target))
             {
-                CycleTargets();
+                this.CycleTargets();
                 return;
             }
             this.SelectedSource = target;
@@ -211,12 +209,12 @@ namespace Start_a_Town_.UI
                     var entity = target.Object;
                     this.LabelName.TextFunc = () => entity.GetName();
                     this.MultipleSelectedCount = 1;
-                    this.MultipleSelected = new TargetArgs[1] { target };
+                    this.MultipleSelected = new TargetArgs[] { target };
                     entity.GetSelectionInfo(this);
                     entity.GetQuickButtons(this);
-                    this.InitInfoTabs(entity.GetInfoTabs());
+                    this.InitInfoTabs(entity.GetTabs());
                     entity.Town.Select(target, this);
-                    this.InitInfoTabs(entity.Town.GetInfoTabs(target));
+                    this.InitInfoTabs(entity.Town.GetTabs(target));
                     break;
 
                 case TargetType.Position:
@@ -226,7 +224,7 @@ namespace Start_a_Town_.UI
                     if (selectables.Any())
                     {
                         this.SelectedStack = selectables.GetEnumerator();
-                        CycleTargets();
+                        this.CycleTargets();
                         if (target.Map.IsUndiscovered(target.Global))// .GetCell(target.Global).IsExposed)
                             this.LabelName.TextFunc = () => "Unknown block";
                     }
@@ -249,9 +247,8 @@ namespace Start_a_Town_.UI
             }
             this.SelectedSource = target;
             this.Show();
-            GameModes.GameMode.Current.OnUIEvent(UIManager.Events.SelectedChanged, this.SelectedSource);
             if (target.Type != TargetType.Null)
-                target.Network.EventOccured(Components.Message.Types.SelectedChanged, target);
+                target.Network.EventOccured(Message.Types.SelectedChanged, target);
             this.WindowManager.OnSelectedTargetChanged(target);
             this.Validate(true);
         }
@@ -290,7 +287,7 @@ namespace Start_a_Town_.UI
             this.SelectedStack.MoveNext();
             var first = this.SelectedStack.Current;
             this.SetName(first.GetName());
-            Clear();
+            this.Clear();
 
             first.GetSelectionInfo(this);
             first.GetQuickButtons(this);
@@ -303,13 +300,19 @@ namespace Start_a_Town_.UI
             foreach (var (name, action) in tabs)
                 this.AddTabAction(name, action, Color.Orange);
         }
+        void InitInfoTabs(IEnumerable<Button> tabs)
+        {
+            foreach (var button in tabs)
+                this.AddTabAction(button);
+        }
         internal static bool IsSelected(ISelectable item)
         {
             if (Instance.SelectedStack == null)
                 return false;
             return Instance.SelectedStack.Current == item;
         }
-        Dictionary<Action<List<TargetArgs>>, List<TargetArgs>> ActionsAdded = new Dictionary<Action<List<TargetArgs>>, List<TargetArgs>>();
+
+        readonly Dictionary<Action<List<TargetArgs>>, List<TargetArgs>> ActionsAdded = new Dictionary<Action<List<TargetArgs>>, List<TargetArgs>>();
 
         private void CreateButtons(IEnumerable<TargetArgs> targets)
         {
@@ -319,6 +322,11 @@ namespace Start_a_Town_.UI
                 tar.GetQuickButtons(this);
             Net.Client.Instance.Map.Town.Select(null, this);
 
+        }
+        void AddTabAction(Button button)
+        {
+            button.BackgroundColor = UIManager.Tint * .5f;
+            this.BoxTabs.AddControlsLineWrap(new[] { button }, this.PanelInfo.Width);
         }
         void AddTabAction(string label, Action action, Color col)
         {
@@ -338,7 +346,7 @@ namespace Start_a_Town_.UI
         }
         internal void AddButton(IconButton button, Action<List<TargetArgs>> action, GameObject obj, bool singleTargetOnly = false)
         {
-            AddButton(button, action, new TargetArgs(obj), singleTargetOnly);
+            this.AddButton(button, action, new TargetArgs(obj), singleTargetOnly);
         }
         public void AddButton(IconButton button, Action<TargetArgs> action, TargetArgs target)
         {
@@ -357,9 +365,9 @@ namespace Start_a_Town_.UI
             else
                 this.ActionsAdded.Add(action, new List<TargetArgs>() { obj });
             button.LeftClickAction = () => this.MultipleSelectedAction(action);
-                this.BoxButtons.AddControls(button);
+            this.BoxButtons.AddControls(button);
         }
-    
+
         internal static void AddButton(IconButton button)
         {
             Instance.AddButtons(new IconButton[] { button });
@@ -374,7 +382,7 @@ namespace Start_a_Town_.UI
             base.Update();
             if (this.SelectedSource is not null && this.SelectedSource.Type == TargetType.Entity && this.SelectedSource.Object.IsDisposed)
                 this.Select(TargetArgs.Null);
-    
+
             if (this.Selectable is null)
             {
                 if (!this.MultipleSelected.Any())
@@ -385,7 +393,7 @@ namespace Start_a_Town_.UI
 
             if (!this.Selectable.Exists)
                 this.Select(TargetArgs.Null);
-           
+
         }
         internal override void OnGameEvent(GameEvent e)
         {
@@ -395,16 +403,16 @@ namespace Start_a_Town_.UI
                     var map = e.Parameters[0] as MapBase;
                     var global = (Vector3)e.Parameters[1];
                     var target = new TargetArgs(map, global);
-                    if (IsSelected(map, global))
-                    ClearTargets();
+                    if (this.IsSelected(map, global))
+                        ClearTargets();
                     break;
 
                 case Message.Types.BlocksChanged:
                     map = e.Parameters[0] as MapBase;
-                    var globals = e.Parameters[1] as Vector3[];
+                    var globals = e.Parameters[1] as IntVec3[];
                     var targets = globals.Select(g => new TargetArgs(map, g));
                     if (targets.Any(t => IsSelected(t)))
-                    ClearTargets();
+                        ClearTargets();
                     break;
 
                 case Message.Types.EntityDespawned:
@@ -450,12 +458,12 @@ namespace Start_a_Town_.UI
                 foreach (var obj in this.MultipleSelected)
                     if (obj.Type == TargetType.Entity)
                         obj.Object.DrawBorder(sb, camera);
-            else if (this.SelectedSource != null)
-                if (this.SelectedSource.Type == TargetType.Entity)
-                    this.SelectedSource.Object.DrawBorder(sb, camera);
+                    else if (this.SelectedSource != null)
+                        if (this.SelectedSource.Type == TargetType.Entity)
+                            this.SelectedSource.Object.DrawBorder(sb, camera);
         }
-        
-        static public bool IsSelected(TargetArgs tar)
+
+        public static bool IsSelected(TargetArgs tar)
         {
             return Instance.MultipleSelected.Any(t => t.IsEqual(tar)) || Instance.SelectedSource.IsEqual(tar);
         }
@@ -469,7 +477,7 @@ namespace Start_a_Town_.UI
 
         static void Slice()
         {
-            var next =  (int)Instance.SelectedSource.Global.Z;
+            var next = (int)Instance.SelectedSource.Global.Z;
             var current = ScreenManager.CurrentScreen.Camera.DrawLevel;
             if (next != current)
             {
@@ -494,7 +502,7 @@ namespace Start_a_Town_.UI
             this.BoxInfo.AlignVertically();
         }
 
-        static public void RemoveButton(IconButton button)
+        public static void RemoveButton(IconButton button)
         {
             Instance.BoxButtons.RemoveControls(button);
         }
@@ -504,8 +512,7 @@ namespace Start_a_Town_.UI
         }
         internal static void AddButton(IconButton button, Action<List<TargetArgs>> action, IEnumerable<TargetArgs> targets)
         {
-            List<TargetArgs> existing;
-            if (Instance.ActionsAdded.TryGetValue(action, out existing))
+            if (Instance.ActionsAdded.TryGetValue(action, out List<TargetArgs> existing))
             {
                 Instance.ActionsAdded.Remove(action);
             }

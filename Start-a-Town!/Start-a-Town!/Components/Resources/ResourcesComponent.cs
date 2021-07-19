@@ -130,14 +130,23 @@ namespace Start_a_Town_.Components
             return this.Resources.FirstOrDefault(r => r.ResourceDef == def);
         }
 
+        GroupBox _cachedGui;
+        GroupBox CachedGui
+        {
+            get
+            {
+                if (this._cachedGui is null)
+                {
+                    this._cachedGui = new GroupBox();
+                    for (int i = 0; i < this.Resources.Length; i++)
+                        this._cachedGui.AddControlsBottomLeft(this.Resources[i].GetControl());
+                }
+                return this._cachedGui;
+            }
+        }
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)
         {
-            var box = new GroupBox();
-            for (int i = 0; i < this.Resources.Length; i++)
-            {
-                box.AddControlsBottomLeft(this.Resources[i].GetControl());
-            }
-            info.AddInfo(box);
+            info.AddInfo(this.CachedGui);
         }
 
         internal void AddModifier(ResourceRateModifier resourceRateModifier)

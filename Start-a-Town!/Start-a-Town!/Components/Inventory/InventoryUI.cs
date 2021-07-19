@@ -79,7 +79,7 @@ namespace Start_a_Town_
             this.AddControls(btncolors);
         }
 
-        static public Control GetUI(Actor actor)
+        static public Control GetGui(Actor actor)
         {
             Window window;
             if (Instance == null)
@@ -125,7 +125,7 @@ namespace Start_a_Town_
         {
             var actor = target.Object as Actor;
             if (actor != null && this.Tag != actor)
-                GetUI(actor);
+                GetGui(actor);
         }
        
     }

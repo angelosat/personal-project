@@ -63,8 +63,6 @@ namespace Start_a_Town_.AI
                 .AddTab("Skills", this.SkillsUI)
                 ;
             this.AddControls(paneltbs);
-
-            GameMode.Current.OnUIEvent(UIManager.Events.NpcUICreated, this);
         }
         public void Refresh(Actor npc)
         {

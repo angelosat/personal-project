@@ -82,28 +82,22 @@ namespace Start_a_Town_.UI
         }
         static public int GetWidth(SpriteFont font, string txt)
         {
-            
             var textw = (int)font.MeasureString(txt).X;
             var w = textw + SpriteLeft.Width + SpriteRight.Width + 2;
             return w;
         }
-
-        public Button() : base() {
-            TexBackgroundColorFunc = () =>
-            {
-                return DefaultBackgroundColorFunc();
-
-            };
-            Height = UIManager.DefaultButtonHeight;
-            Text = "";
-            this.AutoSize = true;
-        }
-
         public Color DefaultBackgroundColorFunc()
         {
             if (this.IsPressed)
                 return this.Color;
             return (this.MouseHover && this.Active) ? this.Color : IdleColor;
+        }
+        public Button() : base()
+        {
+            TexBackgroundColorFunc = () => DefaultBackgroundColorFunc();
+            Height = UIManager.DefaultButtonHeight;
+            Text = "";
+            this.AutoSize = true;
         }
         public Button(int width) : this("", width) 
         { 

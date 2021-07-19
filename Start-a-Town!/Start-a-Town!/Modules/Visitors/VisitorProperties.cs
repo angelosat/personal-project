@@ -362,7 +362,7 @@ namespace Start_a_Town_
             this.Actor.Town.QuestManager.ShowActorGUI(this.Actor);
         }
         static Control GUI;
-        internal void ShowGUI()
+        internal void ShowGui()
         {
             Control[] tabs = new[] 
             {

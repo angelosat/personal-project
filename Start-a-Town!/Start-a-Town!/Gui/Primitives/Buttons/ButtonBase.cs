@@ -66,6 +66,11 @@ namespace Start_a_Town_.UI
                     this.Text = value();
             }
         }
+        internal ButtonBase SetTextFunc(Func<string> textFunc)
+        {
+            this.TextFunc = textFunc;
+            return this;
+        }
         public virtual ButtonBase SetText(string text)
         {
             this.Text = text;
@@ -169,6 +174,11 @@ namespace Start_a_Town_.UI
 
         public ButtonBase(Vector2 location) : base(location) { }
         public ButtonBase() : base() { }
+        public virtual Control SetLeftClickAction(Action action)
+        {
+            this.LeftClickAction = action;
+            return this;
+        }
         public virtual Control SetLeftClickAction(Action<ButtonBase> action)
         {
             this.LeftClickAction = () => action(this);

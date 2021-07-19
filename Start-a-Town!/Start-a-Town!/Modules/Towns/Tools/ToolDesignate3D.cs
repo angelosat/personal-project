@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
-using Start_a_Town_.Towns;
 
 namespace Start_a_Town_
 {
@@ -16,7 +15,7 @@ namespace Start_a_Town_
         bool Valid;
         bool Removing;
         protected Action<IntVec3, IntVec3, bool> Callback;
-        Func<List<IntVec3>> GetZones;
+        Func<List<IntVec3>> GetZones = () => new List<IntVec3>();
         IntVec3 Plane;
         public override bool TargetOnlyBlocks => true;
         public ToolDesignate3D()

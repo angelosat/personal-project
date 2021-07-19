@@ -1,29 +1,24 @@
-﻿using System;
+﻿using Start_a_Town_.Components;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using Start_a_Town_.Components;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     class GearComponent : EntityComponent
     {
-        readonly static public string Name = "Gear";
-
-        public override string ComponentName
-        {
-            get { return Name; }
-        }
+        public override string ComponentName => "Gear";
 
         public override void OnObjectLoaded(GameObject parent)
         {
             base.OnObjectLoaded(parent);
-                        ResetBones(parent);
+            this.ResetBones(parent);
         }
         public override void OnObjectCreated(GameObject parent)
         {
             base.OnObjectCreated(parent);
-            ResetBones(parent);
+            this.ResetBones(parent);
         }
         public override void MakeChildOf(GameObject parent)
         {
@@ -42,10 +37,10 @@ namespace Start_a_Town_
         public override void OnSpawn()
         {
             base.OnSpawn();
-            ResetBones(this.Parent);
+            this.ResetBones(this.Parent);
         }
 
-        public Container Equipment = new Container() { Name = "Equipment" };
+        public Container Equipment = new() { Name = "Equipment" };
         public float ArmorTotal;
         public GearComponent()
         {
@@ -74,45 +69,17 @@ namespace Start_a_Town_
             }
             return comp;
         }
-        
+
         public override void GetContainers(List<Container> list)
         {
             list.Add(this.Equipment);
-        }
-
-        static public bool GetSlot(GameObject entity, GearType gearSlot, out GameObjectSlot slot)
-        {
-            slot = GearComponent.GetSlot(entity, gearSlot);
-            return slot.HasValue;
-        }
-        static public void TryGetHeldObject(GameObject entity, Action<GameObjectSlot> action)
-        {
-            entity.TryGetComponent<HaulComponent>(i =>
-            {
-                GameObjectSlot slot = i.Holding;
-                if (slot.HasValue)
-                    action(slot);
-           
-            });
-        }
-        static public bool TryGetObject(GameObject entity, GearType gearSlot, out GameObject obj)
-        {
-            obj = GearComponent.GetSlot(entity, gearSlot).Object;
-            return obj != null;
-        }
-        static public GameObjectSlot GetHeldObject(GameObject entity)
-        {
-            if (!entity.TryGetComponent<HaulComponent>(out var inv))
-                return GameObjectSlot.Empty;
-            return inv.Holding;
         }
 
         public override string ToString()
         {
             string text = "";
             foreach (var slot in this.Equipment.Slots)
-                text += slot.ID + ": " + (slot.HasValue ? slot.Object.Name : "<empty>") + "\n";
-
+                text += $"{slot.ID}: {(slot.HasValue ? slot.Object.Name : "<empty>")}\n";
             return text.TrimEnd('\n');
         }
 
@@ -136,7 +103,7 @@ namespace Start_a_Town_
             compTag.TryGetTag("Equipment", tag => this.Equipment.Load(tag));
         }
 
-        static public GameObjectSlot GetSlot(GameObject actor, GearType type)
+        public static GameObjectSlot GetSlot(GameObject actor, GearType type)
         {
             var gearComp = actor.GetComponent<GearComponent>();
             var slot = gearComp.Equipment.GetSlot((int)type.ID);
@@ -148,9 +115,9 @@ namespace Start_a_Town_
             var slot = gearComp.Equipment.Slots.FirstOrDefault(s => s.Object == item);
             return slot;
         }
-        static public bool Equip(GameObject a, GameObjectSlot t)
+        public static bool Equip(GameObject a, GameObjectSlot t)
         {
-            if (t.Object == null)
+            if (t.Object is null)
                 return false;
 
             GameObjectSlot objSlot =
@@ -173,10 +140,10 @@ namespace Start_a_Town_
 
             // equip new item
             gearSlot.Swap(objSlot);
-         
+
             return true;
         }
-        static public bool EquipToggle(Actor actor, Entity item)
+        public static bool EquipToggle(Actor actor, Entity item)
         {
             if (actor.IsEquipping(item))
             {
@@ -215,7 +182,7 @@ namespace Start_a_Town_
         public void RefreshStats()
         {
             this.ArmorTotal = 0;
-            foreach(var i in this.Equipment.Slots.Where(s=>s.HasValue).Select(s=>s.Object))
+            foreach (var i in this.Equipment.Slots.Where(s => s.HasValue).Select(s => s.Object))
             {
                 this.ArmorTotal += i.Def.ApparelProperties?.ArmorValue ?? 0;
             }
@@ -230,6 +197,5 @@ namespace Start_a_Town_
                 this.Slots = defs;
             }
         }
-
     }
 }

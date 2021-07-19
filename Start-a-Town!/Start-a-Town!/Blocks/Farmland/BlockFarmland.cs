@@ -40,9 +40,9 @@ namespace Start_a_Town_.Blocks
         static public void Plant(MapBase map, Vector3 global, GameObject obj)
         {
             var plantdef = obj.GetComponent<SeedComponent>().Plant;
-                var plant = plantdef.CreatePlant();
-                plant.SyncInstantiate(map.Net);
-                plant.SyncSpawn(map, global.Above());
+            var plant = plantdef.CreatePlant();
+            plant.SyncInstantiate(map.Net);
+            plant.SyncSpawn(map, global.Above());
 
             var placer = new BlockSoil.Placer();
             placer.Place(map, global);

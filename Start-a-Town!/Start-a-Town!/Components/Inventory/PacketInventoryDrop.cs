@@ -25,7 +25,7 @@ namespace Start_a_Town_
             var amount = r.ReadInt32();
             var item = net.GetNetworkObject(itemID);
             var actor = net.GetNetworkObject(actorID);
-            actor.DropInventoryItem(item, amount); // TODO: this happens immediately when the game is paused. maybe create an interaction with a 1 frame duration?
+            actor.Inventory.Drop(item, amount); // TODO: this happens immediately when the game is paused. maybe create an interaction with a 1 frame duration?
             if (amount == item.StackSize)
                 NpcComponent.RemovePossesion(actor, item);
             if (net is Server)

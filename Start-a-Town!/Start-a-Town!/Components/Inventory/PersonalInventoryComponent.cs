@@ -16,7 +16,8 @@ namespace Start_a_Town_.Components
             static public void Init()
             {
                 PacketSyncInsert = Network.RegisterPacketHandler(HandleSyncInsert);
-                void handleSetHaulSlot(INetwork net, BinaryReader r)
+
+                static void handleSetHaulSlot(INetwork net, BinaryReader r)
                 {
                     var actor = net.GetNetworkObject(r.ReadInt32()) as Actor;
                     var item = net.GetNetworkObject(r.ReadInt32()) as Entity;
@@ -83,9 +84,8 @@ namespace Start_a_Town_.Components
         }
 
         public override string ComponentName => "PersonalInventory";
-          
 
-        public bool HasEmptySpace => this.GetEmptySlots().Any();
+        public bool HasFreeSpace => this.GetEmptySlots().Any();
 
         public float Distance(GameObject obj1, GameObject obj2)
         {
@@ -148,13 +148,29 @@ namespace Start_a_Town_.Components
                     return false;
             }
         }
-        public void DropInventoryItem(GameObject item)
+        public GameObject Drop(GameObject item, int amount)
+        {
+
+            var parent = this.Parent;
+            var slot = this.Slots.Slots.First(i => i.Object == item);
+            // TODO instantiate new item if necessary
+            throw new NotImplementedException();
+            if (amount < slot.Object.StackSize)
+            {
+                //obj = slot.Object.Clone();
+                //obj.StackSize = amount;
+            }
+            item.Spawn(parent.Map, parent.Global + new Vector3(0, 0, parent.Physics.Height));
+            item.StackSize -= amount;
+            return item;
+        }
+        public void Drop(GameObject item)
         {
             var slots = this.Slots;
             var parent = this.Parent;
             var slot = slots.Slots.Where(s => s.Object == item).First();
             slot.Clear();
-            item.Spawn(parent.Map, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
+            item.Spawn(parent.Map, parent.Global + new Vector3(0, 0, parent.Physics.Height));
         }
         public void HaulFromInventory(GameObject item, int amount = -1)
         {
@@ -185,33 +201,7 @@ namespace Start_a_Town_.Components
                 }
             }
         }
-        public static GameObject DropInventoryItem(GameObject parent, GameObject item, int amount)
-        {
-            GameObject obj;
-            var children = parent.GetChildren();
-            GameObjectSlot childslot = children.First(i => i.Object == item);
-
-            if (amount < childslot.Object.StackSize)
-            {
-                obj = childslot.Object.Clone();
-                obj.StackSize = amount;
-            }
-            else
-                obj = childslot.Object;
-            obj.Spawn(parent.Map, parent.Global + new Vector3(0, 0, parent.GetComponent<PhysicsComponent>().Height));
-            childslot.StackSize -= amount;
-            return obj;
-        }
-        static public GameObjectSlot FindFirst(GameObject parent, Func<GameObject, bool> condition)
-        {
-            PersonalInventoryComponent comp;
-            if (!parent.TryGetComponent<PersonalInventoryComponent>(out comp))
-                return null;
-            var contents = comp.GetContents();
-            var found = contents.FirstOrDefault(foo => condition(foo.Object));
-            return found;
-        }
-
+        
         void SlotInteraction(GameObject parent, GameObject actor, GameObjectSlot slot)
         {
             if (!slot.HasValue)
@@ -272,12 +262,6 @@ namespace Start_a_Town_.Components
             return true;
         }
         
-        public bool RemoveItem(Entity obj)
-        {
-            if (obj is null)
-                return false;
-            return this.Slots.Remove(obj);
-        }
         public bool PickUp(GameObject obj, int amount)
         {
             var parent = this.Parent;
@@ -423,52 +407,41 @@ namespace Start_a_Town_.Components
                     return true;
                 }
             
-            this.Throw(Vector3.Zero, parent); //or store carried object in backpack? (if available)
+            this.Throw(Vector3.Zero, true); //or store carried object in backpack? (if available)
 
             obj.Despawn();
             this.HaulSlot.Object = obj;
             return true;
         }
         
-        public bool Throw(Vector3 velocity, GameObject parent, bool all = false)
+        public bool Throw(Vector3 direction, bool all = false)
         {
-            return this.Throw(parent.Net, velocity, parent, all);
-        }
-        public bool Throw(GameObject parent, Vector3 direction, bool all = false)
-        {
-            Vector3 velocity = direction * 0.1f + parent.Velocity;
-            return this.Throw(parent.Net, velocity, parent, all);
-        }
-        bool Throw(INetwork net, Vector3 velocity, GameObject parent, bool all)
-        {
+            var parent = this.Parent;
+            var velocity = direction * 0.1f + parent.Velocity;
             // throws hauled object, if hauling nothing throws equipped object, make it so it only throws hauled object?
-            
             var slot = this.HaulSlot;
-            GameObjectSlot hauling = slot;// this.Slot;
-            if (hauling.Object == null)
+            if (slot.Object == null)
                 return false;
-            GameObject newobj = all ? hauling.Object : hauling.Take();
-
+            GameObject newobj;
+            if (!all && slot.Object.StackSize > 1)
+            {
+                newobj = slot.Object.Clone();
+                newobj.StackSize = 1;
+                slot.Object.StackSize -= 1;
+            }
+            else
+                newobj = slot.Object;
+            // TODO instantiate new obj as necessary
             newobj.Global = parent.Global + new Vector3(0, 0, parent.Physics.Height);
             newobj.Velocity = velocity;
             newobj.Physics.Enabled = true;
-            newobj.Spawn(parent.Map);
+            newobj.SyncSpawnNew(parent.Map);
 
             if (all)
-                hauling.Clear();
+                slot.Clear();
             return true;
         }
 
-        public List<GameObjectSlot> GetContents()
-        {
-            var actor = this.HaulSlot.Parent;
-            var inv = actor.GetComponent<PersonalInventoryComponent>();
-            var list = new List<GameObjectSlot>();
-            list.Add(inv.HaulSlot);
-            foreach (var c in inv.Slots.Slots)
-                list.Add(c);
-            return list;
-        }
         public IEnumerable<ObjectAmount> Take(Func<Entity, bool> filter, int amount)
         {
             var remaining = amount;
@@ -486,8 +459,8 @@ namespace Start_a_Town_.Components
         {
             var comp = new PersonalInventoryComponent((byte)this.Slots.Slots.Count);
 
-            using BinaryWriter w = new BinaryWriter(new MemoryStream());
-            using BinaryReader r = new BinaryReader(w.BaseStream);
+            using BinaryWriter w = new(new MemoryStream());
+            using BinaryReader r = new(w.BaseStream);
 
             this.Write(w);
             w.BaseStream.Position = 0;
@@ -524,14 +497,6 @@ namespace Start_a_Town_.Components
             if (data.TryGetTagValue("IsHauling", out isHauling))
                 if (isHauling)
                     data.TryGetTag("Hauling", tag => this.HaulSlot.Load(tag));
-        }
-
-        internal static void DropHauled(GameObject parent)
-        {
-            var inv = parent.GetComponent<PersonalInventoryComponent>();
-            if (inv == null)
-                return;
-            inv.Throw(parent, Vector3.Zero);
         }
 
         public override string ToString()

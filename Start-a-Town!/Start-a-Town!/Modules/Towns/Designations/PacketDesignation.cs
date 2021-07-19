@@ -40,19 +40,19 @@ namespace Start_a_Town_
             var designation = DesignationDef.Dictionary[typeName];
             var remove = r.ReadBoolean();
             var selectionType = (SelectionType)r.ReadInt32();
-            List<Vector3> positions;
+            List<IntVec3> positions;
             if (selectionType == SelectionType.Box)
             {
                 var begin = r.ReadVector3();
                 var end = r.ReadVector3();
-                positions = new BoundingBox(begin, end).GetBox();
+                positions = new BoundingBox(begin, end).GetBoxIntVec3();
                 if (net is Server)
                     Send(net, designation, begin, end, remove);
             }
             else if (selectionType == SelectionType.List)
             {
                 var list = r.ReadListTargets();
-                positions = list.Select(t => t.Global).ToList();
+                positions = list.Select(t => (IntVec3)t.Global).ToList();
                 if (net is Server)
                     Send(net, designation, list, remove);
             }

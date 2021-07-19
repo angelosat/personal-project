@@ -17,7 +17,7 @@ namespace Start_a_Town_
         readonly HashSet<ItemDef> SpecifiedItemDefs = new();
         public IngredientRestrictions DefaultRestrictions = new();
         readonly List<Func<Entity, bool>> SpecialFilters = new();
-        IEnumerable<Material> ResolvedMaterials;
+        HashSet<Material> ResolvedMaterials;
         HashSet<ItemDef> ResolvedItemDefs;
         bool Resolved;
 
@@ -41,15 +41,12 @@ namespace Start_a_Town_
 
         public IEnumerable<Material> GetAllValidMaterials()
         {
-            if (this.ResolvedMaterials is null)
-            {
-                var defs = this.GetAllValidItemDefs().ToList();
-                this.ResolvedMaterials = defs.SelectMany(d => d.GetValidMaterials()).Distinct().Intersect(this.SpecifiedMaterials);
-            }
+            this.TryResolve();
             foreach (var i in ResolvedMaterials)
                 yield return i;
         }
 
+        [Obsolete]
         public IEnumerable<ItemDefMaterialAmount> GetAllValidMaterialsNew()
         {
             if (this.ItemDef != null)
@@ -162,16 +159,19 @@ namespace Start_a_Town_
                     this.ResolvedItemDefs = new(allDefs.Where(d => this.Modifiers.All(m => m.Evaluate(d))));
                 else if (this.SpecifiedMaterials.Any())
                     this.ResolvedItemDefs = new(allDefs.Where(d => d.ValidMaterialTypes.Any(t => this.SpecifiedMaterials.Any(m => m.Type == t))));
+                else
+                    this.ResolvedItemDefs = new(allDefs.Where(d => this.SpecifiedCategories.Contains(d.Category)));
             }
             if (!this.SpecifiedMaterials.Any())
-                ResolveAllowedMaterials(this.ResolvedItemDefs);
+                ResolveAllowedMaterials();
             this.Resolved = true;
         }
-        private void ResolveAllowedMaterials(HashSet<ItemDef> allowedItemDefs)
+        private void ResolveAllowedMaterials()
         {
+            this.ResolvedMaterials = new();
             if (!this.SpecifiedMaterials.Any())
-                foreach (var m in allowedItemDefs.SelectMany(i => i.GetValidMaterials()))
-                    this.SpecifiedMaterials.Add(m);
+                foreach (var m in this.ResolvedItemDefs.SelectMany(i => i.GetValidMaterials()))
+                    this.ResolvedMaterials.Add(m);
         }
       
         internal string GetLabel()

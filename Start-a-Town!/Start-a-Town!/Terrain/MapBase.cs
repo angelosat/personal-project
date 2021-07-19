@@ -917,8 +917,12 @@ namespace Start_a_Town_
         {
             obj.Global = global;
             obj.Velocity = velocity;
+            this.SyncSpawn(obj);
+        }
+        internal void SyncSpawn(GameObject obj)
+        {
             obj.Spawn(this);
-            Packets.SendSpawnEntity(this.Net, obj, this, global, velocity);
+            Packets.SendSpawnEntity(this.Net, obj, this, obj.Global, obj.Velocity);
         }
         static MapBase()
         {

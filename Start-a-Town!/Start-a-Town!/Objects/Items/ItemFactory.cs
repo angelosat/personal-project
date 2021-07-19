@@ -55,13 +55,7 @@ namespace Start_a_Town_
         {
             var dic = new Dictionary<string, Material>();
             foreach (var r in def.CraftingProperties.Reagents)
-            {
-                var i = r.Value.Ingredient.GetAllValidItemDefs();
-                var m = i.SelectMany(i => i.GetValidMaterials());
-                var md = m.Distinct();
-                var mat = md.ToArray().SelectRandom(Material.Randomizer);
-                dic[r.Value.Name] = mat;
-            }
+                dic[r.Value.Name] = r.Value.Ingredient.GetAllValidMaterials().ToArray().SelectRandom(Material.Randomizer);
             return dic;
         }
     }

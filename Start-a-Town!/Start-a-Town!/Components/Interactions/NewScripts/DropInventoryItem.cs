@@ -13,7 +13,7 @@
        
         public override void Perform(Actor actor, TargetArgs target)
         {
-            actor.Inventory.DropInventoryItem(target.Object);
+            actor.Inventory.Drop(target.Object);
         }
 
         public override object Clone()

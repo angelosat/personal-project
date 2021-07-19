@@ -606,7 +606,7 @@
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderToggleHaul.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftingOrderSync.cs" />
     <Compile Include="Modules\Crafting\Gui\CraftOrderDetailsInterface.cs" />
-    <Compile Include="Modules\Crafting\Gui\WorkstationInterfaceNew.cs" />
+    <Compile Include="Modules\Crafting\Gui\WorkstationGuiNew.cs" />
     <Compile Include="AI\Components\AILog.cs" />
     <Compile Include="AI\Components\Personality\Trait.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConstruct.cs" />

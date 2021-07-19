@@ -51,7 +51,7 @@ namespace Start_a_Town_
             if (CraftingWindow != null)
                 CraftingWindow.Hide();
 
-            CraftingWindow = new Modules.Crafting.WorkstationInterfaceNew(map, global, this).ToWindow("Crafting");
+            CraftingWindow = new Modules.Crafting.WorkstationGuiNew(map, global, this).ToWindow("Crafting");
             CraftingWindow.ToggleSmart();
         }
 

@@ -27,13 +27,7 @@ namespace Start_a_Town_.UI
         IEnumerator<ISelectable> SelectedStack;
         public IEnumerable<TargetArgs> MultipleSelected = new List<TargetArgs>(); // TODO: make this a list of iselectables
 
-        int MultipleSelectedCount
-        {
-            get => this.MultipleSelected.Count();
-            set
-            {
-            }
-        }
+        int MultipleSelectedCount => this.MultipleSelected.Count();
 
         UISelectedInfo()
         {
@@ -177,7 +171,6 @@ namespace Start_a_Town_.UI
         {
             this.Select(TargetArgs.Null);
             this.MultipleSelected = this.Filter(targets).Where(t => t.Exists);
-            this.MultipleSelectedCount = targets.Count();
             if (this.MultipleSelectedCount == 0)
                 return;
             if (this.MultipleSelectedCount == 1)
@@ -208,7 +201,6 @@ namespace Start_a_Town_.UI
                 case TargetType.Entity:
                     var entity = target.Object;
                     this.LabelName.TextFunc = () => entity.GetName();
-                    this.MultipleSelectedCount = 1;
                     this.MultipleSelected = new TargetArgs[] { target };
                     entity.GetSelectionInfo(this);
                     entity.GetQuickButtons(this);
@@ -218,7 +210,6 @@ namespace Start_a_Town_.UI
                     break;
 
                 case TargetType.Position:
-                    this.MultipleSelectedCount = 1;
                     this.MultipleSelected = new TargetArgs[1] { target };
                     var selectables = target.Map.Town.QuerySelectables(target);
                     if (selectables.Any())
@@ -238,7 +229,6 @@ namespace Start_a_Town_.UI
                     this.WindowInfo = null;
                     this.SelectedSource = TargetArgs.Null;
                     this.Selectable = null;
-                    this.MultipleSelectedCount = 0;
                     this.MultipleSelected = new TargetArgs[] { };
                     return;
 

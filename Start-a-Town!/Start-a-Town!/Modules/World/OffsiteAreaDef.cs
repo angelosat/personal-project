@@ -49,7 +49,7 @@ namespace Start_a_Town_
         {
             var actor = visitor.Actor;
             var world = visitor.World;
-            if (actor.Inventory.HasEmptySpace)
+            if (actor.Inventory.HasFreeSpace)
                 actor.Loot(this.GenerateLoot(world.Random), this);
         }
 

@@ -60,7 +60,7 @@ namespace Start_a_Town_.Components
             parent.CrossFade(AttackAnimation, true, this.ChargeMax,
                 (a, b, t) => Interpolation.Sine(a, b, (float)Math.Sqrt(t)));
             // TODO: maybe pass a startattack event to the parent object and let components handle it?
-            PersonalInventoryComponent.DropHauled(parent);
+            parent.Inventory.Throw(Vector3.Zero, true);
         }
         public void Cancel(GameObject parent)
         {

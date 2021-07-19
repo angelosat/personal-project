@@ -1,27 +1,24 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Components.Crafting;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_.Modules.Crafting
 {
-    class WorkstationInterfaceNew : GroupBox
+    class WorkstationGuiNew : GroupBox
     {
-        Vector3 Global;
-        MapBase Map;
-        BlockEntityCompWorkstation Entity;
-        Button BtnAddOrder;
+        IntVec3 Global;
+        readonly MapBase Map;
+        readonly BlockEntityCompWorkstation Entity;
+        readonly Button BtnAddOrder;
+        readonly ButtonList<Reaction> Reactions;
+        readonly Panel PanelReactions;
+        readonly PanelTitled PanelOrders;
+        readonly ScrollableBox ListOrders;
 
-        ButtonList<Reaction> Reactions;
-
-        Panel PanelReactions;
-
-        PanelTitled PanelOrders;
-        ScrollableBox ListOrders;
-
-        public WorkstationInterfaceNew(MapBase map, Vector3 global, BlockEntityCompWorkstation entity)
+        public WorkstationGuiNew(MapBase map, IntVec3 global, BlockEntityCompWorkstation entity)
         {
             this.Entity = entity;
             this.Global = global;
@@ -32,14 +29,14 @@ namespace Start_a_Town_.Modules.Crafting
             this.PanelReactions = new Panel() { AutoSize = true };
             var validreactions = Reaction.Dictionary.Values.Where(r => r.ValidWorkshops.Any(t => entity.IsWorkstationType(t))).ToList();
 
-            this.Reactions = new ButtonList<Reaction>(validreactions, 200, 400, r => r.Name, (r, b) => b.LeftClickAction = () => PlaceOrder(r));
+            this.Reactions = new ButtonList<Reaction>(validreactions, 200, 400, r => r.Name, (r, b) => b.LeftClickAction = () => this.PlaceOrder(r));
 
             this.PanelReactions.AddControls(this.Reactions);
 
             this.ListOrders = new ScrollableBox(this.PanelOrders.Client.ClientSize);
             var orders = entity.Orders;
             if (orders != null)
-                RefreshOrders(orders);
+                this.RefreshOrders(orders);
 
             this.PanelOrders.AddControls(this.ListOrders);
 
@@ -85,19 +82,19 @@ namespace Start_a_Town_.Modules.Crafting
 
         internal override void OnGameEvent(GameEvent e)
         {
-            switch(e.Type)
+            switch (e.Type)
             {
                 case Components.Message.Types.OrdersUpdatedNew:
-                    if(e.Parameters[0] == this.Entity)
-                        RefreshOrders(this.Entity.Orders);
+                    if (e.Parameters[0] == this.Entity)
+                        this.RefreshOrders(this.Entity.Orders);
                     break;
 
                 case Components.Message.Types.BlockChanged:
-                    if ((Vector3)e.Parameters[1] == this.Global)
+                    if ((IntVec3)e.Parameters[1] == this.Global)
                         this.GetWindow().Hide();
                     break;
                 case Components.Message.Types.BlocksChanged:
-                    if ((e.Parameters[1] as IEnumerable<Vector3>).Contains(this.Global))
+                    if ((e.Parameters[1] as IEnumerable<IntVec3>).Contains(this.Global))
                         this.GetWindow().Hide();
                     break;
                 default:

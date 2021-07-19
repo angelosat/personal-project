@@ -525,24 +525,17 @@ namespace Start_a_Town_
         public override string ToString()
         {
             if (!GlobalVars.DebugMode)
-            {
                 return Name;
-            }
 
             string info = "";
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
             {
                 if (info.Length > 0)
-                {
                     info += "\n";
-                }
-
                 info += "*" + comp.Key + "\n" + comp.Value.ToString();
             }
             if (info.Length > 0)
-            {
                 info = info.Remove(info.Length - 1);
-            }
 
             return info;
         }
@@ -551,42 +544,28 @@ namespace Start_a_Town_
         byte _ChildrenSequence = 0;
         public byte ChildrenSequence
         {
-            get
-            {
-                return _ChildrenSequence++;
-            }
-            private set { _ChildrenSequence = value; }
+            get => _ChildrenSequence++;
+            private set => _ChildrenSequence = value; 
         }
         byte _ContainerSequence = 0;
         byte ContainerSequence
         {
-            get
-            {
-                return _ContainerSequence++;
-            }
-            set { _ContainerSequence = value; }
+            get => _ContainerSequence++;
+            set => _ContainerSequence = value; 
         }
         public List<GameObjectSlot> GetChildren()
         {
             var list = new List<GameObjectSlot>();
             foreach (var c in this.GetContainers())
-            {
                 foreach (var s in c.Slots)
-                {
                     list.Add(s);
-                }
-            }
-
             return list;
         }
         public List<Container> GetContainers()
         {
             var list = new List<Container>();
             foreach (var comp in this.Components.Values)
-            {
                 comp.GetContainers(list);
-            }
-
             return list;
         }
         public Container GetContainer(int id)
@@ -749,12 +728,20 @@ namespace Start_a_Town_
             this.Map = map;
             this.OnSpawn(map);
         }
+        public void SyncSpawnNew(MapBase map)
+        {
+            if (this.RefID != 0)
+                this.Spawn(map);
+            if (map.Net is not Server)
+                return;
+            SyncInstantiate(map.Net);
+            map.SyncSpawn(this, this.Global, this.Velocity);
+        }
+
         public void SyncSpawn(MapBase map, Vector3 global)
         {
             if (map.Net is not Server)
-            {
                 return;
-            }
 
             map.SyncSpawn(this, global, Vector3.Zero);
         }
@@ -1466,22 +1453,13 @@ namespace Start_a_Town_
         internal void SyncWrite(BinaryWriter w)
         {
             foreach (var comp in this.Components)
-            {
                 comp.Value.SyncWrite(w);
-            }
         }
 
         internal void SyncRead(BinaryReader r)
         {
             foreach (var comp in this.Components)
-            {
                 comp.Value.SyncRead(this, r);
-            }
-        }
-
-        internal void DropInventoryItem(GameObject item, int amount)
-        {
-            PersonalInventoryComponent.DropInventoryItem(this, item, amount);
         }
 
         internal int GetOwner()
@@ -1506,8 +1484,6 @@ namespace Start_a_Town_
         {
             return this.GetComponent<NpcSkillsComponent>().GetSkill(skill);
         }
-
-       
 
         public float Fuel
         {
@@ -1591,14 +1567,10 @@ namespace Start_a_Town_
         public void SyncInstantiate(INetwork net)
         {
             if (net is not Server server)
-            {
                 return;
-            }
 
             if (this.RefID != 0)
-            {
                 throw new Exception();
-            }
 
             net.Instantiate(this);
             var w = server.GetOutgoingStream();

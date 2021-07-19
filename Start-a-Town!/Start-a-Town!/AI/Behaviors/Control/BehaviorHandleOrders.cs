@@ -18,20 +18,20 @@
                     return BehaviorState.Running;
             }
             
-            if (state.MoveOrder is not null)
-                if (state.MoveOrder.Type == TargetType.Position)
+            if (state.MoveOrder?.Type == TargetType.Position)
+            {
+                var destination = state.MoveOrder.Global.Above();
+                if (parent.IsAt(destination))
+                    return BehaviorState.Running;
+                if (parent.CanReach(destination))
                 {
-                    var destination = state.MoveOrder.Global.Above();
-                    if (parent.IsAt(destination))
-                        return BehaviorState.Running;
                     var target = new TargetArgs(parent.Map, destination);
-                    if (parent.CanReach(target))
-                    {
-                        this.CurrentBehav = new BehaviorGetAtNewNew(target, PathingSync.FinishMode.Exact);
-                        this.CurrentMoveOrder = state.MoveOrder;
-                        return BehaviorState.Running;
-                    }
+                    parent.CurrentTask = new AITask() { TargetA = target };
+                    this.CurrentBehav = new BehaviorGetAtNewNew(TargetIndex.A, PathingSync.FinishMode.Exact);
+                    this.CurrentMoveOrder = state.MoveOrder;
+                    return BehaviorState.Running;
                 }
+            }
             return BehaviorState.Fail;
         }
         public override object Clone()

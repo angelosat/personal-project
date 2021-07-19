@@ -10,7 +10,7 @@
             this.Title = "Block Browser";
             this.AutoSize = true;
             this.Movable = true;
-            this.Client.Controls.Add(new BlockBrowser());
+            this.Client.Controls.Add(new BlockBrowserEditor());
         }
     }
 }

@@ -11,8 +11,8 @@ namespace Start_a_Town_
 {
     public abstract class ConstructionCategory : INamed
     {
-        TerrainWindowNew _window;
-        protected TerrainWindowNew Window => this._window ??= new TerrainWindowNew();
+        GuiConstructionsBrowser _window;
+        protected GuiConstructionsBrowser Window => this._window ??= new GuiConstructionsBrowser();
       
         public abstract string Name { get; }
         public ToolDrawing Tool;

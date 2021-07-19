@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    class BlockBrowserNewNew : GroupBox
+    class BlockBrowserConstruction : GroupBox
     {
         readonly Dictionary<Block, ProductMaterialPair> LastSelectedVariant = new();
         ConstructionCategory SelectedCategory;
@@ -17,7 +17,7 @@ namespace Start_a_Town_
         Block CurrentSelected;
         readonly Dictionary<ConstructionCategory, ButtonGridIcons<Block>> Categories = new();
        
-        public BlockBrowserNewNew()
+        public BlockBrowserConstruction()
         {
             this.Panel_Blocks = new Panel() { AutoSize = true };
 

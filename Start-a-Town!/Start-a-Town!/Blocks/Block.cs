@@ -688,7 +688,6 @@ namespace Start_a_Town_
         public virtual IEnumerable<byte> GetEditorVariations()
         {
             return this.Ingredient.GetAllValidMaterials().Select(m => (byte)m.ID);
-            //return this.GetAllValidConstructionMaterialsNew().Select(m => (byte)m.Material.ID).Distinct();
         }
         internal IEnumerable<ItemDefMaterialAmount> GetAllValidConstructionMaterialsNew()
         {

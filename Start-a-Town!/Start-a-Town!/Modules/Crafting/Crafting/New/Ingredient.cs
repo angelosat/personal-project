@@ -12,12 +12,15 @@ namespace Start_a_Town_
         public int Amount = 1;
         public string Name;
         readonly List<Modifier> Modifiers = new();
-        readonly HashSet<ItemCategory> AllowedCategories = new();
-        readonly public HashSet<Material> AllowedMaterials = new();
-        private HashSet<ItemDef> ValidItemDefs;
-        private readonly HashSet<ItemDef> SpecifiedItemDefs = new();
+        readonly HashSet<ItemCategory> SpecifiedCategories = new();
+        readonly HashSet<Material> SpecifiedMaterials = new();
+        readonly HashSet<ItemDef> SpecifiedItemDefs = new();
         public IngredientRestrictions DefaultRestrictions = new();
         readonly List<Func<Entity, bool>> SpecialFilters = new();
+        IEnumerable<Material> ResolvedMaterials;
+        HashSet<ItemDef> ResolvedItemDefs;
+        bool Resolved;
+
         public bool IsPreserved;
 
         public Ingredient(string name)
@@ -36,15 +39,14 @@ namespace Start_a_Town_
             Amount = amount;
         }
 
-        IEnumerable<Material> _cachedMaterials;
         public IEnumerable<Material> GetAllValidMaterials()
         {
-            if (_cachedMaterials is null)
+            if (this.ResolvedMaterials is null)
             {
                 var defs = this.GetAllValidItemDefs().ToList();
-                _cachedMaterials = defs.SelectMany(d => d.GetValidMaterials()).Distinct().Intersect(this.AllowedMaterials);
+                this.ResolvedMaterials = defs.SelectMany(d => d.GetValidMaterials()).Distinct().Intersect(this.SpecifiedMaterials);
             }
-            foreach (var i in _cachedMaterials)
+            foreach (var i in ResolvedMaterials)
                 yield return i;
         }
 
@@ -86,13 +88,16 @@ namespace Start_a_Town_
         
         public IEnumerable<ItemDef> GetAllValidItemDefs()
         {
-            foreach (var d in this.ValidItemDefs ??= ResolveItemDefs())
+            this.TryResolve();
+            foreach (var d in this.ResolvedItemDefs)
                 yield return d;
+            //foreach (var d in this.ValidItemDefs ??= ResolveItemDefs())
+            //    yield return d;
         }
         public bool Evaluate(Entity item)
         {
-            return this.ValidItemDefs.Contains(item.Def)
-                && this.AllowedMaterials.Contains(item.PrimaryMaterial)
+            return this.ResolvedItemDefs.Contains(item.Def)
+                && this.ResolvedMaterials.Contains(item.PrimaryMaterial)
                 && this.SpecialFilters.All(f => f(item));
         }
         public Ingredient IsBuildingMaterial()
@@ -110,9 +115,9 @@ namespace Start_a_Town_
         public Ingredient SetAllow(ItemCategory category, bool allow)
         {
             if (allow)
-                this.AllowedCategories.Add(category);
+                this.SpecifiedCategories.Add(category);
             else
-                this.AllowedCategories.Remove(category);
+                this.SpecifiedCategories.Remove(category);
             return this;
         }
         public Ingredient SetAllow(Material mat, bool allow)
@@ -120,9 +125,9 @@ namespace Start_a_Town_
             if (mat is null)
                 throw new Exception(); 
             if (allow)
-                this.AllowedMaterials.Add(mat);
+                this.SpecifiedMaterials.Add(mat);
             else
-                this.AllowedMaterials.Remove(mat);
+                this.SpecifiedMaterials.Remove(mat);
             return this;
         }
         public Ingredient SetAllow(MaterialType matType, bool allow)
@@ -143,40 +148,30 @@ namespace Start_a_Town_
                 this.SpecifiedItemDefs.Remove(def);
             return this;
         }
-        HashSet<ItemDef> _resolvedItemDefs;
-        private HashSet<ItemDef> ResolveItemDefs()
+        private void TryResolve()
         {
+            if (this.Resolved)
+                return;
             var allDefs = Def.GetDefs<ItemDef>();
-            //var list =
-            //    new HashSet<ItemDef>(
-            //        this.SpecifiedItemDefs.Concat(
-            //        allDefs.Where(d =>
-            //            this.AllowedCategories.Contains(d.Category)
-            //            &&
-            //            // TODO find better way to imply that all materials are allowed when allowedmaterials is empty
-            //            (!this.AllowedMaterials.Any() || d.ValidMaterialTypes.Any(t => this.AllowedMaterials.Any(m => m.Type == t)))
-            //            )));
-            //ResolveAllowedMaterials(list);
-            //return list;
-
+           
             if (this.SpecifiedItemDefs.Any())
-                this._resolvedItemDefs = this.SpecifiedItemDefs;
+                this.ResolvedItemDefs = this.SpecifiedItemDefs;
             else
             {
                 if (this.Modifiers.Any())
-                    this._resolvedItemDefs = new(allDefs.Where(d => this.Modifiers.All(m => m.Evaluate(d))));
-                else if (this.AllowedMaterials.Any())
-                    this._resolvedItemDefs = new(allDefs.Where(d => d.ValidMaterialTypes.Any(t => this.AllowedMaterials.Any(m => m.Type == t))));
+                    this.ResolvedItemDefs = new(allDefs.Where(d => this.Modifiers.All(m => m.Evaluate(d))));
+                else if (this.SpecifiedMaterials.Any())
+                    this.ResolvedItemDefs = new(allDefs.Where(d => d.ValidMaterialTypes.Any(t => this.SpecifiedMaterials.Any(m => m.Type == t))));
             }
-            if (!this.AllowedMaterials.Any())
-                ResolveAllowedMaterials(this._resolvedItemDefs);
-            return this._resolvedItemDefs;
+            if (!this.SpecifiedMaterials.Any())
+                ResolveAllowedMaterials(this.ResolvedItemDefs);
+            this.Resolved = true;
         }
         private void ResolveAllowedMaterials(HashSet<ItemDef> allowedItemDefs)
         {
-            if (!this.AllowedMaterials.Any())
+            if (!this.SpecifiedMaterials.Any())
                 foreach (var m in allowedItemDefs.SelectMany(i => i.GetValidMaterials()))
-                    this.AllowedMaterials.Add(m);
+                    this.SpecifiedMaterials.Add(m);
         }
       
         internal string GetLabel()

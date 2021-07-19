@@ -2,16 +2,16 @@
 
 namespace Start_a_Town_
 {
-    public class TerrainWindowNew : Window
+    public class GuiConstructionsBrowser : Window
     {
-        readonly BlockBrowserNewNew Browser;
+        readonly BlockBrowserConstruction Browser;
 
-        public TerrainWindowNew()
+        public GuiConstructionsBrowser()
         {
             this.Title = "Constructions Browser";
             this.AutoSize = true;
             this.Movable = true;
-            this.Browser = new BlockBrowserNewNew();
+            this.Browser = new BlockBrowserConstruction();
             this.Client.Controls.Add(this.Browser);
         }
         public override bool Hide()

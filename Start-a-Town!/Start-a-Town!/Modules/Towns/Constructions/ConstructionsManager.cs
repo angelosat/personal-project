@@ -27,7 +27,7 @@ namespace Start_a_Town_
             Production,
             Furniture
         };
-        public readonly TerrainWindowNew WindowBuild = new();
+        public readonly GuiConstructionsBrowser WindowBuild = new();
         public ConstructionsManager(Town town)
         {
             this.Town = town;

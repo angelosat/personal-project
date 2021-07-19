@@ -6,13 +6,13 @@ using System.Linq;
 
 namespace Start_a_Town_.UI.Editor
 {
-    class BlockBrowser : GroupBox
+    class BlockBrowserEditor : GroupBox
     {
         readonly PanelLabeled Panel_Blocks, Panel_Variants;
         readonly SlotGrid<Slot<Block>, Block> GridBlocks;
         SlotGridCustom<SlotCustom<Cell>, Cell> GridVariations2;
 
-        public BlockBrowser()
+        public BlockBrowserEditor()
         {
             this.Panel_Blocks = new PanelLabeled("Blocks") { AutoSize = true };
             var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air

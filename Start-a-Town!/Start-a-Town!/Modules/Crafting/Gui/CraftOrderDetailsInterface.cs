@@ -69,7 +69,7 @@ namespace Start_a_Town_.Crafting
                 list.AddNode(itemTypesNode);
                 foreach (var i in items)
                 {
-                    var mats = r.Ingredient.AllowedMaterials.Intersect(i.GetValidMaterials());
+                    var mats = r.Ingredient.GetAllValidMaterials().Intersect(i.GetValidMaterials());
 
                     if (mats.Count() <= 1) // UNDONE
                     {

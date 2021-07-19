@@ -412,7 +412,7 @@
     <Compile Include="Interfaces\IUISelection.cs" />
     <Compile Include="IntVec2.cs" />
     <Compile Include="Modules\Construction\Tools\UIBlockVariationPickerNew.cs" />
-    <Compile Include="Modules\Construction\UI\BlockBrowserNewNew.cs" />
+    <Compile Include="Modules\Construction\UI\BlockBrowserConstruction.cs" />
     <Compile Include="Modules\Crafting\IngredientRestrictions.cs" />
     <Compile Include="Modules\Towns\Stockpiles\PacketStorageFiltersNew.cs" />
     <Compile Include="Modules\Towns\Stockpiles\PacketStorageFilters.cs" />
@@ -565,7 +565,7 @@
     <Compile Include="Gui\DragDrop\DragDropSlot.cs" />
     <Compile Include="Gui\DragDrop\DragEventArgs.cs" />
     <Compile Include="Gui\DrawMode.cs" />
-    <Compile Include="Gui\Editor\BlockBrowser.cs" />
+    <Compile Include="Gui\Editor\BlockBrowserEditor.cs" />
     <Compile Include="Gui\Editor\ObjectsWindowDefs.cs" />
     <Compile Include="Gui\Primitives\GroupBox.cs" />
     <Compile Include="Gui\Hud\QuickButtonBar.cs" />
@@ -600,7 +600,7 @@
     <Compile Include="Modules\Construction\Tools\ToolDrawingSingle.cs" />
     <Compile Include="Modules\Construction\Tools\UIToolsBox.cs" />
     <Compile Include="Modules\Construction\Tools\UITools.cs" />
-    <Compile Include="Modules\Construction\UI\TerrainWindowNew.cs" />
+    <Compile Include="Modules\Construction\UI\GuiConstructionsBrowser.cs" />
     <Compile Include="Modules\Crafting\CraftOrderFinishMode.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderChangeMode.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderToggleHaul.cs" />

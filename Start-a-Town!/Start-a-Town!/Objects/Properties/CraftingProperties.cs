@@ -5,7 +5,7 @@ namespace Start_a_Town_
 {
     public class CraftingProperties
     {
-        public Dictionary<BoneDef, Reaction.Reagent> Reagents = new Dictionary<BoneDef, Reaction.Reagent>();
+        public Dictionary<BoneDef, Reaction.Reagent> Reagents = new();
         public List<Ingredient> Ingredients = new();
         public bool IsBuildingMaterial;
         public bool IsCraftingMaterial;

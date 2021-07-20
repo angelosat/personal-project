@@ -3,16 +3,6 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
-    public class SplitStackEventArgs : EventArgs
-    {
-        public GameObjectSlot Slot;
-        public int Amount;
-        public SplitStackEventArgs(GameObjectSlot slot, int amount)
-        {
-            this.Slot = slot;
-            this.Amount = amount;
-        }
-    }
     class SplitStackWindow : Window
     {
         static SplitStackWindow _Instance;
@@ -79,15 +69,15 @@ namespace Start_a_Town_.UI
             int w = (int)Math.Max(70, TitleLocation.X + UIManager.Font.MeasureString(Title).X + CloseButton.Width);
             int amount = (int)(slotTarget.Slot.StackSize / 2f);
             Txt_Amount.Width = w;
-            Txt_Amount.Text = amount.ToString();//"1";
-
+            //Txt_Amount.Text = amount.ToString();//"1";
+            Txt_Amount.TextFunc = () => $"{amount}";
             Panel_Input.Controls.Remove(Txt_Amount);
             Panel_Input.Controls.Add(Txt_Amount);
 
             Sldr_Amount = new SliderNew(() => amount, v => amount = (int)v, Panel_Input.Width, 1, slotTarget.Slot.StackSize, 1)
             {
                 Location = Panel_Input.BottomLeft,
-                ValueChangedFunc = () => Txt_Amount.Text = Sldr_Amount.Value.ToString(),
+                //ValueChangedFunc = () => Txt_Amount.Text = Sldr_Amount.Value.ToString(),
                 HoverFunc = () => "Split to: " + Sldr_Amount.Value.ToString(),
             };
 
@@ -107,7 +97,7 @@ namespace Start_a_Town_.UI
         {
             return this.Show(objSlot, parent, (amount) =>
                 {
-                    int count = Int16.Parse(Txt_Amount.Text);
+                    int count = short.Parse(Txt_Amount.Text);
                     DragDropManager.Create(new DragDropSlot(Entity, objSlot, new GameObjectSlot(objSlot.Object.Clone(), count), DragDropEffects.Move | DragDropEffects.Link));
                 });
         }
@@ -159,11 +149,11 @@ namespace Start_a_Town_.UI
             }
 
             int amount;
-            string newAmount = Txt_Amount.Text + (Char.IsDigit(e.Char) ? e.Char.ToString() : "");
+            string newAmount = Txt_Amount.Text + (char.IsDigit(e.Char) ? e.Char.ToString() : "");
             if (!int.TryParse(newAmount, out amount))
                 amount = 1;
             else
-                amount = (int)MathHelper.Clamp((float)Int16.Parse(newAmount), 1, (float)Tag.StackSize);
+                amount = (int)MathHelper.Clamp(short.Parse(newAmount), 1, Tag.StackSize);
 
             Txt_Amount.Text = amount.ToString();
             Sldr_Amount.Value = amount;

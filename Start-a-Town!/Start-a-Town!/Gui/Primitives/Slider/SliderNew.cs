@@ -36,9 +36,7 @@ namespace Start_a_Town_.UI
         public override int Height
         {
             get => DefaultHeight;
-            set
-            {
-            }
+            set { }
         }
 
         public override string Name
@@ -55,12 +53,6 @@ namespace Start_a_Town_.UI
             this.DrawSprite(sb, Vector2.Zero);
         }
 
-        public event EventHandler<EventArgs> ValueChanged;
-        protected void OnValueChanged()
-        {
-            ValueChanged?.Invoke(this, EventArgs.Empty);
-        }
-        
         public SliderNew(Func<float> valueGetter, Action<float> valueSetter, int width, float min = 0, float max = 1, float step = 0.1f, string format = null)
             : base()
         {

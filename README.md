@@ -1,7 +1,7 @@
 # personal-project
  Start-a-town! (working title)
 * Angelo Tsimidakis personal project preview code
-* * Dream game being worked on on and off throughout the years as a hobby
+* Dream game being worked on on and off throughout the years as a hobby
 * 2d isometric pixel-art voxel co-op colony sim
 * Short proof-of-concept video: https://www.youtube.com/watch?v=INYfHrmtfmY
 * Work in progress

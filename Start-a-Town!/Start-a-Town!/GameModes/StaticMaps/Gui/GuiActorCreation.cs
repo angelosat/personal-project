@@ -15,7 +15,7 @@ namespace Start_a_Town_
 
             var actorslistbox = new PanelLabeledNew("Colonists");
             actorslistbox.Client.AddControlsVertically(actorsUI, addactorbutton);
-            var editbox = new Panel(0, 0, 800, actorslistbox.Height) { AutoSize = false };
+            var editbox = new Panel(0, 0, 500, actorslistbox.Height) { AutoSize = false };
             addactorbutton.LeftClickAction = addActor;
 
             actorsUI.AddItems(actors, btnInit);
@@ -47,6 +47,7 @@ namespace Start_a_Town_
                 return btn;
             }
         }
+        GuiCharacterCustomization guiCustomization = new GuiCharacterCustomization();
 
         private void Expand(Actor a, Control editbox)
         {
@@ -85,12 +86,11 @@ namespace Start_a_Town_
                                                    .SetAnchor(Vector2.UnitX));
             boxName.AddControlsHorizontally(firstnamepanel, lastnamepanel);
             editbox.AddControls(boxName);
-
             editbox.AddControlsSmart(
                 a.Personality.GetUI().ToPanelLabeled("Traits").AddControlsTopRight(IconButton.CreateRandomizeButton(() => a.Personality.Randomize()).SetAnchor(Vector2.UnitX)),
                 a.Skills.GetUI().ToPanelLabeled("Skills").AddControlsTopRight(IconButton.CreateRandomizeButton(() => a.Skills.Randomize()).SetAnchor(Vector2.UnitX)),
                 a.Attributes.GetUI().ToPanelLabeled("Attributes").AddControlsTopRight(IconButton.CreateRandomizeButton(() => a.Attributes.Randomize()).SetAnchor(Vector2.UnitX)),
-                new UICharacterCustomization(a));
+                guiCustomization.SetTag(a));// a));
             editbox.Validate(true);
         }
     }

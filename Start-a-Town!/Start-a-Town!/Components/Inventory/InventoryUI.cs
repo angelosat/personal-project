@@ -68,7 +68,7 @@ namespace Start_a_Town_
             this.AddControls(this.PanelSlots);
 
             var customizationClient = new GroupBox();
-            var colorsui = new UICharacterCustomization(actor);
+            var colorsui = new GuiCharacterCustomization(); //actor);
             customizationClient.AddControls(colorsui);
             customizationClient.AddControlsBottomLeft(new Button("Apply", customizationClient.Width) { LeftClickAction = () => PacketEditAppearance.Send(actor, colorsui.Colors) });
 

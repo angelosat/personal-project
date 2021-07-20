@@ -58,9 +58,7 @@ namespace Start_a_Town_
         {
             var box = new GroupBox();
             foreach (var t in this.Traits)
-            {
                 box.AddControlsBottomLeft(t.GetUI());
-            }
             return box;
         }
         public Trait GetTrait(TraitDef def)

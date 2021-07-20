@@ -1,12 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
     class ButtonColor : IconButton
     {
-        public Color SelectedColor = Color.White;
-        Rectangle Rect = new Rectangle(UIManager.DefaultIconButtonSprite.Width / 2 - 5, UIManager.DefaultIconButtonSprite.Height / 2 - 5, 10, 10);
+        Color _selectedColor = Color.White;
+        public Func<Color> SelectedColorFunc;
+        public Color SelectedColor => this.SelectedColorFunc?.Invoke() ?? this._selectedColor;
+        Rectangle Rect = new(UIManager.DefaultIconButtonSprite.Width / 2 - 5, UIManager.DefaultIconButtonSprite.Height / 2 - 5, 10, 10);
 
         public ButtonColor()
         {

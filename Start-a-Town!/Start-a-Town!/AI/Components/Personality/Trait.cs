@@ -36,13 +36,13 @@ namespace Start_a_Town_
         }
         public override string ToString()
         {
-            return string.Format("{0}: {1}", this.Def.Name, this.Value);
+            return $"{this.Def.Name}: {this.Value}";
         }
 
         public Control GetUI()
         {
             var box = new Panel() { AutoSize = true, BackgroundStyle = BackgroundStyle.TickBox };
-            var bar = new BarSigned() { Object = this, TextFunc = () => this.Label, HoverFunc = () => string.Format("{0}: {1} ({2})\n{3}", this.Def.Name, this.Value, this.Label, this.Def.Description.Wrap(TooltipManager.Width)) };
+            var bar = new BarSigned() { Object = this, TextFunc = () => this.Label, HoverFunc = () => $"{this.Def.Name}: {this.Value} ({this.Label})\n{this.Def.Description.Wrap(TooltipManager.Width)}" };
             box.AddControls(bar);
             return box;
         }

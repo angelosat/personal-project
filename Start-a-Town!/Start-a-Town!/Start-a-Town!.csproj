@@ -975,7 +975,7 @@
     <Compile Include="Gui\Primitives\Bars\Bar.cs" />
     <Compile Include="Gui\CharacterCreation\ButtonColor.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColors.cs" />
-    <Compile Include="Gui\CharacterCreation\UICharacterCustomization.cs" />
+    <Compile Include="Gui\CharacterCreation\GuiCharacterCustomization.cs" />
     <Compile Include="Gui\CharacterCreation\ColoredRectangle.cs" />
     <Compile Include="Gui\CharacterCreation\ColorPickerWindow.cs" />
     <Compile Include="Gui\CharacterCreation\ColorPickerHueSaturation.cs" />

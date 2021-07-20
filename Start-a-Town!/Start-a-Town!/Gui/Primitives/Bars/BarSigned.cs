@@ -41,7 +41,7 @@ namespace Start_a_Town_.UI
         public BarSigned()
         {
             this.Height = UIManager.DefaultProgressBarStrip.Bounds.Height;
-            this.Width = 200;
+            this.Width = 100;// 200;
             this.BackgroundColor = Color.Black * 0.5f;
         }
         public BarSigned(IProgressBar progress)

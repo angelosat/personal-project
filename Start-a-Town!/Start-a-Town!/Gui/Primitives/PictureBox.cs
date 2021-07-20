@@ -1,58 +1,56 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
     public class PictureBox : ButtonBase
     {
         public Action<PictureBox> Animate = (box) => { };
-        public event EventHandler<EventArgs> SpriteChanged;
 
-        Action<RenderTarget2D> _Renderer;
+        Action<RenderTarget2D> _renderer;
 
         public Action<RenderTarget2D> Renderer
         {
-            get { return _Renderer; }
+            get => this._renderer;
             set
             {
-                this._Renderer = value;
+                this._renderer = value;
                 this.Sprite = new RenderTarget2D(Game1.Instance.GraphicsDevice, this.BoundsScreen.Width, this.BoundsScreen.Height);
             }
         }
 
-        protected Texture2D _Sprite;
+        protected Texture2D _sprite;
         public Texture2D Sprite
         {
-            get { return _Sprite; }
+            get => this._sprite;
             set
             {
-                _Sprite = value;
-                Width = SourceRect.Width;
-                Height = SourceRect.Height;
+                this._sprite = value;
+                this.Width = this.SourceRect.Width;
+                this.Height = this.SourceRect.Height;
                 this.Invalidate();
-                OnSpriteChanged();
             }
         }
-      
+
         Rectangle? _SourceRect;
         public Rectangle SourceRect
         {
-            get { return _SourceRect.GetValueOrDefault(this.Sprite is null ? new Rectangle(0,0,0,0) : this.Sprite.Bounds); }
+            get => this._SourceRect.GetValueOrDefault(this.Sprite is null ? new Rectangle(0, 0, 0, 0) : this.Sprite.Bounds);
             set
             {
-                _SourceRect = value;
-                Width = SourceRect.Width;
-                Height = SourceRect.Height;
+                this._SourceRect = value;
+                this.Width = this.SourceRect.Width;
+                this.Height = this.SourceRect.Height;
                 this.Invalidate();
-                switch (Alignment)
+                switch (this.Alignment)
                 {
                     case HorizontalAlignment.Center:
-                        PictureOrigin = new Vector2(SourceRect.Width / 2, SourceRect.Height / 2);
+                        this.PictureOrigin = new Vector2(this.SourceRect.Width / 2, this.SourceRect.Height / 2);
                         break;
                     case HorizontalAlignment.Right:
-                        PictureOrigin.X = SourceRect.Width;
+                        this.PictureOrigin.X = this.SourceRect.Width;
                         break;
                     default:
                         break;
@@ -64,7 +62,7 @@ namespace Start_a_Town_.UI
         {
             if (this.DrawAction == null)
             {
-                if (Renderer != null)
+                if (this.Renderer != null)
                     this.Renderer(this.Sprite as RenderTarget2D);
 
                 base.Validate(cascade);
@@ -73,7 +71,7 @@ namespace Start_a_Town_.UI
             else
             {
                 var gd = Game1.Instance.GraphicsDevice;
-                Texture = CreateTexture(gd);
+                this.Texture = this.CreateTexture(gd);
                 gd.SetRenderTarget(this.Texture);
                 gd.Clear(Color.Transparent);
                 this.DrawAction();
@@ -93,33 +91,36 @@ namespace Start_a_Town_.UI
         }
         public Action DrawAction;
         public Vector2 PictureOrigin = new Vector2(0);
-        protected void OnSpriteChanged()
-        {
-            if (SpriteChanged != null)
-                SpriteChanged(this, EventArgs.Empty);
-        }
+
         public override RenderTarget2D CreateTexture(GraphicsDevice gd)
         {
-            return new RenderTarget2D(Game1.Instance.GraphicsDevice, SourceRect.Width, SourceRect.Height);
+            return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.SourceRect.Width, this.SourceRect.Height);
         }
         public HorizontalAlignment Alignment;
 
         public PictureBox() { }
+        public PictureBox(Rectangle bounds, float scale)
+        {
+            this.Width = (int)(bounds.Width * scale);
+            this.Height = (int)(bounds.Height * scale);
+            this.SourceRect = new Rectangle(0, 0, this.Width, this.Height);
+            this.Sprite = this.CreateTexture(Game1.Instance.GraphicsDevice);
+        }
         public PictureBox(Vector2 size, Action<RenderTarget2D> renderer, HorizontalAlignment halign = HorizontalAlignment.Left, VerticalAlignment valign = VerticalAlignment.Top)
         {
-            SourceRect = new Rectangle(0, 0, (int)size.X, (int)size.Y);
-            Width = SourceRect.Width;
-            Height = SourceRect.Height;
+            this.SourceRect = new Rectangle(0, 0, (int)size.X, (int)size.Y);
+            this.Width = this.SourceRect.Width;
+            this.Height = this.SourceRect.Height;
             this.Renderer = renderer;
 
-            Alignment = halign;
+            this.Alignment = halign;
             switch (halign)
             {
                 case HorizontalAlignment.Center:
-                    PictureOrigin = new Vector2(SourceRect.Width / 2, SourceRect.Height / 2);
+                    this.PictureOrigin = new Vector2(this.SourceRect.Width / 2, this.SourceRect.Height / 2);
                     break;
                 case HorizontalAlignment.Right:
-                    PictureOrigin.X = SourceRect.Width;
+                    this.PictureOrigin.X = this.SourceRect.Width;
                     break;
                 default:
                     break;
@@ -128,25 +129,26 @@ namespace Start_a_Town_.UI
         public PictureBox(Vector2 location, Texture2D sprite, Rectangle? sourcerect, HorizontalAlignment halign = HorizontalAlignment.Left, VerticalAlignment valign = VerticalAlignment.Top)
             : base(location)
         {
-            Sprite = sprite;
-            SourceRect = sourcerect.HasValue ? sourcerect.Value : sprite.Bounds;
-            Width = SourceRect.Width;
-            Height = SourceRect.Height;
+            this.Sprite = sprite;
+            this.SourceRect = sourcerect.HasValue ? sourcerect.Value : sprite.Bounds;
+            this.Width = this.SourceRect.Width;
+            this.Height = this.SourceRect.Height;
 
-            Alignment = halign;
+            this.Alignment = halign;
             switch (halign)
             {
                 case HorizontalAlignment.Center:
-                    PictureOrigin = new Vector2(SourceRect.Width / 2, SourceRect.Height / 2);
+                    this.PictureOrigin = new Vector2(this.SourceRect.Width / 2, this.SourceRect.Height / 2);
                     break;
                 case HorizontalAlignment.Right:
-                    PictureOrigin.X = SourceRect.Width;
+                    this.PictureOrigin.X = this.SourceRect.Width;
                     break;
                 default:
                     break;
             }
         }
-        public PictureBox(Entity item, float scale):this(item.Body.RenderIcon(item, scale))
+        public PictureBox(Entity item, float scale)
+            : this(item.Body.RenderIcon(item, scale))
         {
         }
         [Obsolete]
@@ -157,22 +159,23 @@ namespace Start_a_Town_.UI
             this.SourceRect = new Rectangle(0, 0, this.Width, this.Height);
             this.DrawAction = () => GameObject.DrawIcon(bone, this.Width, this.Height, scale);
         }
-        public PictureBox(IAtlasNodeToken token):this(Vector2.Zero, token.Atlas.Texture, token.Rectangle)
+        public PictureBox(IAtlasNodeToken token) : this(Vector2.Zero, token.Atlas.Texture, token.Rectangle)
         {
         }
-        public PictureBox(Texture2D texture2D, Rectangle? rectangle = null, float scale = 1):this(Vector2.Zero, texture2D, rectangle)
+        public PictureBox(Texture2D texture2D, Rectangle? rectangle = null, float scale = 1)
+            : this(Vector2.Zero, texture2D, rectangle)
         {
             this.Width = (int)((rectangle?.Width ?? texture2D.Width) * scale);
             this.Height = (int)((rectangle?.Height ?? texture2D.Height) * scale);
         }
-       
+
         public override void Draw(SpriteBatch sb)
         {
-            sb.Draw(this.Sprite, BoundsScreen, Color.White);
+            sb.Draw(this.Sprite, this.BoundsScreen, Color.White);
 
             base.Draw(sb);
-            if (Active && MouseHover)
-                sb.Draw(Texture, BoundsScreen, SourceRect, new Color(1, 1, 1, 0.5f), this.Rotation, PictureOrigin, SpriteEffects.None, 0);
+            if (this.Active && this.MouseHover)
+                sb.Draw(this.Texture, this.BoundsScreen, this.SourceRect, new Color(1, 1, 1, 0.5f), this.Rotation, this.PictureOrigin, SpriteEffects.None, 0);
         }
 
         internal void SetTexture(Atlas.Node.Token token)

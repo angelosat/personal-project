@@ -3,10 +3,8 @@ using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
@@ -19,7 +17,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         readonly GroupBox Tab_World;
         private StaticMap.MapSize SelectedSize;
 
-        public GuiNewGame()
+        public GuiNewGame(Action cancelAction)
         {
             this.AutoSize = true;
 
@@ -55,29 +53,31 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Panel_Main = new Panel() { AutoSize = true };
             this.Panel_Main.Controls.Add(this.Tab_World);
 
-            var panel_button = new Panel() { Location = this.Panel_Main.BottomLeft, AutoSize = true };
-            panel_button.AutoSize = true;
-            var btn_create = new Button(Vector2.Zero, panel_button.ClientSize.Width, "Create");
-            btn_create.LeftClickAction = () =>
+            var btn_create = new Button("Create", openActorCreationGui);
+            var btn_cancel = new Button("Cancel", cancelAction);
+
+            this.AddControlsVertically(0, HorizontalAlignment.Right,
+                this.Panel_Main,
+                UIHelper.Wrap(btn_create, btn_cancel)
+                );
+
+            void openActorCreationGui()
             {
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
                 var actorsui = new GuiActorCreation(actors);
                 var btnstart = new Button("Start") { LeftClickAction = () => this.CreateMap(actors.ToArray()) };
                 var btnback = new Button("Back") { LeftClickAction = () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); } };
-                actorsCreateBox.AddControlsVertically(actorsui, btnstart, btnback);
+                actorsCreateBox.AddControlsVertically(0, HorizontalAlignment.Right, 
+                    actorsui,
+                    UIHelper.Wrap(btnstart, btnback)
+                    );
                 var createActorsWindow = new Window(actorsCreateBox) { Closable = false, Movable = false, Previous = this.GetWindow() };
                 createActorsWindow.LocationFunc = () => UIManager.Center;
                 createActorsWindow.Anchor = Vector2.One * .5f;
                 createActorsWindow.Show();
                 this.GetWindow().Hide();
-            };
-
-            panel_button.Controls.Add(btn_create);
-
-            this.Controls.Add(
-                panel_button, this.Panel_Main
-                );
+            }
         }
 
         public static DirectoryInfo[] GetWorlds()

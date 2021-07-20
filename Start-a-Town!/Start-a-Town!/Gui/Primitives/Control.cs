@@ -889,6 +889,33 @@ namespace Start_a_Town_.UI
             }
             return this;
         }
+        public virtual Control AddControlsVertically(int spacing, HorizontalAlignment horAlignment, params Control[] controls)
+        {
+            var y = 0;
+            var maxWidth = controls.Max(c => c.Width);
+            foreach (var ctrl in controls)
+            {
+                switch (horAlignment)
+                {
+                    case HorizontalAlignment.Left:
+                        ctrl.Location = new Vector2(0, y);
+                        break;
+                    case HorizontalAlignment.Center:
+                        ctrl.Location = new Vector2(maxWidth / 2, y);
+                        ctrl.Anchor = new(.5f, 0);
+                        break;
+                    case HorizontalAlignment.Right:
+                        ctrl.Location = new Vector2(maxWidth, y);
+                        ctrl.Anchor = new(1, 0);
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                this.Controls.Add(ctrl);
+                y += ctrl.Height + spacing;
+            }
+            return this;
+        }
         public virtual Control AddControlsHorizontally(params Control[] controls)
         {
             return this.AddControlsHorizontally(0, controls);
@@ -1331,5 +1358,5 @@ namespace Start_a_Town_.UI
             this.OnGameEventAction = onGameEventAction;
             return this;
         }
-    }
+}
 }

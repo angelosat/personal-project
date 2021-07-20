@@ -2,6 +2,7 @@
 using Start_a_Town_.Net;
 using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -183,9 +184,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.DialogLoad.Populate();
             return this.DialogLoad;
         }
-        internal override Control GetNewGameGui()
+        internal override Control GetNewGameGui(Action cancelAction)
         {
-            return new GuiNewGame();
+            return new GuiNewGame(cancelAction);
         }
         static readonly string SavePath = GlobalVars.SaveDir + "/Worlds/";
         internal static FileInfo[] GetSaves()

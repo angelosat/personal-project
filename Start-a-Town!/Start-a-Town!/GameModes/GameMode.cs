@@ -4,6 +4,7 @@ using Start_a_Town_.GameModes.StaticMaps;
 using Start_a_Town_.Rooms;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Start_a_Town_.GameModes
 {
@@ -56,7 +57,7 @@ namespace Start_a_Town_.GameModes
         internal virtual void Update(Server server) { }
 
         internal abstract Control Load();
-        internal virtual Control GetNewGameGui() { return null; }
+        internal virtual Control GetNewGameGui(Action cancelAction) { return null; }
 
         internal virtual void ChunkReceived(Server server, int playerid, Vector2 vec) { }
         internal virtual void HandleEvent(INetwork net, GameEvent e) { }

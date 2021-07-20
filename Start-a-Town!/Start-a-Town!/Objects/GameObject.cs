@@ -59,8 +59,8 @@ namespace Start_a_Town_
         public GameObject Debug() { return this; }
 
 
-        private DefComponent _DefComponent;
-        public DefComponent DefComponent => this._DefComponent ??= this.GetComponent<DefComponent>();
+        private DefComponent _defComponent;
+        public DefComponent DefComponent => this._defComponent ??= this.GetComponent<DefComponent>();
         public ItemDef Def;
 
         public Quality Quality { get { return this.DefComponent.Quality; } set { this.DefComponent.Quality = value; } }
@@ -176,7 +176,7 @@ namespace Start_a_Town_
             var bounds = camera.GetScreenBounds(g.X, g.Y, g.Z, this.SpriteComp.GetSpriteBounds(), 0, 0, this.Body.Scale);
             return bounds;
         }
-
+       
         public virtual Color GetNameplateColor()
         {
             return this.DefComponent.Quality.Color;

@@ -346,6 +346,7 @@ namespace Start_a_Town_.UI
             gd.SetRenderTarget(uiTexture);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+
             if (camera is not null)
                 this.DrawOnCamera(sb, camera);
 

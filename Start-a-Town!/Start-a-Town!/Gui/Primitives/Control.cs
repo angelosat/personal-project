@@ -595,10 +595,10 @@ namespace Start_a_Town_.UI
             return (!this.IsMouseThrough) && this.BoundsScreen.Intersects(new Rectangle((int)(Controller.Instance.msCurrent.X / UIManager.Scale), (int)(Controller.Instance.msCurrent.Y / UIManager.Scale), 1, 1));
         }
 
-        public Vector2 ScreenClientLocation => new Vector2(this.X + this.ClientLocation.X, this.Y + this.ClientLocation.Y);
-        public Rectangle ScreenClientRectangle => new Rectangle(this.X + (int)this.ClientLocation.X, this.Y + (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height);
-        public virtual Rectangle BoundsScreen => new Rectangle((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
-        public virtual Rectangle BoundsLocal => new Rectangle((int)this.Location.X, (int)this.Location.Y, this.Width, this.Height);
+        public Vector2 ScreenClientLocation => new(this.X + this.ClientLocation.X, this.Y + this.ClientLocation.Y);
+        public Rectangle ScreenClientRectangle => new(this.X + (int)this.ClientLocation.X, this.Y + (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height);
+        public virtual Rectangle BoundsScreen => new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
+        public virtual Rectangle BoundsLocal => new((int)this.Location.X, (int)this.Location.Y, this.Width, this.Height);
 
         protected Rectangle _ClientSize;
         public virtual Rectangle ClientSize

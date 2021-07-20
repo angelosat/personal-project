@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Components;
-using UI;
 
 namespace Start_a_Town_.UI
 {
@@ -23,9 +21,7 @@ namespace Start_a_Town_.UI
         {
             var plate = new Nameplate(obj);
             if (obj is GameObject)
-            {
                 obj.OnNameplateCreated(plate);
-            }
             else
                 obj.OnNameplateCreated(plate);
             plate.AlignVertically(HorizontalAlignment.Center);
@@ -66,8 +62,8 @@ namespace Start_a_Town_.UI
             this.Active = true;
             this.LocationFunc = () =>
             {
-                Camera camera = obj.Map.Camera;
-                Rectangle rect = Object.GetScreenBounds(camera);
+                var camera = obj.Map.Camera;
+                var rect = Object.GetScreenBounds(camera);
                 return new Vector2(rect.X + rect.Width / 2, rect.Y - this.Height - VertOffset) - this.Dimensions * new Vector2(.5f, 0);
             };
         }
@@ -117,9 +113,9 @@ namespace Start_a_Town_.UI
             if (!b1.BoundsScreen.Intersects(toMove.BoundsScreen))
                 return false;
 
-            Vector2 plateCenter = new Vector2(b1.BoundsScreen.Center.X, b1.BoundsScreen.Center.Y);
-            Vector2 toMoveCenter = new Vector2(toMove.BoundsScreen.Center.X, toMove.BoundsScreen.Center.Y);
-            Vector2 d = toMoveCenter - plateCenter;
+            var plateCenter = new Vector2(b1.BoundsScreen.Center.X, b1.BoundsScreen.Center.Y);
+            var toMoveCenter = new Vector2(toMove.BoundsScreen.Center.X, toMove.BoundsScreen.Center.Y);
+            var d = toMoveCenter - plateCenter;
 
             if (Math.Abs(d.X) > Math.Abs(d.Y)) // offset on x axis
             {
@@ -148,8 +144,7 @@ namespace Start_a_Town_.UI
 
         public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
-            IContextable contextable = this.Object as IContextable;
-            if (contextable is null)
+            if (this.Object is not IContextable contextable)
                 return;
             contextable.GetContextActions(playerEntity, a);
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
 using System;
 using System.Collections.Generic;
@@ -442,7 +443,7 @@ namespace Start_a_Town_.UI
                 }
             }
         }
-        public override void DrawOnCamera(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera)
+        public override void DrawOnCamera(SpriteBatch sb, Camera camera)
         {
             if (this.MultipleSelected.Any())
                 foreach (var obj in this.MultipleSelected)

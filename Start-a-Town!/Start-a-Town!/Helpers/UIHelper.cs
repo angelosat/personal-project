@@ -46,19 +46,19 @@ namespace Start_a_Town_
             var intthickness = (int)Math.Max(1, thickness);
             var padpad = 2 * padding;
             // Draw top line
-            sb.Draw(UI.UIManager.Highlight, new Rectangle(bounds.X - padding + intthickness, bounds.Y - padding, bounds.Width + padpad - intthickness, intthickness), color);
+            sb.Draw(UIManager.Highlight, new Rectangle(bounds.X - padding + intthickness, bounds.Y - padding, bounds.Width + padpad - intthickness, intthickness), color);
 
             // Draw left line
-            sb.Draw(UI.UIManager.Highlight, new Rectangle(bounds.X - padding, bounds.Y - padding, intthickness, bounds.Height + padpad - intthickness), color);
+            sb.Draw(UIManager.Highlight, new Rectangle(bounds.X - padding, bounds.Y - padding, intthickness, bounds.Height + padpad - intthickness), color);
 
             // Draw bottom line
-            sb.Draw(UI.UIManager.Highlight, new Rectangle(bounds.X - padding,
+            sb.Draw(UIManager.Highlight, new Rectangle(bounds.X - padding,
                                             bounds.Y + padding + bounds.Height - intthickness,
                                             bounds.Width - intthickness + padpad,
                                             intthickness), color);
 
             // Draw right line
-            sb.Draw(UI.UIManager.Highlight, new Rectangle((bounds.X + padding + bounds.Width - intthickness),
+            sb.Draw(UIManager.Highlight, new Rectangle(bounds.X + padding + bounds.Width - intthickness,
                                             bounds.Y - padding + intthickness,
                                             intthickness,
                                             bounds.Height - intthickness + padpad), color);

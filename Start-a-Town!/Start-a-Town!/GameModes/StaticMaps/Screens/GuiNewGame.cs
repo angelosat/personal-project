@@ -10,54 +10,42 @@ namespace Start_a_Town_.GameModes.StaticMaps
 {
     class GuiNewGame : GroupBox
     {
-        public Action<IWorld> Callback { get; set; }
-
-        readonly TextBox Txt_Seed;
-        readonly Panel Panel_Main;
-        readonly GroupBox Tab_World;
-        private StaticMap.MapSize SelectedSize;
-
         public GuiNewGame(Action cancelAction)
         {
-            this.AutoSize = true;
-
-            this.Tab_World = new GroupBox();
+            var tab_World = new GroupBox();
             var label_mapsize = new Label("Map size");
 
             var lbl_seed = new Label("Seed");
-            this.Txt_Seed = new(150);
-            this.Txt_Seed.Text = Path.GetRandomFileName().Replace(".", "");
-            this.Txt_Seed.InputFilter = char.IsLetterOrDigit;
+            var txt_Seed = new TextBox(150);
+            txt_Seed.Text = Path.GetRandomFileName().Replace(".", "");
+            txt_Seed.InputFilter = char.IsLetterOrDigit;
 
             IconButton btn_random = new()
             {
                 HoverText = "Randomize",
                 BackgroundTexture = UIManager.Icon16Background,
                 Name = "Randomize seed",
-                Location = this.Txt_Seed.TopRight,
+                Location = txt_Seed.TopRight,
                 Icon = new Icon(UIManager.Icons16x16, 1, 16),
-                LeftClickAction = () => this.Txt_Seed.Text = Path.GetRandomFileName().Replace(".", "")
+                LeftClickAction = () => txt_Seed.Text = Path.GetRandomFileName().Replace(".", "")
             };
             var seedBox = new GroupBox();
             seedBox.AddControls(
-                this.Txt_Seed, btn_random);
+                txt_Seed, btn_random);
 
             var defaultSizes = StaticMap.MapSize.GetList();
-            this.SelectedSize = defaultSizes.First();
-            var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => this.SelectedSize = s, c => this.SelectedSize);
+            var selectedSize = defaultSizes.First();
+            var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => selectedSize = s, c => selectedSize);
 
-            this.Tab_World.AddControlsVertically(
+            tab_World.AddControlsVertically(
                 seedBox.ToPanelLabeled("Seed"),
                 comboSize.ToPanelLabeled("Map Size"));
-
-            this.Panel_Main = new Panel() { AutoSize = true };
-            this.Panel_Main.Controls.Add(this.Tab_World);
 
             var btn_create = new Button("Create", openActorCreationGui);
             var btn_cancel = new Button("Cancel", cancelAction);
 
             this.AddControlsVertically(0, HorizontalAlignment.Right,
-                this.Panel_Main,
+                tab_World.ToPanel(),
                 UIHelper.Wrap(btn_create, btn_cancel)
                 );
 
@@ -66,7 +54,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
                 var actorsui = new GuiActorCreation(actors);
-                var btnstart = new Button("Start") { LeftClickAction = () => this.CreateMap(actors.ToArray()) };
+                var btnstart = new Button("Start") { LeftClickAction = () => this.CreateMap(txt_Seed.Text, selectedSize, actors.ToArray()) };
                 var btnback = new Button("Back") { LeftClickAction = () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); } };
                 actorsCreateBox.AddControlsVertically(0, HorizontalAlignment.Right, 
                     actorsui,
@@ -80,21 +68,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
         }
 
-        public static DirectoryInfo[] GetWorlds()
+        void CreateMap(string seedString, StaticMap.MapSize size, Actor[] actors)
         {
-            DirectoryInfo directory = new DirectoryInfo(GlobalVars.SaveDir + "/Worlds/Static/");
-            if (!Directory.Exists(directory.FullName))
-                Directory.CreateDirectory(directory.FullName);
-            return directory.GetDirectories();
-        }
-
-        void CreateMap(Actor[] actors)
-        {
-            StaticWorld world;
-            var seedString = this.Txt_Seed.Text;
-            world = new StaticWorld(seedString, Terraformer.Defaults);
-            this.Tag = world;
-            var size = this.SelectedSize;
+            var world = new StaticWorld(seedString, Terraformer.Defaults);
             var map = new StaticMap(world, "test", Vector2.Zero, size);
             this.Hide();
             Server.Start();

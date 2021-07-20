@@ -72,6 +72,7 @@ namespace Start_a_Town_.Rooms
             /// 
 
             ToolManager.DrawUI(sb, map);
+            //NameplateManager.Draw(sb);
             DrawInterface(sb, Scene);
             NotificationArea.Draw(sb);
             this.NameplateManager.Update(this.Scene);

@@ -21,7 +21,7 @@ namespace Start_a_Town_.UI
             panel.AddControlsVertically(newgame, load, online, settings, quit);
 
             this.Client.Controls.Add(panel);
-            this.SnapToScreenCenter();
+            this.AnchorToScreenCenter();
             this.Title = "Start-a-Town!";
         }
 

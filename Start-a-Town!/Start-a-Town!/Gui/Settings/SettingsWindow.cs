@@ -24,9 +24,9 @@ namespace Start_a_Town_.UI
             this.Title = "Settings";
             this.AutoSize = true;
 
-            var size = 300;
+            var size = 400;
             this.Panel = new();
-            this.Panel.ClientSize = new Rectangle(0, 0, size, size);
+            this.Panel.ClientSize = new Rectangle(0, 0, size, size / 2);
             this.Panel.ConformToClientSize();
 
             this.InterfaceSettings = new InterfaceSettings();
@@ -50,6 +50,7 @@ namespace Start_a_Town_.UI
                 tabs.ToPanel(),
                 this.Panel,
                 UIHelper.Wrap(this.Panel.ClientSize.Width, ok, cancel).ToPanel());
+            this.AnchorToScreenCenter();
 
             void apply()
             {

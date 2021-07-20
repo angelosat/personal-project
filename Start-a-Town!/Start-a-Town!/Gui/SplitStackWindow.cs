@@ -84,8 +84,9 @@ namespace Start_a_Town_.UI
             Panel_Input.Controls.Remove(Txt_Amount);
             Panel_Input.Controls.Add(Txt_Amount);
 
-            Sldr_Amount = new SliderNew(Panel_Input.BottomLeft, Panel_Input.Width, 1, slotTarget.Slot.StackSize, 1, amount)
+            Sldr_Amount = new SliderNew(() => amount, v => amount = (int)v, Panel_Input.Width, 1, slotTarget.Slot.StackSize, 1)
             {
+                Location = Panel_Input.BottomLeft,
                 ValueChangedFunc = () => Txt_Amount.Text = Sldr_Amount.Value.ToString(),
                 HoverFunc = () => "Split to: " + Sldr_Amount.Value.ToString(),
             };
@@ -130,8 +131,9 @@ namespace Start_a_Town_.UI
             Panel_Input.Controls.Remove(Txt_Amount);
             Panel_Input.Controls.Add(Txt_Amount);
 
-            Sldr_Amount = new SliderNew(Panel_Input.BottomLeft, Panel_Input.Width, 1, objSlot.StackSize, 1, amount)
+            Sldr_Amount = new SliderNew(() => amount, v => amount = (int)v, Panel_Input.Width, 1, objSlot.StackSize, 1)
             {
+                Location = Panel_Input.BottomLeft,
                 ValueChangedFunc = () => Txt_Amount.Text = Sldr_Amount.Value.ToString(),
                 HoverFunc = () => "Split to: " + Sldr_Amount.Value.ToString(),
             };

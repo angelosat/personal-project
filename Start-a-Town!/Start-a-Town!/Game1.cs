@@ -16,7 +16,6 @@ using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
 {
-    
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -35,9 +34,10 @@ namespace Start_a_Town_
 
         bool DeviceReset = false;
 
-        static public Vector2 ScreenSize{get;set;}
-       
-        public List<GameComponent> GameComponents = new List<GameComponent>();
+        static public Vector2 ScreenSize { get; set; }
+        static public Rectangle Bounds => Instance.GraphicsDevice.Viewport.Bounds;
+
+        public List<GameComponent> GameComponents = new();
         public Network Network;
 
         protected override void OnExiting(object sender, EventArgs args)
@@ -181,11 +181,8 @@ namespace Start_a_Town_
         }
 
         double UPDATE_INTERVAL = 1f / Engine.TicksPerSecond;
-        double UPDATE_INTERVAL_UI = 1f / Engine.TicksPerSecond;
         double lastFrameTime = 0.0;
         double cyclesLeftOver = 0.0;
-        double lastFrameTimeUI = 0.0;
-        double cyclesLeftOverUI = 0.0;
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -204,10 +201,9 @@ namespace Start_a_Town_
                         Instance.Window.ClientBounds.Width,
                         Instance.Window.ClientBounds.Height);
             // fixed time step
-            double currentTime, updateIterations, updateIterationsUI;
+            double currentTime, updateIterations;
             currentTime = gameTime.TotalGameTime.TotalSeconds;
-            updateIterations = ((currentTime - lastFrameTime) + cyclesLeftOver);
-            updateIterationsUI = ((currentTime - lastFrameTimeUI) + cyclesLeftOverUI);
+            updateIterations = (currentTime - lastFrameTime + cyclesLeftOver);
             int updatesOccured = 0;
             
             while (updateIterations > UPDATE_INTERVAL)
@@ -231,9 +227,7 @@ namespace Start_a_Town_
             }
            
             cyclesLeftOver = updateIterations;
-            cyclesLeftOverUI = updateIterationsUI;
             lastFrameTime = currentTime;
-            lastFrameTimeUI = lastFrameTime;
         }
         
         /// <summary>

@@ -1,45 +1,41 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
     class SliderNew : Control
     {
-        Panel PanelValue;
-        Label LabelValue;
+        readonly Panel PanelValue;
+        readonly Label LabelValue;
 
-        public Action<float> ValueSelectAction = v => { };
         Action _ValueChangedFunc = () => { };
         public virtual Action ValueChangedFunc
         {
-            get { return _ValueChangedFunc; }
-            set
-            {
-                _ValueChangedFunc = value;
-            }
+            get => this._ValueChangedFunc;
+            set => this._ValueChangedFunc = value;
         }
 
-        PictureBox Thumb;
+        readonly Func<float> ValueGetter;
+        readonly Action<float> ValueSetter;
+        public string Format;// = "##0%";
+        readonly PictureBox Thumb;
         public static int DefaultHeight = UIManager.DefaultTrackBarThumbSprite.Height;
         protected float _Value;
         public float Value
         {
-            get { return _Value; }
+            get => this.ValueGetter?.Invoke() ?? this._Value;
             set
             {
-                _Value = value;
-                this.Thumb.Location.X = (int)(Border + (Width - 2 * Border) * (Value - Min) / (Max - Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2);
+                this._Value = value;
+                this.Thumb.Location.X = (int)(this.Border + (this.Width - 2 * this.Border) * (this.Value - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2);
             }
         }
-        public float NewValue;
+        public float NextValue;
 
         public override int Height
         {
-            get
-            {
-                return DefaultHeight;
-            }
+            get => DefaultHeight;
             set
             {
             }
@@ -47,14 +43,8 @@ namespace Start_a_Town_.UI
 
         public override string Name
         {
-            get
-            {
-                return base.Name;
-            }
-            set
-            {
-                base.Name = value;
-            }
+            get => base.Name;
+            set => base.Name = value;
         }
 
         public float Min, Max, Step;
@@ -62,32 +52,36 @@ namespace Start_a_Town_.UI
 
         public override void OnPaint(SpriteBatch sb)
         {
-            DrawSprite(sb, Vector2.Zero);
+            this.DrawSprite(sb, Vector2.Zero);
         }
 
         public event EventHandler<EventArgs> ValueChanged;
         protected void OnValueChanged()
         {
-            if (ValueChanged != null)
-                ValueChanged(this, EventArgs.Empty);
-
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
-
-        public SliderNew(Vector2 location, int width, float min = 0, float max = 1, float step = 0.1f, float value = 0)
-            : base(location)
+        
+        public SliderNew(Func<float> valueGetter, Action<float> valueSetter, int width, float min = 0, float max = 1, float step = 0.1f, string format = null)
+            : base()
         {
-            BackgroundTexture = UIManager.DefaultTrackBarSprite;
-            Width = width;
-            Alpha = Color.Lerp(Color.White, Color.Transparent, 0.5f);
+            this.BackgroundTexture = UIManager.DefaultTrackBarSprite;
+            this.Width = width;
+            this.Alpha = Color.Lerp(Color.White, Color.Transparent, 0.5f);
+            this.Format = format;
+            this.Min = min;
+            this.Max = max;
+            this.Step = step;
+            this.ValueGetter = valueGetter;
+            this.ValueSetter = valueSetter;
+            this.NextValue = valueGetter();
 
-            this.Thumb = new PictureBox(new Vector2(Border + (Width - 2 * Border) * (Value - Min) / (Max - Min), 0), UIManager.DefaultTrackBarThumbSprite, null) { MouseThrough = true };
-            this.Thumb.ClipToBounds = false;
-            this.Name = "{0}";
-            Min = min;
-            Max = max;
-            Step = step;
-            Value = value;
-            HoverFunc = () => Value.ToString("##0.##");
+            this.Thumb = new PictureBox(UIManager.DefaultTrackBarThumbSprite, null)
+            {
+                MouseThrough = true,
+                LocationFunc = () => new Vector2(this.Border + (this.Width - 2 * this.Border) * (this.Value - this.Min) / (this.Max - this.Min), 0),
+                Anchor = new(.5f, 0),
+                ClipToBounds = false
+            };
 
             this.PanelValue = new Panel() { Location = this.TopRight };
             this.PanelValue.ClientDimensions = UIManager.Font.MeasureString(this.Min.ToString());
@@ -95,55 +89,55 @@ namespace Start_a_Town_.UI
             this.PanelValue.AddControls(this.LabelValue);
             this.PanelValue.SetMousethrough(true, true);
 
-            Controls.Add(Thumb);
+            this.Controls.Add(this.Thumb);
         }
 
         void DrawSprite(SpriteBatch sb, Vector2 position)
         {
-            sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X, (int)position.Y, Height / 2, Height), new Rectangle(0, 0, UIManager.DefaultTrackBarSprite.Height / 2, UIManager.DefaultTrackBarSprite.Height), Color.White);
-            sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X + Height / 2, (int)position.Y, Width - Height, Height), new Rectangle(UIManager.DefaultTrackBarSprite.Height / 2, 0, 1, UIManager.DefaultTrackBarSprite.Height), Color.White);
-            sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X + Width - Height / 2, (int)position.Y, Height / 2, Height), new Rectangle(UIManager.DefaultTrackBarSprite.Height / 2 + 1, 0, UIManager.DefaultTrackBarSprite.Height / 2, UIManager.DefaultTrackBarSprite.Height), Color.White);
+            sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X, (int)position.Y, this.Height / 2, this.Height), new Rectangle(0, 0, UIManager.DefaultTrackBarSprite.Height / 2, UIManager.DefaultTrackBarSprite.Height), Color.White);
+            sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X + this.Height / 2, (int)position.Y, this.Width - this.Height, this.Height), new Rectangle(UIManager.DefaultTrackBarSprite.Height / 2, 0, 1, UIManager.DefaultTrackBarSprite.Height), Color.White);
+            sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X + this.Width - this.Height / 2, (int)position.Y, this.Height / 2, this.Height), new Rectangle(UIManager.DefaultTrackBarSprite.Height / 2 + 1, 0, UIManager.DefaultTrackBarSprite.Height / 2, UIManager.DefaultTrackBarSprite.Height), Color.White);
         }
 
         bool SelectingValue;
-        float Border = UIManager.DefaultTrackBarSprite.Width / 4;
+        readonly float Border = UIManager.DefaultTrackBarSprite.Width / 4;
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            SelectingValue = true;
+            this.SelectingValue = true;
             base.OnMouseLeftPress(e);
         }
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (!SelectingValue)
+            if (!this.SelectingValue)
                 return;
 
-            SelectingValue = false;
+            this.SelectingValue = false;
 
-            if (this.NewValue != this.Value)
-                this.ValueSelectAction(this.NewValue);
+            if (this.NextValue != this.Value)
+                this.ValueSetter(this.NextValue);
         }
 
         public override void Update()
         {
             base.Update();
-            if (!SelectingValue)
+            if (!this.SelectingValue)
                 return;
-            this.LabelValue.Text = this.NewValue.ToString();
-            float mouseX = (Controller.Instance.msCurrent.X / UIManager.Scale - (ScreenLocation.X + this.Border));
-            float mousePerc = MathHelper.Clamp(mouseX / (float)(Width - 2 * this.Border), 0, 1);
+            this.LabelValue.Text = this.NextValue.ToString();
+            float mouseX = (Controller.Instance.msCurrent.X / UIManager.Scale - (this.ScreenLocation.X + this.Border));
+            float mousePerc = MathHelper.Clamp(mouseX / (float)(this.Width - 2 * this.Border), 0, 1);
 
-            var newValue = ((Min + mousePerc * (Max - Min)) / Step);
-            this.NewValue = (float)Math.Round(newValue) * Step;
+            var newValue = (this.Min + mousePerc * (this.Max - this.Min)) / this.Step;
+            this.NextValue = (float)Math.Round(newValue) * this.Step;
         }
 
         protected override void OnGotFocus()
         {
-            Alpha = Color.White;
+            this.Alpha = Color.White;
             base.OnGotFocus();
         }
         public override void OnLostFocus()
         {
-            Alpha = Color.Lerp(Color.Transparent, Color.White, 0.5f);
+            this.Alpha = Color.Lerp(Color.Transparent, Color.White, 0.5f);
             base.OnLostFocus();
         }
 
@@ -152,12 +146,20 @@ namespace Start_a_Town_.UI
             base.Draw(sb, viewport);
             if (!this.SelectingValue)
                 return;
-            var loc = new Vector2((int)(Border + (Width - 2 * Border) * (this.NewValue - Min) / (Max - Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2), 0);
+            var loc = new Vector2((int)(this.Border + (this.Width - 2 * this.Border) * (this.NextValue - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2), 0);
 
             sb.Draw(UIManager.DefaultTrackBarThumbSprite,
                 this.ScreenLocation + loc,
                 Color.White * .5f);
-            UIManager.DrawStringOutlined(sb, this.NewValue.ToString("##0%"), this.ScreenLocation + new Vector2(this.Width, 0), new Vector2(1));
+            UIManager.DrawStringOutlined(sb, this.NextValue.ToString(this.Format), this.ScreenLocation + new Vector2(this.Width, 0));//, Vector2.One);
+        }
+
+        public static Control CreateWithLabel(string label, Func<float> valueGetter, Action<float> valueSetter, int width, float min = 0, float max = 1, float step = 0.1f, string format = null)
+        {
+            return new GroupBox()
+                .AddControlsVertically(
+                new Label(() => $"{label}: {valueGetter().ToString(format)}"),
+                new SliderNew(valueGetter, valueSetter, width, min, max, step, format));
         }
     }
 }

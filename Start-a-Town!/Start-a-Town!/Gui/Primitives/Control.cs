@@ -46,6 +46,10 @@ namespace Start_a_Town_.UI
             this.ClearControls();
             this.AddControls(ctrls.ToArray());
         }
+        /// <summary>
+        /// this is wrong when the control's height is larger than half the screen's height
+        /// </summary>
+        /// <returns></returns>
         public Control SnapToScreenCenter()
         {
             this.Location = new Vector2(UIManager.Width, UIManager.Height) / 2;
@@ -66,7 +70,7 @@ namespace Start_a_Town_.UI
         public Control AnchorToScreenCenter()
         {
             this.LocationFunc = () => UIManager.Center;
-            this.Anchor = Vector2.One / 2f;
+            this.Anchor = new(.5f);
             return this;
         }
         public Control CenterLeftScreen()
@@ -173,6 +177,8 @@ namespace Start_a_Town_.UI
 
         public virtual void Reposition(UIScaleEventArgs e = null)
         {
+            if (this.LocationFunc is not null)
+                return;
             float ratio = e.NewScale / e.OldScale;
             this.Location = this.Location / ratio - (new Vector2(this.Size.Width - this.Size.Width / ratio, this.Size.Height - this.Size.Height / ratio) * this.Anchor);
         }
@@ -566,14 +572,14 @@ namespace Start_a_Town_.UI
 
         public virtual int Bottom => (int)this.Location.Y + this.Height;
         public int Right => (int)this.Location.X + this.Width;
-        public Vector2 Center => new Vector2(this.Width / 2, this.Height / 2);
+        public Vector2 Center => new(this.Width / 2, this.Height / 2);
         public Vector2 BottomCenter => this.TopLeft + new Vector2(this.Width / 2, this.Height);
 
         public Vector2 BottomLeft => this.TopLeft + Vector2.UnitY * this.Height;
         public Vector2 BottomRight => this.TopLeft + new Vector2(this.Width, this.Height);
         public Vector2 TopLeft => this.Location + this.LocationFunc() - this.Dimensions * this.Anchor;
         public Vector2 TopRight => this.TopLeft + Vector2.UnitX * this.Width;
-        public Vector2 CenterRight => new Vector2(this.Right, this.Top + this.Height / 2);
+        public Vector2 CenterRight => new(this.Right, this.Top + this.Height / 2);
 
         public Rectangle ClientRectangle
         {
@@ -1346,7 +1352,7 @@ namespace Start_a_Town_.UI
         public virtual bool ShowDialog()
         {
             this.Layer = UIManager.LayerDialog;
-            this.SnapToScreenCenter();
+            this.MoveToScreenCenter();
             return this.Show();
         }
         internal virtual void OnControlResized(ButtonBase buttonBase)

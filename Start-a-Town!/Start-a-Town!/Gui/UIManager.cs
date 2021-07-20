@@ -47,33 +47,32 @@ namespace Start_a_Town_.UI
     }
     public class UIManager : IDisposable, IKeyEventHandler
     {
-        static float _Scale = 1;
+        static float _scale = 1;
         public static float Scale
         {
-            get { return _Scale; }
+            get =>_scale;
             set
             {
-                var e = new UIScaleEventArgs(_Scale, value);
+                var e = new UIScaleEventArgs(_scale, value);
                 foreach (var manager in WindowManagers)
                     foreach (var layer in manager.Layers)
                         foreach (var ctrl in layer.Value)
                             ctrl.Reposition(e);
-                _Scale = value;
+                _scale = value;
                 UITexture = new RenderTarget2D(Game1.Instance.GraphicsDevice, Width, Height);
             }
         }
 
         public readonly Control DialogBlock = new DialogBlock();
 
-        public static Rectangle Bounds
-        { get { return new Rectangle(0, 0, Width, Height); } }
-        public static Vector2 Center { get { return Game1.ScreenSize / (2 * Scale); } }
+        public static Rectangle Bounds => new Rectangle(0, 0, Width, Height);
+        public static Vector2 Center => Game1.ScreenSize / (2 * Scale);
         public static int Width => (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
         public static int Height => (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
 
-        public static Vector2 Size { get { return new Vector2(Width, Height); } }
-        public static Vector2 Mouse { get { return Controller.Instance.MouseLocation / Scale; } }
-        public static Rectangle MouseRect { get { return new Rectangle((int)Mouse.X, (int)Mouse.Y, 1, 1); } }
+        public static Vector2 Size => new(Width, Height);
+        public static Vector2 Mouse => Controller.Instance.MouseLocation;// / Scale;
+        public static Rectangle MouseRect => new((int)Mouse.X, (int)Mouse.Y, 1, 1);
         public static SortedList<float, Control> MouseOverList;
         public static SpriteFont Font = Game1.Instance.Content.Load<SpriteFont>("DefaultFont");
         public static SpriteFont FontBold = Game1.Instance.Content.Load<SpriteFont>("BoldFont");
@@ -106,7 +105,7 @@ namespace Start_a_Town_.UI
             { LayerDialog, new() }
         };
         public Dictionary<GuiLayer, List<Control>> Layers => this._layers;
-        public List<Control> this[GuiLayer layer] { get { return this.Layers[layer]; } }
+        public List<Control> this[GuiLayer layer] => this.Layers[layer];
 
         public int LastScreenWidth, LastScreenHeight;
         public Window Dialog;
@@ -201,7 +200,7 @@ namespace Start_a_Town_.UI
             Atlas.Initialize();
             Atlas.Bake();
 
-            var scaleNode = Engine.Config.Descendants("UIScale").FirstOrDefault();
+            var scaleNode = Engine.Config.Descendants("Scale").FirstOrDefault();
             if (float.TryParse(scaleNode.Value, out float scale)) // do i need to check for scalenode == null?
                 Scale = scale;
             else
@@ -342,13 +341,14 @@ namespace Start_a_Town_.UI
         public void Draw(SpriteBatch sb, Camera camera)
         {
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;
+
             RenderTarget2D uiTexture = UITexture;
             gd.SetRenderTarget(uiTexture);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 
-            if (camera is not null)
-                this.DrawOnCamera(sb, camera);
+            //if (camera is not null)
+            //    this.DrawOnCamera(sb, camera); // moving this to outside the ui rendertarget draw call, because we dont want it drawn to ui scale
 
             foreach (var layer in this.Layers)
                 foreach (var ctrl in layer.Value.ToList())
@@ -360,16 +360,14 @@ namespace Start_a_Town_.UI
             gd.SetRenderTarget(null);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Scale % 1 > 0 ? SamplerState.AnisotropicClamp : SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
             sb.Draw(uiTexture, new Rectangle(0, 0, (int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y), Color.White);
+            if (camera is not null) 
+                this.DrawOnCamera(sb, camera); //moved this here, because we dont want it drawn to ui scale
             sb.End();
         }
         public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline, SpriteFont font)
         {
-            if (text is null)
+            if (text.IsNullEmptyOrWhiteSpace())
                 return;
-
-            if (text == "")
-                return;
-
             position = position.Round();
             var origin = font.MeasureString(text) * texOrigin;
             origin = new Vector2((int)origin.X, (int)origin.Y);
@@ -381,6 +379,10 @@ namespace Start_a_Town_.UI
         public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline)
         {
             DrawStringOutlined(sb, text, position, texOrigin, fill, outline, UIManager.Font);
+        }
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position)
+        {
+            DrawStringOutlined(sb, text, position, Vector2.Zero, DefaultTextColor, Color.Black);
         }
         public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin)
         {

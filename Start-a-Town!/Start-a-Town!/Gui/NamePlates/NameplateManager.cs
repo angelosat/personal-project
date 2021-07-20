@@ -97,9 +97,13 @@ namespace Start_a_Town_
                 this.ClearControls();
         }
 
-        public override void Draw(SpriteBatch sb, Rectangle viewport)
-        {
-            base.Draw(sb, viewport);
-        }
+        //public override void Draw(SpriteBatch sb, Rectangle viewport)
+        //{
+        //    base.Draw(sb, viewport);
+        //}
+        //public override void DrawOnCamera(SpriteBatch sb, Camera camera)
+        //{
+        //    base.DrawOnCamera(sb, camera);
+        //}
     }
 }

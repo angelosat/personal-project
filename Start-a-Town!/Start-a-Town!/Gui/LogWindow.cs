@@ -68,8 +68,8 @@ namespace Start_a_Town_.UI
 
             Timers = new Dictionary<Control, float>();
 
-            Sldr_Opacity = new SliderNew(this.Label_Title.TopRight, width: 100, min: 0, max: 100, step: 1, value: Box_Text.Opacity * 100) { Name = "Opacity" };
-            Sldr_Opacity.ValueChanged += new EventHandler<EventArgs>(Sldr_Opacity_ValueChanged);
+            Sldr_Opacity = new SliderNew(() => Box_Text.Opacity * 100, v => Box_Text.Opacity = v / 100f, width: 100, min: 0, max: 100, step: 1) { Name = "Opacity", Location = this.Label_Title.TopRight };
+            //Sldr_Opacity.ValueChanged += new EventHandler<EventArgs>(Sldr_Opacity_ValueChanged);
 
             Panel_Input.Controls.Add(TextBox);
             Client.Controls.Add(Panel_Text, Panel_Input);
@@ -82,10 +82,10 @@ namespace Start_a_Town_.UI
             SetMousethrough(true, true);
         }
 
-        void Sldr_Opacity_ValueChanged(object sender, EventArgs e)
-        {
-            Box_Text.Opacity = Sldr_Opacity.Value / 100f;
-        }
+        //void Sldr_Opacity_ValueChanged(object sender, EventArgs e)
+        //{
+        //    Box_Text.Opacity = Sldr_Opacity.Value / 100f;
+        //}
 
         public override void Update()
         {

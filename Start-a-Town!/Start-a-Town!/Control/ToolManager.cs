@@ -49,12 +49,7 @@ namespace Start_a_Town_
             if (ActiveTool != null)
                 ActiveTool.Update(scene);
             foreach (var pl in GetOtherPlayers(map))
-            {
-                if (pl.CurrentTool != null)
-                {
-                    pl.CurrentTool.UpdateRemote(pl.Target);
-                }
-            }
+                pl.CurrentTool?.UpdateRemote(pl.Target);
         }
 
         public bool Add(ControlTool tool)

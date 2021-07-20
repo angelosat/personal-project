@@ -125,7 +125,7 @@ namespace Start_a_Town_
                     ),
                     new XElement("Interface",
                         new XElement("MouseTooltip", true),
-                        new XElement("UIScale", 1)
+                        new XElement("Scale", 1)
                     ),
                     new XElement("Graphics",
                         new XElement("Particles", Particles.ParticleDensityLevel.Current.Name)

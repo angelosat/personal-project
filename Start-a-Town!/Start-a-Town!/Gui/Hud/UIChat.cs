@@ -85,8 +85,8 @@ namespace Start_a_Town_.UI
                 HistoryNextPrev = this.ChatHistory
             };
 
-            Sldr_Opacity = new SliderNew(this.Label_Title.TopRight, width: 100, min: 0, max: 100, step: 1, value: Console.Opacity * 100) { Name = "Opacity", ValueChangedFunc = Sldr_Opacity_ValueChanged };
-
+            Sldr_Opacity = new SliderNew(() => Console.Opacity * 100, v => this.Console.Opacity = v / 100f, width: 100, min: 0, max: 100, step: 1) { Name = "Opacity" };
+            Sldr_Opacity.Location = this.Label_Title.TopRight;
             Panel_Input.Controls.Add(TextBox);
             this.BoxButtons = new GroupBox();
             this.BtnSettings = new IconButton(Icon.ArrowUp) { BackgroundTexture = IconButton.Small, Location = this.TopRight, Anchor = Vector2.UnitX, LeftClickAction = ToggleOptions };
@@ -121,11 +121,6 @@ namespace Start_a_Town_.UI
             this.TextBox.Text = this.History.ElementAt(this.HistoryIndex);
         }
       
-        private void Sldr_Opacity_ValueChanged()
-        {
-            this.Console.Opacity = Sldr_Opacity.Value / 100f;
-        }
-
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb, this.BoundsScreen);

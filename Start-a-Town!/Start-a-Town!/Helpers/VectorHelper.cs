@@ -234,10 +234,10 @@ namespace Start_a_Town_
         static public Vector3[] GetNeighborsSameZ(this Vector3 global)
         {
             Vector3[] neighbors = new Vector3[4];
-            neighbors[0] = (global + new Vector3(1, 0, 0));
-            neighbors[1] = (global - new Vector3(1, 0, 0));
-            neighbors[2] = (global + new Vector3(0, 1, 0));
-            neighbors[3] = (global - new Vector3(0, 1, 0));
+            neighbors[0] = global + new Vector3(1, 0, 0);
+            neighbors[1] = global - new Vector3(1, 0, 0);
+            neighbors[2] = global + new Vector3(0, 1, 0);
+            neighbors[3] = global - new Vector3(0, 1, 0);
             return neighbors;
         }
         static public IEnumerable<Vector3> GetNeighbors(this Vector3 global)
@@ -258,36 +258,16 @@ namespace Start_a_Town_
         }
         static public IEnumerable<Vector2> GetNeighbors8(this Vector2 coords)
         {
-            yield return (coords + new Vector2(-1, -1));
-            yield return (coords + new Vector2(-1, 0));
-            yield return (coords + new Vector2(-1, 1));
-            yield return (coords + new Vector2(0, -1));
-            yield return (coords + new Vector2(0, 1));
-            yield return (coords + new Vector2(1, -1));
-            yield return (coords + new Vector2(1, 0));
-            yield return (coords + new Vector2(1, 1));
+            yield return coords + new Vector2(-1, -1);
+            yield return coords + new Vector2(-1, 0);
+            yield return coords + new Vector2(-1, 1);
+            yield return coords + new Vector2(0, -1);
+            yield return coords + new Vector2(0, 1);
+            yield return coords + new Vector2(1, -1);
+            yield return coords + new Vector2(1, 0);
+            yield return coords + new Vector2(1, 1);
         }
-        static public Vector3[] GetAdjacentExceptDirectlyAboveOrBelow(this Vector3 global)
-        {
-            Vector3[] neighbors = new Vector3[]{
-            (global + new Vector3(1, 0, 0)),
-            (global + new Vector3(-1, 0, 0)),
-            (global + new Vector3(0, 1, 0)),
-            (global + new Vector3(0, -1, 0)),
-
-            (global + new Vector3(-1, 0, -1)),
-            (global + new Vector3(0, -1, -1)),
-            (global + new Vector3(0, 1, -1)),
-            (global + new Vector3(1, 0, -1)),
-
-            (global + new Vector3(-1, 0, 1)),
-            (global + new Vector3(0, -1, 1)),
-            (global + new Vector3(0, 1, 1)),
-            (global + new Vector3(1, 0, 1))};
-
-            return neighbors;
-        }
-
+    
         static public IEnumerable<IntVec3> GetNeighborsDiag(this IntVec3 global)
         {
             yield return global + new IntVec3(1, 0, 0);

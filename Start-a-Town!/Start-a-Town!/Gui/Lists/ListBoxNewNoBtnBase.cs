@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
@@ -12,7 +11,7 @@ namespace Start_a_Town_.UI
     {
         public const int Spacing = 1;
 
-        public TObject SelectedItem { get { return (SelectedControl == null ? default : SelectedControl.Tag as TObject); } }
+        public TObject SelectedItem { get { return SelectedControl == null ? default : SelectedControl.Tag as TObject; } }
         TControl SelectedControl;
 
         public void SelectItem(TObject obj)
@@ -28,9 +27,8 @@ namespace Start_a_Town_.UI
             }
         }
         readonly Func<TObject, TControl> ControlFactory;
-        public event EventHandler<EventArgs> SelectedItemChanged;
 
-        public Action<TObject> ItemChangedFunc = (item) => { };
+        public Action<TObject> ItemChangedFunc = item => { };
         public IEnumerable<TObject> List = new List<TObject>();
 
         public ListBoxNewNoBtnBase(int width, int height, ScrollModes mode = ScrollModes.Vertical) : base(new Rectangle(0,0,width,height), mode) 

@@ -297,8 +297,8 @@ namespace Start_a_Town_
             if (pressed.Contains(System.Windows.Forms.Keys.Oemtilde))
                 ServerConsole.Instance.Toggle();
 
-            if (pressed.Contains(KeyBind.Build.Key))
-                Client.Instance.Map.Town.ConstructionsManager.WindowBuild.Toggle();
+            //if (pressed.Contains(KeyBind.Build.Key))
+            //    Client.Instance.Map.Town.ConstructionsManager.WindowBuild.Toggle();
         }
         public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {

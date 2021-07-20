@@ -16,7 +16,8 @@ namespace Start_a_Town_.UI
         public bool ShowColumnLabels = true;
         public Color ClientBoxColor = Color.Black * .5f;
         ObservableCollection<TObject> BoundCollection;
-        static readonly int ItemHeight = Label.DefaultHeight + ListBoxNewNoBtnBase<TObject, GroupBox>.Spacing;
+        [Obsolete]
+        static readonly int ItemHeight = Label.DefaultHeight + ListBoxNewNoBtnBase<TObject, GroupBox>.Spacing; // TODO remove hardcoding of label.defaultheight
 
         public TableScrollableCompactNewNew(int maxVisibleItems, bool showColumnLabels = false, ScrollableBoxNew.ScrollModes scrollbarMode = ScrollableBoxNew.ScrollModes.Vertical)
         {
@@ -135,9 +136,7 @@ namespace Start_a_Town_.UI
             });
 
             if (this.ShowColumnLabels)
-            {
-                this.BoxItems.Location = this.ColumnLabels.BottomLeft + Vector2.UnitY;
-            }
+                this.BoxItems.Location = this.ColumnLabels.BottomLeft + Vector2.UnitY; //spacing between column labels box and items box
 
             this.AddItems(items.ToArray());
 

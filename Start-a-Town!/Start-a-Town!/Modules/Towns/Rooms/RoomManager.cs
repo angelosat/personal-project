@@ -49,7 +49,7 @@ namespace Start_a_Town_
             return this.Rooms.Values.Where(r => r.OwnerRef == actorID);
         }
         bool Valid = true;
-        public void Init()
+        internal void Init()
         {
             if (!this.Valid)
             {

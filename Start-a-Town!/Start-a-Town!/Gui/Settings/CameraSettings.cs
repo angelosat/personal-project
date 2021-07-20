@@ -7,7 +7,7 @@ namespace Start_a_Town_
         CheckBox Chk_Fog;
         bool Changed;
         GroupBox _Gui;
-        internal GroupBox Gui => this._Gui ??= this.CreateGui();
+        internal override GroupBox Gui => this._Gui ??= this.CreateGui();
 
         GroupBox CreateGui()
         {

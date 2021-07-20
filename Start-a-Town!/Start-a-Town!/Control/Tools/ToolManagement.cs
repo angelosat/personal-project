@@ -1,10 +1,11 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
-using Start_a_Town_.UI;
-using Start_a_Town_.PlayerControl;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.Net;
+using Start_a_Town_.PlayerControl;
+using Start_a_Town_.UI;
+using System;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Start_a_Town_
 {
@@ -25,6 +26,7 @@ namespace Start_a_Town_
         }
         TargetArgs Origin;
         Vector2? SelectionRectangleOrigin;
+        bool LeftPressed, DblClicked;
 
         public override void Update()
         {
@@ -65,6 +67,13 @@ namespace Start_a_Town_
                 this.LastSpeed = Client.Instance.Speed;
             PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, nextSpeed);
         }
+        private void SelectEntity(TargetArgs target)
+        {
+            if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
+                UISelectedInfo.AddToSelection(target);
+            else
+                UISelectedInfo.Refresh(target);
+        }
 
         private void MouseScroll()
         {
@@ -97,19 +106,19 @@ namespace Start_a_Town_
         {
             int xx = 0, yy = 0;
 
-            if (Up)
+            if (this.Up)
             {
                 yy -= 1;
             }
-            else if (Down)
+            else if (this.Down)
             {
                 yy += 1;
             }
-            if (Left)
+            if (this.Left)
             {
                 xx -= 1;
             }
-            else if (Right)
+            else if (this.Right)
             {
                 xx += 1;
             }
@@ -120,45 +129,42 @@ namespace Start_a_Town_
                 double rx, ry;
                 double cos = Math.Cos((-cam.Rotation) * Math.PI / 2f);
                 double sin = Math.Sin((-cam.Rotation) * Math.PI / 2f);
-                rx = (xx * cos - yy * sin);
-                ry = (xx * sin + yy * cos);
+                rx = xx * cos - yy * sin;
+                ry = xx * sin + yy * cos;
                 int roundx, roundy;
                 roundx = (int)Math.Round(rx);
                 roundy = (int)Math.Round(ry);
 
-                Vector2 NextStep = new Vector2(roundx, roundy);
-                NextStep.Normalize();
+                var nextStep = new Vector2(roundx, roundy);
+                nextStep.Normalize();
 
-                var speed = InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey) ? 3 : 1;
+                var speed = InputState.IsKeyDown(Keys.ShiftKey) ? 3 : 1;
                 cam.Move(cam.Coordinates += new Vector2(xx, yy) * 4 * speed);
             }
-            else
-            {
-            }
         }
-        public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
+        public override void HandleKeyDown(KeyEventArgs e)
         {
             if (e.Handled)
                 return;
 
             switch (e.KeyCode)
             {
-                case System.Windows.Forms.Keys.D1:
+                case Keys.D1:
                     PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 1);
                     e.Handled = true;
                     break;
 
-                case System.Windows.Forms.Keys.D2:
+                case Keys.D2:
                     PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 2);
                     e.Handled = true;
                     break;
 
-                case System.Windows.Forms.Keys.D3:
+                case Keys.D3:
                     PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 3);
                     e.Handled = true;
                     break;
 
-                case System.Windows.Forms.Keys.F7:
+                case Keys.F7:
                     Engine.DrawRegions = !Engine.DrawRegions;
                     e.Handled = true;
                     break;
@@ -170,58 +176,57 @@ namespace Start_a_Town_
             if (e.KeyCode == GlobalVars.KeyBindings.North || e.KeyCode == System.Windows.Forms.Keys.Up)
             {
                 e.Handled = true;
-                Up = true;
+                this.Up = true;
             }
             if (e.KeyCode == GlobalVars.KeyBindings.South || e.KeyCode == System.Windows.Forms.Keys.Down)
             {
                 e.Handled = true;
-                Down = true;
+                this.Down = true;
             }
             if (e.KeyCode == GlobalVars.KeyBindings.West || e.KeyCode == System.Windows.Forms.Keys.Left)
             {
                 e.Handled = true;
-                Left = true;
+                this.Left = true;
             }
             if (e.KeyCode == GlobalVars.KeyBindings.East || e.KeyCode == System.Windows.Forms.Keys.Right)
             {
                 e.Handled = true;
-                Right = true;
+                this.Right = true;
             }
 
-            KeyControl key;
-            if (this.KeyControls.TryGetValue(e.KeyCode, out key))
+            if (this.KeyControls.TryGetValue(e.KeyCode, out KeyControl key))
             {
                 key.Down();
                 e.Handled = true;
             }
         }
-        public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
+        public override void HandleKeyUp(KeyEventArgs e)
         {
             if (e.Handled)
                 return;
             switch (e.KeyCode)
             {
-                case System.Windows.Forms.Keys.Up:
-                case System.Windows.Forms.Keys.W:
-                    Up = false;
+                case Keys.Up:
+                case Keys.W:
+                    this.Up = false;
                     break;
-                case System.Windows.Forms.Keys.Left:
-                case System.Windows.Forms.Keys.A:
-                    Left = false;
+                case Keys.Left:
+                case Keys.A:
+                    this.Left = false;
                     break;
-                case System.Windows.Forms.Keys.Right:
-                case System.Windows.Forms.Keys.D:
-                    Right = false;
+                case Keys.Right:
+                case Keys.D:
+                    this.Right = false;
                     break;
-                case System.Windows.Forms.Keys.Down:
-                case System.Windows.Forms.Keys.S:
-                    Down = false;
+                case Keys.Down:
+                case Keys.S:
+                    this.Down = false;
                     break;
                 default:
                     break;
             }
         }
-        public override void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
+        public override void HandleMouseWheel(HandledMouseEventArgs e)
         {
             base.HandleMouseWheel(e);
             var map = Rooms.Ingame.GetMap();
@@ -242,8 +247,7 @@ namespace Start_a_Town_
                 cam.ZoomIncrease();
 
         }
-        bool LeftPressed;
-        public override ControlTool.Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
+        public override Messages MouseLeftPressed(HandledMouseEventArgs e)
         {
             if (e.Handled)
                 return Messages.Default;
@@ -253,12 +257,11 @@ namespace Start_a_Town_
             this.SelectionRectangleOrigin = UIManager.Mouse;
             return Messages.Default;
         }
-        bool DblClicked;
-        public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
+        public override Messages MouseLeftUp(HandledMouseEventArgs e)
         {
-            if (DblClicked)
+            if (this.DblClicked)
             {
-                DblClicked = false;
+                this.DblClicked = false;
                 return base.MouseLeftUp(e);
             }
             if (!e.Handled && this.LeftPressed)
@@ -269,39 +272,47 @@ namespace Start_a_Town_
             this.LeftPressed = false;
             return base.MouseLeftUp(e);
         }
-        private void SelectEntity(TargetArgs target)
+        public override Messages MouseMiddleDown(HandledMouseEventArgs e)
         {
-            if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
-                UISelectedInfo.AddToSelection(target);
-            else
-                UISelectedInfo.Refresh(target);
-        }
-
-        public override ControlTool.Messages MouseMiddleDown(System.Windows.Forms.HandledMouseEventArgs e)
-        {
-            if (this.ScrollingMode != MouseScroll)
+            if (this.ScrollingMode != this.MouseScroll)
                 this.MouseMiddleTimestamp = DateTime.Now;
-            this.ScrollingMode = MouseDrag;
+            this.ScrollingMode = this.MouseDrag;
             this.MouseScrollOrigin = UIManager.Mouse;
             var map = Rooms.Ingame.GetMap();
             var cam = map.Camera;
             this.CameraCoordinatesOrigin = cam.Coordinates;
             return Messages.Default;
         }
-        public override ControlTool.Messages MouseMiddleUp(System.Windows.Forms.HandledMouseEventArgs e)
+        public override Messages MouseMiddleUp(HandledMouseEventArgs e)
         {
             var d = DateTime.Now - this.MouseMiddleTimestamp;
             var c = TimeSpan.FromMilliseconds(100);
-            if (d < c && this.ScrollingMode != MouseScroll)
-                this.ScrollingMode = MouseScroll;
+            if (d < c && this.ScrollingMode != this.MouseScroll)
+                this.ScrollingMode = this.MouseScroll;
             else
                 this.ScrollingMode = null;
             return Messages.Default;
         }
-        public override ControlTool.Messages MouseMiddle()
+        public override Messages MouseMiddle()
         {
             return base.MouseMiddle();
         }
+        public override Messages MouseRightDown(HandledMouseEventArgs e)
+        {
+            if (e.Handled)
+                return Messages.Default;
+
+            if (!this.TryShowForceTaskGUI(this.Target))
+                Rooms.Ingame.CurrentMap.Town.ToggleQuickMenu();
+
+            e.Handled = true;
+            return Messages.Default;
+        }
+        public override Messages MouseRightUp(HandledMouseEventArgs e)
+        {
+            return Messages.Default;
+        }
+
         public override void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (this.Target != null)
@@ -321,24 +332,13 @@ namespace Start_a_Town_
                                 UISelectedInfo.Refresh(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Rooms.Ingame.GetMap(), t)));
                         }));
             }
-            DblClicked = true;
+            this.DblClicked = true;
             e.Handled = true;
         }
         internal override void SlotLeftClick(GameObjectSlot slot)
         {
             if (slot.Object != null)
                 WindowTargetManagement.Refresh(new TargetArgs(slot.Object));
-        }
-        public override ControlTool.Messages MouseRightDown(System.Windows.Forms.HandledMouseEventArgs e)
-        {
-            if (e.Handled)
-                return Messages.Default;
-
-            if (!TryShowForceTaskGUI(this.Target))
-                Rooms.Ingame.CurrentMap.Town.ToggleQuickMenu();
-
-            e.Handled = true;
-            return Messages.Default;
         }
 
         private bool TryShowForceTaskGUI(TargetArgs target)
@@ -357,7 +357,7 @@ namespace Start_a_Town_
                     {
                         var task = t.Task;
                         var giver = t.Source;
-                        return new Button(task.GetForceTaskText())
+                        return new UI.Button(task.GetForceTaskText())
                         {
                             LeftClickAction = () =>
                             {
@@ -379,12 +379,8 @@ namespace Start_a_Town_
             }
         }
 
-        static Control UIForceTask = new Panel() { AutoSize = true };
+        static readonly UI.Control UIForceTask = new UI.Panel() { AutoSize = true };
 
-        public override ControlTool.Messages MouseRightUp(System.Windows.Forms.HandledMouseEventArgs e)
-        {
-            return Messages.Default;
-        }
         internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;

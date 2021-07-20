@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         CheckBox Chkbox_MouseTooltip;
         GroupBox _Gui;
-        internal GroupBox Gui => this._Gui ??= this.CreateGui();
+        internal override GroupBox Gui => this._Gui ??= this.CreateGui();
         float newGuiScale, newTooltipDelay;
 
         GroupBox CreateGui()

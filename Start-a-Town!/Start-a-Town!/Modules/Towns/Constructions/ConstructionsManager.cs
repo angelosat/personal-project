@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Towns;
+using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -15,36 +15,45 @@ namespace Start_a_Town_
     {
         public override string Name => "Constructions";
 
-        static public ConstructionCategoryWalls Walls = new();
-        static public ConstructionCategoryDoors Doors = new();
-        static public ConstructionCategoryProduction Production = new();
-        static public ConstructionCategoryFurniture Furniture = new();
+        public static ConstructionCategoryWalls Walls = new();
+        public static ConstructionCategoryDoors Doors = new();
+        public static ConstructionCategoryProduction Production = new();
+        public static ConstructionCategoryFurniture Furniture = new();
 
-        static public List<ConstructionCategory> AllCategories = new()
+        public static List<ConstructionCategory> AllCategories = new()
         {
             Walls,
             Doors,
             Production,
             Furniture
         };
-        public readonly GuiConstructionsBrowser WindowBuild = new();
+        static readonly Lazy<GuiConstructionsBrowser> WindowBuild = new();
+        static ConstructionsManager()
+        {
+            HotkeyManager.RegisterHotkey("Town", "Build", () => WindowBuild.Value.Toggle(), System.Windows.Forms.Keys.B);
+            HotkeyManager.RegisterHotkey("Ingame", "Pause/Resume", delegate { }, System.Windows.Forms.Keys.Space);
+            HotkeyManager.RegisterHotkey("Ingame", "Speed: Normal", delegate { }, System.Windows.Forms.Keys.D1);
+            HotkeyManager.RegisterHotkey("Ingame", "Speed: Fast", delegate { }, System.Windows.Forms.Keys.D2);
+            HotkeyManager.RegisterHotkey("Ingame", "Speed: Faster", delegate { }, System.Windows.Forms.Keys.D3);
+
+        }
         public ConstructionsManager(Town town)
         {
             this.Town = town;
         }
         readonly Dictionary<Vector3, ConstructionParams> PendingDesignations = new();
         readonly HashSet<IntVec3> Designations = new();
-       
+
         internal IEnumerable<IntVec3> GetAllBuildableCurrently()
         {
-            return this.Designations.Where(IsBuildableCurrently);
+            return this.Designations.Where(this.IsBuildableCurrently);
         }
-        
+
         internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<string, Action>(string.Format("{0} ({1})", "Build", KeyBind.Build.Key), () => WindowBuild.Toggle());
+            yield return new Tuple<string, Action>($"Build ({KeyBind.Build.Key})", () => WindowBuild.Value.Toggle());
         }
-        
+
         public override void Write(BinaryWriter w)
         {
             this.Designations.Write(w);
@@ -66,17 +75,17 @@ namespace Start_a_Town_
             this.Designations.Load(tag, "Designations");
             this.PendingDesignations.Load(tag, "PendingDesignations", i => i.Global);
         }
-       
+
         internal override void OnGameEvent(GameEvent e)
         {
-            switch(e.Type)
+            switch (e.Type)
             {
                 /// I ACTUALLY NEED IT TO ADD PENDING DESIGNATIONS
                 case Components.Message.Types.BlocksChanged:
                     foreach (var pos in e.Parameters[1] as IEnumerable<IntVec3>)
                         this.TryAddPendingDesignation(pos);
                     break;
-               
+
                 case Components.Message.Types.ZoneDesignation:
                     this.Add(e.Parameters[0] as DesignationDef, e.Parameters[1] as List<IntVec3>, (bool)e.Parameters[2]);
                     break;
@@ -92,7 +101,7 @@ namespace Start_a_Town_
             {
                 foreach (var pos in positions)
                 {
-                    if(this.Map.GetBlockEntity<BlockDesignation.BlockDesignationEntity>(pos) is BlockDesignation.BlockDesignationEntity blockEntity)
+                    if (this.Map.GetBlockEntity<BlockDesignation.BlockDesignationEntity>(pos) is BlockDesignation.BlockDesignationEntity blockEntity)
                     {
                         var origin = blockEntity.OriginGlobal;
                         this.Map.RemoveBlock(origin);
@@ -117,7 +126,7 @@ namespace Start_a_Town_
             }
             return false;
         }
-       
+
         internal bool IsDesignatedConstruction(Vector3 vector3)
         {
             return this.Designations.Contains(vector3);
@@ -150,7 +159,7 @@ namespace Start_a_Town_
             if (cheat)
                 PlaceDesignationsGodMode(args, product, positions, map);
             else
-                PlaceDesignations(args, product, positions);
+                this.PlaceDesignations(args, product, positions);
         }
 
         private void PlaceDesignations(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions)
@@ -158,9 +167,9 @@ namespace Start_a_Town_
             var map = this.Town.Map;
             if (args.Removing)
             {
-                foreach(var pos in positions)
+                foreach (var pos in positions)
                 {
-                    if(map.GetBlockEntity(pos) is BlockDesignation.BlockDesignationEntity desEntity)
+                    if (map.GetBlockEntity(pos) is BlockDesignation.BlockDesignationEntity desEntity)
                     {
                         this.Designations.Remove(desEntity.OriginGlobal);
                     }
@@ -247,8 +256,8 @@ namespace Start_a_Town_
             public ConstructionParams(IntVec3 global, int orientation, ProductMaterialPair product)
             {
                 this.Global = global;
-                Orientation = orientation;
-                Product = product;
+                this.Orientation = orientation;
+                this.Product = product;
             }
 
             public SaveTag Save(string name = "")
@@ -266,7 +275,7 @@ namespace Start_a_Town_
                 this.Orientation = tag.GetValue<int>("Orientation");
                 return this;
             }
-           
+
             public void Write(BinaryWriter w)
             {
                 w.Write(this.Global);

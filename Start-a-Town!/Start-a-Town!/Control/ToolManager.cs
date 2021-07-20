@@ -19,9 +19,10 @@ namespace Start_a_Town_
         {
             Tools = new Stack<ControlTool>();
         }
-        static public ControlTool GetDefaultTool()
+        internal ControlTool ToolManagement = new ToolManagement();
+        internal ControlTool GetDefaultTool()
         {
-            return new ToolManagement();
+            return ToolManagement;// new ToolManagement();
         }
         ControlTool _ActiveTool;
         public ControlTool ActiveTool

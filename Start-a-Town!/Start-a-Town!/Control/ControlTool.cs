@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
@@ -12,6 +13,7 @@ namespace Start_a_Town_
     public class ControlTool : IKeyEventHandler
     {
         public enum Messages { Default, Remove }
+        
 
         protected void Sync()
         {

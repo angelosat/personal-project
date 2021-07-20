@@ -9,13 +9,6 @@ namespace Start_a_Town_.UI
         readonly Panel PanelValue;
         readonly Label LabelValue;
 
-        Action _ValueChangedFunc = () => { };
-        public virtual Action ValueChangedFunc
-        {
-            get => this._ValueChangedFunc;
-            set => this._ValueChangedFunc = value;
-        }
-
         readonly Func<float> ValueGetter;
         readonly Action<float> ValueSetter;
         public string Format;// = "##0%";

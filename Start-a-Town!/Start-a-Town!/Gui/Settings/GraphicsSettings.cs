@@ -9,7 +9,7 @@ namespace Start_a_Town_
         bool Changed;
         ParticleDensityLevel TempParticles;
         GroupBox _Gui;
-        internal GroupBox Gui => this._Gui ??= this.CreateGui();
+        internal override GroupBox Gui => this._Gui ??= this.CreateGui();
 
 
         public GraphicsSettings()

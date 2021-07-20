@@ -32,7 +32,7 @@ namespace Start_a_Town_.Net
         public Dictionary<Vector2, byte[]> PendingChunks = new Dictionary<Vector2, byte[]>();
         public HashSet<Vector2> SentChunks = new HashSet<Vector2>();
         public Vector2 CameraPosition;
-        public ControlTool CurrentTool = ToolManager.GetDefaultTool();
+        public ControlTool CurrentTool = ToolManager.Instance.GetDefaultTool();
         public float CameraZoom;
         public TargetArgs Target = TargetArgs.Null;
         public Vector2? LastPointer; // dont store this in the player class?

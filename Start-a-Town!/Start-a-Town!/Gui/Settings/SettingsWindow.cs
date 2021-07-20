@@ -15,9 +15,10 @@ namespace Start_a_Town_.UI
         readonly VideoSettings VideoSettings;
         readonly InterfaceSettings InterfaceSettings;
         readonly CameraSettings CameraSettings;
-        readonly ControlsSettings ControlSettings;
+        //readonly ControlsSettings ControlSettings;
+        readonly HotkeyManager Hotkeys;
 
-        List<GroupBox> Tabs;
+        List<GameSettings> AllSettings;
 
         SettingsWindow()
         {
@@ -33,10 +34,11 @@ namespace Start_a_Town_.UI
             this.CameraSettings = new CameraSettings();
             this.GraphicSettings = new GraphicsSettings();
             this.VideoSettings = new VideoSettings();
-            this.ControlSettings = new ControlsSettings();
+            //this.ControlSettings = new ControlsSettings();
+            this.Hotkeys = new HotkeyManager();
 
-            this.Tabs = new List<GroupBox>() { this.CameraSettings.Gui, GraphicSettings.Gui, this.VideoSettings.Gui, this.InterfaceSettings.Gui, this.ControlSettings.Gui };
-            var tabs = UIHelper.Wrap(this.Tabs.Select(tab => new Button(tab.Name, () => selectTab(tab))), size);
+            this.AllSettings = new List<GameSettings>() { this.CameraSettings, GraphicSettings, this.VideoSettings, this.InterfaceSettings, this.Hotkeys };
+            var tabs = UIHelper.Wrap(this.AllSettings.Select(tab => new Button(tab.Gui.Name, () => selectTab(tab.Gui))), size);
 
             selectTab(this.CameraSettings.Gui);
             
@@ -54,11 +56,8 @@ namespace Start_a_Town_.UI
 
             void apply()
             {
-                this.GraphicSettings.Apply();
-                this.VideoSettings.Apply();
-                this.InterfaceSettings.Apply();
-                this.CameraSettings.Apply();
-                this.ControlSettings.Apply();
+                foreach (var m in this.AllSettings)
+                    m.Apply();
             }
 
             void selectTab(GroupBox tab)

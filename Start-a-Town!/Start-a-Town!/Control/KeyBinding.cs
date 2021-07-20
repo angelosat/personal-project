@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Windows.Forms;
+﻿using Start_a_Town_.Components;
 using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.Components;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Start_a_Town_
 {
     public enum PlayerActions { LB, Interact, PickUp, Activate, Drop, Throw, Seathe }
     public class PlayerInput
     {
-        static public Dictionary<PlayerActions, Keys> KeyBindings = new Dictionary<PlayerActions, Keys>(){
-            {PlayerActions.PickUp, GlobalVars.KeyBindings.PickUp},
-            {PlayerActions.Activate, GlobalVars.KeyBindings.Activate},
-            {PlayerActions.Drop, GlobalVars.KeyBindings.Drop},
-            {PlayerActions.Throw, GlobalVars.KeyBindings.Throw},
-            {PlayerActions.LB, System.Windows.Forms.Keys.LButton},
-            {PlayerActions.Interact, System.Windows.Forms.Keys.RButton},
-            {PlayerActions.Seathe, System.Windows.Forms.Keys.X}
+        public static Dictionary<PlayerActions, Keys> KeyBindings = new()
+        {
+            { PlayerActions.PickUp, GlobalVars.KeyBindings.PickUp },
+            { PlayerActions.Activate, GlobalVars.KeyBindings.Activate },
+            { PlayerActions.Drop, GlobalVars.KeyBindings.Drop },
+            { PlayerActions.Throw, GlobalVars.KeyBindings.Throw },
+            { PlayerActions.LB, Keys.LButton },
+            { PlayerActions.Interact, Keys.RButton },
+            { PlayerActions.Seathe, Keys.X }
         };
-        
-        static public Keys GetKey(PlayerActions actions)
+
+        public static Keys GetKey(PlayerActions actions)
         {
             return KeyBindings[actions];
         }
@@ -30,23 +31,23 @@ namespace Start_a_Town_
             return KeyBindings[this.Action];
         }
 
-        static public readonly PlayerInput Drop = new PlayerInput(PlayerActions.Drop);
-        static public readonly PlayerInput DropHold = new PlayerInput(PlayerActions.Drop, true);
-        static public readonly PlayerInput Throw = new PlayerInput(PlayerActions.Throw);
-        static public readonly PlayerInput ThrowHold = new PlayerInput(PlayerActions.Throw, true);
-        static public readonly PlayerInput LButton = new PlayerInput(PlayerActions.LB);
-        static public readonly PlayerInput RButton = new PlayerInput(PlayerActions.Interact);
-        static public readonly PlayerInput RButtonHold = new PlayerInput(PlayerActions.Interact, true);
-        static public readonly PlayerInput Activate = new PlayerInput(PlayerActions.Activate);
-        static public readonly PlayerInput ActivateHold = new PlayerInput(PlayerActions.Activate, true);
-        static public readonly PlayerInput PickUp = new PlayerInput(PlayerActions.PickUp);
-        static public readonly PlayerInput PickUpHold = new PlayerInput(PlayerActions.PickUp, true);
-        static public readonly PlayerInput Seathe = new PlayerInput(PlayerActions.Seathe);
-        static public readonly PlayerInput SeatheHold = new PlayerInput(PlayerActions.Seathe, true);
+        public static readonly PlayerInput Drop = new(PlayerActions.Drop);
+        public static readonly PlayerInput DropHold = new(PlayerActions.Drop, true);
+        public static readonly PlayerInput Throw = new(PlayerActions.Throw);
+        public static readonly PlayerInput ThrowHold = new(PlayerActions.Throw, true);
+        public static readonly PlayerInput LButton = new(PlayerActions.LB);
+        public static readonly PlayerInput RButton = new(PlayerActions.Interact);
+        public static readonly PlayerInput RButtonHold = new(PlayerActions.Interact, true);
+        public static readonly PlayerInput Activate = new(PlayerActions.Activate);
+        public static readonly PlayerInput ActivateHold = new(PlayerActions.Activate, true);
+        public static readonly PlayerInput PickUp = new(PlayerActions.PickUp);
+        public static readonly PlayerInput PickUpHold = new(PlayerActions.PickUp, true);
+        public static readonly PlayerInput Seathe = new(PlayerActions.Seathe);
+        public static readonly PlayerInput SeatheHold = new(PlayerActions.Seathe, true);
 
-        public static Dictionary<PlayerInput, Func<GameObject, TargetArgs, Interaction>> DefaultInputs = new Dictionary<PlayerInput, Func<GameObject, TargetArgs, Interaction>>()
+        public static Dictionary<PlayerInput, Func<GameObject, TargetArgs, Interaction>> DefaultInputs = new()
         {
-            {PlayerInput.Drop, (a,t)=>new DropCarried()},
+            {Drop, (a,t)=>new DropCarried()},
             {DropHold, (a,t)=>new DropCarried(true)},
             {Throw, (a,t)=>new InteractionThrow()},
             {ThrowHold, (a,t)=>new InteractionThrow(true)},
@@ -58,12 +59,12 @@ namespace Start_a_Town_
             {Seathe, GetSeathe}
         };
 
-        static public Interaction GetDefaultInput(GameObject actor, TargetArgs target, PlayerInput input)
+        public static Interaction GetDefaultInput(GameObject actor, TargetArgs target, PlayerInput input)
         {
             var action = DefaultInputs.FirstOrDefault(foo => foo.Key.Action == input.Action && foo.Key.Hold == input.Hold);
             if (action.Value == null)
                 return null;
-            return action.Value(actor, target) as Interaction;
+            return action.Value(actor, target);
         }
         static Interaction GetRB(GameObject parent, TargetArgs a)
         {
@@ -106,10 +107,10 @@ namespace Start_a_Town_
             var inv = a.GetComponent<PersonalInventoryComponent>();
             var hauled = inv.GetHauling();
             if (hauled.Object != null)
-                    return new InteractionStoreHauled();
+                return new InteractionStoreHauled();
             return null;
         }
-        
+
         public bool Hold;
         public PlayerActions Action;
         PlayerInput(PlayerActions action, bool hold = false)

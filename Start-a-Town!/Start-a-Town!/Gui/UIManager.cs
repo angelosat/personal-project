@@ -359,9 +359,9 @@ namespace Start_a_Town_.UI
             sb.End();
             gd.SetRenderTarget(null);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Scale % 1 > 0 ? SamplerState.AnisotropicClamp : SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-            sb.Draw(uiTexture, new Rectangle(0, 0, (int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y), Color.White);
-            if (camera is not null) 
+            if (camera is not null)
                 this.DrawOnCamera(sb, camera); //moved this here, because we dont want it drawn to ui scale
+            sb.Draw(uiTexture, new Rectangle(0, 0, (int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y), Color.White);
             sb.End();
         }
         public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline, SpriteFont font)

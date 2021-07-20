@@ -39,7 +39,6 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
-
         public StockpileManager StockpileManager;
         public ZoneManager ZoneManager;
         public ConstructionsManager ConstructionsManager;

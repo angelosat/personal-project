@@ -36,6 +36,7 @@ namespace Start_a_Town_.Towns
             this.UpdateTimer = UpdateTimerMax;
             this.OnUpdate();
         }
+
         public virtual void OnUpdate() { }
 
         public virtual GroupBox GetInterface()

@@ -11,7 +11,7 @@ namespace Start_a_Town_
         CheckBox Chk_Fullscreen;
         Rectangle TempResolution;
         GroupBox _Gui;
-        internal GroupBox Gui => this._Gui ??= this.CreateGui();
+        internal override GroupBox Gui => this._Gui ??= this.CreateGui();
 
         GroupBox CreateGui()
         {

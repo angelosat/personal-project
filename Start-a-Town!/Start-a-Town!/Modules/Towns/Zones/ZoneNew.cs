@@ -126,7 +126,7 @@ namespace Start_a_Town_
         }
         internal bool Contains(GameObject obj)
         {
-            var g = obj.Global.SnapToBlock() - Vector3.UnitZ;
+            var g = obj.GridCell - IntVec3.UnitZ;
             return this.GetPositions().Contains(g);
         }
         internal bool Contains(IntVec3 pos)

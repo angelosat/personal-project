@@ -7,12 +7,12 @@ namespace Start_a_Town_
 {
     static class VectorHelper
     {
-        static readonly List<Vector3> AdjacentRadial = Vector3.Zero.GetRadial(2);
-        static readonly IntVec3[] AdjacentRadialLarge = IntVec3.Zero.GetRadial(Chunk.Size);
-        static public IntVec3[] GetRadial(this IntVec3 center, int radius)
+        static readonly IEnumerable<IntVec3> AdjacentRadial = IntVec3.Zero.GetRadial(2);
+        static readonly IEnumerable<IntVec3> AdjacentRadialLarge = IntVec3.Zero.GetRadial(Chunk.Size);
+        static public IEnumerable<IntVec3> GetRadial(this IntVec3 center, int radius)
         {
             var r = Vector3.One * radius;
-            var box = new BoundingBox((Vector3)center - r, (Vector3)center + r).GetBox();
+            var box = new BoundingBox((Vector3)center - r, (Vector3)center + r).GetBoxIntVec3();
             box.Sort((a, b) =>
             {
                 float aa = a.LengthSquared();
@@ -24,26 +24,11 @@ namespace Start_a_Town_
                 else
                     return 1;
             });
-            return box.Select(v => (IntVec3)v).ToArray();
+            foreach (var v in box)
+                yield return v;
         }
-        static public List<Vector3> GetRadial(this Vector3 center, int radius)
-        {
-            var r = Vector3.One * radius;
-            var box = new BoundingBox(center - r, center + r).GetBox();
-            box.Sort((a, b) =>
-            {
-                float aa = a.LengthSquared();
-                float bb = b.LengthSquared();
-                if (aa < bb)
-                    return -1;
-                else if (aa == bb)
-                    return 0;
-                else
-                    return 1;
-            });
-            return box;
-        }
-        static public IEnumerable<Vector3> GetRadial(this Vector3 center)
+       
+        static public IEnumerable<Vector3> GetRadial(this IntVec3 center)
         {
             foreach (var n in AdjacentRadial)
                 yield return center + n;
@@ -194,7 +179,7 @@ namespace Start_a_Town_
             vector.Z = (int)Math.Round(vector.Z);
             return vector;
         }
-        public static Vector3 SnapToBlock(this Vector3 vector)
+        public static IntVec3 SnapToBlock(this Vector3 vector)
         {
             vector.X = (int)Math.Round(vector.X);
             vector.Y = (int)Math.Round(vector.Y);

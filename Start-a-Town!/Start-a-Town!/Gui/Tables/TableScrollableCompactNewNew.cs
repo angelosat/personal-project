@@ -157,9 +157,7 @@ namespace Start_a_Town_.UI
         public TableScrollableCompactNewNew<TObject> AddItems(IEnumerable<TObject> items)
         {
             if (items is null)
-            {
                 return this;
-            }
 
             this.BoxItems.AddItems(items);
             this.Validate(true);

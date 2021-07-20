@@ -113,12 +113,6 @@ namespace Start_a_Town_.Net
         /// </summary>
         public MapBase Map { get; set; }
 
-        private void SetMap(MapBase map)
-        {
-            this.Map = map;
-            map.ResolveReferences();
-        }
-
         static IWorld _World;
         static IWorld World
         {
@@ -780,17 +774,16 @@ namespace Start_a_Town_.Net
             return true;
         }
 
-        public static void InstantiateMap(MapBase map)
+        public static void SetMap(MapBase map)
         {
             World = map.World;
             World.Net = Instance;
             Instance.Map = map;
-
             foreach (var ch in map.GetActiveChunks().Values)
                 InstantiateChunk(ch);
             foreach (var obj in Instance.NetworkObjects)
                 obj.Value.MapLoaded(Instance.Map);
-            Instance.SetMap(map);
+            map.ResolveReferences();
             Random = new RandomThreaded(Instance.Map.Random);
         }
         private static void InstantiateChunk(Chunk chunk)

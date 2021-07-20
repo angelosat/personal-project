@@ -1011,7 +1011,6 @@
     <Compile Include="Gui\SpeechBubble.cs" />
     <Compile Include="Gui\Tables\TableScrollable.cs" />
     <Compile Include="Gui\Tables\TableScrollableCompact.cs" />
-    <Compile Include="Gui\Tables\TableScrollableCompactNew.cs" />
     <Compile Include="Gui\Tables\TableScrollableCompactNewNew.cs" />
     <Compile Include="Gui\WindowTargetManagementStatic.cs" />
     <Compile Include="Gui\WindowTargetManagement.cs" />

@@ -20,8 +20,14 @@ namespace Start_a_Town_
         public override float Height => this.Physics.Height - (this.Mobile.Crouching ? 1 : 0);
         public override bool IsHaulable => false;
 
-        MobileComponent _mobile;
-        public MobileComponent Mobile => this._mobile ??= this.GetComponent<MobileComponent>();
+        MobileComponent _cachedMobile;
+        public MobileComponent Mobile => this._cachedMobile ??= this.GetComponent<MobileComponent>();
+
+        public float Acceleration
+        {
+            get => this.Mobile.Acceleration;
+            set => this.Mobile.Acceleration = value;
+        }
 
         internal NpcSkillsComponent Skills => this.GetComponent<NpcSkillsComponent>();
         internal AttributesComponent Attributes => this.GetComponent<AttributesComponent>();
@@ -136,10 +142,8 @@ namespace Start_a_Town_
         internal void ForceTask(TaskGiver taskGiver, TargetArgs target)
         {
             var task = taskGiver.TryTaskOn(this, target, true);
-            if (task != null)
-            {
+            if (task is not null)
                 this.GetState().ForceTask(task);
-            }
         }
 
         internal bool CanStandIn(Vector3 global)
@@ -406,7 +410,7 @@ namespace Start_a_Town_
             }
         }
 
-        public GameObject Target => null;//.GetComponent<AttackComponent>().Target;
+        public GameObject AttackTarget => null;//.GetComponent<AttackComponent>().Target;
 
         public IEnumerable<TaskGiver> GetTaskGivers()
         {

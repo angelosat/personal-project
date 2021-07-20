@@ -27,8 +27,8 @@ namespace Start_a_Town_
         static public bool TryFindNearbyPlace(Actor actor, GameObject item, Vector3 center, out TargetArgs target)
         {
             var map = actor.Map;
-            var actorGlobal = actor.Global.SnapToBlock();
-            var places = actor.Global.GetRadial();
+            var actorCell = actor.GridCell;
+            var places = actorCell.GetRadial();
             foreach (var pl in places)
             {
                 var global = pl;

@@ -13,11 +13,6 @@ namespace Start_a_Town_.UI
             BackgroundTexture = UIManager.Icon16Background;
         }
 
-        public override void Update()
-        {
-            base.Update();
-        }
-
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
@@ -540,67 +541,75 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 return false;
             return chunk.InvalidateCell(cell);
         }
-
-        public void GenerateWithNotificationsNew(Action<string, float> callback)
+        
+        public override Task Generate(bool showDialog)
         {
-            var tasks = new List<(string label, Action action)>();
-            var size = this.Size.Chunks;
-            var max = size * size;
-            var mutatorlist = this.World.GetMutators().ToList();
-            mutatorlist.ForEach(m => m.SetWorld(this.World));
-            var watch = new Stopwatch();
-            Dictionary<Chunk, Dictionary<IntVec3, double>> gradCache = new();
-            tasks.Add(("Initializing Chunks", () =>
-             {
-                 watch.Start();
-                 for (int i = 0; i < size; i++)
-                 {
-                     for (int j = 0; j < size; j++)
-                     {
-                         var pos = new Vector2(i, j);
-                         var chunk = Chunk.Create(this, pos);
-                         gradCache[chunk] = chunk.InitCells2(mutatorlist);// WARNING!
-                         this.ActiveChunks.Add(pos, chunk);
-                     }
-                 }
-                 watch.Stop();
-                 string.Format("chunks initialized in {0} ms", watch.ElapsedMilliseconds).ToConsole();
-             }
-            ));
-
-            foreach (var m in mutatorlist)
+            var loadingDialog = new DialogLoading();
+            if (showDialog)
+                loadingDialog.ShowDialog();
+            return Task.Factory.StartNew(() =>
             {
-                tasks.Add(("Applying " + m.Name, () =>
+                var tasks = new List<(string label, Action action)>();
+                var size = this.Size.Chunks;
+                var max = size * size;
+                var mutatorlist = this.World.GetMutators().ToList();
+                mutatorlist.ForEach(m => m.SetWorld(this.World));
+                var watch = new Stopwatch();
+                Dictionary<Chunk, Dictionary<IntVec3, double>> gradCache = new();
+                tasks.Add(("Initializing Chunks", () =>
                 {
-                    watch.Restart();
-                    foreach (var chunk in this.ActiveChunks.Values)
+                    watch.Start();
+                    for (int i = 0; i < size; i++)
                     {
-                        var cached = gradCache[chunk];
-                        chunk.InitCells3(m, cached);
-                        m.Finally(chunk, cached);
+                        for (int j = 0; j < size; j++)
+                        {
+                            var pos = new Vector2(i, j);
+                            var chunk = Chunk.Create(this, pos);
+                            gradCache[chunk] = chunk.InitCells2(mutatorlist);// WARNING!
+                            this.ActiveChunks.Add(pos, chunk);
+                        }
                     }
-                    m.Generate(this);
                     watch.Stop();
-
-                    string.Format("{0} finished in in {1} ms", m.ToString(), watch.ElapsedMilliseconds).ToConsole();
+                    $"chunks initialized in {watch.ElapsedMilliseconds} ms".ToConsole();
                 }
                 ));
-            }
 
-            foreach (var a in this.InitChunksNew())
-                tasks.Add(a);
+                foreach (var m in mutatorlist)
+                {
+                    tasks.Add(("Applying " + m.Name, () =>
+                    {
+                        watch.Restart();
+                        foreach (var chunk in this.ActiveChunks.Values)
+                        {
+                            var cached = gradCache[chunk];
+                            chunk.InitCells3(m, cached);
+                            m.Finally(chunk, cached);
+                        }
+                        m.Generate(this);
+                        watch.Stop();
 
-            foreach (var a in this.FinishCreatingNew())
-                tasks.Add(a);
+                        $"{m} finished in {watch.ElapsedMilliseconds} ms".ToConsole();
+                    }
+                    ));
+                }
 
-            tasks.Add(("Detecting undiscovered areas", () => this.InitUndiscoveredAreas(null)));
+                foreach (var a in this.InitChunksNew())
+                    tasks.Add(a);
 
-            for (int i = 0; i < tasks.Count; i++)
-            {
-                var (label, action) = tasks[i];
-                callback(string.Format(label, i, tasks.Count), i / (float)tasks.Count);
-                action();
-            }
+                foreach (var a in this.FinishCreatingNew())
+                    tasks.Add(a);
+
+                tasks.Add(("Detecting undiscovered areas", () => this.InitUndiscoveredAreas(null)));
+
+                for (int i = 0; i < tasks.Count; i++)
+                {
+                    var (label, action) = tasks[i];
+                    loadingDialog.Refresh(string.Format(label, i, tasks.Count), i / (float)tasks.Count);
+                    action();
+                }
+                if (showDialog) 
+                    loadingDialog.Close();
+            });
         }
 
         public override void DrawWorld(MySpriteBatch mySB, Camera camera)
@@ -873,32 +882,26 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Camera.CenterOn(this);
         }
 
-        internal void SpawnStartingActors(Actor[] actors)
+        internal void AddStartingActors(Actor[] actors)
         {
             var x = this.Size.Blocks / 2;
             var y = x;
             var z = this.GetHeightmapValue(x, y);
             var center = new IntVec3(x, y, z);
+            var radial = VectorHelper.GetRadialLarge(center).GetEnumerator();
             for (int i = 0; i < actors.Length; i++)
             {
                 var actor = actors[i];
-                var cell = findStandableCellNear(center);
-                actor.Spawn(this, cell);
-                this.Town.AddCitizen(actor);
-            }
-
-            IntVec3 findStandableCellNear(IntVec3 center)
-            {
-                var radial = VectorHelper.GetRadialLarge(center).GetEnumerator();
                 IntVec3 current;
                 do
                 {
                     radial.MoveNext();
                     current = radial.Current;
                 } while (!this.IsStandableIn(current));
-                return current;
+                actor.Global = current;
+                //actor.Spawn(this, current);
+                this.Add(actor);
             }
         }
-
     }
 }

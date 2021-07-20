@@ -76,7 +76,7 @@ namespace Start_a_Town_
         
         public Control GetUI()
         {
-            var table = new TableScrollableCompactNew<NpcSkill>(this.SkillsNew.Length, scrollbarMode: ScrollableBoxNew.ScrollModes.None)
+            var table = new TableScrollableCompactNewNew<NpcSkill>(this.SkillsNew.Length, scrollbarMode: ScrollableBoxNew.ScrollModes.None)
                 .AddColumn(null, "name", 80, s => new Label(s.Def.Name), 0)
                 .AddColumn(null, "value", 16, s => new Label() { TextFunc = () => s.Level.ToString() }, 0);
 

@@ -10,6 +10,7 @@ using Start_a_Town_.Blocks;
 using Start_a_Town_.Particles;
 using Start_a_Town_.GameModes;
 using Start_a_Town_.Components;
+using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -241,7 +242,12 @@ namespace Start_a_Town_
                 this.GetBlock(above)?.BlockBelowChanged(this, above);
             }
         }
-        
+        /// <summary>
+        /// starts and returns an async task handling map generation
+        /// </summary>
+        /// <returns></returns>
+        public abstract Task Generate(bool showDialog);
+
         internal void RemoveBlocks(IEnumerable<IntVec3> positions, bool notify = true)
         {
             var nonAirPositions = positions.Where(vec => this.GetBlock(vec) != BlockDefOf.Air).ToList();

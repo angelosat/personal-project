@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
-using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
@@ -10,12 +10,12 @@ namespace Start_a_Town_
         {
             actors.AddRange(new[] { Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc) });
 
-            var actorsUI = new ListBoxNew<Actor, ButtonNew>(200, UIManager.LargeButton.Height * 7);
+            var actorsUI = new ListBoxNew<Actor, ButtonNew>(200, UIManager.LargeButton.Height * 8);
             var addactorbutton = new Button("Create", actorsUI.Width);
 
-            var actorslistbox = new PanelLabeledNew("Coloninsts");
+            var actorslistbox = new PanelLabeledNew("Colonists");
             actorslistbox.Client.AddControlsVertically(actorsUI, addactorbutton);
-            var editbox = new Panel(0, 0, 500, actorslistbox.Height) { AutoSize = false };
+            var editbox = new Panel(0, 0, 800, actorslistbox.Height) { AutoSize = false };
             addactorbutton.LeftClickAction = addActor;
 
             actorsUI.AddItems(actors, btnInit);
@@ -34,7 +34,7 @@ namespace Start_a_Town_
 
             ButtonNew btnInit(Actor a)
             {
-                var btn = ButtonNew.CreateBig(() => Expand(a, editbox), actorsUI.Client.Width, a.RenderIcon(), () => a.Npc.FullName);
+                var btn = ButtonNew.CreateBig(() => this.Expand(a, editbox), actorsUI.Client.Width, a.RenderIcon(), () => a.Npc.FullName);
                 var deleteBtn = IconButton.CreateCloseButton();
                 deleteBtn.Location = btn.TopRight;
                 deleteBtn.Anchor = Vector2.UnitX;
@@ -53,7 +53,7 @@ namespace Start_a_Town_
             editbox.ClearControls();
 
             var boxName = new GroupBox();
-            
+
             var firstName = new TextBox(100)
             {
                 TextFunc = () => a.Npc.FirstName,

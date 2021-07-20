@@ -149,5 +149,10 @@ namespace Start_a_Town_
             yield return this + UnitZ;
             yield return this - UnitZ;
         }
+
+        public float LengthSquared()
+        {
+            return this.X * this.X + this.Y * this.Y + this.Z * this.Z;
+        }
     }
 }

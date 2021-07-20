@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,7 +44,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             seedBox.AddControls(
                 this.Txt_Seed, btn_random);
 
-
             var defaultSizes = StaticMap.MapSize.GetList();
             this.SelectedSize = defaultSizes.First();
             var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => this.SelectedSize = s, c => this.SelectedSize);
@@ -62,7 +63,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
                 var actorsui = new GuiActorCreation(actors);
-                var btnstart = new Button("Start") { LeftClickAction = () => this.btn_Create_Click(actors.ToArray()) };
+                var btnstart = new Button("Start") { LeftClickAction = () => this.CreateMap(actors.ToArray()) };
                 var btnback = new Button("Back") { LeftClickAction = () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); } };
                 actorsCreateBox.AddControlsVertically(actorsui, btnstart, btnback);
                 var createActorsWindow = new Window(actorsCreateBox) { Closable = false, Movable = false, Previous = this.GetWindow() };
@@ -83,63 +84,35 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             DirectoryInfo directory = new DirectoryInfo(GlobalVars.SaveDir + "/Worlds/Static/");
             if (!Directory.Exists(directory.FullName))
-            {
                 Directory.CreateDirectory(directory.FullName);
-            }
-
             return directory.GetDirectories();
         }
 
-        void tab_Click(object sender, EventArgs e)
-        {
-            this.Panel_Main.Controls.Clear();
-            global::Start_a_Town_.UI.Control panel = (sender as global::Start_a_Town_.UI.Control).Tag as Control;
-            if (panel == null)
-            {
-                return;
-            }
-
-            this.Panel_Main.AddControls(panel);
-        }
-
-        void btn_Create_Click(Actor[] actors)
+        void CreateMap(Actor[] actors)
         {
             StaticWorld world;
             var seedString = this.Txt_Seed.Text;
             world = new StaticWorld(seedString, Terraformer.Defaults);
-
             this.Tag = world;
-
             var size = this.SelectedSize;
-
             var map = new StaticMap(world, "test", Vector2.Zero, size);
-            var loadingDialog = new DialogLoading();
-            loadingDialog.ShowDialog();
             this.Hide();
-            Net.Server.Start();
+            Server.Start();
+            map.Generate(showDialog: true)
+                .ContinueWith(_ => OnMapGenerated(actors, world, map));
+        }
 
-            Task.Factory.StartNew(() =>
-            {
-                int chunksCount = map.Size.Chunks * map.Size.Chunks;
-                int maxTasks = chunksCount * 2;
-                map.GenerateWithNotificationsNew(loadingDialog.Refresh);
-
-                world.Maps.Add(map.Coordinates, map);
-
-                string localHost = "127.0.0.1";
-                UIConnecting.Create(localHost);
-                map.CameraRecenter();
-
-                Net.Server.InstantiateMap(map); // is this needed??? YES!!! it enumerates all existing entities in the network
-                foreach (var a in actors)
-                    map.Net.Instantiate(a);
-
-                map.SpawnStartingActors(actors);
-
-                Net.Client.Instance.Connect(localHost, "host", a => { LobbyWindow.Instance.Console.Write("Connected to " + localHost); }); // TODO dont manipulate the gui in concurrent threads!!!!!
-
-                loadingDialog.Close();
-            });
+        private static void OnMapGenerated(Actor[] actors, StaticWorld world, StaticMap map)
+        {
+            map.AddStartingActors(actors);
+            world.Maps.Add(map.Coordinates, map);
+            string localHost = "127.0.0.1";
+            UIConnecting.Create(localHost);
+            map.CameraRecenter();
+            Server.SetMap(map);
+            foreach(var a in actors)
+                map.Town.AddCitizen(a);
+            Client.Instance.Connect(localHost, "host", a => LobbyWindow.Instance.Console.Write($"Connected to {localHost}")); // TODO dont manipulate the gui in concurrent threads!!!!!
         }
     }
 }

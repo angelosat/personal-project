@@ -192,31 +192,18 @@ namespace Start_a_Town_
             get => this.Transform.Global;
             set => this.Transform.Global = value;
         }
-        public IntVec3? Cell { get { return this.IsSpawned ? this.Transform.Global.SnapToBlock() : null; } }
-        public Vector3 GridCell
+        public IntVec3? Cell => this.IsSpawned ? this.GridCell : null;
+        public IntVec3 GridCell
         {
-            get { return this.Global.SnapToBlock(); }
-            set { this.SetPosition(value); }
+            get => this.Global.SnapToBlock(); 
+            set => this.SetPosition(value); 
         }
         public Vector3 GridCellOffset
         {
-            get
-            {
-                var grid = this.Global.SnapToBlock();
-                return this.Global - grid;
-            }
-            set
-            {
-                this.SetPosition(this.GridCell + value);
-            }
+            get => this.Global - (Vector3)this.GridCell;
+            set => this.SetPosition((Vector3)this.GridCell + value);
         }
-
-        public float Acceleration
-        {
-            get => this.GetComponent<MobileComponent>().Acceleration;
-            set => this.GetComponent<MobileComponent>().Acceleration = value;
-
-        }
+       
         public Vector3 Velocity
         {
             get => this.Transform.Velocity;

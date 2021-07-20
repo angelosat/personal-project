@@ -45,7 +45,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             DialogInput getSaveName = null;
 
             var groupBox = new GroupBox();
-            var table = new TableScrollableCompactNew<FileInfo>(16, false, ScrollableBoxNew.ScrollModes.Vertical)
+            var table = new TableScrollableCompactNewNew<FileInfo>(16, false, ScrollableBoxNew.ScrollModes.Vertical)
                 .AddColumn(null, "filename", 160, f => new Label(Path.GetFileNameWithoutExtension(f.Name)), 0)
                 .AddColumn(null, "datetime", 160, f => new Label(f.CreationTime.ToString("R")), 0)
                 .AddColumn(null, "overwrite", Button.GetWidth(UIManager.Font, "Overwrite"), f => new Button("Overwrite") { LeftClickAction = () => saveNew(Path.GetFileNameWithoutExtension(f.Name)) }, 0)

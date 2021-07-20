@@ -24,7 +24,8 @@ namespace Start_a_Town_.AI.Behaviors
                 }
             }
             var nextStep = parent.GetNextStep();
-            var doors = parent.Global.SnapToBlock().GetNeighborsSameZ().Where(adj => parent.Intersects(nextStep, BlockDoor.GetBoundingBox(parent.Map, adj)));
+            var doors = parent.GridCell.GetAdjacentHorLazy().Where(adj => parent.Intersects(nextStep, BlockDoor.GetBoundingBox(parent.Map, adj)));
+
             if (!doors.Any())
                 return BehaviorState.Fail;
 

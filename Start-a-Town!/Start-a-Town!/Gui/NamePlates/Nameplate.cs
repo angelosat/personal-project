@@ -79,7 +79,7 @@ namespace Start_a_Town_.UI
             if (actor is null)
                 return;
             if (this.Object is GameObject entity && 
-                actor.Target is GameObject playertarget &&
+                actor.AttackTarget is GameObject playertarget &&
                 entity.RefID == playertarget.RefID)
                 {
                     var border = this.BoundsScreen;

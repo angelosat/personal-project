@@ -19,13 +19,8 @@ namespace Start_a_Town_.UI
             this.SelectedControl = this.Client.Controls.FirstOrDefault(i => i.Tag == obj) as TControl;
         }
 
-        public List<TControl> Items
-        {
-            get
-            {
-                return this.Client.Controls.Cast<TControl>().ToList();
-            }
-        }
+        public List<TControl> Items => this.Client.Controls.Cast<TControl>().ToList();
+           
         readonly Func<TObject, TControl> ControlFactory;
 
         public Action<TObject> ItemChangedFunc = item => { };
@@ -43,77 +38,6 @@ namespace Start_a_Town_.UI
         public ListBoxNewNoBtnBase<TObject, TControl> Clear()
         {
             this.Client.Controls.Clear();
-            return this;
-        }
-
-        public ListBoxNewNoBtnBase<TObject, TControl> Build(IEnumerable<TObject> list, Func<TObject, string> nameFunc, Func<TObject, string> hoverTextFunc = null)
-        {
-            this.List = list;
-            Func<TObject, string> htv = hoverTextFunc ?? (foo => "");
-            this.Client.Controls.Clear();
-            foreach (var obj in list)
-            {
-                var btn = new TControl()
-                {
-                    Location = Client.Controls.Count > 0 ? Client.Controls.Last().BottomLeft : Vector2.Zero,
-                    Tag = obj,
-                    Name = nameFunc(obj),
-                    HoverText = htv(obj),
-                    Active = true
-                };
-                
-                this.Client.Controls.Add(btn);
-            }
-            Remeasure();
-            Client.ClientLocation = Vector2.Zero;
-            SelectedControl = null;
-            return this;
-        }
-        public ListBoxNewNoBtnBase<TObject, TControl> Build(IEnumerable<TObject> list, Action<TObject, TControl> onControlInit)
-        {
-            this.List = list;
-            this.Client.Controls.Clear();
-            foreach (var obj in list)
-            {
-                AddItem(obj, onControlInit);
-            }
-            Client.ClientLocation = Vector2.Zero;
-            SelectedControl = null;
-            return this;
-        }
-        [Obsolete]
-        public ListBoxNewNoBtnBase<TObject, TControl> Build(Dictionary<string, List<TObject>> list, Func<TObject, string> nameFunc, Action<string, TControl> onCategoryInit, Action<TObject, TControl> onControlInit)
-        {
-            this.Client.Controls.Clear();
-            foreach (var obj in list)
-            {
-                var inner = new GroupBox();
-                foreach (var item in obj.Value)
-                {
-                    var btninner = new TControl
-                    {
-                        Tag = item,
-                        TooltipFunc = (tt) => { if (item is ITooltippable) (item as ITooltippable).GetTooltipInfo(tt); },
-                        Active = true,
-                        Location = inner.Controls.BottomLeft
-                    };
-                    inner.Controls.Add(btninner);
-                }
-
-                var btn = new TControl()
-                {
-                    Location = Client.Controls.Count > 0 ? Client.Controls.Last().BottomLeft : Vector2.Zero,
-                    Tag = inner,
-                    Name = obj.Key,
-                    TooltipFunc = (tt) => { if (obj is ITooltippable) (obj as ITooltippable).GetTooltipInfo(tt); },
-                    Active = true
-                };
-
-                this.Client.Controls.Add(btn);
-            }
-            Remeasure();
-            Client.ClientLocation = Vector2.Zero;
-            SelectedControl = null;
             return this;
         }
 
@@ -143,7 +67,6 @@ namespace Start_a_Town_.UI
             this.Client.AddControlsBottomLeft(control);
             control.Location.Y += Spacing;
             this.UpdateClientSize();
-
             return control;
         }
 

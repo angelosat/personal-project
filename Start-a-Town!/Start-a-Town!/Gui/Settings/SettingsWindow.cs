@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
@@ -9,13 +9,12 @@ namespace Start_a_Town_.UI
         static SettingsWindow _Instance;
         static public SettingsWindow Instance => _Instance ??= new SettingsWindow();
 
-        Panel Panel, Panel_Buttons;
+        Panel Panel;
 
         readonly GraphicsSettings GraphicSettings;
         readonly VideoSettings VideoSettings;
         readonly InterfaceSettings InterfaceSettings;
         readonly CameraSettings CameraSettings;
-        //readonly ControlsSettings ControlSettings;
         readonly HotkeyManager Hotkeys;
 
         List<GameSettings> AllSettings;
@@ -34,24 +33,22 @@ namespace Start_a_Town_.UI
             this.CameraSettings = new CameraSettings();
             this.GraphicSettings = new GraphicsSettings();
             this.VideoSettings = new VideoSettings();
-            //this.ControlSettings = new ControlsSettings();
             this.Hotkeys = new HotkeyManager();
 
             this.AllSettings = new List<GameSettings>() { this.CameraSettings, GraphicSettings, this.VideoSettings, this.InterfaceSettings, this.Hotkeys };
-            var tabs = UIHelper.Wrap(this.AllSettings.Select(tab => new Button(tab.Gui.Name, () => selectTab(tab.Gui))), size);
+            var tabs = UIHelper.Wrap(this.AllSettings.Select(tab => new Button(tab.Gui.Name, () => selectTab(tab.Gui))));//, size);
 
             selectTab(this.CameraSettings.Gui);
             
             Button ok = new("Apply", apply, 50);
-            Button cancel = new("Cancel", () => this.Hide(), 50) { Location = ok.TopRight };
+            Button cancel = new("Cancel", () => this.Hide(), 50);// { Location = ok.TopRight };
 
-            Panel_Buttons = new Panel() { AutoSize = true };
-            Panel_Buttons.Controls.Add(ok, cancel);
-
-            this.Client.AddControlsVertically(
+            this.Client.AddControlsVertically(//0, HorizontalAlignment.Right,
                 tabs.ToPanel(),
                 this.Panel,
-                UIHelper.Wrap(this.Panel.ClientSize.Width, ok, cancel).ToPanel());
+                //UIHelper.Wrap(this.Panel.ClientSize.Width, ok, cancel));
+                UIHelper.Wrap(ok, cancel));
+
             this.AnchorToScreenCenter();
 
             void apply()

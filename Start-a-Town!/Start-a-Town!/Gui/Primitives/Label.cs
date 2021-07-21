@@ -288,7 +288,7 @@ namespace Start_a_Town_.UI
                     yield return new Label(txt);
             }
         }
-        public static Label ParseToken(string txt)
+        static Label ParseToken(string txt)
         {
             var token = txt.Split(',');
             var inner = token[0];

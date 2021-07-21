@@ -31,6 +31,7 @@ namespace Start_a_Town_
         static ConstructionsManager()
         {
             HotkeyManager.RegisterHotkey("Town", "Build", () => WindowBuild.Value.Toggle(), System.Windows.Forms.Keys.B);
+            HotkeyManager.RegisterHotkey("Town", "Toggle Forbidden", delegate { }, System.Windows.Forms.Keys.F);
             HotkeyManager.RegisterHotkey("Ingame", "Pause/Resume", delegate { }, System.Windows.Forms.Keys.Space);
             HotkeyManager.RegisterHotkey("Ingame", "Speed: Normal", delegate { }, System.Windows.Forms.Keys.D1);
             HotkeyManager.RegisterHotkey("Ingame", "Speed: Fast", delegate { }, System.Windows.Forms.Keys.D2);

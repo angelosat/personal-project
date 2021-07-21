@@ -92,7 +92,6 @@ namespace Start_a_Town_.UI
         string LastText = "";
         public override void Update()
         {
-
             var newToggled = this.IsToggledFunc();
             if (this.IsToggled != newToggled)
             {

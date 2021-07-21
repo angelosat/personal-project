@@ -106,15 +106,12 @@ namespace Start_a_Town_.UI
             this.ColumnLabels.Width = offset;
 
             if (this.ShowColumnLabels)
-            {
                 this.Controls.Add(this.ColumnLabels);
-            }
 
             this.ColumnLabels.Controls.AlignCenterHorizontally();
             this.BoxItems = new(offset + ScrollbarV.DefaultWidth, ItemHeight * this.MaxVisibleItems, (TObject item) =>
             {
-                var panel = new GroupBox() { BackgroundColor = this.ClientBoxColor };
-                panel.AutoSize = true;
+                var panel = new GroupBox() { BackgroundColor = Color.SlateGray * .2f };// this.ClientBoxColor };
                 panel.Tag = item;
                 var offset = 0;
                 Dictionary<object, Control> controls = new();
@@ -126,17 +123,18 @@ namespace Start_a_Town_.UI
                     offset += c.Width;
                     panel.AddControls(control);
                     controls.Add(c.Tag ?? c.Label, control);
-
                 }
                 panel.Size = new Rectangle(0, 0, this.ColumnLabels.Width, panel.Height);
                 panel.Controls.AlignCenterHorizontally();
 
                 this.Rows.Add(item, controls);
+                panel.AutoSize = false;
+
                 return panel;
             });
 
             if (this.ShowColumnLabels)
-                this.BoxItems.Location = this.ColumnLabels.BottomLeft + Vector2.UnitY; //spacing between column labels box and items box
+                this.BoxItems.Location = this.ColumnLabels.BottomLeft;// + Vector2.UnitY; //spacing between column labels box and items box
 
             this.AddItems(items.ToArray());
 

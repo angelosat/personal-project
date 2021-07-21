@@ -63,7 +63,7 @@ namespace Start_a_Town_.UI
             }
         }
 
-        public readonly Control DialogBlock = new DialogBlock();
+        public readonly DialogBlock DialogBlock = new DialogBlock();
 
         public static Rectangle Bounds => new Rectangle(0, 0, Width, Height);
         public static Vector2 Center => Game1.ScreenSize / (2 * Scale);
@@ -91,11 +91,11 @@ namespace Start_a_Town_.UI
         public Window ActiveWindow => this.ActiveControl?.GetWindow();
 
         public static readonly GuiLayer
-            LayerNameplates = new(),
-            LayerSpeechbubbles = new(),
-            LayerHud = new(),
-            LayerWindows = new(),
-            LayerDialog = new();
+            LayerNameplates = new("Nameplates"),
+            LayerSpeechbubbles = new("Speechbubbles"),
+            LayerHud = new("Hud"),
+            LayerWindows = new("Windows"),
+            LayerDialog = new("Dialog");
         readonly Dictionary<GuiLayer, List<Control>> _layers = new()
         {
             { LayerNameplates, new() },
@@ -769,6 +769,13 @@ namespace Start_a_Town_.UI
         public void Add(Element element)
         {
             var control = element as Control;
+
+            if(control.Layer == LayerDialog)
+            {
+                this.Layers[LayerDialog].Remove(this.DialogBlock);
+                this.Layers[LayerDialog].Add(this.DialogBlock);
+            }
+
             this.Layers[control.Layer].Add(control);
             if (!this.ControlsInMemory.Contains(control))
                 this.ControlsInMemory.Add(control);
@@ -776,6 +783,8 @@ namespace Start_a_Town_.UI
         public bool Remove(Element element)
         {
             var control = element as Control;
+            if (control.Layer == LayerDialog)
+                this.Layers[LayerDialog].Remove(this.DialogBlock);
             if (this.ControlsInMemory.Contains(control)) // TODO: why do i remove it immediately? maintain a fixed size buffer?
                 this.ControlsInMemory.Remove(control);
             return this.Layers[control.Layer].Remove(control);

@@ -61,6 +61,11 @@ namespace Start_a_Town_.UI
             this.Location = new Vector2(UIManager.Width - this.Width, UIManager.Height - this.Height) / 2;
             return this;
         }
+        internal Control AnchorToParentCenter()
+        {
+            this.LocationFunc = () => new Vector2(this.Parent.Width - this.Width , this.Parent.Height - this.Height) / 2 - this.Parent.ClientLocation;
+            return this;
+        }
         internal Control SetAnchor(Vector2 anchor)
         {
             this.Anchor = anchor;
@@ -167,7 +172,6 @@ namespace Start_a_Town_.UI
         public bool IsValidated => this.Valid;
         public virtual Control Invalidate(bool invalidateChildren = false)
         {
-
             this.Valid = false;
             if (invalidateChildren)
                 foreach (Control ctrl in this.Controls)
@@ -474,12 +478,6 @@ namespace Start_a_Town_.UI
         protected virtual void OnRightClick()
         {
         }
-        protected virtual void OnKeyPress(KeyPressEventArgs2 e)
-        {
-        }
-        protected virtual void OnKeyRelease(KeyPressEventArgs2 e)
-        {
-        }
         #endregion
 
         public bool IsTopMost => this.WindowManager.ActiveControl == this;
@@ -758,7 +756,7 @@ namespace Start_a_Town_.UI
             get
             {
                 int width = 0, height = 0;
-                foreach (Control control in this.Controls)
+                foreach (var control in this.Controls)
                 {
                     width = Math.Max(width, (int)control.TopLeft.X + control.Width - (int)control.Origin.X);
                     height = Math.Max(height, (int)control.TopLeft.Y + control.Height - (int)control.Origin.Y);

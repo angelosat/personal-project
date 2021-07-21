@@ -4,8 +4,8 @@ namespace Start_a_Town_.UI
 {
     public class DialogBlock : Control
     {
-        static DialogBlock _Instance;
-        static public DialogBlock Instance => _Instance ??= new DialogBlock();
+        //static DialogBlock _Instance;
+        //static public DialogBlock Instance => _Instance ??= new DialogBlock();
 
         public DialogBlock() { }
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
@@ -25,7 +25,10 @@ namespace Start_a_Town_.UI
                 return UIManager.Bounds;
             }
         }
-
+        public override void BringToFront()
+        {
+            base.BringToFront();
+        }
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);

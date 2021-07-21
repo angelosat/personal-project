@@ -19,10 +19,9 @@ namespace Start_a_Town_
         {
             Tools = new Stack<ControlTool>();
         }
-        internal ControlTool ToolManagement = new ToolManagement();
         internal ControlTool GetDefaultTool()
         {
-            return ToolManagement;// new ToolManagement();
+            return new ToolManagement();
         }
         ControlTool _ActiveTool;
         public ControlTool ActiveTool
@@ -39,7 +38,7 @@ namespace Start_a_Town_
                 if (_ActiveTool != null)
                 {
                     _ActiveTool.Manager = this;
-                    var net = Rooms.Ingame.CurrentMap.Net;
+                    var net = Ingame.CurrentMap.Net;
                     PacketPlayerToolSwitch.Send(net, net.GetPlayer().ID, _ActiveTool);
                 }
             }

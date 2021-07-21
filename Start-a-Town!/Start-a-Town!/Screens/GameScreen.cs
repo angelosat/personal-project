@@ -7,7 +7,7 @@ using Start_a_Town_.UI;
 using System.Windows.Forms;
 using UI;
 
-namespace Start_a_Town_.Rooms
+namespace Start_a_Town_
 {
     public abstract class GameScreen : IDisposable, IKeyEventHandler
     {

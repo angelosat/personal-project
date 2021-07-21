@@ -170,7 +170,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             var client = net as Client;
 
-            var ingame = Rooms.Ingame.Instance.Initialize(client);
+            var ingame = Ingame.Instance.Initialize(client);
 
             map.CameraRecenter(); // TODO: save camera position
             ScreenManager.Add(ingame); // TODO: find out why there's a freeze when ingame screen begins (and causing rendertargets during ingame.initialize() not work
@@ -200,7 +200,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return directory.GetFiles().OrderByDescending(s => s.CreationTime).ToArray();
         }
 
-        public override Rooms.GameScreen GetWorldSelectScreen(INetwork net)
+        public override GameScreen GetWorldSelectScreen(INetwork net)
         {
             throw new System.NotImplementedException();
         }

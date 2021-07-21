@@ -1413,7 +1413,7 @@ namespace Start_a_Town_
 
         internal bool HasFocus()
         {
-            return Rooms.Ingame.Instance.ToolManager.ActiveTool?.Target?.Object == this;
+            return Ingame.Instance.ToolManager.ActiveTool?.Target?.Object == this;
         }
 
         internal void Sync(INetwork net)

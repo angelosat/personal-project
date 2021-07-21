@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
-using Start_a_Town_.Rooms;
 
 namespace Start_a_Town_.UI
 {

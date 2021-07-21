@@ -141,7 +141,7 @@ namespace Start_a_Town_.UI
         }
         internal static void SelectAllVisible(ItemDef def)
         {
-            var objects = Rooms.Ingame.Instance.Scene.ObjectsDrawn.Where(i => i.Def == def).Select(o => new TargetArgs(o));
+            var objects = Ingame.Instance.Scene.ObjectsDrawn.Where(i => i.Def == def).Select(o => new TargetArgs(o));
             Refresh(objects);
         }
         internal static void AddToSelection(IEnumerable<GameObject> targets)

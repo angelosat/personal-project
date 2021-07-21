@@ -232,7 +232,7 @@ namespace Start_a_Town_
                     () =>
                     {
                         UISelectedInfo.Refresh(t);
-                        global::Start_a_Town_.Rooms.Ingame.Instance.Camera.CenterOn(t.Global);
+                        Ingame.Instance.Camera.CenterOn(t.Global);
                     }));
            
 

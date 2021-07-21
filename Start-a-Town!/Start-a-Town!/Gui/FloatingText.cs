@@ -29,7 +29,7 @@ namespace Start_a_Town_.UI
         }
         static public void Create(MapBase map, Func<Vector3> global, string text, Action<FloatingText> initializer = null)
         {
-            if (Rooms.Ingame.Net != map.Net)
+            if (Ingame.Net != map.Net)
                 return;
             var ft = new FloatingText(global, text);
             ft.Font = UIManager.FontBold;

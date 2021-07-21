@@ -5,6 +5,18 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
+    interface IHotkey
+    {
+        System.Windows.Forms.Keys[] Keys { get; }
+    }
+    public class HotkeyContext
+    {
+        public string Name;
+        public HotkeyContext(string name)
+        {
+            this.Name = name;
+        }
+    }
     class HotkeyManager : GameSettings
     {
         static readonly HashSet<Hotkey> Hotkeys = new();
@@ -12,12 +24,17 @@ namespace Start_a_Town_
         internal override GroupBox Gui => this._gui ??= this.CreateGui();
         readonly Lazy<WindowInputKey> EnterKeyGui = new();
 
-        public static void RegisterHotkey(string category, string label, Action action, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
+        public static IHotkey RegisterHotkey(HotkeyContext context, string label, Action action, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
         {
-            var hotkey = new Hotkey(category, label, action, key1, key2);
+            var hotkey = new Hotkey(context, label, action, key1, key2);
             Hotkeys.Add(hotkey);
+            return hotkey;
         }
-
+        public static void PerformHotkey(HotkeyContext context, System.Windows.Forms.Keys key)
+        {
+            var hotkey = Hotkeys.FirstOrDefault(h => h.Context == context && h.Keys.Contains(key));
+            hotkey?.Action();
+        }
         internal override void Apply()
         {
             throw new NotImplementedException();
@@ -26,10 +43,10 @@ namespace Start_a_Town_
         GroupBox CreateGui()
         {
             var box = new GroupBox() { Name = "Hotkeys" };
-            var byCategory = Hotkeys.GroupBy(h => h.Category);
-            box.AddControlsVertically(1, byCategory.Select(cat =>
+            var byContext = Hotkeys.GroupBy(h => h.Context);
+            box.AddControlsVertically(1, byContext.Select(cat =>
                 new TableScrollableCompactNewNew<Hotkey>(cat.Count(), true)
-                    .AddColumn(null, cat.Key, 96, h => h.Label.ToLabel())
+                    .AddColumn(null, cat.Key.Name, 96, h => h.Label.ToLabel())
                     .AddColumn(null, "Primary", 64, h => new Label(() => $"{h.Key1}", delegate { editHotkey(h, 0); }))
                     .AddColumn(null, "Secondary", 64, h => new Label(() => $"{h.Key2}", delegate { editHotkey(h, 1); }))
                     .AddItems(cat)).ToArray());
@@ -41,7 +58,7 @@ namespace Start_a_Town_
                         hk.Key1 = 0;
                     else if (hk.Key2 == key)
                         hk.Key2 = 0;
-                hotkey.Keys[keyIndex] = key;
+                hotkey._keys[keyIndex] = key;
             }
 
             void editHotkey(Hotkey h, int index)
@@ -49,25 +66,26 @@ namespace Start_a_Town_
                 this.EnterKeyGui.Value.EditHotkey(h.Label, key => setHotkey(h, index, key));
             }
         }
-        class Hotkey
+        class Hotkey : IHotkey
         {
             public readonly Action Action;
             public readonly string Label;
-            public readonly string Category;
-            public readonly System.Windows.Forms.Keys[] Keys = new System.Windows.Forms.Keys[2];
+            public readonly HotkeyContext Context;
+            public readonly System.Windows.Forms.Keys[] _keys = new System.Windows.Forms.Keys[2];
+            public System.Windows.Forms.Keys[] Keys => this._keys;
             public System.Windows.Forms.Keys Key1
             {
-                get => this.Keys[0];
-                set => this.Keys[0] = value;
+                get => this._keys[0];
+                set => this._keys[0] = value;
             }
             public System.Windows.Forms.Keys Key2
             {
-                get => this.Keys[1];
-                set => this.Keys[1] = value;
+                get => this._keys[1];
+                set => this._keys[1] = value;
             }
-            public Hotkey(string category, string label, Action action, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
+            public Hotkey(HotkeyContext context, string label, Action action, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
             {
-                this.Category = category;
+                this.Context = context;
                 this.Label = label;
                 this.Action = action;
                 this.Key1 = key1;

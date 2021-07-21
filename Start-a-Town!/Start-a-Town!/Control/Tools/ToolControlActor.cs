@@ -99,7 +99,7 @@ namespace Start_a_Town_
             if (e.KeyCode == System.Windows.Forms.Keys.M)
             {
                 this.MouseMove = !this.MouseMove;
-                Rooms.Ingame.Instance.Hud.Chat.Write("Mouse move " + (this.MouseMove ? "Enabled" : "Disabled"));
+                Ingame.Instance.Hud.Chat.Write("Mouse move " + (this.MouseMove ? "Enabled" : "Disabled"));
             }
 
             base.HandleKeyUp(e);
@@ -151,7 +151,7 @@ namespace Start_a_Town_
             }
             if (xx != 0 || yy != 0)
             {
-                var cam = Rooms.Ingame.CurrentMap.Camera;
+                var cam = Ingame.CurrentMap.Camera;
                 double rx, ry;
                 double cos = Math.Cos((-cam.Rotation) * Math.PI / 2f);
                 double sin = Math.Sin((-cam.Rotation) * Math.PI / 2f);

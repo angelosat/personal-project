@@ -834,7 +834,7 @@ namespace Start_a_Town_
             }
         }
 
-        public bool IsActive => Rooms.Ingame.CurrentMap == this;
+        public bool IsActive => Ingame.CurrentMap == this;
         public bool IsAboveHeightMap(IntVec3 global)
         {
             return this.IsAboveHeightMap((Vector3)global);

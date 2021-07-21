@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Start_a_Town_.UI;
-using Start_a_Town_.Rooms;
 using Start_a_Town_.Net;
 using Start_a_Town_.Animations;
 

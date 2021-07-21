@@ -55,7 +55,7 @@ namespace Start_a_Town_
         public virtual void Update()
         {
             var cam = Client.Instance.Map.Camera;
-            cam.MousePicking(Rooms.Ingame.DrawServer ? Server.Instance.Map : Client.Instance.Map);
+            cam.MousePicking(Ingame.DrawServer ? Server.Instance.Map : Client.Instance.Map);
 
             UpdateTarget();
 

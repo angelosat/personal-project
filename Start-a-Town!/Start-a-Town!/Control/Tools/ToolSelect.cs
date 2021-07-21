@@ -36,7 +36,7 @@ namespace Start_a_Town_
         {
             var cam = Engine.Map.Camera;
 
-            cam.MousePicking(Rooms.Ingame.DrawServer ? Server.Instance.Map : Client.Instance.Map);
+            cam.MousePicking(Ingame.DrawServer ? Server.Instance.Map : Client.Instance.Map);
             this.UpdateTarget();
 
             if (Controller.TargetCell != null)

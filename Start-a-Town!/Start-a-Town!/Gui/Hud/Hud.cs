@@ -101,10 +101,10 @@ namespace Start_a_Town_
             GameModes.GameMode.Current.OnIngameMenuCreated(this.IngameMenu);
 
             this.ZLevelDrawBar = new ScrollbarVNew(MapBase.MaxHeight, MapBase.MaxHeight, 1, 16, 1,
-                 () => MapBase.MaxHeight - Rooms.Ingame.GetMap().Camera.DrawLevel,
+                 () => MapBase.MaxHeight - Ingame.GetMap().Camera.DrawLevel,
                  () => 1 / (float)MapBase.MaxHeight,
-                 () => Rooms.Ingame.GetMap().Camera.DrawLevel / MapBase.MaxHeight,
-                 v => Rooms.Ingame.GetMap().Camera.DrawLevel = MapBase.MaxHeight - v);
+                 () => Ingame.GetMap().Camera.DrawLevel / MapBase.MaxHeight,
+                 v => Ingame.GetMap().Camera.DrawLevel = MapBase.MaxHeight - v);
 
             this.ZLevelDrawBar.Location = this.ZLevelDrawBar.RightCenterScreen;
 

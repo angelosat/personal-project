@@ -34,8 +34,8 @@ namespace Start_a_Town_
         public override void Update()
         {
             this.Selection = this.Begin.GetRectangle(UIManager.Mouse);
-            var cam = Rooms.Ingame.CurrentMap.Camera;
-            this.CurrentSelected = Rooms.Ingame.Instance.Scene.ObjectsDrawn.Where(o => o.GetScreenBounds(cam).Intersects(this.Selection)).ToList();
+            var cam = Ingame.CurrentMap.Camera;
+            this.CurrentSelected = Ingame.Instance.Scene.ObjectsDrawn.Where(o => o.GetScreenBounds(cam).Intersects(this.Selection)).ToList();
         }
 
         public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)

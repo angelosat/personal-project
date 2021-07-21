@@ -30,14 +30,20 @@ namespace Start_a_Town_
         static readonly Lazy<GuiConstructionsBrowser> WindowBuild = new();
         static ConstructionsManager()
         {
-            HotkeyManager.RegisterHotkey("Town", "Build", () => WindowBuild.Value.Toggle(), System.Windows.Forms.Keys.B);
-            HotkeyManager.RegisterHotkey("Town", "Toggle Forbidden", delegate { }, System.Windows.Forms.Keys.F);
-            HotkeyManager.RegisterHotkey("Ingame", "Pause/Resume", delegate { }, System.Windows.Forms.Keys.Space);
-            HotkeyManager.RegisterHotkey("Ingame", "Speed: Normal", delegate { }, System.Windows.Forms.Keys.D1);
-            HotkeyManager.RegisterHotkey("Ingame", "Speed: Fast", delegate { }, System.Windows.Forms.Keys.D2);
-            HotkeyManager.RegisterHotkey("Ingame", "Speed: Faster", delegate { }, System.Windows.Forms.Keys.D3);
-
+            // there are here temporarily for testing purposes
+            HotkeyManager.RegisterHotkey(Town.HotkeyContext, "Build", ToggleConstructionWindow, System.Windows.Forms.Keys.B);
+            HotkeyManager.RegisterHotkey(Town.HotkeyContext, "Toggle Forbidden", delegate { }, System.Windows.Forms.Keys.F);
+            HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Pause/Resume", delegate { }, System.Windows.Forms.Keys.Space);
+            HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Speed: Normal", delegate { }, System.Windows.Forms.Keys.D1);
+            HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Speed: Fast", delegate { }, System.Windows.Forms.Keys.D2);
+            HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Speed: Faster", delegate { }, System.Windows.Forms.Keys.D3);
         }
+
+        private static void ToggleConstructionWindow()
+        {
+            WindowBuild.Value.Toggle();
+        }
+
         public ConstructionsManager(Town town)
         {
             this.Town = town;

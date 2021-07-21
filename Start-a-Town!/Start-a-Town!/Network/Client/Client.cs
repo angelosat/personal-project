@@ -108,7 +108,7 @@ namespace Start_a_Town_.Net
 
             Instance.NetworkObjects.Clear();
             ScreenManager.GameScreens.Clear();
-            ScreenManager.Add(Rooms.MainScreen.Instance);
+            ScreenManager.Add(MainScreen.Instance);
             this.EventOccured(Message.Types.ServerNoResponse);
             this.ClientClock = new TimeSpan();
 
@@ -429,7 +429,7 @@ namespace Start_a_Town_.Net
                 case PacketType.SetSaving:
                     var val = r.ReadBoolean();
                     IsSaving = val;
-                    Rooms.Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, "Map saved");
+                    Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, "Map saved");
                     break;
 
                 default:
@@ -588,7 +588,7 @@ namespace Start_a_Town_.Net
         private void SetSaving(bool val)
         {
             IsSaving = val;
-            Rooms.Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, IsSaving ? "Saving..." : "Map saved");
+            Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, IsSaving ? "Saving..." : "Map saved");
         }
 
         private void SyncTime(double serverMS)
@@ -1145,13 +1145,13 @@ namespace Start_a_Town_.Net
             this.GetPlayer(playerID).SuggestedSpeed = playerSpeed;
             var newspeed = this.Players.GetLowestSpeed();
             if (newspeed != this.Speed)
-                Rooms.Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, string.Format("Speed set to {0}x ({1})", newspeed, string.Join(", ", this.Players.GetList().Where(p => p.SuggestedSpeed == newspeed).Select(p => p.Name))));
+                Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, string.Format("Speed set to {0}x ({1})", newspeed, string.Join(", ", this.Players.GetList().Where(p => p.SuggestedSpeed == newspeed).Select(p => p.Name))));
             this.Speed = newspeed;
         }
 
         public void Write(string text)
         {
-            Rooms.Ingame.Instance.Hud.Chat.Write(text);
+            Ingame.Instance.Hud.Chat.Write(text);
         }
 
         public void Report(string text)

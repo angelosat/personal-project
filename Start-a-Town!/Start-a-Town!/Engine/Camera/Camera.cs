@@ -22,7 +22,7 @@ namespace Start_a_Town_
             set
             {
                 this._HideUnknownBlocks = value;
-                Rooms.Ingame.CurrentMap.InvalidateChunks();
+                Ingame.CurrentMap.InvalidateChunks();
                 this.TopSliceChanged = true;
             }
         }
@@ -33,7 +33,7 @@ namespace Start_a_Town_
             set
             {
                 this._DrawTopSlice = value;
-                Rooms.Ingame.CurrentMap.InvalidateChunks();
+                Ingame.CurrentMap.InvalidateChunks();
             }
         }
         public bool DrawZones = true;
@@ -156,7 +156,7 @@ namespace Start_a_Town_
 
         protected void OnRotationChanged()
         {
-            foreach (var chunk in Rooms.Ingame.CurrentMap.GetActiveChunks())
+            foreach (var chunk in Ingame.CurrentMap.GetActiveChunks())
             {
                 chunk.Value.OnCameraRotated(this);
                 chunk.Value.Invalidate();

@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 using Start_a_Town_.AI;
-using Start_a_Town_.Towns.Farming;
 using Start_a_Town_.Towns.Digging;
 using Start_a_Town_.Towns.Crafting;
-using Start_a_Town_.Towns.Constructions;
 using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 
@@ -18,7 +15,7 @@ namespace Start_a_Town_
     public partial class Town
     {
         UIQuickMenu QuickMenu;
-
+        public static HotkeyContext HotkeyContext = new("Town");
         internal void OnTooltipCreated(Control tooltip, TargetArgs targetArgs)
         {
             foreach (var c in this.TownComponents)
@@ -157,6 +154,7 @@ namespace Start_a_Town_
             entity.Net.Log.Write(string.Format("{0} has joined the town!", entity.Name));
             this.Map.EventOccured(Message.Types.NpcsUpdated);
         }
+
         private void RemoveAgent(GameObject entity)
         {
             if (entity.HasComponent<AIComponent>())

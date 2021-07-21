@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Rooms
+namespace Start_a_Town_
 {
     class MainScreen : GameScreen
     {

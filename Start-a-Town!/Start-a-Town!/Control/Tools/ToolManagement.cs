@@ -30,7 +30,7 @@ namespace Start_a_Town_
 
         public override void Update()
         {
-            var map = Rooms.Ingame.GetMap();
+            var map = Ingame.GetMap();
             var cam = map.Camera;
             cam.MousePicking(map);
             this.UpdateTargetNew();
@@ -97,7 +97,7 @@ namespace Start_a_Town_
         {
             var currentMouse = UIManager.Mouse;
             var delta = currentMouse - this.MouseScrollOrigin;
-            var map = Rooms.Ingame.GetMap();
+            var map = Ingame.GetMap();
             var cam = map.Camera;
             cam.Move(this.CameraCoordinatesOrigin - delta / cam.Zoom);
         }
@@ -124,7 +124,7 @@ namespace Start_a_Town_
             }
             if (xx != 0 || yy != 0)
             {
-                var cam = Rooms.Ingame.CurrentMap.Camera;
+                var cam = Ingame.CurrentMap.Camera;
 
                 double rx, ry;
                 double cos = Math.Cos((-cam.Rotation) * Math.PI / 2f);
@@ -170,10 +170,11 @@ namespace Start_a_Town_
                     break;
 
                 default:
+                    HotkeyManager.PerformHotkey(Town.HotkeyContext, e.KeyCode);
                     break;
             }
 
-            if (e.KeyCode == GlobalVars.KeyBindings.North || e.KeyCode == System.Windows.Forms.Keys.Up)
+            if (e.KeyCode == GlobalVars.KeyBindings.North || e.KeyCode == Keys.Up)
             {
                 e.Handled = true;
                 this.Up = true;
@@ -229,7 +230,7 @@ namespace Start_a_Town_
         public override void HandleMouseWheel(HandledMouseEventArgs e)
         {
             base.HandleMouseWheel(e);
-            var map = Rooms.Ingame.GetMap();
+            var map = Ingame.GetMap();
             var cam = map.Camera;
             if (InputState.IsKeyDown(System.Windows.Forms.Keys.LControlKey))
             {
@@ -278,7 +279,7 @@ namespace Start_a_Town_
                 this.MouseMiddleTimestamp = DateTime.Now;
             this.ScrollingMode = this.MouseDrag;
             this.MouseScrollOrigin = UIManager.Mouse;
-            var map = Rooms.Ingame.GetMap();
+            var map = Ingame.GetMap();
             var cam = map.Camera;
             this.CameraCoordinatesOrigin = cam.Coordinates;
             return Messages.Default;
@@ -303,7 +304,7 @@ namespace Start_a_Town_
                 return Messages.Default;
 
             if (!this.TryShowForceTaskGUI(this.Target))
-                Rooms.Ingame.CurrentMap.Town.ToggleQuickMenu();
+                Ingame.CurrentMap.Town.ToggleQuickMenu();
 
             e.Handled = true;
             return Messages.Default;
@@ -313,7 +314,7 @@ namespace Start_a_Town_
             return Messages.Default;
         }
 
-        public override void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
+        public override void HandleLButtonDoubleClick(HandledMouseEventArgs e)
         {
             if (this.Target != null)
             {
@@ -329,7 +330,7 @@ namespace Start_a_Town_
                             if (a == b)
                                 UISelectedInfo.Refresh(this.Target);
                             else
-                                UISelectedInfo.Refresh(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Rooms.Ingame.GetMap(), t)));
+                                UISelectedInfo.Refresh(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Ingame.GetMap(), t)));
                         }));
             }
             this.DblClicked = true;

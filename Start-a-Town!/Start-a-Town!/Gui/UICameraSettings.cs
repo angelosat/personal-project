@@ -9,7 +9,7 @@ namespace Start_a_Town_.UI
         CheckBoxNew Chk_HideWalls, Chk_HideTerrain, Chk_BlockOutlines, Chk_Fog, Chk_Unknown, Chk_TopSlice, Chk_Designations;
         Camera GetCamera()
         {
-            return Rooms.Ingame.GetMap().Camera;
+            return Ingame.GetMap().Camera;
         }
         public UICameraSettings(Camera camera)
         {
@@ -27,7 +27,7 @@ namespace Start_a_Town_.UI
             Chk_Unknown = new CheckBoxNew("Hide blocks", this.GetCamera().HideUnknownBlocks) {HoverText = "Toggles blocks not exposed to air being drawn as unknown blocks", Location = Chk_Fog.BottomLeft, LeftClickAction = () => this.GetCamera().HideUnknownBlocks = !this.GetCamera().HideUnknownBlocks };
             Chk_TopSlice = new CheckBoxNew("Map boundaries", this.Camera.DrawTopSlice) { HoverText = "Draws blocks at the boundaries of the map", Location = Chk_Unknown.BottomLeft, LeftClickAction = () => this.Camera.DrawTopSlice = !this.Camera.DrawTopSlice };
             Chk_Designations = new CheckBoxNew("Designations", this.Camera.DrawZones) { HoverText = "Toggles drawing of designated zones", Location = Chk_TopSlice.BottomLeft, LeftClickAction = () => this.Camera.DrawZones = !this.Camera.DrawZones };
-            var chk_Nameplates = new CheckBoxNew("Nameplates") { IsToggledFunc = () => Rooms.Ingame.Instance.NameplateManager.NameplatesEnabled, HoverText = "Toggles entity nameplates", LeftClickAction = () => Rooms.Ingame.Instance.NameplateManager.ToggleNameplates() };
+            var chk_Nameplates = new CheckBoxNew("Nameplates") { IsToggledFunc = () => Ingame.Instance.NameplateManager.NameplatesEnabled, HoverText = "Toggles entity nameplates", LeftClickAction = () => Ingame.Instance.NameplateManager.ToggleNameplates() };
             var rooms = new CheckBoxNew("Rooms") { TickedFunc = () => Engine.DrawRooms, LeftClickAction = () => Engine.DrawRooms = !Engine.DrawRooms };
 
             this.AddControlsVertically(Chk_HideWalls,

@@ -5,10 +5,11 @@ using Start_a_Town_.UI;
 using Start_a_Town_.GameModes;
 using Start_a_Town_.Net;
 
-namespace Start_a_Town_.Rooms
+namespace Start_a_Town_
 {
     class Ingame : GameScreen
     {
+        public static HotkeyContext HotkeyContext = new("Ingame");
         static Ingame _Instance;
         static public Ingame Instance => _Instance ??= new Ingame();
             

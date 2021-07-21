@@ -27,18 +27,12 @@ namespace Start_a_Town_.UI
                 if (this._Closable != oldClosable)
                 {
                     if (this._Closable)
-                    {
                         this.Controls.Add(this.CloseButton);
-                    }
                     else
-                    {
                         this.Controls.Remove(this.CloseButton);
-                    }
 
                     if (this.AutoSize)
-                    {
                         this.ClientSize = this.PreferredClientSize;
-                    }
                 }
             }
         }
@@ -62,7 +56,7 @@ namespace Start_a_Town_.UI
         }
         public Label Label_Title;
         public GroupBox Client;
-        protected UICloseButton CloseButton;
+        protected IconButton CloseButton;
         protected override void OnClientSizeChanged()
         {
             this.Size = new Rectangle(0, 0, this.ClientSize.Width + 2 * UIManager.BorderPx, this.ClientSize.Height + 2 * UIManager.BorderPx + (int)UIManager.Font.MeasureString(this.Title).Y);
@@ -117,8 +111,8 @@ namespace Start_a_Town_.UI
             this.Color = UIManager.Tint;
             this.ClientLocation = new Vector2(UIManager.BorderPx, UIManager.BorderPx);
             this.Client = new GroupBox() { Name = "Window client area", MouseThrough = true, Size = ClientSize, Location = new Vector2(0, Label.DefaultHeight) };
-            this.CloseButton = new UICloseButton();
-            this.CloseButton.Location = new Vector2(this.Width - 16 - UIManager.BorderPx - this.ClientLocation.X, UIManager.BorderPx - this.ClientLocation.Y);
+            this.CloseButton = IconButton.CreateCloseButton();
+            this.CloseButton.LocationFunc = () => new Vector2(this.Width - this.CloseButton.Width - UIManager.BorderPx - this.ClientLocation.X, UIManager.BorderPx - this.ClientLocation.Y);
             this.CloseButton.LeftClickAction = () => this.Hide();
             this.Label_Title = new Label() { Font = UIManager.FontBold, MouseThrough = true };
             this.Label_Title.MouseLBActionOld = this.StartDragging;
@@ -232,26 +226,15 @@ namespace Start_a_Town_.UI
                 }
 
             }
-            this.Controls.Remove(this.CloseButton);
             this.ClientSize = this.PreferredClientSize;
-            if (this._Closable)
-            {
-                this.Controls.Add(this.CloseButton);
-                this.CloseButton.Location.X = Math.Max(this.CloseButton.Location.X, this.Label_Title.Right);
-            }
-
         }
 
         public override Vector2 Dimensions
         {
-            get
-            {
-                return base.Dimensions;
-            }
+            get => base.Dimensions;
             set
             {
                 base.Dimensions = value;
-
                 this.Client.Dimensions = new Vector2(this.Width, this.Height) - new Vector2(UIManager.BorderPx * 2) - new Vector2(0, (int)UIManager.Font.MeasureString(this.Title).Y);
             }
         }
@@ -298,21 +281,14 @@ namespace Start_a_Town_.UI
             get
             {
                 int width = 0;
-                foreach (Control control in this.Controls)
-                {
-                    width = Math.Max(width, (int)control.Location.X + control.Width - (int)control.Origin.X);
-                }
-
                 int height = 0;
-                foreach (Control control in this.Client.Controls)
+                foreach (var control in this.Client.Controls)
                 {
-                    if (control != this.CloseButton)
-                    {
-                        width = Math.Max(width, (int)control.Location.X + control.Width - (int)control.Origin.X);
-                        height = Math.Max(height, (int)control.Location.Y + control.Height - (int)control.Origin.Y);
-                    }
+                    //width = Math.Max(width, (int)control.Location.X + control.Width - (int)control.Origin.X);
+                    //height = Math.Max(height, (int)control.Location.Y + control.Height - (int)control.Origin.Y);
+                    width = Math.Max(width, (int)control.TopLeft.X + control.Width - (int)control.Origin.X);
+                    height = Math.Max(height, (int)control.TopLeft.Y + control.Height - (int)control.Origin.Y);
                 }
-                this.CloseButton.Location = new Vector2(this.Width - 16 - UIManager.BorderPx - this.ClientLocation.X, UIManager.BorderPx - this.ClientLocation.Y);
                 return new Rectangle(0, 0, width, height);
             }
         }

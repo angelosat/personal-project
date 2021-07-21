@@ -1,33 +1,33 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using Start_a_Town_.UI;
 
-namespace Start_a_Town_.UI
+namespace Start_a_Town_
 {
     class SettingsWindow : Window
     {
         static SettingsWindow _Instance;
         static public SettingsWindow Instance => _Instance ??= new SettingsWindow();
 
-        Panel Panel;
-
         readonly GraphicsSettings GraphicSettings;
         readonly VideoSettings VideoSettings;
         readonly InterfaceSettings InterfaceSettings;
         readonly CameraSettings CameraSettings;
         readonly HotkeyManager Hotkeys;
-
-        List<GameSettings> AllSettings;
+        readonly List<GameSettings> AllSettings;
 
         SettingsWindow()
         {
             this.Title = "Settings";
             this.AutoSize = true;
 
+            GroupBox selectedSettings = null;
+
             var size = 400;
-            this.Panel = new();
-            this.Panel.ClientSize = new Rectangle(0, 0, size, size / 2);
-            this.Panel.ConformToClientSize();
+            var panel = new PanelLabeledNew(() => selectedSettings?.Name) { AutoSize = false };
+            panel.ClientSize = new Rectangle(0, 0, size, size / 2);
+            panel.ConformToClientSize();
 
             this.InterfaceSettings = new InterfaceSettings();
             this.CameraSettings = new CameraSettings();
@@ -36,17 +36,16 @@ namespace Start_a_Town_.UI
             this.Hotkeys = new HotkeyManager();
 
             this.AllSettings = new List<GameSettings>() { this.CameraSettings, GraphicSettings, this.VideoSettings, this.InterfaceSettings, this.Hotkeys };
-            var tabs = UIHelper.Wrap(this.AllSettings.Select(tab => new Button(tab.Gui.Name, () => selectTab(tab.Gui))));//, size);
+            var tabs = UIHelper.Wrap(this.AllSettings.Select(tab => new Button(tab.Gui.Name, () => selectTab(tab.Gui))), size);
 
             selectTab(this.CameraSettings.Gui);
             
             Button ok = new("Apply", apply, 50);
-            Button cancel = new("Cancel", () => this.Hide(), 50);// { Location = ok.TopRight };
+            Button cancel = new("Cancel", () => this.Hide(), 50);
 
-            this.Client.AddControlsVertically(//0, HorizontalAlignment.Right,
+            this.Client.AddControlsVertically(0, HorizontalAlignment.Right,
                 tabs.ToPanel(),
-                this.Panel,
-                //UIHelper.Wrap(this.Panel.ClientSize.Width, ok, cancel));
+                panel,
                 UIHelper.Wrap(ok, cancel));
 
             this.AnchorToScreenCenter();
@@ -59,8 +58,9 @@ namespace Start_a_Town_.UI
 
             void selectTab(GroupBox tab)
             {
-                this.Panel.Controls.Clear();
-                this.Panel.Controls.Add(tab);
+                selectedSettings = tab;
+                panel.Client.Controls.Clear();
+                panel.Client.Controls.Add(tab);
             }
         }
     }

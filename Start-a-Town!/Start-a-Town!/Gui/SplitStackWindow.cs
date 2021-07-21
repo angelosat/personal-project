@@ -26,7 +26,7 @@ namespace Start_a_Town_.UI
 
             this.Title = "Split";
 
-            float w = Math.Max(70, TitleLocation.X + UIManager.Font.MeasureString(this.Title).X + this.CloseButton.Width);
+            float w = Math.Max(70, TitleLocation.X + UIManager.Font.MeasureString(this.Title).X);
             this.Txt_Amount = new TextBox(Vector2.Zero, new Vector2(w, Label.DefaultHeight));
             this.Txt_Amount.Text = "1";
             this.Txt_Amount.TextEntered += new EventHandler<TextEventArgs>(this.Txt_Amount_TextEntered);
@@ -66,7 +66,7 @@ namespace Start_a_Town_.UI
             this.Copy = new GameObjectSlot(slotTarget.Slot.Object, slotTarget.Slot.StackSize);
 
             this.Title = slotTarget.Slot.ToString();
-            int w = (int)Math.Max(70, TitleLocation.X + UIManager.Font.MeasureString(this.Title).X + this.CloseButton.Width);
+            int w = (int)Math.Max(70, TitleLocation.X + UIManager.Font.MeasureString(this.Title).X);
             int amount = (int)(slotTarget.Slot.StackSize / 2f);
             this.Txt_Amount.Width = w;
             //Txt_Amount.Text = amount.ToString();//"1";

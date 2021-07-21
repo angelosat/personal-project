@@ -141,7 +141,11 @@ namespace Start_a_Town_.UI
             }
         }
 
-        public override Vector2 Dimensions { get => base.Dimensions; set { base.Dimensions = value; this.OnSizeChanged(); } }
+        public override Vector2 Dimensions 
+        { 
+            get => base.Dimensions; 
+            set => base.Dimensions = value; 
+        }
         float _opacity = 1;
         public virtual float Opacity
         {
@@ -619,7 +623,6 @@ namespace Start_a_Town_.UI
                 }
                 this.Invalidate();
                 this.OnClientSizeChanged();
-                this.OnSizeChanged();
             }
         }
         protected virtual void OnClientSizeChanged() { }
@@ -666,13 +669,11 @@ namespace Start_a_Town_.UI
             get => new Rectangle(0, 0, this.Width, this.Height);
             set
             {
-                var oldheight = this.Height;
                 this.Width = value.Width;
                 this.Height = value.Height;
                 var border = this.BackgroundStyle != null ? this.BackgroundStyle.Border : 0;
                 this._ClientSize.Width = this.Width - 2 * border;
                 this._ClientSize.Height = this.Height - 2 * border;
-                this.OnSizeChanged();
             }
         }
         internal void ConformToControls()
@@ -694,12 +695,7 @@ namespace Start_a_Town_.UI
 
             this.ClientSize = union;
         }
-        public event EventHandler<EventArgs> SizeChanged;
-        protected virtual void OnSizeChanged()
-        {
-            SizeChanged?.Invoke(this, EventArgs.Empty);
-        }
-
+       
         public virtual bool AutoSize { get; set; }
 
         internal virtual void OnControlAdded(Control control)

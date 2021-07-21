@@ -1087,7 +1087,6 @@
     <Compile Include="Gui\Primitives\Buttons\Button.cs" />
     <Compile Include="Gui\UIManager.cs" />
     <Compile Include="Gui\Primitives\Window.cs" />
-    <Compile Include="Gui\UICloseButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

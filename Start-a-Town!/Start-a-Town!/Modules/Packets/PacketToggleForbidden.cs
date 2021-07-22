@@ -18,7 +18,7 @@ namespace Start_a_Town_
             w.Write(p);
             w.Write(instanceID);
         }
-        static public void Receive(INetwork net, BinaryReader r)
+        static void Receive(INetwork net, BinaryReader r)
         {
             var list = r.ReadListInt();
             foreach (var id in list)

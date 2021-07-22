@@ -33,7 +33,7 @@ namespace Start_a_Town_
 
             static void handleConflicts(Hotkey newHotkey, bool overwrite)
             {
-                foreach (var h in Hotkeys)
+                foreach (var h in Hotkeys.Where(hk=>hk.Context == newHotkey.Context))
                 {
                     if (h.Keys.Contains(newHotkey.Key1))
                     {

@@ -9,12 +9,11 @@ namespace Start_a_Town_
 {
     class Ingame : GameScreen
     {
-        public static HotkeyContext HotkeyContext = new("Ingame");
         static Ingame _Instance;
-        static public Ingame Instance => _Instance ??= new Ingame();
+        static public Ingame Instance => _Instance ??= new();
             
         public NotificationArea NotificationArea;
-        public NameplateManager NameplateManager = new NameplateManager();
+        public NameplateManager NameplateManager = new();
 
         bool HideInterface = false;
         public SceneState Scene = new();

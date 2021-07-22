@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace Start_a_Town_
 {
+    [EnsureInit]
     public class ToolManagement : DefaultTool
     {
         bool Up, Down, Left, Right;
@@ -16,7 +17,15 @@ namespace Start_a_Town_
         Vector2 MouseScrollOrigin;
         Vector2 CameraCoordinatesOrigin;
         Action ScrollingMode;
-
+        static readonly HotkeyContext HotkeyContext = new("Management");
+        static ToolManagement()
+        {
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Pause/Resume", PauseResume, Keys.Space);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Normal", delegate { SetSpeed(1); }, Keys.D1);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Fast", delegate { SetSpeed(2); }, Keys.D2);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Faster", delegate { SetSpeed(3); }, Keys.D3);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle Forbidden", delegate { }, Keys.F);
+        }
         public ToolManagement()
         {
         }
@@ -59,14 +68,20 @@ namespace Start_a_Town_
         }
         protected virtual void OnUpdate() { }
 
-        int LastSpeed = 1;
+        static int LastSpeed = 1;
         internal override void Jump()
         {
-            int nextSpeed = Client.Instance.Speed == 0 ? this.LastSpeed : 0;
+            PauseResume();
+        }
+
+        static void PauseResume()
+        {
+            int nextSpeed = Client.Instance.Speed == 0 ? LastSpeed : 0;
             if (Client.Instance.Speed != 0)
-                this.LastSpeed = Client.Instance.Speed;
+                LastSpeed = Client.Instance.Speed;
             PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, nextSpeed);
         }
+
         private void SelectEntity(TargetArgs target)
         {
             if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
@@ -146,34 +161,8 @@ namespace Start_a_Town_
         {
             if (e.Handled)
                 return;
-
-            switch (e.KeyCode)
-            {
-                case Keys.D1:
-                    PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 1);
-                    e.Handled = true;
-                    break;
-
-                case Keys.D2:
-                    PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 2);
-                    e.Handled = true;
-                    break;
-
-                case Keys.D3:
-                    PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, 3);
-                    e.Handled = true;
-                    break;
-
-                case Keys.F7:
-                    Engine.DrawRegions = !Engine.DrawRegions;
-                    e.Handled = true;
-                    break;
-
-                default:
-                    HotkeyManager.PerformHotkey(Town.HotkeyContext, e.KeyCode);
-                    break;
-            }
-
+            HotkeyManager.PerformHotkey(HotkeyContext, e.KeyCode);
+        
             if (e.KeyCode == GlobalVars.KeyBindings.North || e.KeyCode == Keys.Up)
             {
                 e.Handled = true;
@@ -201,6 +190,13 @@ namespace Start_a_Town_
                 e.Handled = true;
             }
         }
+
+
+        private static void SetSpeed(int value)
+        {
+            PacketPlayerSetSpeed.Send(Client.Instance, Client.Instance.PlayerData.ID, value);
+        }
+
         public override void HandleKeyUp(KeyEventArgs e)
         {
             if (e.Handled)

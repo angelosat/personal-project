@@ -14,10 +14,12 @@ namespace Start_a_Town_
         static ToolManager _instance;
         public static ToolManager Instance => _instance ??= new ToolManager();
         static readonly HotkeyContext HotkeyContext = new("Targeting");
+        static readonly HotkeyContext HotkeyContextDebug = new("Debug");
+
         static ToolManager()
         {
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle entity mouseover", ToggleEntityTargeting, System.Windows.Forms.Keys.V, System.Windows.Forms.Keys.None);
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Jump", delegate { }, System.Windows.Forms.Keys.Space, System.Windows.Forms.Keys.None);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle entity mouseover", ToggleEntityTargeting, System.Windows.Forms.Keys.V);
+            HotkeyManager.RegisterHotkey(HotkeyContextDebug, "Toggle draw regions", ToggleDrawRegions, System.Windows.Forms.Keys.F7);
         }
         internal ControlTool GetDefaultTool()
         {
@@ -129,23 +131,15 @@ namespace Start_a_Town_
             if (e.Handled)
                 return;
 
-            var pressed = Controller.Input.GetPressedKeys();
-
-            if (pressed.Contains(System.Windows.Forms.Keys.F3))
-                DebugWindow.Instance.Toggle();
             if (this.ActiveTool is null)
                 return;
 
-            //if (e.KeyCode == KeyBind.BlockTargeting.Key)
-            //    ToggleEntityTargeting();
-            if (HotkeyManager.PerformHotkey(HotkeyContext, e.KeyCode))
+            if (HotkeyManager.PerformHotkey(HotkeyContext, e.KeyCode) ||
+                HotkeyManager.PerformHotkey(HotkeyContextDebug, e.KeyCode))
             {
                 e.Handled = true;
                 return;
             }
-
-            if (pressed.Contains(GlobalVars.KeyBindings.Jump))
-                this.ActiveTool.Jump();
 
             this.ActiveTool.HandleKeyDown(e);
         }
@@ -155,7 +149,10 @@ namespace Start_a_Town_
             Controller.BlockTargeting = !Controller.BlockTargeting;
             Client.Instance.Log.Write("Block targeting " + (Controller.BlockTargeting ? "on" : "off"));
         }
-
+        private static void ToggleDrawRegions()
+        {
+            Engine.DrawRegions = !Engine.DrawRegions;
+        }
         public void HandleMouseMove(System.Windows.Forms.HandledMouseEventArgs e)
         {
             this.ActiveTool?.HandleMouseMove(e);

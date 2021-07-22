@@ -133,14 +133,10 @@ namespace Start_a_Town_
         public virtual void GetQuickButtons(UISelectedInfo info)
         {
             if (this.IsForbiddable())
-            {
                 info.AddButton(IconForbidden, RequestToggleForbidden, this);
-            }
 
             foreach (var comp in this.Components.Values)
-            {
                 comp.GetQuickButtons(info, this);
-            }
         }
         static readonly IconButton IconForbidden = new QuickButton(Icon.Cross, KeyBind.ToggleForbidden, "Forbid") { HoverText = "Toggle forbidden" };
         static readonly IconButton IconCameraFollow = new(Icon.Replace) { BackgroundTexture = UIManager.Icon16Background, LeftClickAction = FollowCam, HoverText = "Camera follow" };

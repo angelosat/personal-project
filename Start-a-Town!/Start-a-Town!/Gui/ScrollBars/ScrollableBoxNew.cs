@@ -106,7 +106,7 @@ namespace Start_a_Town_.UI
             this.HScroll.Width = this.Client.Width;
             this.VScroll.Height = this.Client.Height;
         }
-        public virtual void UpdateScrollbars()
+        protected virtual void UpdateScrollbars()
         {
             var prefsize = this.Client.PreferredClientSize;
             var prefw = prefsize.Width;

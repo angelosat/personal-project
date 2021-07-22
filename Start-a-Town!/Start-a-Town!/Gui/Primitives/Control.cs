@@ -1351,7 +1351,8 @@ namespace Start_a_Town_.UI
         public virtual bool ShowDialog()
         {
             this.Layer = UIManager.LayerDialog;
-            this.MoveToScreenCenter();
+            //this.MoveToScreenCenter();
+            this.AnchorToScreenCenter();
             return this.Show();
         }
         internal virtual void OnControlResized(ButtonBase buttonBase)

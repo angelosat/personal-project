@@ -12,7 +12,6 @@ namespace Start_a_Town_
         {
             var ui = new UIConnecting(address);
             ui.ShowDialog();
-            ui.SnapToScreenCenter();
             return ui;
         }
         UIConnecting(string address)
@@ -23,6 +22,7 @@ namespace Start_a_Town_
             this.LabelText = new Label(string.Format("Awaiting response from {0}", address)) { Location = this.ClientDimensions / 2, Anchor = Vector2.One / 2, TextHAlign = HorizontalAlignment.Center };
             this.AddControls(this.LabelText);
             this.BtnBack = new Button("Back") { Location = new Vector2(this.ClientDimensions.X / 2, this.ClientDimensions.Y), Anchor = new Vector2(.5f, 1), LeftClickAction = () => this.Hide() };
+            this.AnchorToScreenCenter();
         }
         internal override void OnGameEvent(GameEvent e)
         {

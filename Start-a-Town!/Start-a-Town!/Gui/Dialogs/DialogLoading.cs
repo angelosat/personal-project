@@ -48,7 +48,7 @@ namespace Start_a_Town_.UI
             this.Widget = new LoadingWidget(200) { Callback = callback };
             this.Client.Controls.Add(this.Widget);
 
-            this.SnapToScreenCenter();
+            this.AnchorToScreenCenter();
             this.Anchor = Vector2.One * .5f;
         }
         public DialogLoading(string title, string message, float percentage)

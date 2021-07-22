@@ -44,8 +44,8 @@ namespace Start_a_Town_.UI
         {
             this.Client.ClearControls();
         }
-        
-        public virtual void UpdateScrollbars()
+
+        protected virtual void UpdateScrollbars()
         {
             var prefsize = this.Client.PreferredClientSize;
             var prefw = prefsize.Width;
@@ -87,7 +87,7 @@ namespace Start_a_Town_.UI
             this.UpdateClientSize();
         }
 
-        public void UpdateClientSize()
+        protected void UpdateClientSize()
         {
             this.Client.ClientSize = this.Client.PreferredClientSize;
             this.EnsureClientWithinBounds(); // should i do this here?

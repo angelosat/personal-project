@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
@@ -12,19 +11,20 @@ namespace Start_a_Town_.UI
             this.PanelButtons = new Panel();
             this.PanelButtons.AutoSize = true;
             int w = 150;
-            Button save = new Button(new Vector2(0), w, "Save") { LeftClickAction = save_Click };
-            Button load = new Button(new Vector2(0, 23), w, "Load"){ LeftClickAction = load_Click };
-            Button settings = new Button(Vector2.Zero, w, "Settings") { LeftClickAction = settings_Click };
-            Button debug = new Button(new Vector2(0, settings.Bottom), w, "Debug") { LeftClickAction = debug_Click };
-            Button help = new Button(new Vector2(0, debug.Bottom), w, "Help") { LeftClickAction = help_Click };
-            Button quit = new Button(new Vector2(0, help.Bottom), w, "Quit to main menu") { LeftClickAction = quit_Click };
-            Button saveexit = new Button(new Vector2(0, quit.Bottom), w, "Save & exit") { LeftClickAction = saveexit_Click };
-            Button exit = new Button(new Vector2(0, saveexit.Bottom), w, "Exit to desktop") { LeftClickAction = exit_Click };
 
-            this.PanelButtons.Controls.Add(settings, debug, help, quit);
+            Button save = new("Save", save_Click, w);
+            Button load = new("Load", load_Click, w);
+            Button settings = new("Settings", settings_Click, w);
+            Button debug = new("Debug", debug_Click, w);
+            Button help = new("Help", help_Click, w);
+            Button quit = new("Quit to main menu", quit_Click, w);
+            Button saveexit = new("Save & exit", saveexit_Click, w);
+            Button exit = new("Exit to desktop", exit_Click, w);
+
+            this.PanelButtons.AddControlsVertically(settings, debug, help, quit);
             Client.Controls.Add(this.PanelButtons);
             SizeToControl(this.PanelButtons);
-
+            this.AnchorToScreenCenter();
             Title = "Options";
         }
 
@@ -81,12 +81,6 @@ namespace Start_a_Town_.UI
         void save_Click()
         {
             Console.WriteLine("save");
-        }
-
-        public override bool Show()
-        {
-            this.SnapToScreenCenter();
-            return base.Show();
         }
     }
 }

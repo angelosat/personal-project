@@ -65,6 +65,12 @@ namespace Start_a_Town_
                 }
             }
         }
+
+        internal static IHotkey RegisterHotkey(object hotkeyContext, string v, Action toggle, System.Windows.Forms.Keys z)
+        {
+            throw new NotImplementedException();
+        }
+
         public static bool PerformHotkey(HotkeyContext context, System.Windows.Forms.Keys key)
         {
             if (Hotkeys.FirstOrDefault(h => h.Context == context && h.ShortcutKeys.Contains(key)) is not Hotkey hotkey)

@@ -14,6 +14,7 @@ namespace Start_a_Town_
             
         public NotificationArea NotificationArea;
         public NameplateManager NameplateManager = new();
+        public static readonly HotkeyContext HotkeyContext = new("Ingame");
 
         bool HideInterface = false;
         public SceneState Scene = new();

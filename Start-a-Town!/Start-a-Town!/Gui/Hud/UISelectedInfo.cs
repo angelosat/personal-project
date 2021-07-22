@@ -23,12 +23,12 @@ namespace Start_a_Town_.UI
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
         int PreviousDrawLevel = -1;
-        static readonly HotkeyContext HotkeyContextSelection = new("Selection");
+        //static readonly HotkeyContext HotkeyContextSelection = new("Selection");
         static readonly IHotkey HotkeySliceZ;
         
         static UISelectedInfo()
         {
-            HotkeySliceZ = HotkeyManager.RegisterHotkey(HotkeyContextSelection, "Set draw elevation to selection", IconSlice.Toggle, System.Windows.Forms.Keys.Z);
+            HotkeySliceZ = HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Set draw elevation to selection", IconSlice.Toggle, System.Windows.Forms.Keys.Z);
         }
         public TargetArgs SelectedSource = TargetArgs.Null;
         ISelectable Selectable;
@@ -560,11 +560,11 @@ namespace Start_a_Town_.UI
         }
         public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
-            HotkeyManager.PerformHotkey(HotkeyContextSelection, e.KeyCode);
+            HotkeyManager.PerformHotkey(Ingame.HotkeyContext, e.KeyCode);
         }
         public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
-            HotkeyManager.PerformHotkey(HotkeyContextSelection, e.KeyCode);
+            HotkeyManager.PerformHotkey(Ingame.HotkeyContext, e.KeyCode);
         }
     }
 }

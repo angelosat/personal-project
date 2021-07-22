@@ -124,6 +124,7 @@ namespace Start_a_Town_
             base.Initialize();
             Animation.Export();
             this.Network = new Network();
+            EnsureInitHelper.Init();
         }
 
         /// <summary>

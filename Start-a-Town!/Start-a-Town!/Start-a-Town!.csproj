@@ -187,6 +187,7 @@
     <Compile Include="Animations\AnimationExtensions.cs" />
     <Compile Include="Control\HotkeyManager.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
+    <Compile Include="Helpers\EnsureInit.cs" />
     <Compile Include="Modules\Crafting\Crafting\New\Ingredient.Modifier.cs" />
     <Compile Include="Modules\Crafting\Crafting\Reaction.Product.ProductMaterialPair.cs" />
     <Compile Include="Components\GearType.cs" />

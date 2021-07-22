@@ -30,10 +30,12 @@ namespace Start_a_Town_
             Hotkeys.Add(hotkey);
             return hotkey;
         }
-        public static void PerformHotkey(HotkeyContext context, System.Windows.Forms.Keys key)
+        public static bool PerformHotkey(HotkeyContext context, System.Windows.Forms.Keys key)
         {
-            var hotkey = Hotkeys.FirstOrDefault(h => h.Context == context && h.Keys.Contains(key));
-            hotkey?.Action();
+            if (Hotkeys.FirstOrDefault(h => h.Context == context && h.Keys.Contains(key)) is not Hotkey hotkey)
+                return false;
+            hotkey.Action();
+            return true;
         }
         internal override void Apply()
         {
@@ -46,7 +48,7 @@ namespace Start_a_Town_
             var byContext = Hotkeys.GroupBy(h => h.Context);
             box.AddControlsVertically(1, byContext.Select(cat =>
                 new TableScrollableCompactNewNew<Hotkey>(cat.Count(), true)
-                    .AddColumn(null, cat.Key.Name, 96, h => h.Label.ToLabel())
+                    .AddColumn(null, cat.Key.Name, 192, h => h.Label.ToLabel())
                     .AddColumn(null, "Primary", 64, h => new Label(() => $"{h.Key1}", delegate { editHotkey(h, 0); }))
                     .AddColumn(null, "Secondary", 64, h => new Label(() => $"{h.Key2}", delegate { editHotkey(h, 1); }))
                     .AddItems(cat)).ToArray());

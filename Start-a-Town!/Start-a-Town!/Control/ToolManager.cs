@@ -1,74 +1,63 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.UI;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
+using Start_a_Town_.UI;
+using System.Collections.Generic;
 using UI;
 
 namespace Start_a_Town_
 {
+    [EnsureInit]
     public class ToolManager : IKeyEventHandler
     {
-        protected Stack<ControlTool> Tools;
-
-        static ToolManager _Instance;
-        public static ToolManager Instance => _Instance ??= new ToolManager();
-        
-        public ToolManager()
+        static ToolManager _instance;
+        public static ToolManager Instance => _instance ??= new ToolManager();
+        static readonly HotkeyContext HotkeyContext = new("Targeting");
+        static ToolManager()
         {
-            Tools = new Stack<ControlTool>();
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle entity mouseover", ToggleEntityTargeting, System.Windows.Forms.Keys.V, System.Windows.Forms.Keys.None);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Jump", delegate { }, System.Windows.Forms.Keys.Space, System.Windows.Forms.Keys.None);
         }
         internal ControlTool GetDefaultTool()
         {
             return new ToolManagement();
         }
-        ControlTool _ActiveTool;
+        ControlTool _activeTool;
         public ControlTool ActiveTool
         {
-            get
-            {
-                if (this._ActiveTool == null)
-                    this._ActiveTool = GetDefaultTool();
-                return _ActiveTool;
-            }
+            get => this._activeTool ??= this.GetDefaultTool();
             set
             {
-                _ActiveTool = value ?? GetDefaultTool();
-                if (_ActiveTool != null)
+                this._activeTool = value ?? this.GetDefaultTool();
+                if (this._activeTool is not null)
                 {
-                    _ActiveTool.Manager = this;
+                    this._activeTool.Manager = this;
                     var net = Ingame.CurrentMap.Net;
-                    PacketPlayerToolSwitch.Send(net, net.GetPlayer().ID, _ActiveTool);
+                    PacketPlayerToolSwitch.Send(net, net.GetPlayer().ID, this._activeTool);
                 }
             }
         }
-        
+
         public void Update(MapBase map, SceneState scene)
         {
-            if (ActiveTool != null)
-                ActiveTool.Update(scene);
+            this.ActiveTool?.Update(scene);
             foreach (var pl in GetOtherPlayers(map))
                 pl.CurrentTool?.UpdateRemote(pl.Target);
         }
 
-        public bool Add(ControlTool tool)
-        {
-            Tools.Push(tool);
-            return true;
-        }
         internal void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
-            if (ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            ActiveTool.DrawBeforeWorld(sb, map, camera);
+            this.ActiveTool.DrawBeforeWorld(sb, map, camera);
         }
         internal void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var camera = map.Camera;
-            if (ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            ActiveTool.DrawAfterWorld(sb, map);
+            this.ActiveTool.DrawAfterWorld(sb, map);
             DrawPlayersBlockMouseover(sb, map);
         }
 
@@ -76,27 +65,21 @@ namespace Start_a_Town_
         {
             var camera = map.Camera;
             foreach (var pl in GetOtherPlayers(map))
-                if (pl.CurrentTool != null)
-                {
-                    ToolManager.DrawBlockMouseover(sb, map, camera, pl.Target, pl.Color);
-                }
+                if (pl.CurrentTool is not null)
+                    DrawBlockMouseover(sb, map, camera, pl.Target, pl.Color);
         }
-        
+
         internal void DrawUI(SpriteBatch sb, MapBase map)
         {
-            if (ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
             sb.Begin();
             var camera = map.Camera;
             this.DrawPlayerMousePointers(sb, map);
             this.ActiveTool.DrawUI(sb, camera);
             foreach (var pl in GetOtherPlayers(map))
-            {
-                if (pl.CurrentTool != null)
-                {
-                    if (pl.Target.Type == TargetType.Entity && pl.Target.Exists)
+                if (pl.CurrentTool is not null && pl.Target.Type == TargetType.Entity && pl.Target.Exists)
                         pl.Target.Object.GetScreenBounds(camera).DrawHighlightBorder(sb, pl.Color, camera.Zoom);
-            }}
             sb.End();
         }
         internal void DrawPlayerMousePointers(SpriteBatch sb, MapBase map)
@@ -105,7 +88,7 @@ namespace Start_a_Town_
             foreach (var pl in GetOtherPlayers(map))
             {
                 pl.Target.Map = map;
-                if(pl.Target.Type != TargetType.Null && pl.Target.Exists)
+                if (pl.Target.Type != TargetType.Null && pl.Target.Exists)
                 {
                     Vector2 pos = GetSmoothedMousePosition(camera, pl);
                     Icon.CursorGrayscale.Draw(sb, new Vector2((int)pos.X, (int)pos.Y), pl.Color);
@@ -123,7 +106,7 @@ namespace Start_a_Town_
             {
                 var lastpos = pl.LastPointer.Value;
                 var diff = pos - lastpos;
-                pos = (lastpos + diff * .1f);
+                pos = lastpos + diff * .1f;
             }
             pl.LastPointer = pos;
             return pos;
@@ -133,16 +116,12 @@ namespace Start_a_Town_
         {
             if (e.Handled)
                 return;
-
-            if (ActiveTool != null)
-                ActiveTool.HandleKeyPress(e);
+            this.ActiveTool?.HandleKeyPress(e);
         }
 
         public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
-            if (ActiveTool != null)
-                ActiveTool.HandleKeyUp(e);
-            List<System.Windows.Forms.Keys> pressed = Controller.Input.GetPressedKeys();
+            this.ActiveTool?.HandleKeyUp(e);
         }
 
         public void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
@@ -150,99 +129,97 @@ namespace Start_a_Town_
             if (e.Handled)
                 return;
 
-            List<System.Windows.Forms.Keys> pressed = Controller.Input.GetPressedKeys();
-            
+            var pressed = Controller.Input.GetPressedKeys();
+
             if (pressed.Contains(System.Windows.Forms.Keys.F3))
                 DebugWindow.Instance.Toggle();
-            if (this.ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            
-            if (e.KeyCode == KeyBind.BlockTargeting.Key)
+
+            //if (e.KeyCode == KeyBind.BlockTargeting.Key)
+            //    ToggleEntityTargeting();
+            if (HotkeyManager.PerformHotkey(HotkeyContext, e.KeyCode))
             {
-                if (this.ActiveTool != null)
-                {
-                    Controller.BlockTargeting = !Controller.BlockTargeting;
-                    Client.Instance.Log.Write("Block targeting " + (Controller.BlockTargeting ? "on" : "off"));
-                }
+                e.Handled = true;
+                return;
             }
 
-            if (ActiveTool == null)
-                return;
-
             if (pressed.Contains(GlobalVars.KeyBindings.Jump))
-                ActiveTool.Jump();
+                this.ActiveTool.Jump();
 
-            ActiveTool.HandleKeyDown(e);
+            this.ActiveTool.HandleKeyDown(e);
+        }
+
+        private static void ToggleEntityTargeting()
+        {
+            Controller.BlockTargeting = !Controller.BlockTargeting;
+            Client.Instance.Log.Write("Block targeting " + (Controller.BlockTargeting ? "on" : "off"));
         }
 
         public void HandleMouseMove(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool == null)
-                return;
-            this.ActiveTool.HandleMouseMove(e);
+            this.ActiveTool?.HandleMouseMove(e);
         }
 
         public void HandleLButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            if (ActiveTool.MouseLeftPressed(e) == ControlTool.Messages.Remove)
-                ActiveTool = GetDefaultTool();
+            if (this.ActiveTool.MouseLeftPressed(e) == ControlTool.Messages.Remove)
+                this.ActiveTool = this.GetDefaultTool();
         }
 
         public void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            if (ActiveTool.MouseLeftUp(e) == ControlTool.Messages.Remove)
-                ActiveTool = GetDefaultTool();
+            if (this.ActiveTool.MouseLeftUp(e) == ControlTool.Messages.Remove)
+                this.ActiveTool = this.GetDefaultTool();
         }
 
         public void HandleRButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            if (ActiveTool.MouseRightDown(e) == ControlTool.Messages.Remove)
-                ActiveTool = GetDefaultTool();
+            if (this.ActiveTool.MouseRightDown(e) == ControlTool.Messages.Remove)
+                this.ActiveTool = this.GetDefaultTool();
         }
 
         public void HandleRButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            if (ActiveTool.MouseRightUp(e) == ControlTool.Messages.Remove)
-                ActiveTool = GetDefaultTool();
+            if (this.ActiveTool.MouseRightUp(e) == ControlTool.Messages.Remove)
+                this.ActiveTool = this.GetDefaultTool();
         }
         public void HandleMButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            if (ActiveTool.MouseMiddleUp(e) == ControlTool.Messages.Remove)
-                ActiveTool = GetDefaultTool();
+            if (this.ActiveTool.MouseMiddleUp(e) == ControlTool.Messages.Remove)
+                this.ActiveTool = this.GetDefaultTool();
         }
         public void HandleMiddleDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            if (ActiveTool.MouseMiddleDown(e) == ControlTool.Messages.Remove)
-                ActiveTool = GetDefaultTool();
+            if (this.ActiveTool.MouseMiddleDown(e) == ControlTool.Messages.Remove)
+                this.ActiveTool = this.GetDefaultTool();
         }
         public void HandleMiddleUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool == null)
+            if (this.ActiveTool is null)
                 return;
-            if (ActiveTool.MouseMiddleUp(e) == ControlTool.Messages.Remove)
-                ActiveTool = GetDefaultTool();
+            if (this.ActiveTool.MouseMiddleUp(e) == ControlTool.Messages.Remove)
+                this.ActiveTool = this.GetDefaultTool();
         }
         public void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool != null)
-                this.ActiveTool.HandleMouseWheel(e);
+            this.ActiveTool?.HandleMouseWheel(e);
         }
         public void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.ActiveTool != null)
-                this.ActiveTool.HandleLButtonDoubleClick(e);
+            this.ActiveTool?.HandleLButtonDoubleClick(e);
         }
 
         internal void ClearTool()
@@ -252,8 +229,7 @@ namespace Start_a_Town_
         static readonly ToolControlActor ToolControlActor = new();
         internal static void OnGameEvent(INetwork net, GameEvent e)
         {
-            if (Instance.ActiveTool != null)
-                Instance.ActiveTool.OnGameEvent(e); 
+            Instance.ActiveTool?.OnGameEvent(e);
             switch (e.Type)
             {
                 case Message.Types.PlayerControlNpc:
@@ -269,25 +245,25 @@ namespace Start_a_Town_
                 default:
                     break;
             }
-          
+
         }
 
-        static public void SetTool(ControlTool tool)
+        public static void SetTool(ControlTool tool)
         {
             ScreenManager.CurrentScreen.ToolManager.ActiveTool = tool;
         }
-        static public void Clear()
+        public static void Clear()
         {
             ScreenManager.CurrentScreen.ToolManager.ClearTool();
         }
 
         public static TargetArgs CurrentTarget => Instance.ActiveTool != null ? (Instance.ActiveTool.Target ?? TargetArgs.Null) : TargetArgs.Null;
-         
+
         public static TargetArgs LastValidTarget
         {
             get
             {
-                if (Instance.ActiveTool != null)
+                if (Instance.ActiveTool is not null)
                 {
                     if (Instance.ActiveTool.Target != null && Instance.ActiveTool.Target.Type != TargetType.Null)
                         return Instance.ActiveTool.Target;
@@ -303,16 +279,13 @@ namespace Start_a_Town_
         }
         internal static void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera, TargetArgs target, Color color)
         {
-            if (target == null)
+            if (target is null)
                 return;
             if (target.Face == Vector3.Zero)
                 return;
 
-            Rectangle bounds = Block.Bounds;
-            float cd;
-            Rectangle screenBounds;
-            Vector2 screenLoc;
-            camera.GetEverything(map, target.Global, bounds, out cd, out screenBounds, out screenLoc);
+            var bounds = Block.Bounds;
+            camera.GetEverything(map, target.Global, bounds, out float cd, out Rectangle screenBounds, out Vector2 screenLoc);
             var scrbnds = camera.GetScreenBoundsVector4(target.Global.X, target.Global.Y, target.Global.Z, bounds, Vector2.Zero);
             screenLoc = new Vector2(scrbnds.X, scrbnds.Y);
             cd = target.Global.GetDrawDepth(map, camera);

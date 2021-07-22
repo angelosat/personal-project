@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -11,7 +12,11 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        static public void Send(INetwork net, List<int> instanceID)
+        internal static void Send(INetwork net, IEnumerable<GameObject> enumerable)
+        {
+            Send(net, enumerable.Select(o => o.RefID).ToList());
+        }
+        internal static void Send(INetwork net, List<int> instanceID)
         {
            
             var w = net.GetOutgoingStream();
@@ -26,5 +31,7 @@ namespace Start_a_Town_
             if (net is Server)
                 Send(net, list);
         }
+
+        
     }
 }

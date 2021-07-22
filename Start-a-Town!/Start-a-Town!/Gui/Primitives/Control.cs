@@ -892,21 +892,25 @@ namespace Start_a_Town_.UI
         public virtual Control AddControlsVertically(int spacing, HorizontalAlignment horAlignment, params Control[] controls)
         {
             var y = 0;
-            var maxWidth = controls.Max(c => c.Width);
+            var maxWidth = this.AutoSize ? controls.Max(c => c.Width) : this.ClientSize.Width;
             foreach (var ctrl in controls)
             {
+                var yy = y;
                 switch (horAlignment)
                 {
                     case HorizontalAlignment.Left:
-                        ctrl.Location = new Vector2(0, y);
+                        //ctrl.Location = new Vector2(0, y);
+                        ctrl.LocationFunc = () => new(0, yy);
                         break;
                     case HorizontalAlignment.Center:
-                        ctrl.Location = new Vector2(maxWidth / 2, y);
-                        ctrl.Anchor = new(.5f, 0);
+                        //ctrl.Location = new Vector2(maxWidth / 2, y);
+                        //ctrl.Anchor = new(.5f, 0);
+                        ctrl.LocationFunc = () => new(maxWidth / 2 - ctrl.Width / 2, yy);
                         break;
                     case HorizontalAlignment.Right:
-                        ctrl.Location = new Vector2(maxWidth, y);
-                        ctrl.Anchor = new(1, 0);
+                        //ctrl.Location = new Vector2(maxWidth, y);
+                        //ctrl.Anchor = new(1, 0);
+                        ctrl.LocationFunc = () => new(maxWidth - ctrl.Width, yy);
                         break;
                     default:
                         throw new Exception();
@@ -916,6 +920,7 @@ namespace Start_a_Town_.UI
             }
             return this;
         }
+
         public virtual Control AddControlsHorizontally(params Control[] controls)
         {
             return this.AddControlsHorizontally(0, controls);

@@ -37,7 +37,7 @@ namespace Start_a_Town_
             this.Hotkeys = new HotkeyManager();
 
             this.AllSettings = new List<GameSettings>() { this.CameraSettings, GraphicSettings, this.VideoSettings, this.InterfaceSettings, this.Hotkeys };
-            var tabs = UIHelper.Wrap(this.AllSettings.Select(tab => new Button(tab.Gui.Name, () => selectTab(tab.Gui))), size);
+            var tabs = UIHelper.Wrap(this.AllSettings.Select(tab => new Button(tab.Gui.Name, () => selectTab(tab.Gui))), panel.Client.Width);
 
             selectTab(this.CameraSettings.Gui);
             

@@ -16,7 +16,13 @@ namespace Start_a_Town_.UI
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
         int PreviousDrawLevel = -1;
-        readonly QuickButton IconSlice = new(Icon.ArrowDown, KeyBind.SliceZ)
+        static readonly HotkeyContext HotkeyContextSelection = new("Selection");
+        static readonly IHotkey HotkeySliceZ;
+        static UISelectedInfo()
+        {
+            HotkeySliceZ = HotkeyManager.RegisterHotkey(HotkeyContextSelection, "Set draw elevation to selection", delegate { }, System.Windows.Forms.Keys.Z);
+        }
+        readonly QuickButton IconSlice = new(Icon.ArrowDown, HotkeySliceZ)
         {
             BackgroundTexture = UIManager.Icon16Background,
             LeftClickAction = Slice,

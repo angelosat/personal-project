@@ -1,8 +1,10 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace Start_a_Town_
 {
-    sealed public class KeyBind
+    [Obsolete]
+    sealed public class KeyBind : IHotkey
     {
         public string Name;
         public Keys Key;
@@ -11,12 +13,16 @@ namespace Start_a_Town_
             this.Name = name;
             this.Key = key;
         }
-        public static readonly KeyBind ToggleForbidden = new KeyBind("Toggle Forbidden", Keys.F);
         public static readonly KeyBind Cancel = new KeyBind("Cancel", Keys.C);
         public static readonly KeyBind Build = new KeyBind("Build", Keys.B);
         public static readonly KeyBind DigMine = new KeyBind("DigMine", Keys.M);
         public static readonly KeyBind Deconstruct = new KeyBind("Deconstruct", Keys.X);
-        public static readonly KeyBind SliceZ = new KeyBind("Slice to Z-Level", Keys.Z);
-        public static readonly KeyBind BlockTargeting = new KeyBind("Block Targeting", Keys.V);
+
+        public Keys[] ShortcutKeys => new[] { this.Key };
+
+        public string GetLabel()
+        {
+            return this.Key != 0 ? this.Key.ToString() : "";
+        }
     }
 }

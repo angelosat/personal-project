@@ -185,7 +185,11 @@
     <Compile Include="AI\Components\Personality\TraitDefOf.cs" />
     <Compile Include="Animations\AnimationBlending.cs" />
     <Compile Include="Animations\AnimationExtensions.cs" />
-    <Compile Include="Control\HotkeyManager.cs" />
+    <Compile Include="Control\Hotkeys\HotkeyContext.cs" />
+    <Compile Include="Control\Hotkeys\HotkeyManager.cs" />
+    <Compile Include="Control\Hotkeys\HotkeyManager.Hotkey.cs" />
+    <Compile Include="Control\Hotkeys\HotkeyManager.WindowInputKey.cs" />
+    <Compile Include="Control\Hotkeys\IHotkey.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
@@ -500,7 +504,6 @@
     <Compile Include="Control\Tools\ToolSelectRectangle.cs" />
     <Compile Include="Control\Tools\ToolSelectRectangleBlocks.cs" />
     <Compile Include="Control\UI\KeyBind.cs" />
-    <Compile Include="Control\UI\KeybindingsManager.cs" />
     <Compile Include="Def.cs" />
     <Compile Include="Animations\AnimationDef.cs" />
     <Compile Include="Animations\BoneDef.cs" />

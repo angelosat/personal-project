@@ -125,6 +125,13 @@ namespace Start_a_Town_.UI
         {
             return new IconButton(Icon.Cross) { BackgroundTexture = UIManager.Icon16Background };
         }
+        public static IconButton CreateCloseButtonNew()
+        {
+            var icon = new IconButton(Icon.Cross) { BackgroundTexture = UIManager.Icon16Background };
+            icon.LocationFunc = () => new(icon.Parent.Width - icon.Width - UIManager.BorderPx - icon.Parent.ClientLocation.X, UIManager.BorderPx - icon.Parent.ClientLocation.Y);
+            icon.LeftClickAction = () => icon.Parent.Hide();
+            return icon;
+        }
         static public IconButton CreateRandomizeButton(Action action = null)
         {
             return new IconButton(Icon.Dice)

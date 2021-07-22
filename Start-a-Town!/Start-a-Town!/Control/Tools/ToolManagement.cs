@@ -24,8 +24,10 @@ namespace Start_a_Town_
             HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Normal", delegate { SetSpeed(1); }, Keys.D1);
             HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Fast", delegate { SetSpeed(2); }, Keys.D2);
             HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Faster", delegate { SetSpeed(3); }, Keys.D3);
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle Forbidden", delegate { }, Keys.F);
+            HotkeyToggleForbidden = HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle Forbidden", delegate { ToggleForbidden(); }, Keys.F);
         }
+        internal static readonly IHotkey HotkeyToggleForbidden;
+
         public ToolManagement()
         {
         }
@@ -190,7 +192,11 @@ namespace Start_a_Town_
                 e.Handled = true;
             }
         }
-
+        private static void ToggleForbidden()
+        {
+            return;
+            PacketToggleForbidden.Send(Client.Instance, UISelectedInfo.GetSelectedEntities().Where(o => o.IsForbiddable()));
+        }
 
         private static void SetSpeed(int value)
         {

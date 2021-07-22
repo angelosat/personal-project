@@ -121,7 +121,7 @@ namespace Start_a_Town_.UI
             if (this.TextFormat != null)
                 return;
 
-            Vector2 textsize = this.Font.MeasureString(txt);
+            var textsize = this.Font.MeasureString(txt);
             var maxw = (int)textsize.X + 2;
             var oldw = this.Width;
 

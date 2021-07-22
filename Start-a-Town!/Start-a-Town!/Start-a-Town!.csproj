@@ -187,6 +187,9 @@
     <Compile Include="Animations\AnimationExtensions.cs" />
     <Compile Include="Control\HotkeyManager.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
+    <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
+    <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
+    <Compile Include="Gui\ScrollBars\ScrollModes.cs" />
     <Compile Include="Helpers\EnsureInit.cs" />
     <Compile Include="Modules\Crafting\Crafting\New\Ingredient.Modifier.cs" />
     <Compile Include="Modules\Crafting\Crafting\Reaction.Product.ProductMaterialPair.cs" />

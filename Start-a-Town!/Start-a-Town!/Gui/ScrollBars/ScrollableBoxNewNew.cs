@@ -3,12 +3,11 @@ using System;
 
 namespace Start_a_Town_.UI
 {
-    [Obsolete]
-    public class ScrollableBoxNew : Control
+    public class ScrollableBoxNewNew : GroupBox
     {
         readonly ScrollbarV VScroll;
         readonly ScrollbarH HScroll;
-        public Control Client;
+        public GroupBox Client;
 
         public override void SetOpacity(float value, bool children, params Control[] exclude)
         {
@@ -16,96 +15,36 @@ namespace Start_a_Town_.UI
             this.VScroll.SetOpacity(value, true);
             this.HScroll.SetOpacity(value, true);
         }
-        public override void OnPaint(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
-        {
-            base.OnPaint(sb);
-        }
-
-        public override bool AutoSize
-        {
-            get => base.AutoSize;
-            set
-            {
-                base.AutoSize = value;
-                this.Client.AutoSize = value;
-            }
-        }
-        public ScrollableBoxNew(int width, int height, ScrollModes mode = ScrollModes.Both)
-            : this(new Rectangle(0, 0, width, height), mode)
-        {
-
-        }
-        public ScrollableBoxNew(Rectangle viewportBounds, ScrollModes mode = ScrollModes.Both)
-            : base(new Vector2(viewportBounds.X, viewportBounds.Y), new Vector2(viewportBounds.Width, viewportBounds.Height))
+        
+        public ScrollableBoxNewNew(int width, int height, ScrollModes mode = ScrollModes.Both)
+            : base(width, height)
         {
             var modeFactor = new IntVec2((mode & ScrollModes.Vertical) == ScrollModes.Vertical ? 1 : 0, (mode & ScrollModes.Horizontal) == ScrollModes.Horizontal ? 1 : 0);
             var buttonSize = 16;
-            this.Client = new GroupBox() { Size = new Rectangle(0, 0, viewportBounds.Width - buttonSize * modeFactor.X, viewportBounds.Height - buttonSize * modeFactor.Y) };
-            this.Client.AutoSize = false;
+            this.Client = new GroupBox(width - buttonSize * modeFactor.X, height - buttonSize * modeFactor.Y) { AutoSize = false };
             this.VScroll = new ScrollbarV(new Vector2(this.Client.Width, 0), this.Client.Height, this.Client);
             this.HScroll = new ScrollbarH(new Vector2(0, this.Client.Height), this.Client.Width, this.Client);
-            this.Size = new Rectangle(viewportBounds.X, viewportBounds.Y, viewportBounds.Width, viewportBounds.Height);
             this.Controls.Add(this.Client);
         }
 
-        public virtual void Add(params Control[] controls)
-        {
-            foreach (var ctrl in controls)
-                this.Client.Controls.Add(ctrl);
-            this.Remeasure();
-        }
-        public void Remove(Control control)
-        {
-            this.Client.Controls.Remove(control);
-            this.Remeasure();
-        }
         public override Control AddControls(params Control[] controls)
         {
             foreach (var ctrl in controls)
                 this.Client.Controls.Add(ctrl);
-            this.Remeasure();
+            this.UpdateClientSize();
             return this;
         }
         public override void RemoveControls(params Control[] controls)
         {
             foreach (var ctrl in controls)
                 this.Client.Controls.Remove(ctrl);
-            this.Remeasure();
+            this.UpdateClientSize();
         }
         public override void ClearControls()
         {
             this.Client.ClearControls();
         }
-        public virtual void Remeasure()
-        {
-            var clientDesiredSize = this.Client.PreferredClientSize;
-            var prefw = clientDesiredSize.Width;
-            if (this.Width < prefw)
-            {
-                this.Controls.Add(this.HScroll);
-                this.Client.Height = this.Height - 16;
-            }
-            else
-            {
-                this.Controls.Remove(this.HScroll);
-                this.Client.Height = this.Height;
-            }
-
-            var prefh = clientDesiredSize.Height;
-            if (this.Height < prefh)
-            {
-                this.Controls.Remove(this.VScroll);
-                this.Controls.Add(this.VScroll);
-                this.Client.Width = this.Width - 16;
-            }
-            else
-            {
-                this.Controls.Remove(this.VScroll);
-                this.Client.Width = this.Width;
-            }
-            this.HScroll.Width = this.Client.Width;
-            this.VScroll.Height = this.Client.Height;
-        }
+        
         public virtual void UpdateScrollbars()
         {
             var prefsize = this.Client.PreferredClientSize;
@@ -116,9 +55,7 @@ namespace Start_a_Town_.UI
                     this.Controls.Add(this.HScroll);
             }
             else
-            {
                 this.Controls.Remove(this.HScroll);
-            }
 
             var prefh = prefsize.Height;
             if (this.Client.Height < prefh)
@@ -127,9 +64,7 @@ namespace Start_a_Town_.UI
                     this.Controls.Add(this.VScroll);
             }
             else
-            {
                 this.Controls.Remove(this.VScroll);
-            }
             this.HScroll.Width = this.Client.Width;
             this.VScroll.Height = this.Client.Height;
         }
@@ -149,12 +84,7 @@ namespace Start_a_Town_.UI
             this.Client.Controls.AlignVertically();
             this.Client.ClientSize = this.Client.PreferredClientSize;
             this.Client.ConformToClientSize();
-            this.Remeasure();
-        }
-
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Rectangle viewport)
-        {
-            base.Draw(sb, viewport);
+            this.UpdateClientSize();
         }
 
         public void UpdateClientSize()

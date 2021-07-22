@@ -25,9 +25,10 @@ namespace Start_a_Town_
             GroupBox selectedSettings = null;
 
             var size = 400;
-            var panel = new PanelLabeledNew(() => selectedSettings?.Name) { AutoSize = false };
-            panel.ClientSize = new Rectangle(0, 0, size, size / 2);
-            panel.ConformToClientSize();
+            //var panel = new PanelLabeledNew(() => selectedSettings?.Name) { AutoSize = false };
+            //panel.ClientSize = new Rectangle(0, 0, size, size / 2);
+            //panel.ConformToClientSize();
+            var panel = new PanelLabeledScrollable(() => selectedSettings?.Name, size, size / 2, ScrollModes.Vertical);
 
             this.InterfaceSettings = new InterfaceSettings();
             this.CameraSettings = new CameraSettings();
@@ -40,8 +41,8 @@ namespace Start_a_Town_
 
             selectTab(this.CameraSettings.Gui);
             
-            Button ok = new("Apply", apply, 50);
-            Button cancel = new("Cancel", () => this.Hide(), 50);
+            var ok = new Button("Apply", apply, 50);
+            var cancel = new Button("Cancel", () => this.Hide(), 50);
 
             this.Client.AddControlsVertically(0, HorizontalAlignment.Right,
                 tabs.ToPanel(),
@@ -59,8 +60,8 @@ namespace Start_a_Town_
             void selectTab(GroupBox tab)
             {
                 selectedSettings = tab;
-                panel.Client.Controls.Clear();
-                panel.Client.Controls.Add(tab);
+                panel.Client.ClearControls();
+                panel.Client.AddControls(tab);
             }
         }
     }

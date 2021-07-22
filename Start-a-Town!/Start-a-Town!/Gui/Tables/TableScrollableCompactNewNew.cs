@@ -8,7 +8,7 @@ namespace Start_a_Town_.UI
 {
     class TableScrollableCompactNewNew<TObject> : GroupBox where TObject : class
     {
-        readonly List<Column> Columns = new List<Column>();
+        readonly List<Column> Columns = new();
         readonly GroupBox ColumnLabels;
         ListBoxNewNoBtnBase<TObject, GroupBox> BoxItems;
         readonly Dictionary<TObject, Dictionary<object, Control>> Rows = new();
@@ -19,7 +19,7 @@ namespace Start_a_Town_.UI
         [Obsolete]
         static readonly int ItemHeight = Label.DefaultHeight + ListBoxNewNoBtnBase<TObject, GroupBox>.Spacing; // TODO remove hardcoding of label.defaultheight
 
-        public TableScrollableCompactNewNew(int maxVisibleItems, bool showColumnLabels = false, ScrollableBoxNew.ScrollModes scrollbarMode = ScrollableBoxNew.ScrollModes.Vertical)
+        public TableScrollableCompactNewNew(int maxVisibleItems, bool showColumnLabels = false, ScrollModes scrollbarMode = ScrollModes.Vertical)
         {
             this.MaxVisibleItems = maxVisibleItems;
             this.ShowColumnLabels = showColumnLabels;

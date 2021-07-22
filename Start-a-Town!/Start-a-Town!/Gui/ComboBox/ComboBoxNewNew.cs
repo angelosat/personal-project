@@ -17,7 +17,7 @@ namespace Start_a_Town_.UI
             var maxVisibleItems = list.Count();
             var height = maxVisibleItems * Button.DefaultHeight;
 
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollableBoxNew.ScrollModes.None)
+            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollModes.None)
                 .AddItems(list);
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
@@ -36,7 +36,7 @@ namespace Start_a_Town_.UI
             this.Button = new Button(()=>this.CurrentlySelectedGetter != null ? labelGetter(this.CurrentlySelectedGetter()) : "undefined", BtnPress, width);
             var maxVisibleItems = list.Count();
             var height = maxVisibleItems * Button.DefaultHeight;
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(listNameGetter(i), () => onSelect(i)), ScrollableBoxNew.ScrollModes.None)
+            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(listNameGetter(i), () => onSelect(i)), ScrollModes.None)
                 .AddItems(list);
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
@@ -57,7 +57,7 @@ namespace Start_a_Town_.UI
                 $"{label}: {(this.CurrentlySelectedGetter() is T item ? listNameGetter(item) : "none")}", BtnPress, width);
 
             var height = Button.DefaultHeight;
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(listNameGetter(i), () => onSelect(i)), ScrollableBoxNew.ScrollModes.None)
+            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(listNameGetter(i), () => onSelect(i)), ScrollModes.None)
              ;
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
@@ -79,7 +79,7 @@ namespace Start_a_Town_.UI
             var maxVisibleItems = list.Count();
             var height = maxVisibleItems * Button.DefaultHeight;
 
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollableBoxNew.ScrollModes.None)
+            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollModes.None)
                 .AddItems(list);
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
@@ -100,7 +100,7 @@ namespace Start_a_Town_.UI
             var maxVisibleItems = list.Count();
             var height = maxVisibleItems * Button.DefaultHeight;
 
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollableBoxNew.ScrollModes.None)
+            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollModes.None)
                 .AddItems(list);
             this.ListControl.ToPanel()
                 .HideOnAnyClick();

@@ -19,7 +19,7 @@ namespace Start_a_Town_.UI
             this.TextFunc = () => selectedGetter(this).Name;
             this.Width = width;
             this.Height = UIManager.DefaultButtonHeight;
-            var list = new ListBoxNew<T, Label>(width, maxVisibleItems * Label.DefaultHeight, maxVisibleItems < items.Length ? ScrollableBoxNew.ScrollModes.Vertical : ScrollableBoxNew.ScrollModes.None);
+            var list = new ListBoxNew<T, Label>(width, maxVisibleItems * Label.DefaultHeight, maxVisibleItems < items.Length ? ScrollModes.Vertical : ScrollModes.None);
             list.AddItems(items, i => new Label() { TextFunc = () => i.Name, LeftClickAction = () => { callback(this, i); this.ToggleOpen(); } });
             this.Panel = list.ToPanel();
         }

@@ -27,14 +27,14 @@ namespace Start_a_Town_.UI
         {
             this.AutoSize = true;
         }
-        public ListBoxNew(int width, int height, ScrollableBoxNew.ScrollModes mode = ScrollModes.Vertical) : base(new Rectangle(0,0,width,height), mode) 
+        public ListBoxNew(int width, int height, ScrollModes mode = ScrollModes.Vertical) : base(new Rectangle(0,0,width,height), mode) 
         {
         }
-        public ListBoxNew(int width, int height, Func<TObject, TControl> controlGetter, ScrollableBoxNew.ScrollModes mode = ScrollModes.Vertical) : this(width, height, mode)
+        public ListBoxNew(int width, int height, Func<TObject, TControl> controlGetter, ScrollModes mode = ScrollModes.Vertical) : this(width, height, mode)
         {
             this.ControlGetter = controlGetter;
         }
-        public ListBoxNew(int width, int height, Func<TObject, ListBoxNew<TObject,TControl>, TControl> controlGetter, ScrollableBoxNew.ScrollModes mode = ScrollModes.Vertical) : this(width, height, mode)
+        public ListBoxNew(int width, int height, Func<TObject, ListBoxNew<TObject,TControl>, TControl> controlGetter, ScrollModes mode = ScrollModes.Vertical) : this(width, height, mode)
         {
             this.ControlGetter = i => controlGetter(i, this);
         }

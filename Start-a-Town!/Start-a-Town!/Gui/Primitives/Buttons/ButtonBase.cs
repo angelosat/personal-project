@@ -273,6 +273,23 @@ namespace Start_a_Town_.UI
             base.OnRightClick();
         }
 
+        public void Toggle()
+        {
+            if (!this.Active)
+                return;
+            if (!this.LeftPressed)
+            {
+                this.LeftPressed = true;
+                this.Pressed = true;
+            }
+            else if (this.LeftPressed)
+            {
+                this.LeftPressed = false;
+                this.Pressed = false;
+                this.OnLeftClick();
+            }
+        }
+
         public override string ToString()
         {
             return "ButtonBase: " + this.Text;

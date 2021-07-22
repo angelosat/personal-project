@@ -7,8 +7,15 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
+    [EnsureInit]
     public sealed class UISelectedInfo : GroupBox, IUISelection
     {
+        static readonly QuickButton IconSlice =  new(Icon.ArrowDown, HotkeySliceZ)
+        {
+            BackgroundTexture = UIManager.Icon16Background,
+            LeftClickAction = Slice,
+            HoverText = "Slice z-level"
+        };
         public static UISelectedInfo Instance = new();
         readonly GroupBox BoxTabs, BoxButtons, BoxIcons, BoxInfo;
         public Panel PanelInfo;
@@ -18,16 +25,11 @@ namespace Start_a_Town_.UI
         int PreviousDrawLevel = -1;
         static readonly HotkeyContext HotkeyContextSelection = new("Selection");
         static readonly IHotkey HotkeySliceZ;
+        
         static UISelectedInfo()
         {
-            HotkeySliceZ = HotkeyManager.RegisterHotkey(HotkeyContextSelection, "Set draw elevation to selection", delegate { }, System.Windows.Forms.Keys.Z);
+            HotkeySliceZ = HotkeyManager.RegisterHotkey(HotkeyContextSelection, "Set draw elevation to selection", IconSlice.Toggle, System.Windows.Forms.Keys.Z);
         }
-        readonly QuickButton IconSlice = new(Icon.ArrowDown, HotkeySliceZ)
-        {
-            BackgroundTexture = UIManager.Icon16Background,
-            LeftClickAction = Slice,
-            HoverText = "Slice z-level"
-        };
         public TargetArgs SelectedSource = TargetArgs.Null;
         ISelectable Selectable;
         Window WindowInfo;
@@ -98,7 +100,7 @@ namespace Start_a_Town_.UI
         {
             this.BoxIcons.ClearControls();
             this.BoxIcons.AddControls(
-                this.IconSlice,
+                IconSlice,
                 this.IconCenter,
                 this.IconInfo
                 );
@@ -555,6 +557,14 @@ namespace Start_a_Town_.UI
                 return null;
 
             return GetSelected().First().Object as Entity;
+        }
+        public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
+        {
+            HotkeyManager.PerformHotkey(HotkeyContextSelection, e.KeyCode);
+        }
+        public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
+        {
+            HotkeyManager.PerformHotkey(HotkeyContextSelection, e.KeyCode);
         }
     }
 }

@@ -27,8 +27,30 @@ namespace Start_a_Town_
         public static IHotkey RegisterHotkey(HotkeyContext context, string label, Action action, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
         {
             var hotkey = new Hotkey(context, label, action, key1, key2);
+            handleConflicts(hotkey, false);
             Hotkeys.Add(hotkey);
             return hotkey;
+
+            static void handleConflicts(Hotkey newHotkey, bool overwrite)
+            {
+                foreach (var h in Hotkeys)
+                {
+                    if (h.Keys.Contains(newHotkey.Key1))
+                    {
+                        if (!overwrite)
+                            newHotkey.Key1 = 0;
+                        else
+                            h.Key1 = 0;
+                    }
+                    else if (h.Keys.Contains(newHotkey.Key2))
+                    {
+                        if (!overwrite)
+                            newHotkey.Key2 = 0;
+                        else
+                            h.Key2 = 0;
+                    }
+                }
+            }
         }
         public static bool PerformHotkey(HotkeyContext context, System.Windows.Forms.Keys key)
         {
@@ -68,6 +90,7 @@ namespace Start_a_Town_
                 this.EnterKeyGui.Value.EditHotkey(h.Label, key => setHotkey(h, index, key));
             }
         }
+        
         class Hotkey : IHotkey
         {
             public readonly Action Action;

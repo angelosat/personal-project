@@ -66,19 +66,32 @@ namespace Start_a_Town_
             }
         }
 
-        public static bool PerformHotkey(HotkeyContext context, System.Windows.Forms.Keys key)
+        public static bool PerformHotkey(System.Windows.Forms.Keys key, HotkeyContext context)
         {
             if (Hotkeys.FirstOrDefault(h => h.Context == context && h.ShortcutKeys.Contains(key)) is not Hotkey hotkey)
                 return false;
-            hotkey.Action();
+            hotkey.ActionPress();
             return true;
         }
-        public static bool PerformHotkey(object context, System.Windows.Forms.Keys key)
+        public static bool Press(System.Windows.Forms.Keys key, HotkeyContext context)
         {
-            if (Hotkeys.FirstOrDefault(h => h.Context.Name == context.GetType().Name && h.ShortcutKeys.Contains(key)) is not Hotkey hotkey)
-                return false;
-            hotkey.Action();
-            return true;
+            if (Hotkeys.FirstOrDefault(h => h.Context == context && h.ShortcutKeys.Contains(key)) is Hotkey hotkey && !hotkey.Pressed)
+            {
+                hotkey.Pressed = true;
+                hotkey.ActionPress();
+                return true;
+            }
+            return false;
+        }
+        public static bool Release(System.Windows.Forms.Keys key, HotkeyContext context)
+        {
+            if (Hotkeys.FirstOrDefault(h => h.Context == context && h.ShortcutKeys.Contains(key)) is Hotkey hotkey && hotkey.Pressed)
+            {
+                hotkey.Pressed = false;
+                hotkey.ActionRelease();
+                return true;
+            }
+            return false;
         }
         internal override void Apply()
         {

@@ -207,6 +207,18 @@ namespace Start_a_Town_
                 this.SetZoom(this.Zoom + n);
         }
 
+        static int PreviousDrawLevel = -1;
+        public void SliceOn(int next)
+        {
+            var current = this.DrawLevel;
+            if (next != current)
+            {
+                PreviousDrawLevel = current;
+                this.DrawLevel = next;
+            }
+            else if (PreviousDrawLevel != -1)
+                this.DrawLevel = PreviousDrawLevel;
+        }
         public void CenterOn(Vector3 global)
         {
             this.Global = global;

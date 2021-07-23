@@ -7,7 +7,8 @@ namespace Start_a_Town_
     {
         class Hotkey : IHotkey
         {
-            public readonly Action Action;
+            public bool Pressed;
+            public readonly Action ActionPress, ActionRelease;
             public readonly string Label;
             public readonly HotkeyContext Context;
             public readonly System.Windows.Forms.Keys[] _keys = new System.Windows.Forms.Keys[2];
@@ -26,7 +27,17 @@ namespace Start_a_Town_
             {
                 this.Context = context;
                 this.Label = label;
-                this.Action = action;
+                this.ActionPress = action;
+                this.ActionRelease = delegate { };
+                this.Key1 = key1;
+                this.Key2 = key2;
+            }
+            public Hotkey(HotkeyContext context, string label, Action actionPress, Action actionRelease, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
+            {
+                this.Context = context;
+                this.Label = label;
+                this.ActionPress = actionPress;
+                this.ActionRelease = actionRelease;
                 this.Key1 = key1;
                 this.Key2 = key2;
             }

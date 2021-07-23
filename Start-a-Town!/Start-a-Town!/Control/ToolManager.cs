@@ -135,8 +135,8 @@ namespace Start_a_Town_
             if (this.ActiveTool is null)
                 return;
 
-            if (HotkeyManager.PerformHotkey(HotkeyContext, e.KeyCode) ||
-                HotkeyManager.PerformHotkey(HotkeyContextDebug, e.KeyCode))
+            if (HotkeyManager.PerformHotkey(e.KeyCode, HotkeyContext) ||
+                HotkeyManager.PerformHotkey(e.KeyCode, HotkeyContextDebug))
             {
                 e.Handled = true;
                 return;

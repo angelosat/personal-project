@@ -25,6 +25,7 @@ namespace Start_a_Town_
             HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Fast", delegate { SetSpeed(2); }, Keys.D2);
             HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Faster", delegate { SetSpeed(3); }, Keys.D3);
             HotkeyToggleForbidden = HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle Forbidden", delegate { ToggleForbidden(); }, Keys.F);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Set draw elevation to selection", Slice, Keys.Z);
         }
         internal static readonly IHotkey HotkeyToggleForbidden;
 
@@ -163,7 +164,7 @@ namespace Start_a_Town_
         {
             if (e.Handled)
                 return;
-            HotkeyManager.PerformHotkey(HotkeyContext, e.KeyCode);
+            HotkeyManager.Press(e.KeyCode, HotkeyContext);
         
             if (e.KeyCode == GlobalVars.KeyBindings.North || e.KeyCode == Keys.Up)
             {
@@ -228,6 +229,7 @@ namespace Start_a_Town_
                 default:
                     break;
             }
+            HotkeyManager.Release(e.KeyCode, HotkeyContext);
         }
         public override void HandleMouseWheel(HandledMouseEventArgs e)
         {
@@ -402,6 +404,13 @@ namespace Start_a_Town_
             if (this.ScrollingMode == this.MouseScroll)
                 Icon.Cross.Draw(sb, this.MouseScrollOrigin, Vector2.One * .5f);
             base.DrawUI(sb, camera);
+        }
+
+        public static void Slice()
+        {
+            if (ToolManager.Instance.ActiveTool is not ToolManagement)
+                return;
+            ScreenManager.CurrentScreen.Camera.SliceOn((int)UISelectedInfo.Instance.SelectedSource.Global.Z);
         }
     }
 }

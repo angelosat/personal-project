@@ -15,17 +15,17 @@ namespace Start_a_Town_.UI
         public Label LabelName;
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
-        int PreviousDrawLevel = -1;
+        //int PreviousDrawLevel = -1;
         static readonly IHotkey HotkeySliceZ;
 
         static UISelectedInfo()
         {
-            HotkeySliceZ = HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Set draw elevation to selection", () => IconSlice.Toggle(), System.Windows.Forms.Keys.Z);
+            //HotkeySliceZ = HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Set draw elevation to selection", ToolManagement.Slice, System.Windows.Forms.Keys.Z);
         }
         static readonly QuickButton IconSlice = new(Icon.ArrowDown, HotkeySliceZ)
         {
             BackgroundTexture = UIManager.Icon16Background,
-            LeftClickAction = Slice,
+            LeftClickAction = ToolManagement.Slice,
             HoverText = "Slice z-level"
         };
         public static UISelectedInfo Instance = new();
@@ -473,18 +473,18 @@ namespace Start_a_Town_.UI
             return true;
         }
 
-        static void Slice()
-        {
-            var next = (int)Instance.SelectedSource.Global.Z;
-            var current = ScreenManager.CurrentScreen.Camera.DrawLevel;
-            if (next != current)
-            {
-                Instance.PreviousDrawLevel = current;
-                ScreenManager.CurrentScreen.Camera.DrawLevel = next;
-            }
-            else if (Instance.PreviousDrawLevel != -1)
-                ScreenManager.CurrentScreen.Camera.DrawLevel = Instance.PreviousDrawLevel;
-        }
+        //static void Slice()
+        //{
+        //    ScreenManager.CurrentScreen.Camera.SliceOn((int)Instance.SelectedSource.Global.Z);
+        //    //var current = ScreenManager.CurrentScreen.Camera.DrawLevel;
+        //    //if (next != current)
+        //    //{
+        //    //    Instance.PreviousDrawLevel = current;
+        //    //    ScreenManager.CurrentScreen.Camera.DrawLevel = next;
+        //    //}
+        //    //else if (Instance.PreviousDrawLevel != -1)
+        //    //    ScreenManager.CurrentScreen.Camera.DrawLevel = Instance.PreviousDrawLevel;
+        //}
         public void AddIcon(IconButton icon)
         {
             if (this.MultipleSelected.Count > 1)
@@ -556,14 +556,6 @@ namespace Start_a_Town_.UI
                 return null;
 
             return GetSelected().First().Object as Entity;
-        }
-        public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
-        {
-            HotkeyManager.PerformHotkey(Ingame.HotkeyContext, e.KeyCode);
-        }
-        public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
-        {
-            HotkeyManager.PerformHotkey(Ingame.HotkeyContext, e.KeyCode);
         }
     }
 }

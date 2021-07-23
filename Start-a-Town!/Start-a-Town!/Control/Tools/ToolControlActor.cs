@@ -7,6 +7,7 @@ namespace Start_a_Town_
     class ToolControlActor : ControlTool
     {
         static readonly HotkeyContext HotkeyContext = new("Movement");
+        private static readonly IHotkey HotkeyLeft, HotkeyRight, HotkeyUp, HotkeyDown, HotkeyWalk, HotkeySprint;
         static ToolControlActor()
         {
             HotkeyLeft = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Left", delegate { }, System.Windows.Forms.Keys.A, System.Windows.Forms.Keys.Left);
@@ -19,10 +20,9 @@ namespace Start_a_Town_
             HotkeySprint = HotkeyManager.RegisterHotkey(HotkeyContext, "Sprint", delegate { }, System.Windows.Forms.Keys.ShiftKey);
         }
 
-        static bool Up, Down, Left, Right, Walking, WalkKeyDown, SprintKeyDown;
-        static bool MoveToggle, Attacking;
-        static bool MouseMove = true;
-        private static readonly IHotkey HotkeyLeft, HotkeyRight, HotkeyUp, HotkeyDown, HotkeyWalk, HotkeySprint;
+        static bool Up, Down, Left, Right, Moving, WalkKeyDown, SprintKeyDown;
+        static bool MovingByMouse, Attacking;
+        static bool MouseMovementEnabled = true;
 
         public ToolControlActor()
         {
@@ -31,14 +31,14 @@ namespace Start_a_Town_
         public override void Update()
         {
             base.Update();
-            if (MoveToggle)
+            if (MovingByMouse)
                 MoveMouse();
             else
                 MoveKeys();
         }
         public void MoveMouse()
         {
-            Walking = true;
+            Moving = true;
             var final = GetDirection3();
             this.ChangeDirection(final);
         }
@@ -75,7 +75,7 @@ namespace Start_a_Town_
             if (HotkeyDown.Contains(e.KeyCode))
                 Down = true;
 
-            HotkeyManager.PerformHotkey(HotkeyContext, e.KeyCode);
+            HotkeyManager.PerformHotkey(e.KeyCode, HotkeyContext);
             if (HotkeyWalk.Contains(e.KeyCode))
                 StartWalk(true);
             if (e.KeyCode == GlobalVars.KeyBindings.Sprint)
@@ -124,9 +124,9 @@ namespace Start_a_Town_
 
         static void ToggleMouseMove()
         {
-            MouseMove = !MouseMove;
-            MoveToggle = false;
-            Ingame.Instance.Hud.Chat.Write($"Mouse move {(MouseMove ? "Enabled" : "Disabled")}");
+            MouseMovementEnabled = !MouseMovementEnabled;
+            MovingByMouse = false;
+            Ingame.Instance.Hud.Chat.Write($"Mouse move {(MouseMovementEnabled ? "Enabled" : "Disabled")}");
         }
         public virtual void MoveKeys()
         {
@@ -164,18 +164,15 @@ namespace Start_a_Town_
                 roundx = (int)Math.Round(rx);
                 roundy = (int)Math.Round(ry);
 
-                Vector2 nextStep = new Vector2(roundx, roundy);
+                var nextStep = new Vector2(roundx, roundy);
                 nextStep.Normalize();
                 PacketPlayerInputDirection.Send(Net.Client.Instance, nextStep);
-                if (!Walking)
+                if (!Moving)
                     StartMoving();
-                Walking = true;
-
+                Moving = true;
             }
             else
-            {
                 StopMoving();
-            }
         }
         public void StartMoving()
         {
@@ -183,23 +180,23 @@ namespace Start_a_Town_
         }
         protected void StopMoving()
         {
-            if (!Walking)
+            if (!Moving)
                 return;
-            if (MoveToggle)
+            if (MovingByMouse)
                 return;
 
             PacketPlayerToggleMove.Send(Net.Client.Instance, false);
 
-            Walking = false;
+            Moving = false;
         }
         public override ControlTool.Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (e.Handled)
                 return Messages.Default;
 
-            if (MouseMove)
+            if (MouseMovementEnabled)
             {
-                MoveToggle = true;
+                MovingByMouse = true;
                 StartMoving();
             }
             else
@@ -207,8 +204,6 @@ namespace Start_a_Town_
             return Messages.Default;
         }
 
-       
-        
         static void JumpNew()
         {
             PacketPlayerJump.Send(Net.Client.Instance);
@@ -250,9 +245,9 @@ namespace Start_a_Town_
         }
         public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (MouseMove)
+            if (MouseMovementEnabled)
             {
-                MoveToggle = false;
+                MovingByMouse = false;
                 StopMoving();
             }
             else

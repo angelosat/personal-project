@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;

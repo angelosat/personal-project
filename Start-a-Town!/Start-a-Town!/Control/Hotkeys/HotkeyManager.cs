@@ -19,6 +19,13 @@ namespace Start_a_Town_
             Hotkeys.Add(hotkey);
             return hotkey;
         }
+        public static IHotkey RegisterHotkey(HotkeyContext context, string label, Action actionPress, Action actionRelease, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
+        {
+            var hotkey = new Hotkey(context, label, actionPress, actionRelease, key1, key2);
+            handleConflicts(hotkey, false);
+            Hotkeys.Add(hotkey);
+            return hotkey;
+        }
         static void handleConflicts(Hotkey newHotkey, bool overwrite)
         {
             foreach (var h in Hotkeys.Where(hk => hk.Context == newHotkey.Context))

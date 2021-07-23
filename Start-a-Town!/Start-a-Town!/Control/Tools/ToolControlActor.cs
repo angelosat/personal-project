@@ -7,17 +7,16 @@ namespace Start_a_Town_
     class ToolControlActor : ControlTool
     {
         static readonly HotkeyContext HotkeyContext = new("Movement");
-        private static readonly IHotkey HotkeyLeft, HotkeyRight, HotkeyUp, HotkeyDown, HotkeyWalk, HotkeySprint;
         static ToolControlActor()
         {
-            HotkeyLeft = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Left", delegate { }, System.Windows.Forms.Keys.A, System.Windows.Forms.Keys.Left);
-            HotkeyRight = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Right", delegate { }, System.Windows.Forms.Keys.D, System.Windows.Forms.Keys.Right);
-            HotkeyUp = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Up", delegate { }, System.Windows.Forms.Keys.W, System.Windows.Forms.Keys.Up);
-            HotkeyDown = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Down", delegate { }, System.Windows.Forms.Keys.S, System.Windows.Forms.Keys.Down);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Left", () => Left = true, () => Left = false, System.Windows.Forms.Keys.A, System.Windows.Forms.Keys.Left);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Right", () => Right = true, () => Right = false, System.Windows.Forms.Keys.D, System.Windows.Forms.Keys.Right);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Up", () => Up = true, () => Up = false, System.Windows.Forms.Keys.W, System.Windows.Forms.Keys.Up);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Down", () => Down = true, () => Down = false, System.Windows.Forms.Keys.S, System.Windows.Forms.Keys.Down);
             HotkeyManager.RegisterHotkey(HotkeyContext, "Jump", JumpNew, System.Windows.Forms.Keys.Space);
             HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle Mouse Move", ToggleMouseMove, System.Windows.Forms.Keys.M);
-            HotkeyWalk = HotkeyManager.RegisterHotkey(HotkeyContext, "Walk", delegate { }, System.Windows.Forms.Keys.ControlKey);
-            HotkeySprint = HotkeyManager.RegisterHotkey(HotkeyContext, "Sprint", delegate { }, System.Windows.Forms.Keys.ShiftKey);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Walk", () => StartWalk(true), () => StartWalk(false), System.Windows.Forms.Keys.ControlKey);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Sprint", () => StartSprint(true), () => StartSprint(false), System.Windows.Forms.Keys.ShiftKey);
         }
 
         static bool Up, Down, Left, Right, Moving, WalkKeyDown, SprintKeyDown;
@@ -65,44 +64,16 @@ namespace Start_a_Town_
         {
             if (e.Handled)
                 return;
-           
-            if (HotkeyLeft.Contains(e.KeyCode))
-                Left = true;
-            if (HotkeyRight.Contains(e.KeyCode))
-                Right = true; 
-            if (HotkeyUp.Contains(e.KeyCode))
-                Up = true;
-            if (HotkeyDown.Contains(e.KeyCode))
-                Down = true;
-
-            HotkeyManager.PerformHotkey(e.KeyCode, HotkeyContext);
-            if (HotkeyWalk.Contains(e.KeyCode))
-                StartWalk(true);
-            if (e.KeyCode == GlobalVars.KeyBindings.Sprint)
-                StartSprint(true);
+            if (HotkeyManager.Press(e.KeyCode, HotkeyContext))
+                e.Handled = true;
+            base.HandleKeyDown(e);
         }
         public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             if (e.Handled)
                 return;
-
-            if (HotkeyLeft.Contains(e.KeyCode))
-                Left = false;
-            if (HotkeyRight.Contains(e.KeyCode))
-                Right = false;
-            if (HotkeyUp.Contains(e.KeyCode))
-                Up = false;
-            if (HotkeyDown.Contains(e.KeyCode))
-                Down = false;
-
-            if (!(Up || Down || Left || Right))
-                StopMoving();
-
-            if (HotkeyWalk.Contains(e.KeyCode))
-                StartWalk(false);
-            if (HotkeySprint.Contains(e.KeyCode))
-                StartSprint(false);
-
+            if (HotkeyManager.Release(e.KeyCode, HotkeyContext))
+                e.Handled = true;
             base.HandleKeyUp(e);
         }
 
@@ -151,6 +122,11 @@ namespace Start_a_Town_
             {
                 yy -= 1;
                 xx += 1;
+            }
+            else if (!(Up || Down || Left || Right))
+            {
+                StopMoving();
+                return;
             }
             if (xx != 0 || yy != 0)
             {
@@ -226,7 +202,7 @@ namespace Start_a_Town_
         }
         internal override void OnGameEvent(GameEvent e)
         {
-            switch(e.Type)
+            switch (e.Type)
             {
                 case Components.Message.Types.PlayerControlNpc:
                     if (e.Parameters[0] == Net.Client.Instance.GetPlayer())

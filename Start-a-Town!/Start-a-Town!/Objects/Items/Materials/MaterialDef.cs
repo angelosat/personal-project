@@ -5,24 +5,24 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class Material : Def, ILabeled
+    public class MaterialDef : Def, ILabeled
     {
         public static readonly Random Randomizer = new();
         static int _idSequence = 0;
         public static int IdSequence => _idSequence++;
 
-        public static Dictionary<int, Material> Registry = new();
+        public static Dictionary<int, MaterialDef> Registry = new();
 
         public string Label => this.Name;
 
-        public static Material GetMaterial(int materialID)
+        public static MaterialDef GetMaterial(int materialID)
         {
             if (materialID < 0)
                 return null;
             return Registry[materialID];
         }
 
-        internal static Material GetRandom()
+        internal static MaterialDef GetRandom()
         {
             var index = Randomizer.Next(0, _idSequence);
             return Registry[index];
@@ -57,13 +57,13 @@ namespace Start_a_Town_
         public float ValueMultiplier = 1;
         public int Value => (int)(this.ValueBase * this.ValueMultiplier);
 
-        public Material()
+        public MaterialDef()
         {
             this.IsTemplate = true;
         }
-        public Material(MaterialType type, string name, string prefix, int density)
+        public MaterialDef(MaterialType type, string name, string prefix, int density)
             : this(type, name, prefix, Color.White, density) { }
-        public Material(string name, Material template) : base(name)
+        public MaterialDef(string name, MaterialDef template) : base(name)
         {
             this.ID = IdSequence;
             Registry[this.ID] = this;
@@ -77,7 +77,7 @@ namespace Start_a_Town_
             this.Fuel = template.Fuel;
         }
 
-        public Material(Material template)
+        public MaterialDef(MaterialDef template)
         {
             this.ID = IdSequence;
             Registry[this.ID] = this;
@@ -90,7 +90,7 @@ namespace Start_a_Town_
             this.Type.AddMaterial(this);
             this.Fuel = template.Fuel;
         }
-        public Material(MaterialType type, string name, string prefix, Color color, int density) : base(name)
+        public MaterialDef(MaterialType type, string name, string prefix, Color color, int density) : base(name)
         {
             this.Type = type;
             type.SubTypes.Add(this);
@@ -105,59 +105,59 @@ namespace Start_a_Town_
         {
         }
 
-        internal static IEnumerable<Material> GetMaterials(Func<Material, bool> condition)
+        internal static IEnumerable<MaterialDef> GetMaterials(Func<MaterialDef, bool> condition)
         {
             return Registry.Values.Where(condition);
         }
         
-        public static Material CreateColor(Color color)
+        public static MaterialDef CreateColor(Color color)
         {
-            var mat = new Material(MaterialType.Dye, "Color", "Color", color, 1);
+            var mat = new MaterialDef(MaterialType.Dye, "Color", "Color", color, 1);
             return mat;
         }
 
-        public Material SetColor(Color color)
+        public MaterialDef SetColor(Color color)
         {
             this.Color = color;
             this.ColorVector = new Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, this.Shininess);
             return this;
         }
-        public Material SetDensity(int density)
+        public MaterialDef SetDensity(int density)
         {
             this.Density = density;
             return this;
         }
-        public Material SetReflectiveness(float reflectiveness)
+        public MaterialDef SetReflectiveness(float reflectiveness)
         {
             this.Shininess = reflectiveness;
             this.ColorVector = new Vector4(this.Color.R / 255.0f, this.Color.G / 255.0f, this.Color.B / 255.0f, reflectiveness);
             return this;
         }
-        public Material SetState(MaterialState state)
+        public MaterialDef SetState(MaterialState state)
         {
             this.State = state;
             return this;
         }
 
-        public Material SetName(string name)
+        public MaterialDef SetName(string name)
         {
             this.Name = name;
             return this;
         }
-        public Material SetPrefix(string prefix)
+        public MaterialDef SetPrefix(string prefix)
         {
             if (this.IsTemplate)
                 throw new Exception();
             this.Prefix = prefix;
             return this;
         }
-        public Material SetValue(int value)
+        public MaterialDef SetValue(int value)
         {
             this.ValueBase = value;
             return this;
         }
 
-        public Material SetType(MaterialType type)
+        public MaterialDef SetType(MaterialType type)
         {
             this.Type = type;
             return this;

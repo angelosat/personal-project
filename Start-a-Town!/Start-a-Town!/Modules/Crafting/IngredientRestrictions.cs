@@ -6,7 +6,7 @@ namespace Start_a_Town_
 {
     public class IngredientRestrictions : ISaveable, ISerializable
     {
-        public HashSet<Material> Material = new();
+        public HashSet<MaterialDef> Material = new();
         public HashSet<MaterialType> MaterialType = new();
         public HashSet<ItemDef> ItemDef = new();
         public IngredientRestrictions()
@@ -20,7 +20,7 @@ namespace Start_a_Town_
             this.MaterialType = new(source.MaterialType);
 
         }
-        public bool IsRestricted(Material item)
+        public bool IsRestricted(MaterialDef item)
         {
             return this.Material.Contains(item);
         }
@@ -33,7 +33,7 @@ namespace Start_a_Town_
             return this.ItemDef.Contains(item);
         }
 
-        public IngredientRestrictions Restrict(Material mat)
+        public IngredientRestrictions Restrict(MaterialDef mat)
         {
             this.Material.Add(mat);
             return this;
@@ -50,7 +50,7 @@ namespace Start_a_Town_
             return this;
         }
 
-        public void Toggle(Material item)
+        public void Toggle(MaterialDef item)
         {
             if (!this.Material.Contains(item))
                 this.Material.Add(item);
@@ -72,7 +72,7 @@ namespace Start_a_Town_
                 this.ItemDef.Remove(item);
         }
 
-        internal void ToggleRestrictions(ItemDef[] defs, Material[] mats, MaterialType[] matTypes)
+        internal void ToggleRestrictions(ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
         {
             for (int i = 0; i < defs.Length; i++)
             {
@@ -109,7 +109,7 @@ namespace Start_a_Town_
         {
             this.ItemDef.TryLoadDefs<ItemDef>(tag, "Material");
 
-            this.Material = new HashSet<Material>(tag.LoadListInt("ItemDef").Select(s => Start_a_Town_.Material.GetMaterial(s)));
+            this.Material = new HashSet<MaterialDef>(tag.LoadListInt("ItemDef").Select(s => Start_a_Town_.MaterialDef.GetMaterial(s)));
             this.MaterialType = new HashSet<MaterialType>(tag.LoadListInt("MaterialType").Select(s => Start_a_Town_.MaterialType.GetMaterialType(s)));
             return this;
         }
@@ -125,7 +125,7 @@ namespace Start_a_Town_
         public ISerializable Read(BinaryReader r)
         {
             this.ItemDef = new HashSet<ItemDef>(r.ReadStringArray().Select(Def.GetDef<ItemDef>));
-            this.Material = new HashSet<Material>(r.ReadIntArray().Select(Start_a_Town_.Material.GetMaterial));
+            this.Material = new HashSet<MaterialDef>(r.ReadIntArray().Select(Start_a_Town_.MaterialDef.GetMaterial));
             this.MaterialType = new HashSet<MaterialType>(r.ReadIntArray().Select(Start_a_Town_.MaterialType.GetMaterialType));
             return this;
         }

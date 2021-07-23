@@ -11,12 +11,12 @@ namespace Start_a_Town_
         public int StackDimension = 1;
         public ItemCategory Category;
         public Sprite DefaultSprite;
-        public Material DefaultMaterial;
+        public MaterialDef DefaultMaterial;
         public bool MadeFromMaterials;
         public List<Reaction.Product.Types> CanProcessInto = new();
         public int BaseValue = 1;
         public MaterialType DefaultMaterialType;
-        public List<Material> CanBeMadeFrom = new();
+        public List<MaterialDef> CanBeMadeFrom = new();
         public List<MaterialType> ValidMaterialTypes = new();
         public Func<ItemDef, Entity> Factory = ItemFactory.CreateItem;
         public ActorDef ActorProperties;
@@ -50,7 +50,7 @@ namespace Start_a_Town_
         {
             return this.Factory(this);
         }
-        public Entity CreateFrom(Material mat)
+        public Entity CreateFrom(MaterialDef mat)
         {
             var item = ItemFactory.CreateFrom(this, mat);
             return item;
@@ -81,9 +81,9 @@ namespace Start_a_Town_
             this.ValidMaterialTypes.AddRange(types);
             return this;
         }
-        public IEnumerable<Material> GetValidMaterials()
+        public IEnumerable<MaterialDef> GetValidMaterials()
         {
-            IEnumerable<Material> validMats = this.ValidMaterialTypes.SelectMany(t => t.SubTypes);
+            IEnumerable<MaterialDef> validMats = this.ValidMaterialTypes.SelectMany(t => t.SubTypes);
             foreach (var m in validMats)
                 yield return m;
         }

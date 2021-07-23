@@ -27,7 +27,7 @@ namespace Start_a_Town_.Components.Resources
                 return "##0";
             }
         }
-        internal override void InitMaterials(Entity obj, Dictionary<string, Material> materials)
+        internal override void InitMaterials(Entity obj, Dictionary<string, MaterialDef> materials)
         {
             var count = materials.Count;
             var totaldensity = materials.Values.Sum(m => m.Density);

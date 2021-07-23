@@ -125,7 +125,7 @@ namespace Start_a_Town_
         public float Fertility => this.Block.GetFertility(this);
         public IntVec3 LocalCoords => new(this.X, this.Y, this.Z);
 
-        public Material Material => this.Block.GetMaterial(this.BlockData);
+        public MaterialDef Material => this.Block.GetMaterial(this.BlockData);
 
         public IntVec3 GetGlobalCoords(Chunk chunk)
         {

@@ -11,7 +11,7 @@ namespace Start_a_Town_.Blocks
             this.Variations.Add(Atlas.Load("blocks/blockblueprint"));
         }
         public override bool IsStandableIn => true;
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return null;
         }

@@ -133,7 +133,7 @@ namespace Start_a_Town_
             Register(Boulders);
             Register(Scraps);
         }
-        static public Entity CreateFrom(ItemDef def, Material mat)
+        static public Entity CreateFrom(ItemDef def, MaterialDef mat)
         {
             var item = ItemFactory.CreateFrom(def, mat);
             return item;

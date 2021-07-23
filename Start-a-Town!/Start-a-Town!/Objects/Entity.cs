@@ -31,7 +31,7 @@ namespace Start_a_Town_
             }
 
         }
-        public Entity SetMaterial(BoneDef bone, Material mat)
+        public Entity SetMaterial(BoneDef bone, MaterialDef mat)
         {
             this.Sprite.SetMaterial(bone, mat);
             return this;
@@ -59,7 +59,7 @@ namespace Start_a_Town_
            
         }
 
-        internal Material GetMaterial(BoneDef def)
+        internal MaterialDef GetMaterial(BoneDef def)
         {
             return this.Sprite.GetMaterial(def);
         }
@@ -73,7 +73,7 @@ namespace Start_a_Town_
         {
             return this.Body.RenderIcon(this, scale);
         }
-        internal Entity SetMaterial(Material mat)
+        internal Entity SetMaterial(MaterialDef mat)
         {
             foreach (var c in this.Components.Values)
                 c.SetMaterial(mat);
@@ -81,7 +81,7 @@ namespace Start_a_Town_
             mat.Apply(this);
             return this;
         }
-        internal Entity SetMaterials(Dictionary<string, Material> materials)
+        internal Entity SetMaterials(Dictionary<string, MaterialDef> materials)
         {
             foreach (var c in this.Components.Values)
                 c.Initialize(this, materials);

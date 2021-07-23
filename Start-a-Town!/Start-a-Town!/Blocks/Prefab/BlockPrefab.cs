@@ -14,7 +14,7 @@ namespace Start_a_Town_.Blocks
         {
             return Token;
         }
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return MaterialDefOf.LightWood;
         }

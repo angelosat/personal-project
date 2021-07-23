@@ -11,11 +11,11 @@ namespace Start_a_Town_.Terraforming.Mutators
         {
             public string Name;
             public int Frequency;
-            public Material Material;
+            public MaterialDef Material;
             public int MaxVeinSize;
             public int MinZ, MaxZ;
 
-            public Template(string name, Material material, int frequency, int maxVeinSize, int minZ, int maxZ)
+            public Template(string name, MaterialDef material, int frequency, int maxVeinSize, int minZ, int maxZ)
             {
                 this.Name = name;
                 this.Frequency = frequency;

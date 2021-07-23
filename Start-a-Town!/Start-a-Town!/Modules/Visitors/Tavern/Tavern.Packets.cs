@@ -78,7 +78,7 @@ namespace Start_a_Town_
                     net.GetOutgoingStream().Write(PacketOrderSync, pl.ID, tavern.ID, order.ID, enabled);
             }
 
-            public static void UpdateOrderIngredients(INetwork net, PlayerData player, Tavern tavern, CraftOrderNew order, string reagent, ItemDef[] defs, Material[] mats, MaterialType[] matTypes)
+            public static void UpdateOrderIngredients(INetwork net, PlayerData player, Tavern tavern, CraftOrderNew order, string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
             {
                 if (net is Server)
                     order.ToggleReagentRestrictions(reagent, defs, mats, matTypes);
@@ -99,7 +99,7 @@ namespace Start_a_Town_
                 var order = tavern.GetOrder(r.ReadInt32());
                 var reagent = r.ReadString();
                 var defs = r.ReadStringArray().Select(Def.GetDef<ItemDef>).ToArray();
-                var mats = r.ReadIntArray().Select(Material.GetMaterial).ToArray();
+                var mats = r.ReadIntArray().Select(MaterialDef.GetMaterial).ToArray();
                 var matTypes = r.ReadIntArray().Select(MaterialType.GetMaterialType).ToArray();
                 if (net is Client)
                 {

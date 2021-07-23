@@ -11,13 +11,8 @@ namespace Start_a_Town_.Components
         
         static int GrowthRate = 20;
 
-        public override string ComponentName
-        {
-            get
-            {
-                return "Plant";
-            }
-        }
+        public override string ComponentName => "Plant";
+           
         public Progress GrowthBody = new(0, 100, 5);
         public Progress FruitGrowth = new(0, 100, 0);
 
@@ -30,15 +25,7 @@ namespace Start_a_Town_.Components
         float Length;
         Progress Progress;
         public int Level;
-        Loot Produce;
        
-        public override void OnObjectCreated(GameObject parent)
-        {
-        }
-        public override void OnObjectLoaded(GameObject parent)
-        {
-            parent.Body.Sprite = this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing;
-        }
         public PlantComponent()
         {
             this.Progress = new Progress();
@@ -72,17 +59,18 @@ namespace Start_a_Town_.Components
             this.FruitGrowth = new Progress(toCopy.FruitGrowth);
         }
        
-        public PlantComponent Initialize(Loot produce, int level)
+        public override void OnObjectCreated(GameObject parent)
         {
-            this.Length = level * GrowthRate * Engine.TicksPerSecond; //*2;
-            this.Progress.Value = 0;
-            this.Produce = produce;
-            this.Level = level;
-            return this;
+            parent.Body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
+        }
+        public override void OnObjectLoaded(GameObject parent)
+        {
+            parent.Body.Sprite = Sprite.Load(this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing);
+            //parent.Body.Sprite = this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing;
         }
         public override void MakeChildOf(GameObject parent)
         {
-            parent.Body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
+            //parent.Body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
         }
         public override void Tick()
         {
@@ -103,7 +91,8 @@ namespace Start_a_Town_.Components
                             {
                                 if (prevPercentage < ForageThreshold)
                                     parent.Net.EventOccured(Message.Types.PlantReady, parent);
-                                parent.Body.Sprite = this.PlantProperties.TextureGrown;
+                                //parent.Body.Sprite = this.PlantProperties.TextureGrown;
+                                parent.Body.Sprite = Sprite.Load(this.PlantProperties.TextureGrown);
                             }
                         }
                     }
@@ -173,7 +162,8 @@ namespace Start_a_Town_.Components
         {
             this.FruitGrowth.Value = 0;
             this.FruitGrowthTick = 0;
-            parent.Body.Sprite = this.PlantProperties.TextureGrowing;
+            //parent.Body.Sprite = this.PlantProperties.TextureGrowing;
+            parent.Body.Sprite = Sprite.Load(this.PlantProperties.TextureGrowing);
         }
 
         public void ResetGrowth(GameObject parent)

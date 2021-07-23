@@ -3,10 +3,9 @@
     public class TreeProperties
     {
         public ItemDef TrunkType;
-        public Material Material;
+        public MaterialDef Material;
         public int Yield;
-
-        public TreeProperties(Material material, int yield)
+        public TreeProperties(MaterialDef material, int yield)
         {
             this.Material = material;
             this.TrunkType = RawMaterialDef.Logs;

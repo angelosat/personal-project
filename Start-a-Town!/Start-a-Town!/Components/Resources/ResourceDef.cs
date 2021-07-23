@@ -91,7 +91,7 @@ namespace Start_a_Town_
         internal virtual void HandleRemoteCall(GameObject parent, ObjectEventArgs e, Resource resource)
         {
         }
-        public virtual void SetMaterial(Material mat) { }
+        public virtual void SetMaterial(MaterialDef mat) { }
         public enum ResourceTypes { Health, Mana, Stamina, Durability }
 
         readonly List<ResourceThreshold> Thresholds = new();
@@ -186,6 +186,6 @@ namespace Start_a_Town_
         public virtual void OnHealthBarCreated(GameObject parent, UI.Nameplate plate, Resource values) { }
         public virtual void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent) { }
 
-        internal virtual void InitMaterials(Entity obj, Dictionary<string, Material> materials) { }
+        internal virtual void InitMaterials(Entity obj, Dictionary<string, MaterialDef> materials) { }
     }
 }

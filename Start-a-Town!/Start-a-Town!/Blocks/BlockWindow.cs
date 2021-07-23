@@ -9,7 +9,7 @@ namespace Start_a_Town_.Blocks
     class BlockWindow : Block
     {
         AtlasDepthNormals.Node.Token[][][] PartsSeparate;
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return MaterialDefOf.Glass;
         }

@@ -53,9 +53,9 @@ namespace Start_a_Town_.Components
         public virtual void OnObjectCreated(GameObject parent) { }
         public virtual void OnObjectLoaded(GameObject parent) { }
         public virtual void OnObjectSynced(GameObject parent) { }
-        public virtual void SetMaterial(Material mat) { }
+        public virtual void SetMaterial(MaterialDef mat) { }
 
-        internal virtual void Initialize(Entity parent, Dictionary<string, Material> materials) { }
+        internal virtual void Initialize(Entity parent, Dictionary<string, MaterialDef> materials) { }
         internal virtual void Initialize(Entity parent, Quality quality) { }
 
         public virtual void MakeChildOf(GameObject parent) { this.Parent = parent; }

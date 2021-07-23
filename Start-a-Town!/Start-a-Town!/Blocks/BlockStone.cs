@@ -15,7 +15,7 @@
         {
             return base.GetDustEmitter();
         }
-        public override Material GetMaterial(byte data)
+        public override MaterialDef GetMaterial(byte data)
         {
             return MaterialDefOf.Stone;
         }

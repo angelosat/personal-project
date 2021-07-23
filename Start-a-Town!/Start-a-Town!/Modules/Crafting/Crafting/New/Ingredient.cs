@@ -7,17 +7,17 @@ namespace Start_a_Town_
     public partial class Ingredient
     {
         public ItemDef ItemDef;
-        public Material Material;
+        public MaterialDef Material;
         public MaterialType MaterialType;
         public int Amount = 1;
         public string Name;
         readonly List<Modifier> Modifiers = new();
         readonly HashSet<ItemCategory> SpecifiedCategories = new();
-        readonly HashSet<Material> SpecifiedMaterials = new();
+        readonly HashSet<MaterialDef> SpecifiedMaterials = new();
         readonly HashSet<ItemDef> SpecifiedItemDefs = new();
         public IngredientRestrictions DefaultRestrictions = new();
         readonly List<Func<Entity, bool>> SpecialFilters = new();
-        HashSet<Material> ResolvedMaterials;
+        HashSet<MaterialDef> ResolvedMaterials;
         HashSet<ItemDef> ResolvedItemDefs;
         bool Resolved;
 
@@ -31,7 +31,7 @@ namespace Start_a_Town_
         {
 
         }
-        public Ingredient(ItemDef item = null, Material material = null, MaterialType materialType = null, int amount = 1)
+        public Ingredient(ItemDef item = null, MaterialDef material = null, MaterialType materialType = null, int amount = 1)
         {
             ItemDef = item;
             Material = material;
@@ -39,7 +39,7 @@ namespace Start_a_Town_
             Amount = amount;
         }
 
-        public IEnumerable<Material> GetAllValidMaterials()
+        public IEnumerable<MaterialDef> GetAllValidMaterials()
         {
             this.TryResolve();
             foreach (var i in ResolvedMaterials)
@@ -117,7 +117,7 @@ namespace Start_a_Town_
                 this.SpecifiedCategories.Remove(category);
             return this;
         }
-        public Ingredient SetAllow(Material mat, bool allow)
+        public Ingredient SetAllow(MaterialDef mat, bool allow)
         {
             if (mat is null)
                 throw new Exception(); 

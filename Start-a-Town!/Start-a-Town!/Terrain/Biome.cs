@@ -2,6 +2,6 @@
 {
     public class Biome
     {
-        public Material Wood = MaterialDefOf.LightWood;
+        public MaterialDef Wood = MaterialDefOf.LightWood;
     }
 }

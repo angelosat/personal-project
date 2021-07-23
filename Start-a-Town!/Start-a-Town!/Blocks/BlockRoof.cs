@@ -10,7 +10,7 @@ namespace Start_a_Town_.Blocks
     {
         static readonly Texture2D Depth1 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth1height19");
         static readonly Texture2D Depth2 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth2height19");
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return MaterialDefOf.LightWood;
         }

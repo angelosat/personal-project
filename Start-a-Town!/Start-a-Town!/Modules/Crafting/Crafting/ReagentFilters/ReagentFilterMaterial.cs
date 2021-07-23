@@ -2,20 +2,20 @@
 {
     public class ReagentFilterMaterial
     {
-        public Material SpecificMaterial;
+        public MaterialDef SpecificMaterial;
         public MaterialType SpecificMaterialType;
 
         public ReagentFilterMaterial()
         {
         }
 
-        public ReagentFilterMaterial(Material mat, MaterialType matType)
+        public ReagentFilterMaterial(MaterialDef mat, MaterialType matType)
         {
             this.SpecificMaterial = mat;
             this.SpecificMaterialType = matType;
         }
 
-        public bool Condition(Material def)
+        public bool Condition(MaterialDef def)
         {
             if (this.SpecificMaterial != null)
                 return def == this.SpecificMaterial;

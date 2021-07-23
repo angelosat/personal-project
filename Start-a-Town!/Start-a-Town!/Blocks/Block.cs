@@ -125,7 +125,7 @@ namespace Start_a_Town_
                 return;
             }
             tooltip.Controls.Add(new Label(this.Name) { Location = tooltip.Controls.BottomLeft, Font = UIManager.FontBold, TextColor = Color.Goldenrod });
-            if (this.GetMaterial(map.GetBlockData(global)) is Material mat)
+            if (this.GetMaterial(map.GetBlockData(global)) is MaterialDef mat)
                 tooltip.Controls.Add(new Label(mat.ToString()) { TextColorFunc = () => mat.Color, Location = tooltip.Controls.BottomLeft });
 
             var data = cell.BlockData;
@@ -490,7 +490,7 @@ namespace Start_a_Town_
             return this.Solid && withinBlock.Z < h;
         }
         public virtual bool IsOpaque(Cell cell) { return this.Opaque; }
-        public abstract Material GetMaterial(byte blockdata);
+        public abstract MaterialDef GetMaterial(byte blockdata);
 
         public virtual void RandomBlockUpdate(INetwork net, IntVec3 global, Cell cell) { }
         protected virtual void HandleMessage(Vector3 global, ObjectEventArgs e) { }
@@ -640,7 +640,7 @@ namespace Start_a_Town_
         {
             return (byte)craftingReagent.Body.Material.ID;
         }
-        public virtual byte GetDataFromMaterial(Material mat)
+        public virtual byte GetDataFromMaterial(MaterialDef mat)
         {
             return (byte)mat.ID;
         }
@@ -693,7 +693,7 @@ namespace Start_a_Town_
         {
             return this.Ingredient?.GetAllValidMaterialsNew() ?? Enumerable.Empty<ItemDefMaterialAmount>();
         }
-        internal void IngredientRequirements(Material mainMaterial, out ItemDef def, out int amount)
+        internal void IngredientRequirements(MaterialDef mainMaterial, out ItemDef def, out int amount)
         {
             if (!this.Ingredient.ItemDef.DefaultMaterialType.SubTypes.Contains(mainMaterial))
             {
@@ -729,7 +729,7 @@ namespace Start_a_Town_
             dropped.Spawn(actor.Map, target.Global + target.Face + target.Precise);
         }
 
-        public static Material GetBlockMaterial(MapBase map, IntVec3 global)
+        public static MaterialDef GetBlockMaterial(MapBase map, IntVec3 global)
         {
             var cell = map.GetCell(global);
             var mat = cell.Block.GetMaterial(cell.BlockData);

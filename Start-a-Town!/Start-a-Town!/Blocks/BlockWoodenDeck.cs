@@ -11,7 +11,7 @@ namespace Start_a_Town_
     {
         public class State : BlockState
         {
-            public Material Material { get; set; }
+            public MaterialDef Material { get; set; }
             public override byte Data
             {
                 get
@@ -20,23 +20,23 @@ namespace Start_a_Town_
                 }
             }
             public override Color GetTint(byte d)
-            { return Material.Registry[d].Color; }
+            { return MaterialDef.Registry[d].Color; }
             public override string GetName(byte d)
             {
-                return Material.Registry[d].Name;
+                return MaterialDef.Registry[d].Name;
             }
 
             public State()
             {
 
             }
-            public State(Material material)
+            public State(MaterialDef material)
             {
                 this.Material = material;
             }
-            public static void Read(byte data, out Material material)
+            public static void Read(byte data, out MaterialDef material)
             {
-                material = Material.Registry[data];
+                material = MaterialDef.Registry[data];
             }
 
             public override void FromCraftingReagent(GameObject reagent)
@@ -89,14 +89,14 @@ namespace Start_a_Town_
         }
         public override IEnumerable<byte> GetEditorVariations()
         {
-            return (from mat in Material.Registry.Values
+            return (from mat in MaterialDef.Registry.Values
                     where mat.Type == MaterialType.Wood
                     select (byte)mat.ID);
 
         }
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
-            return Material.Registry[blockdata];
+            return MaterialDef.Registry[blockdata];
         }
 
         public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)

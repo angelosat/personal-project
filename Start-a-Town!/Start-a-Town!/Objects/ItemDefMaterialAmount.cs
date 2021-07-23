@@ -5,13 +5,13 @@ namespace Start_a_Town_
     public class ItemDefMaterialAmount : ISerializable, ISaveable
     {
         public ItemDef Def;
-        public Material Material;
+        public MaterialDef Material;
         public int Amount;
         public ItemDefMaterialAmount()
         {
 
         }
-        public ItemDefMaterialAmount(ItemDef def, Material material, int amount)
+        public ItemDefMaterialAmount(ItemDef def, MaterialDef material, int amount)
         {
             Def = def;
             Material = material;
@@ -36,7 +36,7 @@ namespace Start_a_Town_
         {
             return GetText(this.Def, this.Material, this.Amount);
         }
-        static public string GetText(ItemDef def, Material material, int amount)
+        static public string GetText(ItemDef def, MaterialDef material, int amount)
         {
             return string.Format("{0}x {1} {2}", amount, material.Label, def.Label); // TODO add a method to itemdefs that return the final name of the item depending on materials etc
         }
@@ -51,7 +51,7 @@ namespace Start_a_Town_
         public ISaveable Load(SaveTag tag)
         {
             this.Def = tag.LoadDef<ItemDef>("DefName");
-            this.Material = Material.GetMaterial(tag.GetValue<int>("MaterialID"));
+            this.Material = MaterialDef.GetMaterial(tag.GetValue<int>("MaterialID"));
             this.Amount = tag.GetValue<int>("Amount");
             return this;
         }
@@ -64,7 +64,7 @@ namespace Start_a_Town_
         public ISerializable Read(BinaryReader r)
         {
             this.Def = Start_a_Town_.Def.GetDef<ItemDef>(r.ReadString());
-            this.Material = Material.GetMaterial(r.ReadInt32());
+            this.Material = MaterialDef.GetMaterial(r.ReadInt32());
             this.Amount = r.ReadInt32();
             return this;
         }

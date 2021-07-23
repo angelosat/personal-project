@@ -44,7 +44,7 @@ namespace Start_a_Town_.Blocks
                 return valid;
             }
            
-            public bool IsReadyToBuild(out ItemDef def, out Material mat, out int amount)
+            public bool IsReadyToBuild(out ItemDef def, out MaterialDef mat, out int amount)
             {
                 var product = this.Product;
                 def = product.Requirement.Def;

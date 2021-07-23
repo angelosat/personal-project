@@ -2,10 +2,10 @@
 {
     class IsOfMaterial : Reaction.Reagent.ReagentFilter
     {
-        Material Material;
+        MaterialDef Material;
         public override string Name => "Is of material";
         
-        public IsOfMaterial(Material material)
+        public IsOfMaterial(MaterialDef material)
         {
             this.Material = material;
         }

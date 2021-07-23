@@ -14,7 +14,7 @@ namespace Start_a_Town_
     {
         public enum Part { Top = 0x0, Bottom = 0x1 }
 
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             // TODO: implement
             return MaterialDefOf.LightWood;

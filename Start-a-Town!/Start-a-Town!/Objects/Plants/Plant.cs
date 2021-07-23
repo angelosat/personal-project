@@ -14,7 +14,7 @@ namespace Start_a_Town_
         }
         public Plant() : base()
         {
-
+            this.AddComponent(new PlantComponent());
         }
 
         public Plant(ItemDef def):base()

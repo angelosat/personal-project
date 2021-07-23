@@ -17,7 +17,7 @@ namespace Start_a_Town_.Blocks
         static Texture2D Normal3 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/stairs/stairs3normal");
         static Texture2D Normal4 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/stairs/stairs4normal");
 
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return MaterialDefOf.LightWood;
         }

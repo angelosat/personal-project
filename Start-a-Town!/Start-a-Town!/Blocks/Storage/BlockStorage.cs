@@ -9,9 +9,9 @@ namespace Start_a_Town_
     partial class BlockStorage : Block
     {
         static readonly Texture2D ChestNormalMap = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chestnormal");
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
-            return Material.Registry[blockdata];
+            return MaterialDef.Registry[blockdata];
         }
         public BlockStorage()
             : base(Types.Bin, opaque: false)
@@ -23,7 +23,7 @@ namespace Start_a_Town_
 
         public override IEnumerable<byte> GetEditorVariations()
         {
-            var vars = (from mat in Material.Registry.Values
+            var vars = (from mat in MaterialDef.Registry.Values
                         where mat.Type == MaterialType.Wood || mat.Type == MaterialType.Metal
                         select (byte)mat.ID);
             return vars;
@@ -34,7 +34,7 @@ namespace Start_a_Town_
         }
         public override Vector4 GetColorVector(byte data)
         {
-            var mat = Material.Registry[data];
+            var mat = MaterialDef.Registry[data];
             var c = mat.ColorVector;
             return c;
         }

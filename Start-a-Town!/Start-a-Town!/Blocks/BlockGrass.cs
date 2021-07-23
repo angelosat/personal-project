@@ -88,7 +88,7 @@ namespace Start_a_Town_
                 return 0;
             return base.GetFertility(cell);
         }
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return MaterialDefOf.Soil;
         }

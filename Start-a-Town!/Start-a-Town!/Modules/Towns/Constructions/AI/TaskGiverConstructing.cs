@@ -30,7 +30,7 @@ namespace Start_a_Town_
                     continue; // because the list contains other block types as well
 
 
-                if (blockEntity.IsReadyToBuild(out ItemDef def, out Material mat, out int amount))
+                if (blockEntity.IsReadyToBuild(out ItemDef def, out MaterialDef mat, out int amount))
                 {
                     var buildtask = TryBuild(actor, closest, blockEntity);
                     if (buildtask != null)
@@ -93,7 +93,7 @@ namespace Start_a_Town_
             return buildtask;
         }
         
-        AITask TryDeliverMaterialNewNew(Actor actor, Vector3 origin, IEnumerable<IntVec3> allConstructions, ItemDef ingredientDef, Material ingredientMat)
+        AITask TryDeliverMaterialNewNew(Actor actor, Vector3 origin, IEnumerable<IntVec3> allConstructions, ItemDef ingredientDef, MaterialDef ingredientMat)
         {
             if (!IsOperatable(actor, origin))
                 return null;

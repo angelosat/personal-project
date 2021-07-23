@@ -64,7 +64,7 @@ namespace Start_a_Town_.UI.Editor
                     mysb.Flush();
                 };
                 slot.CustomTooltip = true;
-                slot.HoverText = $"{cell.Block.Name}:{Material.GetMaterial(cell.BlockData)}";
+                slot.HoverText = $"{cell.Block.Name}:{MaterialDef.GetMaterial(cell.BlockData)}";
             })
             { Location = this.Panel_Variants.Controls.BottomLeft };
             this.Panel_Variants.Controls.Add(this.GridVariations2);

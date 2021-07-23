@@ -154,7 +154,7 @@ namespace Start_a_Town_.Components
             var resource = this.GetResource(resourceRateModifier.Def.Source);
             resource.AddModifier(resourceRateModifier);
         }
-        internal override void Initialize(Entity parent, Dictionary<string, Material> materials)
+        internal override void Initialize(Entity parent, Dictionary<string, MaterialDef> materials)
         {
             for (int i = 0; i < this.Resources.Length; i++)
             {

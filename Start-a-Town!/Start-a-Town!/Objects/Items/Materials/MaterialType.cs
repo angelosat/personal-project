@@ -11,7 +11,7 @@ namespace Start_a_Town_
         public readonly MaterialCategory Category;
         public int ID;
         public string Name;
-        public HashSet<Material> SubTypes = new();
+        public HashSet<MaterialDef> SubTypes = new();
         public float Shininess;
         public ToolAbilityDef SkillToExtract;
 
@@ -31,7 +31,7 @@ namespace Start_a_Town_
             Dictionary[id] = this;
             this.Name = name;
 
-            this.SubTypes = new HashSet<Material>();
+            this.SubTypes = new HashSet<MaterialDef>();
         }
         public MaterialType(string name, MaterialCategory category)
             : this(name)
@@ -56,7 +56,7 @@ namespace Start_a_Town_
         static public readonly MaterialType PlantStem = new("PlantStem", MaterialCategory.Plant);
         static public readonly MaterialType Seed = new("Seed", MaterialCategory.Plant);
 
-        public void AddMaterial(Material mat)
+        public void AddMaterial(MaterialDef mat)
         {
             mat.Type = this;
             this.SubTypes.Add(mat);

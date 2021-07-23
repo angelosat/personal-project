@@ -15,7 +15,7 @@ namespace Start_a_Town_.Crafting
         public Action<Reaction.Product.ProductMaterialPair> Callback = a => { };
         Panel PanelParts, PanelItemTypes, PanelMaterials, PanelCollapsible;
         Dictionary<Reaction.Reagent, ListBoxNew<ItemDef, CheckBoxNew>> CachedReagentLists = new Dictionary<Reaction.Reagent, ListBoxNew<ItemDef, CheckBoxNew>>();
-        Dictionary<Reaction.Reagent, ListBoxNew<Material, CheckBoxNew>> CachedReagentMaterialLists = new Dictionary<Reaction.Reagent, ListBoxNew<Material, CheckBoxNew>>();
+        Dictionary<Reaction.Reagent, ListBoxNew<MaterialDef, CheckBoxNew>> CachedReagentMaterialLists = new Dictionary<Reaction.Reagent, ListBoxNew<MaterialDef, CheckBoxNew>>();
         CheckBoxNew ChkHaulOnFinish;
 
         CraftOrderNew Order;
@@ -97,7 +97,7 @@ namespace Start_a_Town_.Crafting
                             itemNode.AddLeaf(new CheckBoxNew(mat.Name)
                             {
                                 TickedFunc = () => !order.IsRestricted(r.Name, mat),
-                                LeftClickAction = () => CraftingManager.SetOrderRestrictions(order, r.Name, null, new Material[] { mat }, null)
+                                LeftClickAction = () => CraftingManager.SetOrderRestrictions(order, r.Name, null, new MaterialDef[] { mat }, null)
                             });
                         }
                     }

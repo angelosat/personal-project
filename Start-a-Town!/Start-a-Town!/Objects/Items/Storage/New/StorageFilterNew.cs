@@ -14,7 +14,7 @@ namespace Start_a_Town_
             Condition = condition;
         }
 
-        public StorageFilterNew(ItemDef item, Material mat, bool enabled = true)
+        public StorageFilterNew(ItemDef item, MaterialDef mat, bool enabled = true)
         {
             this.Label = mat.Label + " " + item.Label;
             this.Condition = o => o.Def == item && o.PrimaryMaterial == mat;

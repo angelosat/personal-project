@@ -67,15 +67,15 @@ namespace Start_a_Town_
         {
             return this.Restrictions[name].IsRestricted(i);
         }
-        internal bool IsRestricted(string name, Material i)
+        internal bool IsRestricted(string name, MaterialDef i)
         {
             return this.Restrictions[name].IsRestricted(i);
         }
-        internal bool IsRestricted(Material i)
+        internal bool IsRestricted(MaterialDef i)
         {
             return this.Restrictions.Values.Any(r => r.IsRestricted(i));
         }
-        public bool IsAllowed(Material mat)
+        public bool IsAllowed(MaterialDef mat)
         {
             if (this.IsRestricted(mat))
             {
@@ -148,7 +148,7 @@ namespace Start_a_Town_
             return this.Map.GetBlockEntity(this.Workstation).GetComp<BlockEntityCompWorkstation>();
         }
 
-        internal void ToggleReagentRestrictions(string reagent, ItemDef[] defs, Material[] mats, MaterialType[] matTypes)
+        internal void ToggleReagentRestrictions(string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
         {
             this.Restrictions[reagent].ToggleRestrictions(defs, mats, matTypes);
         }
@@ -364,7 +364,7 @@ namespace Start_a_Town_
             return this.GetUniqueLoadID();
         }
 
-        public void ShowDetailsUI(Action<CraftOrderNew, string, ItemDef[], Material[], MaterialType[]> callback)
+        public void ShowDetailsUI(Action<CraftOrderNew, string, ItemDef[], MaterialDef[], MaterialType[]> callback)
         {
             var list = DetailsUIReagents ??= new ListBoxCollapsible(200, 200);
             list.Clear();
@@ -393,7 +393,7 @@ namespace Start_a_Town_
                         itemNode.AddLeaf(new CheckBoxNew(mat.Name)
                         {
                             TickedFunc = () => !this.IsRestricted(r.Name, mat),
-                            LeftClickAction = () => callback(this, r.Name, null, new Material[] { mat }, null)
+                            LeftClickAction = () => callback(this, r.Name, null, new MaterialDef[] { mat }, null)
                         });
                     }
                 }

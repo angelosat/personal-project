@@ -224,7 +224,7 @@ namespace Start_a_Town_
             Read(data, out var locked, out var open, out var part);
             return open ? 0 : 1;
         }
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return MaterialDefOf.LightWood;
         }

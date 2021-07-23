@@ -246,10 +246,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             return this.SaveToTag();
         }
 
-        public SaveTag SaveToTag()
+        SaveTag SaveToTag()
         {
-            SaveTag mapTag;
-            mapTag = new SaveTag(SaveTag.Types.Compound, "Map");
+            var mapTag = new SaveTag(SaveTag.Types.Compound, "Map");
 
             mapTag.Add(new SaveTag(SaveTag.Types.Int, "X", (int)this.Coordinates.X));
             mapTag.Add(new SaveTag(SaveTag.Types.Int, "Y", (int)this.Coordinates.Y));

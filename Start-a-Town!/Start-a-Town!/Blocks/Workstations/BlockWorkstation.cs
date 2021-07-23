@@ -28,9 +28,9 @@ namespace Start_a_Town_
             return Activator.CreateInstance(this.BlockEntityType) as BlockEntity;
         }
 
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
-            return Material.Registry[blockdata];
+            return MaterialDef.Registry[blockdata];
         }
        
         public override Vector4 GetColorVector(byte data)

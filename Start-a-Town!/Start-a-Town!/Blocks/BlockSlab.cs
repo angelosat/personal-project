@@ -42,7 +42,7 @@ namespace Start_a_Town_.Blocks
         {
             yield return (byte)MaterialDefOf.Stone.ID;
         }
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return MaterialDefOf.Stone;
         }

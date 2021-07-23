@@ -11,7 +11,7 @@ namespace Start_a_Town_.Blocks
         
         AtlasDepthNormals.Node.Token[][] Assets;
         enum Fullness { Half, Full };
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
             return MaterialDefOf.Water;
 

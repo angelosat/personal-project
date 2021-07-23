@@ -14,7 +14,6 @@ namespace Start_a_Town_
             Haulable = false,
             DefaultMaterial = MaterialDefOf.LightWood,
             Body = new Bone(BoneDef.TreeTrunk, ItemContent.TreeFull),
-            CompProps = new List<ComponentProps>() { new PlantComponent.Props() }
         };
 
         static public ItemDef Bush = new("BerryBush")
@@ -26,7 +25,6 @@ namespace Start_a_Town_
             Haulable = false,
             DefaultMaterial = MaterialDefOf.ShrubStem,
             Body = new Bone(BoneDef.PlantStem, ItemContent.BerryBushGrowing),
-            CompProps = new List<ComponentProps>() { new PlantComponent.Props() }
         };
         static PlantDefOf()
         {

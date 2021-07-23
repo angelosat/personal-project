@@ -14,12 +14,12 @@ namespace Start_a_Town_
         class State : IBlockState
         {
             public Color GetTint(byte d)
-            { return Material.Registry[d].Color; }
+            { return MaterialDef.Registry[d].Color; }
             public string GetName(byte d)
             {
-                return Material.Registry[d].Name;
+                return MaterialDef.Registry[d].Name;
             }
-            public Material Material;
+            public MaterialDef Material;
             public State()
             {
 
@@ -28,21 +28,21 @@ namespace Start_a_Town_
             {
                 map.SetBlockData(global, (byte)this.Material.ID);
             }
-            public State(Material material)
+            public State(MaterialDef material)
             {
                 this.Material = material;
             }
             public State(byte data)
             {
-                this.Material = Material.Registry[data];
+                this.Material = MaterialDef.Registry[data];
             }
             public State(MapBase map, Vector3 global)
             {
-                this.Material = Material.Registry[global.GetData(map)];
+                this.Material = MaterialDef.Registry[global.GetData(map)];
             }
-            static public void Get(byte data, out Material material)
+            static public void Get(byte data, out MaterialDef material)
             {
-                material = Material.Registry[data];
+                material = MaterialDef.Registry[data];
             }
             public void Apply(ref byte data)
             {
@@ -61,7 +61,7 @@ namespace Start_a_Town_
         }
         public override IEnumerable<byte> GetEditorVariations()
         {
-            var vars = (from mat in Material.Registry.Values
+            var vars = (from mat in MaterialDef.Registry.Values
                         where mat.Type == MaterialType.Stone || mat.Type == MaterialType.Metal 
                         select (byte)mat.ID);
             return vars;
@@ -86,14 +86,14 @@ namespace Start_a_Town_
             this.LoadVariations("stone5height19");
         }
         
-        public override Material GetMaterial(byte data)
+        public override MaterialDef GetMaterial(byte data)
         {
-            return Material.Registry[data];
+            return MaterialDef.Registry[data];
         }
 
         public override byte ParseData(string data)
         {
-            var mat = Material.Registry.Values.FirstOrDefault(m => string.Equals(m.Name, data, StringComparison.OrdinalIgnoreCase));
+            var mat = MaterialDef.Registry.Values.FirstOrDefault(m => string.Equals(m.Name, data, StringComparison.OrdinalIgnoreCase));
             if (mat == null)
                 return (byte)MaterialDefOf.Stone.ID;
             if (mat.Type != MaterialDefOf.Stone.Type)
@@ -110,30 +110,30 @@ namespace Start_a_Town_
 
         public override Color GetColor(byte data)
         {
-            var mat = Material.Registry[data];
+            var mat = MaterialDef.Registry[data];
             var c = mat.Color;
             c.A = (byte)(255 * mat.Type.Shininess);
             return c;
         }
         public override Vector4 GetColorVector(byte data)
         {
-            var mat = Material.Registry[data];
+            var mat = MaterialDef.Registry[data];
             var c = mat.ColorVector;
             return c;
         }
 
         public override void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
-            base.Draw(sb, screenPos, sunlight, blocklight, Material.Registry[cell.BlockData].Color.Multiply(tint), zoom, depth, cell);
+            base.Draw(sb, screenPos, sunlight, blocklight, MaterialDef.Registry[cell.BlockData].Color.Multiply(tint), zoom, depth, cell);
         }
 
         public override void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
-            base.Draw(sb, screenBounds, sunlight, blocklight, fog, Material.Registry[cell.BlockData].Color.Multiply(tint), zoom, depth, cell);
+            base.Draw(sb, screenBounds, sunlight, blocklight, fog, MaterialDef.Registry[cell.BlockData].Color.Multiply(tint), zoom, depth, cell);
         }
         public override void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
-            base.Draw(sb, screenBounds, sunlight, blocklight, fog, Material.Registry[cell.BlockData].Color.Multiply(tint), zoom, depth, cell);
+            base.Draw(sb, screenBounds, sunlight, blocklight, fog, MaterialDef.Registry[cell.BlockData].Color.Multiply(tint), zoom, depth, cell);
         }
     }
 }

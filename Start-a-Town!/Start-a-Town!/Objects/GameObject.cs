@@ -266,7 +266,7 @@ namespace Start_a_Town_
 
         public bool IsStackFull => this.StackSize == this.StackMax; 
         public Bone Body => this.SpriteComp.Body;
-        internal Material PrimaryMaterial => this.Body.Material;
+        internal MaterialDef PrimaryMaterial => this.Body.Material;
 
         public GameObject SetGlobal(Vector3 global)
         {
@@ -1394,7 +1394,7 @@ namespace Start_a_Town_
             }
         }
 
-        public Material Material => this.SpriteComp.GetMaterial(this.Body);
+        public MaterialDef Material => this.SpriteComp.GetMaterial(this.Body);
 
         internal bool HasFocus()
         {

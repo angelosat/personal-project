@@ -12,10 +12,10 @@ namespace Start_a_Town_.Terraforming.Mutators
             public double Threshold;
             public int Frequency;
             byte[] Seed;
-            public Material Material;
+            public MaterialDef Material;
             public int Hash;
 
-            public Template(string name, Material material, int frequency, double threshold) :this()
+            public Template(string name, MaterialDef material, int frequency, double threshold) :this()
             {
                 this.Name = name;
                 this.Frequency = frequency;

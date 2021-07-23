@@ -705,7 +705,7 @@
     <Compile Include="Components\Interactions\NewScripts\Equip.cs" />
     <Compile Include="Modules\Base\GameManager.cs" />
     <Compile Include="Components\Inventory\Container.cs" />
-    <Compile Include="Objects\Items\Materials\Material.cs" />
+    <Compile Include="Objects\Items\Materials\MaterialDef.cs" />
     <Compile Include="Objects\Items\Materials\MaterialType.cs" />
     <Compile Include="Components\MobileComponent.cs" />
     <Compile Include="Components\Inventory\PersonalInventoryComponent.cs" />

@@ -19,7 +19,7 @@ namespace Start_a_Town_.Components.Crafting
             
             if (body == null)
                 return false;
-            Material mat = body.Material;
+            MaterialDef mat = body.Material;
             if (mat == null)
                 return false;
             var type = mat.Type;

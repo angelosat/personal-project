@@ -51,7 +51,7 @@ namespace Start_a_Town_
         }
 
         public Bone Parent;
-        public Material Material;
+        public MaterialDef Material;
 
         public Color Tint = Color.White;
 
@@ -497,7 +497,7 @@ namespace Start_a_Town_
             }
         }
 
-        Material GetMaterial()
+        MaterialDef GetMaterial()
         {
             return this.Material;
         }
@@ -880,7 +880,7 @@ namespace Start_a_Town_
 
         public ISerializable Read(BinaryReader r)
         {
-            this.Material = Material.GetMaterial(r.ReadInt32());
+            this.Material = MaterialDef.GetMaterial(r.ReadInt32());
             foreach (var j in this.Joints.Values)
                 j.Bone?.Read(r);
             return this;
@@ -905,7 +905,7 @@ namespace Start_a_Town_
 
         public ISaveable Load(SaveTag tag)
         {
-            tag.TryGetTagValue<int>("MaterialID", i => this.Material = Material.GetMaterial(i));
+            tag.TryGetTagValue<int>("MaterialID", i => this.Material = MaterialDef.GetMaterial(i));
             tag.TryGetTag("Joints", t =>
             {
                 foreach (var j in this.Joints)

@@ -48,7 +48,7 @@ namespace Start_a_Town_
         }
         public int WhiteSpace { get; set; }
 
-        public Material Material;
+        public MaterialDef Material;
         float _Shininess = 0;
         public float Shininess
         {
@@ -99,12 +99,10 @@ namespace Start_a_Town_
             BlockHightlightBack = new Sprite("blocks/highlightfullback", Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09back")) { OriginGround = Block.OriginCenter };
             Atlas.Initialize();
         }
+        static readonly string Path = "Graphics/Items/";
+        public string AssetPath => Path + this.Name;
+        static readonly Dictionary<string, Sprite> Registry = new();
 
-        public Rectangle GetSourceRect()
-        {
-            return this.AtlasToken.Rectangle;
-        }
-        
         public Sprite(Sprite toClone)
         {
             this.Texture = toClone.Texture;
@@ -126,7 +124,6 @@ namespace Start_a_Town_
             foreach (var ol in toClone.Overlays)
                 this.Overlays.Add(ol.Key, new Sprite(ol.Value));
         }
-        
         public Sprite(Texture2D texture, Rectangle[][] sourcerect, Vector2 origin, MouseMap mousemap = null, Rectangle[][] highlights = null)
         {
             this.Highlights = highlights;
@@ -177,6 +174,7 @@ namespace Start_a_Town_
         public Sprite(string assetName, Texture2D depthMap)
         {
             this.Name = assetName;
+            Registry.Add(this.AssetPath, this);
             OriginGround = Vector2.Zero;
 
             Texture2D texture = Game1.Instance.Content.Load<Texture2D>("Graphics/Items/" + assetName);
@@ -226,6 +224,11 @@ namespace Start_a_Town_
             Joint = joint + Vector2.One * Graphics.Borders.Thickness;
         }
 
+        public static Sprite Load(string assetPath)
+        {
+            return Registry[assetPath];
+        }
+
         /// <summary>
         /// Creates an array used for hit testing
         /// </summary>
@@ -236,7 +239,11 @@ namespace Start_a_Town_
             sprite.Texture.GetData(0, source, spriteMap, 0, source.Width * source.Height);
             return spriteMap;
         }
-        
+        public Rectangle GetSourceRect()
+        {
+            return this.AtlasToken.Rectangle;
+        }
+
         public Rectangle GetBounds()
         { 
             return new Rectangle(
@@ -303,7 +310,7 @@ namespace Start_a_Town_
             foreach (var ol in this.Overlays.Values)
                 ol.Draw(sb, screenPos, sky, block, tint, fog, rotation, origin, scale, sprFx, depth);
         }
-        public void Draw(MySpriteBatch sb, Vector2 screenPos, Material material, Color sky, Color block, Color tint, Color fog, float rotation, Vector2 origin, float scale, SpriteEffects sprFx, float depth)
+        public void Draw(MySpriteBatch sb, Vector2 screenPos, MaterialDef material, Color sky, Color block, Color tint, Color fog, float rotation, Vector2 origin, float scale, SpriteEffects sprFx, float depth)
         {
             if (material == null) // TEMPORARY UNTIL I REMOVE MATERIAL FROM SPRITE
                 material = this.Material;
@@ -314,7 +321,7 @@ namespace Start_a_Town_
             foreach (var ol in this.Overlays.Values)
                 ol.Draw(sb, screenPos, sky, block, tint, fog, rotation, origin, scale, sprFx, depth);
         }
-        public void Draw(MySpriteBatch sb, CharacterColors overlayColors, Vector2 screenPos, Material material, Color sky, Color block, Color tint, Color fog, float rotation, Vector2 origin, float scale, SpriteEffects sprFx, float depth)
+        public void Draw(MySpriteBatch sb, CharacterColors overlayColors, Vector2 screenPos, MaterialDef material, Color sky, Color block, Color tint, Color fog, float rotation, Vector2 origin, float scale, SpriteEffects sprFx, float depth)
         {
             if (material == null) // TEMPORARY UNTIL I REMOVE MATERIAL FROM SPRITE
                 material = this.Material;

@@ -44,18 +44,18 @@ namespace Start_a_Town_
             return obj;
         }
         
-        static public Entity CreateFrom(ItemDef def, Material mat)
+        static public Entity CreateFrom(ItemDef def, MaterialDef mat)
         {
             var obj = CreateItem(def);
             obj.SetMaterial(mat);
             return obj;
         }
 
-        static public Dictionary<string, Material> GetRandomMaterialsFor(ItemDef def)
+        static public Dictionary<string, MaterialDef> GetRandomMaterialsFor(ItemDef def)
         {
-            var dic = new Dictionary<string, Material>();
+            var dic = new Dictionary<string, MaterialDef>();
             foreach (var r in def.CraftingProperties.Reagents)
-                dic[r.Value.Name] = r.Value.Ingredient.GetAllValidMaterials().ToArray().SelectRandom(Material.Randomizer);
+                dic[r.Value.Name] = r.Value.Ingredient.GetAllValidMaterials().ToArray().SelectRandom(MaterialDef.Randomizer);
             return dic;
         }
     }

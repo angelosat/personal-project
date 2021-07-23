@@ -51,7 +51,7 @@ namespace Start_a_Town_
         {
             return this.StoredFuelItems.Sum(o => o.Material.Fuel.Value * o.Amount);
         }
-        private void StoreFuel(ItemDef iD, Material mat, int actualAmountToAdd)
+        private void StoreFuel(ItemDef iD, MaterialDef mat, int actualAmountToAdd)
         {
             var existing = this.StoredFuelItems.FirstOrDefault(o => o.Def == iD && o.Material == mat);
             if (existing == null)

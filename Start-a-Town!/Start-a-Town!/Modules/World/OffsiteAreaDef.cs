@@ -7,7 +7,7 @@ namespace Start_a_Town_
 {
     public class OffsiteAreaDef : Def
     {
-        readonly Dictionary<ItemDef, Dictionary<Material, int>> ResourcesNew = new();
+        readonly Dictionary<ItemDef, Dictionary<MaterialDef, int>> ResourcesNew = new();
         public LootTable LootTable;
         public int LootWeightRawMaterial = 1;
         public int LootWeightEquipment = 1;
@@ -64,7 +64,7 @@ namespace Start_a_Town_
             var obj = factory();
             return obj as Entity;
         }
-        public OffsiteAreaDef AddLoot(ItemDef def, Material mat, float chance)
+        public OffsiteAreaDef AddLoot(ItemDef def, MaterialDef mat, float chance)
         {
             return this;
         }
@@ -90,7 +90,7 @@ namespace Start_a_Town_
         {
             return this.LootTableEquipment.SelectRandom(rand).CreateRandom();
         }
-        internal GameObject TryGenerate(ItemDef def, Material material, Random rand, float chance)
+        internal GameObject TryGenerate(ItemDef def, MaterialDef material, Random rand, float chance)
         {
             if (!this.ResourcesNew.TryGetValue(def, out var found))
                 return null;
@@ -100,7 +100,7 @@ namespace Start_a_Town_
                 return null;
             return def.CreateFrom(material);
         }
-        internal bool CanBeFound(ItemDef def, Material material, out float weight)
+        internal bool CanBeFound(ItemDef def, MaterialDef material, out float weight)
         {
             weight = 0;
             if (!this.ResourcesNew.TryGetValue(def, out var found))
@@ -117,7 +117,7 @@ namespace Start_a_Town_
             this.LootTable.Add(loot);
             return this;
         }
-        public OffsiteAreaDef AddLootRawMaterial(ItemDef item, params (Material mat, int weight)[] mats)
+        public OffsiteAreaDef AddLootRawMaterial(ItemDef item, params (MaterialDef mat, int weight)[] mats)
         {
             if (this.ResourcesNew.TryGetValue(item, out var array))
                 foreach (var mat in mats)

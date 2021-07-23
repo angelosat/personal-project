@@ -18,7 +18,7 @@ namespace Start_a_Town_
 
         public ReactionType Reaction;
         public List<string> Hatelist;
-        HashSet<Material> Favorites = new();
+        HashSet<MaterialDef> Favorites = new();
         public Trait[] Traits;
 
         public override string ComponentName => "Personality";
@@ -65,7 +65,7 @@ namespace Start_a_Town_
         {
             return this.Traits.First(t => t.Def == def);
         }
-        public IEnumerable<Material> GetFavorites()
+        public IEnumerable<MaterialDef> GetFavorites()
         {
             foreach (var i in this.Favorites)
                 yield return i;
@@ -182,9 +182,9 @@ namespace Start_a_Town_
             }
         }
 
-        static public HashSet<Material> GenerateMaterialPreferences()
+        static public HashSet<MaterialDef> GenerateMaterialPreferences()
         {
-            var list = new HashSet<Material>();
+            var list = new HashSet<MaterialDef>();
             foreach (var type in MaterialType.Dictionary.Values)
             {
                 if (type.SubTypes.Any())

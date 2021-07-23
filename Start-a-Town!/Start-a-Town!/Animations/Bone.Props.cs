@@ -4,7 +4,7 @@
     {
         public class Props
         {
-            public Material Material;
+            public MaterialDef Material;
             public Sprite Sprite;
             public float Scale;
         }

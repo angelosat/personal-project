@@ -76,7 +76,7 @@ namespace Start_a_Town_
                 throw new Exception();
         }
 
-        public bool IsReadyToBuild(out ItemDef def, out Material mat, out int amount)
+        public bool IsReadyToBuild(out ItemDef def, out MaterialDef mat, out int amount)
         {
             var req = this.Container.First();
             if (req.Amount == this.Product.Requirement.Amount)

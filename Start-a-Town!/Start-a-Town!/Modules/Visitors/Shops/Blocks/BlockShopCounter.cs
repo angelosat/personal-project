@@ -16,9 +16,9 @@ namespace Start_a_Town_
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
 
-        public override Material GetMaterial(byte blockdata)
+        public override MaterialDef GetMaterial(byte blockdata)
         {
-            return Material.GetMaterial(blockdata);
+            return MaterialDef.GetMaterial(blockdata);
         }
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {

@@ -1,13 +1,36 @@
-﻿namespace Start_a_Town_
+﻿using System.Xml.Serialization;
+
+namespace Start_a_Town_
 {
     public class GrowthProperties
     {
+        [XmlIgnore]
         public ItemDef GrowthItemDef;
-        public Material GrowthMaterial;
+        [XmlIgnore] 
+        public MaterialDef GrowthMaterial;
+
+        [XmlElement(ElementName = "GrowthMaterialDef")]
+        public string GrowthMaterialString
+        {
+            get => this.GrowthMaterial.Name;
+            set { }
+        }
+
+        [XmlElement(ElementName = "GrowthItemDef")]
+        public string GrowthItemDefString
+        {
+            get => this.GrowthItemDef.Name;
+            set { }
+        }
+
         public int MaxYieldHarvest;
         public int GrowthLengthTicks;
 
-        public GrowthProperties(ItemDef growthItemDef, Material growthMaterial, int maxYieldHarvest, int growthLengthTicks)
+        public GrowthProperties()
+        {
+
+        }
+        public GrowthProperties(ItemDef growthItemDef, MaterialDef growthMaterial, int maxYieldHarvest, int growthLengthTicks)
         {
             this.GrowthItemDef = growthItemDef;
             this.GrowthMaterial = growthMaterial;

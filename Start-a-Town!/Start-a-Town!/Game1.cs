@@ -142,7 +142,7 @@ namespace Start_a_Town_
             Effect = Game1.Instance.Content.Load<Effect>("Effect3");
             MapBase.Initialize();
             // TODO: use this.Content to load your game content here
-            Material.Initialize();
+            MaterialDef.Initialize();
             RawMaterialDef.Initialize();
 
             /// def init

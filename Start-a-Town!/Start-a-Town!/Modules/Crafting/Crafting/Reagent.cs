@@ -13,7 +13,7 @@ namespace Start_a_Town_.Components.Crafting
                 public virtual string Name { get; set; }
                 public Func<Entity, bool> _Condition;
                 public Func<ItemDef, bool> _DefCondition;
-                public Func<Material, bool> _MatCondition;
+                public Func<MaterialDef, bool> _MatCondition;
 
                 public virtual bool Condition(Entity obj)
                 {
@@ -29,9 +29,9 @@ namespace Start_a_Town_.Components.Crafting
             public int Quantity => this.Ingredient.Amount;
             public ReagentFilterMaterial MaterialFilter = new();
             public ReagentFilterItem ItemFilter = new();
-            public List<Func<Material, bool>> Modifiers = new();
+            public List<Func<MaterialDef, bool>> Modifiers = new();
             public List<ReagentFilter> Conditions = new();
-            public static Reagent Create(string name, ItemDef itemDef, Material mat, MaterialType matType, int amount = 1)
+            public static Reagent Create(string name, ItemDef itemDef, MaterialDef mat, MaterialType matType, int amount = 1)
             {
                 var r = new Reagent
                 {
@@ -60,7 +60,7 @@ namespace Start_a_Town_.Components.Crafting
             {
                 return new List<Reagent>(reagents);
             }
-            internal static ReagentFilter IsOfMaterial(Material material)
+            internal static ReagentFilter IsOfMaterial(MaterialDef material)
             {
                 return new IsOfMaterial(material);
             }
@@ -82,7 +82,7 @@ namespace Start_a_Town_.Components.Crafting
                 return this.ItemFilter.Condition(def);
 
             }
-            public bool Filter(Material mat)
+            public bool Filter(MaterialDef mat)
             {
                 return
                     this.MaterialFilter.Condition(mat) &&

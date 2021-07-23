@@ -779,7 +779,7 @@ namespace Start_a_Town_
             return los;
         }
 
-        internal Material GetBlockMaterial(Vector3 global)
+        internal MaterialDef GetBlockMaterial(Vector3 global)
         {
             return Block.GetBlockMaterial(this, global);
         }

@@ -7,36 +7,35 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
-    [EnsureInit]
+    [EnsureStaticCtorCall]
     public sealed class UISelectedInfo : GroupBox, IUISelection
     {
-        static readonly QuickButton IconSlice =  new(Icon.ArrowDown, HotkeySliceZ)
-        {
-            BackgroundTexture = UIManager.Icon16Background,
-            LeftClickAction = Slice,
-            HoverText = "Slice z-level"
-        };
-        public static UISelectedInfo Instance = new();
         readonly GroupBox BoxTabs, BoxButtons, BoxIcons, BoxInfo;
         public Panel PanelInfo;
         public Label LabelName;
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
         int PreviousDrawLevel = -1;
-        //static readonly HotkeyContext HotkeyContextSelection = new("Selection");
         static readonly IHotkey HotkeySliceZ;
-        
+
         static UISelectedInfo()
         {
-            HotkeySliceZ = HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Set draw elevation to selection", IconSlice.Toggle, System.Windows.Forms.Keys.Z);
+            HotkeySliceZ = HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Set draw elevation to selection", () => IconSlice.Toggle(), System.Windows.Forms.Keys.Z);
         }
+        static readonly QuickButton IconSlice = new(Icon.ArrowDown, HotkeySliceZ)
+        {
+            BackgroundTexture = UIManager.Icon16Background,
+            LeftClickAction = Slice,
+            HoverText = "Slice z-level"
+        };
+        public static UISelectedInfo Instance = new();
+
         public TargetArgs SelectedSource = TargetArgs.Null;
         ISelectable Selectable;
         Window WindowInfo;
         IEnumerator<ISelectable> SelectedStack;
-        public IEnumerable<TargetArgs> MultipleSelected = new List<TargetArgs>(); // TODO: make this a list of iselectables
+        public ICollection<TargetArgs> MultipleSelected = new List<TargetArgs>(); // TODO: make this a list of iselectables
 
-        int MultipleSelectedCount => this.MultipleSelected.Count();
 
         UISelectedInfo()
         {
@@ -179,16 +178,16 @@ namespace Start_a_Town_.UI
         private void Select(IEnumerable<TargetArgs> targets)
         {
             this.Select(TargetArgs.Null);
-            this.MultipleSelected = this.Filter(targets).Where(t => t.Exists);
-            if (this.MultipleSelectedCount == 0)
+            this.MultipleSelected = this.Filter(targets).Where(t => t.Exists).ToList();
+            if (this.MultipleSelected.Count == 0)
                 return;
-            if (this.MultipleSelectedCount == 1)
+            if (this.MultipleSelected.Count == 1)
             {
                 this.Select(targets.First());
                 return;
             }
 
-            this.LabelName.TextFunc = () => string.Format("Multiple x{0}", this.MultipleSelectedCount);
+            this.LabelName.TextFunc = () => $"Multiple x{this.MultipleSelected.Count}";
 
             this.CreateButtons(targets);
             this.PanelInfo.RemoveControls(this.BoxIcons);
@@ -353,7 +352,7 @@ namespace Start_a_Town_.UI
         }
         internal void AddButton(IconButton button, Action<List<TargetArgs>> action, TargetArgs obj, bool singleTargetOnly = false)
         {
-            if (singleTargetOnly && this.MultipleSelectedCount > 1)
+            if (singleTargetOnly && this.MultipleSelected.Count > 1)
                 return;
 
             if (this.ActionsAdded.TryGetValue(action, out List<TargetArgs> existing))
@@ -488,7 +487,7 @@ namespace Start_a_Town_.UI
         }
         public void AddIcon(IconButton icon)
         {
-            if (this.MultipleSelectedCount > 1)
+            if (this.MultipleSelected.Count > 1)
                 return;
 
             this.BoxIcons.Controls.Insert(0, icon);

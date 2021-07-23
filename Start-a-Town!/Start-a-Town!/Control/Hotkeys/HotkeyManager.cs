@@ -11,7 +11,7 @@ namespace Start_a_Town_
         GroupBox _gui;
         internal override GroupBox Gui => this._gui ??= this.CreateGui();
         readonly Lazy<WindowInputKey> EnterKeyGui = new();
-
+        
         public static IHotkey RegisterHotkey(HotkeyContext context, string label, Action action, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
         {
             var hotkey = new Hotkey(context, label, action, key1, key2);
@@ -66,14 +66,16 @@ namespace Start_a_Town_
             }
         }
 
-        internal static IHotkey RegisterHotkey(object hotkeyContext, string v, Action toggle, System.Windows.Forms.Keys z)
-        {
-            throw new NotImplementedException();
-        }
-
         public static bool PerformHotkey(HotkeyContext context, System.Windows.Forms.Keys key)
         {
             if (Hotkeys.FirstOrDefault(h => h.Context == context && h.ShortcutKeys.Contains(key)) is not Hotkey hotkey)
+                return false;
+            hotkey.Action();
+            return true;
+        }
+        public static bool PerformHotkey(object context, System.Windows.Forms.Keys key)
+        {
+            if (Hotkeys.FirstOrDefault(h => h.Context.Name == context.GetType().Name && h.ShortcutKeys.Contains(key)) is not Hotkey hotkey)
                 return false;
             hotkey.Action();
             return true;

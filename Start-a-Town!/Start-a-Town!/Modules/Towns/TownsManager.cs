@@ -20,7 +20,7 @@ namespace Start_a_Town_.Towns
             PacketCommandNpc.Init();
             PacketControlNpc.Init();
             NpcComponent.Init();
-            PacketPlayerInput.Init();
+            PacketPlayerInputDirection.Init();
             PacketPlayerToggleMove.Init();
             PacketPlayerToggleWalk.Init();
             PacketPlayerToggleSprint.Init();

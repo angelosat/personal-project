@@ -5,7 +5,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketPlayerInput
+    class PacketPlayerInputDirection
     {
         static int p;
         internal static void Init()
@@ -27,6 +27,11 @@ namespace Start_a_Town_
                 throw new NotImplementedException();
             var pl = net.GetPlayer(r.ReadInt32());
             var dir = r.ReadVector2();
+            if (pl.ControllingEntity is null)
+            {
+                net.SyncReport("received direction packet but player controlling entity is null");
+                return;
+            }
             pl.ControllingEntity.Transform.Direction = dir;
         }
     }

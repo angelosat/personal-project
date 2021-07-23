@@ -43,7 +43,7 @@ namespace Start_a_Town_
                     return this.Key1.ToString();
                 return "";
             }
-            internal bool Contains(System.Windows.Forms.Keys key)
+            public bool Contains(System.Windows.Forms.Keys key)
             {
                 return this._keys[0] == key || this._keys[1] == key;
             }

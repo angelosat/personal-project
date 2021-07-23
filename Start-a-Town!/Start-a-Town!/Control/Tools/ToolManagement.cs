@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Start_a_Town_
 {
-    [EnsureInit]
+    [EnsureStaticCtorCall]
     public class ToolManagement : DefaultTool
     {
         bool Up, Down, Left, Right;

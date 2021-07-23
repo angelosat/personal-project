@@ -8,7 +8,7 @@ using UI;
 
 namespace Start_a_Town_
 {
-    [EnsureInit]
+    [EnsureStaticCtorCall]
     public class ToolManager : IKeyEventHandler
     {
         static ToolManager _instance;
@@ -31,6 +31,7 @@ namespace Start_a_Town_
             get => this._activeTool ??= this.GetDefaultTool();
             set
             {
+                this._activeTool?.CleanUp();
                 this._activeTool = value ?? this.GetDefaultTool();
                 if (this._activeTool is not null)
                 {

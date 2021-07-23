@@ -46,6 +46,12 @@ namespace Start_a_Town_
         {
             return Controller.Instance.MouseoverBlock.TryGet<GameObject>(out target);
         }
+
+        internal virtual void CleanUp()
+        {
+            
+        }
+
         public virtual bool TryGetTarget(out GameObject target, out Vector3 face)
         {
             face = Controller.Instance.MouseoverBlock.Face;

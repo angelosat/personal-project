@@ -194,7 +194,7 @@
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
     <Compile Include="Gui\ScrollBars\ScrollModes.cs" />
-    <Compile Include="Helpers\EnsureInit.cs" />
+    <Compile Include="Helpers\EnsureStaticCtorCall.cs" />
     <Compile Include="Modules\Crafting\Crafting\New\Ingredient.Modifier.cs" />
     <Compile Include="Modules\Crafting\Crafting\Reaction.Product.ProductMaterialPair.cs" />
     <Compile Include="Components\GearType.cs" />
@@ -338,7 +338,7 @@
     <Compile Include="AI\Packets\PacketPlayerJump.cs" />
     <Compile Include="AI\Packets\PacketPlayerToggleWalk.cs" />
     <Compile Include="AI\Packets\PacketPlayerToggleMove.cs" />
-    <Compile Include="AI\Packets\PacketPlayerInput.cs" />
+    <Compile Include="AI\Packets\PacketPlayerInputDirection.cs" />
     <Compile Include="AI\Reservations\ReservationManager.cs" />
     <Compile Include="AI\Tasks\TaskDef.cs" />
     <Compile Include="AI\Tasks\TaskDefOf.cs" />

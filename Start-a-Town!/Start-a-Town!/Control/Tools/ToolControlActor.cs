@@ -3,11 +3,27 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
+    [EnsureStaticCtorCall]
     class ToolControlActor : ControlTool
     {
-        bool Up, Down, Left, Right, Walking;
-        private bool MoveToggle;
-        private bool MouseMove = true;
+        static readonly HotkeyContext HotkeyContext = new("Movement");
+        static ToolControlActor()
+        {
+            HotkeyLeft = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Left", delegate { }, System.Windows.Forms.Keys.A, System.Windows.Forms.Keys.Left);
+            HotkeyRight = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Right", delegate { }, System.Windows.Forms.Keys.D, System.Windows.Forms.Keys.Right);
+            HotkeyUp = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Up", delegate { }, System.Windows.Forms.Keys.W, System.Windows.Forms.Keys.Up);
+            HotkeyDown = HotkeyManager.RegisterHotkey(HotkeyContext, "Move: Down", delegate { }, System.Windows.Forms.Keys.S, System.Windows.Forms.Keys.Down);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Jump", JumpNew, System.Windows.Forms.Keys.Space);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle Mouse Move", ToggleMouseMove, System.Windows.Forms.Keys.M);
+            HotkeyWalk = HotkeyManager.RegisterHotkey(HotkeyContext, "Walk", delegate { }, System.Windows.Forms.Keys.ControlKey);
+            HotkeySprint = HotkeyManager.RegisterHotkey(HotkeyContext, "Sprint", delegate { }, System.Windows.Forms.Keys.ShiftKey);
+        }
+
+        static bool Up, Down, Left, Right, Walking, WalkKeyDown, SprintKeyDown;
+        static bool MoveToggle, Attacking;
+        static bool MouseMove = true;
+        private static readonly IHotkey HotkeyLeft, HotkeyRight, HotkeyUp, HotkeyDown, HotkeyWalk, HotkeySprint;
+
         public ToolControlActor()
         {
 
@@ -23,12 +39,12 @@ namespace Start_a_Town_
         public void MoveMouse()
         {
             Walking = true;
-            Vector3 final = GetDirection3();
+            var final = GetDirection3();
             this.ChangeDirection(final);
         }
         public void ChangeDirection(Vector3 direction)
         {
-            PacketPlayerInput.Send(Net.Client.Instance, direction.XY());
+            PacketPlayerInputDirection.Send(Net.Client.Instance, direction.XY());
         }
         public static Vector3 GetDirection3()
         {
@@ -40,91 +56,78 @@ namespace Start_a_Town_
             int xxx, yyy;
             Coords.Ortho(x, y, out xx, out yy);
             Coords.Rotate((int)cam.Rotation, xx, yy, out xxx, out yyy);
-            Vector2 normal = new Vector2(xxx, yyy);
+            var normal = new Vector2(xxx, yyy);
             normal.Normalize();
-            Vector3 final = new Vector3(normal.X, normal.Y, 0);
+            var final = new Vector3(normal.X, normal.Y, 0);
             return final;
         }
         public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
             if (e.Handled)
                 return;
-            if (e.KeyCode == GlobalVars.KeyBindings.North || e.KeyCode == System.Windows.Forms.Keys.Up)
-                PressUp();
-            if (e.KeyCode == GlobalVars.KeyBindings.South || e.KeyCode == System.Windows.Forms.Keys.Down)
-                PressDown();
-            if (e.KeyCode == GlobalVars.KeyBindings.West || e.KeyCode == System.Windows.Forms.Keys.Left)
-                PressLeft();
-            if (e.KeyCode == GlobalVars.KeyBindings.East || e.KeyCode == System.Windows.Forms.Keys.Right)
-                PressRight();
-            
-            if (e.KeyCode == GlobalVars.KeyBindings.RunWalk)
-                PacketPlayerToggleWalk.Send(Net.Client.Instance, true);
+           
+            if (HotkeyLeft.Contains(e.KeyCode))
+                Left = true;
+            if (HotkeyRight.Contains(e.KeyCode))
+                Right = true; 
+            if (HotkeyUp.Contains(e.KeyCode))
+                Up = true;
+            if (HotkeyDown.Contains(e.KeyCode))
+                Down = true;
+
+            HotkeyManager.PerformHotkey(HotkeyContext, e.KeyCode);
+            if (HotkeyWalk.Contains(e.KeyCode))
+                StartWalk(true);
             if (e.KeyCode == GlobalVars.KeyBindings.Sprint)
-                PacketPlayerToggleSprint.Send(Net.Client.Instance, true);
+                StartSprint(true);
         }
         public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             if (e.Handled)
                 return;
-            switch (e.KeyCode)
-            {
-                case System.Windows.Forms.Keys.Up:
-                case System.Windows.Forms.Keys.W:
-                    Up = false;
-                    break;
-                case System.Windows.Forms.Keys.Left:
-                case System.Windows.Forms.Keys.A:
-                    Left = false;
-                    break;
-                case System.Windows.Forms.Keys.Right:
-                case System.Windows.Forms.Keys.D:
-                    Right = false;
-                    break;
-                case System.Windows.Forms.Keys.Down:
-                case System.Windows.Forms.Keys.S:
-                    Down = false;
-                    break;
-                default:
-                    break;
-            }
+
+            if (HotkeyLeft.Contains(e.KeyCode))
+                Left = false;
+            if (HotkeyRight.Contains(e.KeyCode))
+                Right = false;
+            if (HotkeyUp.Contains(e.KeyCode))
+                Up = false;
+            if (HotkeyDown.Contains(e.KeyCode))
+                Down = false;
+
             if (!(Up || Down || Left || Right))
-                StopWalking();
+                StopMoving();
 
-            if (e.KeyCode == GlobalVars.KeyBindings.RunWalk)
-                PacketPlayerToggleWalk.Send(Net.Client.Instance, false);
-            if (e.KeyCode == GlobalVars.KeyBindings.Sprint)
-                PacketPlayerToggleSprint.Send(Net.Client.Instance, false);
-
-            if (e.KeyCode == System.Windows.Forms.Keys.M)
-            {
-                this.MouseMove = !this.MouseMove;
-                Ingame.Instance.Hud.Chat.Write("Mouse move " + (this.MouseMove ? "Enabled" : "Disabled"));
-            }
+            if (HotkeyWalk.Contains(e.KeyCode))
+                StartWalk(false);
+            if (HotkeySprint.Contains(e.KeyCode))
+                StartSprint(false);
 
             base.HandleKeyUp(e);
         }
 
-        private void PressRight()
+        private static void StartSprint(bool enable)
         {
-            this.Right = true;
+            if (SprintKeyDown && enable)
+                return;
+            SprintKeyDown = enable;
+            PacketPlayerToggleSprint.Send(Net.Client.Instance, enable);
         }
 
-        private void PressLeft()
+        private static void StartWalk(bool enable)
         {
-            this.Left = true;
+            if (WalkKeyDown && enable)
+                return;
+            WalkKeyDown = enable;
+            PacketPlayerToggleWalk.Send(Net.Client.Instance, enable);
         }
 
-        private void PressDown()
+        static void ToggleMouseMove()
         {
-            this.Down = true;
+            MouseMove = !MouseMove;
+            MoveToggle = false;
+            Ingame.Instance.Hud.Chat.Write($"Mouse move {(MouseMove ? "Enabled" : "Disabled")}");
         }
-
-        private void PressUp()
-        {
-            this.Up = true;
-        }
-
         public virtual void MoveKeys()
         {
             int xx = 0, yy = 0;
@@ -163,22 +166,22 @@ namespace Start_a_Town_
 
                 Vector2 nextStep = new Vector2(roundx, roundy);
                 nextStep.Normalize();
-                PacketPlayerInput.Send(Net.Client.Instance, nextStep);
+                PacketPlayerInputDirection.Send(Net.Client.Instance, nextStep);
                 if (!Walking)
-                    StartWalking();
+                    StartMoving();
                 Walking = true;
 
             }
             else
             {
-                StopWalking();
+                StopMoving();
             }
         }
-        public void StartWalking()
+        public void StartMoving()
         {
             PacketPlayerToggleMove.Send(Net.Client.Instance, true);
         }
-        protected void StopWalking()
+        protected void StopMoving()
         {
             if (!Walking)
                 return;
@@ -194,28 +197,25 @@ namespace Start_a_Town_
             if (e.Handled)
                 return Messages.Default;
 
-            if (this.MouseMove)
+            if (MouseMove)
             {
                 MoveToggle = true;
-                StartWalking();
+                StartMoving();
             }
             else
                 this.StartAttack();
             return Messages.Default;
         }
 
-        private void StartAttack()
-        {
-            throw new NotImplementedException();
-        }
-        internal override void Jump()
+       
+        
+        static void JumpNew()
         {
             PacketPlayerJump.Send(Net.Client.Instance);
         }
         public override Messages MouseRightDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            PacketControlNpc.Send(Net.Client.Instance, -1);
-            return base.MouseRightDown(e);
+            return Messages.Remove;
         }
         public override void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
         {
@@ -250,19 +250,31 @@ namespace Start_a_Town_
         }
         public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.MouseMove)
+            if (MouseMove)
             {
                 MoveToggle = false;
-                StopWalking();
+                StopMoving();
             }
             else
                 this.FinishAttack();
             return base.MouseLeftUp(e);
         }
-
+        private void StartAttack()
+        {
+            Attacking = true;
+        }
         private void FinishAttack()
         {
-            throw new NotImplementedException();
+            if (!Attacking)
+                return;
+        }
+
+        internal override void CleanUp()
+        {
+            StopMoving();
+            StartWalk(false);
+            StartSprint(false);
+            PacketControlNpc.Send(Net.Client.Instance, -1);
         }
     }
 }

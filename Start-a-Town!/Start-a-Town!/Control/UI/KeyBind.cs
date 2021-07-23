@@ -24,5 +24,10 @@ namespace Start_a_Town_
         {
             return this.Key != 0 ? this.Key.ToString() : "";
         }
+
+        public bool Contains(Keys key)
+        {
+            return this.Key == key;
+        }
     }
 }

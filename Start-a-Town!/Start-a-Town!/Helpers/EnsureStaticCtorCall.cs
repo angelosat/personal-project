@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace Start_a_Town_
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public class EnsureInit : Attribute
+    public class EnsureStaticCtorCall : Attribute
     {
     }
     public static class EnsureInitHelper
@@ -15,7 +15,7 @@ namespace Start_a_Town_
         public static void Init()
         {
             CachedTypes = Assembly.GetExecutingAssembly().GetTypes();
-            foreach (var tt in CachedTypes.Where(t => t.GetCustomAttribute<EnsureInit>() is not null))
+            foreach (var tt in CachedTypes.Where(t => t.GetCustomAttribute<EnsureStaticCtorCall>() is not null))
                 RuntimeHelpers.RunClassConstructor(tt.TypeHandle);
         }
     }

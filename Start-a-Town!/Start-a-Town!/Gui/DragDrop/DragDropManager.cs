@@ -64,7 +64,7 @@ namespace Start_a_Town_
         {
             if (this.Action == null)
                 return;
-            IDropTarget target = Controller.Instance.MouseoverBlock.Object as IDropTarget;
+            IDropTarget target = Controller.Instance.Mouseover.Object as IDropTarget;
             if (target == null)
                 return;
 

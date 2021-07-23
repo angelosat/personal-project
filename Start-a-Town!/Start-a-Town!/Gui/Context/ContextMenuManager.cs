@@ -46,7 +46,7 @@ namespace Start_a_Town_
                 e.Handled = true;
                 return;
             }
-            Object = Controller.Instance.MouseoverBlock.Object as IContextable;
+            Object = Controller.Instance.Mouseover.Object as IContextable;
             Delay = DelayInterval;
         }
 

@@ -206,8 +206,6 @@
     <Compile Include="Components\Vegetation\PlantsExtensions.cs" />
     <Compile Include="Components\WindowSetStackSize.cs" />
     <Compile Include="Control\InputState.cs" />
-    <Compile Include="Control\KeyEventArgs2.cs" />
-    <Compile Include="Control\KeyPressEventArgs2.cs" />
     <Compile Include="Control\Mouseover.cs" />
     <Compile Include="Control\MouseoverEventArgs.cs" />
     <Compile Include="Engine\Camera\LightToken.cs" />

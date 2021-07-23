@@ -574,7 +574,7 @@ namespace Start_a_Town_
 
         public void CreateMouseover(MapBase map, Vector3 global)
         {
-            if (Controller.Instance.MouseoverBlockNext.Object != null)
+            if (Controller.Instance.MouseoverNext.Object != null)
                 return;
             if (!map.TryGetAll(global, out var chunk, out var cell))
                 return;
@@ -612,19 +612,19 @@ namespace Start_a_Town_
 
             var target = new TargetArgs(map, global, rotVec, precise);
             if (global != this.LastMouseover)
-                Controller.Instance.MouseoverBlockNext.Object = target;
+                Controller.Instance.MouseoverNext.Object = target;
             else
-                Controller.Instance.MouseoverBlockNext.Object = Controller.Instance.MouseoverBlock.Object;
+                Controller.Instance.MouseoverNext.Object = Controller.Instance.Mouseover.Object;
 
-            Controller.Instance.MouseoverBlockNext.Face = rotVec;
-            Controller.Instance.MouseoverBlockNext.Precise = precise;
-            Controller.Instance.MouseoverBlockNext.Target = target;
-            Controller.Instance.MouseoverBlockNext.Depth = global.GetMouseoverDepth(map, this);
+            Controller.Instance.MouseoverNext.Face = rotVec;
+            Controller.Instance.MouseoverNext.Precise = precise;
+            Controller.Instance.MouseoverNext.Target = target;
+            Controller.Instance.MouseoverNext.Depth = global.GetMouseoverDepth(map, this);
             this.LastMouseover = global;
         }
         public void CreateMouseover(MapBase map, Vector3 global, Rectangle rect, Vector2 point, bool behind)
         {
-            if (Controller.Instance.MouseoverBlockNext.Object != null)
+            if (Controller.Instance.MouseoverNext.Object != null)
                 return;
 
             if (!map.TryGetAll(global, out var chunk, out var cell))
@@ -1215,7 +1215,7 @@ namespace Start_a_Town_
         }
         private void DrawMouseoverEntity(Effect fx, MySpriteBatch mySB)
         {
-            GameObject mouseover = Controller.Instance.MouseoverBlock.Object as GameObject;
+            GameObject mouseover = Controller.Instance.Mouseover.Object as GameObject;
             fx.CurrentTechnique = fx.Techniques["Default"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             if (mouseover is not null)
@@ -1363,7 +1363,7 @@ namespace Start_a_Town_
             foreach (var chunk in visibleChunks)
                 chunk.HitTestEntities(this);
 
-            if (Controller.Instance.MouseoverBlockNext.Object is not null)
+            if (Controller.Instance.MouseoverNext.Object is not null)
                 return;
 
             if (!BlockTargeting)

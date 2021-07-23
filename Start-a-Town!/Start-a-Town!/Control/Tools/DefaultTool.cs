@@ -261,13 +261,13 @@ namespace Start_a_Town_.PlayerControl
 
         internal override void ManageEquipment()
         {
-            if (!Controller.Instance.MouseoverBlock.TryGet(out GameObject _))
+            if (!Controller.Instance.Mouseover.TryGet(out GameObject _))
                 return;
         }
 
         public Messages OnKey(System.Windows.Forms.Keys key)
         {
-            if (!Controller.Instance.MouseoverBlock.TryGet(out GameObject _))
+            if (!Controller.Instance.Mouseover.TryGet(out GameObject _))
                 return Messages.Default;
             return Messages.Default;
         }

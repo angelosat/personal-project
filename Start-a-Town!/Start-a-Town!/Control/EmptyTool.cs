@@ -20,7 +20,7 @@ namespace Start_a_Town_.PlayerControl
                 return Messages.Default;
             if(this.Target == null)
                 return Messages.Default;
-            if (Controller.Instance.MouseoverBlock.Target.Global != Target.Global)
+            if (Controller.Instance.Mouseover.Target.Global != Target.Global)
                 return Messages.Default;
             return this.Target != null ? LeftClick(this.Target) : Messages.Default;
         }

@@ -53,8 +53,6 @@ namespace Start_a_Town_.Components
         public virtual void OnObjectCreated(GameObject parent) { }
         public virtual void OnObjectLoaded(GameObject parent) { }
         public virtual void OnObjectSynced(GameObject parent) { }
-        public virtual void Focus(GameObject parent) { }
-        public virtual void FocusLost(GameObject parent) { }
         public virtual void SetMaterial(Material mat) { }
 
         internal virtual void Initialize(Entity parent, Dictionary<string, Material> materials) { }

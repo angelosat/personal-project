@@ -89,7 +89,7 @@ namespace Start_a_Town_
             sb.Draw(tex, screenLoc, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, new Vector3(Map.GetOffset(), 0).GetDrawDepth(this.Map, camera));
             if (thumb.HitTest(1, screenBounds, UIManager.MouseRect))
             {
-                Controller.Instance.MouseoverBlockNext.Object = this;
+                Controller.Instance.MouseoverNext.Object = this;
                 sb.Draw(tex, screenLoc, new Color(1, 1, 1, 0.5f));
             }
         }

@@ -729,17 +729,6 @@ namespace Start_a_Town_
             map.SyncSpawn(this, global, Vector3.Zero);
         }
 
-        public void Focus()
-        {
-            foreach (var comp in this.Components.Values)
-                comp.Focus(this);
-        }
-        public void FocusLost()
-        {
-            foreach (var comp in this.Components.Values)
-                comp.FocusLost(this);
-        }
-
         public virtual void Draw(MySpriteBatch sb, Camera camera)
         {
             foreach (var comp in this.Components.Values)

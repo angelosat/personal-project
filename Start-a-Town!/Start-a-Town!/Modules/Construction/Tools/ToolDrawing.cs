@@ -35,7 +35,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             base.Update();
             if(this.Target.Type == TargetType.Entity)
-                this.Target = Controller.Instance.MouseoverBlock.TargetCell;
+                this.Target = Controller.Instance.Mouseover.TargetCell;
         }
         private void CheckValidity()
         {

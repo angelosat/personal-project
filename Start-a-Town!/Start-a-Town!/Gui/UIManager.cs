@@ -267,8 +267,8 @@ namespace Start_a_Town_.UI
 
         public Control ActiveControl
         {
-            get { return Controller.Instance.MouseoverBlock.Object as Control; }
-            set { Controller.Instance.MouseoverBlock.Object = value; }
+            get { return Controller.Instance.Mouseover.Object as Control; }
+            set { Controller.Instance.Mouseover.Object = value; }
         }
 
         public void Screen_MouseMove()
@@ -279,7 +279,7 @@ namespace Start_a_Town_.UI
         public void Update(Game1 game, GameTime gt)
         {
 
-            Control lastactive = Controller.Instance.MouseoverBlock.Object as Control;// ActiveControl;
+            Control lastactive = Controller.Instance.Mouseover.Object as Control;// ActiveControl;
             foreach (var layer in this.Layers)
             {
                 foreach (var ctrl in layer.Value.ToList())
@@ -289,7 +289,7 @@ namespace Start_a_Town_.UI
                 }
             }
 
-            Control nextactive = Controller.Instance.MouseoverBlockNext.Object as Control;
+            Control nextactive = Controller.Instance.MouseoverNext.Object as Control;
 
             if (nextactive != lastactive)
             {

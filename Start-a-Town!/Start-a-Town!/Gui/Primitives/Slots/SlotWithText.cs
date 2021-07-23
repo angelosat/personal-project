@@ -62,8 +62,8 @@ namespace Start_a_Town_.UI
 
         public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
         {
-            if (Controller.Instance.MouseoverBlock != null)
-                if (Controller.Instance.MouseoverBlock.Object == this)
+            if (Controller.Instance.Mouseover != null)
+                if (Controller.Instance.Mouseover.Object == this)
                 DrawHighlight(sb);
             Slot.DrawSprite(sb, destRect, sourceRect, color*(Slot.MouseHover ? 1 : 0.5f), 1);
         }

@@ -239,7 +239,7 @@ namespace Start_a_Town_
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);
             ScreenManager.Instance.Draw(spriteBatch);
-            Controller.Instance.MouseoverBlockNext.Valid = true; // i added this here to fix mouseover flickering but it caused other problems
+            Controller.Instance.MouseoverNext.Valid = true; // i added this here to fix mouseover flickering but it caused other problems
             base.Draw(gameTime);
             var elapsed = gameTime.ElapsedGameTime.TotalSeconds;
             this.FpsTimer += elapsed;

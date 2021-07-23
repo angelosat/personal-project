@@ -38,12 +38,12 @@ namespace Start_a_Town_
 
         public virtual GameObject GetTarget()
         {
-            return Controller.Instance.MouseoverBlock.Object as GameObject;
+            return Controller.Instance.Mouseover.Object as GameObject;
         }
 
         public virtual bool TryGetTarget(out GameObject target)
         {
-            return Controller.Instance.MouseoverBlock.TryGet<GameObject>(out target);
+            return Controller.Instance.Mouseover.TryGet<GameObject>(out target);
         }
 
         internal virtual void CleanUp()
@@ -53,8 +53,8 @@ namespace Start_a_Town_
 
         public virtual bool TryGetTarget(out GameObject target, out Vector3 face)
         {
-            face = Controller.Instance.MouseoverBlock.Face;
-            return Controller.Instance.MouseoverBlock.TryGet<GameObject>(out target);
+            face = Controller.Instance.Mouseover.Face;
+            return Controller.Instance.Mouseover.TryGet<GameObject>(out target);
         }
         public virtual void UpdateRemote(TargetArgs target) { this.Target = target; }
         public virtual void Update()
@@ -64,7 +64,6 @@ namespace Start_a_Town_
 
             UpdateTarget();
 
-            this.ChangeFocus();
             if (this.Target != null)
                 if (this.TargetLast != this.Target)
                     OnTargetChanged();
@@ -76,13 +75,14 @@ namespace Start_a_Town_
         }
         protected void UpdateTargetNew()
         {
-            if ((Controller.Instance.MouseoverBlock.Object is Element))
+            if ((Controller.Instance.Mouseover.Object is Element))
             {
                 this.Target = TargetArgs.Null;
             }
             else
             {
-                var mouseover = (Controller.IsBlockTargeting() || this.TargetOnlyBlocks) ? Controller.Instance.MouseoverBlock : Controller.Instance.GetMouseover();
+                var isblocktargetting = Controller.IsBlockTargeting();
+                var mouseover = (isblocktargetting || this.TargetOnlyBlocks) ? Controller.Instance.Mouseover : Controller.Instance.GetMouseover();
                 if (mouseover.Target != null)
                 {
                     this.Target = mouseover.Target;
@@ -95,13 +95,13 @@ namespace Start_a_Town_
         }
         protected void UpdateTarget()
         {
-            if ((Controller.Instance.MouseoverBlock.Object is Element))
+            if ((Controller.Instance.Mouseover.Object is Element))
                 this.Target = TargetArgs.Null;
             else
             {
-                if (Controller.Instance.MouseoverBlock.Target != null)
+                if (Controller.Instance.Mouseover.Target != null)
                 {
-                    this.Target = Controller.Instance.MouseoverBlock.Target;
+                    this.Target = Controller.Instance.Mouseover.Target;
                     this.TargetLast = this.Target.Type != TargetType.Null ? this.Target : this.TargetLast;
 
                 }
@@ -124,19 +124,6 @@ namespace Start_a_Town_
         public virtual Messages MouseWheel(InputState e, int value) { return Messages.Default; }
 
         public virtual Messages OnKey(System.Windows.Forms.KeyEventArgs e) { return Messages.Default; }
-
-        void ChangeFocus()
-        {
-            var obj = this.Target != null ? this.Target.Object as GameObject : null;
-            var objLast = this.TargetLast != null ? this.TargetLast.Object as GameObject : null;
-            if (obj != objLast)
-            {
-                if (objLast != null)
-                    objLast.FocusLost();
-                if (obj != null)
-                    obj.Focus();
-            }
-        }
 
         protected virtual void OnTargetChanged()
         {
@@ -215,30 +202,6 @@ namespace Start_a_Town_
                 Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cd);
 
             sb.Flush(); // flush here because i might have to switch textures in an overriden tool draw call
-        }
-        public virtual void DrawTileHighlight(MySpriteBatch sb, MapBase map, Camera camera)
-        {
-            if (this.Target == null) 
-                return;
-            if (this.Target.Face == Vector3.Zero)
-                return;
-            Rectangle bounds = Block.Bounds;
-            camera.GetEverything(map, this.Target.FaceGlobal, bounds, out float cd, out Rectangle screenBounds, out Vector2 screenLoc);
-
-            //int x = (int)Math.Abs(this.Target.Face.X), y = (int)Math.Abs(this.Target.Face.Y), r = (int)camera.Rotation;
-            //int z = (int)Math.Abs(this.Target.Face.Z);
-            //int highlightIndex = (2 * z) + (1 - z) * ((x + r) % 2);
-            //int frontback = InputState.IsKeyDown(Keys.RShiftKey) ? 1 : 0;
-
-            cd = (this.Target.FaceGlobal).GetDrawDepth(map, camera);
-
-            var rotatedIndex = this.Target.Face.Rotate(camera.Rotation);
-            if (!Sprite.BlockFaceHighlights.ContainsKey(rotatedIndex))
-                return;
-            var highlight = Sprite.BlockFaceHighlights[rotatedIndex];
-            Game1.Instance.GraphicsDevice.Textures[0] = Sprite.Atlas.Texture;
-            highlight.Draw(sb, screenLoc, Color.White, 0, Vector2.Zero, camera.Zoom, SpriteEffects.None, cd);
-            sb.Flush();
         }
        
         internal virtual void OnGameEvent(GameEvent e)

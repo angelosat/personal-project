@@ -124,6 +124,14 @@ namespace Start_a_Town_
 
         public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
+            if (e.Handled)
+                return;
+            if (HotkeyManager.Release(e.KeyCode, HotkeyContext) ||
+               HotkeyManager.Release(e.KeyCode, HotkeyContextDebug))
+            {
+                e.Handled = true;
+                return;
+            }
             this.ActiveTool?.HandleKeyUp(e);
         }
 
@@ -135,8 +143,8 @@ namespace Start_a_Town_
             if (this.ActiveTool is null)
                 return;
 
-            if (HotkeyManager.PerformHotkey(e.KeyCode, HotkeyContext) ||
-                HotkeyManager.PerformHotkey(e.KeyCode, HotkeyContextDebug))
+            if (HotkeyManager.Press(e.KeyCode, HotkeyContext) ||
+                HotkeyManager.Press(e.KeyCode, HotkeyContextDebug))
             {
                 e.Handled = true;
                 return;

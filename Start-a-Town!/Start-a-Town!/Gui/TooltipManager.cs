@@ -76,7 +76,7 @@ namespace Start_a_Town_.UI
         {
             this.Tooltip = null;
             this.DelayValue = DelayInterval;
-            this.Object = Controller.Instance.MouseoverBlockNext.Object as ITooltippable;
+            this.Object = Controller.Instance.MouseoverNext.Object as ITooltippable;
         }
 
         public Vector2 ScreenLocation

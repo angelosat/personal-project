@@ -153,7 +153,7 @@ namespace Start_a_Town_.UI
             set => this._opacity = value;
         }
         public virtual RenderTarget2D Texture { get; set; }
-        public bool Focused => Controller.Instance.MouseoverBlock.Object == this;  //return WindowManager.ActiveControl == this; } }
+        public bool Focused => Controller.Instance.Mouseover.Object == this;  //return WindowManager.ActiveControl == this; } }
         ControlCollection _controls;
         public ControlCollection Controls => this._controls ??= new ControlCollection(this);
         
@@ -765,7 +765,7 @@ namespace Start_a_Town_.UI
         public virtual void OnAfterDraw(SpriteBatch sb, Rectangle viewport) { }
         public virtual void OnHitTestPass()
         {
-            Controller.Instance.MouseoverBlockNext.Object = this;
+            Controller.Instance.MouseoverNext.Object = this;
         }
         public virtual void Draw(SpriteBatch sb, Rectangle viewport)
         {
@@ -797,7 +797,7 @@ namespace Start_a_Town_.UI
             // TODO: maybe put that somewhere else?
             if (this.HitTest())
             {
-                Controller.Instance.MouseoverBlockNext.Object = this;
+                Controller.Instance.MouseoverNext.Object = this;
             }
 
             foreach (Control control in this.Controls)

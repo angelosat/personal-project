@@ -9,8 +9,8 @@ namespace Start_a_Town_
 {
     class Ingame : GameScreen
     {
-        static Ingame _Instance;
-        static public Ingame Instance => _Instance ??= new();
+        static Ingame _instance;
+        static public Ingame Instance => _instance ??= new();
             
         public NotificationArea NotificationArea;
         public NameplateManager NameplateManager = new();
@@ -18,7 +18,7 @@ namespace Start_a_Town_
 
         bool HideInterface = false;
         public SceneState Scene = new();
-        public override Camera Camera { get => GetMap().Camera; set => base.Camera = value; }
+        public override Camera Camera => GetMap().Camera; 
 
         public override GameScreen Initialize(INetwork net)
         {
@@ -117,7 +117,7 @@ namespace Start_a_Town_
             }
             if (pressed.Contains(GlobalVars.KeyBindings.DebugQuery))
             {
-                var target = Controller.Instance.MouseoverBlock.Target;
+                var target = Controller.Instance.Mouseover.Target;
                 if (target != null)
                 {
                     if (target.Type == TargetType.Entity)

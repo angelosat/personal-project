@@ -10,7 +10,7 @@ namespace Start_a_Town_
     {
         public static bool GetMouseover<T>(out T obj) where T : GameObject
         {
-            return Instance.MouseoverBlock.TryGet(out obj);
+            return Instance.Mouseover.TryGet(out obj);
         }
 
         public static event EventHandler<MouseoverEventArgs> MouseoverObjectChanged;
@@ -19,14 +19,8 @@ namespace Start_a_Town_
             MouseoverObjectChanged?.Invoke(this, e);
         }
 
-        public Mouseover MouseoverEntity, MouseoverEntityNext;
-
-        public Entity GetMouseoverEntity()
-        {
-            return this.MouseoverEntity.Object as Entity;
-        }
-        public Mouseover MouseoverBlock;
-        public Mouseover MouseoverBlockNext;
+        public Mouseover Mouseover;
+        public Mouseover MouseoverNext;
 
         public Rectangle MouseRect;
 
@@ -34,49 +28,13 @@ namespace Start_a_Town_
         public MouseState msCurrent, msPrevious;
 
         static Controller _instance;
-        public static Controller Instance => _instance ??= new Controller();
+        public static Controller Instance => _instance ??= new();
 
-        public static event EventHandler<EventArgs> MouseOverEntityChanged, MouseOverTileChanged, KeyPressed;
-        public static event EventHandler<KeyEventArgs2> KeyDown, KeyUp;
-        public static event EventHandler<KeyPressEventArgs2> KeyPress2;
-        public static event EventHandler<System.Windows.Forms.KeyPressEventArgs> KeyPress;
-
-        protected void OnKeyPressed()
-        {
-            KeyPressed?.Invoke(this, EventArgs.Empty);
-        }
-        protected void OnKeyPress(System.Windows.Forms.KeyPressEventArgs e)
-        {
-            KeyPress?.Invoke(this, e);
-        }
-        protected void OnKeyPress(KeyPressEventArgs2 e)
-        {
-            KeyPress2?.Invoke(this, e);
-        }
-        protected void OnKeyUp(Keys[] keysnew, Keys[] keysold)
-        {
-            KeyUp?.Invoke(this, new KeyEventArgs2(keysnew, keysold));
-        }
-        protected void OnKeyDown(Keys[] keysnew, Keys[] keysold)
-        {
-            KeyDown?.Invoke(this, new KeyEventArgs2(keysnew, keysold));
-        }
-        protected void OnMouseOverTileChanged()
-        {
-            MouseOverTileChanged?.Invoke(this, EventArgs.Empty);
-        }
-        protected void OnMouseOverEntityChanged()
-        {
-            MouseOverEntityChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        public static InputState Input = new InputState();
+        public static InputState Input = new();
         public Controller()
         {
-            this.MouseoverBlock = new Mouseover();
-            this.MouseoverBlockNext = new Mouseover();
-            this.MouseoverEntity = new();
-            this.MouseoverEntityNext = new();
+            this.Mouseover = new();
+            this.MouseoverNext = new();
         }
 
         void GetInputStates()
@@ -85,11 +43,10 @@ namespace Start_a_Town_
             this.msCurrent = Mouse.GetState();
         }
 
-        public Vector2 MouseLocation
-        { get { return new Vector2(this.msCurrent.X, this.msCurrent.Y); } }
+        public Vector2 MouseLocation => new(this.msCurrent.X, this.msCurrent.Y);
         public Mouseover GetMouseover()
         {
-            return this.MouseoverEntity.Target != null ? this.MouseoverEntity : this.MouseoverBlock;
+            return this.Mouseover;
         }
         public void Update()
         {
@@ -99,11 +56,6 @@ namespace Start_a_Town_
             this.GetInputStates();
             this.MouseRect = new Rectangle(this.msCurrent.X, this.msCurrent.Y, 1, 1);
 
-            if (this.ksCurrent.GetPressedKeys().Count() > 0)
-            {
-                this.OnKeyPressed();
-            }
-
             if (this.ksCurrent.IsKeyDown(Keys.LeftAlt) || this.ksCurrent.IsKeyDown(Keys.RightAlt))
             {
                 if (this.KeyPressCheck(Keys.Enter))
@@ -112,42 +64,19 @@ namespace Start_a_Town_
                 }
             }
 
-            Keys[] keysnew = this.ksCurrent.GetPressedKeys();
-            Keys[] keysold = this.ksPrevious.GetPressedKeys();
-            if (keysnew.Length > 0)
-            {
-                this.OnKeyDown(keysnew, keysold);
-            }
-
-            if (keysnew.Length < keysold.Length)
-            {
-                this.OnKeyUp(keysnew, keysold);
-            }
-
             this.ksPrevious = this.ksCurrent;
             this.msPrevious = this.msCurrent;
         }
         private void UpdateMousovers()
         {
-            this.MouseoverBlock.TryGet(out object mouseover);
-            this.MouseoverBlockNext.TryGet(out object mouseoverNext);
+            this.Mouseover.TryGet(out object mouseover);
+            this.MouseoverNext.TryGet(out object mouseoverNext);
 
             if (mouseover != mouseoverNext)
-            {
                 this.OnMouseoverObjectChanged(new MouseoverEventArgs(mouseoverNext, mouseover));
-                if (mouseover is GameObject objLast)
-                {
-                    objLast.FocusLost();
-                }
 
-                if (mouseoverNext is GameObject objNext)
-                {
-                    objNext.Focus();
-                }
-            }
-
-            this.MouseoverBlock = this.MouseoverBlockNext;
-            this.MouseoverBlockNext = new Mouseover();
+            this.Mouseover = this.MouseoverNext;
+            this.MouseoverNext = new Mouseover();
         }
 
         public bool KeyPressCheck(Keys key)
@@ -167,9 +96,9 @@ namespace Start_a_Town_
                 return;
 
             float mouseoverDepth = drawdepth;
-            if (mouseoverDepth >= Instance.MouseoverBlockNext.Depth)
+            if (mouseoverDepth >= Instance.MouseoverNext.Depth)
             {
-                if (Instance.MouseoverBlock.Object is TargetArgs target)
+                if (Instance.Mouseover.Object is TargetArgs target)
                 {
                     if (target.Object != entity)
                     {
@@ -180,30 +109,29 @@ namespace Start_a_Town_
                 {
                     target = new TargetArgs(entity, face) { Map = Engine.Map };
                 }
-
-                Instance.MouseoverBlockNext.Target = target;
-                Instance.MouseoverBlockNext.Object = target;
-                Instance.MouseoverBlockNext.Face = face;
-                Instance.MouseoverBlockNext.Depth = drawdepth;
+                Instance.MouseoverNext.Target = target;
+                Instance.MouseoverNext.Object = target;
+                Instance.MouseoverNext.Face = face;
+                Instance.MouseoverNext.Depth = drawdepth;
             }
         }
         public static void SetMouseoverBlock(Camera camera, MapBase map, Vector3 global, Vector3 face, Vector3 precise)
         {
             var target = new TargetArgs(map, global, face, precise);
 
-            if (global != _LastMouseoverBlockGlobal || Instance.MouseoverBlock.Object is Element) // very hacky
+            if (global != _LastMouseoverBlockGlobal || Instance.Mouseover.Object is Element) // very hacky
             {
-                Instance.MouseoverBlockNext.Object = target;
+                Instance.MouseoverNext.Object = target;
             }
             else
             {
-                Instance.MouseoverBlockNext.Object = Instance.MouseoverBlock.Object;
+                Instance.MouseoverNext.Object = Instance.Mouseover.Object;
             }
 
-            Instance.MouseoverBlockNext.Face = face;
-            Instance.MouseoverBlockNext.Precise = precise;
-            Instance.MouseoverBlockNext.Target = target;
-            Instance.MouseoverBlockNext.Depth = global.GetDrawDepth(map, camera);
+            Instance.MouseoverNext.Face = face;
+            Instance.MouseoverNext.Precise = precise;
+            Instance.MouseoverNext.Target = target;
+            Instance.MouseoverNext.Depth = global.GetDrawDepth(map, camera);
             _LastMouseoverBlockGlobal = global;
         }
         static Vector3 _LastMouseoverBlockGlobal;
@@ -216,7 +144,7 @@ namespace Start_a_Town_
             return keydown ^ BlockTargeting;
         }
 
-        public static TargetArgs TargetCell { get { return Instance.MouseoverBlock.TargetCell; } }
-        public static TargetArgs TargetEntity { get { return Instance.MouseoverBlock.TargetEntity; } }
+        public static TargetArgs TargetCell { get { return Instance.Mouseover.TargetCell; } }
+        public static TargetArgs TargetEntity { get { return Instance.Mouseover.TargetEntity; } }
     }
 }

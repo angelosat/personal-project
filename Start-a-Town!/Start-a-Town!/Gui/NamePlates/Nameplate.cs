@@ -86,7 +86,7 @@ namespace Start_a_Town_.UI
 
         public override void OnHitTestPass()
         {
-            Controller.Instance.MouseoverBlockNext.Object = this.Object;
+            Controller.Instance.MouseoverNext.Object = this.Object;
         }
 
         public override void OnMouseEnter()

@@ -166,8 +166,10 @@ namespace Start_a_Town_.UI
             get => base.Height;
             set
             {
+                var oldHeight = base.Height;
                 base.Height = value;
-                this.Invalidate();
+                if (oldHeight != this.Height)
+                    this.Invalidate();
             }
         }
 

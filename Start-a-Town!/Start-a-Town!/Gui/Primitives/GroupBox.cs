@@ -7,12 +7,23 @@ namespace Start_a_Town_.UI
     public class GroupBox : Control
     {
         public GroupBox() { MouseThrough = true; AutoSize = true; }
-        public GroupBox(int width, int height)
+        public GroupBox(string name)
+            : this()
         {
+            this.Name = name;
+        }
+       
+        public GroupBox(int width, int height)
+            :this(null, width, height)
+        {
+            
+        }
+        public GroupBox(string name, int width, int height)
+        {
+            this.Name = name;
             this.AutoSize = false;
             this.Size = new Rectangle(0, 0, width, height);
         }
-
         internal override void OnControlResized(ButtonBase buttonBase)
         {
             this.ClientSize = PreferredClientSize;

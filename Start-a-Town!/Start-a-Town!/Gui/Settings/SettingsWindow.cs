@@ -20,7 +20,7 @@ namespace Start_a_Town_
         {
             this.Title = "Settings";
             this.AutoSize = true;
-
+            this.Closable = false;
             GroupBox selectedSettings = null;
 
             var size = 400;
@@ -37,13 +37,13 @@ namespace Start_a_Town_
 
             selectTab(this.CameraSettings.Gui);
             
-            var ok = new Button("Apply", apply, 50);
-            var cancel = new Button("Cancel", () => this.Hide(), 50);
-
+            var btnok = new Button("Apply", apply, 50);
+            var btncancel = new Button("Cancel", cancel, 50);
+            
             this.Client.AddControlsVertically(0, HorizontalAlignment.Right,
                 tabs.ToPanel(),
                 panel,
-                UIHelper.Wrap(ok, cancel));
+                UIHelper.Wrap(btnok, btncancel));
 
             this.AnchorToScreenCenter();
 
@@ -53,7 +53,12 @@ namespace Start_a_Town_
                     m.Apply();
                 Engine.SaveConfig();
             }
-
+            void cancel()
+            {
+                foreach (var m in this.AllSettings)
+                    m.Cancel();
+                this.Hide();
+            }
             void selectTab(GroupBox tab)
             {
                 selectedSettings = tab;

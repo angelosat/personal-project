@@ -22,5 +22,10 @@ namespace Start_a_Town_.UI
             this.Client = new(width - 2 * this.Padding, height - 2 * this.Padding - Label.DefaultHeight, mode) { Location = this.Label.BottomLeft };
             this.AddControls(this.Label, this.Client);
         }
+        internal override void OnControlAdded(Control control)
+        {
+            base.OnControlAdded(control);
+            this.Label.Validate();
+        }
     }
 }

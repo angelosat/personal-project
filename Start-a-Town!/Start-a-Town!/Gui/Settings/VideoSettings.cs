@@ -15,8 +15,7 @@ namespace Start_a_Town_
 
         GroupBox CreateGui()
         {
-            var box = new GroupBox();
-            box.Name = "Video";
+            var box = new GroupBox("Video");
 
             var modes = Game1.Instance.graphics.GraphicsDevice.Adapter.SupportedDisplayModes;
 

@@ -139,13 +139,11 @@ namespace Start_a_Town_.UI
         {
             bool removed = base.Remove(control);
             Parent.OnControlRemoved(control);
-            Parent.Invalidate(true); //because i need to redraw owner graphics correctly after resize
             return removed;
         }
         public new int RemoveAll(Predicate<Control> predicate)
         {
             var count = base.RemoveAll(predicate);
-            Parent.Invalidate(true); //because i need to redraw owner graphics correctly after resize
             return count;
         }
     }

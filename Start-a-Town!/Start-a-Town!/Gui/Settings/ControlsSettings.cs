@@ -26,5 +26,8 @@ namespace Start_a_Town_
         internal override void Apply()
         {
         }
+        internal override void Cancel()
+        {
+        }
     }
 }

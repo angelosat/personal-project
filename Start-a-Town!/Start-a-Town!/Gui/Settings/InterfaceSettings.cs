@@ -34,7 +34,9 @@ namespace Start_a_Town_
             UIManager.Scale = newGuiScale;
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Interface").GetOrCreateElement("Scale").Value = UIManager.Scale.ToString();
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Interface").GetOrCreateElement("MouseTooltip").Value = Chkbox_MouseTooltip.Checked.ToString();
-            Engine.Config.Save("config.xml");
+        }
+        internal override void Cancel()
+        {
         }
     }
 }

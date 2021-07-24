@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Net;
-using System.Net.Sockets;
-using Microsoft.Xna.Framework;
-using System.Threading;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     class MultiplayerWindowNew : Window
     {
         const string DefaultName = "";
@@ -22,23 +17,19 @@ namespace Start_a_Town_
         }
         Panel PanelTextBoxes, PanelButtons;
         TextBox Txt_Name, TxtBox_HostName;
-        //CharacterPanel Character;
 
         MultiplayerWindowNew()
         {
             Title = "Multiplayer";
             this.AutoSize = true;
-            //Size = new Rectangle(0, 0, 200, 200);
             int btnWidth = 200;
             AutoSize = true;
             Func<string> hover = () => !CheckName() ? "Invalid name" : "";
-            //this.Client.Controls.Add(new Button(this.Client.Controls.BottomLeft, btnWidth, "Host") { LeftClickAction = () => { if (CheckName()) Host(); }, HoverFunc = hover });
             var joinButton = new Button("Join game", btnWidth)
             {
                 LeftClickAction = () =>
                 {
                     if (CheckName())
-                        //Join();
                         this.ConnectTo(this.TxtBox_HostName.Text);
                 },
                 HoverFunc = hover
@@ -54,7 +45,6 @@ namespace Start_a_Town_
             var labelname = new Label("Player name");
             Txt_Name = new TextBox(this.Client.Controls.TopRight)
             {
-                //Location = labelname.BottomLeft, 
                 Text = name,
                 Width = btnWidth
             };
@@ -67,13 +57,11 @@ namespace Start_a_Town_
             var labelhost = new Label("Host address");
             this.TxtBox_HostName = new TextBox()
             {
-                //Location = labelhost.BottomLeft,
-                Text = host,// "127.0.0.1",
+                Text = host,
                 Width = btnWidth,
                 InputFilter = c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)
             };
 
-            //this.Character = new CharacterPanel() { Location = this.Txt_Name.BottomLeft };
             this.PanelTextBoxes = new Panel() { AutoSize = true };
             this.PanelTextBoxes.AddControlsVertically(
                 labelname,
@@ -88,7 +76,6 @@ namespace Start_a_Town_
             this.Client.AddControlsVertically(this.PanelTextBoxes, this.PanelButtons
                 );
 
-            //Location = CenterScreen;
         }
 
         private void Dedicated()
@@ -100,8 +87,6 @@ namespace Start_a_Town_
 
         private bool CheckName()
         {
-            //if (this.Character.Character = null)
-            //    return false;
             return !(String.IsNullOrEmpty(Txt_Name.Text) || String.IsNullOrWhiteSpace(Txt_Name.Text));
         }
 
@@ -115,30 +100,21 @@ namespace Start_a_Town_
 
         public override bool Show()
         {
-            //this.Location = this.CenterScreen;
             this.SnapToScreenCenter();
             return base.Show();
         }
 
         private void ConnectTo(string address)
         {
-            //try
-            //{
             UIConnecting.Create(address);
 
             SaveFieldsToConfig();
 
-            Engine.PlayGame();//this.Character.Character);
-            //Rooms.Ingame ingame = new Rooms.Ingame();
+            Engine.PlayGame();
             Net.Client.Instance.Connect(address, new PlayerData(Txt_Name.Text), ar =>
             {
             });
-            //}
-            //catch (Exception e)
-            //{
-            //    ScreenManager.Remove();
-            //    new MessageBox(e.GetType().ToString(), e.Message, new ContextAction(() => "Back", () => { })).ShowDialog();
-            //}
+          
             LobbyWindow.Instance.Console.Write("Connected to " + address);
         }
 

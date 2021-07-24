@@ -151,37 +151,6 @@ namespace Start_a_Town_
             this.RestingFrame = new Keyframe(10, Vector2.Zero, 0, Interpolation.Sine);
         }
 
-        /// <summary>
-        /// Creates a clone of an existing spritenode.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        static public Bone Clone(Bone node, Bone parent = null)
-        {
-            Bone newnode = Bone.Create(node.Def, node.Sprite, parent, node.ParentJoint, node.Order);
-
-            newnode.SpriteFunc = node.SpriteFunc;
-            newnode.RestingFrame = node.RestingFrame;
-            newnode.SlotFunc = node.SlotFunc;
-            newnode.Offset = node.Offset;
-            newnode.OriginGroundOffset = node.OriginGroundOffset;
-            newnode.Tint = node.Tint;
-            newnode.Material = node.Material;
-            newnode.ScaleFunc = node.ScaleFunc;
-            foreach (var child in node.Children)
-                Clone(child.Value, newnode);
-            foreach (var joint in node.Joints)
-            {
-                var j = new Joint(joint.Value);
-                
-                newnode.AddJoint(joint.Key, j);
-            }
-
-            newnode.Orientations.Clear();
-            foreach (var i in node.Orientations)
-                newnode.Orientations.Add(new Sprite(i));
-            return newnode;
-        }
         public Bone Clone(Bone parent = null)
         {
             Bone newnode = Bone.Create(this.Def, this.Sprite, parent, this.ParentJoint, this.Order);

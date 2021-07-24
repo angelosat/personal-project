@@ -11,7 +11,6 @@ namespace Start_a_Town_
         GroupBox _Gui;
         internal override GroupBox Gui => this._Gui ??= this.CreateGui();
 
-
         public GraphicsSettings()
         {
             
@@ -34,7 +33,9 @@ namespace Start_a_Town_
             ParticleDensityLevel.Current = this.TempParticles;
 
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Graphics").GetOrCreateElement("Particles").Value = ParticleDensityLevel.Current.Name;
-            Engine.Config.Save("config.xml");
+        }
+        internal override void Cancel()
+        {
         }
     }
 }

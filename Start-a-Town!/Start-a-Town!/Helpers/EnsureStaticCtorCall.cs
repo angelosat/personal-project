@@ -9,14 +9,24 @@ namespace Start_a_Town_
     public class EnsureStaticCtorCall : Attribute
     {
     }
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+    public class ImportConfig : Attribute
+    {
+    }
     public static class EnsureInitHelper
     { 
         static Type[] CachedTypes;
         public static void Init()
         {
-            CachedTypes = Assembly.GetExecutingAssembly().GetTypes();
+            CachedTypes ??= Assembly.GetExecutingAssembly().GetTypes();
             foreach (var tt in CachedTypes.Where(t => t.GetCustomAttribute<EnsureStaticCtorCall>() is not null))
                 RuntimeHelpers.RunClassConstructor(tt.TypeHandle);
+        }
+        public static void ImportConfig()
+        {
+            CachedTypes ??= Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var tt in CachedTypes.Where(t => t.GetCustomAttribute<ImportConfig>() is not null))
+                tt.GetMethod("Import", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
         }
     }
 }

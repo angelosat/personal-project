@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Start_a_Town_.UI;
 
@@ -25,9 +24,6 @@ namespace Start_a_Town_
             GroupBox selectedSettings = null;
 
             var size = 400;
-            //var panel = new PanelLabeledNew(() => selectedSettings?.Name) { AutoSize = false };
-            //panel.ClientSize = new Rectangle(0, 0, size, size / 2);
-            //panel.ConformToClientSize();
             var panel = new PanelLabeledScrollable(() => selectedSettings?.Name, size, size / 2, ScrollModes.Vertical);
 
             this.InterfaceSettings = new InterfaceSettings();
@@ -55,6 +51,7 @@ namespace Start_a_Town_
             {
                 foreach (var m in this.AllSettings)
                     m.Apply();
+                Engine.SaveConfig();
             }
 
             void selectTab(GroupBox tab)

@@ -28,7 +28,9 @@ namespace Start_a_Town_
             Camera.Fog = this.Chk_Fog.Checked;
 
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Camera").GetOrCreateElement("Fog").Value = Camera.Fog.ToString();
-            Engine.Config.Save("config.xml");
+        }
+        internal override void Cancel()
+        {
         }
     }
 }

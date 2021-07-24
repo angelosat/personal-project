@@ -12,6 +12,9 @@ namespace Start_a_Town_
         static public AtlasWithDepth Atlas = new("Entities");
 
         public Dictionary<string, Sprite> Overlays = new();
+        static readonly string Path = "Graphics/Items/";
+        public string AssetPath => Path + this.Name;
+        static readonly Dictionary<string, Sprite> Registry = new();
 
         public enum OrientationType { South, West, North, East };
         public string Name;
@@ -99,10 +102,7 @@ namespace Start_a_Town_
             BlockHightlightBack = new Sprite("blocks/highlightfullback", Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09back")) { OriginGround = Block.OriginCenter };
             Atlas.Initialize();
         }
-        static readonly string Path = "Graphics/Items/";
-        public string AssetPath => Path + this.Name;
-        static readonly Dictionary<string, Sprite> Registry = new();
-
+        
         public Sprite(Sprite toClone)
         {
             this.Texture = toClone.Texture;
@@ -128,6 +128,8 @@ namespace Start_a_Town_
         {
             this.Highlights = highlights;
             this.Name = texture.Name;
+            Registry[this.AssetPath] = this;
+
             Texture = texture;
             SourceRects = sourcerect;
             Joint = OriginGround = origin;
@@ -142,6 +144,7 @@ namespace Start_a_Town_
         public Sprite(string assetName, string depthMap, Vector2 origin)
         {
             this.Name = assetName;
+            Registry[this.AssetPath] = this;
 
             OriginGround = origin + Vector2.One * Borders.Thickness;
 
@@ -159,6 +162,8 @@ namespace Start_a_Town_
         public Sprite(string assetName, float layer)
         {
             this.Name = assetName;
+            Registry[this.AssetPath] = this;
+
             OriginGround = Vector2.Zero;
 
             Texture2D texture = Game1.Instance.Content.Load<Texture2D>("Graphics/Items/" + assetName);
@@ -174,7 +179,7 @@ namespace Start_a_Town_
         public Sprite(string assetName, Texture2D depthMap)
         {
             this.Name = assetName;
-            Registry.Add(this.AssetPath, this);
+            Registry[this.AssetPath] = this;
             OriginGround = Vector2.Zero;
 
             Texture2D texture = Game1.Instance.Content.Load<Texture2D>("Graphics/Items/" + assetName);
@@ -190,6 +195,7 @@ namespace Start_a_Town_
         public Sprite(string assetName, Vector2 origin, MouseMap mousemap = null, Rectangle[][] highlights = null, float alpha = 1)
         {
             this.Name = assetName;
+            Registry[this.AssetPath] = this;
             this.Alpha = alpha;
             OriginGround = origin + Vector2.One * Borders.Thickness;
 
@@ -208,6 +214,7 @@ namespace Start_a_Town_
         public Sprite(string assetName, Vector2 origin, Vector2 joint, MouseMap mousemap = null, Rectangle[][] highlights = null, float alpha = 1)
         {
             this.Name = assetName;
+            Registry[this.AssetPath] = this;
             this.Alpha = alpha;
             OriginGround = origin + Vector2.One * Borders.Thickness;
             

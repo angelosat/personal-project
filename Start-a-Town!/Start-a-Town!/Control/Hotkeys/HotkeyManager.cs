@@ -11,22 +11,19 @@ namespace Start_a_Town_
         GroupBox _gui;
         internal override GroupBox Gui => this._gui ??= this.CreateGui();
         readonly Lazy<WindowInputKey> EnterKeyGui = new();
-        
+
         public static IHotkey RegisterHotkey(HotkeyContext context, string label, Action action, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
         {
-            var hotkey = new Hotkey(context, label, action, key1, key2);
-            handleConflicts(hotkey, false);
-            Hotkeys.Add(hotkey);
-            return hotkey;
+            return RegisterHotkey(context, label, action, delegate { }, key1, key2);
         }
         public static IHotkey RegisterHotkey(HotkeyContext context, string label, Action actionPress, Action actionRelease, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
         {
             var hotkey = new Hotkey(context, label, actionPress, actionRelease, key1, key2);
-            handleConflicts(hotkey, false);
+            HandleConflicts(hotkey, false);
             Hotkeys.Add(hotkey);
             return hotkey;
         }
-        static void handleConflicts(Hotkey newHotkey, bool overwrite)
+        static void HandleConflicts(Hotkey newHotkey, bool overwrite)
         {
             foreach (var h in Hotkeys.Where(hk => hk.Context == newHotkey.Context))
             {
@@ -102,9 +99,15 @@ namespace Start_a_Town_
         }
         internal override void Apply()
         {
-            throw new NotImplementedException();
+            foreach (var hk in Hotkeys)
+                hk.Apply();
+            Export();
         }
-
+        internal override void Cancel()
+        {
+            foreach (var hk in Hotkeys)
+                hk.Undo();
+        }
         GroupBox CreateGui()
         {
             var box = new GroupBox() { Name = "Hotkeys" };
@@ -119,12 +122,47 @@ namespace Start_a_Town_
             static void setHotkey(Hotkey hotkey, int keyIndex, System.Windows.Forms.Keys key)
             {
                 hotkey._keys[keyIndex] = key;
-                handleConflicts(hotkey, true);
+                HandleConflicts(hotkey, true);
             }
 
             void editHotkey(Hotkey h, int index)
             {
                 this.EnterKeyGui.Value.EditHotkey(h.Label, key => setHotkey(h, index, key));
+            }
+        }
+
+        static void Export()
+        {
+            var config = Engine.Config;
+            var byContext = Hotkeys.GroupBy(h => h.Context);
+            var rootNode = XmlNodeSettings.GetOrCreateElement("Hotkeys");
+            foreach(var context in byContext)
+            {
+                var contextNode = rootNode.GetOrCreateElement(context.Key.Name);
+                var childrenByLabel = contextNode.Elements().ToDictionary(x => x.Attribute("Label").Value, x => x);
+                foreach (var key in context)
+                {
+                    if(!childrenByLabel.TryGetValue(key.Label, out var keynode))
+                    {
+                        keynode = new System.Xml.Linq.XElement("Hotkey");
+                        contextNode.Add(keynode);
+                    }
+                    keynode.SetAttributeValue("Label", key.Label);
+                    key.XWrite(keynode);
+                }
+            }
+        }
+        public static void Import()
+        {
+            var config = Engine.Config;
+            var rootNode = XmlNodeSettings.GetOrCreateElement("Hotkeys");
+            var hotkeyNodes = rootNode.Descendants("Hotkey");
+            var byLabel = Hotkeys.ToDictionary(h => h.Label, h => h);
+            foreach(var hkn in hotkeyNodes)
+            {
+                var label = hkn.Attribute("Label").Value;
+                var hotkey = byLabel[label];
+                hotkey.XRead(hkn);
             }
         }
     }

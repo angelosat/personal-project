@@ -39,8 +39,8 @@ namespace Start_a_Town_
         {
             Config.Save("config.xml");
         }
-        static XmlDocument _Settings;
-        public static XmlDocument Settings => _Settings ??= InitSettings();
+        static XmlDocument _settings;
+        public static XmlDocument Settings => _settings ??= InitSettings();
        
         static MapBase _Map;
         static public MapBase Map
@@ -83,8 +83,11 @@ namespace Start_a_Town_
 
         static XmlDocument InitSettings()
         {
-            XmlDocument settings = new XmlDocument();
-            try { settings.Load("config.xml"); }
+            var settings = new XmlDocument();
+            try 
+            {
+                settings.Load("config.xml"); 
+            }
             catch (System.IO.FileNotFoundException)
             {
                 GenerateDefaultConfigFile(Game1.Instance.graphics.GraphicsDevice);
@@ -131,6 +134,8 @@ namespace Start_a_Town_
                 )
             ).Save("config.xml");
         }
+
+        public static XElement XmlNodeSettings => Config.GetOrCreateElement("Settings");
 
         static public void Init(Game1 game)
         {

@@ -13,14 +13,14 @@ namespace Start_a_Town_
         public string GrowthMaterialString
         {
             get => this.GrowthMaterial.Name;
-            set { }
+            set => this.GrowthMaterial = Def.GetDef<MaterialDef>(value);
         }
 
         [XmlElement(ElementName = "GrowthItemDef")]
         public string GrowthItemDefString
         {
             get => this.GrowthItemDef.Name;
-            set { }
+            set => this.GrowthItemDef = Def.GetDef<ItemDef>(value);
         }
 
         public int MaxYieldHarvest;

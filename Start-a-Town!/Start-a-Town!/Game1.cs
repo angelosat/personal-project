@@ -125,6 +125,7 @@ namespace Start_a_Town_
             Animation.Export();
             this.Network = new Network();
             EnsureInitHelper.Init();
+            GameSettings.Init();
         }
 
         /// <summary>
@@ -180,7 +181,7 @@ namespace Start_a_Town_
             // TODO: Unload any non ContentManager content here
         }
 
-        double UPDATE_INTERVAL = 1f / Engine.TicksPerSecond;
+        readonly double UPDATE_INTERVAL = 1f / Engine.TicksPerSecond;
         double lastFrameTime = 0.0;
         double cyclesLeftOver = 0.0;
         /// <summary>

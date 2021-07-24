@@ -555,9 +555,8 @@ namespace Start_a_Town_.UI
         internal static IEnumerable<IntVec3> SelectedCells => GetSelectedCells();
         internal static IEnumerable<GameObject> SelectedEntities => GetSelectedEntities();
 
-        internal static Entity GetSingleSelectedEntity()
-        {
-            return Instance.MultipleSelected.SingleOrDefault()?.Object as Entity;
-        }
+        internal static TargetArgs SingleSelected => Instance.MultipleSelected.SingleOrDefault();
+        internal static Entity SingleSelectedEntity => SingleSelected?.Object as Entity;
+        internal static IntVec3? SingleSelectedCell => (SingleSelected is TargetArgs target && target.Type == TargetType.Position) ? target.Global : null;
     }
 }

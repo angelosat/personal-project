@@ -348,7 +348,7 @@ namespace Start_a_Town_
 
         private bool TryShowForceTaskGUI(TargetArgs target)
         {
-            var actor = SelectionManager.GetSingleSelectedEntity() as Actor;
+            var actor = SelectionManager.SingleSelectedEntity as Actor;
 
             if (!(actor?.IsCitizen ?? false))
                 return false;

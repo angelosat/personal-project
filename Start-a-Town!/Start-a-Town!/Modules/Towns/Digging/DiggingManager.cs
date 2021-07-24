@@ -9,7 +9,7 @@ namespace Start_a_Town_.Towns.Digging
 {
     public class DiggingManager : TownComponent
     {
-        HashSet<IntVec3> AllPositions = new HashSet<IntVec3>();
+        HashSet<IntVec3> AllPositions = new();
 
         public DiggingManager(Town town)
         {

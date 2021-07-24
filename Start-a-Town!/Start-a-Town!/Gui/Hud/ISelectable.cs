@@ -9,7 +9,7 @@ namespace Start_a_Town_
         string GetName();
         void GetSelectionInfo(IUISelection panel);
         IEnumerable<(string name, Action action)> GetInfoTabs();
-        void GetQuickButtons(UISelectedInfo panel);
+        void GetQuickButtons(SelectionManager panel);
         bool Exists { get; }
         void TabGetter(Action<string, Action> getter);
     }

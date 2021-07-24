@@ -160,7 +160,7 @@ namespace Start_a_Town_.UI
         public override void DrawOnCamera(SpriteBatch sb, Camera camera)
         {
             base.Draw(sb, camera.ViewPort);
-            if (UISelectedInfo.IsSelected(this.Object as GameObject))
+            if (SelectionManager.IsSelected(this.Object as GameObject))
                 this.BoundsScreen.DrawHighlightBorder(sb, thickness: 2, padding: 2);
         }
     }

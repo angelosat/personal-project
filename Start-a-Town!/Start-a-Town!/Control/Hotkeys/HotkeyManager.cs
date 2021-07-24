@@ -118,6 +118,7 @@ namespace Start_a_Town_
                     .AddColumn(null, "Primary", 64, h => new Label(() => $"{h.Key1}", delegate { editHotkey(h, 0); }))
                     .AddColumn(null, "Secondary", 64, h => new Label(() => $"{h.Key2}", delegate { editHotkey(h, 1); }))
                     .AddItems(cat)).ToArray());
+            box.Validate(true);
             return box;
             static void setHotkey(Hotkey hotkey, int keyIndex, System.Windows.Forms.Keys key)
             {

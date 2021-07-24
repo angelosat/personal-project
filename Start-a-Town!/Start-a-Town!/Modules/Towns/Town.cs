@@ -376,7 +376,7 @@ namespace Start_a_Town_
                 foreach (var i in comp.GetTabs(selected))
                     yield return i;
         }
-        internal void Select(ISelectable target, UISelectedInfo info)
+        internal void Select(ISelectable target, SelectionManager info)
         {
             foreach (var comp in this.TownComponents)
             {

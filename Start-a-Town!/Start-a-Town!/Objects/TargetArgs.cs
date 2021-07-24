@@ -779,7 +779,7 @@ namespace Start_a_Town_
             }
             this.Map.OnTargetSelected(info, this);
         }
-        public void GetQuickButtons(UISelectedInfo info)
+        public void GetQuickButtons(SelectionManager info)
         {
             switch (this.Type)
             {

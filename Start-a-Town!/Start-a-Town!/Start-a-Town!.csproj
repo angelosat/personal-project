@@ -851,7 +851,7 @@
     <Compile Include="Gui\Hud\ISelectable.cs" />
     <Compile Include="Gui\Hud\UIChatSettings.cs" />
     <Compile Include="Gui\Hud\UIGameSpeed.cs" />
-    <Compile Include="Gui\Hud\UISelectedInfo.cs" />
+    <Compile Include="Gui\Hud\SelectionManager.cs" />
     <Compile Include="Gui\ItemText\EntityTextManager.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListBoxCollapsible.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListBoxCollapsibleNode.cs" />

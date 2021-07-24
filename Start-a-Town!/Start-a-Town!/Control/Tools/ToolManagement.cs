@@ -17,7 +17,7 @@ namespace Start_a_Town_
         Vector2 MouseScrollOrigin;
         Vector2 CameraCoordinatesOrigin;
         Action ScrollingMode;
-        static readonly HotkeyContext HotkeyContext = new("Management");
+        public static readonly HotkeyContext HotkeyContext = new("Management");
         static ToolManagement()
         {
             HotkeyManager.RegisterHotkey(HotkeyContext, "Pause/Resume", PauseResume, Keys.Space);
@@ -88,9 +88,9 @@ namespace Start_a_Town_
         private void SelectEntity(TargetArgs target)
         {
             if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
-                UISelectedInfo.AddToSelection(target);
+                SelectionManager.AddToSelection(target);
             else
-                UISelectedInfo.Refresh(target);
+                SelectionManager.Refresh(target);
         }
 
         private void MouseScroll()
@@ -196,7 +196,7 @@ namespace Start_a_Town_
         private static void ToggleForbidden()
         {
             return;
-            PacketToggleForbidden.Send(Client.Instance, UISelectedInfo.GetSelectedEntities().Where(o => o.IsForbiddable()));
+            PacketToggleForbidden.Send(Client.Instance, SelectionManager.GetSelectedEntities().Where(o => o.IsForbiddable()));
         }
 
         private static void SetSpeed(int value)
@@ -323,7 +323,7 @@ namespace Start_a_Town_
             if (this.Target != null)
             {
                 if (this.Target.Type == TargetType.Entity)
-                    UISelectedInfo.SelectAllVisible(this.Target.Object.Def);
+                    SelectionManager.SelectAllVisible(this.Target.Object.Def);
 
                 // TODO: drawing multiple block selection textures is slow, need to optimize
                 else if (this.Target.Type == TargetType.Position)
@@ -332,9 +332,9 @@ namespace Start_a_Town_
                         (a, b, r) =>
                         {
                             if (a == b)
-                                UISelectedInfo.Refresh(this.Target);
+                                SelectionManager.Refresh(this.Target);
                             else
-                                UISelectedInfo.Refresh(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Ingame.GetMap(), t)));
+                                SelectionManager.Refresh(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Ingame.GetMap(), t)));
                         }));
             }
             this.DblClicked = true;
@@ -348,7 +348,7 @@ namespace Start_a_Town_
 
         private bool TryShowForceTaskGUI(TargetArgs target)
         {
-            var actor = UISelectedInfo.GetSingleSelectedEntity() as Actor;
+            var actor = SelectionManager.GetSingleSelectedEntity() as Actor;
 
             if (!(actor?.IsCitizen ?? false))
                 return false;
@@ -410,7 +410,7 @@ namespace Start_a_Town_
         {
             if (ToolManager.Instance.ActiveTool is not ToolManagement)
                 return;
-            ScreenManager.CurrentScreen.Camera.SliceOn((int)UISelectedInfo.Instance.SelectedSource.Global.Z);
+            ScreenManager.CurrentScreen.Camera.SliceOn((int)SelectionManager.Instance.SelectedSource.Global.Z);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Modules.Construction;
+using Start_a_Town_.Net;
 using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 using System;
@@ -30,8 +31,7 @@ namespace Start_a_Town_
         static readonly Lazy<GuiConstructionsBrowser> WindowBuild = new();
         static ConstructionsManager()
         {
-            // there are here temporarily for testing purposes
-            HotkeyManager.RegisterHotkey(Town.HotkeyContext, "Build", ToggleConstructionWindow, System.Windows.Forms.Keys.B);
+            HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Build", ToggleConstructionWindow, System.Windows.Forms.Keys.B);
         }
 
         private static void ToggleConstructionWindow()
@@ -149,11 +149,19 @@ namespace Start_a_Town_
         {
             panel.AddInfo(new Label() { Text = "Buildings" });
         }
-
-        public void GetQuickButtons(UISelectedInfo panel)
+        internal override void UpdateQuickButtons()
         {
-        }
+            var cells = SelectionManager.SelectedCells;
+            var selectedDesignations = cells.Intersect(this.Designations);
+            if (!selectedDesignations.Any())
+                return;
+            SelectionManager.AddButton(DesignationDef.IconCancel, cancel, selectedDesignations);
 
+            static void cancel(List<TargetArgs> positions)
+            {
+                PacketDesignation.Send(Client.Instance, DesignationDef.Null, positions, false);
+            }
+        }
         public void Handle(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
             var cheat = false;

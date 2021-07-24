@@ -141,7 +141,7 @@ namespace Start_a_Town_.Blocks
         }
         public virtual void DrawUI(SpriteBatch sb, Camera cam, Vector3 global) { }
 
-        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, Vector3 vector3)
+        internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, Vector3 vector3)
         {
             foreach (var c in this.Comps)
                 c.GetQuickButtons(uISelectedInfo, map, vector3);

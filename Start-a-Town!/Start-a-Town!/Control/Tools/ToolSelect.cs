@@ -30,7 +30,7 @@ namespace Start_a_Town_
         protected virtual void Select()
         {
             this.SelectAction(this.Begin, this.End);
-            UISelectedInfo.Refresh(Client.Instance.Map, this.Begin.GetBoundingBox(this.End));
+            SelectionManager.Refresh(Client.Instance.Map, this.Begin.GetBoundingBox(this.End));
         }
         public override void Update()
         {

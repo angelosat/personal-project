@@ -152,7 +152,7 @@ namespace Start_a_Town_
         {
             if (this.Town.Net is Net.Server)
                 return;
-            var selectedCells = UISelectedInfo.GetSelectedPositions();
+            var selectedCells = SelectionManager.GetSelectedCells();
             var fromblockentities = selectedCells.Select(this.Map.GetBlockEntity).OfType<Blocks.BlockEntity>().Select(b => b.OriginGlobal);
             selectedCells = selectedCells.Concat(fromblockentities).Distinct();
             
@@ -161,9 +161,9 @@ namespace Start_a_Town_
             {
                 var selectedDesignations = d.Value.Intersect(selectedCells);
                 if (selectedDesignations.Any())
-                    UISelectedInfo.AddButton(d.Key.IconRemove, DesignationDef.Cancel, selectedDesignations.Select(i => new TargetArgs(this.Map, i)));
+                    SelectionManager.AddButton(d.Key.IconRemove, cancel, selectedDesignations.Select(i => new TargetArgs(this.Map, i)));
                 else
-                    UISelectedInfo.RemoveButton(d.Key.IconRemove);
+                    SelectionManager.RemoveButton(d.Key.IconRemove);
             }
 
             var areNotTask = selectedCells.Except(areTask).Where(t =>
@@ -173,9 +173,14 @@ namespace Start_a_Town_
             foreach (var s in DesignationDef.All)
             {
                 if (!splits.TryGetValue(s, out var list) || !list.Any())
-                    UISelectedInfo.RemoveButton(s.IconAdd);
+                    SelectionManager.RemoveButton(s.IconAdd);
                 else
-                    UISelectedInfo.AddButton(s.IconAdd, targets => MineAdd(targets, s), list.Select(i => new TargetArgs(this.Map, i)));
+                    SelectionManager.AddButton(s.IconAdd, targets => MineAdd(targets, s), list.Select(i => new TargetArgs(this.Map, i)));
+            }
+
+            static void cancel(List<TargetArgs> positions)
+            {
+                PacketDesignation.Send(Client.Instance, DesignationDef.Null, positions, false);
             }
         }
         static public readonly Icon MineIcon = new(ItemContent.PickaxeFull);

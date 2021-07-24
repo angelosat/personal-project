@@ -849,7 +849,7 @@ namespace Start_a_Town_
             info.AddInfo(new Label(node.Region.Room.ToString()));
         }
 
-        internal virtual void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, IntVec3 vector3)
+        internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3)
         {
             var e = map.GetBlockEntity(vector3);
             e?.GetQuickButtons(uISelectedInfo, map, vector3);

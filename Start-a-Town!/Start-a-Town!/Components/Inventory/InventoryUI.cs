@@ -48,7 +48,7 @@ namespace Start_a_Town_
                     },
                     LeftClickAction = () =>
                     {
-                        UISelectedInfo.Refresh(invSlot.Object);
+                        SelectionManager.Refresh(invSlot.Object);
                     }
                 };
                 

@@ -16,7 +16,7 @@ namespace Start_a_Town_.UI
         }
         static public void Popup()
         {
-            Instance.Location = UISelectedInfo.Instance.TopRight;
+            Instance.Location = SelectionManager.Instance.TopRight;
             Instance.Anchor = Vector2.UnitY;
             Instance.Toggle();
         }

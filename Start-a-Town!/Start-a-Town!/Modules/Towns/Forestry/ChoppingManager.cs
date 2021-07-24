@@ -206,7 +206,7 @@ namespace Start_a_Town_
         {
             if (this.Town.Net is Server)
                 return;
-            var entities = UISelectedInfo.GetSelectedEntities();
+            var entities = SelectionManager.GetSelectedEntities();
             this.UpdateQuickButtonsChopping(entities);
             this.UpdateQuickButtonsForaging(entities);
         }
@@ -216,28 +216,28 @@ namespace Start_a_Town_
             var areNotTask = entities.Except(areTask).OfType<Plant>().Where(IsChoppable);
 
             if (areTask.Any())
-                UISelectedInfo.AddButton(ButtonChopRemove, ChopDownRemove, areTask);
+                SelectionManager.AddButton(ButtonChopRemove, ChopDownRemove, areTask);
             else
-                UISelectedInfo.RemoveButton(ButtonChopRemove);
+                SelectionManager.RemoveButton(ButtonChopRemove);
 
             if (areNotTask.Any())
-                UISelectedInfo.AddButton(ButtonChopAdd, ChopDownAdd, areNotTask);
+                SelectionManager.AddButton(ButtonChopAdd, ChopDownAdd, areNotTask);
             else
-                UISelectedInfo.RemoveButton(ButtonChopAdd);
+                SelectionManager.RemoveButton(ButtonChopAdd);
         }
         private void UpdateQuickButtonsForaging(IEnumerable<GameObject> entities)
         {
             var areTask = entities.Where(e => this.QueuedForaging.Contains(e.RefID));
             var areNotTask = entities.Except(areTask).OfType<Plant>().Where(o => o.IsHarvestable);
             if (areTask.Any())
-                UISelectedInfo.AddButton(ButtonForageRemove, ForageRemove, areTask);
+                SelectionManager.AddButton(ButtonForageRemove, ForageRemove, areTask);
             else
-                UISelectedInfo.RemoveButton(ButtonForageRemove);
+                SelectionManager.RemoveButton(ButtonForageRemove);
 
             if (areNotTask.Any())
-                UISelectedInfo.AddButton(ButtonForageAdd, ForageAdd, areNotTask);
+                SelectionManager.AddButton(ButtonForageAdd, ForageAdd, areNotTask);
             else
-                UISelectedInfo.RemoveButton(ButtonForageAdd);
+                SelectionManager.RemoveButton(ButtonForageAdd);
         }
 
         private static bool IsChoppable(GameObject o)

@@ -177,7 +177,7 @@ namespace Start_a_Town_
             }
 
             var path = state.Path;
-            if (!UISelectedInfo.IsSelected(parent))
+            if (!SelectionManager.IsSelected(parent))
             {
                 return;
             }

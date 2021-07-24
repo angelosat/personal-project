@@ -161,7 +161,7 @@ namespace Start_a_Town_
         {
         }
 
-        public void GetQuickButtons(UISelectedInfo info)
+        public void GetQuickButtons(SelectionManager info)
         {
             info.AddButtons(new IconButton(Icon.Cross) { LeftClickAction = this.RequestDelete, HoverText = "Delete" });
             info.AddButtons(new IconButton(Icon.Construction) { LeftClickAction = this.Edit, HoverText = "Edit" });
@@ -173,7 +173,7 @@ namespace Start_a_Town_
         }
         internal void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
-            var isselected = UISelectedInfo.IsSelected(this);
+            var isselected = SelectionManager.IsSelected(this);
             var col = Color.Lerp(this.Color, Color.White, isselected ? .5f : 0) * .5f;
             var positions = this.GetPositions().Select(t => t + IntVec3.UnitZ);
             cam.DrawGrid(sb, map, positions, col);

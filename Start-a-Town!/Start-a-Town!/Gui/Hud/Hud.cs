@@ -311,7 +311,7 @@ namespace Start_a_Town_
 
                 case System.Windows.Forms.Keys.Escape:
                     var winds = (from control in this.WindowManager.Layers[UIManager.LayerWindows] where control is Window select control).ToList();
-                    UISelectedInfo.ClearTargets();
+                    SelectionManager.ClearTargets();
                     if (winds.Count == 0)
                         this.IngameMenu.ToggleDialog();
                     foreach (var win in winds)

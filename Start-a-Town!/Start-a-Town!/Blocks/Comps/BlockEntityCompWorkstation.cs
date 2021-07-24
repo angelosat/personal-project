@@ -41,7 +41,7 @@ namespace Start_a_Town_
             return true;
         }
         
-        internal override void GetQuickButtons(UISelectedInfo uISelectedInfo, MapBase map, IntVec3 vector3)
+        internal override void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3)
         {
             uISelectedInfo.AddTabAction("Orders", () => ShowUI(map, vector3));
         }

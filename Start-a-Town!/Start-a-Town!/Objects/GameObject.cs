@@ -130,7 +130,7 @@ namespace Start_a_Town_
             foreach (var comp in this.Components.Values)
                 comp.GetSelectionInfo(info, this);
         }
-        public virtual void GetQuickButtons(UISelectedInfo info)
+        public virtual void GetQuickButtons(SelectionManager info)
         {
             if (this.IsForbiddable())
                 info.AddButton(IconForbidden, RequestToggleForbidden, this);
@@ -147,7 +147,7 @@ namespace Start_a_Town_
         }
         static void FollowCam()
         {
-            ScreenManager.CurrentScreen.Camera.ToggleFollowing(UISelectedInfo.Instance.SelectedSource.Object);
+            ScreenManager.CurrentScreen.Camera.ToggleFollowing(SelectionManager.Instance.SelectedSource.Object);
         }
 
         public void ToggleForbidden()

@@ -8,19 +8,17 @@ using System.Linq;
 namespace Start_a_Town_.UI
 {
     [EnsureStaticCtorCall]
-    public sealed class UISelectedInfo : GroupBox, IUISelection
+    public sealed class SelectionManager : GroupBox, IUISelection
     {
         readonly GroupBox BoxTabs, BoxButtons, BoxIcons, BoxInfo;
         public Panel PanelInfo;
         public Label LabelName;
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
-        //int PreviousDrawLevel = -1;
         static readonly IHotkey HotkeySliceZ;
 
-        static UISelectedInfo()
+        static SelectionManager()
         {
-            //HotkeySliceZ = HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Set draw elevation to selection", ToolManagement.Slice, System.Windows.Forms.Keys.Z);
         }
         static readonly QuickButton IconSlice = new(Icon.ArrowDown, HotkeySliceZ)
         {
@@ -28,7 +26,7 @@ namespace Start_a_Town_.UI
             LeftClickAction = ToolManagement.Slice,
             HoverText = "Slice z-level"
         };
-        public static UISelectedInfo Instance = new();
+        public static SelectionManager Instance = new();
 
         public TargetArgs SelectedSource = TargetArgs.Null;
         ISelectable Selectable;
@@ -36,8 +34,7 @@ namespace Start_a_Town_.UI
         IEnumerator<ISelectable> SelectedStack;
         public ICollection<TargetArgs> MultipleSelected = new List<TargetArgs>(); // TODO: make this a list of iselectables
 
-
-        UISelectedInfo()
+        SelectionManager()
         {
             this.PanelInfo = new Panel(new Rectangle(0, 0, 300, 100));
             this.BoxTabs = new GroupBox()
@@ -338,34 +335,7 @@ namespace Start_a_Town_.UI
         {
             this.BoxTabs.AddControls(buttons);
         }
-        internal void AddButtons(params IconButton[] buttons)
-        {
-            this.BoxButtons.AddControls(buttons);
-        }
-        internal void AddButton(IconButton button, Action<List<TargetArgs>> action, GameObject obj, bool singleTargetOnly = false)
-        {
-            this.AddButton(button, action, new TargetArgs(obj), singleTargetOnly);
-        }
-        public void AddButton(IconButton button, Action<TargetArgs> action, TargetArgs target)
-        {
-            this.AddButton(button, targets => action(targets.First()), target, true);
-        }
-        internal void AddButton(IconButton button, Action<List<TargetArgs>> action, TargetArgs obj, bool singleTargetOnly = false)
-        {
-            if (singleTargetOnly && this.MultipleSelected.Count > 1)
-                return;
-
-            if (this.ActionsAdded.TryGetValue(action, out List<TargetArgs> existing))
-            {
-                existing.Add(obj);
-                return;
-            }
-            else
-                this.ActionsAdded.Add(action, new List<TargetArgs>() { obj });
-            button.LeftClickAction = () => this.MultipleSelectedAction(action);
-            this.BoxButtons.AddControls(button);
-        }
-
+       
         internal static void AddButton(IconButton button)
         {
             Instance.AddButtons(new IconButton[] { button });
@@ -504,9 +474,41 @@ namespace Start_a_Town_.UI
         {
             Instance.BoxButtons.RemoveControls(button);
         }
+
+        internal void AddButtons(params IconButton[] buttons)
+        {
+            this.BoxButtons.AddControls(buttons);
+        }
+        internal void AddButton(IconButton button, Action<List<TargetArgs>> action, GameObject obj, bool singleTargetOnly = false)
+        {
+            this.AddButton(button, action, new TargetArgs(obj), singleTargetOnly);
+        }
+        internal void AddButton(IconButton button, Action<TargetArgs> action, TargetArgs target)
+        {
+            this.AddButton(button, targets => action(targets.First()), target, true);
+        }
+        internal void AddButton(IconButton button, Action<List<TargetArgs>> action, TargetArgs obj, bool singleTargetOnly = false)
+        {
+            if (singleTargetOnly && this.MultipleSelected.Count > 1)
+                return;
+
+            if (this.ActionsAdded.TryGetValue(action, out List<TargetArgs> existing))
+            {
+                existing.Add(obj);
+                return;
+            }
+            else
+                this.ActionsAdded.Add(action, new List<TargetArgs>() { obj });
+            button.LeftClickAction = () => this.MultipleSelectedAction(action);
+            this.BoxButtons.AddControls(button);
+        }
         internal static void AddButton(IconButton button, Action<List<TargetArgs>> action, IEnumerable<GameObject> targets)
         {
             AddButton(button, action, targets.Select(t => new TargetArgs(t)));
+        }
+        internal static void AddButton(IconButton button, Action<List<TargetArgs>> action, IEnumerable<IntVec3> cells)
+        {
+            AddButton(button, action, cells.Select(t => new TargetArgs(t)));
         }
         internal static void AddButton(IconButton button, Action<List<TargetArgs>> action, IEnumerable<TargetArgs> targets)
         {
@@ -544,18 +546,18 @@ namespace Start_a_Town_.UI
                 .Where(tar => tar.Type == TargetType.Entity)
                 .Select(t => t.Object);
         }
-        internal static IEnumerable<IntVec3> GetSelectedPositions()
+        internal static IEnumerable<IntVec3> GetSelectedCells()
         {
             return GetSelected()
                 .Where(tar => tar.Type == TargetType.Position)
                 .Select(t => (IntVec3)t.Global);
         }
+        internal static IEnumerable<IntVec3> SelectedCells => GetSelectedCells();
+        internal static IEnumerable<GameObject> SelectedEntities => GetSelectedEntities();
+
         internal static Entity GetSingleSelectedEntity()
         {
-            if (GetSelected().Count() != 1)
-                return null;
-
-            return GetSelected().First().Object as Entity;
+            return Instance.MultipleSelected.SingleOrDefault()?.Object as Entity;
         }
     }
 }

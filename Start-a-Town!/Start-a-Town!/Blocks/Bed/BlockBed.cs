@@ -343,13 +343,13 @@ namespace Start_a_Town_
             switch (t)
             {
                 case BlockBedEntity.Types.Citizen:
-                    UISelectedInfo.RemoveButton(ButtonUnsetVisitor);
-                    UISelectedInfo.AddButton(ButtonSetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Visitor), (map, vector3));
+                    SelectionManager.RemoveButton(ButtonUnsetVisitor);
+                    SelectionManager.AddButton(ButtonSetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Visitor), (map, vector3));
                     return;
 
                 case BlockBedEntity.Types.Visitor:
-                    UISelectedInfo.RemoveButton(ButtonSetVisitor);
-                    UISelectedInfo.AddButton(ButtonUnsetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Citizen), (map, vector3));
+                    SelectionManager.RemoveButton(ButtonSetVisitor);
+                    SelectionManager.AddButton(ButtonUnsetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Citizen), (map, vector3));
                     return;
 
                 default:
@@ -362,7 +362,7 @@ namespace Start_a_Town_
             map.InvalidateCell(vector3);
             if (map.IsActive)
             {
-                if (UISelectedInfo.GetSelected().SingleOrDefault() is TargetArgs target && target.Type == TargetType.Position && (IntVec3)target.Global == vector3)
+                if (SelectionManager.GetSelected().SingleOrDefault() is TargetArgs target && target.Type == TargetType.Position && (IntVec3)target.Global == vector3)
                 {
                     UpdateQuickButtons(map, vector3, type);
                 }

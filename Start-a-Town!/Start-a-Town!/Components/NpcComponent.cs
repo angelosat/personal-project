@@ -162,7 +162,7 @@ namespace Start_a_Town_
             NpcDirectory.Remove(this.Parent);
         }
 
-        internal override void GetQuickButtons(UISelectedInfo info, GameObject parent)
+        internal override void GetQuickButtons(SelectionManager info, GameObject parent)
         {
             if (parent.IsPlayerControlled)
                 return;
@@ -217,12 +217,12 @@ namespace Start_a_Town_
                 case Message.Types.PlayerControlNpc:
                     if (parent.Net is Net.Client)
                     {
-                        if (UISelectedInfo.GetSelectedEntities().Contains(parent))
+                        if (SelectionManager.GetSelectedEntities().Contains(parent))
                         {
                             if (e.Parameters[1] as GameObject == parent)
-                                UISelectedInfo.RemoveButton(IconControl);
+                                SelectionManager.RemoveButton(IconControl);
                             else if (e.Parameters[2] as GameObject == parent)
-                                UISelectedInfo.AddButton(IconControl);
+                                SelectionManager.AddButton(IconControl);
                         }
                     }
                     break;

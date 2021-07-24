@@ -131,7 +131,7 @@ namespace Start_a_Town_
         {
             return this.Interior.Where(g => this.Map.GetBlock(g).Furniture == furniture);
         }
-        public void GetQuickButtons(UISelectedInfo panel)
+        public void GetQuickButtons(SelectionManager panel)
         {
         }
 

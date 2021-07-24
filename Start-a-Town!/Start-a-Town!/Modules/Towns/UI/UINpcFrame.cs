@@ -28,9 +28,9 @@ namespace Start_a_Town_
             LeftClickAction = () =>
             {
                 if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
-                    UISelectedInfo.AddToSelection(new TargetArgs(actor));
+                    SelectionManager.AddToSelection(new TargetArgs(actor));
                 else
-                    UISelectedInfo.Refresh(new TargetArgs(actor));
+                    SelectionManager.Refresh(new TargetArgs(actor));
             };
             this.Label = new Label()
             {
@@ -47,7 +47,7 @@ namespace Start_a_Town_
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);
-            if(UISelectedInfo.IsSelected(this.Tag as GameObject))
+            if(SelectionManager.IsSelected(this.Tag as GameObject))
             {
                 this.BoundsScreen.DrawHighlightBorder(sb, .5f, 1);
             }

@@ -139,7 +139,7 @@ namespace Start_a_Town_.Components
         {
         }
 
-        internal virtual void GetQuickButtons(UISelectedInfo info, GameObject parent)
+        internal virtual void GetQuickButtons(SelectionManager info, GameObject parent)
         {
         }
         internal virtual IEnumerable<Button> GetTabs() { yield break; }

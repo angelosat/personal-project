@@ -127,7 +127,8 @@ namespace Start_a_Town_.Components
             this.AnimationWalk.Enabled = true;
 
             this.CurrentState.Apply(this);
-            parent.Net.PostLocalEvent(parent, Message.Types.Walk);
+            var actor = parent as Actor;
+            actor.Work.Interrupt();
             this.Moving = true;
         }
         public void Stop(GameObject parent)

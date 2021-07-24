@@ -29,9 +29,10 @@ namespace Start_a_Town_
             Furniture
         };
         static readonly Lazy<GuiConstructionsBrowser> WindowBuild = new();
+        static IHotkey HotkeyBuild;
         static ConstructionsManager()
         {
-            HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Build", ToggleConstructionWindow, System.Windows.Forms.Keys.B);
+            HotkeyBuild = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Build", ToggleConstructionWindow, System.Windows.Forms.Keys.B);
         }
 
         private static void ToggleConstructionWindow()
@@ -51,9 +52,9 @@ namespace Start_a_Town_
             return this.Designations.Where(this.IsBuildableCurrently);
         }
 
-        internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
+        internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<string, Action>($"Build ({KeyBind.Build.Key})", () => WindowBuild.Value.Toggle());
+            yield return new Tuple<Func<string>, Action>(()=>$"Build ({HotkeyBuild.GetLabel()})", () => WindowBuild.Value.Toggle());
         }
 
         public override void Write(BinaryWriter w)

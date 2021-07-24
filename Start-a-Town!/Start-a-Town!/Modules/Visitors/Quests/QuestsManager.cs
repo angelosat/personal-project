@@ -110,10 +110,10 @@ namespace Start_a_Town_
         {
             this.QuestGiverProperties.Remove(actorID);
         }
-        internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
+        internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
             var win = this.UIWindowQuests;
-            yield return new Tuple<string, Action>("Quests", () => win.Value.Toggle());
+            yield return new Tuple<Func<string>, Action>(()=>"Quests", () => win.Value.Toggle());
         }
 
         static readonly Button BtnQuests = new("Quests");

@@ -15,23 +15,17 @@ namespace Start_a_Town_
         bool Valid;
         bool Removing;
         protected Action<IntVec3, IntVec3, bool> Callback;
-        Func<List<IntVec3>> GetZones = () => new List<IntVec3>();
         IntVec3 Plane;
         public override bool TargetOnlyBlocks => true;
+
         public ToolDesignate3D()
         {
-
         }
-       
         public ToolDesignate3D(Action<IntVec3, IntVec3, bool> callback)
-            : this(callback, () => new List<IntVec3>())
-        {
-        }
-        public ToolDesignate3D(Action<IntVec3, IntVec3, bool> callback, Func<List<IntVec3>> zones)
         {
             this.Callback = callback;
-            this.GetZones = zones;
         }
+       
         public override void Update()
         {
             base.Update();
@@ -77,8 +71,6 @@ namespace Start_a_Town_
             if(this.Target.Type != TargetType.Position)
                 return Messages.Default;
             var pos = this.Target.Global;
-            if (this.GetZones().Contains(pos))
-                this.Removing = true;
             this.Begin = pos;
             this.End = this.Begin;
             this.Width = this.Height = 1;
@@ -169,13 +161,6 @@ namespace Start_a_Town_
             this.DrawGrid(sb, camera);
             sb.Flush();
             base.DrawBeforeWorld(sb, map, camera);
-        }
-
-        private void DrawExistingZones(MySpriteBatch sb, Camera camera)
-        {
-            foreach (var g in this.GetZones())
-                this.DrawGridCell(sb, camera, Color.Yellow, g);
-            sb.Flush();
         }
 
         void DrawGrid(MySpriteBatch sb, Camera cam)

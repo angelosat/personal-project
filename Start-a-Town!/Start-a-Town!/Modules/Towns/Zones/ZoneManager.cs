@@ -110,10 +110,10 @@ namespace Start_a_Town_
         }
         static Type[] ZoneTypes = { typeof(Stockpile), typeof(GrowingZone) }; // TODO make these defs
 
-        internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
+        internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
             foreach(var zoneType in ZoneTypes)
-                yield return new Tuple<string, Action>(zoneType.Name, () => ZoneNew.Edit(this.Town, zoneType));
+                yield return new Tuple<Func<string>, Action>(()=>zoneType.Name, () => ZoneNew.Edit(this.Town, zoneType));
         }
         
         public override ISelectable QuerySelectable(TargetArgs target)

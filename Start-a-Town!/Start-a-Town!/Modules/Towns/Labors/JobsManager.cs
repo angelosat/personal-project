@@ -105,9 +105,9 @@ namespace Start_a_Town_.AI
             this.UILabors = new Lazy<Control>(this.CreateJobsTable);
         }
         
-        internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
+        internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<string, Action>("Labors", this.ToggleLaborsWindow);
+            yield return new Tuple<Func<string>, Action>(()=>"Labors", this.ToggleLaborsWindow);
         }
 
         public void ToggleLaborsWindow()

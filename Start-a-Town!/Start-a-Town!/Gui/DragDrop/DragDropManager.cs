@@ -10,20 +10,9 @@ namespace Start_a_Town_
     class DragDropManager : InputHandler, IKeyEventHandler
     {
         public DragEventArgs Action;
-        public object Source;
-        public DragDropEffects Effects;
-        protected object _Item;
-        public object Item
-        {
-            get { return _Item; }
-            set
-            {
-                _Item = value;
-            }
-        }
-        Icon Icon;
-        static DragDropManager _Instance;
-        public static DragDropManager Instance => _Instance = new DragDropManager();
+            
+        static DragDropManager _instance;
+        public static DragDropManager Instance => _instance ??= new DragDropManager();
        
         public Control Control;
         Action CreateAction;
@@ -38,11 +27,6 @@ namespace Start_a_Town_
                     this.CreateAction();
                 }
             }
-            if (Item is null)
-                return;
-            GameObjectSlot slot = Item as GameObjectSlot;
-            if (slot.StackSize == 0)
-                Clear();
         }
 
         static public void Start(Control control, Action createAction)
@@ -62,10 +46,9 @@ namespace Start_a_Town_
         }
         public override void HandleLButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (this.Action == null)
+            if (this.Action is null)
                 return;
-            IDropTarget target = Controller.Instance.Mouseover.Object as IDropTarget;
-            if (target == null)
+            if (Controller.Instance.Mouseover.Object is not IDropTarget target)
                 return;
 
             e.Handled = true;

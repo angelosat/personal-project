@@ -105,15 +105,14 @@ namespace Start_a_Town_.Components
             //coll.Speed = .1f;
 
             this.AniAttack = AnimationDeliverAttack.Create(parent, () => Perform(parent, parent.Direction, attack), () => FinishDelivering(parent, attack));//() => FinishDelivering(parent, attack)); //
-            
+
             if (attack.Value < 0)
                 attack.Value.ToConsole();
             parent.AddAnimation(this.AniAttack);
 
             // telegraph attack to potential targets
             // TODO: all target in range and in direction of attack?
-            if (this.Target != null)
-                this.Target.PostMessage(new ObjectEventArgs(Message.Types.AttackTelegraph, parent, parent));
+            this.Target?.AttackTelegraph(parent);
         }
         Animation AniAttack;
 

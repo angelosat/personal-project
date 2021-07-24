@@ -139,12 +139,12 @@ namespace Start_a_Town_
                 Designations[des] = new HashSet<IntVec3>(r.ReadListIntVec3());
         }
 
-        internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
+        internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<string, Action>("Cancel designations", this.Cancel);
+            yield return new Tuple<Func<string>, Action>(() => "Cancel designations", Cancel);
         }
 
-        private void Cancel()
+        static void Cancel()
         {
             ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, DesignationDef.Null, a, b, r)));
         }

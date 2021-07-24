@@ -32,10 +32,10 @@ namespace Start_a_Town_.Towns
         public override string Name => "Shops";
         Dictionary<int, Workplace> Shops = new();
         readonly HashSet<Workplace> Shopss = new();
-        internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
+        internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
             var win = new Lazy<Window>(() => this.GetUIManager().ToWindow("Shops"));
-            yield return new Tuple<string, Action>("Businesses", () => win.Value.Toggle());
+            yield return new Tuple<Func<string>, Action>(()=>"Businesses", () => win.Value.Toggle());
         }
         
         public bool ShopExists(Workplace shop)

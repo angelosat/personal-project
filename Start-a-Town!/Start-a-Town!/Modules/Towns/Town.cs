@@ -358,12 +358,12 @@ namespace Start_a_Town_
 
         private void InitQuickMenu()
         {
-            var actions = new List<Tuple<string, Action>>();
+            var actions = new List<Tuple<Func<string>, Action>>();
             foreach (var comp in this.TownComponents)
                 actions.AddRange(comp.OnQuickMenuCreated());
-            actions.Add(new Tuple<string, Action>("Debug commands", UIDebugCommands.Refresh));
-            actions.Add(new Tuple<string, Action>("Spawn objects", () => UI.Editor.ObjectsWindowDefs.Instance.Show()));
-            actions.Add(new Tuple<string, Action>("Edit blocks", () => UI.Editor.TerrainWindow.Instance.Show()));
+            actions.Add(new Tuple<Func<string>, Action>(()=>"Debug commands", UIDebugCommands.Refresh));
+            actions.Add(new Tuple<Func<string>, Action>(()=>"Spawn objects", () => UI.Editor.ObjectsWindowDefs.Instance.Show()));
+            actions.Add(new Tuple<Func<string>, Action>(() => "Edit blocks", () => UI.Editor.TerrainWindow.Instance.Show()));
 
             this.QuickMenu = new UIQuickMenu();
             this.QuickMenu.AddItems(actions);

@@ -22,22 +22,23 @@ namespace Start_a_Town_
 
         readonly AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
         readonly AtlasDepthNormals.Node.Token[][] Parts;
-        public BlockBed() : base(Block.Types.Bed, 0f, 1f, false, true)
+        public BlockBed() 
+            : base(Types.Bed, 0f, 1f, false, true)
         {
             this.Furniture = FurnitureDefOf.Bed;
             this.BuildProperties = new BuildProperties(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
             this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.TopParts = new AtlasDepthNormals.Node.Token[] {
-                Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
-                Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
-                Block.Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
-                Block.Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal")
+                Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
+                Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
+                Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
+                Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal")
             };
             this.BottomParts = new AtlasDepthNormals.Node.Token[] {
-                Block.Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
-                Block.Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
-                Block.Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
-                Block.Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal")
+                Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
+                Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
+                Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
+                Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal")
             };
 
             this.Variations.Add(this.BottomParts.First());
@@ -54,13 +55,8 @@ namespace Start_a_Town_
             return 0.5f;
         }
 
-        public override bool Multi
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool Multi => true;
+            
         public override LootTable GetLootTable(byte data)
         {
             var table =
@@ -92,7 +88,7 @@ namespace Start_a_Town_
         {
             GetState(data, out var part, out var ori);
             IntVec3 top, bottom;
-            IntVec3 global = IntVec3.Zero;
+            var global = IntVec3.Zero;
             switch (ori)
             {
                 case 1:
@@ -179,9 +175,7 @@ namespace Start_a_Town_
         public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             if (!IsValidPosition(map, global, orientation))
-            {
                 return;
-            }
 
             var top = global;
 
@@ -194,8 +188,8 @@ namespace Start_a_Town_
                 _ => throw new NotImplementedException()
             };
 
-            map.SetBlock(bottom, Block.Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
-            map.SetBlock(top, Block.Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
+            map.SetBlock(bottom, Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
+            map.SetBlock(top, Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
             var entity = new BlockBedEntity();
             map.AddBlockEntity(top, entity);
             map.Town.AddUtility(Utility.Types.Sleeping, top);
@@ -288,7 +282,7 @@ namespace Start_a_Town_
             return new BlockBedEntity();
         }
        
-        public static BlockBedEntity GetEntity(MapBase map, Vector3 global)
+        public static BlockBedEntity GetEntity(MapBase map, IntVec3 global)
         {
             var parts = GetPartsDic(map, global);
             var entity = map.GetBlockEntity<BlockBedEntity>(parts[Part.Top]);
@@ -360,13 +354,8 @@ namespace Start_a_Town_
         {
             GetEntity(map, vector3).Type = type;
             map.InvalidateCell(vector3);
-            if (map.IsActive)
-            {
-                if (SelectionManager.GetSelected().SingleOrDefault() is TargetArgs target && target.Type == TargetType.Position && (IntVec3)target.Global == vector3)
-                {
+            if (map.IsActive && SelectionManager.SingleSelectedCell == vector3)
                     UpdateQuickButtons(map, vector3, type);
-                }
-            }
         }
         static class Packets
         {
@@ -379,9 +368,7 @@ namespace Start_a_Town_
             internal static void SetType(INetwork net, PlayerData playerData, IntVec3 vector3, BlockBedEntity.Types type)
             {
                 if (net is Server)
-                {
                     BlockBed.SetType(net.Map, vector3, type);
-                }
 
                 net.GetOutgoingStream().Write(PacketChangeType, playerData.ID, vector3, (int)type);
             }
@@ -392,13 +379,9 @@ namespace Start_a_Town_
                 var vec = r.ReadIntVec3();
                 var type = (BlockBedEntity.Types)r.ReadInt32();
                 if (net is Client)
-                {
                     BlockBed.SetType(net.Map, vec, type);
-                }
                 else
-                {
                     SetType(net, player, vec, type);
-                }
             }
         }
     }

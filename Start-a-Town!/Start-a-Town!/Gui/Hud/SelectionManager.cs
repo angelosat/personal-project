@@ -535,20 +535,17 @@ namespace Start_a_Town_.UI
             }
         }
 
-        internal static IEnumerable<TargetArgs> GetSelected()
-        {
-            return Instance.MultipleSelected;
-        }
+        internal static IEnumerable<TargetArgs> Selected => Instance.MultipleSelected;
 
         internal static IEnumerable<GameObject> GetSelectedEntities()
         {
-            return GetSelected()
+            return Selected
                 .Where(tar => tar.Type == TargetType.Entity)
                 .Select(t => t.Object);
         }
         internal static IEnumerable<IntVec3> GetSelectedCells()
         {
-            return GetSelected()
+            return Selected
                 .Where(tar => tar.Type == TargetType.Position)
                 .Select(t => (IntVec3)t.Global);
         }

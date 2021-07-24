@@ -138,6 +138,12 @@ namespace Start_a_Town_
             foreach (var comp in this.Components.Values)
                 comp.GetQuickButtons(info, this);
         }
+
+        internal void AttackTelegraph(GameObject parent)
+        {
+            throw new NotImplementedException();
+        }
+
         static readonly IconButton IconForbidden = new QuickButton(Icon.Cross, ToolManagement.HotkeyToggleForbidden, "Forbid") { HoverText = "Toggle forbidden" };
         static readonly IconButton IconCameraFollow = new(Icon.Replace) { BackgroundTexture = UIManager.Icon16Background, LeftClickAction = FollowCam, HoverText = "Camera follow" };
 

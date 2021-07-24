@@ -62,14 +62,12 @@ namespace Start_a_Town_
         internal void AddToProgress(GameObject parent, float p)
         {
             this.Progress.Value += p;
-            parent.Net.EventOccured(Message.Types.AttributeProgressChanged, this);
             if (p > 0)
                 this.Rec.Value = this.Rec.Max;
             if (this.Progress.Percentage == 1)
             {
                 this.Progress.Value++;
                 this.Progress.Value = 0;
-                parent.Net.EventOccured(Message.Types.AttributeChanged, this);
             }
             else if (this.Progress.Percentage == 0)
             {
@@ -77,7 +75,6 @@ namespace Start_a_Town_
                     return;
                 this.Progress.Value--;
                 this.Progress.Value = this.Progress.Max;
-                parent.Net.EventOccured(Message.Types.AttributeChanged, this);
             }
         }
 

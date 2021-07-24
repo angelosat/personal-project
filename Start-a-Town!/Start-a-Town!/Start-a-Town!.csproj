@@ -784,9 +784,7 @@
     <Compile Include="Modules\Towns\Tools\ToolDesignateZone.cs" />
     <Compile Include="Modules\Towns\Tools\ToolSelect3D.cs" />
     <Compile Include="Modules\Towns\Tools\ToolDesignate3D.cs" />
-    <Compile Include="Modules\Towns\Tools\ToolDesignatePositions.cs" />
     <Compile Include="Modules\Towns\Tools\ToolZoningPositionsNew.cs" />
-    <Compile Include="Modules\Towns\Tools\ToolDesignateSingle.cs" />
     <Compile Include="Modules\Towns\TownComponent.cs" />
     <Compile Include="Modules\Towns\UI\UIDebugCommands.cs" />
     <Compile Include="Modules\Towns\UI\UIQuickMenu.cs" />
@@ -992,7 +990,6 @@
     <Compile Include="Gui\Primitives\Panels\PanelLabeled.cs" />
     <Compile Include="Gui\RandomizeButton.cs" />
     <Compile Include="Gui\Settings\CameraSettings.cs" />
-    <Compile Include="Gui\Settings\ControlsSettings.cs" />
     <Compile Include="Gui\Settings\GameSettings.cs" />
     <Compile Include="Gui\Settings\InterfaceSettings.cs" />
     <Compile Include="Gui\Settings\VideoSettings.cs" />

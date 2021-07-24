@@ -158,23 +158,8 @@ namespace Start_a_Town_
                     floating.Show();
                     break;
 
-                case Message.Types.NoDurability:
-                    var target = e.Parameters[0] as GameObject;
-                    SpeechBubbleOld.Create(target, "Broken equipment");
-                    break;
-
-                case Message.Types.InvalidTarget:
-                    target = e.Parameters[0] as GameObject;
-                    SpeechBubbleOld.Create(target, "Invalid target");
-                    break;
-
-                case Message.Types.InvalidTargetType:
-                    target = e.Parameters[0] as GameObject;
-                    SpeechBubbleOld.Create(target, "Invalid target type");
-                    break;
-
                 case Message.Types.OutOfRange:
-                    target = e.Parameters[0] as GameObject;
+                    var target = e.Parameters[0] as GameObject;
                     FloatingText.Manager.Create(target, "Out of range", ft => ft.Font = UIManager.FontBold);
                     break;
 

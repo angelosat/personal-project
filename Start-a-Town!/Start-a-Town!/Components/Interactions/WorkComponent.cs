@@ -23,7 +23,6 @@ namespace Start_a_Town_.Components
             switch(e.Type)
             {
                 case Message.Types.Jumped:
-                case Message.Types.Walk:
                     this.Interrupt();
                     break;
 

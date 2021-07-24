@@ -117,10 +117,10 @@ namespace Start_a_Town_.Towns.Digging
             return this.AllPositions.Contains(global);
         }
 
-        internal override IEnumerable<Tuple<string, Action>> OnQuickMenuCreated()
+        internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<string, Action>("Mine", this.Edit);
-            yield return new Tuple<string, Action>("Deconstruct", this.EditDeconstruct);
+            yield return new Tuple<Func<string>, Action>(()=>"Mine", this.Edit);
+            yield return new Tuple<Func<string>, Action>(()=>"Deconstruct", this.EditDeconstruct);
         }
         public void Edit()
         {

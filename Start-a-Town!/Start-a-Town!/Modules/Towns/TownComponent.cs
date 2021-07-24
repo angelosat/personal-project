@@ -44,7 +44,7 @@ namespace Start_a_Town_.Towns
             return null;
         }
 
-        internal virtual IEnumerable<Tuple<string, Action>> OnQuickMenuCreated() { yield break; }
+        internal virtual IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated() { yield break; }
         internal virtual void OnContextMenuCreated(IContextable obj, ContextArgs a) { }
         internal virtual void OnContextActionBarCreated(ContextActionBar.ContextActionBarArgs a) { }
         internal virtual void OnGameEvent(GameEvent e)

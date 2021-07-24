@@ -16,9 +16,9 @@ namespace Start_a_Town_
             this.Color = Color.Black;
         }
       
-        internal void AddItems(IEnumerable<Tuple<string, Action>> actions)
+        internal void AddItems(IEnumerable<Tuple<Func<string>, Action>> actions)
         {
-            var w = Button.GetMaxWidth(actions.Select(i => i.Item1));
+            var w = Button.GetMaxWidth(actions.Select(i => i.Item1()));
             var row = 0;
             var x = 0;
             var y = 0;
@@ -26,7 +26,7 @@ namespace Start_a_Town_
             var maxrows = Math.Ceiling(actions.Count() / 2f);
             foreach (var item in actions)
             {
-                var button = new Button(item.Item1, w) { Location = new Vector2(x,y), LeftClickAction = () => { item.Item2(); this.Hide(); } };
+                var button = new Button(item.Item1, () => { item.Item2(); this.Hide(); }, w) { Location = new Vector2(x,y) };
                 this.Client.AddControls(button);
 
                 row++;

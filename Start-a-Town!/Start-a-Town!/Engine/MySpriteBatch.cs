@@ -452,11 +452,11 @@ namespace Start_a_Town_
         {
             return this.DrawBlock(texture, screenBounds, token, scale, fog, tint, material.ToVector4(), sunLight, blockLight, water, depth, block, Vector3.Zero);
         }
-        public MyVertex[] DrawBlock(Texture2D texture, Vector4 screenBounds, IAtlasNodeToken token, float scale, Color fog, Color tint, Color material, Color sunLight, Vector4 blockLight, Vector4 water, float depth, Block block, Vector3 blockcoords)
+        public MyVertex[] DrawBlock(Texture2D texture, Vector4 screenBounds, IAtlasNodeToken token, float scale, Color fog, Color tint, Color material, Color sunLight, Vector4 blockLight, Vector4 water, float depth, Block block, IntVec3 blockcoords)
         {
             return this.DrawBlock(texture, screenBounds, token, scale, fog, tint, material.ToVector4(), sunLight, blockLight, water, depth, block, blockcoords);
         }
-        public MyVertex[] DrawBlock(Texture2D texture, Vector4 screenBounds, IAtlasNodeToken token, float scale, Color fog, Color tint, Vector4 material, Color sunLight, Vector4 blockLight, Vector4 water, float depth, Block block, Vector3 blockCoords)
+        public MyVertex[] DrawBlock(Texture2D texture, Vector4 screenBounds, IAtlasNodeToken token, float scale, Color fog, Color tint, Vector4 material, Color sunLight, Vector4 blockLight, Vector4 water, float depth, Block block, IntVec3 blockCoords)
         {
             if (this.texture != null && this.texture != texture)
                 this.Flush();

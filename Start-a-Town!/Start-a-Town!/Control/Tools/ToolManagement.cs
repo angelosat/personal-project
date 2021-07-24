@@ -342,7 +342,7 @@ namespace Start_a_Town_
         }
         internal override void SlotLeftClick(GameObjectSlot slot)
         {
-            if (slot.Object != null)
+            if (slot.Object is not null)
                 WindowTargetManagement.Refresh(new TargetArgs(slot.Object));
         }
 

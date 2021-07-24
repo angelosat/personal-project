@@ -306,8 +306,8 @@ namespace Start_a_Town_
         public Vector4 GetScreenBoundsVector4NoOffset(float x, float y, float z, Rectangle spriteRectangle, Vector2 origin)
         {
             Coords.Iso(this, x, y, z, out float xx, out float yy);
-            float xxx = (float)((xx + spriteRectangle.X - origin.X));
-            float yyy = (float)((yy + spriteRectangle.Y - origin.Y));
+            float xxx = (float)(xx + spriteRectangle.X - origin.X);
+            float yyy = (float)(yy + spriteRectangle.Y - origin.Y);
             float w = spriteRectangle.Width;
             float h = spriteRectangle.Height;
             var vector = new Vector4(xxx, yyy, w, h);
@@ -400,11 +400,12 @@ namespace Start_a_Town_
 
             return true;
         }
-        public bool DrawBlockGlobal(MySpriteBatch sb, MapBase map, Vector3 global)
+        static readonly Color CellSelectionTint = Color.White * .5f;
+        public bool DrawBlockSelectionGlobal(MySpriteBatch sb, IntVec3 global)
         {
-            int z = (int)global.Z;
-            int gx = (int)global.X;
-            int gy = (int)global.Y;
+            int z = global.Z;
+            int gx = global.X;
+            int gy = global.Y;
 
             var screenBoundsVector4 = this.GetScreenBoundsVector4NoOffset(gx, gy, z, Block.Bounds, Vector2.Zero);
             Coords.Rotate(this, gx, gy, out int rlx, out int rly);
@@ -412,7 +413,7 @@ namespace Start_a_Town_
 
             sb.DrawBlock(Block.Atlas.Texture, screenBoundsVector4,
                 Block.BlockBlueprint,
-                this.Zoom, Color.Transparent, Color.White * .5f, Color.White, Color.White, Vector4.One, Vector4.Zero, depth, null, global);
+                this.Zoom, Color.Transparent, CellSelectionTint, Color.White, Color.White, Vector4.One, Vector4.Zero, depth, null, global);
             return true;
         }
         public bool DrawUnknown(Canvas canvas, MapBase map, Chunk chunk, Cell cell)

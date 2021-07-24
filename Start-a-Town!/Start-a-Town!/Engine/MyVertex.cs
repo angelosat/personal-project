@@ -17,10 +17,7 @@ namespace Start_a_Town_
                new VertexElement(sizeof(float) * 3 + 4 + 4 + 4 + 4 + sizeof(float) * 2 + 4 + 4, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 3)//, //local(?) block coordinates
                );
         
-        VertexDeclaration IVertexType.VertexDeclaration
-        {
-            get { return MyVertex.VertexDeclaration; }
-        }
+        VertexDeclaration IVertexType.VertexDeclaration => VertexDeclaration;
 
         public Vector3 Position;
         public Color Fog;
@@ -56,22 +53,6 @@ namespace Start_a_Town_
             this.Material = new Color(Vector4.One);
             this.BlockCoords = Vector3.Zero;
         }
-        public MyVertex(Vector3 pos, Color fog, Color tint, Color sunlight, Vector4 blocklight, Vector4 water, Vector2 texCoord)
-        {
-            this.Position = pos;
-            this.Fog = fog;
-            this.Color = tint;
-            this.SunLight = sunlight;
-            this.BlockLight = new Color(blocklight);
-            this.TexCoord = texCoord;
-            this.Water = new Color(water);
-            this.Material = new Color(Vector4.One);
-            this.BlockCoords = Vector3.Zero;
-            var cam = Net.Client.Instance.Map.Camera;
-            float blockx = (float)(this.BlockCoords.X * cam.RotCos - this.BlockCoords.Y * cam.RotSin);
-            float blocky = (float)(this.BlockCoords.X * cam.RotSin + this.BlockCoords.Y * cam.RotCos);
-            this.BlockCoords = new Vector3(blockx, blocky, this.BlockCoords.Z);
-        }
         public MyVertex(Vector3 pos, Color fog, Color tint, Color material, Color sunlight, Vector4 blocklight, Vector4 water, Vector2 texCoord)
         {
             this.Position = pos;
@@ -84,24 +65,7 @@ namespace Start_a_Town_
             this.Material = material;//.ToVector4();
             this.BlockCoords = Vector3.Zero;
         }
-        public MyVertex(Vector3 pos, Color fog, Color tint, Vector4 material, Color sunlight, Vector4 blocklight, Vector4 water, Vector2 texCoord)
-        {
-            this.Position = pos;
-            this.Fog = fog;
-            this.Color = tint;
-            this.SunLight = sunlight;
-            this.BlockLight = new Color(blocklight);
-            this.TexCoord = texCoord;
-            this.Water = new Color(water);
-            this.Material = new Color(material);
-            this.BlockCoords = Vector3.Zero;
-            var cam = Net.Client.Instance.Map.Camera;
-
-            float blockx = (float)(this.BlockCoords.X * cam.RotCos - this.BlockCoords.Y * cam.RotSin);
-            float blocky = (float)(this.BlockCoords.X * cam.RotSin + this.BlockCoords.Y * cam.RotCos);
-            this.BlockCoords = new Vector3(blockx, blocky, this.BlockCoords.Z);
-        }
-        public MyVertex(Vector3 pos, Color fog, Color tint, Vector4 material, Color sunlight, Vector4 blocklight, Vector4 water, Vector2 texCoord, Block block, Vector3 blockGlobalCoords)
+        public MyVertex(Vector3 pos, Color fog, Color tint, Vector4 material, Color sunlight, Vector4 blocklight, Vector4 water, Vector2 texCoord, Block block, IntVec3 blockGlobalCoords)
         {
             this.Position = pos;
             this.Fog = fog;

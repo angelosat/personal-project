@@ -7,8 +7,8 @@ namespace Start_a_Town_
 {
     class ToolSelectRectangleBlocks : ToolDigging
     {
-        Vector3 PrevEnd;
-        MySpriteBatch Batch;
+        IntVec3 PrevEnd;
+        MySpriteBatch Batch = new(Game1.Instance.GraphicsDevice);
         public ToolSelectRectangleBlocks()
         {
 
@@ -33,15 +33,19 @@ namespace Start_a_Town_
         {
             return Messages.Remove;
         }
+        /// <summary>
+        /// TODO optimize
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="camera"></param>
         void Validate(MapBase map, Camera camera)
         {
-            this.Batch = new MySpriteBatch(Game1.Instance.GraphicsDevice);
-            var positions = this.Begin.GetBox(this.End)
-                .Where(v => map.GetBlock(v) != BlockDefOf.Air).ToList();
-            var texture = Block.BlockBlueprint;
-            texture.Atlas.Begin(this.Batch);
+            var positions =
+                this.Begin.GetBox(this.End)
+                .Where(v => map.GetBlock(v) != BlockDefOf.Air || map.IsUndiscovered(v)); // we want to include undiscovered air cells in selection
+            this.Batch.Clear();
             foreach (var pos in positions)
-                camera.DrawBlockGlobal(this.Batch, map, pos);
+                camera.DrawBlockSelectionGlobal(this.Batch, pos);
         }
         internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
@@ -54,10 +58,9 @@ namespace Start_a_Town_
                 this.PrevEnd = this.End;
             }
             camera.PrepareShader(map);
-            float x, y;
-            Coords.Iso(camera, 0 * Chunk.Size, 0 * Chunk.Size, 0, out x, out y);
+            Coords.Iso(camera, 0 * Chunk.Size, 0 * Chunk.Size, 0, out float x, out float y);
             Coords.Rotate(camera, 0, 0, out int rotx, out int roty);
-            var world = Matrix.CreateTranslation(new Vector3(x, y, ((rotx + roty) * Chunk.Size)));
+            var world = Matrix.CreateTranslation(new Vector3(x, y, (rotx + roty) * Chunk.Size));
             camera.Effect.Parameters["World"].SetValue(world);
             camera.Effect.CurrentTechnique.Passes["Pass1"].Apply();
             this.Batch.Draw();

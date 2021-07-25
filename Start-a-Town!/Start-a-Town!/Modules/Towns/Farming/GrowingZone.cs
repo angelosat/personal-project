@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -24,8 +24,8 @@ namespace Start_a_Town_
         {
             this.Read(r);
         }
-      
-        public GrowingZone(ZoneManager manager):base(manager)
+
+        public GrowingZone(ZoneManager manager) : base(manager)
         {
         }
         public GrowingZone(ZoneManager manager, IEnumerable<IntVec3> positions)
@@ -45,8 +45,8 @@ namespace Start_a_Town_
 
         protected override void LoadExtra(SaveTag tag)
         {
-            tag.TryGetTagValue<bool>("Harvesting", out this.Harvesting);
-            tag.TryGetTagValue<bool>("Planting", out this.Planting);
+            tag.TryGetTagValue("Harvesting", out this.Harvesting);
+            tag.TryGetTagValue("Planting", out this.Planting);
             tag.TryLoadDef<PlantProperties>("Plant", ref this.Plant);
         }
         protected override void SaveExtra(SaveTag tag)
@@ -55,7 +55,7 @@ namespace Start_a_Town_
             tag.Add(this.Planting.Save("Planting"));
             tag.Add(this.Plant.Save("Plant"));
         }
-        
+
         internal override void OnBlockChanged(IntVec3 global)
         {
             var below = global.Below;
@@ -77,7 +77,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        
+
         public IEnumerable<Vector3> GetSowingPositions()
         {
             if (!this.Valid)
@@ -93,7 +93,7 @@ namespace Start_a_Town_
             foreach (var pos in this.CachedTilling)
                 yield return pos;
         }
-       
+
         protected override void Validate()
         {
             this.Valid = true;
@@ -117,16 +117,16 @@ namespace Start_a_Town_
                 }
             }
         }
-        
+
         public void GetContextActions(GameObject playerEntity, ContextArgs a) { }
 
-        static public bool IsValidFarmPosition(MapBase map, Vector3 arg)
+        public static bool IsValidFarmPosition(MapBase map, Vector3 arg)
         {
             return
                 Block.GetBlockMaterial(map, arg) == MaterialDefOf.Soil
                 && map.GetBlock(arg + Vector3.UnitZ) == BlockDefOf.Air;
         }
-       
+
         internal IEnumerable<GameObject> GetHarvestablePlantsLazy()
         {
             foreach (var pos in this.Positions)
@@ -174,7 +174,8 @@ namespace Start_a_Town_
                     var growzone = o as GrowingZone;
                     win.SetTitle(growzone.Name);
                 });
-                win.SetOnSelectedTargetChangedAction(t => {
+                win.SetOnSelectedTargetChangedAction(t =>
+                {
                     if (t.Type != TargetType.Position)
                         return;
                     if (t.Map.Town.ZoneManager.GetZoneAt<GrowingZone>(t.Global) is not GrowingZone gz)

@@ -99,8 +99,7 @@ namespace Start_a_Town_
                 var finalPositions = inputpositions.Where(pos => this.Town.GetZoneAt(pos) == null).Union(this.Positions);
                 if (!finalPositions.IsConnectedNew())
                 {
-                    this.Manager.RegisterNewZone(this.GetType(), inputpositions);
-
+                    this.Manager.RegisterNewZone(this.ZoneDef, inputpositions);
                     return;
                 }
                 foreach (var pos in inputpositions.Except(this.Positions))
@@ -152,11 +151,11 @@ namespace Start_a_Town_
         }
         public void Edit()
         {
-            ToolManager.SetTool(new ToolDesignateZone(this.Town, this.GetType()));
+            ToolManager.SetTool(new ToolDesignateZone(this.Town, this.ZoneDef));// this.GetType()));
         }
-        static public void Edit(Town town, Type zoneType)
+        static public void Edit(Town town, ZoneDef def)
         {
-            ToolManager.SetTool(new ToolDesignateZone(town, zoneType));
+            ToolManager.SetTool(new ToolDesignateZone(town, def));// zoneType));
         }
 
         public abstract string GetName();

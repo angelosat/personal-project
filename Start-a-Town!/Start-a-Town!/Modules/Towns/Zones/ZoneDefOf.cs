@@ -7,6 +7,8 @@
        
         internal static void Init()
         {
+            Def.Register(Stockpile);
+            Def.Register(Growing);
         }
     }
 }

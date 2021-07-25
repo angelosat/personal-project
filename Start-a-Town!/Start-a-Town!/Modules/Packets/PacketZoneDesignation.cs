@@ -15,11 +15,11 @@ namespace Start_a_Town_.Towns
         static public void Init()
         {
         }
-        static public void Send(INetwork net, Type zonetype, int zoneID, Vector3 begin, int w, int h, bool remove)
+        static public void Send(INetwork net, ZoneDef zoneDef, int zoneID, Vector3 begin, int w, int h, bool remove)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(PacketPlayerZoneDesignation);
-            stream.Write(zonetype.FullName);
+            stream.Write(zoneDef.Name);
             stream.Write(zoneID);
             stream.Write(begin);
             stream.Write(w);
@@ -28,7 +28,8 @@ namespace Start_a_Town_.Towns
         }
         static public void Receive(INetwork net, BinaryReader r)
         {
-            var zoneType = Type.GetType(r.ReadString());
+            //var zoneType = Type.GetType(r.ReadString());
+            var zoneType = Def.GetDef<ZoneDef>(r.ReadString());
             var zoneID = r.ReadInt32();
             var begin = r.ReadVector3();
             var width = r.ReadInt32();

@@ -4,6 +4,11 @@ namespace Start_a_Town_
 {
     class ZoneGrowingDef : ZoneDef
     {
+        public ZoneGrowingDef()
+            : base("Growing")
+        {
+
+        }
         public override Type ZoneType => typeof(GrowingZone);
 
         public override bool IsValidLocation(MapBase map, IntVec3 global)

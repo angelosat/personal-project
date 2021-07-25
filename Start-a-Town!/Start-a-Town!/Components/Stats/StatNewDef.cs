@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -32,11 +32,11 @@ namespace Start_a_Town_
                     this.Operator = op;
                 }
 
-                static readonly public ExpressionDef Division = new ExpressionDef("Division", "/", (a, b) => a / b);
+                public static readonly ExpressionDef Division = new("Division", "/", (a, b) => a / b);
             }
             protected class Expression
             {
-                ExpressionDef Def;
+                readonly ExpressionDef Def;
                 readonly float Value;
 
                 public Expression(ExpressionDef def, float val)
@@ -53,7 +53,7 @@ namespace Start_a_Town_
         }
         class ValueBuilderFromAttribute : ValueBuilder
         {
-            AttributeDef Def;
+            readonly AttributeDef Def;
             public ValueBuilderFromAttribute(AttributeDef def) : base("AttributeGetter")
             {
                 this.Def = def;
@@ -75,18 +75,18 @@ namespace Start_a_Town_
         public float BaseValue;
         public string Label;
         public string Description;
-        Func<GameObject, float> Formula;
+        readonly Func<GameObject, float> Formula;
         public Types Type = Types.Scalar;
         public string StringFormat = "";
 
         public StatNewDef(string name, Func<GameObject, float> formula) : base(name)
         {
-     
+
             this.Formula = formula;
         }
         public StatNewDef(string name) : base(name)
         {
-    
+
         }
         float ApplyModifiers(GameObject parent, float value)
         {
@@ -112,7 +112,8 @@ namespace Start_a_Town_
         }
         public Control GetControl(GameObject parent)
         {
-            return new Label() {
+            return new Label()
+            {
                 TextFunc = () => string.Format("{0}: {1}", this.Name, this.GetValue(parent)),
             };
         }

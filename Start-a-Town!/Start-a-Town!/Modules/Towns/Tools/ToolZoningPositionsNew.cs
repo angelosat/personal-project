@@ -131,14 +131,14 @@ namespace Start_a_Town_.Towns
         }
         internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
-            if(this.PrevEnd != this.End)
+            if (!this.Enabled)
+                return;
+            if (this.PrevEnd != this.End)
             {
                 this.Renderer.CreateMesh(camera, GetPositions(map, this.Begin, this.End));
                 this.PrevEnd = this.End;
             }
             this.Renderer.DrawBlocks(map, camera);
-            return;
-            DrawGrid(sb, map, camera, this.IsRemoving() ? Color.Red : Color.Lime);
         }
        
         private void DrawGrid(MySpriteBatch sb, MapBase map, Camera camera, Color color)

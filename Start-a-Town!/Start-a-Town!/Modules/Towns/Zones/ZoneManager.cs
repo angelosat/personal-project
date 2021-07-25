@@ -10,28 +10,26 @@ namespace Start_a_Town_
     public class ZoneManager : TownComponent
     {
         public override string Name => "ZoneManager";
-        int _ZoneIDSequence = 1;
-
-        public int GetNextID() => _ZoneIDSequence++;
+        int _zoneIDSequence = 1;
+        public int GetNextID() => _zoneIDSequence++;
         readonly public Dictionary<int, Zone> Zones = new();
 
         public ZoneManager(Town town)
         {
             this.Town = town;
         }
-
-        internal Zone RegisterNewZone(Type zoneType, IEnumerable<IntVec3> allpositions)
+       
+        internal Zone RegisterNewZone(ZoneDef zoneType, IEnumerable<IntVec3> allpositions)
         {
-            if (!allpositions.IsConnectedNew())
-                return null;
             var finalPositions = allpositions.Where(
                 po => this.Town.GetZoneAt(po) == null &&
-                Zone.IsPositionValid(this.Town.Map, po));
-            var zone = Activator.CreateInstance(zoneType, this, finalPositions) as Zone;
+                zoneType.IsValidLocation(this.Town.Map, po));
+            if (!finalPositions.IsConnectedNew())
+                return null;
+            var zone = zoneType.Create(this, finalPositions);
             this.RegisterZone(zone);
             return zone;
         }
-
         internal void Delete(Zone zone)
         {
             this.Delete(zone.ID);
@@ -92,7 +90,8 @@ namespace Start_a_Town_
                 }
             }
         }
-        internal Zone PlayerEdit(int zoneID, Type zoneType, IntVec3 a, int w, int h, bool remove)
+     
+        internal Zone PlayerEdit(int zoneID, ZoneDef zoneType, IntVec3 a, int w, int h, bool remove)
         {
             if (remove)
             {
@@ -108,12 +107,12 @@ namespace Start_a_Town_
             }
             return null;
         }
-        static Type[] ZoneTypes = { typeof(Stockpile), typeof(GrowingZone) }; // TODO make these defs
+        static readonly ZoneDef[] ZoneDefs = { ZoneDefOf.Stockpile, ZoneDefOf.Growing };
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            foreach (var zoneType in ZoneTypes)
-                yield return new Tuple<Func<string>, Action>(() => zoneType.Name, () => Zone.Edit(this.Town, zoneType));
+            foreach (var zoneType in ZoneDefs)
+                yield return new Tuple<Func<string>, Action>(() => zoneType.Label, () => Zone.Edit(this.Town, zoneType));
         }
         
         public override ISelectable QuerySelectable(TargetArgs target)
@@ -130,22 +129,22 @@ namespace Start_a_Town_
         }
         protected override void AddSaveData(SaveTag tag)
         {
-            this._ZoneIDSequence.Save(tag, "IDSequence");
+            this._zoneIDSequence.Save(tag, "IDSequence");
             this.Zones.Values.SaveVariableTypes(tag, "Zones");
         }
         public override void Load(SaveTag tag)
         {
-            tag.TryGetTagValueNew<int>("IDSequence", ref this._ZoneIDSequence);
+            tag.TryGetTagValueNew<int>("IDSequence", ref this._zoneIDSequence);
             this.Zones.TryLoadByValueAbstractTypes(tag, "Zones", zone => zone.ID, this);
         }
         public override void Write(BinaryWriter w)
         {
-            w.Write(this._ZoneIDSequence);
+            w.Write(this._zoneIDSequence);
             this.Zones.Values.WriteAbstract(w);
         }
         public override void Read(BinaryReader r)
         {
-            this._ZoneIDSequence = r.ReadInt32();
+            this._zoneIDSequence = r.ReadInt32();
             this.Zones.ReadByValueAbstractTypes(r, zone => zone.ID, this);
         }
     }

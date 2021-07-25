@@ -8,7 +8,7 @@ namespace Start_a_Town_
     public abstract class Def
     {
         public string Name;
-        static public Dictionary<string, Def> Database = new Dictionary<string, Def>();
+        static public Dictionary<string, Def> Database = new();
         public Def()
         {
 

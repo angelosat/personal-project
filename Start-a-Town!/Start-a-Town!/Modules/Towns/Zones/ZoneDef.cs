@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
-    public abstract class ZoneDef
+    public abstract class ZoneDef : Def
     {
+        public readonly string Label;
         public abstract Type ZoneType { get; }
         public abstract bool IsValidLocation(MapBase map, IntVec3 global);
-
+        public ZoneDef(string name)
+            : base($"Zone{name}")
+        {
+            this.Label = name;
+        }
         public Zone Create()
         {
             var zone = Activator.CreateInstance(this.ZoneType) as Zone;
@@ -27,6 +33,11 @@ namespace Start_a_Town_
                 zone.RemovePosition(below);
                 return;
             }
+        }
+
+        public Zone Create(ZoneManager manager, IEnumerable<IntVec3> positions)
+        {
+            return Activator.CreateInstance(this.ZoneType, manager, positions) as Zone;
         }
     }
 }

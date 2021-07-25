@@ -44,6 +44,10 @@ namespace Start_a_Town_
         {
             this.BlockToken = texToken;
             this.Cells.CollectionChanged += this.Cells_CollectionChanged;
+            this.Add(cells);
+        }
+        public void Add(IEnumerable<IntVec3> cells)
+        {
             foreach (var c in cells)
                 this.Cells.Add(c);
         }

@@ -13,7 +13,7 @@ namespace Start_a_Town_
     {
         public Town Town => this.Manager.Town;
         public MapBase Map { get { return this.Town.Map; } }
-        public readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]); //Block.BlockBlueprintGrayscale);// new();// 
+        public readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]);
         public string Name;
         public ZoneManager Manager;
         public int ID { get; set; }
@@ -21,7 +21,7 @@ namespace Start_a_Town_
         public abstract ZoneDef ZoneDef { get; }
         public abstract string UniqueName { get; }
 
-        abstract public IEnumerable<IntVec3> GetPositions(); // TODO: make it a hashset for faster lookups
+        abstract public IEnumerable<IntVec3> GetPositions(); // TODO: make it a hashset for faster lookups?
         public void Delete()
         {
             this.Manager.Delete(this);
@@ -49,7 +49,7 @@ namespace Start_a_Town_
         public Zone(ZoneManager manager, IEnumerable<IntVec3> cells) : this()
         {
             this.Manager = manager;
-            this.Positions = new(Block.FaceHighlights[IntVec3.UnitZ], cells) { Color = GetRandomColor() }; //new(cells);//
+            this.Positions.Add(cells);
         }
         internal virtual void OnBlockChanged(IntVec3 global)
         {
@@ -136,7 +136,7 @@ namespace Start_a_Town_
         internal bool Contains(GameObject obj)
         {
             var g = obj.GridCell - IntVec3.UnitZ;
-            return this.GetPositions().Contains(g);
+            return this.GetPositions().Contains(g); // TODO use a hashset
         }
         internal bool Contains(IntVec3 pos)
         {

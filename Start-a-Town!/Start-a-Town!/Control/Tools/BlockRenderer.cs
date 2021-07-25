@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 
@@ -77,33 +79,64 @@ namespace Start_a_Town_
             this.Slices.Clear();
         }
     }
-    public class BlockRendererTest
+    public class BlockRendererObservable
     {
-        readonly HashSet<IntVec3> Cells = new();
+        readonly ObservableCollection<IntVec3> Cells;// = new();
         readonly Dictionary<int, MySpriteBatch> Slices = new();
-        bool Validated;
-        public void CreateMesh(Camera camera, IEnumerable<IntVec3> positions)
+        readonly HashSet<int> InvalidatedSlices = new();
+        readonly AtlasDepthNormals.Node.Token BlockToken;
+
+        public BlockRendererObservable(ObservableCollection<IntVec3> cells)
+            : this(Block.BlockBlueprint, cells)
         {
-            if (this.Validated)
+        }
+        public BlockRendererObservable(AtlasDepthNormals.Node.Token texToken, ObservableCollection<IntVec3> cells)
+        {
+            this.BlockToken = texToken;
+            this.Cells = cells;
+            this.Cells.CollectionChanged += this.Cells_CollectionChanged;
+        }
+        private void Cells_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.OldItems is not null)
+                foreach (var z in e.OldItems.Cast<IntVec3>().Select(cell => cell.Z))
+                    this.InvalidatedSlices.Add(z);
+            if (e.NewItems is not null)
+                foreach (var z in e.NewItems.Cast<IntVec3>().Select(cell => cell.Z))
+                    this.InvalidatedSlices.Add(z);
+        }
+        void Validate(Camera camera)
+        {
+            if (!this.InvalidatedSlices.Any())
                 return;
-            this.Validated = true;
-            this.Slices.Clear();
-            foreach (var cells in positions.GroupBy(g => g.Z))
+            var bySlice = this.Cells.ToLookup(c => c.Z);
+            foreach (var z in this.InvalidatedSlices)
             {
-                foreach (var cell in cells)
-                    camera.DrawBlockSelectionGlobal(
-                        this.Slices.GetOrAdd(cells.Key, sliceCtor),
-                        cell);
+                if (!bySlice.Contains(z))
+                    this.Slices.Remove(z);
+                else
+                {
+                    var cells = bySlice[z];
+                    var slice = this.Slices.GetOrAdd(z, sliceCtor);
+                    slice.Clear();
+                    foreach (var cell in cells)
+                        camera.DrawBlockSelectionGlobal(
+                            slice,
+                            this.BlockToken,
+                            cell);
+                }
             }
+            this.InvalidatedSlices.Clear();
 
             static MySpriteBatch sliceCtor()
             {
                 return new(Game1.Instance.GraphicsDevice);
             }
         }
+       
         public void DrawBlocks(MapBase map, Camera camera, IEnumerable<IntVec3> positions)
         {
-            this.CreateMesh(camera, positions);
+            this.Validate(camera);
             camera.PrepareShader(map);
             Coords.Rotate(camera, 0, 0, out int rotx, out int roty);
             var world = Matrix.CreateTranslation(new Vector3(0, 0, (rotx + roty) * Chunk.Size));
@@ -112,11 +145,6 @@ namespace Start_a_Town_
             foreach (var slice in this.Slices)
                 if (slice.Key <= camera.DrawLevel)
                     slice.Value.Draw();
-        }
-
-        internal void Invalidate()
-        {
-            this.Validated = false;
         }
     }
 

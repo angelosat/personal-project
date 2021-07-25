@@ -4,6 +4,7 @@ using System.Linq;
 using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
+using System.Collections.ObjectModel;
 
 namespace Start_a_Town_
 {
@@ -11,15 +12,15 @@ namespace Start_a_Town_
     {
         public override string Name => "Designation Manager";
 
-        readonly Dictionary<DesignationDef, HashSet<IntVec3>> Designations;
-        readonly Dictionary<DesignationDef, BlockRendererNew> Renderers = new();
+        readonly Dictionary<DesignationDef, ObservableCollection<IntVec3>> Designations;
+        readonly Dictionary<DesignationDef, BlockRendererObservable> Renderers = new();
 
         static DesignationManager()
         {
             PacketDesignation.Init();
         }
 
-        internal HashSet<IntVec3> GetDesignations(DesignationDef des)
+        internal ObservableCollection<IntVec3> GetDesignations(DesignationDef des)
         {
             return this.Designations[des];
         }
@@ -34,14 +35,14 @@ namespace Start_a_Town_
 
         public DesignationManager(Town town) : base(town)
         {
-            Designations = new Dictionary<DesignationDef, HashSet<IntVec3>>();
-            Designations.Add(DesignationDef.Deconstruct, new HashSet<IntVec3>());
-            Designations.Add(DesignationDef.Mine, new HashSet<IntVec3>());
-            Designations.Add(DesignationDef.Switch, new HashSet<IntVec3>());
+            Designations = new Dictionary<DesignationDef, ObservableCollection<IntVec3>>();
+            Designations.Add(DesignationDef.Deconstruct, new ObservableCollection<IntVec3>());
+            Designations.Add(DesignationDef.Mine, new ObservableCollection<IntVec3>());
+            Designations.Add(DesignationDef.Switch, new ObservableCollection<IntVec3>());
 
-            Renderers.Add(DesignationDef.Deconstruct, new());
-            Renderers.Add(DesignationDef.Mine, new());
-            Renderers.Add(DesignationDef.Switch, new());
+            Renderers.Add(DesignationDef.Deconstruct, new(Designations[DesignationDef.Deconstruct]));
+            Renderers.Add(DesignationDef.Mine, new(Designations[DesignationDef.Mine]));
+            Renderers.Add(DesignationDef.Switch, new(Designations[DesignationDef.Switch]));
         }
         internal void Add(DesignationDef designation, IntVec3 position, bool remove = false)
         {
@@ -49,14 +50,32 @@ namespace Start_a_Town_
         }
         internal void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
+            //if (designation == DesignationDef.Null)
+            //{
+            //    foreach (var l in Designations)
+            //        foreach (var p in positions)
+            //        {
+            //            if(l.Value.Remove(p))
+            //                this.Renderers[l.Key].Invalidate();
+            //        }
+            //}
+            //else
+            //{
+            //    var list = Designations[designation];
+            //    foreach (var pos in positions)
+            //    {
+            //        if (remove)
+            //            list.Remove(pos);
+            //        else if (designation.IsValid(this.Town.Map, pos))
+            //            list.Add(pos);
+            //    }
+            //    this.Renderers[designation].Invalidate();
+            //}
             if (designation == DesignationDef.Null)
             {
                 foreach (var l in Designations)
                     foreach (var p in positions)
-                    {
-                        if(l.Value.Remove(p))
-                            this.Renderers[l.Key].Invalidate();
-                    }
+                        l.Value.Remove(p);
             }
             else
             {
@@ -68,7 +87,6 @@ namespace Start_a_Town_
                     else if (designation.IsValid(this.Town.Map, pos))
                         list.Add(pos);
                 }
-                this.Renderers[designation].Invalidate();
             }
             this.UpdateQuickButtons();
         }
@@ -134,7 +152,8 @@ namespace Start_a_Town_
         public override void Load(SaveTag tag)
         {
             foreach (var des in Designations.Keys.ToList())
-                tag.TryGetTagValue<List<SaveTag>>(des.Name, v => Designations[des] = new HashSet<IntVec3>(new List<IntVec3>().Load(v)));
+                //tag.TryGetTagValue<List<SaveTag>>(des.Name, v => Designations[des] = new HashSet<IntVec3>(new List<IntVec3>().Load(v)));
+                tag.TryGetTag(des.Name, v => Designations[des].LoadIntVecs(v));
         }
         public override void Write(System.IO.BinaryWriter w)
         {
@@ -144,7 +163,7 @@ namespace Start_a_Town_
         public override void Read(System.IO.BinaryReader r)
         {
             foreach (var des in Designations.Keys.ToList())
-                Designations[des] = new HashSet<IntVec3>(r.ReadListIntVec3());
+                Designations[des].ReadIntVec3(r);// = new HashSet<IntVec3>(r.ReadListIntVec3());
         }
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()

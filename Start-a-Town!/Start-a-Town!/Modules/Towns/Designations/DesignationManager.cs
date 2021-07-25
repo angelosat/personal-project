@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
-using System.Collections.ObjectModel;
 
 namespace Start_a_Town_
 {
@@ -12,7 +12,7 @@ namespace Start_a_Town_
     {
         public override string Name => "Designation Manager";
 
-        readonly Dictionary<DesignationDef, ObservableCollection<IntVec3>> Designations;
+        readonly ReadOnlyDictionary<DesignationDef, ObservableCollection<IntVec3>> Designations;
         readonly Dictionary<DesignationDef, BlockRendererObservable> Renderers = new();
 
         static DesignationManager()
@@ -35,10 +35,12 @@ namespace Start_a_Town_
 
         public DesignationManager(Town town) : base(town)
         {
-            Designations = new Dictionary<DesignationDef, ObservableCollection<IntVec3>>();
-            Designations.Add(DesignationDef.Deconstruct, new ObservableCollection<IntVec3>());
-            Designations.Add(DesignationDef.Mine, new ObservableCollection<IntVec3>());
-            Designations.Add(DesignationDef.Switch, new ObservableCollection<IntVec3>());
+            Designations = new ReadOnlyDictionary<DesignationDef, ObservableCollection<IntVec3>>(
+                new Dictionary<DesignationDef, ObservableCollection<IntVec3>>() {
+                { DesignationDef.Deconstruct, new ObservableCollection<IntVec3>() },
+                { DesignationDef.Mine, new ObservableCollection<IntVec3>()},
+                { DesignationDef.Switch, new ObservableCollection<IntVec3>()} 
+            });
 
             Renderers.Add(DesignationDef.Deconstruct, new(Designations[DesignationDef.Deconstruct]));
             Renderers.Add(DesignationDef.Mine, new(Designations[DesignationDef.Mine]));

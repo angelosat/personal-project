@@ -17,7 +17,7 @@ namespace Start_a_Town_
         public string Name;
         public ZoneManager Manager;
         public int ID { get; set; }
-        public Color Color;
+        
         public abstract ZoneDef ZoneDef { get; }
         public abstract string UniqueName { get; }
 
@@ -31,10 +31,17 @@ namespace Start_a_Town_
         static readonly Random Random = new();
         protected Zone()
         {
+            this.Positions.Color = GetRandomColor();
+        }
+
+        private static Color GetRandomColor()
+        {
             var array = new byte[3];
             Random.NextBytes(array);
-            this.Color = new Color(array[0], array[1], array[2]);
+            var col = new Color(array[0], array[1], array[2]);
+            return col;
         }
+
         public Zone(ZoneManager manager) : this()
         {
             this.Manager = manager;
@@ -42,7 +49,7 @@ namespace Start_a_Town_
         public Zone(ZoneManager manager, IEnumerable<IntVec3> cells) : this()
         {
             this.Manager = manager;
-            this.Positions = new(Block.FaceHighlights[IntVec3.UnitZ], cells); //new(cells);// 
+            this.Positions = new(Block.FaceHighlights[IntVec3.UnitZ], cells) { Color = GetRandomColor() }; //new(cells);//
         }
         internal virtual void OnBlockChanged(IntVec3 global)
         {
@@ -178,7 +185,7 @@ namespace Start_a_Town_
             this.Positions.DrawBlocks(map, cam);
             return;
             var isselected = SelectionManager.IsSelected(this);
-            var col = Color.Lerp(this.Color, Color.White, isselected ? .5f : 0) * .5f;
+            var col = Color.Lerp(this.Positions.Color, Color.White, isselected ? .5f : 0) * .5f;
             var positions = this.GetPositions().Select(t => t + IntVec3.UnitZ);
             cam.DrawGrid(sb, map, positions, col);
         }

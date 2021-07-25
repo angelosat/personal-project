@@ -408,6 +408,10 @@ namespace Start_a_Town_
         }
         public void DrawBlockSelectionGlobal(MySpriteBatch sb, AtlasDepthNormals.Node.Token texToken, IntVec3 global)
         {
+            this.DrawBlockSelectionGlobal(sb, global, texToken, CellSelectionTint);
+        }
+        public void DrawBlockSelectionGlobal(MySpriteBatch sb, IntVec3 global, AtlasDepthNormals.Node.Token texToken, Color tint)
+        {
             int z = global.Z;
             int gx = global.X;
             int gy = global.Y;
@@ -418,7 +422,7 @@ namespace Start_a_Town_
 
             sb.DrawBlock(Block.Atlas.Texture, screenBoundsVector4,
                 texToken,
-                this.Zoom, Color.Transparent, CellSelectionTint, Color.White, Color.White, Vector4.One, Vector4.Zero, depth, null, global);
+                this.Zoom, Color.Transparent, tint, Color.White, Color.White, Vector4.One, Vector4.Zero, depth, null, global);
         }
         public bool DrawUnknown(Canvas canvas, MapBase map, Chunk chunk, Cell cell)
         {

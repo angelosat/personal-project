@@ -13,6 +13,16 @@ namespace Start_a_Town_
         readonly Dictionary<int, MySpriteBatch> Slices = new();
         readonly HashSet<int> InvalidatedSlices = new();
         readonly AtlasDepthNormals.Node.Token BlockToken;
+        Color _color = Color.White;
+        public Color Color
+        {
+            get => this._color;
+            set
+            {
+                this._color = value;
+                this.Invalidate();
+            }
+        }
 
         public int Count => ((ICollection<IntVec3>)this.Cells).Count;
 
@@ -63,8 +73,10 @@ namespace Start_a_Town_
                     foreach (var cell in cells)
                         camera.DrawBlockSelectionGlobal(
                             slice,
+                            cell,
                             this.BlockToken,
-                            cell);
+                            this._color
+                            );
                 }
             }
             this.InvalidatedSlices.Clear();
@@ -87,7 +99,11 @@ namespace Start_a_Town_
                 if (slice.Key <= camera.DrawLevel)
                     slice.Value.Draw();
         }
-
+        void Invalidate()
+        {
+            foreach (var z in this.Slices.Keys)
+                this.InvalidatedSlices.Add(z);
+        }
         public void Add(IntVec3 item)
         {
             ((ICollection<IntVec3>)this.Cells).Add(item);

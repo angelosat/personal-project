@@ -529,7 +529,7 @@ namespace Start_a_Town_
                 Device.Textures[2] = Block.ShaderMouseMap;
                 Device.DepthStencilState = DepthStencilState.Default;
                 fx.CurrentTechnique.Passes["Pass1"].Apply();
-                Device.DrawUserIndexedPrimitives<MyVertex>(
+                Device.DrawUserIndexedPrimitives(
                     PrimitiveType.TriangleList, this.vertices, 0, this.vertexCount,
                     this.indices, 0, this.indexCount / 3);
 
@@ -542,7 +542,7 @@ namespace Start_a_Town_
         {
             if (this.vertexCount > 0)
             {
-                Device.DrawUserIndexedPrimitives<MyVertex>(
+                Device.DrawUserIndexedPrimitives(
                     PrimitiveType.TriangleList, this.vertices, 0, this.vertexCount,
                     this.indices, 0, this.indexCount / 3);
 
@@ -554,7 +554,7 @@ namespace Start_a_Town_
         {
             if (this.vertexCount > 0)
             {
-                Device.DrawUserIndexedPrimitives<MyVertex>(
+                Device.DrawUserIndexedPrimitives(
                     PrimitiveType.TriangleList, this.vertices, 0, this.vertexCount,
                     this.indices, 0, this.indexCount / 3);
             }

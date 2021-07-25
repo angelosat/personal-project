@@ -9,7 +9,8 @@ namespace Start_a_Town_.Towns
     public class StockpileManager : TownComponent
     {
         public override string Name => "Stockpiles";
-        StockpileContentTracker Tracker;
+
+        readonly StockpileContentTracker Tracker;
 
         internal Stockpile GetStockpile(int stID)
         {

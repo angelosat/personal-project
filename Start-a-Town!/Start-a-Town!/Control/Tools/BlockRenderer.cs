@@ -9,12 +9,21 @@ namespace Start_a_Town_
 {
     public class BlockRenderer
     {
+        readonly AtlasDepthNormals.Node.Token BlockToken = Block.BlockBlueprint;
         readonly MySpriteBatch Batch = new(Game1.Instance.GraphicsDevice);
+        public BlockRenderer()
+        {
+
+        }
+        public BlockRenderer(AtlasDepthNormals.Node.Token textureToken)
+        {
+            this.BlockToken = textureToken;
+        }
         public void CreateMesh(Camera camera, IEnumerable<IntVec3> positions)
         {
             this.Batch.Clear();
             foreach (var pos in positions)
-                camera.DrawBlockSelectionGlobal(this.Batch, pos);
+                camera.DrawBlockSelectionGlobal(this.Batch, this.BlockToken, pos);
         }
         public void DrawBlocks(MapBase map, Camera camera)
         {
@@ -160,6 +169,10 @@ namespace Start_a_Town_
 
         public DrawableCellCollection()
             : this(Block.BlockBlueprint, Enumerable.Empty<IntVec3>())
+        {
+        }
+        public DrawableCellCollection(AtlasDepthNormals.Node.Token texToken)
+            : this(texToken, Enumerable.Empty<IntVec3>())
         {
         }
         public DrawableCellCollection(IEnumerable<IntVec3> cells)

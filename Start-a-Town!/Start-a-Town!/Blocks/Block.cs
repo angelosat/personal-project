@@ -66,6 +66,10 @@ namespace Start_a_Town_
 
         public static readonly Texture2D NormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsFilled19");
         public static readonly Texture2D BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19");
+
+        public static readonly Texture2D NormalMapFar = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsInner");
+        public static readonly Texture2D BlockDepthMapFar = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepthFar");
+
         public static readonly Texture2D ShaderMouseMap = Game1.Instance.Content.Load<Texture2D>("Graphics/mousemap - Cube");
 
         public static readonly Texture2D HalfBlockNormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockHalfNormalsFilled");
@@ -82,7 +86,14 @@ namespace Start_a_Town_
         public static readonly MouseMap BlockHalfMouseMap = new(HalfBlockMouseMapTexture, MouseMapSpriteOpposite, HalfBlockMouseMapTexture.Bounds, true);
         public static readonly MouseMap BlockQuarterMouseMap = new(QuarterBlockMouseMapTexture, MouseMapSpriteOpposite, QuarterBlockMouseMapTexture.Bounds, true);
 
-        public static AtlasDepthNormals Atlas = new("Blocks") { DefaultDepthMask = BlockDepthMap, DefaultNormalMask = NormalMap }; 
+        public static AtlasDepthNormals Atlas = new("Blocks") { DefaultDepthMask = BlockDepthMap, DefaultNormalMask = NormalMap };
+
+        public static readonly Dictionary<IntVec3, AtlasDepthNormals.Node.Token> FaceHighlights = new()
+        {
+            { IntVec3.UnitX, Atlas.Load("blocks/highlightwest", BlockDepthMapFar, NormalMapFar) },
+            { IntVec3.UnitY, Atlas.Load("blocks/highlightnorth", BlockDepthMapFar, NormalMapFar) },
+            { IntVec3.UnitZ, Atlas.Load("blocks/highlightdown", BlockDepthMapFar, NormalMapFar) }
+        };
 
         public static readonly AtlasDepthNormals.Node.Token[]
             TexturesCounter = new AtlasDepthNormals.Node.Token[4] {

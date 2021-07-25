@@ -26,7 +26,7 @@ namespace Start_a_Town_.Towns
             PacketZoneDesignation.Send(this.Town.Net, this.ZoneType, this.EditingZone, arg1, arg2, arg3, arg4);
         }
 
-        public override ControlTool.Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
+        public override Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
         {
             base.MouseLeftPressed(e);
             var zone = this.Town.GetZoneAt(this.Begin);

@@ -9,12 +9,13 @@ namespace Start_a_Town_.Towns
 {
     class ToolZoningPositionsNew : ToolManagement
     {
-        protected IntVec3 Begin, End;
+        protected IntVec3 Begin, End, PrevEnd;
         int Width, Height;
         bool Enabled;
         bool Removing;
         protected Action<IntVec3, int, int, bool> Add;
         public override bool TargetOnlyBlocks => true;
+        readonly BlockRenderer Renderer = new(Block.FaceHighlights[IntVec3.UnitZ]);
         public ToolZoningPositionsNew()
         {
 
@@ -44,7 +45,7 @@ namespace Start_a_Town_.Towns
             return true;
         }
        
-        public override ControlTool.Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
+        public override Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (this.Enabled)
                 return Messages.Default;
@@ -64,7 +65,7 @@ namespace Start_a_Town_.Towns
             return Messages.Default;
         }
 
-        public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
+        public override Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (!this.Enabled)
                 return Messages.Default;
@@ -90,7 +91,7 @@ namespace Start_a_Town_.Towns
             return Messages.Default;
         }
 
-        public override ControlTool.Messages MouseRightDown(System.Windows.Forms.HandledMouseEventArgs e)
+        public override Messages MouseRightDown(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (this.Enabled)
             {
@@ -130,9 +131,16 @@ namespace Start_a_Town_.Towns
         }
         internal override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera camera)
         {
+            if(this.PrevEnd != this.End)
+            {
+                this.Renderer.CreateMesh(camera, GetPositions(map, this.Begin, this.End));
+                this.PrevEnd = this.End;
+            }
+            this.Renderer.DrawBlocks(map, camera);
+            return;
             DrawGrid(sb, map, camera, this.IsRemoving() ? Color.Red : Color.Lime);
         }
-
+       
         private void DrawGrid(MySpriteBatch sb, MapBase map, Camera camera, Color color)
         {
             if (!this.Enabled)

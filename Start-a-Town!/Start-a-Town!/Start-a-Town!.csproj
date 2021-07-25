@@ -190,7 +190,10 @@
     <Compile Include="Control\Hotkeys\HotkeyManager.Hotkey.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.WindowInputKey.cs" />
     <Compile Include="Control\Hotkeys\IHotkey.cs" />
-    <Compile Include="Control\Tools\BlockRenderer.cs" />
+    <Compile Include="Control\Tools\CellRendering\BlockRenderer.cs" />
+    <Compile Include="Control\Tools\CellRendering\BlockRendererNew.cs" />
+    <Compile Include="Control\Tools\CellRendering\BlockRendererObservable.cs" />
+    <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />

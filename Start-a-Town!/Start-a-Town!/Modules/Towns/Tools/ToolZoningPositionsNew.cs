@@ -15,7 +15,7 @@ namespace Start_a_Town_.Towns
         bool Removing;
         protected Action<IntVec3, int, int, bool> Add;
         public override bool TargetOnlyBlocks => true;
-        readonly BlockRenderer Renderer = new(Block.FaceHighlights[IntVec3.UnitZ]);
+        readonly BlockRenderer Renderer = new(Block.FaceHighlights[-IntVec3.UnitZ]); //new();// 
         public ToolZoningPositionsNew()
         {
 

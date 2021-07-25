@@ -13,7 +13,7 @@ namespace Start_a_Town_
     {
         public Town Town => this.Manager.Town;
         public MapBase Map { get { return this.Town.Map; } }
-        public readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]); //Block.BlockBlueprintGrayscale);// 
+        public readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]); //Block.BlockBlueprintGrayscale);// new();// 
         public string Name;
         public ZoneManager Manager;
         public int ID { get; set; }
@@ -26,13 +26,8 @@ namespace Start_a_Town_
         {
             this.Manager.Delete(this);
         }
-        public bool Exists
-        {
-            get
-            {
-                return this.Manager.Zones.ContainsKey(this.ID);
-            }
-        }
+        public bool Exists => this.Manager.Zones.ContainsKey(this.ID);
+            
         static readonly Random Random = new();
         protected Zone()
         {
@@ -47,7 +42,7 @@ namespace Start_a_Town_
         public Zone(ZoneManager manager, IEnumerable<IntVec3> cells) : this()
         {
             this.Manager = manager;
-            this.Positions = new(Block.FaceHighlights[IntVec3.UnitZ], cells);
+            this.Positions = new(Block.FaceHighlights[IntVec3.UnitZ], cells); //new(cells);// 
         }
         internal virtual void OnBlockChanged(IntVec3 global)
         {

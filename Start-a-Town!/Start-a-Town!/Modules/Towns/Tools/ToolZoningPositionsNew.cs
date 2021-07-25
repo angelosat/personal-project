@@ -9,21 +9,15 @@ namespace Start_a_Town_.Towns
 {
     class ToolZoningPositionsNew : ToolManagement
     {
-        protected Vector3 Begin, End;
+        protected IntVec3 Begin, End;
         int Width, Height;
         bool Enabled;
         bool Removing;
-        protected Action<Vector3, int, int, bool> Add;
-        protected Func<List<ZoneNew>> GetZones = () => new List<ZoneNew>();
+        protected Action<IntVec3, int, int, bool> Add;
         public override bool TargetOnlyBlocks => true;
         public ToolZoningPositionsNew()
         {
 
-        }
-        public ToolZoningPositionsNew(Action<Vector3, int, int, bool> callback, Func<List<ZoneNew>> zones)
-        {
-            this.Add = callback;
-            this.GetZones = zones;
         }
         public override void Update()
         {
@@ -35,7 +29,7 @@ namespace Start_a_Town_.Towns
             if (this.Target.Type != TargetType.Position)
                 return;
 
-            this.End = new Vector3(this.Target.Global.XY(), this.Begin.Z);
+            this.End = new(this.Target.Global.XY(), this.Begin.Z);
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;
             this.Width = w;
@@ -82,12 +76,12 @@ namespace Start_a_Town_.Towns
                 return Messages.Default;
             if (!this.IsValidShape(this.Width, this.Height))
                 return Messages.Default;
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
+            int x = Math.Min(this.Begin.X, this.End.X);
+            int y = Math.Min(this.Begin.Y, this.End.Y);
             var rect = new Rectangle(x, y, this.Width, this.Height);
 
-            var begin = new Vector3(x, y, this.Begin.Z);
-            var end = new Vector3(x + this.Width - 1, y + this.Height - 1, this.Begin.Z);
+            var begin = new IntVec3(x, y, this.Begin.Z);
+            var end = new IntVec3(x + this.Width - 1, y + this.Height - 1, this.Begin.Z);
             this.Add(begin, this.Width, this.Height, IsRemoving());
             
             this.Removing = false;
@@ -111,28 +105,19 @@ namespace Start_a_Town_.Towns
         public override void UpdateRemote(TargetArgs target)
         {
             if (target.Type == TargetType.Position)
-                this.End = new Vector3(target.Global.XY(), this.Begin.Z);
+                this.End = new(target.Global.XY(), this.Begin.Z);
         }
-        List<Vector3> GetPositions(int w, int h)
-        {
-            List<Vector3> list = new List<Vector3>();
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            for (int i = x; i < x + w; i++)
-                for (int j = y; j < y + h; j++)
-                    list.Add(new Vector3(i, j, this.Begin.Z));
-            return list;
-        }
-        Icon Icon = new Icon(UI.UIManager.Icons32, 12, 32);
+        
+        Icon Icon = new(UIManager.Icons32, 12, 32);
         internal override void DrawUI(SpriteBatch sb, Camera camera)
         {
             base.DrawUI(sb, camera); 
             
-            Icon.Draw(sb, UI.UIManager.Mouse);
+            Icon.Draw(sb, UIManager.Mouse);
             if (this.IsRemoving())
             {
                 var icondelete = Icon.Cross;
-                icondelete.Draw(sb, UI.UIManager.Mouse + new Vector2(Icon.SourceRect.Width / 2, 0));
+                icondelete.Draw(sb, UIManager.Mouse + new Vector2(Icon.SourceRect.Width / 2, 0));
             }
             if (!this.Enabled)
                 return;
@@ -158,7 +143,7 @@ namespace Start_a_Town_.Towns
 
         private IEnumerable<IntVec3> GetPositions(MapBase map, IntVec3 a, IntVec3 b)
         {
-            var validpositions = a.GetBox(b).Where(v => ZoneNew.IsPositionValid(map, v)).Select(v => v.Above);
+            var validpositions = a.GetBox(b).Where(v => Zone.IsPositionValid(map, v)).Select(v => v.Above);
             return validpositions;
         }
        

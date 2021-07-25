@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Towns
@@ -17,13 +15,11 @@ namespace Start_a_Town_.Towns
         {
             return this.Stockpiles[stID];
         }
-        int _StockpileSequence = 1;
-
-        public int NextStockpileID { get { return _StockpileSequence++; } }
+        int _stockpileSequence = 1;
+        public int NextStockpileID => _stockpileSequence++;
         const float UpdateFrequency = 1; // per second
         static readonly float UpdateTimerMax = (float)Engine.TicksPerSecond / UpdateFrequency;
         float UpdateTimer;
-       
 
         public StockpileManager(Town town)
         {
@@ -102,7 +98,7 @@ namespace Start_a_Town_.Towns
 
         protected override void AddSaveData(SaveTag tag)
         {
-            tag.Add(this._StockpileSequence.Save("IDSequence"));
+            tag.Add(this._stockpileSequence.Save("IDSequence"));
             var stockpiles = new SaveTag(SaveTag.Types.List, "Stockpiles", SaveTag.Types.Compound);
             foreach (var stockpile in this.Stockpiles)
                 stockpiles.Add(new SaveTag(SaveTag.Types.Compound, "", stockpile.Value.Save()));

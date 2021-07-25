@@ -13,26 +13,26 @@ namespace Start_a_Town_
         int _ZoneIDSequence = 1;
 
         public int GetNextID() => _ZoneIDSequence++;
-        readonly public Dictionary<int, ZoneNew> Zones = new();
+        readonly public Dictionary<int, Zone> Zones = new();
 
         public ZoneManager(Town town)
         {
             this.Town = town;
         }
 
-        internal ZoneNew RegisterNewZone(Type zoneType, IEnumerable<IntVec3> allpositions)
+        internal Zone RegisterNewZone(Type zoneType, IEnumerable<IntVec3> allpositions)
         {
             if (!allpositions.IsConnectedNew())
                 return null;
             var finalPositions = allpositions.Where(
                 po => this.Town.GetZoneAt(po) == null &&
-                ZoneNew.IsPositionValid(this.Town.Map, po));
-            var zone = Activator.CreateInstance(zoneType, this, finalPositions) as ZoneNew;
+                Zone.IsPositionValid(this.Town.Map, po));
+            var zone = Activator.CreateInstance(zoneType, this, finalPositions) as Zone;
             this.RegisterZone(zone);
             return zone;
         }
 
-        internal void Delete(ZoneNew zone)
+        internal void Delete(Zone zone)
         {
             this.Delete(zone.ID);
         }
@@ -43,7 +43,7 @@ namespace Start_a_Town_
             this.Zones.Remove(zoneID);
             FloatingText.Create(this.Map, zone.Positions.Average(), $"{zone.GetType()} deleted", ft => ft.Font = UIManager.FontBold);
         }
-        void RegisterZone(ZoneNew zone)
+        void RegisterZone(Zone zone)
         {
             if (zone.ID == 0)
                 zone.ID = this.GetNextID();
@@ -58,24 +58,24 @@ namespace Start_a_Town_
             ZoneDefOf.Init();
         }
 
-        internal T GetZone<T>(int zoneID) where T : ZoneNew
+        internal T GetZone<T>(int zoneID) where T : Zone
         {
             return this.Zones[zoneID] as T;
         }
 
-        public ZoneNew GetZoneAt(IntVec3 global)
+        public Zone GetZoneAt(IntVec3 global)
         {
             return this.Zones.Values.FirstOrDefault(z => z.Contains(global));
         }
-        public T GetZoneAt<T>(IntVec3 global) where T : ZoneNew
+        public T GetZoneAt<T>(IntVec3 global) where T : Zone
         {
             return this.Zones.Values.FirstOrDefault(z => z.Contains(global)) as T;
         }
-        public IEnumerable<T> GetZones<T>() where T : ZoneNew
+        public IEnumerable<T> GetZones<T>() where T : Zone
         {
             return this.Zones.Values.OfType<T>();
         }
-        public IEnumerable<ZoneNew> GetZones()
+        public IEnumerable<Zone> GetZones()
         {
             foreach (var z in this.Zones.Values)
                 yield return z;
@@ -92,7 +92,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        internal ZoneNew PlayerEdit(int zoneID, Type zoneType, IntVec3 a, int w, int h, bool remove)
+        internal Zone PlayerEdit(int zoneID, Type zoneType, IntVec3 a, int w, int h, bool remove)
         {
             if (remove)
             {
@@ -112,8 +112,8 @@ namespace Start_a_Town_
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            foreach(var zoneType in ZoneTypes)
-                yield return new Tuple<Func<string>, Action>(()=>zoneType.Name, () => ZoneNew.Edit(this.Town, zoneType));
+            foreach (var zoneType in ZoneTypes)
+                yield return new Tuple<Func<string>, Action>(() => zoneType.Name, () => Zone.Edit(this.Town, zoneType));
         }
         
         public override ISelectable QuerySelectable(TargetArgs target)

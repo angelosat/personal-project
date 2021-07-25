@@ -335,7 +335,7 @@ namespace Start_a_Town_
                 c.GetManagementInterface(t, inter);
         }
 
-        internal ZoneNew GetZoneAt(Vector3 pos)
+        internal Zone GetZoneAt(Vector3 pos)
         {
             return this.ZoneManager.GetZoneAt(pos);
         }

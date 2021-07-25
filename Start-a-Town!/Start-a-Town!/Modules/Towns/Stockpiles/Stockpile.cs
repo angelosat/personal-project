@@ -6,7 +6,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public partial class Stockpile : ZoneNew, IStorage, IContextable
+    public partial class Stockpile : Zone, IStorage, IContextable
     {
         internal static void Init()
         {
@@ -200,9 +200,9 @@ namespace Start_a_Town_
         public Stockpile(ZoneManager manager) : base(manager)
         {
         }
-        public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions) : base(manager)
+        public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions)
+            : base(manager, positions)
         {
-            this.Positions = new HashSet<IntVec3>(positions);
         }
         public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {

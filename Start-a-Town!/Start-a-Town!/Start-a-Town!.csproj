@@ -790,7 +790,7 @@
     <Compile Include="Modules\Towns\UI\UIDebugCommands.cs" />
     <Compile Include="Modules\Towns\UI\UIQuickMenu.cs" />
     <Compile Include="Modules\Towns\Utility.cs" />
-    <Compile Include="Modules\Towns\Zones\ZoneNew.cs" />
+    <Compile Include="Modules\Towns\Zones\Zone.cs" />
     <Compile Include="Network\CommandParser.cs" />
     <Compile Include="Network\Packets\PacketChat.cs" />
     <Compile Include="Network\Packets\PacketChunk.cs" />

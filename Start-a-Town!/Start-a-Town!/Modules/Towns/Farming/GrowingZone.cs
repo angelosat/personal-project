@@ -8,7 +8,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public class GrowingZone : ZoneNew, IContextable, ISelectable
+    public class GrowingZone : Zone, IContextable, ISelectable
     {
         public bool Harvesting = true, Planting = true;
         public float HarvestThreshold = 1;
@@ -28,9 +28,9 @@ namespace Start_a_Town_
         public GrowingZone(ZoneManager manager):base(manager)
         {
         }
-        public GrowingZone(ZoneManager manager, IEnumerable<IntVec3> positions) : base(manager)
+        public GrowingZone(ZoneManager manager, IEnumerable<IntVec3> positions)
+            : base(manager, positions)
         {
-            this.Positions = new HashSet<IntVec3>(positions);
         }
         public override ZoneDef ZoneDef => ZoneDefOf.Growing;
 

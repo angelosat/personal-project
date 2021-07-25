@@ -1,16 +1,15 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Towns
 {
     class ToolDesignateZone : ToolZoningPositionsNew
     {
-        Type ZoneType;
-        int CurrentZoneID;
+        readonly Type ZoneType;
+        readonly int CurrentZoneID;
         int ClickedZoneID;
-        int EditingZone { get { return this.CurrentZoneID != 0 ? this.CurrentZoneID : this.ClickedZoneID; } }
-        Town Town;
+        int EditingZone => this.CurrentZoneID != 0 ? this.CurrentZoneID : this.ClickedZoneID;
+
+        readonly Town Town;
         public ToolDesignateZone()
         {
 
@@ -22,11 +21,11 @@ namespace Start_a_Town_.Towns
             this.Add = this.Perform;
             this.Town = town;
         }
-        void Perform(Vector3 arg1, int arg2, int arg3, bool arg4)
+        void Perform(IntVec3 arg1, int arg2, int arg3, bool arg4)
         {
-            PacketZoneDesignation.Send(Town.Net, this.ZoneType, this.EditingZone, arg1, arg2, arg3, arg4);
+            PacketZoneDesignation.Send(this.Town.Net, this.ZoneType, this.EditingZone, arg1, arg2, arg3, arg4);
         }
-       
+
         public override ControlTool.Messages MouseLeftPressed(System.Windows.Forms.HandledMouseEventArgs e)
         {
             base.MouseLeftPressed(e);
@@ -34,6 +33,7 @@ namespace Start_a_Town_.Towns
             this.ClickedZoneID = zone != null ? zone.ID : 0;
             return Messages.Default;
         }
-        public override string HelpText => "Hold down control to clear zone tiles";
+        string _helpText = "Hold down control to clear zone tiles";
+        public override string HelpText => _helpText;
     }
 }

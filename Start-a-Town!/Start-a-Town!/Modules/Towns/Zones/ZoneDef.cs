@@ -7,13 +7,13 @@ namespace Start_a_Town_
         public abstract Type ZoneType { get; }
         public abstract bool IsValidLocation(MapBase map, IntVec3 global);
 
-        public ZoneNew Create()
+        public Zone Create()
         {
-            var zone = Activator.CreateInstance(this.ZoneType) as ZoneNew;
+            var zone = Activator.CreateInstance(this.ZoneType) as Zone;
             return zone;
         }
         public virtual void OnBlockChanged(IntVec3 global) { }
-        public void OnBlockChanged(ZoneNew zone, IntVec3 global)
+        public void OnBlockChanged(Zone zone, IntVec3 global)
         {
             var map = zone.Map;
             var below = global.Below;

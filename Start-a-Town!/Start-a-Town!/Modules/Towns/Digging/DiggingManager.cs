@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.GameEvents;
+using Start_a_Town_.Net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
-using Start_a_Town_.GameEvents;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Towns.Digging
 {
@@ -27,14 +28,14 @@ namespace Start_a_Town_.Towns.Digging
             switch (e.Type)
             {
                 case Components.Message.Types.BlocksChanged:
-                    HandleBlocksChanged(e.Parameters[1] as IEnumerable<IntVec3>);
+                    this.HandleBlocksChanged(e.Parameters[1] as IEnumerable<IntVec3>);
                     break;
 
                 case Components.Message.Types.BlockChanged:
                     MapBase map;
                     IntVec3 global;
                     EventBlockChanged.Read(e.Parameters, out map, out global);
-                    HandleBlocksChanged(new IntVec3[] {global});
+                    this.HandleBlocksChanged(new IntVec3[] { global });
                     break;
 
                 case Components.Message.Types.MiningDesignation:
@@ -55,9 +56,9 @@ namespace Start_a_Town_.Towns.Digging
 
         private void HandleBlocksChanged(IEnumerable<IntVec3> globals)
         {
-            foreach(var global in globals)
-                if(this.AllPositions.Contains(global))
-                    if(this.Map.IsAir(global))
+            foreach (var global in globals)
+                if (this.AllPositions.Contains(global))
+                    if (this.Map.IsAir(global))
                         this.AllPositions.Remove(global);
         }
 
@@ -77,7 +78,7 @@ namespace Start_a_Town_.Towns.Digging
             return this.AllPositions;
         }
 
-        bool IsMinable(Vector3 global)
+        bool IsMinable(IntVec3 global)
         {
             var material = Block.GetBlockMaterial(this.Town.Map, global);
             var skill = material.Type.SkillToExtract;
@@ -88,7 +89,7 @@ namespace Start_a_Town_.Towns.Digging
                 return false;
             return true;
         }
-        public override UI.GroupBox GetInterface()
+        public override GroupBox GetInterface()
         {
             return new DiggingManagerUI(this);
         }
@@ -112,15 +113,15 @@ namespace Start_a_Town_.Towns.Digging
         {
             cam.DrawGridBlocks(sb, Block.BlockBlueprint, this.AllPositions, Color.White);
         }
-        bool IsDiggingTask(Vector3 global)
+        bool IsDiggingTask(IntVec3 global)
         {
             return this.AllPositions.Contains(global);
         }
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<Func<string>, Action>(()=>"Mine", this.Edit);
-            yield return new Tuple<Func<string>, Action>(()=>"Deconstruct", this.EditDeconstruct);
+            yield return new Tuple<Func<string>, Action>(() => "Mine", this.Edit);
+            yield return new Tuple<Func<string>, Action>(() => "Deconstruct", this.EditDeconstruct);
         }
         public void Edit()
         {

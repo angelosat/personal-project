@@ -877,8 +877,8 @@ namespace Start_a_Town_
 
             fx.CurrentTechnique = fx.Techniques["BlockHighlight"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            map.DrawBeforeWorld(this.SpriteBatch, this);
             ui.DrawWorld(this.SpriteBatch, this);
+            map.DrawBeforeWorld(this.SpriteBatch, this);
             foreach (var entity in objs)
                 entity.DrawAfter(this.SpriteBatch, this); // cull non visible entities
 
@@ -997,20 +997,10 @@ namespace Start_a_Town_
             // draw entity mouseover highlight
             fx.CurrentTechnique = fx.Techniques["EntityMouseover"];
             fx.CurrentTechnique.Passes["Pass1"].Apply();
-            if (toolManager.ActiveTool != null)
-            {
-                if (toolManager.ActiveTool.Target != null)
-                {
-                    GameObject mouseover = toolManager.ActiveTool.Target.Object;
-                    if (mouseover != null)
-                    {
-                        if (mouseover.Exists)
-                        {
+            if (toolManager.ActiveTool is not null)
+                if (toolManager.ActiveTool.Target is not null)
+                    if (toolManager.ActiveTool.Target.Object is GameObject mouseover && mouseover.Exists)
                             mouseover.DrawMouseover(this.SpriteBatch, this);
-                        }
-                    }
-                }
-            }
 
             this.SpriteBatch.Flush();
 

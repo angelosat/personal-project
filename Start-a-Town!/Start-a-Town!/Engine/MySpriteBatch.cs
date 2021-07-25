@@ -22,7 +22,11 @@ namespace Start_a_Town_
         public Matrix View;
         public Matrix Projection;
         public Effect Effect;
+        public MySpriteBatch()
+            : this(Game1.Instance.GraphicsDevice)
+        {
 
+        }
         public MySpriteBatch(GraphicsDevice device)
         {
             this.Device = device;

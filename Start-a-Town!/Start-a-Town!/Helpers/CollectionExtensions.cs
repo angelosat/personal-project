@@ -63,6 +63,14 @@ namespace Start_a_Town_
             }
             return false;
         }
+        public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, Func<TValue> getter)
+        {
+            if (!dic.TryGetValue(key, out TValue item))
+            {
+                item = getter();
+                dic[key] = item;
+            }
+            return item;
+        }
     }
-
 }

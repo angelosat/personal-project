@@ -13,6 +13,7 @@ namespace Start_a_Town_
         public override string Name => "Designation Manager";
 
         readonly Dictionary<DesignationDef, HashSet<IntVec3>> Designations;
+        Dictionary<DesignationDef, BlockRendererNew> Renderers = new();
 
         static DesignationManager()
         {
@@ -38,6 +39,10 @@ namespace Start_a_Town_
             Designations.Add(DesignationDef.Deconstruct, new HashSet<IntVec3>());
             Designations.Add(DesignationDef.Mine, new HashSet<IntVec3>());
             Designations.Add(DesignationDef.Switch, new HashSet<IntVec3>());
+
+            Renderers.Add(DesignationDef.Deconstruct, new());
+            Renderers.Add(DesignationDef.Mine, new());
+            Renderers.Add(DesignationDef.Switch, new());
         }
         internal void Add(DesignationDef designation, IntVec3 position, bool remove = false)
         {
@@ -63,12 +68,16 @@ namespace Start_a_Town_
                 }
             }
             this.UpdateQuickButtons();
+            this.Renderers[designation].Invalidate();
         }
 
         public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
-            foreach (var des in Designations)
-                    cam.DrawGridBlocks(sb, Block.BlockBlueprint, des.Value, Color.White);
+            foreach (var r in this.Renderers)
+                r.Value.DrawBlocks(map, cam, this.Designations[r.Key]);
+
+            //foreach (var des in Designations)
+            //    cam.DrawGridBlocks(sb, Block.BlockBlueprint, des.Value, Color.White);
         }
         public DesignationDef GetDesignation(IntVec3 global)
         {

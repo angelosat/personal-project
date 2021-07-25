@@ -34,8 +34,8 @@ namespace Start_a_Town_
         }
         public static void Iso(Camera camera, float x, float y, float z, out float xx, out float yy)
         {
-            double xr = (x * camera.RotCos - y * camera.RotSin);
-            double yr = (x * camera.RotSin + y * camera.RotCos);
+            double xr = x * camera.RotCos - y * camera.RotSin;
+            double yr = x * camera.RotSin + y * camera.RotCos;
             xx = (float)(Block.Width * (xr - yr) / 2);
             yy = (float)((xr + yr) * Block.Depth / 2 - z * Block.BlockHeight);
         }

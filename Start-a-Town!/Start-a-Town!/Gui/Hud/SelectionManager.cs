@@ -16,7 +16,7 @@ namespace Start_a_Town_.UI
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
         static readonly IHotkey HotkeySliceZ;
-
+        static readonly BlockRendererNew Renderer = new();
         static SelectionManager()
         {
         }
@@ -552,7 +552,7 @@ namespace Start_a_Town_.UI
         internal static IEnumerable<IntVec3> SelectedCells => GetSelectedCells();
         internal static IEnumerable<GameObject> SelectedEntities => GetSelectedEntities();
 
-        internal static TargetArgs SingleSelected => Instance.MultipleSelected.SingleOrDefault();
+        internal static TargetArgs SingleSelected => Instance.MultipleSelected.Count == 1 ? Instance.MultipleSelected.Single() : null;
         internal static Entity SingleSelectedEntity => SingleSelected?.Object as Entity;
         internal static IntVec3? SingleSelectedCell => (SingleSelected is TargetArgs target && target.Type == TargetType.Position) ? target.Global : null;
     }

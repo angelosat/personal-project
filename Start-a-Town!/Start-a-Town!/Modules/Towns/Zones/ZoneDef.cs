@@ -17,12 +17,12 @@ namespace Start_a_Town_
         {
             var map = zone.Map;
             var below = global.Below;
-            if (zone.Positions.Contains(global) && !Block.IsBlockSolid(map, global))
+            if (zone.Contains(global) && !Block.IsBlockSolid(map, global))
             {
                 zone.RemovePosition(global);
                 return;
             }
-            else if (zone.Positions.Contains(below) && !map.IsAir(global))
+            else if (zone.Contains(below) && !map.IsAir(global))
             {
                 zone.RemovePosition(below);
                 return;

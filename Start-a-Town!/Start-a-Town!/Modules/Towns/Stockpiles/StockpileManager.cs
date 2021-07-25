@@ -129,7 +129,7 @@ namespace Start_a_Town_.Towns
         public Stockpile GetStockpile(Vector3 pos)
         {
             foreach (var s in this.Stockpiles)
-                if (s.Value.Positions.Contains(pos))
+                if (s.Value.Contains(pos))
                     return s.Value;
             return null;
         }

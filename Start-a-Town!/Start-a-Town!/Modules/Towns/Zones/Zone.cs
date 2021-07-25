@@ -13,14 +13,17 @@ namespace Start_a_Town_
     {
         public Town Town => this.Manager.Town;
         public MapBase Map { get { return this.Town.Map; } }
-        public readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]);
+        protected readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]);
         public string Name;
         public ZoneManager Manager;
         public int ID { get; set; }
         
         public abstract ZoneDef ZoneDef { get; }
         public abstract string UniqueName { get; }
-
+        public IntVec3 Average()
+        {
+            return this.Positions.Average();
+        }
         public void Delete()
         {
             this.Manager.Delete(this);
@@ -66,11 +69,6 @@ namespace Start_a_Town_
             }
         }
 
-        public void AddPosition(IntVec3 pos)
-        {
-            this.Positions.Add(pos);
-        }
-
         public void RemovePosition(IntVec3 pos)
         {
             this.RemovePositions(new[] { pos });
@@ -88,7 +86,6 @@ namespace Start_a_Town_
             if (splitgraphs.Count == 1)
                 return;
             var largest = splitgraphs.OrderByDescending(g => g.Count).First();
-            //this.Positions = largest;
             foreach (var pos in this.Positions.Except(largest))
                 this.Positions.Remove(pos);
         }
@@ -110,7 +107,7 @@ namespace Start_a_Town_
                 {
                     if (this.Town.GetZoneAt(pos) == null)
                     {
-                        this.AddPosition(pos);
+                        this.Positions.Add(pos);
                     }
                 }
             }

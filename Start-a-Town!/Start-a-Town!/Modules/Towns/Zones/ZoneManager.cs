@@ -41,7 +41,7 @@ namespace Start_a_Town_
             if (!this.Zones.TryGetValue(zoneID, out var zone))
                 throw new Exception();
             this.Zones.Remove(zoneID);
-            FloatingText.Create(this.Map, zone.Positions.Average(), $"{zone.GetType()} deleted", ft => ft.Font = UIManager.FontBold);
+            FloatingText.Create(this.Map, zone.Average(), $"{zone.GetType()} deleted", ft => ft.Font = UIManager.FontBold);
         }
         void RegisterZone(Zone zone)
         {
@@ -50,7 +50,7 @@ namespace Start_a_Town_
             this.Zones.Add(zone.ID, zone);
             zone.Manager = this;
             zone.Name = zone.UniqueName;
-            FloatingText.Create(this.Town.Map, zone.Positions.Average(), $"{zone.GetType()} created", ft => ft.Font = UIManager.FontBold);
+            FloatingText.Create(this.Town.Map, zone.Average(), $"{zone.GetType()} created", ft => ft.Font = UIManager.FontBold);
         }
 
         internal static void Init()

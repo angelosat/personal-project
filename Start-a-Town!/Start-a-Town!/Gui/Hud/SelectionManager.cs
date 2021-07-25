@@ -16,7 +16,7 @@ namespace Start_a_Town_.UI
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
         static readonly IHotkey HotkeySliceZ;
-        static readonly BlockRendererNew Renderer = new();
+        static readonly BlockRendererNew Renderer = new(Block.BlockHighlight);
         static SelectionManager()
         {
         }
@@ -143,6 +143,10 @@ namespace Start_a_Town_.UI
         {
             Instance.Select(targets);
         }
+        //public static void Refresh(IEnumerable<IntVec3> cells)
+        //{
+        //    Instance.Select(cells.Select(c => new TargetArgs(c)));
+        //}
         internal static void SelectAllVisible(ItemDef def)
         {
             var objects = Ingame.Instance.Scene.ObjectsDrawn.Where(i => i.Def == def).Select(o => new TargetArgs(o));
@@ -192,6 +196,8 @@ namespace Start_a_Town_.UI
         }
         private void Select(TargetArgs target)
         {
+            Renderer.Invalidate();
+
             if (this.SelectedSource.IsEqual(target))
             {
                 this.CycleTargets();
@@ -307,7 +313,7 @@ namespace Start_a_Town_.UI
             return Instance.SelectedStack.Current == item;
         }
 
-        readonly Dictionary<Action<List<TargetArgs>>, List<TargetArgs>> ActionsAdded = new Dictionary<Action<List<TargetArgs>>, List<TargetArgs>>();
+        readonly Dictionary<Action<List<TargetArgs>>, List<TargetArgs>> ActionsAdded = new();
 
         private void CreateButtons(IEnumerable<TargetArgs> targets)
         {
@@ -400,14 +406,19 @@ namespace Start_a_Town_.UI
         {
             if (this.MultipleSelected.Any())
             {
-                foreach (var obj in this.MultipleSelected)
-                    if (obj.Type == TargetType.Position)
-                    {
-                        camera.DrawBlockMouseover(sb, obj.Map, obj.Global, Color.Yellow);
-                        var map = obj.Map;
-                        var global = obj.Global;
-                        map.GetBlock(global).DrawSelected(sb, camera, map, global);
-                    }
+                //foreach (var obj in this.MultipleSelected)
+                //    if (obj.Type == TargetType.Position)
+                //    {
+                //        camera.DrawBlockMouseover(sb, obj.Map, obj.Global, Color.Yellow);
+                //        var map = obj.Map;
+                //        var global = obj.Global;
+                //        map.GetBlock(global).DrawSelected(sb, camera, map, global);
+                //    }
+                var first = this.MultipleSelected.First();
+                if (first.Type == TargetType.Position)
+                {
+                    Renderer.DrawBlocks(first.Map, camera, this.MultipleSelected.Select(t => (IntVec3)t.Global));
+                }
             }
             else if (this.SelectedSource != null)
             {

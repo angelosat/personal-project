@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
@@ -13,7 +12,7 @@ namespace Start_a_Town_
         public override string Name => "Designation Manager";
 
         readonly Dictionary<DesignationDef, HashSet<IntVec3>> Designations;
-        Dictionary<DesignationDef, BlockRendererNew> Renderers = new();
+        readonly Dictionary<DesignationDef, BlockRendererNew> Renderers = new();
 
         static DesignationManager()
         {
@@ -52,9 +51,12 @@ namespace Start_a_Town_
         {
             if (designation == DesignationDef.Null)
             {
-                foreach (var l in Designations.Values)
+                foreach (var l in Designations)
                     foreach (var p in positions)
-                        l.Remove(p);
+                    {
+                        if(l.Value.Remove(p))
+                            this.Renderers[l.Key].Invalidate();
+                    }
             }
             else
             {
@@ -66,18 +68,15 @@ namespace Start_a_Town_
                     else if (designation.IsValid(this.Town.Map, pos))
                         list.Add(pos);
                 }
+                this.Renderers[designation].Invalidate();
             }
             this.UpdateQuickButtons();
-            this.Renderers[designation].Invalidate();
         }
 
         public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             foreach (var r in this.Renderers)
                 r.Value.DrawBlocks(map, cam, this.Designations[r.Key]);
-
-            //foreach (var des in Designations)
-            //    cam.DrawGridBlocks(sb, Block.BlockBlueprint, des.Value, Color.White);
         }
         public DesignationDef GetDesignation(IntVec3 global)
         {

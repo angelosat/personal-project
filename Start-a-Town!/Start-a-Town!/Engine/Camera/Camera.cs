@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
+using Start_a_Town_.Graphics;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
@@ -401,7 +402,11 @@ namespace Start_a_Town_
             return true;
         }
         static readonly Color CellSelectionTint = Color.White * .5f;
-        public bool DrawBlockSelectionGlobal(MySpriteBatch sb, IntVec3 global)
+        public void DrawBlockSelectionGlobal(MySpriteBatch sb, IntVec3 global)
+        {
+            this.DrawBlockSelectionGlobal(sb, Block.BlockHighlight, global);
+        }
+        public void DrawBlockSelectionGlobal(MySpriteBatch sb, AtlasDepthNormals.Node.Token texToken, IntVec3 global)
         {
             int z = global.Z;
             int gx = global.X;
@@ -412,9 +417,8 @@ namespace Start_a_Town_
             var depth = rlx + rly;
 
             sb.DrawBlock(Block.Atlas.Texture, screenBoundsVector4,
-                Block.BlockBlueprint,
+                texToken,
                 this.Zoom, Color.Transparent, CellSelectionTint, Color.White, Color.White, Vector4.One, Vector4.Zero, depth, null, global);
-            return true;
         }
         public bool DrawUnknown(Canvas canvas, MapBase map, Chunk chunk, Cell cell)
         {

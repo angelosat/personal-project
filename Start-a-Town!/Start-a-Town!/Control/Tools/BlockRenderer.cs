@@ -30,6 +30,14 @@ namespace Start_a_Town_
         readonly Dictionary<int, MySpriteBatch> Slices = new();
         readonly AtlasDepthNormals.Node.Token BlockToken = Block.BlockBlueprint;
         bool Validated;
+        public BlockRendererNew()
+        {
+
+        }
+        public BlockRendererNew(AtlasDepthNormals.Node.Token blockTexture)
+        {
+            this.BlockToken = blockTexture;
+        }
         public void CreateMesh(Camera camera, IEnumerable<IntVec3> positions)
         {
             if (this.Validated)
@@ -41,6 +49,7 @@ namespace Start_a_Town_
                 foreach (var cell in cells)
                     camera.DrawBlockSelectionGlobal(
                         this.Slices.GetOrAdd(cells.Key, sliceCtor),
+                        this.BlockToken,
                         cell);
             }
 
@@ -65,9 +74,10 @@ namespace Start_a_Town_
         internal void Invalidate()
         {
             this.Validated = false;
+            this.Slices.Clear();
         }
     }
-    public class BlockRendererNewNew
+    public class BlockRendererTest
     {
         readonly HashSet<IntVec3> Cells = new();
         readonly Dictionary<int, MySpriteBatch> Slices = new();

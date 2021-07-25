@@ -21,7 +21,6 @@ namespace Start_a_Town_
         public abstract ZoneDef ZoneDef { get; }
         public abstract string UniqueName { get; }
 
-        abstract public IEnumerable<IntVec3> GetPositions(); // TODO: make it a hashset for faster lookups?
         public void Delete()
         {
             this.Manager.Delete(this);
@@ -135,12 +134,11 @@ namespace Start_a_Town_
         }
         internal bool Contains(GameObject obj)
         {
-            var g = obj.GridCell - IntVec3.UnitZ;
-            return this.GetPositions().Contains(g); // TODO use a hashset
+            return this.Contains(obj.GridCell - IntVec3.UnitZ);
         }
         internal bool Contains(IntVec3 pos)
         {
-            return this.Positions.Contains(pos);
+            return this.Positions.Contains(pos);// TODO use a hashset
         }
 
         internal static bool IsPositionValid(MapBase map, Vector3 pos)
@@ -186,7 +184,7 @@ namespace Start_a_Town_
             return;
             var isselected = SelectionManager.IsSelected(this);
             var col = Color.Lerp(this.Positions.Color, Color.White, isselected ? .5f : 0) * .5f;
-            var positions = this.GetPositions().Select(t => t + IntVec3.UnitZ);
+            var positions = this.Positions.Select(t => t + IntVec3.UnitZ);
             cam.DrawGrid(sb, map, positions, col);
         }
 

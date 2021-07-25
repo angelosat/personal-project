@@ -126,12 +126,7 @@ namespace Start_a_Town_
                 Block.GetBlockMaterial(map, arg) == MaterialDefOf.Soil
                 && map.GetBlock(arg + Vector3.UnitZ) == BlockDefOf.Air;
         }
-        public override IEnumerable<IntVec3> GetPositions()
-        {
-            foreach (var p in this.Positions)
-                yield return p;
-        }
-
+       
         internal IEnumerable<GameObject> GetHarvestablePlantsLazy()
         {
             foreach (var pos in this.Positions)

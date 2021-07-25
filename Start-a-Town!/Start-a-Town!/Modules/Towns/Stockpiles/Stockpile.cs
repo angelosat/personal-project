@@ -166,11 +166,6 @@ namespace Start_a_Town_
 
         }
 
-        public override IEnumerable<IntVec3> GetPositions()
-        {
-            foreach (var p in this.Positions)
-                yield return p;
-        }
 
         internal override void OnBlockChanged(IntVec3 global)
         {

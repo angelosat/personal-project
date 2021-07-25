@@ -163,15 +163,16 @@ namespace Start_a_Town_.Towns.Crafting
                 return true;
             }
             return false;
-        }    
-       
+        }
+
         internal override void OnGameEvent(GameEvent e)
         {
-            switch(e.Type)
+            switch (e.Type)
             {
-                case Message.Types.BlockChanged:
-                    var global = (IntVec3)e.Parameters[1];
-                    this.OrdersNew.Remove(global); //if a block containing a workstation is changed to another type, immediately clear all corresponding orders, no need to check for anything
+                case Message.Types.BlocksChanged:
+                    var cells = e.Parameters[1] as IEnumerable<IntVec3>;
+                    foreach (var global in cells)
+                        this.OrdersNew.Remove(global); //if a block containing a workstation is changed to another type, immediately clear all corresponding orders, no need to check for anything
                     // TODO: close crafting window if it's open for the removed station
                     break;
 

@@ -88,10 +88,6 @@ namespace Start_a_Town_
                         Handle(e.Parameters[0] as MapBase, pos);
                     break;
 
-                case Components.Message.Types.BlockChanged:
-                    Handle(e.Parameters[0] as MapBase, (IntVec3)e.Parameters[1]);
-                    break;
-
                 default:
                     break;
             }

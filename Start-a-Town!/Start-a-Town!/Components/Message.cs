@@ -19,7 +19,6 @@ namespace Start_a_Town_.Components
             EntityCollision,
             BlockEntityAdded,
             BlockEntityRemoved,
-            BlockChanged,
             BlocksChanged,
             ItemGot,
             NotEnoughSpace,

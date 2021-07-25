@@ -31,13 +31,6 @@ namespace Start_a_Town_.Towns.Digging
                     this.HandleBlocksChanged(e.Parameters[1] as IEnumerable<IntVec3>);
                     break;
 
-                case Components.Message.Types.BlockChanged:
-                    MapBase map;
-                    IntVec3 global;
-                    EventBlockChanged.Read(e.Parameters, out map, out global);
-                    this.HandleBlocksChanged(new IntVec3[] { global });
-                    break;
-
                 case Components.Message.Types.MiningDesignation:
                     var positions = e.Parameters[0] as List<IntVec3>;
                     var remove = (bool)e.Parameters[1];

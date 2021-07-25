@@ -91,12 +91,6 @@ namespace Start_a_Town_
                     this.Update(positions);
                     break;
 
-                case Components.Message.Types.BlockChanged:
-                    IntVec3 global;
-                    GameEvents.EventBlockChanged.Read(e.Parameters, out map, out global);
-                    this.Update(new List<IntVec3>() { global });
-                    return;
-
                 default:
                     break;
             }

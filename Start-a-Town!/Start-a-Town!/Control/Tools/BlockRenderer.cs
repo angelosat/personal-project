@@ -134,7 +134,7 @@ namespace Start_a_Town_
             }
         }
        
-        public void DrawBlocks(MapBase map, Camera camera, IEnumerable<IntVec3> positions)
+        public void DrawBlocks(MapBase map, Camera camera)
         {
             this.Validate(camera);
             camera.PrepareShader(map);

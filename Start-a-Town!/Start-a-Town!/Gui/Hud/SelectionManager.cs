@@ -373,16 +373,8 @@ namespace Start_a_Town_.UI
         {
             switch (e.Type)
             {
-                case Message.Types.BlockChanged:
-                    var map = e.Parameters[0] as MapBase;
-                    var global = (Vector3)e.Parameters[1];
-                    var target = new TargetArgs(map, global);
-                    if (this.IsSelected(map, global))
-                        ClearTargets();
-                    break;
-
                 case Message.Types.BlocksChanged:
-                    map = e.Parameters[0] as MapBase;
+                    var map = e.Parameters[0] as MapBase;
                     var globals = e.Parameters[1] as IntVec3[];
                     var targets = globals.Select(g => new TargetArgs(map, g));
                     if (targets.Any(t => IsSelected(t)))

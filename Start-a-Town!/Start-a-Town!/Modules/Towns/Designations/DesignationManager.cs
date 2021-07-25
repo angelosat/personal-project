@@ -94,7 +94,7 @@ namespace Start_a_Town_
         public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             foreach (var r in this.Renderers)
-                r.Value.DrawBlocks(map, cam, this.Designations[r.Key]);
+                r.Value.DrawBlocks(map, cam);
         }
         public DesignationDef GetDesignation(IntVec3 global)
         {
@@ -115,11 +115,6 @@ namespace Start_a_Town_
             {
                 case Components.Message.Types.BlocksChanged:
                     HandleBlocksChanged(e.Parameters[1] as IEnumerable<IntVec3>);
-                    break;
-
-                case Components.Message.Types.BlockChanged:
-                    GameEvents.EventBlockChanged.Read(e.Parameters, out var map, out var global);
-                    HandleBlocksChanged(new IntVec3[] { global });
                     break;
 
                 case Components.Message.Types.ZoneDesignation:

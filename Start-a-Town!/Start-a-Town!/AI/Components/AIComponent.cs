@@ -92,7 +92,7 @@ namespace Start_a_Town_
       
         internal override void OnGameEvent(GameObject gameObject, GameEvent e)
         {
-            if (e.Type == Message.Types.BlockChanged || e.Type == Message.Types.BlocksChanged)
+            if (e.Type == Message.Types.BlocksChanged)
             {
                 if (!this.State.Path?.IsValid(gameObject as Actor) ?? false)
                 {

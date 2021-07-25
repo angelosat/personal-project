@@ -88,10 +88,6 @@ namespace Start_a_Town_.Modules.Crafting
                         this.RefreshOrders(this.Entity.Orders);
                     break;
 
-                case Components.Message.Types.BlockChanged:
-                    if ((IntVec3)e.Parameters[1] == this.Global)
-                        this.GetWindow().Hide();
-                    break;
                 case Components.Message.Types.BlocksChanged:
                     if ((e.Parameters[1] as IEnumerable<IntVec3>).Contains(this.Global))
                         this.GetWindow().Hide();

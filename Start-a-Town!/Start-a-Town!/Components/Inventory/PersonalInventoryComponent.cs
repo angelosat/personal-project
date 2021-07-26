@@ -56,12 +56,14 @@ namespace Start_a_Town_.Components
         {
             Packets.Init();
         }
+
         public int Capacity => this.Slots.Slots.Count;
         public float PercentageEmpty => this.GetEmptySlots().Count() / (float)this.Capacity;
         public float PercentageFull => 1 - this.PercentageEmpty;
-
         readonly Container HaulContainer;
         readonly GameObjectSlot HaulSlot;
+        public Container Slots;
+        public ContainerList Contents = new();
 
         internal void Remove(Entity obj)
         {
@@ -71,8 +73,6 @@ namespace Start_a_Town_.Components
         {
             this.Remove(obj as Entity);
         }
-
-        public Container Slots;
 
         internal void SyncInsert(GameObject split)
         {
@@ -115,7 +115,7 @@ namespace Start_a_Town_.Components
         public override void GetContainers(List<Container> list)
         {
             list.Add(this.HaulContainer);
-            list.Add(this.Slots);
+            //list.Add(this.Slots);
         }
         public PersonalInventoryComponent()
             : base()
@@ -468,15 +468,17 @@ namespace Start_a_Town_.Components
             return comp;
         }
 
-        public override void Write(BinaryWriter writer)
+        public override void Write(BinaryWriter w)
         {
-            this.Slots.Write(writer);
-            this.HaulSlot.Write(writer);
+            this.Contents.Write(w);
+            //this.Slots.Write(w);
+            this.HaulSlot.Write(w);
         }
-        public override void Read(BinaryReader reader)
+        public override void Read(BinaryReader r)
         {
-            this.Slots.Read(reader);
-            this.HaulSlot.Read(reader);
+            //this.Slots.Read(r);
+            this.Contents.Read(r);
+            this.HaulSlot.Read(r);
         }
 
         internal override List<SaveTag> Save()
@@ -493,6 +495,11 @@ namespace Start_a_Town_.Components
         internal override void Load(SaveTag data)
         {
             data.TryGetTag("Inventory", tag => this.Slots.Load(tag));
+
+            /// temp
+            foreach (var i in this.GetItems())
+                this.Contents.Add(i);
+
             bool isHauling;
             if (data.TryGetTagValue("IsHauling", out isHauling))
                 if (isHauling)
@@ -528,6 +535,9 @@ namespace Start_a_Town_.Components
         {
             return this.Slots.GetEmpty();
         }
-       
+        public override void Instantiate(Action<GameObject> instantiator)
+        {
+            this.Contents.Instantiate(instantiator);
+        }
     }
 }

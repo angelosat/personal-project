@@ -299,7 +299,7 @@ namespace Start_a_Town_
             this.ActorID = r.ReadInt32();
             var isspawned = r.ReadBoolean();
             if (!isspawned)
-                this.Actor = GameObject.CreatePrefab(r) as Actor;
+                this.Actor = GameObject.Create(r) as Actor;
             this.TownApprovalRating = r.ReadSingle();
             this.ShopBlacklist = new(r.ReadIntArray());
             this.RecentlyVisitedShops = new(r.ReadIntArray());

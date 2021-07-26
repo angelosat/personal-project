@@ -18,7 +18,6 @@ namespace Start_a_Town_.UI
         ObservableCollection<TObject> BoundCollection;
         [Obsolete]
         static readonly int ItemHeight = Label.DefaultHeight + ListBoxNewNoBtnBase<TObject, GroupBox>.Spacing; // TODO remove hardcoding of label.defaultheight
-
         public TableScrollableCompactNewNew(int maxVisibleItems, bool showColumnLabels = false, ScrollModes scrollbarMode = ScrollModes.Vertical)
         {
             this.MaxVisibleItems = maxVisibleItems;

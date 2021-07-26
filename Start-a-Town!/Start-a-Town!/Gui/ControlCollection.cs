@@ -146,5 +146,11 @@ namespace Start_a_Town_.UI
             var count = base.RemoveAll(predicate);
             return count;
         }
+        public new void RemoveAt(int index)
+        {
+            var ctrl = this[index];
+            base.RemoveAt(index);
+            this.Parent.OnControlRemoved(ctrl);
+        }
     }
 }

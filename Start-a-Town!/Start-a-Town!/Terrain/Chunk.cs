@@ -1218,12 +1218,12 @@ namespace Start_a_Town_
 
             int objCount = reader.ReadInt32();
             for (int i = 0; i < objCount; i++)
-                this.Objects.Add(GameObject.CreatePrefab(reader));
+                this.Objects.Add(GameObject.Create(reader));
 
             int blockObjCount = reader.ReadInt32();
             for (int i = 0; i < blockObjCount; i++)
             {
-                GameObject blobj = GameObject.CreatePrefab(reader);
+                GameObject blobj = GameObject.Create(reader);
                 this.BlockObjects[GetCellIndex(blobj.Global.ToLocal())] = blobj;
             }
 

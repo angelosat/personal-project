@@ -90,7 +90,7 @@ namespace Start_a_Town_
             if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
                 SelectionManager.AddToSelection(target);
             else
-                SelectionManager.Refresh(target);
+                SelectionManager.Select(target);
         }
 
         private void MouseScroll()
@@ -332,9 +332,9 @@ namespace Start_a_Town_
                         (a, b, r) =>
                         {
                             if (a == b)
-                                SelectionManager.Refresh(this.Target);
+                                SelectionManager.Select(this.Target);
                             else
-                                SelectionManager.Refresh(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Ingame.GetMap(), t)));
+                                SelectionManager.Select(new BoundingBox(a, b).GetBox().Select(t => new TargetArgs(Ingame.GetMap(), t)));
                         }));
             }
             this.DblClicked = true;

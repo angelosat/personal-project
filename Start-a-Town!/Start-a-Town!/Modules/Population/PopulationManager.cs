@@ -170,7 +170,7 @@ namespace Start_a_Town_
             var list = new ListBoxNew<VisitorProperties, ButtonNew>(200, UIManager.LargeButton.Height * 8, (props, container) => 
             {
                 var npc = props.Actor;
-                var btn = ButtonNew.CreateBig(()=>UI.SelectionManager.Refresh(npc), container.Client.Width, npc.RenderIcon(), () => npc.Npc.FullName, () => npc.Exists ? "Visiting" : (props.Discovered ? "" : "Unknown"));
+                var btn = ButtonNew.CreateBig(()=>UI.SelectionManager.Select(npc), container.Client.Width, npc.RenderIcon(), () => npc.Npc.FullName, () => npc.Exists ? "Visiting" : (props.Discovered ? "" : "Unknown"));
                 return btn; 
             });
 

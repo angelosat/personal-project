@@ -70,7 +70,7 @@ namespace Start_a_Town_
             {
                 var length = r.ReadInt32();
                 var data = r.ReadBytes(length);
-                var entity = Network.Deserialize<GameObject>(data, GameObject.CreatePrefab);
+                var entity = Network.Deserialize<GameObject>(data, GameObject.Create);
                 entity.Instantiate(net.Instantiator);//.ObjectCreated();
                 if (entity.Exists)
                     entity.Spawn(net.Map);

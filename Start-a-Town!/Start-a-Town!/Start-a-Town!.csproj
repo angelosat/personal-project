@@ -185,6 +185,7 @@
     <Compile Include="AI\Components\Personality\TraitDefOf.cs" />
     <Compile Include="Animations\AnimationBlending.cs" />
     <Compile Include="Animations\AnimationExtensions.cs" />
+    <Compile Include="Components\Inventory\ContainerList.cs" />
     <Compile Include="Control\Hotkeys\HotkeyContext.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.Hotkey.cs" />
@@ -195,6 +196,8 @@
     <Compile Include="Control\Tools\CellRendering\BlockRendererObservable.cs" />
     <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
+    <Compile Include="Gui\Lists\ListBoxObservableNew.cs" />
+    <Compile Include="Gui\Tables\TableObservable.cs" />
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
     <Compile Include="Gui\ScrollBars\ScrollModes.cs" />

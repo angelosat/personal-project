@@ -114,6 +114,7 @@ namespace Start_a_Town_
                 this.RotCos = Math.Round(this.RotCos + this.RotCos) / 2f;
                 this.RotSin = Math.Round(this.RotSin + this.RotSin) / 2f;
 
+
                 if (this._rotation != oldRot)
                     this.OnRotationChanged();
             }

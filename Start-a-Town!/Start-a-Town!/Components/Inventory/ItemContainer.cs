@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+
 namespace Start_a_Town_.Components
 {
     public class ItemContainer : GameObjectSlotCollection
     {
         public Func<GameObject, bool> Filter = o => true;
-        GameObject _Parent;
+        GameObject _parent;
         public GameObject Parent
         {
-            get { return this._Parent; }
+            get { return this._parent; }
             set
             {
-                this._Parent = value;
+                this._parent = value;
                 foreach (var slot in this)
                     slot.Parent = value;
             }
@@ -121,21 +122,6 @@ namespace Start_a_Town_.Components
                 slot.Read(reader);
             }
         }
-        static public ItemContainer Create(BinaryReader reader) { return Create(null, reader); }
-        static public ItemContainer Create(GameObject parent, BinaryReader reader)
-        {
-            var id = reader.ReadByte();
-            ItemContainer cont = new ItemContainer(parent, (byte)reader.ReadInt32()) { ID = id };
-            int occupiedslotCount = reader.ReadInt32();
-            for (int i = 0; i < occupiedslotCount; i++)
-            {
-                int slotID = reader.ReadInt32();
-                var slot = cont[slotID];
-                slot.Read(reader);
-                slot.Container = cont;
-            }
-            return cont;
-        }
 
         public List<GameObjectSlot> Empty()
         {
@@ -165,78 +151,6 @@ namespace Start_a_Town_.Components
             Initialize(newCapacity);
 
             return contents;
-        }
-        public List<SaveTag> Save()
-        {
-            List<SaveTag> containerTag = new List<SaveTag>();
-            containerTag.Add(new SaveTag(SaveTag.Types.Byte, "ID", this.ID));
-            containerTag.Add(new SaveTag(SaveTag.Types.Byte, "Capacity", (byte)this.Capacity));
-            SaveTag items = new SaveTag(SaveTag.Types.Compound, "Items");
-            for (int i = 0; i < this.Count; i++)
-            {
-                GameObjectSlot objSlot = this[i];
-                if (objSlot.Object != null)
-                    items.Add(new SaveTag(SaveTag.Types.Compound, i.ToString(), objSlot.Save()));
-            }
-            containerTag.Add(items);
-            return containerTag;
-        }
-
-        static public ItemContainer Create(GameObject parent, SaveTag containerTag)
-        {
-            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;
-        
-            byte capacity = (byte)shit["Capacity"].Value;
-            ItemContainer container = new ItemContainer(parent, capacity);
-            containerTag.TryGetTagValue<byte>("ID", out container.ID);
-            Dictionary<string, SaveTag> itemList = shit["Items"].Value as Dictionary<string, SaveTag>;
-
-            foreach (SaveTag itemTag in itemList.Values)
-            {
-                if (itemTag.Value == null)
-                    continue;
-                int index = byte.Parse(itemTag.Name);
-                container[index].Load(itemTag);
-            }
-            return container;
-        }
-        static public ItemContainer Create(SaveTag containerTag)
-        {
-            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;
-            byte capacity = (byte)shit["Capacity"].Value;
-            ItemContainer container = new ItemContainer(capacity);
-            containerTag.TryGetTagValue<byte>("ID", out container.ID);
-            List<SaveTag> itemList = shit["Items"].Value as List<SaveTag>;
-            foreach (SaveTag itemTag in itemList)
-            {
-                if (itemTag.Value == null)
-                    continue;
-                int index = byte.Parse(itemTag.Name);
-                GameObjectSlot slot = GameObjectSlot.Create(itemTag);
-                slot.Container = container;
-                slot.ID = (byte)index;
-                container[index] = slot;
-            }
-            return container;
-        }
-        public ItemContainer Load(SaveTag containerTag)
-        {
-            Dictionary<string, SaveTag> shit = containerTag.Value as Dictionary<string, SaveTag>;
-            containerTag.TryGetTagValue<byte>("ID", out this.ID);
-            byte capacity = (byte)shit["Capacity"].Value;
-            this.Initialize(capacity);
-            List<SaveTag> itemList = shit["Items"].Value as List<SaveTag>;
-            foreach (SaveTag itemTag in itemList)
-            {
-                if (itemTag.Value == null)
-                    continue;
-                int index = byte.Parse(itemTag.Name);
-                GameObjectSlot slot = GameObjectSlot.Create(itemTag);
-                slot.Container = this;
-                slot.ID = (byte)index;
-                this[index] = slot;
-            }
-            return this;
         }
     }                        
 }

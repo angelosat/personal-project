@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
@@ -12,9 +11,8 @@ namespace Start_a_Town_.UI
         where TObject : class
     {
         const int Spacing = 1;
-        public event EventHandler<EventArgs> SelectedItemChanged;
 
-        public TObject SelectedItem { get { return (SelectedControl == null ? default : SelectedControl.Tag as TObject); } }
+        public TObject SelectedItem => SelectedControl == null ? default : SelectedControl.Tag as TObject; 
         TControl SelectedControl;
 
         public void SelectItem(TObject obj)
@@ -22,13 +20,7 @@ namespace Start_a_Town_.UI
             this.SelectedControl = this.Client.Controls.FirstOrDefault(i => i.Tag == obj) as TControl;
         }
 
-        public List<TControl> Items
-        {
-            get
-            {
-                return this.Client.Controls.Cast<TControl>().ToList();
-            }
-        }
+        public List<TControl> Items => this.Client.Controls.Cast<TControl>().ToList();
 
         public Action<TObject> ItemChangedFunc = (item) => { };
         public ObservableCollection<TObject> List;

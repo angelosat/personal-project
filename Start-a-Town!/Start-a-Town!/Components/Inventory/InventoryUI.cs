@@ -19,12 +19,13 @@ namespace Start_a_Town_
         public InventoryUI(Actor actor)
         {
             this.PanelSlots = new Panel() { AutoSize = true };
-            this.InitInvSlots(actor);
+            //this.InitInvSlots(actor);
+            this.InitInvList(actor);
         }
         public void Refresh(Actor actor)
         {
-            this.InitInvSlots(actor);
-            
+            //this.InitInvSlots(actor);
+            this.InitInvList(actor);
         }
         private void InitInvSlots(Actor actor)
         {
@@ -46,10 +47,7 @@ namespace Start_a_Town_
                         "npc inventory rearranging disabled".ToConsole();
                         return DragDropEffects.None;
                     },
-                    LeftClickAction = () =>
-                    {
-                        SelectionManager.Refresh(invSlot.Object);
-                    }
+                    LeftClickAction = () => SelectionManager.Select(invSlot.Object)
                 };
                 
                 
@@ -68,13 +66,35 @@ namespace Start_a_Town_
             this.AddControls(this.PanelSlots);
 
             var customizationClient = new GroupBox();
-            var colorsui = new GuiCharacterCustomization(); //actor);
+            var colorsui = new GuiCharacterCustomization();
+            colorsui.SetTag(actor);
             customizationClient.AddControls(colorsui);
             customizationClient.AddControlsBottomLeft(new Button("Apply", customizationClient.Width) { LeftClickAction = () => PacketEditAppearance.Send(actor, colorsui.Colors) });
 
             var uicolors = new Window(string.Format("Edit {0}", actor.Name), customizationClient) { Movable = true, Closable = true };
 
 
+            var btncolors = new Button("Change colors") { Location = this.PanelSlots.BottomLeft, LeftClickAction = () => uicolors.SetLocation(UIManager.Mouse).Toggle() };
+            this.AddControls(btncolors);
+        }
+        private void InitInvList(Actor actor)
+        {
+            var inv = actor.Inventory;
+
+            Controls.Remove(this.PanelSlots);
+
+            this.PanelSlots.Controls.Clear();
+            this.PanelSlots.Controls.Add(inv.Contents.Gui);
+
+            this.AddControls(this.PanelSlots);
+
+            var customizationClient = new GroupBox();
+            var colorsui = new GuiCharacterCustomization();
+            colorsui.SetTag(actor);
+            customizationClient.AddControls(colorsui);
+            customizationClient.AddControlsBottomLeft(new Button("Apply", customizationClient.Width) { LeftClickAction = () => PacketEditAppearance.Send(actor, colorsui.Colors) });
+
+            var uicolors = new Window(string.Format("Edit {0}", actor.Name), customizationClient) { Movable = true, Closable = true };
             var btncolors = new Button("Change colors") { Location = this.PanelSlots.BottomLeft, LeftClickAction = () => uicolors.SetLocation(UIManager.Mouse).Toggle() };
             this.AddControls(btncolors);
         }
@@ -92,8 +112,8 @@ namespace Start_a_Town_
                 window = Instance.GetWindow();
             Instance.Tag = actor;
             window.Title = string.Format("{0} inventory", actor.Name);
-            Instance.InitInvSlots(actor);
-
+            //Instance.InitInvSlots(actor);
+            Instance.InitInvList(actor);
             Instance.RemoveControls(Instance.EquipmentSlots);
             Instance.EquipmentSlots.Refresh(actor);
             Instance.EquipmentSlots.Location = Instance.PanelSlots.TopRight;

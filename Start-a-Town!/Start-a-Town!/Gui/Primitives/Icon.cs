@@ -22,6 +22,8 @@ namespace Start_a_Town_.UI
         public Texture2D SpriteSheet;
         public Rectangle SourceRect;
         public IAtlasNodeToken AtlasToken { get; set; }
+        public int Width => this.SourceRect.Width;
+        public int Height => this.SourceRect.Height;
 
         public Icon(Texture2D spritesheet, uint index, int size)
         {

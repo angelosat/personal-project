@@ -496,7 +496,7 @@ namespace Start_a_Town_.Net
                 case PacketType.SpawnChildObject:
                     Network.Deserialize(msg.Payload, r =>
                     {
-                        GameObject obj = GameObject.CreatePrefab(r);
+                        GameObject obj = GameObject.Create(r);
                         if (obj.RefID == 0)
                             throw new Exception("Uninstantiated entity");
                         if (!Instance.NetworkObjects.ContainsKey(obj.RefID))
@@ -514,7 +514,7 @@ namespace Start_a_Town_.Net
                     return;
 
                 case PacketType.InstantiateObject: //register netID to list without spawning
-                    var ent = Network.Deserialize<GameObject>(msg.Payload, GameObject.CreatePrefab);
+                    var ent = Network.Deserialize<GameObject>(msg.Payload, GameObject.Create);
                     ent.Instantiate(Instance.Instantiator);
                     return;
 

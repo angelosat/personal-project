@@ -47,7 +47,7 @@ namespace Start_a_Town_
                 return btn;
             }
         }
-        GuiCharacterCustomization guiCustomization = new GuiCharacterCustomization();
+        GuiCharacterCustomization GuiCustomization = new();
 
         private void Expand(Actor a, Control editbox)
         {
@@ -90,7 +90,7 @@ namespace Start_a_Town_
                 a.Personality.GetUI().ToPanelLabeled("Traits").AddControlsTopRight(IconButton.CreateRandomizeButton(() => a.Personality.Randomize()).SetAnchor(Vector2.UnitX)),
                 a.Skills.GetUI().ToPanelLabeled("Skills").AddControlsTopRight(IconButton.CreateRandomizeButton(() => a.Skills.Randomize()).SetAnchor(Vector2.UnitX)),
                 a.Attributes.GetUI().ToPanelLabeled("Attributes").AddControlsTopRight(IconButton.CreateRandomizeButton(() => a.Attributes.Randomize()).SetAnchor(Vector2.UnitX)),
-                guiCustomization.SetTag(a));// a));
+                GuiCustomization.SetTag(a));// a));
             editbox.Validate(true);
         }
     }

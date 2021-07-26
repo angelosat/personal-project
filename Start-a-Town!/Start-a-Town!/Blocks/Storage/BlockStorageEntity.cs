@@ -125,7 +125,7 @@ namespace Start_a_Town_
                 var count = r.ReadInt32();
                 for (int i = 0; i < count; i++)
                 {
-                    var obj = GameObject.CreatePrefab(r);
+                    var obj = GameObject.Create(r);
                     this.Contents.Add(obj);
                 }
             }

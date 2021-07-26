@@ -231,7 +231,7 @@ namespace Start_a_Town_
                 t => new Button(t.GetBlock().Name,
                     () =>
                     {
-                        SelectionManager.Refresh(t);
+                        SelectionManager.Select(t);
                         Ingame.Instance.Camera.CenterOn(t.Global);
                     }));
            

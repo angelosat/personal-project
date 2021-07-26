@@ -206,9 +206,9 @@ namespace Start_a_Town_.Components
             var shit = containerTag.Value as Dictionary<string, SaveTag>;
             containerTag.TryGetTagValue<int>("ID", out this.ID);
             var itemList = shit["Items"].Value as Dictionary<string, SaveTag>;
-            foreach (SaveTag itemTag in itemList.Values)
+            foreach (var itemTag in itemList.Values)
             {
-                if (itemTag.Value == null)
+                if (itemTag.Value is null)
                     continue;
                 int index = byte.Parse(itemTag.Name);
                 var slot = GameObjectSlot.Create(itemTag);
@@ -222,8 +222,7 @@ namespace Start_a_Town_.Components
         internal void Dispose()
         {
             foreach (var slot in this.Slots)
-                if (slot.Object != null)
-                    slot.Object.Dispose();
+                slot.Object?.Dispose();
         }
     }
 }

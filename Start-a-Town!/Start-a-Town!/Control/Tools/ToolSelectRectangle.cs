@@ -28,7 +28,7 @@ namespace Start_a_Town_
                 if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
                     SelectionManager.AddToSelection(this.CurrentSelected);
                 else
-                    SelectionManager.Refresh(this.CurrentSelected);
+                    SelectionManager.Select(this.CurrentSelected);
             }
         }
         public override void Update()

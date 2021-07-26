@@ -11,7 +11,8 @@ namespace Start_a_Town_
         readonly PictureBox BodyFrame;
         Actor Actor => this.Tag as Actor;
         public CharacterColors Colors => this.Actor.Sprite.Customization;
-        TableScrollableCompactNewNew<CharacterColor> Table;
+        private readonly TableScrollableCompactNewNew<CharacterColor> Table;
+
         public GuiCharacterCustomization()
             : base("Customize")
         {
@@ -20,8 +21,6 @@ namespace Start_a_Town_
             btnRandomize.Location = this.Label.TopRight;
             btnRandomize.LeftClickAction = () => this.Colors.Randomize();
             this.Controls.Add(btnRandomize);
-
-            //this.Colors = new CharacterColors(actor.Sprite.Customization);
 
             this.BodyFrame = new PictureBox(BodyDef.NpcNew.GetMinimumRectangle(), 2);
 
@@ -60,49 +59,6 @@ namespace Start_a_Town_
             this.Table.ClearItems();
             this.Table.AddItems(this.Colors.Colors.Values);
         }
-        //public GuiCharacterCustomization(Actor actor)
-        //    : base("Customize")
-        //{
-        //    this.AutoSize = true;
-        //    var btnRandomize = IconButton.CreateRandomizeButton();
-        //    btnRandomize.Location = this.Label.TopRight;
-        //    btnRandomize.LeftClickAction = () => this.Colors.Randomize();
-        //    this.Controls.Add(btnRandomize);
-
-        //    this.Colors = new CharacterColors(actor.Sprite.Customization);
-
-        //    this.Actor = actor;
-        //    this.BodyFrame = new PictureBox(actor, 2);
-        //    this.Client.AddControlsBottomLeft(this.BodyFrame.ToPanel());
-
-        //    var picker = new ColorPickerBox();
-        //    var pickerPanel = picker.ToPanelLabeled("");
-
-        //    var table = new TableScrollableCompactNewNew<CharacterColor>(colorsListMaxVisibleItems) { ClientBoxColor = Color.Transparent }
-        //        .AddColumn(null, "Name", 50, c => new Label(c.Name), 0)
-        //        .AddColumn(null, "Color", 16, cc =>
-        //        {
-        //            var btn = new ButtonColor
-        //            {
-        //                SelectedColorFunc = () => cc.Color,
-        //                Tag = cc
-        //            };
-        //            btn.LeftClickAction = () =>
-        //            {
-        //                pickerPanel.Label.Text = string.Format("Choose {0} color", cc.Name);
-        //                var oldColor = cc.Color;
-        //                picker.CancelAction = () => cc.Color = oldColor;
-        //                picker.SelectColor(btn.SelectedColor);
-        //                picker.Callback = c => (btn.Tag as CharacterColor).Color = c;
-        //                picker.ColorChangedFunc = c => cc.Color = c;
-        //                if (!pickerPanel.IsOpen)
-        //                    pickerPanel.SetLocation(btn.ScreenLocation + Vector2.UnitX * btn.Width).Show();
-        //            };
-        //            return btn;
-        //        }, 0);
-        //    table.AddItems(this.Colors.Colors.Values);
-        //    this.Client.AddControlsTopRight(table);
-        //}
         public override void Update()
         {
             base.Update();

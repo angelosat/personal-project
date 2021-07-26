@@ -639,7 +639,10 @@ namespace Start_a_Town_.UI
             this.Location = value;
             return this;
         }
-
+        public virtual Control SetLocation(int x, int y)
+        {
+            return this.SetLocation(new(x, y));
+        }
         public virtual void SetOpacity(float value, bool children = false, params Control[] exclude)
         {
             if (!exclude.Contains(this))

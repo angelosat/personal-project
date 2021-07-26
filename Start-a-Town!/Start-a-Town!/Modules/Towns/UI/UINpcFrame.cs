@@ -30,7 +30,7 @@ namespace Start_a_Town_
                 if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
                     SelectionManager.AddToSelection(new TargetArgs(actor));
                 else
-                    SelectionManager.Refresh(new TargetArgs(actor));
+                    SelectionManager.Select(new TargetArgs(actor));
             };
             this.Label = new Label()
             {

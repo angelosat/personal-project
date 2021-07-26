@@ -127,30 +127,31 @@ namespace Start_a_Town_.UI
             }
         }
 
-        public static void Refresh(TargetArgs target)
+        public static void Select(TargetArgs target)
         {
-            Instance.Select(target);
+            Instance.SelectInternal(target);
         }
-        public static void Refresh(MapBase map, BoundingBox box)
+        public static void Select(MapBase map, BoundingBox box)
         {
-            Refresh(map.GetObjects(box).Select(s => new TargetArgs(s)));
+            Select(map.GetObjects(box).Select(s => new TargetArgs(s)));
         }
-        internal static void Refresh(IEnumerable<GameObject> entities)
+        public static void Select(IEnumerable<GameObject> entities)
         {
-            Refresh(entities.Select(e => new TargetArgs(e)));
+            Select(entities.Select(e => new TargetArgs(e)));
         }
-        public static void Refresh(IEnumerable<TargetArgs> targets)
+        public static void Select(IEnumerable<TargetArgs> targets)
         {
-            Instance.Select(targets);
+            Instance.SelectInternal(targets);
         }
-        //public static void Refresh(IEnumerable<IntVec3> cells)
+
+        //public static void Select(IEnumerable<IntVec3> cells)
         //{
         //    Instance.Select(cells.Select(c => new TargetArgs(c)));
         //}
         internal static void SelectAllVisible(ItemDef def)
         {
             var objects = Ingame.Instance.Scene.ObjectsDrawn.Where(i => i.Def == def).Select(o => new TargetArgs(o));
-            Refresh(objects);
+            Select(objects);
         }
         internal static void AddToSelection(IEnumerable<GameObject> targets)
         {
@@ -159,15 +160,15 @@ namespace Start_a_Town_.UI
         internal static void AddToSelection(IEnumerable<TargetArgs> targets)
         {
             var list = Instance.MultipleSelected.Where(t => !targets.Any(t2 => t2.IsEqual(t))).Concat(targets).ToList();
-            Instance.Select(list);
+            Instance.SelectInternal(list);
         }
         internal static void AddToSelection(TargetArgs target)
         {
             var existing = Instance.MultipleSelected.FirstOrDefault(t => t.IsEqual(target));
             if (existing != null)
-                Instance.Select(Instance.MultipleSelected.Except(new TargetArgs[] { existing }));
+                Instance.SelectInternal(Instance.MultipleSelected.Except(new TargetArgs[] { existing }));
             else
-                Instance.Select(Instance.MultipleSelected.Concat(new TargetArgs[] { target }));
+                Instance.SelectInternal(Instance.MultipleSelected.Concat(new TargetArgs[] { target }));
         }
         private IEnumerable<TargetArgs> Filter(IEnumerable<TargetArgs> targets)
         {
@@ -176,15 +177,15 @@ namespace Start_a_Town_.UI
             return targets;
         }
 
-        private void Select(IEnumerable<TargetArgs> targets)
+        private void SelectInternal(IEnumerable<TargetArgs> targets)
         {
-            this.Select(TargetArgs.Null);
+            this.SelectInternal(TargetArgs.Null);
             this.MultipleSelected = this.Filter(targets).Where(t => t.Exists).ToList();
             if (this.MultipleSelected.Count == 0)
                 return;
             if (this.MultipleSelected.Count == 1)
             {
-                this.Select(targets.First());
+                this.SelectInternal(targets.First());
                 return;
             }
 
@@ -194,7 +195,7 @@ namespace Start_a_Town_.UI
             this.PanelInfo.RemoveControls(this.BoxIcons);
             this.Show();
         }
-        private void Select(TargetArgs target)
+        private void SelectInternal(TargetArgs target)
         {
             Renderer.Invalidate();
 
@@ -355,7 +356,7 @@ namespace Start_a_Town_.UI
         {
             base.Update();
             if (this.SelectedSource is not null && this.SelectedSource.Type == TargetType.Entity && this.SelectedSource.Object.IsDisposed)
-                this.Select(TargetArgs.Null);
+                this.SelectInternal(TargetArgs.Null);
 
             if (this.Selectable is null)
             {
@@ -366,7 +367,7 @@ namespace Start_a_Town_.UI
             }
 
             if (!this.Selectable.Exists)
-                this.Select(TargetArgs.Null);
+                this.SelectInternal(TargetArgs.Null);
 
         }
         internal override void OnGameEvent(GameEvent e)
@@ -442,7 +443,7 @@ namespace Start_a_Town_.UI
         {
             if (!Instance.MultipleSelected.Any() && Instance.SelectedSource.Type == TargetType.Null)
                 return false;
-            Instance.Select(TargetArgs.Null);
+            Instance.SelectInternal(TargetArgs.Null);
             return true;
         }
 

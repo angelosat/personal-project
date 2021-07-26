@@ -312,16 +312,10 @@ namespace Start_a_Town_
         }
         public bool IsForbidden;
         public bool IsSpawned => this._map is not null;
-        public bool IsReserved { get { return this.Town.ReservationManager.IsReserved(this); } }
-        public bool IsPlayerControlled { get { return this.Net.GetPlayers().Any(p => p.ControllingEntity == this); } }
-        public virtual bool IsHaulable
-        {
-            get { return this.Def.Haulable; }
-        }
-        internal bool IsFuel
-        {
-            get { return this.Material?.Fuel.Value > 0; }
-        }
+        public bool IsReserved => this.Town.ReservationManager.IsReserved(this);
+        public bool IsPlayerControlled => this.Net.GetPlayers().Any(p => p.ControllingEntity == this); 
+        public virtual bool IsHaulable => this.Def.Haulable;
+        internal bool IsFuel => this.Material?.Fuel.Value > 0; 
 
         public GameObjectSlot Slot;
         #endregion
@@ -816,7 +810,7 @@ namespace Start_a_Town_
             }
         }
 
-        public static GameObject CreatePrefab(BinaryReader r)
+        public static GameObject Create(BinaryReader r)
         {
             string defName = r.ReadString();
             var def = Start_a_Town_.Def.GetDef<ItemDef>(defName);
@@ -1545,7 +1539,7 @@ namespace Start_a_Town_
                 throw new Exception();
             }
 
-            var obj = CreatePrefab(r);
+            var obj = Create(r);
             net.Instantiate(obj);
         }
         public void SyncSetStackSize(int v)

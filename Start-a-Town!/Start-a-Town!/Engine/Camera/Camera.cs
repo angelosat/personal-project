@@ -1237,20 +1237,6 @@ namespace Start_a_Town_
             mySB.Flush();
         }
 
-        public void HandleKeyPress(KeyPressEventArgs e) { }
-        public void HandleKeyDown(KeyEventArgs e)
-        {
-            if (e.Handled)
-                return;
-
-            if (e.KeyValue == (int)GlobalVars.KeyBindings.RotateMapLeft)
-                this.Rotation += 1;
-            if (e.KeyValue == (int)GlobalVars.KeyBindings.RotateMapRight)
-                this.Rotation -= 1;
-            if (e.KeyValue == (int)Keys.W)
-                if (InputState.IsKeyDown(Keys.LMenu))
-                    Engine.HideWalls = !Engine.HideWalls;
-        }
         public void HandleKeyUp(KeyEventArgs e)
         {
             if (e.Handled)

@@ -236,11 +236,13 @@ namespace Start_a_Town_
 
             var ndepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorndepth");
             var wdepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwdepth");
+            var nnormals = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doornnormals");
+            var wnormals = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwnormals");
 
             Orientations[0] = Atlas.Load("blocks/doors/doors", BlockDepthMap, NormalMap);
-            Orientations[1] = Atlas.Load("blocks/doors/doorw", wdepth, NormalMap);
-            Orientations[2] = Atlas.Load("blocks/doors/doorn", ndepth, NormalMap);
-            Orientations[3] = Atlas.Load("blocks/doors/doore", BlockDepthMap, NormalMap);
+            Orientations[1] = Atlas.Load("blocks/doors/doore", BlockDepthMap, NormalMap);
+            Orientations[2] = Atlas.Load("blocks/doors/doorn", ndepth, nnormals);
+            Orientations[3] = Atlas.Load("blocks/doors/doorw", wdepth, wnormals);
 
             this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
         }

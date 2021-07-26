@@ -18,8 +18,10 @@ namespace Start_a_Town_
 
         static ToolManager()
         {
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle entity mouseover", ToggleEntityTargeting, System.Windows.Forms.Keys.V);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Ignore entity mouse hover", ToggleEntityTargeting, System.Windows.Forms.Keys.V);
             HotkeyManager.RegisterHotkey(HotkeyContextDebug, "Toggle draw regions", ToggleDrawRegions, System.Windows.Forms.Keys.F7);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Rotate camera left", delegate { Ingame.CurrentMap.Camera.RotateClockwise(); }, System.Windows.Forms.Keys.Oemcomma);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Rotate camera right", delegate { Ingame.CurrentMap.Camera.RotateCounterClockwise(); }, System.Windows.Forms.Keys.OemPeriod);
         }
         internal ControlTool GetDefaultTool()
         {

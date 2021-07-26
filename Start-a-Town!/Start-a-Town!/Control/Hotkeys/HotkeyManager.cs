@@ -162,8 +162,9 @@ namespace Start_a_Town_
             foreach(var hkn in hotkeyNodes)
             {
                 var label = hkn.Attribute("Label").Value;
-                var hotkey = byLabel[label];
-                hotkey.XRead(hkn);
+                //var hotkey = byLabel[label];
+                if (byLabel.TryGetValue(label, out var hotkey))
+                    hotkey.XRead(hkn);
             }
         }
     }

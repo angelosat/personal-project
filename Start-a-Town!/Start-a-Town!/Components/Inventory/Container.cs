@@ -203,9 +203,9 @@ namespace Start_a_Town_.Components
         }
         public Container Load(SaveTag containerTag)
         {
-            var shit = containerTag.Value as Dictionary<string, SaveTag>;
+            var dic = containerTag.Value as Dictionary<string, SaveTag>;
             containerTag.TryGetTagValue<int>("ID", out this.ID);
-            var itemList = shit["Items"].Value as Dictionary<string, SaveTag>;
+            var itemList = dic["Items"].Value as Dictionary<string, SaveTag>;
             foreach (var itemTag in itemList.Values)
             {
                 if (itemTag.Value is null)

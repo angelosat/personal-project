@@ -126,7 +126,7 @@ namespace Start_a_Town_
         public virtual void GetSelectionInfo(IUISelection info)
         {
             info.AddIcon(IconCameraFollow);
-            this.Map.World.OnTargetSelected(info, this);
+            this.Map?.World.OnTargetSelected(info, this);
             foreach (var comp in this.Components.Values)
                 comp.GetSelectionInfo(info, this);
         }
@@ -287,6 +287,9 @@ namespace Start_a_Town_
         /// <returns></returns>
         public GameObject SetPosition(Vector3 nextGlobal) // TODO: merge this with SetGlobal
         {
+            if (this.Map is null) // entity has despawned on client before snapshot received?
+                return this;
+
             if (this.Map.IsSolid(nextGlobal))// + Vector3.UnitZ * 0.01f))// TODO: FIX THIS
                 return this; // TODO: FIX: problem when desynced from server, block might be empty on server but solid on client
 
@@ -776,6 +779,7 @@ namespace Start_a_Town_
             GetTooltip(tooltip);
         }
         Sprite CachedSprite;
+        internal IList<GameObject> Container;
 
         public Sprite GetSprite()
         {
@@ -893,13 +897,11 @@ namespace Start_a_Town_
             data.Add(this.RefID.Save("InstanceID"));
             data.Add(this._StackSize.Save("Stack"));
             var compData = new SaveTag(SaveTag.Types.Compound, "Components");
-            foreach (KeyValuePair<string, EntityComponent> comp in this.Components)
+            foreach (var comp in this.Components)
             {
                 var compSave = comp.Value.SaveAs(comp.Key);
-                if (compSave is null)
-                {
+                if (compSave is not null)
                     compData.Add(compSave);
-                }
             }
             data.Add(compData);
             return data;
@@ -917,18 +919,14 @@ namespace Start_a_Town_
             var obj = def.Create();
             tag.TryGetTagValue("InstanceID", out obj.RefID);
             tag.TryGetTagValue<int>("Stack", v=> obj._StackSize = v);
-            Dictionary<string, SaveTag> compData = tag["Components"].Value as Dictionary<string, SaveTag>;
-            foreach (SaveTag compTag in compData.Values)
+            var compData = tag["Components"].Value as Dictionary<string, SaveTag>;
+            foreach (var compTag in compData.Values)
             {
                 if (compTag.Value == null)
-                {
                     continue;
-                }
 
                 if (obj.Components.ContainsKey(compTag.Name))
-                {
                     obj[compTag.Name].Load(obj, compTag);
-                }
             }
             obj.ObjectLoaded();
             return obj;
@@ -936,11 +934,8 @@ namespace Start_a_Town_
 
         public IEnumerable<ContextAction> GetInventoryContextActions(GameObject actor)
         {
-            if (this.Def.GearType != null)
-            {
+            if (this.Def.GearType is not null)
                 yield return new ContextAction(() => "Equip", () => PacketInventoryEquip.Send(this.Net, actor.RefID, this.RefID));
-            }
-
             yield return new ContextAction(() => "Drop", () => PacketInventoryDrop.Send(this.Net, actor.RefID, this.RefID, this.StackSize));
         }
 
@@ -948,10 +943,7 @@ namespace Start_a_Town_
         {
             var list = new Dictionary<PlayerInput, Interaction>();
             foreach (var item in this.Components)
-            {
                 item.Value.GetPlayerActionsWorld(this, list);
-            }
-
             return list;
         }
 
@@ -959,10 +951,7 @@ namespace Start_a_Town_
         {
             var list = new List<ContextAction>();
             foreach (var item in this.Components)
-            {
                 item.Value.GetRightClickActions(this, list);
-            }
-
             return list;
         }
 
@@ -970,10 +959,7 @@ namespace Start_a_Town_
         {
             var list = new List<Interaction>();
             foreach (var item in this.Components)
-            {
                 item.Value.GetHauledActions(this, a, list);
-            }
-
             return list;
         }
 
@@ -984,9 +970,7 @@ namespace Start_a_Town_
             {
                 var a = c.Value.GetContextRB(this, player);
                 if (a is null)
-                {
                     list.Add(a);
-                }
             }
             return list.FirstOrDefault();
         }
@@ -1164,11 +1148,7 @@ namespace Start_a_Town_
             return ToolAbilityComponent.HasSkill(this, skill);
         }
 
-        internal GameObjectSlot GetEquipmentSlot(GearType.Types type)
-        {
-            return GearComponent.GetSlot(this, GearType.Dictionary[type]);
-        }
-
+        
         internal GameObject GetHauled()
         {
             return PersonalInventoryComponent.GetHauling(this).Object;
@@ -1215,23 +1195,7 @@ namespace Start_a_Town_
             return this.GetComponent<NeedsComponent>().NeedsNew.First(n => n.NeedDef.Name == needName);
         }
      
-        internal float GetToolWorkAmount(int skillID)
-        {
-            var tool = this.GetEquipmentSlot(GearType.Types.Mainhand).Object;
-            if (tool is null)
-            {
-                return 1;
-            }
-
-            var ability = tool.Def.ToolProperties?.Ability;
-
-            if (!ability.HasValue)
-            {
-                throw new Exception();
-            }
-
-            return ability.Value.Efficiency;
-        }
+        
 
         public bool CanReachNew(GameObject obj)
         {
@@ -1535,9 +1499,7 @@ namespace Start_a_Town_
         private static void SyncInstantiate(INetwork net, BinaryReader r)
         {
             if (net is Server)
-            {
                 throw new Exception();
-            }
 
             var obj = Create(r);
             net.Instantiate(obj);
@@ -1546,9 +1508,7 @@ namespace Start_a_Town_
         {
             var net = this.Net;
             if (net is Server)
-            {
                 this.SetStackSize(v);
-            }
 
             var w = net.GetOutgoingStream();
             w.Write(PacketSyncSetStacksize);
@@ -1560,13 +1520,9 @@ namespace Start_a_Town_
             var obj = net.GetNetworkObject(r.ReadInt32());
             var value = r.ReadInt32();
             if (net is Client)
-            {
                 obj.SetStackSize(value);
-            }
             else
-            {
                 obj.SyncSetStackSize(value);
-            }
         }
         public void Absorb(GameObject obj)
         {

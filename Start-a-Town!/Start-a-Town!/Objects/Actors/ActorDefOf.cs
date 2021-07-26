@@ -49,7 +49,7 @@
             }
         };
 
-        static public readonly ItemDef Npc = new ItemDef("Npc")
+        static public readonly ItemDef Npc = new("Npc")
         {
             ItemClass = typeof(Actor),
             Description = "A person.",

@@ -51,11 +51,12 @@ namespace Start_a_Town_.Components
         }
         internal override void Load(SaveTag data)
         {
+            //data.TryGetTagValue<Vector3>("Global", v => this.Global = v);
+            //data.TryGetTagValue<Vector3>("Velocity", v => this.Velocity = v);
             data.TryGetTag("Global", t => this.Global = t.LoadVector3());
             data.TryGetTag("Velocity", t => this.Velocity = t.LoadVector3());
             data.TryGetTag("Direction", t => this.Direction = t.LoadVector2());
         }
-
         public override void Write(BinaryWriter w)
         {
             w.Write(this.Exists);

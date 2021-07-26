@@ -37,7 +37,8 @@ namespace Start_a_Town_.UI
             Panel_Buttons.Anchor = Vector2.UnitX / 2;
 
             this.Client.Controls.Add(Panel_Input, Panel_Buttons);
-            this.SnapToScreenCenter();
+            //this.SnapToScreenCenter();
+            this.AnchorToScreenCenter();
         }
         public DialogInput(string title, Action<DialogInput> callback, int maxlength = int.MaxValue, string initialText = "")
         {
@@ -66,7 +67,8 @@ namespace Start_a_Town_.UI
             Panel_Buttons.Anchor = Vector2.UnitX / 2;
 
             this.Client.Controls.Add(Panel_Input, Panel_Buttons);
-            this.SnapToScreenCenter();
+            //this.SnapToScreenCenter();
+            this.AnchorToScreenCenter();
         }
         public delegate bool Validator<TU>(string text, out TU output);
         const int GUIWidth = 128;

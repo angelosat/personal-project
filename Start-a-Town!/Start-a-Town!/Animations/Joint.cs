@@ -21,7 +21,7 @@ namespace Start_a_Town_.Animations
         }
         public Vector2 Position = Vector2.Zero;
         public Func<GameObject, GameObjectSlot> SlotGetter = (entity) => null;
-        public Func<GameObject, GameObject> AttachmentFunc;
+        public Func<Entity, GameObject> AttachmentFunc;
 
         GameObjectSlot Slot;
         public void MakeChildOf(GameObject parent)
@@ -83,12 +83,7 @@ namespace Start_a_Town_.Animations
             this.Bone = bone;
         }
 
-        internal GameObject GetAttachment(GameObject parent)
-        {
-            return this.AttachmentFunc?.Invoke(parent);
-        }
-        
-        internal bool TryGetBone(out Bone next, GameObject parent)
+        internal bool TryGetBone(out Bone next, Entity parent)
         {
             if (this.Bone != null)
             {

@@ -488,13 +488,25 @@ namespace Start_a_Town_
         }
         internal Entity GetEquipmentSlot(GearType type)
         {
-            return GearComponent.GetSlot(this, type).Object as Entity;
+            return this.Gear.GetSlot(type).Object as Entity;
         }
         public ButtonNew GetButton(int width, Func<string> bottomText, Action onLeftClick)
         {
             return ButtonNew.CreateBig(onLeftClick, width, this.RenderIcon(), () => this.Name, bottomText);
         }
+        internal float GetToolWorkAmount(int skillID)
+        {
+            var tool = this.Gear.GetSlot(GearType.Mainhand).Object;
+            if (tool is null)
+                return 1;
 
+            var ability = tool.Def.ToolProperties?.Ability;
+
+            if (!ability.HasValue)
+                throw new Exception();
+
+            return ability.Value.Efficiency;
+        }
         public int EvaluateItem(Entity item)
         {
             var score = ItemUsefulnessEvaluator.Evaluate(this, item);

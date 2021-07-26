@@ -146,7 +146,7 @@ namespace Start_a_Town_.UI
             return new IconButton(icon)
             {
                 BackgroundTexture = UIManager.Icon16Background,
-                HoverText = "hoverText",
+                HoverText = hoverText,
                 LeftClickAction = leftClickAction ?? (() => { })
             };
         }
@@ -156,7 +156,7 @@ namespace Start_a_Town_.UI
             {
                 Font = UIManager.Font,
                 BackgroundTexture = UIManager.Icon16Background,
-                HoverText = "hoverText",
+                HoverText = hoverText,
                 LeftClickAction = leftClickAction ?? (() => { })
             };
         }

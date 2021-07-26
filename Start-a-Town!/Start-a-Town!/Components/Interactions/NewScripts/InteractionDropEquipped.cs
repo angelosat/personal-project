@@ -18,7 +18,7 @@ namespace Start_a_Town_
         
         internal override void InitAction(Actor a, TargetArgs t)
         {
-            var slot = GearComponent.GetSlot(a, this.Type);
+            var slot = a.Gear.GetSlot(this.Type);
             if (slot.Object == null)
                 return;
             slot.Object.Spawn(a.Map, a.Global + new Vector3(0, 0, a.Physics.Height));

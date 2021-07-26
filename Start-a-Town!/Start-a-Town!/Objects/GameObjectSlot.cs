@@ -73,10 +73,9 @@ namespace Start_a_Town_
                 OnObjectChanged();
                 if (value != null)
                 {
+                    value.Container = null;
                     if (value.Slot is not null && value.Slot != this)
-                    {
                         value.Slot.Clear();
-                    }
                     value.Slot = this;
                     value.Parent = this.Parent;
                 }

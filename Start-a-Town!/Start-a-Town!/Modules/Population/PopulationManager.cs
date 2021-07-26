@@ -207,14 +207,16 @@ namespace Start_a_Town_
         }
         public void ResolveReferences()
         {
-            foreach (var actor in this.ActorsAdventuring.Select(p => p.Actor)) // i added this to add visitor needs to existing visitors because I wasn't saving them in the needscomponent class
+            foreach (var props in this.ActorsAdventuring) // i added this to add visitor needs to existing visitors because I wasn't saving them in the needscomponent class
             {
+                var actor = props.Actor;
                 // TODO move this somewhere else
                 if(this.World.Map.Net is Server) 
                     if (!actor.GetNeeds(VisitorNeedsDefOf.NeedCategoryVisitor).Any())
                             MakeVisitor(actor);
-                if (!actor.Exists) // hacky. in progress of finding best way to save unspawned actors
+                if (!actor.Exists) // hacky. in process of finding best way to save unspawned actors
                     this.World.Map.Net.Instantiate(actor);
+                props.OffsiteArea = OffsiteAreaDefOf.Forest; // HACK
             }
         }
         public SaveTag Save(string name = "")

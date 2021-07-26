@@ -880,7 +880,6 @@
     <Compile Include="Gui\LoadingWidget.cs" />
     <Compile Include="Graphics\AtlasWithDepth.cs" />
     <Compile Include="Graphics\Atlas.cs" />
-    <Compile Include="Animations\BodyTemplates.cs" />
     <Compile Include="Graphics\Borders.cs" />
     <Compile Include="Graphics\AtlasWithDepth.Node.cs" />
     <Compile Include="Graphics\Atlas.Node.cs" />

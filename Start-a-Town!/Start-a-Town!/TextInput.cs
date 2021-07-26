@@ -186,8 +186,8 @@ namespace Start_a_Town_
 
         private int ProcessMessages(int nCode, int wParam, ref Message msg)
         {
-            try
-            {
+            //try
+            //{
                 // Check if we must process this message (and whether it has been retrieved via GetMessage):
                 if (nCode == 0 && wParam == 1)
                 {
@@ -253,8 +253,8 @@ namespace Start_a_Town_
 
                 // Call next hook in chain:
                 return CallNextHookEx(0, nCode, wParam, ref msg);
-            }
-            catch (Exception e) { System.Windows.Forms.MessageBox.Show(e.ToString()); return CallNextHookEx(0, nCode, wParam, ref msg); }
+            //}
+            //catch (Exception e) { System.Windows.Forms.MessageBox.Show(e.ToString()); return CallNextHookEx(0, nCode, wParam, ref msg); }
         }
 
 

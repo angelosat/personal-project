@@ -400,7 +400,7 @@ namespace Start_a_Town_
             }
         }
 
-        public void DrawTreeAnimationDeltas(GameObject parent, CharacterColors customization, List<Animation> animations, MySpriteBatch sb, Vector2 screenLoc, Color sky, Color block, Color tint, Color fog, float angle, float zoom, int orientation, SpriteEffects sprFx, float alpha, float depth)
+        public void DrawTreeAnimationDeltas(Entity parent, CharacterColors customization, List<Animation> animations, MySpriteBatch sb, Vector2 screenLoc, Color sky, Color block, Color tint, Color fog, float angle, float zoom, int orientation, SpriteEffects sprFx, float alpha, float depth)
         {
             var material = this.Material;
             Sprite sprite = SpriteSlot == null ? this.GetSprite(orientation) : (SpriteSlot.HasValue ? SpriteSlot.Object.Body.Sprite : null);
@@ -680,7 +680,7 @@ namespace Start_a_Town_
 
             mysb.Flush();
         }
-        internal RenderTarget2D RenderIcon(GameObject parent, float scale = 1)
+        internal RenderTarget2D RenderIcon(Entity parent, float scale = 1)
         {
             var minrect = GetMinimumRectangle();
             // same as gameobject.drawicon
@@ -719,7 +719,7 @@ namespace Start_a_Town_
             return texture;
         }
 
-        internal void RenderIcon(GameObject parent, RenderTarget2D texture, CharacterColors overlayColors = null)
+        internal void RenderIcon(Entity parent, RenderTarget2D texture, CharacterColors overlayColors = null)
         {
             var minrect = GetMinimumRectangle();
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;

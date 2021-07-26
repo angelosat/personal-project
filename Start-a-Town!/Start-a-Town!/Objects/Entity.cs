@@ -6,7 +6,12 @@ namespace Start_a_Town_
 {
     public class Entity : GameObject
     {
-        private SpriteComponent _Sprite;
+        private SpriteComponent _sprite;
+        public SpriteComponent Sprite => this._sprite ??= this.GetComponent<SpriteComponent>();
+
+        GearComponent _gear;
+        public GearComponent Gear => this._gear ??= this.GetComponent<GearComponent>();
+
         public override GameObject Create()
         {
             return new Entity();
@@ -20,17 +25,11 @@ namespace Start_a_Town_
         {
             Def = def;
         }
-
-        public SpriteComponent Sprite
+        internal GameObjectSlot GetEquipmentSlot(GearType.Types type)
         {
-            get
-            {
-                if (this._Sprite == null)
-                    this._Sprite = this.GetComponent<SpriteComponent>(); 
-                return this._Sprite;
-            }
-
+            return this.Gear.GetSlot(GearType.Dictionary[type]);
         }
+
         public Entity SetMaterial(BoneDef bone, MaterialDef mat)
         {
             this.Sprite.SetMaterial(bone, mat);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
@@ -12,6 +13,7 @@ namespace Start_a_Town_.UI
         readonly List<Column> Columns = new();
         public Action<TObject> ItemChangedFunc = (item) => { };
         public ObservableCollection<TObject> List;
+        static readonly Color DefaultRowColor = Color.SlateGray * .2f;
 
         TableObservable<TObject> Clear()
         {
@@ -51,16 +53,15 @@ namespace Start_a_Town_.UI
             foreach (var i in items)
                 this.AddItem(i);
         }
-
         Control AddItem(TObject item)
         {
-            var row = new GroupBox();
+            var row = new GroupBox() { BackgroundColor = DefaultRowColor };
             int currentX = 0;
             foreach (var col in this.Columns)
             {
                 row.AddControls(col.ControlGetter(item).SetLocation(currentX, 0)
                                                        .SetTag(item));
-                currentX = col.Width;
+                currentX += col.Width;
             }
             this.AddControlsBottomLeft(row);
             row.Location.Y += Spacing;

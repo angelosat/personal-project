@@ -74,6 +74,7 @@ namespace Start_a_Town_.UI
 
         public Control AnchorToScreenCenter()
         {
+            this.Location = Vector2.Zero;
             this.LocationFunc = () => UIManager.Center;
             this.Anchor = new(.5f);
             return this;

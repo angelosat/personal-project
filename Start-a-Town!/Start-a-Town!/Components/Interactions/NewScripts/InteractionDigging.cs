@@ -88,7 +88,7 @@ namespace Start_a_Town_
         public void Done(Actor a, TargetArgs t)
         {
             this.Block.Break(a.Map, t.Global);
-            var tool = GearComponent.GetSlot(a, GearType.Mainhand).Object;
+            var tool = a.Gear.GetSlot(GearType.Mainhand).Object;
             this.EmitBreak(a);
         }
         private void EmitStrike(Actor a)

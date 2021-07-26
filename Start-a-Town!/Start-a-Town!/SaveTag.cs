@@ -133,8 +133,8 @@ namespace Start_a_Town_
         /// <param name="value">If the type is compound, the value is dropped unless it's a list of tags. 
         /// If the type is list, then the value can either be a list of tags (from which the type of the list is derived from the first element), 
         /// or the type of the list.</param>
-        public SaveTag(Types type, string name = "", Object value = null) : this((byte)type, name, value) { }
-        SaveTag(byte type, string name = "", Object value = null)
+        public SaveTag(Types type, string name = "", object value = null) : this((byte)type, name, value) { }
+        SaveTag(byte type, string name = "", object value = null)
         {
             switch (type)
             {
@@ -241,10 +241,10 @@ namespace Start_a_Town_
                     writer.Write((byte)0);
                     break;
                 case 11:
-                    writer.Write((UInt16)this.Value);
+                    writer.Write((ushort)this.Value);
                     break;
                 case 12:
-                    writer.Write((UInt32)this.Value);
+                    writer.Write((uint)this.Value);
                     break;
                 case 13:
                     writer.Write((bool)this.Value);
@@ -375,11 +375,14 @@ namespace Start_a_Town_
         public IntVec3 LoadVector3(string name)
         {
             var tag = this[name];
-            return new Vector3((float)tag["X"].Value, (float)tag["Y"].Value, (float)tag["Z"].Value);
+            return tag.LoadVector3();
         }
         public Vector3 LoadVector3()
         {
-            return new Vector3((float)this["X"].Value, (float)this["Y"].Value, (float)this["Z"].Value);
+            if(this.Value is Vector3)
+                return (Vector3)this.Value;
+            else
+                return new Vector3((float)this["X"].Value, (float)this["Y"].Value, (float)this["Z"].Value);
         }
         public List<Vector3> LoadListVector3()
         {

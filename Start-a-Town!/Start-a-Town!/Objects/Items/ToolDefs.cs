@@ -32,6 +32,7 @@ namespace Start_a_Town_
             GearType = GearType.Mainhand,
             ToolProperties = new ItemToolDef(new ToolAbility(ToolAbilityDef.Digging, 5)).AssociateJob(JobDefOf.Digger),
             DefaultMaterial = MaterialDefOf.Iron,
+            Factory = ItemFactory.CreateTool,
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.ShovelHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                             .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.ShovelHead) { DrawMaterialColor = true }),
@@ -52,6 +53,7 @@ namespace Start_a_Town_
             MadeFromMaterials = true,
             DefaultMaterial = MaterialDefOf.Iron,
             ToolProperties = new ItemToolDef(new ToolAbility(ToolAbilityDef.Chopping, 5)).AssociateJob(JobDefOf.Lumberjack),
+            Factory = ItemFactory.CreateTool,
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             GearType = GearType.Mainhand,
             BaseValue = 10,
@@ -76,6 +78,7 @@ namespace Start_a_Town_
             MadeFromMaterials = true,
             DefaultMaterial = MaterialDefOf.Iron,
             ToolProperties = new ItemToolDef(new ToolAbility(ToolAbilityDef.Building, 5)).AssociateJob(JobDefOf.Builder),
+            Factory = ItemFactory.CreateTool,
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.HammerHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                     .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.HammerHead) { DrawMaterialColor = true }),
@@ -96,6 +99,7 @@ namespace Start_a_Town_
             DefaultSprite = ItemContent.PickaxeFull,
             DefaultMaterial = MaterialDefOf.Iron,
             ToolProperties = new ItemToolDef(new ToolAbility(ToolAbilityDef.Mining, 5)).AssociateJob(JobDefOf.Miner),
+            Factory = ItemFactory.CreateTool,
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             BaseValue = 10,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.PickaxeHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
@@ -118,6 +122,7 @@ namespace Start_a_Town_
             DefaultSprite = ItemContent.HandsawFull,
             DefaultMaterial = MaterialDefOf.Iron,
             ToolProperties = new ItemToolDef(new ToolAbility(ToolAbilityDef.Carpentry, 5)).AssociateJob(JobDefOf.Carpenter),
+            Factory = ItemFactory.CreateTool,
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.HandsawHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                     .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.HandsawHead) { DrawMaterialColor = true }),
@@ -139,6 +144,7 @@ namespace Start_a_Town_
             DefaultSprite = ItemContent.HoeFull,
             DefaultMaterial = MaterialDefOf.Iron,
             ToolProperties = new ItemToolDef(new ToolAbility(ToolAbilityDef.Argiculture, 5)).AssociateJob(JobDefOf.Farmer),
+            Factory = ItemFactory.CreateTool,
             Randomizer = ItemFactory.CreateToolFromRandomMaterials,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.HandsawHandle, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                     .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.HandsawHead) { DrawMaterialColor = true }),

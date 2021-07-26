@@ -8,7 +8,7 @@ namespace Start_a_Town_.UI
 
         public IngameMenu()
         {
-            this.PanelButtons = new Panel();
+            this.PanelButtons = new();
             this.PanelButtons.AutoSize = true;
             int w = 150;
 
@@ -59,7 +59,7 @@ namespace Start_a_Town_.UI
 
         void exit_Click()
         {
-            MessageBox exitbox = new MessageBox("Quit game", "Are you sure you want to exit the game without saving?", exitbox_Yes, () => { });
+            var exitbox = new MessageBox("Quit game", "Are you sure you want to exit the game without saving?", exitbox_Yes, () => { });
             exitbox.ShowDialog();
         }
 

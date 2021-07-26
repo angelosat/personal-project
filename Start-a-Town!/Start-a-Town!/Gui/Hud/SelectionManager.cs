@@ -249,8 +249,10 @@ namespace Start_a_Town_.UI
             }
             this.SelectedSource = target;
             this.Show();
-            if (target.Type != TargetType.Null)
-                target.Network.EventOccured(Message.Types.SelectedChanged, target);
+            //if (target.Type != TargetType.Null)
+            //    target.Network.EventOccured(Message.Types.SelectedChanged, target);
+            if (target.Type == TargetType.Entity)
+                target.Object.Net.EventOccured(Message.Types.SelectedChanged, target);
             this.WindowManager.OnSelectedTargetChanged(target);
             this.Validate(true);
         }

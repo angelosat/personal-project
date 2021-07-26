@@ -667,7 +667,7 @@ namespace Start_a_Town_.Net
             if (!this.NetworkObjects.TryGetValue(netID, out GameObject o))
                 return false;
             this.NetworkObjects.Remove(netID);
-            if (o.Exists)
+            if (o.IsSpawned)
                 o.Despawn();
             foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)
                 this.DisposeObject(child);
@@ -687,7 +687,6 @@ namespace Start_a_Town_.Net
 
         public void Instantiator(GameObject ob)
         {
-            ob.Map = this.Map;
             ob.Net = this;
             Instance.NetworkObjects.Add(ob.RefID, ob);
         }

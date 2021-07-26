@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    class GearComponent : EntityComponent
+    public class GearComponent : EntityComponent
     {
         public override string ComponentName => "Gear";
 
@@ -58,14 +58,14 @@ namespace Start_a_Town_
         public override object Clone()
         {
             var types = from gear in this.Equipment.Slots select GearType.Dictionary[(GearType.Types)gear.ID];
-            GearComponent comp = new GearComponent(types.ToArray());
+            var comp = new GearComponent(types.ToArray());
 
-            using (BinaryWriter w = new BinaryWriter(new MemoryStream()))
+            using (var w = new BinaryWriter(new MemoryStream()))
             {
                 this.Write(w);
                 w.BaseStream.Position = 0;
-                using (BinaryReader r = new BinaryReader(w.BaseStream))
-                    comp.Read(r);
+                using var r = new BinaryReader(w.BaseStream);
+                comp.Read(r);
             }
             return comp;
         }
@@ -102,47 +102,41 @@ namespace Start_a_Town_
         {
             compTag.TryGetTag("Equipment", tag => this.Equipment.Load(tag));
         }
-
-        public static GameObjectSlot GetSlot(GameObject actor, GearType type)
+        public GameObject GetGear(GearType type)
         {
-            var gearComp = actor.GetComponent<GearComponent>();
-            var slot = gearComp.Equipment.GetSlot((int)type.ID);
+            return this.Equipment.GetSlot((int)type.ID).Object;
+        }
+        public GameObjectSlot GetSlot(GearType type)
+        {
+            var slot = this.Equipment.GetSlot((int)type.ID);
             return slot;
         }
-        internal static GameObjectSlot GetSlot(GameObject actor, GameObject item)
+        public GameObjectSlot GetSlot(GameObject item)
         {
-            var gearComp = actor.GetComponent<GearComponent>();
-            var slot = gearComp.Equipment.Slots.FirstOrDefault(s => s.Object == item);
+            var slot = this.Equipment.Slots.FirstOrDefault(s => s.Object == item);
             return slot;
         }
-        public static bool Equip(GameObject a, GameObjectSlot t)
+        public static bool Equip(GameObject a, GameObject t)
         {
-            if (t.Object is null)
+            if (t is null)
                 return false;
-
-            GameObjectSlot objSlot =
-                t.Object.Exists ?
-                t.Object.ToSlotLink() :
-                (from slot in a.GetChildren() where slot.HasValue select slot).FirstOrDefault(foo => foo.Object == t.Object);
-
-            if (objSlot == null)
-                return false;
-            if (objSlot.Object == null)
-                return false;
-            var geartype = (int)t.Object.GetComponent<EquipComponent>().Type.ID;
+            
+            var geartype = (int)t.GetComponent<EquipComponent>().Type.ID;
 
             GameObjectSlot gearSlot = a.GetComponent<GearComponent>().Equipment.Slots[geartype];
 
             // despawn item's entity from world (if it's spawned in the world)
-            objSlot.Object.Despawn();
+            if (t.IsSpawned)
+                t.Despawn();
 
             // attempt to store current equipped item in inventory, otherwise drop it if inventory is full
-
+            
             // equip new item
-            gearSlot.Swap(objSlot);
+            gearSlot.Object = t;
 
             return true;
         }
+
         public static bool EquipToggle(Actor actor, Entity item)
         {
             if (actor.IsEquipping(item))
@@ -154,7 +148,7 @@ namespace Start_a_Town_
                 return true;
             }
             var slotType = item.Def.GearType;
-            var gearSlot = GetSlot(actor, slotType);
+            var gearSlot = actor.Gear.GetSlot(slotType);
             var previousItem = gearSlot.Object as Entity;
             if (item == previousItem)
                 return false;

@@ -384,7 +384,7 @@ namespace Start_a_Town_
         {
             var list = new SaveTag(SaveTag.Types.List, name, SaveTag.Types.Vector3);
             foreach (var pos in vectors)
-                list.Add(new SaveTag(SaveTag.Types.Vector3, "", pos));
+                list.Add(new SaveTag(SaveTag.Types.Vector3, "", (Vector3)pos));
             return list;
         }
         public static void Save(this ICollection<Vector3> vectors, SaveTag save, string name)

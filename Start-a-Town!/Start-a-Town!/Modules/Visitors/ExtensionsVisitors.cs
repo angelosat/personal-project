@@ -4,7 +4,7 @@
     {
         internal static VisitorProperties GetVisitorProperties(this Actor actor)
         {
-            return actor.Map.World.Population.GetVisitorProperties(actor);
+            return actor.Net.Map.World.Population.GetVisitorProperties(actor);
         }
         internal static void VisitOffsiteArea(this Actor actor, OffsiteAreaDef area)
         {

@@ -29,15 +29,16 @@ namespace Start_a_Town_
         }
         private void InitInvSlots(Actor actor)
         {
-            var Inventory = actor.GetComponent<PersonalInventoryComponent>();
+            var inventory = actor.GetComponent<PersonalInventoryComponent>();
 
-            Container container = Inventory.Slots;
+            var container = inventory.Slots;
 
             Controls.Remove(this.PanelSlots);
             this.PanelSlots.Controls.Clear();
-            for (int i = 0; i < container.Slots.Count; i++)
+            for (int i = 0; i < inventory.Capacity; i++)
             {
-                GameObjectSlot invSlot = container.Slots[i];
+                //var invSlot = container.Slots[i];
+                var invSlot = new GameObjectSlot(container[i]);
                 int slotid = i; // must be here for correct variable capturing with anonymous method
                 var slot = new InventorySlot(invSlot, actor, i)
                 {
@@ -84,7 +85,7 @@ namespace Start_a_Town_
             Controls.Remove(this.PanelSlots);
 
             this.PanelSlots.Controls.Clear();
-            this.PanelSlots.Controls.Add(inv.Contents.Gui);
+            this.PanelSlots.Controls.Add(inv.Slots.Gui);
 
             this.AddControls(this.PanelSlots);
 

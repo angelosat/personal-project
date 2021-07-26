@@ -18,7 +18,6 @@ namespace Start_a_Town_
                             return result;
                         },
                         Label = "ToolAlreadyEquipped"
-
                     },
                     new BehaviorSequence(
                         new BehaviorSelector(

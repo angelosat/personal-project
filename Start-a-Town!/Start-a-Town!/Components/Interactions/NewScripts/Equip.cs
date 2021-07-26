@@ -16,7 +16,7 @@
 
         public override void OnUpdate(Actor a, TargetArgs t)
         {
-            GearComponent.EquipToggle(a as Actor, t.Object as Entity);
+            GearComponent.EquipToggle(a, t.Object as Entity);
             this.Finish(a, t);
         }
 

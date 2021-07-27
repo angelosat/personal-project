@@ -197,7 +197,7 @@
     <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
     <Compile Include="Gui\Lists\ListBoxNoScroll.cs" />
-    <Compile Include="Gui\Lists\ListBoxObservableNew.cs" />
+    <Compile Include="Gui\Lists\ListBoxObservable.cs" />
     <Compile Include="Gui\Tables\TableObservable.cs" />
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
@@ -860,8 +860,6 @@
     <Compile Include="Gui\Lists\Collapsible\ListBoxCollapsible.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListBoxCollapsibleNode.cs" />
     <Compile Include="Gui\Lists\IListSearchable.cs" />
-    <Compile Include="Gui\Lists\ListBoxObservable.cs" />
-    <Compile Include="Gui\Lists\ListBoxNewNoBtnBase.cs" />
     <Compile Include="Gui\Lists\SearchBar.cs" />
     <Compile Include="Gui\NamePlates\NameplateManager.cs" />
     <Compile Include="Gui\NamePlates\NameplatesContainer.cs" />
@@ -1013,7 +1011,6 @@
     <Compile Include="Gui\Primitives\Slots\SlotGridCustom.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotGridNew.cs" />
     <Compile Include="Gui\SpeechBubble.cs" />
-    <Compile Include="Gui\Tables\TableScrollable.cs" />
     <Compile Include="Gui\Tables\TableScrollableCompact.cs" />
     <Compile Include="Gui\Tables\TableScrollableCompactNewNew.cs" />
     <Compile Include="Gui\WindowTargetManagementStatic.cs" />

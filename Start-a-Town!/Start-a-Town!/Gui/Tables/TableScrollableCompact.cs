@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
+    [Obsolete]
     class TableScrollableCompact<TObject> : GroupBox
     {
         readonly List<Column> Columns = new();

@@ -70,26 +70,9 @@ namespace Start_a_Town_
             {
                 LeftClickAction = () =>
                 {
-                    var listNpc = new ListBoxNewNoBtnBase<GameObject, Label>(150, 400);
-                    listNpc.AddItem(null, (o, l) =>
-                    {
-                        l.Text = "None";
-                        l.LeftClickAction = () =>
-                        {
-                            PacketPlayerSetItemOwner.Send(Net.Client.Instance, gameObject.RefID, -1);
-                        };
-                    });
-                    foreach (var npc in gameObject.Map.Town.GetAgents())
-                    {
-                        listNpc.AddItem(npc, (o, l) =>
-                        {
-                            l.Text = o.Name;
-                            l.LeftClickAction = () =>
-                            {
-                                PacketPlayerSetItemOwner.Send(Net.Client.Instance, gameObject.RefID, o.RefID);
-                            };
-                        });
-                    }
+                    //150, 400
+                    var listNpc = new ListBoxNoScroll<GameObject, Label>(o => new Label(o?.Name ?? "None", () => PacketPlayerSetItemOwner.Send(Net.Client.Instance, gameObject.RefID, -1)));
+                    listNpc.AddItems(gameObject.Map.Town.GetAgents().Prepend(null));
                     listNpc.Toggle();
                 }
             };

@@ -10,14 +10,12 @@ namespace Start_a_Town_.UI
     {
         readonly List<Column> Columns = new();
         readonly GroupBox ColumnLabels;
-        ListBoxNewNoBtnBase<TObject, GroupBox> BoxItems;
+        ListBoxNoScroll<TObject, GroupBox> BoxItems;
         readonly Dictionary<TObject, Dictionary<object, Control>> Rows = new();
         public int MaxVisibleItems;
         public bool ShowColumnLabels = true;
         public Color ClientBoxColor = Color.Black * .5f;
         ObservableCollection<TObject> BoundCollection;
-        [Obsolete]
-        static readonly int ItemHeight = Label.DefaultHeight + ListBoxNewNoBtnBase<TObject, GroupBox>.Spacing; // TODO remove hardcoding of label.defaultheight
         public TableScrollableCompactNewNew(int maxVisibleItems, bool showColumnLabels = false, ScrollModes scrollbarMode = ScrollModes.Vertical)
         {
             this.MaxVisibleItems = maxVisibleItems;
@@ -108,7 +106,7 @@ namespace Start_a_Town_.UI
                 this.Controls.Add(this.ColumnLabels);
 
             this.ColumnLabels.Controls.AlignCenterHorizontally();
-            this.BoxItems = new(offset + ScrollbarV.DefaultWidth, ItemHeight * this.MaxVisibleItems, (TObject item) =>
+            this.BoxItems = new((TObject item) =>
             {
                 var panel = new GroupBox() { BackgroundColor = Color.SlateGray * .2f };// this.ClientBoxColor };
                 panel.Tag = item;
@@ -131,13 +129,13 @@ namespace Start_a_Town_.UI
 
                 return panel;
             });
-
             if (this.ShowColumnLabels)
                 this.BoxItems.Location = this.ColumnLabels.BottomLeft;// + Vector2.UnitY; //spacing between column labels box and items box
 
             this.AddItems(items.ToArray());
 
             this.Controls.Add(this.BoxItems);
+
             return this;
         }
 
@@ -181,12 +179,12 @@ namespace Start_a_Town_.UI
         public void RemoveItem(TObject item)
         {
             this.Rows.Remove(item);
-            this.BoxItems.RemoveItem(item);
+            this.BoxItems.RemoveItems(item);
         }
 
         public TableScrollableCompactNewNew<TObject> ClearItems()
         {
-            this.BoxItems?.Client.ClearControls();
+            this.BoxItems?.ClearControls();
             this.Rows.Clear();
             return this;
         }

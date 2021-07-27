@@ -258,7 +258,7 @@ namespace Start_a_Town_
                 var boxh = 250;
 
                 return _ActorActiveQuestsGUI ??=
-                    new ListBoxObservable<QuestDef, Label>(boxw, boxh, q => new Label(q.Name, q.ShowGUI))
+                    new ListBoxObservable<QuestDef, Label>(q => new Label(q.Name, q.ShowGUI))
                     { Name = "Active quests" }
                     .SetGetDataAction(o => ActorActiveQuestsGUI.Bind((o as Actor).GetVisitorProperties().Quests)) as ListBoxObservable<QuestDef, Label>;
             }

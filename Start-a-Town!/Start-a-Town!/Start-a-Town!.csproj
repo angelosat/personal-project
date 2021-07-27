@@ -1015,7 +1015,6 @@
     <Compile Include="Gui\Tables\TableScrollableCompactNewNew.cs" />
     <Compile Include="Gui\WindowTargetManagementStatic.cs" />
     <Compile Include="Gui\WindowTargetManagement.cs" />
-    <Compile Include="Gui\ScrollBars\ScrollableBox.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotGrid.cs" />
     <Compile Include="Network\Server\ServerUI.cs" />
     <Compile Include="Gui\Hud\UnitFrame.cs" />

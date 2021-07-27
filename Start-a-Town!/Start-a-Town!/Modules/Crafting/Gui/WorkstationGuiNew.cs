@@ -15,7 +15,7 @@ namespace Start_a_Town_.Modules.Crafting
         readonly ButtonList<Reaction> Reactions;
         readonly Panel PanelReactions;
         readonly PanelTitled PanelOrders;
-        readonly ScrollableBox ListOrders;
+        readonly ScrollableBoxNewNew ListOrders;
 
         public WorkstationGuiNew(MapBase map, IntVec3 global, BlockEntityCompWorkstation entity)
         {
@@ -32,7 +32,9 @@ namespace Start_a_Town_.Modules.Crafting
 
             this.PanelReactions.AddControls(this.Reactions);
 
-            this.ListOrders = new ScrollableBox(this.PanelOrders.Client.ClientSize);
+            var w = this.PanelOrders.Client.ClientSize.Width;
+            var h = this.PanelOrders.Client.ClientSize.Height;
+            this.ListOrders = new ScrollableBoxNewNew(w, h, ScrollModes.Vertical);
             var orders = entity.Orders;
             if (orders != null)
                 this.RefreshOrders(orders);

@@ -9,7 +9,7 @@ namespace Start_a_Town_.UI
 {
     public enum ConsoleMessageTypes { Acks }
 
-    public class ConsoleBoxAsync : ScrollableBox
+    public class ConsoleBoxAsync : ScrollableBoxNewNew
     {
         public readonly object Lock = new object();
         public FilterType FilterType = FilterType.Exclude;
@@ -25,7 +25,7 @@ namespace Start_a_Town_.UI
         public bool FadeText;
         public bool TimeStamp = true;
         public ConsoleBoxAsync(Rectangle bounds)
-            : base(bounds)
+            : base(bounds.Width, bounds.Height, ScrollModes.Vertical)
         {
             LoadConfig();
             BackgroundColor = Color.Black;
@@ -57,7 +57,7 @@ namespace Start_a_Town_.UI
 
                 if (this.Client.Controls.Count >= 16)
                 {
-                    this.Remove(this.Client.Controls.First());
+                    this.Client.RemoveControls(this.Client.Controls.First());
                 }
                 var line = new Label(text) {  TextColorFunc = () => c };
                 line.BackgroundColor = Color.Black * .5f;
@@ -81,7 +81,7 @@ namespace Start_a_Town_.UI
                 text = UIManager.WrapText(text, Client.Width);
                 var line = new Label(Client.Controls.BottomLeft, text) { TextColorFunc = () => c };
 
-                Add(line);
+                this.AddControls(line);
                 Client.ClientLocation.Y = Client.Bottom - Client.ClientSize.Height;
                 return line;
             }
@@ -95,12 +95,11 @@ namespace Start_a_Town_.UI
                 return this.Write(c, text);
             }
         }
-
-        public override void Add(params Control[] controls)
+        public override Control AddControls(params Control[] controls)
         {
             foreach (var c in controls)
                 c.Tag = LogWindow.FadeDelay;
-            base.Add(controls);
+            return base.AddControls(controls);
         }
         private void LoadConfig()
         {

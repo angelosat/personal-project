@@ -25,7 +25,7 @@ namespace Start_a_Town_.UI
         internal override void OnControlAdded(Control control)
         {
             base.OnControlAdded(control);
-            this.Label.Validate();
+            //this.Label.Validate();
         }
     }
 }

@@ -24,9 +24,22 @@ namespace Start_a_Town_.UI
             this.AutoSize = false;
             this.Size = new Rectangle(0, 0, width, height);
         }
-        internal override void OnControlResized(ButtonBase buttonBase)
+        internal override void OnControlAdded(Control control)
+        {
+            base.OnControlAdded(control);
+            if (this.AutoSize)
+                this.Parent?.OnControlResized(this);
+        }
+        internal override void OnControlRemoved(Control control)
+        {
+            base.OnControlRemoved(control);
+            if (this.AutoSize)
+                this.Parent?.OnControlResized(this);
+        }
+        internal override void OnControlResized(Control control)
         {
             this.ClientSize = PreferredClientSize;
+            this.Parent?.OnControlResized(this);
         }
         public virtual GroupBox AddControlsLineWrap(IEnumerable<ButtonBase> labels, int width = int.MaxValue)
         {

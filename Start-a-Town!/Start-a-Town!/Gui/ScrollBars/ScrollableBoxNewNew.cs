@@ -26,7 +26,12 @@ namespace Start_a_Town_.UI
             this.HScroll = new ScrollbarH(new Vector2(0, this.Client.Height), this.Client.Width, this.Client);
             this.Controls.Add(this.Client);
         }
-
+        internal override void OnControlResized(Control control)
+        {
+            base.OnControlResized(control);
+            if (control == this.Client)
+                this.UpdateClientSize();
+        }
         public override Control AddControls(params Control[] controls)
         {
             foreach (var ctrl in controls)

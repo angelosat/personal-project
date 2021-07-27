@@ -4,22 +4,20 @@ using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
-    class GuiActorCreation : ScrollableBoxNewNew
+    class GuiActorCreation : GroupBox
     {
         public GuiActorCreation(List<Actor> actors)
-            : base(200, UIManager.LargeButton.Height * 8)
         {
             actors.AddRange(new[] { Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc) });
-            var actorslistbox = new PanelLabeledNew("Colonists");
+            var actorslistbox = new ScrollableBoxNewNew(200, UIManager.LargeButton.Height * 8, ScrollModes.Vertical);
 
             var editbox = new Panel(0, 0, 500, actorslistbox.Height) { AutoSize = false };
 
             ListBoxNoScroll<Actor, ButtonNew> actorsUI = null;
-            actorsUI = new ListBoxNoScroll<Actor, ButtonNew>(btnInit);
-            var addactorbutton = new Button("Create", actorsUI.Width);
+            actorsUI = new ListBoxNoScroll<Actor, ButtonNew>(btnInit) { BackgroundColor = Color.Red };
+            var addactorbutton = new Button("Create", addActor, actorslistbox.Client.Width);
 
-            actorslistbox.Client.AddControlsVertically(actorsUI, addactorbutton);
-            addactorbutton.LeftClickAction = addActor;
+            actorslistbox.AddControlsVertically(addactorbutton, actorsUI);
 
             actorsUI.AddItems(actors);
 
@@ -37,7 +35,7 @@ namespace Start_a_Town_
 
             ButtonNew btnInit(Actor a)
             {
-                var btn = ButtonNew.CreateBig(() => this.Expand(a, editbox), this.Client.Width, a.RenderIcon(), () => a.Npc.FullName);
+                var btn = ButtonNew.CreateBig(() => this.Expand(a, editbox), actorslistbox.Client.Width, a.RenderIcon(), () => a.Npc.FullName);
                 var deleteBtn = IconButton.CreateCloseButton();
                 deleteBtn.Location = btn.TopRight;
                 deleteBtn.Anchor = Vector2.UnitX;
@@ -50,7 +48,8 @@ namespace Start_a_Town_
                 return btn;
             }
         }
-        GuiCharacterCustomization GuiCustomization = new();
+
+        readonly GuiCharacterCustomization GuiCustomization = new();
 
         private void Expand(Actor a, Control editbox)
         {

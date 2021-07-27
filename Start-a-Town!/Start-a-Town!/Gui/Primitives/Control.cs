@@ -892,9 +892,10 @@ namespace Start_a_Town_.UI
             foreach (var ctrl in controls)
             {
                 ctrl.Location = new Vector2(0, y);
-                this.Controls.Add(ctrl);
+                //this.Controls.Add(ctrl);
                 y += ctrl.Height + spacing;
             }
+            this.AddControls(controls);
             return this;
         }
         public virtual Control AddControlsVertically(int spacing, HorizontalAlignment horAlignment, params Control[] controls)
@@ -1363,7 +1364,7 @@ namespace Start_a_Town_.UI
             this.AnchorToScreenCenter();
             return this.Show();
         }
-        internal virtual void OnControlResized(ButtonBase buttonBase)
+        internal virtual void OnControlResized(Control control)
         {
 
         }

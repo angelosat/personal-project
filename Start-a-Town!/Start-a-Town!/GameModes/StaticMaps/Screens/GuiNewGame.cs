@@ -35,7 +35,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             var defaultSizes = StaticMap.MapSize.GetList();
             var selectedSize = defaultSizes.First();
-            //var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => selectedSize = s, c => selectedSize);
             var comboSize = new ComboBoxNewNew<StaticMap.MapSize>(defaultSizes, seedBox.Width, "Size", s => s.Name, () => selectedSize, s => selectedSize = s);
 
             tab_World.AddControlsVertically(
@@ -55,8 +54,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
                 var actorsui = new GuiActorCreation(actors);
-                var btnstart = new Button("Start") { LeftClickAction = () => this.CreateMap(txt_Seed.Text, selectedSize, actors.ToArray()) };
-                var btnback = new Button("Back") { LeftClickAction = () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); } };
+                var btnstart = new Button("Start", () => this.CreateMap(txt_Seed.Text, selectedSize, actors.ToArray()));
+                var btnback = new Button("Back", () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); });
                 actorsCreateBox.AddControlsVertically(0, HorizontalAlignment.Right, 
                     actorsui,
                     UIHelper.Wrap(btnstart, btnback)

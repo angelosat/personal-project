@@ -6,8 +6,9 @@ namespace Start_a_Town_.UI
 {
     class LobbyWindow : Window
     {
-        Panel Panel_Players, Panel_Chat, Panel_Input;
-        ListBoxNew<PlayerData, Label> Players;
+        PanelLabeledScrollable Panel_Players;
+        Panel Panel_Chat, Panel_Input;
+        ListBoxNoScroll<PlayerData, Label> Players;
         TextBox Txt_Input;
         public ConsoleBoxAsync Console;
         static LobbyWindow _Instance;
@@ -21,8 +22,8 @@ namespace Start_a_Town_.UI
             AutoSize = true;
             Movable = false;
 
-            Panel_Players = new Panel() { Dimensions = new Vector2(100, 200) };
-            Players = new ListBoxNew<PlayerData, Label>(Panel_Players.ClientSize);
+            Panel_Players = new PanelLabeledScrollable("Players", 100, 200, ScrollModes.Vertical);
+            Players = new ListBoxNoScroll<PlayerData, Label>(pl => new Label(pl.Name));
             Panel_Players.Controls.Add(Players);
 
             Panel_Chat = new Panel(Panel_Players.TopRight) { Dimensions = new Vector2(400, 200) };
@@ -52,11 +53,8 @@ namespace Start_a_Town_.UI
       
         static public void RefreshPlayers(IEnumerable<PlayerData> players)
         {
-            Instance.Players.Build(players, ip => ip.Name);
-        }
-        static public void RefreshPlayers()
-        {
-            Instance.Players.Build(Net.Client.Instance.Players.GetList(), ip => ip.Name);
+            Instance.Players.Clear();
+            Instance.Players.AddItems(players);
         }
     }
 }

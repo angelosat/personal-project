@@ -7,17 +7,16 @@ namespace Start_a_Town_.UI
     class ComboBoxNewNew<T> : GroupBox where T : class
     {
         readonly Button Button;
-        readonly ListBoxNew<T, Button> ListControl;
+        readonly ListBoxNoScroll<T, Button> ListControl;
         readonly Func<T> CurrentlySelectedGetter;
         readonly Func<IEnumerable<T>> ItemsGetter;
         public ComboBoxNewNew(IEnumerable<T> list, int width, Func<T, string> nameGetter, Action<T> callBack, Func<T> currentlySelectedGetter)
+            //: base(width, list.Count() * Button.DefaultHeight)
         {
             this.CurrentlySelectedGetter = currentlySelectedGetter;
             this.Button = new Button(() => this.CurrentlySelectedGetter != null ? nameGetter(this.CurrentlySelectedGetter()) : "undefined", BtnPress, width);
             var maxVisibleItems = list.Count();
-            var height = maxVisibleItems * Button.DefaultHeight;
-
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollModes.None)
+            this.ListControl = new ListBoxNoScroll<T, Button>(i => new Button(nameGetter(i), () => onSelect(i)))
                 .AddItems(list);
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
@@ -31,12 +30,11 @@ namespace Start_a_Town_.UI
             }
         }
         public ComboBoxNewNew(IEnumerable<T> list, int width, Func<T, string> labelGetter, Func<T, string> listNameGetter, Action<T> callBack, Func<T> currentlySelectedGetter)
+            //: base(width, list.Count() * Button.DefaultHeight)
         {
             this.CurrentlySelectedGetter = currentlySelectedGetter;
             this.Button = new Button(()=>this.CurrentlySelectedGetter != null ? labelGetter(this.CurrentlySelectedGetter()) : "undefined", BtnPress, width);
-            var maxVisibleItems = list.Count();
-            var height = maxVisibleItems * Button.DefaultHeight;
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(listNameGetter(i), () => onSelect(i)), ScrollModes.None)
+            this.ListControl = new ListBoxNoScroll<T, Button>(i => new Button(listNameGetter(i), () => onSelect(i)))
                 .AddItems(list);
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
@@ -56,9 +54,7 @@ namespace Start_a_Town_.UI
             this.Button = new Button(() =>
                 $"{label}: {(this.CurrentlySelectedGetter() is T item ? listNameGetter(item) : "none")}", BtnPress, width);
 
-            var height = Button.DefaultHeight;
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(listNameGetter(i), () => onSelect(i)), ScrollModes.None)
-             ;
+            this.ListControl = new ListBoxNoScroll<T, Button>(i => new Button(listNameGetter(i), () => onSelect(i)));
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
 
@@ -72,14 +68,12 @@ namespace Start_a_Town_.UI
         }
 
         public ComboBoxNewNew(IEnumerable<T> list, int width, string label, Func<T, string> nameGetter, Func<string> currentlySelectedGetter, Action<T> callBack)
+            //: base(width, list.Count() * Button.DefaultHeight)
         {
             this.Button = new Button(() =>
                 $"{label}: {currentlySelectedGetter?.Invoke() ?? "undefined"}", BtnPress, width);
 
-            var maxVisibleItems = list.Count();
-            var height = maxVisibleItems * Button.DefaultHeight;
-
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollModes.None)
+            this.ListControl = new ListBoxNoScroll<T, Button>(i => new Button(nameGetter(i), () => onSelect(i)))
                 .AddItems(list);
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
@@ -93,14 +87,12 @@ namespace Start_a_Town_.UI
             }
         }
         public ComboBoxNewNew(IEnumerable<T> list, int width, string label, Func<T, string> nameGetter, Func<T> currentlySelectedGetter, Action<T> callBack)
+            //: base(width, list.Count() * Button.DefaultHeight)
         {
             this.Button = new Button(() =>
                 $"{label}: {(currentlySelectedGetter() is T item ? nameGetter(item) : "none")}", BtnPress, width);
 
-            var maxVisibleItems = list.Count();
-            var height = maxVisibleItems * Button.DefaultHeight;
-
-            this.ListControl = new ListBoxNew<T, Button>(width, height, i => new Button(nameGetter(i), () => onSelect(i)), ScrollModes.None)
+            this.ListControl = new ListBoxNoScroll<T, Button>(i => new Button(nameGetter(i), () => onSelect(i)))
                 .AddItems(list);
             this.ListControl.ToPanel()
                 .HideOnAnyClick();
@@ -126,8 +118,7 @@ namespace Start_a_Town_.UI
         public ComboBoxNewNew<T> Initialize(IEnumerable<T> items)
         {
             var count = items.Count();
-            this.ListControl.Height = count * Button.DefaultHeight;
-            this.ListControl.Remeasure();
+            //this.ListControl.Height = count * Button.DefaultHeight;
             this.ListControl.Clear();
             this.ListControl.AddItems(items);
             return this;

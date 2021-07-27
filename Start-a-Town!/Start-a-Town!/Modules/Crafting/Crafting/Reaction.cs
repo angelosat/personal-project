@@ -110,15 +110,5 @@ namespace Start_a_Town_.Components.Crafting
         {
            
         }
-
-        static readonly Lazy<ListBoxNew<Reaction, Button>> RecipeListUI = new(() => new ListBoxNew<Reaction, Button>(200, 400, r => new Button(r.Name)).HideOnAnyClick() as ListBoxNew<Reaction, Button>);
-        static public void ShowRecipeListUI(Func<Reaction, bool> filter, Action<Reaction> selectAction)
-        {
-            RecipeListUI.Value
-                .Clear()
-                .AddItems(Dictionary.Values.Where(filter), selectAction)
-                .ToContextMenu("Select recipe")
-                .Show();
-        }
     }
 }

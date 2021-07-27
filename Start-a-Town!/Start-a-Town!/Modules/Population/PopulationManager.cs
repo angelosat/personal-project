@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.GameModes.StaticMaps;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
@@ -166,12 +165,12 @@ namespace Start_a_Town_
         }
         public GroupBox GetUI()
         {
-            var box = new GroupBox();
-            var list = new ListBoxNew<VisitorProperties, ButtonNew>(200, UIManager.LargeButton.Height * 8, (props, container) => 
+            var box = new ScrollableBoxNewNew(200, UIManager.LargeButton.Height * 8);
+            var list = new ListBoxNoScroll<VisitorProperties, ButtonNew>(props =>
             {
                 var npc = props.Actor;
-                var btn = ButtonNew.CreateBig(()=>UI.SelectionManager.Select(npc), container.Client.Width, npc.RenderIcon(), () => npc.Npc.FullName, () => npc.Exists ? "Visiting" : (props.Discovered ? "" : "Unknown"));
-                return btn; 
+                var btn = ButtonNew.CreateBig(() => UI.SelectionManager.Select(npc), box.Client.Width, npc.RenderIcon(), () => npc.Npc.FullName, () => npc.Exists ? "Visiting" : (props.Discovered ? "" : "Unknown"));
+                return btn;
             });
 
             var filters = new GroupBox().AddControlsLineWrap(new[]{
@@ -189,7 +188,7 @@ namespace Start_a_Town_
                   {
                       case Components.Message.Types.NewAdventurerCreated:
                           var actor = e.Parameters[0] as Actor;
-                          list.AddItems(this.ActorsAdventuring.Find(v=>v.Actor == actor));
+                          list.AddItems(this.ActorsAdventuring.Find(v => v.Actor == actor));
                           break;
 
                       default:
@@ -203,7 +202,6 @@ namespace Start_a_Town_
                 list.AddItems(this.ActorsAdventuring.ToArray());
             };
             return box;
-
         }
         public void ResolveReferences()
         {

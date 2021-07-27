@@ -246,12 +246,14 @@ namespace Start_a_Town_
                         break;
                 }
             };
-
-            var btnAdd = new Button("Add menu item", () => Reaction.ShowRecipeListUI(r => r.ValidWorkshops.Contains(IsWorkstation.Types.Baking), r => Packets.SendAddMenuItem(tav.Town.Net, tav.Town.Net.GetPlayer(), tav, r)));
+            var recipeListGui = new ListBoxNoScroll<Reaction, Button>(r =>
+                new Button(r.Name, () => Packets.SendAddMenuItem(tav.Town.Net, tav.Town.Net.GetPlayer(), tav, r))).HideOnAnyClick();
+            var btnAdd = new Button("Add menu item", () => recipeListGui.Toggle());
 
             ordersBox.AddControlsVertically(ordersTable, btnAdd);
             return ordersBox;
         }
+       
         protected override IEnumerable<GroupBox> GetUI()
         {
             yield return OrdersGUI ??= CreateOrdersGUI();

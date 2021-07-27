@@ -6,12 +6,21 @@ namespace Start_a_Town_.Net
 {
     class UIPlayerList : GroupBox
     {
-        ListBoxNew<PlayerData, Button> List_Players;
+        ListBoxNoScroll<PlayerData, Button> List_Players;
 
         public UIPlayerList(IEnumerable<PlayerData> pList)
+            : base(150, 300)
         {
             this.AutoSize = true;
-            List_Players = new ListBoxNew<PlayerData, Button>(new Rectangle(0, 0, 150, 300));
+            List_Players = new ListBoxNoScroll<PlayerData, Button>(foo =>
+            {
+                var ctrl = new Button(foo.Name)
+                {
+                    TextColorFunc = () => foo.Color
+                };
+                ctrl.OnUpdate = () => ctrl.Text = foo.ID + ": " + foo.Name + " " + foo.Ping.ToString("###0ms");
+                return ctrl;
+            });
             this.List_Players.MouseThrough = true;
             this.Refresh(pList);
             this.AddControls(List_Players);
@@ -19,14 +28,8 @@ namespace Start_a_Town_.Net
 
         public UIPlayerList Refresh(IEnumerable<PlayerData> pList)
         {
-            List_Players.Build(pList, foo => foo.Name, (foo, ctrl) =>
-            {
-                ctrl.TextColorFunc = () => foo.Color;
-                ctrl.OnUpdate = () =>
-                {
-                    ctrl.Text = foo.ID + ": " + foo.Name + " " + foo.Ping.ToString("###0ms");
-                };
-            });
+            List_Players.Clear();
+            List_Players.AddItems(pList);
             return this;
         }
 
@@ -35,11 +38,11 @@ namespace Start_a_Town_.Net
             switch(e.Type)
             {
                 case Components.Message.Types.PlayerConnected:
-                    this.List_Players.AddItem(e.Parameters[0] as PlayerData);
+                    this.List_Players.AddItems(e.Parameters[0] as PlayerData);
                     break;
 
                 case Components.Message.Types.PlayerDisconnected:
-                    this.List_Players.RemoveItem(e.Parameters[0] as PlayerData);
+                    this.List_Players.RemoveItems(e.Parameters[0] as PlayerData);
                     break;
 
                 default:

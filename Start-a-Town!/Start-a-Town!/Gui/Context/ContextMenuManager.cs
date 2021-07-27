@@ -8,7 +8,6 @@ namespace Start_a_Town_
     public class ContextArgs : EventArgs
     {
         public List<ContextAction> Actions;
-        public Action<Button> ControlInit = btn => { };
         public object[] Parameters;
 
         public ContextArgs()

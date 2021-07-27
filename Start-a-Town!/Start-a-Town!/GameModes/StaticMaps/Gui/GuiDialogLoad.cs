@@ -4,18 +4,19 @@ using System.IO;
 
 namespace Start_a_Town_.GameModes.StaticMaps
 {
-    class GuiDialogLoad : GroupBox
+    class GuiDialogLoad : ScrollableBoxNewNew
     {
-        readonly ListBoxNew<FileInfo, ButtonNew> List;
+        readonly ListBoxNoScroll<FileInfo, ButtonNew> List;
         public GuiDialogLoad()
+            : base(200, 300)
         {
-            this.AutoSize = true;
-            this.List = new ListBoxNew<FileInfo, ButtonNew>(200, 300);
+            this.List = new ListBoxNoScroll<FileInfo, ButtonNew>(save =>
+            {
+                var btn = ButtonNew.CreateBig(() => this.Load(save), this.Client.Width, () => Path.GetFileNameWithoutExtension(save.Name), () => save.CreationTime.ToString("R"));
+                btn.AddControls(IconButton.CreateCloseButton().SetLeftClickAction(b => delete(save)).SetLocation(btn.TopRight).SetAnchor(Vector2.UnitX));
+                return btn;
+            });
             this.AddControls(this.List);
-        }
-        public void Populate()
-        {
-            var saves = GameModeStaticMaps.GetSaves();
 
             void delete(FileInfo save)
             {
@@ -25,21 +26,22 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 void delete(FileInfo save)
                 {
                     save.Delete();
-                    this.List.RemoveItem(save);
+                    this.List.RemoveItems(save);
                 }
             }
-
-            for (int i = 0; i < saves.Length; i++)
-            {
-                var save = saves[i];
-                this.List.AddItem(save, s =>
-                {
-                    var btn = ButtonNew.CreateBig(() => this.Load(s), this.List.Client.Width, () => Path.GetFileNameWithoutExtension(save.Name), () => save.CreationTime.ToString("R"));
-                    btn.AddControls(IconButton.CreateCloseButton().SetLeftClickAction(b => delete(save)).SetLocation(btn.TopRight).SetAnchor(Vector2.UnitX));
-                    return btn;
-                });
-            }
         }
+        public void Populate()
+        {
+            var saves = GameModeStaticMaps.GetSaves();
+            this.List.Clear();
+            this.List.AddItems(saves);
+            //for (int i = 0; i < saves.Length; i++)
+            //{
+            //    var save = saves[i];
+            //    this.List.AddItem(save, );
+            //}
+        }
+        
         private void Load(FileInfo item)
         {
             Net.Server.Start();

@@ -131,8 +131,9 @@ namespace Start_a_Town_
             };
             bar.TextFunc = () => bar.Percentage.ToString("##0%");
             info.AddInfo(bar);
-
-            var boxcontents = new ListBoxNew<ItemDefMaterialAmount, Label>(150, Label.DefaultHeight * 3);
+            var box = new ScrollableBoxNewNew(150, Label.DefaultHeight * 3);
+            var boxcontents = new ListBoxNoScroll<ItemDefMaterialAmount, Label>(i => new Label(i));
+            box.AddControls(boxcontents);
             void refreshContents()
             {
                 boxcontents.AddItems(this.StoredFuelItems);
@@ -144,7 +145,8 @@ namespace Start_a_Town_
                     if (e.Parameters[0] == this)
                         refreshContents();
             };
-            info.AddInfo(boxcontents);
+            
+            info.AddInfo(box);
 
             info.AddTabAction("Fuel", () =>
             {

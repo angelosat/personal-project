@@ -223,11 +223,12 @@ namespace Start_a_Town_
         protected virtual void LoadExtra(SaveTag tag) { }
         static public (Control control, Action<Workplace> refresh) CreateUI()
         {
-            var box = new GroupBox();
             int listw = 200, listh = 300;
-            var liststockpiles = new ListBoxNew<Stockpile, Button>(listw, listh, i => new Button(i.Name));
+            var box = new ScrollableBoxNewNew(listw, listh, ScrollModes.Vertical);
+
+            var liststockpiles = new ListBoxNoScroll<Stockpile, Button>(i => new Button(i.Name));
             
-            var listfacilities = new ListBoxNew<TargetArgs, Button>(listw, listh,
+            var listfacilities = new ListBoxNoScroll<TargetArgs, Button>(
                 t => new Button(t.GetBlock().Name,
                     () =>
                     {
@@ -343,15 +344,13 @@ namespace Start_a_Town_
         {
             var town = shop.Town;
             var manager = town.ShopManager;
-            var listworkers = new ListBoxNew<Actor, ButtonNew>(
-                 200, UIManager.LargeButton.Height * 7,
-                 (a, l) =>
-                 a.GetButton(l.Client.Width,
+            var box = new ScrollableBoxNewNew(200, UIManager.LargeButton.Height * 7, ScrollModes.Vertical);
+            var listworkers = new ListBoxNoScroll<Actor, ButtonNew>(
+                 a =>
+                 a.GetButton(box.Client.Width,
                  () => a.Workplace != null ? $"Assigned to {a.Workplace.Name}" : "",
-                 () => manager.ToggleWorker(a, shop)
-                 ));
-            listworkers.AddItems(town.GetAgents()
-                );
+                 () => manager.ToggleWorker(a, shop)));
+            listworkers.AddItems(town.GetAgents());
             return listworkers;
         }
 

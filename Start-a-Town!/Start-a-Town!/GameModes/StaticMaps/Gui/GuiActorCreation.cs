@@ -4,21 +4,24 @@ using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
-    class GuiActorCreation : GroupBox
+    class GuiActorCreation : ScrollableBoxNewNew
     {
         public GuiActorCreation(List<Actor> actors)
+            : base(200, UIManager.LargeButton.Height * 8)
         {
             actors.AddRange(new[] { Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc) });
+            var actorslistbox = new PanelLabeledNew("Colonists");
 
-            var actorsUI = new ListBoxNew<Actor, ButtonNew>(200, UIManager.LargeButton.Height * 8);
+            var editbox = new Panel(0, 0, 500, actorslistbox.Height) { AutoSize = false };
+
+            ListBoxNoScroll<Actor, ButtonNew> actorsUI = null;
+            actorsUI = new ListBoxNoScroll<Actor, ButtonNew>(btnInit);
             var addactorbutton = new Button("Create", actorsUI.Width);
 
-            var actorslistbox = new PanelLabeledNew("Colonists");
             actorslistbox.Client.AddControlsVertically(actorsUI, addactorbutton);
-            var editbox = new Panel(0, 0, 500, actorslistbox.Height) { AutoSize = false };
             addactorbutton.LeftClickAction = addActor;
 
-            actorsUI.AddItems(actors, btnInit);
+            actorsUI.AddItems(actors);
 
             this.AddControlsVertically(actorslistbox);
 
@@ -29,19 +32,19 @@ namespace Start_a_Town_
             {
                 var a = ActorDefOf.Npc.Create() as Actor;
                 actors.Add(a);
-                actorsUI.AddItem(a, btnInit);
+                actorsUI.AddItems(a);
             }
 
             ButtonNew btnInit(Actor a)
             {
-                var btn = ButtonNew.CreateBig(() => this.Expand(a, editbox), actorsUI.Client.Width, a.RenderIcon(), () => a.Npc.FullName);
+                var btn = ButtonNew.CreateBig(() => this.Expand(a, editbox), this.Client.Width, a.RenderIcon(), () => a.Npc.FullName);
                 var deleteBtn = IconButton.CreateCloseButton();
                 deleteBtn.Location = btn.TopRight;
                 deleteBtn.Anchor = Vector2.UnitX;
                 deleteBtn.LeftClickAction = () => new MessageBox("", "Delete " + a.Name + " ?", () =>
                 {
                     actors.Remove(a);
-                    actorsUI.RemoveItem(a);
+                    actorsUI.RemoveItems(a);
                 }, () => { }).ShowDialog();
                 btn.AddControls(deleteBtn);
                 return btn;

@@ -1,20 +1,26 @@
-﻿using Start_a_Town_.UI;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.Components;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    class EquipmentUI : GroupBox
+    class EquipmentUI : ScrollableBoxNewNew
     {
-        Panel PanelList;
-        ListBoxNew<Entity, Button> GearList;
+        readonly Panel PanelList;
+        readonly ListBoxNoScroll<Entity, Button> GearList;
         const int MaxRows = 8;
         Actor Actor;
         public EquipmentUI()
+            : base(200, Button.DefaultHeight * MaxRows)
         {
             this.PanelList = new Panel() { AutoSize = true };
-            this.GearList = new ListBoxNew<Entity, Button>(200, Button.DefaultHeight * MaxRows);
+            this.GearList = new ListBoxNoScroll<Entity, Button>(o =>
+            {
+                var btn = ButtonHelper.CreateFromItemCompact(o);
+                btn.LeftClickAction = () => ContextMenuManager.PopUp(new ContextAction(() => "Unequip", () => PacketInventoryEquip.Send(this.Actor.Net, this.Actor.RefID, o.RefID)));
+                return btn;
+            });
             this.PanelList.AddControls(this.GearList);
-            this.AddControls(PanelList);
+            this.AddControls(this.PanelList);
         }
 
         public void Refresh(Actor actor)
@@ -24,17 +30,8 @@ namespace Start_a_Town_
             if (actor == null)
                 return;
             var gear = actor.GetGear();
-            this.GearList.AddItems(gear, (System.Func<Entity, Button>)(o =>
-            {
-                var btn = ButtonHelper.CreateFromItemCompact(o);
-                btn.LeftClickAction = () => {
-                    ContextMenuManager.PopUp(new ContextAction(() => "Unequip", (System.Action)(() =>
-                    {
-                        PacketInventoryEquip.Send((INetwork)actor.Net, actor.RefID, o.RefID);
-                    })));
-                };
-                return btn;
-            }));
+            this.GearList.Clear();
+            this.GearList.AddItems(gear);
         }
 
         internal override void OnGameEvent(GameEvent e)
@@ -48,7 +45,7 @@ namespace Start_a_Town_
                         var newItem = e.Parameters[1] as Entity;
                         var prevItem = e.Parameters[2] as Entity;
                         this.GearList.AddItems(newItem);
-                        this.GearList.RemoveItem(prevItem);
+                        this.GearList.RemoveItems(prevItem);
                     }
                     break;
 

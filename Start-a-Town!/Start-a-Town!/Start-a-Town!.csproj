@@ -572,7 +572,6 @@
     <Compile Include="Gui\CharacterCreation\ColorLightnessPicker.cs" />
     <Compile Include="Gui\CharacterCreation\ColorPickerBox.cs" />
     <Compile Include="Gui\Primitives\CheckBox\CheckBoxIcon.cs" />
-    <Compile Include="Gui\ComboBox\ComboBoxLatest.cs" />
     <Compile Include="Gui\Primitives\Control.cs" />
     <Compile Include="Gui\DialogBlock.cs" />
     <Compile Include="Control\ObjectSpawnToolFromTemplate.cs" />
@@ -848,7 +847,6 @@
     <Compile Include="Gui\Primitives\CheckBox\CheckBoxNew.cs" />
     <Compile Include="Gui\ComboBox\ComboBoxNew.cs" />
     <Compile Include="Gui\ComboBox\ComboBoxNewNew.cs" />
-    <Compile Include="Gui\ComboBox\ComboBoxPanel.cs" />
     <Compile Include="Gui\Context\ContextActionBar.cs" />
     <Compile Include="Gui\Context\ContextAction.cs" />
     <Compile Include="Gui\DialogInput.cs" />
@@ -864,7 +862,6 @@
     <Compile Include="Gui\Lists\IListSearchable.cs" />
     <Compile Include="Gui\Lists\ListBoxObservable.cs" />
     <Compile Include="Gui\Lists\ListBoxNewNoBtnBase.cs" />
-    <Compile Include="Gui\Lists\ListBoxNew.cs" />
     <Compile Include="Gui\Lists\SearchBar.cs" />
     <Compile Include="Gui\NamePlates\NameplateManager.cs" />
     <Compile Include="Gui\NamePlates\NameplatesContainer.cs" />
@@ -1012,9 +1009,6 @@
     <Compile Include="Screens\LobbyWindow.cs" />
     <Compile Include="Gui\MenuStrip.cs" />
     <Compile Include="Gui\MenuStripItem.cs" />
-    <Compile Include="Gui\Lists\ListBox.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Gui\NamePlates\Nameplate.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotGridCustom.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotGridNew.cs" />

@@ -35,7 +35,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             var defaultSizes = StaticMap.MapSize.GetList();
             var selectedSize = defaultSizes.First();
-            var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => selectedSize = s, c => selectedSize);
+            //var comboSize = new ComboBoxLatest<StaticMap.MapSize>(defaultSizes.ToArray(), seedBox.Width, defaultSizes.Count, (c, s) => selectedSize = s, c => selectedSize);
+            var comboSize = new ComboBoxNewNew<StaticMap.MapSize>(defaultSizes, seedBox.Width, "Size", s => s.Name, () => selectedSize, s => selectedSize = s);
 
             tab_World.AddControlsVertically(
                 seedBox.ToPanelLabeled("Seed"),

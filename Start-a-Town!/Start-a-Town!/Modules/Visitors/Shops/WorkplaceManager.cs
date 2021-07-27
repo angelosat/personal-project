@@ -141,14 +141,15 @@ namespace Start_a_Town_.Towns
                     this.CreateUIShopList(action, filter))
                 .ToPanelLabeled("Select shop").HideOnAnyClick();
         }
-        private ListBoxNew<Workplace, Button> CreateUIShopList(Action<Workplace> selectAction, Func<Workplace, bool> filter = null)
+        private ListBoxNoScroll<Workplace, Button> CreateUIShopList(Action<Workplace> selectAction, Func<Workplace, bool> filter = null)
         {
             return this.CreateUIShopList<Workplace>(selectAction, filter);
         }
 
-        private ListBoxNew<T, Button> CreateUIShopList<T>(Action<T> selectAction, Func<T, bool> filter) where T:Workplace
+        private ListBoxNoScroll<T, Button> CreateUIShopList<T>(Action<T> selectAction, Func<T, bool> filter) where T : Workplace
         {
-            var shoplist = new ListBoxNew<T, Button>(UIListWidth, Button.DefaultHeight * 8, s => new Button(s.Name, () => selectAction?.Invoke(s)));
+            //var shoplist = new ListBoxNew<T, Button>(UIListWidth, Button.DefaultHeight * 8, s => new Button(s.Name, () => selectAction?.Invoke(s)));
+            var shoplist = new ListBoxNoScroll<T, Button>(s => new Button(s.Name, () => selectAction?.Invoke(s)));
 
             shoplist.OnGameEventAction = e =>
             {
@@ -222,7 +223,8 @@ namespace Start_a_Town_.Towns
 
             Control selectShopType(Action<Type> callback)
             {
-                ListBoxNew<Type, Button> list = new(150, Button.DefaultHeight * 2, t=>new Button(t.Name, ()=>callback(t)));
+                //var list = new ListBoxNew<Type, Button>(150, Button.DefaultHeight * 2, t=>new Button(t.Name, ()=>callback(t)));
+                var list = new ListBoxNoScroll<Type, Button>(t => new Button(t.Name, () => callback(t)));
                 list.AddItems(typeof(Shop), typeof(Tavern));
                 return list.ToContextMenu("Select shop type");
             }

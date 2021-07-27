@@ -133,8 +133,9 @@ namespace Start_a_Town_
         internal override IEnumerable<Button> GetTabs()
         {
             var parent = this.Parent;
-            if(ActorList is null)
-                ActorList = new ListBoxNew<Actor, Button>(200, 200, a => new Button(a?.Name ?? "none", () => PacketPlayerSetItemOwner.Send(Net.Client.Instance, parent.RefID, a?.RefID ?? -1)))
+            //dimensions 200, 200, 
+            if (ActorList is null)
+                ActorList = new ListBoxNoScroll<Actor, Button>(a => new Button(a?.Name ?? "none", () => PacketPlayerSetItemOwner.Send(Net.Client.Instance, parent.RefID, a?.RefID ?? -1)))
                                                                    .AddItems(parent.Town.GetAgents().Prepend(null))
                                                                    .ToPanelLabeled("Select owner")
                                                                    .HideOnRightClick()

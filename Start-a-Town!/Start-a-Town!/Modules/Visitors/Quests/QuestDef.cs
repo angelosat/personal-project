@@ -214,9 +214,9 @@ namespace Start_a_Town_
         }
         static Control CreateGUI()
         {
-            var box = new GroupBox();
+            var box = new ScrollableBoxNewNew(200, 200);
             QuestDef quest = null;
-            ListBoxNew<ItemDefMaterialAmount, Button> listAvailableReqs = null;
+            ListBoxNoScroll<ItemDefMaterialAmount, Button> listAvailableReqs = null;
             var iconW = UIManager.Icon16Background.Width;
 
             void showAdjustObjectiveCountGui(QuestObjective qo)
@@ -276,7 +276,7 @@ namespace Start_a_Town_
                 reqList.AddItems(added);
                 reqList.RemoveItems(removed);
                 listAvailableReqs.AddItems(removed.Select(o => (o as QuestObjectiveItem).Objective));
-                listAvailableReqs.RemoveItems(o => added.Any(oo =>
+                listAvailableReqs.RemoveWhere(o => added.Any(oo =>
                 {
                     var item = (oo as QuestObjectiveItem).Objective;
                     return item.Def == o.Def && item.Material == o.Material;
@@ -362,7 +362,7 @@ namespace Start_a_Town_
                 var box = new GroupBox();
 
                 var items = Def.Database.Values.OfType<ItemDef>().Where(d => d.Category == ItemCategory.RawMaterials).SelectMany(d => d.GenerateVariants());
-                listAvailableReqs = new ListBoxNew<ItemDefMaterialAmount, Button>(200, 200, (def, currentList) => new(def.ToString(), () =>
+                listAvailableReqs = new ListBoxNoScroll<ItemDefMaterialAmount, Button>(def => new(def.ToString(), () =>
                 {
                     Packets.SendQuestCreateObjective(quest.Manager.Town.Net, quest.Manager.Town.Net.GetPlayer(), quest, new QuestObjectiveItem(quest, def));
                 }));

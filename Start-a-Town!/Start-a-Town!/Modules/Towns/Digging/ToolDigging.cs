@@ -8,6 +8,8 @@ namespace Start_a_Town_
 {
     class ToolDigging : ToolDesignate3D
     {
+        readonly BlockRenderer Renderer = new();
+        IntVec3 PrevEnd;
         public ToolDigging()
         {
 
@@ -20,6 +22,17 @@ namespace Start_a_Town_
         {
             this.Callback = callback;
         }
+        /// <summary>
+        /// TODO optimize
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="camera"></param>
+        protected void Validate(MapBase map, Camera camera)
+        {
+            var positions = this.Begin.GetBox(this.End)
+                .Where(v => map.GetBlock(v) != BlockDefOf.Air || map.IsUndiscovered(v));
+            this.Renderer.CreateMesh(camera, positions);
+        }
         public override void UpdateRemote(TargetArgs target)
         {
             if(target.Type == TargetType.Position)
@@ -29,9 +42,13 @@ namespace Start_a_Town_
         {
             if (!this.Enabled)
                 return;
-            var positions = this.Begin.GetBox(this.End)
-                .Where(v => map.GetBlock(v) != BlockDefOf.Air);
-            camera.DrawGridBlocks(sb, Block.BlockBlueprint, positions, Color.White);
+
+            if (this.End != this.PrevEnd)
+            {
+                this.Validate(map, camera);
+                this.PrevEnd = this.End;
+            }
+            this.Renderer.DrawBlocks(map, camera);
         }
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, PlayerData player)
         {

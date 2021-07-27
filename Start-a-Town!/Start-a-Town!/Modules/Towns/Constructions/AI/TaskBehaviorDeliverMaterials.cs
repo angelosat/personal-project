@@ -34,7 +34,7 @@ namespace Start_a_Town_
             yield return extractDestination;
             bool deliverFail()
             {
-                var o = this.Actor.GetHauled();
+                var o = this.Actor.Hauled;
                 if (o == null)
                     return false;
                 var val = !this.Destination.IsValidHaulDestination(this.Actor.Map, o);

@@ -21,7 +21,7 @@ namespace Start_a_Town_
             Mod = (a,v)=>
             {
                 var encumberance = StatDefOf.Encumberance.GetValue(a);
-                var carryingw = a.GetHauled()?.TotalWeight ?? 0;
+                var carryingw = a.Hauled?.TotalWeight ?? 0;
                 if (carryingw == 0)
                     return v;
                 return .5f + .5f * (1 - encumberance);

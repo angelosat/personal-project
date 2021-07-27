@@ -13,7 +13,7 @@ namespace Start_a_Town_
                 InitAction = () =>
                 {
                     var actor = gotoBhav.Actor;
-                    var hauling = actor.GetHauled();
+                    var hauling = actor.Hauled;
                     var task = actor.CurrentTask;
                     var desiredAmount = Math.Min(task.Count, hauling.StackAvailableSpace);
                     if (desiredAmount == 0)
@@ -54,7 +54,7 @@ namespace Start_a_Town_
                     var actor = bhav.Actor;
                     var task = actor.CurrentTask;
                     target = task.GetTarget(storageIndex);
-                    var hauled = actor.GetHauled();
+                    var hauled = actor.Hauled;
                     var item = target.Object;
                     var reservedAmount = actor.GetReservedAmount(item);
 
@@ -85,15 +85,15 @@ namespace Start_a_Town_
                 {
                     var actor = bhav.Actor;
                     var task = actor.CurrentTask;
-                    var hauled = actor.GetHauled();
+                    var hauled = actor.Hauled;
                     task.Count -= amountToPickUp;
                     //actor.Unreserve(target); // UNDONE ??? dont unreserve here because the ai might continue manipulating (placing/carrying) the item during the same behavior
 
-                    if (target.Object != actor.Carried)
+                    if (target.Object != actor.Hauled)
                     {
                         actor.Unreserve(target); // ACTUALLY UNRESERVE SOURCE STACK HERE IN CASE THE HAULED STACK IS SPLIT FROM THE SOURCE ONE
-                        actor.Reserve(actor.Carried);
-                        task.SetTarget(storageIndex, actor.Carried); // replacing task target with combined item because otherwise the behavior will fail since the old item is now disposed
+                        actor.Reserve(actor.Hauled);
+                        task.SetTarget(storageIndex, actor.Hauled); // replacing task target with combined item because otherwise the behavior will fail since the old item is now disposed
                     }
                     return true;
                 }
@@ -110,7 +110,7 @@ namespace Start_a_Town_
                 {
                     var actor = bhav.Actor;
                     var interaction = new UseHauledOnTargetNew();
-                    hauledObj = actor.GetHauled();
+                    hauledObj = actor.Hauled;
                     var task = actor.CurrentTask;
                     var target = task.GetTarget(storageIndex);
                     actor.Interact(interaction, target);
@@ -125,7 +125,7 @@ namespace Start_a_Town_
                 else if (interaction.State == Interaction.States.Finished)
                 {
                     actor.Net.Log.Write("successfully dropped item");
-                    if (actor.GetHauled() is not Entity hauled)
+                    if (actor.Hauled is not Entity hauled)
                         return BehaviorState.Success;
                     if (!hauledObj.IsDisposed)
                         actor.Unreserve(hauledObj);
@@ -144,7 +144,7 @@ namespace Start_a_Town_
             bhav.InitAction = () =>
             {
                 var actor = gotoBhav.Actor;
-                hauledObj = actor.GetHauled() as Entity;
+                hauledObj = actor.Hauled as Entity;
                 if (hauledObj == null)
                     return;
                 var task = actor.CurrentTask;

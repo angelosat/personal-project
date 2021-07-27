@@ -15,7 +15,7 @@ namespace Start_a_Town_
             "Encumberance",
             a =>
             {
-                var haulWeight = a.GetHauled()?.TotalWeight ?? 0;
+                var haulWeight = a.Hauled?.TotalWeight ?? 0;
                 if (haulWeight == 0)
                     return 0;
                 var maxWeight = StatDefOf.MaxHaulWeight.GetValue(a);

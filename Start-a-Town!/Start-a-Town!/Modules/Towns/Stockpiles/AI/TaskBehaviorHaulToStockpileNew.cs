@@ -27,7 +27,7 @@ namespace Start_a_Town_
 
             bool deliverFail()
             {
-                var o = this.Actor.GetHauled();
+                var o = this.Actor.Hauled;
                 if (o == null)
                     return true;
                 var fail = !HaulHelper.IsValidStorage(this.Task.GetTarget(StorageInd), this.Actor.Map, o);

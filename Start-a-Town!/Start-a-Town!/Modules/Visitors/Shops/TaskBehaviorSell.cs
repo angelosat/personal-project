@@ -14,7 +14,7 @@ namespace Start_a_Town_
             var itemvalue = item.GetValueTotal();
             yield return new BehaviorWait(() =>
             {
-                var carried = tradePartner.Carried;
+                var carried = tradePartner.Hauled;
                 if (carried == null)
                     return false;
                 return carried.Def == ItemDefOf.Coins && carried.StackSize == itemvalue;

@@ -38,7 +38,7 @@ namespace Start_a_Town_
         internal static Behavior CarryFromInventoryAndReplaceTarget(TargetIndex item)
         {
             var bhav = new BehaviorCustom();
-            bhav.InitAction = () => bhav.Actor.CurrentTask.SetTarget(item, bhav.Actor.Carried);
+            bhav.InitAction = () => bhav.Actor.CurrentTask.SetTarget(item, bhav.Actor.Hauled);
             return new BehaviorSequence(
                 new BehaviorInteractionNew(item, () => new InteractionHaul()),
                 bhav);
@@ -98,7 +98,7 @@ namespace Start_a_Town_
                 InitAction = () =>
                 {
                     var actor = jumpBhav.Actor;
-                    var carried = actor.Carried;
+                    var carried = actor.Hauled;
                     var task = actor.CurrentTask;
                     var targets = task.GetTargetQueue(ind);
                     if (!targets?.Any() ?? false)
@@ -117,7 +117,7 @@ namespace Start_a_Town_
                 InitAction = () =>
                 {
                     var actor = jumpBhav.Actor;
-                    var carried = actor.Carried;
+                    var carried = actor.Hauled;
                     var task = actor.CurrentTask;
                     var targets = task.GetTargetQueue(ind);
                     if (!targets?.Any() ?? false)

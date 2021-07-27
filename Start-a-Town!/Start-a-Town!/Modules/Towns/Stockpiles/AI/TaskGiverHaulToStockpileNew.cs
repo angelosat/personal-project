@@ -11,7 +11,7 @@ namespace Start_a_Town_
                 return null;
             if (actor.IsTooTiredToWork)
                 return null;
-            if (actor.Carried != null)
+            if (actor.Hauled != null)
             {
                 return null;
             }

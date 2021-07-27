@@ -33,7 +33,7 @@ namespace Start_a_Town_
                 var worker = item.Parent; // HACK this will just wait for the first person to pick up the item. check if it's a worker of the current shop
                 if (worker == null)
                     return false;
-                if (worker.Carried != item)
+                if (worker.Hauled != item)
                     return false; // TODO maybe throw exception?
                 return true;
                 });
@@ -51,7 +51,7 @@ namespace Start_a_Town_
                 }
             };
             yield return new BehaviorInteractionNew(TargetIndex.C, () => new InteractionHaul(this.Task.AmountC));
-            yield return new BehaviorCustom() { InitAction = () => actor.Reserve(actor.Carried) };
+            yield return new BehaviorCustom() { InitAction = () => actor.Reserve(actor.Hauled) };
             yield return new BehaviorInteractionNew(() => (actor.Map, counter.Above()), () => new UseHauledOnTarget());
             // TODO wait for the item to be placed ontop of the counter, and then pick it up
             yield return new BehaviorWait(() => item.Parent == null && item.Global.SnapToBlock() == counter.Above());

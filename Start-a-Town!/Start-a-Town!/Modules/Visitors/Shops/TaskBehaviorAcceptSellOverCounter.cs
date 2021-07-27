@@ -41,7 +41,7 @@ namespace Start_a_Town_
             // if carrying coins, store in inventory. otherwise drop or haul to stockpile
             yield return new BehaviorInteractionNew(TargetIndex.A, () =>
             {
-                if (this.Actor.Carried.Def == ItemDefOf.Coins)
+                if (this.Actor.Hauled.Def == ItemDefOf.Coins)
                     return new InteractionStoreHauled();
                 else
                     return new InteractionThrow();

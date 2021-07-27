@@ -26,7 +26,7 @@ namespace Start_a_Town_
             }
             else
             {
-                var hauling = actor.GetHauled();
+                var hauling = actor.Hauled;
                 if (hauling != null)
                 {
                     var destination = StockpileAIHelper.GetBestHaulDestination(actor, hauling);
@@ -104,7 +104,7 @@ namespace Start_a_Town_
         }
         static public Behavior FailOnNotCarrying(this Behavior bhav)
         {
-            bhav.FailOn(() => bhav.Actor.Carried == null);
+            bhav.FailOn(() => bhav.Actor.Hauled == null);
             return bhav;
         }
         static public Behavior FailOnForbidden(this Behavior bhav, TargetIndex targetInd)

@@ -24,9 +24,9 @@ namespace Start_a_Town_
         }
         public override void Perform(Actor a, TargetArgs t)
         {
-            var item = a.Carried as Entity;
+            var item = a.Hauled as Entity;
             var seller = t.Object as Actor;
-            var sellerCarriedItem = seller.Carried as Entity;
+            var sellerCarriedItem = seller.Hauled as Entity;
             seller.Carry(item);
             if(this.Trade)
                 a.Carry(sellerCarriedItem);

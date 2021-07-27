@@ -25,7 +25,7 @@ namespace Start_a_Town_
             var item = t.Object as Entity;
             var global = item.Global;
             var actor = a as Actor;
-            var prevCarried = actor.Carried;
+            var prevCarried = actor.Hauled;
             prevCarried.Slot.Clear();
             prevCarried.Spawn(a.Map, global);
             actor.Inventory.Haul(item);

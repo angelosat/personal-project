@@ -30,7 +30,7 @@ namespace Start_a_Town_
                 .AddJoint(new Vector2(0, -12), new Bone(BoneDef.Head, spriteSkull, -.002f))
                 .AddJoint(new Vector2(-7, -7), new Bone(BoneDef.RightHand, spriteArm, -0.003f)
                     .AddJoint(BoneDef.Mainhand, new Joint(-2, 11) { Angle = 5 * (float)Math.PI / 4f, AttachmentFunc = o => o.Gear.GetGear(GearType.Mainhand) })
-                    .AddJoint(BoneDef.Hauled, new Joint(-2, 11) { Angle = (float)Math.PI, AttachmentFunc = o => o.GetHauled() }))
+                    .AddJoint(BoneDef.Hauled, new Joint(-2, 11) { Angle = (float)Math.PI, AttachmentFunc = o => o.Hauled }))
                 .AddJoint(new Vector2(6, -8), new Bone(BoneDef.LeftHand, spriteArm, 0.002f))
                 .AddJoint(new Vector2(-3, 1), new Bone(BoneDef.RightFoot, spriteLeg,  0.001f))
                 .AddJoint(new Vector2(2, 0), new Bone(BoneDef.LeftFoot, spriteLeg,0.002f));
@@ -41,7 +41,7 @@ namespace Start_a_Town_
                     .AddJoint(new Vector2(0, -12), new Bone(BoneDef.Head, spriteSkull, -.002f))
                     .AddJoint(new Vector2(-7, -7), new Bone(BoneDef.RightHand, spriteArm, -0.003f)
                         .AddJoint(BoneDef.Mainhand, new Joint(-2, 11) { Angle = 5 * (float)Math.PI / 4f, AttachmentFunc = o => o.Gear.GetGear(GearType.Mainhand) })
-                        .AddJoint(BoneDef.Hauled, new Joint(-2, 11) { Angle = (float)Math.PI, AttachmentFunc = o => o.GetHauled() }))
+                        .AddJoint(BoneDef.Hauled, new Joint(-2, 11) { Angle = (float)Math.PI, AttachmentFunc = o => o.Hauled }))
                     .AddJoint(new Vector2(6, -8), new Bone(BoneDef.LeftHand, spriteArm, 0.002f)))
                 .AddJoint(new Vector2(-3, 1), new Bone(BoneDef.RightFoot, spriteLeg, 0.001f))
                 .AddJoint(new Vector2(2, 0), new Bone(BoneDef.LeftFoot, spriteLeg, 0.002f));
@@ -57,6 +57,6 @@ namespace Start_a_Town_
                         .AddJoint(BoneDef.Offhand, new Joint(0, 4) { Angle = 5 * (float)Math.PI / 4f, AttachmentFunc = o => o.Gear.GetGear(GearType.Offhand) }))
                     .AddJoint(new Vector2(-4, -9), new Bone(BoneDef.RightHand, rhand, -.004f)
                         .AddJoint(BoneDef.Mainhand, new Joint(-2, 11) { Angle = 5 * (float)Math.PI / 4f, AttachmentFunc = o => o.Gear.GetGear(GearType.Mainhand) })
-                        .AddJoint(BoneDef.Hauled, new Joint(-2, 11) { Angle = (float)Math.PI, AttachmentFunc = o => o.GetHauled() })));
+                        .AddJoint(BoneDef.Hauled, new Joint(-2, 11) { Angle = (float)Math.PI, AttachmentFunc = o => o.Hauled })));
     }
 }

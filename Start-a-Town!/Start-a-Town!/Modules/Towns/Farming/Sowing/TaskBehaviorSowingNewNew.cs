@@ -33,7 +33,7 @@ namespace Start_a_Town_
             yield return extractDestination;
             bool deliverFail()
             {
-                var o = this.Actor.GetHauled();
+                var o = this.Actor.Hauled;
                 if (o == null)
                     return false;
                 return !this.Destination.IsValidHaulDestination(this.Actor.Map, o);
@@ -49,7 +49,6 @@ namespace Start_a_Town_
             return
                 this.Task.ReserveAll(this.Actor, MaterialID) &&
                 this.Task.GetTargetQueue(DestinationID).All(t => this.Actor.Reserve(t, 1));
-
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Start_a_Town_
                 return;
 
             this.End = (IntVec3)this.Target.Global * (IntVec3.One - this.Plane) + this.Begin * this.Plane;
-
+          
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;
             if (w != this.Width || h != this.Height)
@@ -88,13 +88,13 @@ namespace Start_a_Town_
                 return Messages.Default;
             if (this.Target.Type != TargetType.Position)
                 return Messages.Default;
-            int x = (int)Math.Min(this.Begin.X, this.End.X);
-            int y = (int)Math.Min(this.Begin.Y, this.End.Y);
-            int z = (int)Math.Min(this.Begin.Z, this.End.Z);
+            int x = Math.Min(this.Begin.X, this.End.X);
+            int y = Math.Min(this.Begin.Y, this.End.Y);
+            int z = Math.Min(this.Begin.Z, this.End.Z);
 
-            int xx = (int)(this.Begin.X + this.End.X - x);
-            int yy = (int)(this.Begin.Y + this.End.Y - y);
-            int zz = (int)(this.Begin.Z + this.End.Z - z);
+            int xx = this.Begin.X + this.End.X - x;
+            int yy = this.Begin.Y + this.End.Y - y;
+            int zz = this.Begin.Z + this.End.Z - z;
 
             var rect = new Rectangle(x, y, this.Width, this.Height);
 

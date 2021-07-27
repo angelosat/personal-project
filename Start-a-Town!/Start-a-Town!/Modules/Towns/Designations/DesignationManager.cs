@@ -52,27 +52,6 @@ namespace Start_a_Town_
         }
         internal void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
-            //if (designation == DesignationDef.Null)
-            //{
-            //    foreach (var l in Designations)
-            //        foreach (var p in positions)
-            //        {
-            //            if(l.Value.Remove(p))
-            //                this.Renderers[l.Key].Invalidate();
-            //        }
-            //}
-            //else
-            //{
-            //    var list = Designations[designation];
-            //    foreach (var pos in positions)
-            //    {
-            //        if (remove)
-            //            list.Remove(pos);
-            //        else if (designation.IsValid(this.Town.Map, pos))
-            //            list.Add(pos);
-            //    }
-            //    this.Renderers[designation].Invalidate();
-            //}
             if (designation == DesignationDef.Null)
             {
                 foreach (var l in Designations)
@@ -86,7 +65,7 @@ namespace Start_a_Town_
                 {
                     if (remove)
                         list.Remove(pos);
-                    else if (designation.IsValid(this.Town.Map, pos))
+                    else if (designation.IsValid(this.Town.Map, pos) || this.Map.IsUndiscovered(pos))
                         list.Add(pos);
                 }
             }
@@ -149,7 +128,6 @@ namespace Start_a_Town_
         public override void Load(SaveTag tag)
         {
             foreach (var des in Designations.Keys.ToList())
-                //tag.TryGetTagValue<List<SaveTag>>(des.Name, v => Designations[des] = new HashSet<IntVec3>(new List<IntVec3>().Load(v)));
                 tag.TryGetTag(des.Name, v => Designations[des].LoadIntVecs(v));
         }
         public override void Write(System.IO.BinaryWriter w)
@@ -160,7 +138,7 @@ namespace Start_a_Town_
         public override void Read(System.IO.BinaryReader r)
         {
             foreach (var des in Designations.Keys.ToList())
-                Designations[des].ReadIntVec3(r);// = new HashSet<IntVec3>(r.ReadListIntVec3());
+                Designations[des].ReadIntVec3(r);
         }
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
@@ -174,7 +152,7 @@ namespace Start_a_Town_
         }
         internal override void UpdateQuickButtons()
         {
-            if (this.Town.Net is Net.Server)
+            if (this.Town.Net is Server)
                 return;
             var selectedCells = SelectionManager.GetSelectedCells();
             var fromblockentities = selectedCells.Select(this.Map.GetBlockEntity).OfType<Blocks.BlockEntity>().Select(b => b.OriginGlobal);

@@ -14,10 +14,10 @@ namespace Start_a_Town_
             yield return new BehaviorStopMoving();
             yield return new BehaviorWait(() =>
             {
-                if (tradingpartner.Carried != null)
+                if (tradingpartner.Hauled != null)
                 {
                     this.Task.TargetA = actor.GetMoney();
-                    this.Task.AmountA = tradingpartner.Carried.GetValueTotal();
+                    this.Task.AmountA = tradingpartner.Hauled.GetValueTotal();
                     return true;
                 }
                 return false;

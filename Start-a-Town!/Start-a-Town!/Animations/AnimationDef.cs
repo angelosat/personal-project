@@ -140,7 +140,7 @@ namespace Start_a_Town_.Animations
         static public readonly AnimationDef Crouch = new AnimationDef("AnimationCrouch", layer: 4) { Speed = 0 } //  layer: 2
             .AddClip(BoneDef.Torso, new Keyframe(0, Vector2.Zero, (float)Math.PI / 2f));
 
-        static public readonly AnimationDef Haul = new AnimationDef("AnimationHaul", 3) { WeightChangeFunc = actor=>actor.GetHauled() != null ? .1f : -1f }
+        static public readonly AnimationDef Haul = new AnimationDef("AnimationHaul", 3) { WeightChangeFunc = actor=>actor.Hauled != null ? .1f : -1f }
             .AddClip(BoneDef.RightHand, new AnimationClip(WarpMode.Once,
                 new Keyframe(0, Vector2.Zero, -(float)Math.PI)
                 ))

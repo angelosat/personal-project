@@ -318,7 +318,8 @@ namespace Start_a_Town_
         public bool IsReserved => this.Town.ReservationManager.IsReserved(this);
         public bool IsPlayerControlled => this.Net.GetPlayers().Any(p => p.ControllingEntity == this); 
         public virtual bool IsHaulable => this.Def.Haulable;
-        internal bool IsFuel => this.Material?.Fuel.Value > 0; 
+        public bool IsFuel => this.Material?.Fuel.Value > 0;
+        public GameObject Hauled => this.Inventory.GetHauling().Object;
 
         public GameObjectSlot Slot;
         #endregion
@@ -438,6 +439,7 @@ namespace Start_a_Town_
 
         PersonalInventoryComponent _InventoryCached;
         public PersonalInventoryComponent Inventory => this._InventoryCached ??= this.GetComponent<PersonalInventoryComponent>();
+
 
         public ComponentCollection Components = new();
 
@@ -1111,34 +1113,25 @@ namespace Start_a_Town_
         public bool CanAbsorb(GameObject otherItem, int amount = -1)
         {
             if (this == otherItem)
-            {
                 return false;
-            }
 
             if (this.IsStackFull)
-            {
                 return false;
-            }
 
             if (otherItem.Def != null && this.Def != otherItem.Def)
-            {
                 return false;
-            }
 
             if (!this.HasMatchingBody(otherItem))
-            {
                 return false;
-            }
+
+            if (this.IsReserved || otherItem.IsReserved)
+                return false;
 
             if (amount == -1)
-            {
                 return true;
-            }
 
             if (this.StackSize + amount > this.StackMax)
-            {
                 throw new Exception();
-            }
 
             return true;
         }
@@ -1147,17 +1140,8 @@ namespace Start_a_Town_
         {
             return ToolAbilityComponent.HasSkill(this, skill);
         }
-
         
-        internal GameObject GetHauled()
-        {
-            return PersonalInventoryComponent.GetHauling(this).Object;
-        }
-
-        internal GameObject Carried
-        {
-            get { return PersonalInventoryComponent.GetHauling(this).Object; }
-        }
+        
         internal GameObject ClearCarried()
         {
             var carried = PersonalInventoryComponent.GetHauling(this);
@@ -1526,15 +1510,10 @@ namespace Start_a_Town_
         }
         public void Absorb(GameObject obj)
         {
-            if (this.IsReserved)
-            {
-                return;
-            }
+            
 
             if (!this.CanAbsorb(obj))
-            {
                 return;
-            }
 
             this.StackSize += obj.StackSize;
             obj.Despawn();
@@ -1544,9 +1523,7 @@ namespace Start_a_Town_
         {
             var net = this.Net;
             if (net is Client)
-            {
                 throw new Exception();
-            }
 
             this.Absorb(obj);
             var w = net.GetOutgoingStream();
@@ -1557,9 +1534,7 @@ namespace Start_a_Town_
         private static void SyncAbsorb(INetwork net, BinaryReader r)
         {
             if (net is Server)
-            {
                 throw new Exception();
-            }
 
             var master = net.GetNetworkObject(r.ReadInt32());
             var slave = net.GetNetworkObject(r.ReadInt32());
@@ -1571,7 +1546,5 @@ namespace Start_a_Town_
             throw new NotImplementedException();
         }
         #endregion
-
-
     }
 }

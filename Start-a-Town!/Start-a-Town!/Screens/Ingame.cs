@@ -99,7 +99,7 @@ namespace Start_a_Town_
             return DrawServer ? Server.Instance.Map : Client.Instance.Map;
         }
        
-        static public MapBase CurrentMap { get { return DrawServer ? Server.Instance.Map : Client.Instance.Map; } }
+        static public MapBase CurrentMap => DrawServer ? Server.Instance.Map : Client.Instance.Map;
         static public bool DrawServer;
         public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
@@ -122,14 +122,8 @@ namespace Start_a_Town_
                 {
                     if (target.Type == TargetType.Entity)
                     {
-                        if (target.Object is IDebuggable obj)
-                        {
-                            if (obj.Debug() is not null)
-                            {
-                                DebugQueryWindow win = new DebugQueryWindow(obj.Debug());
-                                win.Show();
-                            }
-                        }
+                        var win = new DebugQueryWindow(target.Object);
+                        win.Show();
                     }
                 }
             }

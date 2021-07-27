@@ -10,6 +10,8 @@ namespace Start_a_Town_.UI
             UnCheckedRegion = new(0, 0, 23, 23),
             CheckedRegion = new(0, 23, 23, 23);
 
+        public static readonly Rectangle DefaultBounds = new(0, 0, 23, 23);
+
         Rectangle Region { get { return this.Value ? CheckedRegion : UnCheckedRegion; } }
 
         public override void OnPaint(SpriteBatch sb)
@@ -40,7 +42,6 @@ namespace Start_a_Town_.UI
                 this.Invalidate();
             this.LastValue = nowValue;
         }
-
         public CheckBoxNew() : this("")
         {
         }
@@ -56,7 +57,16 @@ namespace Start_a_Town_.UI
             Alpha = Color.Lerp(Color.Transparent, Color.White, 0.5f);
             this.Value = check;
         }
-
+        public CheckBoxNew(string text, Action clickAction, Func<bool> tickedFunc)
+        {
+            BackgroundTexture = UIManager.TextureTickBox;
+            Text = text;
+            Height = 23;
+            Alpha = Color.Lerp(Color.Transparent, Color.White, 0.5f);
+            this.LeftClickAction = clickAction;
+            this.TickedFunc = tickedFunc;
+        }
+      
         protected override void OnTextChanged()
         {
             base.OnTextChanged();

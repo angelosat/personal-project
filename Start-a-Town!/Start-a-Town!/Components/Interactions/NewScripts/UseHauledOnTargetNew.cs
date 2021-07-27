@@ -61,7 +61,6 @@ namespace Start_a_Town_
                         throw new Exception();
                     if (!o.CanAbsorb(hauledObj, transferAmount))
                         throw new Exception();
-
                     o.StackSize += transferAmount;
                     hauledObj.StackSize -= transferAmount;
 

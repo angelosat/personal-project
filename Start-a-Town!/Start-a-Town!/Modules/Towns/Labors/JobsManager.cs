@@ -121,7 +121,6 @@ namespace Start_a_Town_.AI
             base.OnTargetSelected(info, target);
         }
 
-       
         Control CreateJobsTable()
         {
             var box = new GroupBox();
@@ -138,7 +137,7 @@ namespace Start_a_Town_.AI
                 var icon = new PictureBox(ic.SpriteSheet, ic.SourceRect) { HoverText = labor.Name };
                 var iconManual = new PictureBox(ic.SpriteSheet, ic.SourceRect) { HoverText = labor.Name };
 
-                tableAuto.AddColumn(labor, icon, CheckBox.CheckedRegion.Width, (actor) =>
+                tableAuto.AddColumn(labor, icon, CheckBoxNew.DefaultBounds.Width, (actor) =>
                 {
                     var state = AIState.GetState(actor);
                     var job = state.GetJob(labor);
@@ -149,7 +148,7 @@ namespace Start_a_Town_.AI
                     };
                     return ch;
                 }, 0);
-                tableManual.AddColumn(labor, iconManual, CheckBox.CheckedRegion.Width, (actor) =>
+                tableManual.AddColumn(labor, iconManual, CheckBoxNew.DefaultBounds.Width, (actor) =>
                 {
                     var state = AIState.GetState(actor);
                     var job = state.GetJob(labor);

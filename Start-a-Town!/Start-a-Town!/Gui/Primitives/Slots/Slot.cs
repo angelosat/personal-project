@@ -5,16 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_.UI
 {
-    public class Slot : ButtonBase, IDropTarget, ITooltippable, IContextable, IDebuggable
+    public class Slot : ButtonBase, IDropTarget, ITooltippable, IContextable
     {
-        public GameObject Debug()
-        {
-            if (this.Tag is null)
-                return null;
-            if(this.Tag.HasValue)
-                return this.Tag.Object;
-            return null;
-        }
         GameObject LastObject = null;
         int LastStackSize = 0;
         public Func<GameObject, bool> DragDropCondition = o => true;

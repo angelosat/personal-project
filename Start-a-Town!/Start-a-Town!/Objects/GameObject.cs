@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class GameObject : IEntity, ITooltippable, IContextable, INameplateable, IDebuggable, ISlottable, ISelectable, ILabeled
+    public class GameObject : IEntity, ITooltippable, IContextable, INameplateable, ISlottable, ISelectable, ILabeled
     {
         public static Dictionary<int, GameObject> Templates = new();
         public string Label => this.Def.Label;
@@ -1124,8 +1124,8 @@ namespace Start_a_Town_
             if (!this.HasMatchingBody(otherItem))
                 return false;
 
-            if (this.IsReserved || otherItem.IsReserved)
-                return false;
+            //if (this.IsReserved || otherItem.IsReserved)
+            //    return false;
 
             if (amount == -1)
                 return true;
@@ -1510,8 +1510,6 @@ namespace Start_a_Town_
         }
         public void Absorb(GameObject obj)
         {
-            
-
             if (!this.CanAbsorb(obj))
                 return;
 

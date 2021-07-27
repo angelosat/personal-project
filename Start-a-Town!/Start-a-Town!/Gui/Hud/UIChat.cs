@@ -175,20 +175,7 @@ namespace Start_a_Town_.UI
             if (text.Length == 0)
                 return;
 
-            Color c = Color.White;
-            switch (e.Type)
-            {
-                case Log.EntryTypes.System:
-                    c = Color.Yellow;
-                    break;
-                case Log.EntryTypes.Damage:
-                    c = Color.Red;
-                    break;
-                default:
-                    break;
-            }
-
-            Label line = this.Console.Write(c, text);
+            var line = this.Console.Write(e.Color, text);
             line.MouseThrough = true;
             
             this.Timers.Add(line, FadeDelay);

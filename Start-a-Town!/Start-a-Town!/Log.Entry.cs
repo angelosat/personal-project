@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Start_a_Town_
 {
@@ -6,6 +7,7 @@ namespace Start_a_Town_
     {
         public class Entry
         {
+            public Color Color;
             public EntryTypes Type;
             public object[] Values;
             public Entry(EntryTypes type, params object[] values)
@@ -37,12 +39,18 @@ namespace Start_a_Town_
                         return "[" + (Values[0] == null ? "" : (Values[0] as GameObject).Name) + "] " + Values[1];
                     case EntryTypes.ChatPlayer:
                         return string.Format("[{0}] {1}", Values[0], Values[1]);
-
-                    case EntryTypes.System:
-                        return "[System] " + Values[0];
                     default:
-                        return Values[0].ToString();
+                        return $"[{Type}] {Values[0]}";
                 }
+            }
+
+            public static Entry Warning(string text)
+            {
+                return new Entry(EntryTypes.Warning, text) { Color = Color.Red };
+            }
+            public static Entry System(string text)
+            {
+                return new Entry(EntryTypes.System, text) { Color = Color.Yellow };
             }
         }
     }

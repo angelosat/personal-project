@@ -4,36 +4,33 @@ namespace Start_a_Town_
 {
     class InterfaceSettings : GameSettings
     {
-        CheckBox Chkbox_MouseTooltip;
         GroupBox _Gui;
         internal override GroupBox Gui => this._Gui ??= this.CreateGui();
-        float newGuiScale, newTooltipDelay;
-
+        float _tmpGuiScale, _tmpTooltipDelay;
+        bool _tmpMouseTooltip;
         GroupBox CreateGui()
         {
             var box = new GroupBox() { Name = "Interface" };
-            this.newGuiScale = UIManager.Scale;
-            var sldr_UIScale = SliderNew.CreateWithLabel("UI Scale", () => this.newGuiScale, v => this.newGuiScale = v, 100, 1, 2, 0.1f, "0%");
+            this._tmpGuiScale = UIManager.Scale;
+            var sldr_UIScale = SliderNew.CreateWithLabel("UI Scale", () => this._tmpGuiScale, v => this._tmpGuiScale = v, 100, 1, 2, 0.1f, "0%");
 
-            this.newTooltipDelay = TooltipManager.DelayInterval / Engine.TicksPerSecond;
-            //var sldr_TooltipDelay = new SliderNew(() => this.newTooltipDelay, v => this.newTooltipDelay = v, 100, 0, 2, 0.1f) { Name = "Tooltip Delay: {0}s" };
-            var sldr_TooltipDelay = SliderNew.CreateWithLabel("Tooltip Delay", () => this.newTooltipDelay, v => this.newTooltipDelay = v, 100, 0, 2, 0.1f, "0.0s");
+            this._tmpTooltipDelay = TooltipManager.DelayInterval / Engine.TicksPerSecond;
+            var sldr_TooltipDelay = SliderNew.CreateWithLabel("Tooltip Delay", () => this._tmpTooltipDelay, v => this._tmpTooltipDelay = v, 100, 0, 2, 0.1f, "0.0s");
 
-            this.Chkbox_MouseTooltip = new CheckBox("Mouse Tooltip");
-            this.Chkbox_MouseTooltip.Checked = TooltipManager.MouseTooltips;
-            this.Chkbox_MouseTooltip.HoverText = "Anchor tooltips to the mouse.";
+            var chkbox_MouseTooltip = new CheckBoxNew("Mouse Tooltip", () => this._tmpMouseTooltip = !this._tmpMouseTooltip, () => this._tmpMouseTooltip);
+            chkbox_MouseTooltip.HoverText = "Anchor tooltips to the mouse.";
 
             box.AddControlsVertically(
-                //Lbl_UIScale, 
-                sldr_UIScale, sldr_TooltipDelay,Chkbox_MouseTooltip);
+                sldr_UIScale, sldr_TooltipDelay, chkbox_MouseTooltip);
             return box;
         }
 
         internal override void Apply()
         {
-            UIManager.Scale = newGuiScale;
-            Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Interface").GetOrCreateElement("Scale").Value = UIManager.Scale.ToString();
-            Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Interface").GetOrCreateElement("MouseTooltip").Value = Chkbox_MouseTooltip.Checked.ToString();
+            UIManager.Scale = this._tmpGuiScale;
+            TooltipManager.MouseTooltips = this._tmpMouseTooltip;
+            Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Interface").GetOrCreateElement("Scale").Value = this._tmpGuiScale.ToString();
+            Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Interface").GetOrCreateElement("MouseTooltip").Value = this._tmpMouseTooltip.ToString();
         }
         internal override void Cancel()
         {

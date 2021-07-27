@@ -612,7 +612,6 @@
     <Compile Include="Modules\Construction\Tools\ToolDrawingSinglePreview.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawingSingle.cs" />
     <Compile Include="Modules\Construction\Tools\UIToolsBox.cs" />
-    <Compile Include="Modules\Construction\Tools\UITools.cs" />
     <Compile Include="Modules\Construction\UI\GuiConstructionsBrowser.cs" />
     <Compile Include="Modules\Crafting\CraftOrderFinishMode.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderChangeMode.cs" />
@@ -879,7 +878,6 @@
     <Compile Include="Graphics\Borders.cs" />
     <Compile Include="Graphics\AtlasWithDepth.Node.cs" />
     <Compile Include="Graphics\Atlas.Node.cs" />
-    <Compile Include="Interfaces\IDebuggable.cs" />
     <Compile Include="Interfaces\IGameComponent.cs" />
     <Compile Include="Interfaces\IProgressBar.cs" />
     <Compile Include="Engine\MySpriteBatch.cs" />
@@ -1040,7 +1038,6 @@
     <Compile Include="Gui\Hud\Hud.cs" />
     <Compile Include="Gui\HelpWindow.cs" />
     <Compile Include="Gui\Primitives\TextBox.cs" />
-    <Compile Include="Gui\RadioButton.cs" />
     <Compile Include="Gui\Tooltip.cs" />
     <Compile Include="Gui\TrackBar.cs" />
     <Compile Include="Global.cs" />

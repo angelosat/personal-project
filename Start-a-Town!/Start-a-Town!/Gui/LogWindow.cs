@@ -143,7 +143,7 @@ namespace Start_a_Town_.UI
                 MouseThrough = Instance.MouseThrough
             };
             Instance.Timers.Add(line, FadeDelay);
-            Instance.Box_Text.Add(line);
+            Instance.Box_Text.AddControls(line);
             Instance.Box_Text.Client.ClientLocation.Y = Instance.Box_Text.Client.Bottom - Instance.Box_Text.Client.ClientSize.Height;
         }
 

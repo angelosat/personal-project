@@ -57,25 +57,5 @@ namespace Start_a_Town_.Towns.Constructions
             this.Controls.Remove(this.PanelButtons);
             this.AddControls(this.PanelButtons);
         }
-        public void RefreshOld(List<ToolDrawing> tools, Action<Type> onToolSelected)
-        {
-            this.Tools = tools;
-            this.PanelButtons.ClearControls();
-            foreach (var tool in tools)
-            {
-                var radio = new RadioButton(tool.Name);
-                radio.LeftClickAction = () =>
-                {
-                    this.LastSelectedTool = tool;
-                    onToolSelected(tool.GetType());
-                };
-                this.PanelButtons.AddControls(radio);
-            }
-            (this.PanelButtons.Controls.First() as RadioButton).PerformLeftClick();
-            this.PanelButtons.AlignLeftToRight();
-            this.PanelButtons.AlignTopToBottom();
-            this.Controls.Remove(this.PanelButtons);
-            this.AddControls(this.PanelButtons);
-        }
     }
 }

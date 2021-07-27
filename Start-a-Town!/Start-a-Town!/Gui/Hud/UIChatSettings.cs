@@ -4,21 +4,18 @@ namespace Start_a_Town_
 {
     class UIChatSettings : Panel
     {
-        UIChat Chat;
-        CheckBox ChkTimestamps;
         public UIChatSettings(UIChat chat)
         {
             this.AutoSize = true;
-            this.Chat = chat;
-            this.ChkTimestamps = new CheckBox("Timestamps") { ValueFunction = () => this.Chat.Console.TimeStamp, LeftClickAction = ToggleTimestamps };
-            this.AddControls(ChkTimestamps);
-        }
+            var chkTimestamps = new CheckBoxNew("Timestamps", toggleTimestamps, () => chat.Console.TimeStamp);
+            this.AddControls(chkTimestamps);
 
-        public void ToggleTimestamps()
-        {
-            this.Chat.Console.TimeStamp = !this.Chat.Console.TimeStamp;
-            Engine.Config.SetValue("Interface/Timestamps", this.Chat.Console.TimeStamp);
-            Engine.SaveConfig();
+            void toggleTimestamps()
+            {
+                chat.Console.TimeStamp = !chat.Console.TimeStamp;
+                Engine.Config.SetValue("Interface/Timestamps", chat.Console.TimeStamp);
+                Engine.SaveConfig();
+            }
         }
     }
 }

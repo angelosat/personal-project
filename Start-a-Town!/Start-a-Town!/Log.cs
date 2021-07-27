@@ -29,10 +29,11 @@ namespace Start_a_Town_
             /// </summary>
             Chat,
             System, Dialogue, DialogueOption, DialogueEnd, Jobs,
-            ChatPlayer
+            ChatPlayer,
+            Warning
         }
-        static Log _Instance;
-        static public Log Instance => _Instance ??= new Log();
+        static Log _instance;
+        static public Log Instance => _instance ??= new Log();
         
         static Dictionary<EntryTypes, List<EventHandler<LogEventArgs>>> Events = new();
 
@@ -84,6 +85,26 @@ namespace Start_a_Town_
             var textStamped = $"[{DateTime.Now}] {text}";
             textStamped.ToConsole();
             LogFile.WriteLine(textStamped);
+        }
+        public static void Write(string text)
+        {
+            var textStamped = $"[{DateTime.Now}] {text}";
+            textStamped.ToConsole();
+            UIChat.Instance.Write(text);
+        }
+        public static void Warning(string text)
+        {
+            _write(Entry.Warning, text);
+        }
+        public static void System(string text)
+        {
+            _write(Entry.System, text);
+        }
+        static void _write(Func<string, Entry> entryCtor, string text)
+        {
+            var textStamped = $"[{DateTime.Now}] {text}";
+            textStamped.ToConsole();
+            UIChat.Instance.Write(entryCtor(text));
         }
         static void WriteHelp()
         {

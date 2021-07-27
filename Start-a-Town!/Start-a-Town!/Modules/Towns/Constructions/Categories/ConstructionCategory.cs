@@ -38,13 +38,6 @@ namespace Start_a_Town_
         public abstract ToolDrawing GetTool(Func<ProductMaterialPair> itemGetter);
         public abstract List<ToolDrawing> GetAvailableTools(Func<ProductMaterialPair> itemGetter);
 
-        static public UITools PanelTools;
-        public UITools GetPanelTools(Func<ProductMaterialPair> itemGetter)
-        {
-            PanelTools ??= new UITools();
-            PanelTools.Refresh(this.GetAvailableTools(itemGetter), itemGetter);
-            return PanelTools;
-        }
         static public Window WindowToolsBox;
         static public UIToolsBox ToolsBox;
 

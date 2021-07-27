@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Start_a_Town_.Components;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_.UI
 {
@@ -11,101 +11,70 @@ namespace Start_a_Town_.UI
     {
         EntityComponent Component;
         Label ComponentInfo;
-
-        Panel Panel_Tabs, Panel_Mouseover;
+        readonly Panel Panel_Tabs, Panel_Mouseover;
 
         public DebugQueryWindow(GameObject obj)
         {
-            Title = obj.Name;
-            AutoSize = true;
-            Movable = true;
+            this.Title = obj.Name;
+            this.AutoSize = true;
+            this.Movable = true;
 
-            Panel_Tabs = new Panel();
-            Panel_Tabs.AutoSize = true;
+            this.Panel_Tabs = new Panel();
+            this.Panel_Tabs.AutoSize = true;
 
-            RadioButton prev = null;
-            foreach (KeyValuePair<string, EntityComponent> comp in obj.Components)
+            this.Panel_Tabs.AddControlsVertically(obj.Components.Select(comp => new Button(comp.Key, () => selectTab(comp.Value))));
+
+            this.Panel_Mouseover = new Panel(new Vector2(this.Panel_Tabs.Right, 0));
+            this.Panel_Mouseover.AutoSize = true;
+
+            this.Panel_Mouseover.Height = 100;
+            this.Panel_Mouseover.Width = 100;
+
+            if (this.ComponentInfo != null)
+                this.Panel_Mouseover.Controls.Add(this.ComponentInfo);
+
+            this.Client.Controls.Add(this.Panel_Tabs, this.Panel_Mouseover);
+            this.Location = UIManager.Mouse;
+
+            void selectTab(EntityComponent component)
             {
-                RadioButton rad = new RadioButton(comp.Key, new Vector2(0, prev != null ? prev.Bottom : 0));
-                rad.MouseLeftPress += new EventHandler<System.Windows.Forms.HandledMouseEventArgs>(rad_MouseLeftPress);
-                rad.Tag = comp.Value;
-                Panel_Tabs.Controls.Add(rad);
-                prev = rad;
+                this.Component = component;
+                this.Panel_Mouseover.Controls.Clear();
+                this.ComponentInfo = new Label(component.ToString());
+                this.Panel_Mouseover.Controls.Add(this.ComponentInfo);
 
-                if (comp.Value is DefComponent)
-                {
-                    Component = comp.Value;
-                    ComponentInfo = new Label(comp.Value.ToString());
-                    
-                    rad.Checked = true;
-                }
+                this.Client.Controls.Remove(this.Panel_Mouseover);
+                this.Client.Controls.Add(this.Panel_Mouseover);
             }
-
-            Panel_Mouseover = new Panel(new Vector2(Panel_Tabs.Right, 0));
-            Panel_Mouseover.AutoSize = true;
-            
-            Panel_Mouseover.Height = 100;
-            Panel_Mouseover.Width = 100;
-
-            if (ComponentInfo != null)
-                Panel_Mouseover.Controls.Add(ComponentInfo);
-
-            Client.Controls.Add(Panel_Tabs, Panel_Mouseover);
-            Location = UIManager.Mouse;
         }
 
         public override void Update()
         {
-            
-            if (ComponentInfo != null)
-                ComponentInfo.Text = Component.ToString();
+
+            if (this.ComponentInfo != null)
+                this.ComponentInfo.Text = this.Component.ToString();
             base.Update();
         }
-
-        void rad_MouseLeftPress(object sender, System.Windows.Forms.HandledMouseEventArgs e)
-        {
-            RadioButton rad = sender as RadioButton;
-            EntityComponent component = rad.Tag as EntityComponent;
-            Component = component;
-            Panel_Mouseover.Controls.Clear();
-            ComponentInfo = new Label(component.ToString());
-            Panel_Mouseover.Controls.Add(ComponentInfo);
-
-            Client.Controls.Remove(Panel_Mouseover);
-            Client.Controls.Add(Panel_Mouseover);
-        }
-
         void chunkshot_Click(object sender, EventArgs e)
         {
             SpriteBatch sb = Game1.Instance.spriteBatch;
             GraphicsDevice gfx = Game1.Instance.GraphicsDevice;
-            using (RenderTarget2D screenshot = new RenderTarget2D(gfx, Block.Width * Chunk.Size, MapBase.MaxHeight * Block.Height))
-            {
-                gfx.SetRenderTarget(screenshot);
-                gfx.Clear(Color.Transparent);
-                sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-                sb.End();
-                gfx.SetRenderTarget(null);
+            using RenderTarget2D screenshot = new(gfx, Block.Width * Chunk.Size, MapBase.MaxHeight * Block.Height);
+            gfx.SetRenderTarget(screenshot);
+            gfx.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            sb.End();
+            gfx.SetRenderTarget(null);
 
-                string directory = Directory.GetCurrentDirectory() + @"/Screenshots/";
-                if (!Directory.Exists(directory))
-                    Directory.CreateDirectory(directory);
-                string filename = @"Start-a-town!" + DateTime.Now.ToString("ddMMyy_HHmmss") + @".png";
-                FileStream stream = new FileStream(directory + filename, System.IO.FileMode.OpenOrCreate);
-                screenshot.SaveAsPng(stream, screenshot.Width, screenshot.Height);
-                NotificationArea.Write("Screenshot saved as \"" + filename + "\".");
-                stream.Close();
-            }
+            string directory = Directory.GetCurrentDirectory() + @"/Screenshots/";
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            string filename = @"Start-a-town!" + DateTime.Now.ToString("ddMMyy_HHmmss") + @".png";
+            FileStream stream = new FileStream(directory + filename, System.IO.FileMode.OpenOrCreate);
+            screenshot.SaveAsPng(stream, screenshot.Width, screenshot.Height);
+            NotificationArea.Write("Screenshot saved as \"" + filename + "\".");
+            stream.Close();
         }
-
-        void RB_mouseover_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as RadioButton).Checked)
-                Controls.Add(Panel_Mouseover);
-            else
-                Controls.Remove(Panel_Mouseover);
-        }
-
         public override bool Close()
         {
             return base.Close();

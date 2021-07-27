@@ -62,7 +62,7 @@ namespace Start_a_Town_.UI
                 var line = new Label(text) {  TextColorFunc = () => c };
                 line.BackgroundColor = Color.Black * .5f;
 
-                Add(line); //add line after removing oldest one so that the box height doesn't increase?
+                this.AddControls(line); //add line after removing oldest one so that the box height doesn't increase?
                 this.AlignTopToBottom();
 
                 Client.ClientLocation.Y = Client.Bottom - Client.ClientSize.Height;

@@ -20,14 +20,14 @@ namespace Start_a_Town_
         public static readonly DesignationDef Deconstruct = new("Deconstruct", ButtonDeconstructAdd, (map, global) => map.IsDeconstructible(global));
         public static readonly DesignationDef Mine = new("Mine", ButtonMineAdd, (map, global) => map.GetBlock(global).IsMinable);
         public static readonly DesignationDef Switch = new("Switch", ButtonSwitch, (map, global) => map.GetBlockEntity(global)?.HasComp<BlockEntityCompSwitchable>() ?? false);
-        public static readonly DesignationDef Null = new("Null", null, null);
+        public static readonly DesignationDef Remove = new("Remove", null, null);
 
         public static readonly Dictionary<string, DesignationDef> Dictionary = new()
         {
             { Deconstruct.Name, Deconstruct },
             { Mine.Name, Mine },
             { Switch.Name, Switch },
-            { Null.Name, Null }
+            { Remove.Name, Remove }
         };
         static DesignationDef()
         {
@@ -39,7 +39,7 @@ namespace Start_a_Town_
             Register(Deconstruct);
             Register(Mine);
             Register(Switch);
-            Register(Null);
+            Register(Remove);
         }
 
         public QuickButton IconAdd;

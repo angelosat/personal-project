@@ -100,7 +100,7 @@ namespace Start_a_Town_
 
         private void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
-            if (designation == DesignationDef.Null)
+            if (designation == DesignationDef.Remove)
             {
                 foreach (var pos in positions)
                 {
@@ -160,7 +160,7 @@ namespace Start_a_Town_
 
             static void cancel(List<TargetArgs> positions)
             {
-                PacketDesignation.Send(Client.Instance, DesignationDef.Null, positions, false);
+                PacketDesignation.Send(Client.Instance, DesignationDef.Remove, positions, false);
             }
         }
         public void Handle(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions)

@@ -8,6 +8,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
+    [EnsureStaticCtorCall]
     public class DesignationManager : TownComponent
     {
         public override string Name => "Designation Manager";
@@ -18,6 +19,8 @@ namespace Start_a_Town_
         static DesignationManager()
         {
             PacketDesignation.Init();
+
+            HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Designations", ToggleGui, System.Windows.Forms.Keys.U);
         }
 
         internal ObservableCollection<IntVec3> GetDesignations(DesignationDef des)
@@ -52,7 +55,7 @@ namespace Start_a_Town_
         }
         internal void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
-            if (designation == DesignationDef.Null)
+            if (designation == DesignationDef.Remove)
             {
                 foreach (var l in Designations)
                     foreach (var p in positions)
@@ -143,12 +146,34 @@ namespace Start_a_Town_
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<Func<string>, Action>(() => "Cancel designations", Cancel);
+            yield return new Tuple<Func<string>, Action>(() => "Designations", ToggleGui);
+        }
+        static Window _gui;
+        public static void ToggleGui()
+        {
+            DesignationDef selected = null;
+            if (_gui is null)
+            {
+                var box = new ListBoxNoScroll<DesignationDef, Button>(createButton, 0).AddItems(Ingame.CurrentMap.Town.DesignationManager.Designations.Keys.Prepend(DesignationDef.Remove));
+                _gui = box.ToWindow("Designations").Transparent();
+                _gui.Location = Controller.Instance.MouseLocation;
+            }
+            _gui.Toggle();
+           
+            Button createButton(DesignationDef d)
+            {
+                return new Button(d.Name, () => setTool(d), 96) { IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDigging && selected == d };
+            }
+            void setTool(DesignationDef d)
+            {
+                selected = d;
+                ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, d, a, b, r)));
+            }
         }
 
         static void Cancel()
         {
-            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, DesignationDef.Null, a, b, r)));
+            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, DesignationDef.Remove, a, b, r)));
         }
         internal override void UpdateQuickButtons()
         {
@@ -182,7 +207,7 @@ namespace Start_a_Town_
 
             static void cancel(List<TargetArgs> positions)
             {
-                PacketDesignation.Send(Client.Instance, DesignationDef.Null, positions, false);
+                PacketDesignation.Send(Client.Instance, DesignationDef.Remove, positions, false);
             }
         }
         static public readonly Icon MineIcon = new(ItemContent.PickaxeFull);

@@ -7,13 +7,17 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
+    [EnsureStaticCtorCall]
     public class ZoneManager : TownComponent
     {
         public override string Name => "ZoneManager";
         int _zoneIDSequence = 1;
         public int GetNextID() => _zoneIDSequence++;
         readonly public Dictionary<int, Zone> Zones = new();
-
+        static ZoneManager()
+        {
+            HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Zones", ToggleGui, System.Windows.Forms.Keys.Y);
+        }
         public ZoneManager(Town town)
         {
             this.Town = town;
@@ -55,7 +59,8 @@ namespace Start_a_Town_
         {
             ZoneDefOf.Init();
         }
-
+     
+     
         internal T GetZone<T>(int zoneID) where T : Zone
         {
             return this.Zones[zoneID] as T;
@@ -111,10 +116,19 @@ namespace Start_a_Town_
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            foreach (var zoneType in ZoneDefs)
-                yield return new Tuple<Func<string>, Action>(() => zoneType.Label, () => Zone.Edit(this.Town, zoneType));
+            yield return new Tuple<Func<string>, Action>(() => "Zones", ToggleGui);
         }
-        
+        static Window _gui;
+        public static void ToggleGui()
+        {
+            if (_gui is null)
+            {
+                var box = new ListBoxNoScroll<ZoneDef, Button>(z => new Button(z.Label, () => Zone.Edit(Ingame.CurrentMap.Town, z), 96), 0).AddItems(ZoneDefs);
+                _gui = box.ToWindow("Zones").Transparent();
+                _gui.Location = Controller.Instance.MouseLocation;
+            }
+            _gui.Toggle();
+        }
         public override ISelectable QuerySelectable(TargetArgs target)
         {
             var global = target.Global;

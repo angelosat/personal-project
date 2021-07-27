@@ -878,6 +878,10 @@ namespace Start_a_Town_.UI
         {
             this.Controls.Clear();
         }
+        public Control AddControlsVertically(IEnumerable<Control> controls)
+        {
+            return this.AddControlsVertically(controls.ToArray());
+        }
         public virtual Control AddControlsVertically(params Control[] controls)
         {
             return this.AddControlsVertically(0, controls);

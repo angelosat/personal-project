@@ -38,8 +38,11 @@ namespace Start_a_Town_.AI.Behaviors
             switch (state.PathFinder.State)
             {
                 case PathingSync.States.Stopped:
-                    state.PathFinder.Begin(parent, parent.GetCellStandingOn().Above(), this.Target.Global, this.Range);
-                    state.PathFinder.WorkMode(this.FinishMode);
+                    if (this.Actor.Velocity.Z == 0) // DONT START PATHING if actor is mid air, because then the starting node will be null
+                    {
+                        state.PathFinder.Begin(parent, parent.GetCellStandingOn().Above(), this.Target.Global, this.Range);
+                        state.PathFinder.WorkMode(this.FinishMode);
+                    }
                     return BehaviorState.Running;
 
                 case PathingSync.States.Working:

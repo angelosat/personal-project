@@ -300,6 +300,7 @@ namespace Start_a_Town_
 
         internal void EndCurrentTask()
         {
+            this.Work.Interrupt();
             this.GetComponent<AIComponent>().FindBehavior<BehaviorHandleTasks>().EndCurrentTask(this);
         }
         internal void MoveToggle(bool toggle)

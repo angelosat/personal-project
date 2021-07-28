@@ -206,21 +206,16 @@ namespace Start_a_Town_
             base.AddSaveData(tag);
             tag.Add(this.Timer.Save("Timer"));
             
-            if (this.CurrentTaskGiver != null)
-            {
+            if (this.CurrentTaskGiver is not null)
                 tag.Add(this.CurrentTaskGiver.GetType().FullName.Save("CurrentTaskGiver")); ;
-            }
         }
         internal override void Load(SaveTag tag)
         {
             base.Load(tag);
 
-            tag.TryGetTagValue<int>("Timer", out this.Timer);
+            tag.TryGetTagValue("Timer", out this.Timer);
            
-            tag.TryGetTagValue<string>("CurrentTaskGiver", t =>
-            {
-                this.CurrentTaskGiver = Activator.CreateInstance(Type.GetType(t)) as TaskGiver;
-            });
+            tag.TryGetTagValue<string>("CurrentTaskGiver", t => this.CurrentTaskGiver = Activator.CreateInstance(Type.GetType(t)) as TaskGiver);
         }
         internal override void MapLoaded(Actor parent)
         {

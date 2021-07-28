@@ -54,7 +54,7 @@ namespace Start_a_Town_.AI
 
         public IItemPreferencesManager ItemPreferences;
 
-        public GameObject Parent; //use this?
+        public Actor Parent; //use this?
         public Dictionary<string, object> Properties = new();
         public Knowledge Knowledge;
         public AILog History = new();
@@ -221,6 +221,7 @@ namespace Start_a_Town_.AI
 
         internal void AddMoveOrder(TargetArgs target, bool enqueue)
         {
+            this.Parent.EndCurrentTask();
             if (!enqueue)
                 this.MoveOrders.Clear();
             this.MoveOrders.Enqueue(target);

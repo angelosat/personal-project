@@ -302,36 +302,32 @@ namespace Start_a_Town_.UI
         public bool CloseAll(GuiLayer layer)
         {
             bool closedsomething = false;
-            foreach (var ctrl in this.Layers[layer].OfType<Window>())
-                closedsomething |= ctrl.Close();
+            foreach (var win in this.Layers[layer].OfType<Window>().ToList())
+                if(win.Closable)
+                    closedsomething |= win.Close();
             return closedsomething;
         }
         public bool CloseAll()
         {
             bool closedsomething = false;
-            var toclose = new List<Control>();
-            foreach (var layer in this.Layers)
-                toclose.AddRange(layer.Value.FindAll(foo => foo is Window));
-
+            var toclose = this.Layers.Values.SelectMany(l => l.OfType<Window>()).ToList();
             if (toclose.Any())
-                foreach (var c in toclose)
-                    if (c is Window win && win.Closable)
-                        closedsomething |= win.Close();
-
+                foreach (var win in toclose)
+                    closedsomething |= win.Close();
             return closedsomething;
         }
 
         public void DrawOnCamera(SpriteBatch sb, Camera camera)
         {
             foreach (var layer in this.Layers)
-                foreach (var ctrl in layer.Value.ToList())
+                foreach (var ctrl in layer.Value)
                     ctrl.DrawOnCamera(sb, camera);
         }
 
         public void DrawWorld(MySpriteBatch sb, Camera camera)
         {
             foreach (var layer in this.Layers)
-                foreach (var ctrl in layer.Value.ToList())
+                foreach (var ctrl in layer.Value)
                     ctrl.DrawWorld(sb, camera);
         }
 
@@ -348,7 +344,7 @@ namespace Start_a_Town_.UI
             //    this.DrawOnCamera(sb, camera); // moving this to outside the ui rendertarget draw call, because we dont want it drawn to ui scale
 
             foreach (var layer in this.Layers)
-                foreach (var ctrl in layer.Value.ToList())
+                foreach (var ctrl in layer.Value)
                     ctrl.Draw(sb, Bounds);
 
             TooltipManager.Instance.Draw(sb);

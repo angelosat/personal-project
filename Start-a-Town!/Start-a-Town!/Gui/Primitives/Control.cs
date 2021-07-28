@@ -303,8 +303,10 @@ namespace Start_a_Town_.UI
             get => this.ColorFunc?.Invoke() ?? this._color;
             set
             {
+                var oldcol = this._color;
                 this._color = value;
-                this.Invalidate();
+                if (oldcol != this._color)
+                    this.Invalidate(false);
             }
         }
         public virtual void Validate(bool cascade = false)
@@ -774,7 +776,7 @@ namespace Start_a_Town_.UI
         public virtual void Draw(SpriteBatch sb, Rectangle viewport)
         {
             this.OnBeforeDraw(sb, viewport);
-            Color c = this.Tint;
+            var c = this.Tint;
             if (this.Texture != null)
             {
                 // TODO: this is no use because if i add something outside the window's client area and the window has autosize, it expands the client area screwing up hittesting
@@ -786,28 +788,21 @@ namespace Start_a_Town_.UI
                     sb.Draw(this.Texture, final, source, c * this.Opacity, this.Rotation, this.Origin, SpriteEffects.None, 0);
                     this.OnDrawAction(sb, final);
                 }
-
             }
             this.OnAfterDraw(sb, viewport);
 
-            foreach (Control control in this.Controls)
-            {
+            foreach (var control in this.Controls)
                 control.Draw(sb, Rectangle.Intersect(control.BoundsScreen, viewport));
-            }
         }
 
         public virtual void Draw(SpriteBatch sb)
         {
             // TODO: maybe put that somewhere else?
             if (this.HitTest())
-            {
                 Controller.Instance.MouseoverNext.Object = this;
-            }
 
             foreach (Control control in this.Controls)
-            {
                 control.Draw(sb);
-            }
         }
 
         public override string ToString()
@@ -830,17 +825,7 @@ namespace Start_a_Town_.UI
         public string HoverFormat;
         public virtual string HoverText
         {
-            get
-            {
-                if (this.HoverFunc == null)
-                {
-                    return this._HoverText;
-                }
-                else
-                {
-                    return this.HoverFunc();
-                }
-            }
+            get => this.HoverFunc?.Invoke() ?? this._HoverText;
             set => this._HoverText = value;
         }
 
@@ -848,7 +833,7 @@ namespace Start_a_Town_.UI
         public bool CustomTooltip;
         public virtual void GetTooltipInfo(Control tooltip)
         {
-            if (this.TooltipFunc != null)
+            if (this.TooltipFunc is not null)
             {
                 this.TooltipFunc(tooltip);
                 return;
@@ -862,16 +847,12 @@ namespace Start_a_Town_.UI
 
             base.Update();
 
-            List<Control> copy = this.Controls.ToList();
-            foreach (Control control in copy)
-            {
+            var copy = this.Controls.ToList();
+            foreach (var control in copy)
                 control.Update();
-            }
 
             if (!this.Valid)
-            {
                 this.Validate(); // i put this here after calling base.update because if the size of the control was changed then for one frame it was drawn stretched
-            }
         }
 
         public virtual void ClearControls()
@@ -892,7 +873,6 @@ namespace Start_a_Town_.UI
             foreach (var ctrl in controls)
             {
                 ctrl.Location = new Vector2(0, y);
-                //this.Controls.Add(ctrl);
                 y += ctrl.Height + spacing;
             }
             this.AddControls(controls);
@@ -905,28 +885,19 @@ namespace Start_a_Town_.UI
             foreach (var ctrl in controls)
             {
                 var yy = y;
-                switch (horAlignment)
+                ctrl.LocationFunc = horAlignment switch
                 {
-                    case HorizontalAlignment.Left:
-                        //ctrl.Location = new Vector2(0, y);
-                        ctrl.LocationFunc = () => new(0, yy);
-                        break;
-                    case HorizontalAlignment.Center:
-                        //ctrl.Location = new Vector2(maxWidth / 2, y);
-                        //ctrl.Anchor = new(.5f, 0);
-                        ctrl.LocationFunc = () => new(maxWidth / 2 - ctrl.Width / 2, yy);
-                        break;
-                    case HorizontalAlignment.Right:
-                        //ctrl.Location = new Vector2(maxWidth, y);
-                        //ctrl.Anchor = new(1, 0);
-                        ctrl.LocationFunc = () => new(maxWidth - ctrl.Width, yy);
-                        break;
-                    default:
-                        throw new Exception();
-                }
-                this.Controls.Add(ctrl);
+                    HorizontalAlignment.Left => () => new(0, yy),//ctrl.Location = new Vector2(0, y);
+
+                    HorizontalAlignment.Center => () => new(maxWidth / 2 - ctrl.Width / 2, yy),//ctrl.Location = new Vector2(maxWidth / 2, y);
+                                                                                               //ctrl.Anchor = new(.5f, 0);
+                    HorizontalAlignment.Right => () => new(maxWidth - ctrl.Width, yy),//ctrl.Location = new Vector2(maxWidth, y);
+                                                                                      //ctrl.Anchor = new(1, 0);
+                    _ => throw new Exception(),
+                };
                 y += ctrl.Height + spacing;
             }
+            this.AddControls(controls);
             return this;
         }
 
@@ -940,9 +911,9 @@ namespace Start_a_Town_.UI
             foreach (var ctrl in controls)
             {
                 ctrl.Location = new Vector2(x, 0);
-                this.Controls.Add(ctrl);
                 x += ctrl.Width + spacing;
             }
+            this.AddControls(controls);
             return this;
         }
         public virtual Control AddControlsSmart(params Control[] controls)
@@ -951,71 +922,54 @@ namespace Start_a_Town_.UI
             {
                 var rect = this.FindBestUncoveredRectangle(ctrl.Size.Width, ctrl.Size.Height);
                 ctrl.Location = new Vector2(rect.Left, rect.Top);
-                this.Controls.Add(ctrl);
             }
+            this.AddControls(controls);
             return this;
         }
         public virtual Control AddControls(params Control[] controls)
         {
             foreach (var ctrl in controls)
-            {
                 this.Controls.Add(ctrl);
-            }
-
             return this;
         }
         public virtual void AddControlsBottomLeft(params Control[] controls)
         {
             foreach (var c in controls)
-            {
                 c.Location = this.Controls.BottomLeft;
-                this.Controls.Add(c);
-            }
+            this.AddControls(controls);
         }
         public virtual Control AddControlsTopRight(params Control[] controls)
         {
             foreach (var c in controls)
-            {
                 c.Location = this.Controls.TopRight;
-                this.Controls.Add(c);
-            }
+            this.AddControls(controls);
             return this;
         }
         public virtual void AddControlsTopRight(int spacing, params Control[] controls)
         {
             foreach (var c in controls)
-            {
                 c.Location = this.Controls.TopRight + spacing * Vector2.One;
-                this.Controls.Add(c);
-            }
+            this.AddControls(controls);
         }
         public virtual void RemoveControls(params Control[] controls)
         {
             foreach (var ctrl in controls)
-            {
                 this.Controls.Remove(ctrl);
-            }
         }
         public virtual void HandleKeyUp(KeyEventArgs e)
         {
             foreach (Control control in this.Controls.ToList())
-            {
                 control.HandleKeyUp(e);
-            }
         }
         public virtual void HandleKeyDown(KeyEventArgs e)
         {
             foreach (Control control in this.Controls.ToList())
-            {
                 control.HandleKeyDown(e);
-            }
         }
         public virtual void HandleKeyPress(KeyPressEventArgs e)
         {
             foreach (Control control in this.Controls.ToList())
-            {
                 control.HandleKeyPress(e);
-            }
         }
         public virtual void HandleMouseMove(HandledMouseEventArgs e, Rectangle viewport)
         {
@@ -1024,9 +978,7 @@ namespace Start_a_Town_.UI
                 List<Control> controls = this.Controls.ToList();
                 controls.Reverse();
                 foreach (Control c in controls)
-                {
                     c.HandleMouseMove(e, viewport);
-                }
             }
         }
         public virtual void HandleMouseMove(HandledMouseEventArgs e)

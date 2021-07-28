@@ -35,7 +35,7 @@ namespace Start_a_Town_.PlayerControl
             Client.PlayerStopMoving();
             this.StopWalking();
             ToolManager.SetTool(new ToolManagement());
-            Client.Instance.Log.Write("Switched to management mode");
+            Client.Instance.ConsoleBox.Write("Switched to management mode");
         }
 
         public void ChangeDirection(Vector3 direction)
@@ -225,7 +225,7 @@ namespace Start_a_Town_.PlayerControl
             if (e.KeyCode == System.Windows.Forms.Keys.M)
             {
                 this.MouseMove = !this.MouseMove;
-                Client.Instance.Log.Write("Mouse move " + (this.MouseMove ? "Enabled" : "Disabled"));
+                Client.Instance.ConsoleBox.Write("Mouse move " + (this.MouseMove ? "Enabled" : "Disabled"));
             }
 
             base.HandleKeyUp(e);

@@ -10,12 +10,12 @@ namespace Start_a_Town_.Net
         ServerConsole()
         {
             Panel console = new Panel() { AutoSize = true };
-            console.Controls.Add(Server.Instance.Log);
+            console.Controls.Add(Server.Instance.ConsoleBox);
 
             Panel input = new Panel() { Location = console.BottomLeft, AutoSize = true };
             TextBox txtbox = new TextBox()
             {
-                Width = Server.Instance.Log.Width,
+                Width = Server.Instance.ConsoleBox.Width,
                 EnterFunc = (text) =>
                 {
                     if (text.Length > 0)

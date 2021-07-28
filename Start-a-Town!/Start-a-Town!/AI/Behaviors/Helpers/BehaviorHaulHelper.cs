@@ -35,7 +35,7 @@ namespace Start_a_Town_
                         actor.Reserve(pot, amount);
                         task.SetTarget(itemIndex, new TargetArgs(pot));
                         actor.CurrentTaskBehavior.JumpTo(gotoBhav);
-                        actor.Net.Log.Write("found new haul opportunity");
+                        actor.Net.ConsoleBox.Write("found new haul opportunity");
                         return;
                     }
                 }
@@ -124,7 +124,7 @@ namespace Start_a_Town_
                     return BehaviorState.Fail;
                 else if (interaction.State == Interaction.States.Finished)
                 {
-                    actor.Net.Log.Write("successfully dropped item");
+                    actor.Net.ConsoleBox.Write("successfully dropped item");
                     if (actor.Hauled is not Entity hauled)
                         return BehaviorState.Success;
                     if (!hauledObj.IsDisposed)
@@ -161,7 +161,7 @@ namespace Start_a_Town_
                     actor.Reserve(tar, 1);
                     task.SetTarget(storageIndex, tar);
                     actor.CurrentTaskBehavior.JumpTo(gotoBhav);
-                    actor.Net.Log.Write("found next storage place " + tar.ToString());
+                    actor.Net.ConsoleBox.Write("found next storage place " + tar.ToString());
                     return;
                 }
             };

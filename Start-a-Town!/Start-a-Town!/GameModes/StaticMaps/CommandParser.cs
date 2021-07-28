@@ -70,7 +70,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                         break;
                 }
             }
-            catch (Exception) { net.Log.Write("Invalid command"); }
+            catch (Exception) { net.ConsoleBox.Write("Invalid command"); }
         }
     }
 }

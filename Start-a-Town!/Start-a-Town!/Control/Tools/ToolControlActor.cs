@@ -97,7 +97,8 @@ namespace Start_a_Town_
         {
             MouseMovementEnabled = !MouseMovementEnabled;
             MovingByMouse = false;
-            Ingame.Instance.Hud.Chat.Write($"Mouse move {(MouseMovementEnabled ? "Enabled" : "Disabled")}");
+            //Ingame.Instance.Hud.Chat.Write($"Mouse move {(MouseMovementEnabled ? "Enabled" : "Disabled")}");
+            Log.System($"Mouse move {(MouseMovementEnabled ? "Enabled" : "Disabled")}");
         }
         public virtual void MoveKeys()
         {

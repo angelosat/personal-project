@@ -21,7 +21,7 @@ namespace Start_a_Town_.Net
                     switch (queue.Dequeue())
                     {
                         case "hello":
-                            Server.Log.Write("SERVER", "how are you?");
+                            Server.ConsoleBox.Write("SERVER", "how are you?");
                             break;
 
                         case "loadworld":
@@ -38,7 +38,7 @@ namespace Start_a_Town_.Net
                             foreach (var p in Instance.Players.GetList())
                                 Instance.Enqueue(p, Packet.Create(p, PacketType.ServerBroadcast, data));
 
-                            Server.Log.Write(Color.Orange, "SERVER", message);
+                            Server.ConsoleBox.Write(Color.Orange, "SERVER", message);
                             break;
 
                         case "kick":
@@ -49,13 +49,13 @@ namespace Start_a_Town_.Net
 
                         case "acks":
                         case "ack":
-                            if (!Instance.Log.Filters.Remove(UI.ConsoleMessageTypes.Acks))
+                            if (!Instance.ConsoleBox.Filters.Remove(UI.ConsoleMessageTypes.Acks))
                             {
-                                Server.Log.Write("SERVER", "ACK reporting on");
-                                Instance.Log.Filters.Add(UI.ConsoleMessageTypes.Acks);
+                                Server.ConsoleBox.Write("SERVER", "ACK reporting on");
+                                Instance.ConsoleBox.Filters.Add(UI.ConsoleMessageTypes.Acks);
                             }
                             else
-                                Server.Log.Write("SERVER", "ACK reporting off");
+                                Server.ConsoleBox.Write("SERVER", "ACK reporting off");
                             break;
 
                         case "savechunk":
@@ -66,18 +66,18 @@ namespace Start_a_Town_.Net
                                 var pos = new Vector2(x, y);
                                 if (!Instance.Map.GetActiveChunks().TryGetValue(pos, out Chunk chunk))
                                 {
-                                    Server.Log.Write("SERVER", "Chunk " + pos.ToString() + " doesn't exist");
+                                    Server.ConsoleBox.Write("SERVER", "Chunk " + pos.ToString() + " doesn't exist");
                                     break;
                                 }
-                                Server.Log.Write("SERVER", "Saving chunk " + pos.ToString());
+                                Server.ConsoleBox.Write("SERVER", "Saving chunk " + pos.ToString());
                                 chunk.SaveToFile();
                             }
-                            catch (Exception) { Server.Log.Write("SERVER", "Syntax error in: " + command); }
+                            catch (Exception) { Server.ConsoleBox.Write("SERVER", "Syntax error in: " + command); }
                             break;
 
                         case "savechunks":
 
-                            Server.Log.Write("SERVER", "Saving all active chunks");
+                            Server.ConsoleBox.Write("SERVER", "Saving all active chunks");
                             foreach (var ch in Instance.Map.GetActiveChunks().Values)
                                 ch.SaveToFile();
                             break;
@@ -91,11 +91,11 @@ namespace Start_a_Town_.Net
                             break;
 
                         default:
-                            Server.Log.Write("SERVER", "Unknown command " + command);
+                            Server.ConsoleBox.Write("SERVER", "Unknown command " + command);
                             break;
                     }
                 }
-                catch (Exception) { Server.Log.Write("SERVER", "Syntax error in: " + command); }
+                catch (Exception) { Server.ConsoleBox.Write("SERVER", "Syntax error in: " + command); }
             }
 
             private void Set(string command)

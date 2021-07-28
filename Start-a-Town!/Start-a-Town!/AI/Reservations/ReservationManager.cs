@@ -126,7 +126,7 @@ namespace Start_a_Town_.AI
             var task = actor.CurrentTask;
             if (task.ID != r.TaskID)
                 throw new Exception();
-            actor.Net.Log.Write("cancelling " + actor.Name + "'s task's reservations ");
+            actor.Net.ConsoleBox.Write("cancelling " + actor.Name + "'s task's reservations ");
             task.Cancel();
         }
 

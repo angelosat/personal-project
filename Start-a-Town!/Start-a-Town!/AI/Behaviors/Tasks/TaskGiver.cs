@@ -26,7 +26,7 @@ namespace Start_a_Town_
             new TaskGiverSowingNew(),
             new TaskGiverHarvestingNew(),
             new TaskGiverCrafting(),
-            new TaskGiverHaulToStockpileNew(),
+            new TaskGiverHaulToStockpile(),
             new TaskGiverTradingOverCounter(),
             new TaskGiverOfferQuest(),
             new TaskGiverWorkplace()

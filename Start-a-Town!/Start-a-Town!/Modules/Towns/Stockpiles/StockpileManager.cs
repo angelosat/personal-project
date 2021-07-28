@@ -80,7 +80,7 @@ namespace Start_a_Town_.Towns
                             throw new Exception();
                         if (!this.Storages.Contains(global))
                         {
-                            Client.Instance.Log.Write("Tried to remove nonexistant storage");
+                            Client.Instance.ConsoleBox.Write("Tried to remove nonexistant storage");
                             break;
                         }
                         this.Storages.Remove(global);

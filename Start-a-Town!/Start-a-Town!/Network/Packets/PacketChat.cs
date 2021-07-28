@@ -31,7 +31,7 @@ namespace Start_a_Town_
             else 
             {
                 var player = net.GetPlayer(playerid);
-                net.EventOccured(Components.Message.Types.ChatPlayer, player.Name, text);
+                net.EventOccured(Components.Message.Types.ChatPlayer, player, text);
             }
         }
     }

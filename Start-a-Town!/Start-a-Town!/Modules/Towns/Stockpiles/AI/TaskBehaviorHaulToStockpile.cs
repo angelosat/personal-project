@@ -3,13 +3,37 @@ using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_
 {
-    class TaskBehaviorHaulToStockpileNew : BehaviorPerformTask
+    class TaskBehaviorHaulToStockpile : BehaviorPerformTask
     {
         public const TargetIndex ItemInd = TargetIndex.A, StorageInd = TargetIndex.B;
+        TargetArgs Item => this.Task.GetTarget(ItemInd);
+        TargetArgs Storage => this.Task.GetTarget(StorageInd);
+
         protected override IEnumerable<Behavior> GetSteps()
         {
             this.FailOnForbidden(ItemInd);
+            this.FailOn(deliverFail);
 
+            var gotohaul = new BehaviorGetAtNewNew(ItemInd).FailOn(failCollecting);
+            yield return gotohaul;
+            yield return BehaviorHaulHelper.StartCarrying(ItemInd);
+            yield return BehaviorHaulHelper.FindNearbyHaulOpportunity(gotohaul, ItemInd).FailOnNotCarrying();
+
+            var gotoStorage = new BehaviorGetAtNewNew(StorageInd);
+            var findNextStorage = BehaviorHaulHelper.JumpIfNextStorageFound(gotoStorage, StorageInd);
+            gotoStorage.JumpIf(deliverFail, findNextStorage);
+
+            yield return gotoStorage;
+            yield return BehaviorHaulHelper.DropInStorage(StorageInd).JumpIf(deliverFail, findNextStorage);
+            yield return findNextStorage;
+
+            bool deliverFail()
+            {
+                var fail = !HaulHelper.IsValidStorage(Storage, this.Actor.Map, Item);
+                if (fail)
+                    this.Actor.StopPathing();
+                return fail;
+            }
             bool failCollecting()
             {
                 var map = this.Actor.Map;
@@ -19,31 +43,6 @@ namespace Start_a_Town_
                         return true;
                 return false;
             }
-
-            var gotohaul = new BehaviorGetAtNewNew(ItemInd).FailOn(failCollecting);
-            yield return gotohaul;
-            yield return BehaviorHaulHelper.StartCarrying(ItemInd);
-            yield return BehaviorHaulHelper.FindNearbyHaulOpportunity(gotohaul, ItemInd).FailOnNotCarrying();
-
-            bool deliverFail()
-            {
-                var o = this.Actor.Hauled;
-                if (o == null)
-                    return true;
-                var fail = !HaulHelper.IsValidStorage(this.Task.GetTarget(StorageInd), this.Actor.Map, o);
-                if (fail)
-                {
-                    this.Actor.StopPathing();
-                }
-                return fail;
-            }
-            var gotoStorage = new BehaviorGetAtNewNew(StorageInd);//.FailOn(deliverFail);
-            var findNextStorage = BehaviorHaulHelper.JumpIfNextStorageFound(gotoStorage, StorageInd);
-            gotoStorage.JumpIf(deliverFail, findNextStorage);
-
-            yield return gotoStorage;
-            yield return BehaviorHaulHelper.DropInStorage(StorageInd).JumpIf(deliverFail, findNextStorage);
-            yield return findNextStorage;
         }
 
         protected override bool InitExtraReservations()

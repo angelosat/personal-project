@@ -32,7 +32,7 @@ namespace Start_a_Town_.Net
         bool IsSaving;
 
         UI.ConsoleBoxAsync _Console;
-        public UI.ConsoleBoxAsync Log
+        public UI.ConsoleBoxAsync ConsoleBox
         {
             get
             {
@@ -136,8 +136,8 @@ namespace Start_a_Town_.Net
             if (Listener is not null)
                 Listener.Close();
 
-            if (Instance.Log != null)
-                Instance.Log.Write("SERVER", "Stopped");
+            if (Instance.ConsoleBox != null)
+                Instance.ConsoleBox.Write("SERVER", "Stopped");
             Instance.OutgoingStream = new BinaryWriter(new MemoryStream());
             Instance.OutgoingStreamUnreliable = new BinaryWriter(new MemoryStream());
             Instance.OutgoingStreamReliable = new BinaryWriter(new MemoryStream());
@@ -159,7 +159,7 @@ namespace Start_a_Town_.Net
 
             Connections = new ConcurrentDictionary<EndPoint, UdpConnection>();
             ServerClock = new TimeSpan();
-            Instance.Log.Write("SERVER", "Started");
+            Instance.ConsoleBox.Write("SERVER", "Started");
             if (Listener != null)
                 Listener.Close();
             Listener = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -188,7 +188,7 @@ namespace Start_a_Town_.Net
             {
                 ReceiveMessage(ar);
             }, state);
-            Instance.Log.Write(Color.Yellow, "SERVER", "Listening to port " + Port + "...");
+            Instance.ConsoleBox.Write(Color.Yellow, "SERVER", "Listening to port " + Port + "...");
         }
         int _Speed = 0;// 1;
         public int Speed { get => this._Speed; set => this._Speed = value; }
@@ -340,8 +340,8 @@ namespace Start_a_Town_.Net
                     if (packet.Retries-- <= 0)
                     {
                         player.WaitingForAck.TryRemove(packet.ID, out _);
-                        this.Log.Write(UI.ConsoleMessageTypes.Acks, Color.Orange, "SERVER", "Send retries exceeded maximum for packet " + packet);
-                        this.Log.Write(Color.Red, "SERVER", player.Name + " timed out");
+                        this.ConsoleBox.Write(UI.ConsoleMessageTypes.Acks, Color.Orange, "SERVER", "Send retries exceeded maximum for packet " + packet);
+                        this.ConsoleBox.Write(Color.Red, "SERVER", player.Name + " timed out");
                         CloseConnection(player.Connection);
                         //send player disconnected packet to rest of players
                         break;
@@ -486,7 +486,7 @@ namespace Start_a_Town_.Net
                         //throw new Exception("Invalid sender");
                         return;
                     }
-                    Server.Instance.Log.Write(Color.Yellow, "SERVER", remoteIP + " connecting...");
+                    Server.Instance.ConsoleBox.Write(Color.Yellow, "SERVER", remoteIP + " connecting...");
                     UdpConnection newConnection = CreateConnection(remoteIP);
                     state = newConnection;
                 }
@@ -530,7 +530,7 @@ namespace Start_a_Town_.Net
                         return r.ReadString();
                     });
 
-                    Instance.Log.Write(Color.Lime, "SERVER", name + " connected from " + msg.Connection.IP);
+                    Instance.ConsoleBox.Write(Color.Lime, "SERVER", name + " connected from " + msg.Connection.IP);
 
                     PlayerData pl = msg.Connection.Player;
                     pl.Name = name;
@@ -900,18 +900,18 @@ namespace Start_a_Town_.Net
                 return;
             World = world;
             if (World is not null)
-                Instance.Log.Write(Color.Lime, "SERVER", "World " + World.GetName() + " loaded");
+                Instance.ConsoleBox.Write(Color.Lime, "SERVER", "World " + World.GetName() + " loaded");
         }
         private static bool UnloadWorld()
         {
             if (Connections.Count > 0)
             {
-                Instance.Log.Write(Color.Red, "SERVER", "Can't unload world while active connections exist");
+                Instance.ConsoleBox.Write(Color.Red, "SERVER", "Can't unload world while active connections exist");
                 return false;
             }
             if (World != null)
             {
-                Instance.Log.Write(Color.Lime, "SERVER", "World " + World.GetName() + " unloaded");
+                Instance.ConsoleBox.Write(Color.Lime, "SERVER", "World " + World.GetName() + " unloaded");
             }
             World = null;
             return true;

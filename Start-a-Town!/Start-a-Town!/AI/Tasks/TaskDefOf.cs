@@ -11,10 +11,10 @@ namespace Start_a_Town_
             GetPrimaryTarget = t => t.GetTarget(TaskBehaviorCrafting.WorkstationIndex)
         };
 
-        static public TaskDef Hauling = new("Hauling", typeof(TaskBehaviorHaulToStockpileNew))
+        static public TaskDef Hauling = new("Hauling", typeof(TaskBehaviorHaulToStockpile))
         {
             Format = "Force haul {0}",
-            GetPrimaryTarget = t => t.GetTarget(TaskBehaviorHaulToStockpileNew.ItemInd)
+            GetPrimaryTarget = t => t.GetTarget(TaskBehaviorHaulToStockpile.ItemInd)
         };
 
         static public TaskDef HaulAside = new("HaulAside", typeof(TaskBehaviorHaulAside))

@@ -797,13 +797,13 @@ namespace Start_a_Town_
                 }
                 catch (IOException)
                 {
-                    Net.Server.Instance.Log.Write(Color.Red, "SERVER", "Error saving Chunk " + copy.MapCoords.ToString());
+                    Net.Server.Instance.ConsoleBox.Write(Color.Red, "SERVER", "Error saving Chunk " + copy.MapCoords.ToString());
                     // recover back up here?
                 }
             else
                 File.Move(fullpath + newFile, fullpath + filename);
 
-            Net.Server.Instance.Log.Write(Color.Lime, "SERVER", "Chunk " + copy.MapCoords.ToString() + " saved succesfully \"" + directory + filename + "\"");
+            Net.Server.Instance.ConsoleBox.Write(Color.Lime, "SERVER", "Chunk " + copy.MapCoords.ToString() + " saved succesfully \"" + directory + filename + "\"");
         }
         internal string SaveToFile(string filename)
         {

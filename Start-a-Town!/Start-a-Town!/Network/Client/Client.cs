@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.GameModes;
+using Start_a_Town_.UI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -23,10 +24,10 @@ namespace Start_a_Town_.Net
         public double CurrentTick => this.ClientClock.TotalMilliseconds;
 
         UI.ConsoleBoxAsync _Console;
-        public UI.ConsoleBoxAsync Log => this._Console ??= new UI.ConsoleBoxAsync(new Rectangle(0, 0, 800, 600)) { FadeText = false };
+        public UI.ConsoleBoxAsync ConsoleBox => this._Console ??= new UI.ConsoleBoxAsync(new Rectangle(0, 0, 800, 600)) { FadeText = false };
         public UI.ConsoleBoxAsync GetConsole()
         {
-            return this.Log;
+            return this.ConsoleBox;
         }
         bool IsRunning;
 
@@ -455,7 +456,7 @@ namespace Start_a_Town_.Net
                         Instance.Players = PlayerList.Read(Instance, r);
                         Instance.Speed = r.ReadInt32();
                     });
-                    this.Log.Write(Color.Lime, "CLIENT", "Connected to " + Instance.RemoteIP.ToString());
+                    this.ConsoleBox.Write(Color.Lime, "CLIENT", "Connected to " + Instance.RemoteIP.ToString());
                     GameMode.Current.PlayerIDAssigned(Instance);
                     Instance.SyncTime(msg.Tick);
                     Instance.EventOccured(Message.Types.ServerResponseReceived);
@@ -698,7 +699,8 @@ namespace Start_a_Town_.Net
             this.Players.Add(player);
             UI.LobbyWindow.RefreshPlayers(this.Players.GetList());
             UI.LobbyWindow.Instance.Console.Write(Color.Yellow, player.Name + " connected");
-            UI.UIChat.Instance.Write(new Log.Entry(Start_a_Town_.Log.EntryTypes.System, player.Name + " connected"));
+            //UI.UIChat.Instance.Write(new Log.Entry(Start_a_Town_.Log.EntryTypes.System, player.Name + " connected"));
+            Log.System($"{player.Name} connected");
         }
         void PlayerDisconnected(PlayerData player)
         {
@@ -709,7 +711,8 @@ namespace Start_a_Town_.Net
                 Instance.DisposeObject(player.CharacterID);
             }
             Network.Console.Write(Color.Yellow, player.Name + " disconnected");
-            UI.UIChat.Instance.Write(new Log.Entry(Start_a_Town_.Log.EntryTypes.System, player.Name + " disconnected"));
+            //UI.UIChat.Instance.Write(new Log.Entry(Start_a_Town_.Log.EntryTypes.System, player.Name + " disconnected"));
+            Log.System($"{player.Name} disconnected");
         }
         public void PlayerDisconnected(int playerID)
         {
@@ -759,7 +762,7 @@ namespace Start_a_Town_.Net
                 if (id - this.RemoteSequence > 31)
                 {
                     // very large jump in packets
-                    this.Log.Write(Color.Orange, "CLIENT", "Warning! Large gap in received packets!");
+                    this.ConsoleBox.Write(Color.Orange, "CLIENT", "Warning! Large gap in received packets!");
                 }
                 this.RemoteSequence = id;
                 return false;
@@ -771,7 +774,7 @@ namespace Start_a_Town_.Net
             if (distance > 31)
             {
                 // very old packet
-                this.Log.Write(Color.Orange, "CLIENT", "Warning! Received severely outdated packet: " + packet.PacketType.ToString());
+                this.ConsoleBox.Write(Color.Orange, "CLIENT", "Warning! Received severely outdated packet: " + packet.PacketType.ToString());
                 return false;
             }
             int mask = (1 << distance);
@@ -1150,7 +1153,8 @@ namespace Start_a_Town_.Net
 
         public void Write(string text)
         {
-            Ingame.Instance.Hud.Chat.Write(text);
+            //Ingame.Instance.Hud.Chat.Write(text);
+            Log.Write(text);
         }
 
         public void Report(string text)

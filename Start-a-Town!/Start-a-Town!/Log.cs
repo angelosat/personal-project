@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
+using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
@@ -92,20 +93,7 @@ namespace Start_a_Town_
             textStamped.ToConsole();
             UIChat.Instance.Write(text);
         }
-        public static void Warning(string text)
-        {
-            _write(Entry.Warning, text);
-        }
-        public static void System(string text)
-        {
-            _write(Entry.System, text);
-        }
-        static void _write(Func<string, Entry> entryCtor, string text)
-        {
-            var textStamped = $"[{DateTime.Now}] {text}";
-            textStamped.ToConsole();
-            UIChat.Instance.Write(entryCtor(text));
-        }
+       
         static void WriteHelp()
         {
             Log.Write(EntryTypes.Default,
@@ -237,6 +225,25 @@ List of available commands:
                     Log.Enqueue(EntryTypes.System, "Invalid command");
                     break;
             }
+        }
+        private static void _write(Entry entry)
+        {
+            var text = entry.ToString();
+            var textStamped = $"[{DateTime.Now}] {text}";
+            textStamped.ToConsole();
+            UIChat.Instance.Write(entry);
+        }
+        public static void Warning(string text)
+        {
+            _write(Entry.Warning(text));
+        }
+        public static void System(string text)
+        {
+            _write(Entry.System(text));
+        }
+        internal static void Chat(PlayerData player, string txt)
+        {
+            _write(Entry.Chat(player, txt));
         }
     }
 }

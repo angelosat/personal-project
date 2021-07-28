@@ -93,5 +93,9 @@ namespace Start_a_Town_.Net
         {
             this.Target = target;
         }
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

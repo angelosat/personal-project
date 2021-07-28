@@ -37,7 +37,7 @@ namespace Start_a_Town_
             var hauledObj = hauled.Object;
             if(hauledObj == null)
             {
-                actor.Net.Log.Write(actor.Name + " tried to drop hauled object but was wan't hauling anything");
+                actor.Net.ConsoleBox.Write(actor.Name + " tried to drop hauled object but was wan't hauling anything");
                 this.State = States.Failed;
                 return;
             }

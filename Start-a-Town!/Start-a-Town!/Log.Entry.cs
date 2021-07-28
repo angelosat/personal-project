@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -7,50 +8,69 @@ namespace Start_a_Town_
     {
         public class Entry
         {
-            public Color Color;
+            public Color Color = Color.White;
+            public object Source;
             public EntryTypes Type;
             public object[] Values;
-            public Entry(EntryTypes type, params object[] values)
+            public Entry(EntryTypes type, object[] values)
             {
-                Type = type;
-                Values = values;
+                this.Type = type;
+                this.Source = type;
+                this.Values = values;
             }
+            public Entry(EntryTypes type, object source, object[] values)
+            {
+                this.Type = type;
+                this.Source = source;
+                this.Values = values;
+            }
+           
             public override string ToString()
             {
-                switch (Type)
+                return this.ConvertToString();
+                switch (this.Type)
                 {
                     case EntryTypes.Damage:
                         throw new NotImplementedException();
                     case EntryTypes.Death:
-                        return (Values[1] as GameObject).Name + " slain by " + (Values[0] as GameObject).Name;
+                        return (this.Values[1] as GameObject).Name + " slain by " + (this.Values[0] as GameObject).Name;
                     case EntryTypes.Equip:
-                        return (Values[0] as GameObject).Name + " equipped " + (Values[1] as GameObject).Name;
+                        return (this.Values[0] as GameObject).Name + " equipped " + (this.Values[1] as GameObject).Name;
                     case EntryTypes.Unequip:
-                        return (Values[0] as GameObject).Name + " unequipped " + (Values[1] as GameObject).Name;
+                        return (this.Values[0] as GameObject).Name + " unequipped " + (this.Values[1] as GameObject).Name;
                     case EntryTypes.Buff:
-                        return (Values[0] as GameObject).Name + " is afflicted with " + (Values[1] as GameObject).Name;
+                        return (this.Values[0] as GameObject).Name + " is afflicted with " + (this.Values[1] as GameObject).Name;
                     case EntryTypes.Debuff:
-                        return (Values[0] as GameObject).Name + "'s " + (Values[1] as GameObject).Name + " faded ";
+                        return (this.Values[0] as GameObject).Name + "'s " + (this.Values[1] as GameObject).Name + " faded ";
                     case EntryTypes.TooHeavy:
                         return "Too heavy!";
                     case EntryTypes.CellChanged:
                         return "";
                     case EntryTypes.Chat:
-                        return "[" + (Values[0] == null ? "" : (Values[0] as GameObject).Name) + "] " + Values[1];
+                        return "[" + (this.Values[0] == null ? "" : (this.Values[0] as GameObject).Name) + "] " + this.Values[1];
                     case EntryTypes.ChatPlayer:
-                        return string.Format("[{0}] {1}", Values[0], Values[1]);
+                        return string.Format("[{0}] {1}", this.Values[0], this.Values[1]);
                     default:
-                        return $"[{Type}] {Values[0]}";
+                        return $"[{this.Type}] {this.Values[0]}";
                 }
             }
-
+            string ConvertToString()
+            {
+                return $"[{this.Source}] {string.Join(" ", this.Values.Select(v => v is string ? v.ToString() : $"[{v}]"))}";
+                //return $"[{this.Type}] {string.Join(" ", this.Values.Select(v => v is string ? v.ToString() : $"[{v}]"))}";
+            }
             public static Entry Warning(string text)
             {
-                return new Entry(EntryTypes.Warning, text) { Color = Color.Red };
+                return new Entry(EntryTypes.Warning, new object[] { text }) { Color = Color.Red };
             }
             public static Entry System(string text)
             {
-                return new Entry(EntryTypes.System, text) { Color = Color.Yellow };
+                return new Entry(EntryTypes.System, new object[] { text }) { Color = Color.Yellow };
+            }
+            public static Entry Chat(object source, string text)// object[] values)
+            {
+                return new Entry(EntryTypes.Chat, source, new object[] { text });
+                //return new Entry(EntryTypes.Chat, text) { Values= new object[] { player, text }, Color = Color.Yellow };
             }
         }
     }

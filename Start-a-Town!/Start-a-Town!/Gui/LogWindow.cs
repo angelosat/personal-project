@@ -27,7 +27,7 @@ namespace Start_a_Town_.UI
             Closable = false;
             MouseThrough = true;
 
-            Box_Text = Net.Client.Instance.Log;
+            Box_Text = Net.Client.Instance.ConsoleBox;
             Box_Text.FadeText = true;
             Panel_Text = new Panel() { AutoSize = true, Name = "Panel_Text", Color = Color.Black }; 
             Panel_Text.Controls.Add(Box_Text);

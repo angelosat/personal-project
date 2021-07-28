@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Towns;
 
 namespace Start_a_Town_
 {
@@ -11,12 +10,8 @@ namespace Start_a_Town_
         static public AITask FindBestTask(Actor actor, IEnumerable<Entity> items)
         {
             foreach (var i in items)
-            {
-                var task = TryHaulNew(actor, i);
-
-                if (task != null)
+                if (TryHaulNew(actor, i) is AITask task)
                     return task;
-            }
             return null;
         }
         
@@ -132,7 +127,7 @@ namespace Start_a_Town_
 
         static public bool IsValidStorage(GameObject item, TargetArgs destination)
         {
-            if (destination.HasObject && (destination.Object == null || !destination.Object.Exists || destination.Object.IsStackFull))
+            if (destination.HasObject && (destination.Object == null || !destination.Object.IsSpawned || destination.Object.IsStackFull))
                 return false;
             var global = destination.Global;
             var targetStockpile = destination.Map.Town.ZoneManager.GetZoneAt<Stockpile>(global - Vector3.UnitZ);

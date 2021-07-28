@@ -784,8 +784,8 @@
     <Compile Include="Modules\Towns\Stockpiles\IStorage.cs" />
     <Compile Include="Modules\Towns\Stockpiles\StockpileAIHelper.cs" />
     <Compile Include="Modules\Towns\Stockpiles\StockpileContentTracker.cs" />
-    <Compile Include="Modules\Towns\Stockpiles\AI\TaskBehaviorHaulToStockpileNew.cs" />
-    <Compile Include="Modules\Towns\Stockpiles\AI\TaskGiverHaulToStockpileNew.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\AI\TaskBehaviorHaulToStockpile.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\AI\TaskGiverHaulToStockpile.cs" />
     <Compile Include="Modules\Towns\Terrain\TerrainManager.cs" />
     <Compile Include="Modules\Towns\Tools\ToolDesignateZone.cs" />
     <Compile Include="Modules\Towns\Tools\ToolSelect3D.cs" />

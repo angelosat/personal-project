@@ -170,9 +170,10 @@ namespace Start_a_Town_
                     break;
 
                 case Message.Types.ChatPlayer:
-                    var name = e.Parameters[0] as string;
+                    var player = e.Parameters[0] as PlayerData;
                     var txt = (string)e.Parameters[1];
-                    this.Chat.Write(new Log.Entry(Log.EntryTypes.ChatPlayer, name, txt));
+                    //this.Chat.Write(new Log.Entry(Log.EntryTypes.ChatPlayer, name, txt));
+                    Log.Chat(player, txt);
                     break;
 
                 default:
@@ -189,7 +190,7 @@ namespace Start_a_Town_
             FloatingTextEx floating = new FloatingTextEx(parent,
                 new FloatingTextEx.Segment(txt, Color.White)
                 );
-            Client.Instance.Log.Write(txt);
+            Client.Instance.ConsoleBox.Write(txt);
             floating.Show();
         }
 
@@ -199,7 +200,7 @@ namespace Start_a_Town_
                 new FloatingTextEx.Segment("Received ", Color.Lime),
                 new FloatingTextEx.Segment(item.Name, item.GetInfo().GetQualityColor())
                 );
-            Client.Instance.Log.Write("Received: " + item.Name);
+            Client.Instance.ConsoleBox.Write("Received: " + item.Name);
             floating.Show();
         }
         private void OnItemLost(GameObject parent, GameObject item, int amount)
@@ -208,7 +209,7 @@ namespace Start_a_Town_
                 new FloatingTextEx.Segment("Lost " + amount.ToString() + "x ", Color.Red),
                 new FloatingTextEx.Segment(item.GetInfo().Name, item.GetInfo().GetQualityColor())
                 );
-            Client.Instance.Log.Write("Lost " + amount.ToString() + "x " + item.GetInfo().Name);
+            Client.Instance.ConsoleBox.Write("Lost " + amount.ToString() + "x " + item.GetInfo().Name);
             floating.Show();
         }
       

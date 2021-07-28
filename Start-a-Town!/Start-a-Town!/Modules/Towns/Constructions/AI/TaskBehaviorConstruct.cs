@@ -48,7 +48,7 @@ namespace Start_a_Town_
             {
                 if(!actor.Reserve(new TargetArgs(map, child), 1))
                 {
-                    map.Net.Log.Write("failed to reserve child of multi-blocked construction");
+                    map.Net.ConsoleBox.Write("failed to reserve child of multi-blocked construction");
                     return false;
                 }
             }

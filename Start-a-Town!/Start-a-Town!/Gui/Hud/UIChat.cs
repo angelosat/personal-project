@@ -33,7 +33,7 @@ namespace Start_a_Town_.UI
             Movable = true;
 
 
-            Console = Net.Client.Instance.Log;
+            Console = Net.Client.Instance.ConsoleBox;
             Console.FadeText = true;
             Panel_Text = new Panel() { AutoSize = true, Name = "Panel_Text", Color = Color.Black };
             Panel_Text.Controls.Add(Console);
@@ -167,7 +167,7 @@ namespace Start_a_Town_.UI
         }
         public void Write(Log.EntryTypes type, string text)
         {
-            this.Write(new Log.Entry(type, text));
+            this.Write(new Log.Entry(type, new object[] { text }));
         }
         public void Write(Log.Entry e)
         {
@@ -181,7 +181,6 @@ namespace Start_a_Town_.UI
             this.Timers.Add(line, FadeDelay);
 
             this.Console.Client.ClientLocation.Y = this.Console.Client.Bottom - this.Console.Client.ClientSize.Height;
-
         }
 
         internal override void OnControlRemoved(Control control)

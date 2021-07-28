@@ -158,7 +158,7 @@ namespace Start_a_Town_
         private static void ToggleEntityTargeting()
         {
             Controller.BlockTargeting = !Controller.BlockTargeting;
-            Client.Instance.Log.Write("Block targeting " + (Controller.BlockTargeting ? "on" : "off"));
+            Client.Instance.ConsoleBox.Write("Block targeting " + (Controller.BlockTargeting ? "on" : "off"));
         }
         private static void ToggleDrawRegions()
         {

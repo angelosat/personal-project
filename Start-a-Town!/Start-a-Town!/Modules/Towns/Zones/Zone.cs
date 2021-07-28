@@ -17,7 +17,7 @@ namespace Start_a_Town_
         public string Name;
         public ZoneManager Manager;
         public int ID { get; set; }
-        
+        public bool Hide;
         public abstract ZoneDef ZoneDef { get; }
         public abstract string UniqueName { get; }
         public IntVec3 Average()
@@ -162,6 +162,7 @@ namespace Start_a_Town_
 
         public virtual void GetSelectionInfo(IUISelection info)
         {
+            info.AddInfo(new CheckBoxNew("Hide", () => this.Hide = !this.Hide, () => this.Hide));
         }
 
         public void GetQuickButtons(SelectionManager info)
@@ -176,6 +177,8 @@ namespace Start_a_Town_
         }
         internal void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
+            if (this.Hide)
+                return;
             this.Positions.DrawBlocks(map, cam);
             return;
             var isselected = SelectionManager.IsSelected(this);
@@ -190,7 +193,7 @@ namespace Start_a_Town_
             this.ID.Save(tag, "ID");
             this.Name.Save(tag, "Name");
             this.Positions.Save(tag, "Positions");
-
+            this.Hide.Save(tag, "Hide");
             this.SaveExtra(tag);
             return tag;
         }
@@ -202,6 +205,7 @@ namespace Start_a_Town_
             tag.TryGetTagValueNew("Name", ref this.Name);
             //tag.TryGetTagValue<List<SaveTag>>("Positions", v => this.Positions = new HashSet<IntVec3>(new List<Vector3>().Load(v).Select(i => (IntVec3)i)));
             tag.TryGetTag("Positions", v => this.Positions.LoadIntVecs(v));
+            this.Hide.TryLoad(tag, "Hide");
             this.LoadExtra(tag);
             return this;
         }
@@ -211,6 +215,7 @@ namespace Start_a_Town_
         {
             w.Write(this.ID);
             w.Write(this.Name);
+            w.Write(this.Hide);
             this.Positions.Write(w);
             this.WriteExtra(w);
         }
@@ -220,6 +225,7 @@ namespace Start_a_Town_
         {
             this.ID = r.ReadInt32();
             this.Name = r.ReadString();
+            this.Hide = r.ReadBoolean();
             this.Positions.Read(r);
             this.ReadExtra(r);
             return this;

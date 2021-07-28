@@ -9,7 +9,7 @@ namespace Start_a_Town_
 {
     public interface INetwork
     {
-        ConsoleBoxAsync Log { get; }
+        ConsoleBoxAsync ConsoleBox { get; }
         PlayerData CurrentPlayer { get; }
         TimeSpan Clock { get; }
         double CurrentTick { get; }

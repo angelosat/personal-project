@@ -32,7 +32,6 @@ namespace Start_a_Town_.UI
             MouseThrough = true;
             Movable = true;
 
-
             Console = Net.Client.Instance.ConsoleBox;
             Console.FadeText = true;
             Panel_Text = new Panel() { AutoSize = true, Name = "Panel_Text", Color = Color.Black };
@@ -198,7 +197,24 @@ namespace Start_a_Town_.UI
                 Timers[label] = FadeDelay / 2f;
             }
         }
+        
+        internal void StartOrFinishTyping()
+        {
+            if (this.TextBox.Enabled)
+            {
+                this.TextBox.EnterFunc(this.TextBox.Text);
+                return;
+            }
 
+            this.Client.SetOpacity(1, true, exclude: Console);
+
+            SetMousethrough(false, true);
+            TextBox.Enabled = true;
+            foreach (Control label in Console.Client.Controls)
+            {
+                Timers[label] = FadeDelay / 2f;
+            }
+        }
         public override bool Hide()
         {
             this.Client.SetOpacity(0, true, exclude: Console);

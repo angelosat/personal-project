@@ -15,7 +15,7 @@ namespace Start_a_Town_
         static ToolManager _instance;
         public static ToolManager Instance => _instance ??= new ToolManager();
         static readonly HotkeyContext HotkeyContext = new("Targeting");
-        static readonly HotkeyContext HotkeyContextDebug = new("Debug");
+        public static readonly HotkeyContext HotkeyContextDebug = new("Debug");
 
         static ToolManager()
         {
@@ -147,13 +147,6 @@ namespace Start_a_Town_
             if (this.ActiveTool is null)
                 return;
 
-            if(e.KeyCode == System.Windows.Forms.Keys.Escape && this.ActiveTool?.GetType() != DefaultToolType)
-            {
-                e.Handled = true;
-                this.ActiveTool = null;
-                return;
-            }
-
             if (HotkeyManager.Press(e.KeyCode, HotkeyContext) ||
                 HotkeyManager.Press(e.KeyCode, HotkeyContextDebug))
             {
@@ -239,10 +232,6 @@ namespace Start_a_Town_
             this.ActiveTool?.HandleLButtonDoubleClick(e);
         }
 
-        internal void ClearTool()
-        {
-            this.ActiveTool = null;
-        }
         static readonly ToolControlActor ToolControlActor = new();
         internal static void OnGameEvent(INetwork net, GameEvent e)
         {
@@ -269,9 +258,15 @@ namespace Start_a_Town_
         {
             ScreenManager.CurrentScreen.ToolManager.ActiveTool = tool;
         }
-        public static void Clear()
+        public static bool Clear()
         {
-            ScreenManager.CurrentScreen.ToolManager.ClearTool();
+            if(Instance.ActiveTool.GetType() != Instance.DefaultToolType)
+            {
+                Instance.ActiveTool = null;
+                return true;
+            }
+            return false;
+            //ScreenManager.CurrentScreen.ToolManager.ClearTool();
         }
 
         public static TargetArgs CurrentTarget => Instance.ActiveTool != null ? (Instance.ActiveTool.Target ?? TargetArgs.Null) : TargetArgs.Null;

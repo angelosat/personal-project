@@ -79,6 +79,18 @@ namespace Start_a_Town_
             hotkey.ActionPress();
             return true;
         }
+        /// <summary>
+        /// Sets KeyEventArgs.Handled to true if hotkey was performed
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="context"></param>
+        public static void PerformHotkey(System.Windows.Forms.KeyEventArgs e, HotkeyContext context)
+        {
+            if (Hotkeys.FirstOrDefault(h => h.Context == context && h.ShortcutKeys.Contains(e.KeyCode)) is not Hotkey hotkey)
+                return;
+            hotkey.ActionPress();
+            e.Handled = true;
+        }
         public static bool Press(System.Windows.Forms.Keys key, HotkeyContext context)
         {
             if (Hotkeys.FirstOrDefault(h => h.Context == context && h.ShortcutKeys.Contains(key)) is Hotkey hotkey && !hotkey.Pressed)

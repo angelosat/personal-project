@@ -125,19 +125,15 @@ namespace Start_a_Town_.UI
         public override void Update()
         {
             base.Update();
-
-            if (this.TitleFunc != null)
+            if (this.TitleFunc is not null)
             {
                 var nowTitle = this.TitleFunc();
                 if (this.LastTitle != nowTitle)
-                {
                     this.OnTitleChanged();
-                }
                 this.LastTitle = nowTitle;
             }
             this.Drag();
             this.ScreenClientBounds = new Rectangle((int)this.ScreenClientLocation.X - UIManager.BorderPx, (int)this.ScreenClientLocation.Y - UIManager.BorderPx, this.ClientSize.Width + 2 * UIManager.BorderPx, this.ClientSize.Height + 2 * UIManager.BorderPx);
-           
             this.FocusLast = this.Focused;
         }
 

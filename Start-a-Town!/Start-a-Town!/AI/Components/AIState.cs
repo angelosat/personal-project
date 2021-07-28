@@ -95,7 +95,7 @@ namespace Start_a_Town_.AI
 
         public bool HasJob(JobDef job)
         {
-            return this.Jobs.TryGetValue(job, out var j) ? j.Enabled : false;
+            return this.Jobs.TryGetValue(job, out var j) && j.Enabled;
         }
         public void ToggleJob(JobDef job)
         {
@@ -132,10 +132,7 @@ namespace Start_a_Town_.AI
             tag.Add(new SaveTag(SaveTag.Types.Vector3, "Leash", this.Leash));
 
             tag.Add((this.CurrentTask != null).Save("HasTask"));
-            if (this.CurrentTask != null)
-            {
-                tag.Add(this.CurrentTask.Save("Task"));
-            }
+            tag.Add(this.CurrentTask?.Save("Task"));
             if (this.CurrentTaskBehavior != null)
             {
                 var bhavtag = this.CurrentTaskBehavior.Save("Behavior");
@@ -198,18 +195,14 @@ namespace Start_a_Town_.AI
                           select v as TargetArgs;
             foreach (var t in targets)
                 t.Map = parent.Map;
-            if (this.CurrentTask != null)
-                this.CurrentTask.MapLoaded(parent);
-            if (this.CurrentTaskBehavior != null)
+            this.CurrentTask?.MapLoaded(parent);
+            if(this.CurrentTaskBehavior is not null)
                 this.CurrentTaskBehavior.Actor = parent;
         }
 
         internal void ObjectLoaded(GameObject parent)
         {
-            if (this.CurrentTask != null)
-            {
-                this.CurrentTask.ObjectLoaded(parent);
-            }
+            this.CurrentTask?.ObjectLoaded(parent);
         }
 
         public BehaviorPerformTask LastBehavior;

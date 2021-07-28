@@ -1,41 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
-using Start_a_Town_.AI;
-using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.UI;
-using UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
+    [EnsureStaticCtorCall]
     public class Hud : GroupBox
     {
+        static Hud()
+        {
+            HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Open chat", delegate { Ingame.Instance.Hud.Chat.StartOrFinishTyping(); }, System.Windows.Forms.Keys.Enter);
+            HotkeyManager.RegisterHotkey(ToolManager.HotkeyContextDebug, "Open console", delegate { ServerConsole.Instance.Toggle(); }, System.Windows.Forms.Keys.Oemtilde);
+            HotkeyManager.RegisterHotkey(ToolManager.HotkeyContextDebug, "Spawn objects", delegate { UI.Editor.ObjectsWindowDefs.Instance.Toggle(); }, System.Windows.Forms.Keys.O);
+        }
         public new void Initialize()
         {
             foreach (var item in Game1.Instance.GameComponents)
                 item.InitHUD(this);
         }
 
-        Dictionary<Message.Types, Action<GameEvent>> UIEvents = new();
+        readonly Dictionary<Message.Types, Action<GameEvent>> UIEvents = new();
         internal void RegisterEventHandler(Message.Types type, Action<GameEvent> action)
         {
             this.UIEvents.Add(type, action);
         }
         public static int DefaultHeight = UIManager.DefaultIconButtonSprite.Height;
         Control WindowPlayers;
-        UINpcFrameContainer UnitFrames;
+        readonly UINpcFrameContainer UnitFrames;
         public Panel PartyFrame;
         public UnitFrame PlayerUnitFrame;
         public Panel Box_Buttons;
         public UIChat Chat;
         public Label Time;
-        IngameMenu IngameMenu;
-        ScrollbarVNew ZLevelDrawBar;
-        IconButton BtnPlayers;
+        readonly IngameMenu IngameMenu;
+        readonly ScrollbarVNew ZLevelDrawBar;
+        readonly IconButton BtnPlayers;
         public UIToolHelp ToolHelp;
         public void AddButton(IconButton btn)
         {
@@ -48,7 +51,7 @@ namespace Start_a_Town_
         public Hud(INetwork net, Camera camera)
         {
             this.SetMousethrough(true);
-            
+
             IconButton BTN_Options = new IconButton()
             {
                 BackgroundTexture = UIManager.DefaultIconButtonSprite,
@@ -61,20 +64,20 @@ namespace Start_a_Town_
                 BackgroundTexture = UIManager.DefaultIconButtonSprite,
                 Icon = new Icon(UIManager.Icons32, 0, 32),
                 HoverFunc = () => "Menu [" + GlobalVars.KeyBindings.Menu + "]",
-                LeftClickAction = () => TogglePlayerList(net)
+                LeftClickAction = () => this.TogglePlayerList(net)
             };
 
             this.UnitFrames = new UINpcFrameContainer() { LocationFunc = () => new Vector2(UIManager.Width / 2, 0), Anchor = Vector2.UnitX * .5f };
-            PartyFrame = new Panel();
+            this.PartyFrame = new Panel();
 
-            Box_Buttons = new Panel() { AutoSize = true, Location = UIManager.Size, Color = Color.Black };
-            Box_Buttons.AddControlsHorizontally(
-                BtnPlayers,
+            this.Box_Buttons = new Panel() { AutoSize = true, Location = UIManager.Size, Color = Color.Black };
+            this.Box_Buttons.AddControlsHorizontally(
+                this.BtnPlayers,
                 BTN_Options
                 );
-            Box_Buttons.Anchor = Vector2.One;
+            this.Box_Buttons.Anchor = Vector2.One;
             this.Box_Buttons.SetMousethrough(true, false);
-            Controls.Add(Box_Buttons);
+            this.Controls.Add(this.Box_Buttons);
 
             var camWidget = new CameraWidget(camera)
             {
@@ -110,15 +113,15 @@ namespace Start_a_Town_
 
             this.ToolHelp = new UIToolHelp() { Location = this.ZLevelDrawBar.BottomRight };
 
-            Controls.Add(
+            this.Controls.Add(
                 this.ZLevelDrawBar,
                 camWidget, uiSpeed,
                 this.ToolHelp,
-                Chat
+                this.Chat
                 , this.Time
                 , this.UnitFrames
                 );
-            FloatingBars = new Dictionary<GameObject, FloatingBar>();
+            this.FloatingBars = new Dictionary<GameObject, FloatingBar>();
         }
 
         private void TogglePlayerList(INetwork net)
@@ -140,15 +143,15 @@ namespace Start_a_Town_
             switch (e.Type)
             {
                 case Message.Types.NotEnoughSpace:
-                    NotEnoughSpace(e.Parameters[0] as GameObject);
+                    this.NotEnoughSpace(e.Parameters[0] as GameObject);
                     break;
 
                 case Message.Types.ItemGot:
-                    OnItemGot(e.Parameters[0] as GameObject, e.Parameters[1] as GameObject);
+                    this.OnItemGot(e.Parameters[0] as GameObject, e.Parameters[1] as GameObject);
                     break;
 
                 case Message.Types.ItemLost:
-                    OnItemLost(e.Parameters[0] as GameObject, e.Parameters[1] as GameObject, (int)e.Parameters[2]);
+                    this.OnItemLost(e.Parameters[0] as GameObject, e.Parameters[1] as GameObject, (int)e.Parameters[2]);
                     break;
 
                 case Message.Types.HealthLost:
@@ -177,7 +180,7 @@ namespace Start_a_Town_
                     break;
 
                 default:
-                    if (this.UIEvents.TryGetValue((Message.Types)e.Type, out var val))
+                    if (this.UIEvents.TryGetValue(e.Type, out var val))
                         val(e);
                     base.OnGameEvent(e);
                     break;
@@ -212,14 +215,8 @@ namespace Start_a_Town_
             Client.Instance.ConsoleBox.Write("Lost " + amount.ToString() + "x " + item.GetInfo().Name);
             floating.Show();
         }
-      
-        public override void Update()
-        {
-            base.Update();
-            if (Engine.Map is null)
-                return;
-        }
-        Dictionary<GameObject, FloatingBar> FloatingBars;
+
+        readonly Dictionary<GameObject, FloatingBar> FloatingBars;
         void Log_EntryAdded(object sender, LogEventArgs e)
         {
             switch (e.Entry.Type)
@@ -228,46 +225,41 @@ namespace Start_a_Town_
                     GameObject target = e.Entry.Values[1] as GameObject;
                     Attack attack = e.Entry.Values[2] as Attack;
                     FloatingText floating = new FloatingText(target, attack.Value + " damage");
-                    Controls.Add(floating);
+                    this.Controls.Add(floating);
                     break;
                 default:
                     break;
             }
         }
-        void bar_Finished(object sender, EventArgs e)
-        {
-            FloatingBar bar = sender as FloatingBar;
-            FloatingBars.Remove(bar.Object);
-        }
         public void Initialize(GameObject obj)
         {
-            Controls.Remove(PartyFrame);
-            PartyFrame.Controls.Clear();
-            PartyFrame.AutoSize = true;
+            this.Controls.Remove(this.PartyFrame);
+            this.PartyFrame.Controls.Clear();
+            this.PartyFrame.AutoSize = true;
 
-            PlayerUnitFrame = new UnitFrame().Track(obj);
-            PartyFrame.Controls.Add(PlayerUnitFrame);
+            this.PlayerUnitFrame = new UnitFrame().Track(obj);
+            this.PartyFrame.Controls.Add(this.PlayerUnitFrame);
 
-            Controls.Add(PartyFrame);
-            PartyFrame.Invalidate(true);
+            this.Controls.Add(this.PartyFrame);
+            this.PartyFrame.Invalidate(true);
         }
 
         public void AddUnitFrame(GameObject obj)
         {
-            PartyFrame.Controls.Add(new UnitFrame() { Location = PartyFrame.Controls.Last().BottomLeft }.Track(obj));
+            this.PartyFrame.Controls.Add(new UnitFrame() { Location = this.PartyFrame.Controls.Last().BottomLeft }.Track(obj));
         }
         public void RemoveUnitFrame(GameObject obj)
         {
-            PartyFrame.Controls.Remove(PartyFrame.Controls.Find(frame => frame.Tag == obj));
+            this.PartyFrame.Controls.Remove(this.PartyFrame.Controls.Find(frame => frame.Tag == obj));
         }
-       
+
         void BTN_Options_Click()
         {
             this.IngameMenu.ShowDialog();
         }
         public override void Reposition(Vector2 ratio)
         {
-            foreach (Control ctrl in Controls)
+            foreach (Control ctrl in this.Controls)
                 ctrl.Reposition(ratio);
         }
 
@@ -275,27 +267,15 @@ namespace Start_a_Town_
         {
             if (e.Handled)
                 return;
-            
-            if(e.KeyCode == System.Windows.Forms.Keys.Escape)
+
+            if (e.KeyCode == System.Windows.Forms.Keys.Escape)
             {
                 e.Handled = true;
-                if(!SelectionManager.ClearTargets() && !this.WindowManager.CloseAll())
+                if (!ToolManager.Clear() && !SelectionManager.ClearTargets() && !this.WindowManager.CloseAll())
                     this.IngameMenu.ToggleDialog();
-
-                //SelectionManager.ClearTargets();
-                //var winds = (from control in this.WindowManager.Layers[UIManager.LayerWindows] where control is Window select control).ToList();
-                //if (winds.Count == 0)
-                //    this.IngameMenu.ToggleDialog();
-                //foreach (var win in winds)
-                //    win.Hide();
             }
-
-            List<System.Windows.Forms.Keys> pressed = Controller.Input.GetPressedKeys();
-            if (pressed.Contains(GlobalVars.KeyBindings.ObjectBrowser))
-                UI.Editor.ObjectsWindowDefs.Instance.Toggle();
-
-            if (pressed.Contains(System.Windows.Forms.Keys.Oemtilde))
-                ServerConsole.Instance.Toggle();
+            HotkeyManager.PerformHotkey(e, Ingame.HotkeyContext);
+          
             base.HandleKeyDown(e);
         }
         public override void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
@@ -314,24 +294,10 @@ namespace Start_a_Town_
                     this.Chat.StartTyping();
                     break;
 
-                case '\r':
-                    if (this.Chat.TextBox.Enabled)
-                    {
-                        this.Chat.TextBox.EnterFunc(this.Chat.TextBox.Text);
-                        this.Chat.TextBox.Text = "";
-                        return;
-                    }
-                    this.Chat.StartTyping();
-                    break;
-
                 default:
                     base.HandleKeyPress(e);
                     break;
             }
-        }
-        public override void Draw(SpriteBatch sb, Rectangle viewport)
-        {
-            base.Draw(sb, viewport);
         }
     }
 }

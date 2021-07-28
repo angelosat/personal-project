@@ -1,5 +1,5 @@
-﻿using System;
-using Start_a_Town_.AI;
+﻿using Start_a_Town_.AI;
+using System;
 
 namespace Start_a_Town_
 {
@@ -7,7 +7,7 @@ namespace Start_a_Town_
     {
         static readonly int TimerMax = Engine.TicksPerSecond;
         int Timer = TimerMax;
-        
+
         TaskGiver CurrentTaskGiver;
 
         public override BehaviorState Execute(Actor parent, AIState state)
@@ -15,14 +15,14 @@ namespace Start_a_Town_
             if (parent.Velocity.Z != 0)
                 return BehaviorState.Running;
 
-            if(state.ForcedTask != null)
+            if (state.ForcedTask != null)
             {
                 var task = state.ForcedTask;
                 state.ForcedTask = null;
                 this.CleanUp(parent);
                 this.TryForceTask(parent, task, state);
             }
-           
+
             if (state.CurrentTaskBehavior != null)
             {
                 var (result, source) = state.CurrentTaskBehavior.Tick(parent, state);
@@ -40,13 +40,13 @@ namespace Start_a_Town_
                         /// but that the interaction wasn't being serialized properly. its state wasnt synced to the client, and was left as unstarted
                         /// which resulted in the the intearction starting again and re-adding its animation to the entity
                         /// after fixing that, the cancelinteraction now seem to work even after a success
-                      
+
                         parent.CancelInteraction(); // (the following is not true anymore, see above comment) THIS CANNOT BE HERE BECAUSE IT WILL CANCEL THE CLIENT ENTITY'S INTERACTION WHILE THE ANIMATION IS ON THE LAST FRAME
 
                         //if (result == BehaviorState.Fail) // ONLY CANCEL INTERACTION ON FAILURE?
-                            //parent.CancelInteraction(); 
-                            // DO I ACTUALLY NEED IT? i dont remember why i added this here
-                            // i think i was only cancelling the interaction server-side and the problem appeared after sync-cancelling to the clients
+                        //parent.CancelInteraction(); 
+                        // DO I ACTUALLY NEED IT? i dont remember why i added this here
+                        // i think i was only cancelling the interaction server-side and the problem appeared after sync-cancelling to the clients
 
                         // TODO: unreserve here?
                         parent.Unreserve();
@@ -71,7 +71,7 @@ namespace Start_a_Town_
                 var stamina = parent.GetResource(ResourceDef.Stamina);
                 var staminaTaskThreshold = 20;
                 var tired = stamina.Value <= staminaTaskThreshold;
-               
+
                 if (this.CurrentTaskGiver != null)
                 {
                     if (tired)
@@ -105,19 +105,13 @@ namespace Start_a_Town_
                 if (!tired)
                 {
                     if (this.Timer < TimerMax)
-                    {
                         this.Timer++;
-                    }
                     else
                     {
                         this.Timer = 0;
-
                         var task = this.FindNewTaskNew(parent, state); // TODO: needs optimization
-
-                        if (task != null)
-                        {
+                        if (task is not null)
                             return BehaviorState.Success;
-                        }
                     }
                 }
             }
@@ -143,9 +137,9 @@ namespace Start_a_Town_
         }
         private void CleanUp(Actor parent, AIState state)
         {
-            if(parent.Hauled is not null)
+            if (parent.Hauled is not null)
                 parent.Interact(new InteractionThrow(true));
-           
+
             if (parent.GetEquipmentSlot(GearType.Mainhand) is Entity item)
             {
                 if (parent.ItemPreferences.IsPreference(item))
@@ -155,7 +149,7 @@ namespace Start_a_Town_
             }
 
             parent.Unreserve();
-            
+
             state.Reset();
             this.CurrentTaskGiver = null;
         }
@@ -205,7 +199,7 @@ namespace Start_a_Town_
         {
             base.AddSaveData(tag);
             tag.Add(this.Timer.Save("Timer"));
-            
+
             if (this.CurrentTaskGiver is not null)
                 tag.Add(this.CurrentTaskGiver.GetType().FullName.Save("CurrentTaskGiver")); ;
         }
@@ -214,7 +208,7 @@ namespace Start_a_Town_
             base.Load(tag);
 
             tag.TryGetTagValue("Timer", out this.Timer);
-           
+
             tag.TryGetTagValue<string>("CurrentTaskGiver", t => this.CurrentTaskGiver = Activator.CreateInstance(Type.GetType(t)) as TaskGiver);
         }
         internal override void MapLoaded(Actor parent)

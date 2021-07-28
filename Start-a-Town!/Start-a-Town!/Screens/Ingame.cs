@@ -35,8 +35,8 @@ namespace Start_a_Town_
             this.NameplateManager.Show(WindowManager);
             ToolManager = ToolManager.Instance;
             KeyHandlers.Clear();
-            KeyHandlers.Push(WindowManager);
             KeyHandlers.Push(ToolManager);
+            KeyHandlers.Push(WindowManager);
             KeyHandlers.Push(ContextMenuManager.Instance);
             return this;
         }

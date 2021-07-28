@@ -260,6 +260,7 @@ namespace Start_a_Town_
                 return Messages.Default;
             this.LeftPressed = true;
             this.SelectionRectangleOrigin = UIManager.Mouse;
+            //e.Handled = true;
             return Messages.Default;
         }
         public override Messages MouseLeftUp(HandledMouseEventArgs e)

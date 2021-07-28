@@ -158,13 +158,24 @@ namespace Start_a_Town_.UI
 
         public Action<int> HistoryNextPrev = i => { };
 
-        public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
+        public override void HandleKeyDown(KeyEventArgs e)
         {
             if (!Enabled)
                 return;
             if (e.Handled)
                 return;
             e.Handled = true;
+
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    EnterFunc(this.Text);
+                    this.Text = "";
+                    break;
+                default:
+                    break;
+            }
+
 
             switch (e.KeyValue)
             {
@@ -222,10 +233,10 @@ namespace Start_a_Town_.UI
                     EscapeFunc(e);
                     break;
 
-                case '\r'://13) //enter
-                        EnterFunc(this.Text);
-                    this.Text = "";
-                    break;
+                //case '\r'://13) //enter
+                //    EnterFunc(this.Text);
+                //    this.Text = "";
+                //    break;
 
                 case (char)22: //paste
                     Thread t = new Thread(GetTextFromClipboard);
@@ -244,7 +255,7 @@ namespace Start_a_Town_.UI
                     break;
             }
         }
-        
+
         public override void HandleKeyUp(KeyEventArgs e)
         {
             if (!Enabled)

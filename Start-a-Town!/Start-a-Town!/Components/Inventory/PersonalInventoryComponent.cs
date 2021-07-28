@@ -149,14 +149,13 @@ namespace Start_a_Town_.Components
             var parent = this.Parent;
             var slot = this.Slots.First(i => i == item);
             // TODO instantiate new item if necessary
-            throw new NotImplementedException();
             if (amount < item.StackSize)
             {
                 //obj = slot.Object.Clone();
                 //obj.StackSize = amount;
             }
             item.Spawn(parent.Map, parent.Global + new Vector3(0, 0, parent.Physics.Height));
-            item.StackSize -= amount;
+            //item.StackSize -= amount;
             return item;
         }
         public void Drop(GameObject item)

@@ -59,12 +59,12 @@ namespace Start_a_Town_.UI
             int currentX = 0;
             foreach (var col in this.Columns)
             {
-                row.AddControls(col.ControlGetter(item).SetLocation(currentX, 0)
-                                                       .SetTag(item));
+                row.AddControls(col.ControlGetter(item).SetLocation(currentX, 0));
                 currentX += col.Width;
             }
             this.AddControlsBottomLeft(row);
             row.Location.Y += Spacing;
+            row.Tag = item;
             return row;
         }
         void RemoveItems(IEnumerable<TObject> items)

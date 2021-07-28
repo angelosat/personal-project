@@ -693,6 +693,7 @@ namespace Start_a_Town_
         protected virtual void OnSpawn(MapBase map)
         {
             this.Net = map.Net;
+            this.Container?.Remove(this);
             this.Parent = null;
 
             if (!map.TryGetChunk(this.Global, out var chunk))

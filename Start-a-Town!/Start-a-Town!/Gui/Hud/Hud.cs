@@ -263,7 +263,7 @@ namespace Start_a_Town_
        
         void BTN_Options_Click()
         {
-            this.IngameMenu.ShowDialog();// Toggle();Toggle();
+            this.IngameMenu.ShowDialog();
         }
         public override void Reposition(Vector2 ratio)
         {
@@ -273,42 +273,30 @@ namespace Start_a_Town_
 
         public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
-            base.HandleKeyDown(e);
             if (e.Handled)
                 return;
+            
+            if(e.KeyCode == System.Windows.Forms.Keys.Escape)
+            {
+                e.Handled = true;
+                if(!SelectionManager.ClearTargets() && !this.WindowManager.CloseAll())
+                    this.IngameMenu.ToggleDialog();
+
+                //SelectionManager.ClearTargets();
+                //var winds = (from control in this.WindowManager.Layers[UIManager.LayerWindows] where control is Window select control).ToList();
+                //if (winds.Count == 0)
+                //    this.IngameMenu.ToggleDialog();
+                //foreach (var win in winds)
+                //    win.Hide();
+            }
+
             List<System.Windows.Forms.Keys> pressed = Controller.Input.GetPressedKeys();
             if (pressed.Contains(GlobalVars.KeyBindings.ObjectBrowser))
                 UI.Editor.ObjectsWindowDefs.Instance.Toggle();
 
             if (pressed.Contains(System.Windows.Forms.Keys.Oemtilde))
                 ServerConsole.Instance.Toggle();
-
-            //if (pressed.Contains(KeyBind.Build.Key))
-            //    Client.Instance.Map.Town.ConstructionsManager.WindowBuild.Toggle();
-        }
-        public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
-        {
-            if (e.Handled)
-                return;
-            switch (e.KeyData)
-            {
-                case System.Windows.Forms.Keys.Tab:
-                    break;
-
-                case System.Windows.Forms.Keys.Escape:
-                    var winds = (from control in this.WindowManager.Layers[UIManager.LayerWindows] where control is Window select control).ToList();
-                    SelectionManager.ClearTargets();
-                    if (winds.Count == 0)
-                        this.IngameMenu.ToggleDialog();
-                    foreach (var win in winds)
-                        win.Hide();
-                    break;
-
-                default:
-                    base.HandleKeyUp(e);
-                    break;
-            }
-            return;
+            base.HandleKeyDown(e);
         }
         public override void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
         {

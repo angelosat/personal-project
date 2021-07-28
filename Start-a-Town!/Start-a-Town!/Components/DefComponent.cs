@@ -90,10 +90,10 @@ namespace Start_a_Town_
             {
                 Font = UIManager.FontBold,
                 TextFunc = () => parent.Name,
-                TextColorFunc = parent.GetNameplateColor,
+                //TextColorFunc = parent.GetNameplateColor,
+                TintFunc = parent.GetNameplateColor,
                 MouseThrough = true,
                 TextBackgroundFunc = () => parent.HasFocus() ? this.Quality.Color * .5f : Color.Black * .5f
-
             });
         }
     }

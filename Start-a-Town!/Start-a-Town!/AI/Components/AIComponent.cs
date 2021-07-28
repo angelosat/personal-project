@@ -6,11 +6,10 @@ using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Start_a_Town_
 {
-    class AIComponent : EntityComponent
+    public class AIComponent : EntityComponent
     {
         public override string ComponentName => "AI";
         
@@ -36,12 +35,10 @@ namespace Start_a_Town_
         }
         Behavior Root;
         readonly Knowledge Knowledge;
-        bool Running;
         public AIState State;
-        public bool Enabled = true;
+        bool Enabled = true;
         public AIComponent()
         {
-            this.Running = true;
             this.Knowledge = new Knowledge();
             this.Root = null;
         }
@@ -53,6 +50,15 @@ namespace Start_a_Town_
         internal T FindBehavior<T>() where T : Behavior
         {
             return (this.Root as BehaviorComposite).Find(typeof(T)) as T;
+        }
+
+        public void Enable()
+        {
+            this.Enabled = true;
+        }
+        public void Disable()
+        {
+            this.Enabled = false;
         }
 
         public override void MakeChildOf(GameObject parent)
@@ -76,9 +82,6 @@ namespace Start_a_Town_
             var parent = this.Parent;
             var net = parent.Net;
             if (net is Client) // do i want to run some deterministic behaviors locally too? UPDATE: NO
-                return;
-
-            if (!this.Running)
                 return;
 
             if (this.Enabled)

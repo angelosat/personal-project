@@ -165,7 +165,7 @@
     <Compile Include="AI\Behaviors\Sleeping\TaskBehaviorSleepOnGround.cs" />
     <Compile Include="AI\Behaviors\Sleeping\TaskGiverSleeping.cs" />
     <Compile Include="AI\Behaviors\Tasks\TaskGiver.cs" />
-    <Compile Include="AI\Behaviors\Tasks\BehaviorFindTask.cs" />
+    <Compile Include="AI\Behaviors\Tasks\BehaviorHandleTasks.cs" />
     <Compile Include="AI\Behaviors\Tasks\BehaviorPerformTask.cs" />
     <Compile Include="AI\Behaviors\Tasks\TaskGiverResult.cs" />
     <Compile Include="AI\Behaviors\Tasks\TaskHelper.cs" />

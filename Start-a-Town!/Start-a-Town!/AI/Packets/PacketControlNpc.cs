@@ -30,24 +30,24 @@ namespace Start_a_Town_
         {
             var player = net.GetPlayer(r.ReadInt32());
             var entityid = r.ReadInt32();
-            var entity = entityid != -1 ? net.GetNetworkObject(entityid) as Actor : null;
-            if (entity?.IsPlayerControlled ?? false)
+            var nextEntity = entityid != -1 ? net.GetNetworkObject(entityid) as Actor : null;
+            if (nextEntity?.IsPlayerControlled ?? false)
                 return;
             var lastEntity = player.ControllingEntity;
-            player.ControllingEntity = entity;
-            net.EventOccured(Components.Message.Types.PlayerControlNpc, player, entity, lastEntity);
+            player.ControllingEntity = nextEntity;
+            net.EventOccured(Components.Message.Types.PlayerControlNpc, player, nextEntity, lastEntity);
 
-            if (entity is not null)
-                net.Write($"{player.Name} is controlling {entity.Name}");
+            if (nextEntity is not null)
+                net.Write($"{player.Name} is controlling {nextEntity.Name}");
             else
                 net.Write($"{player.Name} no longer controlling {lastEntity.Name}");
 
             if (net is Server)
             {
                 if (lastEntity is not null)
-                    lastEntity.GetComponent<AIComponent>().Enabled = true;
-                if (entity is not null)
-                    entity.GetComponent<AIComponent>().Enabled = false;
+                    lastEntity.AI.Enable();
+                if (nextEntity is not null)
+                    nextEntity.AI.Disable();
                 Send(net, player.ID, entityid);
             }
         }

@@ -27,6 +27,9 @@ namespace Start_a_Town_.UI
             LeftClickActionNew = bb => { },
             RightClickActionNew = bb => { };
 
+        /// <summary>
+        /// This is applied to the text when drawing it to the control's texture. The color can't change until after the text is updated. Use TintColorFunc instead.
+        /// </summary>
         public Func<Color> TextColorFunc;
         Color _TextColor = UIManager.DefaultTextColor;
         public virtual Color TextColor

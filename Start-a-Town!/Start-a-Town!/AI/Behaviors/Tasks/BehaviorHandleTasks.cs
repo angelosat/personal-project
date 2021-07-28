@@ -1,8 +1,9 @@
 ﻿using System;
+using Start_a_Town_.AI;
 
-namespace Start_a_Town_.AI.Behaviors.Tasks
+namespace Start_a_Town_
 {
-    class BehaviorFindTask : Behavior
+    class BehaviorHandleTasks : Behavior
     {
         static readonly int TimerMax = Engine.TicksPerSecond;
         int Timer = TimerMax;
@@ -189,7 +190,7 @@ namespace Start_a_Town_.AI.Behaviors.Tasks
 
         public override object Clone()
         {
-            return new BehaviorFindTask();
+            return new BehaviorHandleTasks();
         }
 
         public override void Write(System.IO.BinaryWriter w)

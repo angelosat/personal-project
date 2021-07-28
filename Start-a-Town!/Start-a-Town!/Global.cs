@@ -24,7 +24,7 @@ namespace Start_a_Town_
         public static bool DebugMode = false;
         public static string Undefined = "<undefined>";
 
-        public const string Version = "0.2.1";
+        public const string Version = "0.3.0 alpha";
 
         public class Settings
         {

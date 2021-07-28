@@ -299,29 +299,24 @@ namespace Start_a_Town_.UI
                 lastactive?.OnMouseLeave();
             }
         }
-
+        public bool CloseAll(GuiLayer layer)
+        {
+            bool closedsomething = false;
+            foreach (var ctrl in this.Layers[layer].OfType<Window>())
+                closedsomething |= ctrl.Close();
+            return closedsomething;
+        }
         public bool CloseAll()
         {
-
             bool closedsomething = false;
             var toclose = new List<Control>();
             foreach (var layer in this.Layers)
                 toclose.AddRange(layer.Value.FindAll(foo => foo is Window));
 
-            if (toclose.Count > 0)
-            {
-                foreach (Control c in toclose)
-                {
-                    if (c is Window win)
-                    {
-                        if (win.Closable)
-                        {
-                            win.Close();
-                            closedsomething = true;
-                        }
-                    }
-                }
-            }
+            if (toclose.Any())
+                foreach (var c in toclose)
+                    if (c is Window win && win.Closable)
+                        closedsomething |= win.Close();
 
             return closedsomething;
         }
@@ -578,6 +573,8 @@ namespace Start_a_Town_.UI
         }
         public void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
+            if (e.Handled)
+                return;
             foreach (var layer in this.Layers.Reverse())
             {
                 List<Control> wins = layer.Value.ToList();

@@ -40,6 +40,9 @@ namespace Start_a_Town_
         public WorkComponent Work => this._work ??= this.GetComponent<WorkComponent>();
         public Interaction CurrentInteraction => this.Work.Task;
 
+        AIComponent _ai;
+        public AIComponent AI => this._ai ??= this.GetComponent<AIComponent>();
+
         AIState _state;
         public AIState State => this._state ??= this.GetComponent<AIComponent>().State;
         internal AITask CurrentTask
@@ -274,7 +277,7 @@ namespace Start_a_Town_
                    new AIMemory(),
                    new BehaviorHandleResources(),
                    new BehaviorHandleOrders(),
-                   new AI.Behaviors.Tasks.BehaviorFindTask(),
+                   new BehaviorHandleTasks(),
                    new BehaviorIdle()
                    )));
             obj.AddComponent(new SpriteComponent(def.Body));
@@ -288,12 +291,16 @@ namespace Start_a_Town_
         }
         public override Color GetNameplateColor()
         {
-            return this.IsCitizen ? Color.White : Color.Cyan;
+            if (this.IsPlayerControlled)
+                return Color.Yellow;
+            if (this.IsCitizen)
+                return Color.White;
+            return Color.Cyan;
         }
 
         internal void EndCurrentTask()
         {
-            this.GetComponent<AIComponent>().FindBehavior<global::Start_a_Town_.AI.Behaviors.Tasks.BehaviorFindTask>().EndCurrentTask(this);
+            this.GetComponent<AIComponent>().FindBehavior<BehaviorHandleTasks>().EndCurrentTask(this);
         }
         internal void MoveToggle(bool toggle)
         {

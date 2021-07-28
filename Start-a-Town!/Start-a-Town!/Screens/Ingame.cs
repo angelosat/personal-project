@@ -35,8 +35,8 @@ namespace Start_a_Town_
             this.NameplateManager.Show(WindowManager);
             ToolManager = ToolManager.Instance;
             KeyHandlers.Clear();
-            KeyHandlers.Push(ToolManager); // if i have it here then the hud handles 1,2,3 first instead of letting toolmanagement change game speed
             KeyHandlers.Push(WindowManager);
+            KeyHandlers.Push(ToolManager);
             KeyHandlers.Push(ContextMenuManager.Instance);
             return this;
         }
@@ -106,6 +106,7 @@ namespace Start_a_Town_
             base.HandleKeyDown(e);
             if (e.Handled)
                 return;
+
             List<System.Windows.Forms.Keys> pressed = Controller.Input.GetPressedKeys();
             if (pressed.Contains(GlobalVars.KeyBindings.HideInterface))
                 HideInterface = !HideInterface;

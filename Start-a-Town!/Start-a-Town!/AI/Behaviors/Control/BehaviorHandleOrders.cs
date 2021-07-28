@@ -33,38 +33,9 @@
                     return BehaviorState.Running;
                 }
             }
-            return BehaviorState.Fail;
+            return BehaviorState.Fail; // fail only when not awaiting move orders
         }
-        //public override BehaviorState Execute(Actor parent, AIState state)
-        //{
-        //    if (this.CurrentBehav is not null && this.CurrentMoveOrder != TargetArgs.Null && state.MoveOrder == this.CurrentMoveOrder)
-        //    {
-        //        if (this.CurrentBehav.Execute(parent, state) != BehaviorState.Running)
-        //        {
-        //            this.CurrentBehav = null;
-        //            state.MoveOrders.Dequeue();
-        //            this.CurrentMoveOrder = TargetArgs.Null;
-        //        }
-        //        else
-        //            return BehaviorState.Running;
-        //    }
 
-        //    if (state.MoveOrder?.Type == TargetType.Position)
-        //    {
-        //        var destination = state.MoveOrder.Global.Above();
-        //        if (parent.IsAt(destination))
-        //            return BehaviorState.Running;
-        //        if (parent.CanReach(destination))
-        //        {
-        //            var target = new TargetArgs(parent.Map, destination);
-        //            parent.CurrentTask = new AITask() { TargetA = target };
-        //            this.CurrentBehav = new BehaviorGetAtNewNew(TargetIndex.A, PathingSync.FinishMode.Exact);
-        //            this.CurrentMoveOrder = state.MoveOrder;
-        //            return BehaviorState.Running;
-        //        }
-        //    }
-        //    return BehaviorState.Fail;
-        //}
         public override object Clone()
         {
             return new BehaviorHandleOrders();

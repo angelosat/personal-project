@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using UI;
 
@@ -23,9 +24,10 @@ namespace Start_a_Town_
             HotkeyManager.RegisterHotkey(HotkeyContext, "Rotate camera left", delegate { Ingame.CurrentMap.Camera.RotateClockwise(); }, System.Windows.Forms.Keys.Oemcomma);
             HotkeyManager.RegisterHotkey(HotkeyContext, "Rotate camera right", delegate { Ingame.CurrentMap.Camera.RotateCounterClockwise(); }, System.Windows.Forms.Keys.OemPeriod);
         }
+        Type DefaultToolType = typeof(ToolManagement);
         internal ControlTool GetDefaultTool()
         {
-            return new ToolManagement();
+            return Activator.CreateInstance(DefaultToolType) as ControlTool;// new ToolManagement();
         }
         ControlTool _activeTool;
         public ControlTool ActiveTool
@@ -144,6 +146,13 @@ namespace Start_a_Town_
 
             if (this.ActiveTool is null)
                 return;
+
+            if(e.KeyCode == System.Windows.Forms.Keys.Escape && this.ActiveTool?.GetType() != DefaultToolType)
+            {
+                e.Handled = true;
+                this.ActiveTool = null;
+                return;
+            }
 
             if (HotkeyManager.Press(e.KeyCode, HotkeyContext) ||
                 HotkeyManager.Press(e.KeyCode, HotkeyContextDebug))

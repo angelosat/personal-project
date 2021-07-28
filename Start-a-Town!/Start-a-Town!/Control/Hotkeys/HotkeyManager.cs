@@ -25,6 +25,8 @@ namespace Start_a_Town_
         }
         static void HandleConflicts(Hotkey newHotkey, bool overwrite)
         {
+            if (newHotkey.Key1 == System.Windows.Forms.Keys.None && newHotkey.Key2 == System.Windows.Forms.Keys.None)
+                return;
             foreach (var h in Hotkeys.Where(hk => hk.Context == newHotkey.Context))
             {
                 if (h == newHotkey)

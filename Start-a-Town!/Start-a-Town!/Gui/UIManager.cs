@@ -53,6 +53,8 @@ namespace Start_a_Town_.UI
             get =>_scale;
             set
             {
+                if (_scale == value)
+                    return;
                 var e = new UIScaleEventArgs(_scale, value);
                 foreach (var manager in WindowManagers)
                     foreach (var layer in manager.Layers)
@@ -342,7 +344,7 @@ namespace Start_a_Town_.UI
         {
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;
 
-            RenderTarget2D uiTexture = UITexture;
+            RenderTarget2D uiTexture = UITexture ??= new RenderTarget2D(Game1.Instance.GraphicsDevice, Width, Height); // wtf
             gd.SetRenderTarget(uiTexture);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);

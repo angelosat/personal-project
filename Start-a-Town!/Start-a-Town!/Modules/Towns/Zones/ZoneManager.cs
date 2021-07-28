@@ -16,7 +16,7 @@ namespace Start_a_Town_
         readonly public Dictionary<int, Zone> Zones = new();
         static ZoneManager()
         {
-            HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Zones", ToggleGui, System.Windows.Forms.Keys.Y);
+            Hotkey = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Zones", ToggleGui, System.Windows.Forms.Keys.Y);
         }
         public ZoneManager(Town town)
         {
@@ -116,9 +116,11 @@ namespace Start_a_Town_
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<Func<string>, Action>(() => "Zones", ToggleGui);
+            yield return new Tuple<Func<string>, Action>(() => $"Zones [{Hotkey.GetLabel()}]", ToggleGui);
         }
         static Window _gui;
+        private static readonly IHotkey Hotkey;
+
         public static void ToggleGui()
         {
             if (_gui is null)

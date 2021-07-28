@@ -8,6 +8,7 @@ namespace Start_a_Town_
 {
     class ToolDigging : ToolDesignate3D
     {
+        internal DesignationDef DesignationDef;
         readonly BlockRenderer Renderer = new();
         IntVec3 PrevEnd;
         public ToolDigging()

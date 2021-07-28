@@ -20,7 +20,7 @@ namespace Start_a_Town_
             var panel = new PanelLabeledScrollable(() => selectedSettings?.Name, size, size / 2, ScrollModes.Vertical);
 
             var settingsTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(GameSettings)));
-            var allSettings = settingsTypes.Select(t => Activator.CreateInstance(t) as GameSettings);
+            var allSettings = settingsTypes.Select(t => Activator.CreateInstance(t) as GameSettings).ToList(); // need to consolidate the ienumerable otherwise new instances are created when iterating
 
             var tabs = UIHelper.Wrap(allSettings.Select(tab => new Button(tab.Gui.Name, () => selectTab(tab.Gui))), panel.Client.Width);
 

@@ -20,7 +20,10 @@ namespace Start_a_Town_
         {
             PacketDesignation.Init();
 
-            HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Designations", ToggleGui, System.Windows.Forms.Keys.U);
+            Hotkey = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Designations", ToggleGui, System.Windows.Forms.Keys.U);
+            
+            foreach(var d in DesignationDef.Dictionary)
+                HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, $"Designate: {d.Key}", delegate { SetTool(d.Value); });
         }
 
         internal ObservableCollection<IntVec3> GetDesignations(DesignationDef des)
@@ -146,12 +149,12 @@ namespace Start_a_Town_
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<Func<string>, Action>(() => "Designations", ToggleGui);
+            yield return new Tuple<Func<string>, Action>(() => $"Designations [{Hotkey.GetLabel()}]", ToggleGui);
         }
         static Window _gui;
+
         public static void ToggleGui()
         {
-            DesignationDef selected = null;
             if (_gui is null)
             {
                 var box = new ListBoxNoScroll<DesignationDef, Button>(createButton, 0).AddItems(Ingame.CurrentMap.Town.DesignationManager.Designations.Keys.Prepend(DesignationDef.Remove));
@@ -162,13 +165,15 @@ namespace Start_a_Town_
            
             Button createButton(DesignationDef d)
             {
-                return new Button(d.Name, () => setTool(d), 96) { IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDigging && selected == d };
+                var btn = new Button(d.Name, () => SetTool(d), 96) { Tag = d };
+                btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDigging tool && btn.Tag == tool.DesignationDef;
+                return btn;
             }
-            void setTool(DesignationDef d)
-            {
-                selected = d;
-                ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, d, a, b, r)));
-            }
+        }
+
+        private static void SetTool(DesignationDef d)
+        {
+            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, d, a, b, r)) { DesignationDef = d });
         }
 
         static void Cancel()
@@ -211,6 +216,7 @@ namespace Start_a_Town_
             }
         }
         static public readonly Icon MineIcon = new(ItemContent.PickaxeFull);
+        private static readonly IHotkey Hotkey;
 
         static void MineAdd(List<TargetArgs> targets, DesignationDef des)
         {

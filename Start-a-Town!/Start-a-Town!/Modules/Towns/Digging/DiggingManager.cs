@@ -111,11 +111,6 @@ namespace Start_a_Town_.Towns.Digging
             return this.AllPositions.Contains(global);
         }
 
-        internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
-        {
-            yield return new Tuple<Func<string>, Action>(() => "Mine", this.Edit);
-            yield return new Tuple<Func<string>, Action>(() => "Deconstruct", this.EditDeconstruct);
-        }
         public void Edit()
         {
             ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, DesignationDef.Mine, a, b, r)));

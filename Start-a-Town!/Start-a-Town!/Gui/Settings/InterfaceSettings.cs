@@ -8,21 +8,17 @@ namespace Start_a_Town_
         internal override GroupBox Gui => this._Gui ??= this.CreateGui();
         float _tmpGuiScale, _tmpTooltipDelay;
         bool _tmpMouseTooltip;
+
         GroupBox CreateGui()
         {
-            var box = new GroupBox() { Name = "Interface" };
             this._tmpGuiScale = UIManager.Scale;
-            var sldr_UIScale = SliderNew.CreateWithLabel("UI Scale", () => this._tmpGuiScale, v => this._tmpGuiScale = v, 100, 1, 2, 0.1f, "0%");
-
             this._tmpTooltipDelay = TooltipManager.DelayInterval / Engine.TicksPerSecond;
-            var sldr_TooltipDelay = SliderNew.CreateWithLabel("Tooltip Delay", () => this._tmpTooltipDelay, v => this._tmpTooltipDelay = v, 100, 0, 2, 0.1f, "0.0s");
 
-            var chkbox_MouseTooltip = new CheckBoxNew("Mouse Tooltip", () => this._tmpMouseTooltip = !this._tmpMouseTooltip, () => this._tmpMouseTooltip);
-            chkbox_MouseTooltip.HoverText = "Anchor tooltips to the mouse.";
-
-            box.AddControlsVertically(
-                sldr_UIScale, sldr_TooltipDelay, chkbox_MouseTooltip);
-            return box;
+            return new GroupBox() { Name = "Interface" }.AddControlsVertically(
+                    SliderNew.CreateWithLabel("UI Scale", () => this._tmpGuiScale, v => this._tmpGuiScale = v, 100, 1, 2, 0.1f, "0%"),
+                    SliderNew.CreateWithLabel("Tooltip Delay", () => this._tmpTooltipDelay, v => this._tmpTooltipDelay = v, 100, 0, 2, 0.1f, "0.0s"),
+                    new CheckBoxNew("Mouse Tooltip", () => this._tmpMouseTooltip = !this._tmpMouseTooltip, () => this._tmpMouseTooltip) { HoverText = "Anchor tooltips to the mouse." }
+                ) as GroupBox;
         }
 
         internal override void Apply()

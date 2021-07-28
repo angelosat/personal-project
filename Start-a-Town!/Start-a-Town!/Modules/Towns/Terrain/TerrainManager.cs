@@ -81,7 +81,8 @@ namespace Start_a_Town_
         }
         private void SpawnBlock(MapBase map, IntVec3 global)
         {
-            BlockGrass.GrowRandomFlower(map, global);
+            if (map.GetBlock(global) == BlockDefOf.Grass)
+                BlockGrass.GrowRandomFlower(map, global);
         }
         PlantProperties[] GetValidPlants()
         {

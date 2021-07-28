@@ -72,6 +72,9 @@ namespace Start_a_Town_.Components
 
 
         State CurrentState;
+        int JumpCooldown;
+        public bool CanJump => this.JumpCooldown == 0;
+
         internal bool Crouching => this.AnimationCrouch.Weight > 0;
         const float AccelerationStep = .1f;
         public MobileComponent()
@@ -169,7 +172,7 @@ namespace Start_a_Town_.Components
             }
             parent.Net.PostLocalEvent(parent, Message.Types.Jumped);
         }
-       
+
         public void ToggleWalk(bool toggle)
         {
             if (this.CurrentState.Type != State.Types.Blocking)
@@ -202,6 +205,7 @@ namespace Start_a_Town_.Components
                 case Message.Types.HitGround:
                 case Message.Types.EntityHitGround:
                     this.AnimationWalk.Frame = 0;
+                    this.OnLanded();
                     break;
 
                 default:
@@ -210,10 +214,18 @@ namespace Start_a_Town_.Components
             return false;
         }
 
+        private void OnLanded()
+        {
+            this.JumpCooldown = 1; // added a jump cooldown because the way it was set up, the ai can't correct its direction between consecutive jumps in behaviorgetat
+        }
+
         public override void Tick()
         {
             var parent = this.Parent;
             bool midair = parent.Velocity.Z != 0;
+
+            if (this.JumpCooldown > 0)
+                this.JumpCooldown--;
 
             this.AnimationJump.Weight = midair ? 1 : 0;
             if (!this.Moving)

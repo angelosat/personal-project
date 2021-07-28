@@ -493,6 +493,8 @@ namespace Start_a_Town_.Components
         private void HitGround(GameObject parent, Vector3 vector3)
         {
             parent.Map.EventOccured(Message.Types.EntityHitGround, parent, vector3);
+            //parent.PostMessage(new(Message.Types.EntityHitGround));
+            parent.Net.PostLocalEvent(parent, Message.Types.HitGround, Math.Abs(vector3.Z));
         }
         private void HitCeiling(GameObject parent, Vector3 vector3)
         {

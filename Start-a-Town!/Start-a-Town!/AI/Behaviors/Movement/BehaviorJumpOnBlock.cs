@@ -9,6 +9,9 @@ namespace Start_a_Town_.AI.Behaviors
         const float VelocityFactorForNextStep = 4;
         public override BehaviorState Execute(Actor parent, AIState state)
         {
+            if (!parent.Mobile.CanJump)
+                return BehaviorState.Success;
+
             var v = parent.Velocity;
             if (v.Z != 0)
                 return BehaviorState.Success;

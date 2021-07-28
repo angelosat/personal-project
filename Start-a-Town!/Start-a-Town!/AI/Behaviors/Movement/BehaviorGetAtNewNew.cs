@@ -9,7 +9,6 @@ namespace Start_a_Town_.AI.Behaviors
         {
 
         }
-        
         public BehaviorGetAtNewNew(TargetArgs target)
             : this(target, PathingSync.FinishMode.Touching)
         {

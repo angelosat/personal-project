@@ -287,6 +287,8 @@ namespace Start_a_Town_
         public void Add(GameObject obj)
         {
             obj.Map = this.Map;
+            if (this.Objects.Contains(obj))
+                throw new Exception();
             this.Objects.Add(obj);
         }
         public bool Remove(GameObject obj)

@@ -14,8 +14,10 @@ namespace Start_a_Town_.UI
         public Action<TObject> ItemChangedFunc = (item) => { };
         public ObservableCollection<TObject> List;
         static readonly Color DefaultRowColor = Color.SlateGray * .2f;
+        public int TotalWidth => this.Columns.Sum(c => c.Width);
+        public int DefaultRowHeight => Label.DefaultHeight + Spacing;
 
-        TableObservable<TObject> Clear()
+        TableObservable < TObject> Clear()
         {
             this.Controls.Clear();
             return this;
@@ -46,8 +48,10 @@ namespace Start_a_Town_.UI
             this.RemoveItems(e.OldItems?.Cast<TObject>());
         }
 
-        void AddItems(IEnumerable<TObject> items)
+        public void AddItems(IEnumerable<TObject> items)
         {
+            if (this.List is not null)
+                return;
             if (items == null)
                 return;
             foreach (var i in items)
@@ -74,8 +78,10 @@ namespace Start_a_Town_.UI
             foreach (var i in items)
                 this.RemoveItem(i);
         }
-        void RemoveItem(TObject item)
+        public void RemoveItem(TObject item)
         {
+            if (this.List is not null)
+                return;
             if (item is null)
                 return;
             var listControls = this.Controls;

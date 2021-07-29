@@ -16,6 +16,13 @@ namespace Start_a_Town_.UI
             this.HScroll.SetOpacity(value, true);
         }
         
+        public static ScrollableBoxNewNew FromClientSize(int width, int height, ScrollModes mode = ScrollModes.Both)
+        {
+            var modeFactor = new IntVec2((mode & ScrollModes.Vertical) == ScrollModes.Vertical ? 1 : 0, (mode & ScrollModes.Horizontal) == ScrollModes.Horizontal ? 1 : 0);
+            var buttonSize = 16;
+            return new ScrollableBoxNewNew(width + buttonSize * modeFactor.X, height + buttonSize * modeFactor.Y, mode);
+        }
+
         public ScrollableBoxNewNew(int width, int height, ScrollModes mode = ScrollModes.Both)
             : base(width, height)
         {

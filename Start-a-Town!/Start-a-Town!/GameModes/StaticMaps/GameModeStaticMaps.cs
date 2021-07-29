@@ -38,29 +38,33 @@ namespace Start_a_Town_.GameModes.StaticMaps
         internal override void OnMainMenuCreated(MainMenuWindow mainmenu)
         {
         }
-
         void IngameSave()
         {
             // TODO: store the map reference here? or pass something like a game state as an argument so i can select what to save?
             var map = Server.Instance.Map as StaticMap;
             DialogInput getSaveName = null;
-
-            var groupBox = new GroupBox();
-            var table = new TableScrollableCompactNewNew<FileInfo>(16, false, ScrollModes.Vertical)
-                .AddColumn(null, "filename", 160, f => new Label(Path.GetFileNameWithoutExtension(f.Name)), 0)
-                .AddColumn(null, "datetime", 160, f => new Label(f.CreationTime.ToString("R")), 0)
-                .AddColumn(null, "overwrite", Button.GetWidth(UIManager.Font, "Overwrite"), f => new Button("Overwrite") { LeftClickAction = () => saveNew(Path.GetFileNameWithoutExtension(f.Name)) }, 0)
-                .AddColumn(null, "delete", 16, (t, f) => IconButton.CreateCloseButton().SetLeftClickAction(b => SaveFile.Delete(f, () => t.RemoveItem(f))), 0)
+            var box = new GroupBox();
+            ScrollableBoxNewNew groupBox = null;
+            var table = new TableObservable<FileInfo>();
+            table
+                .AddColumn("filename", 160, f => new Label(Path.GetFileNameWithoutExtension(f.Name)))
+                .AddColumn("datetime", 160, f => new Label(f.CreationTime.ToString("R")))
+                .AddColumn("overwrite", Button.GetWidth(UIManager.Font, "Overwrite"), f => new Button("Overwrite") { LeftClickAction = () => saveNew(Path.GetFileNameWithoutExtension(f.Name)) })
+                .AddColumn("delete", 16, f => IconButton.CreateCloseButton().SetLeftClickAction(b => SaveFile.Delete(f, () => table.RemoveItem(f))))
                 ;
+
+            groupBox = ScrollableBoxNewNew.FromClientSize(table.TotalWidth, 16 * table.DefaultRowHeight, ScrollModes.Vertical);
+
             var saves = GetSaves();
-            table.Build(saves);
-            var tablePanel = table.ToPanel();
+            table.AddItems(saves);
+            groupBox.AddControls(table);
+            var tablePanel = groupBox.ToPanel();
 
             getSaveName = new DialogInput("Enter save name", saveNew, 300, map.World.Name);
 
-            groupBox.AddControlsVertically(tablePanel, new Button("Create new save", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
+            box.AddControlsVertically(tablePanel, new Button("Create new save", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
 
-            groupBox.ToWindow("Save", true, false).ShowDialog();
+            box.ToWindow("Save", true, false).ShowDialog();
 
             void saveNew(string name = "")
             {
@@ -79,9 +83,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     msgBoxOverwrite.ShowDialog();
                 }
                 else
-                {
                     save();
-                }
 
                 void save()
                 {
@@ -99,10 +101,75 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     }
                     Server.FinishSaving();
                     getSaveName.Hide();
-                    groupBox.GetWindow().Hide();
+                    box.GetWindow().Hide();
                 }
             }
         }
+
+        //void IngameSave()
+        //{
+        //    // TODO: store the map reference here? or pass something like a game state as an argument so i can select what to save?
+        //    var map = Server.Instance.Map as StaticMap;
+        //    DialogInput getSaveName = null;
+
+        //    var groupBox = new GroupBox();
+        //    var table = new TableScrollableCompactNewNew<FileInfo>(16, false, ScrollModes.Vertical)
+        //        .AddColumn(null, "filename", 160, f => new Label(Path.GetFileNameWithoutExtension(f.Name)), 0)
+        //        .AddColumn(null, "datetime", 160, f => new Label(f.CreationTime.ToString("R")), 0)
+        //        .AddColumn(null, "overwrite", Button.GetWidth(UIManager.Font, "Overwrite"), f => new Button("Overwrite") { LeftClickAction = () => saveNew(Path.GetFileNameWithoutExtension(f.Name)) }, 0)
+        //        .AddColumn(null, "delete", 16, (t, f) => IconButton.CreateCloseButton().SetLeftClickAction(b => SaveFile.Delete(f, () => t.RemoveItem(f))), 0)
+        //        ;
+        //    var saves = GetSaves();
+        //    table.Build(saves);
+        //    var tablePanel = table.ToPanel();
+
+        //    getSaveName = new DialogInput("Enter save name", saveNew, 300, map.World.Name);
+
+        //    groupBox.AddControlsVertically(tablePanel, new Button("Create new save", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
+
+        //    groupBox.ToWindow("Save", true, false).ShowDialog();
+
+        //    void saveNew(string name = "")
+        //    {
+        //        var tag = new SaveTag(SaveTag.Types.Compound, "Save");
+        //        var world = map.World as StaticWorld; // TODO: add methods to interface instead of casting them?
+
+        //        name = name.IsNullEmptyOrWhiteSpace() ? world.Name : name;
+
+        //        string directory = GlobalVars.SaveDir + @"/Worlds/";
+        //        string worldPath = @"/Saves/Worlds/";
+        //        string fullPath = worldPath + name + ".sat";
+        //        var workingDir = Directory.GetCurrentDirectory();
+        //        if (File.Exists(workingDir + fullPath))
+        //        {
+        //            var msgBoxOverwrite = new MessageBox("", $"{fullPath} already exists. Overwrite?", save);
+        //            msgBoxOverwrite.ShowDialog();
+        //        }
+        //        else
+        //        {
+        //            save();
+        //        }
+
+        //        void save()
+        //        {
+        //            Server.StartSaving();
+        //            tag.Add(world.SaveToTag());
+
+        //            using (MemoryStream stream = new())
+        //            {
+        //                BinaryWriter writer = new(stream);
+        //                tag.WriteWithRefs(writer);
+        //                if (!Directory.Exists(directory))
+        //                    Directory.CreateDirectory(directory);
+        //                Chunk.Compress(stream, workingDir + fullPath);
+        //                stream.Close();
+        //            }
+        //            Server.FinishSaving();
+        //            getSaveName.Hide();
+        //            groupBox.GetWindow().Hide();
+        //        }
+        //    }
+        //}
 
         public override bool IsPlayerWithinRangeForPacket(PlayerData player, Vector3 packetEventGlobal)
         {

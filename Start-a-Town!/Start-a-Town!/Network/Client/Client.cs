@@ -430,7 +430,8 @@ namespace Start_a_Town_.Net
                 case PacketType.SetSaving:
                     var val = r.ReadBoolean();
                     IsSaving = val;
-                    Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, "Map saved");
+                    //Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, "Map saved");
+                    Log.System("Game saved");
                     break;
 
                 default:
@@ -471,7 +472,7 @@ namespace Start_a_Town_.Net
                     msg.Payload.Deserialize(r =>
                     {
                         int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
+                        var target = TargetArgs.Read(Instance, r);
                         if (Instance.GetNetworkObject(netid) is not Actor obj)
                             return;
                         var input = new PlayerInput(r);
@@ -559,18 +560,15 @@ namespace Start_a_Town_.Net
                 case PacketType.PlayerSlotClick:
                     msg.Payload.Deserialize(r =>
                     {
-                        TargetArgs actor = TargetArgs.Read(Instance, r);
-                        TargetArgs t = TargetArgs.Read(Instance, r);
+                        var actor = TargetArgs.Read(Instance, r);
+                        var t = TargetArgs.Read(Instance, r);
                         var parent = t.Slot.Parent;
                         Instance.PostLocalEvent(parent, Components.Message.Types.SlotInteraction, actor.Object, t.Slot);
                     });
                     return;
 
                 case PacketType.PlayerServerCommand:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        Instance.ParseCommand(r.ReadASCII());
-                    });
+                    msg.Payload.Deserialize(r => Instance.ParseCommand(r.ReadASCII()));
                     break;
 
                 case PacketType.SetSaving:
@@ -589,7 +587,7 @@ namespace Start_a_Town_.Net
         private void SetSaving(bool val)
         {
             IsSaving = val;
-            Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, IsSaving ? "Saving..." : "Map saved");
+            Log.System(IsSaving ? "Saving..." : "Game saved");
         }
 
         private void SyncTime(double serverMS)
@@ -603,7 +601,7 @@ namespace Start_a_Town_.Net
             this.LastReceivedTime = serverMS;
             var newtime = serverMS - ClientClockDelayMS;
 
-            TimeSpan serverTime = TimeSpan.FromMilliseconds(newtime);
+            var serverTime = TimeSpan.FromMilliseconds(newtime);
 
             this.ClientClock = serverTime;
         }
@@ -823,11 +821,11 @@ namespace Start_a_Town_.Net
                 obj.ObjectLoaded();
             });
 
-            foreach (var blockentity in chunk.GetBlockEntitiesByPosition())
+            foreach (var (local, entity) in chunk.GetBlockEntitiesByPosition())
             {
-                var global = blockentity.local.ToGlobal(chunk);
-                blockentity.entity.MapLoaded(this.Map, global);
-                blockentity.entity.Instantiate(global, Instance.Instantiator);
+                var global = local.ToGlobal(chunk);
+                entity.MapLoaded(this.Map, global);
+                entity.Instantiate(global, Instance.Instantiator);
             }
 
             Instance.Map.AddChunk(chunk);
@@ -1153,7 +1151,6 @@ namespace Start_a_Town_.Net
 
         public void Write(string text)
         {
-            //Ingame.Instance.Hud.Chat.Write(text);
             Log.Write(text);
         }
 

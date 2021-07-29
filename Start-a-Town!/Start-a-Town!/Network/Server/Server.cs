@@ -660,7 +660,7 @@ namespace Start_a_Town_.Net
                 case TargetType.Position:
                     entity.Global = target.Global;
                     this.Instantiate(entity);
-                    entity.Spawn(this.Map, target.Global);
+                    //entity.Spawn(this.Map, target.Global);
                     PacketEntityInstantiate.SendFromTemplate(this, templateID, entity);
                     this.Map.SyncSpawn(entity);
                     break;
@@ -744,9 +744,7 @@ namespace Start_a_Town_.Net
             obj.Instantiate(this.Instantiator);
             byte[] data = Network.Serialize(obj.Write);
             foreach (var player in this.Players.GetList())
-            {
                 this.Enqueue(player, Packet.Create(player, PacketType.InstantiateObject, data, SendType.Ordered | SendType.Reliable));
-            }
             return obj;
         }
 

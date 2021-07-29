@@ -25,6 +25,7 @@ namespace Start_a_Town_
         public Entity(ItemDef def):this()
         {
             Def = def;
+            this.AddComponent(new SpriteComponent(def));
         }
         internal GameObjectSlot GetEquipmentSlot(GearType.Types type)
         {

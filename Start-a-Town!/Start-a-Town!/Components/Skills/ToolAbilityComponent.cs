@@ -34,10 +34,17 @@ namespace Start_a_Town_
         {
             return this;
         }
-        public override void OnObjectLoaded(GameObject parent)
-        {
-            base.OnObjectLoaded(parent);
-        }
+
+        /// <summary>
+        /// load sprites here on in the Tool.ObjectLoaded method?
+        /// </summary>
+        //public override void OnObjectLoaded(GameObject parent)
+        //{
+        //    if (this.Props is null)
+        //        return;
+        //    this.Parent.Body.Sprite = this.Props.SpriteHandle;
+        //    this.Parent.Body[BoneDef.EquipmentHead].Sprite = this.Props.SpriteHead;
+        //}
         public ToolAbilityDef Skill { get { return this.Skills.FirstOrDefault(); } }
         
         static public bool HasSkill(GameObject parent, ToolAbilityDef skill)
@@ -73,11 +80,8 @@ namespace Start_a_Town_
         {
             var box = new GroupBox();
             foreach(var s in this.WorkCapabilities)
-            {
                 box.AddControlsBottomLeft(ToolAbilityDef.GetUI(s.Key, s.Value));
-            }
-            var ability = parent.Def.ToolProperties?.Ability;
-
+            var ability = parent.Def.ToolProperties?.Ability ?? this.Props?.Ability;
             if (ability != null)
                 box.AddControlsBottomLeft(ToolAbilityDef.GetUI(ability.Value.Def.ID, ability.Value.Efficiency));
             return box;
@@ -92,6 +96,16 @@ namespace Start_a_Town_
         {
             if (r.ReadBoolean()) // HACK for loading legacy items which lack Props
                 this.Props = Def.GetDef<ToolProps>(r);
+        }
+
+        internal override void AddSaveData(SaveTag tag)
+        {
+            this.Props?.Name.Save(tag, "Props");
+        }
+
+        internal override void Load(SaveTag tag)
+        {
+            tag.TryLoadDef("Props", ref this.Props);
         }
     }
 }

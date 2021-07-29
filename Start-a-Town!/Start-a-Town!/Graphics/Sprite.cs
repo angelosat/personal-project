@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -228,12 +229,20 @@ namespace Start_a_Town_
             this.Texture = Atlas.Texture;
             AtlasToken = Atlas.Load(assetName);
             this.ColorArray = this.AtlasToken.ColorArray;
-            Joint = joint + Vector2.One * Graphics.Borders.Thickness;
+            Joint = joint + Vector2.One * Borders.Thickness;
         }
 
+        public void Write(BinaryWriter w)
+        {
+            w.Write(this.Name);
+        }
         public static Sprite Load(string assetPath)
         {
             return Registry[assetPath];
+        }
+        public static Sprite Load(BinaryReader r)
+        {
+            return Registry[Path + r.ReadString()];
         }
 
         /// <summary>
@@ -297,6 +306,19 @@ namespace Start_a_Town_
             if (c.A == 0)
                 return false;
             return true;
+        }
+
+        public void Save(SaveTag tag, string name)
+        {
+            tag.Add(new SaveTag(SaveTag.Types.String, name, this.Name));
+        }
+        public static Sprite Load(SaveTag tag, string name)
+        {
+            return Registry[Path + (string)tag[name].Value];
+        }
+        public static Sprite Load(SaveTag tag)
+        {
+            return Registry[Path + (string)tag.Value];
         }
 
         public void Draw(MySpriteBatch sb, Vector2 screenPos, Color color, float rotation, Vector2 origin, float scale, SpriteEffects sprFx, float depth)

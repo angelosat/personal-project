@@ -330,11 +330,9 @@ namespace Start_a_Town_
             if (obj is null)
             {
                 obj = this.Create(); //for derived classes
-                obj.Def = this.Def;
+                obj.Def = this.Def; // TODO pass def in the create method above
                 foreach (var comp in this.Components)
-                {
                     obj.AddComponent(comp.Value.Clone() as EntityComponent);
-                }
             }
             obj.ObjectCreated();
             return obj;
@@ -848,12 +846,13 @@ namespace Start_a_Town_
             obj.ObjectSynced();
             return obj;
         }
-        public GameObject ObjectLoaded()
+        GameObject ObjectLoaded()
         {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-                comp.Value.OnObjectLoaded(this);
+            foreach (var comp in this.Components.Values)
+                comp.OnObjectLoaded(this);
             return this;
         }
+        
         /// <summary>
         /// try to make this private
         /// </summary>

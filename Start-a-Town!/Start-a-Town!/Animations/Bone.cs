@@ -843,6 +843,7 @@ namespace Start_a_Town_
         public void Write(BinaryWriter w)
         {
             w.Write(this.Material != null ? this.Material.ID : -1);
+            this.Sprite.Write(w); // i decided to sync sprites as well instead of relying on initializing sprites after gameobject loading/syncing
 
             foreach (var j in this.Joints.Values)
                 j.Bone?.Write(w);
@@ -851,6 +852,8 @@ namespace Start_a_Town_
         public ISerializable Read(BinaryReader r)
         {
             this.Material = MaterialDef.GetMaterial(r.ReadInt32());
+            this.Sprite = Sprite.Load(r); // i decided to sync sprites as well instead of relying on initializing sprites after gameobject loading/syncing
+
             foreach (var j in this.Joints.Values)
                 j.Bone?.Read(r);
             return this;
@@ -860,6 +863,7 @@ namespace Start_a_Town_
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             tag.Add((this.Material?.ID ?? -1).Save("MaterialID"));
+            this.Sprite?.Save(tag, "Sprite");
             var tagjoints = new SaveTag(SaveTag.Types.Compound, "Joints");
             foreach (var joint in this.Joints)
             {
@@ -876,6 +880,7 @@ namespace Start_a_Town_
         public ISaveable Load(SaveTag tag)
         {
             tag.TryGetTagValue<int>("MaterialID", i => this.Material = MaterialDef.GetMaterial(i));
+            tag.TryGetTag("Sprite", t => this.Sprite = Sprite.Load(t));
             tag.TryGetTag("Joints", t =>
             {
                 foreach (var j in this.Joints)

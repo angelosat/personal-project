@@ -50,6 +50,12 @@ namespace Start_a_Town_
         {
             return this.Factory(this);
         }
+        public Entity CreateNew()
+        {
+            var obj = Activator.CreateInstance(this.ItemClass, this) as Entity;
+            obj.InitComps();
+            return obj;
+        }
         public Entity CreateFrom(MaterialDef mat)
         {
             var item = ItemFactory.CreateFrom(this, mat);

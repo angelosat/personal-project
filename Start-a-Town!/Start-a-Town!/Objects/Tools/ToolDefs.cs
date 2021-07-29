@@ -23,14 +23,13 @@ namespace Start_a_Town_
 
         static public readonly ItemDef Tool = new("Tool")
         {
+            ItemClass = typeof(Tool),
             QualityLevels = true,
             Category = ItemCategory.Tools,
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
             DefaultMaterial = MaterialDefOf.Iron,
-            //Factory = ItemFactory.CreateTool,
-            //Factory = def=>ToolProps.CreateTemplate(),
-            //Randomizer = ItemFactory.CreateFromRandomMaterials,
+            Factory = d => d.CreateNew(),
             CraftingProperties = ToolCraftingProperties,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.LogsGrayscale, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                             .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.LogsGrayscale) { DrawMaterialColor = true }),
@@ -173,6 +172,8 @@ namespace Start_a_Town_
         static public void Init() { }
         static ToolDefs()
         {
+            Def.Register(Tool);
+
             Def.Register(Shovel);
             Def.Register(Axe);
             Def.Register(Hammer);

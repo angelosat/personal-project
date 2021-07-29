@@ -645,11 +645,11 @@ namespace Start_a_Town_
         {
             return Def.GetDef<T>(tag[name].Value as string);
         }
-        public static bool TryLoadDef<T>(this SaveTag tag, string name, ref PlantProperties target) where T : Def
+        public static bool TryLoadDef<T>(this SaveTag tag, string name, ref T target) where T : Def
         {
             if (!tag.TryGetTag(name, out var deftag))
                 return false;
-            target = Def.GetDef<T>((string)deftag.Value) as PlantProperties;
+            target = Def.GetDef<T>((string)deftag.Value);
             return true;
         }
         public static SaveTag Save(this IEnumerable<string> strings, string name)

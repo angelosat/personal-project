@@ -26,18 +26,16 @@ namespace Start_a_Town_
             return this;
         }
 
-        public GameObject Create()
+        GameObject Create()
         {
-            var tool = ItemFactory.CreateTool(ToolDefs.Tool);
-            tool.AddComponent(new ResourcesComponent(ResourceDef.Durability));
-            tool.AddComponent(new OwnershipComponent());
-            tool.AddComponent(new ToolAbilityComponent(this));
+            var tool = ToolDefs.Tool.CreateNew() as Tool;
+            tool.ToolComponent.Props = this;
             tool.Body.Sprite = this.SpriteHandle;
             tool.Body[BoneDef.EquipmentHead].Sprite = this.SpriteHead;
             tool.Name = $"Tool:{this.Label}";
             return tool;
         }
-
+        
         internal static void Init()
         {
             Register(ToolPropsDefof.Shovel);
@@ -47,10 +45,9 @@ namespace Start_a_Town_
             Register(ToolPropsDefof.Hoe);
             Register(ToolPropsDefof.Pickaxe);
 
-
-            foreach (var toolDef in GetDefs<ToolProps>())
+            foreach (var toolProp in GetDefs<ToolProps>())
             {
-                var obj = toolDef.Create();
+                var obj = toolProp.Create();
                 GameObject.AddTemplate(obj);
             }
         }

@@ -10,6 +10,13 @@ namespace Start_a_Town_
         private SpriteComponent _sprite;
         public SpriteComponent Sprite => this._sprite ??= this.GetComponent<SpriteComponent>();
 
+        /// <summary>
+        /// here or in tool class?
+        /// </summary>
+        ToolAbilityComponent _toolComponent;
+        public ToolAbilityComponent ToolComponent => this._toolComponent ??= this.GetComponent<ToolAbilityComponent>();
+
+
         GearComponent _gear;
         public GearComponent Gear => this._gear ??= this.GetComponent<GearComponent>();
 

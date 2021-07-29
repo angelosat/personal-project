@@ -893,6 +893,12 @@ namespace Start_a_Town_
                 if (filter(o))
                     yield return o;
         }
+        public IEnumerable<T> Find<T>(Func<T, bool> filter) where T : Entity
+        {
+            foreach (T o in this.GetObjectsLazy().OfType<T>())
+                if (filter(o))
+                    yield return o;
+        }
         internal bool IsVisible(Vector3 global)
         {
             if (global.Z == MaxHeight - 1)

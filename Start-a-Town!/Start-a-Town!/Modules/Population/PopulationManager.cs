@@ -198,7 +198,7 @@ namespace Start_a_Town_
                 if (this.World.Map.Net is Server)
                     if (!actor.GetNeeds(VisitorNeedsDefOf.NeedCategoryVisitor).Any())
                         MakeVisitor(actor);
-                if (!actor.Exists) // hacky. in process of finding best way to save unspawned actors
+                if (!actor.IsSpawned) // hacky. in process of finding best way to save unspawned actors
                     this.World.Map.Net.Instantiate(actor);
                 if (actor.IsSpawned)
                     props.Discovered = true; // HACK

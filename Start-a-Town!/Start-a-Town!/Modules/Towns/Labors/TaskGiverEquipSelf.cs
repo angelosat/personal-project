@@ -43,12 +43,14 @@ namespace Start_a_Town_
                 {
                     if (job.Enabled)
                     {
-                        var potentialTools = actor.Map.Find(i => i.Def.ToolProperties?.Ability.Def == toolUse || i.GetComponent<ToolAbilityComponent>()?.Props.Ability.Def == toolUse);
+                        //var potentialTools = actor.Map.Find(i => i.Def.ToolProperties?.Ability.Def == toolUse);// || i.GetComponent<ToolAbilityComponent>()?.Props.Ability.Def == toolUse);
+                        //var scoredTools = potentialTools.OrderByDescending(i => i.Def.ToolProperties.Ability.Efficiency);
+                        var potentialTools = actor.Map.Find(i => i.ToolComponent?.Props?.Ability.Def == toolUse);// || i.GetComponent<ToolAbilityComponent>()?.Props.Ability.Def == toolUse);
+                        var scoredTools = potentialTools.OrderByDescending(i => i.ToolComponent.Props.Ability.Efficiency);
 
-                        var scoredTools = potentialTools.OrderByDescending(i => i.Def.ToolProperties.Ability.Efficiency);
                         foreach (var tool in scoredTools)
                         {
-                            if (!actor.CanReserve(tool))
+                            if (!actor.CanReserve(tool as Entity))
                                 continue;
                             if (!actor.CanReach(tool))
                                 continue;
@@ -69,9 +71,7 @@ namespace Start_a_Town_
         static AITask DropUnnecessaryItems(Actor actor)
         {
             if (actor.Inventory.All.FirstOrDefault(i => !actor.ItemPreferences.IsPreference(i)) is Entity item)
-            {
-                return new AITask(typeof(TaskBehaviorHaulFromInventory), item);
-            }
+                return new AITask(typeof(TaskBehaviorDropInventoryItem), item);
             return null;
         }
     }

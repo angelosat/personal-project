@@ -785,7 +785,7 @@ namespace Start_a_Town_.Net
             {
                 Instance.Instantiate(obj);
                 _objID = Math.Max(_objID, obj.RefID + 1);
-                obj.Map = Instance.Map;
+                //obj.Map = Instance.Map; // this isn't necessary, i set the entity's map field when loading the chunk
             });
 
             foreach (var (local, entity) in chunk.GetBlockEntitiesByPosition())

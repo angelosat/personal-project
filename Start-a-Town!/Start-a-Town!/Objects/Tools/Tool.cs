@@ -2,8 +2,8 @@
 {
     class Tool : Entity
     {
-        ToolAbilityComponent _toolComponent;
-        public ToolAbilityComponent ToolComponent => this._toolComponent ??= this.GetComponent<ToolAbilityComponent>();
+        //ToolAbilityComponent _toolComponent;
+        //public ToolAbilityComponent ToolComponent => this._toolComponent ??= this.GetComponent<ToolAbilityComponent>();
         
         public Tool(ItemDef def)
             : base(def)

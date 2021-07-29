@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
-    class ToolProps : Def
+    public class ToolProps : Def
     {
         public string Label, Description;
         public ToolAbility Ability;

@@ -1081,11 +1081,9 @@ namespace Start_a_Town_
 
         internal void MapLoaded(MapBase map)
         {
-            this.Map = map;
-            foreach (var comp in this.Components)
-            {
-                comp.Value.MapLoaded(this);
-            }
+            //this.Map = map; // DONT set map here because this is called for every networkobject which includes inventory items, and unspawned items must NOT have their map field set
+            foreach (var comp in this.Components.Values)
+                comp.MapLoaded(this);
         }
 
         internal void HitTest(Camera camera)

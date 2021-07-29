@@ -1220,7 +1220,7 @@ namespace Start_a_Town_
 
             int objCount = reader.ReadInt32();
             for (int i = 0; i < objCount; i++)
-                this.Objects.Add(GameObject.Create(reader));
+                this.Add(GameObject.Create(reader));
 
             int blockObjCount = reader.ReadInt32();
             for (int i = 0; i < blockObjCount; i++)

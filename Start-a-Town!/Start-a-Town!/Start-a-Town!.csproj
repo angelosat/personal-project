@@ -123,7 +123,7 @@
     <Compile Include="AI\Behaviors\Control\BehaviorHandleOrders.cs" />
     <Compile Include="AI\Behaviors\Interactions\BehaviorInteractionNew.cs" />
     <Compile Include="AI\Behaviors\BehaviorIdle.cs" />
-    <Compile Include="AI\Behaviors\Inventory\TaskBehaviorHaulFromInventory.cs" />
+    <Compile Include="AI\Behaviors\Inventory\TaskBehaviorDropInventoryItem.cs" />
     <Compile Include="AI\Behaviors\Inventory\TaskBehaviorStoreInInventory.cs" />
     <Compile Include="AI\Behaviors\Movement\BehaviorCrouch.cs" />
     <Compile Include="AI\Behaviors\Movement\TaskBehaviorLeaveUnstandableCell.cs" />

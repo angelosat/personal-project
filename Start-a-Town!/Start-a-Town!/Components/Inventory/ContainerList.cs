@@ -26,7 +26,7 @@ namespace Start_a_Town_
         //        return _gui.Bind(this.Contents).Parent;
         //    }
         //}
-        static TableObservable<GameObject> _gui;
+        TableObservable<GameObject> _gui;
         public Control Gui
         {
             get

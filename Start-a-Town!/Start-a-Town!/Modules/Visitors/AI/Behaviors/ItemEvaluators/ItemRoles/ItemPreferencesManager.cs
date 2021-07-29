@@ -134,7 +134,8 @@ namespace Start_a_Town_
 
         public void AddPreferenceTool(Entity tool)
         {
-            var toolUse = tool.Def.ToolProperties.Ability.Def;
+            //var t = tool as Tool;
+            var toolUse = tool.ToolComponent.Props.Ability.Def;
             this.SetItemPreference(tool, ItemRolesTool[toolUse]);
         }
 
@@ -146,7 +147,8 @@ namespace Start_a_Town_
         {
             return
                 (item.Def.ApparelProperties?.GearType is GearType g && this.GetPreference(ItemRolesGear[g]) == item) ||
-                (item.Def.ToolProperties?.Ability.Def is ToolAbilityDef t && this.GetPreference(ItemRolesTool[t]) == item);
+                //(item.Def.ToolProperties?.Ability.Def is ToolAbilityDef t && this.GetPreference(ItemRolesTool[t]) == item);
+                (item.ToolComponent?.Props?.Ability.Def is ToolAbilityDef t && this.GetPreference(ItemRolesTool[t]) == item);
         }
 
         public SaveTag Save(string name = "")

@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    class ToolAbilityComponent : EntityComponent
+    public class ToolAbilityComponent : EntityComponent
     {
         readonly static public string Name = "Tool";
         public override string ComponentName => Name;

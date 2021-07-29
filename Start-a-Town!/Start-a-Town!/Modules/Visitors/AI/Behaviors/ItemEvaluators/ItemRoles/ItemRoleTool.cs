@@ -10,13 +10,7 @@
 
         public override int Score(Actor actor, Entity item)
         {
-            //var props = item.Def.ToolProperties;
-            //if (props?.Ability.Def != this.ToolAbility)
-            //    return 0;
-            //return props.Ability.Efficiency;
-
             var ability = item.ToolComponent?.Props?.Ability;
-            //var ability = item.Def.ToolProperties?.Ability ?? item.ToolComponent?.Props?.Ability;
             if (!ability.HasValue)
                 return -1;
             if (ability.Value.Def != this.ToolAbility)
@@ -25,7 +19,7 @@
         }
         public override string ToString()
         {
-            return string.Format("{0}: {1}", base.ToString(), this.ToolAbility.Name);
+            return $"{base.ToString()}:{this.ToolAbility.Name}";
         }
     }
 }

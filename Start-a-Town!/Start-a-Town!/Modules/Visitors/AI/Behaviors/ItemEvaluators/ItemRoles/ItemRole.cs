@@ -22,7 +22,9 @@ namespace Start_a_Town_
             foreach (var i in items)
             {
                 var score = this.Score(actor, i);
-                if (score > bestScore)
+                if (score < 0)
+                    continue;
+                else if (score > bestScore)
                 {
                     bestItem = i;
                     bestScore = score;

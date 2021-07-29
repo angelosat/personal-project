@@ -55,6 +55,7 @@ namespace Start_a_Town_
                             if (!actor.CanReach(tool))
                                 continue;
                             itemmanager.AddPreferenceTool(tool);
+                            itemmanager.AddPreference(tool);
                             return new AITask(typeof(TaskBehaviorStoreInInventory)) { TargetA = tool, AmountA = 1 };
                         }
                     }

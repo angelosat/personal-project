@@ -488,6 +488,22 @@ namespace Start_a_Town_
                         list.Add(new U().Load(pos.Value as SaveTag) as U);
             });
         }
+        public static T LoadNew<T, U>(this T list, SaveTag tag, string name)
+            where U : ISaveable, new()
+            where T : ICollection<U>
+        {
+            tag.TryGetTag(name, t =>
+            {
+                list.Clear();
+                if (t.Value is List<SaveTag> tags)
+                    foreach (var tag in tags)
+                    {
+                        var item = new U().Load(tag);
+                        list.Add((U)item);
+                    }
+            });
+            return list;
+        }
         public static T[] LoadList<T>(this SaveTag tag, string name)
             where T : class, ISaveable, new()
         {
@@ -593,6 +609,13 @@ namespace Start_a_Town_
             var list = new SaveTag(SaveTag.Types.List, name, SaveTag.Types.Int);
             foreach (var item in ints)
                 list.Add(new SaveTag(SaveTag.Types.Int, "", item));
+            return list;
+        }
+        public static SaveTag Save<T>(this IEnumerable<T> saveables, string name) where T : ISaveable, new()
+        {
+            var list = new SaveTag(SaveTag.Types.List, name, SaveTag.Types.Compound);
+            foreach (var item in saveables)
+                list.Add(item.Save());
             return list;
         }
         public static List<int> Load(this List<int> list, List<SaveTag> positions)
@@ -776,6 +799,25 @@ namespace Start_a_Town_
         {
             var keys = new List<string>().Load(save["Keys"].Value as List<SaveTag>);
             var values = new List<int>().Load(save["Values"].Value as List<SaveTag>);
+            var tempdic = keys.Zip(values, (k, v) => new { k, v });
+            foreach (var i in tempdic)
+                dic.Add(i.k, i.v);
+            return dic;
+        }
+
+        public static void SaveNew<T>(this Dictionary<string, T> dic, SaveTag save, string name) where T : ISaveable, new()
+        {
+            var tag = new SaveTag(SaveTag.Types.Compound, name);
+            tag.Add(dic.Keys.Save("Keys"));
+            tag.Add(dic.Values.Save("Values"));
+            //return tag;
+            save.Add(tag);
+        }
+        public static Dictionary<string, T> LoadNew<T>(this Dictionary<string, T> dic, SaveTag save) where T : ISaveable, new()
+        {
+            var keys = new List<string>().Load(save["Keys"].Value as List<SaveTag>);
+            var values = new List<T>();
+            values.LoadNew<List<T>, T>(save, "Values");
             var tempdic = keys.Zip(values, (k, v) => new { k, v });
             foreach (var i in tempdic)
                 dic.Add(i.k, i.v);

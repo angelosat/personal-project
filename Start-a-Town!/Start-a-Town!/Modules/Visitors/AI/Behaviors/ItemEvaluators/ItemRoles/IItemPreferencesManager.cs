@@ -9,6 +9,7 @@ namespace Start_a_Town_
         IEnumerable<Entity> GetJunk();
         void RemoveJunk(Entity entity);
         void AddPreferenceTool(Entity tool);
+        bool AddPreference(Entity item);
         void RemovePreference(ToolAbilityDef toolUse);
         bool IsPreference(Entity item);
     }

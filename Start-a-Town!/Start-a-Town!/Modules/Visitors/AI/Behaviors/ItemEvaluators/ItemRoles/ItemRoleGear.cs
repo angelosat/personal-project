@@ -1,6 +1,4 @@
-﻿using Start_a_Town_.Components;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     class ItemRoleGear : ItemRole
     {
@@ -19,7 +17,7 @@ namespace Start_a_Town_
         }
         public override string ToString()
         {
-            return string.Format("{0}: {1}", base.ToString(), this.GearType.Name);
+            return $"{base.ToString()}:{this.GearType.Name}";
         }
     }
 }

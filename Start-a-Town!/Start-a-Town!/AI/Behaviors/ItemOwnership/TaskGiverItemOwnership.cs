@@ -12,7 +12,7 @@ namespace Start_a_Town_.AI.Behaviors.ItemOwnership
             var carriedItems = actor.Inventory.All;
 
             // drop only items that have another specific owner set, instead of every unowned item
-            var itemToDrop = carriedItems.Where(i => !actor.OwnsOrCanClaim(i as Entity)).FirstOrDefault();
+            var itemToDrop = carriedItems.Where(i => !actor.OwnsOrCanClaim(i)).FirstOrDefault();
 
             if (itemToDrop != null)
                 return new AITask(typeof(TaskBehaviorDropItem)) { TargetA = new TargetArgs(itemToDrop) };

@@ -43,7 +43,7 @@ namespace Start_a_Town_
                 {
                     if (job.Enabled)
                     {
-                        var potentialTools = actor.Map.Find(i => i.Def.ToolProperties?.Ability.Def == toolUse);
+                        var potentialTools = actor.Map.Find(i => i.Def.ToolProperties?.Ability.Def == toolUse || i.GetComponent<ToolAbilityComponent>()?.Props.Ability.Def == toolUse);
 
                         var scoredTools = potentialTools.OrderByDescending(i => i.Def.ToolProperties.Ability.Efficiency);
                         foreach (var tool in scoredTools)
@@ -62,13 +62,13 @@ namespace Start_a_Town_
                     }
                 }
             }
-           
+
             return null;
         }
 
         static AITask DropUnnecessaryItems(Actor actor)
         {
-            if(actor.Inventory.All.FirstOrDefault(i=>!actor.ItemPreferences.IsPreference(i)) is Entity item)
+            if (actor.Inventory.All.FirstOrDefault(i => !actor.ItemPreferences.IsPreference(i)) is Entity item)
             {
                 return new AITask(typeof(TaskBehaviorHaulFromInventory), item);
             }

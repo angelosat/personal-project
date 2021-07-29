@@ -51,21 +51,17 @@ namespace Start_a_Town_.AI
 
         public static AIConversationManager ConversationManager = new();
         public AIConversationManager.Conversation CurrentConversation;
-
         public IItemPreferencesManager ItemPreferences;
-
         public Actor Parent; //use this?
         public Dictionary<string, object> Properties = new();
         public Knowledge Knowledge;
         public AILog History = new();
-
         public GameObject Target;
         public List<GameObject> NearbyEntities { get; set; }
         public bool InSync;
         public PathFinding.Path Path;
         public Vector3 Leash;
         public int JobFindTimer;
-        // dialogue
         public GameObject Talker;
         public Progress Attention = new();
         public Actor ConversationPartner, TradingPartner;
@@ -82,7 +78,7 @@ namespace Start_a_Town_.AI
 
         public static bool TryGetState(GameObject entity, out AIState state)
         {
-            if (entity.TryGetComponent<AIComponent>(out AIComponent ai))
+            if (entity.TryGetComponent(out AIComponent ai))
                 state = ai.State;
             else
                 state = null;

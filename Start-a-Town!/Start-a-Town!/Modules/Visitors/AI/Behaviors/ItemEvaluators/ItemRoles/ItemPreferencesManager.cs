@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    partial class ItemPreferencesManager : IItemPreferencesManager, ISaveable, ISerializable
+    class ItemPreferencesManager : IItemPreferencesManager, ISaveable, ISerializable
     {
         static ItemPreferencesManager()
         {
@@ -20,17 +20,13 @@ namespace Start_a_Town_
         {
             var geardefs = GearType.Dictionary.Values;
             foreach (var g in geardefs)
-            {
                 ItemRolesGear.Add(g, new ItemRoleGear(g));
-            }
         }
         static void GenerateItemRolesTools()
         {
-            var defs = Start_a_Town_.Def.Database.Values.OfType<ToolAbilityDef>();
+            var defs = Def.Database.Values.OfType<ToolAbilityDef>();
             foreach (var d in defs)
-            {
                 ItemRolesTool.Add(d, new ItemRoleTool(d));
-            }
         }
         
         static public readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();

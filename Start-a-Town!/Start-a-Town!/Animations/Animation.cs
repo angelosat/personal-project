@@ -12,20 +12,7 @@ namespace Start_a_Town_.Animations
         public float Weight = 1;
         public float WeightChange;
         public float Speed = 1;
-
-        internal Animation SetWeight(int v)
-        {
-            this.Weight = v;
-            return this;
-        }
-
         public float Frame;
-
-        public Animation(AnimationDef def)
-        {
-            this.Def = def;
-        }
-
         public float Layer => this.Def.Layer;
         public float Fade { get { return this.FadeValue / (float)this.FadeLength; } }
         public string Name;
@@ -37,11 +24,23 @@ namespace Start_a_Town_.Animations
         public Action FinishAction = () => { };
         public Action OnFadeOut = () => { };
         public Action OnFadeIn = () => { };
+
+        [Obsolete]
         public Animation(GameObject entity, string name, bool loop = false)
             : base()
         {
             this.Entity = entity;
             this.Name = name;
+        }
+        public Animation(AnimationDef def)
+        {
+            this.Def = def;
+        }
+
+        internal Animation SetWeight(int v)
+        {
+            this.Weight = v;
+            return this;
         }
 
         public override string ToString()

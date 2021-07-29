@@ -4,7 +4,6 @@ namespace Start_a_Town_
 {
     public class Job : ISerializable, ISaveable
     {
-        public Entity PreferredTool;
         public JobDef Def;
         const byte InitialPriority = 5, MaxPriority = 10;
         byte _Priority = InitialPriority;

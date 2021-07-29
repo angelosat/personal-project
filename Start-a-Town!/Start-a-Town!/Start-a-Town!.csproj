@@ -254,7 +254,6 @@
     <Compile Include="Modules\Towns\Zones\ZoneGrowingDef.cs" />
     <Compile Include="Modules\Towns\Zones\ZoneManager.cs" />
     <Compile Include="Modules\Towns\Zones\ZoneStockpileDef.cs" />
-    <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemPreferencesManager.ItemPreferenceProperties.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemRoleDef.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemRoleGearDef.cs" />
     <Compile Include="Modules\Visitors\AI\Needs\NeedInventorySpace.cs" />

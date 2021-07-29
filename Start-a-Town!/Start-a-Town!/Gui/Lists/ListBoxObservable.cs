@@ -10,7 +10,8 @@ namespace Start_a_Town_.UI
         where TObject : class
     {
         const int Spacing = 1;
-
+        static readonly Func<TObject, bool> DefaultFilter = i => true;
+        Func<TObject, bool> CurrentFilter = DefaultFilter;
         public TObject SelectedItem => SelectedControl == null ? default : SelectedControl.Tag as TObject;
         TControl SelectedControl;
 
@@ -19,7 +20,10 @@ namespace Start_a_Town_.UI
             this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag == obj) as TControl;
         }
 
-        public List<TControl> Items => this.Controls.Cast<TControl>().ToList();
+        /// <summary>
+        /// A list containing all item controls, not just the currently displayed ones. Used for filtering.
+        /// </summary>
+        List<TControl> Items = new();// => this.Controls.Cast<TControl>().ToList();
 
         public Action<TObject> ItemChangedFunc = (item) => { };
         public ObservableCollection<TObject> List;
@@ -63,8 +67,15 @@ namespace Start_a_Town_.UI
         TControl AddItem(TObject item)
         {
             var control = this.ControlFactory(item);
-            this.AddControlsBottomLeft(control);
-            control.Location.Y += Spacing;
+            control.Tag = item;
+            this.Items.Add(control);
+            if (this.Controls.Any())
+            {
+                this.AddControlsBottomLeft(control);
+                control.Location.Y += Spacing;
+            }
+            else
+                this.AddControls(control);
             return control;
         }
         void RemoveItems(IEnumerable<TObject> items)
@@ -78,6 +89,7 @@ namespace Start_a_Town_.UI
         {
             if (item is null)
                 return;
+            this.Items.Remove(this.Items.First(c => c.Tag == item));
             var listControls = this.Controls;
             var removedItemIndex = listControls.FindIndex(c => c.Tag == item);
             var prevY = listControls[removedItemIndex].Location.Y;
@@ -92,9 +104,10 @@ namespace Start_a_Town_.UI
 
         public void Filter(Func<TObject, bool> filter)
         {
+            this.CurrentFilter = filter ?? DefaultFilter;
             this.Controls.Clear();
-            var validControls = this.Items.Where(c => filter(c.Tag as TObject)).ToArray();
-            this.AddControlsBottomLeft(validControls);
+            var validControls = this.Items.Where(c => this.CurrentFilter(c.Tag as TObject)).ToArray();
+            this.AddControlsVertically(Spacing, validControls);
         }
     }
 }

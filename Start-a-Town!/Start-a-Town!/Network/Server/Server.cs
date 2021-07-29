@@ -259,12 +259,6 @@ namespace Start_a_Town_.Net
                     this.BlockUpdateTimer = Instance.BlockUpdateTimerMax;
                     this.SendRandomBlockUpdates();
                 }
-                // i moved it from here because the player must be able to issue commands while the game is paused
-                //ProcessEvents();
-                // CLOCK AND PACKETS MUST BE ADVANCED HERE AND SENT WITH THE CORRECT CLOCK TICK HEADER
-                //SendPackets();
-                //ResetOutgoingStreams();
-                //Instance.AdvanceClock();
             }
             if (auxStream.BaseStream.Position > 0)
             {

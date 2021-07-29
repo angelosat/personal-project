@@ -97,12 +97,12 @@ namespace Start_a_Town_.UI
             control.Parent = Parent;
             Parent.OnControlAdded(control);
         }
-        public void AlignVertically()
+        public void AlignVertically(int spacing = 0)
         {
             var prev = 0;
             foreach (var c in this)
             {
-                c.Location.Y = prev;
+                c.Location.Y = prev + spacing;
                 prev = c.Bottom;
             }
             if(this.Parent.AutoSize)

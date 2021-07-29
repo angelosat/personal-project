@@ -299,7 +299,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         GroupBox CreateUI()
         {
             var box = new GroupBox();
-            var winPop = new Lazy<Window>(() => new Window(this.PopulationManager.GetUI()) { Title = "Population", Movable = true, Closable = true });
+            var winPop = new Lazy<Window>(() => new Window(this.PopulationManager.Gui) { Title = "Population", Movable = true, Closable = true });
             var btnPop = new Button("Population").SetLeftClickAction(b => winPop.Value.Toggle());
             box.AddControls(btnPop);
             return box;

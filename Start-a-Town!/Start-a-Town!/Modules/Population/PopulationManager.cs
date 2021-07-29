@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Start_a_Town_.GameModes.StaticMaps;
+﻿using Start_a_Town_.GameModes.StaticMaps;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     public class PopulationManager : ISaveable, ISerializable
     {
-        static internal class Packets
+        internal static class Packets
         {
             static int PacketVisitorArrived, PacketAdventurerCreated;
             public static void Init()
@@ -18,7 +19,7 @@ namespace Start_a_Town_
                 PacketVisitorArrived = Network.RegisterPacketHandler(ReceiveNotifyVisit);
                 PacketAdventurerCreated = Network.RegisterPacketHandler(ReceiveNotifyAdventurerCreated);
             }
-            
+
             public static void SendNotifyVisit(Actor actor)
             {
                 var w = Server.Instance.GetOutgoingStream();
@@ -53,7 +54,7 @@ namespace Start_a_Town_
                 props.Discovered = true;
             }
         }
-        static internal void Init()
+        internal static void Init()
         {
             Packets.Init();
             OffsiteAreaDefOf.Init();
@@ -61,10 +62,10 @@ namespace Start_a_Town_
         }
 
         bool Populated;
-        readonly List<VisitorProperties> ActorsAdventuring = new(ActorsCap);
-        readonly public StaticWorld World;
+        readonly ObservableCollection<VisitorProperties> ActorsAdventuring = new();// ActorsCap);
+        public readonly StaticWorld World;
         const int ActorsCap = 8;
-        const float TickRate = 1 / 3f, InitialChance = .05f,  VisitChanceBaseRate = .001f;// 2 seconds per tick //1 tick per second 
+        const float TickRate = 1 / 3f, InitialChance = .05f, VisitChanceBaseRate = .001f;// 2 seconds per tick //1 tick per second 
         const int InitialApproval = 50;
 
         int TickCount = (int)(Engine.TicksPerSecond / TickRate);
@@ -99,7 +100,7 @@ namespace Start_a_Town_
                 {
                     this.Populated = true;
                     Packets.SendNotifyAdventurerCreated(actor);
-                    RegisterActor(actor.Net as Server, actor);
+                    this.RegisterActor(actor.Net as Server, actor);
                     Log.WriteToFile($"{actor.Name} is not a town member and was missing from the world population list.");
                 }
             }
@@ -119,7 +120,7 @@ namespace Start_a_Town_
                 Actor actor = GenerateVisitor();
                 actor.SyncInstantiate(Server.Instance);
                 Packets.SendNotifyAdventurerCreated(actor);
-                RegisterActor(Server.Instance, actor);
+                this.RegisterActor(Server.Instance, actor);
             }
         }
 
@@ -150,7 +151,7 @@ namespace Start_a_Town_
             foreach (var v in this.ActorsAdventuring.Where(pred))
                 yield return v;
         }
-     
+
         internal IEnumerable<VisitorProperties> GetVisitorProperties()
         {
             foreach (var v in this.ActorsAdventuring)
@@ -163,44 +164,46 @@ namespace Start_a_Town_
         internal void OnTargetSelected(IUISelection info, ISelectable selected)
         {
         }
-        public GroupBox GetUI()
+        Control _gui;
+        public Control Gui => this._gui ??= this.CreateGui();
+        Control CreateGui()
         {
             var box = new ScrollableBoxNewNew(200, UIManager.LargeButton.Height * 8);
-            var list = new ListBoxNoScroll<VisitorProperties, ButtonNew>(props =>
+            var list = new ListBoxObservable<VisitorProperties, ButtonNew>(props =>
             {
                 var npc = props.Actor;
-                var btn = ButtonNew.CreateBig(() => UI.SelectionManager.Select(npc), box.Client.Width, npc.RenderIcon(), () => npc.Npc.FullName, () => npc.Exists ? "Visiting" : (props.Discovered ? "" : "Unknown"));
+                var btn = ButtonNew.CreateBig(() => SelectionManager.Select(npc), box.Client.Width, npc.RenderIcon(), () => npc.Npc.FullName, () => npc.Exists ? "Visiting" : (props.Discovered ? "" : "Unknown"));
                 return btn;
             });
 
             var filters = new GroupBox().AddControlsLineWrap(new[]{
-                new Button("All", ()=>list.Filter(i=>true)),
+                new Button("All", ()=>list.Filter(null)),
                 new Button("Visiting", ()=>list.Filter(i=>i.Actor.Exists)),
                 new Button("Away", ()=>list.Filter(i=>!i.Actor.Exists && i.Discovered)),
                 new Button("Unknown", ()=>list.Filter(i=>!i.Discovered)),
             });
+            list.Bind(this.ActorsAdventuring);
+            //list.AddItems(this.ActorsAdventuring.ToArray());
 
-            list.AddItems(this.ActorsAdventuring.ToArray());
+            //list.OnGameEventAction = e =>
+            //  {
+            //      switch (e.Type)
+            //      {
+            //          case Components.Message.Types.NewAdventurerCreated:
+            //              var actor = e.Parameters[0] as Actor;
+            //              list.AddItems(this.ActorsAdventuring.Find(v => v.Actor == actor));
+            //              break;
 
-            list.OnGameEventAction = e =>
-              {
-                  switch (e.Type)
-                  {
-                      case Components.Message.Types.NewAdventurerCreated:
-                          var actor = e.Parameters[0] as Actor;
-                          list.AddItems(this.ActorsAdventuring.Find(v => v.Actor == actor));
-                          break;
-
-                      default:
-                          break;
-                  }
-              };
+            //          default:
+            //              break;
+            //      }
+            //  };
             box.AddControlsVertically(filters, list);
-            list.OnShowAction = () =>
-            {
-                list.Clear();
-                list.AddItems(this.ActorsAdventuring.ToArray());
-            };
+            //list.OnShowAction = () =>
+            //{
+            //    list.Clear();
+            //    list.AddItems(this.ActorsAdventuring.ToArray());
+            //};
             return box;
         }
         public void ResolveReferences()
@@ -209,9 +212,9 @@ namespace Start_a_Town_
             {
                 var actor = props.Actor;
                 // TODO move this somewhere else
-                if(this.World.Map.Net is Server) 
+                if (this.World.Map.Net is Server)
                     if (!actor.GetNeeds(VisitorNeedsDefOf.NeedCategoryVisitor).Any())
-                            MakeVisitor(actor);
+                        MakeVisitor(actor);
                 if (!actor.Exists) // hacky. in process of finding best way to save unspawned actors
                     this.World.Map.Net.Instantiate(actor);
                 props.OffsiteArea = OffsiteAreaDefOf.Forest; // HACK

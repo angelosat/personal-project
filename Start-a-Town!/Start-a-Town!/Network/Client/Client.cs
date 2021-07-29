@@ -181,7 +181,6 @@ namespace Start_a_Town_.Net
             if (!this.IsRunning)
                 return;
 
-            // CALL THESE IN THE GAMESPEED LOOP
             this.HandleOrderedPackets();
             this.HandleOrderedReliablePackets();
             this.ProcessSyncedPackets();
@@ -192,37 +191,19 @@ namespace Start_a_Town_.Net
             {
                 var size = Instance.Map.GetSizeInChunks();
                 var maxChunks = size * size;
-                if (Instance.Map.ActiveChunks.Count == maxChunks)
-                /// i had to add this check here because when i moved the call to map  update method, from the ingame update method (which was called only after the map has fully loaded),
-                /// to the client update method here, the map update method was called before it was fully loaded so while doing cell operations, there were glitches at the edges of chunks where the
-                /// neighbors weren't loaded yet. it's still ugly to put this check here, must find more elegant way
+                if (Instance.Map.ActiveChunks.Count == maxChunks && !IsSaving)
                 {
-                    if (!IsSaving)
-                    {
-                        for (int i = 0; i < Instance.Speed; i++)
-                        {
-                            // PACKETS MUST BE HANDLED AS THE CLOCK ADVANCES, AND THE CLOCK MUST ADVANCE ACCORDING TO GAMESPEED
-                            //HandleOrderedPackets();
-                            //HandleOrderedReliablePackets();
-                            this.TickMap();
-                            // moved it from here to be able to process packets from player input while game is paused
-                            //ProcessEvents();
-                            //ClientClock = ClientClock.Add(TimeSpan.FromMilliseconds(Server.ClockIntervalMS));
-                        }
-                        this.Map.Update();
-                        //ProcessEvents();
-                        this.UpdateWorldState();
-                    }
+                    for (int i = 0; i < Instance.Speed; i++)
+                        this.TickMap();
+                    this.Map.Update();
+                    this.UpdateWorldState();
                 }
             }
-            //HandleOrderedPackets();
-            //HandleOrderedReliablePackets();
             this.ClientClock = this.ClientClock.Add(TimeSpan.FromMilliseconds(Server.ClockIntervalMS));
-            // if there's any data in the outgoing stream, send it
+
             if (this.PlayerData is not null && this.Map is not null)
                 PacketMousePosition.Send(Instance, this.PlayerData.ID, ToolManager.CurrentTarget); // TODO: do this at the toolmanager class instead of here
 
-            // call these here or in the gamespeed loop?
             this.SendAcks();
             this.SendOutgoingStream();
         }

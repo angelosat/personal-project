@@ -50,9 +50,7 @@ namespace Start_a_Town_.UI
 
         public void AddItems(IEnumerable<TObject> items)
         {
-            if (this.List is not null)
-                return;
-            if (items == null)
+            if (items is null)
                 return;
             foreach (var i in items)
                 this.AddItem(i);
@@ -80,8 +78,6 @@ namespace Start_a_Town_.UI
         }
         public void RemoveItem(TObject item)
         {
-            if (this.List is not null)
-                return;
             if (item is null)
                 return;
             var listControls = this.Controls;

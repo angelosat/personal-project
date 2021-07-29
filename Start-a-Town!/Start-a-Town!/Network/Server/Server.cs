@@ -786,7 +786,6 @@ namespace Start_a_Town_.Net
                 Instance.Instantiate(obj);
                 _objID = Math.Max(_objID, obj.RefID + 1);
                 obj.Map = Instance.Map;
-                obj.Transform.Exists = true;
             });
 
             foreach (var (local, entity) in chunk.GetBlockEntitiesByPosition())

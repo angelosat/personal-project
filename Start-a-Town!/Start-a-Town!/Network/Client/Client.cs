@@ -797,8 +797,6 @@ namespace Start_a_Town_.Net
             {
                 obj.Instantiate(this.Instantiator);
                 obj.MapLoaded(Instance.Map);
-                obj.Transform.Exists = true;
-
                 /// why here too? BECAUSE some things dont get initialized properly on client. like initializing sprites from defs
                 //obj.ObjectLoaded();
                 /// FIXED by saving and serializing sprites along bones (by using the assetpath and the static sprite registry)

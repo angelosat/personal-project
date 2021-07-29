@@ -349,7 +349,11 @@ namespace Start_a_Town_
         {
             return global.GetDrawDepth(map, this);
         }
-
+        internal int GetDrawDepthSimple(IntVec3 global)
+        {
+            Coords.Rotate(this, global.X, global.Y, out int rx, out int ry);
+            return rx + ry + global.Z;
+        }
         public bool CullingCheck(float x, float y, float z, Rectangle sourceBounds, out Rectangle screenBounds)
         {
             screenBounds = this.GetScreenBounds(x, y, z, sourceBounds);
@@ -1261,10 +1265,10 @@ namespace Start_a_Town_
             foreach (var chunk in visibleChunks)
                 chunk.HitTestEntities(this);
 
-            // uncomment this to prefer targetting entities even when they are behind blocks
+            /// uncomment this to prefer targetting entities even when they are behind blocks
             //if (Controller.Instance.MouseoverNext.Object is not null)
             //    return;
-
+          
             if (!BlockTargeting)
                 return;
 
@@ -1389,9 +1393,13 @@ namespace Start_a_Town_
         }
         public void CreateMouseover(MapBase map, Vector3 global, Rectangle rect, Vector2 point, bool behind)
         {
-            // uncomment this to prefer targetting entities even when they are behind blocks
+            /// uncomment this to prefer targetting entities even when they are behind blocks
+            /// i also call this at the start of the mouspicking method, no need to call it here too
             //if (Controller.Instance.MouseoverNext.Object != null)
             //    return;
+            if (Controller.Instance.MouseoverNext.Object is TargetArgs target && target.Object is GameObject obj)
+                if(this.GetDrawDepthSimple(obj.Cell.Value) > this.GetDrawDepthSimple(global)) // HACK
+                    return;
 
             if (!map.TryGetAll(global, out var chunk, out var cell))
                 return;

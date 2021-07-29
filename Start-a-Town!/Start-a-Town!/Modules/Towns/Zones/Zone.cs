@@ -12,38 +12,23 @@ namespace Start_a_Town_
     abstract public class Zone : ISelectable, ISaveable, ISerializable
     {
         public Town Town => this.Manager.Town;
-        public MapBase Map { get { return this.Town.Map; } }
+        public MapBase Map => this.Town.Map;
         protected readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]);
         public string Name;
         public ZoneManager Manager;
         public int ID { get; set; }
         public bool Hide;
+        static readonly Random Random = new();
         public abstract ZoneDef ZoneDef { get; }
         public abstract string UniqueName { get; }
-        public IntVec3 Average()
-        {
-            return this.Positions.Average();
-        }
-        public void Delete()
-        {
-            this.Manager.Delete(this);
-        }
+        public abstract string GetName();
+
         public bool Exists => this.Manager.Zones.ContainsKey(this.ID);
-            
-        static readonly Random Random = new();
+
         protected Zone()
         {
             this.Positions.Color = GetRandomColor();
         }
-
-        private static Color GetRandomColor()
-        {
-            var array = new byte[3];
-            Random.NextBytes(array);
-            var col = new Color(array[0], array[1], array[2]);
-            return col;
-        }
-
         public Zone(ZoneManager manager) : this()
         {
             this.Manager = manager;
@@ -53,6 +38,24 @@ namespace Start_a_Town_
             this.Manager = manager;
             this.Positions.Add(cells);
         }
+
+        public IntVec3 Average()
+        {
+            return this.Positions.Average();
+        }
+        public void Delete()
+        {
+            this.Manager.Delete(this);
+        }
+
+        private static Color GetRandomColor()
+        {
+            var array = new byte[3];
+            Random.NextBytes(array);
+            var col = new Color(array[0], array[1], array[2]);
+            return col;
+        }
+      
         internal virtual void OnBlockChanged(IntVec3 global)
         {
             var map = this.Map;
@@ -86,7 +89,7 @@ namespace Start_a_Town_
             if (splitgraphs.Count == 1)
                 return;
             var largest = splitgraphs.OrderByDescending(g => g.Count).First();
-            foreach (var pos in this.Positions.Except(largest))
+            foreach (var pos in this.Positions.Except(largest).ToList())
                 this.Positions.Remove(pos);
         }
 
@@ -103,17 +106,11 @@ namespace Start_a_Town_
                     return;
                 }
                 foreach (var pos in inputpositions.Except(this.Positions))
-                {
-                    if (this.Town.GetZoneAt(pos) == null)
-                    {
+                    if (this.Town.GetZoneAt(pos) is null)
                         this.Positions.Add(pos);
-                    }
-                }
             }
             else
-            {
                 this.RemovePositions(inputpositions);
-            }
         }
         public void Invalidate()
         {
@@ -157,8 +154,6 @@ namespace Start_a_Town_
         {
             ToolManager.SetTool(new ToolDesignateZone(town, def));// zoneType));
         }
-
-        public abstract string GetName();
 
         public virtual void GetSelectionInfo(IUISelection info)
         {

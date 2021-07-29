@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace Start_a_Town_.UI
 {
@@ -10,14 +10,14 @@ namespace Start_a_Town_.UI
         const int VertOffset = 10;
         public bool AlwaysShow;
 
-        static Dictionary<INameplateable, Nameplate> Plates = new();
+        static readonly Dictionary<INameplateable, Nameplate> Plates = new();
 
-        static public void Reset()
+        public static void Reset()
         {
             ScreenManager.CurrentScreen.WindowManager[UIManager.LayerNameplates].Clear();
         }
 
-        static public Nameplate Create(INameplateable obj)
+        public static Nameplate Create(INameplateable obj)
         {
             var plate = new Nameplate(obj);
             if (obj is GameObject)
@@ -42,17 +42,13 @@ namespace Start_a_Town_.UI
             this.Hide();
         }
 
-        static public void Show(GameObject entity)
+        public static void Show(GameObject entity)
         {
-            var plate = Nameplate.GetNameplate(entity);
-            if (plate != null)
-                plate.OnFocus();
+            GetNameplate(entity)?.OnFocus();
         }
-        static public void Hide(GameObject entity)
+        public static void Hide(GameObject entity)
         {
-            var plate = Nameplate.GetNameplate(entity);
-            if (plate != null)
-                plate.OnFocusLost();
+            GetNameplate(entity)?.OnFocusLost();
         }
         public INameplateable Object;
         Nameplate(INameplateable obj)
@@ -63,7 +59,7 @@ namespace Start_a_Town_.UI
             this.LocationFunc = () =>
             {
                 var camera = obj.Map.Camera;
-                var rect = Object.GetScreenBounds(camera);
+                var rect = this.Object.GetScreenBounds(camera);
                 return new Vector2(rect.X + rect.Width / 2, rect.Y - this.Height - VertOffset) - this.Dimensions * new Vector2(.5f, 0);
             };
         }
@@ -74,14 +70,14 @@ namespace Start_a_Town_.UI
             var actor = obj.Net.GetPlayer()?.ControllingEntity;
             if (actor is null)
                 return;
-            if (this.Object is GameObject entity && 
+            if (this.Object is GameObject entity &&
                 actor.AttackTarget is GameObject playertarget &&
                 entity.RefID == playertarget.RefID)
-                {
-                    var border = this.BoundsScreen;
-                    border.Inflate(1, 1);
-                    border.DrawHighlight(sb, Color.Red * 0.5f, Vector2.Zero, 0);
-                }
+            {
+                var border = this.BoundsScreen;
+                border.Inflate(1, 1);
+                border.DrawHighlight(sb, Color.Red * 0.5f, Vector2.Zero, 0);
+            }
         }
 
         public override void OnHitTestPass()
@@ -101,8 +97,8 @@ namespace Start_a_Town_.UI
             base.OnMouseLeave();
         }
 
-        
-        static public Nameplate GetNameplate(INameplateable entity)
+
+        public static Nameplate GetNameplate(INameplateable entity)
         {
             return Plates.GetValueOrDefault(entity);
         }

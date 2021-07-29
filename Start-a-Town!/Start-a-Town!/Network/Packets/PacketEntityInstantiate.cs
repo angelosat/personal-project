@@ -16,6 +16,7 @@ namespace Start_a_Town_
             PckType = Network.RegisterPacketHandler(Receive);
             PckTypeNew = Network.RegisterPacketHandler(ReceiveTemplate);
         }
+        [Obsolete]
         static public void Send(INetwork net, GameObject entity)
         {
             Send(net, new GameObject[] { entity });
@@ -38,11 +39,13 @@ namespace Start_a_Town_
             var templateID = r.ReadInt32();
             var length = r.ReadInt32();
             var data = r.ReadBytes(length);
-            var entity = Network.Deserialize<GameObject>(data, reader=> GameObject.CloneTemplate(templateID, reader));
+            var entity = Network.Deserialize(data, reader=> GameObject.CloneTemplate(templateID, reader));
             entity.Instantiate(net.Instantiator); // move this to client class
-            if (entity.Exists)// move this to client class
-                entity.Spawn(net.Map);// move this to client class
+            //if (entity.Exists)// move this to client class
+            // TODO spawn it with a separate packet
+                //entity.Spawn(net.Map);// move this to client class
         }
+        [Obsolete]
         static public void Send(INetwork net, IEnumerable<GameObject> entities)
         {
             if (net is Client)

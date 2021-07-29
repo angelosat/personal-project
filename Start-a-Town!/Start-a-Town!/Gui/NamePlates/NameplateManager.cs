@@ -13,10 +13,12 @@ namespace Start_a_Town_
         readonly Dictionary<INameplateable, Nameplate> Cache = new();
         readonly NameplatesContainer Container = new();
         readonly NameplatesContainer ContainerActors = new();
+        public override Rectangle BoundsScreen => UIManager.Bounds;
 
         public NameplateManager()
         {
             this.AddControls(this.ContainerActors);
+            this.MouseThrough = true;
         }
         public void Update(SceneState scene)
         {

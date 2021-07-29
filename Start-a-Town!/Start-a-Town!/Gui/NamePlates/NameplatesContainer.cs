@@ -6,11 +6,15 @@ namespace Start_a_Town_
 {
     class NameplatesContainer : Control
     {
+        public override Rectangle BoundsScreen => UIManager.Bounds;
+        public NameplatesContainer()
+        {
+            this.MouseThrough = true;
+        }
         public override Control Invalidate(bool invalidateChildren = false)
         {
             return this;
         }
-
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, UIManager.Bounds);

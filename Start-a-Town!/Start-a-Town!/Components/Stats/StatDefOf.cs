@@ -88,7 +88,7 @@ namespace Start_a_Town_
                   if (material is null)
                       return 1;
                   var matStrength = material.Density;
-                  var efficiency = tool.Def.ToolProperties.Ability.Efficiency;
+                  var efficiency = tool.Def.ToolProperties?.Ability.Efficiency ?? tool.GetComponent<ToolAbilityComponent>().Props.Ability.Efficiency;
                   var total = (float)efficiency * matStrength;
                   total *= a.Quality.Multiplier;
                   return total;

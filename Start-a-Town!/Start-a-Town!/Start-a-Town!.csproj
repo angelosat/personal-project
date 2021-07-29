@@ -471,7 +471,7 @@
     <Compile Include="Objects\Items\Materials\RawMaterials\RawMaterialDef.cs" />
     <Compile Include="Objects\Items\Storage\New\StorageFilterCategoryNew.cs" />
     <Compile Include="Objects\Items\Storage\New\StorageFilterNew.cs" />
-    <Compile Include="Objects\Items\ToolDefs.cs" />
+    <Compile Include="Objects\Tools\ToolDefs.cs" />
     <Compile Include="Objects\Items\ItemFactory.cs" />
     <Compile Include="Objects\Items\Storage\ItemCategory.cs" />
     <Compile Include="Objects\Items\Storage\StorageFilter.cs" />
@@ -541,7 +541,6 @@
     <Compile Include="Objects\BehaviorHandleResources.cs" />
     <Compile Include="Objects\BodyDef.cs" />
     <Compile Include="Objects\ItemDef.cs" />
-    <Compile Include="Objects\ItemToolDef.cs" />
     <Compile Include="Objects\Apparel\ApparelDefOf.cs" />
     <Compile Include="Objects\ObjectRefIDsAmount.cs" />
     <Compile Include="Objects\ObjectAmount.cs" />
@@ -554,6 +553,8 @@
     <Compile Include="Objects\Properties\RecipeProperties.cs" />
     <Compile Include="Objects\Properties\FoodClass.cs" />
     <Compile Include="Objects\Properties\CraftingProperties.cs" />
+    <Compile Include="Objects\Tools\ItemToolDef.cs" />
+    <Compile Include="Objects\Tools\ToolProps.cs" />
     <Compile Include="Pathing\PathingSync.FinishMode.cs" />
     <Compile Include="Pathing\PathingSync.Node.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />

@@ -160,6 +160,7 @@ namespace Start_a_Town_
 
         public ISaveable Load(SaveTag tag)
         {
+            return this; // added this to reset inventory contents of every entity to do some work that will break existing items
             var itemList = tag["Contents"].Value as List<SaveTag>;
             foreach (var itemTag in itemList)
                 this.Add(GameObject.Load(itemTag));

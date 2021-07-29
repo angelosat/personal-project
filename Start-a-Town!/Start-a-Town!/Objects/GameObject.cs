@@ -851,10 +851,7 @@ namespace Start_a_Town_
         public GameObject ObjectLoaded()
         {
             foreach (KeyValuePair<string, EntityComponent> comp in Components)
-            {
                 comp.Value.OnObjectLoaded(this);
-            }
-
             return this;
         }
         /// <summary>

@@ -1,23 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Start_a_Town_.UI;
+using Start_a_Town_.Components;
+using System.IO;
 
-namespace Start_a_Town_.Components
+namespace Start_a_Town_
 {
     class ToolAbilityComponent : EntityComponent
     {
         readonly static public string Name = "Tool";
-        public override string ComponentName
-        {
-            get { return Name; }
-        }
+        public override string ComponentName => Name;
         public override object Clone()
         {
-            return new ToolAbilityComponent();
+            return new ToolAbilityComponent(this.Props);
         }
-
+        public ToolProps Props;
         readonly List<ToolAbilityDef> Skills = new();
         readonly Dictionary<int, float> WorkCapabilities = new();
+        public ToolAbilityComponent(ToolProps props)
+        {
+            this.Props = props;
+        }
         public ToolAbilityComponent()
         {
 
@@ -31,7 +34,10 @@ namespace Start_a_Town_.Components
         {
             return this;
         }
-       
+        public override void OnObjectLoaded(GameObject parent)
+        {
+            base.OnObjectLoaded(parent);
+        }
         public ToolAbilityDef Skill { get { return this.Skills.FirstOrDefault(); } }
         
         static public bool HasSkill(GameObject parent, ToolAbilityDef skill)
@@ -75,6 +81,15 @@ namespace Start_a_Town_.Components
             if (ability != null)
                 box.AddControlsBottomLeft(ToolAbilityDef.GetUI(ability.Value.Def.ID, ability.Value.Efficiency));
             return box;
+        }
+
+        public override void Write(BinaryWriter w)
+        {
+            this.Props.Write(w);
+        }
+        public override void Read(BinaryReader r)
+        {
+            this.Props = Def.GetDef<ToolProps>(r);
         }
     }
 }

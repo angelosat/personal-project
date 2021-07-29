@@ -153,7 +153,7 @@ namespace Start_a_Town_
 
         public Bone Clone(Bone parent = null)
         {
-            Bone newnode = Bone.Create(this.Def, this.Sprite, parent, this.ParentJoint, this.Order);
+            Bone newnode = Create(this.Def, this.Sprite, parent, this.ParentJoint, this.Order);
 
             newnode.SpriteFunc = this.SpriteFunc;
             newnode.RestingFrame = this.RestingFrame;
@@ -164,6 +164,7 @@ namespace Start_a_Town_
             newnode.Material = this.Material;
             newnode.DrawMaterialColor = this.DrawMaterialColor;
             newnode.ScaleFunc = this.ScaleFunc;
+            newnode.Material = this.Material;
 
             foreach (var joint in this.Joints)
             {

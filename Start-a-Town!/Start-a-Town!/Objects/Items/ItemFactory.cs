@@ -16,7 +16,7 @@ namespace Start_a_Town_
 
             obj.AddComponent<ToolAbilityComponent>();
             obj.AddComponent(new SpriteComponent(def));
-                                                       
+
             obj.InitComps();
 
             return obj;

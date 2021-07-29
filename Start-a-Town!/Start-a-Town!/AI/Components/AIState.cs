@@ -132,7 +132,8 @@ namespace Start_a_Town_.AI
             tag.Add(new SaveTag(SaveTag.Types.Vector3, "Leash", this.Leash));
 
             tag.Add((this.CurrentTask != null).Save("HasTask"));
-            tag.Add(this.CurrentTask?.Save("Task"));
+            if(this.CurrentTask != null)
+                tag.Add(this.CurrentTask.Save("Task"));
             if (this.CurrentTaskBehavior != null)
             {
                 var bhavtag = this.CurrentTaskBehavior.Save("Behavior");

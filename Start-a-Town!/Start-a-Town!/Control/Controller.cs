@@ -101,14 +101,11 @@ namespace Start_a_Town_
                 if (Instance.Mouseover.Object is TargetArgs target)
                 {
                     if (target.Object != entity)
-                    {
                         target = new TargetArgs(entity, face) { Map = Engine.Map };
-                    }
                 }
                 else
-                {
                     target = new TargetArgs(entity, face) { Map = Engine.Map };
-                }
+
                 Instance.MouseoverNext.Target = target;
                 Instance.MouseoverNext.Object = target;
                 Instance.MouseoverNext.Face = face;
@@ -117,21 +114,22 @@ namespace Start_a_Town_
         }
         public static void SetMouseoverBlock(Camera camera, MapBase map, Vector3 global, Vector3 face, Vector3 precise)
         {
+            var depth = global.GetDrawDepth(map, camera);
+
+            if (Instance.MouseoverNext.Depth > depth)
+                return;
+
             var target = new TargetArgs(map, global, face, precise);
 
             if (global != _LastMouseoverBlockGlobal || Instance.Mouseover.Object is Element) // very hacky
-            {
                 Instance.MouseoverNext.Object = target;
-            }
             else
-            {
                 Instance.MouseoverNext.Object = Instance.Mouseover.Object;
-            }
 
             Instance.MouseoverNext.Face = face;
             Instance.MouseoverNext.Precise = precise;
             Instance.MouseoverNext.Target = target;
-            Instance.MouseoverNext.Depth = global.GetDrawDepth(map, camera);
+            Instance.MouseoverNext.Depth = depth;
             _LastMouseoverBlockGlobal = global;
         }
         static Vector3 _LastMouseoverBlockGlobal;

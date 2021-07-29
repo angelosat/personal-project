@@ -582,94 +582,6 @@ namespace Start_a_Town_
             return light;
         }
 
-        public void CreateMouseover(MapBase map, Vector3 global)
-        {
-            if (Controller.Instance.MouseoverNext.Object != null)
-                return;
-            if (!map.TryGetAll(global, out var chunk, out var cell))
-                return;
-
-            var texbounds = Block.Bounds;
-
-            var cellScreenBounds = this.GetScreenBounds(global, texbounds);
-            var uvCoords = new Vector2((Controller.Instance.msCurrent.X - cellScreenBounds.X) / this.Zoom, (Controller.Instance.msCurrent.Y - cellScreenBounds.Y) / this.Zoom);
-            int faceIndex = (int)uvCoords.Y * Block.MouseMapSprite.Width + (int)uvCoords.X;
-
-            // find block coordinates
-            var sample = Block.BlockCoordinatesFull[faceIndex];
-            float u = sample.R / 255f;
-            float v = sample.G / 255f;
-            float w = sample.B / 255f;
-            var precise = new Vector3(u, v, w);
-            precise.X -= 0.5f;
-            precise.Y -= 0.5f; // compensate for (0,0) being at the center of the block
-
-            Block.BlockMouseMap.HitTest((int)uvCoords.X, (int)uvCoords.Y, out Vector3 vec);
-
-            // comment these lines if i want to select blocks even if mouseover face is inaccessible
-            //if (!Cell.CheckFace(this, cell, vec))
-            //    return;
-
-            Coords.Rotate((int)this.Rotation, vec, out Vector3 rotVec);
-            precise = precise.Rotate(-this.Rotation);
-            // TODO: find more elegant way to do this
-            if (rotVec == Vector3.UnitX || rotVec == -Vector3.UnitX)
-                precise.X = 0;
-            else if (rotVec == Vector3.UnitY || rotVec == -Vector3.UnitY)
-                precise.Y = 0;
-            else if (rotVec == Vector3.UnitZ || rotVec == -Vector3.UnitZ)
-                precise.Z = 0;
-
-            var target = new TargetArgs(map, global, rotVec, precise);
-            if (global != this.LastMouseover)
-                Controller.Instance.MouseoverNext.Object = target;
-            else
-                Controller.Instance.MouseoverNext.Object = Controller.Instance.Mouseover.Object;
-
-            Controller.Instance.MouseoverNext.Face = rotVec;
-            Controller.Instance.MouseoverNext.Precise = precise;
-            Controller.Instance.MouseoverNext.Target = target;
-            Controller.Instance.MouseoverNext.Depth = global.GetMouseoverDepth(map, this);
-            this.LastMouseover = global;
-        }
-        public void CreateMouseover(MapBase map, Vector3 global, Rectangle rect, Vector2 point, bool behind)
-        {
-            if (Controller.Instance.MouseoverNext.Object != null)
-                return;
-
-            if (!map.TryGetAll(global, out var chunk, out var cell))
-                return;
-
-            var uvCoords = new Vector2((point.X - rect.X) / this.Zoom, (point.Y - rect.Y) / this.Zoom);
-            int faceIndex = (int)uvCoords.Y * cell.Block.MouseMap.Texture.Width + (int)uvCoords.X;
-
-            // find block coordinates
-            var sample = cell.Block.UV[faceIndex];
-            float u = sample.R / 255f;
-            float v = sample.G / 255f;
-            float w = sample.B / 255f;
-            var precise = new Vector3(u, v, w);// Vector3.Zero;
-            precise.X -= 0.5f;
-            precise.Y -= 0.5f; // compensate for (0,0) being at the center of the block
-
-            cell.Block.MouseMap.HitTest(behind, (int)uvCoords.X, (int)uvCoords.Y, out Vector3 vec);
-
-            // comment these lines if i want to select blocks even if mouseover face is inaccessible
-            //if (!Cell.CheckFace(this, cell, vec))
-            //    return;
-
-            Coords.Rotate((int)this.Rotation, vec, out Vector3 rotVec);
-            precise = precise.Rotate(-this.Rotation);
-            // TODO: find more elegant way to do this
-            if (rotVec == Vector3.UnitX || rotVec == -Vector3.UnitX)
-                precise.X = 0;
-            else if (rotVec == Vector3.UnitY || rotVec == -Vector3.UnitY)
-                precise.Y = 0;
-            else if (rotVec == Vector3.UnitZ || rotVec == -Vector3.UnitZ)
-                precise.Z = 0;
-
-            Controller.SetMouseoverBlock(this, map, global, rotVec, precise);
-        }
 
         public void DrawMap(MapBase map, ToolManager toolManager, UIManager ui, SceneState scene)
         {
@@ -1349,8 +1261,9 @@ namespace Start_a_Town_
             foreach (var chunk in visibleChunks)
                 chunk.HitTestEntities(this);
 
-            if (Controller.Instance.MouseoverNext.Object is not null)
-                return;
+            // uncomment this to prefer targetting entities even when they are behind blocks
+            //if (Controller.Instance.MouseoverNext.Object is not null)
+            //    return;
 
             if (!BlockTargeting)
                 return;
@@ -1474,6 +1387,46 @@ namespace Start_a_Town_
                 this.CreateMouseover(map, foundGlobal, foundRect, foundMouse, behind);
             }
         }
+        public void CreateMouseover(MapBase map, Vector3 global, Rectangle rect, Vector2 point, bool behind)
+        {
+            // uncomment this to prefer targetting entities even when they are behind blocks
+            //if (Controller.Instance.MouseoverNext.Object != null)
+            //    return;
+
+            if (!map.TryGetAll(global, out var chunk, out var cell))
+                return;
+
+            var uvCoords = new Vector2((point.X - rect.X) / this.Zoom, (point.Y - rect.Y) / this.Zoom);
+            int faceIndex = (int)uvCoords.Y * cell.Block.MouseMap.Texture.Width + (int)uvCoords.X;
+
+            // find block coordinates
+            var sample = cell.Block.UV[faceIndex];
+            float u = sample.R / 255f;
+            float v = sample.G / 255f;
+            float w = sample.B / 255f;
+            var precise = new Vector3(u, v, w);// Vector3.Zero;
+            precise.X -= 0.5f;
+            precise.Y -= 0.5f; // compensate for (0,0) being at the center of the block
+
+            cell.Block.MouseMap.HitTest(behind, (int)uvCoords.X, (int)uvCoords.Y, out Vector3 vec);
+
+            // comment these lines if i want to select blocks even if mouseover face is inaccessible
+            //if (!Cell.CheckFace(this, cell, vec))
+            //    return;
+
+            Coords.Rotate((int)this.Rotation, vec, out Vector3 rotVec);
+            precise = precise.Rotate(-this.Rotation);
+            // TODO: find more elegant way to do this
+            if (rotVec == Vector3.UnitX || rotVec == -Vector3.UnitX)
+                precise.X = 0;
+            else if (rotVec == Vector3.UnitY || rotVec == -Vector3.UnitY)
+                precise.Y = 0;
+            else if (rotVec == Vector3.UnitZ || rotVec == -Vector3.UnitZ)
+                precise.Z = 0;
+
+            Controller.SetMouseoverBlock(this, map, global, rotVec, precise);
+        }
+
         public bool EarlyOutMousePicking(MyVertex[] array, int i, float mousex, float mousey, float chunkx, float chunky, int rectw, int recth, out int rectx, out int recty, out Vector3 global)
         {
             rectx = recty = 0;

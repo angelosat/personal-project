@@ -28,10 +28,9 @@ namespace Start_a_Town_
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
             DefaultMaterial = MaterialDefOf.Iron,
-
             //Factory = ItemFactory.CreateTool,
             //Factory = def=>ToolProps.CreateTemplate(),
-            //Randomizer = ItemFactory.CreateToolFromRandomMaterials,
+            //Randomizer = ItemFactory.CreateFromRandomMaterials,
             CraftingProperties = ToolCraftingProperties,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.LogsGrayscale, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                             .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.LogsGrayscale) { DrawMaterialColor = true }),

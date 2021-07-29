@@ -877,15 +877,7 @@ namespace Start_a_Town_
             this.EnumerateChildren();
             return this;
         }
-        public GameObject Initialize(RandomThreaded random)
-        {
-            foreach (KeyValuePair<string, EntityComponent> comp in Components)
-            {
-                comp.Value.Initialize(this, random);
-            }
-
-            return this;
-        }
+       
         public SaveTag Save(string name = "")
         {
             return new SaveTag(SaveTag.Types.Compound, name, this.SaveInternal());

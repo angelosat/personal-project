@@ -1,9 +1,6 @@
 ﻿using Start_a_Town_.Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
@@ -41,15 +38,15 @@ namespace Start_a_Town_
             return tool;
         }
 
-        internal static Entity CreateTemplate()
-        {
-            throw new NotImplementedException();
-        }
-
         internal static void Init()
         {
             Register(ToolPropsDefof.Shovel);
             Register(ToolPropsDefof.Axe);
+            Register(ToolPropsDefof.Hammer);
+            Register(ToolPropsDefof.Handsaw);
+            Register(ToolPropsDefof.Hoe);
+            Register(ToolPropsDefof.Pickaxe);
+
 
             foreach (var toolDef in GetDefs<ToolProps>())
             {
@@ -57,25 +54,5 @@ namespace Start_a_Town_
                 GameObject.AddTemplate(obj);
             }
         }
-    }
-
-    static class ToolPropsDefof
-    {
-        public static readonly ToolProps Shovel = new("Shovel")
-        {
-            Description = "Used to dig out grainy material like soil dirt and sand.",
-            SpriteHandle = ItemContent.ShovelHandle,
-            SpriteHead = ItemContent.ShovelHead,
-            Ability = new ToolAbility(ToolAbilityDef.Digging, 5),
-            AssociatedJobs = new() { JobDefOf.Digger }
-        };
-        public static readonly ToolProps Axe = new("Axe")
-        {
-            Description = "Chops down trees.",
-            SpriteHandle = ItemContent.AxeHandle,
-            SpriteHead = ItemContent.AxeHead,
-            Ability = new ToolAbility(ToolAbilityDef.Chopping, 5),
-            AssociatedJobs = new() { JobDefOf.Lumberjack }
-        };
     }
 }

@@ -639,9 +639,9 @@ namespace Start_a_Town_.Net
 
         public void SpawnRequestFromTemplate(int templateID, TargetArgs target)
         {
-            var entity = GameObject.Templates[templateID].Clone();
+            var entity = GameObject.Templates[templateID].Clone() as Entity;
 
-            entity.Initialize(Random);
+            entity.Randomize(Random);
             target.Map = Instance.Map;
             switch (target.Type)
             {

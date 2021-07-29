@@ -42,7 +42,7 @@ namespace Start_a_Town_
             this.Knowledge = new Knowledge();
             this.Root = null;
         }
-        public override void Initialize(GameObject parent, RandomThreaded random)
+        public override void Randomize(GameObject parent, RandomThreaded random)
         {
             this.State.Generate(parent, random);
         }

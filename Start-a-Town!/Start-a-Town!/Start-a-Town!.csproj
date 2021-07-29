@@ -555,6 +555,7 @@
     <Compile Include="Objects\Properties\CraftingProperties.cs" />
     <Compile Include="Objects\Tools\ItemToolDef.cs" />
     <Compile Include="Objects\Tools\ToolProps.cs" />
+    <Compile Include="Objects\Tools\ToolPropsDefof.cs" />
     <Compile Include="Pathing\PathingSync.FinishMode.cs" />
     <Compile Include="Pathing\PathingSync.Node.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />

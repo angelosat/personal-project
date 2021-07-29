@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
+using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
@@ -91,6 +92,16 @@ namespace Start_a_Town_
             if (this.Def.QualityLevels)
                 foreach (var c in this.Components.Values)
                     c.Initialize(this, quality);
+            return this;
+        }
+        public GameObject Randomize(RandomThreaded random)
+        {
+            var mats = ItemFactory.GetRandomMaterialsFor(this.Def);
+            this.SetMaterials(mats);
+            this.SetQuality(Quality.GetRandom());
+
+            foreach (var comp in this.Components.Values)
+                comp.Randomize(this, random);
             return this;
         }
     }

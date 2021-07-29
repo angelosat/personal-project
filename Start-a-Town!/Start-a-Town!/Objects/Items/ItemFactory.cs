@@ -27,6 +27,14 @@ namespace Start_a_Town_
             obj.SetMaterials(ingredients.ToDictionary(i => i.Key, i => i.Value.PrimaryMaterial));
             return obj;
         }
+        static public Entity CreateFromRandomMaterials(ItemDef def)
+        {
+            var mats = GetRandomMaterialsFor(def);
+            var obj = CreateItem(def);
+            obj.SetMaterials(mats);
+            obj.SetQuality(Quality.GetRandom());
+            return obj;
+        }
         static public Entity CreateToolFromRandomMaterials(ItemDef def)
         {
             var mats = GetRandomMaterialsFor(def);

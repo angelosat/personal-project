@@ -30,8 +30,8 @@ namespace Start_a_Town_
         static public readonly Sprite HandsawHead = new Sprite("handsaw/handsawblade") { OriginGround = new Vector2(16, 16) };
 
         static public readonly Sprite HoeFull = new Sprite("hoe", 0) { OriginGround = new Vector2(16, 32) };
-        static public readonly Sprite HowHandle = new Sprite("hoe/hoeHandle", 0.5f) { OriginGround = new Vector2(16, 16) };
-        static public readonly Sprite HowHead = new Sprite("hoe/hoeHead", 0.5f) { OriginGround = new Vector2(16, 16) };
+        static public readonly Sprite HoeHandle = new Sprite("hoe/hoeHandle", 0.5f) { OriginGround = new Vector2(16, 16) };
+        static public readonly Sprite HoeHead = new Sprite("hoe/hoeHead", 0.5f) { OriginGround = new Vector2(16, 16) };
 
         static public readonly Sprite PlanksGrayscale = new Sprite("planksbw", new Vector2(16, 32), new Vector2(16, 24));//, new Vector2(16, 28), new Vector2(16, 24));
         static public readonly Sprite BagsGrayscale = new Sprite("soilbagbw", Block.BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(16, 24), Joint = new Vector2(16, 24) };

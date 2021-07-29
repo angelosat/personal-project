@@ -145,6 +145,7 @@ namespace Start_a_Town_
         }
         public bool IsPreference(Entity item)
         {
+            return this.Preferences.Any(p => p.Key.Score(this.Actor, item) > -1 && item.RefID == p.Value);
             return
                 (item.Def.ApparelProperties?.GearType is GearType g && this.GetPreference(ItemRolesGear[g]) == item) ||
                 //(item.Def.ToolProperties?.Ability.Def is ToolAbilityDef t && this.GetPreference(ItemRolesTool[t]) == item);

@@ -8,6 +8,12 @@ namespace Start_a_Town_
         {
 
         }
+        /// <summary>
+        /// returns -1 for completely invalid items
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         abstract public int Score(Actor actor, Entity item);
         public Entity FindBest(Actor actor, IEnumerable<Entity> items)
         {

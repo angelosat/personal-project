@@ -85,11 +85,13 @@ namespace Start_a_Town_
 
         public override void Write(BinaryWriter w)
         {
-            this.Props.Write(w);
+            w.Write(this.Props is not null); // HACK for loading legacy items which lack Props
+            this.Props?.Write(w);
         }
         public override void Read(BinaryReader r)
         {
-            this.Props = Def.GetDef<ToolProps>(r);
+            if (r.ReadBoolean()) // HACK for loading legacy items which lack Props
+                this.Props = Def.GetDef<ToolProps>(r);
         }
     }
 }

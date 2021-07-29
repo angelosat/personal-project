@@ -49,8 +49,6 @@ namespace Start_a_Town_
         public HashSet<int> Rooms = new();
         public IntVec3? Counter;
 
-        readonly protected Dictionary<WorkerRoleDef, WorkerRole> Roles;
-
         public INetwork Net => this.Town.Net;
         public Town Town;
         public MapBase Map => this.Town.Map;

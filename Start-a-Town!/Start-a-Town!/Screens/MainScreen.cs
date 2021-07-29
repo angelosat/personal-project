@@ -22,7 +22,7 @@ namespace Start_a_Town_
             WindowManager.Initialize();
             var mainmenu = new MainMenuWindow(null);
             mainmenu.Show();
-            new Label(GlobalVars.Version).Show();
+            new Label($"{GlobalVars.Version}").Show();
             return this;
         }
         MainScreen()

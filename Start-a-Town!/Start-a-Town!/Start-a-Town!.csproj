@@ -295,10 +295,7 @@
     <Compile Include="Modules\Visitors\Tavern\TaskGiverTavernCustomer.cs" />
     <Compile Include="Modules\Visitors\Tavern\TaskGiverWorkplace.cs" />
     <Compile Include="Modules\Visitors\Tavern\Tavern.Packets.cs" />
-    <Compile Include="Modules\Visitors\WorkerProperties.cs" />
     <Compile Include="Modules\Visitors\WorkerProps.cs" />
-    <Compile Include="Modules\Visitors\WorkerRole.cs" />
-    <Compile Include="Modules\Visitors\WorkerRoleDef.cs" />
     <Compile Include="Modules\Visitors\VisitorCraftRequest.cs" />
     <Compile Include="Modules\Visitors\Workplace.cs" />
     <Compile Include="Modules\Visitors\Quests\QuestGiverProperties.cs" />

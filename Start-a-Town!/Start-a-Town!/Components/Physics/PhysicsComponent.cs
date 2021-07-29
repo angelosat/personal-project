@@ -18,7 +18,8 @@ namespace Start_a_Town_.Components
         public bool Enabled = true;
         const float FrictionFactor = .5f;
         public static float Jump = 0.2f;//-0.04f;// -0.05f; //35f;
-        public static float Friction = 0.02f;// 0.005f; // TODO move this to blocks?
+        public static float Friction = 0.02f;// 0.005f; // TODO move this to blocks? 
+        public bool MidAir { get; private set; } // => this.Parent.Velocity.Z != 0;// HACK because checking velocity.z == 0 returns true at the peak of the jump 
         public const int KnockbackMagnitude = 3;
 
         public PhysicsComponent()
@@ -67,9 +68,7 @@ namespace Start_a_Town_.Components
             var feetcell = map.GetCell(feetposition);
             Block feetblock = feetcell.Block;
             if (!this.Enabled)
-            {
                 return;
-            }
 
             // TODO: make getdensity method on block that takes into account its height
             float density = feetblock.GetDensity(feetcell.BlockData, feetposition);
@@ -82,41 +81,27 @@ namespace Start_a_Town_.Components
 
             velocity = new Vector3(velocity.X * FrictionFactor, velocity.Y * FrictionFactor, velocity.Z);
             if (velocity.LengthSquared() < .0001f)
-            {
                 velocity = Vector3.Zero;
-            }
 
             Vector3 blocktransform = this.GetStandingBlockTransform(map, lastGlobal);
             var origin = parent.Global + blocktransform;
 
             if (velocity.X != 0 || blocktransform.X != 0)
-            {
                 nx = ResolveHorizontalCorners(net, parent, origin, map, box, ref velocity, Vector2.UnitX, nz, out nz).X;
-            }
             else
-            {
                 nx = lastGlobal.X;
-            }
 
             if (velocity.Y != 0 || blocktransform.Y != 0)
-            {
                 ny = ResolveHorizontalCorners(net, parent, origin, map, box, ref velocity, Vector2.UnitY, nz, out nz).Y;
-            }
             else
-            {
                 ny = lastGlobal.Y;
-            }
 
             next = new Vector3(nx, ny, nz);
 
             if (lastGlobal != next)
-            {
                 parent.SetPosition(next);
-            }
             else if (velocity == Vector3.Zero)
-            {
                 this.Enabled = false;
-            }
             this.DetectEntityCollisions(parent, lastGlobal, next);
             // reset speed according to new position to prevent it from accumulating
             parent.Velocity = velocity;
@@ -244,7 +229,7 @@ namespace Start_a_Town_.Components
         {
             var grav = map.Gravity;
             var adjustedGravity = grav;
-            Vector3 global = parent.Global;
+            var global = parent.Global;
             if (speed.Z == 0)
             {
                 // TODO: maybe instead of checking the corners, i check if the box intersects with nearby block boxes?
@@ -254,19 +239,17 @@ namespace Start_a_Town_.Components
                     new Vector3(box.Max.X, box.Min.Y, global.Z),
                     new Vector3(box.Max.X, box.Max.Y, global.Z)
                 };
-                if (corners.All(c =>
+                if (corners.All(c => !map.IsSolid(c + new Vector3(0, 0, adjustedGravity))))
                 {
-                    return !map.IsSolid(c + new Vector3(0, 0, adjustedGravity));
-                }))
-                {
+                    this.MidAir = true;
                     speed.Z = grav;
                     return global.Z + adjustedGravity;
                 }
 
                 return global.Z;
             }
-            Vector3 offset = new Vector3(0, 0, speed.Z);
-            Vector3 next = global + offset;
+            var offset = new Vector3(0, 0, speed.Z);
+            var next = global + offset;
             if (speed.Z < 0)
             {
                 float fallheight = global.Z - next.Z;
@@ -274,7 +257,7 @@ namespace Start_a_Town_.Components
                 {
                     for (int i = 0; i < (int)Math.Ceiling(fallheight); i++)
                     {
-                        Vector3 check = global - new Vector3(0, 0, 1 + i);
+                        var check = global - new Vector3(0, 0, 1 + i);
                         if (IsStandable(map, check))
                         {
                             parent.Net.PostLocalEvent(parent, Message.Types.HitGround, Math.Abs(speed.Z));
@@ -310,6 +293,7 @@ namespace Start_a_Town_.Components
             }
             else
             {
+                this.MidAir = true;
                 // hit on cieling
                 if (map.IsSolid(box.Max + offset))
                 {
@@ -492,6 +476,7 @@ namespace Start_a_Town_.Components
         /// <param name="vector3"></param>
         private void HitGround(GameObject parent, Vector3 vector3)
         {
+            this.MidAir = false;
             parent.Map.EventOccured(Message.Types.EntityHitGround, parent, vector3);
             //parent.PostMessage(new(Message.Types.EntityHitGround));
             parent.Net.PostLocalEvent(parent, Message.Types.HitGround, Math.Abs(vector3.Z));

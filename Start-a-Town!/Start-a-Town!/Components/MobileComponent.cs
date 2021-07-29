@@ -30,6 +30,8 @@ namespace Start_a_Town_.Components
             }
             public void Apply(MobileComponent component)
             {
+                if (!component.Moving)
+                    component.AnimationWalk.Frame = 0;
                 component.AnimationWalk.Weight = this.AnimationWeight;
                 component.AnimationWalk.Speed = this.AnimationSpeed;
             }
@@ -69,7 +71,6 @@ namespace Start_a_Town_.Components
         readonly Animation AnimationCrouch;
 
         public bool Moving;
-
 
         State CurrentState;
         int JumpCooldown;
@@ -147,7 +148,7 @@ namespace Start_a_Town_.Components
         {
             if (parent.Net is Net.Server)
             {
-                Vector3 force = Vector3.Zero;
+                var force = Vector3.Zero;
                 var feetposition = parent.Global + Vector3.UnitZ * 0.1f;
                 var cell = parent.Net.Map.GetCell(feetposition);
                 var block = cell.Block;// parent.Net.Map.GetBlock(parent.Global + Vector3.UnitZ * 0.1f); // to check if entity is in water
@@ -222,12 +223,12 @@ namespace Start_a_Town_.Components
         public override void Tick()
         {
             var parent = this.Parent;
-            bool midair = parent.Velocity.Z != 0;
-
+            var midair = parent.Physics.MidAir;
             if (this.JumpCooldown > 0)
                 this.JumpCooldown--;
 
             this.AnimationJump.Weight = midair ? 1 : 0;
+          
             if (!this.Moving)
                 return;
 

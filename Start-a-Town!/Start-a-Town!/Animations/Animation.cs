@@ -46,7 +46,7 @@ namespace Start_a_Town_.Animations
 
         public override string ToString()
         {
-            return string.Format("{0} f: {1} w: {2}", this.Def.Name, this.Frame, this.Weight);
+            return $"{this.Def.Name} f: {this.Frame} w: {this.Weight}";
         }
 
         public void Restart()

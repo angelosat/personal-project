@@ -41,6 +41,14 @@ namespace Start_a_Town_.UI
             this.ClientSize = PreferredClientSize;
             this.Parent?.OnControlResized(this);
         }
+        public GroupBox AddControlsLineWrap(int width, params ButtonBase[] labels)
+        {
+            return this.AddControlsLineWrap(labels, width);
+        }
+        public GroupBox AddControlsLineWrap(params ButtonBase[] labels)
+        {
+            return this.AddControlsLineWrap(labels as IEnumerable<ButtonBase>);
+        }
         public virtual GroupBox AddControlsLineWrap(IEnumerable<ButtonBase> labels, int width = int.MaxValue)
         {
             var lastControl = this.Controls.LastOrDefault();

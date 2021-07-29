@@ -109,6 +109,19 @@ namespace Start_a_Town_.UI
             var validControls = this.Items.Where(c => this.CurrentFilter(c.Tag as TObject)).ToArray();
             this.AddControlsVertically(Spacing, validControls);
         }
+
+        public Control CreateFilters(params (string name, Func<TObject, bool> filter)[] filters)
+        {
+            Func<TObject, bool> selectedFilter = null;
+
+            return new GroupBox().AddControlsLineWrap(filters.Select(f => new Button(f.name, () => selectFilter(f.filter)) { IsToggledFunc = () => selectedFilter == f.filter }));
+
+            void selectFilter(Func<TObject, bool> filter)
+            {
+                selectedFilter = filter;
+                this.Filter(filter);
+            }
+        }
     }
 }
 

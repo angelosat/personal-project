@@ -164,6 +164,7 @@ namespace Start_a_Town_
         internal void OnTargetSelected(IUISelection info, ISelectable selected)
         {
         }
+
         Control _gui;
         public Control Gui => this._gui ??= this.CreateGui();
         Control CreateGui()
@@ -176,36 +177,18 @@ namespace Start_a_Town_
                 return btn;
             });
 
-            var filters = new GroupBox().AddControlsLineWrap(new[]{
-                new Button("All", ()=>list.Filter(null)),
-                new Button("Visiting", ()=>list.Filter(i=>i.Actor.Exists)),
-                new Button("Away", ()=>list.Filter(i=>!i.Actor.Exists && i.Discovered)),
-                new Button("Unknown", ()=>list.Filter(i=>!i.Discovered)),
-            });
+            Func<VisitorProperties, bool>
+                filterUndiscovered = i => !i.Discovered,
+                filterVisiting = i => i.Actor.Exists,
+                filterAway = i => !i.Actor.Exists && i.Discovered;
+
+            var filters = list.CreateFilters(("All", null), ("Visiting", filterVisiting), ("Away", filterAway), ("Unknown", filterUndiscovered));
+         
             list.Bind(this.ActorsAdventuring);
-            //list.AddItems(this.ActorsAdventuring.ToArray());
-
-            //list.OnGameEventAction = e =>
-            //  {
-            //      switch (e.Type)
-            //      {
-            //          case Components.Message.Types.NewAdventurerCreated:
-            //              var actor = e.Parameters[0] as Actor;
-            //              list.AddItems(this.ActorsAdventuring.Find(v => v.Actor == actor));
-            //              break;
-
-            //          default:
-            //              break;
-            //      }
-            //  };
             box.AddControlsVertically(filters, list);
-            //list.OnShowAction = () =>
-            //{
-            //    list.Clear();
-            //    list.AddItems(this.ActorsAdventuring.ToArray());
-            //};
             return box;
         }
+
         public void ResolveReferences()
         {
             foreach (var props in this.ActorsAdventuring) // i added this to add visitor needs to existing visitors because I wasn't saving them in the needscomponent class
@@ -217,6 +200,8 @@ namespace Start_a_Town_
                         MakeVisitor(actor);
                 if (!actor.Exists) // hacky. in process of finding best way to save unspawned actors
                     this.World.Map.Net.Instantiate(actor);
+                if (actor.IsSpawned)
+                    props.Discovered = true; // HACK
                 props.OffsiteArea = OffsiteAreaDefOf.Forest; // HACK
             }
         }

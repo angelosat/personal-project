@@ -79,10 +79,7 @@ namespace Start_a_Town_
         {
             var actor = this.Actor;
             if (actor.IsSpawned)
-            {
-                this.Discovered = true;
                 return;
-            }
             if (this.OffsiteTick < OffsiteTickLength)
             {
                 this.OffsiteTick++;

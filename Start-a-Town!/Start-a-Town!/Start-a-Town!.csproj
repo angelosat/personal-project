@@ -632,7 +632,6 @@
     <Compile Include="Helpers\PriorityListQueue.cs" />
     <Compile Include="Modules\Towns\Labors\JobsManager.cs" />
     <Compile Include="AI\Labors\JobDef.cs" />
-    <Compile Include="Modules\Towns\Labors\NpcUI.cs" />
     <Compile Include="Modules\Towns\Labors\NpcLogUINew.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.cs" />
     <Compile Include="Modules\Crafting\CraftOrderNew.cs" />

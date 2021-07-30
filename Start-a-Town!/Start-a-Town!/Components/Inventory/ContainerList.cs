@@ -37,8 +37,9 @@ namespace Start_a_Town_
                         .AddColumn("name", 96, o => new Label(() => o.Name, () => SelectionManager.Select(o)) { TooltipFunc = o.GetInventoryTooltip })
                         .AddColumn("weight", 32, o => new Label(() => o.TotalWeight.ToString("0.# kg")))
                         .AddColumn("drop", Icon.Cross.Width, o => IconButton.CreateSmall(Icon.Cross, delegate { PacketInventoryDrop.Send(o.Net, this.Parent.RefID, o.RefID, o.StackSize); }, "Drop"));
-                    var box = new ScrollableBoxNewNew(256, 256).AddControls(_gui);
+                    //var box = new ScrollableBoxNewNew(256, 256).AddControls(_gui);
                 }
+                return _gui.Bind(this.Contents);
                 return _gui.Bind(this.Contents).Parent;
             }
         }

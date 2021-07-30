@@ -47,7 +47,7 @@ namespace Start_a_Town_.UI
                 case TargetType.Entity:
                     if (t.Object.HasComponent<NpcComponent>())
                     {
-                        var win = new AI.NpcUI(t.Object as Actor).ToWindow(t.Object.Name);
+                        var win = new Window() { Title = "not implemented" };// new AI.NpcUI(t.Object as Actor).ToWindow(t.Object.Name);
                         win.SmartPosition();
                         win.Show();
                         OpenWindows[t.Object] = win;
@@ -103,7 +103,7 @@ namespace Start_a_Town_.UI
         {
             if (obj.HasComponent<NpcComponent>())
             {
-                var win = new AI.NpcUI(obj as Actor).ToWindow(obj.Name);
+                var win = new Window() { Title = "not implemented" };// new AI.NpcUI(obj as Actor).ToWindow(obj.Name);
                 win.SmartPosition();
                 win.Show();
                 return win;

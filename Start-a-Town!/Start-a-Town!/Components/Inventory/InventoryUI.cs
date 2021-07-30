@@ -2,6 +2,7 @@
 using Start_a_Town_.UI;
 using Start_a_Town_.Components;
 using System.Linq;
+using System;
 
 namespace Start_a_Town_
 {
@@ -10,22 +11,28 @@ namespace Start_a_Town_
         static InventoryUI Instance;
         EquipmentUI EquipmentSlots;
         static readonly int LineMax = 4;
-        Panel PanelSlots;
+        ScrollableBoxNewNew PanelSlots;
+        Actor Actor => this.Tag as Actor;
+        GuiCharacterCustomization colorsui;
+        static InventoryUI Gui;
+
         public InventoryUI()
         {
-            this.PanelSlots = new Panel() { AutoSize = true };
             EquipmentSlots = new EquipmentUI();
+            this.InitInvList();
         }
+        [Obsolete]
         public InventoryUI(Actor actor)
         {
-            this.PanelSlots = new Panel() { AutoSize = true };
-            //this.InitInvSlots(actor);
-            this.InitInvList(actor);
+            throw new System.Exception();
+            this.InitInvList();
         }
         public void Refresh(Actor actor)
         {
-            //this.InitInvSlots(actor);
-            this.InitInvList(actor);
+            this.Tag = actor;
+            this.PanelSlots.ClearControls();
+            this.PanelSlots.AddControls(actor.Inventory.Slots.Gui);
+            colorsui.SetTag(actor);
         }
         private void InitInvSlots(Actor actor)
         {
@@ -80,36 +87,29 @@ namespace Start_a_Town_
             boxbtns.AddControlsVertically(btncolors, btnprefs);
             this.AddControlsBottomLeft(boxbtns);
         }
-        private void InitInvList(Actor actor)
+        private void InitInvList()
         {
-            var inv = actor.Inventory;
-
-            Controls.Remove(this.PanelSlots);
-
-            this.PanelSlots.Controls.Clear();
-            this.PanelSlots.Controls.Add(inv.Slots.Gui);
-
-            this.AddControls(this.PanelSlots);
-
+            this.PanelSlots = new ScrollableBoxNewNew(256, 256);
             var customizationClient = new GroupBox();
-            var colorsui = new GuiCharacterCustomization();
-            colorsui.SetTag(actor);
-            customizationClient.AddControls(colorsui);
-            customizationClient.AddControlsBottomLeft(new Button("Apply", customizationClient.Width) { LeftClickAction = () => PacketEditAppearance.Send(actor, colorsui.Colors) });
+            colorsui = new GuiCharacterCustomization();
 
-            var uicolors = new Window($"Edit {actor.Name}", customizationClient) { Movable = true, Closable = true };
+            customizationClient.AddControls(colorsui);
+            customizationClient.AddControlsBottomLeft(new Button("Apply", () => PacketEditAppearance.Send(this.Actor, colorsui.Colors), customizationClient.Width));
+
+            var uicolors = new Window($"Edit colors", customizationClient) { Movable = true, Closable = true }; //Edit {this.Actor.Name}
 
             var boxbtns = new GroupBox();
             var btncolors = new Button("Change colors", () => uicolors.SetLocation(UIManager.Mouse).Toggle(), 128);
-            var btnprefs = new Button("Item Preferences", () => actor.ItemPreferences.Gui.Toggle(), 128);
+            var btnprefs = new Button("Item Preferences", () => this.Actor.ItemPreferences.Gui.Toggle(), 128);
             boxbtns.AddControlsVertically(btncolors, btnprefs);
-            this.AddControlsBottomLeft(boxbtns);
+            this.AddControlsVertically(
+                this.PanelSlots.ToPanel(),
+                boxbtns);
         }
-
         static public Control GetGui(Actor actor)
         {
             Window window;
-            if (Instance == null)
+            if (Instance is null)
             {
                 Instance = new InventoryUI();
                 window = new Window(Instance) { Closable = true, Movable = true };
@@ -119,33 +119,31 @@ namespace Start_a_Town_
                 window = Instance.GetWindow();
             Instance.Tag = actor;
             window.Title = string.Format("{0} inventory", actor.Name);
-            //Instance.InitInvSlots(actor);
-            Instance.InitInvList(actor);
-            Instance.RemoveControls(Instance.EquipmentSlots);
-            Instance.EquipmentSlots.Refresh(actor);
-            Instance.EquipmentSlots.Location = Instance.PanelSlots.TopRight;
-            Instance.AddControls(Instance.EquipmentSlots);
+            Instance.Refresh(actor);
+            //Instance.RemoveControls(Instance.EquipmentSlots);
+            //Instance.EquipmentSlots.Refresh(actor);
+            //Instance.EquipmentSlots.Location = Instance.PanelSlots.TopRight;
+            //Instance.AddControls(Instance.EquipmentSlots);
 
             window.Validate(true);
             return window;
         }
-        static InventoryUI GUI;
         static public Control GetGUI()
         {
-            if(GUI == null)
+            if(Gui == null)
             {
-                GUI = new InventoryUI() { Name = "Inventory" };
-                GUI.SetGetDataAction(o =>
+                Gui = new InventoryUI() { Name = "Inventory" };
+                Gui.SetGetDataAction(o =>
                 {
                     var actor = o as Actor;
-                    GUI.InitInvSlots(actor);
-                    GUI.RemoveControls(GUI.EquipmentSlots);
-                    GUI.EquipmentSlots.Refresh(actor);
-                    GUI.EquipmentSlots.Location = GUI.PanelSlots.TopRight;
-                    GUI.AddControls(GUI.EquipmentSlots);
+                    Gui.InitInvSlots(actor);
+                    Gui.RemoveControls(Gui.EquipmentSlots);
+                    Gui.EquipmentSlots.Refresh(actor);
+                    Gui.EquipmentSlots.Location = Gui.PanelSlots.TopRight;
+                    Gui.AddControls(Gui.EquipmentSlots);
                 });
             }
-            return GUI;
+            return Gui;
         }
         
         internal override void OnSelectedTargetChanged(TargetArgs target)

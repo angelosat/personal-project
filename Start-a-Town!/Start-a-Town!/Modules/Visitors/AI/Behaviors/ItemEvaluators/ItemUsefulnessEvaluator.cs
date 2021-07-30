@@ -12,7 +12,7 @@ namespace Start_a_Town_.AI
                 return 0;
             var ability = tool.Ability;
             var similarOwnedItem = actor.Inventory.FindItems((Entity item) => item.Def.ToolProperties?.Ability.Def == ability.Def).FirstOrDefault();
-            var benefit = ability.Efficiency - (similarOwnedItem?.Def.ToolProperties.Ability.Efficiency ?? 0); // TODO get total effeciency (multiplied by item level/quality?
+            var benefit = ability.Effectiveness - (similarOwnedItem?.Def.ToolProperties.Ability.Effectiveness ?? 0); // TODO get total effeciency (multiplied by item level/quality?
             return benefit;
         }
 

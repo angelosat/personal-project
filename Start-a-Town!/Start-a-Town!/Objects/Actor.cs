@@ -508,7 +508,7 @@ namespace Start_a_Town_
                 return 1;
 
             var ability = tool.ToolComponent.Props.Ability;
-            return ability.Efficiency;
+            return ability.Effectiveness;
         }
         public int EvaluateItem(Entity item)
         {

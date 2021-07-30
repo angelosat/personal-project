@@ -58,7 +58,7 @@ namespace Start_a_Town_.Crafting
         }
         internal override void OnToolContact(Actor a, TargetArgs t)
         {
-            var work = StatDefOf.ToolEfficiency.GetValue(a);
+            var work = StatDefOf.ToolEffectiveness.GetValue(a);
             this.Progress.Value += work * BaseWorkAmount;// 25;
         }
         

@@ -3,12 +3,12 @@
     public struct ToolAbility
     {
         public readonly ToolAbilityDef Def;
-        public int Efficiency;
+        public int Effectiveness;
 
         public ToolAbility(ToolAbilityDef def, int efficiency)
         {
             this.Def = def;
-            this.Efficiency = efficiency;
+            this.Effectiveness = efficiency;
         }
     }
 }

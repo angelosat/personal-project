@@ -25,11 +25,14 @@ namespace Start_a_Town_
             foreach (var r in ItemRolesTool.Values.Concat(ItemRolesGear.Values))
             {
                 RegistryByName[r.ToString()] = r;
-                RegistryByTag[r.Context] = r;
+                RegistryByContext[r.Context] = r;
             }
         }
         static readonly Dictionary<string, ItemRole> RegistryByName = new();
-        static readonly Dictionary<IItemPreferenceContext, ItemRole> RegistryByTag = new();
+        static readonly Dictionary<IItemPreferenceContext, ItemRole> RegistryByContext = new();
+
+        static readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
+        static readonly Dictionary<ToolAbilityDef, ItemRole> ItemRolesTool = new();
 
         static void GenerateItemRolesGear()
         {
@@ -43,9 +46,7 @@ namespace Start_a_Town_
             foreach (var d in defs)
                 ItemRolesTool.Add(d, new ItemRoleTool(d));
         }
-
-        public static readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
-        public static readonly Dictionary<ToolAbilityDef, ItemRole> ItemRolesTool = new();
+       
         readonly Dictionary<IItemPreferenceContext, ItemPreference> PreferencesNew = new();
         readonly ObservableCollection<ItemPreference> PreferencesObs = new();
         readonly HashSet<int> ToDiscard = new();
@@ -95,9 +96,15 @@ namespace Start_a_Town_
             //return refid > 0 ? this.Actor.Net.GetNetworkObject<Entity>(refid) : null;
         }
 
-        public Entity GetPreference(IItemPreferenceContext tag)
+        public Entity GetPreference(IItemPreferenceContext context, out int score)
         {
-            return this.GetPreference(RegistryByTag[tag]);
+            var p = this.PreferencesNew[context];
+            score = p.Score;
+            return p.Item;
+        }
+        public Entity GetPreference(IItemPreferenceContext context)
+        {
+            return this.GetPreference(RegistryByContext[context]);
         }
 
         public void ResetPreferences()
@@ -202,8 +209,9 @@ namespace Start_a_Town_
             {
                 foreach (var p in pt.LoadList<ItemPreference>())
                 {
-                    this.PreferencesNew[p.Role.Context].CopyFrom(p);
-                    this.PreferencesObs.Add(this.PreferencesNew[p.Role.Context]);
+                    var existing = this.PreferencesNew[p.Role.Context];
+                    existing.CopyFrom(p);
+                    this.PreferencesObs.Add(existing);
                 }
             });
 
@@ -247,8 +255,14 @@ namespace Start_a_Town_
         public void ResolveReferences()
         {
             foreach (var p in this.PreferencesObs)
-                p.ResolveReferences(this.Actor.Net);
+                p.ResolveReferences(this.Actor);
         }
+
+        public int GetScore(IItemPreferenceContext context, Entity item)
+        {
+            return RegistryByContext[context].Score(this.Actor, item);
+        }
+
 
         [EnsureStaticCtorCall]
         static class Packets

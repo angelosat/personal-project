@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Linq;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    static public class StatDefOf
+    public static class StatDefOf
     {
-        static public readonly StatNewDef MaxHaulWeight = new("MaxHaulWeight", a => a.GetAttribute(AttributeDef.Strength)?.Level ?? 0)
+        public static readonly StatNewDef MaxHaulWeight = new("MaxHaulWeight", a => a.GetAttribute(AttributeDef.Strength)?.Level ?? 0)
         {
             Description = "Exceeding the limit will drain stamina",
             Label = "Haul weight limit",
         };
-        static public readonly StatNewDef Encumberance = new(
+        public static readonly StatNewDef Encumberance = new(
             "Encumberance",
             a =>
             {
@@ -28,14 +28,14 @@ namespace Start_a_Town_
             Label = "Encumberance",
         };
 
-        static public readonly StatNewDef WalkSpeed = new("WalkSpeed")
+        public static readonly StatNewDef WalkSpeed = new("WalkSpeed")
         {
             Description = "Speed of walking",
             Label = "Walk speed",
             Type = StatNewDef.Types.Percentile
         };
 
-        static public readonly StatNewDef StaminaThresholdForWork = new("StaminaThresholdForWork",
+        public static readonly StatNewDef StaminaThresholdForWork = new("StaminaThresholdForWork",
             a =>
             {
                 var actor = a as Actor;
@@ -52,7 +52,7 @@ namespace Start_a_Town_
             Label = "Work Stamina Threshold",
         };
 
-        static public readonly StatNewDef MoodChangeRate = new("MoodChangeRate",
+        public static readonly StatNewDef MoodChangeRate = new("MoodChangeRate",
             a =>
             {
                 var actor = a as Actor;
@@ -65,7 +65,7 @@ namespace Start_a_Town_
             Label = "Mood change rate",
         };
 
-        static public readonly StatNewDef Armor = new("Armor",
+        public static readonly StatNewDef Armor = new("Armor",
               a =>
               {
                   var actor = a as Actor;
@@ -80,7 +80,7 @@ namespace Start_a_Town_
         };
 
 
-        static public readonly StatNewDef ToolEfficiency = new("ToolEfficiecy",
+        public static readonly StatNewDef ToolEffectiveness = new("ToolEfficiecy",
               a =>
               {
                   var tool = a as Entity;
@@ -88,7 +88,7 @@ namespace Start_a_Town_
                   if (material is null)
                       return 1;
                   var matStrength = material.Density;
-                  var efficiency = tool.Def.ToolProperties?.Ability.Efficiency ?? tool.GetComponent<ToolAbilityComponent>().Props.Ability.Efficiency;
+                  var efficiency = tool.Def.ToolProperties?.Ability.Effectiveness ?? tool.GetComponent<ToolAbilityComponent>().Props.Ability.Effectiveness;
                   var total = (float)efficiency * matStrength;
                   total *= a.Quality.Multiplier;
                   return total;
@@ -98,7 +98,7 @@ namespace Start_a_Town_
             Label = "Tool efficiency",
             Type = StatNewDef.Types.Scalar
         };
-        static public readonly StatNewDef ToolSpeed = new("ToolSpeed",
+        public static readonly StatNewDef ToolSpeed = new("ToolSpeed",
               a =>
               {
                   var tool = a as Entity;
@@ -118,7 +118,7 @@ namespace Start_a_Town_
             Type = StatNewDef.Types.Scalar,
             StringFormat = "+##0%"
         };
-        static public readonly StatNewDef WorkSpeed = new("WorkSpeed",
+        public static readonly StatNewDef WorkSpeed = new("WorkSpeed",
               a =>
               {
                   var actor = a as Actor;
@@ -132,7 +132,7 @@ namespace Start_a_Town_
             Type = StatNewDef.Types.Scalar,
             StringFormat = "+##0%"
         };
-        static public readonly StatNewDef[] ToolStatPackage = { ToolEfficiency, ToolSpeed };
-        static public readonly StatNewDef[] NpcStatPackage = { MaxHaulWeight, Encumberance, WalkSpeed, Armor };
+        public static readonly StatNewDef[] ToolStatPackage = { ToolEffectiveness, ToolSpeed };
+        public static readonly StatNewDef[] NpcStatPackage = { MaxHaulWeight, Encumberance, WalkSpeed, Armor };
     }
 }

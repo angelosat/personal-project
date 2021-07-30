@@ -17,7 +17,8 @@
                 return -1;
             if (ability.Value.Def != this.ToolAbility)
                 return -1;
-            return ability.Value.Efficiency;
+            return (int)StatDefOf.ToolEffectiveness.GetValue(item);
+            return ability.Value.Effectiveness;
         }
         public override string ToString()
         {

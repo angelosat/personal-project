@@ -83,7 +83,7 @@ namespace Start_a_Town_
                 box.AddControlsBottomLeft(ToolAbilityDef.GetUI(s.Key, s.Value));
             var ability = parent.Def.ToolProperties?.Ability ?? this.Props?.Ability;
             if (ability != null)
-                box.AddControlsBottomLeft(ToolAbilityDef.GetUI(ability.Value.Def.ID, ability.Value.Efficiency));
+                box.AddControlsBottomLeft(ToolAbilityDef.GetUI(ability.Value.Def.ID, ability.Value.Effectiveness));
             return box;
         }
 

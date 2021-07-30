@@ -72,7 +72,7 @@ namespace Start_a_Town_
             customizationClient.AddControls(colorsui);
             customizationClient.AddControlsBottomLeft(new Button("Apply", customizationClient.Width) { LeftClickAction = () => PacketEditAppearance.Send(actor, colorsui.Colors) });
 
-            var uicolors = new Window(string.Format("Edit {0}", actor.Name), customizationClient) { Movable = true, Closable = true };
+            var uicolors = new Window($"Edit {actor.Name}", customizationClient) { Movable = true, Closable = true };
 
             var boxbtns = new GroupBox();
             var btncolors = new Button("Change colors",() => uicolors.SetLocation(UIManager.Mouse).Toggle(), 128);

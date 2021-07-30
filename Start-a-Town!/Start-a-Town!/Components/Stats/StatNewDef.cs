@@ -12,7 +12,7 @@ namespace Start_a_Town_
             {
             }
             protected abstract float BaseGet(GameObject parent);
-            protected List<Expression> Expressions = new List<Expression>();
+            protected List<Expression> Expressions = new();
 
             public float Get(GameObject parent)
             {
@@ -114,7 +114,7 @@ namespace Start_a_Town_
         {
             return new Label()
             {
-                TextFunc = () => string.Format("{0}: {1}", this.Name, this.GetValue(parent)),
+                TextFunc = () => $"{this.Name}: {this.GetValue(parent)}",
             };
         }
     }

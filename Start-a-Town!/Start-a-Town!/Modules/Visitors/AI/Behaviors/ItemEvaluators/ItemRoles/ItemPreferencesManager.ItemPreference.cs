@@ -9,7 +9,12 @@ namespace Start_a_Town_
         class ItemPreference : ISaveable, ISerializable
         {
             public ItemRole Role;
-            public int ItemRefId { get; private set; }
+            int _itemRefId;
+            public int ItemRefId
+            {
+                get => this.Item?.RefID ?? this._itemRefId; 
+                private set { this._itemRefId = value; } 
+            }
             public Entity Item;
             public int Score;
             public ItemPreference()
@@ -19,8 +24,8 @@ namespace Start_a_Town_
             public ItemPreference(ItemRole role)
             {
                 this.Role = role;
-                this.ItemRefId = 0;
-                this.Score = 0;
+                //this.ItemRefId = 0;
+                //this.Score = 0;
             }
             public void CopyFrom(ItemPreference pref)
             {
@@ -32,7 +37,7 @@ namespace Start_a_Town_
             }
             public override string ToString()
             {
-                return $"{Role}:{Item?.ToString() ?? ItemRefId.ToString()}:{Score}";
+                return $"{Role}:{Item?.DebugName ?? ItemRefId.ToString()}:{Score}";
             }
 
             public void Write(BinaryWriter w)

@@ -12,6 +12,7 @@ namespace Start_a_Town_
         IEnumerable<Entity> GetJunk();
         void RemoveJunk(Entity entity);
         bool AddPreference(Entity item);
+        void AddPreference(IItemPreferenceContext context, Entity item, int score);
         void RemovePreference(IItemPreferenceContext context);
         bool IsPreference(Entity item);
         Control Gui { get; }

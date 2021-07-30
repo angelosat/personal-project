@@ -28,13 +28,13 @@ namespace Start_a_Town_
                     var scoredTools = potentialTools.Select(i => new { item = i, score = itemmanager.GetScore(toolUse, i) }).OrderByDescending(i => i.score);
                     foreach (var tool in scoredTools)
                     {
-                        if (tool.score < existingScore)
+                        if (tool.score <= existingScore)
                             break;
                         if (!actor.CanReserve(tool.item))
                             continue;
                         if (!actor.CanReach(tool.item))
                             continue;
-                        itemmanager.AddPreference(tool.item);
+                        itemmanager.AddPreference(toolUse, tool.item, tool.score);
                         return new AITask(typeof(TaskBehaviorStoreInInventory)) { TargetA = tool.item, AmountA = 1 };
                     }
                 }

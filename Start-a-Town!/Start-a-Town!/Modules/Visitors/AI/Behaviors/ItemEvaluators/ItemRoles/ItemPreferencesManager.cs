@@ -62,7 +62,7 @@ namespace Start_a_Town_
         private void PreferencesObs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (this.Actor.Net is Server)
-                Packets.Sync(this.Actor.Net, this.Actor, e.NewItems, e.OldItems);
+                Packets.Sync(this.Actor.Net, this.Actor, e.OldItems, e.NewItems);
         }
 
         private void PopulateRoles()
@@ -92,8 +92,6 @@ namespace Start_a_Town_
         private Entity GetPreference(ItemRole role)
         {
             return this.PreferencesNew[role.Context].Item;
-            //var refid = this.PreferencesNew[role.Context].ItemRefId;
-            //return refid > 0 ? this.Actor.Net.GetNetworkObject<Entity>(refid) : null;
         }
 
         public Entity GetPreference(IItemPreferenceContext context, out int score)
@@ -171,7 +169,16 @@ namespace Start_a_Town_
                 this.PreferencesObs.Add(pref);
             return true;
         }
-        
+        public void AddPreference(IItemPreferenceContext context, Entity item, int score)
+        {
+            var pref = this.PreferencesNew[context];
+            pref.Item = item;
+            pref.Score = score;
+            if (this.PreferencesObs.Contains(pref))
+                this.PreferencesObs.Remove(pref);
+            this.PreferencesObs.Add(pref); // HACK to trigger observable syncing
+        }
+
         public void RemovePreference(IItemPreferenceContext tag)
         {
             this.PreferencesNew[tag].Clear();
@@ -186,9 +193,9 @@ namespace Start_a_Town_
         Control GetGui()
         {
             var table = new TableObservable<ItemPreference>()
-                .AddColumn("role", 160, p => new Label(p.Role.Context))
-                .AddColumn("item", 96, p => new Label(p.Item?.ToString() ?? "none", () => p.Item?.Select()))
-                .AddColumn("score", 64, p => new Label(p.Score.ToString()))
+                .AddColumn("role", 128, p => new Label(p.Role.Context))
+                .AddColumn("item", 128, p => new Label(() => p.Item?.DebugName ?? "none", () => p.Item?.Select()))
+                .AddColumn("score", 64, p => new Label(() => p.Score.ToString()))
                 .Bind(this.PreferencesObs);
             var box = new ScrollableBoxNewNew(table.RowWidth, table.RowHeight * 16, ScrollModes.Vertical)
                 .AddControls(table)
@@ -239,6 +246,7 @@ namespace Start_a_Town_
                 throw new Exception();
             var existing = this.PreferencesNew[pref.Role.Context];
             existing.CopyFrom(pref);
+            existing.ResolveReferences(this.Actor);
             if (!this.PreferencesObs.Contains(existing))
                 this.PreferencesObs.Add(existing);
         }
@@ -263,31 +271,31 @@ namespace Start_a_Town_
             return RegistryByContext[context].Score(this.Actor, item);
         }
 
-
+       
         [EnsureStaticCtorCall]
         static class Packets
         {
-            static readonly int pSyncPrefs;
+            static readonly int pSyncPrefsAll;
             static Packets()
             {
-                pSyncPrefs = Network.RegisterPacketHandler(Receive);
+                pSyncPrefsAll = Network.RegisterPacketHandler(Receive);
             }
 
-            internal static void Sync(INetwork net, Actor actor, System.Collections.IList newItems, System.Collections.IList oldItems)
+            internal static void Sync(INetwork net, Actor actor, System.Collections.IList oldItems, System.Collections.IList newItems)
             {
                 var w = net.GetOutgoingStream();
-                w.Write(pSyncPrefs);
+                w.Write(pSyncPrefsAll);
                 w.Write(actor.RefID);
-
-                if (newItems is null)
-                    w.Write(0);
-                else
-                    newItems.Cast<ItemPreference>().ToList().Write(w);
 
                 if (oldItems is null)
                     w.Write(0);
                 else
                     oldItems.Cast<ItemPreference>().ToList().Write(w);
+
+                if (newItems is null)
+                    w.Write(0);
+                else
+                    newItems.Cast<ItemPreference>().ToList().Write(w);
             }
 
             private static void Receive(INetwork net, BinaryReader r)
@@ -296,12 +304,13 @@ namespace Start_a_Town_
                     throw new Exception();
                 var actor = net.GetNetworkObject<Actor>(r.ReadInt32());
                 var prefs = actor.ItemPreferences as ItemPreferencesManager;
-                var newItems = new List<ItemPreference>().Read(r);
                 var oldItems = new List<ItemPreference>().Read(r);
-                foreach (var p in newItems)
-                    prefs.SyncAddPref(p);
+                var newItems = new List<ItemPreference>().Read(r);
+              
                 foreach (var p in oldItems)
                     prefs.SyncRemovePref(p);
+                foreach (var p in newItems)
+                    prefs.SyncAddPref(p);
             }
         }
     }

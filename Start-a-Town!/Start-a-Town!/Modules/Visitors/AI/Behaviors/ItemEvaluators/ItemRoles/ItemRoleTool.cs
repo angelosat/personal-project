@@ -3,7 +3,7 @@
     class ItemRoleTool : ItemRole
     {
         public ToolAbilityDef ToolAbility;
-        public override object Tag => this.ToolAbility;
+        public override IItemPreferenceContext Tag => this.ToolAbility;
 
         public ItemRoleTool(ToolAbilityDef ttype)
         {

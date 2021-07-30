@@ -2,7 +2,7 @@
 
 namespace Start_a_Town_
 {
-    public sealed class GearType : Def
+    public sealed class GearType : Def, IItemPreferenceContext
     {
         public enum Types { 
             None, 

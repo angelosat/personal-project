@@ -2,15 +2,15 @@
 
 namespace Start_a_Town_
 {
+    public interface IItemPreferenceContext
+    { }
     public interface IItemPreferencesManager : ISaveable, ISerializable
     {
-        //Entity GetPreference(GearType gt);
-        //Entity GetPreference(ToolAbilityDef toolUse);
-        Entity GetPreference(object tag);
+        Entity GetPreference(IItemPreferenceContext tag);
         IEnumerable<Entity> GetJunk();
         void RemoveJunk(Entity entity);
         bool AddPreference(Entity item);
-        void RemovePreference(ToolAbilityDef toolUse);
+        void RemovePreference(IItemPreferenceContext tag);
         bool IsPreference(Entity item);
     }
 }

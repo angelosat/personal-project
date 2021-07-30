@@ -17,10 +17,17 @@ namespace Start_a_Town_
             GenerateItemRolesGear();
             GenerateItemRolesTools();
 
+            // TODO no need to initialize each actor's preferences with empty roles?
+            // TODO find way to avoid checking every role of the same type for items that are invalid for said role type, for example don't check all tool roles for non-tool items
             foreach (var r in ItemRolesTool.Values.Concat(ItemRolesGear.Values))
-                Registry[r.ToString()] = r;
+            {
+                RegistryByName[r.ToString()] = r;
+                RegistryByTag[r.Tag] = r;
+            }
         }
-        static readonly Dictionary<string, ItemRole> Registry = new();
+        static readonly Dictionary<string, ItemRole> RegistryByName = new();
+        static readonly Dictionary<IItemPreferenceContext, ItemRole> RegistryByTag = new();
+
         static void GenerateItemRolesGear()
         {
             var geardefs = GearType.Dictionary.Values;
@@ -33,12 +40,11 @@ namespace Start_a_Town_
             foreach (var d in defs)
                 ItemRolesTool.Add(d, new ItemRoleTool(d));
         }
-        
+
         static public readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
         static public readonly Dictionary<ToolAbilityDef, ItemRole> ItemRolesTool = new();
-        readonly Dictionary<ItemRole, ItemPreference> PreferencesNew = new();
+        readonly Dictionary<IItemPreferenceContext, ItemPreference> PreferencesNew = new();
         readonly HashSet<int> ToDiscard = new();
-        readonly HashSet<Entity> Items = new();
         readonly Actor Actor;
         public ItemPreferencesManager(Actor actor)
         {
@@ -49,7 +55,7 @@ namespace Start_a_Town_
         private void PopulateRoles()
         {
             foreach (var r in ItemRolesTool.Values.Concat(ItemRolesGear.Values))
-                this.PreferencesNew.Add(r, new(r));
+                this.PreferencesNew.Add(r.Tag, new(r));
         }
         public void HandleItem(Entity item)
         {
@@ -70,42 +76,15 @@ namespace Start_a_Town_
                 this.ToDiscard.Add(item.RefID);
         }
 
-        //public void HandleItem(Entity item)
-        //{
-        //    foreach (var role in this.Preferences.Keys)
-        //    {
-        //        var score = role.Score(this.Actor, item);
-        //        if (score < 0)
-        //            continue;
-        //        var existingItemID = this.Preferences[role];
-        //        var existingItem = existingItemID != -1 ? this.Actor.Net.GetNetworkObject<Entity>(existingItemID) : null;
-        //        var existingScore = existingItem != null ? role.Score(this.Actor, existingItem) : 0;
-        //        if (score > existingScore)
-        //        {
-        //            SetItemPreference(item, role);
-        //            return; // TODO check 
-        //        }
-        //    }
-        //    if (!this.IsUseful(item))
-        //        this.ToDiscard.Add(item.RefID);
-        //}
-
         private Entity GetPreference(ItemRole role)
         {
-            var refid = this.PreferencesNew[role].ItemRefId;
+            var refid = this.PreferencesNew[role.Tag].ItemRefId;
             return refid > 0 ? this.Actor.Net.GetNetworkObject<Entity>(refid) : null;
         }
-        //public Entity GetPreference(GearType gt)
-        //{
-        //    return this.GetPreference(ItemRolesGear[gt]);
-        //}
-        //public Entity GetPreference(ToolAbilityDef def)
-        //{
-        //    return this.GetPreference(ItemRolesTool[def]);
-        //}
-        public Entity GetPreference(object tag)
+
+        public Entity GetPreference(IItemPreferenceContext tag)
         {
-            return this.GetPreference(Registry.Values.First(r => r.Tag == tag));
+            return this.GetPreference(RegistryByTag[tag]);
         }
 
         public void ResetPreferences()
@@ -118,7 +97,7 @@ namespace Start_a_Town_
         {
             var items = this.Actor.Inventory.GetItems();
             foreach (var i in items)
-                if(!this.IsUseful(i))
+                if (!this.IsUseful(i))
                     yield return i;
         }
         public bool IsUseful(Entity item)
@@ -165,15 +144,15 @@ namespace Start_a_Town_
             if (!scored.Any())
                 return false;
             var bestRole = scored.First();
-            var pref = this.PreferencesNew[bestRole.r];
+            var pref = this.PreferencesNew[bestRole.r.Tag];
             pref.ItemRefId = item.RefID;
             pref.Score = bestRole.Item2;
             return true;
         }
-       
-        public void RemovePreference(ToolAbilityDef toolUse)
+
+        public void RemovePreference(IItemPreferenceContext tag)
         {
-            this.PreferencesNew[ItemRolesTool[toolUse]].Clear();
+            this.PreferencesNew[tag].Clear();
         }
         public bool IsPreference(Entity item)
         {
@@ -192,7 +171,7 @@ namespace Start_a_Town_
             tag.TryGetTag("Preferences", pt =>
             {
                 foreach (var p in pt.LoadList<ItemPreference>())
-                    this.PreferencesNew[p.Role].CopyFrom(p);
+                    this.PreferencesNew[p.Role.Tag].CopyFrom(p);
             });
 
             return this;
@@ -261,7 +240,7 @@ namespace Start_a_Town_
 
             public ISaveable Load(SaveTag tag)
             {
-                this.Role = Registry[(string)tag["Role"].Value];
+                this.Role = RegistryByName[(string)tag["Role"].Value];
                 this.ItemRefId = (int)tag["ItemRefId"].Value;
                 this.Score = (int)tag["Score"].Value;
                 return this;

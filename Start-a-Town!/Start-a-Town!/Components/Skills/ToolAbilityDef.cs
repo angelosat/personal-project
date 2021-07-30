@@ -5,7 +5,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public class ToolAbilityDef : Def
+    public class ToolAbilityDef : Def, IItemPreferenceContext
     {
         static int _IDSequence = "skills".GetHashCode() >> 2;
         public static int IDSequence { get { return _IDSequence++; } }

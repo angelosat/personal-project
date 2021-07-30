@@ -3,7 +3,7 @@
     class ItemRoleGear : ItemRole
     {
         public GearType GearType;
-        public override object Tag => this.GearType;
+        public override IItemPreferenceContext Tag => this.GearType;
 
         public ItemRoleGear(GearType gtype)
         {
@@ -14,7 +14,7 @@
         {
             var props = item.Def.ApparelProperties;
             if (props?.GearType != this.GearType)
-                return 0;
+                return -1;
             return props.ArmorValue;
         }
         public override string ToString()

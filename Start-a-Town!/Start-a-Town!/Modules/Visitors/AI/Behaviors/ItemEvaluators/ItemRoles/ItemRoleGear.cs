@@ -17,7 +17,7 @@
         }
         public override string ToString()
         {
-            return $"{base.ToString()}:{this.GearType.Name}";
+            return $"{this.GetType().Name}:{this.GearType.Name}";
         }
     }
 }

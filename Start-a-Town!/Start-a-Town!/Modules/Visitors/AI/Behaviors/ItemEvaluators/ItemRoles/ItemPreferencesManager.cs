@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
+    [EnsureStaticCtorCall]
     class ItemPreferencesManager : IItemPreferencesManager, ISaveable, ISerializable
     {
         static ItemPreferencesManager()
@@ -19,7 +20,7 @@ namespace Start_a_Town_
             foreach (var r in ItemRolesTool.Values.Concat(ItemRolesGear.Values))
                 Registry[r.ToString()] = r;
         }
-        static Dictionary<string, ItemRole> Registry = new();
+        static readonly Dictionary<string, ItemRole> Registry = new();
         static void GenerateItemRolesGear()
         {
             var geardefs = GearType.Dictionary.Values;
@@ -35,7 +36,6 @@ namespace Start_a_Town_
         
         static public readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
         static public readonly Dictionary<ToolAbilityDef, ItemRole> ItemRolesTool = new();
-        readonly Dictionary<ItemRole, int> Preferences = new();
         readonly Dictionary<ItemRole, ItemPreference> PreferencesNew = new();
         readonly HashSet<int> ToDiscard = new();
         readonly HashSet<Entity> Items = new();
@@ -49,25 +49,20 @@ namespace Start_a_Town_
         private void PopulateRoles()
         {
             foreach (var r in ItemRolesTool.Values.Concat(ItemRolesGear.Values))
-            {
-                this.Preferences.Add(r, -1);
-                this.PreferencesNew.Add(r, default);
-            }
+                this.PreferencesNew.Add(r, new(r));
         }
-
         public void HandleItem(Entity item)
         {
-            foreach (var role in this.Preferences.Keys)
+            foreach (var pref in this.PreferencesNew.Values)
             {
+                var role = pref.Role;
                 var score = role.Score(this.Actor, item);
                 if (score < 0)
                     continue;
-                var existingItemID = this.Preferences[role];
-                var existingItem = existingItemID != -1 ? this.Actor.Net.GetNetworkObject<Entity>(existingItemID) : null;
-                var existingScore = existingItem != null ? role.Score(this.Actor, existingItem) : 0;
-                if (score > existingScore)
+                if (score > pref.Score)
                 {
-                    SetItemPreference(item, role);
+                    pref.ItemRefId = item.RefID;
+                    pref.Score = score;
                     return; // TODO check 
                 }
             }
@@ -75,14 +70,30 @@ namespace Start_a_Town_
                 this.ToDiscard.Add(item.RefID);
         }
 
-        private void SetItemPreference(Entity item, ItemRole role)
-        {
-            this.Preferences[role] = item.RefID;
-        }
+        //public void HandleItem(Entity item)
+        //{
+        //    foreach (var role in this.Preferences.Keys)
+        //    {
+        //        var score = role.Score(this.Actor, item);
+        //        if (score < 0)
+        //            continue;
+        //        var existingItemID = this.Preferences[role];
+        //        var existingItem = existingItemID != -1 ? this.Actor.Net.GetNetworkObject<Entity>(existingItemID) : null;
+        //        var existingScore = existingItem != null ? role.Score(this.Actor, existingItem) : 0;
+        //        if (score > existingScore)
+        //        {
+        //            SetItemPreference(item, role);
+        //            return; // TODO check 
+        //        }
+        //    }
+        //    if (!this.IsUseful(item))
+        //        this.ToDiscard.Add(item.RefID);
+        //}
+
         private Entity GetPreference(ItemRole role)
         {
-            var refid = this.Preferences[role];
-            return refid == -1 ? null : this.Actor.Net.GetNetworkObject<Entity>(refid);
+            var refid = this.PreferencesNew[role].ItemRefId;
+            return refid > 0 ? this.Actor.Net.GetNetworkObject<Entity>(refid) : null;
         }
         public Entity GetPreference(GearType gt)
         {
@@ -109,7 +120,7 @@ namespace Start_a_Town_
         {
             if (item.Def == ItemDefOf.Coins)
                 return true;
-            if (this.Preferences.Values.Contains(item.RefID))
+            if (this.PreferencesNew.Values.Any(p => p.ItemRefId == item.RefID))
                 return true;
             return false;
         }
@@ -149,55 +160,34 @@ namespace Start_a_Town_
             if (!scored.Any())
                 return false;
             var bestRole = scored.First();
-            this.PreferencesNew[bestRole.r] = new() { ItemRefId = item.RefID, Score = bestRole.Item2 };
+            var pref = this.PreferencesNew[bestRole.r];
+            pref.ItemRefId = item.RefID;
+            pref.Score = bestRole.Item2;
             return true;
         }
-        public void AddPreferenceTool(Entity tool)
-        {
-            //var t = tool as Tool;
-            var toolUse = tool.ToolComponent.Props.Ability.Def;
-            this.SetItemPreference(tool, ItemRolesTool[toolUse]);
-        }
-
+       
         public void RemovePreference(ToolAbilityDef toolUse)
         {
-            this.Preferences[ItemRolesTool[toolUse]] = -1;
+            this.PreferencesNew[ItemRolesTool[toolUse]].Clear();
         }
         public bool IsPreference(Entity item)
         {
             return this.PreferencesNew.Values.Any(p => item.RefID == p.ItemRefId);
-            return this.Preferences.Any(p => p.Key.Score(this.Actor, item) > -1 && item.RefID == p.Value);
         }
 
         public SaveTag Save(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-
-            var dicGear = ItemRolesGear.Where(r => this.Preferences[r.Value] != -1).ToDictionary(r => r.Key.Name, r => this.Preferences[r.Value]);
-            tag.Add(dicGear.Save("PreferencesGear"));
-
-            var dicTool = ItemRolesTool.Where(r => this.Preferences[r.Value] != -1).ToDictionary(r => r.Key.Name, r => this.Preferences[r.Value]);
-            tag.Add(dicTool.Save("PreferencesTool"));
-
-            this.PreferencesNew.Where(p => p.Value.ItemRefId > 0).ToDictionary(p => p.Key.ToString(), p => p.Value).SaveNew(tag, "Preferences");
-
+            tag.Add(this.PreferencesNew.Values.Where(p => p.ItemRefId > 0).Save("Preferences"));
             return tag;
         }
 
         public ISaveable Load(SaveTag tag)
         {
-            var dicGear = new Dictionary<string, int>().Load(tag["PreferencesGear"]).ToDictionary(i => Def.GetDef<GearType>(i.Key), i => i.Value);
-            foreach (var i in dicGear)
-                this.Preferences[ItemRolesGear[i.Key]] = i.Value;
-            var dicTool = new Dictionary<string, int>().Load(tag["PreferencesTool"]).ToDictionary(i => Def.GetDef<ToolAbilityDef>(i.Key), i => i.Value);
-            foreach (var i in dicTool)
-                this.Preferences[ItemRolesTool[i.Key]] = i.Value;
-
             tag.TryGetTag("Preferences", pt =>
             {
-                var dicPrefs = new Dictionary<string, ItemPreference>().LoadNew(pt);
-                foreach (var d in dicPrefs)
-                    this.PreferencesNew[Registry[d.Key]] = d.Value;
+                foreach (var p in pt.LoadList<ItemPreference>())
+                    this.PreferencesNew[p.Role].CopyFrom(p);
             });
 
             return this;
@@ -205,36 +195,42 @@ namespace Start_a_Town_
 
         public void Write(BinaryWriter w)
         {
-            var dicGear = ItemRolesGear.Where(r => this.Preferences[r.Value] != -1).ToDictionary(r => r.Key.Name, r => this.Preferences[r.Value]);
-            dicGear.WriteNew(w, key => w.Write(key), value => w.Write(value));
-            var dicTool = ItemRolesTool.Where(r => this.Preferences[r.Value] != -1).ToDictionary(r => r.Key.Name, r => this.Preferences[r.Value]);
-            dicTool.WriteNew(w, key => w.Write(key), value => w.Write(value));
-
             foreach (var r in this.PreferencesNew.Values)
                 r.Write(w);
         }
 
         public ISerializable Read(BinaryReader r)
         {
-            var dicGear = new Dictionary<GearType, int>().ReadNew(r, r => Def.GetDef<GearType>(r.ReadString()), r => r.ReadInt32());
-            foreach (var i in dicGear)
-                this.Preferences[ItemRolesGear[i.Key]] = i.Value;
-            var dicTool = new Dictionary<ToolAbilityDef, int>().ReadNew(r, r => Def.GetDef<ToolAbilityDef>(r.ReadString()), r => r.ReadInt32());
-            foreach (var i in dicTool)
-                this.Preferences[ItemRolesTool[i.Key]] = i.Value;
-
             foreach (var p in this.PreferencesNew)
                 p.Value.Read(r);
             return this;
         }
 
-        struct ItemPreference : ISaveable
+        class ItemPreference : ISaveable
         {
+            public ItemRole Role;
             public int ItemRefId;
             public int Score;
+            public ItemPreference()
+            {
+
+            }
+            public ItemPreference(ItemRole role)
+            {
+                this.Role = role;
+                this.ItemRefId = 0;
+                this.Score = 0;
+            }
+            public void CopyFrom(ItemPreference pref)
+            {
+                if (this.Role != pref.Role)
+                    throw new Exception();
+                this.ItemRefId = pref.ItemRefId;
+                this.Score = pref.Score;
+            }
             public override string ToString()
             {
-                return $"{ItemRefId}:{Score}";
+                return $"{Role}:{ItemRefId}:{Score}";
             }
 
             public void Write(BinaryWriter w)
@@ -249,21 +245,10 @@ namespace Start_a_Town_
                 this.Score = r.ReadInt32();
             }
 
-            public void Save(SaveTag tag, string name)
-            {
-                this.ItemRefId.Save(tag, "ItemRefId");
-                this.Score.Save(tag, "Score");
-            }
-
-            public void Load(SaveTag tag, string name)
-            {
-                this.ItemRefId = (int)tag[name]["ItemRefId"].Value;
-                this.Score = (int)tag[name]["Score"].Value;
-            }
-
             public SaveTag Save(string name = "")
             {
                 var tag = new SaveTag(SaveTag.Types.Compound, name);
+                this.Role.ToString().Save(tag, "Role");
                 this.ItemRefId.Save(tag, "ItemRefId");
                 this.Score.Save(tag, "Score");
                 return tag;
@@ -271,9 +256,16 @@ namespace Start_a_Town_
 
             public ISaveable Load(SaveTag tag)
             {
+                this.Role = Registry[(string)tag["Role"].Value];
                 this.ItemRefId = (int)tag["ItemRefId"].Value;
                 this.Score = (int)tag["Score"].Value;
                 return this;
+            }
+
+            internal void Clear()
+            {
+                this.ItemRefId = 0;
+                this.Score = 0;
             }
         }
     }

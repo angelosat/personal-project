@@ -21,7 +21,7 @@ namespace Start_a_Town_
                 if (toolUse is null)
                     continue;
                 var preferredTool = itemmanager.GetPreference(toolUse);
-                if (preferredTool != null)
+                if (preferredTool is not null)
                 {
                     if (!actor.Inventory.Contains(preferredTool))
                     {
@@ -54,7 +54,6 @@ namespace Start_a_Town_
                                 continue;
                             if (!actor.CanReach(tool))
                                 continue;
-                            itemmanager.AddPreferenceTool(tool);
                             itemmanager.AddPreference(tool);
                             return new AITask(typeof(TaskBehaviorStoreInInventory)) { TargetA = tool, AmountA = 1 };
                         }

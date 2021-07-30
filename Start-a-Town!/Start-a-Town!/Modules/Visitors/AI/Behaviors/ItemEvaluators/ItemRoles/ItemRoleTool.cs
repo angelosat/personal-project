@@ -19,7 +19,7 @@
         }
         public override string ToString()
         {
-            return $"{base.ToString()}:{this.ToolAbility.Name}";
+            return $"{this.GetType().Name}:{this.ToolAbility.Name}";
         }
     }
 }

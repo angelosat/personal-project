@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Start_a_Town_.UI;
+using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
@@ -12,5 +13,6 @@ namespace Start_a_Town_
         bool AddPreference(Entity item);
         void RemovePreference(IItemPreferenceContext tag);
         bool IsPreference(Entity item);
+        Control Gui { get; }
     }
 }

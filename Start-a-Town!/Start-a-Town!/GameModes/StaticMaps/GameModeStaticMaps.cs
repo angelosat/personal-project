@@ -53,7 +53,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 .AddColumn("delete", 16, f => IconButton.CreateCloseButton().SetLeftClickAction(b => SaveFile.Delete(f, () => table.RemoveItem(f))))
                 ;
 
-            groupBox = ScrollableBoxNewNew.FromClientSize(table.TotalWidth, 16 * table.DefaultRowHeight, ScrollModes.Vertical);
+            groupBox = ScrollableBoxNewNew.FromClientSize(table.RowWidth, 16 * table.RowHeight, ScrollModes.Vertical);
 
             var saves = GetSaves();
             table.AddItems(saves);

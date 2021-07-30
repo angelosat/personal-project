@@ -3,7 +3,7 @@
     class ItemRoleGear : ItemRole
     {
         public GearType GearType;
-        public override IItemPreferenceContext Tag => this.GearType;
+        public override IItemPreferenceContext Context => this.GearType;
 
         public ItemRoleGear(GearType gtype)
         {

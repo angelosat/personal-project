@@ -74,9 +74,11 @@ namespace Start_a_Town_
 
             var uicolors = new Window(string.Format("Edit {0}", actor.Name), customizationClient) { Movable = true, Closable = true };
 
-
-            var btncolors = new Button("Change colors") { Location = this.PanelSlots.BottomLeft, LeftClickAction = () => uicolors.SetLocation(UIManager.Mouse).Toggle() };
-            this.AddControls(btncolors);
+            var boxbtns = new GroupBox();
+            var btncolors = new Button("Change colors",() => uicolors.SetLocation(UIManager.Mouse).Toggle(), 128);
+            var btnprefs = new Button("Item Preferences", () => actor.ItemPreferences.Gui.Toggle(), 128);
+            boxbtns.AddControlsVertically(btncolors, btnprefs);
+            this.AddControlsBottomLeft(boxbtns);
         }
         private void InitInvList(Actor actor)
         {
@@ -95,9 +97,13 @@ namespace Start_a_Town_
             customizationClient.AddControls(colorsui);
             customizationClient.AddControlsBottomLeft(new Button("Apply", customizationClient.Width) { LeftClickAction = () => PacketEditAppearance.Send(actor, colorsui.Colors) });
 
-            var uicolors = new Window(string.Format("Edit {0}", actor.Name), customizationClient) { Movable = true, Closable = true };
-            var btncolors = new Button("Change colors") { Location = this.PanelSlots.BottomLeft, LeftClickAction = () => uicolors.SetLocation(UIManager.Mouse).Toggle() };
-            this.AddControls(btncolors);
+            var uicolors = new Window($"Edit {actor.Name}", customizationClient) { Movable = true, Closable = true };
+
+            var boxbtns = new GroupBox();
+            var btncolors = new Button("Change colors", () => uicolors.SetLocation(UIManager.Mouse).Toggle(), 128);
+            var btnprefs = new Button("Item Preferences", () => actor.ItemPreferences.Gui.Toggle(), 128);
+            boxbtns.AddControlsVertically(btncolors, btnprefs);
+            this.AddControlsBottomLeft(boxbtns);
         }
 
         static public Control GetGui(Actor actor)

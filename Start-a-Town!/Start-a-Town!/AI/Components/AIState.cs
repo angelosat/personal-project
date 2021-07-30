@@ -117,10 +117,12 @@ namespace Start_a_Town_.AI
         public void Write(BinaryWriter w)
         {
             this.Jobs.Sync(w);
+            this.ItemPreferences.Write(w); // sync to clients?
         }
         public void Read(BinaryReader r)
         {
             this.Jobs.Sync(r);
+            this.ItemPreferences.Read(r); // sync to clients?
         }
         public SaveTag Save(string name)
         {

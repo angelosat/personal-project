@@ -14,8 +14,8 @@ namespace Start_a_Town_.UI
         public Action<TObject> ItemChangedFunc = (item) => { };
         public ObservableCollection<TObject> List;
         static readonly Color DefaultRowColor = Color.SlateGray * .2f;
-        public int TotalWidth => this.Columns.Sum(c => c.Width);
-        public int DefaultRowHeight => Label.DefaultHeight + Spacing;
+        public int RowWidth;// => this.Columns.Sum(c => c.Width);
+        public int RowHeight => Label.DefaultHeight + Spacing;
 
         TableObservable < TObject> Clear()
         {
@@ -39,6 +39,7 @@ namespace Start_a_Town_.UI
         public TableObservable<TObject> AddColumn(string label, int width, Func<TObject, Control> controlGetter)
         {
             this.Columns.Add(new(label, width, controlGetter));
+            this.RowWidth += width;
             return this;
         }
 
@@ -57,7 +58,7 @@ namespace Start_a_Town_.UI
         }
         Control AddItem(TObject item)
         {
-            var row = new GroupBox() { BackgroundColor = DefaultRowColor };
+            var row = new GroupBox(this.RowWidth, Label.DefaultHeight) { BackgroundColor = DefaultRowColor };
             int currentX = 0;
             foreach (var col in this.Columns)
             {

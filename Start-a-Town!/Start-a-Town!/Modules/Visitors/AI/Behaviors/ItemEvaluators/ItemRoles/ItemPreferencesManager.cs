@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Start_a_Town_.Net;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
 namespace Start_a_Town_
 {
     [EnsureStaticCtorCall]
-    class ItemPreferencesManager : IItemPreferencesManager, ISaveable, ISerializable
+    partial class ItemPreferencesManager : IItemPreferencesManager, ISaveable, ISerializable
     {
         static ItemPreferencesManager()
         {
@@ -22,7 +25,7 @@ namespace Start_a_Town_
             foreach (var r in ItemRolesTool.Values.Concat(ItemRolesGear.Values))
             {
                 RegistryByName[r.ToString()] = r;
-                RegistryByTag[r.Tag] = r;
+                RegistryByTag[r.Context] = r;
             }
         }
         static readonly Dictionary<string, ItemRole> RegistryByName = new();
@@ -41,21 +44,30 @@ namespace Start_a_Town_
                 ItemRolesTool.Add(d, new ItemRoleTool(d));
         }
 
-        static public readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
-        static public readonly Dictionary<ToolAbilityDef, ItemRole> ItemRolesTool = new();
+        public static readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
+        public static readonly Dictionary<ToolAbilityDef, ItemRole> ItemRolesTool = new();
         readonly Dictionary<IItemPreferenceContext, ItemPreference> PreferencesNew = new();
+        readonly ObservableCollection<ItemPreference> PreferencesObs = new();
         readonly HashSet<int> ToDiscard = new();
         readonly Actor Actor;
         public ItemPreferencesManager(Actor actor)
         {
             this.Actor = actor;
             this.PopulateRoles();
+
+            this.PreferencesObs.CollectionChanged += this.PreferencesObs_CollectionChanged;
+        }
+
+        private void PreferencesObs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (this.Actor.Net is Server)
+                Packets.Sync(this.Actor.Net, this.Actor, e.NewItems, e.OldItems);
         }
 
         private void PopulateRoles()
         {
             foreach (var r in ItemRolesTool.Values.Concat(ItemRolesGear.Values))
-                this.PreferencesNew.Add(r.Tag, new(r));
+                this.PreferencesNew.Add(r.Context, new(r));
         }
         public void HandleItem(Entity item)
         {
@@ -78,7 +90,7 @@ namespace Start_a_Town_
 
         private Entity GetPreference(ItemRole role)
         {
-            var refid = this.PreferencesNew[role.Tag].ItemRefId;
+            var refid = this.PreferencesNew[role.Context].ItemRefId;
             return refid > 0 ? this.Actor.Net.GetNetworkObject<Entity>(refid) : null;
         }
 
@@ -144,12 +156,14 @@ namespace Start_a_Town_
             if (!scored.Any())
                 return false;
             var bestRole = scored.First();
-            var pref = this.PreferencesNew[bestRole.r.Tag];
+            var pref = this.PreferencesNew[bestRole.r.Context];
             pref.ItemRefId = item.RefID;
             pref.Score = bestRole.Item2;
+            if (!this.PreferencesObs.Contains(pref))
+                this.PreferencesObs.Add(pref);
             return true;
         }
-
+        
         public void RemovePreference(IItemPreferenceContext tag)
         {
             this.PreferencesNew[tag].Clear();
@@ -157,6 +171,21 @@ namespace Start_a_Town_
         public bool IsPreference(Entity item)
         {
             return this.PreferencesNew.Values.Any(p => item.RefID == p.ItemRefId);
+        }
+
+        Control _gui;
+        public Control Gui => this._gui ??= this.GetGui();
+        Control GetGui()
+        {
+            var table = new TableObservable<ItemPreference>()
+                .AddColumn("role", 160, p => new Label(p.Role.Context))
+                .AddColumn("item", 96, p => new Label(p.ItemRefId > 0 ? this.Actor.Net.GetNetworkObject(p.ItemRefId) : "none"))
+                .AddColumn("score", 64, p => new Label(p.Score.ToString()))
+                .Bind(this.PreferencesObs);
+            var box = new ScrollableBoxNewNew(table.RowWidth, table.RowHeight * 16, ScrollModes.Vertical)
+                .AddControls(table)
+                .ToWindow($"{this.Actor.Name}'s Item Preferences");
+            return box;
         }
 
         public SaveTag Save(string name = "")
@@ -171,7 +200,10 @@ namespace Start_a_Town_
             tag.TryGetTag("Preferences", pt =>
             {
                 foreach (var p in pt.LoadList<ItemPreference>())
-                    this.PreferencesNew[p.Role.Tag].CopyFrom(p);
+                {
+                    this.PreferencesNew[p.Role.Context].CopyFrom(p);
+                    this.PreferencesObs.Add(this.PreferencesNew[p.Role.Context]);
+                }
             });
 
             return this;
@@ -187,69 +219,68 @@ namespace Start_a_Town_
         {
             foreach (var p in this.PreferencesNew)
                 p.Value.Read(r);
+            foreach(var p in this.PreferencesNew.Where(t=>t.Value.ItemRefId>0))
+                this.PreferencesObs.Add(p.Value);
             return this;
         }
 
-        class ItemPreference : ISaveable
+        void SyncAddPref(ItemPreference pref)
         {
-            public ItemRole Role;
-            public int ItemRefId;
-            public int Score;
-            public ItemPreference()
-            {
+            if (this.Actor.Net is not Client)
+                throw new Exception();
+            var existing = this.PreferencesNew[pref.Role.Context];
+            existing.CopyFrom(pref);
+            if (!this.PreferencesObs.Contains(existing))
+                this.PreferencesObs.Add(existing);
+        }
+        void SyncRemovePref(ItemPreference pref)
+        {
+            if (this.Actor.Net is not Client)
+                throw new Exception();
+            var existing = this.PreferencesNew[pref.Role.Context];
+            existing.Clear();
+            if (this.PreferencesObs.Contains(existing))
+                this.PreferencesObs.Remove(existing);
+        }
 
-            }
-            public ItemPreference(ItemRole role)
+        [EnsureStaticCtorCall]
+        static class Packets
+        {
+            static readonly int pSyncPrefs;
+            static Packets()
             {
-                this.Role = role;
-                this.ItemRefId = 0;
-                this.Score = 0;
+                pSyncPrefs = Network.RegisterPacketHandler(Receive);
             }
-            public void CopyFrom(ItemPreference pref)
+
+            internal static void Sync(INetwork net, Actor actor, System.Collections.IList newItems, System.Collections.IList oldItems)
             {
-                if (this.Role != pref.Role)
+                var w = net.GetOutgoingStream();
+                w.Write(pSyncPrefs);
+                w.Write(actor.RefID);
+
+                if (newItems is null)
+                    w.Write(0);
+                else
+                    newItems.Cast<ItemPreference>().ToList().Write(w);
+
+                if (oldItems is null)
+                    w.Write(0);
+                else
+                    oldItems.Cast<ItemPreference>().ToList().Write(w);
+            }
+
+            private static void Receive(INetwork net, BinaryReader r)
+            {
+                if (net is Server)
                     throw new Exception();
-                this.ItemRefId = pref.ItemRefId;
-                this.Score = pref.Score;
-            }
-            public override string ToString()
-            {
-                return $"{Role}:{ItemRefId}:{Score}";
-            }
-
-            public void Write(BinaryWriter w)
-            {
-                w.Write(this.ItemRefId);
-                w.Write(this.Score);
-            }
-
-            public void Read(BinaryReader r)
-            {
-                this.ItemRefId = r.ReadInt32();
-                this.Score = r.ReadInt32();
-            }
-
-            public SaveTag Save(string name = "")
-            {
-                var tag = new SaveTag(SaveTag.Types.Compound, name);
-                this.Role.ToString().Save(tag, "Role");
-                this.ItemRefId.Save(tag, "ItemRefId");
-                this.Score.Save(tag, "Score");
-                return tag;
-            }
-
-            public ISaveable Load(SaveTag tag)
-            {
-                this.Role = RegistryByName[(string)tag["Role"].Value];
-                this.ItemRefId = (int)tag["ItemRefId"].Value;
-                this.Score = (int)tag["Score"].Value;
-                return this;
-            }
-
-            internal void Clear()
-            {
-                this.ItemRefId = 0;
-                this.Score = 0;
+                var actor = net.GetNetworkObject<Actor>(r.ReadInt32());
+                var prefs = actor.ItemPreferences as ItemPreferencesManager;
+                var newItems = new List<ItemPreference>().Read(r);
+                var oldItems = new List<ItemPreference>().Read(r);
+                foreach (var p in newItems)
+                    prefs.SyncAddPref(p);
+                foreach (var p in oldItems)
+                    prefs.SyncRemovePref(p);
             }
         }
     }

@@ -200,6 +200,10 @@ namespace Start_a_Town_
                 comp.DrawBeforeWorld(sb, map, cam);
         }
 
+        internal void ResolveReferences()
+        {
+        }
+
         public SaveTag Save(string name)
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);

@@ -12,7 +12,6 @@ namespace Start_a_Town_
     public class AIComponent : EntityComponent
     {
         public override string ComponentName => "AI";
-        
         public Guid Guid = Guid.NewGuid();
         public static Dictionary<Guid, GameObject> Registry = new();
         public static Guid GetGuid(GameObject agent)
@@ -208,6 +207,10 @@ namespace Start_a_Town_
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)
         {
             info.AddInfo(this.CachedGuiLabelCurrentTask.SetTextFunc(()=> $"Current Task: {this.State.TaskString}"));
+        }
+        internal override void ResolveReferences()
+        {
+            this.State.ResolveReferences();
         }
     }
 }

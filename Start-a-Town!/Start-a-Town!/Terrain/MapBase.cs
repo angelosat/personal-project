@@ -179,6 +179,9 @@ namespace Start_a_Town_
         internal void ResolveReferences()
         {
             this.World.ResolveReferences();
+            this.Town.ResolveReferences();
+            foreach (var chunk in this.ActiveChunks.Values)
+                chunk.ResolveReferences();
         }
 
         internal void ReplaceBlock(Vector3 global, Block.Types type, byte data, int variation, int orientation, bool raiseEvent = true)

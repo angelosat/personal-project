@@ -7,8 +7,10 @@ namespace Start_a_Town_
     {
         class ItemPreference : ISaveable, ISerializable
         {
+            Actor Actor;
             public ItemRole Role;
-            public int ItemRefId;
+            public int ItemRefId { get; private set; }
+            public Entity Item;
             public int Score;
             public ItemPreference()
             {
@@ -24,12 +26,13 @@ namespace Start_a_Town_
             {
                 if (this.Role != pref.Role)
                     throw new Exception();
+                this.Item = pref.Item;
                 this.ItemRefId = pref.ItemRefId;
                 this.Score = pref.Score;
             }
             public override string ToString()
             {
-                return $"{Role}:{ItemRefId}:{Score}";
+                return $"{Role}:{Item}:{Score}";
             }
 
             public void Write(BinaryWriter w)
@@ -66,8 +69,14 @@ namespace Start_a_Town_
 
             internal void Clear()
             {
+                this.Item = null;
                 this.ItemRefId = 0;
                 this.Score = 0;
+            }
+
+            internal void ResolveReferences(INetwork net)
+            {
+                this.Item = net.GetNetworkObject<Entity>(this.ItemRefId);
             }
         }
     }

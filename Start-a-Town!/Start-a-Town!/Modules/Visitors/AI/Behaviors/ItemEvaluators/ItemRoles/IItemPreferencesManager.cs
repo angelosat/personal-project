@@ -14,5 +14,6 @@ namespace Start_a_Town_
         void RemovePreference(IItemPreferenceContext tag);
         bool IsPreference(Entity item);
         Control Gui { get; }
+        void ResolveReferences();
     }
 }

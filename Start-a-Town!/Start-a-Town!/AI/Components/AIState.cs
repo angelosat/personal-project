@@ -75,7 +75,6 @@ namespace Start_a_Town_.AI
             this.NearbyEntities = new List<GameObject>();
             this.ItemPreferences = new ItemPreferencesManager(actor);
         }
-
         public static bool TryGetState(GameObject entity, out AIState state)
         {
             if (entity.TryGetComponent(out AIComponent ai))
@@ -197,6 +196,11 @@ namespace Start_a_Town_.AI
             this.CurrentTask?.MapLoaded(parent);
             if(this.CurrentTaskBehavior is not null)
                 this.CurrentTaskBehavior.Actor = parent;
+        }
+
+        internal void ResolveReferences()
+        {
+            this.ItemPreferences.ResolveReferences();
         }
 
         internal void ObjectLoaded(GameObject parent)

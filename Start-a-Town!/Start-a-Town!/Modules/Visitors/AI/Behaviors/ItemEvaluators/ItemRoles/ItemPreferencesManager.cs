@@ -79,7 +79,7 @@ namespace Start_a_Town_
                     continue;
                 if (score > pref.Score)
                 {
-                    pref.ItemRefId = item.RefID;
+                    pref.Item = item;
                     pref.Score = score;
                     return; // TODO check 
                 }
@@ -90,8 +90,9 @@ namespace Start_a_Town_
 
         private Entity GetPreference(ItemRole role)
         {
-            var refid = this.PreferencesNew[role.Context].ItemRefId;
-            return refid > 0 ? this.Actor.Net.GetNetworkObject<Entity>(refid) : null;
+            return this.PreferencesNew[role.Context].Item;
+            //var refid = this.PreferencesNew[role.Context].ItemRefId;
+            //return refid > 0 ? this.Actor.Net.GetNetworkObject<Entity>(refid) : null;
         }
 
         public Entity GetPreference(IItemPreferenceContext tag)
@@ -116,7 +117,7 @@ namespace Start_a_Town_
         {
             if (item.Def == ItemDefOf.Coins)
                 return true;
-            if (this.PreferencesNew.Values.Any(p => p.ItemRefId == item.RefID))
+            if (this.PreferencesNew.Values.Any(p => p.Item == item))
                 return true;
             return false;
         }
@@ -157,7 +158,7 @@ namespace Start_a_Town_
                 return false;
             var bestRole = scored.First();
             var pref = this.PreferencesNew[bestRole.r.Context];
-            pref.ItemRefId = item.RefID;
+            pref.Item = item;
             pref.Score = bestRole.Item2;
             if (!this.PreferencesObs.Contains(pref))
                 this.PreferencesObs.Add(pref);
@@ -170,7 +171,7 @@ namespace Start_a_Town_
         }
         public bool IsPreference(Entity item)
         {
-            return this.PreferencesNew.Values.Any(p => item.RefID == p.ItemRefId);
+            return this.PreferencesNew.Values.Any(p => item == p.Item);
         }
 
         Control _gui;
@@ -179,7 +180,7 @@ namespace Start_a_Town_
         {
             var table = new TableObservable<ItemPreference>()
                 .AddColumn("role", 160, p => new Label(p.Role.Context))
-                .AddColumn("item", 96, p => new Label(p.ItemRefId > 0 ? this.Actor.Net.GetNetworkObject(p.ItemRefId) : "none"))
+                .AddColumn("item", 96, p => new Label(p.Item?.ToString() ?? "none", () => p.Item?.Select()))
                 .AddColumn("score", 64, p => new Label(p.Score.ToString()))
                 .Bind(this.PreferencesObs);
             var box = new ScrollableBoxNewNew(table.RowWidth, table.RowHeight * 16, ScrollModes.Vertical)
@@ -191,7 +192,7 @@ namespace Start_a_Town_
         public SaveTag Save(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            tag.Add(this.PreferencesNew.Values.Where(p => p.ItemRefId > 0).Save("Preferences"));
+            tag.Add(this.PreferencesNew.Values.Where(p => p.Item is not null).Save("Preferences"));
             return tag;
         }
 
@@ -219,7 +220,7 @@ namespace Start_a_Town_
         {
             foreach (var p in this.PreferencesNew)
                 p.Value.Read(r);
-            foreach(var p in this.PreferencesNew.Where(t=>t.Value.ItemRefId>0))
+            foreach (var p in this.PreferencesNew.Where(t => t.Value.Score > 0))
                 this.PreferencesObs.Add(p.Value);
             return this;
         }
@@ -241,6 +242,12 @@ namespace Start_a_Town_
             existing.Clear();
             if (this.PreferencesObs.Contains(existing))
                 this.PreferencesObs.Remove(existing);
+        }
+
+        public void ResolveReferences()
+        {
+            foreach (var p in this.PreferencesObs)
+                p.ResolveReferences(this.Actor.Net);
         }
 
         [EnsureStaticCtorCall]

@@ -201,6 +201,13 @@ namespace Start_a_Town_
                 return this.CellGrid2[ind];
             }
         }
+
+        internal void ResolveReferences()
+        {
+            foreach (var obj in this.Objects)
+                obj.ResolveReferences();
+        }
+
         public Cell this[IntVec3 localCoords]
         {
             get

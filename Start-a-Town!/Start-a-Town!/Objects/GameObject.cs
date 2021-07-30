@@ -223,6 +223,13 @@ namespace Start_a_Town_
                 }
             }
         }
+
+        internal void ResolveReferences()
+        {
+            foreach (var comp in this.Components.Values)
+                comp.ResolveReferences();
+        }
+
         public Vector3 Direction
         {
             get => new(this.Transform.Direction, 0);

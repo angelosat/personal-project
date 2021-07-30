@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -117,6 +118,11 @@ namespace Start_a_Town_
             foreach (var comp in this.Components.Values)
                 comp.Randomize(this, random);
             return this;
+        }
+
+        internal void Select()
+        {
+            SelectionManager.Select(this);
         }
     }
 }

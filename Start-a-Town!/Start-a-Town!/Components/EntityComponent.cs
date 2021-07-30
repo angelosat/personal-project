@@ -157,5 +157,9 @@ namespace Start_a_Town_.Components
         internal virtual void SyncRead(GameObject parent, BinaryReader r)
         {
         }
+
+        internal virtual void ResolveReferences()
+        {
+        }
     }
 }

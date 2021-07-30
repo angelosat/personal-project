@@ -271,7 +271,6 @@ namespace Start_a_Town_
             return RegistryByContext[context].Score(this.Actor, item);
         }
 
-       
         [EnsureStaticCtorCall]
         static class Packets
         {

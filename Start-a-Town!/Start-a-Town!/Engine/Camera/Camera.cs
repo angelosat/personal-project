@@ -1513,11 +1513,12 @@ namespace Start_a_Town_
             if (global.Z > this.DrawLevel)
                 return;
 
-            sprite.Atlas.Begin(sb);
+            //sprite.Atlas.Begin(sb);
             var bounds = this.GetScreenBounds(global, Block.Bounds);
             var pos = new Vector2(bounds.X, bounds.Y);
             var depth = global.GetDrawDepth(Engine.Map, this);
-            sb.Draw(Sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col * .5f, SpriteEffects.None, depth);
+            //sb.Draw(Sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col * .5f, SpriteEffects.None, depth);
+            sb.Draw(sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col * .5f, SpriteEffects.None, depth);
         }
         public void DrawGridBlocks(MySpriteBatch sb, IEnumerable<IntVec3> positions, Color col)
         {
@@ -1528,6 +1529,8 @@ namespace Start_a_Town_
         }
         public void DrawGridBlocks(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, IEnumerable<IntVec3> positions, Color col)
         {
+            if (!positions.Any())
+                return;
             sb.Flush();
             sprite.Atlas.Begin(sb);
             foreach (var pos in positions)

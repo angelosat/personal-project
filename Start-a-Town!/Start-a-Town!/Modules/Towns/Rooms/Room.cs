@@ -41,6 +41,7 @@ namespace Start_a_Town_
         }
         public Room(RoomManager manager, ICollection<IntVec3> positions) : this(manager.Map, new HashSet<IntVec3>(positions)) { }
         private RoomRoleDef roomRole;
+        DrawableCellCollection Cells = new();
         public HashSet<IntVec3> Interior = new();
         public HashSet<IntVec3> Border = new();
         public Color Color;
@@ -264,6 +265,11 @@ namespace Start_a_Town_
             return newRooms.Any();
         }
 
+        internal void Draw(Camera cam)
+        {
+            this.Cells.DrawBlocks(this.Map, cam);
+        }
+
         void Validate()
         {
             this.Valid = true;
@@ -288,6 +294,8 @@ namespace Start_a_Town_
             if (this.roomRole is not null)
                 if (!this.roomRole.Furniture.IsSubsetOf(this.Furnitures))
                     this.RoomRole = null;
+
+            this.Cells = new(this.Interior);
         }
        
         void DetectBorders(IntVec3 g)
@@ -333,6 +341,7 @@ namespace Start_a_Town_
         {
             tag.TryGetTagValue<int>("ID", out this.ID);
             tag.TryGetTag("Positions", t => this.Interior = new HashSet<IntVec3>().LoadIntVecs(t));
+            this.Cells = new(this.Interior);
             tag.TryGetTagValue("OwnerRef", out this.OwnerRef);
             tag.TryGetTagValueNew<int>("Workplace", ref this.workplaceID);
             tag.TryGetTagValue<string>("RoomDef", v => this.roomRole = !v.IsNullEmptyOrWhiteSpace() ? Def.GetDef<RoomRoleDef>(v) : null);
@@ -350,6 +359,7 @@ namespace Start_a_Town_
         {
             this.ID = r.ReadInt32();
             this.Interior = new HashSet<IntVec3>().ReadIntVec3(r);
+            this.Cells = new(this.Interior);
             this.OwnerRef = r.ReadInt32();
             this.workplaceID = r.ReadInt32();
             this.roomRole = (r.ReadString() is string s && !s.IsNullEmptyOrWhiteSpace()) ? Def.GetDef<RoomRoleDef>(s) : null;

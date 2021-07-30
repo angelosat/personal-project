@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
-using Start_a_Town_.Towns;
-using Microsoft.Xna.Framework;
-using System.IO;
-using Start_a_Town_.UI;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
+using Start_a_Town_.Towns;
+using Start_a_Town_.UI;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -14,7 +14,7 @@ namespace Start_a_Town_
         int RoomIDSequence;
         int GetNextRoomID()
         {
-            return RoomIDSequence++;
+            return this.RoomIDSequence++;
         }
         public override string Name => "InsideManager";
         readonly Dictionary<int, Room> Rooms = new();
@@ -22,11 +22,11 @@ namespace Start_a_Town_
         {
             this.Town = town;
         }
-        
+
         internal override void OnBlocksChanged(IEnumerable<IntVec3> positions)
         {
             foreach (var pos in positions)
-                Handle(pos);
+                this.Handle(pos);
         }
         internal Room GetRoom(int roomID)
         {
@@ -103,7 +103,7 @@ namespace Start_a_Town_
 
         internal void AddRoom(Room room)
         {
-            room.ID = GetNextRoomID();
+            room.ID = this.GetNextRoomID();
             this.Rooms.Add(room.ID, room);
         }
         internal void RemoveRoom(Room room)
@@ -116,13 +116,13 @@ namespace Start_a_Town_
         {
             var map = this.Map;
             var block = map.GetBlock(global);
-            if(!block.IsRoomBorder)
+            if (!block.IsRoomBorder)
             {
                 if (this.TryGetRoomAt(global, out var existing))
                 {
                     existing.Invalidate();
                 }
-                TryConnectRoomsAtNew(global);
+                this.TryConnectRoomsAtNew(global);
             }
             else
             {
@@ -187,7 +187,7 @@ namespace Start_a_Town_
                 var largestRoom = bySize.First();
                 largestRoom.AddPosition(global);
                 var otherRooms = bySize.Skip(1);
-                foreach(var other in otherRooms)
+                foreach (var other in otherRooms)
                 {
                     largestRoom.Absorb(other);
                     this.RemoveRoom(other);
@@ -195,10 +195,10 @@ namespace Start_a_Town_
                 largestRoom.Invalidate();
             }
         }
-       
+
         internal override void OnTargetSelected(IUISelection info, TargetArgs selected)
         {
-            if(this.GetRoomAt(selected.FaceGlobal) is Room r)
+            if (this.GetRoomAt(selected.FaceGlobal) is Room r)
                 info.AddTabAction("Roomm", () => r.ShowGUI(selected.FaceGlobal));
         }
         public override ISelectable QuerySelectable(TargetArgs selected)
@@ -210,8 +210,8 @@ namespace Start_a_Town_
         {
             if (!Engine.DrawRooms)
                 return;
-            foreach (var room in this.Rooms)
-                cam.DrawGridBlocks(sb, Block.BlockHighlight, room.Value.Interior, room.Value.Color);
+            foreach (var room in this.Rooms.Values)
+                room.Draw(cam);
         }
 
         public bool TryGetRoomAt(IntVec3 global, out Room room)
@@ -234,7 +234,7 @@ namespace Start_a_Town_
             var control = room.GetControl().ToPanelLabeled("Room");
             tooltip.AddControlsBottomLeft(control);
         }
-       
+
         protected override void AddSaveData(SaveTag tag)
         {
             this.Rooms.Values.TrySaveNewBEST(tag, "Rooms");

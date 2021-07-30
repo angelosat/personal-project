@@ -67,6 +67,12 @@ namespace Start_a_Town_
            
         }
 
+        internal bool ProvidesSkill(ToolAbilityDef skill)
+        {
+            return this.ToolComponent?.Props?.Ability.Def == skill;
+            //return ToolAbilityComponent.HasSkill(this, skill);
+        }
+
         internal MaterialDef GetMaterial(BoneDef def)
         {
             return this.Sprite.GetMaterial(def);

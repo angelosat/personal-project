@@ -504,16 +504,11 @@ namespace Start_a_Town_
         }
         internal float GetToolWorkAmount(int skillID)
         {
-            var tool = this.Gear.GetSlot(GearType.Mainhand).Object;
-            if (tool is null)
+            if (this.Gear.GetSlot(GearType.Mainhand).Object is not Tool tool)
                 return 1;
 
-            var ability = tool.Def.ToolProperties?.Ability;
-
-            if (!ability.HasValue)
-                throw new Exception();
-
-            return ability.Value.Efficiency;
+            var ability = tool.ToolComponent.Props.Ability;
+            return ability.Efficiency;
         }
         public int EvaluateItem(Entity item)
         {

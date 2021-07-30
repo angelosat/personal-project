@@ -49,16 +49,29 @@ namespace Start_a_Town_
             var task = TryAssignTask(actor);
             return task != null ? new TaskGiverResult(task, this) : TaskGiverResult.Empty;
         }
-        
         protected static void FindTool(Actor actor, AITask task, ToolAbilityDef skill)
         {
+            var preference = actor.ItemPreferences.GetPreference(skill);
             var equipped = actor.GetEquipmentSlot(GearType.Mainhand);//.Object;
+            if (preference is not null && (equipped == preference || actor.Inventory.Contains(preference)))
+            {
+                task.Tool = preference;
+                return;
+            }
             if (equipped != null && equipped.ProvidesSkill(skill))
                 task.Tool = new TargetArgs(equipped);
             else
-                task.Tool = TaskHelper.FindItemAnywhere(actor, o => o.ProvidesSkill(skill));
+                task.Tool = TaskHelper.FindItemAnywhere(actor, o => o is Tool tool && tool.ProvidesSkill(skill));
         }
-        
+        //protected static void FindTool(Actor actor, AITask task, ToolAbilityDef skill)
+        //{
+        //    var equipped = actor.GetEquipmentSlot(GearType.Mainhand);//.Object;
+        //    if (equipped != null && equipped.ProvidesSkill(skill))
+        //        task.Tool = new TargetArgs(equipped);
+        //    else
+        //        task.Tool = TaskHelper.FindItemAnywhere(actor, o => o is Tool tool && tool.ProvidesSkill(skill));
+        //}
+
         public virtual AITask TryTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false) { return null; }
     }
 }

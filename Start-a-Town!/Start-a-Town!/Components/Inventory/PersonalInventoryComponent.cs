@@ -306,7 +306,7 @@ namespace Start_a_Town_.Components
         public bool Receive(GameObjectSlot objSlot, bool report = true)
         {
             // TODO: if can't receive, haul item instead or drop on ground?
-            var obj = objSlot.Object;
+            var obj = objSlot.Object as Entity;
             var parent = this.Parent;
             this.Slots.Add(obj);
             objSlot.Clear();

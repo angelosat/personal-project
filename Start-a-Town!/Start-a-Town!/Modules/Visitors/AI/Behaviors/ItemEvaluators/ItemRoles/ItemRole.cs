@@ -4,6 +4,7 @@ namespace Start_a_Town_
 {
     abstract class ItemRole
     {
+        public abstract object Tag { get; }
         public ItemRole()
         {
 

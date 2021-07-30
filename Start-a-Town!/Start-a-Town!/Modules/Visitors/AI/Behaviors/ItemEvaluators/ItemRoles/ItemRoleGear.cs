@@ -3,6 +3,8 @@
     class ItemRoleGear : ItemRole
     {
         public GearType GearType;
+        public override object Tag => this.GearType;
+
         public ItemRoleGear(GearType gtype)
         {
             this.GearType = gtype;

@@ -95,14 +95,19 @@ namespace Start_a_Town_
             var refid = this.PreferencesNew[role].ItemRefId;
             return refid > 0 ? this.Actor.Net.GetNetworkObject<Entity>(refid) : null;
         }
-        public Entity GetPreference(GearType gt)
+        //public Entity GetPreference(GearType gt)
+        //{
+        //    return this.GetPreference(ItemRolesGear[gt]);
+        //}
+        //public Entity GetPreference(ToolAbilityDef def)
+        //{
+        //    return this.GetPreference(ItemRolesTool[def]);
+        //}
+        public Entity GetPreference(object tag)
         {
-            return this.GetPreference(ItemRolesGear[gt]);
+            return this.GetPreference(Registry.Values.First(r => r.Tag == tag));
         }
-        public Entity GetPreference(ToolAbilityDef def)
-        {
-            return this.GetPreference(ItemRolesTool[def]);
-        }
+
         public void ResetPreferences()
         {
             var items = this.Actor.Inventory.GetItems();

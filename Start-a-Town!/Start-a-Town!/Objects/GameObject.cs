@@ -1123,11 +1123,7 @@ namespace Start_a_Town_
             return true;
         }
 
-        internal bool ProvidesSkill(ToolAbilityDef skill)
-        {
-            return ToolAbilityComponent.HasSkill(this, skill);
-        }
-        
+       
         
         internal GameObject ClearCarried()
         {

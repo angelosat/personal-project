@@ -266,6 +266,7 @@ namespace Start_a_Town_.UI
         }
 
         public Control FocusedControl;
+        internal static Color DefaultListItemBackgroundColor = Color.SlateGray * .2f;
 
         public Control ActiveControl
         {

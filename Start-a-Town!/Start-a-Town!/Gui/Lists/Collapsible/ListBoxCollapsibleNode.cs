@@ -16,6 +16,7 @@ namespace Start_a_Town_.UI
         public Func<ButtonBase> ControlGetter;
         public PictureBox Arrow;
         public GroupBox ChildGroupBox = new();// { BackgroundColor = Color.Red * .2f };
+        public static readonly int IndentWidth = UIManager.ArrowRight.Rectangle.Width;
 
         public string Name;
         public bool Expanded;
@@ -23,6 +24,7 @@ namespace Start_a_Town_.UI
         public ListBoxCollapsibleNode(string name)
         {
             this.Name = name;
+            this.ChildGroupBox.Name = name;
         }
         public ListBoxCollapsibleNode(string name, Func<ListBoxCollapsibleNode, ButtonBase> controlGetter) : this(name)
         {
@@ -45,8 +47,10 @@ namespace Start_a_Town_.UI
         }
         public ListBoxCollapsibleNode AddLeaf(Control leaf)
         {
+            //leaf.BackgroundColor = UIManager.DefaultListItemBackgroundColor;
             this.LeafControls.Add(leaf);
             this.ChildGroupBox.AddControlsBottomLeft(leaf);
+            leaf.Location.X = IndentWidth;
             leaf.Validate(true);
             return this;
         }

@@ -16,11 +16,10 @@ namespace Start_a_Town_
             readonly Button BtnPlus, BtnMinus, BtnDetails;
             readonly CraftOrderDetailsInterface PanelDetails;
             readonly ComboBoxNewNew<CraftOrderFinishMode> ComboFinishMode;
-            static readonly Color DefaultBackgroundColor = Color.SlateGray * .2f;
 
             public UI(CraftOrder order)
             {
-                this.BackgroundColor = DefaultBackgroundColor;
+                this.BackgroundColor = UIManager.DefaultListItemBackgroundColor;
                 this.Order = order;
 
                 this.BtnUp = new ButtonIcon(Icon.ArrowUp) { LeftClickAction = MoveUp };

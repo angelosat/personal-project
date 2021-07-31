@@ -80,7 +80,6 @@ namespace Start_a_Town_.UI
             this.HScroll.Width = this.Client.Width;
             this.VScroll.Height = this.Client.Height;
         }
-
         public override void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
         {
             if (!this.HitTest())

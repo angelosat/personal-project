@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
@@ -8,6 +9,20 @@ namespace Start_a_Town_.UI
     {
         public ListBoxCollapsibleNode ARoot = new("root");
         int Spacing = 0;
+        public ListCollapsibleNew()
+        {
+
+        }
+        public ListCollapsibleNew(IListCollapsibleDataSource dataSource, Action<int[], int[]> callback)
+        {
+            throw new NotImplementedException();
+        }
+        public ListCollapsibleNew(IListCollapsibleDataSource dataSource)
+        {
+            var node = new ListBoxCollapsibleNode(dataSource);
+            this.ARoot.AddNode(node);
+            this.Build();
+        }
         public ListCollapsibleNew AddNode(ListBoxCollapsibleNode node)
         {
             this.ARoot.AddNode(node);

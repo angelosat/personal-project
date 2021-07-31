@@ -17,6 +17,7 @@ namespace Start_a_Town_
         static Control DetailsUIContainer;
 
         public string Name => this.Reaction.Name;
+        string IListable.Label => this.Name;
         public CraftOrderFinishMode FinishMode = CraftOrderFinishMode.AllModes.First();
         public int Quantity = 1;
         CraftMode Mode = CraftMode.XTimes;
@@ -152,7 +153,7 @@ namespace Start_a_Town_
             this.Restrictions[reagent].ToggleRestrictions(defs, mats, matTypes);
         }
 
-        public Control GetGui()
+        public Control GetListControlGui()
         {
             return new UI(this);
         }

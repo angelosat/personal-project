@@ -68,7 +68,7 @@ namespace Start_a_Town_.UI
                 return;
             var newControls = items.Select(i =>
             {
-                var gui = i.GetGui();
+                var gui = i.GetListControlGui();
                 gui.Tag = i;
                 this.Items.Add(gui);
                 return gui;
@@ -79,7 +79,7 @@ namespace Start_a_Town_.UI
 
         Control AddItem(TObject item)
         {
-            var control = item.GetGui();
+            var control = item.GetListControlGui();
             control.Tag = item;
             this.Items.Add(control);
             if (this.Controls.Any())

@@ -185,14 +185,16 @@ namespace Start_a_Town_
         }
         public Stockpile()
         {
-
+            this.DefaultFilters = InitFilters();
         }
         public Stockpile(ZoneManager manager) : base(manager)
         {
+            this.DefaultFilters = InitFilters();
         }
         public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions)
             : base(manager, positions)
         {
+            this.DefaultFilters = InitFilters();
         }
         public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
@@ -263,9 +265,10 @@ namespace Start_a_Town_
             {
                 var box = new GroupBox();
                 box.AddControlsVertically(
-                    new GroupBox().AddControlsHorizontally(
-                        new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
-                    this.DefaultFilters.GetGui((n, l) => PacketStorageFiltersNew.Send(this, n, l))
+                    new GroupBox()
+                        .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
+                    this.DefaultFilters
+                        .GetGui((nodeIndices, leaveIndices) => PacketStorageFiltersNew.Send(this, nodeIndices, leaveIndices))
                         .ToPanelLabeled("Fitlers"));
                 return box;
 
@@ -280,29 +283,28 @@ namespace Start_a_Town_
 
         public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
 
-        readonly StorageFilterCategoryNew DefaultFilters = InitFilters();
-        static StorageFilterCategoryNew InitFilters()
+        readonly StorageFilterCategoryNew DefaultFilters;// = InitFilters();
+        StorageFilterCategoryNew InitFilters()
         {
             var cats = Def.Database.Values.OfType<ItemDef>().GroupBy(d => d.Category);
 
             var all = new StorageFilterCategoryNew("All");
+            all.Owner = this;
             foreach (var cat in cats)
             {
                 if (cat.Key == null)
                     continue;
                 var c = new StorageFilterCategoryNew(cat.Key.Label);
+                all.AddChildren(c);
                 foreach (var def in cat)
                 {
                     if (def.DefaultMaterialType != null)
-                    {
                         c.AddChildren(new StorageFilterCategoryNew(def.Label).AddLeafs(def.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNew(def, m))));
-                    }
                     else
                         c.AddLeafs(new StorageFilterNew(def));
                 }
-                all.AddChildren(c);
             }
-
+           
             return all;
         }
 

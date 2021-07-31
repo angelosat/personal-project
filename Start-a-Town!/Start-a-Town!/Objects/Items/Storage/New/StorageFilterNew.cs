@@ -1,12 +1,17 @@
-﻿using System;
+﻿using Start_a_Town_.UI;
+using System;
 
 namespace Start_a_Town_
 {
-    class StorageFilterNew : ILabeled
+    class StorageFilterNew : ILabeled, IListable
     {
+        public StorageFilterCategoryNew Parent;
+        public StorageFilterCategoryNew Root => this.Parent.Root;
+
         public string Label { get; set; }
         public Predicate<Entity> Condition;
         public bool Enabled = true;
+        internal Stockpile Owner;
 
         public StorageFilterNew(string label, Predicate<Entity> condition)
         {
@@ -26,5 +31,17 @@ namespace Start_a_Town_
             this.Condition = o => o.Def == item;
             this.Enabled = enabled;
         }
-}
+        
+        public Control GetListControlGui()
+        {
+            return new CheckBoxNew(this.Label)
+            {
+                TickedFunc = () => this.Enabled,
+                LeftClickAction = () => {
+                    this.Root.FindLeafIndex(this, out var i);
+                    PacketStorageFiltersNew.Send(this.Owner, null, new int[] { i });
+                }
+            };
+        }
+    }
 }

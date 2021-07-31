@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Start_a_Town_.Crafting
 {
-    class CraftOrderDetailsInterface : ScrollableBoxNewNew
+    class CraftOrderDetailsInterface : GroupBox
     {
         public Action<Reaction.Product.ProductMaterialPair> Callback = a => { };
         readonly Panel PanelParts, PanelItemTypes, PanelMaterials, PanelCollapsible;
@@ -18,7 +18,7 @@ namespace Start_a_Town_.Crafting
         readonly CheckBoxNew ChkHaulOnFinish;
         readonly CraftOrder Order;
         public CraftOrderDetailsInterface(CraftOrder order)
-            : base(70, 150)
+            //: base(300, 400)//70, 150)
         {
             this.Order = order;
             this.AutoSize = true;

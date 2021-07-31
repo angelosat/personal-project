@@ -253,7 +253,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 this.DialogLoad = new GuiDialogLoad();
 
             this.DialogLoad.Populate();
-            return this.DialogLoad;
+            return this.DialogLoad.ToPanel();
         }
         internal override Control GetNewGameGui(Action cancelAction)
         {

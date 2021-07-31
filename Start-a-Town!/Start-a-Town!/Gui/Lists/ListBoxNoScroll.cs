@@ -52,7 +52,8 @@ namespace Start_a_Town_.UI
             var control = this.ControlFactory(item);
             control.Tag = item;
             this.AddControlsBottomLeft(control);
-            control.Location.Y += Spacing;
+            if(this.Controls.Count > 1) // HACK
+                control.Location.Y += Spacing;
             return control;
         }
         public void RemoveItems(params TObject[] items)
@@ -127,36 +128,22 @@ namespace Start_a_Town_.UI
 
         public ListBoxNoScroll<TObject, TControl> AddItems(IEnumerable<TObject> items)
         {
-            foreach (var i in items)
-                this.AddItem(i);
-            return this;
+            return this.AddItems(items.ToArray());
         }
         public ListBoxNoScroll<TObject, TControl> AddItems(params TObject[] items)
         {
-            foreach (var i in items)
-                this.AddItem(i);
-            return this;
-        }
-        public ListBoxNoScroll<TObject, TControl> AddItem(TObject obj, Action<TObject, TControl> onControlInit)
-        {
-            var btn = new TControl()
+            var currentY = this.Controls.Any() ? this.BottomLeft.Y + Spacing : 0;
+            var newControls = items.Select(i =>
             {
-                Location = this.Controls.BottomLeft,
-                Tag = obj,
-                TooltipFunc = (tt) => { if (obj is ITooltippable) (obj as ITooltippable).GetTooltipInfo(tt); },
-                Active = true
-            };
-            onControlInit(obj, btn);
-            this.Controls.Add(btn);
+                var c = this.ControlFactory(i);
+                c.Tag = i;
+                c.Location.Y = currentY;
+                c.TooltipFunc = tt => { if (i is ITooltippable tooltippable) tooltippable.GetTooltipInfo(tt); };
+                currentY += c.Height + Spacing;
+                return c;
+            });
+            this.AddControls(newControls.ToArray());
             return this;
-        }
-        TControl AddItem(TObject item)
-        {
-            var control = this.ControlFactory(item);
-            control.Tag = item;
-            this.AddControlsBottomLeft(control);
-            control.Location.Y += Spacing;
-            return control;
         }
         public void RemoveItems(params TObject[] items)
         {

@@ -102,22 +102,22 @@ namespace Start_a_Town_.UI
             var prev = 0;
             foreach (var c in this)
             {
-                c.Location.Y = prev + spacing;
-                prev = c.Bottom;
+                c.Location.Y = prev;
+                prev = c.Bottom + spacing;
             }
-            if(this.Parent.AutoSize)
-            this.Parent.ClientSize = this.Parent.PreferredClientSize;
+            if (this.Parent.AutoSize)
+                this.Parent.ClientSize = this.Parent.PreferredClientSize;
         }
-        public void AlignHorizontally()
+        public void AlignHorizontally(int spacing = 0)
         {
             var prev = 0;
             foreach (var c in this)
             {
                 c.Location.X = prev;
-                prev = c.Right;
+                prev = c.Right + spacing;
             }
             if (this.Parent.AutoSize)
-            this.Parent.ClientSize = this.Parent.PreferredClientSize;
+                this.Parent.ClientSize = this.Parent.PreferredClientSize;
         }
         public void AlignCenterHorizontally()
         {

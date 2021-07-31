@@ -158,13 +158,19 @@ namespace Start_a_Town_.UI
         ControlCollection _controls;
         public ControlCollection Controls => this._controls ??= new ControlCollection(this);
         
-        public virtual void AlignTopToBottom()
+        public virtual void AlignTopToBottom(int spacing = 0)
         {
-            this.Controls.AlignVertically();
+            var oldsize = this.ClientSize;
+            this.Controls.AlignVertically(spacing);
+            if (this.ClientSize != oldsize)
+                this.Parent?.OnControlResized(this);
         }
-        public virtual void AlignLeftToRight()
+        public virtual void AlignLeftToRight(int spacing = 0)
         {
-            this.Controls.AlignHorizontally();
+            var oldsize = this.ClientSize;
+            this.Controls.AlignHorizontally(spacing);
+            if (this.ClientSize != oldsize)
+                this.Parent?.OnControlResized(this);
         }
         public Control SetControls(params Control[] controls)
         {
@@ -628,7 +634,9 @@ namespace Start_a_Town_.UI
                 this.OnClientSizeChanged();
             }
         }
-        protected virtual void OnClientSizeChanged() { }
+        protected virtual void OnClientSizeChanged()
+        {
+        }
 
         public void SetClipToBounds(bool value, bool children = false, params Control[] exclude)
         {

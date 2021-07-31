@@ -27,7 +27,7 @@ namespace Start_a_Town_
         public bool Enabled;
         public Dictionary<string, IngredientRestrictions> Restrictions = new();
         readonly Dictionary<string, HashSet<int>> ReagentRestrictions = new();
-        static ListBoxCollapsible DetailsUIReagents;
+        static ListCollapsibleNew DetailsUIReagents;
         static Control DetailsUIContainer;
 
         public bool IsActive
@@ -153,7 +153,7 @@ namespace Start_a_Town_
             this.Restrictions[reagent].ToggleRestrictions(defs, mats, matTypes);
         }
 
-        public UI GetInterface()
+        public UI GetGui()
         {
             return new UI(this);
         }
@@ -366,7 +366,8 @@ namespace Start_a_Town_
 
         public void ShowDetailsUI(Action<CraftOrderNew, string, ItemDef[], MaterialDef[], MaterialType[]> callback)
         {
-            var list = DetailsUIReagents ??= new ListBoxCollapsible(200, 200);
+            var box = new ScrollableBoxNewNew(200, 200, ScrollModes.Vertical);
+            var list = DetailsUIReagents ??= new ListCollapsibleNew();
             list.Clear();
             foreach (var r in this.Reaction.Reagents)
             {
@@ -399,8 +400,9 @@ namespace Start_a_Town_
                 }
             }
             list.Build();
+            box.AddControls(list);
             var container = DetailsUIContainer ??= new GroupBox()
-                .AddControls(list)
+                .AddControls(box)
                 .ToWindow("Details")
                 .SnapToMouse()
                 .SetGameEventAction(e =>

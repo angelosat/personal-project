@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 
@@ -8,8 +10,8 @@ namespace Start_a_Town_
 {
     public class BlockEntityCompWorkstation : BlockEntityComp
     {
-        readonly List<CraftOrderNew> _Orders = new List<CraftOrderNew>();
-        public List<CraftOrderNew> Orders => this._Orders;
+        readonly ObservableCollection<CraftOrderNew> _Orders = new();
+        public ObservableCollection<CraftOrderNew> Orders => this._Orders;
         readonly HashSet<IsWorkstation.Types> WorkstationTypes;
         static Window CraftingWindow;
 
@@ -21,13 +23,18 @@ namespace Start_a_Town_
         {
             return this.WorkstationTypes.Contains(type);
         }
+
         internal CraftOrderNew GetOrder(string uniqueID)
         {
-            return this.Orders.Find(o => o.GetUniqueLoadID() == uniqueID);
+            return this.Orders.First(o => o.GetUniqueLoadID() == uniqueID);
         }
         internal CraftOrderNew GetOrder(int uniqueID)
         {
-            return this.Orders.Find(o => o.ID == uniqueID);
+            return this.Orders.First(o => o.ID == uniqueID);
+        }
+        internal bool RemoveOrder(string orderID)
+        {
+            return this.Orders.Remove(this.GetOrder(orderID));
         }
         internal bool Reorder(int orderID, bool increasePriority)
         {
@@ -85,5 +92,7 @@ namespace Start_a_Town_
             foreach (var ord in this._Orders)
                 ord.Map = map;
         }
+
+        
     }
 }

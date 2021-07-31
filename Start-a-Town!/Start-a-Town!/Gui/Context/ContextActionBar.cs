@@ -47,11 +47,7 @@ namespace Start_a_Town_.UI
                 comp.OnContextActionBarCreated(args);
             Instance.Initialize(args);
         }
-        static public void Remove()
-        {
-            Instance.Hide();
-        }
-
+       
         public void Initialize(ContextActionBarArgs args)
         {
             this.ClearControls();

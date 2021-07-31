@@ -91,9 +91,9 @@ namespace Start_a_Town_.UI
             e.Handled = true;
         }
 
-        public override void AlignTopToBottom()
+        public override void AlignTopToBottom(int spacing = 0)
         {
-            this.Client.Controls.AlignVertically();
+            this.Client.Controls.AlignVertically(spacing);
             this.Client.ClientSize = this.Client.PreferredClientSize;
             this.Client.ConformToClientSize();
             this.UpdateClientSize();

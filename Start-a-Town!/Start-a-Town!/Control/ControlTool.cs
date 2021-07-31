@@ -25,10 +25,7 @@ namespace Start_a_Town_
         }
         public TargetArgs Target;
         public TargetArgs TargetLast;
-        public virtual Icon Icon
-        {
-            get { return Icon.Cursor; }
-        }
+        public virtual Icon Icon => Icon.Cursor;
         
         public virtual Icon GetIcon()
         {

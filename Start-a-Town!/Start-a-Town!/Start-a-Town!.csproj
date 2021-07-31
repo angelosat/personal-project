@@ -196,6 +196,7 @@
     <Compile Include="Control\Tools\CellRendering\BlockRendererObservable.cs" />
     <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
+    <Compile Include="Gui\Lists\Collapsible\ListCollapsibleNew.cs" />
     <Compile Include="Gui\Lists\ListBoxNoScroll.cs" />
     <Compile Include="Gui\Lists\ListBoxObservable.cs" />
     <Compile Include="Gui\Tables\TableObservable.cs" />
@@ -981,7 +982,7 @@
     <Compile Include="Gui\CharacterCreation\GuiCharacterCustomization.cs" />
     <Compile Include="Gui\CharacterCreation\ColoredRectangle.cs" />
     <Compile Include="Gui\CharacterCreation\ColorPickerWindow.cs" />
-    <Compile Include="Gui\CharacterCreation\ColorPickerHueSaturation.cs" />
+    <Compile Include="Gui\CharacterCreation\ColorHueSaturationPicker.cs" />
     <Compile Include="Gui\CameraWidget.cs" />
     <Compile Include="Gui\ConsoleBoxAsync.cs" />
     <Compile Include="Gui\Dialogs\DialogLoading.cs" />

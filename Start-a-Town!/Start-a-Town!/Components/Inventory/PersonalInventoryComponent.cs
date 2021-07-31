@@ -314,7 +314,6 @@ namespace Start_a_Town_.Components
                 parent.Net.EventOccured(Message.Types.ItemGot, parent, obj);
             return true;
             // TODO: drop object if can't receive? here? or let whoever called this method do something else if it fails?
-            return false;
         }
 
         public IEnumerable<Entity> GetItems()

@@ -15,7 +15,6 @@ namespace Start_a_Town_
         bool Valid;
         bool Removing;
         protected Action<IntVec3, IntVec3, bool> Callback;
-        IntVec3 Plane;
         public override bool TargetOnlyBlocks => true;
 
         public ToolDesignate3D()
@@ -36,7 +35,7 @@ namespace Start_a_Town_
             if (this.Target.Type != TargetType.Position)
                 return;
 
-            this.End = (IntVec3)this.Target.Global * (IntVec3.One - this.Plane) + this.Begin * this.Plane;
+            this.End = this.Target.Global;
           
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;
@@ -131,7 +130,8 @@ namespace Start_a_Town_
                     list.Add(new IntVec3(i, j, this.Begin.Z));
             return list;
         }
-        Icon Icon = new Icon(UI.UIManager.Icons32, 12, 32);
+        Icon _icon = new Icon(UI.UIManager.Icons32, 12, 32);
+        public override Icon Icon => this._icon;
         internal override void DrawUI(SpriteBatch sb, Camera camera)
         {
             base.DrawUI(sb, camera); 

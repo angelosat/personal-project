@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
@@ -10,7 +10,7 @@ namespace Start_a_Town_.UI
 
         static readonly Texture2D ColorWheel = CreateTexture();
 
-        bool Pressed;
+        bool PressedNew;
         public Color Selected;
         Vector2 SelectedCoords;
 
@@ -22,8 +22,8 @@ namespace Start_a_Town_.UI
                     Color color = HSVtoRGB(h, 1 - v / 256f, 1f);
                     Colors[v * 360 + h] = color;
                 }
-            Texture2D texture = new Texture2D(Game1.Instance.GraphicsDevice, 360, 256);
-            texture.SetData<Color>(Colors);
+            var texture = new Texture2D(Game1.Instance.GraphicsDevice, 360, 256);
+            texture.SetData(Colors);
             return texture;
         }
 
@@ -31,8 +31,8 @@ namespace Start_a_Town_.UI
         {
             float h, s, v;
             h = s = v = 0;
-            ColorHueSaturationPicker.RGBtoHSV(rgb, ref h, ref s, ref v);
-            Vector2 pos = new Vector2(h, (1-s) * 255);
+            RGBtoHSV(rgb, ref h, ref s, ref v);
+            var pos = new Vector2(h, (1 - s) * 255);
             this.Selected = Colors[(int)pos.Y * ColorWheel.Width + (int)pos.X];
             this.SelectedCoords = pos;
         }
@@ -48,16 +48,16 @@ namespace Start_a_Town_.UI
         public override void Update()
         {
             base.Update();
-            if (!this.Pressed)
+            if (!this.PressedNew)
                 return;
             if (!this.MouseHover)
                 return;
-            Vector2 pos = UIManager.Mouse - this.ScreenLocation;
+            var pos = UIManager.Mouse - this.ScreenLocation;
             var x = (int)Math.Max(0, Math.Min(ColorWheel.Width - 1, pos.X));
             var y = (int)Math.Max(0, Math.Min(ColorWheel.Height - 1, pos.Y));
 
             this.Selected = Colors[y * ColorWheel.Width + x];
-            this.SelectedCoords = new Vector2(x,y);
+            this.SelectedCoords = new Vector2(x, y);
             this.Callback(this.Selected);
         }
 
@@ -65,11 +65,11 @@ namespace Start_a_Town_.UI
         {
             if (!this.MouseHover)
                 return;
-            this.Pressed = true;
+            this.PressedNew = true;
         }
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            this.Pressed = false;
+            this.PressedNew = false;
         }
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
@@ -80,12 +80,12 @@ namespace Start_a_Town_.UI
             rect.DrawHighlight(sb, Color.Black, Vector2.Zero, 0);
         }
 
-        static public void RGBtoHSV(Color rgb, ref float h, ref float s, ref float v)
+        public static void RGBtoHSV(Color rgb, ref float h, ref float s, ref float v)
         {
             float r = rgb.R, g = rgb.G, b = rgb.B;
             RGBtoHSV(r, g, b, ref h, ref s, ref v);
         }
-        static public Color HSVtoRGB(float h, float s, float v)
+        public static Color HSVtoRGB(float h, float s, float v)
         {
             float r, g, b;
             r = g = b = 0;
@@ -93,7 +93,7 @@ namespace Start_a_Town_.UI
             return new Color(r, g, b);
         }
 
-        static public void RGBtoHSV(float r, float g, float b, ref float h, ref float s, ref float v)
+        public static void RGBtoHSV(float r, float g, float b, ref float h, ref float s, ref float v)
         {
             float min, max, delta;
             min = Math.Min(r, Math.Min(g, b));
@@ -119,7 +119,7 @@ namespace Start_a_Town_.UI
             if (h < 0)
                 h += 360;
         }
-        static public void HSVtoRGB(ref float r, ref float g, ref float b, float h, float s, float v)
+        public static void HSVtoRGB(ref float r, ref float g, ref float b, float h, float s, float v)
         {
             int i;
             float f, p, q, t;

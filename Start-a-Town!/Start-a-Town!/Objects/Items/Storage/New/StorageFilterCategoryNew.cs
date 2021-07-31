@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -97,12 +98,14 @@ namespace Start_a_Town_
             }
         }
        
-        public Control GetControl(Action<int[], int[]> callback)
+        public Control GetGui(Action<int[], int[]> callback)
         {
             bool isEnabled(StorageFilterCategoryNew cat) => cat.Leaves.All(l => l.Enabled) && cat.Children.All(isEnabled);
 
-            var listcollapsible = new ListBoxCollapsible(300, 400);
-            
+            var box = new ScrollableBoxNewNew(300, 400, ScrollModes.Vertical);
+            //var listcollapsible = new ListBoxCollapsible(300, 400);
+            var listcollapsible = new ListCollapsibleNew();
+
             ListBoxCollapsibleNode createNode(StorageFilterCategoryNew cat)
             {
                 var node = new ListBoxCollapsibleNode(cat.Label, n => new CheckBoxNew() 
@@ -128,9 +131,10 @@ namespace Start_a_Town_
                 return node;
             }
             listcollapsible.AddNode(createNode(this));
-            
             listcollapsible.Build();
-            return listcollapsible;
+            //return listcollapsible;
+            box.AddControls(listcollapsible);
+            return box;
         }
 
         public bool Filter(Entity obj)

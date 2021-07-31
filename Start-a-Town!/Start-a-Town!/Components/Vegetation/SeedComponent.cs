@@ -1,25 +1,18 @@
-﻿using Start_a_Town_.UI;
+﻿using Start_a_Town_.Components;
+using Start_a_Town_.UI;
 using System;
 using System.IO;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
     class SeedComponent : EntityComponent
     {
-        readonly static public string Name = "Seed";
+        public static readonly string Name = "Seed";
+        public override string ComponentName => Name;
 
-        public override string ComponentName
-        {
-            get
-            {
-                return Name;
-            }
-        }
-        public int Source;
         public int Level = 1;
         public PlantProperties Plant;
-        
+
         public SeedComponent()
         {
         }
@@ -28,7 +21,7 @@ namespace Start_a_Town_
             this.Plant = toCopy.Plant;
             this.Level = toCopy.Level;
         }
-       
+
         public void SetPlant(PlantProperties props)
         {
             this.Plant = props;
@@ -44,7 +37,7 @@ namespace Start_a_Town_
         {
             info.AddInfo(new Label() { TextFunc = () => string.Format("Grows into: {0}", this.Plant.Name) });
         }
-        
+
         internal override void AddSaveData(SaveTag tag)
         {
             this.Plant.Save(tag, "Plant");

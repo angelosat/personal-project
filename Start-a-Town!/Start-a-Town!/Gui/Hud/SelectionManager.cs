@@ -15,12 +15,11 @@ namespace Start_a_Town_.UI
         public Label LabelName;
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
-        static readonly IHotkey HotkeySliceZ;
         static readonly BlockRendererNew Renderer = new(Block.BlockHighlight);
         static SelectionManager()
         {
         }
-        static readonly QuickButton IconSlice = new(Icon.ArrowDown, HotkeySliceZ)
+        static readonly IconButton IconSlice = new(Icon.ArrowDown)
         {
             BackgroundTexture = UIManager.Icon16Background,
             LeftClickAction = ToolManagement.Slice,
@@ -70,7 +69,7 @@ namespace Start_a_Town_.UI
             this.BoxButtons.BackgroundColorFunc = () => Color.Black * .5f;
             this.BoxButtons.LocationFunc = () => this.BottomRight;
             this.BoxButtons.Anchor = new Vector2(0, 1);
-            this.BoxButtons.ControlsChangedAction = this.BoxButtons.AlignLeftToRight;
+            this.BoxButtons.ControlsChangedAction = () => this.BoxButtons.AlignLeftToRight();
 
             this.BoxInfo = new GroupBox() { Location = this.LabelName.BottomLeft };
             this.PanelInfo.AddControls(

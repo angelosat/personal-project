@@ -5,13 +5,13 @@ namespace Start_a_Town_.UI
 {
     public class ListBoxCollapsibleNode
     {
-        public List<Control> Leafs = new List<Control>();
-        public List<ILabeled> CustomLeafs = new List<ILabeled>();
+        public List<Control> Leafs = new();
+        public List<ILabeled> CustomLeafs = new();
         public Control Control;
-        public List<Control> LeafControls = new List<Control>();
-        public List<Control> ChildControls = new List<Control>();
+        public List<Control> LeafControls = new();
+        public List<Control> ChildControls = new();
         public ListBoxCollapsibleNode Parent;
-        public List<ListBoxCollapsibleNode> Children = new List<ListBoxCollapsibleNode>();
+        public List<ListBoxCollapsibleNode> Children = new();
         public Func<ButtonBase> ControlGetter;
         public PictureBox Arrow;
 
@@ -26,7 +26,7 @@ namespace Start_a_Town_.UI
         {
             this.ControlGetter = () => controlGetter(this);
         }
-        public ListBoxCollapsibleNode(string name, Func<ButtonBase> controlGetter):this(name)
+        public ListBoxCollapsibleNode(string name, Func<ButtonBase> controlGetter) : this(name)
         {
             this.ControlGetter = controlGetter;
         }
@@ -52,7 +52,7 @@ namespace Start_a_Town_.UI
             this.Children.Clear();
             return this;
         }
-       
+
         public void Build<C>(Action<ILabeled, C> onControlInit, Action<ILabeled[]> onLeafSelect) where C : ButtonBase, new()
         {
             foreach (var item in this.CustomLeafs)
@@ -71,7 +71,7 @@ namespace Start_a_Town_.UI
         {
             var depth = 0;
             var parent = this.Parent;
-            while (parent != null)
+            while (parent is not null)
             {
                 depth++;
                 parent = parent.Parent;

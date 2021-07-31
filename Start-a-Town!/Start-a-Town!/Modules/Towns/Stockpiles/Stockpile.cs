@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -14,13 +14,7 @@ namespace Start_a_Town_
         }
 
         public StorageSettings Settings = new();
-        public int Priority
-        {
-            get
-            {
-                return this.Settings.Priority.Value;
-            }
-        }
+        public int Priority => this.Settings.Priority.Value;
 
         public override string UniqueName => $"Zone_Stockpile_{this.ID}";
 
@@ -51,7 +45,8 @@ namespace Start_a_Town_
                 contents.AddRange(this.Town.Map.GetObjects(pos + IntVec3.UnitZ));
             return contents;
         }
-        List<GameObject> Cache = new();
+
+        readonly List<GameObject> Cache = new();
 
         public List<GameObject> ScanExistingStoredItems()
         {
@@ -81,7 +76,7 @@ namespace Start_a_Town_
         {
             return this.Accepts(item) && this.GetAvailableCells().Any();
         }
-        
+
         public IEnumerable<TargetArgs> DistributeToStorageSpotsNewLazy(GameObject actor, GameObject obj)
         {
             var emptyCells = new List<Vector3>();
@@ -270,7 +265,7 @@ namespace Start_a_Town_
                 box.AddControlsVertically(
                     new GroupBox().AddControlsHorizontally(
                         new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
-                    DefaultFilters.GetControl((n, l) => PacketStorageFiltersNew.Send(this, n, l))
+                    this.DefaultFilters.GetGui((n, l) => PacketStorageFiltersNew.Send(this, n, l))
                         .ToPanelLabeled("Fitlers"));
                 return box;
 
@@ -285,8 +280,8 @@ namespace Start_a_Town_
 
         public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
 
-        StorageFilterCategoryNew DefaultFilters = initFilters();
-        static StorageFilterCategoryNew initFilters()
+        readonly StorageFilterCategoryNew DefaultFilters = InitFilters();
+        static StorageFilterCategoryNew InitFilters()
         {
             var cats = Def.Database.Values.OfType<ItemDef>().GroupBy(d => d.Category);
 
@@ -316,7 +311,7 @@ namespace Start_a_Town_
             var indices = categoryIndices;
             foreach (var i in indices)
             {
-                var c = DefaultFilters.GetNodeByIndex(i);
+                var c = this.DefaultFilters.GetNodeByIndex(i);
                 var all = c.GetAllDescendantLeaves();
                 var minor = all.GroupBy(a => a.Enabled).OrderBy(a => a.Count()).First();
                 foreach (var f in minor)
@@ -328,7 +323,7 @@ namespace Start_a_Town_
             var indices = gameObjects;
             foreach (var i in indices)
             {
-                var f = DefaultFilters.GetLeafByIndex(i);
+                var f = this.DefaultFilters.GetLeafByIndex(i);
                 f.Enabled = !f.Enabled;
             }
         }

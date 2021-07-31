@@ -1,27 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
-    public class ListBoxCollapsible : ScrollableBoxNew
+    public class ListCollapsibleNew : GroupBox
     {
         readonly int IndentWidth = UIManager.ArrowRight.Rectangle.Width;
 
         public ListBoxCollapsibleNode ARoot = new("root");
-        public ListBoxCollapsible(int width, int height, ScrollModes mode = ScrollModes.Vertical) : base(new Rectangle(0, 0, width, height), mode)
-        {
-            this.AutoSize = false;
-        }
-
-        public ListBoxCollapsible AddNode(ListBoxCollapsibleNode node)
+        int Spacing = 1;
+        public ListCollapsibleNew AddNode(ListBoxCollapsibleNode node)
         {
             this.ARoot.AddNode(node);
             return this;
         }
-        public ListBoxCollapsible Build()
+        public ListCollapsibleNew Build()
         {
-            this.Client.ClearControls();
+            this.ClearControls();
             var queue = new Queue<ListBoxCollapsibleNode>(this.ARoot.Children);
             
             while (queue.Any())
@@ -38,8 +33,7 @@ namespace Start_a_Town_.UI
                 container.CenterControlsAlignmentVertically();
                 container.Validate(true);
 
-                if (node.Parent is not null)
-                    node.Parent.ChildControls.Add(container);
+                node.Parent?.ChildControls.Add(container);
                 
                 label.LeftClickAction = expand;
                 void expand()
@@ -48,19 +42,20 @@ namespace Start_a_Town_.UI
                     {
                         node.Expanded = true;
                         node.Arrow.SetTexture(UIManager.ArrowDown);
-                        var nodeindex = this.Client.Controls.IndexOf(container);
+                        var nodeindex = this.Controls.IndexOf(container);
                         var indexToInsert = nodeindex + 1;
-                        var allControls = node.ChildControls.Concat(node.LeafControls);
-                        foreach (var lc in allControls)
+                        var depth = node.GetDepth();
+                        foreach (var lc in node.ChildControls)
                         {
-                            this.Client.Controls.Insert(indexToInsert, lc);
-                            lc.Location.X = node.GetDepth() * IndentWidth;
+                            this.Controls.Insert(indexToInsert++, lc);
+                            lc.Location.X = depth * IndentWidth;
                         }
-                        this.Client.AlignTopToBottom();
-                        this.UpdateClientSize();
-
-                        var lowestLeaf = allControls.First();
-                        this.EnsureControlVisible(lowestLeaf);
+                        foreach (var lc in node.LeafControls)
+                        {
+                            this.Controls.Insert(indexToInsert++, lc);
+                            lc.Location.X = depth * IndentWidth  + UIManager.ArrowDown.Rectangle.Width;
+                        }
+                        this.AlignTopToBottom(this.Spacing);
                     }
                     else
                     {
@@ -72,12 +67,11 @@ namespace Start_a_Town_.UI
                             current.Expanded = false;
                             current.Arrow.SetTexture(UIManager.ArrowRight);
 
-                            this.Client.Controls.RemoveAll(c => current.LeafControls.Contains(c) || current.ChildControls.Contains(c));
+                            this.Controls.RemoveAll(c => current.LeafControls.Contains(c) || current.ChildControls.Contains(c));
                             foreach(var child in current.Children)
                                 descendants.Enqueue(child);
                         }
-                        this.Client.AlignTopToBottom();
-                        this.UpdateClientSize();
+                        this.AlignTopToBottom(this.Spacing);
                     }
                 };
 
@@ -88,36 +82,14 @@ namespace Start_a_Town_.UI
             }
 
             foreach (var child in this.ARoot.Children)
-            {
-                this.Client.AddControlsBottomLeft(child.Control);
-            }
+                this.AddControlsBottomLeft(child.Control);
             return this;
-
-        }
-
-        private void EnsureControlVisible(Control control)
-        {
-            var lowestVisiblePoint = control.Location.Y + control.Height;
-            EnsureLocationVisible(lowestVisiblePoint);
         }
 
         public void Clear()
         {
-            this.Client.Controls.Clear();
+            this.Controls.Clear();
             this.ARoot.Clear();
-        }
-
-        public override void Remeasure()
-        {
-            base.Remeasure();
-            // TODO: lol
-            int oldH = Client.Height;
-            Client.ClientSize = new Rectangle(0, 0, Client.Width, Client.ClientSize.Height);
-            Client.Height = oldH;
-            foreach (var btn in Client.Controls)
-            {
-                btn.Width = Client.Width;
-            }
         }
 
         internal bool FindLeafIndex(Control c, out int i)

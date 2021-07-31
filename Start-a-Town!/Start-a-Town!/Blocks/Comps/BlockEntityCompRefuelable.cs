@@ -150,7 +150,7 @@ namespace Start_a_Town_
 
             info.AddTabAction("Fuel", () =>
             {
-                DefaultFilters.GetControl((n, l) => ChangeFiltersSend(map.Net, vector3, n, l)).ToWindow("Select permitted fuel").Toggle();
+                DefaultFilters.GetGui((n, l) => ChangeFiltersSend(map.Net, vector3, n, l)).ToWindow("Select permitted fuel").Toggle();
             });
         }
         

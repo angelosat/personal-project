@@ -60,7 +60,6 @@ namespace Start_a_Town_
         {
             byte next, maxAdjLight = 0;
 
-            bool visible = false;
             foreach (var n in neighbors)
             {
                 if (!this.Map.TryGetAll(n, out var nchunk, out var ncell))
@@ -70,13 +69,10 @@ namespace Start_a_Town_
               
                 var l = nchunk.GetSunlight(ncell.LocalCoords);
                 maxAdjLight = Math.Max(maxAdjLight, l);
-                visible = true;
             }
          
             if (cell.Opaque)
-            {
                 next = 0;
-            }
             else
             {
                 if (chunk.IsAboveHeightMap(lx, ly, z))

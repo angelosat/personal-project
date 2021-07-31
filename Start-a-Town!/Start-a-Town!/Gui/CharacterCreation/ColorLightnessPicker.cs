@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
@@ -10,7 +10,7 @@ namespace Start_a_Town_.UI
         static readonly Color[] Gradient = new Color[TexWidth * 256];
         static readonly Texture2D GradientTexture = CreateGradient();
         public Color Selected;
-        bool Pressed;
+        bool PressedNew;
         Vector2 SelectedCoords;
         static Texture2D CreateGradient()
         {
@@ -21,8 +21,8 @@ namespace Start_a_Town_.UI
                     Color color = ColorHueSaturationPicker.HSVtoRGB(0, 0, val);
                     Gradient[v * TexWidth + x] = color;
                 }
-            Texture2D texture = new Texture2D(Game1.Instance.GraphicsDevice, TexWidth, 256);
-            texture.SetData<Color>(Gradient);
+            var texture = new Texture2D(Game1.Instance.GraphicsDevice, TexWidth, 256);
+            texture.SetData(Gradient);
             return texture;
         }
         public Action<Color> Callback;
@@ -38,7 +38,7 @@ namespace Start_a_Town_.UI
             float h, s, v;
             h = s = v = 0;
             ColorHueSaturationPicker.RGBtoHSV(rgb, ref h, ref s, ref v);
-            Vector2 pos = new Vector2(0, 255-v);
+            Vector2 pos = new Vector2(0, 255 - v);
             this.Selected = Gradient[(int)pos.Y * GradientTexture.Width + (int)pos.X];
             this.SelectedCoords = pos;
         }
@@ -46,7 +46,7 @@ namespace Start_a_Town_.UI
         public override void Update()
         {
             base.Update();
-            if (!this.Pressed)
+            if (!this.PressedNew)
                 return;
             if (!this.MouseHover)
                 return;
@@ -63,11 +63,11 @@ namespace Start_a_Town_.UI
         {
             if (!this.MouseHover)
                 return;
-            this.Pressed = true;
+            this.PressedNew = true;
         }
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            this.Pressed = false;
+            this.PressedNew = false;
         }
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {

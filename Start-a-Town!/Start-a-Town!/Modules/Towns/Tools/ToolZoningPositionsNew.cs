@@ -16,6 +16,9 @@ namespace Start_a_Town_.Towns
         protected Action<IntVec3, int, int, bool> Add;
         public override bool TargetOnlyBlocks => true;
         readonly BlockRenderer Renderer = new(Block.FaceHighlights[-IntVec3.UnitZ]); //new();// 
+        readonly Icon _icon = new(UIManager.Icons32, 12, 32);
+        public override Icon Icon => this._icon;
+
         public ToolZoningPositionsNew()
         {
 
@@ -108,8 +111,7 @@ namespace Start_a_Town_.Towns
             if (target.Type == TargetType.Position)
                 this.End = new(target.Global.XY(), this.Begin.Z);
         }
-        
-        Icon Icon = new(UIManager.Icons32, 12, 32);
+       
         internal override void DrawUI(SpriteBatch sb, Camera camera)
         {
             base.DrawUI(sb, camera); 

@@ -30,35 +30,31 @@ namespace Start_a_Town_.Crafting
                 .AddItems(reagents);
             this.PanelParts.AddControls(listParts);
 
+            var listbox = new ScrollableBoxNewNew(200, 200, ScrollModes.Vertical);
             var listcollapsible = this.CreateList(order);
             listcollapsible.Build();
+            listbox.AddControls(listcollapsible);
 
             this.PanelItemTypes = new Panel() { Location = this.PanelParts.TopRight };
 
             this.PanelMaterials = new PanelLabeledNew("Materials") { Location = this.PanelItemTypes.BottomLeft }.SetClientDimensions(200, 150);
 
             this.PanelCollapsible = new Panel() { AutoSize = false }.SetClientDimensions(200, 200);
-            this.PanelCollapsible.AddControls(listcollapsible);
+            this.PanelCollapsible.AddControls(listbox);
             this.AddControls(this.PanelCollapsible);
 
             this.ChkHaulOnFinish = new CheckBoxNew("Haul on finish", this.Order.HaulOnFinish)
             {
                 Location = this.PanelCollapsible.BottomLeft,
-                TickedFunc = () =>
-                {
-                    return this.Order.HaulOnFinish;
-                },
-                LeftClickAction = () =>
-                {
-                    PacketCraftOrderToggleHaul.Send(this.Order, !this.Order.HaulOnFinish);
-                }
+                TickedFunc = () =>  this.Order.HaulOnFinish,
+                LeftClickAction = () => PacketCraftOrderToggleHaul.Send(this.Order, !this.Order.HaulOnFinish)
             };
             this.AddControls(this.ChkHaulOnFinish);
         }
 
-        ListBoxCollapsible CreateList(CraftOrderNew order)
+        ListCollapsibleNew CreateList(CraftOrderNew order)
         {
-            var list = new ListBoxCollapsible(200, 200);
+            var list = new ListCollapsibleNew();// 200, 200);
             foreach (var r in order.Reaction.Reagents)
             {
                 var items = r.Ingredient.GetAllValidItemDefs();

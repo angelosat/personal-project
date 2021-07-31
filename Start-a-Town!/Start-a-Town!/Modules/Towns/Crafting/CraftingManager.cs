@@ -27,9 +27,12 @@ namespace Start_a_Town_.Towns.Crafting
             PacketCraftOrderChangeMode.Init();
         }
         
-        internal IEnumerable<KeyValuePair<IntVec3, List<CraftOrderNew>>> ByWorkstationNew()
+        internal IEnumerable<KeyValuePair<IntVec3, ICollection<CraftOrderNew>>> ByWorkstationNew()
         {
-            return this.Map.GetBlockEntitiesCache().Where(e => e.Value.HasComp<BlockEntityCompWorkstation>()).Select(r => new KeyValuePair<IntVec3, List<CraftOrderNew>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
+            //return this.Map.GetBlockEntitiesCache().Where(e => e.Value.HasComp<BlockEntityCompWorkstation>()).Select(r => new KeyValuePair<IntVec3, List<CraftOrderNew>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
+            return this.Map.GetBlockEntitiesCache()
+                .Where(e => e.Value.HasComp<BlockEntityCompWorkstation>())
+                .Select(r => new KeyValuePair<IntVec3, ICollection<CraftOrderNew>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
         }
         internal BlockEntityCompWorkstation GetWorkstation(IntVec3 global)
         {
@@ -157,11 +160,12 @@ namespace Start_a_Town_.Towns.Crafting
         internal bool RemoveOrder(IntVec3 station, string orderID)
         {
             var bench = this.GetWorkstation(station);
-            if (bench.Orders.RemoveAll(r => r.GetUniqueLoadID() == orderID) > 0)
-            {
-                this.Town.Map.EventOccured(Message.Types.OrdersUpdatedNew, bench);
-                return true;
-            }
+            //if (bench.Orders.RemoveAll(r => r.GetUniqueLoadID() == orderID) > 0)
+            //{
+            //    this.Town.Map.EventOccured(Message.Types.OrdersUpdatedNew, bench);
+            //    return true;
+            //}
+            bench.RemoveOrder(orderID);
             return false;
         }
 

@@ -5,8 +5,8 @@ namespace Start_a_Town_.UI
 {
     class SplitStackWindow : Window
     {
-        static SplitStackWindow _Instance;
-        public static SplitStackWindow Instance => _Instance ??= new SplitStackWindow();
+        static SplitStackWindow _instance;
+        public static SplitStackWindow Instance => _instance ??= new SplitStackWindow();
 
         SliderNew Sldr_Amount;
         Action<int> SplitAction;
@@ -42,7 +42,7 @@ namespace Start_a_Town_.UI
 
         void Split()
         {
-            this.SplitAction(Int16.Parse(this.Txt_Amount.Text));
+            this.SplitAction(short.Parse(this.Txt_Amount.Text));
             this.Hide();
         }
 

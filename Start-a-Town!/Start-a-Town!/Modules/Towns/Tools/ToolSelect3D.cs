@@ -16,7 +16,6 @@ namespace Start_a_Town_.Towns
         bool Removing;
         protected Action<Vector3, Vector3, bool> Add;
         Func<List<Vector3>> GetZones = () => new List<Vector3>();
-        IntVec3 Plane;
 
         protected ToolSelect3D()
         {
@@ -42,7 +41,7 @@ namespace Start_a_Town_.Towns
             if (this.Target.Type != TargetType.Position)
                 return;
 
-            this.End = (IntVec3)this.Target.Global * (IntVec3.One - this.Plane) + this.Begin * this.Plane;
+            this.End = (IntVec3)this.Target.Global;
 
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;
@@ -59,7 +58,7 @@ namespace Start_a_Town_.Towns
             if (this.Target.Type != TargetType.Position)
                 return;
 
-            this.End = (IntVec3)this.Target.Global * (IntVec3.One - this.Plane) + this.Begin * this.Plane;
+            this.End = this.Target.Global;
 
             var w = (int)Math.Abs(this.Target.Global.X - this.Begin.X) + 1;
             var h = (int)Math.Abs(this.Target.Global.Y - this.Begin.Y) + 1;

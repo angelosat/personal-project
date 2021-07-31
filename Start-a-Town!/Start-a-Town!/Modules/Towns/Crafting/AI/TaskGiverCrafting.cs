@@ -16,7 +16,6 @@ namespace Start_a_Town_
 
             var allOrders = manager.ByWorkstationNew();
 
-
             var allObjects = map.GetEntities().OfType<Entity>().ToArray();
 
             var itemAmounts = new List<Dictionary<TargetArgs, int>>();

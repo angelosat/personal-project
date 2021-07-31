@@ -16,7 +16,7 @@ namespace Start_a_Town_.UI
             this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj));
         }
 
-        public List<Control> Items => this.Controls;
+        public IList<Control> Items => this.Controls;
 
         readonly Func<TObject, Control> ControlFactory;
 

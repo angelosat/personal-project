@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 using Start_a_Town_.Crafting;
@@ -160,15 +159,13 @@ namespace Start_a_Town_.Towns.Crafting
         internal bool RemoveOrder(IntVec3 station, string orderID)
         {
             var bench = this.GetWorkstation(station);
-            //if (bench.Orders.RemoveAll(r => r.GetUniqueLoadID() == orderID) > 0)
-            //{
-            //    this.Town.Map.EventOccured(Message.Types.OrdersUpdatedNew, bench);
-            //    return true;
-            //}
-            bench.RemoveOrder(orderID);
-            return false;
+            return bench.RemoveOrder(orderID);
         }
-
+        internal CraftOrder RemoveOrder(IntVec3 station, int orderID)
+        {
+            var bench = this.GetWorkstation(station);
+            return bench.RemoveOrder(orderID);
+        }
         internal override void OnGameEvent(GameEvent e)
         {
             switch (e.Type)

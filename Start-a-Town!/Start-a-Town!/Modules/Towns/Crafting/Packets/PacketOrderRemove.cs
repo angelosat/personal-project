@@ -16,7 +16,7 @@ namespace Start_a_Town_
             var w = net.GetOutgoingStream();
             w.Write(p);
             w.Write(order.Workstation);
-            w.Write(order.GetUniqueLoadID());
+            w.Write(order.ID);
         }
         internal static void Send(INetwork net, Vector3 global, string orderID)
         {
@@ -34,11 +34,11 @@ namespace Start_a_Town_
         }
         private static void Receive(INetwork net, BinaryReader r)
         {
-            var station = r.ReadVector3();
-            var orderID = r.ReadString();
-            if(net.Map.Town.CraftingManager.RemoveOrder(station, orderID))
+            var station = r.ReadIntVec3();
+            var orderID = r.ReadInt32();// r.ReadString();
+            if(net.Map.Town.CraftingManager.RemoveOrder(station, orderID) is CraftOrder order)
                 if (net is Server)
-                    Send(net, station, orderID);
+                    Send(net, order);
         }
     }
 }

@@ -36,11 +36,15 @@ namespace Start_a_Town_
         {
             return this.Orders.Remove(this.GetOrder(orderID));
         }
+        internal CraftOrder RemoveOrder(int orderID)
+        {
+            var order = this.GetOrder(orderID);
+            this.Orders.Remove(order);
+            return order;
+        }
         internal bool Reorder(int orderID, bool increasePriority)
         {
             var order = this.GetOrder(orderID);
-            if (order == null)
-                return false;
             var prevIndex = this.Orders.IndexOf(order);
             this.Orders.Remove(order);
             var newIndex = Math.Max(0, Math.Min(this.Orders.Count, prevIndex + (increasePriority ? -1 : 1)));

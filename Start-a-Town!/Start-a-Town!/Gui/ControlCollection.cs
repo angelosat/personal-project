@@ -90,7 +90,11 @@ namespace Start_a_Town_.UI
             }
             //this.Parent.Validate();
         }
-
+        public void Insert(int index, IEnumerable<Control> controls)
+        {
+            foreach (var c in controls)
+                this.Insert(index++, c);
+        }
         public new void Insert(int index, Control control)
         {
             base.Insert(index, control);

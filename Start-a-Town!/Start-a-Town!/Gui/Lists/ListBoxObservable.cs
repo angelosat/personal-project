@@ -51,7 +51,7 @@ namespace Start_a_Town_.UI
 
         private void List_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            this.AddItems(e.NewItems?.Cast<TObject>());
+            this.AddItems(e.NewItems?.Cast<TObject>(), e.NewStartingIndex);
             this.RemoveItems(e.OldItems?.Cast<TObject>());
         }
 
@@ -61,6 +61,20 @@ namespace Start_a_Town_.UI
                 return;
             foreach (var i in items)
                 this.AddItem(i);
+        }
+        void AddItems(IEnumerable<TObject> items, int index)
+        {
+            if (items == null)
+                return;
+            var newControls = items.Select(i =>
+            {
+                var gui = i.GetGui();
+                gui.Tag = i;
+                this.Items.Add(gui);
+                return gui;
+            });
+            this.Controls.Insert(index, newControls);
+            this.Controls.AlignVertically(Spacing);
         }
 
         Control AddItem(TObject item)
@@ -77,6 +91,7 @@ namespace Start_a_Town_.UI
                 this.AddControls(control);
             return control;
         }
+
         void RemoveItems(IEnumerable<TObject> items)
         {
             if (items is null)

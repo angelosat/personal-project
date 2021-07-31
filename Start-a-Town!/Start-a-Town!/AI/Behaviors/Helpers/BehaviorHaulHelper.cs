@@ -107,16 +107,14 @@ namespace Start_a_Town_
             GameObject hauledObj = null;
             bhav.PreInitAction = () =>
             {
-                {
-                    var actor = bhav.Actor;
-                    var interaction = new UseHauledOnTargetNew();
-                    hauledObj = actor.Hauled;
-                    var task = actor.CurrentTask;
-                    var target = task.GetTarget(storageIndex);
-                    actor.Interact(interaction, target);
-                }
+                var actor = bhav.Actor;
+                var interaction = new UseHauledOnTargetNew();
+                hauledObj = actor.Hauled;
+                var task = actor.CurrentTask;
+                var target = task.GetTarget(storageIndex);
+                actor.Interact(interaction, target);
             };
-            bhav.AddEndCondition((Func<BehaviorState>)(() =>
+            bhav.AddEndCondition(() =>
             {
                 var actor = bhav.Actor;
                 var interaction = actor.CurrentInteraction;
@@ -134,7 +132,7 @@ namespace Start_a_Town_
                     actor.Unreserve(target);
                 }
                 return BehaviorState.Running;
-            }));
+            });
             return bhav;
         }
         static public Behavior JumpIfNextStorageFound(Behavior gotoBhav, TargetIndex storageIndex)

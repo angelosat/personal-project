@@ -12,7 +12,6 @@ namespace Start_a_Town_
         protected override IEnumerable<Behavior> GetSteps()
         {
             this.FailOnForbidden(ItemInd);
-            this.FailOn(deliverFail);
 
             var gotohaul = new BehaviorGetAtNewNew(ItemInd).FailOn(failCollecting);
             yield return gotohaul;
@@ -29,7 +28,10 @@ namespace Start_a_Town_
 
             bool deliverFail()
             {
-                var fail = !HaulHelper.IsValidStorage(Storage, this.Actor.Map, Item);
+                var o = this.Actor.Hauled;
+                if (o == null)
+                    return true;
+                var fail = !HaulHelper.IsValidStorage(this.Task.GetTarget(StorageInd), this.Actor.Map, o);
                 if (fail)
                     this.Actor.StopPathing();
                 return fail;

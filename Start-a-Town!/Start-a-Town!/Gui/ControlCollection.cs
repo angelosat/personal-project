@@ -132,10 +132,11 @@ namespace Start_a_Town_.UI
                 c.Anchor = new Vector2(0, .5f);
             }
         }
-        public int RemoveAll(Predicate<Control> predicate)
+        public void RemoveAll(Func<Control, bool> predicate)
         {
-            var count = this.RemoveAll(predicate);
-            return count;
+            var toremove = this.Items.Where(predicate).ToList();
+            foreach (var c in toremove)
+                this.Remove(c);
         }
         protected override void RemoveItem(int index)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace Start_a_Town_.UI
@@ -14,6 +15,7 @@ namespace Start_a_Town_.UI
         public List<ListBoxCollapsibleNode> Children = new();
         public Func<ButtonBase> ControlGetter;
         public PictureBox Arrow;
+        public GroupBox ChildGroupBox = new();// { BackgroundColor = Color.Red * .2f };
 
         public string Name;
         public bool Expanded;
@@ -44,6 +46,7 @@ namespace Start_a_Town_.UI
         public ListBoxCollapsibleNode AddLeaf(Control leaf)
         {
             this.LeafControls.Add(leaf);
+            this.ChildGroupBox.AddControlsBottomLeft(leaf);
             leaf.Validate(true);
             return this;
         }

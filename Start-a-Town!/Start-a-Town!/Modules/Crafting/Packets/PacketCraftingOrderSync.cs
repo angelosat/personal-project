@@ -11,7 +11,7 @@ namespace Start_a_Town_.Modules.Crafting
             p = Network.RegisterPacketHandler(Receive);
         }
 
-        internal static void Send(CraftOrderNew order)
+        internal static void Send(CraftOrder order)
         {
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();
@@ -25,7 +25,7 @@ namespace Start_a_Town_.Modules.Crafting
         {
             var station = r.ReadVector3();
             var index = r.ReadInt32();
-            var order = new CraftOrderNew(net.Map, r);
+            var order = new CraftOrder(net.Map, r);
             var existing = net.Map.Town.CraftingManager.GetOrder(station, index);
             existing.HaulOnFinish = order.HaulOnFinish;
             existing.FinishMode = order.FinishMode;

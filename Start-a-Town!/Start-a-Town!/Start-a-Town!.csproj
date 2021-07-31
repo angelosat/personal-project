@@ -204,6 +204,7 @@
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
     <Compile Include="Gui\ScrollBars\ScrollModes.cs" />
     <Compile Include="Helpers\EnsureStaticCtorCall.cs" />
+    <Compile Include="Interfaces\IListable.cs" />
     <Compile Include="Modules\Crafting\Crafting\New\Ingredient.Modifier.cs" />
     <Compile Include="Modules\Crafting\Crafting\Reaction.Product.ProductMaterialPair.cs" />
     <Compile Include="Components\GearType.cs" />
@@ -233,7 +234,7 @@
     <Compile Include="AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawing.Args.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.Args.cs" />
-    <Compile Include="Modules\Crafting\CraftOrderNew.UI.cs" />
+    <Compile Include="Modules\Crafting\CraftOrder.UI.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDef.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDefOf.cs" />
     <Compile Include="Blocks\Workstations\IBlockWorkstation.cs" />
@@ -619,7 +620,7 @@
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderToggleHaul.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftingOrderSync.cs" />
     <Compile Include="Modules\Crafting\Gui\CraftOrderDetailsInterface.cs" />
-    <Compile Include="Modules\Crafting\Gui\WorkstationGuiNew.cs" />
+    <Compile Include="Modules\Crafting\Gui\WorkstationGui.cs" />
     <Compile Include="AI\Components\AILog.cs" />
     <Compile Include="AI\Components\Personality\Trait.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionConstruct.cs" />
@@ -635,7 +636,7 @@
     <Compile Include="AI\Labors\JobDef.cs" />
     <Compile Include="Modules\Towns\Labors\NpcLogUINew.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.cs" />
-    <Compile Include="Modules\Crafting\CraftOrderNew.cs" />
+    <Compile Include="Modules\Crafting\CraftOrder.cs" />
     <Compile Include="Blocks\Workstations\BlockWorkbenchEntity.cs" />
     <Compile Include="Blocks\Chest\BlockChest.cs" />
     <Compile Include="Blocks\Chest\BlockChestEntity.cs" />

@@ -84,12 +84,7 @@ namespace Start_a_Town_.UI
             this.Location = new(0, (UIManager.Height - this.Height) / 2);
             return this;
         }
-        public Vector2 LeftCenterScreen => new(0, (UIManager.Height - this.Height) / 2);
-        public Vector2 RightCenterScreen => new(UIManager.Width - this.Width, (UIManager.Height - this.Height) / 2);
-        public Vector2 BottomLeftScreen => new(0, UIManager.Height - this.Height);
-        public Vector2 BottomRightScreen => new(UIManager.Width - this.Width, UIManager.Height - this.Height);
-        public Vector2 BottomCenterScreen => new((UIManager.Width - this.Width) / 2, UIManager.Height - this.Height);
-        public Vector2 TopRightScreen => new(UIManager.Width - this.Width, 0);
+        
 
         public virtual void ConformToScreen()
         {
@@ -586,11 +581,20 @@ namespace Start_a_Town_.UI
         public Vector2 Center => new(this.Width / 2, this.Height / 2);
         public Vector2 BottomCenter => this.TopLeft + new Vector2(this.Width / 2, this.Height);
 
+        public Vector2 BottomRightLocal => new Vector2(this.Width, this.Height);
+
         public Vector2 BottomLeft => this.TopLeft + Vector2.UnitY * this.Height;
         public Vector2 BottomRight => this.TopLeft + new Vector2(this.Width, this.Height);
         public Vector2 TopLeft => this.Location + this.LocationFunc() - this.Dimensions * this.Anchor;
         public Vector2 TopRight => this.TopLeft + Vector2.UnitX * this.Width;
         public Vector2 CenterRight => new(this.Right, this.Top + this.Height / 2);
+
+        public Vector2 LeftCenterScreen => new(0, (UIManager.Height - this.Height) / 2);
+        public Vector2 RightCenterScreen => new(UIManager.Width - this.Width, (UIManager.Height - this.Height) / 2);
+        public Vector2 BottomLeftScreen => new(0, UIManager.Height - this.Height);
+        public Vector2 BottomRightScreen => new(UIManager.Width - this.Width, UIManager.Height - this.Height);
+        public Vector2 BottomCenterScreen => new((UIManager.Width - this.Width) / 2, UIManager.Height - this.Height);
+        public Vector2 TopRightScreen => new(UIManager.Width - this.Width, 0);
 
         public Rectangle ClientRectangle
         {
@@ -1276,6 +1280,12 @@ namespace Start_a_Town_.UI
         {
             this.Location = location;
             this.Anchor = anchor;
+            return this;
+        }
+        internal Control AnchorToBottomRight()
+        {
+            this.LocationFunc = ()=>this.Parent.BottomRightLocal;
+            this.Anchor = Vector2.One;
             return this;
         }
         public void SmartPosition()

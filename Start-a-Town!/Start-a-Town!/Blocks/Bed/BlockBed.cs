@@ -190,7 +190,7 @@ namespace Start_a_Town_
 
             map.SetBlock(bottom, Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
             map.SetBlock(top, Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
-            var entity = new BlockBedEntity();
+            var entity = new BlockBedEntity(global);
             map.AddBlockEntity(top, entity);
             map.Town.AddUtility(Utility.Types.Sleeping, top);
         }
@@ -277,9 +277,9 @@ namespace Start_a_Town_
                 sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
             }
         }
-        public override BlockEntity CreateBlockEntity()
+        public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {
-            return new BlockBedEntity();
+            return new BlockBedEntity(originGlobal);
         }
        
         public static BlockBedEntity GetEntity(MapBase map, IntVec3 global)

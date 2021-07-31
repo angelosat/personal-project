@@ -4,10 +4,10 @@ namespace Start_a_Town_
 {
     public class VisitorCraftRequest
     {
-        public readonly CraftOrderNew Order;
+        public readonly CraftOrder Order;
         readonly Dictionary<string, ItemDefMaterialAmount> Preferences = new();
 
-        public VisitorCraftRequest(CraftOrderNew order, IEnumerable<(string reagentName, ItemDef item, MaterialDef material)> preferences)
+        public VisitorCraftRequest(CraftOrder order, IEnumerable<(string reagentName, ItemDef item, MaterialDef material)> preferences)
         {
             this.Order = order;
             foreach (var (reagentName, item, material) in preferences)

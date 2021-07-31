@@ -14,13 +14,15 @@ namespace Start_a_Town_
         public ProductMaterialPair Product;
         public List<ItemDefMaterialAmount> Container = new();
         public Progress BuildProgress { get; set; }
-        public Vector3 Origin { get; set; }
-        public List<Vector3> Children { get; set; } = new List<Vector3>();
-        public BlockConstructionEntity()
+        public List<IntVec3> Children { get; set; } = new List<IntVec3>();
+
+        public BlockConstructionEntity(IntVec3 origin)
+            : base (origin)
         {
 
         }
-        public BlockConstructionEntity(ProductMaterialPair product, Vector3 origin, GameObject initialMaterial, int amount)
+        public BlockConstructionEntity(ProductMaterialPair product, IntVec3 origin, GameObject initialMaterial, int amount)
+            : this(origin)
         {
             this.Product = product;
             if (amount > initialMaterial.StackSize)
@@ -28,12 +30,6 @@ namespace Start_a_Town_
             this.Container.Add(new ItemDefMaterialAmount(initialMaterial.Def, initialMaterial.PrimaryMaterial, amount));
 
             this.BuildProgress = new Progress(0, product.Block.WorkAmount, 0);
-            this.Origin = origin;
-        }
-
-        public override object Clone()
-        {
-            throw new Exception();
         }
         public override void GetTooltip(UI.Control tooltip)
         {
@@ -115,7 +111,6 @@ namespace Start_a_Town_
         protected override void AddSaveData(SaveTag tag)
         {
             tag.Add(new SaveTag(SaveTag.Types.Compound, "Product", this.Product.Save()));
-            tag.Add(new SaveTag(SaveTag.Types.Vector3, "Origin", this.Origin));
             tag.Add(this.Children.Save("Children"));
             tag.Add(this.Container.SaveNewBEST("Container"));
             tag.Add(this.BuildProgress.Save("BuildProgress"));
@@ -123,7 +118,6 @@ namespace Start_a_Town_
         protected override void LoadExtra(SaveTag tag)
         {
             tag.TryGetTag("Product", t => this.Product = new ProductMaterialPair(t));
-            tag.TryGetTagValue<Vector3>("Origin", t => this.Origin = t);
             tag.TryGetTagValue<List<SaveTag>>("Children", t => this.Children.Load(t));
             this.Container.TryLoadMutable(tag, "Container");
             tag.TryGetTag("BuildProgress", v => this.BuildProgress = new Progress(v));
@@ -133,7 +127,6 @@ namespace Start_a_Town_
         {
             this.Product.Write(w);
             this.BuildProgress.Write(w);
-            w.Write(this.Origin);
             w.Write(this.Children);
             this.Container.Write(w);
         }
@@ -141,8 +134,7 @@ namespace Start_a_Town_
         {
             this.Product = new ProductMaterialPair(r);
             this.BuildProgress = new Progress(r);
-            this.Origin = r.ReadVector3();
-            this.Children = r.ReadListVector3();
+            this.Children = r.ReadListIntVec3();
             this.Container.ReadMutable(r);
         }
     }

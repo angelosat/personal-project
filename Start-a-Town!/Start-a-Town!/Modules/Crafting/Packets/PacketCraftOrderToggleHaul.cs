@@ -12,7 +12,7 @@ namespace Start_a_Town_.Modules.Crafting
             p = Network.RegisterPacketHandler(Receive);
         }
 
-        internal static void Send(CraftOrderNew order, bool value)
+        internal static void Send(CraftOrder order, bool value)
         {
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();

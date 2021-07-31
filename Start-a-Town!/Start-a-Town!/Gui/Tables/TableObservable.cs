@@ -15,9 +15,15 @@ namespace Start_a_Town_.UI
         public ObservableCollection<TObject> List;
         static readonly Color DefaultRowColor = Color.SlateGray * .2f;
         public int RowWidth;// => this.Columns.Sum(c => c.Width);
-        public int RowHeight => Label.DefaultHeight + Spacing;
+        //public int RowHeight => Label.DefaultHeight + Spacing;
+        public int RowHeight;// => Label.DefaultHeight;
 
-        TableObservable < TObject> Clear()
+        public int GetHeightFromRowCount(int rowCount)
+        {
+            return rowCount * (this.RowHeight + Spacing) - Spacing;
+        }
+
+        TableObservable< TObject> Clear()
         {
             this.Controls.Clear();
             return this;
@@ -53,23 +59,45 @@ namespace Start_a_Town_.UI
         {
             if (items is null)
                 return;
-            foreach (var i in items)
-                this.AddItem(i);
-        }
-        Control AddItem(TObject item)
-        {
-            var row = new GroupBox(this.RowWidth, Label.DefaultHeight) { BackgroundColor = DefaultRowColor };
-            int currentX = 0;
-            foreach (var col in this.Columns)
+            var currentY = this.Controls.Any() ? this.BottomLeft.Y + Spacing : 0;
+            var newControls = items.Select(item =>
+            //this.AddItem(i);
             {
-                row.AddControls(col.ControlGetter(item).SetLocation(currentX, 0));
-                currentX += col.Width;
-            }
-            this.AddControlsBottomLeft(row);
-            row.Location.Y += Spacing;
-            row.Tag = item;
-            return row;
+                var row = new GroupBox() { BackgroundColor = DefaultRowColor };
+                int currentX = 0;
+                foreach (var col in this.Columns)
+                {
+                    row.AddControls(col.ControlGetter(item).SetLocation(currentX, 0));
+                    currentX += col.Width;
+                }
+                row.Controls.AlignCenterHorizontally();
+                row.Tag = item;
+                this.RowHeight = row.Height;
+                row.Width = this.RowWidth;
+                row.AutoSize = false;
+                row.Location.Y = currentY;
+                currentY += row.Height + Spacing;
+                return row;
+            });
+            this.AddControls(newControls.ToArray());
         }
+        //Control AddItem(TObject item)
+        //{
+        //    //var row = new GroupBox(this.RowWidth, Label.DefaultHeight) { BackgroundColor = DefaultRowColor };
+        //    var row = new GroupBox() { BackgroundColor = DefaultRowColor };
+        //    int currentX = 0;
+        //    foreach (var col in this.Columns)
+        //    {
+        //        row.AddControls(col.ControlGetter(item).SetLocation(currentX, 0));
+        //        currentX += col.Width;
+        //    }
+        //    row.Controls.AlignCenterHorizontally();
+        //    this.RowHeight = row.Height;
+        //    this.AddControlsBottomLeft(row);
+        //    row.Location.Y += Spacing;
+        //    row.Tag = item;
+        //    return row;
+        //}
         void RemoveItems(IEnumerable<TObject> items)
         {
             if (items is null)

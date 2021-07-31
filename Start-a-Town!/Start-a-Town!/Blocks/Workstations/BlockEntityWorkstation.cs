@@ -15,16 +15,21 @@ namespace Start_a_Town_.Crafting
         /// make this a property that returns first item from this.getorders(this.global) ?
         /// </summary>
         public GameObject CurrentWorker;
-        public List<CraftOrderNew> Orders = new List<CraftOrderNew>();
+        public List<CraftOrder> Orders = new List<CraftOrder>();
         public bool ExecutingOrders;
         public abstract Container Input { get; }
         public abstract IsWorkstation.Types Type { get; }
+        public BlockEntityWorkstation(IntVec3 originGlobal)
+            : base(originGlobal)
+        {
 
-        internal CraftOrderNew GetOrder(string uniqueID)
+        }
+
+        internal CraftOrder GetOrder(string uniqueID)
         {
             return this.Orders.Find(o => o.GetUniqueLoadID() == uniqueID);
         }
-        internal CraftOrderNew GetOrder(int uniqueID)
+        internal CraftOrder GetOrder(int uniqueID)
         {
             return this.Orders.Find(o => o.ID == uniqueID);
         }
@@ -58,7 +63,7 @@ namespace Start_a_Town_.Crafting
         }
         protected override void LoadExtra(SaveTag tag)
         {
-            tag.TryLoadRefs<CraftOrderNew>("Orders", ref this.Orders);
+            tag.TryLoadRefs<CraftOrder>("Orders", ref this.Orders);
         }
         protected override void WriteExtra(BinaryWriter w)
         {

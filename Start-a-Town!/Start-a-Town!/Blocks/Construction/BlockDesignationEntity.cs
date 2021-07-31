@@ -24,11 +24,14 @@ namespace Start_a_Town_.Blocks
             }
             public Container Material;
             public Progress BuildProgress { get; set; }
-            public List<Vector3> Children { get; set; } = new List<Vector3>();
-            public BlockDesignationEntity()
+            public List<IntVec3> Children { get; set; } = new List<IntVec3>();
+            public BlockDesignationEntity(IntVec3 origin)
+                : base(origin)
             {
+
             }
-            public BlockDesignationEntity(ProductMaterialPair product, Vector3 origin)
+            public BlockDesignationEntity(ProductMaterialPair product, IntVec3 origin)
+                : this(origin)
             {
                 this.OriginGlobal = origin;
                 this.Product = product;
@@ -53,10 +56,6 @@ namespace Start_a_Town_.Blocks
                 return false;
             }
             
-            public override object Clone()
-            {
-                return new BlockDesignationEntity(this.Product, this.OriginGlobal);
-            }
             public override void GetTooltip(Control tooltip)
             {
                 var product = this.Product;
@@ -104,7 +103,7 @@ namespace Start_a_Town_.Blocks
             {
                 this.Product = new ProductMaterialPair(r);
                 this.BuildProgress = new Progress(r);
-                this.Children = r.ReadListVector3();
+                this.Children = r.ReadListIntVec3();
             }
             public int GetMissingAmount(ItemDef def)
             {

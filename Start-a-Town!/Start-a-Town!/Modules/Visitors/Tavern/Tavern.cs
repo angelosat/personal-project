@@ -88,7 +88,7 @@ namespace Start_a_Town_
                 yield return r;
         }
         
-        readonly List<CraftOrderNew> Orders = new();
+        readonly List<CraftOrder> Orders = new();
         int MenuItemIDSequence = 1;
         public Tavern()
         {
@@ -102,26 +102,26 @@ namespace Start_a_Town_
         {
         }
         
-        public override CraftOrderNew GetOrder(int orderid)
+        public override CraftOrder GetOrder(int orderid)
         {
             return this.Orders.First(o => o.ID == orderid);
         }
-        public void AddOrder(CraftOrderNew order)
+        public void AddOrder(CraftOrder order)
         {
             this.Orders.Add(order);
-            this.Town.Net.EventOccured(Components.Message.Types.TavernMenuChanged, this, new CraftOrderNew[] { order }, new CraftOrderNew[] { });
+            this.Town.Net.EventOccured(Components.Message.Types.TavernMenuChanged, this, new CraftOrder[] { order }, new CraftOrder[] { });
         }
-        public void RemoveOrder(CraftOrderNew order)
+        public void RemoveOrder(CraftOrder order)
         {
             this.Orders.Remove(order);
-            this.Town.Net.EventOccured(Components.Message.Types.TavernMenuChanged, this, new CraftOrderNew[] {  }, new CraftOrderNew[] { order });
+            this.Town.Net.EventOccured(Components.Message.Types.TavernMenuChanged, this, new CraftOrder[] {  }, new CraftOrder[] { order });
             this.Town.Net.EventOccured(Components.Message.Types.OrderDeleted, order);
         }
         public void RemoveOrder(int orderid)
         {
             var order = this.GetOrder(orderid);
             this.Orders.Remove(order);
-            this.Town.Net.EventOccured(Components.Message.Types.TavernMenuChanged, this, new CraftOrderNew[] { }, new CraftOrderNew[] { order });
+            this.Town.Net.EventOccured(Components.Message.Types.TavernMenuChanged, this, new CraftOrder[] { }, new CraftOrder[] { order });
             this.Town.Net.EventOccured(Components.Message.Types.OrderDeleted, order);
         }
         public void AddTable(IntVec3 global)
@@ -175,7 +175,7 @@ namespace Start_a_Town_
             table = default;
             return false;
         }
-        public IEnumerable<CraftOrderNew> GetAvailableOrders()
+        public IEnumerable<CraftOrder> GetAvailableOrders()
         {
             foreach(var o in this.Orders)
                 yield return o;
@@ -217,7 +217,7 @@ namespace Start_a_Town_
         {
             var ordersBox = new GroupBox() { Name = "Orders" };
             Tavern tav = null;
-            var ordersTable = new TableScrollableCompactNewNew<CraftOrderNew>(16)
+            var ordersTable = new TableScrollableCompactNewNew<CraftOrder>(16)
                 .AddColumn(new(), "enabled", UIManager.TextureTickBox.Width, o => new CheckBoxNew() { TickedFunc = () => o.Enabled, LeftClickAction = () => Packets.SendOrderSync(tav.Town.Net, tav.Town.Net.GetPlayer(), tav, o, !o.Enabled) })
                 .AddColumn(new(), "name", 130, o => new Label(o.Name, () => o.ShowDetailsUI((o, n, i, m, t) => Packets.UpdateOrderIngredients(tav.Town.Net, tav.Town.Net.GetPlayer(), tav, o, n, i, m, t))), 0)
                 .AddColumn(new(), "price", 70 - Icon.Cross.SourceRect.Width, o => new Label("-"))
@@ -236,9 +236,9 @@ namespace Start_a_Town_
                         var t = e.Parameters[0] as Tavern;
                         if (tav != t)
                             break;
-                        var ordersAdded = e.Parameters[1] as CraftOrderNew[];
+                        var ordersAdded = e.Parameters[1] as CraftOrder[];
                         ordersTable.AddItems(ordersAdded);
-                        var ordersRemoved = e.Parameters[2] as CraftOrderNew[];
+                        var ordersRemoved = e.Parameters[2] as CraftOrder[];
                         ordersTable.RemoveItems(ordersRemoved);
                         break;
 

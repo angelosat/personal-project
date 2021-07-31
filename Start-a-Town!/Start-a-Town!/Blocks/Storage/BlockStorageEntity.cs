@@ -19,17 +19,14 @@ namespace Start_a_Town_
             public bool IsFull => this.Contents.Count == this.Capacity;
 
             MapBase IStorage.Map => this.Map;
-
+            public BlockStorageEntity(IntVec3 originGlobal)
+                : base(originGlobal)
+            { 
+            }
             public bool Accepts(Entity item)
             {
                 throw new NotImplementedException();
             }
-
-            public override object Clone()
-            {
-                return new BlockStorageEntity();
-            }
-
             public Dictionary<TargetArgs, int> GetPotentialHaulTargets(Actor actor, GameObject item, out int maxamount)
             {
                 var dic = new Dictionary<TargetArgs, int>();

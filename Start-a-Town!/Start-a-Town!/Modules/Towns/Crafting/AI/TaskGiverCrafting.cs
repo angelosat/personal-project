@@ -156,11 +156,11 @@ namespace Start_a_Town_
             }
             return null;
         }
-        private static bool AllReagentsAvailable(GameObject actor, List<GameObject> allObjects, ref List<Dictionary<TargetArgs, int>> itemAmounts, Dictionary<string, int> materialsUsed, CraftOrderNew order)
+        private static bool AllReagentsAvailable(GameObject actor, List<GameObject> allObjects, ref List<Dictionary<TargetArgs, int>> itemAmounts, Dictionary<string, int> materialsUsed, CraftOrder order)
         {
             return AllReagentsAvailable(actor, allObjects, ref itemAmounts, materialsUsed, order);
         }
-        private static bool TryFindAllIngredients(Actor actor, IEnumerable<Entity> allObjects, ref List<Dictionary<TargetArgs, int>> itemAmounts, Dictionary<string, Entity> materialsUsed, CraftOrderNew order)
+        private static bool TryFindAllIngredients(Actor actor, IEnumerable<Entity> allObjects, ref List<Dictionary<TargetArgs, int>> itemAmounts, Dictionary<string, Entity> materialsUsed, CraftOrder order)
         {
             //var handled = new HashSet<GameObject>();
             Dictionary<Entity, int> alreadyFound = new();

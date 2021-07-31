@@ -16,8 +16,8 @@ namespace Start_a_Town_.Crafting
         readonly Dictionary<Reaction.Reagent, ListBoxNoScroll<ItemDef, CheckBoxNew>> CachedReagentLists = new();
         readonly Dictionary<Reaction.Reagent, ListBoxNoScroll<MaterialDef, CheckBoxNew>> CachedReagentMaterialLists = new();
         readonly CheckBoxNew ChkHaulOnFinish;
-        readonly CraftOrderNew Order;
-        public CraftOrderDetailsInterface(CraftOrderNew order)
+        readonly CraftOrder Order;
+        public CraftOrderDetailsInterface(CraftOrder order)
             : base(70, 150)
         {
             this.Order = order;
@@ -52,7 +52,7 @@ namespace Start_a_Town_.Crafting
             this.AddControls(this.ChkHaulOnFinish);
         }
 
-        ListCollapsibleNew CreateList(CraftOrderNew order)
+        ListCollapsibleNew CreateList(CraftOrder order)
         {
             var list = new ListCollapsibleNew();// 200, 200);
             foreach (var r in order.Reaction.Reagents)
@@ -115,7 +115,7 @@ namespace Start_a_Town_.Crafting
             switch (e.Type)
             {
                 case Message.Types.OrderParametersChanged:
-                    var order = e.Parameters[0] as CraftOrderNew;
+                    var order = e.Parameters[0] as CraftOrder;
                     if (order == this.Order)
                         this.RefreshReagents();
                     break;

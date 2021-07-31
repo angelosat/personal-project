@@ -313,7 +313,8 @@ namespace Start_a_Town_.UI
             var toclose = this.Layers.Values.SelectMany(l => l.OfType<Window>()).ToList();
             if (toclose.Any())
                 foreach (var win in toclose)
-                    closedsomething |= win.Close();
+                    if(win.Closable)
+                        closedsomething |= win.Close();
             return closedsomething;
         }
 
@@ -571,6 +572,13 @@ namespace Start_a_Town_.UI
         {
             if (e.Handled)
                 return;
+
+            if (e.KeyCode == System.Windows.Forms.Keys.Escape)
+            {
+                if (ToolManager.Clear() || SelectionManager.ClearTargets() || this.CloseAll())
+                    e.Handled = true;
+            }
+
             foreach (var layer in this.Layers.Reverse())
             {
                 List<Control> wins = layer.Value.ToList();

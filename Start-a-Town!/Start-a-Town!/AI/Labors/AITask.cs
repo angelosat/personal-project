@@ -192,7 +192,7 @@ namespace Start_a_Town_
         public List<Entity> CraftedItems = new();
 
         public List<Func<bool>> FailConditions = new();
-        public CraftOrderNew Order;
+        public CraftOrder Order;
         public Dictionary<string, ObjectRefIDsAmount> IngredientsUsed = new();
 
         public TargetArgs Product = TargetArgs.Null;

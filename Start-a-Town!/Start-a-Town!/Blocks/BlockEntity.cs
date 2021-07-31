@@ -8,7 +8,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Blocks
 {
-    public abstract class BlockEntity : ICloneable, IDisposable, IEntityCompContainer<BlockEntityComp>//, IHasChildren
+    public abstract class BlockEntity : IDisposable, IEntityCompContainer<BlockEntityComp>//, IHasChildren
     {
         public HashSet<IntVec3> CellsOccupied = new();
         public MapBase Map;
@@ -18,14 +18,18 @@ namespace Start_a_Town_.Blocks
         public ICollection<BlockEntityComp> Comps { get {
                 return this._Comps;
             } private set { this._Comps = value as BlockEntityCompCollection<BlockEntityComp>; } }
-        
+
+        public BlockEntity(IntVec3 originGlobal)
+        {
+            this.OriginGlobal = originGlobal;
+        }
+
         public virtual void Tick(MapBase map, IntVec3 global)
         {
             foreach (var comp in this.Comps)
                 comp.Tick(this, map, global);
         }
         public virtual void GetTooltip(Control tooltip) { }
-        public abstract object Clone();
         
         /// <summary>
         /// Dipose any children GameObjects here.

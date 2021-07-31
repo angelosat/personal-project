@@ -69,7 +69,7 @@ namespace Start_a_Town_.Crafting
 
         }
 
-        GameObject ProduceWithMaterialsOnTopNew(Actor a, Vector3 global, CraftOrderNew order)
+        GameObject ProduceWithMaterialsOnTopNew(Actor a, Vector3 global, CraftOrder order)
         {
             var actor = a as Actor;
             var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();

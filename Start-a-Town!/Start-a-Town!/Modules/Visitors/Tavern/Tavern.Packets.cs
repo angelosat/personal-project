@@ -28,7 +28,7 @@ namespace Start_a_Town_
                 else
                     SendRemoveOrder(net, pl, tavern, order);
             }
-            public static void SendRemoveOrder(INetwork net, PlayerData player, Tavern tavern, CraftOrderNew order)
+            public static void SendRemoveOrder(INetwork net, PlayerData player, Tavern tavern, CraftOrder order)
             {
                 if (net is Server)
                     tavern.RemoveOrder(order);
@@ -41,7 +41,7 @@ namespace Start_a_Town_
                 var reaction = Reaction.GetReaction(r.ReadInt32());
                 var id = r.ReadInt32();
                 if (net is Client)
-                    tavern.AddOrder(new CraftOrderNew(reaction) { ID = id });
+                    tavern.AddOrder(new CraftOrder(reaction) { ID = id });
                 else
                     SendAddMenuItem(net, pl, tavern, reaction, id);
             }
@@ -51,12 +51,12 @@ namespace Start_a_Town_
                 if (net is Server)
                 {
                     id = tavern.MenuItemIDSequence++;
-                    tavern.AddOrder(new CraftOrderNew(reaction) { ID = id });
+                    tavern.AddOrder(new CraftOrder(reaction) { ID = id });
                 }
                 net.GetOutgoingStream().Write(PacketOrderAdd, player.ID, tavern.ID, reaction.ID, id);
             }
 
-            static public void SendOrderSync(INetwork net, PlayerData player, Tavern tavern, CraftOrderNew order, bool enabled)
+            static public void SendOrderSync(INetwork net, PlayerData player, Tavern tavern, CraftOrder order, bool enabled)
             {
                 if (net is Server)
                 {
@@ -78,7 +78,7 @@ namespace Start_a_Town_
                     net.GetOutgoingStream().Write(PacketOrderSync, pl.ID, tavern.ID, order.ID, enabled);
             }
 
-            public static void UpdateOrderIngredients(INetwork net, PlayerData player, Tavern tavern, CraftOrderNew order, string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
+            public static void UpdateOrderIngredients(INetwork net, PlayerData player, Tavern tavern, CraftOrder order, string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
             {
                 if (net is Server)
                     order.ToggleReagentRestrictions(reagent, defs, mats, matTypes);

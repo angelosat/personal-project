@@ -83,16 +83,16 @@ namespace Start_a_Town_.UI
             Console.WriteLine("save");
         }
 
-        public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
-        {
-            if (e.Handled)
-                return;
-            if(e.KeyCode == System.Windows.Forms.Keys.Escape)
-            {
-                e.Handled = true;
-                this.Hide();
-            }
-            base.HandleKeyDown(e);
-        }
+        //public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
+        //{
+        //    if (e.Handled)
+        //        return;
+        //    if(e.KeyCode == System.Windows.Forms.Keys.Escape)
+        //    {
+        //        e.Handled = true;
+        //        this.Hide();
+        //    }
+        //    base.HandleKeyDown(e);
+        //}
     }
 }

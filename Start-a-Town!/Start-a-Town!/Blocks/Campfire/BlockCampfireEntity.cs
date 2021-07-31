@@ -6,7 +6,8 @@ namespace Start_a_Town_.Blocks
     {
         class BlockCampfireEntity : BlockEntity
         {
-            public BlockCampfireEntity()
+            public BlockCampfireEntity(IntVec3 originGlobal)
+                : base(originGlobal)
             {
                 var switchable = new BlockEntityCompSwitchable();
                 this.Comps.Add(switchable);
@@ -17,11 +18,6 @@ namespace Start_a_Town_.Blocks
                 this.Comps.Add(lightComp);
                 this.Comps.Add(new BlockEntityCompParticles(ParticleEmitter.Fire.SetRateFunc(() => (lightComp.Powered && switchable.SwitchedOn) ? 1 : 0)));
                 this.Comps.Add(new BlockEntityCompDeconstructible());
-            }
-
-            public override object Clone()
-            {
-                return new BlockCampfireEntity();
             }
         }
     }

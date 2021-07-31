@@ -47,7 +47,7 @@ namespace Start_a_Town_.Interactions
             {
                 map.RemoveBlock(child, false);
             }
-            block.Place(map, entity.Origin, entity.Product.Data, 0, ori, true);
+            block.Place(map, entity.OriginGlobal, entity.Product.Data, 0, ori, true);
             map.GetBlockEntity(t.Global)?.IsMadeFrom(new ItemDefMaterialAmount[] { entity.Product.Requirement });
             this.Finish(a, t);
         }

@@ -868,14 +868,14 @@ namespace Start_a_Town_
             }
         }
 
-        private Dictionary<BlockEntity, List<Vector3>> GetDistinctBlockEntities()
+        private Dictionary<BlockEntity, List<IntVec3>> GetDistinctBlockEntities()
         {
-            var distinct = new Dictionary<BlockEntity, List<Vector3>>();
+            var distinct = new Dictionary<BlockEntity, List<IntVec3>>();
             foreach (var ent in this.BlockEntitiesByPosition)
             {
                 if (!distinct.TryGetValue(ent.Value, out var existing))
                 {
-                    existing = new List<Vector3>();
+                    existing = new List<IntVec3>();
                     distinct.Add(ent.Value, existing);
                 }
                 existing.Add(ent.Key);
@@ -937,7 +937,7 @@ namespace Start_a_Town_
 
                     if (this.Contains(origin))
                     {
-                        var entity = this[origin.ToLocal()].Block.CreateBlockEntity();
+                        var entity = this[origin.ToLocal()].Block.CreateBlockEntity(origin);
 
                         tag.TryGetTag("Entity", t => entity.Load(t));
 
@@ -992,7 +992,7 @@ namespace Start_a_Town_
                 if (this.Contains(originGlobal))
                 {
                     var str = r.ReadString();
-                    var entity = Activator.CreateInstance(Type.GetType(str)) as BlockEntity;
+                    var entity = Activator.CreateInstance(Type.GetType(str), originGlobal) as BlockEntity;
                     entity.Read(r);
                     foreach (var global in entity.CellsOccupied)
                     {

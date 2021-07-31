@@ -7,9 +7,9 @@ namespace Start_a_Town_
     {
         public enum Modes { XTimes, UntilX, Forever }
         public Modes Mode;
-        public Func<CraftOrderNew, string> GetString;
-        public Func<CraftOrderNew, bool> IsActive;
-        public Action<CraftOrderNew> OnComplete = o => { };
+        public Func<CraftOrder, string> GetString;
+        public Func<CraftOrder, bool> IsActive;
+        public Action<CraftOrder> OnComplete = o => { };
         public override string ToString()
         {
             return base.ToString();

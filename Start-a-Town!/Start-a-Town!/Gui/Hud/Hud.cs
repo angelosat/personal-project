@@ -271,7 +271,7 @@ namespace Start_a_Town_
             if (e.KeyCode == System.Windows.Forms.Keys.Escape)
             {
                 e.Handled = true;
-                if (!ToolManager.Clear() && !SelectionManager.ClearTargets() && !this.WindowManager.CloseAll())
+                //if (!ToolManager.Clear() && !SelectionManager.ClearTargets() && !this.WindowManager.CloseAll())
                     this.IngameMenu.ToggleDialog();
             }
             HotkeyManager.PerformHotkey(e, Ingame.HotkeyContext);

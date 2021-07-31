@@ -242,7 +242,7 @@ namespace Start_a_Town_
         public virtual Color[] UV => BlockCoordinatesFull;
         public virtual MouseMap MouseMap => BlockMouseMap;
         // TODO find a way to make this method required for blocks tha have entity
-        public virtual BlockEntity CreateBlockEntity()
+        public virtual BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         { return null; }
         public GameObject GetEntity()
         {
@@ -429,7 +429,7 @@ namespace Start_a_Town_
         public virtual void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
             map.SetBlock(global, this.Type, data, variation, orientation, notify);
-            var entity = this.CreateBlockEntity();
+            var entity = this.CreateBlockEntity(global);
             if (entity != null)
             {
                 map.AddBlockEntity(global, entity);

@@ -22,9 +22,9 @@ namespace Start_a_Town_.Blocks
             return canvas.Designations.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, color, sunlight, blocklight, depth, this, blockCoordinates);
         }
        
-        public override BlockEntity CreateBlockEntity()
+        public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {
-            return new BlockDesignationEntity();
+            return new BlockDesignationEntity(originGlobal);
         }
         
         public override void OnDrop(GameObject actor, GameObject dropped, TargetArgs target, int amount = -1)

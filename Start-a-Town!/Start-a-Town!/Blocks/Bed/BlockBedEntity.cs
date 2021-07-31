@@ -13,13 +13,10 @@ namespace Start_a_Town_
         public bool Occupied { get { return this.CurrentOccupant != -1; } }
         public int CurrentOccupant = -1;
         public Types Type = Types.Citizen;
-        public BlockBedEntity()
+        public BlockBedEntity(IntVec3 originGlobal)
+            : base(originGlobal)
         {
 
-        }
-        public override object Clone()
-        {
-            return new BlockBedEntity();
         }
         public void Sleep(GameObject agent)
         {

@@ -9,6 +9,6 @@ namespace Start_a_Town_
         bool IsValidHaulDestination(ItemDef objid);
         int GetMissingAmount(ItemDef objid);
         Progress BuildProgress { get; }
-        List<Vector3> Children { get; }
+        List<IntVec3> Children { get; }
     }
 }

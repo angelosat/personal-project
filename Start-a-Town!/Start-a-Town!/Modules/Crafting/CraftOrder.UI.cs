@@ -5,19 +5,20 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public partial class CraftOrderNew
+    public partial class CraftOrder
     {
         public class UI : GroupBox
         {
-            readonly CraftOrderNew Order;
+            readonly CraftOrder Order;
             readonly Label OrderName;
             readonly IconButton BtnClose;
             readonly ButtonIcon BtnUp, BtnDown;
             readonly Button BtnPlus, BtnMinus, BtnDetails;
             readonly CraftOrderDetailsInterface PanelDetails;
             readonly ComboBoxNewNew<CraftOrderFinishMode> ComboFinishMode;
-            static readonly Color DefaultBackgroundColor = Color.SlateGray * .5f;
-            public UI(CraftOrderNew order)
+            static readonly Color DefaultBackgroundColor = Color.SlateGray * .2f;
+
+            public UI(CraftOrder order)
             {
                 this.BackgroundColor = DefaultBackgroundColor;
                 this.Order = order;
@@ -41,10 +42,8 @@ namespace Start_a_Town_
                 this.BtnPlus = new Button("+", Button.DefaultHeight) { Location = this.BtnMinus.TopRight, LeftClickAction = Plus };
                 this.AddControls(this.BtnMinus, this.BtnPlus);
 
-                this.BtnDetails = new Button("Details") { Anchor = Vector2.UnitX, LeftClickAction = ToggleDetails };
-                this.BtnDetails.LocationFunc = () => this.BottomRight;
-                this.BtnDetails.Anchor = Vector2.One;
-                this.AddControls(this.BtnDetails);
+                this.BtnDetails = new Button("Details", ToggleDetails);
+                this.AddControls(this.BtnDetails.AnchorToBottomRight());
 
                 this.PanelDetails = new CraftOrderDetailsInterface(this.Order);
                 this.PanelDetails.ToWindow(this.Order.Name);

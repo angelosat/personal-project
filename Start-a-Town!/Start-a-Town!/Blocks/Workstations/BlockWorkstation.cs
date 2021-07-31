@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
@@ -9,9 +8,9 @@ namespace Start_a_Town_
 {
     sealed class BlockWorkstation : BlockWithEntity, IBlockWorkstation
     {
-        AtlasDepthNormals.Node.Token[] Orientations = Block.TexturesCounter;
+        readonly AtlasDepthNormals.Node.Token[] Orientations = Block.TexturesCounter;
         Type BlockEntityType;
-        public BlockWorkstation(Block.Types workstationType, Type blockEntityType)
+        public BlockWorkstation(Types workstationType, Type blockEntityType)
             : base(workstationType, opaque: false, solid: true)
         {
             this.BlockEntityType = blockEntityType;
@@ -23,9 +22,9 @@ namespace Start_a_Town_
         {
             return this.Orientations[orientation];
         }
-        public override BlockEntity CreateBlockEntity()
+        public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {
-            return Activator.CreateInstance(this.BlockEntityType) as BlockEntity;
+            return Activator.CreateInstance(this.BlockEntityType, originGlobal) as BlockEntity;
         }
 
         public override MaterialDef GetMaterial(byte blockdata)

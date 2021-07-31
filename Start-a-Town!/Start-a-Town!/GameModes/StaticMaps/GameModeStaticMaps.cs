@@ -53,16 +53,20 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 .AddColumn("delete", 16, f => IconButton.CreateCloseButton().SetLeftClickAction(b => SaveFile.Delete(f, () => table.RemoveItem(f))))
                 ;
 
-            groupBox = ScrollableBoxNewNew.FromClientSize(table.RowWidth, 16 * table.RowHeight, ScrollModes.Vertical);
-
             var saves = GetSaves();
             table.AddItems(saves);
+            //table.BackgroundColor = Color.Red;
+            //groupBox = ScrollableBoxNewNew.FromClientSize(table.RowWidth, 16 * table.RowHeight, ScrollModes.Vertical);
+            groupBox = ScrollableBoxNewNew.FromClientSize(table.RowWidth, table.GetHeightFromRowCount(16), ScrollModes.Vertical);
             groupBox.AddControls(table);
             var tablePanel = groupBox.ToPanel();
 
             getSaveName = new DialogInput("Enter save name", saveNew, 300, map.World.Name);
 
-            box.AddControlsVertically(tablePanel, new Button("Create new save", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
+            box.AddControlsVertically(
+                tablePanel, 
+                //table,
+                new Button("Create new save", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
 
             box.ToWindow("Save", true, false).ShowDialog();
 

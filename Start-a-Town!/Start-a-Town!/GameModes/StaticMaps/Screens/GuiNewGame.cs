@@ -60,7 +60,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     actorsui,
                     UIHelper.Wrap(btnstart, btnback)
                     );
-                var createActorsWindow = new Window(actorsCreateBox) { Closable = false, Movable = false, Previous = this.GetWindow() };
+                var createActorsWindow = new Window(actorsCreateBox) { Closable = false, Movable = false };//, Previous = this.GetWindow() };
                 createActorsWindow.LocationFunc = () => UIManager.Center;
                 createActorsWindow.Anchor = Vector2.One * .5f;
                 createActorsWindow.Show();

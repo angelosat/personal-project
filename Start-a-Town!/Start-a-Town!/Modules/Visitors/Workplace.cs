@@ -148,7 +148,7 @@ namespace Start_a_Town_
             return this.Stockpiles.Contains(stockpileID);
         }
 
-        public virtual CraftOrderNew GetOrder(int orderID)
+        public virtual CraftOrder GetOrder(int orderID)
         {
             return null;
         }

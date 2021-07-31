@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -178,6 +179,11 @@ namespace Start_a_Town_
 
             box.AddControlsVertically(boxtabs, boxclient);
             return box;
+        }
+
+        public static ListBoxObservableNew<T> GetListControl<T>(this ObservableCollection<T> collection) where T : class, IListable
+        {
+            return new ListBoxObservableNew<T>(collection);
         }
     }
 }

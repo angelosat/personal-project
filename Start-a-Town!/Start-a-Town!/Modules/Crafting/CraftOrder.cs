@@ -7,15 +7,16 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public partial class CraftOrderNew : ILoadReferencable<CraftOrderNew>, ILoadReferencable, ISerializable
+    public partial class CraftOrder : ILoadReferencable<CraftOrder>, ILoadReferencable, ISerializable, IListable
     {
-        static readonly Dictionary<int, CraftOrderNew> References = new();
-
-        public static CraftOrderNew GetOrder(int id) => References[id];
+        enum CraftMode { XTimes, UntilX, Forever }
+        
+        static readonly Dictionary<int, CraftOrder> References = new();
+        public static CraftOrder GetOrder(int id) => References[id];
+        static ListCollapsibleNew DetailsUIReagents;
+        static Control DetailsUIContainer;
 
         public string Name => this.Reaction.Name;
-
-        enum CraftMode { XTimes, UntilX, Forever }
         public CraftOrderFinishMode FinishMode = CraftOrderFinishMode.AllModes.First();
         public int Quantity = 1;
         CraftMode Mode = CraftMode.XTimes;
@@ -27,8 +28,6 @@ namespace Start_a_Town_
         public bool Enabled;
         public Dictionary<string, IngredientRestrictions> Restrictions = new();
         readonly Dictionary<string, HashSet<int>> ReagentRestrictions = new();
-        static ListCollapsibleNew DetailsUIReagents;
-        static Control DetailsUIContainer;
 
         public bool IsActive
         {
@@ -43,18 +42,18 @@ namespace Start_a_Town_
             }
         }
 
-        public CraftOrderNew()
+        public CraftOrder()
         {
 
         }
-        public CraftOrderNew(int id, int reactionID, MapBase map, IntVec3 workstation)
+        public CraftOrder(int id, int reactionID, MapBase map, IntVec3 workstation)
             : this(Reaction.Dictionary[reactionID])
         {
             this.Map = map;
             this.Workstation = workstation;
             this.ID = id;
         }
-        public CraftOrderNew(Reaction reaction)
+        public CraftOrder(Reaction reaction)
         {
             this.Reaction = reaction;
             foreach (var r in this.Reaction.Reagents)
@@ -153,16 +152,16 @@ namespace Start_a_Town_
             this.Restrictions[reagent].ToggleRestrictions(defs, mats, matTypes);
         }
 
-        public UI GetGui()
+        public Control GetGui()
         {
             return new UI(this);
         }
 
-        CraftOrderNew(SaveTag tag) : this(null, tag)
+        CraftOrder(SaveTag tag) : this(null, tag)
         {
 
         }
-        CraftOrderNew(MapBase map, SaveTag tag)
+        CraftOrder(MapBase map, SaveTag tag)
         {
             tag.TryGetTagValue<int>("ReactionID", p => this.Reaction = Reaction.Dictionary[p]);
             tag.TryGetTagValue<int>("Mode", p => this.Mode = (CraftMode)p);
@@ -247,7 +246,7 @@ namespace Start_a_Town_
 
             return this;
         }
-        public CraftOrderNew(MapBase map, BinaryReader r)
+        public CraftOrder(MapBase map, BinaryReader r)
         {
             this.Read(map, r);
         }
@@ -271,9 +270,9 @@ namespace Start_a_Town_
             return this.IsCompletable(this.Map.GetBlockEntity(this.Workstation));
         }
 
-        internal static CraftOrderNew Load(SaveTag t)
+        internal static CraftOrder Load(SaveTag t)
         {
-            var order = new CraftOrderNew(t);
+            var order = new CraftOrder(t);
             var id = order.ID;
             if (References.TryGetValue(order.ID, out var existing))
             {
@@ -364,7 +363,7 @@ namespace Start_a_Town_
             return this.GetUniqueLoadID();
         }
 
-        public void ShowDetailsUI(Action<CraftOrderNew, string, ItemDef[], MaterialDef[], MaterialType[]> callback)
+        public void ShowDetailsUI(Action<CraftOrder, string, ItemDef[], MaterialDef[], MaterialType[]> callback)
         {
             var box = new ScrollableBoxNewNew(200, 200, ScrollModes.Vertical);
             var list = DetailsUIReagents ??= new ListCollapsibleNew();

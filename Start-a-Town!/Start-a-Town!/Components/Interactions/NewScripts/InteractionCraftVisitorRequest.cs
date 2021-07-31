@@ -33,7 +33,7 @@ namespace Start_a_Town_
 
         }
 
-        public InteractionCraftVisitorRequest(Workplace shop, CraftOrderNew order, Dictionary<string, ObjectRefIDsAmount> ingredientsUsed) : this()
+        public InteractionCraftVisitorRequest(Workplace shop, CraftOrder order, Dictionary<string, ObjectRefIDsAmount> ingredientsUsed) : this()
         {
             this.ShopID = shop.ID;
             this.OrderID = order.ID;
@@ -49,7 +49,7 @@ namespace Start_a_Town_
             if (this.Progress.Value < this.Progress.Max)
                 return;
 
-            CraftOrderNew order = a.Town.GetShop(this.ShopID).GetOrder(this.OrderID);
+            CraftOrder order = a.Town.GetShop(this.ShopID).GetOrder(this.OrderID);
 
             var product = ProduceWithMaterialsOnTopNew(a, t.Global, order);
 
@@ -71,7 +71,7 @@ namespace Start_a_Town_
             return new InteractionCraftNew(this.OrderID, this.PlacedObjects);
         }
 
-        GameObject ProduceWithMaterialsOnTopNew(Actor actor, Vector3 global, CraftOrderNew order)
+        GameObject ProduceWithMaterialsOnTopNew(Actor actor, Vector3 global, CraftOrder order)
         {
             var ingr = this.IngredientsUsed.ToDictionary(vk => vk.Key, vk => new ObjectAmount(actor.Net.GetNetworkObject(vk.Value.Object), vk.Value.Amount));
             var reaction = order.Reaction;

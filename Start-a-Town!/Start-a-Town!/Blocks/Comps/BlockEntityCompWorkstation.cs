@@ -10,8 +10,8 @@ namespace Start_a_Town_
 {
     public class BlockEntityCompWorkstation : BlockEntityComp
     {
-        readonly ObservableCollection<CraftOrderNew> _Orders = new();
-        public ObservableCollection<CraftOrderNew> Orders => this._Orders;
+        readonly ObservableCollection<CraftOrder> _Orders = new();
+        public ObservableCollection<CraftOrder> Orders => this._Orders;
         readonly HashSet<IsWorkstation.Types> WorkstationTypes;
         static Window CraftingWindow;
 
@@ -24,11 +24,11 @@ namespace Start_a_Town_
             return this.WorkstationTypes.Contains(type);
         }
 
-        internal CraftOrderNew GetOrder(string uniqueID)
+        internal CraftOrder GetOrder(string uniqueID)
         {
             return this.Orders.First(o => o.GetUniqueLoadID() == uniqueID);
         }
-        internal CraftOrderNew GetOrder(int uniqueID)
+        internal CraftOrder GetOrder(int uniqueID)
         {
             return this.Orders.First(o => o.ID == uniqueID);
         }
@@ -58,7 +58,7 @@ namespace Start_a_Town_
             if (CraftingWindow != null)
                 CraftingWindow.Hide();
 
-            CraftingWindow = new Modules.Crafting.WorkstationGuiNew(map, global, this).ToWindow("Crafting");
+            CraftingWindow = new Modules.Crafting.WorkstationGui(map, global, this).ToWindow("Crafting");
             CraftingWindow.ToggleSmart();
         }
 

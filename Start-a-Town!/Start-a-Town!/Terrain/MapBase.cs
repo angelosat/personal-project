@@ -642,7 +642,7 @@ namespace Start_a_Town_
                 if (!this.SetBlock(pos, type, data, variation, orientation, notify))
                     return;
             }
-            var entity = block.CreateBlockEntity();
+            var entity = block.CreateBlockEntity(global);
             if (entity is not null)
             {
                 this.AddBlockEntity(global, entity);

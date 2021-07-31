@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.GameModes;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Start_a_Town_.UI
@@ -30,13 +31,13 @@ namespace Start_a_Town_.UI
             if (GameMode.Registry.Count == 1)
             {
                 GameMode.Current = GameMode.Registry.First();
-                MultiplayerWindowNew.Instance.ShowFrom(this);
+                MultiplayerWindowNew.Instance.Show();
             }
         }
 
         void Settings()
         {
-            SettingsWindow.Instance.ShowFrom(this);
+            SettingsWindow.Instance.Show();
         }
 
         void Quit()
@@ -48,7 +49,7 @@ namespace Start_a_Town_.UI
         void Newgame()
         {
             GameMode.Current = GameMode.Registry.First();
-            this.Hide();
+            //this.Hide();
 
             var client = new GroupBox();
             client.AddControlsVertically(
@@ -57,7 +58,7 @@ namespace Start_a_Town_.UI
             var win = new Window("New Game", client)
             {
                 Movable = false,
-                Closable = false
+                Closable = true
             }
             .AnchorToScreenCenter().Show();
         }
@@ -65,16 +66,13 @@ namespace Start_a_Town_.UI
         private void Load()
         {
             if (GameMode.Registry.Count == 1)
-            {
                 GameMode.Current = GameMode.Registry.First();
-            }
             var control = GameMode.Current.Load().ToWindow("Load");
-            control.Previous = this;
             control.LocationFunc = () => UIManager.Center;
             control.Movable = false;
             control.Anchor = Vector2.One * .5f;
             control.Show();
-            this.Hide();
+            //this.Hide();
         }
     }
 }

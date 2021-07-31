@@ -6,4 +6,8 @@ namespace Start_a_Town_.UI
     {
         void Filter(Func<TObject, bool> filter);
     }
+    interface IListSearchable
+    {
+        void Filter(Func<IListable, bool> filter);
+    }
 }

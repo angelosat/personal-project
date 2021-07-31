@@ -13,7 +13,6 @@ namespace Start_a_Town_.UI
         private string title = "<undefined>";
         readonly bool isResizable = false;
         public bool FocusLast = false, isMouseOverCurrent = false, isMouseOverPrevious = false;
-        public Window Previous;
         public bool Movable, IsDragged;
         protected Rectangle ScreenClientBounds = new();
         protected bool _Closable = true;
@@ -71,18 +70,6 @@ namespace Start_a_Town_.UI
             return this.Hide();
         }
 
-        /// <summary>
-        /// Closes the previous window and opens the current one, opens the previous window when current one closes 
-        /// </summary>
-        /// <param name="previous"></param>
-        /// <returns></returns>
-        internal virtual Window ShowFrom(Window previous)
-        {
-            this.Previous = previous;
-            previous.Hide();
-            this.Show();
-            return this;
-        }
         public override void Dispose()
         {
             base.Dispose();
@@ -252,7 +239,7 @@ namespace Start_a_Town_.UI
             if (this.WindowManager.RemoveWindow(this))
             {
                 this.OnHidden();
-                this.Previous?.Show(this.WindowManager);
+                //this.Previous?.Show(this.WindowManager);
                 this.Client.OnWindowHidden(this);
                 return true;
             }

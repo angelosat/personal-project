@@ -2,15 +2,11 @@
 {
         class BlockCarpentryEntity : BlockEntity
         {
-            public BlockCarpentryEntity()
+            public BlockCarpentryEntity(IntVec3 originGlobal)
+                : base(originGlobal)
             {
                 this.Comps.Add(new BlockEntityCompWorkstation(IsWorkstation.Types.Carpentry));
-            this.Comps.Add(new BlockEntityCompDeconstructible());
-            }
-            public override object Clone()
-            {
-                return new BlockCarpentryEntity();
+                this.Comps.Add(new BlockEntityCompDeconstructible());
             }
         }
-
 }

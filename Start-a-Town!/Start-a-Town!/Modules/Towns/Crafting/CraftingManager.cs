@@ -27,12 +27,12 @@ namespace Start_a_Town_.Towns.Crafting
             PacketCraftOrderChangeMode.Init();
         }
         
-        internal IEnumerable<KeyValuePair<IntVec3, ICollection<CraftOrderNew>>> ByWorkstationNew()
+        internal IEnumerable<KeyValuePair<IntVec3, ICollection<CraftOrder>>> ByWorkstationNew()
         {
             //return this.Map.GetBlockEntitiesCache().Where(e => e.Value.HasComp<BlockEntityCompWorkstation>()).Select(r => new KeyValuePair<IntVec3, List<CraftOrderNew>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
             return this.Map.GetBlockEntitiesCache()
                 .Where(e => e.Value.HasComp<BlockEntityCompWorkstation>())
-                .Select(r => new KeyValuePair<IntVec3, ICollection<CraftOrderNew>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
+                .Select(r => new KeyValuePair<IntVec3, ICollection<CraftOrder>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
         }
         internal BlockEntityCompWorkstation GetWorkstation(IntVec3 global)
         {
@@ -43,15 +43,15 @@ namespace Start_a_Town_.Towns.Crafting
         int OrderSequence = 1;
 
         // TODO: add order priorities
-        readonly Dictionary<IntVec3, List<CraftOrderNew>> OrdersNew = new();
-        readonly List<CraftOrderNew> OrdersNewNew = new();
+        readonly Dictionary<IntVec3, List<CraftOrder>> OrdersNew = new();
+        readonly List<CraftOrder> OrdersNewNew = new();
 
         public CraftingManager(Town town)
         {
             this.Town = town;
         }
         
-        public static void SetOrderRestrictions(CraftOrderNew order, string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
+        public static void SetOrderRestrictions(CraftOrder order, string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
         {
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();
@@ -126,14 +126,14 @@ namespace Start_a_Town_.Towns.Crafting
                 WriteOrderModifyQuantityParams(server.OutgoingStream, order, quantity);
         }
 
-        static public void WriteOrderModifyQuantityParams(BinaryWriter w, CraftOrderNew order, int quantity)
+        static public void WriteOrderModifyQuantityParams(BinaryWriter w, CraftOrder order, int quantity)
         {
             w.Write(pQuantity);
             w.Write(order.Workstation);
             w.Write(order.GetUniqueLoadID());
             w.Write(quantity);
         }
-        static public void WriteOrderToggleReagent(BinaryWriter w, CraftOrderNew order, string reagent, int item, bool add)
+        static public void WriteOrderToggleReagent(BinaryWriter w, CraftOrder order, string reagent, int item, bool add)
         {
             w.Write(pReaget);
             w.Write(order.Workstation);
@@ -143,7 +143,7 @@ namespace Start_a_Town_.Towns.Crafting
             w.Write(add);
         }
 
-        internal static void WriteOrderModifyPriority(BinaryWriter w, CraftOrderNew order, bool increase)
+        internal static void WriteOrderModifyPriority(BinaryWriter w, CraftOrder order, bool increase)
         {
             w.Write(pPriority);
             w.Write(order.Workstation);
@@ -151,7 +151,7 @@ namespace Start_a_Town_.Towns.Crafting
             w.Write(increase);
         }
        
-        public void AddOrderNew(CraftOrderNew order)
+        public void AddOrderNew(CraftOrder order)
         {
             this.OrdersNewNew.Add(order);
             this.Town.Map.EventOccured(Message.Types.OrdersUpdatedNew, order.Workstation);
@@ -187,24 +187,24 @@ namespace Start_a_Town_.Towns.Crafting
        
         internal void AddOrder(IntVec3 station, int reactionID)
         {
-            var order = new CraftOrderNew(this.OrderSequence++, reactionID, this.Town.Map, station);
+            var order = new CraftOrder(this.OrderSequence++, reactionID, this.Town.Map, station);
             var benchEntity = this.Map.GetBlockEntity(station).GetComp<BlockEntityCompWorkstation>();
             benchEntity.Orders.Add(order);
             this.Town.Map.EventOccured(Message.Types.OrdersUpdatedNew, benchEntity);
         }
         
-        internal bool OrderExists(CraftOrderNew craftOrderNew)
+        internal bool OrderExists(CraftOrder craftOrderNew)
         {
             var orders = this.GetOrdersNew(craftOrderNew.Workstation);
             if (orders == null)
                 return false;
             return orders.Contains(craftOrderNew);
         }
-        public CraftOrderNew GetOrder(IntVec3 benchGlobal, int orderIndex)
+        public CraftOrder GetOrder(IntVec3 benchGlobal, int orderIndex)
         {
             return this.OrdersNew[benchGlobal][orderIndex];
         }
-        internal List<CraftOrderNew> GetOrdersNew(IntVec3 workstationGlobal)
+        internal List<CraftOrder> GetOrdersNew(IntVec3 workstationGlobal)
         {
             var benchEntity = this.Map.GetBlockEntity(workstationGlobal).GetComp<BlockEntityCompWorkstation>();
             return benchEntity.Orders.ToList();
@@ -249,7 +249,7 @@ namespace Start_a_Town_.Towns.Crafting
             var orderCount = r.ReadInt32();
             for (int i = 0; i < orderCount; i++)
             {
-                this.OrdersNewNew.Add(new CraftOrderNew(this.Town.Map, r));
+                this.OrdersNewNew.Add(new CraftOrder(this.Town.Map, r));
             }
         }
     }

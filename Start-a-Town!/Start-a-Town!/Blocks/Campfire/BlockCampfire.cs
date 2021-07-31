@@ -24,9 +24,9 @@ namespace Start_a_Town_.Blocks
                     );
             return table;
         }
-        public override BlockEntity CreateBlockEntity()
+        public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {
-            return new BlockCampfireEntity();
+            return new BlockCampfireEntity(originGlobal);
         }
 
         public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)

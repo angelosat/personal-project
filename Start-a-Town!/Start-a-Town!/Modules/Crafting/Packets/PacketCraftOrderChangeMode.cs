@@ -11,7 +11,7 @@ namespace Start_a_Town_
             p = Network.RegisterPacketHandler(Receive);
         }
 
-        internal static void Send(CraftOrderNew order, int value)
+        internal static void Send(CraftOrder order, int value)
         {
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();

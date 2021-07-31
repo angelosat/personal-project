@@ -4,9 +4,10 @@
     {
         class BlockPrefabEntity : BlockEntity
         {
-            public override object Clone()
+            public BlockPrefabEntity(IntVec3 originGlobal)
+                : base(originGlobal)
             {
-                return new BlockPrefabEntity();
+
             }
         }
     }

@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Interactions;
-using Start_a_Town_.UI;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Blocks.Chest
 {
@@ -14,7 +10,8 @@ namespace Start_a_Town_.Blocks.Chest
             public Container Container;
 
 
-            public BlockChestEntity(int capacity)
+            public BlockChestEntity(IntVec3 originGlobal, int capacity)
+                : base(originGlobal)
             {
                 this.Container = new Container(capacity) { Name = "Container" };
             }
@@ -31,11 +28,6 @@ namespace Start_a_Town_.Blocks.Chest
                     map.Net.PopLoot(slot.Object, global, Vector3.Zero);
                 }
             }
-            public override object Clone()
-            {
-                return new BlockChestEntity(this.Container.Capacity);
-            }
-
             protected override void AddSaveData(SaveTag tag)
             {
                 tag.Add(new SaveTag(SaveTag.Types.Compound, "Container", this.Container.Save()));

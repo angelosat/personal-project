@@ -28,9 +28,9 @@ namespace Start_a_Town_
                         select (byte)mat.ID);
             return vars;
         }
-        public override BlockEntity CreateBlockEntity()
+        public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {
-            return new BlockStorageEntity();
+            return new BlockStorageEntity(originGlobal);
         }
         public override Vector4 GetColorVector(byte data)
         {

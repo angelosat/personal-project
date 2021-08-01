@@ -51,6 +51,8 @@ namespace Start_a_Town_.Components
         public void Perform(Interaction task, TargetArgs target)
         {
             var parent = this.Parent as Actor;
+            task.Actor = parent;
+            task.Target = target;
             if (task == null)
                 throw new ArgumentException();
             this.Interrupt();
@@ -139,7 +141,11 @@ namespace Start_a_Town_.Components
                 return;
             this.Target = TargetArgs.Read((INetwork)null, r);
             var interactionType = r.ReadString();
-            var interaction = Interaction.Create(interactionType);
+            var interaction = Activator.CreateInstance(Type.GetType(interactionType)) as Interaction;
+            interaction.Actor = this.Parent as Actor;
+            interaction.Target = this.Target;
+            if (interaction.Actor is null)
+                throw new Exception();
             interaction.Read(r);
             this.Task = interaction;
             if (this.Task.Animation != null)

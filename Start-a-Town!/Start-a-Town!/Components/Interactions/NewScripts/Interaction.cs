@@ -31,11 +31,6 @@ namespace Start_a_Town_
         {
         }
 
-        static public Interaction Create(string typeName)
-        {
-            var inter = Activator.CreateInstance(Type.GetType(typeName)) as Interaction;
-            return inter;
-        }
         public static void Initialize()
         {
             
@@ -66,6 +61,8 @@ namespace Start_a_Town_
         public ToolAbilityDef Skill { get; set; }
         public float Seconds { get; set; }
         public Animation Animation = new(AnimationDef.Work);
+        internal Actor Actor;
+        internal TargetArgs Target;
 
         // TODO: i need a method that returns satisfaction score based on ai entity's state
         static readonly Dictionary<Need.Types, float> _NeedSatisfaction = new();

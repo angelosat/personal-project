@@ -51,6 +51,8 @@ namespace Start_a_Town_
             }
             var target = TargetArgs.Read(net.Map, r);
             var action = Activator.CreateInstance(Type.GetType(r.ReadString())) as Interaction;
+            action.Actor = entity;
+            action.Target = target;
             action.Read(r);
             var global = r.ReadVector3();
             var velocity = r.ReadVector3();

@@ -11,20 +11,20 @@ namespace Start_a_Town_.Crafting
 {
     class InteractionCraftNew : InteractionPerpetual
     {
-        int OrderID;
+        CraftOrder Order;
         Progress Progress = new();
         readonly List<ObjectRefIDsAmount> PlacedObjects = new();
 
-        public InteractionCraftNew(int orderID, List<ObjectAmount> placedObjects)
+        public InteractionCraftNew(CraftOrder order, List<ObjectAmount> placedObjects)
             : base("Produce")
         {
-            this.OrderID = orderID;
+            this.Order = order;
             this.PlacedObjects = placedObjects.Select(o=>new ObjectRefIDsAmount(o.Object, o.Amount)).ToList();
         }
-        public InteractionCraftNew(int orderID, List<ObjectRefIDsAmount> placedObjects)
+        public InteractionCraftNew(CraftOrder order, List<ObjectRefIDsAmount> placedObjects)
             : base("Produce")
         {
-            this.OrderID = orderID;
+            this.Order = order;
             this.PlacedObjects = placedObjects;
         }
         public InteractionCraftNew()
@@ -43,11 +43,7 @@ namespace Start_a_Town_.Crafting
         {
             if (this.Progress.Value >= this.Progress.Max)
             {
-                var orderContainer = a.Map.GetBlockEntity(t.Global).GetComp<BlockEntityCompWorkstation>();
-                var order = orderContainer.GetOrder(this.OrderID);
-
-                var product = ProduceWithMaterialsOnTopNew(a, t.Global, order);
-
+                var product = ProduceWithMaterialsOnTopNew(a, t.Global, this.Order);
 
                 if (a.Net is Server)
                 {
@@ -67,7 +63,7 @@ namespace Start_a_Town_.Crafting
         
         public override object Clone()
         {
-            return new InteractionCraftNew(this.OrderID, this.PlacedObjects);
+            return new InteractionCraftNew(this.Order, this.PlacedObjects);
 
         }
 
@@ -99,25 +95,25 @@ namespace Start_a_Town_.Crafting
 
         protected override void AddSaveData(SaveTag tag)
         {
-            tag.Add(this.OrderID.Save("OrderID"));
+            tag.TrySaveRef(this.Order, "Order");
             tag.Add(this.Progress.Save("CraftProgress"));
             tag.Add(this.PlacedObjects.SaveNewBEST("PlacedItems"));
         }
         public override void LoadData(SaveTag tag)
         {
-            tag.TryGetTagValue("OrderID", out this.OrderID);
+            tag.TryLoadRef("Order", out this.Order);
             this.Progress = new Progress(tag["CraftProgress"]);
             this.PlacedObjects.TryLoadMutable(tag, "PlacedItems");
         }
         protected override void WriteExtra(BinaryWriter w)
         {
-            w.Write(this.OrderID);
+            w.Write(this.Order.ID);
             this.Progress.Write(w);
             this.PlacedObjects.Write(w);
         }
         protected override void ReadExtra(BinaryReader r)
         {
-            this.OrderID = r.ReadInt32();
+            this.Order = this.Actor.Map.GetBlockEntity(this.Target.Global).GetComp<BlockEntityCompWorkstation>().GetOrder(r.ReadInt32());
             this.Progress = new Progress(r);
             this.PlacedObjects.ReadMutable(r);
         }
@@ -126,9 +122,10 @@ namespace Start_a_Town_.Crafting
         {
             throw new NotImplementedException();
         }
+       
         public override void DrawUI(SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
         {
-            var text = camera.Zoom > 2 ? "Crafting" : "";
+            var text = camera.Zoom > 2 ? this.Order.Name : "";
             Bar.Draw(sb, camera, target.Global.Above(), text, this.Progress.Percentage, camera.Zoom * .2f);
         }
     }

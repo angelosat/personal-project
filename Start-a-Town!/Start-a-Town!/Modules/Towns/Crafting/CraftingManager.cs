@@ -197,6 +197,7 @@ namespace Start_a_Town_.Towns.Crafting
                 return false;
             return orders.Contains(craftOrderNew);
         }
+       
         public CraftOrder GetOrder(IntVec3 benchGlobal, int orderIndex)
         {
             return this.OrdersNew[benchGlobal][orderIndex];

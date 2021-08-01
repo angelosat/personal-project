@@ -99,7 +99,7 @@ namespace Start_a_Town_
                 }
             };
             yield return new BehaviorGetAtNewNew(AuxiliaryIndex, PathingSync.FinishMode.Exact).FailOnUnavailablePlacedItems().FailOn(orderIncompletable);
-            yield return new BehaviorInteractionNew(WorkstationIndex, () => new InteractionCraftNew(this.Task.Order.ID, this.Task.PlacedObjects)).FailOnUnavailablePlacedItems().FailOn(orderIncompletable);
+            yield return new BehaviorInteractionNew(WorkstationIndex, () => new InteractionCraftNew(this.Task.Order/*.ID*/, this.Task.PlacedObjects)).FailOnUnavailablePlacedItems().FailOn(orderIncompletable);
 
             // assign a new haul behavior directly to the actor instead of adding the steps here?
             yield return new BehaviorCustom()

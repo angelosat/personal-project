@@ -68,7 +68,7 @@ namespace Start_a_Town_
        
         public override object Clone()
         {
-            return new InteractionCraftNew(this.OrderID, this.PlacedObjects);
+            return new InteractionCraftVisitorRequest(this.ShopID, this.OrderID, this.PlacedObjects);
         }
 
         GameObject ProduceWithMaterialsOnTopNew(Actor actor, Vector3 global, CraftOrder order)

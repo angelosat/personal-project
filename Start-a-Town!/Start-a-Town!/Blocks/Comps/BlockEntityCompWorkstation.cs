@@ -96,7 +96,5 @@ namespace Start_a_Town_
             foreach (var ord in this._Orders)
                 ord.Map = map;
         }
-
-        
     }
 }

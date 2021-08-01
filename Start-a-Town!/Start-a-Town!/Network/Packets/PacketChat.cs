@@ -3,15 +3,13 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketChat
+    [EnsureStaticCtorCall]
+    static class PacketChat
     {
         static readonly int p;
         static PacketChat()
         {
             p = Network.RegisterPacketHandler(Receive);
-        }
-        internal static void Init()
-        {
         }
         internal static void Send(INetwork net, int playerID, string text)
         {

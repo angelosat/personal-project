@@ -3,16 +3,19 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketEntityCrouchToggle
+    [EnsureStaticCtorCall]
+    static class PacketEntityCrouchToggle
     {
-        static int PType;
-        internal static void Init()
+        static readonly int PType;
+        static PacketEntityCrouchToggle()
         {
             PType = Network.RegisterPacketHandler(Receive);
         }
+       
         internal static void Send(INetwork net, int entityID, bool toggle)
         {
-            var w = net.GetOutgoingStream();
+            var server = net as Server;
+            var w = server.OutgoingStreamTimestamped;
             w.Write(PType);
             w.Write(entityID);
             w.Write(toggle);

@@ -3,10 +3,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketEntityRequestDispose
+    [EnsureStaticCtorCall]
+    static class PacketEntityRequestDispose
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketEntityRequestDispose()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

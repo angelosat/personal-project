@@ -3,19 +3,17 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketEntityMoveToggle
+    [EnsureStaticCtorCall]
+    static class PacketEntityMoveToggle
     {
         static readonly int PType;
         static PacketEntityMoveToggle()
         {
             PType = Network.RegisterPacketHandler(Receive);
         }
-        internal static void Init()
-        {
-        }
+        
         internal static void Send(INetwork net, int entityID, bool toggle)
         {
-            //var w = net.GetOutgoingStream();
             var server = net as Server;
             var w = server.OutgoingStreamTimestamped;
             w.Write(PType);

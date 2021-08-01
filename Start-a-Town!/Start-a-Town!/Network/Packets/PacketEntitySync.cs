@@ -4,10 +4,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketEntitySync
+    [EnsureStaticCtorCall]
+    static class PacketEntitySync
     {
-        static int PckType;
-        static public void Init()
+        static readonly int PckType;
+        static PacketEntitySync()
         {
             PckType = Network.RegisterPacketHandler(Receive);
         }

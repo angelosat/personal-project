@@ -3,10 +3,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketMousePosition
+    [EnsureStaticCtorCall]
+    static class PacketMousePosition
     {
-        static int p;
-        static internal void Init()
+        static readonly int p;
+        static PacketMousePosition()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

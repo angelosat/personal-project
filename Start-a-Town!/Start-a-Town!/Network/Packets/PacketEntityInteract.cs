@@ -1,20 +1,18 @@
 ﻿using System;
 using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
-    class PacketEntityInteract
+    [EnsureStaticCtorCall]
+    static class PacketEntityInteract
     {
         static readonly int PacketInteract;
         static PacketEntityInteract()
         {
             PacketInteract = Network.RegisterPacketHandler(Receive);
         }
-        internal static void Init()
-        {
-        }
+        
         internal static void EndInteraction(INetwork net, GameObject entity, bool success)
         {
             var server = net as Server;

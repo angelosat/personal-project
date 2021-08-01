@@ -4,10 +4,11 @@ using Start_a_Town_.GameModes.StaticMaps;
 
 namespace Start_a_Town_
 {
-    class PacketEntityDespawn
+    [EnsureStaticCtorCall]
+    static class PacketEntityDespawn
     {
-        static int p;
-        static public void Init()
+        static readonly int p;
+        static PacketEntityDespawn()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

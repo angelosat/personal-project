@@ -3,10 +3,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketPlayerToolSwitch
+    [EnsureStaticCtorCall]
+    static class PacketPlayerToolSwitch
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketPlayerToolSwitch()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

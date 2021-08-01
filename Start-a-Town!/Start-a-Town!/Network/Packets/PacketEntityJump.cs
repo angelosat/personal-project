@@ -3,16 +3,19 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketEntityJump
+    [EnsureStaticCtorCall]
+    static class PacketEntityJump
     {
-        static int PType;
-        internal static void Init()
+        static readonly int PType;
+        static PacketEntityJump()
         {
             PType = Network.RegisterPacketHandler(Receive);
         }
+        
         internal static void Send(INetwork net, int entityID)
         {
-            var w = net.GetOutgoingStream();
+            var server = net as Server;
+            var w = server.OutgoingStreamTimestamped;
             w.Write(PType);
             w.Write(entityID);
         }

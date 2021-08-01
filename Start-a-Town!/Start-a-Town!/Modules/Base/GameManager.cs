@@ -7,29 +7,31 @@ namespace Start_a_Town_.Modules.Base
     {
         public override void Initialize()
         {
-            PacketEntityInstantiate.Init();
-            PacketEntitySync.Init();
+            //PacketEntityInstantiate.Init();
+            //PacketEntitySync.Init();
 
-            PacketEntityMoveToggle.Init();
-            PacketEntityWalkToggle.Init();
-            PacketEntityCrouchToggle.Init();
-            PacketEntitySprintToggle.Init();
-            PacketEntityJump.Init();
+            /// these should write on the timestamped stream
+            //PacketEntityMoveToggle.Init();
+            //PacketEntityWalkToggle.Init();
+            //PacketEntityCrouchToggle.Init();
+            //PacketEntitySprintToggle.Init();
+            //PacketEntityJump.Init();
+            //PacketEntityInteract.Init();
+            ///
 
-            PacketEntityInteract.Init();
+            //PacketRandomBlockUpdates.Init();
+            //PacketSnapshots.Init();
+            //PacketPlayerToolSwitch.Init();
+            //PacketChat.Init();
+            //PacketMousePosition.Init();
+            //PacketEntityRequestDispose.Init();
+            //PacketEntityRequestSpawn.Init();
+            //PacketEntityDespawn.Init();
 
-            PacketRandomBlockUpdates.Init();
-            PacketSnapshots.Init();
+            /// ADDED ensurestaticctor to all the above
+
             PacketPlayerConnecting.Init();
-            PacketPlayerToolSwitch.Init();
-            PacketChat.Init();
             PacketChunk.Init();
-            PacketMousePosition.Init();
-            PacketEntityRequestDispose.Init();
-            PacketEntityRequestSpawn.Init();
-
-            PacketEntityDespawn.Init();
-
             PacketPlayerDisconnected.Init();
         }
 

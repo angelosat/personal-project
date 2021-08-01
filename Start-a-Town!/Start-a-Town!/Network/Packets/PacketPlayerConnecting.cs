@@ -3,8 +3,12 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketPlayerConnecting
+    static class PacketPlayerConnecting
     {
+        static PacketPlayerConnecting()
+        {
+
+        }
         internal static void Init()
         {
             Client.RegisterPacketHandler(PacketType.PlayerConnecting, Receive);

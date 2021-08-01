@@ -4,7 +4,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketChunk
+    static class PacketChunk
     {
         internal static void Init()
         {

@@ -6,12 +6,12 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketEntityInstantiate
+    [EnsureStaticCtorCall]
+    static class PacketEntityInstantiate
     {
-        static int PckType;
-        static int PckTypeNew;
-
-        static public void Init()
+        static readonly int PckType;
+        static readonly int PckTypeNew;
+        static PacketEntityInstantiate()
         {
             PckType = Network.RegisterPacketHandler(Receive);
             PckTypeNew = Network.RegisterPacketHandler(ReceiveTemplate);

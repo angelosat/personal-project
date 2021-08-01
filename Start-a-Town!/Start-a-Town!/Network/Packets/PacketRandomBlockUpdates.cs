@@ -6,10 +6,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketRandomBlockUpdates
+    [EnsureStaticCtorCall]
+    static class PacketRandomBlockUpdates
     {
-        static int p;
-        static public void Init()
+        static readonly int p;
+        static PacketRandomBlockUpdates()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

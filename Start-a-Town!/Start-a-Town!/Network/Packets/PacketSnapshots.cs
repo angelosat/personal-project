@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketSnapshots
+    [EnsureStaticCtorCall]
+    static class PacketSnapshots
     {
-        static int p;
-        static public void Init()
+        static readonly int p;
+        static PacketSnapshots()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

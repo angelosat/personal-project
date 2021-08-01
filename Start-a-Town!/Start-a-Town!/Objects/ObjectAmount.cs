@@ -62,5 +62,10 @@ namespace Start_a_Town_
         {
             return this.Object.Name + ": " + this.Amount.ToString();
         }
+
+        internal void ResolveReferences(INetwork net)
+        {
+            this.ObjectTarget.Map = net.Map;
+        }
     }
 }

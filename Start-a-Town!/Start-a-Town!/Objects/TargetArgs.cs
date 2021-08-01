@@ -73,17 +73,13 @@ namespace Start_a_Town_
                     if (this.EntityID == -1)
                         throw new Exception();
                     if (this.CachedObject == null)
-                    {
                         this.CachedObject = this.Map.Net.GetNetworkObject(this.EntityID);
-                    }
                 }
                
                 else if (this.Type == TargetType.Slot || this.Type == TargetType.BlockEntitySlot)
                 {
                     if (this.CachedObject == null)
-                    {
                         this.CachedObject = this.Slot.Object;
-                    }
                 }
                 return this.CachedObject;
             }

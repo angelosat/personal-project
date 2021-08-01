@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
+using System.Collections.ObjectModel;
 
 namespace Start_a_Town_
 {
@@ -494,6 +495,20 @@ namespace Start_a_Town_
             return itemList;
         }
         public bool TryLoadRefs<T>(string name, ref List<T> list) where T : class, ISaveable
+        {
+            if (this.TryGetTag(name, out var l))
+            {
+                var taglist = l.Value as List<SaveTag>;
+                foreach (var tag in taglist)
+                {
+                    var refID = (string)tag.Value;
+                    list.Add(LoadReferences[refID] as T);
+                }
+                return true;
+            }
+            return false;
+        }
+        public bool TryLoadRefs<T>(Collection<T> list, string name) where T : class, ISaveable
         {
             if (this.TryGetTag(name, out var l))
             {

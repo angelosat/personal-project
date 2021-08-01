@@ -72,16 +72,23 @@ namespace Start_a_Town_
             cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + map.GetCell(global).Front });
         }
 
+        //public override void AddSaveData(SaveTag tag)
+        //{
+        //    tag.Add(this._Orders.SaveNewBEST("Orders"));
+        //}
+
+        //public override void Load(SaveTag tag)
+        //{
+        //    this._Orders.TryLoadMutable(tag, "Orders");
+        //}
         public override void AddSaveData(SaveTag tag)
         {
-            tag.Add(this._Orders.SaveNewBEST("Orders"));
+            tag.TrySaveRefs(this.Orders, "Orders");
         }
-
         public override void Load(SaveTag tag)
         {
-            this._Orders.TryLoadMutable(tag, "Orders");
+            tag.TryLoadRefs(this.Orders, "Orders");
         }
-
         public override void Write(BinaryWriter w)
         {
             this._Orders.Write(w);

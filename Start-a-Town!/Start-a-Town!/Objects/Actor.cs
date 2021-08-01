@@ -256,10 +256,17 @@ namespace Start_a_Town_
             obj.Physics.Height = def.Height;
             obj.Physics.Weight = def.Weight;
 
+            obj.AddComponent(new AIComponent().Initialize( /// MOVING AICOMPONENT TO THE TOP because it generates packets that are being processed in the client before the entities even get ticked
+               new BehaviorQueue(
+                   new AIMemory(),
+                   new BehaviorHandleResources(),
+                   new BehaviorHandleOrders(),
+                   new BehaviorHandleTasks(),
+                   new BehaviorIdle()
+                   )));
             obj.AddComponent(new AttributesComponent(def).Randomize());
             obj.AddComponent(new NpcSkillsComponent(def).Randomize());
             obj.AddComponent(new PersonalityComponent(def).Randomize());
-
             obj.AddComponent(new GearComponent(def));
             obj.AddComponent(new ResourcesComponent(def));
             obj.AddComponent(new NeedsComponent(obj));
@@ -270,17 +277,21 @@ namespace Start_a_Town_
             obj.AddComponent(new PersonalInventoryComponent(16));
             obj.AddComponent(new StatsComponentNew());
             obj.AddComponent(new MobileComponent());
-            obj.AddComponent(new WorkComponent());
+            //obj.AddComponent(new WorkComponent());
             obj.AddComponent(new MoodComp());
-            obj.AddComponent(new AIComponent().Initialize(
-               new BehaviorQueue(
-                   new AIMemory(),
-                   new BehaviorHandleResources(),
-                   new BehaviorHandleOrders(),
-                   new BehaviorHandleTasks(),
-                   new BehaviorIdle()
-                   )));
+            //obj.AddComponent(new AIComponent().Initialize(
+            //   new BehaviorQueue(
+            //       new AIMemory(),
+            //       new BehaviorHandleResources(),
+            //       new BehaviorHandleOrders(),
+            //       new BehaviorHandleTasks(),
+            //       new BehaviorIdle()
+            //       )));
             obj.AddComponent(new SpriteComponent(def.Body));
+            obj.AddComponent(new WorkComponent()); /// MOVED THIS HERE AFTER THE AICOMPONENT, so that when the ai starts an interaction, it gets ticked during the same frame
+                                                   /// because when the interaction is received on the client, the packet is processed before the entity even ticks at all
+                                                   /// resulting in a one-tick difference in the interaction progress beteween server and client
+
             foreach (var b in obj.Body.GetAllBones())
                 b.Material = def.DefaultMaterial;
 

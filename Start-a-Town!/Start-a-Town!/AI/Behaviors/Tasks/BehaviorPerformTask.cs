@@ -33,7 +33,7 @@ namespace Start_a_Town_
                 return this._CachedBehaviors;
             }
         }
-
+        Behavior CurrentBehavior => this.CachedBehaviors[this.CurrentStepIndex];
         public BehaviorPerformTask()
         {
 
@@ -164,7 +164,10 @@ namespace Start_a_Town_
             FromJump = true;
             this.CurrentStepIndex = this.CachedBehaviors.IndexOf(bhav); //because it's increased by one 
         }
-
+        internal override void ObjectLoaded(GameObject parent)
+        {
+            this.CurrentBehavior.ObjectLoaded(parent);
+        }
         protected void AddFinishAction(Action a)
         {
             this.FinishActions.Add(a);

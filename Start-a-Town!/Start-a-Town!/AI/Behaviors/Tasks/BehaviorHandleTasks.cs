@@ -215,7 +215,7 @@ namespace Start_a_Town_
         {
             this.Actor = parent;
         }
-
+        
         internal void EndCurrentTask(Actor actor)
         {
             this.CleanUp(actor);

@@ -438,6 +438,7 @@ namespace Start_a_Town_
         
         public void ObjectLoaded(GameObject parent)
         {
+            
         }
 
         internal void MapLoaded(GameObject parent)
@@ -459,6 +460,8 @@ namespace Start_a_Town_
                     t.Map = parent.Map;
             foreach (var t in this.GetCustomTargets())
                 t.Map = parent.Map;
+            foreach (var t in this.PlacedObjects)
+                t.ResolveReferences(parent.Net);
         }
        
         internal void AddTarget(TargetIndex index, GameObject target, int count = -1)

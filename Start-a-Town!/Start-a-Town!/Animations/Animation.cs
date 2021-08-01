@@ -24,7 +24,10 @@ namespace Start_a_Town_.Animations
         public Action FinishAction = () => { };
         public Action OnFadeOut = () => { };
         public Action OnFadeIn = () => { };
-
+        public Animation(SaveTag tag)
+        {
+            this.Load(tag);
+        }
         [Obsolete]
         public Animation(GameObject entity, string name, bool loop = false)
             : base()
@@ -205,18 +208,23 @@ namespace Start_a_Town_.Animations
             tag.Add(this.FadeLength.Save("FadeLength"));
             tag.Add(this.Weight.Save("Weight"));
             tag.Add(this.WeightChange.Save("WeightChange"));
+            tag.Add(this.Speed.Save("Speed"));
             tag.Add(((int)this.State).Save("State"));
-
             return tag;
+        }
+        internal void Save(SaveTag tag, string name)
+        {
+            tag.Add(this.Save(name));
         }
         public void Load(SaveTag tag)
         {
-            tag.TryGetTagValue<string>("Def", t => Start_a_Town_.Def.GetDef<AnimationDef>(t));
+            tag.TryGetTagValue<string>("Def", t => this.Def = Start_a_Town_.Def.GetDef<AnimationDef>(t));
             tag.TryGetTagValue("Frame", out this.Frame);
             tag.TryGetTagValue("FadeValue", out this.FadeValue);
             tag.TryGetTagValue("FadeLength", out this.FadeLength);
             tag.TryGetTagValue("Weight", out this.Weight);
             tag.TryGetTagValue("WeightChange", out this.WeightChange);
+            tag.TryGetTagValue("Speed", out this.Speed);
             tag.TryGetTagValue<int>("State", t => this.State = (AnimationStates)t);
         }
 
@@ -228,6 +236,7 @@ namespace Start_a_Town_.Animations
             w.Write(this.FadeValue);
             w.Write(this.Weight);
             w.Write(this.WeightChange);
+            w.Write(this.Speed);
             w.Write((int)this.State);
         }
         internal void Read(System.IO.BinaryReader r)
@@ -238,6 +247,7 @@ namespace Start_a_Town_.Animations
             this.FadeValue = r.ReadInt32();
             this.Weight = r.ReadSingle();
             this.WeightChange = r.ReadSingle();
+            this.Speed = r.ReadSingle();
             this.State = (AnimationStates)r.ReadInt32();
         }
     }

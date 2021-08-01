@@ -233,7 +233,7 @@ namespace Start_a_Town_.Net
                 this.lasttickreceived = tick;
             }
         }
-        void HandleTimestamped()
+        void HandleBufferedTimestamped()
         {
             while (this.BufferTimestamped.Any())
             {
@@ -247,10 +247,18 @@ namespace Start_a_Town_.Net
         }
         private void TickMap()
         {
-            this.HandleTimestamped();
+            this.HandleBufferedTimestamped();
             this.Map.UpdateParticles();
             this.Map.World.Tick(Instance);
             this.Map.Tick();
+            //this.HandleBufferedTimestamped();
+            /// move this to after the map ticks because workcomponent ticks before aicomponent, 
+            /// which results new interactions getting ticked in the next frame on the server,
+            /// but getting ticked in the same frame when received on the client
+            /// SOLUTIONS:
+            /// 1) manually add aicomponent before workcomponent inside entities
+            /// 2) process packets after ticking map
+            /// 3) add a timestamp on the actual interaction class during the frame that it's first ticked on the server, and make clients tick it only then as well
         }
 
         private void SendAcks()

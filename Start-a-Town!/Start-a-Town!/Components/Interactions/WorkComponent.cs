@@ -42,7 +42,6 @@ namespace Start_a_Town_.Components
             this.Target = null;
         }
 
-
         internal void OnToolContact()
         {
             this.Task.OnToolContact(this.Parent as Actor, this.Target);
@@ -131,8 +130,8 @@ namespace Start_a_Town_.Components
             this.Target.Write(w);
             w.Write(this.Task.GetType().FullName);
             this.Task.Write(w);
-            if (this.Task.Animation != null)
-                this.Task.Animation.Write(w);
+            //if (this.Task.Animation != null)
+            //    this.Task.Animation.Write(w);
         }
         public override void Read(System.IO.BinaryReader r)
         {
@@ -148,8 +147,8 @@ namespace Start_a_Town_.Components
                 throw new Exception();
             interaction.Read(r);
             this.Task = interaction;
-            if (this.Task.Animation != null)
-                this.Task.Animation.Read(r);
+            //if (this.Task.Animation != null)
+            //    this.Task.Animation.Read(r);
         }
         internal override void AddSaveData(SaveTag tag)
         {
@@ -159,26 +158,25 @@ namespace Start_a_Town_.Components
                 return;
             tag.Add(this.Target.Save("Target"));
             tag.Add(this.Task.SaveAs("Interaction"));
-            if (this.Task.Animation != null)
-                tag.Add(this.Task.Animation.Save("Animation"));
+            //if (this.Task.Animation != null)
+            //    tag.Add(this.Task.Animation.Save("Animation"));
         }
         internal override void Load(SaveTag save)
         {
             bool isInteracting;
-            if (!save.TryGetTagValue<bool>("IsInteracting", out isInteracting))
+            if (!save.TryGetTagValue("IsInteracting", out isInteracting))
                 return;
             if (!isInteracting)
                 return;
             this.Target = new TargetArgs(null, save["Target"]);
             var interactionTag = save["Interaction"];
             var inter = Interaction.Load(interactionTag);
+            inter.Actor = this.Parent as Actor;
+            inter.Target = this.Target;
+            //inter.Animation?.Load(save["Animation"]);
             this.Task = inter;
-            if (inter.Animation != null)
-            {
-                inter.Animation.Load(save["Animation"]);
-            }
         }
-        
+
         public override void OnObjectLoaded(GameObject parent)
         {
             if (this.Task != null)
@@ -190,11 +188,19 @@ namespace Start_a_Town_.Components
                 }
             }
         }
-        
+        public override void OnObjectSynced(GameObject parent)
+        {
+            this.OnObjectLoaded(parent);
+        }
         internal override void MapLoaded(GameObject parent)
         {
             if (this.Target != null)
                 this.Target.Map = parent.Map;
+        }
+
+        internal override void ResolveReferences()
+        {
+            this.Task?.ResolveReferences();
         }
     }
 }

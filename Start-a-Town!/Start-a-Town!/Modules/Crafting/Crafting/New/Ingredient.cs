@@ -93,6 +93,8 @@ namespace Start_a_Town_
         }
         public bool Evaluate(Entity item)
         {
+            this.TryResolve();
+
             return this.ResolvedItemDefs.Contains(item.Def)
                 && this.ResolvedMaterials.Contains(item.PrimaryMaterial)
                 && this.SpecialFilters.All(f => f(item));

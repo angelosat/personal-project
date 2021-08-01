@@ -1,5 +1,4 @@
-﻿using System;
-using Start_a_Town_.Animations;
+﻿using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
 {

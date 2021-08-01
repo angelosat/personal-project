@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
-using Start_a_Town_.AI;
 using Start_a_Town_.Animations;
 using Start_a_Town_.Components;
 
@@ -100,7 +98,6 @@ namespace Start_a_Town_
                 parent.Net.EventOccured(Message.Types.InteractionInterrupted, parent, this);
             this.State = States.Finished;
             this.Animation?.FadeOutAndRemove();
-
         }
 
         public virtual void Perform(Actor a, TargetArgs t)
@@ -192,6 +189,11 @@ namespace Start_a_Town_
         {
             this.DrawUI(sb, camera, parent);
         }
+
+        internal virtual void ResolveReferences()
+        {
+        }
+
         public abstract object Clone();
         
         public virtual string GetCompletedText(Actor actor, TargetArgs target)
@@ -202,12 +204,14 @@ namespace Start_a_Town_
         {
             w.Write(this.CurrentTick);
             w.Write((int)this.State);
+            this.Animation.Write(w);
             this.WriteExtra(w);
         }
         public void Read(BinaryReader r)
         {
             this.CurrentTick = r.ReadSingle();
             this.State = (States)r.ReadInt32();
+            this.Animation.Read(r);
             this.ReadExtra(r);
         }
         protected virtual void WriteExtra(BinaryWriter w) { }
@@ -219,6 +223,7 @@ namespace Start_a_Town_
             tag.Add(this.GetType().FullName.Save("Name"));
             tag.Add(((int)this.State).Save("State"));
             tag.Add(this.CurrentTick.Save("Progress"));
+            this.Animation?.Save(tag, "Animation");
             this.AddSaveData(tag);
             return tag;
         }
@@ -233,7 +238,8 @@ namespace Start_a_Town_
             var name = (string)tag["Name"].Value;
             var inter = Activator.CreateInstance(Type.GetType(name)) as Interaction;
             tag.TryGetTagValue<int>("State", t => inter.State = (States)t);
-            tag.TryGetTagValue<float>("Progress", out inter.CurrentTick);
+            tag.TryGetTagValue("Progress", out inter.CurrentTick);
+            tag.TryGetTag("Animation", t => inter.Animation = new Animation(t));
             inter.LoadData(tag);
             return inter;
         }

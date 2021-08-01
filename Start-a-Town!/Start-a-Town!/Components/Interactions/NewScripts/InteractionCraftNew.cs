@@ -13,7 +13,10 @@ namespace Start_a_Town_.Crafting
     {
         CraftOrder Order;
         Progress Progress = new();
+        int _orderID;
+        private int OrderID => this.Order?.ID ?? this._orderID;
         readonly List<ObjectRefIDsAmount> PlacedObjects = new();
+        readonly int BaseWorkAmount = 5;//25;
 
         public InteractionCraftNew(CraftOrder order, List<ObjectAmount> placedObjects)
             : base("Produce")
@@ -33,8 +36,6 @@ namespace Start_a_Town_.Crafting
 
         }
 
-        readonly int BaseWorkAmount = 5;//25;
-        
         public override void Start(Actor a, TargetArgs t)
         {
             base.Start(a, t);
@@ -59,7 +60,6 @@ namespace Start_a_Town_.Crafting
             var work = StatDefOf.ToolEffectiveness.GetValue(a);
             this.Progress.Value += work * BaseWorkAmount;// 25;
         }
-        
         
         public override object Clone()
         {
@@ -113,9 +113,18 @@ namespace Start_a_Town_.Crafting
         }
         protected override void ReadExtra(BinaryReader r)
         {
-            this.Order = this.Actor.Map.GetBlockEntity(this.Target.Global).GetComp<BlockEntityCompWorkstation>().GetOrder(r.ReadInt32());
+            var orderID = r.ReadInt32();
+            if (this.Actor.Map is not null)
+                this.Order = this.Actor.Map.GetBlockEntity(this.Target.Global).GetComp<BlockEntityCompWorkstation>().GetOrder(orderID);
+            else
+                this._orderID = orderID;
             this.Progress = new Progress(r);
             this.PlacedObjects.ReadMutable(r);
+        }
+
+        internal override void ResolveReferences()
+        {
+            this.Order = this.Actor.Map.GetBlockEntity(this.Target.Global).GetComp<BlockEntityCompWorkstation>().GetOrder(this.OrderID);
         }
 
         public override void OnUpdate(Actor a, TargetArgs t)
@@ -125,8 +134,7 @@ namespace Start_a_Town_.Crafting
        
         public override void DrawUI(SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
         {
-            var text = camera.Zoom > 2 ? this.Order.Name : "";
-            Bar.Draw(sb, camera, target.Global.Above(), text, this.Progress.Percentage, camera.Zoom * .2f);
+            Bar.Draw(sb, camera, target.Global.Above(), this.Order.Name, this.Progress.Percentage, camera.Zoom * .2f);
         }
     }
 }

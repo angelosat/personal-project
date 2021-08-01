@@ -206,6 +206,7 @@ namespace Start_a_Town_.AI
         internal void ObjectLoaded(GameObject parent)
         {
             this.CurrentTask?.ObjectLoaded(parent);
+            this.CurrentTaskBehavior?.ObjectLoaded(parent);
         }
 
         public BehaviorPerformTask LastBehavior;

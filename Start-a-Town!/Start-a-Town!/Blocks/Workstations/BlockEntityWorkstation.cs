@@ -63,7 +63,7 @@ namespace Start_a_Town_.Crafting
         }
         protected override void LoadExtra(SaveTag tag)
         {
-            tag.TryLoadRefs<CraftOrder>("Orders", ref this.Orders);
+            tag.TryLoadRefs("Orders", ref this.Orders);
         }
         protected override void WriteExtra(BinaryWriter w)
         {

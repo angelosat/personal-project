@@ -67,6 +67,7 @@ namespace Start_a_Town_.UI
         }
         static public void Draw(SpriteBatch sb, Camera camera, Vector3 global, string text, float percentage, float scale)
         {
+            text = camera.Zoom > 2 ? text : "";
             var scrLoc = camera.GetScreenPositionFloat(global);
             InteractionBar.Draw(sb, scrLoc, InteractionBar.DefaultWidth, percentage, scale);
             UIManager.DrawStringOutlined(sb, text, scrLoc, Color.Black, Color.White, 1, HorizontalAlignment.Center, VerticalAlignment.Center, 0.5f);

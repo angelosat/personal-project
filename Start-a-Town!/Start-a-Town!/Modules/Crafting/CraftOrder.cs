@@ -330,7 +330,8 @@ namespace Start_a_Town_
             tag.TryGetTagValue<int>("FinishMode", p => this.FinishMode = CraftOrderFinishMode.GetMode(p));
             tag.TryGetTagValue<int>("ID", out this.ID);
             tag.TryGetTagValue<int>("Quantity", p => this.Quantity = p);
-            tag.TryGetTagValue<IntVec3>("Bench", p => this.Workstation = p);
+            //tag.TryGetTagValue<IntVec3>("Bench", p => this.Workstation = p);
+            this.Workstation = tag.LoadIntVec3("Bench");
             tag.TryGetTagValue("Enabled", out this.Enabled);
             tag.TryGetTag("RestrictionsNew", t =>
                 {

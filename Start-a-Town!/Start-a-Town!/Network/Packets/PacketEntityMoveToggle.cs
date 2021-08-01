@@ -15,7 +15,9 @@ namespace Start_a_Town_
         }
         internal static void Send(INetwork net, int entityID, bool toggle)
         {
-            var w = net.GetOutgoingStream();
+            //var w = net.GetOutgoingStream();
+            var server = net as Server;
+            var w = server.OutgoingStreamTimestamped;
             w.Write(PType);
             w.Write(entityID);
             w.Write(toggle);

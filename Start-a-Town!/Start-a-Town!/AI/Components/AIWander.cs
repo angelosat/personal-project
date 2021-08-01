@@ -49,6 +49,11 @@ namespace Start_a_Town_.AI.Behaviors
         {
             var net = parent.Net;
 
+            /// dont handle this here. it isn't this behavior's job. if an interaction is active, the behavior sequence shouldn't arrive here
+            /// OR NOT?
+            //if (parent.CurrentInteraction is not null) // added this here because when cleaning up, an unequip interaction might be in progress. and we dont want to interrupt it by starting another task
+            //    return BehaviorState.Running;
+
             if (this.Timer == 0)
             {
                 Refresh(parent, state);

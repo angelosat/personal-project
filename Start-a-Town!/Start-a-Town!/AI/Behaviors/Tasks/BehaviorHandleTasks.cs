@@ -58,6 +58,10 @@ namespace Start_a_Town_
                         // the pathfinding behavior saw that the path wasn't null and didn't calculate a new path for the new behavior/targets
                         state.Path = null;
 
+                        if (parent.CurrentInteraction is not null) // added this here because when cleaning up, an unequip interaction might be in progress. and we dont want to interrupt it by starting another task
+                            return BehaviorState.Running; // returning running until clean up interaction finishes, otherwise it might get interrupted by the next behaviors, like BehaviorIdle
+                        /// OTHER SOLUTION: make a new behavior that cleans up before behaviorhandletask is ticked?
+                        
                         // I MOVED THIS FROM HERE SO THAT THE FALLBACK BEHAVIOR, IF ANY, STARTS IN THE NEXT FRAME
                         //this.CleanUp(parent, state);
                         return BehaviorState.Fail;
@@ -100,7 +104,8 @@ namespace Start_a_Town_
                     else
                     {
                         this.CleanUp(parent, state);
-                        return BehaviorState.Fail;
+                        //return BehaviorState.Fail;
+                        return BehaviorState.Running; // RETURN RUNNING INSTEAD because cleaning up starts an interaction
                     }
                 }
 
@@ -117,7 +122,8 @@ namespace Start_a_Town_
                     }
                 }
             }
-
+            if (parent.CurrentInteraction is not null) // added this here because when cleaning up, an unequip interaction might be in progress. and we dont want to interrupt it by starting another task
+                return BehaviorState.Running; // returning running until clean up interaction finishes, otherwise it might get interrupted by the next behaviors, like BehaviorIdle
             return BehaviorState.Fail;
         }
 

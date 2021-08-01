@@ -8,7 +8,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
     {
         readonly ListBoxNoScroll<FileInfo, ButtonNew> List;
         public GuiDialogLoad()
-            : base(200, 300)
+            : base(320, 320)
         {
             this.List = new ListBoxNoScroll<FileInfo, ButtonNew>(save =>
             {

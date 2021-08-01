@@ -12,8 +12,14 @@ namespace Start_a_Town_
             var trees = manager.GetTrees()
                 .Where(o => actor.CanReserve(o))
                 .OrderByReachableRegionDistance(actor);
+
             if (!trees.Any())
-                return TaskHelper.TryStoreEquipped(actor, GearType.Mainhand);
+                return null;
+
+            /// why have i put this here?
+            /// did i put it so that actor doesn't unequip tool between same consecutive tasks?
+            //if (!trees.Any())
+            //  return TaskHelper.TryStoreEquipped(actor, GearType.Mainhand); 
 
             var task = new AITask(typeof(TaskBehaviorChoppingNew));
             FindTool(actor, task, ToolAbilityDef.Chopping);

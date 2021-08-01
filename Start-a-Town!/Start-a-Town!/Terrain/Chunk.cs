@@ -699,7 +699,9 @@ namespace Start_a_Town_
             var objCount = objectList.Length;
             for (int i = 0; i < objCount; i++)
             {
-                objectList[i].Update();
+                var obj = objectList[i];
+                if(obj.IsSpawned) // BECAUSE obj might have been despawned or disposed as a result of a previous object's tick, for example an item stack absorbing another item stack in the physicscomponent
+                    obj.Update(); // make an item stack merge itself to the other stack instead of the other way around? so that i don't have to do this check
             }
         }
 

@@ -148,10 +148,8 @@ namespace Start_a_Town_
         public virtual void CleanUp() 
         {
             for (int i = 0; i < this.FinishActions.Count; i++)
-            {
                 this.FinishActions[i]();
-            }
-            this.Actor.Net.Report(string.Format("{0} cleaned up", this));
+            this.Actor.Net.Report($"{this} cleaned up");
         }
         internal override void MapLoaded(Actor parent)
         {

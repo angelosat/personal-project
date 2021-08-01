@@ -377,7 +377,7 @@ namespace Start_a_Town_.Components
                     {
                         // collision
                         obj.Net.PostLocalEvent(obj, ObjectEventArgs.Create(Message.Types.EntityCollision, new object[] { parent }));
-                        obj.Net.EventOccured(Message.Types.EntityCollision, parent, obj);
+                        //obj.Net.EventOccured(Message.Types.EntityCollision, parent, obj); //removing this because object gets disposed as a result of the above line
                     }
                     // TODO: combine items only when an item enters another stationary item's cell?
                 }

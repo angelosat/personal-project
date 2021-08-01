@@ -55,12 +55,15 @@ namespace Start_a_Town_
             get => this.State.CurrentTaskBehavior;
             set => this.State.CurrentTaskBehavior = value;
         }
-        internal Workplace Workplace => this.Town.ShopManager.GetShop(this);
         internal PersonalityComponent Personality => this.GetComponent<PersonalityComponent>();
         public AILog Log => AIState.GetState(this).History;
-        public Room AssignedRoom => this.Town.RoomManager.FindRoom(this.RefID);
-        public bool IsCitizen => this.Town.Agents.Contains(this.RefID);
         public IItemPreferencesManager ItemPreferences => this.GetState().ItemPreferences;
+
+        public Room AssignedRoom => this.Net.Map.Town.RoomManager.FindRoom(this.RefID); // replaced this.town with this.net.map.town because when the actor leaves the map, this.town returns null
+        internal Workplace Workplace => this.Net.Map.Town.ShopManager.GetShop(this); // replaced this.town with this.net.map.town because when the actor leaves the map, this.town returns null
+        public bool IsCitizen => this.Net.Map.Town.Agents.Contains(this.RefID); // replaced this.town with this.net.map.town because when the actor leaves the map, this.town returns null
+
+        public float Mood => this.GetComponent<MoodComp>().Mood;
 
         public override string Name => this.Npc.FullName;
         internal override GameObject SetName(string name)
@@ -334,17 +337,8 @@ namespace Start_a_Town_
             return this.GetComponent<MoodComp>().Contains(mdef);
         }
 
-        public float GetMood()
-        {
-            return this.GetComponent<MoodComp>().Mood;
-        }
-
-        public bool HasRoomAssigned()
-        {
-            var manager = this.Map.Town.RoomManager;
-            return manager.FindRoom(this.RefID) != null;
-        }
-
+        
+       
         readonly Button btnLog = new("Log");
         readonly Button btnSkills = new("Skills");
         readonly Button btnGear = new("Gear");

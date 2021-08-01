@@ -758,8 +758,9 @@ namespace Start_a_Town_.Net
         {
             if (!this.NetworkObjects.TryGetValue(netID, out GameObject o))
                 return false;
+            Console.WriteLine($"{this} disposing {o.DebugName}");
             this.NetworkObjects.Remove(netID);
-
+            o.Net = null;
             if (o.Exists)
                 o.Despawn();
             foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)

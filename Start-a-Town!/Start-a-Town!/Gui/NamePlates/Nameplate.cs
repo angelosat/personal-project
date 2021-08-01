@@ -58,7 +58,7 @@ namespace Start_a_Town_.UI
             this.Active = true;
             this.LocationFunc = () =>
             {
-                var camera = obj.Map.Camera;
+                var camera = Ingame.Instance.Camera;
                 var rect = this.Object.GetScreenBounds(camera);
                 return new Vector2(rect.X + rect.Width / 2, rect.Y - this.Height - VertOffset) - this.Dimensions * new Vector2(.5f, 0);
             };

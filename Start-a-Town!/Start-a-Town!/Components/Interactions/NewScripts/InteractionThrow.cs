@@ -27,7 +27,7 @@ namespace Start_a_Town_
             if (obj == null)
                 return;
             var all = this.All;
-            GameObject newobj = all ? obj : obj.TrySplitOne();
+            var newobj = all ? obj : obj.TrySplitOne();
             var velocity = new Vector3(target.Direction, 0) * 0.1f + actor.Velocity;
 
             /// GLOBAL DOESNT GET SET HERE BECAUSE THE OBJ STILL HAVE THE ACTOR AS THE PARENT AND RETURNS HIS GLOBAL
@@ -45,9 +45,7 @@ namespace Start_a_Town_
                 }
             }
             else
-            {
                 newobj.Spawn(actor.Map, newGlobal);
-            }
             if (obj == newobj)
                 slot.Clear();
         }

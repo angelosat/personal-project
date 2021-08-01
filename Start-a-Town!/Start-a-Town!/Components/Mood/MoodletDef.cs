@@ -17,17 +17,15 @@ namespace Start_a_Town_
         MoodletDef(string name) : base(name)
         {
         }
-        static public readonly MoodletDef NoRoom = new MoodletDef("NoRoom")
+        static public readonly MoodletDef NoRoom = new("NoRoom")
         {
-
             Description = "No room assigned",
             Value = -15,
             Mode = Moodlet.Modes.Indefinite,
-            Condition = a => !a.HasRoomAssigned()
+            Condition = a => a.IsCitizen && a.AssignedRoom == null
         };
-        static public readonly MoodletDef JustAte = new MoodletDef("Meal")
+        static public readonly MoodletDef JustAte = new("Meal")
         {
-       
             Description = "Just had a nice meal",
             Value = 20,
             Mode = Moodlet.Modes.Finite,

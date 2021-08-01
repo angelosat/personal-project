@@ -308,7 +308,11 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
-        public Actor Owner { get => GetOwner(); set => this.OwnerRef = value?.RefID ?? -1; }
+        public Actor Owner
+        {
+            get => GetOwner();
+            set => this.OwnerRef = value?.RefID ?? -1;
+        }
 
         public Actor GetOwner()
         {

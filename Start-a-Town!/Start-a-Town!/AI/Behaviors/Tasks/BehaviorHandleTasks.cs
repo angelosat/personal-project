@@ -68,6 +68,9 @@ namespace Start_a_Town_
             }
             else
             {
+                if (parent.CurrentInteraction is not null) // added this here because when cleaning up, an unequip interaction might be in progress. and we dont want to interrupt it by starting another task
+                    return BehaviorState.Running; // returning running until clean up interaction finishes, otherwise it might get interrupted by the next behaviors, like BehaviorIdle
+                /// OTHER SOLUTION: make a new behavior that cleans up before behaviorhandletask is ticked?
                 var stamina = parent.GetResource(ResourceDef.Stamina);
                 var staminaTaskThreshold = 20;
                 var tired = stamina.Value <= staminaTaskThreshold;
@@ -86,7 +89,7 @@ namespace Start_a_Town_
                         var bhav = next.Task.CreateBehavior(parent);
                         if (bhav.InitBaseReservations())
                         {
-                            string.Format("found followup task from same taskgiver {0}", this.CurrentTaskGiver).ToConsole();
+                            $"found followup task from same taskgiver {this.CurrentTaskGiver}".ToConsole();
                             state.CurrentTaskBehavior = bhav;
                             state.CurrentTask = next.Task;
                             return BehaviorState.Success;
@@ -98,7 +101,6 @@ namespace Start_a_Town_
                     {
                         this.CleanUp(parent, state);
                         return BehaviorState.Fail;
-
                     }
                 }
 
@@ -125,7 +127,7 @@ namespace Start_a_Town_
             if (!bhav.InitBaseReservations())
                 return false;
 
-            string.Format("found followup task from same taskgiver {0}", this.CurrentTaskGiver).ToConsole();
+            $"found followup task from same taskgiver {this.CurrentTaskGiver}".ToConsole();
             state.CurrentTaskBehavior = bhav;
             state.CurrentTask = task;
             return true;
@@ -156,6 +158,7 @@ namespace Start_a_Town_
 
         AITask FindNewTaskNew(Actor parent, AIState state)
         {
+            
             var givers = parent.GetTaskGivers();
 
             foreach (var giver in givers)
@@ -206,9 +209,7 @@ namespace Start_a_Town_
         internal override void Load(SaveTag tag)
         {
             base.Load(tag);
-
             tag.TryGetTagValue("Timer", out this.Timer);
-
             tag.TryGetTagValue<string>("CurrentTaskGiver", t => this.CurrentTaskGiver = Activator.CreateInstance(Type.GetType(t)) as TaskGiver);
         }
         internal override void MapLoaded(Actor parent)

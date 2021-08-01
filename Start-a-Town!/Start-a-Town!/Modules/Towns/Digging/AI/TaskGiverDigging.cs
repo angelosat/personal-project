@@ -15,8 +15,10 @@ namespace Start_a_Town_
 
             var mainhand = actor.GetEquipmentSlot(GearType.Mainhand);
 
-            if (!jobs.Any())
-                return TaskHelper.TryStoreEquipped(actor, GearType.Mainhand);
+            /// why have i put this here?
+            /// did i put it so that actor doesn't unequip tool between same consecutive tasks?
+            //if (!jobs.Any())
+            //    return TaskHelper.TryStoreEquipped(actor, GearType.Mainhand); // WHY DO THIS HERE? i clean up in behaviorhandletask
 
             foreach (var job in jobs) // TODO: check if another npc is standing on the target block to be digged
             {

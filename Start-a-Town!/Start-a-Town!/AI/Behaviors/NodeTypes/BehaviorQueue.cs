@@ -16,7 +16,6 @@ namespace Start_a_Town_.AI.Behaviors
         }
         public override BehaviorState Execute(Actor parent, AIState state)
         {
-            
             foreach (var child in this.Children)
             {
                 var result = child.Execute(parent, state);

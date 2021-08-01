@@ -1027,7 +1027,7 @@ namespace Start_a_Town_
             return list;
         }
 
-        public bool IsDisposed => this.Net.GetNetworkObject(this.RefID) is null;
+        public bool IsDisposed => this.RefID > 0 && this.Net is null;//.GetNetworkObject(this.RefID) is null;
 
         public bool Dispose()
         {

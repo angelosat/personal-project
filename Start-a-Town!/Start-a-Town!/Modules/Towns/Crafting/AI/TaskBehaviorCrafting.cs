@@ -29,37 +29,11 @@ namespace Start_a_Town_
             }
         }
 
-
         protected override IEnumerable<Behavior> GetSteps()
         {
-            bool noOperatingPositions() // 
-            {
-                // fail if no available operating positions
-                /// CHECK MULTIPLE POSITIONS OR ONLY FRONT?
-                /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
-
-                var map = this.Actor.Map;
-                var front = map.GetFrontOfBlock(this.Workstation.Global);
-                if (!map.IsStandableIn(front))
-                {
-                    "no operating position available".ToConsole();
-                    return true;
-                } 
-                return false;
-            };
+            
             this.FailOn(noOperatingPositions);
-            bool orderIncompletable()
-            {
-                //return !this.Task.Order.IsActive(this.Actor.Map);
-                var val = !this.Task.Order.IsActive || !this.Task.Order.IsCompletable();
-                if(val)
-                {
-                    "order incompletable".ToConsole();
-                }
-                return val;
-            }
-            bool failOnInvalidWorkstation() { return !(this.Workstation.GetBlockEntity()?.HasComp<BlockEntityCompWorkstation>() ?? false); };
-
+            
             var nextIngredient = BehaviorHelper.ExtractNextTargetAmount(IngredientIndex);
             yield return nextIngredient;
             yield return new BehaviorGetAtNewNew(IngredientIndex).FailOnUnavailableTarget(IngredientIndex).FailOn(failOnInvalidWorkstation).FailOn(orderIncompletable).FailOn(noOperatingPositions);
@@ -98,8 +72,8 @@ namespace Start_a_Town_
                     this.Task.SetTarget(AuxiliaryIndex, new TargetArgs(map, front));
                 }
             };
-            yield return new BehaviorGetAtNewNew(AuxiliaryIndex, PathingSync.FinishMode.Exact).FailOnUnavailablePlacedItems().FailOn(orderIncompletable);
-            yield return new BehaviorInteractionNew(WorkstationIndex, () => new InteractionCraftNew(this.Task.Order/*.ID*/, this.Task.PlacedObjects)).FailOnUnavailablePlacedItems().FailOn(orderIncompletable);
+            yield return new BehaviorGetAtNewNew(AuxiliaryIndex, PathingSync.FinishMode.Exact).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
+            yield return new BehaviorInteractionNew(WorkstationIndex, () => new InteractionCraftNew(this.Task.Order, this.Task.PlacedObjects)).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
 
             // assign a new haul behavior directly to the actor instead of adding the steps here?
             yield return new BehaviorCustom()
@@ -121,7 +95,26 @@ namespace Start_a_Town_
                         this.Actor.EndCurrentTask();
                 }
             };
+           
+            yield return new BehaviorGetAtNewNew(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
+            yield return BehaviorHelper.StartCarrying(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
+            yield return new BehaviorGetAtNewNew(WorkstationIndex).FailOn(deliverFail);
+            yield return BehaviorHelper.PlaceCarried(WorkstationIndex).FailOn(deliverFail);
 
+            bool orderIncompletable()
+            {
+                //return !this.Task.Order.IsActive(this.Actor.Map);
+                var val = !this.Task.Order.IsActive || !this.Task.Order.IsCompletable();
+                if (val)
+                {
+                    "order incompletable".ToConsole();
+                }
+                return val;
+            }
+            bool failOnInvalidWorkstation()
+            {
+                return !(this.Workstation.GetBlockEntity()?.HasComp<BlockEntityCompWorkstation>() ?? false);
+            };
             bool deliverFail()
             {
                 if (this.Task.Order.HaulOnFinish)
@@ -129,10 +122,34 @@ namespace Start_a_Town_
                 else
                     return !this.IsValidStorage(this.Task.GetTarget(WorkstationIndex));
             };
-            yield return new BehaviorGetAtNewNew(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
-            yield return BehaviorHelper.StartCarrying(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
-            yield return new BehaviorGetAtNewNew(WorkstationIndex).FailOn(deliverFail);
-            yield return BehaviorHelper.PlaceCarried(WorkstationIndex).FailOn(deliverFail);
+            bool noOperatingPositions() // 
+            {
+                // fail if no available operating positions
+                /// CHECK MULTIPLE POSITIONS OR ONLY FRONT?
+                /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
+
+                var map = this.Actor.Map;
+                var front = map.GetFrontOfBlock(this.Workstation.Global);
+                if (!map.IsStandableIn(front))
+                {
+                    "no operating position available".ToConsole();
+                    return true;
+                }
+                return false;
+            };
+            bool placedObjectsChanged()
+            {
+                foreach (var t in this.Task.PlacedObjects)
+                {
+                    if (t.Object.IsDisposed)
+                        return true;
+                    if (t.Object.IsForbidden)
+                        return true;
+                    if (t.Object.Cell != this.Workstation.Global.Above())
+                        return true;
+                }
+                return false;
+            }
         }
         protected override bool InitExtraReservations()
         {

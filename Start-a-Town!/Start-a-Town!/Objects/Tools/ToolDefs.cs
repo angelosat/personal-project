@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
 using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
@@ -12,7 +11,7 @@ namespace Start_a_Town_
         static readonly string HandleIngredientIndex = "Handle";
         static readonly string HeadIngredientIndex = "Head";
 
-        private static readonly CraftingProperties ToolCraftingProperties = new()
+        public static readonly CraftingProperties ToolCraftingProperties = new()
         {
             Reagents = new Dictionary<BoneDef, Reaction.Reagent>()
                 {
@@ -188,13 +187,13 @@ namespace Start_a_Town_
             GameObject.AddTemplate(ItemFactory.CreateTool(Handsaw));
             GameObject.AddTemplate(ItemFactory.CreateTool(Hoe));
 
-            GenerateRecipes();
+            //GenerateRecipes();
 
             Reaction.Register(Reaction.Repairing);
 
             ToolProps.Init();
         }
-
+        
         private static void GenerateRecipes()
         {
             var defs = Def.Database.Values.OfType<ItemDef>();

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Crafting
 {
@@ -123,6 +125,11 @@ namespace Start_a_Town_.Crafting
         public override void OnUpdate(Actor a, TargetArgs t)
         {
             throw new NotImplementedException();
+        }
+        public override void DrawUI(SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
+        {
+            var text = camera.Zoom > 2 ? "Crafting" : "";
+            Bar.Draw(sb, camera, target.Global.Above(), text, this.Progress.Percentage, camera.Zoom * .2f);
         }
     }
 }

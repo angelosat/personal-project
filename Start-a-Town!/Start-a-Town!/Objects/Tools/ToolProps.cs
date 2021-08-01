@@ -1,6 +1,6 @@
-﻿using Start_a_Town_.Components;
-using System;
+﻿using Start_a_Town_.Components.Crafting;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -35,7 +35,12 @@ namespace Start_a_Town_
             tool.Name = $"Tool:{this.Label}";
             return tool;
         }
-        
+        public Entity Create(Dictionary<string, Entity> ingredients)
+        {
+            var tool = Create() as Tool;
+            tool.SetMaterials(ingredients.ToDictionary(i => i.Key, i => i.Value.PrimaryMaterial));
+            return tool;
+        }
         internal static void Init()
         {
             Register(ToolPropsDefof.Shovel);
@@ -49,6 +54,26 @@ namespace Start_a_Town_
             {
                 var obj = toolProp.Create();
                 GameObject.AddTemplate(obj);
+            }
+
+            GenerateRecipesNew();
+        }
+        private static void GenerateRecipesNew()
+        {
+            var defs = Def.Database.Values.OfType<ToolProps>();
+            foreach (var toolDef in defs)
+            {
+                var reagents = new List<Reaction.Reagent>();
+
+                foreach (var reagent in ToolDefs.ToolCraftingProperties.Reagents)
+                    reagents.Add(reagent.Value);
+
+                var reaction = new Reaction(
+                    toolDef.Name,
+                    Reaction.CanBeMadeAt(IsWorkstation.Types.None, IsWorkstation.Types.Workbench),
+                    reagents,
+                    new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },
+                    SkillDef.Crafting);
             }
         }
     }

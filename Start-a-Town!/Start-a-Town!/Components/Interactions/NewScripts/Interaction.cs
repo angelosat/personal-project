@@ -190,7 +190,6 @@ namespace Start_a_Town_
 
             InteractionBar.Draw(sb, barLoc, InteractionBar.DefaultWidth, this.Percentage);
             UIManager.DrawStringOutlined(sb, this.Verb, textLoc, HorizontalAlignment.Left, VerticalAlignment.Center, 0.5f);
-
         }
         public virtual void DrawUI(SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
         {

@@ -9,13 +9,8 @@ namespace Start_a_Town_.UI
         public bool Invert;
         public override Texture2D BackgroundTexture
         {
-            get
-            {
-                return UIManager.DefaultProgressBar;
-            }
-            set
-            {
-            }
+            get => UIManager.DefaultProgressBar;
+            set { }
         }
 
         public IProgressBar Object { get; set; }
@@ -63,21 +58,18 @@ namespace Start_a_Town_.UI
 
         static public void Draw(SpriteBatch sb, Camera camera, GameObject parent, string text, float percentage)
         {
-            Rectangle bounds = camera.GetScreenBounds(parent.Global, parent.GetSprite().GetBounds());
-            Vector2 scrLoc = new Vector2(bounds.X + bounds.Width / 2f, bounds.Y);//
-            Vector2 barLoc = scrLoc - new Vector2(InteractionBar.DefaultWidth / 2, InteractionBar.DefaultHeight / 2);
-            Vector2 textLoc = new Vector2(barLoc.X, scrLoc.Y);
+            var bounds = camera.GetScreenBounds(parent.Global, parent.GetSprite().GetBounds());
+            var scrLoc = new Vector2(bounds.X + bounds.Width / 2f, bounds.Y);//
+            var barLoc = scrLoc - new Vector2(InteractionBar.DefaultWidth / 2, InteractionBar.DefaultHeight / 2);
+            var textLoc = new Vector2(barLoc.X, scrLoc.Y);
             InteractionBar.Draw(sb, barLoc, InteractionBar.DefaultWidth, percentage);
             UIManager.DrawStringOutlined(sb, text, textLoc, HorizontalAlignment.Left, VerticalAlignment.Center, 0.5f);
         }
         static public void Draw(SpriteBatch sb, Camera camera, Vector3 global, string text, float percentage, float scale)
         {
-            Vector2 scrLoc = camera.GetScreenPositionFloat(global);
-            Vector2 barLoc = scrLoc;
-            Vector2 textLoc = new Vector2(barLoc.X, scrLoc.Y);
-            InteractionBar.Draw(sb, barLoc, InteractionBar.DefaultWidth, percentage, scale);
-            var textlocloc = textLoc - new Vector2(InteractionBar.DefaultWidth / 2, 0);
-            UIManager.DrawStringOutlined(sb, text, textlocloc, Color.Black, Color.White, scale, HorizontalAlignment.Left, VerticalAlignment.Center, 0.5f);
+            var scrLoc = camera.GetScreenPositionFloat(global);
+            InteractionBar.Draw(sb, scrLoc, InteractionBar.DefaultWidth, percentage, scale);
+            UIManager.DrawStringOutlined(sb, text, scrLoc, Color.Black, Color.White, 1, HorizontalAlignment.Center, VerticalAlignment.Center, 0.5f);
         }
     }
 }

@@ -85,7 +85,7 @@ namespace Start_a_Town_.Components
             Packets.SendSyncInsert(net, actor, split as Entity);
         }
 
-        public override string ComponentName { get; } = "PersonalInventory";
+        public override string Name { get; } = "PersonalInventory";
 
 
         public float Distance(GameObject obj1, GameObject obj2)

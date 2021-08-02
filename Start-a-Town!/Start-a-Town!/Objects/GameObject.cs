@@ -86,12 +86,11 @@ namespace Start_a_Town_
         #region Common Properties
         public virtual string Name
         {
-            get => $"{this.GetInfo().Name}{(this.StackSize > 1 ? $" (x{this.StackSize})" : "")}";
-            
+            get => $"{this.GetInfo().ParentName}{(this.StackSize > 1 ? $" (x{this.StackSize})" : "")}";
             set
             {
                 var info = GetInfo();
-                info.Name = value;
+                info.ParentName = value;
             }
         }
 
@@ -424,7 +423,7 @@ namespace Start_a_Town_
             get => this.Components[componentName];
             set
             {
-                Components[value.ComponentName] = value;
+                Components[value.Name] = value;
                 value.MakeChildOf(this);
             }
         }
@@ -496,7 +495,7 @@ namespace Start_a_Town_
 
         public EntityComponent AddComponent(EntityComponent component)
         {
-            this.Components[component.ComponentName] = component;
+            this.Components[component.Name] = component;
             component.Parent = this;
             component.MakeChildOf(this);
             return component;
@@ -505,7 +504,7 @@ namespace Start_a_Town_
         public T AddComponent<T>() where T : EntityComponent, new()
         {
             T component = new();
-            this.Components[component.ComponentName] = component;
+            this.Components[component.Name] = component;
             component.MakeChildOf(this);
             return component;
         }

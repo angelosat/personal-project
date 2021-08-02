@@ -25,7 +25,7 @@ namespace Start_a_Town_.Components
         {
             this.Growth.Set(parent, this.Growth.Max);
         }
-        public override string ComponentName { get; } = "Tree"; 
+        public override string Name { get; } = "Tree"; 
         public override object Clone()
         {
             return new TreeComponent();

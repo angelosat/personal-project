@@ -7,7 +7,7 @@ namespace Start_a_Town_.Components
 {
     class AttributesComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Attributes";
+        public override string Name { get; } = "Attributes";
         public AttributeStat[] Attributes;
 
         public AttributesComponent(ItemDef def)

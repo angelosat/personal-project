@@ -7,7 +7,7 @@ namespace Start_a_Town_.Components
     partial class HaulComponent : EntityComponent
     {
 
-        public override string ComponentName { get; } = "Haul"; 
+        public override string Name { get; } = "Haul"; 
         PersonalInventoryComponent Inventory;
         public GameObjectSlot GetSlot()
         {

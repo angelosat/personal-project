@@ -21,7 +21,7 @@ namespace Start_a_Town_
         HashSet<MaterialDef> Favorites = new();
         public Trait[] Traits;
 
-        public override string ComponentName { get; } = "Personality";
+        public override string Name { get; } = "Personality";
 
         public PersonalityComponent(ItemDef def)
         {

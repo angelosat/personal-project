@@ -41,6 +41,11 @@ namespace Start_a_Town_
             }
         }
 
+        internal bool IsValidTilling(IntVec3 global)
+        {
+            return this.CachedTilling.Contains(global);
+        }
+
         bool _harvesting = true, _planting = true, _tilling = true;
         public bool Harvesting
         {
@@ -214,7 +219,7 @@ namespace Start_a_Town_
         }
         public bool IsValidSeed(GameObject item)
         {
-            return this.Plant is not null && item.GetComponent<SeedComponent>()?.Plant == this.Plant;
+            return this.Plant is not null && item.IsSeedFor(this.Plant);
         }
         public override string GetName()
         {
@@ -259,6 +264,17 @@ namespace Start_a_Town_
                 });
                 return box.Window;
             }
+        }
+
+        public override bool Accepts(Entity obj, IntVec3 pos)
+        {
+            if (this.Plant is null)
+                return false;
+            if (obj.Def != ItemDefOf.Seeds)
+                return false;
+            if (!this.CachedSowing.Contains(pos))
+                return false;
+            return obj.IsSeedFor(this.Plant);
         }
     }
 }

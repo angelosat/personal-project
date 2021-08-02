@@ -10,7 +10,7 @@ namespace Start_a_Town_
     {
         public Resource[] Resources;
         
-        public override string ComponentName { get; } = "Resources";
+        public override string Name { get; } = "Resources";
             
         public ResourcesComponent(ItemDef def)
         {

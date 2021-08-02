@@ -8,7 +8,7 @@ namespace Start_a_Town_
 {
     public class ToolAbilityComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Tool";
+        public override string Name { get; } = "Tool";
         public override object Clone()
         {
             return new ToolAbilityComponent(this.Props);

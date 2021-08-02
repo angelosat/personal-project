@@ -870,7 +870,7 @@ namespace Start_a_Town_
             if (this.Furniture is not null)
                 uISelectedInfo.AddTabAction("Room", () => { });
         }
-        internal virtual bool IsValidHaulDestination(MapBase map, Vector3 global, GameObject obj)
+        internal virtual bool IsValidHaulDestination(MapBase map, IntVec3 global, GameObject obj)
         {
             return false;
         }

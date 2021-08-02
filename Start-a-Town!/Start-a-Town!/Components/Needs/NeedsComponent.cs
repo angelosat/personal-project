@@ -8,7 +8,7 @@ namespace Start_a_Town_.Components
 {
     class NeedsComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Needs";
+        public override string Name { get; } = "Needs";
            
         float Timer = Engine.TicksPerSecond;
         public List<Need> NeedsNew;

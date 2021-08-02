@@ -129,11 +129,12 @@ namespace Start_a_Town_
         {
             if (destination.HasObject && (destination.Object == null || !destination.Object.IsSpawned || destination.Object.IsStackFull))
                 return false;
-            var global = destination.Global;
-            var targetStockpile = destination.Map.Town.ZoneManager.GetZoneAt<Stockpile>(global - Vector3.UnitZ);
+            var global = (IntVec3)destination.Global;
+            var below = global.Below;
+            var targetStockpile = destination.Map.Town.ZoneManager.GetZoneAt<Stockpile>(below);
             if (targetStockpile == null)
                 return false;
-            return targetStockpile.IsValidStorage(item as Entity, new TargetArgs(global - Vector3.UnitZ), item.StackSize);
+            return targetStockpile.IsValidStorage(item as Entity, new TargetArgs(below), item.StackSize);
         }
     }
 }

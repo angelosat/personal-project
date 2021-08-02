@@ -9,7 +9,7 @@ namespace Start_a_Town_
 {
     class OwnershipComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Ownership";
+        public override string Name { get; } = "Ownership";
         public int Owner { get; private set; } = -1;
 
         public new OwnershipComponent Initialize(GameObject owner = null)

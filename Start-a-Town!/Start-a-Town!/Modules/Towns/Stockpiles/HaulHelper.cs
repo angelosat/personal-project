@@ -23,7 +23,14 @@ namespace Start_a_Town_
                 return true;
             return false;
         }
-
+        static public bool IsValidHaulDestinationNew(this TargetArgs destination, MapBase map, GameObject item)
+        {
+            var pos = (IntVec3)destination.Global;
+            return 
+                map.Town.GetZoneAt(destination.Global)?.Accepts(item as Entity, pos) ?? false ||
+                map.GetBlock(destination.Global).IsValidHaulDestination(map, pos, item);
+              
+        }
         static public bool TryFindNearbyPlace(Actor actor, GameObject item, Vector3 center, out TargetArgs target)
         {
             var map = actor.Map;

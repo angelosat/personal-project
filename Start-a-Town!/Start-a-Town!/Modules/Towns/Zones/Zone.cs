@@ -232,5 +232,6 @@ namespace Start_a_Town_
         {
             yield break;
         }
+        public abstract bool Accepts(Entity obj, IntVec3 pos);
     }
 }

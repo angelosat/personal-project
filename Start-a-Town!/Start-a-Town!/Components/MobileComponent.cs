@@ -55,7 +55,7 @@ namespace Start_a_Town_.Components
 
         public const float NormalWalkSpeed = .1f;// 0.08f; when i used friction wrongly
 
-        public override string ComponentName { get; } = "Mobile"; 
+        public override string Name { get; } = "Mobile"; 
         public override object Clone()
         {
             return new MobileComponent();

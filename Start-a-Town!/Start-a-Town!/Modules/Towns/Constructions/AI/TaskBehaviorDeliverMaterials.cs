@@ -11,38 +11,18 @@ namespace Start_a_Town_
         public const TargetIndex MaterialID = TargetIndex.A, DestinationID = TargetIndex.B;
         protected override IEnumerable<Behavior> GetSteps()
         {
-            this.FailOnForbidden(MaterialID);
-            bool failCollecting()
-            {
-                var map = this.Actor.Map;
-                var o = Material.Object;
-                foreach (var d in this.Task.GetTargetQueue(DestinationID))
-                    if (!d.IsValidHaulDestination(map, Material.Object))
-                    {
-                        "failed collecting".ToConsole();
-                        return true;
-                    }
-                return false;
-            }
+            var actor = this.Actor;
+            var map = actor.Map;
+            var town = map.Town;
 
+            this.FailOnForbidden(MaterialID);
             var extractMaterial = BehaviorHelper.ExtractNextTargetAmount(MaterialID);
             yield return extractMaterial;
-            yield return new BehaviorGetAtNewNew(MaterialID).FailOn(failCollecting);
-            yield return BehaviorHaulHelper.StartCarrying(MaterialID).FailOn(failCollecting);
+            yield return new BehaviorGetAtNewNew(MaterialID).FailOn(collectFail);
+            yield return BehaviorHaulHelper.StartCarrying(MaterialID).FailOn(collectFail);
             yield return BehaviorHelper.JumpIfNextCarryStackable(extractMaterial, MaterialID, MaterialID);
             var extractDestination = BehaviorHelper.ExtractNextTargetAmount(DestinationID);
             yield return extractDestination;
-            bool deliverFail()
-            {
-                var o = this.Actor.Hauled;
-                if (o == null)
-                    return false;
-                var val = !this.Destination.IsValidHaulDestination(this.Actor.Map, o);
-                if (val)
-                    "invalid haul destination".ToConsole();
-                return val;
-            }
-
             var gotoStorage = new BehaviorGetAtNewNew(DestinationID).FailOn(deliverFail);
             yield return gotoStorage;
             yield return new BehaviorInteractionNew(DestinationID, () =>
@@ -50,6 +30,29 @@ namespace Start_a_Town_
             ).FailOn(deliverFail);
             yield return BehaviorHelper.JumpIfMoreTargets(extractDestination, DestinationID);
 
+            bool collectFail()
+            {
+                var o = Material.Object;
+                foreach (var d in this.Task.GetTargetQueue(DestinationID))
+                    if (!d.IsValidHaulDestinationNew(map, Material.Object))
+                    {
+                        "failed collecting".ToConsole();
+                        return true;
+                    }
+                return false;
+            }
+            bool deliverFail()
+            {
+                var o = actor.Hauled;
+                if (o == null)
+                    return true;
+                if (!this.Destination.IsValidHaulDestinationNew(map, o))
+                {
+                    "invalid haul destination".ToConsole();
+                    return true;
+                }
+                return false;
+            }
         }
         protected override bool InitExtraReservations()
         {

@@ -6,7 +6,7 @@ namespace Start_a_Town_.Components
     [Obsolete]
     class BlockingComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Blocking"; 
+        public override string Name { get; } = "Blocking"; 
         public override object Clone()
         {
             return new BlockingComponent();

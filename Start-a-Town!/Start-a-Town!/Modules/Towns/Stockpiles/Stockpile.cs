@@ -56,11 +56,23 @@ namespace Start_a_Town_
                 list.AddRange(from obj in objects where this.Accepts(obj) where obj.Global - Vector3.UnitZ == (Vector3)pos select obj); // TODO: this is shit
             return list;
         }
-
+        public override bool Accepts(Entity obj, IntVec3 pos)
+        {
+            if (!this.Positions.Contains(pos))
+                return false;
+            return this.Accepts(obj);
+        }
+        public bool Accepts(Entity obj)
+        {
+            return this.DefaultFilters.Filter(obj);
+        }
         internal bool Accepts(GameObject obj)
         {
-            var item = obj as Entity;
-            return item != null ? this.Accepts(item) : false;
+            return obj is Entity item ? this.Accepts(item) : false;
+        }
+        public bool CanAccept(GameObject item)
+        {
+            return this.Accepts(item) && this.GetAvailableCells().Any();
         }
 
         public IEnumerable<IntVec3> GetAvailableCells()
@@ -72,10 +84,7 @@ namespace Start_a_Town_
                 .Select(p => p.Above);
             return emptyCells;
         }
-        public bool CanAccept(GameObject item)
-        {
-            return this.Accepts(item) && this.GetAvailableCells().Any();
-        }
+        
 
         public IEnumerable<TargetArgs> DistributeToStorageSpotsNewLazy(GameObject actor, GameObject obj)
         {
@@ -155,11 +164,7 @@ namespace Start_a_Town_
             this.Settings.Toggle(filter);
         }
 
-        public bool Accepts(Entity obj)
-        {
-            return this.DefaultFilters.Filter(obj);
-
-        }
+        
 
 
         internal override void OnBlockChanged(IntVec3 global)
@@ -329,5 +334,7 @@ namespace Start_a_Town_
                 f.Enabled = !f.Enabled;
             }
         }
+
+        
     }
 }

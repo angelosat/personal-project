@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
@@ -9,13 +8,13 @@ namespace Start_a_Town_
 {
     public class DefComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Info";
+        public override string Name { get; } = "Info";
        
         public bool InCatalogue = true;
         public Quality Quality = Quality.Common;
 
         public string CustomName = "";
-        public string Name
+        public string ParentName
         {
             get => string.IsNullOrEmpty(this.CustomName) ? this.Parent.Def.Label : this.CustomName; 
             set => this.CustomName = value;

@@ -7,7 +7,7 @@ namespace Start_a_Town_
 {
     class SeedComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Seed";
+        public override string Name { get; } = "Seed";
 
         public int Level = 1;
         public PlantProperties Plant;

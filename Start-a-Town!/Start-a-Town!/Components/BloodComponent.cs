@@ -8,7 +8,7 @@ namespace Start_a_Town_.Components
 {
     class BloodComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Blood"; 
+        public override string Name { get; } = "Blood"; 
         public override object Clone()
         {
             return new BloodComponent();

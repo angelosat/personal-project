@@ -5,7 +5,7 @@ namespace Start_a_Town_.Components
 {
     public sealed class PositionComponent : EntityComponent
     {
-        public override string ComponentName { get; } = "Position";
+        public override string Name { get; } = "Position";
 
         public GameObject ParentEntity;
         public Vector2 Direction;

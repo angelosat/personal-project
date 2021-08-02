@@ -210,9 +210,9 @@ namespace Start_a_Town_
         {
             FloatingTextEx floating = new FloatingTextEx(parent,
                 new FloatingTextEx.Segment("Lost " + amount.ToString() + "x ", Color.Red),
-                new FloatingTextEx.Segment(item.GetInfo().Name, item.GetInfo().GetQualityColor())
+                new FloatingTextEx.Segment(item.Name, item.GetInfo().GetQualityColor())
                 );
-            Client.Instance.ConsoleBox.Write("Lost " + amount.ToString() + "x " + item.GetInfo().Name);
+            Client.Instance.ConsoleBox.Write("Lost " + amount.ToString() + "x " + item.Name);
             floating.Show();
         }
 

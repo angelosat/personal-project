@@ -770,7 +770,6 @@
     <Compile Include="Modules\Towns\Farming\GrowingZone.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskBehaviorHarvestingNew.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskGiverHarvesting.cs" />
-    <Compile Include="Modules\Towns\Farming\Sowing\TaskBehaviorSowingNewNew.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskGiverPlanting.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskBehaviorTilling.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskGiverTilling.cs" />

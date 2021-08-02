@@ -1169,8 +1169,6 @@ namespace Start_a_Town_
             return this.GetComponent<NeedsComponent>().NeedsNew.First(n => n.NeedDef.Name == needName);
         }
      
-        
-
         public bool CanReachNew(GameObject obj)
         {
             return this.Map.Regions.CanReach(this.GetCellStandingOn(), obj.Global.SnapToBlock(), this as Actor);
@@ -1179,10 +1177,12 @@ namespace Start_a_Town_
         {
             return this.Map.Regions.CanReach(this.GetCellStandingOn(), global.SnapToBlock(), this as Actor);
         }
+        [Obsolete]
         internal bool CanReach(GameObject obj)
         {
             return this.Map.GetRegionDistance(this.GetCellStandingOn(), obj.Global.SnapToBlock(), this as Actor) != -1;
         }
+        [Obsolete]
         internal bool CanReach(Vector3 global)
         {
             return this.Map.GetRegionDistance(this.GetCellStandingOn(), global.SnapToBlock(), this as Actor) != -1;

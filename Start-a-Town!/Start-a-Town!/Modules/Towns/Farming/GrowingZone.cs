@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
+using Start_a_Town_.Net;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,65 @@ namespace Start_a_Town_
 {
     public class GrowingZone : Zone, IContextable, ISelectable
     {
-        public bool Harvesting = true, Planting = true;
+        [EnsureStaticCtorCall]
+        static class Syncing
+        {
+            static readonly int pSync;
+            static Syncing()
+            {
+                pSync = Network.RegisterPacketHandler(Sync);
+            }
+            public static void SyncProperties(GrowingZone zone)
+            {
+                if (zone.Net is Client)
+                    return;
+
+                var w = zone.Map.Net.GetOutgoingStream();
+                w.Write(pSync);
+                w.Write(zone.ID);
+                w.Write(zone.Tilling);
+                w.Write(zone.Planting);
+                w.Write(zone.Harvesting);
+
+            }
+            static void Sync(INetwork net, BinaryReader r)
+            {
+                var zone = net.Map.Town.ZoneManager.GetZone<GrowingZone>(r.ReadInt32());
+                zone.Tilling = r.ReadBoolean();
+                zone.Planting = r.ReadBoolean();
+                zone.Harvesting = r.ReadBoolean();
+            }
+        }
+
+        bool _harvesting = true, _planting = true, _tilling = true;
+        public bool Harvesting
+        {
+            get => this._harvesting;
+            set
+            {
+                this._harvesting = !this._harvesting;
+                Syncing.SyncProperties(this);
+            }
+        }
+        public bool Planting
+        {
+            get => this._planting;
+            set
+            {
+                this._planting = !this._planting;
+                Syncing.SyncProperties(this);
+            }
+        }
+        public bool Tilling
+        {
+            get => this._tilling;
+            set
+            {
+                this._tilling = !this._tilling;
+                Syncing.SyncProperties(this);
+            }
+        }
+
         public float HarvestThreshold = 1;
         public override string UniqueName => $"Zone_Growing_{this.ID}";
         public ItemDef SeedType = PlantDefOf.Bush;
@@ -36,23 +95,31 @@ namespace Start_a_Town_
 
         protected override void WriteExtra(BinaryWriter w)
         {
+            w.Write(this._tilling);
+            w.Write(this._planting);
+            w.Write(this._harvesting);
             this.Plant.Write(w);
         }
         protected override void ReadExtra(BinaryReader r)
         {
+            this._tilling = r.ReadBoolean();
+            this._planting = r.ReadBoolean();
+            this._harvesting = r.ReadBoolean();
             this.Plant = r.ReadDef<PlantProperties>();
         }
 
         protected override void LoadExtra(SaveTag tag)
         {
-            tag.TryGetTagValue("Harvesting", out this.Harvesting);
-            tag.TryGetTagValue("Planting", out this.Planting);
-            tag.TryLoadDef<PlantProperties>("Plant", ref this.Plant);
+            tag.TryGetTagValueNew("Tilling", ref this._tilling);
+            tag.TryGetTagValueNew("Planting", ref this._planting);
+            tag.TryGetTagValueNew("Harvesting", ref this._harvesting);
+            tag.TryLoadDef("Plant", ref this.Plant);
         }
         protected override void SaveExtra(SaveTag tag)
         {
-            tag.Add(this.Harvesting.Save("Harvesting"));
+            tag.Add(this.Tilling.Save("Tilling"));
             tag.Add(this.Planting.Save("Planting"));
+            tag.Add(this.Harvesting.Save("Harvesting"));
             tag.Add(this.Plant.Save("Plant"));
         }
 
@@ -86,7 +153,7 @@ namespace Start_a_Town_
                 yield return pos;
         }
 
-        public IEnumerable<Vector3> GetTillingPositions()
+        public IEnumerable<IntVec3> GetTillingPositions()
         {
             if (!this.Valid)
                 this.Validate();
@@ -167,11 +234,20 @@ namespace Start_a_Town_
 
             static Control createGui()
             {
+                GrowingZone growzone = null;
                 var box = new GroupBox(300, 200);
+                box.AddControlsVertically(
+                    //new CheckBoxNew("Tilling", () => Syncing.SyncProperties(growzone), () => growzone.Tilling),
+                    //new CheckBoxNew("Planting", () => Syncing.SyncProperties(growzone), () => growzone.Planting),
+                    //new CheckBoxNew("Harvesting", () => Syncing.SyncProperties(growzone), () => growzone.Harvesting)
+                    new CheckBoxNew("Tilling", () => growzone.Tilling = !growzone.Tilling, () => growzone.Tilling),
+                    new CheckBoxNew("Planting", () => growzone.Planting = !growzone.Planting, () => growzone.Planting),
+                    new CheckBoxNew("Harvesting", () => growzone.Harvesting = !growzone.Harvesting, () => growzone.Harvesting)
+                    );
                 var win = box.ToWindow();
                 win.SetGetDataAction(o =>
                 {
-                    var growzone = o as GrowingZone;
+                    growzone = o as GrowingZone;
                     win.SetTitle(growzone.Name);
                 });
                 win.SetOnSelectedTargetChangedAction(t =>

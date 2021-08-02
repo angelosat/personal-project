@@ -11,7 +11,7 @@ namespace Start_a_Town_
         static public readonly JobDef Forester = new("Forester");
         static public readonly JobDef Craftsman = new("Craftsman", new TaskGiverCrafting());
         static public readonly JobDef Smelter = new("Smelter");
-        static public readonly JobDef Farmer = new JobDef("Farmer", new TaskGiverTillingNew(), new TaskGiverSowingNew(), new TaskGiverHarvestingNew()).AddTools(ToolAbilityDef.Argiculture);
+        static public readonly JobDef Farmer = new JobDef("Farmer", new TaskGiverTilling(), new TaskGiverSowingNew(), new TaskGiverHarvestingNew()).AddTools(ToolAbilityDef.Argiculture);
         static public readonly JobDef Harvester = new("Harvester");
         static public readonly JobDef Forager = new("Forager", new TaskGiverForaging());
         static public readonly JobDef Builder = new JobDef("Builder", new TaskGiverDeconstruct(), new TaskGiverConstructing()).AddTools(ToolAbilityDef.Building);

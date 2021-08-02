@@ -13,6 +13,7 @@ namespace Start_a_Town_
     {
         public Town Town => this.Manager.Town;
         public MapBase Map => this.Town.Map;
+        public INetwork Net => this.Map.Net;
         protected readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]);
         public string Name;
         public ZoneManager Manager;

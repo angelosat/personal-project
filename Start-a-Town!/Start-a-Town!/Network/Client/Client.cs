@@ -315,8 +315,8 @@ namespace Start_a_Town_.Net
             PacketHandlersNew.Add(channel, handler);
         }
 
-        static readonly Dictionary<int, Action<INetwork, BinaryReader>> PacketHandlersNewNewNew = new();
-        internal static void RegisterPacketHandler(int id, Action<INetwork, BinaryReader> handler)
+        static readonly Dictionary<int, PacketHandler> PacketHandlersNewNewNew = new();
+        internal static void RegisterPacketHandler(int id, PacketHandler handler)
         {
             PacketHandlersNewNewNew.Add(id, handler);
         }

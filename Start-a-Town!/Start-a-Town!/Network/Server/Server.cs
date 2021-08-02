@@ -60,14 +60,21 @@ namespace Start_a_Town_.Net
         }
 
         static int PacketSequence = 1;
-        static readonly Dictionary<int, Action<INetwork, BinaryReader>> PacketHandlersNewNewNew = new();
-        internal static int RegisterPacketHandler(Action<INetwork, BinaryReader> handler)
-        {
-            var id = PacketSequence++;
-            PacketHandlersNewNewNew.Add(id, handler);
-            return id;
-        }
-        internal static void RegisterPacketHandler(int id, Action<INetwork, BinaryReader> handler)
+        //static readonly Dictionary<int, Action<INetwork, BinaryReader>> PacketHandlersNewNewNew = new();
+        static readonly Dictionary<int, PacketHandler> PacketHandlersNewNewNew = new();
+        //internal static int RegisterPacketHandler(PacketHandler handler)
+        //{
+        //    var id = PacketSequence++;
+        //    PacketHandlersNewNewNew.Add(id, handler.Invoke);
+        //    return id;
+        //}
+        //internal static int RegisterPacketHandler(Action<INetwork, BinaryReader> handler)
+        //{
+        //    var id = PacketSequence++;
+        //    PacketHandlersNewNewNew.Add(id, handler);
+        //    return id;
+        //}
+        internal static void RegisterPacketHandler(int id, PacketHandler handler)
         {
             PacketHandlersNewNewNew.Add(id, handler);
         }

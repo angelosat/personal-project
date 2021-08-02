@@ -774,7 +774,7 @@
     <Compile Include="Modules\Towns\Farming\Sowing\TaskBehaviorSowingNewNew.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskGiverSowingNew.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskBehaviorTillingNew.cs" />
-    <Compile Include="Modules\Towns\Farming\Tilling\TaskGiverTillingNew.cs" />
+    <Compile Include="Modules\Towns\Farming\Tilling\TaskGiverTilling.cs" />
     <Compile Include="Modules\Towns\Forestry\AI\TaskBehaviorChoppingNew.cs" />
     <Compile Include="Modules\Towns\Forestry\AI\TaskGiverForaging.cs" />
     <Compile Include="Modules\Towns\Forestry\AI\TaskGiverChopping.cs" />

@@ -22,7 +22,7 @@ namespace Start_a_Town_
             new TaskGiverForaging(),
             new TaskGiverDigging(),
             new TaskGiverDeconstruct(),
-            new TaskGiverTillingNew(),
+            new TaskGiverTilling(),
             new TaskGiverSowingNew(),
             new TaskGiverHarvestingNew(),
             new TaskGiverCrafting(),

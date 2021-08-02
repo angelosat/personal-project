@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace Start_a_Town_.Net
 {
     public enum NetworkSideType { Local, Server }
-
+    public delegate void PacketHandler(INetwork net, BinaryReader r);
     public class Network
     {
         public class Packets
@@ -36,13 +36,21 @@ namespace Start_a_Town_.Net
                 net.Report(r.ReadString());
             }
         }
+
         static public ConsoleBoxAsync Console { get { return LobbyWindow.Instance.Console; } }
 
         public Client Client;
         public Server Server;
 
         static int PacketIDSequence = 10000;
-        public static int RegisterPacketHandler(Action<INetwork, BinaryReader> handler)
+        //public static int RegisterPacketHandler(Action<INetwork, BinaryReader> handler)
+        //{
+        //    var id = PacketIDSequence++;
+        //    Server.RegisterPacketHandler(id, handler);
+        //    Client.RegisterPacketHandler(id, handler);
+        //    return id;
+        //}
+        public static int RegisterPacketHandler(PacketHandler handler)
         {
             var id = PacketIDSequence++;
             Server.RegisterPacketHandler(id, handler);

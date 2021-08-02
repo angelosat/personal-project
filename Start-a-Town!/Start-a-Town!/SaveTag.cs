@@ -77,7 +77,7 @@ namespace Start_a_Town_
         {
             if (!this.TryGetTag(name, out var tag))
             {
-                value = default(TValue);
+                value = default;
                 return false;
             }
             else

@@ -4,7 +4,7 @@
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Hauler))
+            if (!actor.HasJob(JobDefOf.Hauler))
                 return null;
             if (actor.IsTooTiredToWork)
                 return null;

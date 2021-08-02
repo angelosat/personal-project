@@ -231,7 +231,6 @@
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
     <Compile Include="Log.Entry.cs" />
-    <Compile Include="AI\AIExtensions.cs" />
     <Compile Include="AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawing.Args.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.Args.cs" />
@@ -770,7 +769,7 @@
     <Compile Include="Modules\Towns\Farming\GrowingZoneUI.cs" />
     <Compile Include="Modules\Towns\Farming\GrowingZone.cs" />
     <Compile Include="Modules\Towns\Farming\Harvesting\TaskBehaviorHarvestingNew.cs" />
-    <Compile Include="Modules\Towns\Farming\Harvesting\TaskGiverHarvestingNew.cs" />
+    <Compile Include="Modules\Towns\Farming\Harvesting\TaskGiverHarvesting.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskBehaviorSowingNewNew.cs" />
     <Compile Include="Modules\Towns\Farming\Sowing\TaskGiverPlanting.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskBehaviorTilling.cs" />

@@ -8,7 +8,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Craftsman))
+            if (!actor.HasJob(JobDefOf.Craftsman))
                 return null;
             var map = actor.Map;
 
@@ -60,7 +60,7 @@ namespace Start_a_Town_
 
                 foreach (var order in bench.Value)
                 {
-                    if (!actor.HasLabor(order.Reaction.Labor))
+                    if (!actor.HasJob(order.Reaction.Labor))
                         continue;
                     if (!actor.CanReserve(benchglobal))
                         continue;
@@ -136,7 +136,7 @@ namespace Start_a_Town_
             var materialsUsed = new Dictionary<string, Entity>();
             foreach (var order in orders)
             {
-                if (!actor.HasLabor(order.Reaction.Labor))
+                if (!actor.HasJob(order.Reaction.Labor))
                     continue;
                 if (!actor.CanReserve(benchglobal))
                     continue;

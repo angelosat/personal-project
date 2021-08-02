@@ -7,7 +7,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Digger))
+            if (!actor.HasJob(JobDefOf.Digger))
                 return null;
             var map = actor.Map;
             

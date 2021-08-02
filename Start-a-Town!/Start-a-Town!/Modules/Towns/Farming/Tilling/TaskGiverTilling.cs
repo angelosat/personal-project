@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Farmer))
+            if (!actor.HasJob(JobDefOf.Farmer))
                 return null;
             var loc = GetBestTillingLocation(actor);
             if (!loc.HasValue)

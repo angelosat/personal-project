@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Lumberjack))
+            if (!actor.HasJob(JobDefOf.Lumberjack))
                 return null;
             var manager = actor.Map.Town.ChoppingManager;
             var trees = manager.GetTrees()

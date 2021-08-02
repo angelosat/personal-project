@@ -207,7 +207,6 @@ namespace Start_a_Town_
         internal IEnumerable<GameObject> GetHarvestablePlants()
         {
             return this.Town.Map.GetObjects(this.Positions.Select(pos => (Vector3)pos.Above)).OfType<Plant>().Where(p => p.IsHarvestable);
-
         }
         internal IEnumerable<GameObject> GetChoppableTrees()
         {

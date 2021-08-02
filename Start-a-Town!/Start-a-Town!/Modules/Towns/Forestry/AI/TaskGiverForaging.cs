@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Forager))
+            if (!actor.HasJob(JobDefOf.Forager))
                 return null;
             var manager = actor.Map.Town.ChoppingManager;
             var plants = manager.GetPlants()

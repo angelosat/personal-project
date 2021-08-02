@@ -8,9 +8,9 @@ namespace Start_a_Town_
         {
             actor.GetState().ToggleJob(jobDef);
         }
-        static public void HasJob(this Actor actor, JobDef jobDef)
+        static public bool HasJob(this Actor actor, JobDef jobDef)
         {
-            actor.GetState().HasJob(jobDef);
+            return jobDef is null ? true : actor.GetState().HasJob(jobDef);
         }
         static public Job GetJob(this Actor actor, JobDef jobDef)
         {

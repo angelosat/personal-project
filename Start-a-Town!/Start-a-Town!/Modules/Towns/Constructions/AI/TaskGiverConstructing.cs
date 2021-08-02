@@ -10,7 +10,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Builder))
+            if (!actor.HasJob(JobDefOf.Builder))
                 return null;
             var manager = actor.Map.Town.ConstructionsManager;
             // TODO: if was previously building, continue building other available nearby unfinished constructions, instead of stopping and delivering materials

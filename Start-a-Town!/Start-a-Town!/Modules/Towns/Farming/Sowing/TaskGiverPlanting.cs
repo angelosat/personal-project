@@ -9,7 +9,7 @@ namespace Start_a_Town_
         protected override AITask TryAssignTask(Actor actor)
         {
             var map = actor.Map;
-            if (!actor.HasLabor(JobDefOf.Farmer))
+            if (!actor.HasJob(JobDefOf.Farmer))
                 return null;
             // TODO: iterate through all zones until one with an available seed type is found
 

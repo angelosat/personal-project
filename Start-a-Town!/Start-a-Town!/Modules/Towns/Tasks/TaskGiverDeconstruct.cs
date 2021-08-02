@@ -4,7 +4,7 @@
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Builder))
+            if (!actor.HasJob(JobDefOf.Builder))
                 return null;
             var allPositions = actor.Map.Town.DesignationManager.GetDesignations(DesignationDef.Deconstruct);
             foreach(var pos in allPositions)

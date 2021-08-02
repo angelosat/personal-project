@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (!actor.HasLabor(JobDefOf.Guide))
+            if (!actor.HasJob(JobDefOf.Guide))
                 return null;
             var visitors = actor.Map.World.Population.Find(v => v.Actor.Map == actor.Map && v.Actor.GetNeed(VisitorNeedsDefOf.Guidance).Value < 50);
 

@@ -145,7 +145,7 @@ namespace Start_a_Town_
             }
         }
 
-        public IEnumerable<Vector3> GetSowingPositions()
+        public IEnumerable<IntVec3> GetSowingPositions()
         {
             if (!this.Valid)
                 this.Validate();

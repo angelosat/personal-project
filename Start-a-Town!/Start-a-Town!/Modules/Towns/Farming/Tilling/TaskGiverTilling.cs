@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Start_a_Town_.Towns.Farming;
 
 namespace Start_a_Town_
 {
@@ -12,8 +11,8 @@ namespace Start_a_Town_
             var loc = GetBestTillingLocation(actor);
             if (!loc.HasValue)
                 return null;
-            var task = new AITask(typeof(TaskBehaviorTillingNew));
-            task.SetTarget(TaskBehaviorTillingNew.TargetInd, new TargetArgs(actor.Map, loc.Value));
+            var task = new AITask(typeof(TaskBehaviorTilling));
+            task.SetTarget(TaskBehaviorTilling.TargetInd, new TargetArgs(actor.Map, loc.Value));
             FindTool(actor, task, ToolAbilityDef.Argiculture);
             return task;
         }

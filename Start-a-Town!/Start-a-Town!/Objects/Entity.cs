@@ -111,10 +111,12 @@ namespace Start_a_Town_
         }
         public GameObject Randomize(RandomThreaded random)
         {
-            var mats = ItemFactory.GetRandomMaterialsFor(this.Def);
-            this.SetMaterials(mats);
-            this.SetQuality(Quality.GetRandom());
-
+            if (this.Def.CraftingProperties is not null) // HACK
+            {
+                var mats = ItemFactory.GetRandomMaterialsFor(this.Def);
+                this.SetMaterials(mats);
+                this.SetQuality(Quality.GetRandom());
+            }
             foreach (var comp in this.Components.Values)
                 comp.Randomize(this, random);
             return this;

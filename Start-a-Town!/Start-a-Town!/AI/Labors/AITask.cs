@@ -60,7 +60,9 @@ namespace Start_a_Town_
                 _ => throw new Exception(),
             };
         }
+
         
+
         internal List<TargetArgs> GetTargetQueue(TargetIndex targetInd)
         {
             return targetInd switch
@@ -463,7 +465,11 @@ namespace Start_a_Town_
             foreach (var t in this.PlacedObjects)
                 t.ResolveReferences(parent.Net);
         }
-       
+        internal void AddTargets(TargetIndex index, IEnumerable<(TargetArgs target, int amount)> targetsAmounts)
+        {
+            foreach(var (target, amount) in targetsAmounts)
+                this.AddTarget(index, target, amount);
+        }
         internal void AddTarget(TargetIndex index, GameObject target, int count = -1)
         {
             this.AddTarget(index, new TargetArgs(target), count);
@@ -505,7 +511,7 @@ namespace Start_a_Town_
             this.TargetsA.Add(target);
             this.AmountsA.Add(count);
         }
-
+        
         protected virtual IEnumerable<TargetArgs> GetCustomTargets() { yield break; }
     }
 }

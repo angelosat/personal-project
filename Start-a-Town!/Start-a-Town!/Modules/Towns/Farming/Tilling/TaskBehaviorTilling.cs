@@ -2,9 +2,9 @@
 using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.Components.Interactions;
 
-namespace Start_a_Town_.Towns.Farming
+namespace Start_a_Town_
 {
-    class TaskBehaviorTillingNew : BehaviorPerformTask
+    class TaskBehaviorTilling : BehaviorPerformTask
     {
         public const TargetIndex TargetInd = TargetIndex.A;
         TargetArgs Target { get { return this.Task.GetTarget(TargetInd); } }

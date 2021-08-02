@@ -53,7 +53,7 @@ namespace Start_a_Town_
         {
             return obj.Map.Town.ReservationManager.GetUnreservedAmount(i);
         }
-
+       
         static public bool TryGetUnreservedAmount(this Actor obj, GameObject i, out int amount)
         {
             amount = obj.Map.Town.ReservationManager.GetUnreservedAmount(new TargetArgs(i));

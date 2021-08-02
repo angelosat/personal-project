@@ -8,10 +8,8 @@ namespace Start_a_Town_.AI
 {
     public partial class ReservationManager : TownComponent
     {
-        public override string Name
-        {
-            get { return "Reservations"; }
-        }
+        string _name = "Reservations";
+        public override string Name => _name; 
         public ReservationManager(Town town)
         {
             this.Town = town;

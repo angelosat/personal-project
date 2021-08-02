@@ -260,11 +260,12 @@ namespace Start_a_Town_.Components
                     if (transferAmount == 0)
                         throw new Exception();
                     currentHauled.StackSize += transferAmount;
-                    if (transferAmount == obj.StackSize)
-                    {
-                        obj.Despawn();
-                        parent.Net.DisposeObject(obj);
-                    }
+                    /// NO NEED FOR THE BELOW, it's handled by the gameobject.stacksize property
+                    //if (transferAmount == obj.StackSize)
+                    //{
+                    //    obj.Despawn();
+                    //    parent.Net.DisposeObject(obj);
+                    //}
                     obj.StackSize -= transferAmount;
                     return false;
                 }

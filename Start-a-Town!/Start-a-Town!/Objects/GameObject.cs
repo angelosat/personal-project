@@ -421,7 +421,7 @@ namespace Start_a_Town_
 
         public EntityComponent this[string componentName]
         {
-            get { return this.Components[componentName]; }
+            get => this.Components[componentName];
             set
             {
                 Components[value.ComponentName] = value;

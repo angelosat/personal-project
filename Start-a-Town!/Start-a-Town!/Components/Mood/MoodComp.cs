@@ -18,7 +18,7 @@ namespace Start_a_Town_
 
         private float ValueTarget => BaseMood + this.Moodlets.Sum(m => m.Def.Value);
 
-        public override string ComponentName => "Mood";
+        public override string ComponentName { get; } = "Mood";
         public float Min => 0;
 
         public float Max => 100;

@@ -6,7 +6,7 @@ namespace Start_a_Town_.Components
 {
     class StatsComponentNew : EntityComponent
     {
-        public override string ComponentName => "StatsNew";
+        public override string ComponentName { get; } = "StatsNew";
         
         readonly Dictionary<StatNewDef, List<StatNewModifier>> Modifiers = new();
         internal List<StatNewModifier> GetModifiers(StatNewDef statNewDef)

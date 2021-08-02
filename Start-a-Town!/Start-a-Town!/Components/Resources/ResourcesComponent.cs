@@ -10,13 +10,8 @@ namespace Start_a_Town_
     {
         public Resource[] Resources;
         
-        public override string ComponentName
-        {
-            get
-            {
-                return "Resources";
-            }
-        }
+        public override string ComponentName { get; } = "Resources";
+            
         public ResourcesComponent(ItemDef def)
         {
             var defs = def.ActorProperties.Resources;

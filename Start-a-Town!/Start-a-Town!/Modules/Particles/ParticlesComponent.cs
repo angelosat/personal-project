@@ -6,10 +6,7 @@ namespace Start_a_Town_.Particles
 {
     class ParticlesComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get { return "ParticleSystem"; }
-        }
+        public override string ComponentName { get; } = "ParticleSystem"; 
 
         List<ParticleEmitter> Emitters = new List<ParticleEmitter>();
         public ParticlesComponent()

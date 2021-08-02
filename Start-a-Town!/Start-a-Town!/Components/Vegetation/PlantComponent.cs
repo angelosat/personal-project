@@ -11,7 +11,7 @@ namespace Start_a_Town_.Components
         
         static int GrowthRate = 20;
 
-        public override string ComponentName => "Plant";
+        public override string ComponentName { get; } = "Plant";
            
         public Progress GrowthBody = new(0, 100, 5);
         public Progress FruitGrowth = new(0, 100, 0);

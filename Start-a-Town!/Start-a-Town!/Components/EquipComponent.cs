@@ -8,7 +8,7 @@ namespace Start_a_Town_.Components
 {
     class EquipComponent : EntityComponent
     {
-        public override string ComponentName => "Equippable";
+        public override string ComponentName { get; } = "Equippable";
           
         public GearType Type;
         public Resource Durability;

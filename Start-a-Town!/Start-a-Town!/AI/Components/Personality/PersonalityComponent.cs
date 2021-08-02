@@ -9,7 +9,7 @@ namespace Start_a_Town_
     public enum ReactionType { Friendly, Hostile }
     public class PersonalityComponent : EntityComponent
     {
-        static readonly Random Randomizer = new Random();
+        static readonly Random Randomizer = new();
 
         public override object Clone()
         {
@@ -21,7 +21,7 @@ namespace Start_a_Town_
         HashSet<MaterialDef> Favorites = new();
         public Trait[] Traits;
 
-        public override string ComponentName => "Personality";
+        public override string ComponentName { get; } = "Personality";
 
         public PersonalityComponent(ItemDef def)
         {

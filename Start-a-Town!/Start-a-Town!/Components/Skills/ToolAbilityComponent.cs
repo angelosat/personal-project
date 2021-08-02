@@ -8,8 +8,7 @@ namespace Start_a_Town_
 {
     public class ToolAbilityComponent : EntityComponent
     {
-        readonly static public string Name = "Tool";
-        public override string ComponentName => Name;
+        public override string ComponentName { get; } = "Tool";
         public override object Clone()
         {
             return new ToolAbilityComponent(this.Props);

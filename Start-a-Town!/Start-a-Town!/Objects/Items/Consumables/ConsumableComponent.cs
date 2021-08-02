@@ -15,14 +15,7 @@ namespace Start_a_Town_.Components
 
     public class ConsumableComponent : EntityComponent
     {
-        public static readonly string Name = "Consumable";
-        public override string ComponentName
-        {
-            get
-            {
-                return Name;
-            }
-        }
+        public override string ComponentName { get; } = "Consumable";
 
         public LootTable Byproducts;
         public List<ConsumableEffect> Effects = new List<ConsumableEffect>();

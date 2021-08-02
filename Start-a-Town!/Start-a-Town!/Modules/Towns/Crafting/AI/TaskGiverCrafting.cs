@@ -74,7 +74,6 @@ namespace Start_a_Town_
                     if (order.IsActive && order.IsCompletable())
                         if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))
                         {
-                            
                             var workstationTarget = new TargetArgs(map, benchglobal);
                             var task = new AITask(TaskDefOf.Crafting);
                             foreach (var i in itemAmounts)

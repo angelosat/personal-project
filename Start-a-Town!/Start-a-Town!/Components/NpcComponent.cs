@@ -176,7 +176,7 @@ namespace Start_a_Town_
         static IconButton IconControl = new IconButton(Icon.ArrowUp) { HoverText = "Take Control" };
         static IconButton IconToggleCitizen = new IconButton() { HoverText = "Toggle citizenship" };
 
-        public override string ComponentName => "Npc";
+        public override string ComponentName { get; } = "Npc";
 
         static void Command(List<TargetArgs> actors)
         {

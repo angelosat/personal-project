@@ -7,13 +7,8 @@ namespace Start_a_Town_.Components
     [Obsolete]
     class BodyComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get
-            {
-                return "Body";
-            }
-        }
+        public override string ComponentName { get; } = "Body";
+        
 
         public Dictionary<string, BodyPart> BodyParts;
        

@@ -8,7 +8,7 @@ namespace Start_a_Town_.Components
     [Obsolete]
     class AttackComponent : EntityComponent
     {
-        public override string ComponentName => "Attack";
+        public override string ComponentName { get; } = "Attack";
 
         public static float DefaultRange = Interaction.DefaultRange;
         public static double DefaultArc = Math.PI / 6d;

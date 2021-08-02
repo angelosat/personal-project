@@ -9,7 +9,7 @@ namespace Start_a_Town_
 {
     public class DefComponent : EntityComponent
     {
-        public override string ComponentName => "Info";
+        public override string ComponentName { get; } = "Info";
        
         public bool InCatalogue = true;
         public Quality Quality = Quality.Common;

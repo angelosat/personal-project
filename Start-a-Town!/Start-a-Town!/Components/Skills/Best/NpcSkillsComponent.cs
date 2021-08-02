@@ -10,7 +10,7 @@ namespace Start_a_Town_
 {
     class NpcSkillsComponent : EntityComponent
     {
-        public override string ComponentName => "Npc Skills";
+        public override string ComponentName { get; } = "Npc Skills";
         static public Panel UI = new Panel(new Rectangle(0,0,500, 400));
         public override object Clone()
         {

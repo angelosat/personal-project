@@ -10,7 +10,7 @@ namespace Start_a_Town_.Components
     public enum ObjectSize { Immovable = -1, Inventoryable, Haulable }
     public class PhysicsComponent : EntityComponent
     {
-        public override string ComponentName => "Physics";
+        public override string ComponentName { get; } = "Physics";
         public ObjectSize Size;
         public bool Solid;
         public float Height;

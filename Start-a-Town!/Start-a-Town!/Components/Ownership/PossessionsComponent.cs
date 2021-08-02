@@ -7,7 +7,7 @@ namespace Start_a_Town_
 {
     public class PossessionsComponent : EntityComponent
     {
-        public override string ComponentName => "Possesions";
+        public override string ComponentName { get; } = "Possesions";
         readonly HashSet<Room> Rooms = new();
         public override object Clone()
         {

@@ -8,7 +8,7 @@ namespace Start_a_Town_
 {
     public class GearComponent : EntityComponent
     {
-        public override string ComponentName => "Gear";
+        public override string ComponentName { get; } = "Gear";
 
         public override void OnObjectLoaded(GameObject parent)
         {

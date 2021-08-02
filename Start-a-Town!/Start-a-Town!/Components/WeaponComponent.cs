@@ -6,7 +6,7 @@ namespace Start_a_Town_.Components
     [Obsolete]
     class WeaponComponent : EntityComponent
     {
-        public override string ComponentName => "Weapon";
+        public override string ComponentName { get; } = "Weapon";
 
         public float Speed;
 

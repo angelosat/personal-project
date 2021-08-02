@@ -11,7 +11,7 @@ namespace Start_a_Town_
 {
     public class AIComponent : EntityComponent
     {
-        public override string ComponentName => "AI";
+        public override string ComponentName { get; } = "AI";
         public Guid Guid = Guid.NewGuid();
         public static Dictionary<Guid, GameObject> Registry = new();
         public static Guid GetGuid(GameObject agent)

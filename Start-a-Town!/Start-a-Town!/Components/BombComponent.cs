@@ -7,10 +7,7 @@ namespace Start_a_Town_.Components
 {
     class BombComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get { return "Bomb"; }
-        }
+        public override string ComponentName { get; } = "Bomb";
         public override object Clone()
         {
             return new BombComponent(this.Radius, this.Fuse);

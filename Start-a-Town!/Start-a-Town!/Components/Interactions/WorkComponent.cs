@@ -6,10 +6,7 @@ namespace Start_a_Town_.Components
 {
     public class WorkComponent : EntityComponent
     {
-        public override string ComponentName
-        {
-            get { return "Work"; }
-        }
+        public override string ComponentName { get; } = "Work";
         public override object Clone()
         {
             return new WorkComponent();

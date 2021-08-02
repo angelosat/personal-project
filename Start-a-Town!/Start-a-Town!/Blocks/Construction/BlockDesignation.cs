@@ -65,7 +65,7 @@ namespace Start_a_Town_.Blocks
             dropped.StackSize -= amount;
         }
         
-        internal override bool IsValidHaulDestination(MapBase map, Vector3 global, GameObject obj)
+        internal override bool IsValidHaulDestination(MapBase map, IntVec3 global, GameObject obj)
         {
             var entity = map.GetBlockEntity(global) as BlockDesignationEntity;
             return entity.IsValidHaulDestination(obj.Def);

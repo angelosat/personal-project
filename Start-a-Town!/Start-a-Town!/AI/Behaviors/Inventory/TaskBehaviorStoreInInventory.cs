@@ -5,12 +5,12 @@ namespace Start_a_Town_
 {
     class TaskBehaviorStoreInInventory : BehaviorPerformTask
     {
-        public override string Name => "Storing item in inventory";
+        public override string Name { get; } = "Storing item in inventory";
 
         protected override IEnumerable<Behavior> GetSteps()
         {
             var index = TargetIndex.A;
-            yield return new BehaviorGetAtNewNew(index);
+            yield return new BehaviorGetAtNewNew(index, PathingSync.FinishMode.Any);
             yield return new BehaviorInteractionNew(index, () => new InteractionHaul(this.Actor.CurrentTask.GetAmount(index)));
             yield return new BehaviorInteractionNew(index, ()=>new InteractionStoreHauled());
         }

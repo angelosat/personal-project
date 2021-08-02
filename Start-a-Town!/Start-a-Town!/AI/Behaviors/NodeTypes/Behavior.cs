@@ -10,7 +10,7 @@ namespace Start_a_Town_
     public enum BehaviorState { Running, Success, Fail }
     public abstract class Behavior : ICloneable
     {
-        public virtual string Name { get { return ""; } }
+        public virtual string Name { get; } = string.Empty;
         public string Label;
         /// <summary>
         /// This action is performed before any end conditions are checked

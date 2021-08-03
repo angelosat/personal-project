@@ -6,7 +6,7 @@ namespace Start_a_Town_
     record ItemFilter : ISaveable, ISerializable, ISyncable
     {
         public ItemDef Item { get; private set; }
-        public bool Enabled;
+        public bool Enabled = true;
         readonly HashSet<MaterialDef> DisallowedMaterials = new();
         public ItemFilter()
         {
@@ -47,6 +47,7 @@ namespace Start_a_Town_
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             this.Item.Save(tag, "Item");
+            this.Enabled.Save(tag, "Enabled");
             this.DisallowedMaterials.SaveDefs(tag, "Materials");
             return tag;
         }
@@ -54,6 +55,7 @@ namespace Start_a_Town_
         public ISaveable Load(SaveTag tag)
         {
             this.Item = tag.LoadDef<ItemDef>("Item");
+            this.Enabled = (bool)tag["Enabled"].Value;
             this.DisallowedMaterials.TryLoadDefs(tag, "Materials");
             return this;
         }
@@ -73,14 +75,23 @@ namespace Start_a_Town_
 
         public ISyncable Sync(BinaryWriter w)
         {
+            w.Write(this.Enabled);
             this.DisallowedMaterials.WriteDefs(w);
             return this;
         }
 
         public ISyncable Sync(BinaryReader r)
         {
+            this.Enabled = r.ReadBoolean();
             this.DisallowedMaterials.ReadDefs(r);
             return this;
+        }
+
+        public void CopyFrom(ItemFilter toCopy)
+        {
+            this.Enabled = toCopy.Enabled;
+            foreach (var m in toCopy.DisallowedMaterials)
+                this.DisallowedMaterials.Add(m);
         }
     }
 }

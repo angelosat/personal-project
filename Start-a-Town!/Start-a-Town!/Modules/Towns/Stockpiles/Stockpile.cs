@@ -369,8 +369,11 @@ namespace Start_a_Town_
         {
             tag.TryGetTag("Filters", t =>
             {
-                foreach (var r in t.LoadList<ItemFilter>())
-                    this.Allowed.Add(r.Item, r);
+                var list = t.LoadList<ItemFilter>();
+                foreach (var r in list)
+                    //this.Allowed.Add(r.Item, r);
+                    this.Allowed[r.Item].CopyFrom(r);
+
             });
         }
         protected override void WriteExtra(BinaryWriter w)

@@ -41,6 +41,7 @@ namespace Start_a_Town_
             };
         }
     }
+    [Obsolete]
     class StorageFilterNew : ILabeled, IListable
     {
         public StorageFilterCategoryNew Parent;

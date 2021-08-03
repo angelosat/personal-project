@@ -24,6 +24,7 @@ namespace Start_a_Town_
                 throw new Exception();
             Database.Add(def.Name, def);
         }
+       
         static public Def GetDef(string defName)
         {
             if (defName == null || string.IsNullOrEmpty(defName) || string.IsNullOrWhiteSpace(defName))

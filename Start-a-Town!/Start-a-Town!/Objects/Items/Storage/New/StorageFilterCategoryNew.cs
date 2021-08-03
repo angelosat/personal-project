@@ -185,7 +185,7 @@ namespace Start_a_Town_
                     else if (this.Item is not null)
                         PacketStorageFiltersNew.Send(this.Owner, this.Item, null);
                     else
-                        throw new Exception();
+                        PacketStorageFiltersNew.Send(this.Owner, null);
                 }
             };
         }
@@ -202,6 +202,7 @@ namespace Start_a_Town_
             this.Owner = owner;
         }
     }
+    [Obsolete]
     class StorageFilterCategoryNew : IListCollapsibleDataSource, IListable, ILabeled
     {
         public string Label { get; set; }

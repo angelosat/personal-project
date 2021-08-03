@@ -2,53 +2,13 @@
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Start_a_Town_
 {
-    record ItemFilter
-    {
-        public readonly ItemDef Item;
-        public bool Enabled;
-        readonly HashSet<MaterialDef> DisallowedMaterials = new();
-        public ItemFilter(ItemDef item, bool enabled = true)
-        {
-            this.Item = item;
-            this.Enabled = enabled;
-        }
-        public bool IsAllowed(MaterialDef mat)
-        {
-            return this.Enabled && !this.DisallowedMaterials.Contains(mat);
-        }
-        internal ItemFilter SetAllow(MaterialDef m, bool allow)
-        {
-            if (allow)
-                this.DisallowedMaterials.Remove(m);
-            else
-                this.DisallowedMaterials.Add(m);
-            return this;
-        }
-
-        internal void Toggle(MaterialDef mat = null)
-        {
-            if (mat == null)
-                this.Enabled = !this.Enabled;
-            else
-            {
-                if (this.DisallowedMaterials.Contains(mat))
-                    this.DisallowedMaterials.Remove(mat);
-                else
-                    this.DisallowedMaterials.Add(mat);
-            }
-        }
-    }
-
     public partial class Stockpile : Zone, IStorage, IContextable
     {
-        //{
-        //    public ItemDef Item;
-        //    HashSet<MaterialDef> AllowedMaterials;
-        //}
         internal static void Init()
         {
             Packets.Init();
@@ -64,8 +24,14 @@ namespace Start_a_Town_
         }
         internal void ToggleFilter(ItemCategory cat)
         {
-            var byCategory = this.Allowed.Values.ToLookup(r => r.Item.Category);
-            var records = byCategory[cat];
+            IEnumerable<ItemFilter> records = null;
+            if (cat is null)
+                records = this.Allowed.Values;
+            else
+            {
+                var byCategory = this.Allowed.Values.ToLookup(r => r.Item.Category);
+                records = byCategory[cat];
+            }
             var minor = records.GroupBy(a => a.Enabled).OrderBy(a => a.Count()).First();
             foreach (var f in minor)
                 f.Toggle();
@@ -75,7 +41,7 @@ namespace Start_a_Town_
         public StorageSettings Settings = new();
         public int Priority => this.Settings.Priority.Value;
         static IListCollapsibleDataSource DefaultFiltersNew;// = InitFilters();
-        Dictionary<ItemDef, ItemFilter> Allowed = new();
+        readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
 
         public override string UniqueName => $"Zone_Stockpile_{this.ID}";
 
@@ -385,27 +351,35 @@ namespace Start_a_Town_
             DefaultFiltersNew = all;
             return all;
         }
-
+        [Obsolete]
         public void ToggleItemFiltersCategories(int[] categoryIndices)
         {
-            //var indices = categoryIndices;
-            //foreach (var i in indices)
-            //{
-            //    var c = this.DefaultFilters.GetNodeByIndex(i);
-            //    var all = c.GetAllDescendantLeaves();
-            //    var minor = all.GroupBy(a => a.Enabled).OrderBy(a => a.Count()).First();
-            //    foreach (var f in minor)
-            //        f.Enabled = !minor.Key;
-            //}
+            throw new Exception();
         }
+        [Obsolete]
         public void ToggleItemFilters(int[] gameObjects)
         {
-            //var indices = gameObjects;
-            //foreach (var i in indices)
-            //{
-            //    var f = this.DefaultFilters.GetLeafByIndex(i);
-            //    f.Enabled = !f.Enabled;
-            //}
+            throw new Exception();
+        }
+        protected override void SaveExtra(SaveTag tag)
+        {
+            this.Allowed.Values.SaveNewBEST(tag, "Filters");
+        }
+        protected override void LoadExtra(SaveTag tag)
+        {
+            tag.TryGetTag("Filters", t =>
+            {
+                foreach (var r in t.LoadList<ItemFilter>())
+                    this.Allowed.Add(r.Item, r);
+            });
+        }
+        protected override void WriteExtra(BinaryWriter w)
+        {
+            this.Allowed.Values.Sync(w);
+        }
+        protected override void ReadExtra(BinaryReader r)
+        {
+            this.Allowed.Values.Sync(r);
         }
     }
 }

@@ -488,6 +488,21 @@ namespace Start_a_Town_
                         list.Add(new U().Load(pos.Value as SaveTag) as U);
             });
         }
+        public static ICollection<T> LoadNewNew<T>(this ICollection<T> list, SaveTag tag, string name)
+           where T : ISaveable, new()
+        {
+            tag.TryGetTag(name, t =>
+            {
+                list.Clear();
+                if (t.Value is List<SaveTag> tags)
+                    foreach (var tag in tags)
+                    {
+                        var item = new T().Load(tag);
+                        list.Add((T)item);
+                    }
+            });
+            return list;
+        }
         public static T LoadNew<T, U>(this T list, SaveTag tag, string name)
             where U : ISaveable, new()
             where T : ICollection<U>

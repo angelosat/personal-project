@@ -19,13 +19,13 @@ namespace Start_a_Town_
             var s = stockpile.Map.Net.GetOutgoingStream();
             s.Write(pCategory);
             s.Write(stockpile.ID);
-            s.Write(category.Name);
+            s.Write(category?.Name ?? "");
         }
         private static void ReceiveCategory(INetwork net, BinaryReader r)
         {
             var stockpileID = r.ReadInt32();
             var stockpile = net.Map.Town.ZoneManager.GetZone<Stockpile>(stockpileID);
-            var cat = Def.GetDef<ItemCategory>(r);
+            var cat = r.ReadString() is string catName && !catName.IsNullEmptyOrWhiteSpace() ? Def.GetDef<ItemCategory>(r) : null;
             stockpile.ToggleFilter(cat);
             if (net is Server)
                 Send(stockpile, cat);

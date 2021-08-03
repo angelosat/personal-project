@@ -136,6 +136,12 @@ namespace Start_a_Town_
                 i.Sync(b);
             return list;
         }
+        static public ICollection<T> SyncNew<T>(this ICollection<T> list, BinaryReader b) where T : ISerializable
+        {
+            foreach (var i in list)
+                i.Read(b);
+            return list;
+        }
         /// <summary>
         /// the good one
         /// </summary>

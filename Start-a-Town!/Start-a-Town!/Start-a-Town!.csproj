@@ -210,6 +210,7 @@
     <Compile Include="Modules\Crafting\Crafting\Reaction.Product.ProductMaterialPair.cs" />
     <Compile Include="Components\GearType.cs" />
     <Compile Include="Components\IEntity.cs" />
+    <Compile Include="Modules\Towns\Stockpiles\ItemFilter.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemPreferencesManager.ItemPreference.cs" />
     <Compile Include="Objects\Loot.cs" />
     <Compile Include="Objects\LootTable.cs" />

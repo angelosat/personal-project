@@ -1,21 +1,21 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
     class StockpileAIHelper
     {
-        static public AITask FindBestTask(Actor actor, IEnumerable<Entity> items)
+        public static AITask FindBestTask(Actor actor, IEnumerable<Entity> items)
         {
             foreach (var i in items)
                 if (TryHaulNew(actor, i) is AITask task)
                     return task;
             return null;
         }
-        
-        static public AITask TryHaulNew(Actor actor, Entity item, bool ignoreOtherReservations = false)
+
+        public static AITask TryHaulNew(Actor actor, Entity item, bool ignoreOtherReservations = false)
         {
             var unreservedAmount = actor.GetUnreservedAmount(item);
             if (unreservedAmount == 0)
@@ -56,16 +56,16 @@ namespace Start_a_Town_
                 else
                     task.Count = item.StackMax;
             }
-            
+
             if (task.Count < 0)
                 throw new Exception();
             if (task.Count == 0)
                 return null;
-             return task;
-            
+            return task;
+
         }
 
-        static public Dictionary<TargetArgs, int> GetAllValidHaulDestinations(Actor actor, GameObject item, out int maxamount)
+        public static Dictionary<TargetArgs, int> GetAllValidHaulDestinations(Actor actor, GameObject item, out int maxamount)
         {
             Dictionary<TargetArgs, int> all = new Dictionary<TargetArgs, int>();
             var stockpiles = GetStoragesByPriority(item.Map);
@@ -79,15 +79,14 @@ namespace Start_a_Town_
             }
             return all;
         }
-        static public TargetArgs GetBestHaulDestination(Actor actor, GameObject item)
+        public static TargetArgs GetBestHaulDestination(Actor actor, GameObject item)
         {
-            int maxAmount;
-            var all = GetAllValidHaulDestinations(actor, item, out maxAmount).Keys.Select(k => new TargetArgs(actor.Map, k.Global + Vector3.UnitZ));
+            var all = GetAllValidHaulDestinations(actor, item, out int maxAmount).Keys.Select(k => new TargetArgs(actor.Map, k.Global + Vector3.UnitZ));
             var closest = all.OrderBy(t => Vector3.DistanceSquared(t.Global, actor.Global)).FirstOrDefault();
             return closest == null ? TargetArgs.Null : closest;
         }
 
-        static public bool IsItemAtBestStockpile(GameObject item)
+        public static bool IsItemAtBestStockpile(GameObject item)
         {
             var stockpiles = item.Map.Town.ZoneManager.GetZones<Stockpile>();
             var currentStockpile = stockpiles.FirstOrDefault(s => s.Contains(item));
@@ -103,7 +102,7 @@ namespace Start_a_Town_
             return betterStockpile == null && currentStockpile.Accepts(item);
         }
 
-        static public IEnumerable<IStorage> GetStoragesByPriority(MapBase map)
+        public static IEnumerable<IStorage> GetStoragesByPriority(MapBase map)
         {
             IEnumerable<Stockpile> stockpiles = GetStockpiles(map);
             return stockpiles.OrderByDescending(i => i.Priority);
@@ -114,7 +113,7 @@ namespace Start_a_Town_
             return map.Town.ZoneManager.GetZones<Stockpile>();
         }
 
-        static public IEnumerable<TargetArgs> GetAllValidStoragePlacesNoReserveCheckLazy(Actor actor, Entity item)
+        public static IEnumerable<TargetArgs> GetAllValidStoragePlacesNoReserveCheckLazy(Actor actor, Entity item)
         {
             var storages = GetStoragesByPriority(actor.Map);
             foreach (var s in storages)
@@ -125,7 +124,7 @@ namespace Start_a_Town_
             }
         }
 
-        static public bool IsValidStorage(GameObject item, TargetArgs destination)
+        public static bool IsValidStorage(GameObject item, TargetArgs destination)
         {
             if (destination.HasObject && (destination.Object == null || !destination.Object.IsSpawned || destination.Object.IsStackFull))
                 return false;

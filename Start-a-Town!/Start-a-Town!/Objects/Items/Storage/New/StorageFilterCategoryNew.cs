@@ -5,7 +5,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    class StorageFilterCategoryNewNew : IListCollapsibleDataSource, IListable, ILabeled
+    public class StorageFilterCategoryNewNew : IListCollapsibleDataSource, IListable, ILabeled
     {
         public string Label { get; set; }
         Stockpile _owner;

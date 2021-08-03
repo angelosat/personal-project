@@ -30,12 +30,14 @@ namespace Start_a_Town_
         public Func<ItemDef, GameObject> Randomizer;
         public List<MaterialToken> MadeFrom = new();
         public bool QualityLevels;
-
+        internal IEnumerable<IItemDefVariator> Variator;
+        
         public ItemDef(string name) : base(name)
         {
         }
 
         string _Label;
+
         public string Label { get => _Label ?? Name; set => _Label = value; }
 
         internal GameObject CreateRandom()
@@ -102,6 +104,19 @@ namespace Start_a_Town_
         internal Reaction CreateRecipe()
         {
             return this.RecipeProperties.CreateRecipe(this);
+        }
+
+        public StorageFilterCategoryNewNew GetSpecialFilter()
+        {
+            if (this.Variator is null)
+                return null;
+            var filter = new StorageFilterCategoryNewNew(this.Name);
+            filter.AddLeafs(this.Variator.Select(v => v.GetFilter()));
+            return filter;
+        }
+        public IEnumerable<StorageFilterNewNew> GetSpecialFilters()
+        {
+            return this.Variator?.Select(v => v.GetFilter());
         }
     }
 }

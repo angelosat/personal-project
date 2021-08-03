@@ -32,6 +32,7 @@ namespace Start_a_Town_
             CraftingProperties = ToolCraftingProperties,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.LogsGrayscale, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                             .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.LogsGrayscale) { DrawMaterialColor = true }),
+            Variator = Def.GetDefs<ToolProps>()
         };
 
         static public readonly ItemDef Shovel = new("Shovel")
@@ -186,8 +187,6 @@ namespace Start_a_Town_
             GameObject.AddTemplate(ItemFactory.CreateTool(Pickaxe));
             GameObject.AddTemplate(ItemFactory.CreateTool(Handsaw));
             GameObject.AddTemplate(ItemFactory.CreateTool(Hoe));
-
-            //GenerateRecipes();
 
             Reaction.Register(Reaction.Repairing);
 

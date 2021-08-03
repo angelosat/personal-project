@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class ToolProps : Def
+    public class ToolProps : Def, IItemDefVariator
     {
         public string Label, Description;
         public ToolAbility Ability;
@@ -75,6 +75,11 @@ namespace Start_a_Town_
                     new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },
                     SkillDef.Crafting);
             }
+        }
+
+        public StorageFilterNewNew GetFilter()
+        {
+            return new(this.Label, ToolDefs.Tool) { SpecialFilter = o => o.ToolComponent?.Props == this };
         }
     }
 }

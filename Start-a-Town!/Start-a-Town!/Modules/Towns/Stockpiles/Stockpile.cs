@@ -344,6 +344,10 @@ namespace Start_a_Town_
                     this.Allowed.Add(def, record);
                     if (def.DefaultMaterialType != null)
                         c.AddChildren(new StorageFilterCategoryNewNew(def.Label) { Item = def }.AddLeafs(def.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNewNew(def, m))));
+                    //else if(def.GetSpecialFilters() is IEnumerable<StorageFilterNewNew> filters)
+                    //    c.AddLeafs(filters);
+                    else if(def.GetSpecialFilter() is StorageFilterCategoryNewNew filter)
+                        c.AddChildren(filter);
                     else
                         c.AddLeafs(new StorageFilterNewNew(def));
                 }

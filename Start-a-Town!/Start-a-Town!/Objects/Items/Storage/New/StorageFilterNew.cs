@@ -3,13 +3,14 @@ using System;
 
 namespace Start_a_Town_
 {
-    class StorageFilterNewNew : ILabeled, IListable
+    public class StorageFilterNewNew : ILabeled, IListable
     {
         public StorageFilterCategoryNewNew Parent;
         public StorageFilterCategoryNewNew Root => this.Parent.Root;
         internal Stockpile Owner => this.Root.Owner;
         public string Label { get; set; }
         public Predicate<Entity> Condition;
+        public Func<Entity, bool> SpecialFilter;
         public bool Enabled => this.Owner.Accepts(this.Item, this.Material);
         readonly ItemDef Item;
         readonly MaterialDef Material;
@@ -21,13 +22,18 @@ namespace Start_a_Town_
             this.Label = mat.Label + " " + item.Label;
             this.Condition = o => o.Def == item && o.PrimaryMaterial == mat;
         }
+        public StorageFilterNewNew(string label, ItemDef item)
+        {
+            this.Item = item;
+            this.Label = label;
+            this.Condition = o => o.Def == item;
+        }
         public StorageFilterNewNew(ItemDef item)
         {
             this.Item = item;
             this.Label = item.Label;
             this.Condition = o => o.Def == item;
         }
-
         public Control GetListControlGui()
         {
             return new CheckBoxNew(this.Label)

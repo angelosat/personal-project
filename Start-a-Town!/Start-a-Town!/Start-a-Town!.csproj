@@ -471,6 +471,7 @@
     <Compile Include="Objects\Items\Materials\RawMaterials\RawMaterialDef.cs" />
     <Compile Include="Objects\Items\Storage\New\StorageFilterCategoryNew.cs" />
     <Compile Include="Objects\Items\Storage\New\StorageFilterNew.cs" />
+    <Compile Include="Objects\Tools\IItemDefVariator.cs" />
     <Compile Include="Objects\Tools\Tool.cs" />
     <Compile Include="Objects\Tools\ToolDefs.cs" />
     <Compile Include="Objects\Items\ItemFactory.cs" />

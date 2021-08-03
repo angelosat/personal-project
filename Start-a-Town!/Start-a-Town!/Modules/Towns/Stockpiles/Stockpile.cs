@@ -150,6 +150,8 @@ namespace Start_a_Town_
                 }
                 foreach (var item in itemsInCell)
                 {
+                    if (!item.IsHaulable)
+                        continue;
                     if (!this.Accepts(item))
                         continue;
                     if (!item.CanAbsorb(obj))

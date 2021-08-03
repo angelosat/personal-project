@@ -51,6 +51,7 @@ namespace Start_a_Town_
             this.Item.Save(tag, "Item");
             this.Enabled.Save(tag, "Enabled");
             this.DisallowedMaterials.SaveDefs(tag, "Materials");
+            this.DisallowedVariations.SaveDefs(tag, "Variations");
             return tag;
         }
 
@@ -59,6 +60,7 @@ namespace Start_a_Town_
             this.Item = tag.LoadDef<ItemDef>("Item");
             this.Enabled = (bool)tag["Enabled"].Value;
             this.DisallowedMaterials.TryLoadDefs(tag, "Materials");
+            this.DisallowedVariations.TryLoadDefs(tag, "Variations");
             return this;
         }
 
@@ -79,6 +81,7 @@ namespace Start_a_Town_
         {
             w.Write(this.Enabled);
             this.DisallowedMaterials.WriteDefs(w);
+            this.DisallowedVariations.WriteDefs(w);
             return this;
         }
 
@@ -86,6 +89,7 @@ namespace Start_a_Town_
         {
             this.Enabled = r.ReadBoolean();
             this.DisallowedMaterials.ReadDefs(r);
+            this.DisallowedVariations.ReadDefs(r);
             return this;
         }
 
@@ -94,6 +98,8 @@ namespace Start_a_Town_
             this.Enabled = toCopy.Enabled;
             foreach (var m in toCopy.DisallowedMaterials)
                 this.DisallowedMaterials.Add(m);
+            foreach (var m in toCopy.DisallowedVariations)
+                this.DisallowedVariations.Add(m);
         }
     }
 

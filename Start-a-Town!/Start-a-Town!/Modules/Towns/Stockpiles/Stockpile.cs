@@ -13,6 +13,13 @@ namespace Start_a_Town_
         {
             Packets.Init();
         }
+        internal void ToggleFilter(ItemDef item, Def variator)
+        {
+            if (variator is not IItemDefVariator)
+                throw new Exception();
+            var record = this.Allowed[item];
+            record.Toggle(variator);
+        }
 
         internal void ToggleFilter(ItemDef item, MaterialDef mat = null)
         {
@@ -83,10 +90,20 @@ namespace Start_a_Town_
                 list.AddRange(from obj in objects where this.Accepts(obj) where obj.Global - Vector3.UnitZ == (Vector3)pos select obj); // TODO: this is shit
             return list;
         }
+        public bool Accepts(ItemDef item, Def v)
+        {
+            var record = this.Allowed[item];
+            return record.IsAllowed(v);
+        }
         public bool Accepts(ItemDef item, MaterialDef mat)
         {
             var record = this.Allowed[item];
             return record.IsAllowed(mat);
+        }
+        public bool Accepts(ItemDef item, MaterialDef mat, Def variation)
+        {
+            var record = this.Allowed[item];
+            return record.IsAllowed(mat) && record.IsAllowed(variation);
         }
         public override bool Accepts(Entity obj, IntVec3 pos)
         {
@@ -101,7 +118,7 @@ namespace Start_a_Town_
         }
         internal bool Accepts(GameObject obj)
         {
-            return obj is Entity item ? this.Accepts(item) : false;
+            return obj is Entity item && this.Accepts(item);
         }
         public bool CanAccept(GameObject item)
         {

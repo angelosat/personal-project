@@ -346,7 +346,7 @@ namespace Start_a_Town_.UI
             //    this.DrawOnCamera(sb, camera); // moving this to outside the ui rendertarget draw call, because we dont want it drawn to ui scale
 
             foreach (var layer in this.Layers)
-                foreach (var ctrl in layer.Value)
+                foreach (var ctrl in layer.Value) // has thrown collection was modified during receing map packets
                     ctrl.Draw(sb, Bounds);
 
             TooltipManager.Instance.Draw(sb);

@@ -9,30 +9,28 @@ namespace Start_a_Town_
         public StorageFilterCategoryNewNew Root => this.Parent.Root;
         internal Stockpile Owner => this.Root.Owner;
         public string Label { get; set; }
-        public Predicate<Entity> Condition;
         public Func<Entity, bool> SpecialFilter;
-        public bool Enabled => this.Owner.Accepts(this.Item, this.Material);
+        public bool Enabled => this.Owner.Accepts(this.Item, this.Material, this.Variation);
         readonly ItemDef Item;
         readonly MaterialDef Material;
+        readonly Def Variation;
 
         public StorageFilterNewNew(ItemDef item, MaterialDef mat)
         {
             this.Item = item;
             this.Material = mat;
             this.Label = mat.Label + " " + item.Label;
-            this.Condition = o => o.Def == item && o.PrimaryMaterial == mat;
         }
-        public StorageFilterNewNew(string label, ItemDef item)
+        public StorageFilterNewNew(string label, ItemDef item, Def variation)
         {
             this.Item = item;
+            this.Variation = variation;
             this.Label = label;
-            this.Condition = o => o.Def == item;
         }
         public StorageFilterNewNew(ItemDef item)
         {
             this.Item = item;
             this.Label = item.Label;
-            this.Condition = o => o.Def == item;
         }
         public Control GetListControlGui()
         {
@@ -41,7 +39,10 @@ namespace Start_a_Town_
                 TickedFunc = () => this.Enabled,
                 LeftClickAction = () => {
                     this.Root.FindLeafIndex(this, out var i);
-                    PacketStorageFiltersNew.Send(this.Owner, this.Item, this.Material);
+                    if (this.Variation is not null)
+                        PacketStorageFiltersNew.Send(this.Owner, this.Item, this.Variation as Def);
+                    else
+                        PacketStorageFiltersNew.Send(this.Owner, this.Item, this.Material);
                     //PacketStorageFiltersNew.Send(this.Owner, null, new int[] { i });
                 }
             };

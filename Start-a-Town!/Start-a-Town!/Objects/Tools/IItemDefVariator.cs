@@ -1,6 +1,6 @@
 ﻿namespace Start_a_Town_
 {
-    internal interface IItemDefVariator
+    public interface IItemDefVariator
     {
         StorageFilterNewNew GetFilter();
     }

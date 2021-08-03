@@ -166,11 +166,6 @@ namespace Start_a_Town_
             bool isEnabled(StorageFilterCategoryNewNew cat) => cat.Leaves.All(l => l.Enabled) && cat.Branches.All(isEnabled);
         }
 
-        public bool Filter(Entity obj)
-        {
-            return this.Leaves.Any(f => f.Enabled && f.Condition(obj)) || this.Branches.Any(c => c.Filter(obj));
-        }
-
         public Control GetListControlGui()
         {
             return new CheckBoxNew()
@@ -179,7 +174,6 @@ namespace Start_a_Town_
                 LeftClickAction = () =>
                 {
                     this.Root.FindNodeIndex(this, out var d);
-                    //PacketStorageFiltersNew.Send(this.Owner, new int[] { d }, null);
                     if (this.Category is not null)
                         PacketStorageFiltersNew.Send(this.Owner, this.Category);
                     else if (this.Item is not null)
@@ -191,11 +185,6 @@ namespace Start_a_Town_
         }
 
         bool IsEnabled => this.Leaves.All(l => l.Enabled) && this.Branches.All(c => c.IsEnabled);
-
-        public void UpdateOwner(Stockpile newOwner)
-        {
-
-        }
 
         public void SetOwner(Stockpile owner)
         {

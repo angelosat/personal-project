@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Start_a_Town_.Net;
 
@@ -7,13 +8,33 @@ namespace Start_a_Town_
     [EnsureStaticCtorCall]
     class PacketStorageFiltersNew : Packet
     {
-        static readonly int p, pNew, pCategory;
+        static readonly int p, pNew, pCategory, pVariation;
         static PacketStorageFiltersNew()
         {
             p = Network.RegisterPacketHandler(Receive);
             pNew = Network.RegisterPacketHandler(ReceiveNew);
             pCategory = Network.RegisterPacketHandler(ReceiveCategory);
+            pVariation = Network.RegisterPacketHandler(ReceiveVariation);
         }
+        public static void Send(Stockpile stockpile, ItemDef item, Def v)
+        {
+            var s = stockpile.Map.Net.GetOutgoingStream();
+            s.Write(pVariation);
+            s.Write(stockpile.ID);
+            s.Write(item.Name);
+            s.Write(v.Name);
+        }
+        private static void ReceiveVariation(INetwork net, BinaryReader r)
+        {
+            var stockpileID = r.ReadInt32();
+            var stockpile = net.Map.Town.ZoneManager.GetZone<Stockpile>(stockpileID);
+            var item = Def.GetDef<ItemDef>(r);
+            var v = Def.GetDef(r.ReadString());
+            stockpile.ToggleFilter(item, v);
+            if (net is Server)
+                Send(stockpile, item, v);
+        }
+
         public static void Send(Stockpile stockpile, ItemCategory category)
         {
             var s = stockpile.Map.Net.GetOutgoingStream();

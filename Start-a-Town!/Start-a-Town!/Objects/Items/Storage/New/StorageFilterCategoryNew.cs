@@ -7,16 +7,23 @@ namespace Start_a_Town_
 {
     class StorageFilterCategoryNew : IListCollapsibleDataSource, IListable, ILabeled
     {
-        public Stockpile Owner;
+        public string Label { get; set; }
+        Stockpile _owner;
+        public Stockpile Owner
+        {
+            get => this.Root._owner;
+            set
+            {
+                if (this.Root != this)
+                    throw new Exception();
+                this._owner = value;
+            }
+        }
         public StorageFilterCategoryNew Parent;
         public StorageFilterCategoryNew Root => this.Parent?.Root ?? this;
-
-        public string Label { get; set; }
         public List<StorageFilterCategoryNew> Branches = new();
         public List<StorageFilterNew> Leaves = new();
-
         public IEnumerable<IListCollapsibleDataSource> ListBranches => this.Branches;
-
         public IEnumerable<IListable> ListLeafs => this.Leaves;
 
         public StorageFilterCategoryNew(string label)
@@ -33,7 +40,7 @@ namespace Start_a_Town_
             foreach (var c in cats)
             {
                 c.Parent = this;
-                c.Owner = this.Owner;
+                //c.Owner = this.Owner;
             }
             this.Branches.AddRange(cats);
             return this;
@@ -47,7 +54,7 @@ namespace Start_a_Town_
             foreach (var c in filters)
             {
                 c.Parent = this;
-                c.Owner = this.Owner;
+                //c.Owner = this.Owner;
             }
             this.Leaves.AddRange(filters);
             return this;
@@ -176,5 +183,10 @@ namespace Start_a_Town_
         }
         
         bool IsEnabled => this.Leaves.All(l => l.Enabled) && this.Branches.All(c => c.IsEnabled);
+
+        public void UpdateOwner(Stockpile newOwner)
+        {
+
+        }
     }
 }

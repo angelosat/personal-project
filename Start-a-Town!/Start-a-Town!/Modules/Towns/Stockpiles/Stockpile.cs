@@ -12,9 +12,11 @@ namespace Start_a_Town_
         {
             Packets.Init();
         }
-
+        StorageSettings IStorage.Settings => this.Settings;
+        public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
         public StorageSettings Settings = new();
         public int Priority => this.Settings.Priority.Value;
+        readonly StorageFilterCategoryNew DefaultFilters;// = InitFilters();
 
         public override string UniqueName => $"Zone_Stockpile_{this.ID}";
 
@@ -286,7 +288,7 @@ namespace Start_a_Town_
                 new GroupBox()
                     .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
                 this.DefaultFilters
-                    .GetGui((nodeIndices, leaveIndices) => PacketStorageFiltersNew.Send(this, nodeIndices, leaveIndices))
+                    .GetGui()//(nodeIndices, leaveIndices) => PacketStorageFiltersNew.Send(this, nodeIndices, leaveIndices))
                     .ToPanelLabeled("Fitlers"));
             
             this.FiltersGui = box;
@@ -297,11 +299,9 @@ namespace Start_a_Town_
                 Packets.SyncPriority(this, p);
             }
         }
-        StorageSettings IStorage.Settings => this.Settings;
+        
 
-        public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
 
-        readonly StorageFilterCategoryNew DefaultFilters;// = InitFilters();
         StorageFilterCategoryNew InitFilters()
         {
             var cats = Def.Database.Values.OfType<ItemDef>().GroupBy(d => d.Category);

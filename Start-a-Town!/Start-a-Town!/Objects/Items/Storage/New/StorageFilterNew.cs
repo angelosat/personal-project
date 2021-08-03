@@ -11,7 +11,7 @@ namespace Start_a_Town_
         public string Label { get; set; }
         public Predicate<Entity> Condition;
         public bool Enabled = true;
-        internal Stockpile Owner;
+        internal Stockpile Owner => this.Root.Owner;
 
         public StorageFilterNew(string label, Predicate<Entity> condition)
         {

@@ -79,7 +79,7 @@ namespace Start_a_Town_.PathFinding
 
         public bool IsValid(Actor entity)
         {
-            var global = entity.Global.SnapToBlock();
+            var global = entity.Global.ToCell();
             if (this.CellsToTraverse.Contains(global))
                 this.CellsToTraverse.Remove(global);
             foreach(var cell in this.CellsToTraverse)

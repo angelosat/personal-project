@@ -33,7 +33,7 @@ namespace Start_a_Town_
             yield return BehaviorHelper.SetTarget(Item, item);
             yield return BehaviorHelper.SetTarget(Counter, shop.Counter.Value); 
             yield return BehaviorHelper.MoveTo(Counter);
-            yield return new BehaviorWait(() => item.Cell == counterSurface);
+            yield return new BehaviorWait(() => item.CellIfSpawned == counterSurface);
             yield return new BehaviorCustom()
             { 
                 InitAction = ()=>

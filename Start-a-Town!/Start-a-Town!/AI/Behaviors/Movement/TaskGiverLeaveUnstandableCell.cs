@@ -4,7 +4,7 @@
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            var cell = actor.Global.SnapToBlock();
+            var cell = actor.Global.ToCell();
             var map = actor.Map;
             if (map.IsStandableIn(cell))
                 return null;

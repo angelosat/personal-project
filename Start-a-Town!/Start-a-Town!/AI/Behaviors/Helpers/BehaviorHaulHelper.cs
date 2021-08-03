@@ -147,7 +147,7 @@ namespace Start_a_Town_
                     return;
                 var task = actor.CurrentTask;
                 var target = task.GetTarget(storageIndex);
-                var cell = target.Global.SnapToBlock();
+                var cell = target.Global.ToCell();
                 var targets = GetMoreValidStoragePlaces(actor, hauledObj, cell);
 
                 foreach (var tar in targets)

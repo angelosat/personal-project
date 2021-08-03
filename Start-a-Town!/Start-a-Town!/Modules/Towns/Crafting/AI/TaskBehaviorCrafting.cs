@@ -145,7 +145,7 @@ namespace Start_a_Town_
                         return true;
                     if (t.Object.IsForbidden)
                         return true;
-                    if (t.Object.Cell != this.Workstation.Global.Above())
+                    if (t.Object.CellIfSpawned != this.Workstation.Global.Above())
                         return true;
                 }
                 return false;

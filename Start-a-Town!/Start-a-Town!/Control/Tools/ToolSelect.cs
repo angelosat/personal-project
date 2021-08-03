@@ -16,7 +16,7 @@ namespace Start_a_Town_
         }
         public ToolSelect(TargetArgs target)
         {
-            this.Begin = target.Type == TargetType.Position ? this.GetBeginFromTarget(target.Global) : target.Object.Global.SnapToBlock();
+            this.Begin = target.Type == TargetType.Position ? this.GetBeginFromTarget(target.Global) : target.Object.Global.ToCell();
             this.End = this.Begin;
         }
         protected virtual IntVec3 GetBeginFromTarget(IntVec3 a)

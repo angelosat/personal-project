@@ -25,7 +25,7 @@ namespace Start_a_Town_
             yield return BehaviorHelper.SetTarget(Counter, () => (map, counter + counterCell.Back));
 
             yield return BehaviorHelper.MoveTo(Counter, PathingSync.FinishMode.Exact);
-            yield return new BehaviorWait(() => customer.Cell.Value == counter + counterCell.Front);
+            yield return new BehaviorWait(() => customer.CellIfSpawned.Value == counter + counterCell.Front);
             yield return new BehaviorWait(() =>
             {
                 var money = map.GetObjects(counterSurface).FirstOrDefault(o => o.Def == ItemDefOf.Coins);

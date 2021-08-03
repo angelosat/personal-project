@@ -34,7 +34,7 @@ namespace Start_a_Town_
         static public bool TryFindNearbyPlace(Actor actor, GameObject item, Vector3 center, out TargetArgs target)
         {
             var map = actor.Map;
-            var actorCell = actor.GridCell;
+            var actorCell = actor.Cell;
             var places = actorCell.GetRadial();
             foreach (var pl in places)
             {
@@ -63,7 +63,7 @@ namespace Start_a_Town_
         static public bool TryFindNearbyPlace(Actor actor, GameObject item, out TargetArgs target)
         {
             var map = actor.Map;
-            var itemCell = item.Global.SnapToBlock();
+            var itemCell = item.Global.ToCell();
             var places = itemCell.GetRadial();
             foreach (var pl in places)
             {

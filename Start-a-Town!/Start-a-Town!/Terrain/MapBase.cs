@@ -514,11 +514,11 @@ namespace Start_a_Town_
             var ch = this.GetChunk(global);
             var objects = ch.Objects;
             var count = objects.Count;
-            var globalIntVec3 = global.SnapToBlock();
+            var globalIntVec3 = global.ToCell();
             for (int i = 0; i < count; i++)
             {
                 var e = objects[i];
-                if (e.Global.SnapToBlock() == globalIntVec3)
+                if (e.Global.ToCell() == globalIntVec3)
                     yield return e;
             }
         }
@@ -533,7 +533,7 @@ namespace Start_a_Town_
             foreach (var pos in positions)
                 chunks.Add(this.GetChunk(pos));
             IEnumerable<GameObject> objects = chunks.SelectMany(ch => ch.GetObjects());
-            return objects.Where(obj => positions.Contains(obj.Global.SnapToBlock()));
+            return objects.Where(obj => positions.Contains(obj.Global.ToCell()));
         }
 
         public abstract bool IsInBounds(Vector3 global);

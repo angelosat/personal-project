@@ -25,7 +25,7 @@ namespace Start_a_Town_
             var citizens = town.GetAgents().Randomize(town.Map.Random);
             foreach(var citizen in citizens)
             {
-                foreach (var spot in citizen.Global.SnapToBlock().GetRadial(3))
+                foreach (var spot in citizen.Global.ToCell().GetRadial(3))
                 {
                     if(actor.Map.Contains(spot) && actor.CanStandIn(spot) && actor.CanReach(spot))
                     {

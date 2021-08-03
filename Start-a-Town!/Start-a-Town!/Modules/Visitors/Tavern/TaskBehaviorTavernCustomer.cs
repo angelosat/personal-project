@@ -35,7 +35,7 @@ namespace Start_a_Town_
                 task.TicksWaited = 0;
                 task.SetTarget(TargetIndex.B, customerProps.OrderTakenBy);
             });
-            yield return new BehaviorWait(() => customerProps.Dish?.Cell == table.Global.Above()).FailOn(lostPatience);
+            yield return new BehaviorWait(() => customerProps.Dish?.CellIfSpawned == table.Global.Above()).FailOn(lostPatience);
             yield return new BehaviorCustom(() => actor.Reserve(customerProps.Dish));
             yield return new BehaviorCustom(() =>
             {

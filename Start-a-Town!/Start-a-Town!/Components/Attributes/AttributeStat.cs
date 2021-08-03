@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
-using Start_a_Town_.UI;
-using Start_a_Town_.Components;
 using System.IO;
 
 namespace Start_a_Town_
@@ -10,7 +9,7 @@ namespace Start_a_Town_
     {
         public class ValueModifier
         {
-            float _Value;
+            readonly float _Value;
             readonly Func<float> ValueGetter;
             public ValueModifier(float value)
             {
@@ -37,7 +36,7 @@ namespace Start_a_Town_
         public ProgressLeveledExp Progress;
         public AttributeDef Def;
 
-        public int Level { get { return this.Progress.Level; } set { this.Progress.SetLevel(value); } }
+        public int Level { get => this.Progress.Level; set => this.Progress.SetLevel(value); }
         public int Min = 10;
         const int BaseXpToLevel = 100;//5; //placeholder
         public AttributeStat(AttributeDef def, int value = 10)

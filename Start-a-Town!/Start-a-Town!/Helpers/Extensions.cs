@@ -208,7 +208,7 @@ namespace Start_a_Town_
         }
         static public BoundingBox GetBoundingBox(this Vector3 blockCoords)
         {
-            blockCoords = blockCoords.SnapToBlock(); //necessary? do i need this?
+            blockCoords = blockCoords.ToCell(); //necessary? do i need this?
             return new BoundingBox(blockCoords - new Vector3(.5f, .5f, 0), blockCoords + new Vector3(.5f, .5f, 1));
         }
         static public List<Vector3> GetBox(this Vector3 begin, Vector3 end)

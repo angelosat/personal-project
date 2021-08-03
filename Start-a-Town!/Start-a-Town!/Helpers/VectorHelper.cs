@@ -179,7 +179,7 @@ namespace Start_a_Town_
             vector.Z = (int)Math.Round(vector.Z);
             return vector;
         }
-        public static IntVec3 SnapToBlock(this Vector3 vector)
+        public static IntVec3 ToCell(this Vector3 vector)
         {
             vector.X = (int)Math.Round(vector.X);
             vector.Y = (int)Math.Round(vector.Y);

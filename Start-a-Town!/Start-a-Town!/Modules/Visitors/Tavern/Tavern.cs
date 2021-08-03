@@ -38,7 +38,7 @@ namespace Start_a_Town_
                 return
                     p.GetJob(JobInnKeeper).Enabled &&
                     actor.GetState().CurrentTaskBehavior is TaskBehaviorInnKeeper &&
-                    actor.Cell.Value == map.GetBehindOfBlock(this.Counter.Value);
+                    actor.CellIfSpawned.Value == map.GetBehindOfBlock(this.Counter.Value);
             });
         }
 

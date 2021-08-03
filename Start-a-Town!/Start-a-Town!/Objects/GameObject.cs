@@ -193,16 +193,16 @@ namespace Start_a_Town_
             get => this.Transform.Global;
             set => this.Transform.Global = value;
         }
-        public IntVec3? Cell => this.IsSpawned ? this.GridCell : null;
-        public IntVec3 GridCell
+        public IntVec3? CellIfSpawned => this.IsSpawned ? this.Cell : null;
+        public IntVec3 Cell
         {
-            get => this.Global.SnapToBlock(); 
+            get => this.Global.ToCell(); 
             set => this.SetPosition(value); 
         }
         public Vector3 GridCellOffset
         {
-            get => this.Global - (Vector3)this.GridCell;
-            set => this.SetPosition((Vector3)this.GridCell + value);
+            get => this.Global - (Vector3)this.Cell;
+            set => this.SetPosition((Vector3)this.Cell + value);
         }
        
         public Vector3 Velocity
@@ -211,15 +211,11 @@ namespace Start_a_Town_
             set
             {
                 if (float.IsNaN(value.X) || float.IsNaN(value.Y))
-                {
                     throw new Exception();
-                }
 
                 this.Transform.Velocity = value;
                 if (value != Vector3.Zero)
-                {
                     PhysicsComponent.Enable(this);
-                }
             }
         }
 
@@ -1170,21 +1166,21 @@ namespace Start_a_Town_
      
         public bool CanReachNew(GameObject obj)
         {
-            return this.Map.Regions.CanReach(this.GetCellStandingOn(), obj.Global.SnapToBlock(), this as Actor);
+            return this.Map.Regions.CanReach(this.GetCellStandingOn(), obj.Global.ToCell(), this as Actor);
         }
         internal bool CanReachNew(Vector3 global)
         {
-            return this.Map.Regions.CanReach(this.GetCellStandingOn(), global.SnapToBlock(), this as Actor);
+            return this.Map.Regions.CanReach(this.GetCellStandingOn(), global.ToCell(), this as Actor);
         }
         [Obsolete]
         internal bool CanReach(GameObject obj)
         {
-            return this.Map.GetRegionDistance(this.GetCellStandingOn(), obj.Global.SnapToBlock(), this as Actor) != -1;
+            return this.Map.GetRegionDistance(this.GetCellStandingOn(), obj.Global.ToCell(), this as Actor) != -1;
         }
         [Obsolete]
         internal bool CanReach(Vector3 global)
         {
-            return this.Map.GetRegionDistance(this.GetCellStandingOn(), global.SnapToBlock(), this as Actor) != -1;
+            return this.Map.GetRegionDistance(this.GetCellStandingOn(), global.ToCell(), this as Actor) != -1;
         }
 
         internal BehaviorPerformTask GetLastBehavior()
@@ -1200,6 +1196,25 @@ namespace Start_a_Town_
         {
             return this.Physics.GetBoundingBox(global, height);
         }
+        /// <summary>
+        /// checks if the entity's bounding box intersects the specified cell at its current position
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <returns></returns>
+        internal bool Intersects(IntVec3 cell)
+        {
+            return this.GetBoundingBox(this.Global).Intersects(new BoundingBox(new Vector3(cell.X - .5f, cell.Y - .5f, cell.Z), new Vector3(cell.X + .5f, cell.Y + .5f, cell.Z + 1)));
+        }
+        /// <summary>
+        /// checks if the entity's bounding box will intersect the specified cell at the specified global position
+        /// </summary>
+        /// <param name="global"></param>
+        /// <param name="cell"></param>
+        /// <returns></returns>
+        internal bool Intersects(Vector3 global, IntVec3 cell)
+        {
+            return this.GetBoundingBox(global).Intersects(new BoundingBox(new Vector3(cell.X - .5f, cell.Y - .5f, cell.Z), new Vector3(cell.X + .5f, cell.Y + .5f, cell.Z + 1)));
+        }
         internal bool Intersects(BoundingBox boundingBox)
         {
             return this.GetBoundingBox(this.Global).Intersects(boundingBox);
@@ -1208,7 +1223,11 @@ namespace Start_a_Town_
         {
             return this.GetBoundingBox(global).Intersects(boundingBox);
         }
-
+        /// <summary>
+        /// Returns the next cell the entity will enter determined by its velocity vector
+        /// </summary>
+        public IntVec3 NextCell => this.Global + this.Velocity.Normalized();
+        
         internal Vector3 GetNextStep()
         {
             return this.Global + PhysicsComponent.Decelerate(this.Velocity);
@@ -1264,7 +1283,7 @@ namespace Start_a_Town_
        
         internal bool IsIndoors()
         {
-            var region = Server.Instance.Map.GetRegionAt(this.Global.Below().SnapToBlock()); // TODO: find first solid block below object
+            var region = Server.Instance.Map.GetRegionAt(this.Global.Below().ToCell()); // TODO: find first solid block below object
             return region != null && !region.Room.IsOutdoors;
         }
 
@@ -1295,7 +1314,7 @@ namespace Start_a_Town_
         internal Vector3 GetCellStandingOn()
         {
             var global = this.Global;
-            var below = global.CeilingZ().Below().SnapToBlock();
+            var below = global.CeilingZ().Below().ToCell();
             var belownode = this.Map.GetNodeAt(below);
             if (belownode is null)
             {
@@ -1304,7 +1323,7 @@ namespace Start_a_Town_
             //else check corners because it's standing on the edge of a block
             foreach (var corner in HitboxCorners)
             {
-                var pos = (global + corner).CeilingZ().Below().SnapToBlock();
+                var pos = (global + corner).CeilingZ().Below().ToCell();
                 belownode = this.Map.GetNodeAt(pos);
                 if (belownode is not null)
                 {

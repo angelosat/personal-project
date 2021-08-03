@@ -128,7 +128,7 @@ namespace Start_a_Town_
         }
         internal bool Contains(GameObject obj)
         {
-            return this.Contains(obj.GridCell - IntVec3.UnitZ);
+            return this.Contains(obj.Cell - IntVec3.UnitZ);
         }
         internal bool Contains(IntVec3 pos)
         {

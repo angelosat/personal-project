@@ -134,7 +134,7 @@ namespace Start_a_Town_
 
         public bool CanReach(GameObject entity, Vector3 target)
         {
-            var startNode = this.GetNodeAt(entity.Global.Below().SnapToBlock());
+            var startNode = this.GetNodeAt(entity.Global.Below().ToCell());
             if (startNode == null)
                 throw new Exception();
             var currentRegion = startNode.Region;

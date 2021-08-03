@@ -9,7 +9,7 @@ namespace Start_a_Town_
         public static IEnumerable<Entity> OrderByReachableRegionDistance(this IEnumerable<Entity> targets, Actor actor)
         {
             return from t in targets
-                   let dist = actor.Map.GetRegionDistance(actor.GetCellStandingOn(), t.Global.SnapToBlock(), actor)
+                   let dist = actor.Map.GetRegionDistance(actor.GetCellStandingOn(), t.Global.ToCell(), actor)
                    where dist != -1
                    orderby dist
                    select t;
@@ -17,7 +17,7 @@ namespace Start_a_Town_
         public static IEnumerable<GameObject> OrderByReachableRegionDistance(this IEnumerable<GameObject> targets, Actor actor)
         {
             return from t in targets
-                   let dist = actor.Map.GetRegionDistance(actor.GetCellStandingOn(), t.Global.SnapToBlock(), actor)
+                   let dist = actor.Map.GetRegionDistance(actor.GetCellStandingOn(), t.Global.ToCell(), actor)
                    where dist != -1
                    orderby dist
                    select t;
@@ -25,7 +25,7 @@ namespace Start_a_Town_
         public static IEnumerable<TargetArgs> OrderByReachableRegionDistance(this IEnumerable<TargetArgs> targets, Actor actor)
         {
             return from t in targets
-                   let dist = actor.Map.GetRegionDistance(actor.GetCellStandingOn(), t.Global.SnapToBlock(), actor)
+                   let dist = actor.Map.GetRegionDistance(actor.GetCellStandingOn(), t.Global.ToCell(), actor)
                    where dist != -1
                    orderby dist
                    select t;

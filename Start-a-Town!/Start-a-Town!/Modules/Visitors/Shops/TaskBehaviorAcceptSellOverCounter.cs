@@ -24,7 +24,7 @@ namespace Start_a_Town_
                 }
             };
             yield return new BehaviorGetAtNewNew(TargetIndex.A);
-            yield return new BehaviorWait(() => task.TargetB.Object.Parent == null && task.TargetB.Object.Global.SnapToBlock() == task.TargetA.Global.Above());
+            yield return new BehaviorWait(() => task.TargetB.Object.Parent == null && task.TargetB.Object.Global.ToCell() == task.TargetA.Global.Above());
             yield return new BehaviorInteractionNew(TargetIndex.B, () => new InteractionHaul());
             // TODO wait until money on counter
             yield return new BehaviorWait(() =>

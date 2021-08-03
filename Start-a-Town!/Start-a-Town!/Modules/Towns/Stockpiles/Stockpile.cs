@@ -228,7 +228,6 @@ namespace Start_a_Town_
                     break;
             }
 
-
             return true;
         }
 
@@ -244,6 +243,7 @@ namespace Start_a_Town_
 
         }
         static Window WindowFilters;
+        Control FiltersGui;
         private void ToggleFiltersUI()
         {
             // TODO: update controls when selecting another stockpile
@@ -255,9 +255,8 @@ namespace Start_a_Town_
                 WindowFilters.SetTag(this);
                 return;
             }
-            if (WindowFilters == null)
+            if (WindowFilters is null)
             {
-
                 WindowFilters =
                     getGUI()
                     .ToWindow("Stockpile settings");
@@ -266,24 +265,38 @@ namespace Start_a_Town_
             WindowFilters.SetTag(this);
             WindowFilters.Toggle();
 
-            GroupBox getGUI()
+            WindowFilters.SetOnSelectedTargetChangedAction(t =>
             {
-                var box = new GroupBox();
-                box.AddControlsVertically(
-                    new GroupBox()
-                        .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
-                    this.DefaultFilters
-                        .GetGui((nodeIndices, leaveIndices) => PacketStorageFiltersNew.Send(this, nodeIndices, leaveIndices))
-                        .ToPanelLabeled("Fitlers"));
-                return box;
-
-                void syncPriority(StoragePriority p)
+                if (this.Town.ZoneManager.GetZoneAt<Stockpile>(t.Global) is Stockpile newStockpile)
                 {
-                    Packets.SyncPriority(this, p);
+                    WindowFilters.SetTitle($"{newStockpile.UniqueName} settings");
+                    WindowFilters.SetTag(newStockpile);
+                    WindowFilters.Client.ClearControls();
+                    WindowFilters.Client.AddControls(newStockpile.getGUI());
                 }
+            });
+        }
+        Control getGUI()
+        {
+            if (this.FiltersGui is not null)
+                return this.FiltersGui;
+
+            var box = new GroupBox();
+            box.AddControlsVertically(
+                new GroupBox()
+                    .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
+                this.DefaultFilters
+                    .GetGui((nodeIndices, leaveIndices) => PacketStorageFiltersNew.Send(this, nodeIndices, leaveIndices))
+                    .ToPanelLabeled("Fitlers"));
+            
+            this.FiltersGui = box;
+            return box;
+
+            void syncPriority(StoragePriority p)
+            {
+                Packets.SyncPriority(this, p);
             }
         }
-
         StorageSettings IStorage.Settings => this.Settings;
 
         public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
@@ -293,8 +306,7 @@ namespace Start_a_Town_
         {
             var cats = Def.Database.Values.OfType<ItemDef>().GroupBy(d => d.Category);
 
-            var all = new StorageFilterCategoryNew("All");
-            all.Owner = this;
+            var all = new StorageFilterCategoryNew("All") { Owner = this };
             foreach (var cat in cats)
             {
                 if (cat.Key == null)
@@ -309,7 +321,6 @@ namespace Start_a_Town_
                         c.AddLeafs(new StorageFilterNew(def));
                 }
             }
-           
             return all;
         }
 
@@ -334,7 +345,5 @@ namespace Start_a_Town_
                 f.Enabled = !f.Enabled;
             }
         }
-
-        
     }
 }

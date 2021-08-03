@@ -86,7 +86,7 @@ namespace Start_a_Town_
             var closest = all.OrderBy(t => Vector3.DistanceSquared(t.Global, actor.Global)).FirstOrDefault();
             return closest == null ? TargetArgs.Null : closest;
         }
-        
+
         static public bool IsItemAtBestStockpile(GameObject item)
         {
             var stockpiles = item.Map.Town.ZoneManager.GetZones<Stockpile>();
@@ -94,13 +94,13 @@ namespace Start_a_Town_
             if (currentStockpile == null)
                 return false;
             var betterStockpile = stockpiles
-                .Where(s => 
-                    s!= currentStockpile && 
-                    s.CanAccept(item) && 
+                .Where(s =>
+                    s != currentStockpile &&
+                    s.CanAccept(item) &&
                     s.Priority > currentStockpile.Priority)
                 .OrderByDescending(s => s.Priority)
                 .FirstOrDefault();
-            return betterStockpile == null;
+            return betterStockpile == null && currentStockpile.Accepts(item);
         }
 
         static public IEnumerable<IStorage> GetStoragesByPriority(MapBase map)

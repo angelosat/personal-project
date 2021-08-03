@@ -10,12 +10,12 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        internal static void Send(INetwork net, int actorID, int itemID, int amount)
+        internal static void Send(INetwork net, GameObject actor, GameObject item, int amount)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(p);
-            stream.Write(actorID);
-            stream.Write(itemID);
+            stream.Write(actor.RefID);
+            stream.Write(item.RefID);
             stream.Write(amount);
         }
         static void Receive(INetwork net, BinaryReader r)
@@ -29,7 +29,7 @@ namespace Start_a_Town_
             if (amount == item.StackSize)
                 NpcComponent.RemovePossesion(actor, item);
             if (net is Server)
-                Send(net, actorID, itemID, amount);
+                Send(net, actor, item, amount);
         }
     }
 }

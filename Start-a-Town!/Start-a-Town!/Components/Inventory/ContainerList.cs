@@ -10,22 +10,6 @@ namespace Start_a_Town_
 {
     public class ContainerList : IList<GameObject>, ISerializable, ISaveable
     {
-        //static ListBoxObservableNew<GameObject, GroupBox> _gui;
-        //public Control Gui
-        //{
-        //    get
-        //    {
-        //        if (_gui is null)
-        //        {
-        //            _gui = new ListBoxObservableNew<GameObject, GroupBox>(o =>
-        //               new GroupBox().AddControls(
-        //                   new Label(() => o.Name),
-        //                   IconButton.CreateSmall(Icon.Cross, delegate { }).SetLocation(new(128, 0))) as GroupBox);
-        //            var box = new ScrollableBoxNewNew(256, 256).AddControls(_gui);
-        //        }
-        //        return _gui.Bind(this.Contents).Parent;
-        //    }
-        //}
         TableObservable<GameObject> _gui;
         public Control Gui
         {
@@ -36,11 +20,15 @@ namespace Start_a_Town_
                     _gui = new TableObservable<GameObject>()
                         .AddColumn("name", 96, o => new Label(() => o.Name, () => SelectionManager.Select(o)) { TooltipFunc = o.GetInventoryTooltip })
                         .AddColumn("weight", 32, o => new Label(() => o.TotalWeight.ToString("0.# kg")))
-                        .AddColumn("drop", Icon.Cross.Width, o => IconButton.CreateSmall(Icon.Cross, delegate { PacketInventoryDrop.Send(o.Net, this.Parent.RefID, o.RefID, o.StackSize); }, "Drop"));
-                    //var box = new ScrollableBoxNewNew(256, 256).AddControls(_gui);
+                        .AddColumn("drop", Icon.Cross.Width, o => IconButton.CreateSmall(Icon.Cross, delegate { drop(o); }, "Drop"));
                 }
                 return _gui.Bind(this.Contents);
-                return _gui.Bind(this.Contents).Parent;
+                void drop(GameObject o)
+                {
+                    var actor = this.Parent as Actor;
+                    if(actor.IsSpawned && actor.IsCitizen)
+                        PacketInventoryDrop.Send(o.Net, this.Parent, o, o.StackSize);
+                }
             }
         }
         readonly ObservableCollection<GameObject> Contents = new();

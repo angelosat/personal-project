@@ -929,7 +929,7 @@ namespace Start_a_Town_
         {
             if (this.Def.GearType is not null)
                 yield return new ContextAction(() => "Equip", () => PacketInventoryEquip.Send(this.Net, actor.RefID, this.RefID));
-            yield return new ContextAction(() => "Drop", () => PacketInventoryDrop.Send(this.Net, actor.RefID, this.RefID, this.StackSize));
+            yield return new ContextAction(() => "Drop", () => PacketInventoryDrop.Send(this.Net, actor, this, this.StackSize));
         }
 
         public Dictionary<PlayerInput, Interaction> GetPlayerActionsWorld()

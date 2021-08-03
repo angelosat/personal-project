@@ -14,7 +14,6 @@ namespace Start_a_Town_
         ScrollableBoxNewNew PanelSlots;
         Actor Actor => this.Tag as Actor;
         GuiCharacterCustomization colorsui;
-        static InventoryUI Gui;
 
         public InventoryUI()
         {
@@ -118,7 +117,7 @@ namespace Start_a_Town_
             else
                 window = Instance.GetWindow();
             Instance.Tag = actor;
-            window.Title = string.Format("{0} inventory", actor.Name);
+            window.Title = $"{actor.Name} inventory";
             Instance.Refresh(actor);
             //Instance.RemoveControls(Instance.EquipmentSlots);
             //Instance.EquipmentSlots.Refresh(actor);
@@ -128,30 +127,11 @@ namespace Start_a_Town_
             window.Validate(true);
             return window;
         }
-        static public Control GetGUI()
-        {
-            if(Gui == null)
-            {
-                Gui = new InventoryUI() { Name = "Inventory" };
-                Gui.SetGetDataAction(o =>
-                {
-                    var actor = o as Actor;
-                    Gui.InitInvSlots(actor);
-                    Gui.RemoveControls(Gui.EquipmentSlots);
-                    Gui.EquipmentSlots.Refresh(actor);
-                    Gui.EquipmentSlots.Location = Gui.PanelSlots.TopRight;
-                    Gui.AddControls(Gui.EquipmentSlots);
-                });
-            }
-            return Gui;
-        }
-        
+      
         internal override void OnSelectedTargetChanged(TargetArgs target)
         {
-            var actor = target.Object as Actor;
-            if (actor != null && this.Tag != actor)
+            if (target.Object is Actor actor && this.Tag != actor)
                 GetGui(actor);
         }
-       
     }
 }

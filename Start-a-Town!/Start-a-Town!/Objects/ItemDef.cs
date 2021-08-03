@@ -114,9 +114,5 @@ namespace Start_a_Town_
             filter.AddLeafs(this.Variator.Select(v => v.GetFilter()));
             return filter;
         }
-        public IEnumerable<StorageFilterNewNew> GetSpecialFilters()
-        {
-            return this.Variator?.Select(v => v.GetFilter());
-        }
     }
 }

@@ -79,7 +79,7 @@ namespace Start_a_Town_
 
         public StorageFilterNewNew GetFilter()
         {
-            return new(this.Label, ToolDefs.Tool, this) { SpecialFilter = o => o.ToolComponent?.Props == this };
+            return new(this.Label, ToolDefs.Tool, this);
         }
     }
 }

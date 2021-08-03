@@ -9,7 +9,6 @@ namespace Start_a_Town_
         public StorageFilterCategoryNewNew Root => this.Parent.Root;
         internal Stockpile Owner => this.Root.Owner;
         public string Label { get; set; }
-        public Func<Entity, bool> SpecialFilter;
         public bool Enabled => this.Owner.Accepts(this.Item, this.Material, this.Variation);
         readonly ItemDef Item;
         readonly MaterialDef Material;

@@ -152,7 +152,8 @@ namespace Start_a_Town_
             //return this; // added this to reset inventory contents of every entity to do some work that will break existing items
             var itemList = tag["Contents"].Value as List<SaveTag>;
             foreach (var itemTag in itemList)
-                this.Add(GameObject.Load(itemTag));
+                if(GameObject.Load(itemTag) is GameObject obj)
+                    this.Add(obj);
             return this;
         }
     }

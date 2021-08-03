@@ -394,9 +394,14 @@ namespace Start_a_Town_
             {
                 var list = t.LoadList<ItemFilter>();
                 foreach (var r in list)
-                    //this.Allowed.Add(r.Item, r);
+                {
+                    //this.Allowed[r.Item].CopyFrom(r);
+                    if (r.Item is null) // in case an itemdef has been changed/removed
+                        continue;
                     this.Allowed[r.Item].CopyFrom(r);
-
+                    //if (this.Allowed.TryGetValue(r.Item, out var rec)) 
+                    //    rec.CopyFrom(r);
+                }
             });
         }
         protected override void WriteExtra(BinaryWriter w)

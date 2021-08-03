@@ -24,7 +24,7 @@ namespace Start_a_Town_
         {
             ItemClass = typeof(Tool),
             QualityLevels = true,
-            Category = ItemCategory.Tools,
+            Category = ItemCategory.Equipment,
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
             DefaultMaterial = MaterialDefOf.Iron,
@@ -39,7 +39,7 @@ namespace Start_a_Town_
         {
             BaseValue = 10,
             QualityLevels = true,
-            Category = ItemCategory.Tools,
+            Category = ItemCategory.Equipment,
             Description = "Used to dig out grainy material like soil dirt and sand.",
             DefaultSprite = ItemContent.ShovelFull,
             MadeFromMaterials = true,
@@ -60,7 +60,7 @@ namespace Start_a_Town_
         
         static public readonly ItemDef Axe = new("Axe")
         {
-            Category = ItemCategory.Tools,
+            Category = ItemCategory.Equipment,
             Description = "Chops down trees.",
             QualityLevels = true,
             DefaultSprite = ItemContent.AxeFull,
@@ -83,7 +83,7 @@ namespace Start_a_Town_
 
         static public readonly ItemDef Hammer = new("Hammer")
         {
-            Category = ItemCategory.Tools,
+            Category = ItemCategory.Equipment,
             Description = "Chops down trees.",
             BaseValue = 10,
             QualityLevels = true,
@@ -105,7 +105,7 @@ namespace Start_a_Town_
 
         static public readonly ItemDef Pickaxe = new("Pickaxe")
         {
-            Category = ItemCategory.Tools,
+            Category = ItemCategory.Equipment,
             Description = "Used for mining.",
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
@@ -128,7 +128,7 @@ namespace Start_a_Town_
         static public readonly ItemDef Handsaw = new("Handsaw")
         {
             BaseValue = 10,
-            Category = ItemCategory.Tools,
+            Category = ItemCategory.Equipment,
             Description = "Converts logs to planks.",
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
@@ -150,7 +150,7 @@ namespace Start_a_Town_
         static public readonly ItemDef Hoe = new("Hoe")
         {
             BaseValue = 10,
-            Category = ItemCategory.Tools,
+            Category = ItemCategory.Equipment,
             Description = "Converts logs to planks.",
             MadeFromMaterials = true,
             QualityLevels = true,
@@ -174,21 +174,21 @@ namespace Start_a_Town_
         {
             Def.Register(Tool);
 
-            Def.Register(Shovel);
-            Def.Register(Axe);
-            Def.Register(Hammer);
-            Def.Register(Pickaxe);
-            Def.Register(Handsaw);
-            Def.Register(Hoe);
+            //Def.Register(Shovel);
+            //Def.Register(Axe);
+            //Def.Register(Hammer);
+            //Def.Register(Pickaxe);
+            //Def.Register(Handsaw);
+            //Def.Register(Hoe);
 
-            GameObject.AddTemplate(ItemFactory.CreateTool(Shovel));
-            GameObject.AddTemplate(ItemFactory.CreateTool(Hammer));
-            GameObject.AddTemplate(ItemFactory.CreateTool(Axe));
-            GameObject.AddTemplate(ItemFactory.CreateTool(Pickaxe));
-            GameObject.AddTemplate(ItemFactory.CreateTool(Handsaw));
-            GameObject.AddTemplate(ItemFactory.CreateTool(Hoe));
+            //GameObject.AddTemplate(ItemFactory.CreateTool(Shovel));
+            //GameObject.AddTemplate(ItemFactory.CreateTool(Hammer));
+            //GameObject.AddTemplate(ItemFactory.CreateTool(Axe));
+            //GameObject.AddTemplate(ItemFactory.CreateTool(Pickaxe));
+            //GameObject.AddTemplate(ItemFactory.CreateTool(Handsaw));
+            //GameObject.AddTemplate(ItemFactory.CreateTool(Hoe));
 
-            Reaction.Register(Reaction.Repairing);
+            //Reaction.Register(Reaction.Repairing);
 
             ToolProps.Init();
         }

@@ -41,7 +41,11 @@ namespace Start_a_Town_
         static public T GetDef<T>(string defName) where T : Def
         {
             if (TryGetDef<T>(defName) is not T def)
-                throw new Exception($"def \"{defName}\" does not exist");
+            {
+                //throw new Exception($"def \"{defName}\" does not exist");
+                Log.Warning($"def \"{defName}\" does not exist");
+                return null;
+            }
             return def;
         }
         static public T TryGetDef<T>(string defName) where T : Def

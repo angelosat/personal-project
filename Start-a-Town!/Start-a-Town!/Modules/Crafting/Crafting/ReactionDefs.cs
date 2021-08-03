@@ -19,7 +19,7 @@ namespace Start_a_Town_.Components.Crafting
         static public readonly Reaction Repairing = new Reaction("Repair", SkillDef.Tinkering)
             .AddBuildSite(IsWorkstation.Types.Workbench)
             .AddIngredient(new Ingredient("item")
-                .SetAllow(ItemCategory.Tools, true)
+                .SetAllow(ItemCategory.Equipment, true)
                 .AddResourceFilter(ResourceDef.Durability)
                 .Preserve())
             .AddProduct(new Product("item").RestoreDurability());

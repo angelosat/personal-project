@@ -1196,6 +1196,18 @@ namespace Start_a_Town_
         {
             return this.Physics.GetBoundingBox(global, height);
         }
+        internal bool IntersectsCorners(IntVec3 cell)
+        {
+            return this.GetBoundingBoxCorners().Any(c => c.ToCell() == cell);
+        }
+        internal IEnumerable<Vector3> GetBoundingBoxCorners()
+        {
+            return this.Physics.GetBoundingBoxCorners(this.Global);
+        }
+        internal IEnumerable<Vector3> GetBoundingBoxCorners(Vector3 global)
+        {
+            return this.Physics.GetBoundingBoxCorners(global);
+        }
         /// <summary>
         /// checks if the entity's bounding box intersects the specified cell at its current position
         /// </summary>
@@ -1227,7 +1239,11 @@ namespace Start_a_Town_
         /// Returns the next cell the entity will enter determined by its velocity vector
         /// </summary>
         public IntVec3 NextCell => this.Global + this.Velocity.Normalized();
-        
+        /// <summary>
+        /// Returns the cell the entity moved from, determined by its velocity
+        /// </summary>
+        public IntVec3 LastCell => this.Global - this.Velocity.Normalized();
+
         internal Vector3 GetNextStep()
         {
             return this.Global + PhysicsComponent.Decelerate(this.Velocity);

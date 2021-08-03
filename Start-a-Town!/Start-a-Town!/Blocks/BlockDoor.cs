@@ -278,14 +278,14 @@ namespace Start_a_Town_
             return Orientations[orientation];
         }
 
-        public static void Toggle(MapBase map, Vector3 global)
+        public static void Toggle(MapBase map, IntVec3 global)
         {
             var children = BlockDefOf.Door.GetParts(map, global);
             var chunk = map.GetChunk(global);
             foreach (var g in children)
             {
                 Cell cell = map.GetCell(g);
-                if (map.GetBlock(global).Type != Types.Door)
+                if (map.GetBlock(g).Type != Types.Door)
                     throw new Exception();
                 bool lastOpen = (cell.BlockData & 0x4) == 0x4;
                 var open = !lastOpen;
@@ -294,9 +294,10 @@ namespace Start_a_Town_
                 else
                     cell.BlockData ^= 0x4;
                 chunk.InvalidateSlice(g.Z);
+                $"[{map.Net}] door at {g} {(open ? "opened" : "closed")}".ToConsole();
             }
         }
-        
+
         public override void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             bool locked;

@@ -123,6 +123,27 @@ namespace Start_a_Town_.Components
                 }
             }
         }
+        static Vector3[] BoundingBoxCorners = { 
+            new Vector3(-.25f, -.25f, 0), 
+            new Vector3(-.25f, .25f, 0), 
+            new Vector3(.25f, -.25f, 0), 
+            new Vector3(.25f, .25f, 0) };
+
+        public IEnumerable<Vector3> GetBoundingBoxCorners(Vector3 global)
+        {
+            yield return global + BoundingBoxCorners[0];
+            yield return global + BoundingBoxCorners[1];
+            yield return global + BoundingBoxCorners[2];
+            yield return global + BoundingBoxCorners[3];
+            for (int i = 1; i < this.Height; i++)
+            {
+                var zVec = new Vector3(0, 0, i);
+                yield return global + BoundingBoxCorners[0] + zVec;
+                yield return global + BoundingBoxCorners[1] + zVec;
+                yield return global + BoundingBoxCorners[2] + zVec;
+                yield return global + BoundingBoxCorners[3] + zVec;
+            }
+        }
         public BoundingBox GetBoundingBox(Vector3 global)
         {
             return new BoundingBox(global - new Vector3(.25f, .25f, 0), global + new Vector3(.25f, .25f, this.Height));

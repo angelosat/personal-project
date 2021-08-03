@@ -31,7 +31,8 @@ namespace Start_a_Town_
             Chat,
             System, Dialogue, DialogueOption, DialogueEnd, Jobs,
             ChatPlayer,
-            Warning
+            Warning,
+            Network
         }
         static Log _instance;
         static public Log Instance => _instance ??= new Log();
@@ -244,6 +245,10 @@ List of available commands:
         internal static void Chat(PlayerData player, string txt)
         {
             _write(Entry.Chat(player, txt));
+        }
+        internal static void Network(INetwork net, string txt)
+        {
+            _write(Entry.Network(net, txt));
         }
     }
 }

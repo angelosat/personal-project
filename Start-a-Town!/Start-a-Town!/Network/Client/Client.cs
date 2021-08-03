@@ -427,7 +427,11 @@ namespace Start_a_Town_.Net
                     break;
             }
         }
-
+        string _name = "Client";
+        public override string ToString()
+        {
+            return this._name;
+        }
         private void HandleMessage(Packet msg)
         {
             if (PacketHandlersNew.TryGetValue(msg.PacketType, out Action<INetwork, BinaryReader> handlerNew))
@@ -446,7 +450,8 @@ namespace Start_a_Town_.Net
                         Instance.Players = PlayerList.Read(Instance, r);
                         Instance.Speed = r.ReadInt32();
                     });
-                    this.ConsoleBox.Write(Color.Lime, "CLIENT", "Connected to " + Instance.RemoteIP.ToString());
+                    //this.ConsoleBox.Write(Color.Lime, "CLIENT", "Connected to " + Instance.RemoteIP.ToString());
+                    Log.Network(this, $"Connected to {this.RemoteIP}");
                     GameMode.Current.PlayerIDAssigned(Instance);
                     Instance.SyncTime(msg.Tick);
                     Instance.EventOccured(Message.Types.ServerResponseReceived);

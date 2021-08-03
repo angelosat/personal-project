@@ -9,7 +9,6 @@ namespace Start_a_Town_
         public string Label;
         ItemCategory(string label) : base("StorageCategory:"+label)
         {
-
             this.Label = label;
         }
         public ItemCategory AddStats(params StatNewDef[] stats)

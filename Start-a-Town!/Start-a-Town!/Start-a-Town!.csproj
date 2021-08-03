@@ -196,6 +196,7 @@
     <Compile Include="Control\Tools\CellRendering\BlockRendererObservable.cs" />
     <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
+    <Compile Include="Gui\Hud\Chat\UIChat.Entry.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListCollapsibleNew.cs" />
     <Compile Include="Gui\Lists\IListCollapsibleDataSource.cs" />
     <Compile Include="Gui\Lists\ListBoxNoScroll.cs" />
@@ -852,9 +853,9 @@
     <Compile Include="Gui\Context\ContextAction.cs" />
     <Compile Include="Gui\DialogInput.cs" />
     <Compile Include="Gui\FloatingTextEx.cs" />
-    <Compile Include="Gui\Hud\UIChat.cs" />
+    <Compile Include="Gui\Hud\Chat\UIChat.cs" />
     <Compile Include="Gui\Hud\ISelectable.cs" />
-    <Compile Include="Gui\Hud\UIChatSettings.cs" />
+    <Compile Include="Gui\Hud\Chat\UIChatSettings.cs" />
     <Compile Include="Gui\Hud\UIGameSpeed.cs" />
     <Compile Include="Gui\Hud\SelectionManager.cs" />
     <Compile Include="Gui\ItemText\EntityTextManager.cs" />

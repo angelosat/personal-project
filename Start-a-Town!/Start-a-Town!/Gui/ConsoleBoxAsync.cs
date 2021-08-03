@@ -69,6 +69,13 @@ namespace Start_a_Town_.UI
                 return line;
             }
         }
+        public void Write(Label line)
+        {
+            this.AddControls(line); //add line after removing oldest one so that the box height doesn't increase?
+            this.AlignTopToBottom();
+            foreach (var c in this.Client.Controls)
+                c.Opacity = 1; // added this here because the latest entry has lagging behind in the fade timer by one frame compared to the previous ones
+        }
         public Label Write(ConsoleMessageTypes type, Color c, string name, string text)
         {
             this.Entries.Add(text);

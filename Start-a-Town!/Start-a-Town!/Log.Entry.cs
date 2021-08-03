@@ -45,6 +45,10 @@ namespace Start_a_Town_
             {
                 return new Entry(EntryTypes.Chat, source, new object[] { text });
             }
+            public static Entry Network(object source, string text)
+            {
+                return new Entry(EntryTypes.Network, source, new object[] { text }) { Color = Color.Lime };
+            }
         }
     }
 }

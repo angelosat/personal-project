@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -6,5 +7,8 @@ namespace Start_a_Town_
     {
         IEnumerable<IListCollapsibleDataSource> ListBranches { get; }
         IEnumerable<IListable> ListLeafs { get; }
+        Control GetGui();
+        void SetOwner(Stockpile owner);
+        Stockpile Owner { get; }
     }
 }

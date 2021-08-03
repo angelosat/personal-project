@@ -33,7 +33,7 @@ namespace Start_a_Town_.Towns
             PacketToggleForbidden.Init();
 
             PacketStorageFilters.Init();
-            PacketStorageFiltersNew.Init();
+            //PacketStorageFiltersNew.Init();
 
             ZoneManager.Init();
             StockpileManager.Init();

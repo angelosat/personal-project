@@ -6,17 +6,76 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
+    record ItemFilter
+    {
+        public readonly ItemDef Item;
+        public bool Enabled;
+        readonly HashSet<MaterialDef> DisallowedMaterials = new();
+        public ItemFilter(ItemDef item, bool enabled = true)
+        {
+            this.Item = item;
+            this.Enabled = enabled;
+        }
+        public bool IsAllowed(MaterialDef mat)
+        {
+            return this.Enabled && !this.DisallowedMaterials.Contains(mat);
+        }
+        internal ItemFilter SetAllow(MaterialDef m, bool allow)
+        {
+            if (allow)
+                this.DisallowedMaterials.Remove(m);
+            else
+                this.DisallowedMaterials.Add(m);
+            return this;
+        }
+
+        internal void Toggle(MaterialDef mat = null)
+        {
+            if (mat == null)
+                this.Enabled = !this.Enabled;
+            else
+            {
+                if (this.DisallowedMaterials.Contains(mat))
+                    this.DisallowedMaterials.Remove(mat);
+                else
+                    this.DisallowedMaterials.Add(mat);
+            }
+        }
+    }
+
     public partial class Stockpile : Zone, IStorage, IContextable
     {
+        //{
+        //    public ItemDef Item;
+        //    HashSet<MaterialDef> AllowedMaterials;
+        //}
         internal static void Init()
         {
             Packets.Init();
+        }
+
+        internal void ToggleFilter(ItemDef item, MaterialDef mat = null)
+        {
+            var record = this.Allowed[item];
+            if (mat == null)
+                record.Toggle();
+            else
+                record.Toggle(mat);
+        }
+        internal void ToggleFilter(ItemCategory cat)
+        {
+            var byCategory = this.Allowed.Values.ToLookup(r => r.Item.Category);
+            var records = byCategory[cat];
+            var minor = records.GroupBy(a => a.Enabled).OrderBy(a => a.Count()).First();
+            foreach (var f in minor)
+                f.Toggle();
         }
         StorageSettings IStorage.Settings => this.Settings;
         public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
         public StorageSettings Settings = new();
         public int Priority => this.Settings.Priority.Value;
-        readonly StorageFilterCategoryNew DefaultFilters;// = InitFilters();
+        static IListCollapsibleDataSource DefaultFiltersNew;// = InitFilters();
+        Dictionary<ItemDef, ItemFilter> Allowed = new();
 
         public override string UniqueName => $"Zone_Stockpile_{this.ID}";
 
@@ -58,6 +117,11 @@ namespace Start_a_Town_
                 list.AddRange(from obj in objects where this.Accepts(obj) where obj.Global - Vector3.UnitZ == (Vector3)pos select obj); // TODO: this is shit
             return list;
         }
+        public bool Accepts(ItemDef item, MaterialDef mat)
+        {
+            var record = this.Allowed[item];
+            return record.IsAllowed(mat);
+        }
         public override bool Accepts(Entity obj, IntVec3 pos)
         {
             if (!this.Positions.Contains(pos))
@@ -66,7 +130,8 @@ namespace Start_a_Town_
         }
         public bool Accepts(Entity obj)
         {
-            return this.DefaultFilters.Filter(obj);
+            return this.Allowed[obj.Def].IsAllowed(obj.PrimaryMaterial);
+            //return this.DefaultFilters.Filter(obj);
         }
         internal bool Accepts(GameObject obj)
         {
@@ -166,9 +231,6 @@ namespace Start_a_Town_
             this.Settings.Toggle(filter);
         }
 
-        
-
-
         internal override void OnBlockChanged(IntVec3 global)
         {
             var below = global.Below;
@@ -192,16 +254,16 @@ namespace Start_a_Town_
         }
         public Stockpile()
         {
-            this.DefaultFilters = InitFilters();
+            InitFilters();
         }
         public Stockpile(ZoneManager manager) : base(manager)
         {
-            this.DefaultFilters = InitFilters();
+            InitFilters();
         }
         public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions)
             : base(manager, positions)
         {
-            this.DefaultFilters = InitFilters();
+            InitFilters();
         }
         public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
@@ -245,14 +307,14 @@ namespace Start_a_Town_
 
         }
         static Window WindowFilters;
-        Control FiltersGui;
+        static Control FiltersGui;
         private void ToggleFiltersUI()
         {
             // TODO: update controls when selecting another stockpile
             if (WindowFilters is not null && WindowFilters.Tag != this && WindowFilters.IsOpen)
             {
                 WindowFilters.Client.ClearControls();
-                WindowFilters.Client.AddControls(getGUI());
+                WindowFilters.Client.AddControls(GetGUI());
                 WindowFilters.SetTitle($"{this.UniqueName} settings");
                 WindowFilters.SetTag(this);
                 return;
@@ -260,7 +322,7 @@ namespace Start_a_Town_
             if (WindowFilters is null)
             {
                 WindowFilters =
-                    getGUI()
+                    GetGUI()
                     .ToWindow("Stockpile settings");
             }
             WindowFilters.SetTitle($"{this.UniqueName} settings");
@@ -273,77 +335,77 @@ namespace Start_a_Town_
                 {
                     WindowFilters.SetTitle($"{newStockpile.UniqueName} settings");
                     WindowFilters.SetTag(newStockpile);
-                    WindowFilters.Client.ClearControls();
-                    WindowFilters.Client.AddControls(newStockpile.getGUI());
+                    DefaultFiltersNew.SetOwner(newStockpile);
                 }
             });
         }
-        Control getGUI()
+        static Control GetGUI()
         {
-            if (this.FiltersGui is not null)
-                return this.FiltersGui;
+            if (FiltersGui is not null)
+                return FiltersGui;
 
             var box = new GroupBox();
             box.AddControlsVertically(
                 new GroupBox()
-                    .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => this.Settings.Priority)),
-                this.DefaultFilters
-                    .GetGui()//(nodeIndices, leaveIndices) => PacketStorageFiltersNew.Send(this, nodeIndices, leaveIndices))
+                    .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => DefaultFiltersNew.Owner.Settings.Priority)),
+                DefaultFiltersNew
+                    .GetGui()
                     .ToPanelLabeled("Fitlers"));
             
-            this.FiltersGui = box;
+            FiltersGui = box;
             return box;
 
             void syncPriority(StoragePriority p)
             {
-                Packets.SyncPriority(this, p);
+                Packets.SyncPriority(DefaultFiltersNew.Owner, p);
             }
         }
         
-
-
-        StorageFilterCategoryNew InitFilters()
+        IListCollapsibleDataSource InitFilters()
         {
             var cats = Def.Database.Values.OfType<ItemDef>().GroupBy(d => d.Category);
 
-            var all = new StorageFilterCategoryNew("All") { Owner = this };
+            var all = new StorageFilterCategoryNewNew("All") { Owner = this };
             foreach (var cat in cats)
             {
                 if (cat.Key == null)
                     continue;
-                var c = new StorageFilterCategoryNew(cat.Key.Label);
+                var c = new StorageFilterCategoryNewNew(cat.Key.Label) { Category = cat.Key };
                 all.AddChildren(c);
                 foreach (var def in cat)
                 {
+                    var record = new ItemFilter(def);
+                    this.Allowed.Add(def, record);
                     if (def.DefaultMaterialType != null)
-                        c.AddChildren(new StorageFilterCategoryNew(def.Label).AddLeafs(def.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNew(def, m))));
+                        c.AddChildren(new StorageFilterCategoryNewNew(def.Label) { Item = def }.AddLeafs(def.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNewNew(def, m))));
                     else
-                        c.AddLeafs(new StorageFilterNew(def));
+                        c.AddLeafs(new StorageFilterNewNew(def));
                 }
             }
+            DefaultFiltersNew = all;
             return all;
         }
 
         public void ToggleItemFiltersCategories(int[] categoryIndices)
         {
-            var indices = categoryIndices;
-            foreach (var i in indices)
-            {
-                var c = this.DefaultFilters.GetNodeByIndex(i);
-                var all = c.GetAllDescendantLeaves();
-                var minor = all.GroupBy(a => a.Enabled).OrderBy(a => a.Count()).First();
-                foreach (var f in minor)
-                    f.Enabled = !minor.Key;
-            }
+            //var indices = categoryIndices;
+            //foreach (var i in indices)
+            //{
+            //    var c = this.DefaultFilters.GetNodeByIndex(i);
+            //    var all = c.GetAllDescendantLeaves();
+            //    var minor = all.GroupBy(a => a.Enabled).OrderBy(a => a.Count()).First();
+            //    foreach (var f in minor)
+            //        f.Enabled = !minor.Key;
+            //}
         }
         public void ToggleItemFilters(int[] gameObjects)
         {
-            var indices = gameObjects;
-            foreach (var i in indices)
-            {
-                var f = this.DefaultFilters.GetLeafByIndex(i);
-                f.Enabled = !f.Enabled;
-            }
+            //var indices = gameObjects;
+            //foreach (var i in indices)
+            //{
+            //    var f = this.DefaultFilters.GetLeafByIndex(i);
+            //    f.Enabled = !f.Enabled;
+            //}
         }
     }
 }

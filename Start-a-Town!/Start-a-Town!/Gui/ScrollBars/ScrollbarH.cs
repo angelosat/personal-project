@@ -42,7 +42,7 @@ namespace Start_a_Town_.UI
             Thumb.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(Thumb_Click);
             Thumb.MouseScroll += new EventHandler<HandledMouseEventArgs>(Thumb_MouseScroll);
 
-            this.Area = new GroupBox() { Size = new Rectangle(0, 0, width - 32, Height), Location = this.Btn_Left.TopRight };
+            this.Area = new GroupBox() { Size = new Rectangle(0, 0, width - 32, Height), Location = this.Btn_Left.TopRight, MouseThrough = false };
             this.Area.MouseLeftPress += Area_MouseLeftPress;
             Controls.Add(Btn_Left, Btn_Right, this.Area,Thumb);
         }

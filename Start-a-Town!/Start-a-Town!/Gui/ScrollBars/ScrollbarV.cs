@@ -33,13 +33,22 @@ namespace Start_a_Town_.UI
             this.Down = new PictureBox(new Vector2(0, height - 16), UIManager.DefaultVScrollbarSprite, new Rectangle(0, 32, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
             this.Thumb = new PictureBox(new Vector2(0, 16), UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
 
-            this.Up.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Up_Click);
-            this.Down.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Down_Click);
-            this.Thumb.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Thumb_Click);
-
-            this.Area = new GroupBox() { Size = new Rectangle(0, 0, DefaultWidth, height - 32), Location = this.Up.BottomLeft };
+            this.Up.MouseLeftPress += this.Up_Click;
+            this.Down.MouseLeftPress += this.Down_Click;
+            this.Thumb.MouseLeftPress += this.Thumb_Click;
+            this.Area = new GroupBox() { Size = new Rectangle(0, 0, DefaultWidth, height - 32), Location = this.Up.BottomLeft, MouseThrough = false };
             this.Area.MouseLeftPress += this.Area_MouseLeftPress;
             this.Controls.Add(this.Up, this.Down, this.Area, this.Thumb);
+        }
+
+        private void Thumb_MouseLeftPress(object sender, HandledMouseEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Area_MouseLeftPress1(object sender, HandledMouseEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         void Area_MouseLeftPress(object sender, HandledMouseEventArgs e)

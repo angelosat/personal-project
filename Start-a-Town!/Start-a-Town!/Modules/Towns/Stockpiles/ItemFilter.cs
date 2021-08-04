@@ -58,7 +58,10 @@ namespace Start_a_Town_
         public ISaveable Load(SaveTag tag)
         {
             this.Item = tag.LoadDef<ItemDef>("Item");
+            if (this.Item is null)
+                return null;
             this.Enabled = (bool)tag["Enabled"].Value;
+            this.Enabled |= this.Item.DefaultMaterialType is not null || this.Item.StorageFilterVariations is not null; // FAILSAFE because 'enabled' can only be set to false for itemdefs that are leafs (don't have any sub-variations)
             this.DisallowedMaterials.TryLoadDefs(tag, "Materials");
             this.DisallowedVariations.TryLoadDefs(tag, "Variations");
             return this;
@@ -102,96 +105,4 @@ namespace Start_a_Town_
                 this.DisallowedVariations.Add(m);
         }
     }
-
-    //record ItemFilter : ISaveable, ISerializable, ISyncable
-    //{
-    //    public ItemDef Item { get; private set; }
-    //    public bool Enabled = true;
-    //    readonly HashSet<MaterialDef> DisallowedMaterials = new();
-    //    public ItemFilter()
-    //    {
-
-    //    }
-    //    public ItemFilter(ItemDef item, bool enabled = true)
-    //    {
-    //        this.Item = item;
-    //        this.Enabled = enabled;
-    //    }
-    //    public bool IsAllowed(MaterialDef mat)
-    //    {
-    //        return this.Enabled && !this.DisallowedMaterials.Contains(mat);
-    //    }
-    //    internal ItemFilter SetAllow(MaterialDef m, bool allow)
-    //    {
-    //        if (allow)
-    //            this.DisallowedMaterials.Remove(m);
-    //        else
-    //            this.DisallowedMaterials.Add(m);
-    //        return this;
-    //    }
-
-    //    internal void Toggle(MaterialDef mat = null)
-    //    {
-    //        if (mat == null)
-    //            this.Enabled = !this.Enabled;
-    //        else
-    //        {
-    //            if (this.DisallowedMaterials.Contains(mat))
-    //                this.DisallowedMaterials.Remove(mat);
-    //            else
-    //                this.DisallowedMaterials.Add(mat);
-    //        }
-    //    }
-
-    //    public SaveTag Save(string name = "")
-    //    {
-    //        var tag = new SaveTag(SaveTag.Types.Compound, name);
-    //        this.Item.Save(tag, "Item");
-    //        this.Enabled.Save(tag, "Enabled");
-    //        this.DisallowedMaterials.SaveDefs(tag, "Materials");
-    //        return tag;
-    //    }
-
-    //    public ISaveable Load(SaveTag tag)
-    //    {
-    //        this.Item = tag.LoadDef<ItemDef>("Item");
-    //        this.Enabled = (bool)tag["Enabled"].Value;
-    //        this.DisallowedMaterials.TryLoadDefs(tag, "Materials");
-    //        return this;
-    //    }
-
-    //    public void Write(BinaryWriter w)
-    //    {
-    //        this.Item.Write(w);
-    //        this.Sync(w);
-    //    }
-
-    //    public ISerializable Read(BinaryReader r)
-    //    {
-    //        this.Item = Def.GetDef<ItemDef>(r.ReadString());
-    //        this.Sync(r);
-    //        return this;
-    //    }
-
-    //    public ISyncable Sync(BinaryWriter w)
-    //    {
-    //        w.Write(this.Enabled);
-    //        this.DisallowedMaterials.WriteDefs(w);
-    //        return this;
-    //    }
-
-    //    public ISyncable Sync(BinaryReader r)
-    //    {
-    //        this.Enabled = r.ReadBoolean();
-    //        this.DisallowedMaterials.ReadDefs(r);
-    //        return this;
-    //    }
-
-    //    public void CopyFrom(ItemFilter toCopy)
-    //    {
-    //        this.Enabled = toCopy.Enabled;
-    //        foreach (var m in toCopy.DisallowedMaterials)
-    //            this.DisallowedMaterials.Add(m);
-    //    }
-    //}
 }

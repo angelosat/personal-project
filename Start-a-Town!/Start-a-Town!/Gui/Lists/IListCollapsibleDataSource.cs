@@ -8,7 +8,5 @@ namespace Start_a_Town_
         IEnumerable<IListCollapsibleDataSource> ListBranches { get; }
         IEnumerable<IListable> ListLeafs { get; }
         Control GetGui();
-        void SetOwner(Stockpile owner);
-        Stockpile Owner { get; }
     }
 }

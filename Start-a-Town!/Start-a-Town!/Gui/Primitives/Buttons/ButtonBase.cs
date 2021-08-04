@@ -278,7 +278,7 @@ namespace Start_a_Town_.UI
             base.OnRightClick();
         }
 
-        public void Toggle()
+        public void TogglePressed()
         {
             if (!this.Active)
                 return;

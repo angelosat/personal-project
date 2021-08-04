@@ -7,12 +7,12 @@ namespace Start_a_Town_
     {
         public StorageFilterCategoryNewNew Parent;
         public StorageFilterCategoryNewNew Root => this.Parent.Root;
-        internal Stockpile Owner => this.Root.Owner;
+        internal IStorageNew Owner => this.Root.Owner;
         public string Label { get; set; }
         public bool Enabled => this.Owner.Accepts(this.Item, this.Material, this.Variation);
-        readonly ItemDef Item;
-        readonly MaterialDef Material;
-        readonly Def Variation;
+        public readonly ItemDef Item;
+        public readonly MaterialDef Material;
+        public readonly Def Variation;
 
         public StorageFilterNewNew(ItemDef item, MaterialDef mat)
         {
@@ -36,15 +36,19 @@ namespace Start_a_Town_
             return new CheckBoxNew(this.Label)
             {
                 TickedFunc = () => this.Enabled,
-                LeftClickAction = () => {
+                LeftClickAction = () =>
+                {
                     this.Root.FindLeafIndex(this, out var i);
                     if (this.Variation is not null)
-                        PacketStorageFiltersNew.Send(this.Owner, this.Item, this.Variation as Def);
+                        PacketStorageFiltersNew.Send(this.Owner, this.Item, this.Variation);
                     else
                         PacketStorageFiltersNew.Send(this.Owner, this.Item, this.Material);
-                    //PacketStorageFiltersNew.Send(this.Owner, null, new int[] { i });
                 }
             };
+        }
+        public override string ToString()
+        {
+            return $"{this.Item.Name}:{this.Material?.Name ?? "null"}:{this.Variation?.Name ?? "null"}";
         }
     }
     [Obsolete]

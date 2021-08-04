@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -16,8 +14,9 @@ namespace Start_a_Town_
             pCategory = Network.RegisterPacketHandler(ReceiveCategory);
             pVariation = Network.RegisterPacketHandler(ReceiveVariation);
         }
-        public static void Send(Stockpile stockpile, ItemDef item, Def v)
+        public static void Send(IStorageNew storage, ItemDef item, Def v)
         {
+            var stockpile = storage as Stockpile;
             var s = stockpile.Map.Net.GetOutgoingStream();
             s.Write(pVariation);
             s.Write(stockpile.ID);
@@ -35,8 +34,9 @@ namespace Start_a_Town_
                 Send(stockpile, item, v);
         }
 
-        public static void Send(Stockpile stockpile, ItemCategory category)
+        public static void Send(IStorageNew storage, ItemCategory category)
         {
+            var stockpile = storage as Stockpile;
             var s = stockpile.Map.Net.GetOutgoingStream();
             s.Write(pCategory);
             s.Write(stockpile.ID);
@@ -46,14 +46,15 @@ namespace Start_a_Town_
         {
             var stockpileID = r.ReadInt32();
             var stockpile = net.Map.Town.ZoneManager.GetZone<Stockpile>(stockpileID);
-            var cat = r.ReadString() is string catName && !catName.IsNullEmptyOrWhiteSpace() ? Def.GetDef<ItemCategory>(r) : null;
+            var cat = r.ReadString() is string catName && !catName.IsNullEmptyOrWhiteSpace() ? Def.GetDef<ItemCategory>(catName) : null;
             stockpile.ToggleFilter(cat);
             if (net is Server)
                 Send(stockpile, cat);
         }
 
-        public static void Send(Stockpile stockpile, ItemDef item, MaterialDef mat)
+        public static void Send(IStorageNew storage, ItemDef item, MaterialDef mat)
         {
+            var stockpile = storage as Stockpile;
             var s = stockpile.Map.Net.GetOutgoingStream();
             s.Write(pNew);
             s.Write(stockpile.ID);
@@ -77,14 +78,6 @@ namespace Start_a_Town_
                 Send(stockpile, item, mat);
         }
 
-        public static void Send(Stockpile stockpile, ItemDef[] items = null, MaterialDef[] mats = null)
-        {
-            var s = stockpile.Map.Net.GetOutgoingStream();
-            s.Write(p);
-            s.Write(stockpile.ID);
-            s.Write(items?.Select(i => i.Name) ?? new string[] { });
-            s.Write(mats?.Select(i => i.Name) ?? new string[] { });
-        }
         public static void Send(Stockpile stockpile, int[] nodeIndices = null, int[] leafIndices = null)
         {
             var s = stockpile.Map.Net.GetOutgoingStream();

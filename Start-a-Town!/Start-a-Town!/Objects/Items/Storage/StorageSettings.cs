@@ -4,7 +4,8 @@ namespace Start_a_Town_
 {
     public class StorageSettings
     {
-        public HashSet<StorageFilter> ActiveFilters = new HashSet<StorageFilter>(StorageFilter.CreateFilterSet());
+        public HashSet<StorageFilter> ActiveFilters = new(StorageFilter.CreateFilterSet());
+        readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
         public StoragePriority Priority = StoragePriority.Normal;
 
         public void Toggle(StorageFilter filter, bool toggle)

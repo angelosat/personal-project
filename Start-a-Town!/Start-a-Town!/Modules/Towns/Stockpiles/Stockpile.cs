@@ -7,12 +7,35 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public partial class Stockpile : Zone, IStorage, IContextable
+    public partial class Stockpile : Zone, IStorageNew, IStorage, IContextable
     {
         internal static void Init()
         {
             Packets.Init();
         }
+        
+        public int StorageID { get; }
+        public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
+        public StorageSettings Settings { get; } = new();
+        public int Priority => this.Settings.Priority.Value;
+        static StorageFilterCategoryNewNew FiltersView = InitFilters();
+        readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
+        public override string UniqueName => $"Zone_Stockpile_{this.ID}";
+
+        public Stockpile()
+        {
+            this.InitStorageFilters();
+        }
+        public Stockpile(ZoneManager manager) : base(manager)
+        {
+            this.InitStorageFilters();
+        }
+        public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions)
+            : base(manager, positions)
+        {
+            this.InitStorageFilters();
+        }
+
         internal void ToggleFilter(ItemDef item, Def variator)
         {
             if (variator is not IItemDefVariator)
@@ -20,14 +43,33 @@ namespace Start_a_Town_
             var record = this.Allowed[item];
             record.Toggle(variator);
         }
-
-        internal void ToggleFilter(ItemDef item, MaterialDef mat = null)
+        internal void ToggleFilter(ItemDef item, MaterialDef mat)
         {
             var record = this.Allowed[item];
-            if (mat == null)
-                record.Toggle();
+            record.Toggle(mat);
+        }
+        internal void ToggleFilter(ItemDef item)
+        {
+            var record = this.Allowed[item];
+            //record.Toggle();
+            if (item.StorageFilterVariations is not null)
+            {
+                //foreach (var m in item.StorageFilterVariations)
+                //    record.Toggle(m as Def);
+                var minor = item.StorageFilterVariations.GroupBy(a => record.IsAllowed(a as Def)).OrderBy(a => a.Count()).First();
+                foreach (var m in minor)
+                    record.Toggle(m as Def);
+            }
+            else if (item.DefaultMaterialType is not null)
+            {
+                //foreach (var m in item.DefaultMaterialType.SubTypes)
+                //    record.Toggle(m);
+                var minor = item.DefaultMaterialType.SubTypes.GroupBy(a => record.IsAllowed(a)).OrderBy(a => a.Count()).First();
+                foreach (var m in minor)
+                    record.Toggle(m);
+            }
             else
-                record.Toggle(mat);
+                record.Toggle();
         }
         internal void ToggleFilter(ItemCategory cat)
         {
@@ -39,18 +81,19 @@ namespace Start_a_Town_
                 var byCategory = this.Allowed.Values.ToLookup(r => r.Item.Category);
                 records = byCategory[cat];
             }
-            var minor = records.GroupBy(a => a.Enabled).OrderBy(a => a.Count()).First();
-            foreach (var f in minor)
-                f.Toggle();
+            var catNode = FiltersView.FindNode(cat);
+            var leafs = catNode.GetAllDescendantLeaves();
+            var leafsMinor = leafs.GroupBy(l => l.Enabled).OrderBy(l => l.Count()).First();
+            foreach(var l in leafsMinor)
+            {
+                if (l.Variation is not null)
+                    this.ToggleFilter(l.Item, l.Variation);
+                else if (l.Material is not null)
+                    this.ToggleFilter(l.Item, l.Material);
+                else
+                    this.ToggleFilter(l.Item);
+            }
         }
-        StorageSettings IStorage.Settings => this.Settings;
-        public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
-        public StorageSettings Settings = new();
-        public int Priority => this.Settings.Priority.Value;
-        static IListCollapsibleDataSource DefaultFiltersNew;// = InitFilters();
-        readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
-
-        public override string UniqueName => $"Zone_Stockpile_{this.ID}";
 
         public override string GetName()
         {
@@ -237,19 +280,7 @@ namespace Start_a_Town_
                 }
             }
         }
-        public Stockpile()
-        {
-            InitFilters();
-        }
-        public Stockpile(ZoneManager manager) : base(manager)
-        {
-            InitFilters();
-        }
-        public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions)
-            : base(manager, positions)
-        {
-            InitFilters();
-        }
+      
         public void GetContextActions(GameObject playerEntity, ContextArgs a)
         {
         }
@@ -295,6 +326,8 @@ namespace Start_a_Town_
         static Control FiltersGui;
         private void ToggleFiltersUI()
         {
+            FiltersView.SetOwner(this);
+
             // TODO: update controls when selecting another stockpile
             if (WindowFilters is not null && WindowFilters.Tag != this && WindowFilters.IsOpen)
             {
@@ -320,7 +353,7 @@ namespace Start_a_Town_
                 {
                     WindowFilters.SetTitle($"{newStockpile.UniqueName} settings");
                     WindowFilters.SetTag(newStockpile);
-                    DefaultFiltersNew.SetOwner(newStockpile);
+                    FiltersView.SetOwner(newStockpile);
                 }
             });
         }
@@ -332,8 +365,8 @@ namespace Start_a_Town_
             var box = new GroupBox();
             box.AddControlsVertically(
                 new GroupBox()
-                    .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => DefaultFiltersNew.Owner.Settings.Priority)),
-                DefaultFiltersNew
+                    .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => FiltersView.Owner.Settings.Priority)),
+                FiltersView
                     .GetGui()
                     .ToPanelLabeled("Fitlers"));
             
@@ -342,15 +375,19 @@ namespace Start_a_Town_
 
             void syncPriority(StoragePriority p)
             {
-                Packets.SyncPriority(DefaultFiltersNew.Owner, p);
+                Packets.SyncPriority(FiltersView.Owner, p);
             }
         }
-        
-        IListCollapsibleDataSource InitFilters()
+        void InitStorageFilters()
+        {
+            foreach (var c in FiltersView.GetAllDescendantLeaves().GroupBy(l => l.Item))
+                this.Allowed.Add(c.Key, new(c.Key));
+        }
+        static StorageFilterCategoryNewNew InitFilters()
         {
             var cats = Def.Database.Values.OfType<ItemDef>().GroupBy(d => d.Category);
 
-            var all = new StorageFilterCategoryNewNew("All") { Owner = this };
+            var all = new StorageFilterCategoryNewNew("All");// { Owner = this };
             foreach (var cat in cats)
             {
                 if (cat.Key == null)
@@ -360,7 +397,7 @@ namespace Start_a_Town_
                 foreach (var def in cat)
                 {
                     var record = new ItemFilter(def);
-                    this.Allowed.Add(def, record);
+                    //this.Allowed.Add(def, record);
                     if (def.DefaultMaterialType != null)
                         c.AddChildren(new StorageFilterCategoryNewNew(def.Label) { Item = def }.AddLeafs(def.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNewNew(def, m))));
                     //else if(def.GetSpecialFilters() is IEnumerable<StorageFilterNewNew> filters)
@@ -371,7 +408,7 @@ namespace Start_a_Town_
                         c.AddLeafs(new StorageFilterNewNew(def));
                 }
             }
-            DefaultFiltersNew = all;
+            FiltersView = all;
             return all;
         }
         [Obsolete]
@@ -395,12 +432,9 @@ namespace Start_a_Town_
                 var list = t.LoadList<ItemFilter>();
                 foreach (var r in list)
                 {
-                    //this.Allowed[r.Item].CopyFrom(r);
-                    if (r.Item is null) // in case an itemdef has been changed/removed
+                    if (r is null) // in case an itemdef has been changed/removed
                         continue;
                     this.Allowed[r.Item].CopyFrom(r);
-                    //if (this.Allowed.TryGetValue(r.Item, out var rec)) 
-                    //    rec.CopyFrom(r);
                 }
             });
         }

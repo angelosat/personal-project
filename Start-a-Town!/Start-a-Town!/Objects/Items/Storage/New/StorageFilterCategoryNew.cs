@@ -8,8 +8,8 @@ namespace Start_a_Town_
     public class StorageFilterCategoryNewNew : IListCollapsibleDataSource, IListable, ILabeled
     {
         public string Label { get; set; }
-        Stockpile _owner;
-        public Stockpile Owner
+        IStorageNew _owner;
+        public IStorageNew Owner
         {
             get => this.Root._owner;
             set
@@ -27,7 +27,11 @@ namespace Start_a_Town_
         public List<StorageFilterNewNew> Leaves = new();
         public IEnumerable<IListCollapsibleDataSource> ListBranches => this.Branches;
         public IEnumerable<IListable> ListLeafs => this.Leaves;
-
+        public StorageFilterCategoryNewNew(ItemDef def)
+        {
+            this.Item = def;
+            this.Label = def.Label;
+        }
         public StorageFilterCategoryNewNew(string label)
         {
             this.Label = label;
@@ -91,6 +95,12 @@ namespace Start_a_Town_
             do { enumerator.MoveNext(); } while (n++ != i);
             return enumerator.Current;
         }
+
+        internal StorageFilterCategoryNewNew FindNode(ItemCategory cat)
+        {
+            return GetAllDescendantNodes().First(n => n.Category == cat);
+        }
+
         internal StorageFilterCategoryNewNew GetNodeByIndex(int i)
         {
             var n = 0;
@@ -189,6 +199,10 @@ namespace Start_a_Town_
         public void SetOwner(Stockpile owner)
         {
             this.Owner = owner;
+        }
+        public override string ToString()
+        {
+            return this.Category?.Name ?? this.Item.Name;
         }
     }
     [Obsolete]

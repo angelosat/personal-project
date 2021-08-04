@@ -12,8 +12,9 @@ namespace Start_a_Town_
             {
                 PacketStockpileSync = Network.RegisterPacketHandler(Receive);
             }
-            internal static void SyncPriority(Stockpile stockpile, StoragePriority p)
+            internal static void SyncPriority(IStorageNew storage, StoragePriority p)
             {
+                var stockpile = storage as Stockpile;
                 var net = stockpile.Map.Net;
                 if (net is Server)
                     stockpile.Settings.Priority = p;

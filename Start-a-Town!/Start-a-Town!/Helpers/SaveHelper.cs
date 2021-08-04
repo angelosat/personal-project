@@ -461,9 +461,7 @@ namespace Start_a_Town_
                 var tags = t.Value as List<SaveTag>;
                 var count = tags.Count;
                 for (int i = 0; i < count; i++)
-                {
                     collection.Add(Activator.CreateInstance(typeof(U), new[] { tags[i] }.Concat(ctorArgs).ToArray()) as U);
-                }
             });
         }
         public static bool TryLoad(this ICollection<int> collection, SaveTag save, string name)
@@ -526,9 +524,7 @@ namespace Start_a_Town_
             var count = list.Count;
             var array = new T[count];
             for (int i = 0; i < count; i++)
-            {
                 array[i] = new T().Load(list[i]) as T;
-            }
             return array;
            
         }
@@ -539,9 +535,7 @@ namespace Start_a_Town_
             var count = list.Count;
             var array = new T[count];
             for (int i = 0; i < count; i++)
-            {
                 array[i] = new T().Load(list[i]) as T;
-            }
             return array;
         }
         

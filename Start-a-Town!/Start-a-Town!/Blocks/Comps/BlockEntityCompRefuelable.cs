@@ -214,5 +214,12 @@ namespace Start_a_Town_
                 .AddChildren(Def.Database.Values.OfType<ItemDef>()
                     .Where(d => d.DefaultMaterialType == MaterialType.Wood)
                     .Select(d => new StorageFilterCategoryNew(d.Label).AddLeafs(d.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNew(d, m)))));
+
+
+        static readonly StorageFilterCategoryNew DefaultFiltersNew =
+            new StorageFilterCategoryNew("Wood")
+                .AddChildren(Def.Database.Values.OfType<ItemDef>()
+                    .Where(d => d.DefaultMaterialType == MaterialType.Wood)
+                    .Select(d => new StorageFilterCategoryNew(d.Label).AddLeafs(d.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNew(d, m)))));
     }
 }

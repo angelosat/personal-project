@@ -111,7 +111,7 @@ namespace Start_a_Town_
         {
             if (this.StorageFilterVariations is null)
                 return null;
-            var filter = new StorageFilterCategoryNewNew(this.Name);
+            var filter = new StorageFilterCategoryNewNew(this);
             filter.AddLeafs(this.StorageFilterVariations.Select(v => v.GetFilter()));
             return filter;
         }

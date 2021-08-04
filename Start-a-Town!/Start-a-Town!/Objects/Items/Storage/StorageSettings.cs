@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class StorageSettings
+    public class StorageSettings : ISerializable
     {
         public HashSet<StorageFilter> ActiveFilters = new(StorageFilter.CreateFilterSet());
         readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
@@ -52,19 +53,14 @@ namespace Start_a_Town_
         internal void Toggle(ItemDef item)
         {
             var record = this.Allowed[item];
-            //record.Toggle();
             if (item.StorageFilterVariations is not null)
             {
-                //foreach (var m in item.StorageFilterVariations)
-                //    record.Toggle(m as Def);
                 var minor = item.StorageFilterVariations.GroupBy(a => record.IsAllowed(a as Def)).OrderBy(a => a.Count()).First();
                 foreach (var m in minor)
                     record.Toggle(m as Def);
             }
             else if (item.DefaultMaterialType is not null)
             {
-                //foreach (var m in item.DefaultMaterialType.SubTypes)
-                //    record.Toggle(m);
                 var minor = item.DefaultMaterialType.SubTypes.GroupBy(a => record.IsAllowed(a)).OrderBy(a => a.Count()).First();
                 foreach (var m in minor)
                     record.Toggle(m);
@@ -100,6 +96,23 @@ namespace Start_a_Town_
         {
             var record = this.Allowed[item];
             return record.IsAllowed(mat) && record.IsAllowed(variation);
+        }
+        public bool Accepts(Entity obj)
+        {
+            return this.Allowed[obj.Def].IsAllowed(obj.PrimaryMaterial);
+        }
+
+        public void Write(BinaryWriter w)
+        {
+            w.Write((byte)this.Priority);
+            this.Allowed.Values.Sync(w);
+        }
+
+        public ISerializable Read(BinaryReader r)
+        {
+            this.Priority = (StoragePriority)r.ReadByte();
+            this.Allowed.Values.Sync(r);
+            return this;
         }
     }
 }

@@ -811,6 +811,8 @@ namespace Start_a_Town_
         public void Write(BinaryWriter w)
         {
             w.Write(this.Def.Name);
+            if (Start_a_Town_.Def.GetDef(this.Def.Name) is null)
+                throw new Exception();
             w.Write(this.RefID);
             w.Write(this.StackSize);
             w.Write(this.Components.Count);

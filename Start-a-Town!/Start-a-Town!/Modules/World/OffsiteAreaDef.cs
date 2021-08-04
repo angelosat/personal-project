@@ -58,7 +58,7 @@ namespace Start_a_Town_
             var (factory, weight) = new (Func<GameObject> factory, int weight)[]
             {
                 (()=>GetRandomRawMaterial(rand), this.LootWeightRawMaterial),
-                (()=>GetRandomEquipment(rand), this.LootWeightRawMaterial),
+                //(()=>GetRandomEquipment(rand), this.LootWeightRawMaterial),
                 (()=>LootCurrency.GenerateNew(rand), this.LootWeightCurrency)
             }.SelectRandomWeighted(rand, p => p.weight);
             var obj = factory();

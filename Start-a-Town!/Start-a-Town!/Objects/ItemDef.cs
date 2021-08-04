@@ -32,6 +32,7 @@ namespace Start_a_Town_
         public bool QualityLevels;
         internal IEnumerable<IItemDefVariator> StorageFilterVariations;
         public Func<Entity, string> NameGetter;
+        public Func<Entity, Def> VariationGetter;
 
         public ItemDef(string name) : base(name)
         {

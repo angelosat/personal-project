@@ -33,7 +33,8 @@ namespace Start_a_Town_
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.LogsGrayscale, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                             .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.LogsGrayscale) { DrawMaterialColor = true }),
             NameGetter = e => e.ToolComponent.Props.Label,
-            StorageFilterVariations = Def.GetDefs<ToolProps>()
+            StorageFilterVariations = Def.GetDefs<ToolProps>(),
+            VariationGetter = e => e.ToolComponent.Props
         };
 
         static public readonly ItemDef Shovel = new("Shovel")

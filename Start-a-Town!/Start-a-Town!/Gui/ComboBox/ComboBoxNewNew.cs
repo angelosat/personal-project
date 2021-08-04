@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
-    class ComboBoxNewNew<T> : GroupBox where T : class
+    class ComboBoxNewNew<T> : GroupBox
     {
         readonly Button Button;
         readonly ListBoxNoScroll<T, Button> ListControl;
@@ -25,7 +25,7 @@ namespace Start_a_Town_.UI
         public ComboBoxNewNew(IEnumerable<T> list, int width, Func<T, string> labelGetter, Func<T, string> nameGetter, Action<T> callBack, Func<T> currentlySelectedGetter)
         {
             this.CurrentlySelectedGetter = currentlySelectedGetter;
-            this.Button = new Button(()=>this.CurrentlySelectedGetter != null ? labelGetter(this.CurrentlySelectedGetter()) : "undefined", BtnPress, width);
+            this.Button = new Button(() => this.CurrentlySelectedGetter != null ? labelGetter(this.CurrentlySelectedGetter()) : "undefined", BtnPress, width);
             this.ListControl = new ListBoxNoScroll<T, Button>(i => CreateButton(i, nameGetter, callBack, width))
                 .AddItems(list);
             this.ListControl.ToPanel()
@@ -80,7 +80,7 @@ namespace Start_a_Town_.UI
             void onSelect(T i)
             {
                 callBack(i);
-                this.ListControl.Hide();
+                this.ListControl.TopLevelControl.Hide();
             }
         }
         private void BtnPress()
@@ -91,7 +91,7 @@ namespace Start_a_Town_.UI
             panel.Location = UIManager.Mouse;
             panel.Show();
         }
-        
+
         public ComboBoxNewNew<T> Initialize(IEnumerable<T> items)
         {
             this.ListControl.Clear();

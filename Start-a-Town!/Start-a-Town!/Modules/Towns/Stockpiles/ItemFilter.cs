@@ -18,6 +18,15 @@ namespace Start_a_Town_
             this.Item = item;
             this.Enabled = enabled;
         }
+        public bool IsAllowed(Entity item)
+        {
+            if (item.Def.DefaultMaterialType is not null)
+                return !this.DisallowedMaterials.Contains(item.PrimaryMaterial);
+            else if (item.Def.StorageFilterVariations is not null)
+                return !this.DisallowedVariations.Contains(item.Def.VariationGetter(item));
+            else
+                return this.Enabled;
+        }
         public bool IsAllowed(MaterialDef mat)
         {
             return this.Enabled && !this.DisallowedMaterials.Contains(mat);

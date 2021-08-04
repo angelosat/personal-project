@@ -15,7 +15,7 @@ namespace Start_a_Town_
         }
         public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
         public StorageSettings Settings { get; } = new();
-        public int Priority => this.Settings.Priority.Value;
+        public int Priority => (int)this.Settings.Priority;
         static StorageFilterCategoryNewNew FiltersView = InitFilters();
         readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
         public override string UniqueName => $"Zone_Stockpile_{this.ID}";
@@ -125,7 +125,7 @@ namespace Start_a_Town_
 
         public List<GameObject> ScanExistingStoredItems()
         {
-            List<GameObject> list = new List<GameObject>();
+            var list = new List<GameObject>();
             var objects = this.Town.Map.GetObjects();
             foreach (var pos in this.Positions)
                 list.AddRange(from obj in objects where this.Accepts(obj) where obj.Global - Vector3.UnitZ == (Vector3)pos select obj); // TODO: this is shit
@@ -154,8 +154,7 @@ namespace Start_a_Town_
         }
         public bool Accepts(Entity obj)
         {
-            return this.Allowed[obj.Def].IsAllowed(obj.PrimaryMaterial);
-            //return this.DefaultFilters.Filter(obj);
+            return this.Allowed[obj.Def].IsAllowed(obj);
         }
         internal bool Accepts(GameObject obj)
         {
@@ -363,7 +362,7 @@ namespace Start_a_Town_
             var box = new GroupBox();
             box.AddControlsVertically(
                 new GroupBox()
-                    .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(StoragePriority.All, 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => FiltersView.Owner.Settings.Priority)),
+                    .AddControlsHorizontally(new ComboBoxNewNew<StoragePriority>(Enum.GetValues(typeof(StoragePriority)).Cast<StoragePriority>(), 128, p => $"Priority: {p}", p => $"{p}", syncPriority, () => FiltersView.Owner.Settings.Priority)),
                 FiltersView
                     .GetGui()
                     .ToPanelLabeled("Fitlers"));
@@ -438,11 +437,13 @@ namespace Start_a_Town_
         }
         protected override void WriteExtra(BinaryWriter w)
         {
-            this.Allowed.Values.Sync(w);
+            this.Settings.Write(w);
+            //this.Allowed.Values.Sync(w);
         }
         protected override void ReadExtra(BinaryReader r)
         {
-            this.Allowed.Values.Sync(r);
+            this.Settings.Read(r);
+            //this.Allowed.Values.Sync(r);
         }
 
         public void FiltersGuiCallback(ItemDef item, MaterialDef material)

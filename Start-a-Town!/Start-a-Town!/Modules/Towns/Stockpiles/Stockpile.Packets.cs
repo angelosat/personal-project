@@ -21,15 +21,14 @@ namespace Start_a_Town_
                 var w = net.GetOutgoingStream();
                 w.Write(PacketStockpileSync);
                 w.Write(stockpile.ID);
-                w.Write(p.Value);
+                w.Write((byte)p);
             }
             private static void Receive(INetwork net, BinaryReader r)
             {
                 var stockpileID = r.ReadInt32();
-                var p = r.ReadInt32();
+                var p = r.ReadByte();
                 var stockpile = net.Map.Town.ZoneManager.GetZone<Stockpile>(stockpileID);
-
-                var newPriority = StoragePriority.GetFromValue(p);
+                var newPriority = (StoragePriority)p;
                 if (net is Server)
                     SyncPriority(stockpile, newPriority);
                 else

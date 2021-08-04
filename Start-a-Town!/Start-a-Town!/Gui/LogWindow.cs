@@ -1,52 +1,49 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_.UI
 {
     class LogWindow : Window
     {
-        ConsoleBoxAsync Box_Text;
-        Panel Panel_Text, Panel_Input;
-        SliderNew Sldr_Opacity;
-
-        Dictionary<Control, float> Timers;
+        readonly ConsoleBoxAsync Box_Text;
+        readonly Panel Panel_Text, Panel_Input;
+        readonly SliderNew Sldr_Opacity;
+        readonly Dictionary<Control, float> Timers;
         public TextBox TextBox;
-        static public float FadeDelay = 6 * Engine.TicksPerSecond;
+        public static float FadeDelay = 6 * Engine.TicksPerSecond;
 
         static LogWindow _Instance;
-        static public LogWindow Instance => _Instance ??= new LogWindow();
+        public static LogWindow Instance => _Instance ??= new LogWindow();
 
         public LogWindow()
         {
-            Title = "Log";
-            AutoSize = true;
-            Closable = false;
-            MouseThrough = true;
+            this.Title = "Log";
+            this.AutoSize = true;
+            this.Closable = false;
+            this.MouseThrough = true;
 
-            Box_Text = Net.Client.Instance.ConsoleBox;
-            Box_Text.FadeText = true;
-            Panel_Text = new Panel() { AutoSize = true, Name = "Panel_Text", Color = Color.Black }; 
-            Panel_Text.Controls.Add(Box_Text);
+            this.Box_Text = Net.Client.Instance.ConsoleBox;
+            this.Box_Text.FadeText = true;
+            this.Panel_Text = new Panel() { AutoSize = true, Name = "Panel_Text", Color = Color.Black };
+            this.Panel_Text.Controls.Add(this.Box_Text);
 
-            Panel_Input = new Panel() { Location = Panel_Text.BottomLeft, Color = Color.Black };
-            Panel_Input.ClientSize = new Rectangle(0, 0, Panel_Text.ClientSize.Width, Label.DefaultHeight);
-            Panel_Input.BackgroundStyle = BackgroundStyle.TickBox;
+            this.Panel_Input = new Panel() { Location = this.Panel_Text.BottomLeft, Color = Color.Black };
+            this.Panel_Input.ClientSize = new Rectangle(0, 0, this.Panel_Text.ClientSize.Width, Label.DefaultHeight);
+            this.Panel_Input.BackgroundStyle = BackgroundStyle.TickBox;
 
-            TextBox = new TextBox()
+            this.TextBox = new TextBox()
             {
-                Width = Panel_Input.ClientSize.Width,
+                Width = this.Panel_Input.ClientSize.Width,
                 EnterFunc = (a) =>
                 {
                     this.Hide();
-                    TextBox.Enabled = false;
-                    string gotText = TextBox.Text;
-                    TextBox.Text = "";
+                    this.TextBox.Enabled = false;
+                    string gotText = this.TextBox.Text;
+                    this.TextBox.Text = "";
 
-                    Panel_Input.Opacity = 0;
+                    this.Panel_Input.Opacity = 0;
                     if (gotText.Length == 0)
                         return;
 
@@ -55,31 +52,31 @@ namespace Start_a_Town_.UI
                 },
                 EscapeFunc = (a) =>
                 {
-                    TextBox.Enabled = false;
-                    TextBox.Text = "";
-                    Controls.Remove(Panel_Input);
+                    this.TextBox.Enabled = false;
+                    this.TextBox.Text = "";
+                    this.Controls.Remove(this.Panel_Input);
                 },
                 TextEnterFunc = (a) =>
                 {
                     if (!char.IsControl(a.KeyChar))
-                        TextBox.Text += a.KeyChar;
+                        this.TextBox.Text += a.KeyChar;
                 }
             };
 
-            Timers = new Dictionary<Control, float>();
+            this.Timers = new Dictionary<Control, float>();
 
-            Sldr_Opacity = new SliderNew(() => Box_Text.Opacity * 100, v => Box_Text.Opacity = v / 100f, width: 100, min: 0, max: 100, step: 1) { Name = "Opacity", Location = this.Label_Title.TopRight };
+            this.Sldr_Opacity = new SliderNew(() => this.Box_Text.Opacity * 100, v => this.Box_Text.Opacity = v / 100f, width: 100, min: 0, max: 100, step: 1) { Name = "Opacity", Location = this.Label_Title.TopRight };
             //Sldr_Opacity.ValueChanged += new EventHandler<EventArgs>(Sldr_Opacity_ValueChanged);
 
-            Panel_Input.Controls.Add(TextBox);
-            Client.Controls.Add(Panel_Text, Panel_Input);
-            Controls.Add(Client, Sldr_Opacity);
-            Location = new Vector2(0, UIManager.Height);
-            Anchor = new Vector2(0, 1);
+            this.Panel_Input.Controls.Add(this.TextBox);
+            this.Client.Controls.Add(this.Panel_Text, this.Panel_Input);
+            this.Controls.Add(this.Client, this.Sldr_Opacity);
+            this.Location = new Vector2(0, UIManager.Height);
+            this.Anchor = new Vector2(0, 1);
 
-            this.SetOpacity(0, true, exclude: Box_Text);
-            TextBox.Enabled = false;
-            SetMousethrough(true, true);
+            this.SetOpacity(0, true, exclude: this.Box_Text);
+            this.TextBox.Enabled = false;
+            this.SetMousethrough(true, true);
         }
 
         //void Sldr_Opacity_ValueChanged(object sender, EventArgs e)
@@ -93,18 +90,18 @@ namespace Start_a_Town_.UI
             if (this.TextBox.Enabled)
                 return;
 
-            Dictionary<Control, float> copy = new Dictionary<Control, float>(Timers);
+            Dictionary<Control, float> copy = new Dictionary<Control, float>(this.Timers);
             foreach (KeyValuePair<Control, float> timer in copy)
             {
                 float newValue = timer.Value - 1;
-                float alpha = 10 * (float)Math.Sin(Math.PI * (newValue / (float)FadeDelay));
+                float alpha = 10 * (float)Math.Sin(Math.PI * (newValue / FadeDelay));
 
-                Timers[timer.Key] = newValue;
+                this.Timers[timer.Key] = newValue;
                 timer.Key.Opacity = alpha;
 
                 if (timer.Value <= 0)
                 {
-                    Timers.Remove(timer.Key);
+                    this.Timers.Remove(timer.Key);
                     timer.Key.Opacity = 0;
                 }
             }
@@ -112,15 +109,15 @@ namespace Start_a_Town_.UI
 
         void Timer_Tick(object sender, EventArgs e)
         {
-            Hide();
+            this.Hide();
         }
 
-        static public void Write(LogEventArgs e)
+        public static void Write(LogEventArgs e)
         {
             string text = e.Entry.ToString();
             if (text.Length == 0)
                 return;
-        
+
             Color c = Color.White;
             switch (e.Entry.Type)
             {
@@ -137,7 +134,7 @@ namespace Start_a_Town_.UI
             fullText = UIManager.WrapText(fullText, Instance.Box_Text.Client.Width);
             var line = new Label(fullText)
             {
-                
+
                 TextColor = c,
                 Location = Instance.Box_Text.Client.Controls.Count > 0 ? Instance.Box_Text.Client.Controls.Last().BottomLeft : Vector2.Zero,
                 MouseThrough = Instance.MouseThrough
@@ -149,9 +146,9 @@ namespace Start_a_Town_.UI
 
         public override bool Hide()
         {
-            this.SetOpacity(0, true, exclude: Box_Text);
-            TextBox.Enabled = false;
-            SetMousethrough(true, true);
+            this.SetOpacity(0, true, exclude: this.Box_Text);
+            this.TextBox.Enabled = false;
+            this.SetMousethrough(true, true);
             return true;
         }
     }

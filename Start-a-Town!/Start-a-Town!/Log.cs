@@ -88,12 +88,7 @@ namespace Start_a_Town_
             textStamped.ToConsole();
             LogFile.WriteLine(textStamped);
         }
-        public static void Write(string text)
-        {
-            var textStamped = $"[{DateTime.Now}] {text}";
-            textStamped.ToConsole();
-            UIChat.Instance.Write(text);
-        }
+      
        
         static void WriteHelp()
         {
@@ -230,9 +225,15 @@ List of available commands:
         private static void _write(Entry entry)
         {
             var text = entry.ToString();
-            var textStamped = $"[{DateTime.Now}] {text}";
-            textStamped.ToConsole();
+            var timeStamped = $"[{DateTime.Now}] {text}";
+            timeStamped.ToConsole();
             UIChat.Instance.Write(entry);
+        }
+        public static void Write(string text)
+        {
+            var timeStamped = $"[{DateTime.Now}] {text}";
+            timeStamped.ToConsole();
+            UIChat.Instance.Write(text);
         }
         public static void Warning(string text)
         {

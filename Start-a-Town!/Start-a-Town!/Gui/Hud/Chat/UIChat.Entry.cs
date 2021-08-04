@@ -32,12 +32,6 @@ namespace Start_a_Town_.UI
                     else
                         opacity = 0;
                     return Math.Max(opacity, Parent.Opacity);
-                    //if (this.TimerTick > 0)
-                    //    return 1;
-                    //else if (this.Fade > 0)
-                    //    return (float)Math.Sin(this.Fade * Math.PI / 2f);
-                    //else
-                    //    return 0;
                 }
                 set
                 {

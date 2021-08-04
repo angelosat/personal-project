@@ -121,11 +121,11 @@ namespace Start_a_Town_.Components
             public override void Perform(Actor a, TargetArgs t)
             {
                 var fuse = this.FuseSet();
-                var client = a.Net as Net.Client;
-                if (client != null)
-                {
-                    client.GetConsole().Write(Color.Red, "Fuse set to: " + (fuse == -1 ? "none" : TimeSpan.FromSeconds(fuse).TotalSeconds.ToString("#s")));
-                }
+                //var client = a.Net as Net.Client;
+                //if (client != null)
+                //{
+                //    client.GetConsole().Write(Color.Red, "Fuse set to: " + (fuse == -1 ? "none" : TimeSpan.FromSeconds(fuse).TotalSeconds.ToString("#s")));
+                //}
             }
         }
     }

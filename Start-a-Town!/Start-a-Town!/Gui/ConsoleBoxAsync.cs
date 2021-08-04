@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_.UI
 {
@@ -11,15 +11,15 @@ namespace Start_a_Town_.UI
 
     public class ConsoleBoxAsync : ScrollableBoxNewNew
     {
-        public readonly object Lock = new object();
+        public readonly object Lock = new();
         public FilterType FilterType = FilterType.Exclude;
-        public HashSet<ConsoleMessageTypes> Filters = new HashSet<ConsoleMessageTypes>() { ConsoleMessageTypes.Acks };
+        public HashSet<ConsoleMessageTypes> Filters = new() { ConsoleMessageTypes.Acks };
 
         public bool Filter(ConsoleMessageTypes i)
         {
-            if (Filters.Contains(i))
-                return FilterType == FilterType.Include;
-            return FilterType == FilterType.Exclude;
+            if (this.Filters.Contains(i))
+                return this.FilterType == FilterType.Include;
+            return this.FilterType == FilterType.Exclude;
         }
 
         public bool FadeText;
@@ -27,79 +27,75 @@ namespace Start_a_Town_.UI
         public ConsoleBoxAsync(Rectangle bounds)
             : base(bounds.Width, bounds.Height, ScrollModes.Vertical)
         {
-            LoadConfig();
-            BackgroundColor = Color.Black;
-            Opacity = 0f;
+            this.LoadConfig();
+            this.BackgroundColor = Color.Black;
+            this.Opacity = 0f;
         }
 
-        public ConcurrentBag<string> Entries = new System.Collections.Concurrent.ConcurrentBag<string>();
+        public ConcurrentBag<string> Entries = new();
 
-        public Label Write(string name, string text)
+        public void Write(string name, string text)
         {
-            return Write(Color.White, name, text);
+            this.Write(Color.White, name, text);
         }
-        public Label Write(string text)
+        public void Write(string text)
         {
-            return Write(Color.White, text);
+            this.Write(Color.White, text);
         }
-        public Label Write(Color c, string text)
+        public void Write(Color c, string text)
         {
             // TODO i don't want to write directly here. write to the logwindow that has this consoleboxasync bound
             this.Entries.Add(text);
 #if DEBUG
             text.ToConsole();
 #endif
-            lock (Lock)
+            lock (this.Lock)
             {
-                if (TimeStamp)
+                if (this.TimeStamp)
                     text = text.Insert(0, DateTime.Now.ToString("[HH:mm:ss]"));
-                text = UIManager.WrapText(text, Client.Width);
+                text = UIManager.WrapText(text, this.Client.Width);
 
                 if (this.Client.Controls.Count >= 16)
-                {
                     this.Client.RemoveControls(this.Client.Controls.First());
-                }
-                var line = new Label(text) {  TextColorFunc = () => c };
+
+                var line = new Label(text) { TextColorFunc = () => c };
                 line.BackgroundColor = Color.Black * .5f;
 
                 this.AddControls(line); //add line after removing oldest one so that the box height doesn't increase?
                 this.AlignTopToBottom();
 
-                Client.ClientLocation.Y = Client.Bottom - Client.ClientSize.Height;
-                return line;
+                this.Client.ClientLocation.Y = this.Client.Bottom - this.Client.ClientSize.Height;
             }
         }
         public void Write(Label line)
         {
+            this.Entries.Add(line.Text);
             this.AddControls(line); //add line after removing oldest one so that the box height doesn't increase?
             this.AlignTopToBottom();
-            foreach (var c in this.Client.Controls)
-                c.Opacity = 1; // added this here because the latest entry has lagging behind in the fade timer by one frame compared to the previous ones
         }
-        public Label Write(ConsoleMessageTypes type, Color c, string name, string text)
+        public void Write(ConsoleMessageTypes type, Color c, string name, string text)
         {
             this.Entries.Add(text);
-            if (!Filter(type))
-                return null;
-            lock (Lock)
+            if (!this.Filter(type))
+                return;
+            lock (this.Lock)
             {
-                if (TimeStamp)
+                if (this.TimeStamp)
                     text = text.Insert(0, DateTime.Now.ToString("[HH:mm:ss]" + "[" + name + "]: "));
-                text = UIManager.WrapText(text, Client.Width);
-                var line = new Label(Client.Controls.BottomLeft, text) { TextColorFunc = () => c };
+                text = UIManager.WrapText(text, this.Client.Width);
+                var line = new Label(this.Client.Controls.BottomLeft, text) { TextColorFunc = () => c };
 
                 this.AddControls(line);
-                Client.ClientLocation.Y = Client.Bottom - Client.ClientSize.Height;
-                return line;
+                this.Client.ClientLocation.Y = this.Client.Bottom - this.Client.ClientSize.Height;
             }
         }
-        public Label Write(Color c, string name, string text)
+        public void Write(Color c, string name, string text)
         {
             this.Entries.Add(text);
-            lock (Lock)
+            lock (this.Lock)
             {
                 text = text.Insert(0, DateTime.Now.ToString("[" + name + "]: "));
-                return this.Write(c, text);
+                this.Write(c, text);
             }
         }
         public override Control AddControls(params Control[] controls)
@@ -112,8 +108,7 @@ namespace Start_a_Town_.UI
         {
             Engine.Config.Root.TryGetValue("Timestamps", v =>
             {
-                bool parsed;
-                if (bool.TryParse(v, out parsed))
+                if (bool.TryParse(v, out bool parsed))
                     this.TimeStamp = parsed;
             });
         }

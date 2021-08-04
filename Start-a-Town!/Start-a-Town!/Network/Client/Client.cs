@@ -419,7 +419,6 @@ namespace Start_a_Town_.Net
                 case PacketType.SetSaving:
                     var val = r.ReadBoolean();
                     IsSaving = val;
-                    //Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, "Map saved");
                     Log.System("Game saved");
                     break;
 
@@ -450,7 +449,6 @@ namespace Start_a_Town_.Net
                         Instance.Players = PlayerList.Read(Instance, r);
                         Instance.Speed = r.ReadInt32();
                     });
-                    //this.ConsoleBox.Write(Color.Lime, "CLIENT", "Connected to " + Instance.RemoteIP.ToString());
                     Log.Network(this, $"Connected to {this.RemoteIP}");
                     GameMode.Current.PlayerIDAssigned(Instance);
                     Instance.SyncTime(msg.Tick);
@@ -692,8 +690,7 @@ namespace Start_a_Town_.Net
         {
             this.Players.Add(player);
             UI.LobbyWindow.RefreshPlayers(this.Players.GetList());
-            UI.LobbyWindow.Instance.Console.Write(Color.Yellow, player.Name + " connected");
-            //UI.UIChat.Instance.Write(new Log.Entry(Start_a_Town_.Log.EntryTypes.System, player.Name + " connected"));
+            Log.Network(this, $"{player.Name} connected");
             Log.System($"{player.Name} connected");
         }
         void PlayerDisconnected(PlayerData player)
@@ -704,8 +701,7 @@ namespace Start_a_Town_.Net
                 Instance.NetworkObjects[player.CharacterID].Despawn();
                 Instance.DisposeObject(player.CharacterID);
             }
-            Network.Console.Write(Color.Yellow, player.Name + " disconnected");
-            //UI.UIChat.Instance.Write(new Log.Entry(Start_a_Town_.Log.EntryTypes.System, player.Name + " disconnected"));
+            Log.Network(this, $"{player.Name} disconnected");
             Log.System($"{player.Name} disconnected");
         }
         public void PlayerDisconnected(int playerID)

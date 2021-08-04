@@ -15,6 +15,7 @@ namespace Start_a_Town_.Blocks
             this.Variations.Add(Block.Atlas.Load("blocks/campfire", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap));
             this.BuildProperties.WorkAmount = 2;
             this.ToggleConstructionCategory(ConstructionsManager.Production, true);
+            this.Ingredient = new Ingredient().SetAllow(RawMaterialDef.Logs, true);
         }
         public override LootTable GetLootTable(byte data)
         {

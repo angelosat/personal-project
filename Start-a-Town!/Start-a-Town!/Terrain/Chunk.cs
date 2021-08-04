@@ -1652,6 +1652,7 @@ namespace Start_a_Town_
 
         public void AddBlockEntity(BlockEntity entity, IntVec3 local)
         {
+            entity.Map = this.Map;
             this.BlockEntitiesByPosition[local] = entity;
         }
         public bool TryRemoveBlockEntity(IntVec3 local, out BlockEntity entity)

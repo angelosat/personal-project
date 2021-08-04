@@ -5,8 +5,8 @@
             public BlockCarpentryEntity(IntVec3 originGlobal)
                 : base(originGlobal)
             {
-                this.Comps.Add(new BlockEntityCompWorkstation(IsWorkstation.Types.Carpentry));
-                this.Comps.Add(new BlockEntityCompDeconstructible());
+                this.AddComp(new BlockEntityCompWorkstation(IsWorkstation.Types.Carpentry));
+                this.AddComp(new BlockEntityCompDeconstructible());
             }
         }
 }

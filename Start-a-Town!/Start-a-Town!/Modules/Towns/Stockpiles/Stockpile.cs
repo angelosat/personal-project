@@ -13,8 +13,6 @@ namespace Start_a_Town_
         {
             Packets.Init();
         }
-        
-        public int StorageID { get; }
         public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
         public StorageSettings Settings { get; } = new();
         public int Priority => this.Settings.Priority.Value;

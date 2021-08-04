@@ -4,7 +4,6 @@ namespace Start_a_Town_
 {
     public interface IStorageNew
     {
-        int StorageID { get; }
         StorageSettings Settings { get; }
         bool Accepts(ItemDef item, MaterialDef material, Def variation);
         void FiltersGuiCallback(ItemDef item, MaterialDef material);

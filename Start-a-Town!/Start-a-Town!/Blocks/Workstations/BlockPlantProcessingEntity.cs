@@ -7,8 +7,8 @@ namespace Start_a_Town_
         public BlockPlantProcessingEntity(IntVec3 originGlobal)
             : base(originGlobal)
         {
-            this.Comps.Add(new BlockEntityCompWorkstation(IsWorkstation.Types.PlantProcessing));
-            this.Comps.Add(new BlockEntityCompDeconstructible());
+            this.AddComp(new BlockEntityCompWorkstation(IsWorkstation.Types.PlantProcessing));
+            this.AddComp(new BlockEntityCompDeconstructible());
         }
     }
 }

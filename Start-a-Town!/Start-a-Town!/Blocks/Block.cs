@@ -889,11 +889,7 @@ namespace Start_a_Town_
         }
         internal void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
         {
-            var e = map.GetBlockEntity(global);
-            if (e is not null)
-                foreach (var c in e.Comps)
-                    c.DrawSelected(sb, cam, map, global);
-
+            map.GetBlockEntity(global)?.DrawSelected(sb, cam, map, global);
             this.OnDrawSelected(sb, cam, map, global);
         }
 

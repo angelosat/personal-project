@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -7,6 +9,7 @@ namespace Start_a_Town_
         public HashSet<StorageFilter> ActiveFilters = new(StorageFilter.CreateFilterSet());
         readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
         public StoragePriority Priority = StoragePriority.Normal;
+        public StorageFilterCategoryNewNew FiltersView;
 
         public void Toggle(StorageFilter filter, bool toggle)
         {
@@ -21,6 +24,82 @@ namespace Start_a_Town_
                 this.ActiveFilters.Add(filter);
             else
                 this.ActiveFilters.Remove(filter);
+        }
+        //public StorageSettings(StorageFilterCategoryNewNew root)
+        //{
+        //    this.Initialize(root);
+        //}
+        public StorageSettings Initialize(StorageFilterCategoryNewNew root)
+        {
+            this.FiltersView = root;
+            foreach (var c in root.GetAllDescendantLeaves().GroupBy(l => l.Item))
+                this.Allowed.Add(c.Key, new(c.Key));
+            return this;
+        }
+
+        internal void Toggle(ItemDef item, Def variator)
+        {
+            if (variator is not IItemDefVariator)
+                throw new Exception();
+            var record = this.Allowed[item];
+            record.Toggle(variator);
+        }
+        internal void Toggle(ItemDef item, MaterialDef mat)
+        {
+            var record = this.Allowed[item];
+            record.Toggle(mat);
+        }
+        internal void Toggle(ItemDef item)
+        {
+            var record = this.Allowed[item];
+            //record.Toggle();
+            if (item.StorageFilterVariations is not null)
+            {
+                //foreach (var m in item.StorageFilterVariations)
+                //    record.Toggle(m as Def);
+                var minor = item.StorageFilterVariations.GroupBy(a => record.IsAllowed(a as Def)).OrderBy(a => a.Count()).First();
+                foreach (var m in minor)
+                    record.Toggle(m as Def);
+            }
+            else if (item.DefaultMaterialType is not null)
+            {
+                //foreach (var m in item.DefaultMaterialType.SubTypes)
+                //    record.Toggle(m);
+                var minor = item.DefaultMaterialType.SubTypes.GroupBy(a => record.IsAllowed(a)).OrderBy(a => a.Count()).First();
+                foreach (var m in minor)
+                    record.Toggle(m);
+            }
+            else
+                record.Toggle();
+        }
+        internal void Toggle(ItemCategory cat)
+        {
+            IEnumerable<ItemFilter> records = null;
+            if (cat is null)
+                records = this.Allowed.Values;
+            else
+            {
+                var byCategory = this.Allowed.Values.ToLookup(r => r.Item.Category);
+                records = byCategory[cat];
+            }
+            var catNode = FiltersView.FindNode(cat);
+            var leafs = catNode.GetAllDescendantLeaves();
+            var leafsMinor = leafs.GroupBy(l => l.Enabled).OrderBy(l => l.Count()).First();
+            foreach (var l in leafsMinor)
+            {
+                if (l.Variation is not null)
+                    this.Toggle(l.Item, l.Variation);
+                else if (l.Material is not null)
+                    this.Toggle(l.Item, l.Material);
+                else
+                    this.Toggle(l.Item);
+            }
+        }
+
+        public bool Accepts(ItemDef item, MaterialDef mat, Def variation)
+        {
+            var record = this.Allowed[item];
+            return record.IsAllowed(mat) && record.IsAllowed(variation);
         }
     }
 }

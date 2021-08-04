@@ -196,7 +196,7 @@ namespace Start_a_Town_
 
         bool IsEnabled => this.Leaves.All(l => l.Enabled) && this.Branches.All(c => c.IsEnabled);
 
-        public void SetOwner(Stockpile owner)
+        public void SetOwner(IStorageNew owner)
         {
             this.Owner = owner;
         }

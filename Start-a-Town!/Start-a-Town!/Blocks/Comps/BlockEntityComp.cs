@@ -6,6 +6,7 @@ namespace Start_a_Town_
 {
     public abstract class BlockEntityComp : IBlockEntityComp, ISerializable
     {
+        public BlockEntity Parent;
         public virtual void OnEntitySpawn(BlockEntity entity, MapBase map, IntVec3 global) { }
         public virtual void Draw(Camera camera, MapBase map, IntVec3 global) { }
         public virtual void Load(SaveTag tag)

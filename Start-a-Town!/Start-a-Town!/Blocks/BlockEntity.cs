@@ -14,10 +14,7 @@ namespace Start_a_Town_.Blocks
         public MapBase Map;
         public bool Exists => this.Map is not null;
         public IntVec3 OriginGlobal;
-        BlockEntityCompCollection<BlockEntityComp> _Comps = new();
-        public ICollection<BlockEntityComp> Comps { get {
-                return this._Comps;
-            } private set { this._Comps = value as BlockEntityCompCollection<BlockEntityComp>; } }
+        BlockEntityCompCollection<BlockEntityComp> Comps = new();
 
         public BlockEntity(IntVec3 originGlobal)
         {
@@ -62,6 +59,7 @@ namespace Start_a_Town_.Blocks
         }
         public BlockEntity AddComp(BlockEntityComp comp)
         {
+            comp.Parent = this;
             this.Comps.Add(comp);
             return this;
         }
@@ -92,14 +90,14 @@ namespace Start_a_Town_.Blocks
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             this.CellsOccupied.Save(tag, "CellsOccupied");
             this.OriginGlobal.Save(tag, "OriginGlobal");
-            tag.Add(this._Comps.Save("Components"));
+            tag.Add(this.Comps.Save("Components"));
             this.AddSaveData(tag);
             return tag;
         }
 
         public void Load(SaveTag tag)
         {
-            tag.TryGetTag("Components", this._Comps.Load);
+            tag.TryGetTag("Components", this.Comps.Load);
             tag.TryGetTagValue<Vector3>("OriginGlobal", v => this.OriginGlobal = v);
             this.CellsOccupied.Load(tag, "CellsOccupied");
             this.LoadExtra(tag);
@@ -172,6 +170,12 @@ namespace Start_a_Town_.Blocks
 
         protected virtual void OnMapLoaded(MapBase map, Vector3 global)
         {
+        }
+
+        internal void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
+        {
+            foreach (var c in this.Comps)
+                c.DrawSelected(sb, cam, map, global);
         }
     }
 }

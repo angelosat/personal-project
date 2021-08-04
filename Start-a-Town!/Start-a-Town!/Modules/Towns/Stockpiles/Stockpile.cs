@@ -446,5 +446,18 @@ namespace Start_a_Town_
         {
             this.Allowed.Values.Sync(r);
         }
+
+        public void FiltersGuiCallback(ItemDef item, MaterialDef material)
+        {
+            PacketStorageFiltersNew.Send(this, item, material);
+        }
+        public void FiltersGuiCallback(ItemDef item, Def variation)
+        {
+            PacketStorageFiltersNew.Send(this, item, variation);
+        }
+        public void FiltersGuiCallback(ItemCategory category)
+        {
+            PacketStorageFiltersNew.Send(this, category);
+        }
     }
 }

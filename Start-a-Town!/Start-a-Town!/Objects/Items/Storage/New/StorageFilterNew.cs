@@ -40,9 +40,9 @@ namespace Start_a_Town_
                 {
                     this.Root.FindLeafIndex(this, out var i);
                     if (this.Variation is not null)
-                        PacketStorageFiltersNew.Send(this.Owner, this.Item, this.Variation);
+                        this.Owner.FiltersGuiCallback(this.Item, this.Variation);
                     else
-                        PacketStorageFiltersNew.Send(this.Owner, this.Item, this.Material);
+                        this.Owner.FiltersGuiCallback(this.Item, this.Material);
                 }
             };
         }

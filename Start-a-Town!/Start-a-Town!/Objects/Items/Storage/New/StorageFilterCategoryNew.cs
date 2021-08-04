@@ -185,11 +185,11 @@ namespace Start_a_Town_
                 {
                     this.Root.FindNodeIndex(this, out var d);
                     if (this.Category is not null)
-                        PacketStorageFiltersNew.Send(this.Owner, this.Category);
+                        this.Owner.FiltersGuiCallback(this.Category);
                     else if (this.Item is not null)
-                        PacketStorageFiltersNew.Send(this.Owner, this.Item, null);
+                        this.Owner.FiltersGuiCallback(this.Item, null);
                     else
-                        PacketStorageFiltersNew.Send(this.Owner, null);
+                        this.Owner.FiltersGuiCallback(null);
                 }
             };
         }

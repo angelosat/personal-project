@@ -7,6 +7,9 @@ namespace Start_a_Town_
         int StorageID { get; }
         StorageSettings Settings { get; }
         bool Accepts(ItemDef item, MaterialDef material, Def variation);
+        void FiltersGuiCallback(ItemDef item, MaterialDef material);
+        void FiltersGuiCallback(ItemDef item, Def variation);
+        void FiltersGuiCallback(ItemCategory category);
     }
     public interface IStorage
     {

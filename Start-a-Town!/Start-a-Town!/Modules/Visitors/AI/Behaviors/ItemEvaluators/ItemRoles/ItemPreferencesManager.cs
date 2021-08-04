@@ -88,7 +88,10 @@ namespace Start_a_Town_
             if (!this.IsUseful(item))
                 this.ToDiscard.Add(item.RefID);
         }
-
+        public IItemPreferenceContext GetPreference(Entity item)
+        {
+            return this.PreferencesNew.Values.FirstOrDefault(p => p.Item == item)?.Role.Context;
+        }
         private Entity GetPreference(ItemRole role)
         {
             return this.PreferencesNew[role.Context].Item;
@@ -269,6 +272,12 @@ namespace Start_a_Town_
         public int GetScore(IItemPreferenceContext context, Entity item)
         {
             return RegistryByContext[context].Score(this.Actor, item);
+        }
+
+        public Control GetListControl(Entity entity)
+        {
+            var p = this.GetPreference(entity);
+            return new Label(p) { HoverText = $"[{this.Actor.Name}] prefers [{entity.Name}] for [{p}]" };
         }
 
         [EnsureStaticCtorCall]

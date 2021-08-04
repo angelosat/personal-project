@@ -7,6 +7,7 @@ namespace Start_a_Town_
     { }
     public interface IItemPreferencesManager : ISaveable, ISerializable
     {
+        IItemPreferenceContext GetPreference(Entity item);
         Entity GetPreference(IItemPreferenceContext context);
         Entity GetPreference(IItemPreferenceContext context, out int score);
         IEnumerable<Entity> GetJunk();
@@ -18,5 +19,6 @@ namespace Start_a_Town_
         Control Gui { get; }
         void ResolveReferences();
         int GetScore(IItemPreferenceContext context, Entity item);
+        Control GetListControl(Entity entity);
     }
 }

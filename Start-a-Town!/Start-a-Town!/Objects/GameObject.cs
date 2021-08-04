@@ -102,7 +102,11 @@ namespace Start_a_Town_
         public INetwork Net;
 
         MapBase _map;
-        public MapBase Map { get { return this.Parent?.Map ?? this._map; } set { this._map = value; } }
+        public MapBase Map 
+        { 
+            get => this.Parent?.Map ?? this._map; 
+            set => this._map = value; 
+        }
 
         public Town Town => this.Net.Map.Town;
 
@@ -923,6 +927,7 @@ namespace Start_a_Town_
                 if (obj.Components.ContainsKey(compTag.Name))
                     obj[compTag.Name].Load(obj, compTag);
             }
+            obj.Name = obj.Def.NameGetter?.Invoke(obj) ?? obj.Name; // reset name
             obj.ObjectLoaded();
             return obj;
         }

@@ -96,7 +96,8 @@ namespace Start_a_Town_
                 LocationFunc = () => uiSpeed.TopRight,
                 Anchor = Vector2.One,
                 BackgroundColorFunc = () => Color.Black * .5f,
-                TextFunc = () => string.Format("Day {0}, {1:%h}h", (int)net.Map.World.Clock.TotalDays, net.Map.World.Clock)
+                //TextFunc = () => string.Format("Day {0}, {1:%h}h", (int)net.Map.World.Clock.TotalDays, net.Map.World.Clock)
+                TextFunc = () => $"Day {(int)net.Map.World.Clock.TotalDays}, {net.Map.World.Clock:%h}h"
             };
 
             this.Chat = UIChat.Instance;

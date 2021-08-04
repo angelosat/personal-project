@@ -32,7 +32,8 @@ namespace Start_a_Town_
             CraftingProperties = ToolCraftingProperties,
             Body = new Bone(BoneDef.EquipmentHandle, ItemContent.LogsGrayscale, Vector2.Zero, 0.001f) { DrawMaterialColor = true, OriginGroundOffset = new Vector2(0, -16) }
                             .AddJoint(Vector2.Zero, new Bone(BoneDef.EquipmentHead, ItemContent.LogsGrayscale) { DrawMaterialColor = true }),
-            Variator = Def.GetDefs<ToolProps>()
+            NameGetter = e => e.ToolComponent.Props.Label,
+            StorageFilterVariations = Def.GetDefs<ToolProps>()
         };
 
         static public readonly ItemDef Shovel = new("Shovel")

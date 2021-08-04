@@ -292,7 +292,7 @@ namespace Start_a_Town_.UI
         {
             var token = txt.Split(',');
             var inner = token[0];
-            var lbl = new Label($"{inner}") { TextColor = Color.Gold };
+            var lbl = new Label($"{inner}") { TextColor = Color.Gold, Font = UIManager.FontBold };
             if (token.Length > 1)
             {
                 if (token[1].TryParseColor(out var col))

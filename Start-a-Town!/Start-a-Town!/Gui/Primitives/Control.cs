@@ -822,23 +822,13 @@ namespace Start_a_Town_.UI
             return this.Name ?? base.ToString();
         }
 
-        public GroupBox TooltipHoverText
-        {
-            get
-            {
-                GroupBox tooltip = new GroupBox();
-                Label label = new Label(this.HoverText);
-                tooltip.Controls.Add(label);
-                return tooltip;
-            }
-        }
-        string _HoverText = "";
+        string _hoverText = "";
         public Func<string> HoverFunc;
         public string HoverFormat;
         public virtual string HoverText
         {
-            get => this.HoverFunc?.Invoke() ?? this._HoverText;
-            set => this._HoverText = value;
+            get => this.HoverFunc?.Invoke() ?? this._hoverText;
+            set => this._hoverText = value;
         }
 
         public Action<Control> TooltipFunc;
@@ -850,7 +840,9 @@ namespace Start_a_Town_.UI
                 this.TooltipFunc(tooltip);
                 return;
             }
-            if (this.HoverText.Length > 0)
+            if (this._hoverText.Length > 0)
+                tooltip.Controls.Add(new GroupBox().AddControlsLineWrap(Label.ParseNew(this._hoverText)));
+            else if (this.HoverText.Length > 0)
                 tooltip.Controls.Add(new Label(this.HoverText, this.HoverFormat) { TextFunc = this.HoverFunc });
         }
         public override void Update()

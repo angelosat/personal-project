@@ -32,7 +32,7 @@ namespace Start_a_Town_
             tool.ToolComponent.Props = this;
             tool.Body.Sprite = this.SpriteHandle;
             tool.Body[BoneDef.EquipmentHead].Sprite = this.SpriteHead;
-            tool.Name = $"Tool:{this.Label}";
+            tool.Name = this.Label;
             return tool;
         }
         public Entity Create(Dictionary<string, Entity> ingredients)

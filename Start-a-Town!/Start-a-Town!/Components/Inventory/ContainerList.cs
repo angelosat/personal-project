@@ -15,18 +15,20 @@ namespace Start_a_Town_
         {
             get
             {
+                var actor = this.Parent as Actor;
                 if (_gui is null)
                 {
                     _gui = new TableObservable<GameObject>()
                         .AddColumn("name", 96, o => new Label(() => o.Name, () => SelectionManager.Select(o)) { TooltipFunc = o.GetInventoryTooltip })
+                        //.AddColumn("preference", 96, o => new Label(actor.ItemPreferences.GetPreference(o as Entity)) { HoverText = $"[{actor.Name}] prefers [{o.Name}] for this activity" })
+                        .AddColumn("preference", 96, o => actor.ItemPreferences.GetListControl(o as Entity))
                         .AddColumn("weight", 32, o => new Label(() => o.TotalWeight.ToString("0.# kg")))
                         .AddColumn("drop", Icon.Cross.Width, o => IconButton.CreateSmall(Icon.Cross, delegate { drop(o); }, "Drop"));
                 }
                 return _gui.Bind(this.Contents);
                 void drop(GameObject o)
                 {
-                    var actor = this.Parent as Actor;
-                    if(actor.IsSpawned && actor.IsCitizen)
+                    if (actor.IsSpawned && actor.IsCitizen)
                         PacketInventoryDrop.Send(o.Net, this.Parent, o, o.StackSize);
                 }
             }

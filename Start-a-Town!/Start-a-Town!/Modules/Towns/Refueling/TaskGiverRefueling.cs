@@ -50,9 +50,11 @@ namespace Start_a_Town_
             float currentFuelValue = 0;
             int totalAmountToCollect = 0;
             var enumerator = similarNearby.GetEnumerator();
+            var fuelPerItem = center.Material.Fuel.Value;
+            var maxCapacity = refComp.GetCapacityForFuelItem(center as Entity);
+            var max = Math.Min(center.StackMax, maxCapacity);
             while (
-                totalAmountToCollect < center.StackMax &&
-                currentFuelValue < fuelMissing &&
+                totalAmountToCollect < max &&
                 totalAmountToCollect + 1 <= stackEnduranceLimit && // we're just below encumberance limit
                 enumerator.MoveNext())
             {

@@ -156,6 +156,8 @@ namespace Start_a_Town_
             var fuel = item.Fuel;
             var fuelMissing = this.Fuel.Max - this.Fuel.Value;
             var desiredAmount = (int)(fuelMissing / fuel);
+            if (quantity > desiredAmount)
+                throw new Exception();
             var actualAmountToAdd = Math.Min(amount, desiredAmount);
             var actualFuelToAdd = actualAmountToAdd * fuel;
             item.StackSize -= actualAmountToAdd;
@@ -163,6 +165,12 @@ namespace Start_a_Town_
             // add fuel immediately or store item and consume it when power is requested?
             this.Fuel.Value += actualFuelToAdd;
             this.StoreFuel(item.Def, item.PrimaryMaterial, actualAmountToAdd);
+        }
+        public int GetCapacityForFuelItem(Entity item)
+        {
+            var fuel = item.Fuel;
+            var fuelMissing = this.Fuel.Max - this.Fuel.Value;
+            return (int)(fuelMissing / fuel);
         }
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {

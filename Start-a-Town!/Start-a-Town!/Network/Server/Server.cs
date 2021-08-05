@@ -213,7 +213,7 @@ namespace Start_a_Town_.Net
                 return;
             if (!Instance.IsSaving)
             {
-                this.SendTimeStampedPackets();
+                this.TickMap();
                 this.Map.Update();
                 SendSnapshots(ServerClock);
             }
@@ -242,12 +242,16 @@ namespace Start_a_Town_.Net
             Instance.OutgoingStreamReliable = new BinaryWriter(new MemoryStream());
         }
 
-        private void SendTimeStampedPackets()
+        private void TickMap()
         {
             var auxStream = new BinaryWriter(new MemoryStream());
             for (int i = 0; i < this.Speed; i++)
             {
-                this.OutgoingStreamTimestamped = new(new MemoryStream());
+                /// i moved this from the start of the loop to the end of the loop because
+                /// some packets might have been written already during packet handling before the map ticking
+                /// (for example as a response to player input) and we don't want to clear them
+                //this.OutgoingStreamTimestamped = new(new MemoryStream());
+
                 auxStream.Write(this.Map.World.CurrentTick);
                 auxStream.Write(this.CurrentTick);
                 this.Map.World.Tick(Instance);
@@ -266,6 +270,11 @@ namespace Start_a_Town_.Net
                     this.BlockUpdateTimer = Instance.BlockUpdateTimerMax;
                     this.SendRandomBlockUpdates();
                 }
+
+                /// i moved this from the start of the loop to the end of the loop because
+                /// some packets might have been written already during packet handling before the map ticking
+                /// (for example as a response to player input) and we don't want to clear them
+                this.OutgoingStreamTimestamped = new(new MemoryStream());
             }
             if (auxStream.BaseStream.Position > 0)
             {

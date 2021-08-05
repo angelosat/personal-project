@@ -79,7 +79,7 @@ namespace Start_a_Town_.Components
 
             nz = this.ResolveVertical(parent, map, box, ref velocity, density);
 
-            //if(!this.MidAir)
+            if(!this.MidAir)
                 velocity = new Vector3(velocity.X * FrictionFactor, velocity.Y * FrictionFactor, velocity.Z);
             if (velocity.LengthSquared() < .0001f)
                 velocity = Vector3.Zero;

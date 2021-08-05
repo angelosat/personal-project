@@ -151,7 +151,7 @@ namespace Start_a_Town_
             if (!entity.HasComponent<AIComponent>())
                 throw new Exception();
             this.AddCitizen(entity.RefID);
-            entity.Net.ConsoleBox.Write(string.Format("{0} has joined the town!", entity.Name));
+            entity.Net.ConsoleBox.Write($"{entity.Name} has joined the town!");
             this.Map.EventOccured(Message.Types.NpcsUpdated);
         }
 
@@ -160,7 +160,7 @@ namespace Start_a_Town_
             if (entity.HasComponent<AIComponent>())
             {
                 this.RemoveCitizen(entity.RefID);
-                entity.Net.ConsoleBox.Write(string.Format("{0} was dismissed from the town!", entity.Name));
+                this.Net.ConsoleBox.Write($"{entity.Name} was dismissed from the town!");
                 this.Map.EventOccured(Message.Types.NpcsUpdated);
             }
         }

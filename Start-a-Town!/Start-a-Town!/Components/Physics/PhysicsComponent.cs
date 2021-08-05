@@ -80,12 +80,16 @@ namespace Start_a_Town_.Components
             float nx, ny, nz;
             var box = this.GetBoundingBox(parent, lastGlobal);
 
-            //nz = this.ResolveVertical(parent, map, box, ref velocity, density); //moved this after the friction application to fix velocity being larger while jumping
+            ///moved this after the friction application to fix velocity being larger while jumping
+            //nz = this.ResolveVertical(parent, map, box, ref velocity, density); 
+
             if (!this.MidAir)
                 velocity = new Vector3(velocity.X * FrictionFactor, velocity.Y * FrictionFactor, velocity.Z);
             if (velocity.LengthSquared() < .0001f)
                 velocity = Vector3.Zero;
-            nz = this.ResolveVertical(parent, map, box, ref velocity, density); //moved this after the friction application to fix velocity being larger while jumping
+
+            ///moved this after the friction application to fix velocity being larger while jumping
+            nz = this.ResolveVertical(parent, map, box, ref velocity, density);
 
             var blocktransform = this.GetStandingBlockTransform(map, lastGlobal);
             var origin = parent.Global + blocktransform;

@@ -875,14 +875,14 @@ namespace Start_a_Town_.Net
             double angle = Random.NextDouble() * (Math.PI + Math.PI);
             double w = Math.PI / 4f;
 
-            float force = 0.3f;
+            float verticalForce = .3f;// 0.3f;
+            float horizontalForce = .1f;
+            float x = horizontalForce * (float)(Math.Sin(w) * Math.Cos(angle));
+            float y = horizontalForce * (float)(Math.Sin(w) * Math.Sin(angle));
+            float z = verticalForce * (float)Math.Cos(w);
 
-            float x = 0.1f * (float)(Math.Sin(w) * Math.Cos(angle));
-            float y = 0.1f * (float)(Math.Sin(w) * Math.Sin(angle));
-            float z = (float)Math.Cos(w);
-            
             var direction = new Vector3(x, y, z);
-            var final = startVelocity + force * direction;
+            var final = startVelocity +  direction;
 
             obj.Global = startPosition;
             obj.Velocity = final;

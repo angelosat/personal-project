@@ -21,7 +21,11 @@ namespace Start_a_Town_.Net
         {
             RegisterPacketHandler(PacketType.Acks, Instance.ReceiveAcks);
         }
-
+        string _name = "Server";
+        public override string ToString()
+        {
+            return this._name;
+        }
         // TODO: figure out why it's glitching out if I set it lower than 10
         public const int ClockIntervalMS = 10;// 10 is working
         public TimeSpan Clock => ServerClock;

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.Graphics;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.UI;
-using Start_a_Town_.Graphics;
 
 namespace Start_a_Town_
 {
@@ -50,7 +50,7 @@ namespace Start_a_Town_
                     if (this.Open)
                         cell.BlockData |= 0x4;
                     else
-                        cell.BlockData = (byte)(cell.BlockData ^= 0x4);
+                        cell.BlockData = cell.BlockData ^= 0x4;
                 }
             }
             public void Apply(ref byte data)
@@ -79,11 +79,30 @@ namespace Start_a_Town_
                 return "Part:" + this.Part.ToString() + ":" + (this.Open ? "Closed" : "Open");
             }
         }
-        static public State GetState(byte data)
+        public BlockDoor()
+         : base(Types.Door, 0, 1, false, true)
+        {
+            this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
+
+            var ndepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorndepth");
+            var wdepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwdepth");
+            var nnormals = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doornnormals");
+            var wnormals = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwnormals");
+
+            Orientations[0] = Atlas.Load("blocks/doors/doors", BlockDepthMap, NormalMap);
+            Orientations[1] = Atlas.Load("blocks/doors/doore", BlockDepthMap, NormalMap);
+            Orientations[2] = Atlas.Load("blocks/doors/doorn", ndepth, nnormals);
+            Orientations[3] = Atlas.Load("blocks/doors/doorw", wdepth, wnormals);
+
+            this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
+        }
+        public override bool IsDeconstructible => true;
+
+        public static State GetState(byte data)
         {
             return new State(data);
         }
-        static public BoundingBox GetBoundingBox(MapBase map, Vector3 global)
+        public static BoundingBox GetBoundingBox(MapBase map, Vector3 global)
         {
             var children = BlockDefOf.Door.GetParts(map, global);
             var minx = children.Min(c => c.X);
@@ -97,13 +116,13 @@ namespace Start_a_Town_
             var box = new BoundingBox(min - new Vector3(.5f, .5f, 0), max + new Vector3(.5f, .5f, 0));
             return box;
         }
-        static public void Read(byte data, out bool locked, out bool open, out int part)
+        public static void Read(byte data, out bool locked, out bool open, out int part)
         {
             locked = IsLocked(data);
             open = IsOpen(data);
             part = GetPart(data);
         }
-        static public byte WriteOpen(byte data, bool open)
+        public static byte WriteOpen(byte data, bool open)
         {
             if (open)
                 data |= 0x4;
@@ -111,12 +130,12 @@ namespace Start_a_Town_
                 data ^= 0x4;
             return data;
         }
-        static public byte WritePart(byte data, int part)
+        public static byte WritePart(byte data, int part)
         {
             data &= (byte)part;
             return data;
         }
-        static public byte WriteLocked(byte data, bool locked)
+        public static byte WriteLocked(byte data, bool locked)
         {
             if (locked)
                 data |= 0x8;
@@ -124,11 +143,11 @@ namespace Start_a_Town_
                 data ^= 0x8;
             return data;
         }
-        static public bool IsLocked(byte data)
+        public static bool IsLocked(byte data)
         {
             return (data & 0x8) == 0x8;
         }
-        static public bool IsOpen(byte data)
+        public static bool IsOpen(byte data)
         {
             return (data & 0x4) == 0x4;
         }
@@ -137,11 +156,11 @@ namespace Start_a_Town_
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        static public int GetPart(byte data)
+        public static int GetPart(byte data)
         {
             return data & 0x3;
         }
-        static public byte GetData(int verticalPos)
+        public static byte GetData(int verticalPos)
         {
             return (byte)verticalPos;
         }
@@ -158,7 +177,7 @@ namespace Start_a_Town_
         [Flags]
         enum States { Open = 0x0, Closed = 0x1 };
 
-        static AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
+        static readonly AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
 
         public override bool IsOpaque(Cell cell)
         {
@@ -195,7 +214,7 @@ namespace Start_a_Town_
                 //flood fill to find all enterior
             }
         }
-        
+
         private static IntVec3 GetCenter(byte data)
         {
             byte masked = data &= 0x1;
@@ -229,23 +248,7 @@ namespace Start_a_Town_
             return MaterialDefOf.LightWood;
         }
 
-        public BlockDoor()
-            : base(Types.Door, 0, 1, false, true)
-        {
-            this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
-
-            var ndepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorndepth");
-            var wdepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwdepth");
-            var nnormals = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doornnormals");
-            var wnormals = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorwnormals");
-
-            Orientations[0] = Atlas.Load("blocks/doors/doors", BlockDepthMap, NormalMap);
-            Orientations[1] = Atlas.Load("blocks/doors/doore", BlockDepthMap, NormalMap);
-            Orientations[2] = Atlas.Load("blocks/doors/doorn", ndepth, nnormals);
-            Orientations[3] = Atlas.Load("blocks/doors/doorw", wdepth, wnormals);
-
-            this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
-        }
+     
         public override Icon GetIcon()
         {
             return new Icon(this.GetDefault());
@@ -297,32 +300,23 @@ namespace Start_a_Town_
                 $"[{map.Net}] door at {g} {(open ? "opened" : "closed")}".ToConsole();
             }
         }
-
+        protected override Rectangle ParticleTextureRect => Orientations[0].Rectangle;
         public override void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
-            bool locked;
-            int part;
-            bool open;
-            Read(cell.BlockData, out locked, out open, out part);
+            Read(cell.BlockData, out bool locked, out bool open, out int part);
             int ori = (cell.Orientation + (open ? 1 : 0)) % 4; // FASTER???
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth, this);
         }
         public override void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
-            bool locked;
-            int part;
-            bool open;
-            Read(cell.BlockData, out locked, out open, out part);
+            Read(cell.BlockData, out bool locked, out bool open, out int part);
             int ori = (cell.Orientation + (open ? 1 : 0)) % 4; // FASTER???
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth);
         }
-        
+
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
-            bool locked;
-            int part;
-            bool open;
-            Read(data, out locked, out open, out part);
+            Read(data, out bool locked, out bool open, out int part);
             int ori = (orientation - (int)camera.Rotation + (open ? 1 : 0)); // FASTER???
             if (ori < 0)
                 ori += 4;

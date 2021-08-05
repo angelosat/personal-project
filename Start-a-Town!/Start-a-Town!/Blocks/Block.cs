@@ -350,11 +350,12 @@ namespace Start_a_Town_
         }
         public virtual ParticleEmitterSphere GetEmitter()
         { return this.GetDustEmitter(); }
+        protected virtual Rectangle ParticleTextureRect => this.Variations[0].Rectangle;
         public List<Rectangle> GetParticleRects(int count)
         {
             var list = new List<Rectangle>();
             var sqrt = (int)Math.Sqrt(count);
-            var rect = this.Variations[0].Rectangle;
+            var rect = this.ParticleTextureRect;// this.Variations[0].Rectangle;
             var w = rect.Width / sqrt;
             var h = rect.Height / sqrt;
             for (int i = 0; i < sqrt; i++)

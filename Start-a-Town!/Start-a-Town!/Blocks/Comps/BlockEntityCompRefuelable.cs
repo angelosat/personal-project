@@ -166,7 +166,7 @@ namespace Start_a_Town_
             this.Fuel.Value += actualFuelToAdd;
             this.StoreFuel(item.Def, item.PrimaryMaterial, actualAmountToAdd);
         }
-        public int GetCapacityForFuelItem(Entity item)
+        public int GetCapacityFor(Entity item)
         {
             var fuel = item.Fuel;
             var fuelMissing = this.Fuel.Max - this.Fuel.Value;

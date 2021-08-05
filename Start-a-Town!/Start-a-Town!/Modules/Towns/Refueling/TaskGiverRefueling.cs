@@ -51,7 +51,7 @@ namespace Start_a_Town_
             int totalAmountToCollect = 0;
             var enumerator = similarNearby.GetEnumerator();
             var fuelPerItem = center.Material.Fuel.Value;
-            var maxCapacity = refComp.GetCapacityForFuelItem(center as Entity);
+            var maxCapacity = refComp.GetCapacityFor(center as Entity);
             var max = Math.Min(center.StackMax, maxCapacity);
             while (
                 totalAmountToCollect < max &&

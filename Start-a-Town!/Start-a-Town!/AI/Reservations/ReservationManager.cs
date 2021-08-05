@@ -51,7 +51,7 @@ namespace Start_a_Town_.AI
             }
 
             if (!actor.CanReserve(target, stackCount))
-                throw new Exception(); // this will probably throw if the canreserve check has been omitted in a taskgiver
+                throw new Exception(); // this will probably throw if the canreserve check has been omitted in a taskgiver, or a reservation has been omitted in the initreservations of another behavior
             /// I MOVED THIS TO THE BEGINNING OF THE FUNCTION because I check the stackCount against any existing reservations which are NEVER -1
             ///if (target.Type == TargetType.Position)
             ///    stackCount = 1;
@@ -183,6 +183,10 @@ namespace Start_a_Town_.AI
             return Reservations.FirstOrDefault(r =>
                r.Target.Type == TargetType.Position && r.Target.Global == global
             ) == null;
+        }
+        internal int GetUnreservedAmount(GameObject obj)
+        {
+            return GetUnreservedAmount(new TargetArgs(obj));
         }
         internal int GetUnreservedAmount(TargetArgs target)
         {

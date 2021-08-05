@@ -27,7 +27,7 @@ namespace Start_a_Town_
                     {
                         if (!item.CanAbsorb(pot))
                             continue;
-                    var unreservedAmount = actor.GetUnreservedAmount(pot);
+                        var unreservedAmount = actor.GetUnreservedAmount(pot);
                         if (unreservedAmount == 0)
                             continue;
                         desiredAmount = Math.Min(desiredAmount, unreservedAmount);

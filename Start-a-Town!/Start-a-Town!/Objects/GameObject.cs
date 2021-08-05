@@ -133,6 +133,12 @@ namespace Start_a_Town_
             foreach (var comp in this.Components.Values)
                 comp.GetSelectionInfo(info, this);
         }
+
+        internal int GetUnreservedAmount()
+        {
+            return this.Town.ReservationManager.GetUnreservedAmount(this);
+        }
+
         public virtual void GetQuickButtons(SelectionManager info)
         {
             if (this.IsForbiddable())

@@ -98,7 +98,7 @@ namespace Start_a_Town_
             return emptyCells;
         }
 
-        public IEnumerable<TargetArgs> DistributeToStorageSpotsNewLazy(GameObject actor, GameObject obj)
+        public IEnumerable<TargetArgs> DistributeToStorageSpotsNewLazy(Actor actor, GameObject obj)
         {
             var emptyCells = new List<Vector3>();
             foreach (var pos in this.Positions)
@@ -110,15 +110,19 @@ namespace Start_a_Town_
                     emptyCells.Add(above);
                     continue;
                 }
-                foreach (var item in itemsInCell)
+                foreach (var existing in itemsInCell)
                 {
-                    if (!item.IsHaulable)
+                    if (!existing.IsHaulable) // not really necessary?
                         continue;
-                    if (!this.Accepts(item))
+                    if (!this.Accepts(existing))
                         continue;
-                    if (!item.CanAbsorb(obj))
+                    if (!existing.CanAbsorb(obj))
                         continue;
-                    yield return new TargetArgs(item);
+                    /// dont haul to this existing item, because it might be reserved by another actor to be completely picked up
+                    /// maybe if unreservedamount > 1? so that we ensure that the stack will continue existing even after being partially picked up by another actor?
+                    if (existing.GetUnreservedAmount() == 0)
+                        continue; 
+                    yield return new TargetArgs(existing);
                 }
             }
             foreach (var cell in emptyCells)

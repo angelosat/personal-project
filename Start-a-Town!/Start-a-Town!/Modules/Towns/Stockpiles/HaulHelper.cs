@@ -105,6 +105,8 @@ namespace Start_a_Town_
                     continue;
                 if (!actor.CanReach(item))
                     continue;
+                if (!actor.CanReserve(item))
+                    continue;
                 if (StockpileAIHelper.IsItemAtBestStockpile(item))
                     continue;
                 yield return item;

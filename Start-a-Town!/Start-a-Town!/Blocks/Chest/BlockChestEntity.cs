@@ -21,7 +21,7 @@ namespace Start_a_Town_.Blocks.Chest
                 return this.Container.GetSlot(slotID);
             }
 
-            public override void OnRemoved(MapBase map, Vector3 global)
+            public override void OnRemoved(MapBase map, IntVec3 global)
             {
                 foreach(var slot in this.Container.GetNonEmpty())
                 {

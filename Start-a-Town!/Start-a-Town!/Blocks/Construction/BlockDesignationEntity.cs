@@ -65,18 +65,18 @@ namespace Start_a_Town_.Blocks
                     TextFunc = () => $"{product.Requirement.Material.Name} {product.Requirement.Def.Label} {0} / {product.Requirement.Amount}"
                 });
             }
-            internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
+            internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
             {
                 var product = this.Product;
                 var req = product.Requirement;
                 info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Name} {req.Def.Label} {0} / {req.Amount}" });
             }
-            public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera cam, Vector3 global)
+            public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera cam, IntVec3 global)
             {
                 if (ToolManager.Instance.ActiveTool != null)
                     if (ToolManager.Instance.ActiveTool.Target != null)
-                        if (ToolManager.Instance.ActiveTool.Target.Type == TargetType.Position && ToolManager.Instance.ActiveTool.Target.Global == global)
-                            Bar.Draw(sb, cam, global + Vector3.UnitZ, "", this.BuildProgress.Percentage, cam.Zoom * .2f);
+                        if (ToolManager.Instance.ActiveTool.Target.Type == TargetType.Position && (IntVec3)ToolManager.Instance.ActiveTool.Target.Global == global)
+                            Bar.Draw(sb, cam, global.Above, "", this.BuildProgress.Percentage, cam.Zoom * .2f);
             }
 
             protected override void AddSaveData(SaveTag tag)

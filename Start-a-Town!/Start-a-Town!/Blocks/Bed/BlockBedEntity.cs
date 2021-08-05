@@ -60,7 +60,7 @@ namespace Start_a_Town_
                 agent.GetNeed(NeedDef.Energy).Mod += 1;
             }
         }
-        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var room = map.GetRoomAt(vector3);
             room.GetSelectionInfo(info);

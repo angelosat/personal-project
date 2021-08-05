@@ -42,7 +42,7 @@ namespace Start_a_Town_
                 TextFunc = GetIngredientText
             });
         }
-        internal override void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
+        internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var product = this.Product;
             info.AddInfo(new Label() { TextFunc =

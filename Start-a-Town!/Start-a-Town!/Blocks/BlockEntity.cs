@@ -32,13 +32,13 @@ namespace Start_a_Town_.Blocks
         /// Dipose any children GameObjects here.
         /// </summary>
         public virtual void Dispose() { } // maybe make this abstract so i don't forget it?
-        public virtual void OnRemoved(MapBase map, Vector3 global)
+        public virtual void OnRemoved(MapBase map, IntVec3 global)
         {
             foreach (var c in this.Comps)
                 c.Remove(map, global, this);
         }
-        public virtual void Break(MapBase map, Vector3 global) { }
-        public virtual void Place(MapBase map, Vector3 global)
+        public virtual void Break(MapBase map, IntVec3 global) { }
+        public virtual void Place(MapBase map, IntVec3 global)
         {
             foreach (var comp in this.Comps)
                 comp.OnEntitySpawn(this, map, global);
@@ -78,7 +78,7 @@ namespace Start_a_Town_.Blocks
                 c.IsMadeFrom(itemDefMaterialAmounts);
         }
 
-        internal virtual void Deconstruct(GameObject actor, Vector3 global)
+        internal virtual void Deconstruct(GameObject actor, IntVec3 global)
         {
             foreach (var c in this.Comps)
                 c.Deconstruct(actor, global);
@@ -143,34 +143,34 @@ namespace Start_a_Town_.Blocks
             foreach (var comp in this.Comps)
                 comp.Draw(camera, map, global);
         }
-        public virtual void DrawUI(SpriteBatch sb, Camera cam, Vector3 global) { }
+        public virtual void DrawUI(SpriteBatch sb, Camera cam, IntVec3 global) { }
 
-        internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, Vector3 vector3)
+        internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3)
         {
             foreach (var c in this.Comps)
                 c.GetQuickButtons(uISelectedInfo, map, vector3);
         }
 
-        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, Vector3 vector3)
+        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             foreach (var c in this.Comps)
                 c.GetSelectionInfo(info, map, vector3);
         }
 
-        internal void OnBlockBelowChanged(MapBase map, Vector3 global)
+        internal void OnBlockBelowChanged(MapBase map, IntVec3 global)
         {
             foreach (var c in this.Comps)
                 c.OnBlockBelowChanged(map, global);
         }
 
-        internal void MapLoaded(MapBase map, Vector3 global)
+        internal void MapLoaded(MapBase map, IntVec3 global)
         {
             foreach (var c in this.Comps)
                 c.MapLoaded(map, global);
             this.OnMapLoaded(map, global);
         }
 
-        protected virtual void OnMapLoaded(MapBase map, Vector3 global)
+        protected virtual void OnMapLoaded(MapBase map, IntVec3 global)
         {
         }
 

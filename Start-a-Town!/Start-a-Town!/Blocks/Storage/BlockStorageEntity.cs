@@ -64,12 +64,12 @@ namespace Start_a_Town_
                 this.Contents.Remove(item);
                 item.Net.EventOccured(Components.Message.Types.ContentsChanged, this);
             }
-            public override void Place(MapBase map, Vector3 global)
+            public override void Place(MapBase map, IntVec3 global)
             {
                 base.Place(map, global);
                 this.Global = global;
             }
-            public override void OnRemoved(MapBase map, Vector3 global)
+            public override void OnRemoved(MapBase map, IntVec3 global)
             {
                 foreach (var i in this.Contents)
                 {

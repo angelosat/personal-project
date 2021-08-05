@@ -99,7 +99,9 @@ namespace Start_a_Town_
         }
         public bool Accepts(Entity obj)
         {
-            return this.Allowed[obj.Def].IsAllowed(obj.PrimaryMaterial);
+            if (!this.Allowed.TryGetValue(obj.Def, out ItemFilter filter))
+                return false;
+            return filter.IsAllowed(obj.PrimaryMaterial);
         }
 
         public void Write(BinaryWriter w)

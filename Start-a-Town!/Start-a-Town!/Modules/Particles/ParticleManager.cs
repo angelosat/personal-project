@@ -78,6 +78,8 @@ namespace Start_a_Town_.Particles
             var entity = e.Parameters[0] as GameObject;
             var vector3 = (Vector3)e.Parameters[1];
             var block = entity.Map.GetBlock(vector3);
+            if (block is null)
+                return;
             var emitter = block.GetEmitter();
             emitter.Source = new Vector3(vector3.XY(), (float)Math.Floor(vector3.Z) - .1f);
             emitter.Emit(10);

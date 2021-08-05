@@ -51,7 +51,7 @@ namespace Start_a_Town_.AI
             }
 
             if (!actor.CanReserve(target, stackCount))
-                throw new Exception();
+                throw new Exception(); // this will probably throw if the canreserve check has been omitted in a taskgiver
             /// I MOVED THIS TO THE BEGINNING OF THE FUNCTION because I check the stackCount against any existing reservations which are NEVER -1
             ///if (target.Type == TargetType.Position)
             ///    stackCount = 1;

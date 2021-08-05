@@ -1,12 +1,16 @@
-﻿using System.IO;
+﻿using Start_a_Town_.UI;
+using System.IO;
 
 namespace Start_a_Town_
 {
-    public class ItemDefMaterialAmount : ISerializable, ISaveable
+    public class ItemDefMaterialAmount : ISerializable, ISaveable, IListable
     {
         public ItemDef Def;
         public MaterialDef Material;
         public int Amount;
+
+        public string Label => throw new System.NotImplementedException();
+
         public ItemDefMaterialAmount()
         {
 
@@ -34,11 +38,15 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return GetText(this.Def, this.Material, this.Amount);
+            return this.GetText();// GetText(this.Def, this.Material, this.Amount);
         }
         static public string GetText(ItemDef def, MaterialDef material, int amount)
         {
-            return string.Format("{0}x {1} {2}", amount, material.Label, def.Label); // TODO add a method to itemdefs that return the final name of the item depending on materials etc
+            return $"{amount}x {material.Label} {def.Label}"; // TODO add a method to itemdefs that return the final name of the item depending on materials etc
+        }
+        public string GetText()
+        {
+            return $"{this.Amount}x {this.Material.Label} {this.Def.Label}"; // TODO add a method to itemdefs that return the final name of the item depending on materials etc
         }
         public SaveTag Save(string name = "")
         {
@@ -67,6 +75,11 @@ namespace Start_a_Town_
             this.Material = MaterialDef.GetMaterial(r.ReadInt32());
             this.Amount = r.ReadInt32();
             return this;
+        }
+
+        public Control GetListControlGui()
+        {
+            return new Label(this.GetText);
         }
     }
 }

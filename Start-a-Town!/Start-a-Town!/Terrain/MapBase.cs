@@ -98,7 +98,7 @@ namespace Start_a_Town_
 
         internal bool IsDeconstructible(IntVec3 global)
         {
-            return this.GetBlockEntity(global)?.HasComp<BlockEntityCompDeconstructible>() ?? this.GetBlock(global).IsDeconstructible;
+            return (this.GetBlockEntity(global)?.HasComp<BlockEntityCompDeconstructible>() ?? false) || this.GetBlock(global).IsDeconstructible;
         }
 
         public Vector2 Coordinates;

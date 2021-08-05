@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace Start_a_Town_.Blocks
 {
@@ -37,7 +38,10 @@ namespace Start_a_Town_.Blocks
             base.Place(map, global, data, variation, orientation, notify);
         }
         public override bool IsRoomBorder => false;
-
+        public override bool IsDeconstructible => true;
+        protected override void OnDeconstruct(GameObject actor, Vector3 global)
+        {
+        }
         internal override IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
         {
             yield return new IntVec3(-1, 0, 0);

@@ -17,7 +17,7 @@ namespace Start_a_Town_.Blocks
                 var lightComp = new BlockEntityLuminance(15, refuel, 1, switchable.IsSwitchedOn);
                 this.AddComp(lightComp);
                 this.AddComp(new BlockEntityCompParticles(ParticleEmitter.Fire.SetRateFunc(() => (lightComp.Powered && switchable.SwitchedOn) ? 1 : 0)));
-                this.AddComp(new BlockEntityCompDeconstructible());
+                //this.AddComp(new BlockEntityCompDeconstructible());
             }
         }
     }

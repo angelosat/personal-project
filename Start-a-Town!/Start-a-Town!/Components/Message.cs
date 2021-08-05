@@ -49,7 +49,6 @@ namespace Start_a_Town_.Components
             SkillIncrease,
             ZoneDesignation,
             MoodletsUpdated,
-            FuelConsumed,
             ActorGearUpdated,
             NewAdventurerCreated,
             ShopsUpdated,

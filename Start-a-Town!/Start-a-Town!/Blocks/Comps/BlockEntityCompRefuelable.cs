@@ -6,6 +6,7 @@ using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace Start_a_Town_
 {
@@ -77,7 +78,7 @@ namespace Start_a_Town_
         }
       
         public Progress Fuel = new();
-        readonly List<ItemDefMaterialAmount> StoredFuelItems = new();
+        readonly ObservableCollection<ItemDefMaterialAmount> StoredFuelItems = new();
         public StorageSettings Settings { get; } = new();
 
         public BlockEntityCompRefuelable(int storedFuelCapacity = 100)
@@ -111,30 +112,32 @@ namespace Start_a_Town_
                 var firstFuel = this.StoredFuelItems[0];
                 firstFuel.Amount -= 1;
                 if (firstFuel.Amount == 0)
-                {
                     this.StoredFuelItems.RemoveAt(0);
-                    map.EventOccured(Components.Message.Types.FuelConsumed, this);
-                }
             }
         }
         internal override void Remove(MapBase map, IntVec3 global, BlockEntity parent)
         {
-            if (map.Net is Net.Client)
-                return;
-            foreach (var oa in this.StoredFuelItems.ToList())
+            foreach (var i in this.StoredFuelItems)
             {
-                do
-                {
-                    var matEntity = oa.Create();
-                    var amountToSpawn = Math.Min(oa.Amount, matEntity.StackMax);
-                    if (amountToSpawn == 0)
-                        throw new Exception();
-                    matEntity.StackSize = amountToSpawn;
-                    oa.Amount -= amountToSpawn;
-                    map.Net.PopLoot(matEntity, global, Vector3.Zero);
-                } while (oa.Amount > 0);
-                this.StoredFuelItems.Remove(oa); // just in case
+                var item = i.Create();
+                map.Net.PopLoot(item, global, Vector3.Zero);
             }
+            //if (map.Net is Net.Client)
+            //    return;
+            //foreach (var oa in this.StoredFuelItems.ToList())
+            //{
+            //    do
+            //    {
+            //        var matEntity = oa.Create();
+            //        var amountToSpawn = Math.Min(oa.Amount, matEntity.StackMax);
+            //        if (amountToSpawn == 0)
+            //            throw new Exception();
+            //        matEntity.StackSize = amountToSpawn;
+            //        oa.Amount -= amountToSpawn;
+            //        map.Net.PopLoot(matEntity, global, Vector3.Zero);
+            //    } while (oa.Amount > 0);
+            //    this.StoredFuelItems.Remove(oa); // just in case
+            //}
         }
         internal override void OnDrop(GameObject actor, GameObject item, TargetArgs target, int quantity)
         {
@@ -160,10 +163,7 @@ namespace Start_a_Town_
             // add fuel immediately or store item and consume it when power is requested?
             this.Fuel.Value += actualFuelToAdd;
             this.StoreFuel(item.Def, item.PrimaryMaterial, actualAmountToAdd);
-
-            item.Map.EventOccured(Components.Message.Types.FuelConsumed, this);
         }
-
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var bar = new Bar()
@@ -174,25 +174,13 @@ namespace Start_a_Town_
             };
             bar.TextFunc = () => bar.Percentage.ToString("##0%");
             info.AddInfo(bar);
-            var box = new ScrollableBoxNewNew(150, Label.DefaultHeight * 3);
-            var boxcontents = new ListBoxNoScroll<ItemDefMaterialAmount, Label>(i => new Label(i));
+            var box = new ScrollableBoxNewNew(150, Label.DefaultHeight * 2, ScrollModes.Vertical);
+            var boxcontents = new ListBoxObservable<ItemDefMaterialAmount>(this.StoredFuelItems);
             box.AddControls(boxcontents);
-            void refreshContents()
-            {
-                boxcontents.AddItems(this.StoredFuelItems);
-            }
-            refreshContents();
-            boxcontents.OnGameEventAction = e =>
-            {
-                if (e.Type == Components.Message.Types.FuelConsumed)
-                    if (e.Parameters[0] == this)
-                        refreshContents();
-            };
-
             info.AddInfo(box);
-
             info.AddTabAction("Fuel", this.ToggleFiltersGui);
         }
+        
         static Control FiltersGui;
         void ToggleFiltersGui()
         {

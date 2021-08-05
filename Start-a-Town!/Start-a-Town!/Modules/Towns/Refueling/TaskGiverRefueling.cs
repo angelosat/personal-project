@@ -22,6 +22,10 @@ namespace Start_a_Town_
                 foreach (var fuel in allObjects)
                 {
                     handled.Add(fuel);
+                    if (!actor.CanReachNew(fuel))
+                        continue;
+                    if (!actor.CanReserve(fuel))
+                        continue;
                     if (!fuel.IsHaulable)
                         continue;
                     if (!refComp.Accepts(fuel as Entity))
@@ -31,9 +35,7 @@ namespace Start_a_Town_
                         var task = new AITask(typeof(TaskBehaviorRefueling));
                         task.SetTarget(TaskBehaviorRefueling.DestinationIndex, new TargetArgs(actor.Map, destination.Key));
                         foreach (var similar in CollectUntilFull(actor, refComp, fuel, fuelMissing, handled))
-                        {
                             task.AddTarget(TaskBehaviorRefueling.SourceIndex, new TargetArgs(similar.Key), similar.Value);
-                        }
                         return task;
                     }
                 }

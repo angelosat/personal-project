@@ -79,7 +79,8 @@ namespace Start_a_Town_.Components
 
             nz = this.ResolveVertical(parent, map, box, ref velocity, density);
 
-            velocity = new Vector3(velocity.X * FrictionFactor, velocity.Y * FrictionFactor, velocity.Z);
+            //if(!this.MidAir)
+                velocity = new Vector3(velocity.X * FrictionFactor, velocity.Y * FrictionFactor, velocity.Z);
             if (velocity.LengthSquared() < .0001f)
                 velocity = Vector3.Zero;
 
@@ -281,7 +282,7 @@ namespace Start_a_Town_.Components
                         var check = global - new Vector3(0, 0, 1 + i);
                         if (IsStandable(map, check))
                         {
-                            parent.Net.PostLocalEvent(parent, Message.Types.HitGround, Math.Abs(speed.Z));
+                            //parent.Net.PostLocalEvent(parent, Message.Types.HitGround, Math.Abs(speed.Z));
                             speed.Z = 0;
                             // land
                             this.HitGround(parent, check);

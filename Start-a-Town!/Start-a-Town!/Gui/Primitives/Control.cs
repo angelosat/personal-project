@@ -1265,7 +1265,7 @@ namespace Start_a_Town_.UI
         {
             this.OnGameEventAction(e);
             this.Listeners.TryGetValue(e.Type, a => a(e));
-            foreach (var child in this.Controls)
+            foreach (var child in this.Controls.ToList())
                 child.OnGameEvent(e);
         }
         internal Control AnchorTo(Vector2 location, Vector2 anchor)

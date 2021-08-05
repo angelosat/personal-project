@@ -403,6 +403,21 @@ namespace Start_a_Town_
 
         public void Deconstruct(GameObject actor, Vector3 global)
         {
+            /// I DONT WANT EVERY BLOCK TO TO DECONSTRUCT INTO SCRAPS BY DEFAULT
+            //var map = actor.Map;
+            //var cell = map.GetCell(global);
+            //var material = this.GetMaterial(cell.BlockData);
+            //var scraps = RawMaterialDef.Scraps;
+            //var materialQuantity = this.Ingredient.Amount;
+            //var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
+            //actor.Net.PopLoot(obj, global, Vector3.Zero);
+
+            this.OnDeconstruct(actor, global);
+            actor.Map.GetBlockEntity(global)?.Deconstruct(actor, global);
+            actor.Map.RemoveBlock(global);
+        }
+        protected virtual void OnDeconstruct(GameObject actor, Vector3 global)
+        {
             var map = actor.Map;
             var cell = map.GetCell(global);
             var material = this.GetMaterial(cell.BlockData);
@@ -410,12 +425,7 @@ namespace Start_a_Town_
             var materialQuantity = this.Ingredient.Amount;
             var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
             actor.Net.PopLoot(obj, global, Vector3.Zero);
-
-            this.OnDeconstruct(actor, global);
-            actor.Map.GetBlockEntity(global)?.Deconstruct(actor, global);
-            actor.Map.RemoveBlock(global);
         }
-        protected virtual void OnDeconstruct(GameObject actor, Vector3 global) { }
 
         public virtual bool IsValidPosition(MapBase map, IntVec3 global, int orientation) { return true; }
         internal void Place(MapBase map, IEnumerable<IntVec3> positions, byte data, int orientation, bool notify)

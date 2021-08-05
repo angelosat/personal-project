@@ -81,7 +81,7 @@ namespace Start_a_Town_
        
         internal bool Accepts(GameObject obj)
         {
-            return obj is Entity item && this.Accepts(item);
+            return obj is Entity item && this.Settings.Accepts(item);
         }
         public bool CanAccept(GameObject item)
         {

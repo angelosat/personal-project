@@ -871,7 +871,7 @@ namespace Start_a_Town_.Net
             float x = 0.1f * (float)(Math.Sin(w) * Math.Cos(angle));
             float y = 0.1f * (float)(Math.Sin(w) * Math.Sin(angle));
             float z = (float)Math.Cos(w);
-
+            
             var direction = new Vector3(x, y, z);
             var final = startVelocity + force * direction;
 

@@ -21,6 +21,7 @@ namespace Start_a_Town_.Components
         public static float Friction = 0.02f;// 0.005f; // TODO move this to blocks? 
         public bool MidAir { get; private set; } // => this.Parent.Velocity.Z != 0;// HACK because checking velocity.z == 0 returns true at the peak of the jump 
         public const int KnockbackMagnitude = 3;
+        public Vector3 Force;
 
         public PhysicsComponent()
             : base()
@@ -51,40 +52,42 @@ namespace Start_a_Town_.Components
         /// <param name="chunk"></param>
         public override void Tick()
         {
+            var force = this.Force;
+            this.Force = Vector3.Zero;
+
             if (!this.Enabled)
                 return;
 
             var parent = this.Parent;
             var map = parent.Map;
             var net = parent.Net;
-            Vector3 next;
-            Vector3 lastGlobal = parent.Transform.Global;
+            var lastGlobal = parent.Transform.Global;
             if (!map.TryGetCell(lastGlobal, out var thisCell))
                 return;
 
-            Vector3 velocity = parent.Velocity;
+            var velocity = parent.Velocity + force;
 
             var feetposition = lastGlobal + Vector3.UnitZ * .1f;
             var feetcell = map.GetCell(feetposition);
-            Block feetblock = feetcell.Block;
+            var feetblock = feetcell.Block;
             if (!this.Enabled)
                 return;
 
             // TODO: make getdensity method on block that takes into account its height
             float density = feetblock.GetDensity(feetcell.BlockData, feetposition);
-            velocity *= (1 - density);
+            velocity *= 1 - density;
 
             float nx, ny, nz;
-            BoundingBox box = this.GetBoundingBox(parent, lastGlobal);
+            var box = this.GetBoundingBox(parent, lastGlobal);
 
-            nz = this.ResolveVertical(parent, map, box, ref velocity, density);
-
-            if(!this.MidAir)
+            //nz = this.ResolveVertical(parent, map, box, ref velocity, density); //moved this after the friction application to fix velocity being larger while jumping
+            if (!this.MidAir)
                 velocity = new Vector3(velocity.X * FrictionFactor, velocity.Y * FrictionFactor, velocity.Z);
             if (velocity.LengthSquared() < .0001f)
                 velocity = Vector3.Zero;
+            nz = this.ResolveVertical(parent, map, box, ref velocity, density); //moved this after the friction application to fix velocity being larger while jumping
 
-            Vector3 blocktransform = this.GetStandingBlockTransform(map, lastGlobal);
+            var blocktransform = this.GetStandingBlockTransform(map, lastGlobal);
             var origin = parent.Global + blocktransform;
 
             if (velocity.X != 0 || blocktransform.X != 0)
@@ -97,7 +100,7 @@ namespace Start_a_Town_.Components
             else
                 ny = lastGlobal.Y;
 
-            next = new Vector3(nx, ny, nz);
+            var next = new Vector3(nx, ny, nz);
 
             if (lastGlobal != next)
                 parent.SetPosition(next);
@@ -328,6 +331,12 @@ namespace Start_a_Town_.Components
             }
             speed.Z += adjustedGravity;
             return next.Z;
+        }
+
+        internal void Applyforce(Vector3 nextvelocity)
+        {
+            this.Force += nextvelocity;
+            this.Enabled = true;
         }
 
         private static Vector3 ResolveHorizontalCorners(INetwork net, GameObject parent, Vector3 origin, MapBase map, BoundingBox boxGlobal, ref Vector3 velocity, Vector2 horAxis, float nz, out float zz)

@@ -88,7 +88,7 @@ namespace Start_a_Town_
 
         public bool Accepts(Entity fuel)
         {
-            return this.DefaultFilters.Filter(fuel);
+            return this.Settings.Accepts(fuel);
         }
         internal float GetTotalStoredFuel()
         {
@@ -263,17 +263,20 @@ namespace Start_a_Town_
             Packets.Send(this, category);
         }
 
+        public Dictionary<TargetArgs, int> GetPotentialHaulTargets(Actor actor, GameObject item, out int maxamount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TargetArgs> GetPotentialHaulTargets(Actor actor, GameObject item)
+        {
+            throw new NotImplementedException();
+        }
+
         static readonly StorageFilterCategoryNewNew DefaultFiltersNew =
             new StorageFilterCategoryNewNew("Wood")
                 .AddChildren(Def.Database.Values.OfType<ItemDef>()
                     .Where(d => d.DefaultMaterialType == MaterialType.Wood)
                     .Select(d => new StorageFilterCategoryNewNew(d.Label).AddLeafs(d.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNewNew(d, m)))));
-
-
-        readonly StorageFilterCategoryNew DefaultFilters =
-            new StorageFilterCategoryNew("Wood")
-                .AddChildren(Def.Database.Values.OfType<ItemDef>()
-                    .Where(d => d.DefaultMaterialType == MaterialType.Wood)
-                    .Select(d => new StorageFilterCategoryNew(d.Label).AddLeafs(d.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNew(d, m)))));
     }
 }

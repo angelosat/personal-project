@@ -67,13 +67,13 @@ namespace Start_a_Town_
 
         public static Dictionary<TargetArgs, int> GetAllValidHaulDestinations(Actor actor, GameObject item, out int maxamount)
         {
-            Dictionary<TargetArgs, int> all = new Dictionary<TargetArgs, int>();
+            var all = new Dictionary<TargetArgs, int>();
             var stockpiles = GetStoragesByPriority(item.Map);
             maxamount = 0;
 
             foreach (var s in stockpiles)
             {
-                if (s.Accepts(item as Entity))
+                if (s.Settings.Accepts(item as Entity))
                     foreach (var spot in s.GetPotentialHaulTargets(actor, item, out maxamount))
                         all.Add(spot.Key, spot.Value);
             }
@@ -83,7 +83,7 @@ namespace Start_a_Town_
         {
             var all = GetAllValidHaulDestinations(actor, item, out int maxAmount).Keys.Select(k => new TargetArgs(actor.Map, k.Global + Vector3.UnitZ));
             var closest = all.OrderBy(t => Vector3.DistanceSquared(t.Global, actor.Global)).FirstOrDefault();
-            return closest == null ? TargetArgs.Null : closest;
+            return closest ?? TargetArgs.Null;
         }
 
         public static bool IsItemAtBestStockpile(GameObject item)
@@ -102,7 +102,7 @@ namespace Start_a_Town_
             return betterStockpile == null && currentStockpile.Accepts(item);
         }
 
-        public static IEnumerable<IStorage> GetStoragesByPriority(MapBase map)
+        public static IEnumerable<IStorageNew> GetStoragesByPriority(MapBase map)
         {
             IEnumerable<Stockpile> stockpiles = GetStockpiles(map);
             return stockpiles.OrderByDescending(i => i.Priority);
@@ -118,7 +118,7 @@ namespace Start_a_Town_
             var storages = GetStoragesByPriority(actor.Map);
             foreach (var s in storages)
             {
-                if (s.Accepts(item))
+                if (s.Settings.Accepts(item))
                     foreach (var spot in s.GetPotentialHaulTargets(actor, item))
                         yield return spot;
             }

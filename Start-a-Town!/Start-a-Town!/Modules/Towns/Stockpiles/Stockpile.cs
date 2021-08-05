@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public partial class Stockpile : Zone, IStorageNew, IStorage, IContextable
+    public partial class Stockpile : Zone, IStorageNew, IContextable
     {
         internal static void Init()
         {
@@ -17,80 +17,20 @@ namespace Start_a_Town_
         public StorageSettings Settings { get; } = new();
         public int Priority => (int)this.Settings.Priority;
         static StorageFilterCategoryNewNew FiltersView = InitFilters();
-        readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
         public override string UniqueName => $"Zone_Stockpile_{this.ID}";
 
         public Stockpile()
         {
-            this.InitStorageFilters();
+            this.Settings.Initialize(FiltersView);
         }
         public Stockpile(ZoneManager manager) : base(manager)
         {
-            this.InitStorageFilters();
+            this.Settings.Initialize(FiltersView);
         }
         public Stockpile(ZoneManager manager, IEnumerable<IntVec3> positions)
             : base(manager, positions)
         {
-            this.InitStorageFilters();
-        }
-
-        internal void ToggleFilter(ItemDef item, Def variator)
-        {
-            if (variator is not IItemDefVariator)
-                throw new Exception();
-            var record = this.Allowed[item];
-            record.Toggle(variator);
-        }
-        internal void ToggleFilter(ItemDef item, MaterialDef mat)
-        {
-            var record = this.Allowed[item];
-            record.Toggle(mat);
-        }
-        internal void ToggleFilter(ItemDef item)
-        {
-            var record = this.Allowed[item];
-            //record.Toggle();
-            if (item.StorageFilterVariations is not null)
-            {
-                //foreach (var m in item.StorageFilterVariations)
-                //    record.Toggle(m as Def);
-                var minor = item.StorageFilterVariations.GroupBy(a => record.IsAllowed(a as Def)).OrderBy(a => a.Count()).First();
-                foreach (var m in minor)
-                    record.Toggle(m as Def);
-            }
-            else if (item.DefaultMaterialType is not null)
-            {
-                //foreach (var m in item.DefaultMaterialType.SubTypes)
-                //    record.Toggle(m);
-                var minor = item.DefaultMaterialType.SubTypes.GroupBy(a => record.IsAllowed(a)).OrderBy(a => a.Count()).First();
-                foreach (var m in minor)
-                    record.Toggle(m);
-            }
-            else
-                record.Toggle();
-        }
-        internal void ToggleFilter(ItemCategory cat)
-        {
-            IEnumerable<ItemFilter> records = null;
-            if (cat is null)
-                records = this.Allowed.Values;
-            else
-            {
-                var byCategory = this.Allowed.Values.ToLookup(r => r.Item.Category);
-                records = byCategory[cat];
-            }
-            var catNode = FiltersView.FindNode(cat);
-            var leafs = catNode.GetAllDescendantLeaves();
-            var leafsMinor = leafs.GroupBy(l => l.Enabled).OrderBy(l => l.Count()).First();
-            foreach(var l in leafsMinor)
-            {
-                if (l.Variation is not null)
-                    this.ToggleFilter(l.Item, l.Variation);
-                else if (l.Material is not null)
-                    this.ToggleFilter(l.Item, l.Material);
-                else
-                    this.ToggleFilter(l.Item);
-            }
+            this.Settings.Initialize(FiltersView);
         }
 
         public override string GetName()
@@ -131,31 +71,14 @@ namespace Start_a_Town_
                 list.AddRange(from obj in objects where this.Accepts(obj) where obj.Global - Vector3.UnitZ == (Vector3)pos select obj); // TODO: this is shit
             return list;
         }
-        public bool Accepts(ItemDef item, Def v)
-        {
-            var record = this.Allowed[item];
-            return record.IsAllowed(v);
-        }
-        public bool Accepts(ItemDef item, MaterialDef mat)
-        {
-            var record = this.Allowed[item];
-            return record.IsAllowed(mat);
-        }
-        public bool Accepts(ItemDef item, MaterialDef mat, Def variation)
-        {
-            var record = this.Allowed[item];
-            return record.IsAllowed(mat) && record.IsAllowed(variation);
-        }
+        
         public override bool Accepts(Entity obj, IntVec3 pos)
         {
             if (!this.Positions.Contains(pos))
                 return false;
             return this.Accepts(obj);
         }
-        public bool Accepts(Entity obj)
-        {
-            return this.Allowed[obj.Def].IsAllowed(obj);
-        }
+       
         internal bool Accepts(GameObject obj)
         {
             return obj is Entity item && this.Accepts(item);
@@ -174,7 +97,6 @@ namespace Start_a_Town_
                 .Select(p => p.Above);
             return emptyCells;
         }
-        
 
         public IEnumerable<TargetArgs> DistributeToStorageSpotsNewLazy(GameObject actor, GameObject obj)
         {
@@ -375,11 +297,7 @@ namespace Start_a_Town_
                 Packets.SyncPriority(FiltersView.Owner, p);
             }
         }
-        void InitStorageFilters()
-        {
-            foreach (var c in FiltersView.GetAllDescendantLeaves().GroupBy(l => l.Item))
-                this.Allowed.Add(c.Key, new(c.Key));
-        }
+        
         static StorageFilterCategoryNewNew InitFilters()
         {
             var cats = Def.Database.Values.OfType<ItemDef>().GroupBy(d => d.Category);
@@ -420,30 +338,19 @@ namespace Start_a_Town_
         }
         protected override void SaveExtra(SaveTag tag)
         {
-            this.Allowed.Values.SaveNewBEST(tag, "Filters");
+            tag.Add(this.Settings.Save("Settings"));
         }
         protected override void LoadExtra(SaveTag tag)
         {
-            tag.TryGetTag("Filters", t =>
-            {
-                var list = t.LoadList<ItemFilter>();
-                foreach (var r in list)
-                {
-                    if (r is null) // in case an itemdef has been changed/removed
-                        continue;
-                    this.Allowed[r.Item].CopyFrom(r);
-                }
-            });
+            tag.TryGetTag("Settings", t => this.Settings.Load(t));
         }
         protected override void WriteExtra(BinaryWriter w)
         {
             this.Settings.Write(w);
-            //this.Allowed.Values.Sync(w);
         }
         protected override void ReadExtra(BinaryReader r)
         {
             this.Settings.Read(r);
-            //this.Allowed.Values.Sync(r);
         }
 
         public void FiltersGuiCallback(ItemDef item, MaterialDef material)

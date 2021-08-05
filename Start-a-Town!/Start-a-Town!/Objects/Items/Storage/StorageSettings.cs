@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class StorageSettings : ISerializable
+    public class StorageSettings : ISerializable, ISaveable
     {
         public HashSet<StorageFilter> ActiveFilters = new(StorageFilter.CreateFilterSet());
         readonly Dictionary<ItemDef, ItemFilter> Allowed = new();
@@ -112,6 +112,28 @@ namespace Start_a_Town_
         {
             this.Priority = (StoragePriority)r.ReadByte();
             this.Allowed.Values.Sync(r);
+            return this;
+        }
+
+        public SaveTag Save(string name = "")
+        {
+            var tag = new SaveTag(SaveTag.Types.Compound, name);
+            this.Allowed.Values.SaveNewBEST(tag, "Filters");
+            return tag;
+        }
+
+        public ISaveable Load(SaveTag tag)
+        {
+            tag.TryGetTag("Filters", t =>
+            {
+                var list = t.LoadList<ItemFilter>();
+                foreach (var r in list)
+                {
+                    if (r is null) // in case an itemdef has been changed/removed
+                        continue;
+                    this.Allowed[r.Item].CopyFrom(r);
+                }
+            });
             return this;
         }
     }

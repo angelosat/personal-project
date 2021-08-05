@@ -72,7 +72,6 @@ namespace Start_a_Town_.UI
                 .HideOnAnyClick();
 
             this.Controls.Add(this.Button);
-
         }
         Button CreateButton(T i, Func<T, string> labelGetter, Action<T> callBack, int width)
         {

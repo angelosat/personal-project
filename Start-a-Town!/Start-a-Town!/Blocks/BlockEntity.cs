@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_.Blocks
 {
@@ -14,7 +14,7 @@ namespace Start_a_Town_.Blocks
         public MapBase Map;
         public bool Exists => this.Map is not null;
         public IntVec3 OriginGlobal;
-        BlockEntityCompCollection<BlockEntityComp> Comps = new();
+        readonly BlockEntityCompCollection<BlockEntityComp> Comps = new();
 
         public BlockEntity(IntVec3 originGlobal)
         {
@@ -27,23 +27,25 @@ namespace Start_a_Town_.Blocks
                 comp.Tick(this, map, global);
         }
         public virtual void GetTooltip(Control tooltip) { }
-        
+
         /// <summary>
         /// Dipose any children GameObjects here.
         /// </summary>
         public virtual void Dispose() { } // maybe make this abstract so i don't forget it?
-        public virtual void OnRemoved(MapBase map, Vector3 global) {
+        public virtual void OnRemoved(MapBase map, Vector3 global)
+        {
             foreach (var c in this.Comps)
                 c.Remove(map, global, this);
         }
         public virtual void Break(MapBase map, Vector3 global) { }
-        public virtual void Place(MapBase map, Vector3 global) 
+        public virtual void Place(MapBase map, Vector3 global)
         {
             foreach (var comp in this.Comps)
                 comp.OnEntitySpawn(this, map, global);
         }
 
-        public virtual GameObjectSlot GetChild(string containerName, int slotID) {
+        public virtual GameObjectSlot GetChild(string containerName, int slotID)
+        {
             throw new NotImplementedException();
         }
 
@@ -52,7 +54,7 @@ namespace Start_a_Town_.Blocks
         /// </summary>
         /// <returns></returns>
         public virtual List<GameObjectSlot> GetChildren() { return new List<GameObjectSlot>(); }
-       
+
         public bool HasComp<T>() where T : class, IBlockEntityComp
         {
             return this.GetComp<T>() != null;
@@ -107,7 +109,7 @@ namespace Start_a_Town_.Blocks
         {
             return this.Comps.FirstOrDefault(c => c is T) as T;
         }
-        public void Write(BinaryWriter w) 
+        public void Write(BinaryWriter w)
         {
             w.Write(this.OriginGlobal);
             this.CellsOccupied.Write(w);
@@ -136,7 +138,7 @@ namespace Start_a_Town_.Blocks
             }
         }
 
-        public virtual void Draw(Camera camera, MapBase map, IntVec3 global) 
+        public virtual void Draw(Camera camera, MapBase map, IntVec3 global)
         {
             foreach (var comp in this.Comps)
                 comp.Draw(camera, map, global);

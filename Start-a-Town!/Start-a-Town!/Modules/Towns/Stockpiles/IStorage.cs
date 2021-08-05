@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
     public interface IStorageNew
     {
         StorageSettings Settings { get; }
-        bool Accepts(ItemDef item, MaterialDef material, Def variation);
         void FiltersGuiCallback(ItemDef item, MaterialDef material);
         void FiltersGuiCallback(ItemDef item, Def variation);
         void FiltersGuiCallback(ItemCategory category);
+        Dictionary<TargetArgs, int> GetPotentialHaulTargets(Actor actor, GameObject item, out int maxamount);
+        IEnumerable<TargetArgs> GetPotentialHaulTargets(Actor actor, GameObject item);
     }
+    [Obsolete]
     public interface IStorage
     {
         MapBase Map { get; }

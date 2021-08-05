@@ -64,18 +64,14 @@ namespace Start_a_Town_.Towns
             switch (e.Type)
             {
                 case Components.Message.Types.BlockEntityAdded:
-                    var binEntity = e.Parameters[0] as IStorage;
-                    if (binEntity != null)
-                        
+                    if (e.Parameters[0] is IStorage)
                         this.Storages.Add((Vector3)e.Parameters[1]);
                     break;
 
                 case Components.Message.Types.BlockEntityRemoved:
-                    var entity = e.Parameters[0] as IStorage;
                     var global = (IntVec3)e.Parameters[1];
-                    if (entity != null)
+                    if (e.Parameters[0] is IStorage entity)
                     {
-                       
                         if (!(entity is IStorage))
                             throw new Exception();
                         if (!this.Storages.Contains(global))
@@ -113,9 +109,6 @@ namespace Start_a_Town_.Towns
         public override void Load(SaveTag tag)
         {
             this.Storages.LoadVectors(tag["Storages"]);
-            //if (tag.TryGetTagValue("Storages", out List<SaveTag> storagesTag))
-            //    foreach (var s in storagesTag)
-            //        this.Storages.Add(s.LoadVector3());
         }
 
         public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)

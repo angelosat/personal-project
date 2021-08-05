@@ -431,7 +431,6 @@
     <Compile Include="Modules\Construction\UI\BlockBrowserConstruction.cs" />
     <Compile Include="Modules\Crafting\IngredientRestrictions.cs" />
     <Compile Include="Modules\Towns\Stockpiles\PacketStorageFiltersNew.cs" />
-    <Compile Include="Modules\Towns\Stockpiles\PacketStorageFilters.cs" />
     <Compile Include="Modules\Visitors\AI\Needs\VisitorNeedsDefOf.cs" />
     <Compile Include="Modules\Visitors\Quests\InteractionGetQuest.cs" />
     <Compile Include="Modules\Visitors\Quests\Quest.cs" />

@@ -32,7 +32,6 @@ namespace Start_a_Town_.Towns
             PacketEntityDesignation.Init();
             PacketToggleForbidden.Init();
 
-            PacketStorageFilters.Init();
             //PacketStorageFiltersNew.Init();
 
             ZoneManager.Init();

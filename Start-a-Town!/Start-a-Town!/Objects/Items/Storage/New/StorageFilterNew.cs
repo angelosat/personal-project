@@ -9,7 +9,7 @@ namespace Start_a_Town_
         public StorageFilterCategoryNewNew Root => this.Parent.Root;
         internal IStorageNew Owner => this.Root.Owner;
         public string Label { get; set; }
-        public bool Enabled => this.Owner.Accepts(this.Item, this.Material, this.Variation);
+        public bool Enabled => this.Owner.Settings.Accepts(this.Item, this.Material, this.Variation);
         public readonly ItemDef Item;
         public readonly MaterialDef Material;
         public readonly Def Variation;

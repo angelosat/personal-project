@@ -55,8 +55,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             var saves = GetSaves();
             table.AddItems(saves);
-            //table.BackgroundColor = Color.Red;
-            //groupBox = ScrollableBoxNewNew.FromClientSize(table.RowWidth, 16 * table.RowHeight, ScrollModes.Vertical);
             groupBox = ScrollableBoxNewNew.FromClientSize(table.RowWidth, table.GetHeightFromRowCount(16), ScrollModes.Vertical);
             groupBox.AddControls(table);
             var tablePanel = groupBox.ToPanel();

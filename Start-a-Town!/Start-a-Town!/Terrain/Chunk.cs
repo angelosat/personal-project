@@ -1120,17 +1120,28 @@ namespace Start_a_Town_
             var w = writer;
             int consecutiveAirblocks = 0;
             bool lastDiscovered = false;
+            bool foundAir = false;
             foreach (var cell in this.CellGrid2)
             {
                 if (cell.Block == BlockDefOf.Air)
                 {
                     consecutiveAirblocks++;
-                    lastDiscovered = cell.Discovered;
+                    if (!foundAir)
+                    {
+                        foundAir = true;
+                        lastDiscovered = cell.Discovered;
+                    }
+                    else if (lastDiscovered != cell.Discovered)
+                    {
+                        foundAir = false;
+                        writeAir(w, consecutiveAirblocks, lastDiscovered);
+                        consecutiveAirblocks = 0;
+                    }
                     continue;
                 }
                 if (consecutiveAirblocks > 0)
                 {
-                    // write air block length
+                    foundAir = false;
                     writeAir(w, consecutiveAirblocks, lastDiscovered);
                     consecutiveAirblocks = 0;
                 }
@@ -1141,13 +1152,12 @@ namespace Start_a_Town_
             if (consecutiveAirblocks > 0)
                 writeAir(w, consecutiveAirblocks, lastDiscovered);
 
-            //w.Write(-1);
-
             static void writeAir(BinaryWriter w, int consecutiveAirblocks, bool lastDiscovered)
             {
                 w.Write(BlockDefOf.Air);
                 w.Write(consecutiveAirblocks);
                 w.Write(lastDiscovered); // because all consecutive air blocks are either all discovered or none is
+                /// NO!!!! when incrementing the cell index, the next cell can be in a different Z level and completely disconnected from the previous cell
             }
             //var w = writer;
             //int consecutiveAirblocks = 0;
@@ -1495,8 +1505,7 @@ namespace Start_a_Town_
                     for (int i = n; i < n + airCount; i++)
                     {
                         var c = this.CellGrid2[i];
-                        c.Discovered = airDiscovered;
-
+                        c.Discovered = false;// airDiscovered;
                     }
 
                     n += airCount;

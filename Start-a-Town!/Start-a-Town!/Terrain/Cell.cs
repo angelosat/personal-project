@@ -154,7 +154,6 @@ namespace Start_a_Town_
 
         public void Write(BinaryWriter w)
         {
-            w.Write(this.Block.Hash);
             w.Write(this.Block);
             w.Write(this.X);
             w.Write(this.Y);
@@ -162,7 +161,7 @@ namespace Start_a_Town_
             w.Write(this.Variation);
             w.Write(this.Data.Data);
             //writer.Write(this.BlockData);
-            w.Write(this.Discovered);
+            w.Write(this.ValidDiscovered);
 
         }
         public Cell Read(BinaryReader r)
@@ -174,7 +173,8 @@ namespace Start_a_Town_
             this.Variation = r.ReadByte();
             this.Data = new BitVector32(r.ReadInt32());
             //this.BlockData = reader.ReadByte();
-            this.Discovered = r.ReadBoolean();
+            this.ValidDiscovered = new BitVector32(r.ReadInt32());
+            //this.Discovered = r.ReadBoolean();
             return this;
         }
 

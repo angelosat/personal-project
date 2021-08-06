@@ -71,13 +71,6 @@ namespace Start_a_Town_.UI
                     this.TextBox.Enabled = false;
                     this.TextBox.Text = "";
                     this.Controls.Remove(this.Panel_Input);
-                }
-                ,
-                InputFunc = (text, ch) =>
-                {
-                    if (char.IsControl(ch))
-                        return text;
-                    return text + ch;
                 },
                 HistoryNextPrev = this.ChatHistory
             };

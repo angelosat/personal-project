@@ -20,9 +20,7 @@ namespace Start_a_Town_.UI
         const int CursorWidth = 1; //3;
         int _SelectionStart = 0;
         bool CursorVisible;
-        public Func<char, bool> InputFilter = c => true;
-        [Obsolete]
-        public Func<string, char, string> InputFunc = (current, input) => char.IsControl(input) ? current : (current + input);
+        public Func<char, bool> InputFilter = char.IsLetterOrDigit;// c => true;
         public Action<KeyPressEventArgs> TextEnterFunc = (e) => { };
         public Action<string> EnterFunc = (text) => { };
         public Action<KeyPressEventArgs> EscapeFunc = (e) => { };
@@ -191,13 +189,11 @@ namespace Start_a_Town_.UI
             {
                 case 37:
                     this.CursorPosition--;
-                    this.CursorVisible = true;
-                    this.CursorTimer = CursorTimerMax;
+                    this.RefreshCursor();
                     break;
                 case 39:
                     this.CursorPosition++;
-                    this.CursorVisible = true;
-                    this.CursorTimer = CursorTimerMax;
+                    this.RefreshCursor();
                     break;
 
                 default:
@@ -239,7 +235,12 @@ namespace Start_a_Town_.UI
             switch (e.KeyChar)
             {
                 case '\b':
-                    this.Text = this.Text.Length > 0 ? this.Text.Remove(this.Text.Length - 1) : "";
+                    //this.Text = this.Text.Length > 0 ? this.Text.Remove(this.Text.Length - 1) : "";
+                    if (this.CursorPosition == 0)
+                        break;
+                    this.Text = this.Text.Length > 0 ? this.Text.Remove(this.CursorPosition - 1, 1) : "";
+                    this.CursorPosition--;
+                    this.RefreshCursor();
                     this.OnTextEntered(e.KeyChar);
                     break;
 
@@ -261,16 +262,25 @@ namespace Start_a_Town_.UI
                 default:
                     if (this.Text.Length == this.MaxLength)
                         break;
+                    if (char.IsControl(e.KeyChar))
+                        break;
                     if (!this.InputFilter(e.KeyChar))
                         break;
                     var cursor = this.CursorPosition;
                     //this.Text = this.InputFunc(this.Text, e.KeyChar);
                     this.Text = this.Text.Insert(cursor, e.KeyChar.ToString());
                     this.CursorPosition = cursor + 1;
+                    this.RefreshCursor();
                     this.TextEnterFunc(e);
                     this.OnTextEntered(e.KeyChar);
                     break;
             }
+        }
+
+        private void RefreshCursor()
+        {
+            this.CursorVisible = true;
+            this.CursorTimer = CursorTimerMax;
         }
 
         public override void HandleKeyUp(KeyEventArgs e)

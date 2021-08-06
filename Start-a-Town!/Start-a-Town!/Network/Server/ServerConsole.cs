@@ -20,10 +20,6 @@ namespace Start_a_Town_.Net
                 {
                     if (text.Length > 0)
                         Server.Command(text);
-                },
-                InputFunc = (prev, c) =>
-                {
-                    return char.IsControl(c) ? prev : (prev + c);
                 }
             };
             input.Controls.Add(txtbox);

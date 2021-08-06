@@ -43,17 +43,8 @@ namespace Start_a_Town_
             host = hostnode != null ? hostnode.Value : host;
 
             var labelname = new Label("Player name");
-            Txt_Name = new TextBox(this.Client.Controls.TopRight)
-            {
-                Text = name,
-                Width = btnWidth
-            };
-            Txt_Name.InputFunc = (t, c) =>
-            {
-                if (char.IsLetter(c))
-                    return t + c;
-                return t;
-            };
+            Txt_Name = new TextBox(name, btnWidth) { Location = this.Client.Controls.TopRight };
+            
             var labelhost = new Label("Host address");
             this.TxtBox_HostName = new TextBox()
             {

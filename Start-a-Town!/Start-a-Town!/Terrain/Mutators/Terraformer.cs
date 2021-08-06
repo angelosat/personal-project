@@ -113,18 +113,25 @@ namespace Start_a_Town_
                 TextBox input;
                 var slider = new SliderNew(() => item.Value, v => item.Value = v, 100, item.Min, item.Max, item.Step);
                 input = new TextBox(50) { Location = slider.TopRight, Text = item.Value.ToString() };
-                //slider.ValueSetter = value => input.Text = value.ToString();
-                input.InputFunc = (txt, ch) =>
+                input.TextChangedFunc = newtxt =>
                 {
-                    if (!char.IsDigit(ch))
-                        return txt;
-                    string newtxt = txt + ch;
                     float newValue = int.Parse(newtxt);
                     newValue = (float)(Math.Round(newValue / item.Step) * item.Step);
                     newValue = MathHelper.Clamp(newValue, item.Min, item.Max);
-                    newtxt = newValue.ToString();
-                    return newtxt;
+                    input.Text = newValue.ToString();
                 };
+                /// THIS IS THE OLD CODE TO CORRECT INVALID VALUE ENTERED
+                //input.InputFunc = (txt, ch) =>
+                //{
+                //    if (!char.IsDigit(ch))
+                //        return txt;
+                //    string newtxt = txt + ch;
+                //    float newValue = int.Parse(newtxt);
+                //    newValue = (float)(Math.Round(newValue / item.Step) * item.Step);
+                //    newValue = MathHelper.Clamp(newValue, item.Min, item.Max);
+                //    newtxt = newValue.ToString();
+                //    return newtxt;
+                //};
                 input.TextChangedFunc = txt =>
                 {
                     if (string.IsNullOrEmpty(txt) || string.IsNullOrWhiteSpace(txt))

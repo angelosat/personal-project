@@ -922,9 +922,17 @@ namespace Start_a_Town_.UI
         }
         public virtual Control AddControlsSmart(params Control[] controls)
         {
+            //foreach (var ctrl in controls)
+            //{
+            //    var rect = this.FindBestUncoveredRectangle(ctrl.Size.Width, ctrl.Size.Height);
+            //    ctrl.Location = new Vector2(rect.Left, rect.Top);
+            //}
+
+            var existing = this.Controls.Select(c => c.ContainerSize).ToList();
             foreach (var ctrl in controls)
             {
-                var rect = this.FindBestUncoveredRectangle(ctrl.Size.Width, ctrl.Size.Height);
+                var rect = this.ContainerSize.FindBestUncoveredRectangle(existing, ctrl.Size.Width, ctrl.Size.Height);
+                existing.Add(new Rectangle(rect.X, rect.Y, ctrl.Width, ctrl.Height));
                 ctrl.Location = new Vector2(rect.Left, rect.Top);
             }
             this.AddControls(controls);

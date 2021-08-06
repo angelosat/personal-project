@@ -8,6 +8,37 @@ namespace Start_a_Town_
 {
     static public class RectangleHelper
     {
+        public static Rectangle FindBestUncoveredRectangle(this Rectangle container, List<Rectangle> existingRectangles, int w, int h)
+        {
+            var freeRects = GetFreeRectangles(container, existingRectangles);
+            var bestRect = new Rectangle(0, 0, w, h);
+            var ordered = freeRects.OrderBy(r => new Vector2(r.X, r.Y).LengthSquared()).ToList();
+            foreach (var rect in ordered)
+            {
+                if (w <= rect.Width && h <= rect.Height)
+                    return rect;
+            }
+            return bestRect;
+        }
+        static List<Rectangle> GetFreeRectangles(Rectangle container, List<Rectangle> children)
+        {
+            var freeRects = new List<Rectangle>() { container };
+            foreach (var child in children) // TODO: fix HUD being a control itself
+            {
+                foreach (var rect in freeRects.ToList())
+                {
+                    if (rect.Intersects(child))
+                    {
+                        freeRects.Remove(rect);
+                        var divisions = DivideScreenQuad(rect, child);
+                        foreach (var div in divisions)
+                            if (!freeRects.Contains(div))
+                                freeRects.Add(div);
+                    }
+                }
+            }
+            return freeRects;
+        }
         static public Rectangle FindBestUncoveredRectangle(this IBoundedCollection container, int w, int h)
         {
             var freeRects = GetFreeRectangles(container);
@@ -49,6 +80,7 @@ namespace Start_a_Town_
             }
             return freeRects;
         }
+
         static List<Rectangle> DivideScreenQuad(Rectangle screen, Rectangle rect)
         {
             var right = rect.X + rect.Width;

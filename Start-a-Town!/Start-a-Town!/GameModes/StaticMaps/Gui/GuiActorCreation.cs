@@ -6,6 +6,8 @@ namespace Start_a_Town_
 {
     class GuiActorCreation : GroupBox
     {
+        readonly GuiCharacterCustomization GuiCustomization = new();
+        
         public GuiActorCreation(List<Actor> actors)
         {
             actors.AddRange(new[] { Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc) });
@@ -48,8 +50,6 @@ namespace Start_a_Town_
                 return btn;
             }
         }
-
-        readonly GuiCharacterCustomization GuiCustomization = new();
 
         private void Expand(Actor a, Control editbox)
         {

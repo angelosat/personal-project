@@ -11,4 +11,9 @@ namespace UI
         Rectangle ContainerSize { get; }
         IBounded[] Children { get; }
     }
+    public class BoundedCollection
+    {
+        Rectangle ContainerSize { get; }
+        Rectangle[] Children { get; }
+    }
 }

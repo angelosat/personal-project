@@ -92,7 +92,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public StaticMap(string name = "")
         {
             this.LightingEngine = new LightingEngine(this);
-            this.Camera = new Camera((int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y);
+            this.Camera = new Camera(Game1.ScreenSize.Width, Game1.ScreenSize.Height);
             this.Name = name;
             this.ActiveChunks = new Dictionary<Vector2, Chunk>();
             this.Thumbnails = new Texture2D[3];

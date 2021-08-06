@@ -74,9 +74,10 @@ namespace Start_a_Town_.UI
 
         public Control AnchorToScreenCenter()
         {
-            this.Location = Vector2.Zero;
-            this.LocationFunc = () => UIManager.Center;
-            this.Anchor = new(.5f);
+            //this.Location = Vector2.Zero;
+            //this.LocationFunc = () => UIManager.Center;
+            //this.Anchor = new(.5f);
+            this.LocationFunc = () => new Vector2(UIManager.Width - this.Width, UIManager.Height - this.Height) / 2;
             return this;
         }
         public Control CenterLeftScreen()

@@ -27,8 +27,8 @@ namespace Start_a_Town_
         }
 
         public byte[] KeyState = new byte[256], LastKeyState;
-        public Vector2 LastMouse;
-        public Vector2 CurrentMouse;
+        //public Vector2 LastMouse;
+        //public Vector2 CurrentMouse;
         public KeyboardState CurrentKeyboardState, LastKeyboardState;
         public MouseState CurrentMouseState, LastMouseState;
 
@@ -114,8 +114,8 @@ namespace Start_a_Town_
             LastMouseState = CurrentMouseState;
             CurrentKeyboardState = Keyboard.GetState();
             CurrentMouseState = Mouse.GetState();
-            this.LastMouse = this.CurrentMouse;
-            this.CurrentMouse = new Vector2(System.Windows.Forms.Control.MousePosition.X - Game1.Instance.Window.ClientBounds.X, System.Windows.Forms.Control.MousePosition.Y - Game1.Instance.Window.ClientBounds.Y);
+            //this.LastMouse = this.CurrentMouse;
+            //this.CurrentMouse = new Vector2(System.Windows.Forms.Control.MousePosition.X - Game1.Instance.Window.ClientBounds.X, System.Windows.Forms.Control.MousePosition.Y - Game1.Instance.Window.ClientBounds.Y);
         }
     }
 }

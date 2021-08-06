@@ -68,9 +68,11 @@ namespace Start_a_Town_.UI
         public readonly DialogBlock DialogBlock = new DialogBlock();
 
         public static Rectangle Bounds => new Rectangle(0, 0, Width, Height);
-        public static Vector2 Center => Game1.ScreenSize / (2 * Scale);
-        public static int Width => (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
-        public static int Height => (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
+        public static Vector2 Center => new Vector2(Game1.ScreenSize.Width, Game1.ScreenSize.Height) / (2 * Scale);
+        //public static int Width => (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
+        //public static int Height => (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
+        public static int Width => (int)(Game1.ScreenSize.Width / Scale);
+        public static int Height => (int)(Game1.ScreenSize.Height / Scale);
 
         public static Vector2 Size => new(Width, Height);
         public static Vector2 Mouse => Controller.Instance.MouseLocation;// / Scale;
@@ -245,7 +247,8 @@ namespace Start_a_Town_.UI
         {
             int newWidth = Game1.Instance.graphics.PreferredBackBufferWidth;
             int newHeight = Game1.Instance.graphics.PreferredBackBufferHeight;
-
+            //int newWidth = Game1.ScreenSize.Width;
+            //int newHeight = Game1.ScreenSize.Height;
             float wRatio = newWidth / (float)this.LastScreenWidth;
             float hRatio = newHeight / (float)this.LastScreenHeight;
 
@@ -253,6 +256,7 @@ namespace Start_a_Town_.UI
             this.LastScreenHeight = newHeight;
 
             UITexture = new RenderTarget2D(Game1.Instance.GraphicsDevice, newWidth, newHeight);
+            var t = Game1.Instance;
             foreach (Control ctrl in this.ControlsInMemory)
             {
                 ctrl.Reposition(new Vector2(wRatio, hRatio));
@@ -288,7 +292,7 @@ namespace Start_a_Town_.UI
                 foreach (var ctrl in layer.Value.ToList())
                 {
                     ctrl.Update();
-                    ctrl.Update(new Rectangle(0, 0, (int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y));
+                    ctrl.Update(new Rectangle(0, 0, Game1.ScreenSize.Width, Game1.ScreenSize.Height));
                 }
             }
 
@@ -337,7 +341,11 @@ namespace Start_a_Town_.UI
         {
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;
 
+            if (UITexture != null)
+                if (UITexture.Width != Width || UITexture.Height != Height)
+                    UITexture = null;
             RenderTarget2D uiTexture = UITexture ??= new RenderTarget2D(Game1.Instance.GraphicsDevice, Width, Height); // wtf
+
             gd.SetRenderTarget(uiTexture);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
@@ -356,7 +364,10 @@ namespace Start_a_Town_.UI
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Scale % 1 > 0 ? SamplerState.AnisotropicClamp : SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
             if (camera is not null)
                 this.DrawOnCamera(sb, camera); //moved this here, because we dont want it drawn to ui scale
-            sb.Draw(uiTexture, new Rectangle(0, 0, (int)Game1.ScreenSize.X, (int)Game1.ScreenSize.Y), Color.White);
+            sb.Draw(uiTexture, new Rectangle(0, 0, Game1.ScreenSize.Width, Game1.ScreenSize.Height), Color.White);
+            //DrawStringOutlined(sb, UIManager.Mouse.ToString(), UIManager.Mouse);
+            DrawStringOutlined(sb, Controller.Instance.msCurrent.ToString(), UIManager.Mouse);
+
             sb.End();
         }
         public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Vector2 texOrigin, Color fill, Color outline, SpriteFont font)

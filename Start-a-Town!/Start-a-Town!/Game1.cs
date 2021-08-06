@@ -31,9 +31,9 @@ namespace Start_a_Town_
         double FpsTimer;
         int Fps;
 
-        bool DeviceReset = false;
 
-        static public Vector2 ScreenSize { get; set; }
+        //static public Rectangle ScreenSize => new(0, 0, Instance.graphics.PreferredBackBufferWidth, Instance.graphics.PreferredBackBufferHeight);// Instance.Window.ClientBounds; //new Rectangle(0,0, Instance.GraphicsDevice.DisplayMode.Width, Instance.GraphicsDevice.DisplayMode.Height);// 
+        static public Rectangle ScreenSize => Instance.Window.ClientBounds; //new Rectangle(0,0, Instance.GraphicsDevice.DisplayMode.Width, Instance.GraphicsDevice.DisplayMode.Height);// 
         static public Rectangle Bounds => Instance.GraphicsDevice.Viewport.Bounds;
 
         public List<GameComponent> GameComponents = new();
@@ -57,9 +57,8 @@ namespace Start_a_Town_
             graphics.DeviceReset += new EventHandler<EventArgs>(graphics_DeviceReset);
             graphics.DeviceResetting += new EventHandler<EventArgs>(graphics_DeviceResetting);
             graphics.DeviceCreated += new EventHandler<EventArgs>(graphics_DeviceCreated);
-            Window.AllowUserResizing = true;
+            Window.AllowUserResizing = false;// true;
             Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
-            
             this.IsMouseVisible = true;
 
             // put these here to prevent thousands of framerate in the menus resulting in gpu whine noise
@@ -70,10 +69,11 @@ namespace Start_a_Town_
         void Window_ClientSizeChanged(object sender, EventArgs e)
         {
             var displayMode = Instance.graphics.GraphicsDevice.Adapter.SupportedDisplayModes[SurfaceFormat.Color].First();
-            graphics.PreferredBackBufferWidth = Math.Max(displayMode.Width, Instance.Window.ClientBounds.Width);
-            graphics.PreferredBackBufferHeight = Math.Max(displayMode.Height, Instance.Window.ClientBounds.Height);
+            //graphics.PreferredBackBufferWidth = displayMode.Width;// Math.Max(displayMode.Width, Instance.Window.ClientBounds.Width);
+            //graphics.PreferredBackBufferHeight = displayMode.Height;// Math.Max(displayMode.Height, Instance.Window.ClientBounds.Height);
+            graphics.PreferredBackBufferWidth = Instance.Window.ClientBounds.Width;
+            graphics.PreferredBackBufferHeight = Instance.Window.ClientBounds.Height;
             graphics.ApplyChanges();
-
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Width").Value = graphics.PreferredBackBufferWidth.ToString();
             Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Height").Value = graphics.PreferredBackBufferHeight.ToString();
             Engine.Config.Save("config.xml");
@@ -90,6 +90,17 @@ namespace Start_a_Town_
             graphics.PreferredBackBufferWidth = (int?)resolution.Element("Resolution").Element("Width") ?? graphics.PreferredBackBufferWidth;
             graphics.PreferredBackBufferHeight = (int?)resolution.Element("Resolution").Element("Height") ?? graphics.PreferredBackBufferHeight;
             graphics.IsFullScreen = (bool?)resolution.Element("Fullscreen") ?? true;
+            ToggleBorderlessFullscreen();
+        }
+
+        public static void ToggleBorderlessFullscreen()
+        {
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Form gameForm = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(Game1.Instance.Window.Handle);
+            if (Instance.GraphicsDevice.Adapter.CurrentDisplayMode is var mode && mode.Width == Instance.graphics.PreferredBackBufferWidth && mode.Height == Instance.graphics.PreferredBackBufferHeight)
+                gameForm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            else
+                gameForm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
         }
 
         void graphics_DeviceResetting(object sender, EventArgs e)
@@ -99,7 +110,6 @@ namespace Start_a_Town_
 
         void graphics_DeviceReset(object sender, EventArgs e)
         {
-            this.DeviceReset = true;
             "reset".ToConsole();
         }
 
@@ -134,9 +144,6 @@ namespace Start_a_Town_
         /// </summary>
         protected override void LoadContent()
         {
-            ScreenSize = new Vector2(
-                      Instance.Window.ClientBounds.Width,
-                      Instance.Window.ClientBounds.Height);
             spriteBatch = new SpriteBatch(Game1.Instance.GraphicsDevice);
             UIManager.LoadContent();
             ScreenManager.LoadContent();
@@ -205,9 +212,7 @@ namespace Start_a_Town_
             //    UIManager.Atlas.OnDeviceLost();
             //    DeviceReset = false;
             //}
-            ScreenSize = new Vector2(
-                        Instance.Window.ClientBounds.Width,
-                        Instance.Window.ClientBounds.Height);
+          
             // fixed time step
             double currentTime, updateIterations;
             currentTime = gameTime.TotalGameTime.TotalSeconds;

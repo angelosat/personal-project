@@ -15,12 +15,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var tab_World = new GroupBox();
             var label_mapsize = new Label("Map size");
 
-            var guiname = TextBox.CreateWithLabel("Name", 150, out _, out var txtboxname);
-            txtboxname.Text = StaticWorld.GetRandomName();
+            var guiname = TextBox.CreateWithLabel("Name", StaticWorld.GetRandomName(), 150, out _, out var txtboxname);
             txtboxname.InputFilter = char.IsLetterOrDigit;
 
-            var seedBox = TextBox.CreateWithLabel("Seed", 150, out var lbl_seed, out var txt_Seed);
-            txt_Seed.Text = Path.GetRandomFileName().Replace(".", "");
+            var seedBox = TextBox.CreateWithLabel("Seed", Path.GetRandomFileName().Replace(".", ""), 150, out var lbl_seed, out var txt_Seed);
             txt_Seed.InputFilter = char.IsLetterOrDigit;
 
             var btn_randomSeed = new IconButton()

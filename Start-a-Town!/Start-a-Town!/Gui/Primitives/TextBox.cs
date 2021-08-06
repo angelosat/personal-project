@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Windows.Forms;
+using System;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Start_a_Town_.UI
 {
@@ -11,26 +11,35 @@ namespace Start_a_Town_.UI
         public char Char;
         public TextEventArgs(char c)
         {
-            Char = c;
+            this.Char = c;
         }
     }
 
     public class TextBox : Label
     {
+        const int CursorWidth = 1; //3;
         int _SelectionStart = 0;
         bool CursorVisible;
         public Func<char, bool> InputFilter = c => true;
-        public Func<string, char, string> InputFunc = (current, input) => char.IsControl(input) ? current : (current + input);              
+        [Obsolete]
+        public Func<string, char, string> InputFunc = (current, input) => char.IsControl(input) ? current : (current + input);
         public Action<KeyPressEventArgs> TextEnterFunc = (e) => { };
-
-        
-
         public Action<string> EnterFunc = (text) => { };
         public Action<KeyPressEventArgs> EscapeFunc = (e) => { };
         public Action<string> TextChangedFunc = txt => { };
         public int MaxLength = int.MaxValue;
-        int Timer = TimerMax;
-
+        int CursorTimer = CursorTimerMax;
+        int _cursorPosition;// = int.MaxValue;
+        int CursorPosition
+        {
+            get => this._cursorPosition;
+            set => this._cursorPosition = Math.Max(0, Math.Min(this.Text.Length, value));
+        }
+        public override string Text
+        {
+            get => base.Text; 
+            set => base.Text = value;
+        }
         protected override void OnTextChanged()
         {
             this.Invalidate();
@@ -39,27 +48,27 @@ namespace Start_a_Town_.UI
         protected virtual void OnTextEntered(char c)
         {
             TextEntered?.Invoke(this, new TextEventArgs(c));
-            TextChangedFunc(this.Text);
+            this.TextChangedFunc(this.Text);
         }
 
         public int SelectionStart
         {
-            get { return _SelectionStart; }
-            set { _SelectionStart = value; }
+            get => this._SelectionStart;
+            set => this._SelectionStart = value;
         }
 
         public TextBox() : base()
-        { 
-            Active = true;
+        {
+            this.Active = true;
             this.BackgroundColor = Color.Black * 0.5f;
             this.BackgroundColor = Color.White * .1f;
-    }
-        public TextBox(Vector2 position) : this() { Location = position; }
+        }
+        public TextBox(Vector2 position) : this() { this.Location = position; }
         public TextBox(Vector2 position, Vector2 size)
             : this(position)
         {
             this.Width = (int)size.X;
-            this.Height = (int)size.Y; 
+            this.Height = (int)size.Y;
         }
         public TextBox(int width)
             : this()
@@ -67,103 +76,102 @@ namespace Start_a_Town_.UI
             this.Width = width;
             this.Height = DefaultHeight;
         }
-        readonly static int TimerMax = (int)(Engine.TicksPerSecond / 2f);
+        public TextBox(string initialText, int width)
+            : this()
+        {
+            this.Text = initialText;
+            this.Width = width;
+            this.Height = DefaultHeight;
+            this.CursorPosition = this.Text.Length;
+        }
+        static readonly int CursorTimerMax = (int)(Engine.TicksPerSecond / 2f);
         public override void Update()
         {
             base.Update();
             if (!this.Enabled)
                 return;
-            this.Timer++;
-            if (this.Timer <= 0)
+            this.CursorTimer--;
+            if (this.CursorTimer <= 0)
             {
-                CursorTimer_Tick();
-                this.Timer = TimerMax;
+                this.CursorTimer_Tick();
+                this.CursorTimer = CursorTimerMax;
             }
         }
         void CursorTimer_Tick()
         {
-            CursorVisible = !CursorVisible;
-            this.Invalidate();
+            this.CursorVisible = !this.CursorVisible;
+            //this.Invalidate();
         }
 
         public override int Height
         {
-            get
-            {
-                return UIManager.LineHeight;
-            }
-            set
-            {
-                base.Height = value;
-            }
+            get => UIManager.LineHeight;
+            set => base.Height = value;
         }
 
         public override void Select()
         {
-            Enabled = true;
+            this.Enabled = true;
             base.Select();
         }
 
         public override void Unselect()
         {
-            Enabled = false;
+            this.Enabled = false;
             base.Unselect();
         }
 
         public override void OnLostFocus()
         {
-            Enabled = false;
+            this.Enabled = false;
             base.OnLostFocus();
         }
 
         bool _Enabled;
         public bool Enabled
         {
-            get { return _Enabled; }
+            get => this._Enabled;
             set
             {
-                bool old = _Enabled;
-                _Enabled = value;
-                if (_Enabled)
+                bool old = this._Enabled;
+                this._Enabled = value;
+                if (this._Enabled)
                 {
                     if (!old)
                     {
-                        this.Timer = TimerMax;
-                        CursorVisible = true;
+                        this.CursorTimer = CursorTimerMax;
+                        this.CursorVisible = true;
                     }
                 }
                 else
-                {
-                    CursorVisible = false;
-                }
+                    this.CursorVisible = false;
                 this.Invalidate();
             }
         }
-        public override void OnPaint(SpriteBatch sb)
+        public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
-            base.OnPaint(sb);
-            if (CursorVisible)
+            base.Draw(sb, viewport);
+            if (this.CursorVisible)
             {
-                Vector2 textbounds = UIManager.Font.MeasureString(Text);
-                sb.Draw(UIManager.Highlight, new Rectangle((int)textbounds.X, 0, 3, Height), Color.White);
+                var textbounds = UIManager.Font.MeasureString(this.Text.Substring(0, this.CursorPosition));
+                sb.Draw(UIManager.Highlight, new Rectangle((int)this.ScreenClientLocation.X + (int)textbounds.X, (int)this.ScreenClientLocation.Y, CursorWidth, this.Height), Color.White);
             }
         }
-
         public override void Dispose()
         {
-            Texture.Dispose();
+            this.Texture.Dispose();
         }
 
         public void AppendText(string text)
         {
-            Text += text;
+            this.Text += text;
         }
 
         public Action<int> HistoryNextPrev = i => { };
 
         public override void HandleKeyDown(KeyEventArgs e)
         {
-            if (!Enabled)
+            if (!this.Enabled)
                 return;
             if (e.Handled)
                 return;
@@ -172,23 +180,26 @@ namespace Start_a_Town_.UI
             switch (e.KeyCode)
             {
                 case Keys.Enter:
-                    EnterFunc(this.Text);
+                    this.EnterFunc(this.Text);
                     this.Text = "";
                     break;
                 default:
                     break;
             }
 
-
             switch (e.KeyValue)
             {
                 case 37:
-                    Console.WriteLine("back");
+                    this.CursorPosition--;
+                    this.CursorVisible = true;
+                    this.CursorTimer = CursorTimerMax;
                     break;
                 case 39:
-                    Console.WriteLine("forward");
+                    this.CursorPosition++;
+                    this.CursorVisible = true;
+                    this.CursorTimer = CursorTimerMax;
                     break;
-               
+
                 default:
                     if ((Keys)e.KeyValue == Keys.Up ||
                         (Keys)e.KeyValue == Keys.Down)
@@ -202,7 +213,7 @@ namespace Start_a_Town_.UI
 
         void GetTextFromClipboard()
         {
-            Text += Clipboard.ContainsText() ? Clipboard.GetText() : "";
+            this.Text += Clipboard.ContainsText() ? Clipboard.GetText() : "";
         }
 
         /// <summary>
@@ -210,17 +221,17 @@ namespace Start_a_Town_.UI
         /// </summary>
         public override BackgroundStyle BackgroundStyle
         {
-            get { return _BackgroundStyle; }
+            get => this._BackgroundStyle;
             set
             {
-                _BackgroundStyle = value;
-                ClientLocation = new Vector2(_BackgroundStyle.Border);
+                this._BackgroundStyle = value;
+                this.ClientLocation = new Vector2(this._BackgroundStyle.Border);
             }
         }
 
         public override void HandleKeyPress(KeyPressEventArgs e)
         {
-            if (!Enabled)
+            if (!this.Enabled)
                 return;
             if (e.Handled)
                 return;
@@ -228,12 +239,12 @@ namespace Start_a_Town_.UI
             switch (e.KeyChar)
             {
                 case '\b':
-                    Text = Text.Length > 0 ? Text.Remove(Text.Length - 1) : "";
-                    OnTextEntered(e.KeyChar);
+                    this.Text = this.Text.Length > 0 ? this.Text.Remove(this.Text.Length - 1) : "";
+                    this.OnTextEntered(e.KeyChar);
                     break;
 
                 case (char)27: //escape
-                    EscapeFunc(e);
+                    this.EscapeFunc(e);
                     break;
 
                 //case '\r'://13) //enter
@@ -242,7 +253,7 @@ namespace Start_a_Town_.UI
                 //    break;
 
                 case (char)22: //paste
-                    Thread t = new Thread(GetTextFromClipboard);
+                    var t = new Thread(this.GetTextFromClipboard);
                     t.SetApartmentState(ApartmentState.STA);
                     t.Start();
                     break;
@@ -252,16 +263,19 @@ namespace Start_a_Town_.UI
                         break;
                     if (!this.InputFilter(e.KeyChar))
                         break;
-                    this.Text = InputFunc(this.Text, e.KeyChar);
-                    TextEnterFunc(e);
-                    OnTextEntered(e.KeyChar);
+                    var cursor = this.CursorPosition;
+                    //this.Text = this.InputFunc(this.Text, e.KeyChar);
+                    this.Text = this.Text.Insert(cursor, e.KeyChar.ToString());
+                    this.CursorPosition = cursor + 1;
+                    this.TextEnterFunc(e);
+                    this.OnTextEntered(e.KeyChar);
                     break;
             }
         }
 
         public override void HandleKeyUp(KeyEventArgs e)
         {
-            if (!Enabled)
+            if (!this.Enabled)
                 return;
             if (e.Handled)
                 return;
@@ -269,14 +283,14 @@ namespace Start_a_Town_.UI
             switch (e.KeyValue)
             {
                 case 27: //escape
-                    Enabled = false;
+                    this.Enabled = false;
                     break;
                 default:
                     break;
             }
         }
 
-        static public void DefaultTextHandling(TextBox txtBox, TextEventArgs e)
+        public static void DefaultTextHandling(TextBox txtBox, TextEventArgs e)
         {
             if (e.Char == 13) //enter
             {
@@ -290,17 +304,14 @@ namespace Start_a_Town_.UI
                 txtBox.Text += e.Char;
         }
 
-        internal static GroupBox CreateWithLabel(string name, int width, out Label label, out TextBox textBox)
+        internal static GroupBox CreateWithLabel(string name, string initialText, int width, out Label label, out TextBox textBox)
         {
             label = new Label($"{name}: ");
-            textBox = new TextBox(width);
-            return new GroupBox() //{ BackgroundColor = UIManager.DefaultListItemBackgroundColor }
-                .AddControlsHorizontally( //Vertically(//
+            textBox = new TextBox(initialText, width);
+            return new GroupBox()
+                .AddControlsHorizontally(
                     label,
                     textBox) as GroupBox;
-            //return new GroupBox() { BackgroundColor = UIManager.DefaultListItemBackgroundColor }.AddControlsVertically(//Horizontally(
-            //    new Label(label),
-            //    new TextBox(width)) as GroupBox;
         }
     }
 }

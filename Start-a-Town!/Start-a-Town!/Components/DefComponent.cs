@@ -89,7 +89,8 @@ namespace Start_a_Town_
             {
                 Font = UIManager.FontBold,
                 TextFunc = () => parent.Name,
-                TintFunc = parent.GetNameplateColor,
+                TextColorFunc = parent.GetNameplateColor,
+                //TintFunc = parent.GetNameplateColor, // we dont want tintfunc, we want to change textcolorfunc directly because the default textcolor is UIManager.DefaultTextColor = Color.LightGray
                 MouseThrough = true,
                 TextBackgroundFunc = () => parent.HasFocus() ? this.Quality.Color * .5f : Color.Black * .5f
             });

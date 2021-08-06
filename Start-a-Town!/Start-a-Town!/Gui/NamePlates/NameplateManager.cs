@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Start_a_Town_.UI;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -14,6 +13,8 @@ namespace Start_a_Town_
         readonly NameplatesContainer Container = new();
         readonly NameplatesContainer ContainerActors = new();
         public override Rectangle BoundsScreen => UIManager.Bounds;
+        public override int Width { get => BoundsScreen.Width; }
+        public override int Height { get => BoundsScreen.Height; }
 
         public NameplateManager()
         {

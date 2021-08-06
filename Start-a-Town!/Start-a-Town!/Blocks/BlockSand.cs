@@ -12,7 +12,7 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.Sand;
         }
         public BlockSand()
-            : base(Block.Types.Sand)
+            : base("Sand")
         {
             this.LoadVariations("sand1");
             this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Sand, null, 1);

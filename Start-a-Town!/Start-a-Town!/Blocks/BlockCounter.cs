@@ -11,7 +11,8 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.LightWood;
         }
         AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
-        public BlockCounter():base(Types.Counter, opaque: false)
+        public BlockCounter()
+            : base("Counter", opaque: false)
         {
             this.Orientations[0] = Atlas.Load("blocks/counters/counter1");
             this.Orientations[1] = Atlas.Load("blocks/counters/counter4");

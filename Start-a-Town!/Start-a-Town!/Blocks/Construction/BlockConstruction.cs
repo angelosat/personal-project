@@ -7,7 +7,8 @@ namespace Start_a_Town_
 {
     class BlockConstruction : BlockWithEntity
     {
-        public BlockConstruction():base(Types.Construction, solid: false, opaque: false)
+        public BlockConstruction()
+            : base("Construction", solid: false, opaque: false)
         {
             this.Variations.Add(Block.Atlas.Load("blocks/blockblueprint"));
         }

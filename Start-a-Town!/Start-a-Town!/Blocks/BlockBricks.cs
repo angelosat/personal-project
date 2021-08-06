@@ -8,7 +8,7 @@ namespace Start_a_Town_
     class BlockBricks : Block
     {
         public BlockBricks()
-            : base(Types.Bricks)
+            : base("Bricks")
         {
             this.LoadVariations("bricks/bricks");
             this.BuildProperties.WorkAmount = 20;

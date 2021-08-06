@@ -10,7 +10,7 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.LightWood;
         }
         public BlockCampfire()
-            : base(Block.Types.Campfire, opaque: false, solid: false)
+            : base("Campfire", opaque: false, solid: false)
         {
             this.BuildProperties = new BuildProperties(new Ingredient(item: RawMaterialDef.Logs), 0);
             this.Variations.Add(Block.Atlas.Load("blocks/campfire", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap));

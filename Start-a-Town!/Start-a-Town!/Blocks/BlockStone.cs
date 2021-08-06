@@ -5,7 +5,7 @@
         public override bool IsMinable => true;
 
         public BlockStone()
-            : base(Block.Types.Cobblestone, 0, 1, true, true)
+            : base("Cobblestone", 0, 1, true, true)
         {
             this.LoadVariations("stone5height19");
             this.Ingredient = new Ingredient(RawMaterialDef.Boulders, MaterialDefOf.Stone, null, 1);

@@ -16,7 +16,8 @@ namespace Start_a_Town_.Blocks
         }
 
         readonly AtlasDepthNormals.Node.Token[] Parts = new AtlasDepthNormals.Node.Token[4];
-        public BlockRoof() : base(Types.Roof, opaque: false)
+        public BlockRoof() 
+            : base("Roof", opaque: false)
         {
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.Parts[0] = Atlas.Load("blocks/roof/roof1height19", Depth1, NormalMap);

@@ -8,7 +8,7 @@
         }
 
         public BlockStool()
-            : base(Types.Stool, opaque: false)
+            : base("Stool", opaque: false)
         {
             this.Variations.Add(Atlas.Load("blocks/furniture/stool", BlockDepthMap, NormalMap));
             this.Furniture = FurnitureDefOf.Table;

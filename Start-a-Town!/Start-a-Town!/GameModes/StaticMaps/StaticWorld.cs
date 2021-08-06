@@ -31,7 +31,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         string _Name;
         public bool Lighting;
         public int MaxHeight { get; set; }
-        public Block.Types DefaultTile { get; set; }
+        public Block DefaultBlock { get; set; }
         public string Name { get => this._Name; set => this._Name = value; }
         public int Seed { get; set; }
         public const int TickTime = (int)(60 * 1.44f);
@@ -94,14 +94,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
         StaticWorld()
         {
             this.MaxHeight = 128;
-            this.DefaultTile = Block.Types.Soil;
+            this.DefaultBlock = BlockDefOf.Soil;
             this.Mutators = new SortedSet<Terraformer>();
             this.Trees = true;
             this.Maps = new MapCollection();
             this.PopulationManager = new PopulationManager(this);
         }
 
-        public StaticWorld(string seedString, IEnumerable<Terraformer> mutators, Block.Types defaultTile = Block.Types.Soil)
+        public StaticWorld(string seedString, IEnumerable<Terraformer> mutators)
             : this()
         {
             if(seedString.IsNullEmptyOrWhiteSpace())
@@ -112,9 +112,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Seed = seed;
             this.Random = new Random(seed);
             this.Mutators = new SortedSet<Terraformer>(mutators);
-            this.DefaultTile = defaultTile;
+            this.DefaultBlock = BlockDefOf.Soil;
         }
-        public StaticWorld(SaveTag save):this()
+        public StaticWorld(SaveTag save)
+            : this()
         {
             this.Name = (string)save["Name"].Value;
             this.Seed = (int)save["Seed"].Value;
@@ -126,7 +127,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 this.Flat = (bool)flatTag.Value;
             save.TryGetTagValue<double>("CurrentTick", v => this.CurrentTick = (ulong)v);
 
-            this.DefaultTile = (Block.Types)save.TagValueOrDefault<int>("DefaultTile", (int)Block.Types.Soil);
+            //this.DefaultBlock = (Block.Types)save.TagValueOrDefault<int>("DefaultTile", (int)Block.Types.Soil);
+            if (!save.TryGetTagValue<int>("DefaultBlock", v => { this.DefaultBlock = Block.GetBlock(v); }))
+                this.DefaultBlock = BlockDefOf.Soil;
             this.Name = (string)save["Name"].Value;
 
             if (!save.TryGetTag("Mutators", out SaveTag mutatorsTag))
@@ -175,8 +178,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             tag.Add(new SaveTag(SaveTag.Types.Int, "RandomState", currentRandomState));
             tag.Add(new SaveTag(SaveTag.Types.Double, "Time", Clock.TotalSeconds));
             this.CurrentTick.Save(tag, "CurrentTick");
-            tag.Add(new SaveTag(SaveTag.Types.Int, "DefaultTile", (int)this.DefaultTile));
-            
+            this.DefaultBlock.Hash.Save(tag, "DefaultBlock");
             tag.Add(new SaveTag(SaveTag.Types.String, "Name", "World 0"));
             this.Population.Save(tag, "Population");
             SaveTag mutatorsTag = new SaveTag(SaveTag.Types.List, "Mutators", SaveTag.Types.Compound);
@@ -253,7 +255,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             w.Write(this.Seed);
             w.Write(this.CurrentTick);
             w.Write(this.Trees);
-            w.Write((byte)this.DefaultTile);
+            w.Write(this.DefaultBlock.Hash);
             w.Write(this.Mutators.Count);
             foreach(var m in this.Mutators)
             {
@@ -269,7 +271,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             world.Seed = r.ReadInt32();
             world.CurrentTick = r.ReadUInt64();
             world.Trees = r.ReadBoolean();
-            world.DefaultTile = (Block.Types)r.ReadByte();
+            world.DefaultBlock = Block.GetBlock(r.ReadInt32());
             int mutatorCount = r.ReadInt32();
             for (int i = 0; i < mutatorCount; i++)
             {

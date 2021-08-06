@@ -63,8 +63,8 @@ namespace Start_a_Town_.Terraforming.Mutators
         {
             foreach (var mineral in this.Templates)
             {
-                Block.Types mineralType = Block.Types.Mineral;
-                if (c.Block.Type != Block.Types.Cobblestone)
+                var mineralType = BlockDefOf.Mineral;
+                if (c.Block != BlockDefOf.Cobblestone)
                     return;
 
                 double mineralGradient = mineral.GetGradient(w, x, y, z);
@@ -76,7 +76,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                     double chance = Math.Pow((mineralGradient - mineral.Threshold) / (1 - mineral.Threshold), 2);
                     if (p < chance)
                     {
-                        c.SetBlockType(mineralType);
+                        c.Block = mineralType;
                         c.BlockData = (byte)mineral.Material.ID;
                     }
                 }

@@ -6,12 +6,13 @@
         {
             return MaterialDefOf.Soil;
         }
-        public BlockFlowers():base(Block.Types.FlowersNew,solid:false, opaque: false)
+        public BlockFlowers()
+            : base("Flowers", solid:false, opaque: false)
         {
-            this.Variations.Add(Block.Atlas.Load("blocks/flowers/flowersred", Block.SliceBlockDepthMap, Block.NormalMap));
-            this.Variations.Add(Block.Atlas.Load("blocks/flowers/flowersyellow", Block.SliceBlockDepthMap, Block.NormalMap));
-            this.Variations.Add(Block.Atlas.Load("blocks/flowers/flowerswhite", Block.SliceBlockDepthMap, Block.NormalMap));
-            this.Variations.Add(Block.Atlas.Load("blocks/flowers/flowerspurple", Block.SliceBlockDepthMap, Block.NormalMap));
+            this.Variations.Add(Atlas.Load("blocks/flowers/flowersred", SliceBlockDepthMap, NormalMap));
+            this.Variations.Add(Atlas.Load("blocks/flowers/flowersyellow", SliceBlockDepthMap, NormalMap));
+            this.Variations.Add(Atlas.Load("blocks/flowers/flowerswhite", SliceBlockDepthMap, NormalMap));
+            this.Variations.Add(Atlas.Load("blocks/flowers/flowerspurple", SliceBlockDepthMap, NormalMap));
         }
     }
 }

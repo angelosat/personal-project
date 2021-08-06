@@ -12,37 +12,36 @@ namespace Start_a_Town_
             p = Network.RegisterPacketHandler(Receive);
         }
         public static void Init() { }
-        public static void Send(INetwork net, PlayerData player, IntVec3 global, Block.Types type, byte data = 0, int variation = 0, int orientation = 0)
+        public static void Send(INetwork net, PlayerData player, IntVec3 global, Block block, byte data = 0, int variation = 0, int orientation = 0)
         {
             if (net is Server)
-                Perform(net.Map, global, type, data, variation, orientation);
+                Perform(net.Map, global, block, data, variation, orientation);
 
-            net.GetOutgoingStream().Write(
-                p,
-                player.ID,
-                global,
-                (int)type,
-                data,
-                variation,
-                orientation
-                );
+            var w = net.GetOutgoingStream();
+            w.Write(p);
+            w.Write(player.ID);
+            w.Write(global);
+            w.Write(block);
+            w.Write(data);
+            w.Write(variation);
+            w.Write(orientation);
         }
         private static void Receive(INetwork net, BinaryReader r)
         {
             var player = net.GetPlayer(r.ReadInt32());
             var global = r.ReadIntVec3();
-            var type = (Block.Types)r.ReadInt32();
+            var block = r.ReadBlock();
             var data = r.ReadByte();
             var variation = r.ReadInt32();
             var orientation = r.ReadInt32();
 
             if (net is Server)
-                Send(net, player, global, type, data, variation, orientation);
+                Send(net, player, global, block, data, variation, orientation);
             else
-                Perform(net.Map, global, type, data, variation, orientation);
+                Perform(net.Map, global, block, data, variation, orientation);
         }
 
-        private static void Perform(MapBase map, IntVec3 global, Block.Types type, byte data, int variation, int orientation)
+        private static void Perform(MapBase map, IntVec3 global, Block block, byte data, int variation, int orientation)
         {
             if (!map.IsInBounds(global))
                 return;
@@ -54,11 +53,8 @@ namespace Start_a_Town_
             // TODO: DECIDE!
             map.RemoveBlock(global);
 
-            if (type != Block.Types.Air)
-            {
-                var block = Block.Registry[type];
+            if (block != BlockDefOf.Air)
                 block.Place(map, global, data, variation, orientation);
-            }
         }
     }
 }

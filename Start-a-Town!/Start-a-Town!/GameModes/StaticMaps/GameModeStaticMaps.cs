@@ -47,7 +47,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             ScrollableBoxNewNew groupBox = null;
             var table = new TableObservable<FileInfo>();
             table
-                .AddColumn("filename", 160, f => new Label(Path.GetFileNameWithoutExtension(f.Name)))
+                .AddColumn("filename", 256, f => new Label(Path.GetFileNameWithoutExtension(f.Name)))
                 .AddColumn("datetime", 160, f => new Label(f.CreationTime.ToString("R")))
                 .AddColumn("overwrite", Button.GetWidth(UIManager.Font, "Overwrite"), f => new Button("Overwrite") { LeftClickAction = () => saveNew(Path.GetFileNameWithoutExtension(f.Name)) })
                 .AddColumn("delete", 16, f => IconButton.CreateCloseButton().SetLeftClickAction(b => SaveFile.Delete(f, () => table.RemoveItem(f))))

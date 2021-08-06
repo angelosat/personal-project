@@ -5,7 +5,7 @@ namespace Start_a_Town_.Blocks
     class BlockSlab : Block
     {
         public BlockSlab()
-            : base(Block.Types.Slab, opaque: false)
+            : base("Slab", opaque: false)
         {
             var txt = Block.Atlas.Load("blocks/slab", Block.QuarterBlockMapDepth, Block.QuarterBlockMapNormal);
             this.Variations.Add(txt);

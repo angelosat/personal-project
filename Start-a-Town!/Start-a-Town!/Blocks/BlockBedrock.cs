@@ -7,7 +7,7 @@
             return MaterialDefOf.Stone;
         }
         public BlockBedrock()
-            : base(Block.Types.Stone)
+            : base("Stone")
         {
             this.LoadVariations("smoothstone");
         }

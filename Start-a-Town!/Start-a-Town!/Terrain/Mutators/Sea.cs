@@ -47,12 +47,12 @@ namespace Start_a_Town_.Terraforming.Mutators
                 }
             }
         }
-        public override Block.Types Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r)
+        public override Block Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r)
         {
             if (z > this.SeaLevel)
-                return Block.Types.Air;
+                return BlockDefOf.Air;
 
-            return w.DefaultTile;
+            return w.DefaultBlock;
         }
         public override List<MutatorProperty> GetAdjustableParameters()
         {
@@ -63,13 +63,13 @@ namespace Start_a_Town_.Terraforming.Mutators
 
         public override List<SaveTag> Save()
         {
-            List<SaveTag> tag = new List<SaveTag>();
+            var tag = new List<SaveTag>();
             tag.Add(new SaveTag(SaveTag.Types.Int, "Level", this.SeaLevel));
             return tag;
         }
         public override Terraformer Load(SaveTag save)
         {
-            this.SeaLevel = save.TagValueOrDefault<int>("Level", MapBase.MaxHeight / 2 - 1);
+            this.SeaLevel = save.TagValueOrDefault("Level", MapBase.MaxHeight / 2 - 1);
             return this;
         }
 

@@ -108,7 +108,7 @@ namespace Start_a_Town_
         #region Interfaces
         public string GetName()
         {
-            return this.Type.ToString();
+            return this.Label;
         }
         public virtual Icon GetIcon()
         {
@@ -175,63 +175,14 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return "Block:" + this.Type.ToString();
+            return "Block:" + this.Label;
         }
 
-        public virtual string Name => this.Type.ToString();
+        public virtual string Name => this.Label;
+        public readonly string Label;
+        public readonly int Hash;
         public static readonly int Width = 32, Depth = 16, Height = 40, BlockHeight = 20;
         public static readonly Vector2 OriginCenter = new(Width / 2f, Height - Depth / 2f);
-        public enum Types : byte
-        {
-            Air,
-            Soil,
-            Farmland,
-            Water,
-            Sand,
-            Stone,
-            Coal,
-            Wall,
-            Cobblestone,
-            Grass,
-            Flowers,
-            WoodenDeck,
-            WallSlice,
-            Iron,
-            Scaffolding,
-            Designation,
-            Blueprint,
-            EditorOrigin,
-            EditorAir,
-            Gravel,
-            Door,
-            Empty,
-            WoodenFrame,
-            Mineral,
-            Bed,
-            WoodPaneling,
-            Smeltery,
-            Chest,
-            Sapling,
-            Chair,
-            Stool,
-            Bricks,
-            FlowersNew,
-            Campfire,
-            Window,
-            Roof,
-            Counter,
-            Stairs,
-            Workbench,
-            CarpenterBench,
-            Slab,
-            Prefab,
-            Kitchen,
-            Conveyor,
-            PlantProcessing,
-            Bin,
-            Construction,
-            ShopCounter
-        }
 
         internal virtual void PreRemove(MapBase mapBase, IntVec3 p)
         {
@@ -272,7 +223,6 @@ namespace Start_a_Town_
 
         public virtual bool Multi => false;
 
-        public readonly Types Type;
         /// <summary>
         /// Defines the alpha channel of the block's sprite during drawing.
         /// </summary>
@@ -439,7 +389,7 @@ namespace Start_a_Town_
         }
         public virtual void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
         {
-            map.SetBlock(global, this.Type, data, variation, orientation, notify);
+            map.SetBlock(global, this, data, variation, orientation, notify);
             var entity = this.CreateBlockEntity(global);
             if (entity != null)
             {
@@ -520,8 +470,16 @@ namespace Start_a_Town_
         public virtual void RandomBlockUpdate(INetwork net, IntVec3 global, Cell cell) { }
         protected virtual void HandleMessage(Vector3 global, ObjectEventArgs e) { }
 
-        public static Dictionary<Block.Types, Block> Registry = new();
+        public static Dictionary<int, Block> Registry = new();
 
+        public static Block GetBlock(int hash)
+        {
+            return Registry[hash];
+        }
+        public static Block GetBlock(string name)
+        {
+            return Registry[name.GetHashCode()];
+        }
         /// <summary>
         /// The index to the block's variation is stored within a cell. Add variations to this list so they can be picked at random whenever a block is placed.
         /// </summary>
@@ -536,41 +494,35 @@ namespace Start_a_Town_
                 this.Variations.Add(token);
             }
         }
-        protected Block(Block.Types type, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
+        protected Block(string name, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
         {
-            this.Type = type;
+            this.Label = name;
+            this.Hash = name.GetHashCode();
             this.Transparency = transparency;
             this.Density = density;
             this.Opaque = opaque;
             this.Solid = solid;
             this.LootTable = new LootTable();
-            Registry[type] = this;
+            Registry[this.Hash] = this;
         }
-
         public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
-            if (cell.Block.Type == Types.Air)
-            {
+            if (this == BlockDefOf.Air)
                 return;
-            }
 
             sb.DrawBlock(Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth);
         }
         public virtual void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
-            if (cell.Block.Type == Types.Air)
-            {
+            if (this == BlockDefOf.Air)
                 return;
-            }
 
             sb.DrawBlock(Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth, this);
         }
         public virtual MyVertex[] Draw(MySpriteBatch sb, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             if (this == BlockDefOf.Air)
-            {
                 return null;
-            }
 
             var material = this.GetColorVector(data);
 
@@ -583,9 +535,7 @@ namespace Start_a_Town_
         public virtual MyVertex[] Draw(Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             if (this == BlockDefOf.Air)
-            {
                 return null;
-            }
 
             var material = this.GetColorVector(data);
 
@@ -597,9 +547,7 @@ namespace Start_a_Town_
         public virtual MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
         {
             if (this == BlockDefOf.Air)
-            {
                 return null;
-            }
 
             var material = this.GetColorVector(data);
             MySpriteBatch mesh = this.Opaque ? canvas.Opaque : canvas.NonOpaque;
@@ -610,10 +558,8 @@ namespace Start_a_Town_
         }
         public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
-            if (cell.Block.Type == Types.Air)
-            {
+            if (this == BlockDefOf.Air)
                 return;
-            }
 
             sb.DrawBlock(Atlas.Texture, screenPos, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
         }
@@ -911,5 +857,6 @@ namespace Start_a_Town_
             else
                 category.Remove(this);
         }
+
     }
 }

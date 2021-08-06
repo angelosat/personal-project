@@ -6,7 +6,7 @@
 
         public override void OnUpdate(Actor a, TargetArgs t)
         {
-            a.Map.SetBlock(t.Global, Block.Types.Farmland, 0);
+            a.Map.SetBlock(t.Global, BlockDefOf.Farmland, 0);
             this.Finish(a, t);
         }
 

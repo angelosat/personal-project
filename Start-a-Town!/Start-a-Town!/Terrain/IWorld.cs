@@ -24,7 +24,7 @@ namespace Start_a_Town_.GameModes
 
         byte[] GetSeedArray();
 
-        Block.Types DefaultTile { get; set; }
+        Block DefaultBlock { get; set; }
         PopulationManager Population { get; }
 
         SortedSet<Terraformer> GetMutators();

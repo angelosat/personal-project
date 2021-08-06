@@ -34,9 +34,9 @@ namespace Start_a_Town_
         static public readonly Block Prefab = new BlockPrefab();
         static public readonly Block Construction = new BlockConstruction();
         static public readonly Block ShopCounter = new BlockShopCounter();
-        static public readonly Block Workbench = new BlockWorkstation(Block.Types.Workbench, typeof(BlockWorkbenchEntity));
-        static public readonly Block Kitchen = new BlockWorkstation(Block.Types.Kitchen, typeof(BlockKitchenEntity));
-        static public readonly Block PlantProcessingBench = new BlockWorkstation(Block.Types.PlantProcessing, typeof(BlockPlantProcessingEntity));
-        static public readonly Block CarpentryBench = new BlockWorkstation(Block.Types.CarpenterBench, typeof(BlockCarpentryEntity));
+        static public readonly Block Workbench = new BlockWorkstation("Workbench", typeof(BlockWorkbenchEntity));
+        static public readonly Block Kitchen = new BlockWorkstation("Kitchen", typeof(BlockKitchenEntity));
+        static public readonly Block PlantProcessingBench = new BlockWorkstation("PlantProcessing", typeof(BlockPlantProcessingEntity));
+        static public readonly Block CarpentryBench = new BlockWorkstation("CarpenterBench", typeof(BlockCarpentryEntity));
     }
 }

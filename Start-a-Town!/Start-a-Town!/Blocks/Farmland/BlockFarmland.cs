@@ -12,7 +12,7 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.Soil;
         }
         public BlockFarmland()
-            : base(Types.Farmland)
+            : base("Farmland")
         {
             this.Textures = new AtlasDepthNormals.Node.Token[2];
             this.Textures[0] = Atlas.Load("blocks/farmland", BlockDepthMap, NormalMap);

@@ -14,7 +14,7 @@ namespace Start_a_Town_
             return MaterialDef.Registry[blockdata];
         }
         public BlockStorage()
-            : base(Types.Bin, opaque: false)
+            : base("Bin", opaque: false)
         {
             var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chest").ToGrayscale();
             this.Variations.Add(Atlas.Load("chestgrayscale", tex, BlockDepthMap, ChestNormalMap));

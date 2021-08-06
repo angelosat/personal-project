@@ -19,7 +19,7 @@ namespace Start_a_Town_
         }
 
         public BlockSoil()
-            : base(Block.Types.Soil)
+            : base("Soil")
         {
             this.RequiresConstruction = false;
             this.LoadVariations("soil/soil1", "soil/soil2", "soil/soil3", "soil/soil4");
@@ -44,7 +44,7 @@ namespace Start_a_Town_
             {
                 if (!net.Map.TryGetCell(n, out Cell cell))
                     continue;
-                if (cell.Block.Type != Block.Types.Grass)
+                if (cell.Block != BlockDefOf.Grass)
                     continue;
                 BlockDefOf.Grass.Place(net.Map, global, 0, celll.Variation, 0);
                 return;

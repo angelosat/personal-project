@@ -7,7 +7,7 @@
             return MaterialDefOf.LightWood;
         }
         public BlockWoodPaneling()
-            : base(Block.Types.WoodPaneling, 0, 1, true, true)
+            : base("WoodPaneling", 0, 1, true, true)
         {
             this.LoadVariations("woodvertical");
         }

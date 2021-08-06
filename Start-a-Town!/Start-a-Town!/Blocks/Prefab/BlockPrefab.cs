@@ -6,7 +6,7 @@ namespace Start_a_Town_.Blocks
     {
         static readonly AtlasDepthNormals.Node.Token Token = Block.Atlas.Load("blocks/blockblueprint");
         public BlockPrefab()
-            : base(Block.Types.Prefab, 0, 1, true, true)
+            : base("Prefab", 0, 1, true, true)
         {
 
         }

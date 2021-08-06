@@ -31,8 +31,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
                         break;
 
                     case "replace":
-                        Block old = Block.Registry[(Block.Types)Enum.Parse(typeof(Block.Types), p[1], true)];
-                        Block replace = Block.Registry[(Block.Types)Enum.Parse(typeof(Block.Types), p[2], true)];
+                        var old = Block.GetBlock(p[1]);
+                        var replace = Block.GetBlock(p[2]);
                         if (replace == BlockDefOf.Air || old == BlockDefOf.Air)
                             break;
                         foreach (var ch in net.Map.GetActiveChunks())
@@ -55,7 +55,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                         break;
 
                     case "remove":
-                        Block toremove = Block.Registry[(Block.Types)Enum.Parse(typeof(Block.Types), p[1], true)];
+                        var toremove = Block.GetBlock(p[1]);
                         if (toremove == BlockDefOf.Air)
                             break;
                         foreach (var ch in net.Map.GetActiveChunks())

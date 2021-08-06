@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
 using System.Xml.Linq;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Start_a_Town_
 {
@@ -110,19 +111,27 @@ namespace Start_a_Town_
             }
             return randomized.ToList();
         }
-        public static List<T> Randomize<T>(this IEnumerable<T> list, Random random)
+        public static T[] Shuffle<T>(this IEnumerable<T> collection, Random random)
         {
-            var unhandled = list.ToList();
-            var randomized = new Queue<T>();
-            while (unhandled.Count > 0)
-            {
-                var current = unhandled[random.Next(unhandled.Count)];
-                unhandled.Remove(current);
-                randomized.Enqueue(current);
-            }
-            return randomized.ToList();
+            var array = collection.ToArray();
+            array.Shuffle(random);
+            return array;
         }
-        
+        public static void Shuffle<T>(this T[] collection, Random random)
+        {
+            var watch = Stopwatch.StartNew();
+            var count = collection.Length;
+            var last = count - 1;
+            for (var i = 0; i < last; ++i)
+            {
+                var r = random.Next(i, count);
+                var tmp = collection[i];
+                collection[i] = collection[r];
+                collection[r] = tmp;
+            }
+            watch.Stop();
+            $"{count} items randomized in {watch.ElapsedMilliseconds} ms".ToConsole();
+        }
         public static List<Vector2> GetSpiral(this Vector2 center, int radius = Engine.ChunkRadius)
         {
             var list = new List<Vector2>();
@@ -205,6 +214,10 @@ namespace Start_a_Town_
         static public List<IntVec3> GetBoxIntVec3(this BoundingBox box)
         {
             return ((IntVec3)box.Min).GetBox(box.Max);
+        }
+        static public IEnumerable<IntVec3> GetBoxIntVec3Lazy(this BoundingBox box)
+        {
+            return ((IntVec3)box.Min).GetBoxLazy(box.Max);
         }
         static public BoundingBox GetBoundingBox(this Vector3 blockCoords)
         {

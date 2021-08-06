@@ -6,7 +6,7 @@ namespace Start_a_Town_.Blocks
     partial class BlockDesignation : Block
     {
         public BlockDesignation()
-            : base(Types.Designation, 1, 0, false, false)
+            : base("Designation", 1, 0, false, false)
         {
             this.Variations.Add(Atlas.Load("blocks/blockblueprint"));
         }
@@ -47,7 +47,7 @@ namespace Start_a_Town_.Blocks
                 {
                     map.AddBlockEntity(p, constr);
                     var pcell = map.GetCell(p);
-                    map.SetBlock(p, BlockDefOf.Construction.Type, pcell.BlockData, pcell.Variation, pcell.Orientation, false);
+                    map.SetBlock(p, BlockDefOf.Construction, pcell.BlockData, pcell.Variation, pcell.Orientation, false);
                 }
             }
             else if(isReady)

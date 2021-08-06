@@ -93,11 +93,11 @@ namespace Start_a_Town_.Modules.Construction
         }
         protected override void WriteData(System.IO.BinaryWriter w)
         {
-            w.Write((int)this.Block.Type);
+            w.Write(this.Block);
         }
         protected override void ReadData(System.IO.BinaryReader r)
         {
-            this.Block = Block.Registry[(Block.Types)r.ReadInt32()];
+            this.Block = r.ReadBlock();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Graphics;
 
@@ -9,7 +8,8 @@ namespace Start_a_Town_
     {
         AtlasDepthNormals.Node.Token[] Orientations = TexturesCounter;
 
-        public BlockShopCounter() : base(Block.Types.ShopCounter, 0, 1, false, true)
+        public BlockShopCounter() 
+            : base("ShopCounter", 0, 1, false, true)
         {
             this.Variations.Add(this.Orientations.First());
             this.Furniture = FurnitureDefOf.Counter;

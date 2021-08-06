@@ -81,7 +81,7 @@ namespace Start_a_Town_.Blocks
 
             protected override void AddSaveData(SaveTag tag)
             {
-                tag.Add(new SaveTag(SaveTag.Types.Compound, "Product", this.Product.Save()));
+                this.Product.Save(tag, "Product");
                 tag.Add(this.Children.Save("Children"));
                 tag.Add(this.BuildProgress.Save("BuildProgress"));
             }

@@ -10,8 +10,8 @@ namespace Start_a_Town_
     {
         readonly AtlasDepthNormals.Node.Token[] Orientations = Block.TexturesCounter;
         Type BlockEntityType;
-        public BlockWorkstation(Types workstationType, Type blockEntityType)
-            : base(workstationType, opaque: false, solid: true)
+        public BlockWorkstation(string name, Type blockEntityType)
+            : base(name, opaque: false, solid: true)
         {
             this.BlockEntityType = blockEntityType;
             this.Variations.Add(this.Orientations.First());

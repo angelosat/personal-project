@@ -70,7 +70,7 @@ namespace Start_a_Town_
         readonly AtlasDepthNormals.Node.Token GrayScale;
 
         public BlockWoodenDeck()
-            : base(Block.Types.WoodenDeck, 0, 1, true, true)
+            : base("WoodenDeck", 0, 1, true, true)
         {
             this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
             this.Variations.Add(this.GrayScale);

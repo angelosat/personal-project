@@ -186,14 +186,14 @@ namespace Start_a_Town_
         }
         public override bool IsAllowed(Block block)
         {
-            return (block.Type == Block.Types.Kitchen) || block is BlockStool || block is BlockShopCounter;
+            return (block == BlockDefOf.Kitchen) || block is BlockStool || block is BlockShopCounter;
         }
         internal override void AddFacility(IntVec3 global)
         {
             var block = this.Town.Map.GetBlock(global);
             if (block is BlockStool)
                 this.Tables.Add(global);
-            else if (block.Type == Block.Types.Kitchen)
+            else if (block == BlockDefOf.Kitchen)
                 this.Workstations.Add(global);
             else if (block is BlockShopCounter)
                 this.Counter = global;
@@ -263,7 +263,7 @@ namespace Start_a_Town_
         {
             this.NoonPassed = this.Town.Map.Clock.Hours >= 12;
             this.Tables.RemoveWhere(g => this.Town.Map.GetBlock(g) is not BlockStool);
-            this.Workstations.RemoveWhere(g => this.Town.Map.GetBlock(g).Type != Block.Types.Kitchen);
+            this.Workstations.RemoveWhere(g => this.Town.Map.GetBlock(g) != BlockDefOf.Kitchen);
         }
         internal override void OnBlocksChanged(IEnumerable<IntVec3> positions)
         {
@@ -272,7 +272,7 @@ namespace Start_a_Town_
                 var block = this.Map.GetBlock(pos);
                 if (this.Tables.Contains(pos) && block is not BlockStool)
                     this.Tables.Remove(pos);
-                else if (this.Workstations.Contains(pos) && block.Type != Block.Types.Kitchen)
+                else if (this.Workstations.Contains(pos) && block != BlockDefOf.Kitchen)
                     this.Workstations.Remove(pos);
             }
         }

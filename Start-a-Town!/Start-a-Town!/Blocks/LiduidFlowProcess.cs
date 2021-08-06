@@ -51,7 +51,7 @@ namespace Start_a_Town_.Blocks
             var belowBlock = this.Map.GetBlock(below);
             if (belowBlock == BlockDefOf.Air)
             {
-                this.Map.SetBlock(below, Block.Types.Water, 1, Rand.Next(4));
+                this.Map.SetBlock(below, BlockDefOf.Water, 1, Rand.Next(4));
                 if (!this.Handled.Contains(below))
                     if (!this.ToHandle.Contains(below))
                         this.ToHandle.Enqueue(below);
@@ -67,7 +67,7 @@ namespace Start_a_Town_.Blocks
                 var nblock = this.Map.GetBlock(n);
                 if (nblock != BlockDefOf.Air)
                     continue;
-                this.Map.SetBlock(n, Block.Types.Water, 0, Rand.Next(4));
+                this.Map.SetBlock(n, BlockDefOf.Water, 0, Rand.Next(4));
                 FlowProcesses.Add(new LiduidFlowProcess(this.Map, this.Source, n));
             }
             return false;

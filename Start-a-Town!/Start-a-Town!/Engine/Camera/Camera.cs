@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.Blocks;
 using Start_a_Town_.Components;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.UI;
@@ -378,8 +379,8 @@ namespace Start_a_Town_
         public bool DrawCell(Canvas canvas, MapBase map, Chunk chunk, Cell cell)
         {
             int z = cell.Z;
-            Block.Types cellTile = cell.Block.Type;
-            if (cellTile == Block.Types.Air)
+            var cellTile = cell.Block;
+            if (cellTile is BlockAir)
             {
                 chunk.InvalidateCell(cell);
                 ("tried to draw air at " + cell.GetGlobalCoords(chunk).ToString()).ToConsole();

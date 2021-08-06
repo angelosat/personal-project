@@ -140,7 +140,7 @@ namespace Start_a_Town_
             {
                 if (this._randomOrderedChunkIndices is null)
                 {
-                    this._randomOrderedChunkIndices = Enumerable.Range(0, this.ActiveChunks.Count).Randomize(this.Random).ToArray();
+                    this._randomOrderedChunkIndices = Enumerable.Range(0, this.ActiveChunks.Count).Shuffle(this.Random).ToArray();
                     // force initialization on all chunks
                     foreach (var ch in this.ActiveChunks.Values)
                         _ = ch.GetRandomCellInOrder(0);
@@ -184,7 +184,7 @@ namespace Start_a_Town_
                 chunk.ResolveReferences();
         }
 
-        internal void ReplaceBlock(Vector3 global, Block.Types type, byte data, int variation, int orientation, bool raiseEvent = true)
+        internal void ReplaceBlock(Vector3 global, Block block, byte data, int variation, int orientation, bool raiseEvent = true)
         {
             this.RemoveBlock(global);
 
@@ -198,11 +198,9 @@ namespace Start_a_Town_
 
             // reenable physics of entities resting on block
             foreach (var entity in this.GetObjects(global.Above()))
-            {
                 PhysicsComponent.Enable(entity);
-            }
 
-            this.SetBlock(global, type, data, variation, orientation, raiseEvent);
+            this.SetBlock(global, block, data, variation, orientation, raiseEvent);
         }
         internal void SyncSetCellData(IntVec3 global, byte data)
         {
@@ -236,7 +234,7 @@ namespace Start_a_Town_
             }
             foreach (var p in parts)
             {
-                this.SetBlock(p, Block.Types.Air, 0, 0, 0, notify);
+                this.SetBlock(p, BlockDefOf.Air, 0, 0, 0, notify);
                 this.SetBlockLuminance(p, 0);
                 // reenable physics of entities resting on block
                 foreach (var entity in this.GetObjects(p - new IntVec3(1, 1, 0), p + new IntVec3(1, 1, 2)))
@@ -595,7 +593,7 @@ namespace Start_a_Town_
 
         public abstract void GetTooltipInfo(Control tooltip);
 
-        public virtual bool SetBlock(IntVec3 global, Block.Types type, byte data, int variation = 0, int orientation = 0, bool raiseEvent = true)
+        public virtual bool SetBlock(IntVec3 global, Block block, byte data, int variation = 0, int orientation = 0, bool raiseEvent = true)
         {
             if (global.Z == 0)
                 return false;
@@ -605,7 +603,7 @@ namespace Start_a_Town_
                 return false;
 
             var chunk = this.GetChunk(global);
-            cell.SetBlockType(type);
+            cell.Block = block;
             cell.Variation = (byte)variation;
             cell.BlockData = data;
             cell.Orientation = orientation;
@@ -631,15 +629,14 @@ namespace Start_a_Town_
                 NotifyBlockChanged(global);
             return true;
         }
-        public void PlaceBlockNew(IntVec3 global, Block.Types type, byte data, int variation = 0, int orientation = 0, bool notify = true)
+        public void PlaceBlockNew(IntVec3 global, Block block, byte data, int variation = 0, int orientation = 0, bool notify = true)
         {
-            var block = Block.Registry[type];
             if (block.IsValidPosition(this, global, orientation))
                 return;
             var parts = block.GetParts(data, global);
             foreach (var pos in parts)
             {
-                if (!this.SetBlock(pos, type, data, variation, orientation, notify))
+                if (!this.SetBlock(pos, block, data, variation, orientation, notify))
                     return;
             }
             var entity = block.CreateBlockEntity(global);

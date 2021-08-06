@@ -14,7 +14,7 @@ namespace Start_a_Town_
             var editbox = new Panel(0, 0, 500, actorslistbox.Height) { AutoSize = false };
 
             ListBoxNoScroll<Actor, ButtonNew> actorsUI = null;
-            actorsUI = new ListBoxNoScroll<Actor, ButtonNew>(btnInit) { BackgroundColor = Color.Red };
+            actorsUI = new ListBoxNoScroll<Actor, ButtonNew>(btnInit);
             var addactorbutton = new Button("Create", addActor, actorslistbox.Client.Width);
 
             actorslistbox.AddControlsVertically(addactorbutton, actorsUI);

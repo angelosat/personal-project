@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
@@ -110,7 +109,7 @@ namespace Start_a_Town_
 
         protected override void AddSaveData(SaveTag tag)
         {
-            tag.Add(new SaveTag(SaveTag.Types.Compound, "Product", this.Product.Save()));
+            this.Product.Save(tag, "Product");
             tag.Add(this.Children.Save("Children"));
             tag.Add(this.Container.SaveNewBEST("Container"));
             tag.Add(this.BuildProgress.Save("BuildProgress"));

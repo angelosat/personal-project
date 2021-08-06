@@ -178,6 +178,7 @@
     <Compile Include="Blocks\BlockPlacer.cs" />
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />
+    <Compile Include="Blocks\Helpers\BlockHelper.cs" />
     <Compile Include="Blocks\LiduidFlowProcess.cs" />
     <Compile Include="Blocks\Workstations\BlockCarpentryEntity.cs" />
     <Compile Include="Blocks\Workstations\BlockPlantProcessingEntity.cs" />
@@ -970,7 +971,6 @@
     <Compile Include="Objects\GameObjectSlot.cs" />
     <Compile Include="SaveTag.cs" />
     <Compile Include="Terrain\PacketPlayerSetBlock.cs" />
-    <Compile Include="Terrain\WorldArgs.cs" />
     <Compile Include="TextInput.cs">
       <SubType>Code</SubType>
     </Compile>

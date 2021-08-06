@@ -344,6 +344,15 @@ namespace Start_a_Town_
                 list.Add(new SaveTag(SaveTag.Types.Vector3, "", (Vector3)pos));
             save.Add(list);
         }
+        public static IntVec3[] LoadArrayIntVec3(this SaveTag tag, string name)
+        {
+            var positions = tag[name].Value as List<SaveTag>;
+            var count = positions.Count;
+            var array = new IntVec3[count];
+            for (int i = 0; i < count; i++)
+                array[i] = (Vector3)positions[i].Value;
+            return array;
+        }
         public static void Load(this ICollection<IntVec3> list, SaveTag save, string name)
         {
             save.TryGetTag(name, tag =>

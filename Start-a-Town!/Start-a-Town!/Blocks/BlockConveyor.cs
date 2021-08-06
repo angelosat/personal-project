@@ -6,7 +6,7 @@ namespace Start_a_Town_.Blocks
     class BlockConveyor : Block
     {
         public BlockConveyor()
-            : base(Block.Types.Conveyor, opaque: false)
+            : base("Conveyor", opaque: false)
         {
             var txt = Block.Atlas.Load("blocks/slab", Block.QuarterBlockMapDepth, Block.QuarterBlockMapNormal);
             this.Variations.Add(txt);

@@ -36,7 +36,7 @@ namespace Start_a_Town_
             {
                 Cell cell = map.GetCell(global);
 
-                if (cell.Block.Type != Types.Door)
+                if (cell.Block is not BlockDoor)
                     throw new Exception("Block type mismatch");
 
                 int baseZ = (int)global.Z - this.Part;
@@ -80,7 +80,7 @@ namespace Start_a_Town_
             }
         }
         public BlockDoor()
-         : base(Types.Door, 0, 1, false, true)
+         : base("Door", 0, 1, false, true)
         {
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
 
@@ -196,7 +196,7 @@ namespace Start_a_Town_
                 var g = global + new IntVec3(0, 0, i);
                 positions[i] = g;
                 byte _data = (byte)i;
-                map.SetBlock(g, Block.Types.Door, _data, variation, orientation, false);
+                map.SetBlock(g, this, _data, variation, orientation, false);
             }
             if (notify)
                 map.NotifyBlocksChanged(positions);
@@ -288,7 +288,7 @@ namespace Start_a_Town_
             foreach (var g in children)
             {
                 Cell cell = map.GetCell(g);
-                if (map.GetBlock(g).Type != Types.Door)
+                if (map.GetBlock(g) is not BlockDoor)
                     throw new Exception();
                 bool lastOpen = (cell.BlockData & 0x4) == 0x4;
                 var open = !lastOpen;

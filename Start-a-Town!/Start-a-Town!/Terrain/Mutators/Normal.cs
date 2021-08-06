@@ -23,7 +23,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.GroundRatio = 0f;// .5f;
         }
 
-        public override Block.Types Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r)
+        public override Block Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r)
         {
             double gradientSoil, gradientRock, turbulence, tRock, zNormal; //turbpower; //lower? higher turbpower makes floating islands
 
@@ -54,19 +54,19 @@ namespace Start_a_Town_.Terraforming.Mutators
 
             if (gradientRock < this.GroundRatio)
             {
-                c.Variation = (byte)Terraformer.GetRandom(rockSeed, x, y, z, 0, Block.Registry[Block.Types.Cobblestone].Variations.Count);
-                return Block.Types.Cobblestone;
+                c.Variation = (byte)Terraformer.GetRandom(rockSeed, x, y, z, 0, BlockDefOf.Cobblestone.Variations.Count);
+                return BlockDefOf.Cobblestone;
             }
 
             if (z == 0)
             {
                 c.Block = BlockDefOf.Stone;
-                return Block.Types.Stone;
+                return BlockDefOf.Stone;
             }
             if (gradientSoil <= this.GroundRatio)
             {
-                c.Variation = (byte)Terraformer.GetRandom(rockSeed, x, y, z, 0, Block.Registry[Block.Types.Soil].Variations.Count);
-                return w.DefaultTile;
+                c.Variation = (byte)Terraformer.GetRandom(rockSeed, x, y, z, 0, BlockDefOf.Soil.Variations.Count);
+                return w.DefaultBlock;
             }
             // if we didn't add a block yet, it means we have air. so add water if below sealevel
             else
@@ -76,10 +76,10 @@ namespace Start_a_Town_.Terraforming.Mutators
                 {
                     if (z < seaLevel)
                         c.BlockData = Blocks.BlockWater.GetData(1);
-                    return Block.Types.Water;
+                    return BlockDefOf.Water;
                 }
             }
-            return Block.Types.Air;
+            return BlockDefOf.Air;
         }
 
         public override void Initialize(IWorld w, Cell c, int x, int y, int z, double gradient)

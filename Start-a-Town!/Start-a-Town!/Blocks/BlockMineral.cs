@@ -81,7 +81,7 @@ namespace Start_a_Town_
             
 
         public BlockMineral()
-            : base(Block.Types.Mineral,  0, 1, true, true)
+            : base("Mineral", 0, 1, true, true)
         {
             this.LoadVariations("stone5height19");
         }

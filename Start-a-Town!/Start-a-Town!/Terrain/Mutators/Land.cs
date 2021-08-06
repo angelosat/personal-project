@@ -26,21 +26,21 @@ namespace Start_a_Town_.Terraforming.Mutators
         {
             if (z > this.LandLevel)
             {
-                c.SetBlockType(Block.Types.Air);
+                c.Block = BlockDefOf.Air;
                 return;
             }
-            c.SetBlockType(w.DefaultTile);
+            c.Block = w.DefaultBlock;
         }
         public override List<MutatorProperty> GetAdjustableParameters()
         {
-            List<MutatorProperty> list = new List<MutatorProperty>();
+            var list = new List<MutatorProperty>();
             list.Add(new MutatorProperty("Land Level", this.LandLevel, 0, MapBase.MaxHeight, 1));
             return list;
         }
 
         public override List<SaveTag> Save()
         {
-            List<SaveTag> tag = new List<SaveTag>();
+            var tag = new List<SaveTag>();
             tag.Add(new SaveTag(SaveTag.Types.Int, "Level", this.LandLevel));
             return tag;
         }

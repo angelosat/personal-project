@@ -59,7 +59,7 @@ namespace Start_a_Town_
         (CraftOrder order, IEnumerable<(string reagent, ItemDef itemDef, MaterialDef material)>) SelectOrderIngredients(ICollection<CraftOrder> orders, Random rand, int budget, List<MaterialDef> favs)
         {
             var ingredients = new List<(string reagent, ItemDef itemDef, MaterialDef material)>();
-            foreach(var order in orders.Randomize(rand))
+            foreach(var order in orders.Shuffle(rand))
             {
 
             }

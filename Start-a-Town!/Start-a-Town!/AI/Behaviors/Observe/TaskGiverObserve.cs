@@ -12,7 +12,7 @@ namespace Start_a_Town_.AI.Behaviors.Observe
                 return null;
             var potentialTargets = actor.Map.GetObjects()
                 .Where(o=>actor.CanReserve(o));
-            var randomized = new Queue<GameObject>(potentialTargets.Randomize<GameObject>(actor.Map.Random));
+            var randomized = new Queue<GameObject>(potentialTargets.Shuffle(actor.Map.Random));
 
             while (randomized.Count > 0)
             {

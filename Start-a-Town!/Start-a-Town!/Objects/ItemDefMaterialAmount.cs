@@ -48,6 +48,10 @@ namespace Start_a_Town_
         {
             return $"{this.Amount}x {this.Material.Label} {this.Def.Label}"; // TODO add a method to itemdefs that return the final name of the item depending on materials etc
         }
+        public void Save(SaveTag save, string name)
+        {
+            save.Add(this.Save(name));
+        }
         public SaveTag Save(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);

@@ -24,7 +24,7 @@ namespace Start_a_Town_
         public static readonly double TramplingChance = 0.1f;
 
         public BlockGrass()
-            : base(Block.Types.Grass, 0, 1, true, true)
+            : base("Grass", 0, 1, true, true)
         {
             this.LootTable = new LootTable(
                         new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), chance: 1f, count: 1)

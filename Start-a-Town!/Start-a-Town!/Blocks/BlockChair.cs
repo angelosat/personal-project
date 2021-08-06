@@ -11,12 +11,12 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.LightWood;
         }
         
-        public BlockChair():base(Block.Types.Chair, opaque: false)
+        public BlockChair():base("Chair", opaque: false)
         {
-            Orientations[0] = Block.Atlas.Load("blocks/furniture/chair", Block.HalfBlockDepthMap, Block.NormalMap);
-            Orientations[1] = Block.Atlas.Load("blocks/furniture/chair2", Block.HalfBlockDepthMap, Block.NormalMap);
-            Orientations[2] = Block.Atlas.Load("blocks/furniture/chairback2", Block.HalfBlockDepthMap, Block.NormalMap);
-            Orientations[3] = Block.Atlas.Load("blocks/furniture/chairback", Block.HalfBlockDepthMap, Block.NormalMap);
+            Orientations[0] = Atlas.Load("blocks/furniture/chair", Block.HalfBlockDepthMap, Block.NormalMap);
+            Orientations[1] = Atlas.Load("blocks/furniture/chair2", Block.HalfBlockDepthMap, Block.NormalMap);
+            Orientations[2] = Atlas.Load("blocks/furniture/chairback2", Block.HalfBlockDepthMap, Block.NormalMap);
+            Orientations[3] = Atlas.Load("blocks/furniture/chairback", Block.HalfBlockDepthMap, Block.NormalMap);
 
             this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();

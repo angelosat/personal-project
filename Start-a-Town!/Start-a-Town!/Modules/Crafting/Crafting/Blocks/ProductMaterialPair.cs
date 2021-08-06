@@ -5,7 +5,7 @@ namespace Start_a_Town_.Components.Crafting
 {
     public class ProductMaterialPair
     {
-        public override string ToString() => "Type: " + this.Block.Type.ToString() + "\nData: " + this.Data.ToString();
+        public override string ToString() => "Type: " + this.Block.Label + "\nData: " + this.Data.ToString();
         public string GetName() => this.Requirement.ToString();
         public Block Block;
         public byte Data;
@@ -26,13 +26,13 @@ namespace Start_a_Town_.Components.Crafting
         }
         public ProductMaterialPair(BinaryReader r)
         {
-            this.Block = Block.Registry[(Block.Types)r.ReadInt32()];
+            this.Block = r.ReadBlock();
             this.Data = r.ReadByte();
             this.Requirement = new ItemDefMaterialAmount(r);
         }
         public ProductMaterialPair(SaveTag tag)
         {
-            this.Block = Block.Registry[(Block.Types)tag.GetValue<int>("Product")];
+            this.Block = tag.LoadBlock("Product");// Block.Registry[(Block.Types)tag.GetValue<int>("Product")];
             this.Data = tag.TagValueOrDefault<byte>("Data", 0);
             this.Requirement = new ItemDefMaterialAmount(tag["Requirement"]);
         }
@@ -44,22 +44,14 @@ namespace Start_a_Town_.Components.Crafting
 
         internal void Save(SaveTag tag, string name)
         {
-            tag.Add(new SaveTag(SaveTag.Types.Compound, name, this.Save()));
+            var save = new SaveTag(SaveTag.Types.Compound, name);
+            save.Save(this.Block, "Product");
+            this.Data.Save(save, "Data");
+            this.Requirement.Save(save, "Requirement");
         }
-        public List<SaveTag> Save()
-        {
-            var save = new List<SaveTag>
-            {
-                new SaveTag(SaveTag.Types.Int, "Product", (int)this.Block.Type),
-                new SaveTag(SaveTag.Types.Byte, "Data", this.Data),
-                this.Requirement.Save("Requirement")
-            };
-            return save;
-        }
-
         public void Write(BinaryWriter w)
         {
-            w.Write((int)this.Block.Type);
+            w.Write(this.Block);
             w.Write(this.Data);
             this.Requirement.Write(w);
         }

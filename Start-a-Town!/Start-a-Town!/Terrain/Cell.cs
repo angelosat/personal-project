@@ -13,7 +13,7 @@ namespace Start_a_Town_
     {
         public string GetName()
         {
-            return this.Block.Type.ToString();
+            return this.Block.Label;
         }
         public Icon GetIcon()
         {
@@ -35,21 +35,12 @@ namespace Start_a_Town_
         {
             this.Block.DrawUI(sb, pos, this.BlockData);
         }
-        public void SetBlockType(Block.Types type)
-        {
-            this.Block = Block.Registry[type];
-        }
-
-        public void SetBlockType(int type)
-        {
-            this.Block = Block.Registry[(Block.Types)type];
-        }
 
         public override string ToString()
         {
             return
                 "Local: " + this.LocalCoords +
-                "\nTile ID: " + this.Block.Type +
+                "\nBlock: " + this.Block.Label +
                 "\nStyle: " + this.Variation +
                 "\nOrientation: " + this.Orientation;
         }
@@ -146,8 +137,8 @@ namespace Start_a_Town_
 
         public SaveTag Save()
         {
-            SaveTag data = new SaveTag(SaveTag.Types.Compound);
-            data.Add(new SaveTag(SaveTag.Types.Byte, "Tile", (byte)this.Block.Type));
+            var data = new SaveTag(SaveTag.Types.Compound);
+            data.Save(this.Block, "Block");
             data.Add(new SaveTag(SaveTag.Types.Int, "Data", this.Data.Data));
             this.ValidDiscovered.Data.Save(data, "Extra");
             data.Add(new SaveTag(SaveTag.Types.Int, "ValidDiscovered", this.ValidDiscovered.Data));
@@ -155,34 +146,35 @@ namespace Start_a_Town_
         }
         public Cell Load(SaveTag data)
         {
-            this.SetBlockType((Block.Types)data["Tile"].Value);
+            this.Block = data.LoadBlock("Block");
             this.Data = new BitVector32((int)data["Data"].Value);
             data.TryGetTagValue<int>("ValidDiscovered", v => this.ValidDiscovered = new(v));
             return this;
         }
 
-        public void Write(BinaryWriter writer)
+        public void Write(BinaryWriter w)
         {
-            writer.Write((byte)this.Block.Type);
-            writer.Write(this.X);
-            writer.Write(this.Y);
-            writer.Write(this.Z);
-            writer.Write(this.Variation);
-            writer.Write(this.Data.Data);
+            w.Write(this.Block.Hash);
+            w.Write(this.Block);
+            w.Write(this.X);
+            w.Write(this.Y);
+            w.Write(this.Z);
+            w.Write(this.Variation);
+            w.Write(this.Data.Data);
             //writer.Write(this.BlockData);
-            writer.Write(this.Discovered);
+            w.Write(this.Discovered);
 
         }
-        public Cell Read(BinaryReader reader)
+        public Cell Read(BinaryReader r)
         {
-            this.SetBlockType((Block.Types)reader.ReadByte());
-            this.X = reader.ReadByte();
-            this.Y = reader.ReadByte();
-            this.Z = reader.ReadByte();
-            this.Variation = reader.ReadByte();
-            this.Data = new BitVector32(reader.ReadInt32());
+            this.Block = r.ReadBlock();
+            this.X = r.ReadByte();
+            this.Y = r.ReadByte();
+            this.Z = r.ReadByte();
+            this.Variation = r.ReadByte();
+            this.Data = new BitVector32(r.ReadInt32());
             //this.BlockData = reader.ReadByte();
-            this.Discovered = reader.ReadBoolean();
+            this.Discovered = r.ReadBoolean();
             return this;
         }
 

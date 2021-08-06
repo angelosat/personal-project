@@ -63,11 +63,11 @@ namespace Start_a_Town_.PlayerControl
             bool isDelete = InputState.IsKeyDown(KeyRemove);
             bool isReplace = InputState.IsKeyDown(KeyReplace);
             var global = this.Target.Global + ((isDelete || isReplace) ? Vector3.Zero : this.Target.Face);
-            Block block = isDelete ? BlockDefOf.Air : this.Block;
+            var block = isDelete ? BlockDefOf.Air : this.Block;
             byte state = isDelete ? (byte)0 : this.State;
 
             if (global != this.LastPainted)
-                PacketPlayerSetBlock.Send(Client.Instance, Client.Instance.GetPlayer(), global, block.Type, state, this.Variation, this.Orientation);
+                PacketPlayerSetBlock.Send(Client.Instance, Client.Instance.GetPlayer(), global, block, state, this.Variation, this.Orientation);
             this.LastPainted = global;
 
             this.Variation = this.Random.Next(block.Variations.Count);
@@ -133,12 +133,12 @@ namespace Start_a_Town_.PlayerControl
         }
         protected override void WriteData(System.IO.BinaryWriter w)
         {
-            w.Write((int)this.Block.Type);
+            w.Write(this.Block.Hash);
             w.Write(this.State);
         }
         protected override void ReadData(System.IO.BinaryReader r)
         {
-            this.Block = Block.Registry[(Block.Types)r.ReadInt32()];
+            this.Block = Block.Registry[r.ReadInt32()];
             this.State = r.ReadByte();
         }
     }

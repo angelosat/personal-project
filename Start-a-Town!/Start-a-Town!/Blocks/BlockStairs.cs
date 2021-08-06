@@ -24,7 +24,7 @@ namespace Start_a_Town_.Blocks
 
         AtlasDepthNormals.Node.Token[] Parts = new AtlasDepthNormals.Node.Token[4];
         public BlockStairs()
-            : base(Block.Types.Stairs, opaque: false)
+            : base("Stairs", opaque: false)
         {
             this.Parts[0] = Block.Atlas.Load("blocks/stairs/stairs1", Depth1, Normal1);
             this.Parts[1] = Block.Atlas.Load("blocks/stairs/stairs2", Depth2, Normal2);

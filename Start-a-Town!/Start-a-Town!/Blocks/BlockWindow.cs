@@ -14,7 +14,7 @@ namespace Start_a_Town_.Blocks
             return MaterialDefOf.Glass;
         }
         public BlockWindow()
-            : base(Types.Window, opaque: false)
+            : base("Window", opaque: false)
         {
             this.PartsSeparate = 
                 new AtlasDepthNormals.Node.Token[][][] { 

@@ -111,15 +111,17 @@ namespace Start_a_Town_
             return text.Remove(text.Length - 1);
         }
 
-        List<IntVec3> _RandomOrderedCells;
-        List<IntVec3> RandomOrderedCells
+        IntVec3[] _RandomOrderedCells;
+        IntVec3[] RandomOrderedCells
         {
             get
             {
                 if (this._RandomOrderedCells is null)
                 {
-                    var allPositions = new BoundingBox(IntVec3.Zero, new IntVec3(Chunk.Size - 1, Chunk.Size - 1, MapBase.MaxHeight - 1)).GetBoxIntVec3();
-                    this._RandomOrderedCells = allPositions.Randomize(this.Map.Random);
+                    var allPositions = new BoundingBox(IntVec3.Zero, new IntVec3(Chunk.Size - 1, Chunk.Size - 1, MapBase.MaxHeight - 1)).GetBoxIntVec3Lazy();
+                    var array = allPositions.ToArray();
+                    array.Shuffle(this.Map.Random);
+                    this._RandomOrderedCells = array;// allPositions.Randomize(this.Map.Random);
                 }
                 return this._RandomOrderedCells;
             }
@@ -395,7 +397,7 @@ namespace Start_a_Town_
             {
                 cell = this.GetLocalCell(localx, localy, z);
                 if (!hit)
-                    if (cell.Block.Type != Block.Types.Air)
+                    if (cell.Block != BlockDefOf.Air)
                     {
                         hit = true;
                     }
@@ -442,7 +444,7 @@ namespace Start_a_Town_
             {
                 cell = this.GetLocalCell(localx, localy, z);
                 if (!hit)
-                    if (cell.Block.Type != Block.Types.Air)
+                    if (cell.Block != BlockDefOf.Air)
                     {
                         hit = true;
                     }
@@ -478,7 +480,7 @@ namespace Start_a_Town_
             {
                 cell = this.GetLocalCell(localx, localy, z);
                 if (!hit)
-                    if (cell.Block.Type != Block.Types.Air)
+                    if (cell.Block != BlockDefOf.Air)
                     {
                         hit = true;
                         firstContact = z;
@@ -863,7 +865,7 @@ namespace Start_a_Town_
             static void saveAirTag(SaveTag cellstag, int airLength, bool airIsDiscovered)
             {
                 var airtag = new SaveTag(SaveTag.Types.Compound);
-                airtag.Add(new SaveTag(SaveTag.Types.Byte, "Tile", (byte)BlockDefOf.Air.Type));
+                airtag.Save(BlockDefOf.Air, "Block");
                 airtag.Add(new SaveTag(SaveTag.Types.Int, "Data", airLength));
                 airtag.Add(new SaveTag(SaveTag.Types.Bool, "Discovered", airIsDiscovered));
                 cellstag.Add(airtag);
@@ -1120,7 +1122,7 @@ namespace Start_a_Town_
             bool lastDiscovered = false;
             foreach (var cell in this.CellGrid2)
             {
-                if (cell.Block.Type == Block.Types.Air)
+                if (cell.Block == BlockDefOf.Air)
                 {
                     consecutiveAirblocks++;
                     lastDiscovered = cell.Discovered;
@@ -1132,30 +1134,62 @@ namespace Start_a_Town_
                     writeAir(w, consecutiveAirblocks, lastDiscovered);
                     consecutiveAirblocks = 0;
                 }
-                w.Write((int)cell.Block.Type);
+                w.Write(cell.Block);
                 w.Write(cell.Data.Data);
                 w.Write(cell.Discovered);
             }
             if (consecutiveAirblocks > 0)
                 writeAir(w, consecutiveAirblocks, lastDiscovered);
 
-            w.Write(-1);
+            //w.Write(-1);
 
             static void writeAir(BinaryWriter w, int consecutiveAirblocks, bool lastDiscovered)
             {
-                w.Write(0);
+                w.Write(BlockDefOf.Air);
                 w.Write(consecutiveAirblocks);
                 w.Write(lastDiscovered); // because all consecutive air blocks are either all discovered or none is
             }
+            //var w = writer;
+            //int consecutiveAirblocks = 0;
+            //bool lastDiscovered = false;
+            //foreach (var cell in this.CellGrid2)
+            //{
+            //    if (cell.Block == BlockDefOf.Air)
+            //    {
+            //        consecutiveAirblocks++;
+            //        lastDiscovered = cell.Discovered;
+            //        continue;
+            //    }
+            //    if (consecutiveAirblocks > 0)
+            //    {
+            //        // write air block length
+            //        writeAir(w, consecutiveAirblocks, lastDiscovered);
+            //        consecutiveAirblocks = 0;
+            //    }
+            //    w.Write((int)cell.Block.Type);
+            //    w.Write(cell.Data.Data);
+            //    w.Write(cell.Discovered);
+            //}
+            //if (consecutiveAirblocks > 0)
+            //    writeAir(w, consecutiveAirblocks, lastDiscovered);
+
+            //w.Write(-1);
+
+            //static void writeAir(BinaryWriter w, int consecutiveAirblocks, bool lastDiscovered)
+            //{
+            //    w.Write(0);
+            //    w.Write(consecutiveAirblocks);
+            //    w.Write(lastDiscovered); // because all consecutive air blocks are either all discovered or none is
+            //}
         }
         void ReadCells(BinaryReader r)
         {
             int cellIndex = 0;
-            int type;
+            Block block;
             do
             {
-                type = r.ReadInt32();
-                if (type == 0)
+                block = r.ReadBlock();
+                if (block == BlockDefOf.Air)
                 {
                     // read length of consecutive air blocks
                     int consecutiveAirblocks = r.ReadInt32();
@@ -1163,19 +1197,44 @@ namespace Start_a_Town_
                     for (int j = 0; j < consecutiveAirblocks; j++)
                     {
                         var c = this.CellGrid2[cellIndex++];
-                        c.SetBlockType(Block.Types.Air);
+                        c.Block = BlockDefOf.Air;
                         c.Discovered = discovered;
                     }
                 }
-                else if (type > 0)
+                else
                 {
                     var cell = this.CellGrid2[cellIndex++];
-                    cell.SetBlockType(type);
-
+                    cell.Block = block;
                     cell.Data = new BitVector32(r.ReadInt32());
                     cell.Discovered = r.ReadBoolean();
                 }
-            } while (type > -1);
+            } while (cellIndex < this.CellGrid2.Length);
+            //int cellIndex = 0;
+            //int type;
+            //do
+            //{
+            //    type = r.ReadInt32();
+            //    if (type == 0)
+            //    {
+            //        // read length of consecutive air blocks
+            //        int consecutiveAirblocks = r.ReadInt32();
+            //        bool discovered = r.ReadBoolean();
+            //        for (int j = 0; j < consecutiveAirblocks; j++)
+            //        {
+            //            var c = this.CellGrid2[cellIndex++];
+            //            c.Block = BlockDefOf.Air;
+            //            c.Discovered = discovered;
+            //        }
+            //    }
+            //    else if (type > 0)
+            //    {
+            //        var cell = this.CellGrid2[cellIndex++];
+            //        cell.SetBlockType(type);
+
+            //        cell.Data = new BitVector32(r.ReadInt32());
+            //        cell.Discovered = r.ReadBoolean();
+            //    }
+            //} while (type > -1);
         }
         #region Serialization
         public void Write(BinaryWriter writer)
@@ -1373,7 +1432,7 @@ namespace Start_a_Town_
             this.LightValid = chunktag.TagValueOrDefault<bool>("LightValid", false);
             this.EdgesValid = chunktag.TagValueOrDefault<bool>("EdgesValid", false);
 
-            List<SaveTag> lightTag = chunktag["Light"].Value as List<SaveTag>;
+            var lightTag = chunktag["Light"].Value as List<SaveTag>;
 
             this.LoadCellsFromTagCompressed(chunktag);
 
@@ -1389,13 +1448,13 @@ namespace Start_a_Town_
                         n++;
                     }
 
-            List<SaveTag> heightTag = chunktag["Heightmap"].Value as List<SaveTag>;
+            var heightTag = chunktag["Heightmap"].Value as List<SaveTag>;
             n = 0;
             for (int j = 0; j < Size; j++)
                 for (int i = 0; i < Size; i++)
                     this.HeightMap[i][j] = (byte)heightTag[n++].Value;
 
-            List<SaveTag> entitytags = chunktag["Entities"].Value as List<SaveTag>;
+            var entitytags = chunktag["Entities"].Value as List<SaveTag>;
 
             foreach (SaveTag tag in entitytags)
             {
@@ -1414,12 +1473,12 @@ namespace Start_a_Town_
 
             this.LoadBlockEntitiesDistinct(chunktag);
 
-            chunktag.TryGetTag("RandomOrderedCells", t => this._RandomOrderedCells = new List<IntVec3>().Load(t));
+            this._RandomOrderedCells = chunktag.LoadArrayIntVec3("RandomOrderedCells");
             return this;
         }
         private void LoadCellsFromTagCompressed(SaveTag chunktag)
         {
-            List<SaveTag> celllist = chunktag["Cells"].Value as List<SaveTag>;
+            var celllist = chunktag["Cells"].Value as List<SaveTag>;
             int n = 0;
             var airCount = 0;
             bool airDiscovered = true;
@@ -1428,7 +1487,8 @@ namespace Start_a_Town_
             while (listPosition < celllist.Count)
             {
                 var celltag = celllist[listPosition++];
-                if ((byte)celltag["Tile"].Value == (byte)BlockDefOf.Air.Type)
+                var block = celltag.LoadBlock("Block");
+                if(block == BlockDefOf.Air)
                 {
                     airCount = (int)celltag["Data"].Value;
                     celltag.TryGetTagValueNew("Discovered", ref airDiscovered);
@@ -1593,7 +1653,7 @@ namespace Start_a_Town_
                             if (camera.HideUnknownBlocks && map.IsUndiscovered(pos.ToGlobal(this)))
                                 camera.DrawUnknown(slice.Canvas, map, this, cell);
                             // TESTING IF REMOVING THIS BREAKS ANYTHING
-                            else if (cell.Block.Type != Block.Types.Air)
+                            else if (cell.Block != BlockDefOf.Air)
                                 camera.DrawCell(slice.Canvas, map, this, cell);
                         }
                     }
@@ -1630,7 +1690,7 @@ namespace Start_a_Town_
                             if (camera.HideUnknownBlocks && map.IsUndiscovered(pos.ToGlobal(this)))
                                 camera.DrawUnknown(slice.Canvas, map, this, cell);
                             // TESTING IF REMOVING THIS BREAKS ANYTHING
-                            else if (cell.Block.Type != Block.Types.Air)
+                            else if (cell.Block != BlockDefOf.Air)
                                 camera.DrawCell(slice.Canvas, map, this, cell);
                         }
                     }

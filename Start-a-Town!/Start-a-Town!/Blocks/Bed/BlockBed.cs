@@ -23,7 +23,7 @@ namespace Start_a_Town_
         readonly AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
         readonly AtlasDepthNormals.Node.Token[][] Parts;
         public BlockBed() 
-            : base(Types.Bed, 0f, 1f, false, true)
+            : base("Bed", 0f, 1f, false, true)
         {
             this.Furniture = FurnitureDefOf.Bed;
             this.BuildProperties = new BuildProperties(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
@@ -188,8 +188,8 @@ namespace Start_a_Town_
                 _ => throw new NotImplementedException()
             };
 
-            map.SetBlock(bottom, Types.Bed, GetData(Part.Bottom, orientation), 0, 0, notify);
-            map.SetBlock(top, Types.Bed, GetData(Part.Top, orientation), 0, 0, notify);
+            map.SetBlock(bottom, this, GetData(Part.Bottom, orientation), 0, 0, notify);
+            map.SetBlock(top, this, GetData(Part.Top, orientation), 0, 0, notify);
             var entity = new BlockBedEntity(global);
             map.AddBlockEntity(top, entity);
             map.Town.AddUtility(Utility.Types.Sleeping, top);
@@ -211,14 +211,8 @@ namespace Start_a_Town_
                 3 => global - IntVec3.UnitY,
                 _ => throw new Exception()
             });
-            foreach (var pos in positions)
-            {
-                if (map.GetBlock(pos).Type != Types.Air)
-                {
-                    return false;
-                }
-            }
-
+            if (positions.Any(pos => map.GetBlock(pos) != BlockDefOf.Air))
+                return false;
             return true;
         }
 

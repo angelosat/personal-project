@@ -26,6 +26,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 net.Map.World.CurrentTick++;
             }
         }
+        public string SeedString { get; set; }
         public float Gravity => -0.015f;//-0.04f;// -0.05f; //35f;
         public const int Zenith = 14;
         string _Name;
@@ -104,9 +105,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public StaticWorld(string seedString, IEnumerable<Terraformer> mutators)
             : this()
         {
+            this.SeedString = seedString;
             if(seedString.IsNullEmptyOrWhiteSpace())
                 seedString = Path.GetRandomFileName().Replace(".","");
-            this.Name = seedString;
+            this.Name = GetRandomName();
             if (!int.TryParse(seedString, out var seed))
                 seed = seedString.Length > 0 ? seedString.GetHashCode() : new Random().Next(int.MinValue, int.MaxValue);
             this.Seed = seed;
@@ -119,6 +121,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             this.Name = (string)save["Name"].Value;
             this.Seed = (int)save["Seed"].Value;
+            this.SeedString = (string)save["SeedString"].Value;
             save.TryGetTagValue<int>("RandomState", v =>
             {
                 this.Random = new Random(v);
@@ -154,7 +157,25 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 this.Maps.Add(map.Coordinates, map);
             }
         }
-
+        public StaticWorld(BinaryReader r)
+           : this()
+        {
+            this.Name = r.ReadString();
+            this.SeedString = r.ReadString();
+            this.Seed = r.ReadInt32();
+            this.CurrentTick = r.ReadUInt64();
+            this.Trees = r.ReadBoolean();
+            this.DefaultBlock = Block.GetBlock(r.ReadInt32());
+            int mutatorCount = r.ReadInt32();
+            for (int i = 0; i < mutatorCount; i++)
+            {
+                Terraformer.Types id = (Terraformer.Types)r.ReadInt32();
+                Terraformer terra = Terraformer.Dictionary[id].Clone() as Terraformer;
+                terra.Read(r);
+                this.Mutators.Add(terra);
+            }
+            this.Population.Read(r);
+        }
         public MapBase CreateMap(Vector2 mapCoords)
         {
             return new StaticMap(this, mapCoords);
@@ -172,7 +193,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var tag = new SaveTag(SaveTag.Types.Compound, "World");
 
             tag.Add(new SaveTag(SaveTag.Types.Int, "Seed", this.Seed));
-
+            this.SeedString.Save(tag, "SeedString");
             var currentRandomState = this.Random.Next();
             this.Random = new Random(currentRandomState);
             tag.Add(new SaveTag(SaveTag.Types.Int, "RandomState", currentRandomState));
@@ -181,7 +202,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.DefaultBlock.Hash.Save(tag, "DefaultBlock");
             tag.Add(new SaveTag(SaveTag.Types.String, "Name", "World 0"));
             this.Population.Save(tag, "Population");
-            SaveTag mutatorsTag = new SaveTag(SaveTag.Types.List, "Mutators", SaveTag.Types.Compound);
+            var mutatorsTag = new SaveTag(SaveTag.Types.List, "Mutators", SaveTag.Types.Compound);
             foreach (var item in this.Mutators)
             {
                 var mut = new SaveTag(SaveTag.Types.Compound);
@@ -252,6 +273,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public void WriteData(BinaryWriter w)
         {
             w.Write(this.Name);
+            w.Write(this.SeedString);
             w.Write(this.Seed);
             w.Write(this.CurrentTick);
             w.Write(this.Trees);
@@ -264,26 +286,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
             this.Population.Write(w);
         }
-        static public StaticWorld ReadData(BinaryReader r)
-        {
-            StaticWorld world = new StaticWorld();
-            world.Name = r.ReadString();
-            world.Seed = r.ReadInt32();
-            world.CurrentTick = r.ReadUInt64();
-            world.Trees = r.ReadBoolean();
-            world.DefaultBlock = Block.GetBlock(r.ReadInt32());
-            int mutatorCount = r.ReadInt32();
-            for (int i = 0; i < mutatorCount; i++)
-            {
-                Terraformer.Types id = (Terraformer.Types)r.ReadInt32();
-                Terraformer terra = Terraformer.Dictionary[id].Clone() as Terraformer;
-                terra.Read(r);
-                world.Mutators.Add(terra);
-            }
-            world.Population.Read(r);
-            return world;
-        }
-
+       
+       
         public void OnHudCreated(Hud hud)
         {
             var win = new Window(this.CreateUI()) { Movable = true, Closable = true };
@@ -310,6 +314,15 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public void OnTargetSelected(IUISelection info, ISelectable selected)
         {
             this.PopulationManager.OnTargetSelected(info, selected);
+        }
+
+        static string[] NameFirst = {"glory", "thunder", "realm", "world", "city", "town", "far", "outer", "rim", "border",
+            "land", "ville", "honor", "elder", "rock", "stone", "wood", "gold", "silver", "iron", "vale", "srping", "lake" };
+        public static string GetRandomName()
+        {
+            var rand = new Random();
+            var name = NameFirst.SelectRandom(rand) + NameFirst.SelectRandom(rand);
+            return name.First().ToString().ToUpper() + name.Substring(1);
         }
     }
 }

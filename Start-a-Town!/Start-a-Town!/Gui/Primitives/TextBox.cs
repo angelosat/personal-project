@@ -22,6 +22,9 @@ namespace Start_a_Town_.UI
         public Func<char, bool> InputFilter = c => true;
         public Func<string, char, string> InputFunc = (current, input) => char.IsControl(input) ? current : (current + input);              
         public Action<KeyPressEventArgs> TextEnterFunc = (e) => { };
+
+        
+
         public Action<string> EnterFunc = (text) => { };
         public Action<KeyPressEventArgs> EscapeFunc = (e) => { };
         public Action<string> TextChangedFunc = txt => { };
@@ -285,6 +288,19 @@ namespace Start_a_Town_.UI
             }
             else if (!char.IsControl(e.Char))
                 txtBox.Text += e.Char;
+        }
+
+        internal static GroupBox CreateWithLabel(string name, int width, out Label label, out TextBox textBox)
+        {
+            label = new Label($"{name}: ");
+            textBox = new TextBox(width);
+            return new GroupBox() //{ BackgroundColor = UIManager.DefaultListItemBackgroundColor }
+                .AddControlsHorizontally( //Vertically(//
+                    label,
+                    textBox) as GroupBox;
+            //return new GroupBox() { BackgroundColor = UIManager.DefaultListItemBackgroundColor }.AddControlsVertically(//Horizontally(
+            //    new Label(label),
+            //    new TextBox(width)) as GroupBox;
         }
     }
 }

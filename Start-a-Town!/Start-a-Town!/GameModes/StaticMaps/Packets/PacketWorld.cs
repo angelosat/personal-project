@@ -32,7 +32,7 @@ namespace Start_a_Town_
                 throw new Exception("world already received");
                 //"world already received, dropping packet".ToConsole();
             }
-            StaticWorld world = StaticWorld.ReadData(r);
+            var world = new StaticWorld(r);
             client.World = world;
             world.Net = client;
         }

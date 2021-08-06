@@ -84,7 +84,7 @@ namespace Start_a_Town_.UI
             get
             {
                 //return new(Math.Max(Math.Min(Controller.Instance.msCurrent.X + 16, Game1.Instance.graphics.PreferredBackBufferWidth - this.Tooltip.Width), 0), Math.Max(Math.Min(Controller.Instance.msCurrent.Y, Game1.Instance.graphics.PreferredBackBufferHeight - this.Tooltip.Height), 0));
-                return new(Math.Max(Math.Min(Controller.Instance.msCurrent.X + 16, Game1.ScreenSize.Width - this.Tooltip.Width), 0), Math.Max(Math.Min(Controller.Instance.msCurrent.Y, Game1.ScreenSize.Height - this.Tooltip.Height), 0));
+                return new(Math.Max(Math.Min(Controller.Instance.msCurrent.X + 16, Game1.Bounds.Width - this.Tooltip.Width), 0), Math.Max(Math.Min(Controller.Instance.msCurrent.Y, Game1.Bounds.Height - this.Tooltip.Height), 0));
             }
         }
         public void Draw(SpriteBatch sb)

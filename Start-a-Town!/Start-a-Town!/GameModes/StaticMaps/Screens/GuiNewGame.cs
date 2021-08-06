@@ -96,6 +96,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             UIConnecting.Create(localHost);
             map.CameraRecenter();
             Server.SetMap(map);
+
             foreach (var a in actors)
                 map.Town.AddCitizen(a);
             Client.Instance.Connect(localHost, "host", a => LobbyWindow.Instance.Console.Write($"Connected to {localHost}")); // TODO dont manipulate the gui in concurrent threads!!!!!

@@ -24,11 +24,15 @@ namespace Start_a_Town_
         }
        
         public bool IsHarvestable => this.PlantComponent.IsHarvestable;
-        public float FruitGrowth => this.PlantComponent.FruitGrowth.Percentage;
         public float Growth
         {
             get => this.PlantComponent.GrowthBody.Percentage;
             set => this.PlantComponent.GrowthBody.Percentage = value;
+        }
+        public float FruitGrowth
+        {
+            get => this.PlantComponent.FruitGrowth.Percentage;
+            set => this.PlantComponent.FruitGrowth.Percentage = value;
         }
     }
 }

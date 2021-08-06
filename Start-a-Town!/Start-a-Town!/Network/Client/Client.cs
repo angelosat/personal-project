@@ -228,8 +228,9 @@ namespace Start_a_Town_.Net
                     else
                         this.BufferTimestamped.Add(tick, (tick, serverTick, array));
                 }
-                if (tick <= this.lasttickreceived)
-                    throw new Exception();
+                //if (tick <= this.lasttickreceived)
+                    if (tick < this.lasttickreceived)
+                        throw new Exception();
                 this.lasttickreceived = tick;
             }
         }

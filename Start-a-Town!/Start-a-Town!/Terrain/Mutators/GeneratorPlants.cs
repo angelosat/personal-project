@@ -33,6 +33,7 @@ namespace Start_a_Town_
                         var randomPlant = allPlants.SelectRandom(map.Random);
                         var plant = randomPlant.CreatePlant();
                         plant.Growth = 1;
+                        plant.FruitGrowth = 1;
                         int gx = x + (int)chunk.Start.X, gy = y + (int)chunk.Start.Y;
                         plant.Global = new Vector3(gx, gy, z + 1);
                         chunk.Add(plant);

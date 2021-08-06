@@ -68,11 +68,11 @@ namespace Start_a_Town_.UI
         public readonly DialogBlock DialogBlock = new DialogBlock();
 
         public static Rectangle Bounds => new Rectangle(0, 0, Width, Height);
-        public static Vector2 Center => new Vector2(Game1.ScreenSize.Width, Game1.ScreenSize.Height) / (2 * Scale);
+        public static Vector2 Center => new Vector2(Game1.Bounds.Width, Game1.Bounds.Height) / (2 * Scale);
         //public static int Width => (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
         //public static int Height => (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
-        public static int Width => (int)(Game1.ScreenSize.Width / Scale);
-        public static int Height => (int)(Game1.ScreenSize.Height / Scale);
+        public static int Width => (int)(Game1.Bounds.Width / Scale);
+        public static int Height => (int)(Game1.Bounds.Height / Scale);
 
         public static Vector2 Size => new(Width, Height);
         public static Vector2 Mouse => Controller.Instance.MouseLocation;// / Scale;
@@ -292,7 +292,7 @@ namespace Start_a_Town_.UI
                 foreach (var ctrl in layer.Value.ToList())
                 {
                     ctrl.Update();
-                    ctrl.Update(new Rectangle(0, 0, Game1.ScreenSize.Width, Game1.ScreenSize.Height));
+                    ctrl.Update(new Rectangle(0, 0, Game1.Bounds.Width, Game1.Bounds.Height));
                 }
             }
 
@@ -364,9 +364,7 @@ namespace Start_a_Town_.UI
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Scale % 1 > 0 ? SamplerState.AnisotropicClamp : SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
             if (camera is not null)
                 this.DrawOnCamera(sb, camera); //moved this here, because we dont want it drawn to ui scale
-            sb.Draw(uiTexture, new Rectangle(0, 0, Game1.ScreenSize.Width, Game1.ScreenSize.Height), Color.White);
-            //DrawStringOutlined(sb, UIManager.Mouse.ToString(), UIManager.Mouse);
-            DrawStringOutlined(sb, Controller.Instance.msCurrent.ToString(), UIManager.Mouse);
+            sb.Draw(uiTexture, new Rectangle(0, 0, Game1.Bounds.Width, Game1.Bounds.Height), Color.White);
 
             sb.End();
         }

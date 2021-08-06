@@ -48,8 +48,8 @@ namespace Start_a_Town_.UI
             this.Widget = new LoadingWidget(200) { Callback = callback };
             this.Client.Controls.Add(this.Widget);
 
-            this.AnchorToScreenCenter();
-            this.Anchor = Vector2.One * .5f;
+            //this.AnchorToScreenCenter();
+            //this.Anchor = Vector2.One * .5f;
         }
         public DialogLoading(string title, string message, float percentage)
         {
@@ -61,8 +61,8 @@ namespace Start_a_Town_.UI
             this.Widget = new LoadingWidget(200, message, percentage);
             this.Client.Controls.Add(this.Widget);
 
-            this.SnapToScreenCenter();
-            this.Anchor = Vector2.One * .5f;
+            //this.SnapToScreenCenter();
+            //this.Anchor = Vector2.One * .5f;
             this.AutoSize = false;
         }
 

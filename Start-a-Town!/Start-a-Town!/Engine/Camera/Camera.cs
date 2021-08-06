@@ -132,7 +132,7 @@ namespace Start_a_Town_
         public bool TopSliceChanged = true;
 
         public Camera()
-            : this(Game1.ScreenSize.Width, Game1.ScreenSize.Height)
+            : this(Game1.Bounds.Width, Game1.Bounds.Height)
             //: this(Game1.Instance.graphics.PreferredBackBufferWidth, Game1.Instance.graphics.PreferredBackBufferHeight)
         {
             this.WaterSpriteBatch = new MySpriteBatch(Game1.Instance.GraphicsDevice);
@@ -172,8 +172,8 @@ namespace Start_a_Town_
         {
             //this.Width = (sender as GraphicsDeviceManager).PreferredBackBufferWidth;
             //this.Height = (sender as GraphicsDeviceManager).PreferredBackBufferHeight;
-            this.Width = Game1.ScreenSize.Width;
-            this.Height = Game1.ScreenSize.Height;
+            this.Width = Game1.Bounds.Width;
+            this.Height = Game1.Bounds.Height;
             this.ViewPort = new Rectangle(0, 0, this.Width, this.Height);
             this.RenderTargetsInvalid = true;
         }

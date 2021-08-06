@@ -699,7 +699,11 @@ namespace Start_a_Town_
             oldmap.EventOccured(Message.Types.EntityDespawned, this);
             //this.Unreserve(); // UNDONE dont unreserve here because the ai might continue manipulating (placing/carrying) the item during the same behavior
         }
-
+        public virtual void OnSpawnNew()
+        {
+            foreach (var comp in this.Components.Values)
+                comp.OnSpawn();
+        }
         protected virtual void OnSpawn(MapBase map)
         {
             this.Net = map.Net;

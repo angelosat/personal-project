@@ -32,9 +32,7 @@ namespace Start_a_Town_
         int Fps;
 
 
-        //static public Rectangle ScreenSize => new(0, 0, Instance.graphics.PreferredBackBufferWidth, Instance.graphics.PreferredBackBufferHeight);// Instance.Window.ClientBounds; //new Rectangle(0,0, Instance.GraphicsDevice.DisplayMode.Width, Instance.GraphicsDevice.DisplayMode.Height);// 
-        static public Rectangle ScreenSize => Instance.Window.ClientBounds; //new Rectangle(0,0, Instance.GraphicsDevice.DisplayMode.Width, Instance.GraphicsDevice.DisplayMode.Height);// 
-        static public Rectangle Bounds => Instance.GraphicsDevice.Viewport.Bounds;
+        static public Rectangle Bounds => new(0, 0, Instance.graphics.PreferredBackBufferWidth, Instance.graphics.PreferredBackBufferHeight);
 
         public List<GameComponent> GameComponents = new();
         public Network Network;

@@ -12,9 +12,9 @@ namespace Start_a_Town_.Graphics
         {
             var gfx = Game1.Instance.GraphicsDevice;
 
-            SpriteBatch sb = new(gfx);
+            var sb = new SpriteBatch(gfx);
 
-            RenderTarget2D next = new(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
+            var next = new RenderTarget2D(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
             gfx.SetRenderTarget(next);
             gfx.Clear(Color.Transparent);
 
@@ -39,7 +39,7 @@ namespace Start_a_Town_.Graphics
             sb.End();
 
             gfx.SetRenderTarget(null);
-            return next;
+            return next.ToTexture();
         }
 
         public static Texture2D GenerateDepthTexture(Texture2D texture, float layer = 0.5f) // default value is the object rests at the center of the block
@@ -48,8 +48,8 @@ namespace Start_a_Town_.Graphics
 
             SpriteBatch sb = new(gfx);
 
-            RenderTarget2D next = new(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
-            gfx.SetRenderTarget(next);
+            var nextRender = new RenderTarget2D(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
+            gfx.SetRenderTarget(nextRender);
             gfx.Clear(Color.Transparent);
 
             Effect blur = Game1.Instance.Content.Load<Effect>("blur");
@@ -63,8 +63,7 @@ namespace Start_a_Town_.Graphics
             sb.End();
 
             gfx.SetRenderTarget(null);
-            return next;
-
+            return nextRender.ToTexture();
         }
 
         public static Texture2D GenerateDepthTexture(Texture2D texture, Texture2D mask)
@@ -73,9 +72,9 @@ namespace Start_a_Town_.Graphics
                 throw new ArgumentNullException();
             var gfx = Game1.Instance.GraphicsDevice;
     
-            SpriteBatch sb = new SpriteBatch(gfx);
+            var sb = new SpriteBatch(gfx);
 
-            RenderTarget2D next = new RenderTarget2D(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
+            var next = new RenderTarget2D(gfx, texture.Width + 2 * Thickness, texture.Height + 2 * Thickness);
             gfx.SetRenderTarget(next);
             gfx.Clear(Color.Transparent);
 
@@ -91,7 +90,7 @@ namespace Start_a_Town_.Graphics
             sb.End();
 
             gfx.SetRenderTarget(null);
-            return next;
+            return next.ToTexture();
 
         }
 
@@ -99,9 +98,9 @@ namespace Start_a_Town_.Graphics
         {
             var gfx = Game1.Instance.GraphicsDevice;
 
-            SpriteBatch sb = new(gfx);
+            var sb = new SpriteBatch(gfx);
 
-            RenderTarget2D next = new(gfx, texture.Width, texture.Height);
+            var next = new RenderTarget2D(gfx, texture.Width, texture.Height);
             gfx.SetRenderTarget(next);
             gfx.Clear(Color.Transparent);
 
@@ -118,8 +117,7 @@ namespace Start_a_Town_.Graphics
             sb.End();
 
             gfx.SetRenderTarget(null);
-            return next;
-
+            return next.ToTexture();
         }
     }
 }

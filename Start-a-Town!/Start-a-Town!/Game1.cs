@@ -170,6 +170,13 @@ namespace Start_a_Town_
                 item.Initialize();
 
             Interaction.Initialize();
+
+
+            // bake atlases
+            // TODO put these in each respective initialize/loadcontent call above
+            Sprite.Atlas.Bake();
+            Block.Atlas.Bake();
+            UIManager.Atlas.Bake();
         }
 
         /// <summary>
@@ -191,13 +198,13 @@ namespace Start_a_Town_
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (DeviceReset)
-            {
-                Sprite.Atlas.OnDeviceLost();
-                Block.Atlas.OnDeviceLost();
-                UIManager.Atlas.OnDeviceLost();
-                DeviceReset = false;
-            }
+            //if (DeviceReset)
+            //{
+            //    Sprite.Atlas.OnDeviceLost();
+            //    Block.Atlas.OnDeviceLost();
+            //    UIManager.Atlas.OnDeviceLost();
+            //    DeviceReset = false;
+            //}
             ScreenSize = new Vector2(
                         Instance.Window.ClientBounds.Width,
                         Instance.Window.ClientBounds.Height);

@@ -114,11 +114,11 @@ namespace Start_a_Town_.Graphics
 
         internal void Bake()
         {
-            GraphicsDevice gfx = Game1.Instance.GraphicsDevice;
-            RenderTarget2D texture = new RenderTarget2D(gfx, Size, Size);
-            RenderTarget2D depthtexture = new RenderTarget2D(gfx, Size, Size);
+            var gfx = Game1.Instance.GraphicsDevice;
+            var render = new RenderTarget2D(gfx, Size, Size);
+            var depthrender = new RenderTarget2D(gfx, Size, Size);
 
-            gfx.SetRenderTarget(texture);
+            gfx.SetRenderTarget(render);
             gfx.Clear(Color.Transparent);
             SpriteBatch sb = new SpriteBatch(gfx);
             sb.Begin();
@@ -135,12 +135,12 @@ namespace Start_a_Town_.Graphics
             gfx.SetRenderTarget(null);
             using (FileStream stream = new FileStream(GlobalVars.SaveDir + this.Name + "Atlas.png", FileMode.OpenOrCreate))
             {
-                texture.SaveAsPng(stream, texture.Width, texture.Height);
+                render.SaveAsPng(stream, render.Width, render.Height);
                 stream.Close();
             }
 
             //bake depth texture
-            gfx.SetRenderTarget(depthtexture);
+            gfx.SetRenderTarget(depthrender);
             gfx.Clear(Color.Transparent);
             sb = new SpriteBatch(gfx);
             sb.Begin();
@@ -157,11 +157,11 @@ namespace Start_a_Town_.Graphics
             gfx.SetRenderTarget(null);
             using (FileStream stream = new FileStream(GlobalVars.SaveDir + this.Name + "AtlasDepth.png", FileMode.OpenOrCreate))
             {
-                depthtexture.SaveAsPng(stream, depthtexture.Width, depthtexture.Height);
+                depthrender.SaveAsPng(stream, depthrender.Width, depthrender.Height);
                 stream.Close();
             }
-            this.DepthTexture = depthtexture;
-            this.Texture = texture;
+            this.DepthTexture = depthrender.ToTexture();
+            this.Texture = render.ToTexture();
         }
 
         public void Begin(GraphicsDevice gd)

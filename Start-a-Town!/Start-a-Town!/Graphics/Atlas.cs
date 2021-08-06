@@ -81,11 +81,11 @@ namespace Start_a_Town_.Graphics
 
         internal void Bake()
         {
-            GraphicsDevice gfx = Game1.Instance.GraphicsDevice;
-            RenderTarget2D texture = new(gfx, Size, Size);
+            var gfx = Game1.Instance.GraphicsDevice;
+            var texture = new RenderTarget2D(gfx, Size, Size);
             gfx.SetRenderTarget(texture);
             gfx.Clear(Color.Transparent);
-            SpriteBatch sb = new SpriteBatch(gfx);
+            var sb = new SpriteBatch(gfx);
             sb.Begin();
             var nodes = this.RootNode.GetChildren();
 
@@ -103,7 +103,7 @@ namespace Start_a_Town_.Graphics
                 texture.SaveAsPng(stream, texture.Width, texture.Height);
                 stream.Close();
             }
-            this.Texture = texture;
+            this.Texture = texture.ToTexture();
         }
     }
 }

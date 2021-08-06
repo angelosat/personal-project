@@ -134,10 +134,10 @@ namespace Start_a_Town_.Graphics
 
         internal void Bake()
         {
-            GraphicsDevice gfx = Game1.Instance.GraphicsDevice;
-            RenderTarget2D texture = new(gfx, Size, Size);
-            RenderTarget2D depthtexture = new(gfx, Size, Size);
-            RenderTarget2D normaltexture = new(gfx, Size, Size);
+            var gfx = Game1.Instance.GraphicsDevice;
+            var texture = new RenderTarget2D(gfx, Size, Size);
+            var depthtexture = new RenderTarget2D(gfx, Size, Size);
+            var normaltexture = new RenderTarget2D(gfx, Size, Size);
 
             gfx.SetRenderTarget(texture);
             gfx.Clear(Color.Transparent);
@@ -202,9 +202,9 @@ namespace Start_a_Town_.Graphics
                 normaltexture.SaveAsPng(stream, normaltexture.Width, normaltexture.Height);
                 stream.Close();
             }
-            this.DepthTexture = depthtexture;
-            this.NormalTexture = normaltexture;
-            this.Texture = texture;
+            this.DepthTexture = depthtexture.ToTexture();
+            this.NormalTexture = normaltexture.ToTexture();
+            this.Texture = texture.ToTexture();
         }
     }
 }

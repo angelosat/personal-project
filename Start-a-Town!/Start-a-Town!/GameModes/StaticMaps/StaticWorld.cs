@@ -102,13 +102,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.PopulationManager = new PopulationManager(this);
         }
 
-        public StaticWorld(string seedString, IEnumerable<Terraformer> mutators)
+        public StaticWorld(string name, string seedString, IEnumerable<Terraformer> mutators)
             : this()
         {
             this.SeedString = seedString;
             if(seedString.IsNullEmptyOrWhiteSpace())
                 seedString = Path.GetRandomFileName().Replace(".","");
-            this.Name = GetRandomName();
+            this.Name = name;
             if (!int.TryParse(seedString, out var seed))
                 seed = seedString.Length > 0 ? seedString.GetHashCode() : new Random().Next(int.MinValue, int.MaxValue);
             this.Seed = seed;
@@ -200,7 +200,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             tag.Add(new SaveTag(SaveTag.Types.Double, "Time", Clock.TotalSeconds));
             this.CurrentTick.Save(tag, "CurrentTick");
             this.DefaultBlock.Hash.Save(tag, "DefaultBlock");
-            tag.Add(new SaveTag(SaveTag.Types.String, "Name", "World 0"));
+            this.Name.Save(tag, "Name");
             this.Population.Save(tag, "Population");
             var mutatorsTag = new SaveTag(SaveTag.Types.List, "Mutators", SaveTag.Types.Compound);
             foreach (var item in this.Mutators)

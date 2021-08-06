@@ -398,8 +398,6 @@ namespace Start_a_Town_
 
             var finalFogColor = Color.Transparent; // i calculate fog inside the shader from now on
             var global = new Vector3(gx, gy, z);
-            if (global == new Vector3(31, 31, 60))
-                "arxidia".ToConsole();
             var isDiscovered = !map.IsUndiscovered(global);
             /// DONT ERASE
             ///if (cell.AllEdges == 0 && HideUnknownBlocks)  // do i want cells that have already been discoverd, to remain visible even if they become obstructed again?

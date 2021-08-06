@@ -1377,7 +1377,7 @@ namespace Start_a_Town_
 
         public string DirectoryName => (((int)(this.MapCoords.X)).ToString() + "." + ((int)(this.MapCoords.Y)).ToString()) + "/";
 
-        public Canvas Canvas, CanvasTopSlice;
+        public Canvas Canvas;
 
         public void Build(Camera cam)
         {
@@ -1581,16 +1581,14 @@ namespace Start_a_Town_
             for (int i = 0; i < Chunk.Size; i++)
                 for (int j = 0; j < Chunk.Size; j++)
                 {
-                    Cell cell;
                     var local = new IntVec3(i, j, z);
-
-                    cell = this.Cells[GetCellIndex(local)];
+                    var cell = this.Cells[GetCellIndex(local)];
                     var global = local.ToGlobal(this);
 
                     // DO I NEED THIS?
                     if (!camera.HideUnknownBlocks)
                     {
-                        if (cell.Block != BlockDefOf.Air && map.IsVisible(global)) // did i need visibleoutercells list afterall?
+                        if (cell.Block != BlockDefOf.Air)// && map.IsVisible(global)) // did i need visibleoutercells list afterall?
                             visible.Add(cell);
                     }
                     else

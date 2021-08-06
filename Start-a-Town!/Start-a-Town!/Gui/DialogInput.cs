@@ -1,42 +1,41 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Start_a_Town_.UI
 {
     class DialogInput : Window
     {
-        Panel Panel_Input, Panel_Buttons;
-        TextBox Txt_Input;
-        Button Btn_Accept, Btn_Cancel;
-        public string Input { get { return this.Txt_Input.Text; } }
-       
+        readonly Panel Panel_Input, Panel_Buttons;
+        readonly TextBox Txt_Input;
+        readonly Button Btn_Accept, Btn_Cancel;
+        public string Input => this.Txt_Input.Text;
+
         public DialogInput(string title, Action<string> callback, int maxlength = int.MaxValue, string initialText = "")
         {
             this.Title = title;
             this.AutoSize = true;
 
-            Panel_Input = new Panel();
-            Panel_Input.AutoSize = true;
-            Panel_Input.BackgroundStyle = BackgroundStyle.TickBox;
+            this.Panel_Input = new Panel();
+            this.Panel_Input.AutoSize = true;
+            this.Panel_Input.BackgroundStyle = BackgroundStyle.TickBox;
 
-            Panel_Buttons = new Panel(Panel_Input.BottomLeft);
-            Panel_Buttons.AutoSize = true;
+            this.Panel_Buttons = new Panel(this.Panel_Input.BottomLeft);
+            this.Panel_Buttons.AutoSize = true;
 
-            Txt_Input = new TextBox(Vector2.Zero, new Vector2(300, Label.DefaultHeight)) { MaxLength = maxlength, Text = initialText, EnterFunc = callback };
-            Txt_Input.BackgroundStyle = BackgroundStyle.TickBox;
+            this.Txt_Input = new TextBox(initialText, 300) { MaxLength = maxlength, EnterFunc = callback, BackgroundStyle = BackgroundStyle.TickBox };
 
-            Panel_Input.Controls.Add(Txt_Input);
+            this.Panel_Input.Controls.Add(this.Txt_Input);
 
-            Panel_Buttons = new Panel(Panel_Input.BottomLeft);
-            Panel_Buttons.AutoSize = true;
-            Btn_Accept = new Button(Vector2.Zero, 50, "Done") { LeftClickAction = () => callback(this.Txt_Input.Text) };
-            Btn_Cancel = new Button(Btn_Accept.TopRight, 50, "Cancel");
-            Panel_Buttons.Controls.Add(Btn_Accept);
+            this.Panel_Buttons = new Panel(this.Panel_Input.BottomLeft);
+            this.Panel_Buttons.AutoSize = true;
+            this.Btn_Accept = new Button(Vector2.Zero, 50, "Done") { LeftClickAction = () => callback(this.Txt_Input.Text) };
+            this.Btn_Cancel = new Button(this.Btn_Accept.TopRight, 50, "Cancel");
+            this.Panel_Buttons.Controls.Add(this.Btn_Accept);
 
-            Panel_Buttons.Location = Panel_Input.BottomCenter;
-            Panel_Buttons.Anchor = Vector2.UnitX / 2;
+            this.Panel_Buttons.Location = this.Panel_Input.BottomCenter;
+            this.Panel_Buttons.Anchor = Vector2.UnitX / 2;
 
-            this.Client.Controls.Add(Panel_Input, Panel_Buttons);
+            this.Client.Controls.Add(this.Panel_Input, this.Panel_Buttons);
             //this.SnapToScreenCenter();
             this.AnchorToScreenCenter();
         }
@@ -45,28 +44,27 @@ namespace Start_a_Town_.UI
             this.Title = title;
             this.AutoSize = true;
 
-            Panel_Input = new Panel();
-            Panel_Input.AutoSize = true;
-            Panel_Input.BackgroundStyle = BackgroundStyle.TickBox;
+            this.Panel_Input = new Panel();
+            this.Panel_Input.AutoSize = true;
+            this.Panel_Input.BackgroundStyle = BackgroundStyle.TickBox;
 
-            Panel_Buttons = new Panel(Panel_Input.BottomLeft);
-            Panel_Buttons.AutoSize = true;
+            this.Panel_Buttons = new Panel(this.Panel_Input.BottomLeft);
+            this.Panel_Buttons.AutoSize = true;
 
-            Txt_Input = new TextBox(Vector2.Zero, new Vector2(300, Label.DefaultHeight)) { MaxLength = maxlength, Text = initialText, EnterFunc = (txt) => callback(this) };
-            Txt_Input.BackgroundStyle = BackgroundStyle.TickBox;
+            this.Txt_Input = new TextBox(initialText, 300) { MaxLength = maxlength, EnterFunc = txt => callback(this), BackgroundStyle = BackgroundStyle.TickBox };
 
-            Panel_Input.Controls.Add(Txt_Input);
+            this.Panel_Input.Controls.Add(this.Txt_Input);
 
-            Panel_Buttons = new Panel(Panel_Input.BottomLeft);
-            Panel_Buttons.AutoSize = true;
-            Btn_Accept = new Button(Vector2.Zero, 50, "Done") { LeftClickAction = () => callback(this) };
-            Btn_Cancel = new Button(Btn_Accept.TopRight, 50, "Cancel");
-            Panel_Buttons.Controls.Add(Btn_Accept);
+            this.Panel_Buttons = new Panel(this.Panel_Input.BottomLeft);
+            this.Panel_Buttons.AutoSize = true;
+            this.Btn_Accept = new Button(Vector2.Zero, 50, "Done") { LeftClickAction = () => callback(this) };
+            this.Btn_Cancel = new Button(this.Btn_Accept.TopRight, 50, "Cancel");
+            this.Panel_Buttons.Controls.Add(this.Btn_Accept);
 
-            Panel_Buttons.Location = Panel_Input.BottomCenter;
-            Panel_Buttons.Anchor = Vector2.UnitX / 2;
+            this.Panel_Buttons.Location = this.Panel_Input.BottomCenter;
+            this.Panel_Buttons.Anchor = Vector2.UnitX / 2;
 
-            this.Client.Controls.Add(Panel_Input, Panel_Buttons);
+            this.Client.Controls.Add(this.Panel_Input, this.Panel_Buttons);
             //this.SnapToScreenCenter();
             this.AnchorToScreenCenter();
         }

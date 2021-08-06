@@ -152,7 +152,7 @@ namespace Start_a_Town_.UI
             if (this.CursorVisible)
             {
                 var textbounds = UIManager.Font.MeasureString(this.Text.Substring(0, this.CursorPosition));
-                sb.Draw(UIManager.Highlight, new Rectangle((int)this.ScreenClientLocation.X + (int)textbounds.X, (int)this.ScreenClientLocation.Y, CursorWidth, this.Height), Color.White);
+                sb.Draw(UIManager.Highlight, new Rectangle(this.BoundsScreen.X + (int)textbounds.X, this.BoundsScreen.Y, CursorWidth, this.Height), Color.White);
             }
         }
         public override void Dispose()
@@ -267,7 +267,6 @@ namespace Start_a_Town_.UI
                     if (!this.InputFilter(e.KeyChar))
                         break;
                     var cursor = this.CursorPosition;
-                    //this.Text = this.InputFunc(this.Text, e.KeyChar);
                     this.Text = this.Text.Insert(cursor, e.KeyChar.ToString());
                     this.CursorPosition = cursor + 1;
                     this.RefreshCursor();

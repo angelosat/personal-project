@@ -64,7 +64,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
                 var actorsui = new GuiActorCreation(actors);
-                var btnstart = new Button("Start", () => this.CreateMap(txt_Seed.Text, selectedSize, actors.ToArray()));
+                var btnstart = new Button("Start", () => this.CreateMap(txtboxname.Text, txt_Seed.Text, selectedSize, actors.ToArray()));
                 var btnback = new Button("Back", () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); });
                 actorsCreateBox.AddControlsVertically(0, HorizontalAlignment.Right,
                     actorsui,
@@ -78,9 +78,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
         }
 
-        void CreateMap(string seedString, StaticMap.MapSize size, Actor[] actors)
+        void CreateMap(string name, string seedString, StaticMap.MapSize size, Actor[] actors)
         {
-            var world = new StaticWorld(seedString, Terraformer.Defaults);
+            var world = new StaticWorld(name, seedString, Terraformer.Defaults);
             var map = new StaticMap(world, "test", Vector2.Zero, size);
             this.Hide();
             Server.Start();

@@ -42,7 +42,7 @@ namespace Start_a_Town_.UI
 
         void Quit()
         {
-            this.quitbox = new MessageBox("Quit game", "Are you sure you want to quit?", new ContextAction(() => "Yes", () => Game1.Instance.Exit()), new ContextAction(() => "No", () => { }));
+            this.quitbox = MessageBox.Create("Quit game", "Are you sure you want to quit?", Game1.Instance.Exit);
             this.quitbox.ShowDialog();
         }
 

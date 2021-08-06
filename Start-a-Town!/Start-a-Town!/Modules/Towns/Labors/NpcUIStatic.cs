@@ -1,5 +1,4 @@
 ﻿using Start_a_Town_.UI;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.AI
 {
@@ -73,7 +72,7 @@ namespace Start_a_Town_.AI
             this.Needs.Refresh(npc);
             this.Inventory.Refresh(npc);
             this.StatsUI.Refresh(npc);
-            this.PersonalityUI.Refresh(npc as Actor);
+            this.PersonalityUI.Refresh(npc);
             this.SkillsUI.ClearControls();
             this.SkillsUI.AddControls(NpcSkillsComponent.GetGUI(npc));
 

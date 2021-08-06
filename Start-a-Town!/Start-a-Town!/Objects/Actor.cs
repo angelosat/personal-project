@@ -269,7 +269,7 @@ namespace Start_a_Town_
                    )));
             obj.AddComponent(new AttributesComponent(def).Randomize());
             obj.AddComponent(new NpcSkillsComponent(def).Randomize());
-            obj.AddComponent(new PersonalityComponent(def).Randomize());
+            obj.AddComponent(new PersonalityComponent(def));//.Randomize());
             obj.AddComponent(new GearComponent(def));
             obj.AddComponent(new ResourcesComponent(def));
             obj.AddComponent(new NeedsComponent(obj));

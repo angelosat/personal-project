@@ -48,7 +48,7 @@ namespace Start_a_Town_
             else
                 window = Instance.GetWindow();
             Instance.Tag = actor;
-            window.Title = string.Format("{0} needs", actor.Name);
+            window.Title = $"{actor.Name} needs";
             Instance.Refresh(actor);
             return window;
         }
@@ -56,9 +56,7 @@ namespace Start_a_Town_
         {
             var actor = target.Object as Actor;
             if (!actor?.Equals(this.Tag) ?? false)
-            {
                 GetGui(actor);
-            }
         }
     }
 }

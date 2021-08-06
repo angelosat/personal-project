@@ -14,7 +14,7 @@ namespace Start_a_Town_.AI
             var p = npc.Personality;
             foreach (var t in p.Traits)
             {
-                this.AddControlsBottomLeft(t.GetUI());
+                this.AddControlsBottomLeft(t.GetListControlGui());
             }
         }
     }

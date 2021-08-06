@@ -3,30 +3,22 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public sealed class Trait : ISaveable, ISerializable, IProgressBar, INamed 
+    public sealed class Trait : ISaveable, ISerializable, IProgressBar, INamed, IListable
     {
         public float Percentage
         {
-            get
-            {
-                return this.Value / MaxDefault;
-            }
-            set { this.Value = (MaxDefault - MinDefault) * value; }
+            get => this.Value / MaxDefault;
+            set => this.Value = (MaxDefault - MinDefault) * value;
         }
 
         public TraitDef Def;
-        public string Name { get { return this.Def.Name; } }
-        public string Label { get { return this.Value >= 0 ? this.Def.NamePositive : this.Def.NameNegative; } }
+        public string Name => this.Def.Name;
+        public string Label => this.Value >= 0 ? this.Def.NamePositive : this.Def.NameNegative;
         public const float MinDefault = -100;
         public const float MaxDefault = 100;
         public const float ValueRange = 100;
         public float Value;
-
-        public float Normalized
-        {
-            get { return this.Value / ValueRange; } //unsigned. do i want this?
-        }
-
+        public float Normalized => this.Value / ValueRange;  //unsigned. do i want this?
         public float Min => MinDefault;
         public float Max => MaxDefault;
 
@@ -39,7 +31,7 @@ namespace Start_a_Town_
             return $"{this.Def.Name}: {this.Value}";
         }
 
-        public Control GetUI()
+        public Control GetListControlGui()
         {
             var box = new Panel() { AutoSize = true, BackgroundStyle = BackgroundStyle.TickBox };
             var bar = new BarSigned() { Object = this, TextFunc = () => this.Label, HoverFunc = () => $"{this.Def.Name}: {this.Value} ({this.Label})\n{this.Def.Description.Wrap(TooltipManager.Width)}" };

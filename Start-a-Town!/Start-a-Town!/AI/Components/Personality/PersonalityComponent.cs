@@ -58,7 +58,7 @@ namespace Start_a_Town_
         {
             var box = new GroupBox();
             foreach (var t in this.Traits)
-                box.AddControlsBottomLeft(t.GetUI());
+                box.AddControlsBottomLeft(t.GetListControlGui());
             return box;
         }
         public Trait GetTrait(TraitDef def)
@@ -74,6 +74,18 @@ namespace Start_a_Town_
         /// https://softwareengineering.stackexchange.com/questions/254301/algorithm-to-generate-n-random-numbers-between-a-and-b-which-sum-up-to-x
         /// </summary>
         public PersonalityComponent Randomize()
+        {
+            RandomizeTraits();
+            RandomizeFavorites();
+            return this;
+        }
+
+        private void RandomizeFavorites()
+        {
+            this.Favorites = GenerateMaterialPreferences();
+        }
+
+        private void RandomizeTraits()
         {
             int budget = 0; //placeholder
             var random = Randomizer;
@@ -114,7 +126,6 @@ namespace Start_a_Town_
             {
                 return RandomHelper.NextNormal(minimum, maximum);
             }
-            return this;
         }
 
         public override void Write(System.IO.BinaryWriter w)
@@ -125,6 +136,7 @@ namespace Start_a_Town_
         public override void Read(System.IO.BinaryReader r)
         {
             this.Traits.Read(r);
+            this.Favorites.Clear();
             this.Favorites.ReadDefs(r);
         }
         internal override void AddSaveData(SaveTag tag)
@@ -135,6 +147,7 @@ namespace Start_a_Town_
         internal override void Load(SaveTag tag)
         {
             this.Traits.TryLoadImmutable(tag, "Traits");
+            this.Favorites.Clear();
             if (!this.Favorites.TryLoadDefs(tag, "Favorites"))
                 this.Favorites = GenerateMaterialPreferences();
         }
@@ -148,20 +161,20 @@ namespace Start_a_Town_
                 win = new Window(GUI) { Movable = true, Closable = true };
                 win.OnSelectedTargetChangedAction = t =>
                 {
-                    if (t.Object is not Actor)
+                    if (t.Object is not Actor actor)
                         win.Hide();
+                    else
+                        GetGui(actor);
                 };
             }
             else
                 win = GUI.GetWindow();
-            win.Title = string.Format("{0} personality", actor.Name);
+            win.Title = $"{actor.Name} personality";
             GUI.ClearControls();
             var p = actor.Personality;
             var boxtraits = new GroupBox();
             foreach (var t in p.Traits)
-            {
-                boxtraits.AddControlsBottomLeft(t.GetUI());
-            }
+                boxtraits.AddControlsBottomLeft(t.GetListControlGui());
             GUI.AddControlsVertically(boxtraits.ToPanelLabeled("Traits"), getFavoritesUI(boxtraits.Width));
             return win;
 

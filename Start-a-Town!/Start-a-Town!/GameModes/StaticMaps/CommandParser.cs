@@ -36,7 +36,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                         if (replace == BlockDefOf.Air || old == BlockDefOf.Air)
                             break;
                         foreach (var ch in net.Map.GetActiveChunks())
-                            foreach (var cell in ch.Value.CellGrid2)
+                            foreach (var cell in ch.Value.Cells)
                                 if (cell.Block == old)
                                 {
                                     cell.Block = replace;
@@ -59,7 +59,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                         if (toremove == BlockDefOf.Air)
                             break;
                         foreach (var ch in net.Map.GetActiveChunks())
-                            foreach (var cell in ch.Value.CellGrid2)
+                            foreach (var cell in ch.Value.Cells)
                                 if (cell.Block == toremove)
                                     net.Map.RemoveBlock(cell.LocalCoords.ToGlobal(ch.Value));
                         if (net is Server)

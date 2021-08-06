@@ -190,7 +190,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                             if (contains == ContainmentType.Disjoint)
                                 continue;
                             var local = current.ToLocal();
-                            var c = chunk.CellGrid2[Chunk.GetCellIndex(local)];
+                            var c = chunk.Cells[Chunk.GetCellIndex(local)];
                             if (c.Block == BlockDefOf.Air ||
                                 c.Block == BlockDefOf.Water ||
                                 c.Block == BlockDefOf.Sand)

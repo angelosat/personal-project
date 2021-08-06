@@ -50,7 +50,7 @@ namespace Start_a_Town_
                         gradientCache.Add(new IntVec3(i, j, z), gradient);
                         foreach (var m in mutators)
                             m.Initialize(world, cell, (int)this.Start.X + i, (int)this.Start.Y + j, z, gradient);
-                        this.CellGrid2[n++] = cell;
+                        this.Cells[n++] = cell;
                     }
             return gradientCache;
         }
@@ -67,7 +67,7 @@ namespace Start_a_Town_
                         Cell cell = new(i, j, z);
                         double gradient = grad.GetGradient(i, j, z);
                         gradientCache.Add(new IntVec3(i, j, z), gradient);
-                        this.CellGrid2[n++] = cell;
+                        this.Cells[n++] = cell;
                     }
             return gradientCache;
         }
@@ -79,7 +79,7 @@ namespace Start_a_Town_
                 for (int i = 0; i < Size; i++)
                     for (int j = 0; j < Size; j++)
                     {
-                        var cell = this.CellGrid2[n++];
+                        var cell = this.Cells[n++];
                         m.Initialize(this.Map.World, cell, (int)this.Start.X + i, (int)this.Start.Y + j, z, gradient[new IntVec3(i, j, z)]);
                     }
             this.UpdateHeightMap();
@@ -93,7 +93,7 @@ namespace Start_a_Town_
                     for (int j = 0; j < Size; j++)
                     {
                         Cell cell = new(i, j, z);
-                        this.CellGrid2[n++] = cell;
+                        this.Cells[n++] = cell;
                     }
             return this;
         }
@@ -128,17 +128,17 @@ namespace Start_a_Town_
         }
         public IntVec3 GetRandomCellInOrder(int index)
         {
-            if (index >= this.CellGrid2.Length)
+            if (index >= this.Cells.Length)
                 throw new Exception();
             return this.RandomOrderedCells[index];
         }
 
-        public Cell[] CellGrid2;
+        public Cell[] Cells;
 
         public void CopyFrom(Chunk chunk)
         {
             this.Objects = chunk.Objects;
-            this.CellGrid2 = chunk.CellGrid2;
+            this.Cells = chunk.Cells;
             this.HeightMap = chunk.HeightMap;
             this.Sunlight = chunk.Sunlight;
             this.BlockLight = chunk.BlockLight;
@@ -189,7 +189,7 @@ namespace Start_a_Town_
                     return null;
 
                 int ind = GetCellIndex(localx, localy, localz);
-                return this.CellGrid2[ind];
+                return this.Cells[ind];
             }
         }
         public Cell this[float localx, float localy, float localz]
@@ -200,7 +200,7 @@ namespace Start_a_Town_
                     return null;
 
                 int ind = GetCellIndex(localx, localy, localz);
-                return this.CellGrid2[ind];
+                return this.Cells[ind];
             }
         }
 
@@ -217,10 +217,10 @@ namespace Start_a_Town_
                 if (!localCoords.IsWithinChunkBounds())
                     return null;
 
-                return this.CellGrid2[GetCellIndex(localCoords)];
+                return this.Cells[GetCellIndex(localCoords)];
             }
         }
-        public Cell this[int cellIndex] => this.CellGrid2[cellIndex];
+        public Cell this[int cellIndex] => this.Cells[cellIndex];
 
         public Vector2 MapCoords
         {
@@ -262,7 +262,7 @@ namespace Start_a_Town_
         }
         Chunk()
         {
-            this.CellGrid2 = new Cell[Chunk.Size * Chunk.Size * MapBase.MaxHeight];
+            this.Cells = new Cell[Chunk.Size * Chunk.Size * MapBase.MaxHeight];
             this.VisibleIndoorCells = new SortedList<int, Cell>();
             this.Objects = new List<GameObject>();
             this.BlockObjects = new Dictionary<int, GameObject>();
@@ -310,7 +310,7 @@ namespace Start_a_Town_
         #region Dunno
         public Cell GetLocalCell(int x, int y, int z)
         {
-            return this.CellGrid2[GetCellIndex(x, y, z)];
+            return this.Cells[GetCellIndex(x, y, z)];
         }
         public static int GetCellIndex(int x, int y, int z)
         { return (z * Chunk.Size + x) * Chunk.Size + y; }
@@ -590,13 +590,13 @@ namespace Start_a_Town_
         /// <summary>
         /// TODO: optimize: convert to dictionary for speed
         /// </summary>
-        public Dictionary<IntVec3, LightToken> LightCache2 = new();
+        public Dictionary<IntVec3, LightToken> LightCache = new();
 
         public static bool InvalidateLight(MapBase map, IntVec3 global)
         {
             if (map.TryGetAll(global.X, global.Y, global.Z, out Chunk chunk, out Cell cell, out int lx, out int ly))
             {
-                return chunk.LightCache2.Remove(global);
+                return chunk.LightCache.Remove(global);
             }
             return false;
         }
@@ -607,7 +607,7 @@ namespace Start_a_Town_
         }
         public bool InvalidateLight(IntVec3 global)
         {
-            this.LightCache2.Clear();
+            this.LightCache.Clear();
             if (this.Slices.Any())
             {
                 var z = global.Z;
@@ -839,17 +839,30 @@ namespace Start_a_Town_
             SaveTag cellstag = new(SaveTag.Types.List, "Cells", SaveTag.Types.Compound);
             var airLength = 0;
             bool airIsDiscovered = false;
-            foreach (var cell in this.CellGrid2)
+            bool foundAir = false;
+            foreach (var cell in this.Cells)
             {
                 if (cell.Block == BlockDefOf.Air)
                 {
                     airLength++;
-                    airIsDiscovered = cell.Discovered;
+                    if (!foundAir)
+                    {
+                        foundAir = true;
+                        airIsDiscovered = cell.Discovered;
+                    }
+                    else if (airIsDiscovered != cell.Discovered)
+                    {
+                        foundAir = false;
+                        saveAirTag(cellstag, airLength, airIsDiscovered);
+                        airLength = 0;
+                    }
                     continue;
                 }
+                
                 // TODO when the last cell in the cell array is air, the air savetag isn't written
                 if (airLength > 0)
                 {
+                    foundAir = false; 
                     saveAirTag(cellstag, airLength, airIsDiscovered);
                     airLength = 0;
                 }
@@ -871,6 +884,104 @@ namespace Start_a_Town_
                 cellstag.Add(airtag);
             }
         }
+        private void LoadCellsFromTagCompressed(SaveTag chunktag)
+        {
+            var celllist = chunktag["Cells"].Value as List<SaveTag>;
+            int n = 0;
+            var airCount = 0;
+            bool airDiscovered = true;
+            var listPosition = 0;
+            var maxn = Size * Size * MapBase.MaxHeight;
+            while (listPosition < celllist.Count)
+            {
+                var celltag = celllist[listPosition++];
+                var block = celltag.LoadBlock("Block");
+                if (block == BlockDefOf.Air)
+                {
+                    airCount = (int)celltag["Data"].Value;
+                    celltag.TryGetTagValueNew("Discovered", ref airDiscovered);
+                    for (int i = n; i < n + airCount; i++)
+                    {
+                        var c = this.Cells[i];
+                        c.Discovered = airDiscovered;
+                    }
+
+                    n += airCount;
+
+                    continue;
+                }
+                var cell = this.Cells[n++];
+                cell.Load(celltag);
+            }
+        }
+
+        //private void SaveCellsToTagCompressed(SaveTag chunktag)
+        //{
+        //    SaveTag cellstag = new(SaveTag.Types.List, "Cells", SaveTag.Types.Compound);
+        //    var airLength = 0;
+        //    bool airIsDiscovered = false;
+        //    foreach (var cell in this.Cells)
+        //    {
+        //        if (cell.Block == BlockDefOf.Air)
+        //        {
+        //            airLength++;
+        //            airIsDiscovered = cell.Discovered;
+        //            continue;
+        //        }
+        //        // TODO when the last cell in the cell array is air, the air savetag isn't written
+        //        if (airLength > 0)
+        //        {
+        //            saveAirTag(cellstag, airLength, airIsDiscovered);
+        //            airLength = 0;
+        //        }
+
+        //        cellstag.Add(cell.Save());
+        //    }
+        //    // TODO when the last cell in the cell array is air, the air savetag isn't written
+        //    if (airLength > 0)
+        //        saveAirTag(cellstag, airLength, airIsDiscovered);
+
+        //    chunktag.Add(cellstag);
+
+        //    static void saveAirTag(SaveTag cellstag, int airLength, bool airIsDiscovered)
+        //    {
+        //        var airtag = new SaveTag(SaveTag.Types.Compound);
+        //        airtag.Save(BlockDefOf.Air, "Block");
+        //        airtag.Add(new SaveTag(SaveTag.Types.Int, "Data", airLength));
+        //        airtag.Add(new SaveTag(SaveTag.Types.Bool, "Discovered", airIsDiscovered));
+        //        cellstag.Add(airtag);
+        //    }
+        //}
+        //private void LoadCellsFromTagCompressed(SaveTag chunktag)
+        //{
+        //    var celllist = chunktag["Cells"].Value as List<SaveTag>;
+        //    int n = 0;
+        //    var airCount = 0;
+        //    bool airDiscovered = true;
+        //    var listPosition = 0;
+        //    var maxn = Size * Size * MapBase.MaxHeight;
+        //    while (listPosition < celllist.Count)
+        //    {
+        //        var celltag = celllist[listPosition++];
+        //        var block = celltag.LoadBlock("Block");
+        //        if (block == BlockDefOf.Air)
+        //        {
+        //            airCount = (int)celltag["Data"].Value;
+        //            celltag.TryGetTagValueNew("Discovered", ref airDiscovered);
+        //            for (int i = n; i < n + airCount; i++)
+        //            {
+        //                var c = this.Cells[i];
+        //                c.Discovered = false;// airDiscovered;
+        //            }
+
+        //            n += airCount;
+
+        //            continue;
+        //        }
+        //        var cell = this.Cells[n++];
+        //        cell.Load(celltag);
+        //    }
+        //}
 
         private Dictionary<BlockEntity, List<IntVec3>> GetDistinctBlockEntities()
         {
@@ -1072,7 +1183,7 @@ namespace Start_a_Town_
         }
         public Cell GetCellLocal(Vector3 local)
         {
-            return this.CellGrid2[GetCellIndex(local)];
+            return this.Cells[GetCellIndex(local)];
         }
 
         public List<IntVec3> GetEdges(Edges edges)
@@ -1112,7 +1223,7 @@ namespace Start_a_Town_
 
         public void OnCameraRotated(Camera camera)
         {
-            this.LightCache2.Clear();
+            this.LightCache.Clear();
         }
 
         void WriteCells(BinaryWriter writer)
@@ -1121,7 +1232,7 @@ namespace Start_a_Town_
             int consecutiveAirblocks = 0;
             bool lastDiscovered = false;
             bool foundAir = false;
-            foreach (var cell in this.CellGrid2)
+            foreach (var cell in this.Cells)
             {
                 if (cell.Block == BlockDefOf.Air)
                 {
@@ -1159,38 +1270,6 @@ namespace Start_a_Town_
                 w.Write(lastDiscovered); // because all consecutive air blocks are either all discovered or none is
                 /// NO!!!! when incrementing the cell index, the next cell can be in a different Z level and completely disconnected from the previous cell
             }
-            //var w = writer;
-            //int consecutiveAirblocks = 0;
-            //bool lastDiscovered = false;
-            //foreach (var cell in this.CellGrid2)
-            //{
-            //    if (cell.Block == BlockDefOf.Air)
-            //    {
-            //        consecutiveAirblocks++;
-            //        lastDiscovered = cell.Discovered;
-            //        continue;
-            //    }
-            //    if (consecutiveAirblocks > 0)
-            //    {
-            //        // write air block length
-            //        writeAir(w, consecutiveAirblocks, lastDiscovered);
-            //        consecutiveAirblocks = 0;
-            //    }
-            //    w.Write((int)cell.Block.Type);
-            //    w.Write(cell.Data.Data);
-            //    w.Write(cell.Discovered);
-            //}
-            //if (consecutiveAirblocks > 0)
-            //    writeAir(w, consecutiveAirblocks, lastDiscovered);
-
-            //w.Write(-1);
-
-            //static void writeAir(BinaryWriter w, int consecutiveAirblocks, bool lastDiscovered)
-            //{
-            //    w.Write(0);
-            //    w.Write(consecutiveAirblocks);
-            //    w.Write(lastDiscovered); // because all consecutive air blocks are either all discovered or none is
-            //}
         }
         void ReadCells(BinaryReader r)
         {
@@ -1206,45 +1285,19 @@ namespace Start_a_Town_
                     bool discovered = r.ReadBoolean();
                     for (int j = 0; j < consecutiveAirblocks; j++)
                     {
-                        var c = this.CellGrid2[cellIndex++];
+                        var c = this.Cells[cellIndex++];
                         c.Block = BlockDefOf.Air;
                         c.Discovered = discovered;
                     }
                 }
                 else
                 {
-                    var cell = this.CellGrid2[cellIndex++];
+                    var cell = this.Cells[cellIndex++];
                     cell.Block = block;
                     cell.Data = new BitVector32(r.ReadInt32());
                     cell.Discovered = r.ReadBoolean();
                 }
-            } while (cellIndex < this.CellGrid2.Length);
-            //int cellIndex = 0;
-            //int type;
-            //do
-            //{
-            //    type = r.ReadInt32();
-            //    if (type == 0)
-            //    {
-            //        // read length of consecutive air blocks
-            //        int consecutiveAirblocks = r.ReadInt32();
-            //        bool discovered = r.ReadBoolean();
-            //        for (int j = 0; j < consecutiveAirblocks; j++)
-            //        {
-            //            var c = this.CellGrid2[cellIndex++];
-            //            c.Block = BlockDefOf.Air;
-            //            c.Discovered = discovered;
-            //        }
-            //    }
-            //    else if (type > 0)
-            //    {
-            //        var cell = this.CellGrid2[cellIndex++];
-            //        cell.SetBlockType(type);
-
-            //        cell.Data = new BitVector32(r.ReadInt32());
-            //        cell.Discovered = r.ReadBoolean();
-            //    }
-            //} while (type > -1);
+            } while (cellIndex < this.Cells.Length);
         }
         #region Serialization
         public void Write(BinaryWriter writer)
@@ -1405,7 +1458,7 @@ namespace Start_a_Town_
 
             sw.Restart();
             int n = 0;
-            foreach (Cell cell in this.CellGrid2)
+            foreach (Cell cell in this.Cells)
             {
                 byte light = (byte)((this.Sunlight[n] << 4) + this.BlockLight[n++]);
                 lightTag.Add(new SaveTag(SaveTag.Types.Byte, "", light));
@@ -1486,37 +1539,7 @@ namespace Start_a_Town_
             this._RandomOrderedCells = chunktag.LoadArrayIntVec3("RandomOrderedCells");
             return this;
         }
-        private void LoadCellsFromTagCompressed(SaveTag chunktag)
-        {
-            var celllist = chunktag["Cells"].Value as List<SaveTag>;
-            int n = 0;
-            var airCount = 0;
-            bool airDiscovered = true;
-            var listPosition = 0;
-            var maxn = Size * Size * MapBase.MaxHeight;
-            while (listPosition < celllist.Count)
-            {
-                var celltag = celllist[listPosition++];
-                var block = celltag.LoadBlock("Block");
-                if(block == BlockDefOf.Air)
-                {
-                    airCount = (int)celltag["Data"].Value;
-                    celltag.TryGetTagValueNew("Discovered", ref airDiscovered);
-                    for (int i = n; i < n + airCount; i++)
-                    {
-                        var c = this.CellGrid2[i];
-                        c.Discovered = false;// airDiscovered;
-                    }
-
-                    n += airCount;
-
-                    continue;
-                }
-                var cell = this.CellGrid2[n++];
-                cell.Load(celltag);
-            }
-        }
-
+       
         internal bool IsSolid(IntVec3 local)
         {
             if (local.Z > this.Map.GetMaxHeight() - 1)
@@ -1561,7 +1584,7 @@ namespace Start_a_Town_
                     Cell cell;
                     var local = new IntVec3(i, j, z);
 
-                    cell = this.CellGrid2[GetCellIndex(local)];
+                    cell = this.Cells[GetCellIndex(local)];
                     var global = local.ToGlobal(this);
 
                     // DO I NEED THIS?
@@ -1657,7 +1680,7 @@ namespace Start_a_Town_
                                     break;
                             }
                             var cellIndex = Chunk.GetCellIndex(pos.X, pos.Y, pos.Z);// FASTER WITH INTS
-                            cell = this.CellGrid2[cellIndex];
+                            cell = this.Cells[cellIndex];
 
                             if (camera.HideUnknownBlocks && map.IsUndiscovered(pos.ToGlobal(this)))
                                 camera.DrawUnknown(slice.Canvas, map, this, cell);
@@ -1695,7 +1718,7 @@ namespace Start_a_Town_
                                     break;
                             }
                             var cellIndex = Chunk.GetCellIndex(pos.X, pos.Y, pos.Z);// FASTER WITH INTS
-                            cell = this.CellGrid2[cellIndex];
+                            cell = this.Cells[cellIndex];
                             if (camera.HideUnknownBlocks && map.IsUndiscovered(pos.ToGlobal(this)))
                                 camera.DrawUnknown(slice.Canvas, map, this, cell);
                             // TESTING IF REMOVING THIS BREAKS ANYTHING

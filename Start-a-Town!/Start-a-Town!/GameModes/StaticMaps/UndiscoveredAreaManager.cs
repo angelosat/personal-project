@@ -61,11 +61,11 @@ namespace Start_a_Town_
 
         public void Write(BinaryWriter w)
         {
-            //w.Write(this.Valid);
+            w.Write(this.Valid);
         }
         public UndiscoveredAreaManager Read(BinaryReader r)
         {
-            //this.Valid = r.ReadBoolean();
+            this.Valid = r.ReadBoolean();
             return this;
         }
         public SaveTag Save(string name)
@@ -76,7 +76,7 @@ namespace Start_a_Town_
         }
         internal void Load(SaveTag tag)
         {
-            //tag.TryGetTagValueNew("Valid", ref this.Valid);
+            tag.TryGetTagValueNew("Valid", ref this.Valid);
         }
 
         internal void OnGameEvent(GameEvent e)

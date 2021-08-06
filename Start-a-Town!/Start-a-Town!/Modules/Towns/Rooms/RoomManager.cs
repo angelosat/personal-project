@@ -70,7 +70,7 @@ namespace Start_a_Town_
             var sw = Stopwatch.StartNew();
             foreach (var chunk in map.ActiveChunks.Values)
             {
-                foreach (var cell in chunk.CellGrid2)
+                foreach (var cell in chunk.Cells)
                 {
                     var global = cell.GetGlobalCoords(chunk);
                     if (handled.Contains(global))

@@ -108,7 +108,7 @@ namespace Start_a_Town_.Net
                         throw new NotImplementedException();
                         int t = int.Parse(p[2]);
                         foreach (var ch in this.Server.Map.GetActiveChunks())
-                            ch.Value.LightCache2.Clear();
+                            ch.Value.LightCache.Clear();
 
                         this.Server.Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
                         break;

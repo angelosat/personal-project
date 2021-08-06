@@ -213,7 +213,7 @@ List of available commands:
                     throw new Exception();
                     int t = int.Parse(words.Dequeue());
                     foreach (var ch in Engine.Map.GetActiveChunks())
-                        ch.Value.LightCache2.Clear();
+                        ch.Value.LightCache.Clear();
                     Enqueue(EntryTypes.System, "Hour set to " + t);
                     break;
                 

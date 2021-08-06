@@ -557,7 +557,7 @@ namespace Start_a_Town_
             //    return cell.Light;
             var global = new Vector3(gx, gy, z);
 
-            if (chunk.LightCache2.TryGetValue(global, out LightToken cached))
+            if (chunk.LightCache.TryGetValue(global, out LightToken cached))
                 return cached;
 
             // update block exposed faces too here?
@@ -586,7 +586,7 @@ namespace Start_a_Town_
             Vector4 block = new((blockeast + 1) / 16f, (blocksouth + 1) / 16f, (blocktop + 1) / 16f, 1f);
 
             var light = new LightToken(global, sun, block);
-            chunk.LightCache2[global] = light;
+            chunk.LightCache[global] = light;
             return light;
         }
 

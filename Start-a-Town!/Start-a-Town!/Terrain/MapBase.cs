@@ -171,7 +171,7 @@ namespace Start_a_Town_
             get
             {
                 foreach (var ch in this.ActiveChunks.Values)
-                    foreach (var c in ch.CellGrid2)
+                    foreach (var c in ch.Cells)
                         yield return c;
             }
         }

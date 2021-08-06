@@ -25,7 +25,7 @@ namespace Start_a_Town_.Terraforming.Mutators
        
         public override void Finally(Chunk chunk)
         {
-            foreach(var c in chunk.CellGrid2)
+            foreach(var c in chunk.Cells)
             {
                 var z = c.Z;
                 if (z > this.SeaLevel)

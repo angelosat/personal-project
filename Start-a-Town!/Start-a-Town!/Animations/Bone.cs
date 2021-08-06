@@ -681,7 +681,7 @@ namespace Start_a_Town_
 
             mysb.Flush();
         }
-        internal RenderTarget2D RenderIcon(Entity parent, float scale = 1)
+        internal Texture2D RenderIcon(Entity parent, float scale = 1)
         {
             var minrect = GetMinimumRectangle();
             // same as gameobject.drawicon
@@ -689,9 +689,8 @@ namespace Start_a_Town_
             var w = (int)(minrect.Width * scale);
             var h = (int)(minrect.Height * scale);
 
-            var texture = new RenderTarget2D(gd, w, h);
-
-            gd.SetRenderTarget(texture);
+            var renderTarget = new RenderTarget2D(gd, w, h);
+            gd.SetRenderTarget(renderTarget);
             gd.Clear(Color.Transparent);
 
             var fx = Game1.Instance.Content.Load<Effect>("blur");
@@ -712,11 +711,16 @@ namespace Start_a_Town_
 
             var body = this;
             var customization = parent.GetComponent<Components.SpriteComponent>().Customization;
-            var grounddistancefromcenter = texture.Height / 2 + OriginGroundOffset.Y * scale;
-            var loc = new Vector2((int)(texture.Width / 2), texture.Height / 2 + grounddistancefromcenter);
+            var grounddistancefromcenter = renderTarget.Height / 2 + OriginGroundOffset.Y * scale;
+            var loc = new Vector2(renderTarget.Width / 2, renderTarget.Height / 2 + grounddistancefromcenter);
             body.DrawTreeAnimationDeltas(parent, customization, new List<Animation>() { new Animation(AnimationDef.Null) }, mysb, loc, Color.White, Color.White, Color.White, Color.Transparent, 0, scale, 0, SpriteEffects.None, 1f, 0.5f);
 
             mysb.Flush();
+            var texture = new Texture2D(gd, w, h);
+            var data = new Color[w * h];
+            gd.SetRenderTarget(null);
+            renderTarget.GetData(data);
+            texture.SetData(data);
             return texture;
         }
 

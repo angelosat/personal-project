@@ -92,9 +92,10 @@ namespace Start_a_Town_.UI
         public Action DrawAction;
         public Vector2 PictureOrigin = new Vector2(0);
 
-        public override RenderTarget2D CreateTexture(GraphicsDevice gd)
+        protected override RenderTarget2D CreateTexture(GraphicsDevice gd)
         {
             return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.SourceRect.Width, this.SourceRect.Height);
+            //return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.SourceRect.Width, this.SourceRect.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
         }
         public HorizontalAlignment Alignment;
 

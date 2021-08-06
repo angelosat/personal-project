@@ -15,7 +15,7 @@ namespace Start_a_Town_
         {
             if (!Camera.DrawnOnce)
                 return;
-            var actors = Net.Client.Instance.Map.Town.GetAgents().Where(a=>a!=null).ToList();
+            var actors = Net.Client.Instance.Map.Town.GetAgents().Where(a => a != null).ToList();
             var toInit = actors.Where(a => !this.PrevActors.Contains(a));
             foreach (var a in toInit)
                 this.AddControlsTopRight(Spacing, new UINpcFrame(a));

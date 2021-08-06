@@ -343,7 +343,11 @@ namespace Start_a_Town_.UI
         public virtual void PreparingPaint() { }
         public virtual void OnPaint(SpriteBatch sb) { }
         public virtual void OnAfterPaint(SpriteBatch sb) { }
-        public virtual RenderTarget2D CreateTexture(GraphicsDevice gd) { return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.Width, this.Height); }
+        protected virtual RenderTarget2D CreateTexture(GraphicsDevice gd) 
+        { 
+            return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.Width, this.Height);
+            //return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.Width, this.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
+        }
         Texture2D _BackgroundTexture;
 
         public Action<TargetArgs> OnSelectedTargetChangedAction;
@@ -855,7 +859,9 @@ namespace Start_a_Town_.UI
             foreach (var control in copy)
                 control.Update();
 
-            if (!this.Valid)
+            if (this.Texture?.IsContentLost ?? false)
+                this.Validate();
+            else if (!this.Valid)
                 this.Validate(); // i put this here after calling base.update because if the size of the control was changed then for one frame it was drawn stretched
         }
 

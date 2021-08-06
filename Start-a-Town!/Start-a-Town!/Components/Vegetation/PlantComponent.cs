@@ -62,10 +62,13 @@ namespace Start_a_Town_.Components
         public override void OnObjectCreated(GameObject parent)
         {
             parent.Body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
+            parent.Body.SpriteFunc = () => Sprite.Load(this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing);
         }
         public override void OnObjectLoaded(GameObject parent)
         {
             parent.Body.Sprite = Sprite.Load(this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing);
+            //parent.Body.SpriteFuncNew = o => Sprite.Load(this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing);
+
             //parent.Body.Sprite = this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing;
         }
         public override void MakeChildOf(GameObject parent)

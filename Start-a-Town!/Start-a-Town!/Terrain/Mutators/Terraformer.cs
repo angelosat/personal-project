@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.Terraforming.Mutators;
 using Start_a_Town_.UI;

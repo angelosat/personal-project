@@ -92,14 +92,15 @@ namespace Start_a_Town_
 
         public Sprite Sprite
         {
-            get { return this.Orientations.FirstOrDefault(); }
+            get => this.SpriteFunc?.Invoke() ?? this.Orientations.FirstOrDefault();
             set
             {
                 this.Orientations.Clear();
                 this.Orientations.Add(value);
             }
         }
-        public Func<GameObject, Sprite> SpriteFunc;
+        public Func<Sprite> SpriteFunc;
+
         public Func<GameObject, GameObjectSlot> SlotFunc;
 
         GameObjectSlot SpriteSlot;
@@ -142,7 +143,6 @@ namespace Start_a_Town_
         static readonly DescendingComparer<float> Descending = new();
         Bone()
         {
-            this.SpriteFunc = parent => { return this.Sprite; };
             this.Order = 0;
             this.Angle = 0;
             this.Offset = Vector2.Zero;
@@ -155,7 +155,6 @@ namespace Start_a_Town_
         {
             Bone newnode = Create(this.Def, this.Sprite, parent, this.ParentJoint, this.Order);
 
-            newnode.SpriteFunc = this.SpriteFunc;
             newnode.RestingFrame = this.RestingFrame;
             newnode.SlotFunc = this.SlotFunc;
             newnode.Offset = this.Offset;

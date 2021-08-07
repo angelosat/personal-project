@@ -139,7 +139,8 @@ namespace Start_a_Town_
                 return;
             }
             tooltip.Controls.Add(new Label(this.Name) { Location = tooltip.Controls.BottomLeft, Font = UIManager.FontBold, TextColor = Color.Goldenrod });
-            if (this.GetMaterial(map.GetBlockData(global)) is MaterialDef mat)
+            //if (this.GetMaterial(map.GetBlockData(global)) is MaterialDef mat)
+            if(cell.Material is MaterialDef mat)
                 tooltip.Controls.Add(new Label(mat.ToString()) { TextColorFunc = () => mat.Color, Location = tooltip.Controls.BottomLeft });
 
             var data = cell.BlockData;
@@ -371,7 +372,8 @@ namespace Start_a_Town_
         {
             var map = actor.Map;
             var cell = map.GetCell(global);
-            var material = this.GetMaterial(cell.BlockData);
+            //var material = this.GetMaterial(cell.BlockData);
+            var material = cell.Material;
             var scraps = RawMaterialDef.Scraps;
             var materialQuantity = this.Ingredient.Amount;
             var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
@@ -465,7 +467,7 @@ namespace Start_a_Town_
             return this.Solid && withinBlock.Z < h;
         }
         public virtual bool IsOpaque(Cell cell) { return this.Opaque; }
-        public abstract MaterialDef GetMaterial(byte blockdata);
+        //public abstract MaterialDef GetMaterial(byte blockdata);
 
         public virtual void RandomBlockUpdate(INetwork net, IntVec3 global, Cell cell) { }
         protected virtual void HandleMessage(Vector3 global, ObjectEventArgs e) { }
@@ -519,12 +521,12 @@ namespace Start_a_Town_
 
             sb.DrawBlock(Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth, this);
         }
-        public virtual MyVertex[] Draw(MySpriteBatch sb, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public virtual MyVertex[] Draw(MySpriteBatch sb, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
                 return null;
 
-            var material = this.GetColorVector(data);
+            var material = this.DrawMaterialColor ? mat.ColorVector : DefaultColorVector;// this.GetColorVector(data);
 
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return sb.DrawBlock(Atlas.Texture, screenBounds,
@@ -532,24 +534,27 @@ namespace Start_a_Town_
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
 
         }
-        public virtual MyVertex[] Draw(Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public virtual MyVertex[] Draw(Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
                 return null;
 
-            var material = this.GetColorVector(data);
+            //var material = this.GetColorVector(data);
+            var material = this.DrawMaterialColor ? mat.ColorVector : DefaultColorVector;// this.GetColorVector(data);
 
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return chunk.Canvas.Opaque.DrawBlock(Atlas.Texture, screenBounds,
                 token,
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
         }
-        public virtual MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public virtual MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
                 return null;
 
-            var material = this.GetColorVector(data);
+            //var material = this.GetColorVector(data);
+            var material = this.DrawMaterialColor ? mat.ColorVector : DefaultColorVector;// this.GetColorVector(data);
+
             MySpriteBatch mesh = this.Opaque ? canvas.Opaque : canvas.NonOpaque;
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return mesh.DrawBlock(Atlas.Texture, screenBounds,
@@ -599,12 +604,12 @@ namespace Start_a_Town_
         {
             return DefaultColorVector;
         }
-        public Vector4 GetColorFromMaterial(byte data)
-        {
-            var mat = this.GetMaterial(data);
-            var c = mat.ColorVector;
-            return c;
-        }
+        //public Vector4 GetColorFromMaterial(byte data)
+        //{
+        //    var mat = this.GetMaterial(data);
+        //    var c = mat.ColorVector;
+        //    return c;
+        //}
         static Vector4 DefaultColorVector = Vector4.One;
 
         public virtual byte GetDataFromMaterial(GameObject craftingReagent)
@@ -655,6 +660,8 @@ namespace Start_a_Town_
         }
 
         public bool RequiresConstruction = true;
+        internal MaterialDef DefaultMaterial;
+        protected bool DrawMaterialColor = true;
 
         public virtual IEnumerable<byte> GetEditorVariations()
         {
@@ -703,8 +710,9 @@ namespace Start_a_Town_
         public static MaterialDef GetBlockMaterial(MapBase map, IntVec3 global)
         {
             var cell = map.GetCell(global);
-            var mat = cell.Block.GetMaterial(cell.BlockData);
-            return mat;
+            return cell.Material;
+            //var mat = cell.Block.GetMaterial(cell.BlockData);
+            //return mat;
         }
         public static float GetBlockHeight(MapBase map, Vector3 global)
         {
@@ -751,7 +759,7 @@ namespace Start_a_Town_
 
         }
 
-        public void PaintIcon(int width, int height, byte data)
+        public void PaintIcon(int width, int height, byte data, MaterialDef mat)
         {
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;
             var token = this.GetDefault();
@@ -767,10 +775,10 @@ namespace Start_a_Town_
             {
                 SpriteBatch = mysb
             };
-            this.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data);
+            this.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data, mat);
             mysb.Flush();
         }
-        public RenderTarget2D PaintIcon(byte data)
+        public RenderTarget2D PaintIcon(byte data, MaterialDef mat)
         {
             GraphicsDevice gd = Game1.Instance.GraphicsDevice;
             var token = this.GetDefault();
@@ -791,7 +799,7 @@ namespace Start_a_Town_
             {
                 SpriteBatch = mysb
             };
-            this.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data);
+            this.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data, mat);
             mysb.Flush();
             gd.SetRenderTarget(null);
             return renderTarget;
@@ -837,7 +845,8 @@ namespace Start_a_Town_
         }
         internal virtual float GetFertility(Cell cell)
         {
-            return this.GetMaterial(cell.BlockData) == MaterialDefOf.Soil ? 1f : 0;
+            return cell.Material == MaterialDefOf.Soil ? 1f : 0;
+            //return this.GetMaterial(cell.BlockData) == MaterialDefOf.Soil ? 1f : 0;
         }
 
         internal virtual void OnDrawSelected(MySpriteBatch sb, Camera camera, MapBase map, IntVec3 global)

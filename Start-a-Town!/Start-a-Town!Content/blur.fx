@@ -245,27 +245,6 @@ float4 PixelShaderFunction(VertexShaderOutput input, out float depth : DEPTH0) :
 	depth = input.Depth.r;
 	float a = input.Color.a;
 	return (1 - a)*color + float4(a*color.rgb*input.Color.rgb, color.a);
-
-	// get local UV
-	float u = ((input.TexCoord.x * AtlasWidth) % BlockWidth) / BlockWidth;
-	float v = ((input.TexCoord.y * AtlasHeight) % BlockHeight) / BlockHeight;
-	float2 uv = float2(u, v);
-	// find current block face
-	float4 face = tex2D(s2, uv);
-
-	float l = 0;
-	if (face.r > 0)
-		l = input.Color.b;
-	else if (face.g > 0)
-		l = input.Color.g;
-	else if (face.b > 0)
-		l = input.Color.r;
-
-	float r = (1 - a) * color.r + a * input.Color.r;
-	float g = (1 - a) * color.g + a * input.Color.g;
-	float b = (1 - a) * color.b + a * input.Color.b;
-
-	return float4(r, g, b, color.a);
 }
 
 float4 BlurMore(VertexShaderOutput input) : COLOR0

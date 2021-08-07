@@ -6,10 +6,10 @@ namespace Start_a_Town_.Blocks
 {
     class BlockCounter : Block
     {
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.LightWood;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.LightWood;
+        //}
         AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
         public BlockCounter()
             : base("Counter", opaque: false)

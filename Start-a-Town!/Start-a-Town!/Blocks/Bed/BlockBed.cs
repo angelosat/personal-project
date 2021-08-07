@@ -14,11 +14,11 @@ namespace Start_a_Town_
     {
         public enum Part { Top = 0x0, Bottom = 0x1 }
 
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            // TODO: implement
-            return MaterialDefOf.LightWood;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    // TODO: implement
+        //    return MaterialDefOf.LightWood;
+        //}
 
         readonly AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
         readonly AtlasDepthNormals.Node.Token[][] Parts;
@@ -61,7 +61,7 @@ namespace Start_a_Town_
         {
             var table =
                 new LootTable(
-                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Planks, this.GetMaterial(data)))
+                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Planks, MaterialDefOf.Human))// this.GetMaterial(data)))
                     );
             return table;
         }
@@ -216,7 +216,7 @@ namespace Start_a_Town_
             return true;
         }
 
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             GetState(data, out var part, out var ori);
             var entity = GetEntity(chunk.Map, blockCoordinates);

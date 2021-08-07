@@ -16,10 +16,10 @@ namespace Start_a_Town_
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
 
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDef.GetMaterial(blockdata);
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDef.GetMaterial(blockdata);
+        //}
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var shop = map.Town.ShopManager.GetShops().FirstOrDefault(s => s.Counter.HasValue && s.Counter.Value == vector3);

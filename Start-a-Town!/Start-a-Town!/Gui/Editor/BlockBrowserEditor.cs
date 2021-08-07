@@ -57,10 +57,11 @@ namespace Start_a_Town_.UI.Editor
                     gd.Textures[0] = Block.Atlas.Texture;
                     gd.Textures[1] = Block.Atlas.DepthTexture;
                     fx.CurrentTechnique.Passes["Pass1"].Apply();
-                    var material = tag.Block.GetColor(tag.BlockData);
+                    //var material = tag.Block.GetColor(tag.BlockData);
+                    var material = tag.Material;
                     var bounds = new Vector4(3, 3 - Block.Depth / 2, token.Texture.Bounds.Width, token.Texture.Bounds.Height);
                     var cam = new Camera { SpriteBatch = mysb };
-                    tag.Block.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, tag.BlockData);
+                    tag.Block.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, tag.BlockData, material);
                     mysb.Flush();
                 };
                 slot.CustomTooltip = true;

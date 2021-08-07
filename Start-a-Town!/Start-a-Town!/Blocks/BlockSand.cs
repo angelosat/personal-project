@@ -7,10 +7,10 @@ namespace Start_a_Town_.Blocks
     class BlockSand : Block
     {
         public override bool IsMinable => true;
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.Sand;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.Sand;
+        //}
         public BlockSand()
             : base("Sand")
         {

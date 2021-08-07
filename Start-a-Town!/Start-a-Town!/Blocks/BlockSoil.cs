@@ -28,6 +28,8 @@ namespace Start_a_Town_
                 .SetAllow(RawMaterialDef.Bags, true)
                 .SetAllow(MaterialDefOf.Soil, true);
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+            this.DefaultMaterial = MaterialDefOf.Soil;
+            this.DrawMaterialColor = false;
         }
 
         public override void RandomBlockUpdate(INetwork net, IntVec3 global, Cell celll)
@@ -51,9 +53,9 @@ namespace Start_a_Town_
             }
         }
       
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.Soil;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.Soil;
+        //}
     }
 }

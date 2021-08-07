@@ -20,7 +20,7 @@ namespace Start_a_Town_.UI
         const int CursorWidth = 1; //3;
         int _SelectionStart = 0;
         bool CursorVisible;
-        public Func<char, bool> InputFilter = char.IsLetterOrDigit;// c => true;
+        public Func<char, bool> InputFilter = c => char.IsWhiteSpace(c) || char.IsLetterOrDigit(c);// c => true;
         public Action<KeyPressEventArgs> TextEnterFunc = (e) => { };
         public Action<string> EnterFunc = (text) => { };
         public Action<KeyPressEventArgs> EscapeFunc = (e) => { };

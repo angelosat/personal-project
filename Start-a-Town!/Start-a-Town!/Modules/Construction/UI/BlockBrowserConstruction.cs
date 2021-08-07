@@ -32,7 +32,7 @@ namespace Start_a_Town_
                 {
                     slot.Tag = block;
                     slot.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDrawing drawing && drawing.Block == block;
-                    slot.PaintAction = () => block.PaintIcon(slot.Width, slot.Height, block.GetDataFromMaterial(this.GetLastSelectedVariantOrDefault(block).Requirement.Material));
+                    slot.PaintAction = () => block.PaintIcon(slot.Width, slot.Height, block.GetDataFromMaterial(this.GetLastSelectedVariantOrDefault(block).Requirement.Material), this.GetLastSelectedVariantOrDefault(block).Requirement.Material);
                     slot.LeftClickAction = () =>
                     {
                         this.CurrentSelected = block;

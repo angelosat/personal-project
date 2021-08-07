@@ -33,27 +33,28 @@ namespace Start_a_Town_.Terraforming.Mutators
                 else if (z == this.SeaLevel)
                 {
                     if (c.Block == BlockDefOf.Air)
+                    {
                         c.Block = BlockDefOf.Water;
+                        c.Material = MaterialDefOf.Water;
+                    }
                     else
+                    {
                         c.Block = BlockDefOf.Sand;
+                        c.Material = MaterialDefOf.Sand;
+                    }
                 }
                 else
                 {
                     if (c.Block == BlockDefOf.Air)
                     {
                         c.Block = BlockDefOf.Water;
+                        c.Material = MaterialDefOf.Water;
                         c.BlockData = BlockWater.GetData(1);
                     }
                 }
             }
         }
-        public override Block Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r)
-        {
-            if (z > this.SeaLevel)
-                return BlockDefOf.Air;
-
-            return w.DefaultBlock;
-        }
+      
         public override List<MutatorProperty> GetAdjustableParameters()
         {
             var list = new List<MutatorProperty>();

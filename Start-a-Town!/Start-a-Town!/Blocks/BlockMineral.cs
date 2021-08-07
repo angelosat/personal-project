@@ -86,10 +86,10 @@ namespace Start_a_Town_
             this.LoadVariations("stone5height19");
         }
         
-        public override MaterialDef GetMaterial(byte data)
-        {
-            return MaterialDef.Registry[data];
-        }
+        //public override MaterialDef GetMaterial(byte data)
+        //{
+        //    return MaterialDef.Registry[data];
+        //}
 
         public override byte ParseData(string data)
         {

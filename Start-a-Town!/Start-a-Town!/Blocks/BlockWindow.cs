@@ -9,10 +9,10 @@ namespace Start_a_Town_.Blocks
     class BlockWindow : Block
     {
         AtlasDepthNormals.Node.Token[][][] PartsSeparate;
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.Glass;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.Glass;
+        //}
         public BlockWindow()
             : base("Window", opaque: false)
         {
@@ -96,7 +96,7 @@ namespace Start_a_Town_.Blocks
             sb.DrawBlock(Block.Atlas.Texture, map, global + Vector3.UnitZ, top, cam, Color.Transparent, Color.White * 0.5f, Color.White, Vector4.One);
         }
 
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             //15 18 65
             //sunlight 255 16 239(159?) 255

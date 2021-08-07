@@ -2,10 +2,10 @@
 {
     class BlockBedrock : Block
     {
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.Stone;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.Stone;
+        //}
         public BlockBedrock()
             : base("Stone")
         {

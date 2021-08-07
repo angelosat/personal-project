@@ -16,7 +16,8 @@ namespace Start_a_Town_
             var map = actor.Map;
             var cell = map.GetCell(global);
             var block = cell.Block;
-            var material = block.GetMaterial(cell.BlockData);
+            //var material = block.GetMaterial(cell.BlockData);
+            var material = cell.Material;
             var scraps = RawMaterialDef.Scraps;
             var materialQuantity = block.Ingredient.Amount;
             var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);

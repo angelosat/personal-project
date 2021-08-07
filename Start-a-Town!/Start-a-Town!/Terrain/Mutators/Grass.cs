@@ -38,6 +38,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                         continue;
                     var variation = (byte)this.Randomizer.Next(varCount);
                     c.Block = BlockDefOf.Grass;
+                    c.Material = MaterialDefOf.Soil;
                     c.Variation = variation;
                 }
             }

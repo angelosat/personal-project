@@ -8,10 +8,10 @@ namespace Start_a_Town_.Blocks.Chest
     partial class BlockChest : Block
     {
         static Texture2D ChestNormalMap = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chestnormal");
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDef.Registry[blockdata];
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDef.Registry[blockdata];
+        //}
         public BlockChest()
             : base("Chest", opaque: false)
         {

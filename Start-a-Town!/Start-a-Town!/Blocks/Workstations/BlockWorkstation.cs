@@ -27,14 +27,14 @@ namespace Start_a_Town_
             return Activator.CreateInstance(this.BlockEntityType, originGlobal) as BlockEntity;
         }
 
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDef.Registry[blockdata];
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDef.Registry[blockdata];
+        //}
        
-        public override Vector4 GetColorVector(byte data)
-        {
-            return this.GetColorFromMaterial(data);
-        }
+        //public override Vector4 GetColorVector(byte data)
+        //{
+        //    return this.GetColorFromMaterial(data);
+        //}
     }
 }

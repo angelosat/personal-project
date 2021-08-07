@@ -7,10 +7,10 @@ namespace Start_a_Town_.Blocks
     {
         public override bool IsMinable => true;
         readonly AtlasDepthNormals.Node.Token[] Textures;
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.Soil;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.Soil;
+        //}
         public BlockFarmland()
             : base("Farmland")
         {

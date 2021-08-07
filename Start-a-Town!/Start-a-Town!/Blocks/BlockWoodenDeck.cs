@@ -83,7 +83,7 @@ namespace Start_a_Town_
         {
             var table =
                 new LootTable(
-                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Planks, this.GetMaterial(data)))
+                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Planks, MaterialDefOf.Human))// this.GetMaterial(data)))
                     );
             return table;
         }
@@ -94,10 +94,10 @@ namespace Start_a_Town_
                     select (byte)mat.ID);
 
         }
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDef.Registry[blockdata];
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDef.Registry[blockdata];
+        //}
 
         public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
         {

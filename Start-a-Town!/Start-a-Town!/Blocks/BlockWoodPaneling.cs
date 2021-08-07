@@ -2,10 +2,10 @@
 {
     class BlockWoodPaneling : Block
     {
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.LightWood;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.LightWood;
+        //}
         public BlockWoodPaneling()
             : base("WoodPaneling", 0, 1, true, true)
         {

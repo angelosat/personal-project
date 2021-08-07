@@ -9,10 +9,10 @@ namespace Start_a_Town_
     partial class BlockStorage : Block
     {
         static readonly Texture2D ChestNormalMap = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chestnormal");
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDef.Registry[blockdata];
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDef.Registry[blockdata];
+        //}
         public BlockStorage()
             : base("Bin", opaque: false)
         {

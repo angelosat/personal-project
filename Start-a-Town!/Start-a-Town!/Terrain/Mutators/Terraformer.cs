@@ -53,7 +53,6 @@ namespace Start_a_Town_
         public Action<RandomThreaded, IWorld, Cell, int, int, int>
             Finalize = (r, w, c, x, y, z) => { };
 
-        public virtual Block Initialize(IWorld w, Cell c, int x, int y, int z, Net.RandomThreaded r) { return c.Block; }
         public virtual void Initialize(IWorld w, Cell c, int x, int y, int z, double g) { }
         public virtual void Finally(Chunk chunk) { }
         internal virtual void Finally(Chunk newChunk, Dictionary<IntVec3, double> gradients)

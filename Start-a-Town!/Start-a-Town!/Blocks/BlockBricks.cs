@@ -22,10 +22,10 @@ namespace Start_a_Town_
                     where mat.Type == MaterialType.Stone
                     select (byte)mat.ID);
         }
-        public override MaterialDef GetMaterial(byte data)
-        {
-            return MaterialDef.Registry[data];
-        }
+        //public override MaterialDef GetMaterial(byte data)
+        //{
+        //    return MaterialDef.Registry[data];
+        //}
         public override byte GetDataFromMaterial(GameObject craftingReagent)
         {
             return (byte)craftingReagent.Body.Material.ID;

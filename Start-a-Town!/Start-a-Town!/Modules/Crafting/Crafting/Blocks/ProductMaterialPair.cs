@@ -12,6 +12,7 @@ namespace Start_a_Town_.Components.Crafting
         public int Orientation;
         public ToolAbilityDef Skill;
         public ItemDefMaterialAmount Requirement;
+        internal MaterialDef Material = MaterialDefOf.Air;
 
         public ToolAbilityDef GetSkill()
         {

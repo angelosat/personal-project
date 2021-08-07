@@ -243,10 +243,10 @@ namespace Start_a_Town_
             Read(data, out var locked, out var open, out var part);
             return open ? 0 : 1;
         }
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.LightWood;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.LightWood;
+        //}
 
      
         public override Icon GetIcon()
@@ -314,7 +314,7 @@ namespace Start_a_Town_
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth);
         }
 
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             Read(data, out bool locked, out bool open, out int part);
             int ori = (orientation - (int)camera.Rotation + (open ? 1 : 0)); // FASTER???

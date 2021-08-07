@@ -8,10 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using UI;
 
 namespace Start_a_Town_
 {
-    public class Camera
+    public class Camera : IKeyEventHandler
     {
         public const int FogZOffset = 2, FogFadeLength = 8;
         Vector4 FogColor = Color.SteelBlue.ToVector4();
@@ -407,7 +408,7 @@ namespace Start_a_Town_
             if (!isDiscovered && this.HideUnknownBlocks)// && isAir) // do i want cells that have already been discoverd, to remain visible even if they become obstructed again?
                 Block.DrawUnknown(canvas.Opaque, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth);
             else
-                block.Draw(canvas, chunk, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell.Variation, cell.Orientation, cell.BlockData);
+                block.Draw(canvas, chunk, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell.Variation, cell.Orientation, cell.BlockData, cell.Material);
 
             return true;
         }
@@ -828,10 +829,7 @@ namespace Start_a_Town_
             foreach (var chunk in visibleChunks)
             {
                 if (!chunk.Valid)
-                {
                     continue;
-                }
-
                 chunk.DrawTransparentLayers(this, this.Effect);
             }
 
@@ -993,12 +991,19 @@ namespace Start_a_Town_
             ///
 
             // draw final scene to backbuffer
-            RenderTarget2D[] targets = new RenderTarget2D[] { this.FinalScene, this.RenderBeforeFog, this.FogBeforeFog,
-                this.WaterRender, this.WaterDepth, this.WaterLight, this.WaterFog,
+            RenderTarget2D[] targets = new RenderTarget2D[] { 
+                this.FinalScene, 
+                this.RenderBeforeFog, 
+                this.FogBeforeFog,
+                this.WaterRender, 
+                this.WaterDepth, 
+                this.WaterLight, 
+                this.WaterFog,
                 this.WaterComposite,
                 this.MapRender,
-
-                this.MapDepth, this.MapLight, this.TextureFogWater };
+                this.MapDepth, 
+                this.MapLight, 
+                this.TextureFogWater };
             this.RenderTargets = targets.ToArray();
             gd.SetRenderTarget(null);
             //gd.Textures[0] = this.FinalScene;
@@ -1008,7 +1013,9 @@ namespace Start_a_Town_
 
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             this.SpriteBatch.Draw(this.FinalScene, this.FinalScene.Bounds, gd.Viewport.Bounds, Color.White);
-            gd.DepthStencilState = DepthStencilState.Default;
+
+            /// added this here to draw the final scene with depth, but i have to change the shader to read depth from the depth texture
+            //gd.DepthStencilState = DepthStencilState.Default;
 
             this.SpriteBatch.Flush();
 
@@ -1588,6 +1595,50 @@ namespace Start_a_Town_
         internal bool IsCompletelyHiddenByFog(float z)
         {
             return z < this.LastZTarget - FogZOffset - FogFadeLength + 1;
+        }
+
+        public void HandleKeyPress(KeyPressEventArgs e)
+        {
+        }
+
+        public void HandleKeyDown(KeyEventArgs e)
+        {
+        }
+
+        public void HandleMouseMove(HandledMouseEventArgs e)
+        {
+        }
+
+        public void HandleLButtonDown(HandledMouseEventArgs e)
+        {
+        }
+
+        public void HandleLButtonUp(HandledMouseEventArgs e)
+        {
+        }
+
+        public void HandleRButtonDown(HandledMouseEventArgs e)
+        {
+        }
+
+        public void HandleRButtonUp(HandledMouseEventArgs e)
+        {
+        }
+
+        public void HandleMiddleUp(HandledMouseEventArgs e)
+        {
+        }
+
+        public void HandleMiddleDown(HandledMouseEventArgs e)
+        {
+        }
+
+        public void HandleMouseWheel(HandledMouseEventArgs e)
+        {
+        }
+
+        public void HandleLButtonDoubleClick(HandledMouseEventArgs e)
+        {
         }
     }
 }

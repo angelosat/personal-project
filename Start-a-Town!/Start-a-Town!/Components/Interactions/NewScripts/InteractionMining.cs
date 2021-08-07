@@ -93,7 +93,8 @@ namespace Start_a_Town_.Components.Interactions
             var block = cell.Block;
             if (!IsMetalOrMineral(a, t))
                 return;
-            var material = block.GetMaterial(cell.BlockData);
+            //var material = block.GetMaterial(cell.BlockData);
+            var material = cell.Material;
             var server = a.Net as Server;
             if (server != null)
             {

@@ -1256,9 +1256,11 @@ namespace Start_a_Town_
                     writeAir(w, consecutiveAirblocks, lastDiscovered);
                     consecutiveAirblocks = 0;
                 }
+                //cell.Write(w);
                 w.Write(cell.Block);
                 w.Write(cell.Data.Data);
-                w.Write(cell.Discovered);
+                cell.Material.Write(w);
+                //w.Write(cell.Discovered);
             }
             if (consecutiveAirblocks > 0)
                 writeAir(w, consecutiveAirblocks, lastDiscovered);
@@ -1287,15 +1289,18 @@ namespace Start_a_Town_
                     {
                         var c = this.Cells[cellIndex++];
                         c.Block = BlockDefOf.Air;
+                        c.Material = MaterialDefOf.Air;
                         c.Discovered = discovered;
                     }
                 }
                 else
                 {
                     var cell = this.Cells[cellIndex++];
+                    //cell.Read(r);
                     cell.Block = block;
                     cell.Data = new BitVector32(r.ReadInt32());
-                    cell.Discovered = r.ReadBoolean();
+                    cell.Material = Def.GetDef<MaterialDef>(r);
+                    //cell.Discovered = r.ReadBoolean();
                 }
             } while (cellIndex < this.Cells.Length);
         }

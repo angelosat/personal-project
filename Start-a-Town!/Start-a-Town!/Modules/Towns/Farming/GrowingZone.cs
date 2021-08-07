@@ -182,7 +182,8 @@ namespace Start_a_Town_
                         if (!Blocks.BlockFarmland.IsSeeded(cellData))
                             this.CachedSowing.Add(pos);
                 }
-                else if (block.GetMaterial(cellData) == MaterialDefOf.Soil)
+                //else if (block.GetMaterial(cellData) == MaterialDefOf.Soil)
+                else if (cell.Material == MaterialDefOf.Soil)
                 {
                     if (!this.Town.Map.GetObjects(pos.Above).Any(o => o.IsPlant()))
                         this.CachedTilling.Add(pos);

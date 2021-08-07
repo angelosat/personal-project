@@ -38,6 +38,7 @@ namespace Start_a_Town_
             KeyHandlers.Push(ToolManager);
             KeyHandlers.Push(WindowManager);
             KeyHandlers.Push(ContextMenuManager.Instance);
+            KeyHandlers.Push(this.Camera);
             return this;
         }
 

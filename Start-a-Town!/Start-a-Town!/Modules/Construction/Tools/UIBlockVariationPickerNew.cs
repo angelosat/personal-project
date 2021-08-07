@@ -32,7 +32,7 @@ namespace Start_a_Town_.Towns.Constructions
                     BackgroundStyle = UI.BackgroundStyle.LargeButton
                 };
                 var padding = btn.BackgroundStyle.Left.Width;
-                var picbox = new PictureBox(variant.Block.PaintIcon(variant.Data)) { MouseThrough = true, Location = new Vector2(padding, btn.Height / 2), Anchor = new Vector2(0, .5f) };
+                var picbox = new PictureBox(variant.Block.PaintIcon(variant.Data, variant.Material)) { MouseThrough = true, Location = new Vector2(padding, btn.Height / 2), Anchor = new Vector2(0, .5f) };
                 var label = new Label(variant.Requirement.ToString()) { Location = picbox.TopRight + Vector2.UnitX * padding, MouseThrough = true };
                 btn.AddControls(picbox, label);
                 btn.LeftClickAction = () =>

@@ -13,11 +13,11 @@ namespace Start_a_Town_
             this.Variations.Add(Block.Atlas.Load("blocks/blockblueprint"));
         }
         public override bool IsStandableIn => false;
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return null;
-        }
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return null;
+        //}
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             var entity = chunk.Map.GetBlockEntity(blockCoordinates) as BlockConstructionEntity;
             var block = entity.Product.Block;

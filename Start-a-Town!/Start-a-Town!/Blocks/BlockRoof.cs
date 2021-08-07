@@ -10,10 +10,10 @@ namespace Start_a_Town_.Blocks
     {
         static readonly Texture2D Depth1 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth1height19");
         static readonly Texture2D Depth2 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth2height19");
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.LightWood;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.LightWood;
+        //}
 
         readonly AtlasDepthNormals.Node.Token[] Parts = new AtlasDepthNormals.Node.Token[4];
         public BlockRoof() 
@@ -72,11 +72,11 @@ namespace Start_a_Town_.Blocks
         {
             base.Place(map, global, GetData(orientation), variation, orientation, notify);
         }
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
                 return null;
-            var material = this.GetColorVector(data);
+            var material = mat.ColorVector;// this.GetColorVector(data);
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds,
                 token,

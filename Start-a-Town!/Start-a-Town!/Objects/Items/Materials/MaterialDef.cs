@@ -12,6 +12,8 @@ namespace Start_a_Town_
         public static int IdSequence => _idSequence++;
 
         public static Dictionary<int, MaterialDef> Registry = new();
+        public static Dictionary<int, MaterialDef> RegistryByHash = new();
+
 
         public string Label => this.Name;
 
@@ -41,6 +43,7 @@ namespace Start_a_Town_
 
         public bool IsTemplate { get; private set; }
 
+        private int HashCode;
         public MaterialType Type;
         public readonly int ID;
         public Color Color;
@@ -92,6 +95,8 @@ namespace Start_a_Town_
         }
         public MaterialDef(MaterialType type, string name, string prefix, Color color, int density) : base(name)
         {
+            this.HashCode = name.GetHashCode();
+            RegistryByHash[this.HashCode] = this;
             this.Type = type;
             type.SubTypes.Add(this);
             this.ID = IdSequence;

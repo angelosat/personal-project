@@ -42,6 +42,7 @@ namespace Start_a_Town_
             FlowerOverlays.Add(Atlas.Load("blocks/grass/flowersoverlayyellow", BlockDepthMap, NormalMap));
             FlowerOverlays.Add(Atlas.Load("blocks/grass/flowersoverlaywhite", BlockDepthMap, NormalMap));
             FlowerOverlays.Add(Atlas.Load("blocks/grass/flowersoverlaypurple", BlockDepthMap, NormalMap));
+            this.DrawMaterialColor = false;
         }
 
         internal static void GrowRandomFlower(MapBase map, IntVec3 global)
@@ -88,18 +89,18 @@ namespace Start_a_Town_
                 return 0;
             return base.GetFertility(cell);
         }
-        public override MaterialDef GetMaterial(byte blockdata)
-        {
-            return MaterialDefOf.Soil;
-        }
+        //public override MaterialDef GetMaterial(byte blockdata)
+        //{
+        //    return MaterialDefOf.Soil;
+        //}
 
-        public override MyVertex[] Draw(Chunk chunk, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public override MyVertex[] Draw(Chunk chunk, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
-            return base.Draw(chunk, blockcoords, camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data);
+            return base.Draw(chunk, blockcoords, camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data, mat);
         }
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
-            base.Draw(canvas, chunk, blockCoordinates, camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data);
+            base.Draw(canvas, chunk, blockCoordinates, camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data, mat);
             if (data == 0)
                 return null;
             var fl = this.GetFlowerOverlay(data);

@@ -30,6 +30,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                 return;
             }
             c.Block = w.DefaultBlock;
+            c.Material = c.Block.DefaultMaterial;
         }
         public override List<MutatorProperty> GetAdjustableParameters()
         {

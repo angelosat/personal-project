@@ -29,6 +29,11 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
+    <Compile Include="Effect3.fx">
+      <Name>Effect3</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <Compile Include="Graphics\Gui\gui-window2.png">
       <Name>gui-window2</Name>
       <Importer>TextureImporter</Importer>
@@ -268,13 +273,6 @@
       <Name>item-box</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Effect1.fx">
-      <Name>Effect1</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -886,13 +884,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Effect3.fx">
-      <Name>Effect3</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Graphics\Items\crate1.png">
       <Name>crate1</Name>
       <Importer>TextureImporter</Importer>
@@ -1045,13 +1036,6 @@
       <Name>grass3-overlay</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="blur - Copy.fx">
-      <Name>blur - Copy</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>

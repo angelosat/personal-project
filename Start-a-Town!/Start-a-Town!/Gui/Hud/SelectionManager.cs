@@ -404,15 +404,14 @@ namespace Start_a_Town_.UI
                 //    if (obj.Type == TargetType.Position)
                 //    {
                 //        camera.DrawBlockMouseover(sb, obj.Map, obj.Global, Color.Yellow);
+                //        //ToolManager.DrawBlockMouseover(sb, obj.Map, camera, obj);
                 //        var map = obj.Map;
                 //        var global = obj.Global;
-                //        map.GetBlock(global).DrawSelected(sb, camera, map, global);
+                //        //map.GetBlock(global).DrawSelected(sb, camera, map, global);
                 //    }
                 var first = this.MultipleSelected.First();
                 if (first.Type == TargetType.Position)
-                {
                     Renderer.DrawBlocks(first.Map, camera, this.MultipleSelected.Select(t => (IntVec3)t.Global));
-                }
             }
             else if (this.SelectedSource != null)
             {

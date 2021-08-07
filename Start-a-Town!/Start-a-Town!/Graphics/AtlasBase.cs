@@ -13,5 +13,10 @@ namespace Start_a_Town_.Graphics
             Game1.Instance.GraphicsDevice.Textures[0] = this.Texture;
             Game1.Instance.GraphicsDevice.Textures[1] = this.DepthTexture;
         }
+        internal void Begin()
+        {
+            Game1.Instance.GraphicsDevice.Textures[0] = this.Texture;
+            Game1.Instance.GraphicsDevice.Textures[1] = this.DepthTexture;
+        }
     }
 }

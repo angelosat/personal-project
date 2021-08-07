@@ -521,7 +521,7 @@ namespace Start_a_Town_
             this.Effect.Parameters["OutlineThreshold"].SetValue((1) / (this.DepthNear - this.DepthFar));
         }
 
-        private void PrepareShaderTransparent(MapBase map)
+        public void PrepareShaderTransparent(MapBase map)
         {
             var view =
                 new Matrix(
@@ -888,7 +888,6 @@ namespace Start_a_Town_
             gd.Textures[1] = Sprite.Atlas.DepthTexture;
             this.DrawEntities(scene, objs);
             map.DrawParticles(this);
-
             //  // draw entity shadows
             MySpriteBatch shadowsSB = new MySpriteBatch(gd);
             fx.CurrentTechnique = fx.Techniques["EntityShadows"];
@@ -922,6 +921,7 @@ namespace Start_a_Town_
             // gd.DepthStencilState = new DepthStencilState() { DepthBufferWriteEnable = true }; // this broke depth on block highlights
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             toolManager.DrawAfterWorld(this.SpriteBatch, map);
+
             this.SpriteBatch.Flush();
 
             // draw entity mouseover highlight
@@ -948,6 +948,7 @@ namespace Start_a_Town_
             gd.Textures[3] = this.MapDepth;
             this.SpriteBatch.Draw(this.MapComposite, this.MapComposite.Bounds, gd.Viewport.Bounds, Color.White);
             fx.CurrentTechnique.Passes["Pass1"].Apply();
+            gd.DepthStencilState = DepthStencilState.Default;
             this.SpriteBatch.Flush();
 
             // draw water on pre-final texture
@@ -985,6 +986,7 @@ namespace Start_a_Town_
             ///i moved this here from ingame.cs's draw method
             var sb = new SpriteBatch(gd);
             gd.SetRenderTarget(this.FinalScene);
+
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone);
             map.DrawInterface(sb, this);
             sb.End();
@@ -1000,17 +1002,18 @@ namespace Start_a_Town_
             this.RenderTargets = targets.ToArray();
             gd.SetRenderTarget(null);
             //gd.Textures[0] = this.FinalScene;
+
             gd.Textures[0] = this.RenderTargets[this.RenderIndex];
             fx.CurrentTechnique = fx.Techniques["Normal"];
 
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             this.SpriteBatch.Draw(this.FinalScene, this.FinalScene.Bounds, gd.Viewport.Bounds, Color.White);
+            gd.DepthStencilState = DepthStencilState.Default;
 
             this.SpriteBatch.Flush();
 
             // draw ui and other elements
             map.DrawWorld(this.SpriteBatch, this);
-
             this.SpriteBatch.Flush();
         }
 

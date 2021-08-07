@@ -66,15 +66,13 @@ namespace Start_a_Town_
 
         void Window_ClientSizeChanged(object sender, EventArgs e)
         {
-            var displayMode = Instance.graphics.GraphicsDevice.Adapter.SupportedDisplayModes[SurfaceFormat.Color].First();
+            //var displayMode = Instance.graphics.GraphicsDevice.Adapter.SupportedDisplayModes[SurfaceFormat.Color].First();
             //graphics.PreferredBackBufferWidth = displayMode.Width;// Math.Max(displayMode.Width, Instance.Window.ClientBounds.Width);
             //graphics.PreferredBackBufferHeight = displayMode.Height;// Math.Max(displayMode.Height, Instance.Window.ClientBounds.Height);
-            graphics.PreferredBackBufferWidth = Instance.Window.ClientBounds.Width;
-            graphics.PreferredBackBufferHeight = Instance.Window.ClientBounds.Height;
-            graphics.ApplyChanges();
-            Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Width").Value = graphics.PreferredBackBufferWidth.ToString();
-            Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Height").Value = graphics.PreferredBackBufferHeight.ToString();
-            Engine.Config.Save("config.xml");
+            //graphics.ApplyChanges();
+            //Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Width").Value = graphics.PreferredBackBufferWidth.ToString();
+            //Engine.Config.GetOrCreateElement("Settings").GetOrCreateElement("Video").GetOrCreateElement("Resolution").GetOrCreateElement("Height").Value = graphics.PreferredBackBufferHeight.ToString();
+            //Engine.Config.Save("config.xml");
         }
 
         void graphics_DeviceCreated(object sender, EventArgs e)

@@ -42,10 +42,12 @@ namespace Start_a_Town_
         {
             this.CreateMesh(camera, positions);
             camera.PrepareShader(map);
+            //camera.PrepareShaderTransparent(map);
             Coords.Rotate(camera, 0, 0, out int rotx, out int roty);
             var world = Matrix.CreateTranslation(new Vector3(0, 0, (rotx + roty) * Chunk.Size));
             camera.Effect.Parameters["World"].SetValue(world);
             camera.Effect.CurrentTechnique.Passes["Pass1"].Apply();
+            this.BlockToken.Atlas.Begin();
             foreach (var slice in this.Slices)
                 if (slice.Key <= camera.DrawLevel)
                     slice.Value.Draw();

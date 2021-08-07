@@ -1135,10 +1135,14 @@ namespace Start_a_Town_.Net
         }
         public void SetSpeed(int playerID, int playerSpeed)
         {
-            this.GetPlayer(playerID).SuggestedSpeed = playerSpeed;
+            var player = this.GetPlayer(playerID);
+            player.SuggestedSpeed = playerSpeed;
             var newspeed = this.Players.GetLowestSpeed();
             if (newspeed != this.Speed)
-                Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, string.Format("Speed set to {0}x ({1})", newspeed, string.Join(", ", this.Players.GetList().Where(p => p.SuggestedSpeed == newspeed).Select(p => p.Name))));
+                //Ingame.Instance.Hud.Chat.Write(Start_a_Town_.Log.EntryTypes.System, string.Format("Speed set to {0}x ({1})", newspeed, string.Join(", ", this.Players.GetList().Where(p => p.SuggestedSpeed == newspeed).Select(p => p.Name))));
+                Log.Network(this, $"Speed set to to {newspeed}"); // TODO prevent spam
+            else
+                Log.Network(this, $"{player.Name} wants to set speed to {playerSpeed}"); // TODO prevent spam
             this.Speed = newspeed;
         }
 

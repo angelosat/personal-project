@@ -807,7 +807,6 @@ namespace Start_a_Town_.UI
                 }
             }
             this.OnAfterDraw(sb, viewport);
-
             foreach (var control in this.Controls)
                 control.Draw(sb, Rectangle.Intersect(control.BoundsScreen, viewport));
         }

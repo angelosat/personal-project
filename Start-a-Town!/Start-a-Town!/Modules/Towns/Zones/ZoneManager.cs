@@ -126,6 +126,7 @@ namespace Start_a_Town_
             if (_gui is null)
             {
                 var box = new ListBoxNoScroll<ZoneDef, Button>(z => new Button(z.Label, () => Zone.Edit(Ingame.CurrentMap.Town, z), 96), 0).AddItems(ZoneDefs);
+                box.BackgroundColor = Microsoft.Xna.Framework.Color.Black * .5f;
                 _gui = box.ToWindow("Zones").Transparent();
                 _gui.Location = Controller.Instance.MouseLocation;
             }

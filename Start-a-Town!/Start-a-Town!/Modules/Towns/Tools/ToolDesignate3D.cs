@@ -148,7 +148,7 @@ namespace Start_a_Town_
             int dx = (int)Math.Abs(this.End.X - this.Begin.X) + 1;
             int dy = (int)Math.Abs(this.End.Y - this.Begin.Y) + 1;
             int dz = (int)Math.Abs(this.End.Z - this.Begin.Z) + 1;
-            UIManager.DrawStringOutlined(sb, string.Format("{0} x {1} x {2}", dx, dy, dz), UIManager.Mouse, Vector2.UnitY);
+            UIManager.DrawStringOutlined(sb, $"{dx} x {dy} x {dz}", UIManager.Mouse, Vector2.UnitY);
         }
 
         private bool IsRemoving()

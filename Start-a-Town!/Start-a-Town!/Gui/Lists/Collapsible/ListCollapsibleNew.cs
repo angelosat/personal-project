@@ -38,7 +38,7 @@ namespace Start_a_Town_.UI
                 var node = queue.Dequeue();
                 var nodeContainer = new GroupBox() { Name = "container", BackgroundColor = UIManager.DefaultListItemBackgroundColor };
                 var nodeItem = new GroupBox() { Name = "item" };
-                node.Arrow = new PictureBox(UIManager.ArrowRight) { LeftClickAction = expand };
+                node.Arrow = new PictureBox(UIManager.ArrowRight) { LeftDownAction = expand };// { LeftClickAction = expand };
                 var label = new Label(node.Name) { Active = true };
                 var control = node.ControlGetter?.Invoke();
                 if (control is not null)

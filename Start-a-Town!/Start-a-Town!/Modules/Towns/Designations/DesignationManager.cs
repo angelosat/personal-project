@@ -158,6 +158,7 @@ namespace Start_a_Town_
             if (_gui is null)
             {
                 var box = new ListBoxNoScroll<DesignationDef, Button>(createButton, 0).AddItems(Ingame.CurrentMap.Town.DesignationManager.Designations.Keys.Prepend(DesignationDef.Remove));
+                box.BackgroundColor = Microsoft.Xna.Framework.Color.Black * .5f;
                 _gui = box.ToWindow("Designations").Transparent();
                 _gui.Location = Controller.Instance.MouseLocation;
             }

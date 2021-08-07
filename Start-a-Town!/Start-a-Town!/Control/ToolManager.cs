@@ -43,6 +43,19 @@ namespace Start_a_Town_
                     var net = Ingame.CurrentMap.Net;
                     PacketPlayerToolSwitch.Send(net, net.GetPlayer().ID, this._activeTool);
                 }
+                if (ToolHelpTextGui is null)
+                {
+                    ToolHelpTextGui = new GroupBox(256, 32);
+                }
+                if (!this._activeTool.HelpText.IsNullEmptyOrWhiteSpace())
+                {
+                    // show movable window with tool help text
+                    ToolHelpTextGui.ClearControls();
+                    ToolHelpTextGui.AddControls(new Label(this._activeTool.HelpText) { MouseThrough = true, BackgroundColor = Color.Black * .5f });
+                    ToolHelpTextGui.Show();
+                }
+                else
+                    ToolHelpTextGui.Hide();
             }
         }
 
@@ -253,10 +266,11 @@ namespace Start_a_Town_
             }
 
         }
-
+        static Control ToolHelpTextGui;
         public static void SetTool(ControlTool tool)
         {
             ScreenManager.CurrentScreen.ToolManager.ActiveTool = tool;
+           
         }
         public static bool Clear()
         {

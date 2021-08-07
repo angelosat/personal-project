@@ -64,7 +64,13 @@ namespace Start_a_Town_
                                             intthickness,
                                             bounds.Height - intthickness + padpad), color);
         }
-
+        public static void DrawFlashingBorder(this Rectangle bounds, SpriteBatch sb)
+        {
+            var lerp = (float)Math.Cos(Math.PI * 2 * UIManager.FlashingTimer / 120f);
+            lerp += 1;
+            lerp /= 2;
+            bounds.DrawHighlightBorder(sb, Color.Lerp(Color.Transparent, Color.White, lerp), Vector2.Zero);
+        }
 
         public static Label ToLabel(this string text) { return new UI.Label(Vector2.Zero, text); }
         public static Label ToLabel(this string text, Vector2 location) { return new UI.Label(location, text); }

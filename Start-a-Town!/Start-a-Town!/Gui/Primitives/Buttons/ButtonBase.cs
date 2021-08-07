@@ -22,6 +22,7 @@ namespace Start_a_Town_.UI
 
         public Action
             LeftClickAction = () => { },
+            LeftDownAction,
             RightClickAction = () => { };
         public Action<ButtonBase>
             LeftClickActionNew = bb => { },
@@ -248,6 +249,7 @@ namespace Start_a_Town_.UI
             this.LeftPressed = true;
             this.Pressed = true;
             e.Handled = true;
+            this.LeftDownAction?.Invoke();
             base.OnMouseLeftPress(e);
         }
         protected override void OnMouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)

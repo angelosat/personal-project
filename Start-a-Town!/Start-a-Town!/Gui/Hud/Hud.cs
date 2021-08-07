@@ -39,7 +39,6 @@ namespace Start_a_Town_
         readonly IngameMenu IngameMenu;
         readonly ScrollbarVNew ZLevelDrawBar;
         readonly IconButton BtnPlayers;
-        public UIToolHelp ToolHelp;
         public void AddButton(IconButton btn)
         {
             btn.Location = this.Box_Buttons.Controls.TopRight;
@@ -112,12 +111,10 @@ namespace Start_a_Town_
 
             this.ZLevelDrawBar.Location = this.ZLevelDrawBar.RightCenterScreen;
 
-            this.ToolHelp = new UIToolHelp() { Location = this.ZLevelDrawBar.BottomRight };
 
             this.Controls.Add(
                 this.ZLevelDrawBar,
                 camWidget, uiSpeed,
-                this.ToolHelp,
                 this.Chat
                 , this.Time
                 , this.UnitFrames

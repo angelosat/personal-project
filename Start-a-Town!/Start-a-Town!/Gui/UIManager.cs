@@ -64,7 +64,7 @@ namespace Start_a_Town_.UI
                 UITexture = new RenderTarget2D(Game1.Instance.GraphicsDevice, Width, Height);
             }
         }
-
+        public static int FlashingTimer { get; private set; }
         public readonly DialogBlock DialogBlock = new DialogBlock();
 
         public static Rectangle Bounds => new Rectangle(0, 0, Width, Height);
@@ -285,7 +285,7 @@ namespace Start_a_Town_.UI
 
         public void Update(Game1 game, GameTime gt)
         {
-
+            FlashingTimer++;
             Control lastactive = Controller.Instance.Mouseover.Object as Control;// ActiveControl;
             foreach (var layer in this.Layers)
             {
@@ -354,7 +354,7 @@ namespace Start_a_Town_.UI
             //    this.DrawOnCamera(sb, camera); // moving this to outside the ui rendertarget draw call, because we dont want it drawn to ui scale
 
             foreach (var layer in this.Layers)
-                foreach (var ctrl in layer.Value) // has thrown collection was modified during receing map packets
+                foreach (var ctrl in layer.Value) // has thrown collection was modified during receiving map packets?
                     ctrl.Draw(sb, Bounds);
 
             TooltipManager.Instance.Draw(sb);
@@ -510,7 +510,13 @@ namespace Start_a_Town_.UI
             }
             return false;
         }
-
+        /// <summary>
+        /// use extension stringhelper.wrap instead
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="maxwidth"></param>
+        /// <returns></returns>
+        [Obsolete]
         public static string WrapText(string text, int maxwidth)
         {
             int pos = 0, linewidth = 0;

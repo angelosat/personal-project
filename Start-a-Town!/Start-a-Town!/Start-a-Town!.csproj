@@ -587,7 +587,6 @@
     <Compile Include="Gui\Editor\ObjectsWindowDefs.cs" />
     <Compile Include="Gui\Primitives\GroupBox.cs" />
     <Compile Include="Gui\Hud\QuickButtonBar.cs" />
-    <Compile Include="Gui\Hud\UIToolHelp.cs" />
     <Compile Include="GameEvents\EventBlocksChanged.cs" />
     <Compile Include="GameModes\StaticMaps\Screens\GuiNewGame.cs" />
     <Compile Include="Modules\Towns\Rooms\RoomManager.cs" />

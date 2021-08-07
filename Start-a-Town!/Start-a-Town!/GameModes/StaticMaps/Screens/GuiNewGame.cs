@@ -18,37 +18,36 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var guiname = TextBox.CreateWithLabel("Name", StaticWorld.GetRandomName(), 150, out _, out var txtboxname);
             txtboxname.InputFilter = char.IsLetterOrDigit;
 
-            var seedBox = TextBox.CreateWithLabel("Seed", Path.GetRandomFileName().Replace(".", ""), 150, out var lbl_seed, out var txt_Seed);
-            txt_Seed.InputFilter = char.IsLetterOrDigit;
+            //var seedBox = TextBox.CreateWithLabel("Seed", Path.GetRandomFileName().Replace(".", ""), 150, out var lbl_seed, out var txt_Seed);
+            //txt_Seed.InputFilter = char.IsLetterOrDigit;
+            //var btn_randomSeed = new IconButton()
+            //{
+            //    HoverText = "Randomize",
+            //    BackgroundTexture = UIManager.Icon16Background,
+            //    Name = "Randomize seed",
+            //    Location = txt_Seed.TopRight,
+            //    Icon = new Icon(UIManager.Icons16x16, 1, 16),
+            //    LeftClickAction = () => txt_Seed.Text = Path.GetRandomFileName().Replace(".", "")
+            //};
+            //seedBox.AddControls(
+            //    btn_randomSeed);
 
-            var btn_randomSeed = new IconButton()
-            {
-                HoverText = "Randomize",
-                BackgroundTexture = UIManager.Icon16Background,
-                Name = "Randomize seed",
-                Location = txt_Seed.TopRight,
-                Icon = new Icon(UIManager.Icons16x16, 1, 16),
-                LeftClickAction = () => txt_Seed.Text = Path.GetRandomFileName().Replace(".", "")
-            };
             var btn_randomName = new IconButton()
             {
                 HoverText = "Randomize",
                 BackgroundTexture = UIManager.Icon16Background,
-                Name = "Randomize seed",
-                Location = txt_Seed.TopRight,
+                Name = "Randomize",
                 Icon = new Icon(UIManager.Icons16x16, 1, 16),
                 LeftClickAction = () => txtboxname.Text = StaticWorld.GetRandomName()
             };
-            seedBox.AddControls(
-                btn_randomSeed);
             guiname.AddControlsTopRight(btn_randomName);
             var defaultSizes = StaticMap.MapSize.GetList();
             var selectedSize = defaultSizes.First();
-            var comboSize = new ComboBoxNewNew<StaticMap.MapSize>(defaultSizes, seedBox.Width, "Size", s => s.Name, () => selectedSize, s => selectedSize = s);
+            var comboSize = new ComboBoxNewNew<StaticMap.MapSize>(defaultSizes, guiname.Width, "Size", s => s.Name, () => selectedSize, s => selectedSize = s);
 
             tab_World.AddControlsVertically(1,
                 guiname,
-                seedBox,
+                //seedBox,
                 comboSize);//.ToPanelLabeled("Map Size"));
 
             var btn_create = new Button("Create", openActorCreationGui);
@@ -64,7 +63,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
                 var actorsui = new GuiActorCreation(actors);
-                var btnstart = new Button("Start", () => this.CreateMap(txtboxname.Text, txt_Seed.Text, selectedSize, actors.ToArray()));
+                var btnstart = new Button("Start", () => this.CreateMap(txtboxname.Text, selectedSize, actors.ToArray()));
                 var btnback = new Button("Back", () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); });
                 actorsCreateBox.AddControlsVertically(0, HorizontalAlignment.Right,
                     actorsui,
@@ -78,9 +77,9 @@ namespace Start_a_Town_.GameModes.StaticMaps
             }
         }
 
-        void CreateMap(string name, string seedString, StaticMap.MapSize size, Actor[] actors)
+        void CreateMap(string name, StaticMap.MapSize size, Actor[] actors)
         {
-            var world = new StaticWorld(name, seedString, Terraformer.Defaults);
+            var world = new StaticWorld(name, Terraformer.Defaults);
             var map = new StaticMap(world, "test", Vector2.Zero, size);
             this.Hide();
             Server.Start();

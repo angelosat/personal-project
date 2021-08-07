@@ -60,7 +60,7 @@ namespace Start_a_Town_.Towns.Crafting
             w.Write(reagent);
             w.Write(defs?.Select(d => d.Name).ToArray());
             w.Write(mats?.Select(d => d.Name).ToArray());
-            w.Write(matTypes?.Select(d => d.ID).ToArray());
+            w.Write(matTypes?.Select(d => d.Name).ToArray());
         }
         private static void SetOrderRestrictions(INetwork net, BinaryReader r)
         {
@@ -69,7 +69,7 @@ namespace Start_a_Town_.Towns.Crafting
             var reagent = r.ReadString();
             var defs = r.ReadStringArray().Select(Def.GetDef<ItemDef>).ToArray();
             var mats = r.ReadStringArray().Select(Def.GetDef<MaterialDef>).ToArray();
-            var matTypes = r.ReadIntArray().Select(MaterialType.GetMaterialType).ToArray();
+            var matTypes = r.ReadStringArray().Select(Def.GetDef<MaterialType>).ToArray();
             order.ToggleReagentRestrictions(reagent, defs, mats, matTypes);
             if(net is Server)
             {

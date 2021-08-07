@@ -2,15 +2,18 @@
 
 namespace Start_a_Town_
 {
-    public sealed class MaterialType
+    public sealed class MaterialType : Def
     {
-        static int _idSequence = 0;
-        public static int IdSequence { get { return _idSequence++; } }
+        //static int _idSequence = 0;
+        //public static int IdSequence { get { return _idSequence++; } }
         public static Dictionary<int, MaterialType> Dictionary = new();
+        public static Dictionary<int, MaterialType> DictionaryByHash = new();
+
         public ReactionClass ReactionClass;
         public readonly MaterialCategory Category;
-        public int ID;
-        public string Name;
+        //public int ID;
+        public string Label;
+        public readonly int Hash;
         public HashSet<MaterialDef> SubTypes = new();
         public float Shininess;
         public ToolAbilityDef SkillToExtract;
@@ -24,13 +27,15 @@ namespace Start_a_Town_
             return "Material:Type:" + this.Name;
         }
        
-        public MaterialType(string name)
+        public MaterialType(string name) : base($"MaterialType:{name}")
         {
-            int id = IdSequence;
-            this.ID = id;
-            Dictionary[id] = this;
-            this.Name = name;
-
+            //int id = IdSequence;
+            //this.ID = id;
+            //Dictionary[id] = this;
+            //this.Name = name;
+            this.Label = name;
+            this.Hash = name.GetHashCode();
+            DictionaryByHash[this.Hash] = this;
             this.SubTypes = new HashSet<MaterialDef>();
         }
         public MaterialType(string name, MaterialCategory category)

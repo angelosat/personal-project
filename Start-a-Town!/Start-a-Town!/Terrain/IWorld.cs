@@ -10,7 +10,7 @@ namespace Start_a_Town_.GameModes
     public interface IWorld
     {
         string Name { get; set; }
-        string SeedString { get; set; }
+        //string SeedString { get; set; }
         string GetName();
         string GetPath();
         MapBase GetMap(Vector2 mapCoords);

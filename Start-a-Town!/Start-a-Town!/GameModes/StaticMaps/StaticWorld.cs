@@ -26,7 +26,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 net.Map.World.CurrentTick++;
             }
         }
-        public string SeedString { get; set; }
+        //public string SeedString { get; set; }
         public float Gravity => -0.015f;//-0.04f;// -0.05f; //35f;
         public const int Zenith = 14;
         string _Name;
@@ -101,27 +101,37 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Maps = new MapCollection();
             this.PopulationManager = new PopulationManager(this);
         }
-
-        public StaticWorld(string name, string seedString, IEnumerable<Terraformer> mutators)
-            : this()
+        public StaticWorld(string name, IEnumerable<Terraformer> mutators)
+           : this()
         {
-            this.SeedString = seedString;
-            if(seedString.IsNullEmptyOrWhiteSpace())
-                seedString = Path.GetRandomFileName().Replace(".","");
+            if (name.IsNullEmptyOrWhiteSpace())
+                throw new ArgumentNullException();
             this.Name = name;
-            if (!int.TryParse(seedString, out var seed))
-                seed = seedString.Length > 0 ? seedString.GetHashCode() : new Random().Next(int.MinValue, int.MaxValue);
-            this.Seed = seed;
-            this.Random = new Random(seed);
+            this.Seed = name.GetHashCode();
+            this.Random = new Random(this.Seed);
             this.Mutators = new SortedSet<Terraformer>(mutators);
             this.DefaultBlock = BlockDefOf.Soil;
         }
+        //public StaticWorld(string name, string seedString, IEnumerable<Terraformer> mutators)
+        //    : this()
+        //{
+        //    this.SeedString = seedString;
+        //    if (seedString.IsNullEmptyOrWhiteSpace())
+        //        seedString = Path.GetRandomFileName().Replace(".", "");
+        //    this.Name = name;
+        //    if (!int.TryParse(seedString, out var seed))
+        //        seed = seedString.Length > 0 ? seedString.GetHashCode() : new Random().Next(int.MinValue, int.MaxValue);
+        //    this.Seed = seed;
+        //    this.Random = new Random(seed);
+        //    this.Mutators = new SortedSet<Terraformer>(mutators);
+        //    this.DefaultBlock = BlockDefOf.Soil;
+        //}
         public StaticWorld(SaveTag save)
             : this()
         {
             this.Name = (string)save["Name"].Value;
             this.Seed = (int)save["Seed"].Value;
-            this.SeedString = (string)save["SeedString"].Value;
+            //this.SeedString = (string)save["SeedString"].Value;
             save.TryGetTagValue<int>("RandomState", v =>
             {
                 this.Random = new Random(v);
@@ -161,7 +171,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
            : this()
         {
             this.Name = r.ReadString();
-            this.SeedString = r.ReadString();
+            //this.SeedString = r.ReadString();
             this.Seed = r.ReadInt32();
             this.CurrentTick = r.ReadUInt64();
             this.Trees = r.ReadBoolean();
@@ -193,7 +203,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var tag = new SaveTag(SaveTag.Types.Compound, "World");
 
             tag.Add(new SaveTag(SaveTag.Types.Int, "Seed", this.Seed));
-            this.SeedString.Save(tag, "SeedString");
+            //this.SeedString.Save(tag, "SeedString");
             var currentRandomState = this.Random.Next();
             this.Random = new Random(currentRandomState);
             tag.Add(new SaveTag(SaveTag.Types.Int, "RandomState", currentRandomState));
@@ -273,7 +283,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public void WriteData(BinaryWriter w)
         {
             w.Write(this.Name);
-            w.Write(this.SeedString);
+            //w.Write(this.SeedString);
             w.Write(this.Seed);
             w.Write(this.CurrentTick);
             w.Write(this.Trees);

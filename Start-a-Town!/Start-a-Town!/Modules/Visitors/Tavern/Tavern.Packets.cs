@@ -59,9 +59,7 @@ namespace Start_a_Town_
             static public void SendOrderSync(INetwork net, PlayerData player, Tavern tavern, CraftOrder order, bool enabled)
             {
                 if (net is Server)
-                {
                     order.Enabled = enabled;
-                }
                 net.GetOutgoingStream().Write(PacketOrderSync, player.ID, tavern.ID, order.ID, enabled);
             }
             private static void HandleSyncOrder(INetwork net, BinaryReader r)
@@ -71,9 +69,7 @@ namespace Start_a_Town_
                 var order = tavern.GetOrder(r.ReadInt32());
                 var enabled = r.ReadBoolean();
                 if (net is Client)
-                {
                     order.Enabled = enabled;
-                }
                 else
                     net.GetOutgoingStream().Write(PacketOrderSync, pl.ID, tavern.ID, order.ID, enabled);
             }
@@ -90,7 +86,7 @@ namespace Start_a_Town_
                 w.Write(reagent);
                 w.Write(defs?.Select(d => d.Name).ToArray());
                 w.Write(mats?.Select(d => d.Name).ToArray());
-                w.Write(matTypes?.Select(d => d.ID).ToArray());
+                w.Write(matTypes?.Select(d => d.Name).ToArray());
             }
             private static void UpdateOrderIngredients(INetwork net, BinaryReader r)
             {
@@ -100,15 +96,11 @@ namespace Start_a_Town_
                 var reagent = r.ReadString();
                 var defs = r.ReadStringArray().Select(Def.GetDef<ItemDef>).ToArray();
                 var mats = r.ReadStringArray().Select(Def.GetDef<MaterialDef>).ToArray();
-                var matTypes = r.ReadIntArray().Select(MaterialType.GetMaterialType).ToArray();
+                var matTypes = r.ReadStringArray().Select(Def.GetDef<MaterialType>).ToArray();
                 if (net is Client)
-                {
                     order.ToggleReagentRestrictions(reagent, defs, mats, matTypes);
-                }
                 else
-                {
                     UpdateOrderIngredients(net, player, tavern, order, reagent, defs, mats, matTypes);
-                }
             }
         }
     }

@@ -58,10 +58,10 @@ namespace Start_a_Town_.Blocks
             return data;
         }
 
-        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
-            base.Place(map, global, GetData(0), variation, orientation);
-            base.Place(map, global + IntVec3.UnitZ, GetData(1), variation, orientation, notify);
+            base.Place(map, global, material, GetData(0), variation, orientation);
+            base.Place(map, global + IntVec3.UnitZ, material, GetData(1), variation, orientation, notify);
         }
         public override IEnumerable<IntVec3> GetParts(byte data)
         {

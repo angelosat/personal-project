@@ -381,17 +381,17 @@ namespace Start_a_Town_
         }
 
         public virtual bool IsValidPosition(MapBase map, IntVec3 global, int orientation) { return true; }
-        internal void Place(MapBase map, IEnumerable<IntVec3> positions, byte data, int orientation, bool notify)
+        internal void Place(MapBase map, IEnumerable<IntVec3> positions, MaterialDef material, byte data, int orientation, bool notify)
         {
             foreach (var pos in positions)
-                this.Place(map, pos, data, 0, orientation, false);
+                this.Place(map, pos, material, data, 0, orientation, false);
 
             if (notify)
                 map.NotifyBlocksChanged(positions);
         }
-        public virtual void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
+        public virtual void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
-            map.SetBlock(global, this, data, variation, orientation, notify);
+            map.SetBlock(global, this, material, data, variation, orientation, notify);
             var entity = this.CreateBlockEntity(global);
             if (entity != null)
             {

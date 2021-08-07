@@ -22,8 +22,9 @@ namespace Start_a_Town_.PlayerControl
         {
 
         }
-        public BlockPainter (Block block, byte state)
+        public BlockPainter(Block block, MaterialDef mat, byte state)
         {
+            this.Material = mat;
             this.State = state;
             this.Random = new Random();
             this.Block = block;
@@ -68,7 +69,7 @@ namespace Start_a_Town_.PlayerControl
             byte state = isDelete ? (byte)0 : this.State;
 
             if (global != this.LastPainted)
-                PacketPlayerSetBlock.Send(Client.Instance, Client.Instance.GetPlayer(), global, block, state, this.Variation, this.Orientation);
+                PacketPlayerSetBlock.Send(Client.Instance, Client.Instance.GetPlayer(), global, block, this.Material, state, this.Variation, this.Orientation);
             this.LastPainted = global;
 
             this.Variation = this.Random.Next(block.Variations.Count);

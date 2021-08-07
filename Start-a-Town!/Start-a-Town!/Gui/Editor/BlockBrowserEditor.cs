@@ -42,7 +42,7 @@ namespace Start_a_Town_.UI.Editor
             {
                 slot.LeftClickAction = () =>
                 {
-                    ScreenManager.CurrentScreen.ToolManager.ActiveTool = new BlockPainter(cell.Block, cell.BlockData);
+                    ScreenManager.CurrentScreen.ToolManager.ActiveTool = new BlockPainter(cell.Block, cell.Material, cell.BlockData);
                 };
                 slot.PaintAction = (sb, tag) =>
                 {

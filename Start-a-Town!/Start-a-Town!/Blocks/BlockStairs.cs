@@ -74,9 +74,9 @@ namespace Start_a_Town_.Blocks
             var o = (data + cameraRotation) % 4;
             return this.Parts[o];
         }
-        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
-            base.Place(map, global, GetData(orientation), variation, orientation, notify);
+            base.Place(map, global, material, GetData(orientation), variation, orientation, notify);
         }
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {

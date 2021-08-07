@@ -29,9 +29,9 @@ namespace Start_a_Town_.Blocks
             };
         }
 
-        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
-            base.Place(map, global, data, variation, orientation, notify);
+            base.Place(map, global, material, data, variation, orientation, notify);
             var flow = new LiduidFlowProcess(map, global, global);
             LiduidFlowProcess.Add(flow);
         }

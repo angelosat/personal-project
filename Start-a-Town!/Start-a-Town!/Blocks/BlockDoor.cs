@@ -188,7 +188,7 @@ namespace Start_a_Town_
             return !IsLocked(cell.BlockData);
         }
         public override bool Multi => true;
-        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             var positions = new IntVec3[2];
             for (int i = 0; i < 2; i++)
@@ -196,7 +196,7 @@ namespace Start_a_Town_
                 var g = global + new IntVec3(0, 0, i);
                 positions[i] = g;
                 byte _data = (byte)i;
-                map.SetBlock(g, this, _data, variation, orientation, false);
+                map.SetBlock(g, this, material, _data, variation, orientation, false);
             }
             if (notify)
                 map.NotifyBlocksChanged(positions);

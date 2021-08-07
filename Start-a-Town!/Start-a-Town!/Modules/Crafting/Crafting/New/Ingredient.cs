@@ -164,7 +164,7 @@ namespace Start_a_Town_
                 else
                     this.ResolvedItemDefs = new(allDefs.Where(d => this.SpecifiedCategories.Contains(d.Category)));
             }
-            if (!this.SpecifiedMaterials.Any())
+            //if (!this.SpecifiedMaterials.Any())
                 ResolveAllowedMaterials();
             this.Resolved = true;
         }
@@ -174,6 +174,8 @@ namespace Start_a_Town_
             if (!this.SpecifiedMaterials.Any())
                 foreach (var m in this.ResolvedItemDefs.SelectMany(i => i.GetValidMaterials()))
                     this.ResolvedMaterials.Add(m);
+            else
+                this.ResolvedMaterials = this.SpecifiedMaterials;
         }
       
         internal string GetLabel()

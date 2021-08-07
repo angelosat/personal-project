@@ -21,9 +21,9 @@ namespace Start_a_Town_.Blocks
             this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
-        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
-            base.Place(map, global, data, orientation, 0, notify);
+            base.Place(map, global, material, data, orientation, 0, notify);
         }
         public override float GetHeight(float x, float y)
         {

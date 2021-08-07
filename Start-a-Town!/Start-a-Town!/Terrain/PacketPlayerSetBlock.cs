@@ -12,16 +12,17 @@ namespace Start_a_Town_
             p = Network.RegisterPacketHandler(Receive);
         }
         public static void Init() { }
-        public static void Send(INetwork net, PlayerData player, IntVec3 global, Block block, byte data = 0, int variation = 0, int orientation = 0)
+        public static void Send(INetwork net, PlayerData player, IntVec3 global, Block block, MaterialDef material, byte data = 0, int variation = 0, int orientation = 0)
         {
             if (net is Server)
-                Perform(net.Map, global, block, data, variation, orientation);
+                Perform(net.Map, global, block, material, data, variation, orientation);
 
             var w = net.GetOutgoingStream();
             w.Write(p);
             w.Write(player.ID);
             w.Write(global);
             w.Write(block);
+            material.Write(w);
             w.Write(data);
             w.Write(variation);
             w.Write(orientation);
@@ -31,17 +32,18 @@ namespace Start_a_Town_
             var player = net.GetPlayer(r.ReadInt32());
             var global = r.ReadIntVec3();
             var block = r.ReadBlock();
+            var material = Def.GetDef<MaterialDef>(r);
             var data = r.ReadByte();
             var variation = r.ReadInt32();
             var orientation = r.ReadInt32();
 
             if (net is Server)
-                Send(net, player, global, block, data, variation, orientation);
+                Send(net, player, global, block, material, data, variation, orientation);
             else
-                Perform(net.Map, global, block, data, variation, orientation);
+                Perform(net.Map, global, block, material, data, variation, orientation);
         }
 
-        private static void Perform(MapBase map, IntVec3 global, Block block, byte data, int variation, int orientation)
+        private static void Perform(MapBase map, IntVec3 global, Block block, MaterialDef material, byte data, int variation, int orientation)
         {
             if (!map.IsInBounds(global))
                 return;
@@ -54,7 +56,7 @@ namespace Start_a_Town_
             map.RemoveBlock(global);
 
             if (block != BlockDefOf.Air)
-                block.Place(map, global, data, variation, orientation);
+                block.Place(map, global, material, data, variation, orientation);
         }
     }
 }

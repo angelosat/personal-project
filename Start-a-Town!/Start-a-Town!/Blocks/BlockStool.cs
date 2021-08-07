@@ -1,25 +1,23 @@
-﻿namespace Start_a_Town_
+﻿using Microsoft.Xna.Framework.Graphics;
+
+namespace Start_a_Town_
 {
     class BlockStool : Block
     {
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.LightWood;
-        //}
-
         public BlockStool()
             : base("Stool", opaque: false)
         {
-            this.Variations.Add(Atlas.Load("blocks/furniture/stool", BlockDepthMap, NormalMap));
+            var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/stool").ToGrayscale();
+            this.Variations.Add(Atlas.Load("stoolgrayscale", tex, BlockDepthMap, NormalMap));
             this.Furniture = FurnitureDefOf.Table;
             this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.UtilitiesProvided.Add(Utility.Types.Eating);
         }
         
-        public override void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, bool notify = true)
+        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
-            base.Place(map, global, data, variation, orientation, notify);
+            base.Place(map, global, material, data, variation, orientation, notify);
             map.Town.AddUtility(Utility.Types.Eating, global);
         }
       

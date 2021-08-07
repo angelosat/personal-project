@@ -210,6 +210,7 @@ namespace Start_a_Town_
                 product.Block.Place(
                     map,
                     positions.Where(vec => args.Replacing ? map.GetBlock(vec) != BlockDefOf.Air : map.GetBlock(vec) == BlockDefOf.Air).ToList(),
+                    product.Material,
                     product.Data,
                     args.Orientation
                     , true);
@@ -238,14 +239,14 @@ namespace Start_a_Town_
                 {
                     map.AddBlockEntity(p.Key, entity);// DIDNT I DECIDE THAT BLOCKENTITIES WILL BE PLACE ONLY IN THE ORIGIN CELL???
                     entity.Children.Add(p.Key);
-                    map.SetBlock(p.Key, BlockDefOf.Designation, p.Value, variation, orientation, false);
+                    map.SetBlock(p.Key, BlockDefOf.Designation, MaterialDefOf.Air, p.Value, variation, orientation, false);
                 }
             }
             else
             {
                 map.AddBlockEntity(global, entity);// DIDNT I DECIDE THAT BLOCKENTITIES WILL BE PLACE ONLY IN THE ORIGIN CELL???
                 entity.Children.Add(global);
-                map.SetBlock(global, BlockDefOf.Designation, data, variation, orientation, false); // i put this last because there are blockchanged event handlers that look up the block entity which hadn't beeen added yet when I set the block beforehand
+                map.SetBlock(global, BlockDefOf.Designation, MaterialDefOf.Air, data, variation, orientation, false); // i put this last because there are blockchanged event handlers that look up the block entity which hadn't beeen added yet when I set the block beforehand
             }
             // TODO: add blockentities on construction manager instead?
         }

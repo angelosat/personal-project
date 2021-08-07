@@ -16,7 +16,7 @@ namespace Start_a_Town_
         }
         public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            return Def.GetDefs<MaterialDef>().Where(m => m.Type == MaterialType.Stone);
+            return Def.GetDefs<MaterialDef>().Where(m => m.Type == MaterialType.Stone || m.Type == MaterialType.Metal);
         }
     }
 }

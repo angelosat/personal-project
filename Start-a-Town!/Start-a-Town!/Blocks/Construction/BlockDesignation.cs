@@ -47,7 +47,7 @@ namespace Start_a_Town_.Blocks
                 {
                     map.AddBlockEntity(p, constr);
                     var pcell = map.GetCell(p);
-                    map.SetBlock(p, BlockDefOf.Construction, pcell.BlockData, pcell.Variation, pcell.Orientation, false);
+                    map.SetBlock(p, BlockDefOf.Construction, product.Material, pcell.BlockData, pcell.Variation, pcell.Orientation, false);
                 }
             }
             else if(isReady)
@@ -56,7 +56,7 @@ namespace Start_a_Town_.Blocks
                     map.RemoveBlock(p, false);
                 var block = product.Block;
                 var cell = map.GetCell(global);
-                block.Place(map, global, product.Data, 0, cell.Orientation, true);
+                block.Place(map, global, product.Material, product.Data, 0, cell.Orientation, true);
                 map.GetBlockEntity(global)?.IsMadeFrom(new ItemDefMaterialAmount[] { product.Requirement });
             }
            

@@ -23,8 +23,8 @@ namespace Start_a_Town_.Terraforming.Mutators
                 var segments = worm.GetBoxes();
                 foreach (var segment in segments)
                 {
-                    var minvec3 = new Vector3(chunkglobal, 0);
-                    var maxvec3 = new Vector3(chunkglobal + (Chunk.Size - 1) * Vector2.One, maxz - 1);
+                    var minvec3 = new IntVec3(chunkglobal, 0);
+                    var maxvec3 = new IntVec3(chunkglobal + (Chunk.Size - 1) * IntVec2.One, maxz - 1);
                     var chunkbox = new BoundingBox(minvec3, maxvec3);
                     if (chunkbox.Intersects(segment))
                         this.Carve(segment, chunkbox, chunk);
@@ -167,7 +167,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             public void CarveWithin(Vector3 global, Chunk chunk)
             {
                 var chunkglobal = chunk.MapCoords * Chunk.Size;
-                var box = new BoundingBox(new Vector3(chunkglobal, 0), new Vector3(chunkglobal + (Chunk.Size - 1) * Vector2.One, MapBase.MaxHeight - 1));
+                var box = new BoundingBox(new IntVec3(chunkglobal, 0), new IntVec3(chunkglobal + (Chunk.Size - 1) * IntVec2.One, MapBase.MaxHeight - 1));
 
                 var radius = GetRadius(3, 5, this.Life);
 

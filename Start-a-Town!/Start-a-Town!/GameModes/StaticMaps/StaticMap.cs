@@ -94,7 +94,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.LightingEngine = new LightingEngine(this);
             this.Camera = new Camera(Game1.Bounds.Width, Game1.Bounds.Height);
             this.Name = name;
-            this.ActiveChunks = new Dictionary<Vector2, Chunk>();
+            this.ActiveChunks = new Dictionary<IntVec2, Chunk>();
             this.Thumbnails = new Texture2D[3];
             this.Town = new Town(this);
             this.Regions = new RegionManager(this);
@@ -191,7 +191,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public override void DrawBlocks(MySpriteBatch sb, Camera camera, EngineArgs a)
         {
-            var copyOfActiveChunks = new Dictionary<Vector2, Chunk>(this.ActiveChunks);
+            var copyOfActiveChunks = new Dictionary<IntVec2, Chunk>(this.ActiveChunks);
             Vector3? playerGlobal = null;
             var hiddenRects = new List<Rectangle>();
 
@@ -218,8 +218,8 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
         public override void DrawInterface(SpriteBatch sb, Camera camera)
         {
-            Dictionary<Vector2, Chunk> copyOfActiveChunks = new Dictionary<Vector2, Chunk>(this.ActiveChunks);
-            foreach (KeyValuePair<Vector2, Chunk> chunk in copyOfActiveChunks)
+            var copyOfActiveChunks = new Dictionary<IntVec2, Chunk>(this.ActiveChunks);
+            foreach (var chunk in copyOfActiveChunks)
             {
                 Rectangle chunkBounds = camera.GetScreenBounds(chunk.Value.Start.X + Chunk.Size / 2, chunk.Value.Start.Y + Chunk.Size / 2, MaxHeight / 2, Chunk.Bounds);  //chunk.Value.GetBounds(camera);
                 if (camera.ViewPort.Intersects(chunkBounds))
@@ -411,16 +411,16 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             var actives = this.GetActiveChunks();
 
-            if (actives.TryGetValue(chunk.MapCoords + new Vector2(1, 0), out Chunk neighbor))
+            if (actives.TryGetValue(chunk.MapCoords + new IntVec2(1, 0), out var neighbor))
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.West));
 
-            if (actives.TryGetValue(chunk.MapCoords + new Vector2(-1, 0), out neighbor))
+            if (actives.TryGetValue(chunk.MapCoords + new IntVec2(-1, 0), out neighbor))
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.East));
 
-            if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, 1), out neighbor))
+            if (actives.TryGetValue(chunk.MapCoords + new IntVec2(0, 1), out neighbor))
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.North));
 
-            if (actives.TryGetValue(chunk.MapCoords + new Vector2(0, -1), out neighbor))
+            if (actives.TryGetValue(chunk.MapCoords + new IntVec2(0, -1), out neighbor))
                 this.LightingEngine.HandleImmediate(neighbor.GetEdges(Edges.South));
         }
 
@@ -668,7 +668,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.Name;
         }
-        public override Dictionary<Vector2, Chunk> GetActiveChunks()
+        public override Dictionary<IntVec2, Chunk> GetActiveChunks()
         {
             return this.ActiveChunks;
         }

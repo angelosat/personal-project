@@ -328,7 +328,14 @@ namespace Start_a_Town_
                 }
             });
         }
-
+        public static void Save(this IntVec2 vec2, SaveTag save, string name)
+        {
+            ((Vector2)vec2).Save(save, name);
+        }
+        public static SaveTag Save(this IntVec2 vec2, string name)
+        {
+            return ((Vector2)vec2).Save(name);
+        }
         public static void Save(this IntVec3 vec3, SaveTag save, string name)
         {
             save.Add(new SaveTag(SaveTag.Types.Vector3, name, (Vector3)vec3));

@@ -51,11 +51,11 @@ namespace Start_a_Town_
             return map.TryGetCell(global, out Cell cell) ? cell.BlockData : (byte)0;
         }
        
-        public static Vector2 GetChunkCoords(this Vector3 global)
+        public static IntVec2 GetChunkCoords(this Vector3 global)
         {
             int chunkX = (int)Math.Floor(Math.Round(global.X) / Chunk.Size);
             int chunkY = (int)Math.Floor(Math.Round(global.Y) / Chunk.Size);
-            return new Vector2(chunkX, chunkY);
+            return new IntVec2(chunkX, chunkY);
         }
 
         static public bool IsWithinChunkBounds(this Vector3 local)

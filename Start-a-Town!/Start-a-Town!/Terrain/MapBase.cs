@@ -70,7 +70,7 @@ namespace Start_a_Town_
         protected Queue<IntVec3> RandomBlockUpdateQueue = new();
         public LightingEngine LightingEngine;
         public IWorld World;
-        public Dictionary<Vector2, Chunk> ActiveChunks;
+        public Dictionary<IntVec2, Chunk> ActiveChunks;
         INetwork _net;
         public INetwork Net => this._net ??= this.World.Net;
         public GameObject PlayerCharacter;
@@ -107,17 +107,17 @@ namespace Start_a_Town_
         public readonly float PlantDensityTarget = .1f;
         public int ChunkVolume => Chunk.Size * Chunk.Size * this.GetMaxHeight();
 
-        public int Area { get { return this.ActiveChunks.Count * Chunk.Size * Chunk.Size; } }
+        public int Area => this.ActiveChunks.Count * Chunk.Size * Chunk.Size;
 
         internal Room GetRoomAt(IntVec3 global)
         {
             return this.Town.RoomManager.GetRoomAt(global);
         }
 
-        public int Volume { get { return this.ActiveChunks.Count * ChunkVolume; } }
+        public int Volume => this.ActiveChunks.Count * ChunkVolume;
 
-        public Random Random { get { return this.World.Random; } }
-        public abstract Dictionary<Vector2, Chunk> GetActiveChunks();
+        public Random Random => this.World.Random;
+        public abstract Dictionary<IntVec2, Chunk> GetActiveChunks();
         public abstract bool AddChunk(Chunk chunk);
         public abstract IEnumerable<GameObject> GetObjects();
         public abstract IEnumerable<GameObject> GetObjects(Vector3 min, Vector3 max);

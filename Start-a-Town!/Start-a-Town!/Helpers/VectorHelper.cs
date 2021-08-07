@@ -256,6 +256,7 @@ namespace Start_a_Town_
             yield return coords + new Vector2(0, 1);
             yield return coords - new Vector2(0, 1);
         }
+        
         static public IEnumerable<Vector2> GetNeighbors8(this Vector2 coords)
         {
             yield return coords + new Vector2(-1, -1);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
@@ -53,6 +54,14 @@ namespace Start_a_Town_
         {
             return new IntVec2(a.X - b.X, a.Y - b.Y);
         }
+        public static IntVec2 operator *(IntVec2 a, int k)
+        {
+            return new IntVec2(a.X * k, a.Y * k);
+        }
+        public static IntVec2 operator *(int k, IntVec2 a)
+        {
+            return a * k;
+        }
         public static IntVec2 operator -(IntVec2 a, int b)
         {
             return new IntVec2(a.X * b, a.Y * b);
@@ -73,6 +82,14 @@ namespace Start_a_Town_
         public static implicit operator IntVec2(Vector2 a)
         {
             return new IntVec2(a);
+        }
+
+        public IEnumerable<IntVec2> GetNeighbors()
+        {
+            yield return this + new IntVec2(1, 0);
+            yield return this - new IntVec2(1, 0);
+            yield return this + new IntVec2(0, 1);
+            yield return this - new IntVec2(0, 1);
         }
     }
 }

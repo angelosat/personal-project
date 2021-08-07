@@ -151,8 +151,8 @@ namespace Start_a_Town_
         public bool IsQueuedForLight;
         public const int Size = 16;
         public SortedList<int, Cell> VisibleIndoorCells;
-
-        public Vector2 Start, bottomRight;
+        public IntVec2 Start;
+        public Vector2  bottomRight;
         public void Invalidate()
         {
             foreach (var slice in this.Slices)
@@ -222,19 +222,19 @@ namespace Start_a_Town_
         }
         public Cell this[int cellIndex] => this.Cells[cellIndex];
 
-        public Vector2 MapCoords
+        public IntVec2 MapCoords
         {
-            get => new Vector2(this.X, this.Y);
+            get => new IntVec2(this.X, this.Y);
             set
             {
                 this.X = (int)value.X;
                 this.Y = (int)value.Y;
-                this.Start = this.MapCoords * Chunk.Size;
+                this.Start = this.MapCoords * Size;
             }
         }
 
         public static readonly int Width = Block.Width * Size;
-        public static readonly int Height = MapBase.MaxHeight * Block.BlockHeight + Chunk.Size * Block.Depth;
+        public static readonly int Height = MapBase.MaxHeight * Block.BlockHeight + Size * Block.Depth;
         public static readonly Rectangle Bounds = new(-Width / 2, -Height / 2, Width, Height);
 
         public Rectangle GetScreenBounds(Camera cam)

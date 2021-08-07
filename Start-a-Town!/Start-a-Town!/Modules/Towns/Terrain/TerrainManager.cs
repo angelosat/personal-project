@@ -88,9 +88,13 @@ namespace Start_a_Town_
         {
             return Def.GetDefs<PlantProperties>().ToArray();
         }
-        bool CanGrowOn(Vector3 global)
+        bool CanGrowOn(IntVec3 global)
         {
-            return !this.Map.GetObjects(global.Above()).Any() && this.Map.GetBlock(global.Above()) == BlockDefOf.Air;
+            var above = global.Above;
+            return
+                this.Map.GetSunLight(above) == 15 &&
+                !this.Map.GetObjects(above).Any() && 
+                this.Map.GetBlock(above) == BlockDefOf.Air;
         }
         bool IsSaturated()
         {

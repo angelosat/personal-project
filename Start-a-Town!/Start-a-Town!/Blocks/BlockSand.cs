@@ -18,9 +18,9 @@ namespace Start_a_Town_.Blocks
             this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Sand, null, 1);
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
-        public override IEnumerable<byte> GetEditorVariations()
+        public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            yield return 0;
+            yield return MaterialDefOf.Sand;
         }
         public override ParticleEmitterSphere GetEmitter()
         {

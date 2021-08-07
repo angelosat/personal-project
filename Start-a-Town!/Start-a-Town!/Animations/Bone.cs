@@ -845,7 +845,9 @@ namespace Start_a_Town_
       
         public void Write(BinaryWriter w)
         {
-            w.Write(this.Material != null ? this.Material.ID : -1);
+            //w.Write(this.Material != null ? this.Material.ID : -1);
+            w.Write(this.Material != null ? this.Material.Name : "");
+
             this.Sprite.Write(w); // i decided to sync sprites as well instead of relying on initializing sprites after gameobject loading/syncing
 
             foreach (var j in this.Joints.Values)
@@ -854,7 +856,9 @@ namespace Start_a_Town_
 
         public ISerializable Read(BinaryReader r)
         {
-            this.Material = MaterialDef.GetMaterial(r.ReadInt32());
+            //this.Material = MaterialDef.GetMaterial(r.ReadInt32());
+            if (r.ReadString() is string matName && !matName.IsNullEmptyOrWhiteSpace())
+                this.Material = Start_a_Town_.Def.GetDef<MaterialDef>(matName);
             this.Sprite = Sprite.Load(r); // i decided to sync sprites as well instead of relying on initializing sprites after gameobject loading/syncing
 
             foreach (var j in this.Joints.Values)
@@ -865,7 +869,9 @@ namespace Start_a_Town_
         public SaveTag Save(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            tag.Add((this.Material?.ID ?? -1).Save("MaterialID"));
+            //tag.Add((this.Material?.ID ?? -1).Save("MaterialID"));
+            if (this.Material is not null)
+                this.Material.Save(tag, "Material");
             this.Sprite?.Save(tag, "Sprite");
             var tagjoints = new SaveTag(SaveTag.Types.Compound, "Joints");
             foreach (var joint in this.Joints)
@@ -882,7 +888,9 @@ namespace Start_a_Town_
 
         public ISaveable Load(SaveTag tag)
         {
-            tag.TryGetTagValue<int>("MaterialID", i => this.Material = MaterialDef.GetMaterial(i));
+            //tag.TryGetTagValue<int>("MaterialID", i => this.Material = MaterialDef.GetMaterial(i));
+            tag.TryGetTagValue<string>("Material", i => this.Material = Start_a_Town_.Def.GetDef<MaterialDef>(i));
+
             tag.TryGetTag("Sprite", t => this.Sprite = Sprite.Load(t));
             tag.TryGetTag("Joints", t =>
             {

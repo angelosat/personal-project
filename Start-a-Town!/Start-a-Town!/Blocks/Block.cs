@@ -568,14 +568,14 @@ namespace Start_a_Town_
 
             sb.DrawBlock(Atlas.Texture, screenPos, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
         }
-        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
+        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, byte data, MaterialDef mat, int variation = 0, int orientation = 0)
         {
-            this.DrawPreview(sb, map, global, cam, Color.White * .5f, data, variation, orientation);
+            this.DrawPreview(sb, map, global, cam, Color.White * .5f, data, mat, variation, orientation);
         }
-        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
+        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, MaterialDef mat, int variation = 0, int orientation = 0)
         {
             var depth = global.GetDrawDepth(map, cam);
-            var materialcolor = this.GetColor(data);
+            var materialcolor = this.DrawMaterialColor ? mat.Color : Color.White;// this.GetColor(data);
             var token = this.GetPreviewToken(variation, orientation, (int)cam.Rotation, data); // change the method to accept double so i don't have to cast the camera rotation to int?
             var bounds = cam.GetScreenBoundsVector4(global.X, global.Y, global.Z, Bounds, Vector2.Zero);
             sb.DrawBlock(Atlas.Texture, bounds, token, cam.Zoom, Color.Transparent, tint, materialcolor, Color.White, Vector4.One, Vector4.Zero, depth, this);
@@ -596,31 +596,8 @@ namespace Start_a_Town_
 
         public virtual IBlockState BlockState => new DefaultState();
 
-        public virtual Color GetColor(byte data)
-        {
-            return Color.White;
-        }
-        public virtual Vector4 GetColorVector(byte data)
-        {
-            return DefaultColorVector;
-        }
-        //public Vector4 GetColorFromMaterial(byte data)
-        //{
-        //    var mat = this.GetMaterial(data);
-        //    var c = mat.ColorVector;
-        //    return c;
-        //}
         static Vector4 DefaultColorVector = Vector4.One;
 
-        public virtual byte GetDataFromMaterial(GameObject craftingReagent)
-        {
-            return (byte)craftingReagent.Body.Material.ID;
-        }
-        public virtual byte GetDataFromMaterial(MaterialDef mat)
-        {
-            return (byte)mat.ID;
-        }
-        
         public string GetName(byte p)
         {
             var statename = this.BlockState.GetName(p);
@@ -663,9 +640,9 @@ namespace Start_a_Town_
         internal MaterialDef DefaultMaterial;
         protected bool DrawMaterialColor = true;
 
-        public virtual IEnumerable<byte> GetEditorVariations()
+        public virtual IEnumerable<MaterialDef> GetEditorVariations()
         {
-            return this.Ingredient.GetAllValidMaterials().Select(m => (byte)m.ID);
+            return this.Ingredient.GetAllValidMaterials();//.Select(m => (byte)m.ID);
         }
         internal IEnumerable<ItemDefMaterialAmount> GetAllValidConstructionMaterialsNew()
         {

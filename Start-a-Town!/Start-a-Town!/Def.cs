@@ -38,6 +38,7 @@ namespace Start_a_Town_
         {
             return GetDef<T>(r.ReadString());
         }
+      
         static public T GetDef<T>(string defName) where T : Def
         {
             if (TryGetDef<T>(defName) is not T def)

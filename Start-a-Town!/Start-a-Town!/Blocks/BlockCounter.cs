@@ -21,9 +21,9 @@ namespace Start_a_Town_.Blocks
             this.Variations.Add(this.Orientations.First());
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
-        public override IEnumerable<byte> GetEditorVariations()
+        public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            yield return 0;
+            yield return MaterialDefOf.Human;
         }
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {

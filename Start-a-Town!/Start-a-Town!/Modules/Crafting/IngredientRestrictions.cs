@@ -100,16 +100,15 @@ namespace Start_a_Town_
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             tag.Add(this.ItemDef.Select(d => d.Name).Save("ItemDef"));
-            tag.Add(this.Material.Select(d => d.ID).Save("Material"));
+            tag.Add(this.Material.Select(d => d.Name).Save("Material"));
             tag.Add(this.MaterialType.Select(d => d.ID).Save("MaterialType"));
             return tag;
         }
 
         public ISaveable Load(SaveTag tag)
         {
-            this.ItemDef.TryLoadDefs<ItemDef>(tag, "Material");
-
-            this.Material = new HashSet<MaterialDef>(tag.LoadListInt("ItemDef").Select(s => Start_a_Town_.MaterialDef.GetMaterial(s)));
+            this.ItemDef.TryLoadDefs(tag, "Material");
+            this.Material.TryLoadDefs(tag, "Material");
             this.MaterialType = new HashSet<MaterialType>(tag.LoadListInt("MaterialType").Select(s => Start_a_Town_.MaterialType.GetMaterialType(s)));
             return this;
         }
@@ -118,14 +117,14 @@ namespace Start_a_Town_
         public void Write(BinaryWriter w)
         {
             w.Write(this.ItemDef.Select(d => d.Name).ToArray());
-            w.Write(this.Material.Select(d => d.ID).ToArray());
+            w.Write(this.Material.Select(d => d.Name).ToArray());
             w.Write(this.MaterialType.Select(d => d.ID).ToArray());
         }
 
         public ISerializable Read(BinaryReader r)
         {
             this.ItemDef = new HashSet<ItemDef>(r.ReadStringArray().Select(Def.GetDef<ItemDef>));
-            this.Material = new HashSet<MaterialDef>(r.ReadIntArray().Select(Start_a_Town_.MaterialDef.GetMaterial));
+            this.Material = new HashSet<MaterialDef>(r.ReadStringArray().Select(Def.GetDef<MaterialDef>));
             this.MaterialType = new HashSet<MaterialType>(r.ReadIntArray().Select(Start_a_Town_.MaterialType.GetMaterialType));
             return this;
         }

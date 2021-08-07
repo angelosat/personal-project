@@ -18,6 +18,7 @@ namespace Start_a_Town_.Modules.Construction
         protected IntVec3 Begin, End, Axis;
 
         public Block Block;
+        public MaterialDef Material;
         public byte State;
         public int Variation, Orientation;
 
@@ -192,7 +193,7 @@ namespace Start_a_Town_.Modules.Construction
             var atlastoken = this.Block.GetDefault();
             atlastoken.Atlas.Begin(sb);
             foreach(var pos in this.GetPositions())
-                this.Block.DrawPreview(sb, map, pos, cam, this.State, this.Variation, this.Orientation);
+                this.Block.DrawPreview(sb, map, pos, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
         }
 

@@ -56,27 +56,27 @@ namespace Start_a_Town_
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             tag.Add(this.Def.Name.Save("DefName"));
-            tag.Add(this.Material.ID.Save("MaterialID"));
+            this.Material.Save(tag, "Material");
             tag.Add(this.Amount.Save("Amount"));
             return tag;
         }
         public ISaveable Load(SaveTag tag)
         {
             this.Def = tag.LoadDef<ItemDef>("DefName");
-            this.Material = MaterialDef.GetMaterial(tag.GetValue<int>("MaterialID"));
+            this.Material = tag.LoadDef<MaterialDef>("Material");
             this.Amount = tag.GetValue<int>("Amount");
             return this;
         }
         public void Write(BinaryWriter w)
         {
             w.Write(this.Def.Name);
-            w.Write(this.Material.ID);
+            w.Write(this.Material.Name);
             w.Write(this.Amount);
         }
         public ISerializable Read(BinaryReader r)
         {
             this.Def = Start_a_Town_.Def.GetDef<ItemDef>(r.ReadString());
-            this.Material = MaterialDef.GetMaterial(r.ReadInt32());
+            this.Material = Start_a_Town_.Def.GetDef<MaterialDef>(r.ReadString());
             this.Amount = r.ReadInt32();
             return this;
         }

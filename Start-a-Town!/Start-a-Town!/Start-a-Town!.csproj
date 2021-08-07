@@ -956,7 +956,6 @@
     <Compile Include="Terrain\Mutators\Caves.cs" />
     <Compile Include="Terrain\Mutators\Empty.cs" />
     <Compile Include="Terrain\Mutators\Gradient.cs" />
-    <Compile Include="Terrain\Mutators\MineralsSlow.cs" />
     <Compile Include="Terrain\Mutators\GeneratorPlants.cs" />
     <Compile Include="Terrain\Mutators\Flowers.cs" />
     <Compile Include="Terrain\Mutators\Land.cs" />

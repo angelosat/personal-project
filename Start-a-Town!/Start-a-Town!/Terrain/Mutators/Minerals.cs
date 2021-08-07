@@ -75,8 +75,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                     if (c.Block != BlockDefOf.Cobblestone)
                         continue;
                     c.Block = BlockDefOf.Mineral;
-                    var blockData = (byte)ore.Material.ID;
-                    c.BlockData = blockData;
                     c.Material = ore.Material;
 
                     for (int j = 0; j < ore.MaxVeinSize; j++)
@@ -91,7 +89,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                                 continue;
 
                         c.Block = BlockDefOf.Mineral;
-                        c.BlockData = blockData;
                         c.Material = ore.Material;
                     }
                 }

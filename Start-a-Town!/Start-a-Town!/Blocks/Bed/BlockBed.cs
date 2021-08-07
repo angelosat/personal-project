@@ -224,7 +224,7 @@ namespace Start_a_Town_
             var token = this.Parts[(int)part][(ori + (int)camera.Rotation) % 4];
             return canvas.NonOpaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, col /*Color.White*/, sunlight, blocklight, depth, this, blockCoordinates);
         }
-        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
+        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, MaterialDef material, int variation = 0, int orientation = 0)
         {
             var top = global;
             var bottom = global + Vector3.UnitX;

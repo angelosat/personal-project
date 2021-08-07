@@ -14,6 +14,7 @@ namespace Start_a_Town_.PlayerControl
         bool Painting;
         readonly Random Random;
         int Orientation;
+        MaterialDef Material;
         Vector3 LastPainted = new Vector3(float.MinValue);
         Keys KeyReplace = Keys.ShiftKey;
         Keys KeyRemove = Keys.ControlKey;
@@ -108,7 +109,7 @@ namespace Start_a_Town_.PlayerControl
             var atlastoken = this.Block.GetDefault();
             var global = this.Target.FaceGlobal;
             atlastoken.Atlas.Begin(sb);
-            this.Block.DrawPreview(sb, map, global, cam, this.State, this.Variation, this.Orientation);
+            this.Block.DrawPreview(sb, map, global, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
         }
         public override Icon GetIcon()
@@ -128,7 +129,7 @@ namespace Start_a_Town_.PlayerControl
             var atlastoken = this.Block.GetDefault();
             var global = targetArgs.FaceGlobal;
             atlastoken.Atlas.Begin(sb);
-            this.Block.DrawPreview(sb, map, global, camera, this.State, this.Variation, this.Orientation);
+            this.Block.DrawPreview(sb, map, global, camera, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
         }
         protected override void WriteData(System.IO.BinaryWriter w)

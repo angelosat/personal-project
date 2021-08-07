@@ -37,7 +37,7 @@ namespace Start_a_Town_.UI.Editor
                 this.Panel_Variants.Controls.Remove(this.GridVariations2);
             var variations = new List<Cell>();
             foreach (var item in block.GetEditorVariations())
-                variations.Add(new Cell() { Block = block, BlockData = item });
+                variations.Add(new Cell() { Block = block, Material = item }); //BlockData = item, 
             this.GridVariations2 = new SlotGridCustom<SlotCustom<Cell>, Cell>(variations, 8, (slot, cell) =>
             {
                 slot.LeftClickAction = () =>
@@ -65,7 +65,7 @@ namespace Start_a_Town_.UI.Editor
                     mysb.Flush();
                 };
                 slot.CustomTooltip = true;
-                slot.HoverText = $"{cell.Block.Name}:{MaterialDef.GetMaterial(cell.BlockData)}";
+                slot.HoverText = $"{cell.Block.Name}:{cell.Material}";
             })
             { Location = this.Panel_Variants.Controls.BottomLeft };
             this.Panel_Variants.Controls.Add(this.GridVariations2);

@@ -8,26 +8,14 @@ namespace Start_a_Town_
     public class MaterialDef : Def, ILabeled
     {
         public static readonly Random Randomizer = new();
-        static int _idSequence = 0;
-        public static int IdSequence => _idSequence++;
 
-        public static Dictionary<int, MaterialDef> Registry = new();
         public static Dictionary<int, MaterialDef> RegistryByHash = new();
-
 
         public string Label => this.Name;
 
-        public static MaterialDef GetMaterial(int materialID)
+        public static MaterialDef GetMaterial(int materialHash)
         {
-            if (materialID < 0)
-                return null;
-            return Registry[materialID];
-        }
-
-        internal static MaterialDef GetRandom()
-        {
-            var index = Randomizer.Next(0, _idSequence);
-            return Registry[index];
+            return RegistryByHash[materialHash];
         }
 
         public static void Initialize()
@@ -43,9 +31,8 @@ namespace Start_a_Town_
 
         public bool IsTemplate { get; private set; }
 
-        private int HashCode;
+        private readonly int HashCode;
         public MaterialType Type;
-        public readonly int ID;
         public Color Color;
         public Vector4 ColorVector;
         public string Prefix;
@@ -68,9 +55,6 @@ namespace Start_a_Town_
             : this(type, name, prefix, Color.White, density) { }
         public MaterialDef(string name, MaterialDef template) : base(name)
         {
-            this.ID = IdSequence;
-            Registry[this.ID] = this;
-
             this.State = template.State;
             this.Category = template.Category;
             this.Density = template.Density;
@@ -82,9 +66,6 @@ namespace Start_a_Town_
 
         public MaterialDef(MaterialDef template)
         {
-            this.ID = IdSequence;
-            Registry[this.ID] = this;
-
             this.State = template.State;
             this.Category = template.Category;
             this.Density = template.Density;
@@ -99,8 +80,6 @@ namespace Start_a_Town_
             RegistryByHash[this.HashCode] = this;
             this.Type = type;
             type.SubTypes.Add(this);
-            this.ID = IdSequence;
-            Registry[this.ID] = this;
             this.Prefix = prefix;
             this.Density = density;
             this.Color = color;
@@ -112,7 +91,7 @@ namespace Start_a_Town_
 
         internal static IEnumerable<MaterialDef> GetMaterials(Func<MaterialDef, bool> condition)
         {
-            return Registry.Values.Where(condition);
+            return RegistryByHash.Values.Where(condition);
         }
         
         public static MaterialDef CreateColor(Color color)

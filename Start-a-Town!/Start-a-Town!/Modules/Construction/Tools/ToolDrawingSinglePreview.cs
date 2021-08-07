@@ -57,7 +57,7 @@ namespace Start_a_Town_.Modules.Construction
             var atlastoken = this.Block.GetDefault();
             var global = this.Enabled ? this.Begin : (IntVec3)this.Target.FaceGlobal;
             atlastoken.Atlas.Begin(sb);
-            this.Block.DrawPreview(sb, map, global, cam, this.State, this.Variation, this.Orientation);
+            this.Block.DrawPreview(sb, map, global, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
 
             // show operation position of workstation 

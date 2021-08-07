@@ -9,42 +9,6 @@ namespace Start_a_Town_
 {
     class BlockWoodenDeck : Block
     {
-        public class State : BlockState
-        {
-            public MaterialDef Material { get; set; }
-            public override byte Data
-            {
-                get
-                {
-                    return (byte)this.Material.ID;
-                }
-            }
-            public override Color GetTint(byte d)
-            { return MaterialDef.Registry[d].Color; }
-            public override string GetName(byte d)
-            {
-                return MaterialDef.Registry[d].Name;
-            }
-
-            public State()
-            {
-
-            }
-            public State(MaterialDef material)
-            {
-                this.Material = material;
-            }
-            public static void Read(byte data, out MaterialDef material)
-            {
-                material = MaterialDef.Registry[data];
-            }
-
-            public override void FromCraftingReagent(GameObject reagent)
-            {
-                this.Material = reagent.Body.Sprite.Material;
-            }
-        }
-
         public override Particles.ParticleEmitterSphere GetEmitter()
         {
             return base.GetDustEmitter();
@@ -60,10 +24,6 @@ namespace Start_a_Town_
             var token = this.GrayScale;
             sb.Draw(token.Atlas.Texture, pos - new Vector2(token.Rectangle.Width, token.Rectangle.Height) * 0.5f, token.Rectangle, this.BlockState.GetTint(state));
         }
-
-        public static IBlockState GetState() { return new State(); }
-        public override IBlockState BlockState
-        { get { return new State(); } }
 
         public override bool IsDeconstructible => true;
 
@@ -87,18 +47,11 @@ namespace Start_a_Town_
                     );
             return table;
         }
-        public override IEnumerable<byte> GetEditorVariations()
+        public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            return (from mat in MaterialDef.Registry.Values
-                    where mat.Type == MaterialType.Wood
-                    select (byte)mat.ID);
-
+            return Def.GetDefs<MaterialDef>().Where(mat => mat.Type == MaterialType.Wood);
         }
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDef.Registry[blockdata];
-        //}
-
+       
         public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
         {
             var list = new List<Interaction>();
@@ -108,38 +61,24 @@ namespace Start_a_Town_
 
         public override void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
-            Rectangle sourceRect = this.GrayScale.Rectangle;
-            State.Read(cell.BlockData, out var mat);
+            var sourceRect = this.GrayScale.Rectangle;
+            var mat = cell.Material;
             tint = tint.Multiply(mat.Color);
             sb.DrawBlock(Block.Atlas.Texture, screenPos, this.GrayScale.Rectangle, zoom, tint, sunlight, blocklight, depth);
         }
 
         public override void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
-            State.Read(cell.BlockData, out var mat);
-            Color finaltint = mat.Color;
+            var mat = cell.Material;
+            var finaltint = mat.Color;
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.GrayScale, zoom, fog, finaltint.Multiply(tint), sunlight, blocklight, depth);
         }
         public override void Draw(MySpriteBatch sb, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
-            State.Read(cell.BlockData, out var mat);
-            Color finaltint = mat.Color;
+            var mat = cell.Material;
+            var finaltint = mat.Color;
             finaltint = finaltint.Multiply(tint) * .66f;
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.GrayScale, zoom, fog, finaltint.Multiply(tint), sunlight, blocklight, depth, this);
-        }
-
-        public override Color GetColor(byte data)
-        {
-            State.Read(data, out var mat);
-            var c = mat.Color * .66f;
-            c.A = 1;
-            return c;
-        }
-        public override Vector4 GetColorVector(byte data)
-        {
-            State.Read(data, out var mat);
-            var c = mat.ColorVector;
-            return c;
         }
 
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraOrientation, byte data)

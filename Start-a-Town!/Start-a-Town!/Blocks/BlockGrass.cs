@@ -64,9 +64,10 @@ namespace Start_a_Town_
             var flowerIndex = data - 1; //because 0 is no flowers
             return FlowerOverlays[flowerIndex];
         }
-        public override IEnumerable<byte> GetEditorVariations()
+        public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            return Enumerable.Range(0, 5).Select(i => (byte)i);
+            yield return MaterialDefOf.Human;
+            //return Enumerable.Range(0, 5).Select(i => (byte)i);
         }
         static void Trample(MapBase map, IntVec3 global)
         {

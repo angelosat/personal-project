@@ -87,7 +87,7 @@ namespace Start_a_Town_.Blocks
             return true;
         }
 
-        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, byte data, int variation = 0, int orientation = 0)
+        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, byte data, MaterialDef material, int variation = 0, int orientation = 0)
         {
             var orientationindex = (int)(orientation + cam.Rotation) % 2;
             var bottom = this.PartsSeparate[0][orientationindex][0];

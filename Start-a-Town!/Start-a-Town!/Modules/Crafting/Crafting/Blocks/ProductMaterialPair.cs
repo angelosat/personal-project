@@ -12,7 +12,7 @@ namespace Start_a_Town_.Components.Crafting
         public int Orientation;
         public ToolAbilityDef Skill;
         public ItemDefMaterialAmount Requirement;
-        internal MaterialDef Material = MaterialDefOf.Air;
+        internal MaterialDef Material => this.Requirement.Material;// MaterialDefOf.Air;
 
         public ToolAbilityDef GetSkill()
         {
@@ -23,7 +23,7 @@ namespace Start_a_Town_.Components.Crafting
         {
             this.Block = block;
             this.Requirement = itemMaterial;
-            this.Data = block.GetDataFromMaterial(this.Requirement.Material);
+            //this.Data = block.GetDataFromMaterial(this.Requirement.Material);
         }
         public ProductMaterialPair(BinaryReader r)
         {

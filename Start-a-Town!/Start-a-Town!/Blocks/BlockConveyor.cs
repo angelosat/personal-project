@@ -41,9 +41,9 @@ namespace Start_a_Town_.Blocks
         {
             return .25f;
         }
-        public override IEnumerable<byte> GetEditorVariations()
+        public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            yield return (byte)MaterialDefOf.Stone.ID;
+            yield return MaterialDefOf.Stone;
         }
         //public override MaterialDef GetMaterial(byte blockdata)
         //{

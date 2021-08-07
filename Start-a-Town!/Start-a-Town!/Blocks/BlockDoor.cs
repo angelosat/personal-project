@@ -253,9 +253,9 @@ namespace Start_a_Town_
         {
             return new Icon(this.GetDefault());
         }
-        public override IEnumerable<byte> GetEditorVariations()
+        public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            yield return 0;
+            yield return MaterialDefOf.Human;
         }
 
         public override void GetTooltip(UI.Control tooltip, MapBase map, Vector3 global)
@@ -324,7 +324,7 @@ namespace Start_a_Town_
                 ori %= 4;
             return canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, Orientations[ori], camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockCoordinates);
         }
-        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, int variation = 0, int orientation = 0)
+        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, MaterialDef material, int variation = 0, int orientation = 0)
         {
             var token = Orientations[orientation];
             sb.DrawBlock(Block.Atlas.Texture, map, global, token, cam, Color.Transparent, tint, Color.White, Vector4.One);

@@ -6,11 +6,6 @@ namespace Start_a_Town_.Blocks
     {
         static AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
 
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.LightWood;
-        //}
-        
         public BlockChair():base("Chair", opaque: false)
         {
             Orientations[0] = Atlas.Load("blocks/furniture/chair", Block.HalfBlockDepthMap, Block.NormalMap);

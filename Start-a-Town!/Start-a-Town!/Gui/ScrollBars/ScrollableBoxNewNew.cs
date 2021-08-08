@@ -5,10 +5,11 @@ namespace Start_a_Town_.UI
 {
     public class ScrollableBoxNewNew : GroupBox
     {
+        private const int buttonSize = 16;
         readonly ScrollbarV VScroll;
         readonly ScrollbarH HScroll;
         public GroupBox Client;
-
+        public override Rectangle ClientSize => this.Client.ClientSize; 
         public override void SetOpacity(float value, bool children, params Control[] exclude)
         {
             base.SetOpacity(value, children, exclude);
@@ -19,7 +20,6 @@ namespace Start_a_Town_.UI
         public static ScrollableBoxNewNew FromClientSize(int width, int height, ScrollModes mode = ScrollModes.Both)
         {
             var modeFactor = new IntVec2((mode & ScrollModes.Vertical) == ScrollModes.Vertical ? 1 : 0, (mode & ScrollModes.Horizontal) == ScrollModes.Horizontal ? 1 : 0);
-            var buttonSize = 16;
             return new ScrollableBoxNewNew(width + buttonSize * modeFactor.X, height + buttonSize * modeFactor.Y, mode);
         }
 
@@ -27,12 +27,12 @@ namespace Start_a_Town_.UI
             : base(width, height)
         {
             var modeFactor = new IntVec2((mode & ScrollModes.Vertical) == ScrollModes.Vertical ? 1 : 0, (mode & ScrollModes.Horizontal) == ScrollModes.Horizontal ? 1 : 0);
-            var buttonSize = 16;
             this.Client = new GroupBox(width - buttonSize * modeFactor.X, height - buttonSize * modeFactor.Y) { AutoSize = false };
             this.VScroll = new ScrollbarV(new Vector2(this.Client.Width, 0), this.Client.Height, this.Client);
             this.HScroll = new ScrollbarH(new Vector2(0, this.Client.Height), this.Client.Width, this.Client);
             this.Controls.Add(this.Client);
         }
+
         internal override void OnControlResized(Control control)
         {
             base.OnControlResized(control);

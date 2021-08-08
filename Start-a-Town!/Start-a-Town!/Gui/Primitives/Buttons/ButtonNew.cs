@@ -88,7 +88,9 @@ namespace Start_a_Town_.UI
                 return this.Color;
             return (this.MouseHover && this.Active) ? this.Color : IdleColor;
         }
-        public ButtonNew(int width) : this("", width) { 
+        public ButtonNew(int width) : this("", width) 
+        {
+            this.AutoSize = false;
             this.Width = width;
         }
        

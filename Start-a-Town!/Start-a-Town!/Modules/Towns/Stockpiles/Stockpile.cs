@@ -2,6 +2,7 @@
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -18,6 +19,8 @@ namespace Start_a_Town_
         public int Priority => (int)this.Settings.Priority;
         static StorageFilterCategoryNewNew FiltersView = InitFilters();
         public override string UniqueName => $"Zone_Stockpile_{this.ID}";
+        readonly List<GameObject> Cache = new();
+        public readonly ObservableCollection<GameObject> CacheObservable = new();
 
         public Stockpile()
         {
@@ -47,6 +50,13 @@ namespace Start_a_Town_
             this.Cache.Clear();
             foreach (var pos in this.Positions)
                 this.Cache.AddRange(this.Map.GetObjects(pos.Above).Where(i => i.IsStockpilable()));
+
+            foreach(var item in this.CacheObservable.ToArray())
+                if (!item.IsSpawned || this.Positions.Contains(item.Cell.Below))
+                    this.CacheObservable.Remove(item);
+            foreach (var pos in this.Positions)
+                foreach (var item in this.Map.GetObjects(pos.Above).Where(i => i.IsStockpilable()))
+                    this.CacheObservable.Add(item);
         }
         public IEnumerable<GameObject> GetContentsNew()
         {
@@ -61,7 +71,6 @@ namespace Start_a_Town_
             return contents;
         }
 
-        readonly List<GameObject> Cache = new();
 
         public List<GameObject> ScanExistingStoredItems()
         {

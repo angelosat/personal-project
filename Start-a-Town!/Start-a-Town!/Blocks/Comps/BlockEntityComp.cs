@@ -54,7 +54,7 @@ namespace Start_a_Town_
         {
         }
 
-        internal virtual void IsMadeFrom(ItemDefMaterialAmount[] itemDefMaterialAmounts)
+        internal virtual void IsMadeFrom(ItemMaterialAmount[] itemDefMaterialAmounts)
         {
         }
 

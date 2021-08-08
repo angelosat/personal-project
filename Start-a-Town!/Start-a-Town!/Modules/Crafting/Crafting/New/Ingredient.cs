@@ -47,25 +47,25 @@ namespace Start_a_Town_
         }
 
         [Obsolete]
-        public IEnumerable<ItemDefMaterialAmount> GetAllValidMaterialsNew()
+        public IEnumerable<ItemMaterialAmount> GetAllValidMaterialsNew()
         {
             if (this.ItemDef != null)
             {
                 if (this.MaterialType != null)
                 {
                     if (this.Material != null)
-                        yield return new ItemDefMaterialAmount(this.ItemDef, this.Material, this.Amount);
+                        yield return new ItemMaterialAmount(this.ItemDef, this.Material, this.Amount);
                     else
                         foreach (var m in this.MaterialType.SubTypes)
-                            yield return new ItemDefMaterialAmount(this.ItemDef, m, this.Amount);
+                            yield return new ItemMaterialAmount(this.ItemDef, m, this.Amount);
                 }
                 else
                 {
                     if(this.Material != null)
-                        yield return new ItemDefMaterialAmount(this.ItemDef, this.Material, this.Amount);
+                        yield return new ItemMaterialAmount(this.ItemDef, this.Material, this.Amount);
                     else
                         foreach (var m in this.ItemDef.DefaultMaterialType.SubTypes)
-                            yield return new ItemDefMaterialAmount(this.ItemDef, m, this.Amount);
+                            yield return new ItemMaterialAmount(this.ItemDef, m, this.Amount);
                 }
             }
             else

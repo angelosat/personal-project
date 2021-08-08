@@ -98,5 +98,7 @@ namespace Start_a_Town_.Towns
         internal virtual void ResolveReferences() { }
 
         internal virtual void OnBlocksChanged(IEnumerable<IntVec3> positions) { }
+
+        internal virtual void OnHudCreated(Hud hud) { }
     }
 }

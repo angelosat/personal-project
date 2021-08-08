@@ -5,8 +5,8 @@ namespace Start_a_Town_
 {
     class BlockEntityCompDeconstructible : BlockEntityComp
     {
-        public ItemDefMaterialAmount[] Materials = new ItemDefMaterialAmount[1] { new ItemDefMaterialAmount(RawMaterialDef.Logs, MaterialDefOf.Human, 2) };
-        internal override void IsMadeFrom(ItemDefMaterialAmount[] itemDefMaterialAmounts)
+        public ItemMaterialAmount[] Materials = new ItemMaterialAmount[1] { new ItemMaterialAmount(RawMaterialDef.Logs, MaterialDefOf.Human, 2) };
+        internal override void IsMadeFrom(ItemMaterialAmount[] itemDefMaterialAmounts)
         {
             this.Materials = itemDefMaterialAmounts;
         }

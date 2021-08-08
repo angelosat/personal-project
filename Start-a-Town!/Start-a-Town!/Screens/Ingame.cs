@@ -29,6 +29,7 @@ namespace Start_a_Town_
             NotificationArea = new NotificationArea();
             this.Hud = new Hud(net, camera);
             this.Hud.Initialize();
+            this.Hud.Initialize(net.Map);
             GameMode.Current.OnHudCreated(this.Hud);
             net.Map.World.OnHudCreated(this.Hud);
             this.Hud.Show(WindowManager);

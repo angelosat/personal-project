@@ -39,7 +39,7 @@ namespace Start_a_Town_.Blocks
 
             public bool IsValidHaulDestination(ItemDef def)
             {
-                var valid = this.Product.Requirement.Def == def;
+                var valid = this.Product.Requirement.Item == def;
                 if (!valid)
                 {
 
@@ -50,7 +50,7 @@ namespace Start_a_Town_.Blocks
             public bool IsReadyToBuild(out ItemDef def, out MaterialDef mat, out int amount)
             {
                 var product = this.Product;
-                def = product.Requirement.Def;
+                def = product.Requirement.Item;
                 amount = product.Requirement.Amount;
                 mat = product.Requirement.Material;
                 return false;
@@ -62,14 +62,14 @@ namespace Start_a_Town_.Blocks
                 var req = product.Requirement;
                 tooltip.AddControlsBottomLeft(new Label()
                 {
-                    TextFunc = () => $"{product.Requirement.Material.Name} {product.Requirement.Def.Label} {0} / {product.Requirement.Amount}"
+                    TextFunc = () => $"{product.Requirement.Material.Name} {product.Requirement.Item.Label} {0} / {product.Requirement.Amount}"
                 });
             }
             internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
             {
                 var product = this.Product;
                 var req = product.Requirement;
-                info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Name} {req.Def.Label} {0} / {req.Amount}" });
+                info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Name} {req.Item.Label} {0} / {req.Amount}" });
             }
             public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera cam, IntVec3 global)
             {

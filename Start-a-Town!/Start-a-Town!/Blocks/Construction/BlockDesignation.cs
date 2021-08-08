@@ -58,7 +58,7 @@ namespace Start_a_Town_.Blocks
                 var block = product.Block;
                 var cell = map.GetCell(global);
                 block.Place(map, global, product.Material, product.Data, 0, cell.Orientation, true);
-                map.GetBlockEntity(global)?.IsMadeFrom(new ItemDefMaterialAmount[] { product.Requirement });
+                map.GetBlockEntity(global)?.IsMadeFrom(new ItemMaterialAmount[] { product.Requirement });
             }
            
             if (amount == -1)

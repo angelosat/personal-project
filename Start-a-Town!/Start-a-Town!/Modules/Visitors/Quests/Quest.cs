@@ -4,9 +4,9 @@
     {
         public QuestDef QuestGiver;
         QuestObjective[] Requirements;
-        ItemDefMaterialAmount Reward;
+        ItemMaterialAmount Reward;
        
-        public Quest(QuestDef questGiver, QuestObjective[] requirements, ItemDefMaterialAmount reward)
+        public Quest(QuestDef questGiver, QuestObjective[] requirements, ItemMaterialAmount reward)
         {
             QuestGiver = questGiver;
             Requirements = requirements;

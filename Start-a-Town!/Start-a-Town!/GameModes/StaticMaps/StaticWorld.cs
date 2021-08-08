@@ -310,6 +310,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     win.Toggle();
                 },
             });
+            this.Map.OnHudCreated(hud);
         }
 
         GroupBox CreateUI()

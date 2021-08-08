@@ -11,7 +11,7 @@ namespace Start_a_Town_
     class BlockConstructionEntity : BlockEntity, IConstructible
     {
         public ProductMaterialPair Product;
-        public List<ItemDefMaterialAmount> Container = new();
+        public List<ItemMaterialAmount> Container = new();
         public Progress BuildProgress { get; set; }
         public List<IntVec3> Children { get; set; } = new List<IntVec3>();
 
@@ -26,7 +26,7 @@ namespace Start_a_Town_
             this.Product = product;
             if (amount > initialMaterial.StackSize)
                 throw new Exception();
-            this.Container.Add(new ItemDefMaterialAmount(initialMaterial.Def, initialMaterial.PrimaryMaterial, amount));
+            this.Container.Add(new ItemMaterialAmount(initialMaterial.Def, initialMaterial.PrimaryMaterial, amount));
 
             this.BuildProgress = new Progress(0, product.Block.WorkAmount, 0);
         }
@@ -55,16 +55,16 @@ namespace Start_a_Town_
             var req = product.Requirement;
             var block = product.Block;
             var ing = block.Ingredient;
-            return $"{product.Requirement.Material.Name} {product.Requirement.Def.Label} {this.Container.First().Amount} / {product.Requirement.Amount}";
+            return $"{product.Requirement.Material.Name} {product.Requirement.Item.Label} {this.Container.First().Amount} / {product.Requirement.Amount}";
         }
 
         internal void HandleDepositedItem(GameObject dropped, int amount)
         {
-            if (dropped.Def != this.Product.Requirement.Def)
+            if (dropped.Def != this.Product.Requirement.Item)
                 throw new Exception();
             if (dropped.PrimaryMaterial != this.Product.Requirement.Material)
                 throw new Exception();
-            var req = this.Container.FirstOrDefault(r => r.Def == dropped.Def);
+            var req = this.Container.FirstOrDefault(r => r.Item == dropped.Def);
             req.Amount += amount;
             dropped.StackSize -= amount;
             if (req.Amount > this.Product.Requirement.Amount)
@@ -81,7 +81,7 @@ namespace Start_a_Town_
                 amount = 0;
                 return true;
             }
-            def = this.Product.Requirement.Def;
+            def = this.Product.Requirement.Item;
             mat = this.Product.Requirement.Material;
             amount = this.Product.Requirement.Amount - req.Amount;
             return false;
@@ -91,20 +91,20 @@ namespace Start_a_Town_
         {
             return this.GetReq(def).Amount - this.GetContainedMaterialAmount(def);
         }
-        ItemDefMaterialAmount GetReq(ItemDef objid)
+        ItemMaterialAmount GetReq(ItemDef objid)
         {
             var req = this.Product.Requirement;
-            if (objid != req.Def)
+            if (objid != req.Item)
                 throw new Exception();
             return req;
         }
         public bool IsValidHaulDestination(ItemDef objectID)
         {
-            return this.Product.Requirement.Def == objectID;
+            return this.Product.Requirement.Item == objectID;
         }
         private int GetContainedMaterialAmount(ItemDef def)
         {
-            return this.Container.FirstOrDefault(o => o.Def == def).Amount;
+            return this.Container.FirstOrDefault(o => o.Item == def).Amount;
         }
 
         protected override void AddSaveData(SaveTag tag)

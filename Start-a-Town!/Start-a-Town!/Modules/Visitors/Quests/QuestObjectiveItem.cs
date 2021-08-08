@@ -5,12 +5,12 @@ namespace Start_a_Town_
 {
     class QuestObjectiveItem : QuestObjective
     {
-        public ItemDefMaterialAmount Objective;
+        public ItemMaterialAmount Objective;
         public QuestObjectiveItem(QuestDef parent) : base(parent)
         {
 
         }
-        public QuestObjectiveItem(QuestDef parent, ItemDefMaterialAmount requirement):base(parent)
+        public QuestObjectiveItem(QuestDef parent, ItemMaterialAmount requirement):base(parent)
         {
             Objective = requirement;
         }
@@ -19,7 +19,7 @@ namespace Start_a_Town_
 
         public override int GetValue()
         {
-            return this.Objective.Def.BaseValue * this.Objective.Material.Value * this.Objective.Amount ;
+            return this.Objective.Item.BaseValue * this.Objective.Material.Value * this.Objective.Amount ;
         }
         public override void Write(BinaryWriter w)
         {
@@ -27,7 +27,7 @@ namespace Start_a_Town_
         }
         public override ISerializable Read(BinaryReader r)
         {
-            this.Objective = new ItemDefMaterialAmount(r);
+            this.Objective = new ItemMaterialAmount(r);
             return this;
         }
         protected override void AddSaveData(SaveTag save)
@@ -41,13 +41,13 @@ namespace Start_a_Town_
 
         public override bool IsCompleted(Actor actor)
         {
-            return actor.Inventory.Count(this.Objective.Def, this.Objective.Material) >= this.Objective.Amount;
+            return actor.Inventory.Count(this.Objective.Item, this.Objective.Material) >= this.Objective.Amount;
         }
         internal override void TryComplete(Actor actor, OffsiteAreaDef area)
         {
             if (this.IsCompleted(actor))
                 return;
-            var item = this.Objective.Def;
+            var item = this.Objective.Item;
             var mat = this.Objective.Material;
             if (!area.CanBeFound(item, mat, out var chance))
                 return;
@@ -56,7 +56,7 @@ namespace Start_a_Town_
         internal override IEnumerable<ObjectAmount> GetQuestItemsInInventory(Actor actor)
         {
             var inv = actor.Inventory;
-            foreach(var i in inv.Take(e=> e.Def == this.Objective.Def && e.PrimaryMaterial == this.Objective.Material, this.Objective.Amount))
+            foreach(var i in inv.Take(e=> e.Def == this.Objective.Item && e.PrimaryMaterial == this.Objective.Material, this.Objective.Amount))
                 yield return i;
         }
     }

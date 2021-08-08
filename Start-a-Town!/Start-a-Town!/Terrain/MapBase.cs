@@ -937,6 +937,10 @@ namespace Start_a_Town_
             obj.Spawn(this);
             Packets.SendSpawnEntity(this.Net, obj, this, obj.Global, obj.Velocity);
         }
+
+        internal virtual void OnHudCreated(Hud hud)
+        {
+        }
         static MapBase()
         {
 

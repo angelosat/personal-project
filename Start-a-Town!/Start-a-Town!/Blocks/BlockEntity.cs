@@ -72,7 +72,7 @@ namespace Start_a_Town_.Blocks
                 comp.OnDrop(actor, item, target, quantity);
         }
 
-        internal void IsMadeFrom(ItemDefMaterialAmount[] itemDefMaterialAmounts)
+        internal void IsMadeFrom(ItemMaterialAmount[] itemDefMaterialAmounts)
         {
             foreach (var c in this.Comps)
                 c.IsMadeFrom(itemDefMaterialAmounts);

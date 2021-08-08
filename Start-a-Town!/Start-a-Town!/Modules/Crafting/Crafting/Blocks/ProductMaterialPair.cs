@@ -10,7 +10,7 @@ namespace Start_a_Town_.Components.Crafting
         public byte Data;
         public int Orientation;
         public ToolAbilityDef Skill;
-        public ItemDefMaterialAmount Requirement;
+        public ItemMaterialAmount Requirement;
         internal MaterialDef Material => this.Requirement.Material;// MaterialDefOf.Air;
 
         public ToolAbilityDef GetSkill()
@@ -18,7 +18,7 @@ namespace Start_a_Town_.Components.Crafting
             return this.Skill;
         }
 
-        public ProductMaterialPair(Block block, ItemDefMaterialAmount itemMaterial)
+        public ProductMaterialPair(Block block, ItemMaterialAmount itemMaterial)
         {
             this.Block = block;
             this.Requirement = itemMaterial;
@@ -28,13 +28,13 @@ namespace Start_a_Town_.Components.Crafting
         {
             this.Block = r.ReadBlock();
             this.Data = r.ReadByte();
-            this.Requirement = new ItemDefMaterialAmount(r);
+            this.Requirement = new ItemMaterialAmount(r);
         }
         public ProductMaterialPair(SaveTag tag)
         {
             this.Block = tag.LoadBlock("Product");// Block.Registry[(Block.Types)tag.GetValue<int>("Product")];
             this.Data = tag.TagValueOrDefault<byte>("Data", 0);
-            this.Requirement = new ItemDefMaterialAmount(tag["Requirement"]);
+            this.Requirement = new ItemMaterialAmount(tag["Requirement"]);
         }
 
         internal int GetMaterialRequirement(ItemDef def)

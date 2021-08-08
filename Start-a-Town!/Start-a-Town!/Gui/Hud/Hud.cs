@@ -241,7 +241,10 @@ namespace Start_a_Town_
             this.Controls.Add(this.PartyFrame);
             this.PartyFrame.Invalidate(true);
         }
+        public void Initialize(MapBase map)
+        {
 
+        }
         public void AddUnitFrame(GameObject obj)
         {
             this.PartyFrame.Controls.Add(new UnitFrame() { Location = this.PartyFrame.Controls.Last().BottomLeft }.Track(obj));

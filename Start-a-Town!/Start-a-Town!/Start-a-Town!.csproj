@@ -213,6 +213,7 @@
     <Compile Include="Components\GearType.cs" />
     <Compile Include="Components\IEntity.cs" />
     <Compile Include="Modules\Towns\Stockpiles\ItemFilter.cs" />
+    <Compile Include="Modules\Towns\Storage\StorageManager.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemPreferencesManager.ItemPreference.cs" />
     <Compile Include="Objects\Loot.cs" />
     <Compile Include="Objects\LootTable.cs" />
@@ -460,7 +461,7 @@
     <Compile Include="Objects\DrawObjectArgs.cs" />
     <Compile Include="Objects\GameObjectSlotCollection.cs" />
     <Compile Include="Objects\ItemDefAmount.cs" />
-    <Compile Include="Objects\ItemDefMaterialAmount.cs" />
+    <Compile Include="Objects\ItemMaterialAmount.cs" />
     <Compile Include="Objects\ItemDefOf.cs" />
     <Compile Include="Objects\Items\ItemContent.cs" />
     <Compile Include="Objects\Items\Materials\New\MaterialCategory.cs" />

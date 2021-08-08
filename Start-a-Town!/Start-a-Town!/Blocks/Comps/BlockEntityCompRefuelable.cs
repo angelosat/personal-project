@@ -78,7 +78,7 @@ namespace Start_a_Town_
         }
       
         public Progress Fuel = new();
-        readonly ObservableCollection<ItemDefMaterialAmount> StoredFuelItems = new();
+        readonly ObservableCollection<ItemMaterialAmount> StoredFuelItems = new();
         public StorageSettings Settings { get; } = new();
 
         public BlockEntityCompRefuelable(int storedFuelCapacity = 100)
@@ -97,9 +97,9 @@ namespace Start_a_Town_
         }
         private void StoreFuel(ItemDef iD, MaterialDef mat, int actualAmountToAdd)
         {
-            var existing = this.StoredFuelItems.FirstOrDefault(o => o.Def == iD && o.Material == mat);
+            var existing = this.StoredFuelItems.FirstOrDefault(o => o.Item == iD && o.Material == mat);
             if (existing == null)
-                this.StoredFuelItems.Add(new ItemDefMaterialAmount(iD, mat, actualAmountToAdd));
+                this.StoredFuelItems.Add(new ItemMaterialAmount(iD, mat, actualAmountToAdd));
             else
                 existing.Amount += actualAmountToAdd;
         }
@@ -183,7 +183,7 @@ namespace Start_a_Town_
             bar.TextFunc = () => bar.Percentage.ToString("##0%");
             info.AddInfo(bar);
             var box = new ScrollableBoxNewNew(150, Label.DefaultHeight * 2, ScrollModes.Vertical);
-            var boxcontents = new ListBoxObservable<ItemDefMaterialAmount>(this.StoredFuelItems);
+            var boxcontents = new ListBoxObservable<ItemMaterialAmount>(this.StoredFuelItems);
             box.AddControls(boxcontents);
             info.AddInfo(box);
             info.AddTabAction("Fuel", this.ToggleFiltersGui);

@@ -50,6 +50,7 @@ namespace Start_a_Town_
         public TerrainManager TerrainManager;
         public WorkplaceManager ShopManager;
         public QuestsManager QuestManager;
+        public StorageManager Storage;
 
         public List<TownComponent> TownComponents = new();
 
@@ -73,6 +74,7 @@ namespace Start_a_Town_
             this.TerrainManager = new(this);
             this.ShopManager = new(this);
             this.QuestManager = new(this);
+            this.Storage = new(this);
 
             this.TownComponents.AddRange(new TownComponent[]{
                 this.ZoneManager,
@@ -86,7 +88,8 @@ namespace Start_a_Town_
                 this.ReservationManager,
                 this.TerrainManager,
                 this.ShopManager,
-                this.QuestManager
+                this.QuestManager,
+                this.Storage
             });
             
             var utilities = (Utility.Types[])Enum.GetValues(typeof(Utility.Types));
@@ -373,6 +376,12 @@ namespace Start_a_Town_
             this.QuickMenu = new UIQuickMenu();
             this.QuickMenu.AddItems(actions);
             this.QuickMenu.Location = UIManager.Mouse;
+        }
+
+        internal void OnHudCreated(Hud hud)
+        {
+            foreach (var c in this.TownComponents)
+                c.OnHudCreated(hud);
         }
 
         public IEnumerable<Button> GetTabs(ISelectable selected)

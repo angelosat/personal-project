@@ -327,6 +327,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 }
             }
         }
+        internal override void OnHudCreated(Hud hud)
+        {
+            this.Town.OnHudCreated(hud);
+        }
         public static StaticMap Load(StaticWorld world, Vector2 coords, SaveTag mapTag)
         {
             var map = new StaticMap(world, coords)

@@ -65,12 +65,12 @@ namespace Start_a_Town_
             var item = ItemFactory.CreateFrom(this, mat);
             return item;
         }
-        public IEnumerable<ItemDefMaterialAmount> GenerateVariants(int amount = 1)
+        public IEnumerable<ItemMaterialAmount> GenerateVariants(int amount = 1)
         {
             if (this.DefaultMaterialType == null)
                 yield break;
             foreach (var m in this.DefaultMaterialType.SubTypes)
-                yield return new ItemDefMaterialAmount(this, m, amount);
+                yield return new ItemMaterialAmount(this, m, amount);
         }
 
         public MaterialType MaterialType

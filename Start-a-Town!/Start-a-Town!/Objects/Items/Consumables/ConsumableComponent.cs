@@ -20,9 +20,9 @@ namespace Start_a_Town_.Components
         public LootTable Byproducts;
         public List<ConsumableEffect> Effects = new List<ConsumableEffect>();
         public GameObject Seeds;
-        public ItemDefMaterialAmount[] Ingredients;
+        public ItemMaterialAmount[] Ingredients;
 
-        public ConsumableComponent InitIngredients(params ItemDefMaterialAmount[] ingredients)
+        public ConsumableComponent InitIngredients(params ItemMaterialAmount[] ingredients)
         {
             this.Ingredients = ingredients;
             return this;

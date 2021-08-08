@@ -1413,11 +1413,17 @@ namespace Start_a_Town_
                 var slice = this.Slices[i];
                 slice.Canvas.NonOpaque.Draw();
             }
+           
             if (cam.DrawTopSlice)
             {
-                effectHideWalls.SetValue(Engine.HideWalls);
-                effect.CurrentTechnique.Passes["Pass1"].Apply();
-                this.Slices[cam.MaxDrawZ].Unknown.Draw();
+                if (cam.HideUnknownBlocks)
+                {
+                    effectHideWalls.SetValue(Engine.HideWalls);
+                    effect.CurrentTechnique.Passes["Pass1"].Apply();
+                    this.Slices[cam.MaxDrawZ].Unknown.Draw();
+                }
+                else
+                    this.Slices[cam.MaxDrawZ].TopCover.Opaque.Draw(); 
             }
             foreach (var blockentity in this.BlockEntitiesByPosition)
                 blockentity.Value.Draw(cam, this.Map, blockentity.Key.ToGlobal(this));
@@ -1437,6 +1443,13 @@ namespace Start_a_Town_
                 slice.Canvas.Transparent.Draw();
                 if (cam.DrawZones)
                     slice.Canvas.Designations.Draw();
+            }
+            if (cam.DrawTopSlice && !cam.HideUnknownBlocks)
+            {
+                var slice = this.Slices[cam.MaxDrawZ];
+                slice.TopCover.Transparent.Draw();
+                if (cam.DrawZones)
+                    slice.TopCover.Designations.Draw();
             }
         }
         internal bool Contains(Vector3 global)
@@ -1593,8 +1606,12 @@ namespace Start_a_Town_
                     // DO I NEED THIS?
                     if (!camera.HideUnknownBlocks)
                     {
-                        if (cell.Block != BlockDefOf.Air)// && map.IsVisible(global)) // did i need visibleoutercells list afterall?
+                        if (!map.IsVisible(global))
+                            unknown.Add(cell);
+                        else if (cell.Block != BlockDefOf.Air) // did i need visibleoutercells list afterall?
                             visible.Add(cell);
+                        //if (cell.Block != BlockDefOf.Air && map.IsVisible(global)) // did i need visibleoutercells list afterall?
+                        //        visible.Add(cell);
                     }
                     else
                     {
@@ -1610,9 +1627,14 @@ namespace Start_a_Town_
 
             var unknownCount = unknown.Count;
             var unknownSlice = new MySpriteBatch(Game1.Instance.GraphicsDevice, unknownCount);
+            var topCover = new Canvas(Game1.Instance.GraphicsDevice, unknownCount);
+
             foreach (var cell in unknown)
             {
-                camera.DrawUnknown(unknownSlice, map, this, cell);
+                if(camera.HideUnknownBlocks)
+                    camera.DrawUnknown(unknownSlice, map, this, cell);
+                else
+                    camera.DrawCell(topCover, map, this, cell);
             }
 
             var visibleCount = visible.Count;
@@ -1623,7 +1645,7 @@ namespace Start_a_Town_
                 var cell = visible[i];
                 camera.DrawCell(slice.Canvas, map, this, cell);
             }
-
+            slice.TopCover = topCover;
             slice.Unknown = unknownSlice;
         }
         public void BuildFrontmostBlocksNewSlices(Camera camera)
@@ -1738,6 +1760,7 @@ namespace Start_a_Town_
         {
             public bool Valid;
             public Canvas Canvas;
+            public Canvas TopCover;
             public MySpriteBatch Unknown;
         }
         public bool TryGetBlockEntity(IntVec3 local, out BlockEntity entity)

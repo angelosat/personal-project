@@ -84,9 +84,10 @@ namespace Start_a_Town_.UI
                     throw new Exception();
                 if (control.Parent != null)
                     control.Parent.Controls.Remove(control);
-                base.Add(control);
                 control.Parent = Parent;
-                Parent.OnControlAdded(control);
+                base.Add(control);
+                //control.Parent = Parent;
+                //Parent.OnControlAdded(control);
             }
             //this.Parent.Validate();
         }
@@ -103,6 +104,8 @@ namespace Start_a_Town_.UI
         }
         public void AlignVertically(int spacing = 0)
         {
+            //var oldsize = this.Parent.ClientSize;
+
             var prev = 0;
             foreach (var c in this)
             {
@@ -111,6 +114,9 @@ namespace Start_a_Town_.UI
             }
             if (this.Parent.AutoSize)
                 this.Parent.ClientSize = this.Parent.PreferredClientSize;
+
+            //if (this.Parent.ClientSize != oldsize)
+            //    this.Parent.Parent?.OnControlResized(this.Parent);
         }
         public void AlignHorizontally(int spacing = 0)
         {

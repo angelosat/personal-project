@@ -198,7 +198,9 @@
     <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
     <Compile Include="Gui\Hud\Chat\UIChat.Entry.cs" />
+    <Compile Include="Gui\Lists\Collapsible\ListCollapsibleObservable.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListCollapsibleNew.cs" />
+    <Compile Include="Gui\Lists\Collapsible\ListCollapsibleObservable.Node.cs" />
     <Compile Include="Gui\Lists\IListCollapsibleDataSource.cs" />
     <Compile Include="Gui\Lists\ListBoxNoScroll.cs" />
     <Compile Include="Gui\Lists\ListBoxObservable.cs" />
@@ -206,6 +208,7 @@
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
     <Compile Include="Gui\ScrollBars\ScrollModes.cs" />
+    <Compile Include="Helpers\Collections\ObservableDictionary.cs" />
     <Compile Include="Helpers\EnsureStaticCtorCall.cs" />
     <Compile Include="Interfaces\IListable.cs" />
     <Compile Include="Modules\Crafting\Crafting\New\Ingredient.Modifier.cs" />
@@ -270,7 +273,7 @@
     <Compile Include="Components\Needs\Types\NeedEnergy.cs" />
     <Compile Include="Components\Needs\Types\NeedFood.cs" />
     <Compile Include="Components\Resources\ExtensionsResources.cs" />
-    <Compile Include="Helpers\CollectionExtensions.cs" />
+    <Compile Include="Helpers\Collections\CollectionExtensions.cs" />
     <Compile Include="Interfaces\ISyncable.cs" />
     <Compile Include="AI\Labors\Job.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\TaskBehaviorDepart.cs" />
@@ -634,7 +637,7 @@
     <Compile Include="Engine\Canvas.cs" />
     <Compile Include="GameEvents\EventEntityDespawned.cs" />
     <Compile Include="GameEvents\EventBlockChanged.cs" />
-    <Compile Include="Helpers\PriorityListQueue.cs" />
+    <Compile Include="Helpers\Collections\PriorityListQueue.cs" />
     <Compile Include="Modules\Towns\Labors\JobsManager.cs" />
     <Compile Include="AI\Labors\JobDef.cs" />
     <Compile Include="Modules\Towns\Labors\NpcLogUINew.cs" />
@@ -1073,7 +1076,7 @@
     <Compile Include="Coords.cs" />
     <Compile Include="Terrain\Generator.cs" />
     <Compile Include="Components\EntityComponent.cs" />
-    <Compile Include="Helpers\PriorityQueue.cs" />
+    <Compile Include="Helpers\Collections\PriorityQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

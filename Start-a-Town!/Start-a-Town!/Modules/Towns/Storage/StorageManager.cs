@@ -95,6 +95,7 @@ namespace Start_a_Town_
                     }
                 }
             }
+            this.RootNode.UpdateSum();
         }
         internal override void OnHudCreated(Hud hud)
         {
@@ -112,11 +113,14 @@ namespace Start_a_Town_
         }
         class StorageItemBranch : IListCollapsibleDataSourceObservable
         {
+            int Sum;
+
             public StorageItemBranch this[ItemDef branch] => (StorageItemBranch)this.Branches.First(c => ((StorageItemBranch)c).ItemDef == branch);
             public StorageItemLeaf this[MaterialDef leaf] => (StorageItemLeaf)this.Leafs.First(c => ((StorageItemLeaf)c).Key == leaf);
 
             ItemDef ItemDef;
-            readonly HashSet<StorageItemLeaf> InnerItems = new();
+            readonly HashSet<StorageItemBranch> _branches = new();
+            readonly HashSet<StorageItemLeaf> _leafs = new();
 
             readonly ObservableCollection<IListCollapsibleDataSourceObservable> Branches = new();
             readonly ObservableCollection<IListable> Leafs = new();
@@ -128,34 +132,44 @@ namespace Start_a_Town_
 
             public bool Remove(ItemDef item)
             {
-                return this.Branches.Remove(this.Branches.First(i => ((StorageItemBranch)i).ItemDef == item));
+                var b = this.Branches.First(i => ((StorageItemBranch)i).ItemDef == item);
+                this._branches.Remove(b as StorageItemBranch);
+                return this.Branches.Remove(b);
             }
             public void Add(ItemDef item)
             {
-                this.Branches.Add(new StorageItemBranch() { ItemDef = item });
+                var b = new StorageItemBranch() { ItemDef = item };
+                this._branches.Add(b);
+                this.Branches.Add(b);
             }
             public bool Remove(MaterialDef item)
             {
                 var leaf = this.Leafs.First(i => ((StorageItemLeaf)i).Key == item);
-                this.InnerItems.Remove(leaf as StorageItemLeaf);
+                this._leafs.Remove(leaf as StorageItemLeaf);
                 return this.Leafs.Remove(leaf);
             }
             public void Add(ItemMaterialAmount item)
             {
                 var leaf = new StorageItemLeaf() { Key = item.Material, Item = item };
-                this.InnerItems.Add(leaf);
+                this._leafs.Add(leaf);
                 this.Leafs.Add(leaf);
             }
             public Control GetGui()
             {
                 return new ListCollapsibleObservable(this, true);
             }
-
+            internal void UpdateSum()
+            {
+                this.Sum = this._leafs.Sum(l => l.Item.Amount);
+                foreach (var b in this._branches)
+                    b.UpdateSum();
+            }
             public Control GetListControlGui()
             {
-                return new Label(() => $"{this.InnerItems.Sum(l => l.Item.Amount)}x {this.Label}");
-                //return new Label(() => $"{this.Leafs.Sum(l => (l as StorageItemLeaf).Item.Amount)}x {this.Label}");
-                return null;// new Label(this.ItemDef.Label);
+                // TODO instead of calculating sum every frame, store it in a field update it only when refreshing storemanager cache
+                //return new Label(() => $"{this.InnerItems.Sum(l => l.Item.Amount)}x {this.Label}");
+                return new Label(() => $"{this.Sum}x {this.Label}");
+
             }
             public override string ToString()
             {

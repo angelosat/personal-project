@@ -13,8 +13,12 @@ namespace Start_a_Town_.UI
         readonly List<Node> RootNodes = new();
         int Spacing = 1;
         new IListCollapsibleDataSourceObservable DataSource;
-        public ListCollapsibleObservable(IListCollapsibleDataSourceObservable root)
+        private bool AutoExpand;
+
+        public ListCollapsibleObservable(IListCollapsibleDataSourceObservable root, bool expandedInitially = false)
         {
+            //this.BackgroundColor = Color.Red;
+            this.AutoExpand = expandedInitially;
             this.Bind(root);
         }
         
@@ -65,7 +69,6 @@ namespace Start_a_Town_.UI
         {
             this.ClearControls();
             var queue = new Queue<IListCollapsibleDataSourceObservable>(this.DataSource.ListBranches);
-
             while (queue.Any())
             {
                 var branch = queue.Dequeue();
@@ -73,9 +76,6 @@ namespace Start_a_Town_.UI
                 foreach (var child in branch.ListBranches)
                     queue.Enqueue(child);
             }
-
-            foreach (var child in this.ARoot.ChildrenNodes)
-                this.AddControlsBottomLeft(child.Control);
             return this;
         }
         
@@ -85,12 +85,20 @@ namespace Start_a_Town_.UI
             var nodeContainer = new GroupBox() { Name = "container", BackgroundColor = Color.Black * .2f };// UIManager.DefaultListItemBackgroundColor };
             var nodeItem = new GroupBox() { Name = "item" };
             node.Arrow = new PictureBox(UIManager.ArrowRight) { LeftDownAction = expand };// { LeftClickAction = expand };
+
             var label = new Label(node.Name) { Active = true };
-            var control = node.ControlGetter?.Invoke();
+            //var control = node.ControlGetter?.Invoke();
+            var control = branch.GetListControlGui();
+            if (control is ButtonBase btn)
+            {
+                btn.Active = true;
+                btn.LeftClickAction = expand;
+            }
             if (control is not null)
-                nodeItem.AddControlsHorizontally(node.Arrow, control, label);
+                nodeItem.AddControlsHorizontally(node.Arrow, control);//, label);
             else
                 nodeItem.AddControlsHorizontally(node.Arrow, label);
+
             nodeItem.CenterControlsAlignmentVertically();
             nodeItem.Validate(true);
             nodeContainer.AddControls(nodeItem);
@@ -99,14 +107,19 @@ namespace Start_a_Town_.UI
             node.ParentNode?.ChildGroupBox.Controls.Insert(0, nodeContainer);
 
             label.LeftClickAction = expand;
+            node.Control = nodeContainer;
+            if (this.AutoExpand)
+                expand();
+            return node;
+
             void expand()
             {
                 if (!node.Expanded)
                 {
                     node.Expanded = true;
                     node.Arrow.SetTexture(UIManager.ArrowDown);
-                    //node.ChildGroupBox.Location = nodeItem.BottomLeft + new Vector2(Node.IndentWidth, Spacing);
-                    node.ChildGroupBox.Location = nodeItem.BottomLeft;// + new Vector2(0, Spacing);
+                    node.ChildGroupBox.Location = nodeItem.BottomLeft + new Vector2(Node.IndentWidth, Spacing);
+                    //node.ChildGroupBox.Location = nodeItem.BottomLeft;// + new Vector2(0, Spacing);
                     nodeContainer.AddControls(node.ChildGroupBox);
                 }
                 else
@@ -123,8 +136,7 @@ namespace Start_a_Town_.UI
                 }
                 this.AlignTopToBottom(this.Spacing);
             };
-            node.Control = nodeContainer;
-            return node;
+            
         }
         private void Remove(IListCollapsibleDataSourceObservable branch)
         {
@@ -146,38 +158,6 @@ namespace Start_a_Town_.UI
         {
             base.OnControlResized(control);
             this.AlignTopToBottom(this.Spacing);
-        }
-
-        internal bool FindLeafIndex(Control c, out int i)
-        {
-            i = 0;
-            foreach (var item in this.GetEnumerable())
-            {
-                if (c == item)
-                    return true;
-                i++;
-            }
-            return false;
-        }
-        internal Control GetLeafByIndex(int i)
-        {
-            var n = 0;
-            var enumerator = this.GetEnumerable().GetEnumerator();
-            do { enumerator.MoveNext(); } while (n++ != i);
-            return enumerator.Current;
-        }
-        IEnumerable<Control> GetEnumerable()
-        {
-            var queue = new Queue<Node>();
-            queue.Enqueue(this.ARoot);
-            while (queue.Any())
-            {
-                var current = queue.Dequeue();
-                foreach (var leaf in current.Leafs)
-                    yield return leaf;
-                foreach (var child in current.ChildrenNodes)
-                    queue.Enqueue(child);
-            }
         }
     }
 }

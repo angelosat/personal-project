@@ -102,7 +102,7 @@ namespace Start_a_Town_
         }
         Control getGui()
         {
-            var list = new ListCollapsibleObservable(this.RootNode);
+            var list = new ListCollapsibleObservable(this.RootNode, true);
             return list;
 
             var table = new TableObservable<ItemMaterialAmount>()
@@ -116,6 +116,8 @@ namespace Start_a_Town_
             public StorageItemLeaf this[MaterialDef leaf] => (StorageItemLeaf)this.Leafs.First(c => ((StorageItemLeaf)c).Key == leaf);
 
             ItemDef ItemDef;
+            readonly HashSet<StorageItemLeaf> InnerItems = new();
+
             readonly ObservableCollection<IListCollapsibleDataSourceObservable> Branches = new();
             readonly ObservableCollection<IListable> Leafs = new();
 
@@ -134,70 +136,33 @@ namespace Start_a_Town_
             }
             public bool Remove(MaterialDef item)
             {
-                return this.Leafs.Remove(this.Leafs.First(i => ((StorageItemLeaf)i).Key == item));
+                var leaf = this.Leafs.First(i => ((StorageItemLeaf)i).Key == item);
+                this.InnerItems.Remove(leaf as StorageItemLeaf);
+                return this.Leafs.Remove(leaf);
             }
             public void Add(ItemMaterialAmount item)
             {
-                this.Leafs.Add(new StorageItemLeaf() { Key = item.Material, Item = item });
+                var leaf = new StorageItemLeaf() { Key = item.Material, Item = item };
+                this.InnerItems.Add(leaf);
+                this.Leafs.Add(leaf);
             }
             public Control GetGui()
             {
-                return new ListCollapsibleObservable(this);
+                return new ListCollapsibleObservable(this, true);
             }
 
             public Control GetListControlGui()
             {
-                return new Label(this.ItemDef.Label);
+                return new Label(() => $"{this.InnerItems.Sum(l => l.Item.Amount)}x {this.Label}");
+                //return new Label(() => $"{this.Leafs.Sum(l => (l as StorageItemLeaf).Item.Amount)}x {this.Label}");
+                return null;// new Label(this.ItemDef.Label);
             }
             public override string ToString()
             {
                 return this.ItemDef is ItemDef def ? $"{def.Label}: {this.Leafs.Count}" : $"Root: {this.Branches.Count}";
             }
         }
-        //class StorageItemBranch : IListCollapsibleDataSourceObservable
-        //{
-        //    public StorageItemBranch this[ItemDef branch] => this.Branches.First(c => c.ItemDef == branch);
-        //    public StorageItemLeaf this[MaterialDef leaf] => this.Leafs.First(c => c.Key == leaf);
-
-        //    ItemDef ItemDef;
-        //    readonly ObservableCollection<StorageItemBranch> Branches = new();
-        //    readonly ObservableCollection<StorageItemLeaf> Leafs = new();
-
-        //    public string Label => this.ItemDef.Label;
-
-        //    public ObservableCollection<IListCollapsibleDataSourceObservable> ListBranches => new(this.Branches.Cast<IListCollapsibleDataSourceObservable>());
-        //    public ObservableCollection<IListable> ListLeafs => new(this.Leafs.Cast<IListable>());
-
-        //    public bool Remove(ItemDef item)
-        //    {
-        //        return this.Branches.Remove(this.Branches.First(i => i.ItemDef == item));
-        //    }
-        //    public void Add(ItemDef item)
-        //    {
-        //        this.Branches.Add(new StorageItemBranch() { ItemDef = item });
-        //    }
-        //    public bool Remove(MaterialDef item)
-        //    {
-        //        return this.Leafs.Remove(this.Leafs.First(i => i.Key == item));
-        //    }
-        //    public void Add(ItemMaterialAmount item)
-        //    {
-        //        this.Leafs.Add(new StorageItemLeaf() { Key = item.Material, Item = item });
-        //    }
-        //    public Control GetGui()
-        //    {
-        //        return new ListCollapsibleObservable(this);
-        //    }
-
-        //    public Control GetListControlGui()
-        //    {
-        //        return new Label(this.ItemDef.Label);
-        //    }
-        //    public override string ToString()
-        //    {
-        //        return this.ItemDef is ItemDef def ? $"{def.Label}: {this.Leafs.Count}" : $"Root: {this.Branches.Count}";
-        //    }
-        //}
+        
         class StorageItemLeaf : IListable
         {
             public MaterialDef Key;

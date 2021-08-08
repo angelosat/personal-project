@@ -107,9 +107,10 @@ namespace Start_a_Town_.UI
             Node AddLeaf(Control leaf)
             {
                 //leaf.BackgroundColor = UIManager.DefaultListItemBackgroundColor;
+                //leaf.Location.X = IndentWidth;
+
                 this.LeafControls.Add(leaf);
                 this.ChildGroupBox.AddControlsBottomLeft(leaf);
-                leaf.Location.X = IndentWidth;
                 leaf.Validate(true);
                 return this;
             }

@@ -212,8 +212,8 @@ namespace Start_a_Town_.Components
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)
         {
             info.AddInfo(new Bar(this.GrowthBody) { Color = Color.MediumAquamarine, Name = "Growth: ", TextFunc = () => this.GrowthBody.Percentage.ToString("##0%") });
-            info.AddInfo(new Bar(this.FruitGrowth) { Color = Color.MediumAquamarine, Name = "Fruit: ", TextFunc = () => this.FruitGrowth.Percentage.ToString("##0%") });
-
+            if(this.PlantProperties.ProducesFruit)
+                info.AddInfo(new Bar(this.FruitGrowth) { Color = Color.MediumAquamarine, Name = "Fruit: ", TextFunc = () => this.FruitGrowth.Percentage.ToString("##0%") });
         }
         string GrowthTimeSpan
         {
@@ -272,7 +272,7 @@ namespace Start_a_Town_.Components
             actions.Add(new ContextAction("Debug: Grow", () => { return false; }));
         }
 
-        internal bool IsHarvestable => this.FruitGrowth.Percentage >= ForageThreshold;
+        internal bool IsHarvestable => this.PlantProperties.ProducesFruit && this.FruitGrowth.Percentage >= ForageThreshold;
 
         public class Props : ComponentProps
         {

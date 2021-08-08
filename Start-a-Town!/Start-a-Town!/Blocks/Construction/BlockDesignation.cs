@@ -9,6 +9,7 @@ namespace Start_a_Town_.Blocks
             : base("Designation", 1, 0, false, false)
         {
             this.Variations.Add(Atlas.Load("blocks/blockblueprint"));
+            this.DrawMaterialColor = false;
         }
         public override bool IsStandableIn => true;
         //public override MaterialDef GetMaterial(byte blockdata)

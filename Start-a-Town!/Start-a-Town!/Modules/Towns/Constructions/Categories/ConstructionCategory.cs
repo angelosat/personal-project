@@ -46,6 +46,7 @@ namespace Start_a_Town_
             var tools = GetAvailableTools(() => productMaterialPair);
             var tool = tools.First(t => t.GetType() == toolType);
             tool.Block = productMaterialPair.Block;
+            tool.Material = productMaterialPair.Material;
             tool.State = productMaterialPair.Data;
             return tool;
         }

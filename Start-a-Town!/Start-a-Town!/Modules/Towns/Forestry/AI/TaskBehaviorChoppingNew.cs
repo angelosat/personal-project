@@ -23,5 +23,10 @@ namespace Start_a_Town_
                 this.Actor.Map.Town.ChoppingManager.IsChoppingTask(tree);
             return !isvalid;
         }
+
+        protected override bool InitExtraReservations()
+        {
+            return this.Actor.Reserve(TargetIndex.A);
+        }
     }
 }

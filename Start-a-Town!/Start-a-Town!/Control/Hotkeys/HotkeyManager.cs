@@ -127,7 +127,7 @@ namespace Start_a_Town_
             var box = new GroupBox() { Name = "Hotkeys" };
             var byContext = Hotkeys.GroupBy(h => h.Context);
             box.AddControlsVertically(1, byContext.Select(cat =>
-                new TableScrollableCompactNewNew<Hotkey>(cat.Count(), true)
+                new TableScrollableCompactNewNew<Hotkey>(true)
                     .AddColumn(null, cat.Key.Name, 192, h => h.Label.ToLabel())
                     .AddColumn(null, "Primary", 64, h => new Label(() => $"{h.Key1}", delegate { editHotkey(h, 0); }))
                     .AddColumn(null, "Secondary", 64, h => new Label(() => $"{h.Key2}", delegate { editHotkey(h, 1); }))

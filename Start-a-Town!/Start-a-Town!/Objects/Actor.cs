@@ -326,11 +326,11 @@ namespace Start_a_Town_
         }
         public void AddMoodlet(Moodlet m)
         {
-            this.GetComponent<MoodComp>().Add(this, m);
+            this.GetComponent<MoodComp>().Add(m);
         }
         public void RemoveMoodlet(MoodletDef mdef)
         {
-            this.GetComponent<MoodComp>().Remove(this, mdef);
+            this.GetComponent<MoodComp>().Remove(mdef);
         }
         public bool HasMoodlet(MoodletDef mdef)
         {

@@ -126,9 +126,9 @@ namespace Start_a_Town_.AI
         {
             var box = new GroupBox();
             var tableBox = new GroupBox();
-            var tableAuto = new TableScrollableCompactNewNew<Actor>(8, true)
+            var tableAuto = new TableScrollableCompactNewNew<Actor>(true)
                             .AddColumn(null, "Name", 100, o => new Label(o.Name, () => { }));
-            var tableManual = new TableScrollableCompactNewNew<Actor>(8, true)
+            var tableManual = new TableScrollableCompactNewNew<Actor>(true)
                            .AddColumn(null, "Name", 100, o => new Label(o.Name, () => { }));
             var player = this.Player;
             foreach (var labor in JobDefOf.All)
@@ -145,7 +145,8 @@ namespace Start_a_Town_.AI
                     var ch =  new CheckBoxNew
                     {
                         TickedFunc = () => job.Enabled,
-                        LeftClickAction = () => Packets.SendLaborToggle(player, actor, labor)
+                        LeftClickAction = () => Packets.SendLaborToggle(player, actor, labor),
+                        HoverText = job.Def.Label
                     };
                     return ch;
                 }, 0);
@@ -157,7 +158,8 @@ namespace Start_a_Town_.AI
                     {
                         TextFunc = () => { var val = job.Priority; return job.Enabled ? val.ToString() : ""; },
                         LeftClickAction = () => Packets.SendPriorityModify(player, actor, job, job.Priority + 1), 
-                        RightClickAction = () => Packets.SendPriorityModify(player, actor, job, job.Priority - 1)
+                        RightClickAction = () => Packets.SendPriorityModify(player, actor, job, job.Priority - 1),
+                        HoverText = job.Def.Label
                     };
                     return btn;
                 }, 0);

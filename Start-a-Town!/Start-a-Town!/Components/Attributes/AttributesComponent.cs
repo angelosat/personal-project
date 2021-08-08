@@ -78,7 +78,7 @@ namespace Start_a_Town_.Components
             var found = comp.Attributes.FirstOrDefault(att => att.Def == type);
             return found != null ? found.Level : dflt;
         }
-        TableScrollableCompactNewNew<AttributeStat> GUITableAttributes = new TableScrollableCompactNewNew<AttributeStat>(8)
+        TableScrollableCompactNewNew<AttributeStat> GUITableAttributes = new TableScrollableCompactNewNew<AttributeStat>()
                 .AddColumn("name", "", 64, a => new Label(a.Def.Label)
                 {
                     TooltipFunc = (t) =>
@@ -104,7 +104,7 @@ namespace Start_a_Town_.Components
         
         internal Control GetUI()
         {
-            var table = new TableScrollableCompactNewNew<AttributeStat>(this.Attributes.Length)
+            var table = new TableScrollableCompactNewNew<AttributeStat>()
                .AddColumn(null, "name", 80, s => new Label(s.Def.Label), 0)
                .AddColumn(null, "value", 16, s => new Label() { TextFunc = () => s.Level.ToString() }, 0);
 

@@ -2,6 +2,7 @@
 using Start_a_Town_.Blocks;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace Start_a_Town_
@@ -13,7 +14,7 @@ namespace Start_a_Town_
             Vector3 Global;
             readonly int Capacity = 4;
             readonly StorageSettings Settings = new();
-            public List<GameObject> Contents = new(4);
+            public ObservableCollection<GameObject> Contents = new();
             public int ID { get; }
             StorageSettings IStorage.Settings => this.Settings;
             public bool IsFull => this.Contents.Count == this.Capacity;
@@ -57,12 +58,10 @@ namespace Start_a_Town_
 
                 this.Contents.Add(obj);
                 obj.Global = this.Global;
-                obj.Net.EventOccured(Components.Message.Types.ContentsChanged, this);
             }
             internal void Remove(GameObject item)
             {
                 this.Contents.Remove(item);
-                item.Net.EventOccured(Components.Message.Types.ContentsChanged, this);
             }
             public override void Place(MapBase map, IntVec3 global)
             {

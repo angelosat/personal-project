@@ -238,7 +238,7 @@ namespace Start_a_Town_
                     qo.Count.ToString());
             }
 
-            var reqList = new TableScrollableCompactNewNew<QuestObjective>(10, true)
+            var reqList = new TableScrollableCompactNewNew<QuestObjective>(true)
                 .AddColumn("quantity", "", 32, q => new Label(() => q.Count.ToString(), ()=> showAdjustObjectiveCountGui(q)), 0f)
                 .AddColumn("minus", "", iconW, q => IconButton.CreateSmall('-', () => confirm(()=>Packets.SendAdjustObjectiveCount(quest.Manager.Net, quest.Manager.Net.GetPlayer(), q, q.Count - 1))), 0f)
                 .AddColumn("plus", "", iconW, q => IconButton.CreateSmall('+', () => confirm(() => Packets.SendAdjustObjectiveCount(quest.Manager.Net, quest.Manager.Net.GetPlayer(), q, q.Count + 1))), 0f)
@@ -283,7 +283,7 @@ namespace Start_a_Town_
                 }));
             });
 
-            var rewardList = new TableScrollableCompactNewNew<QuestReward>(10)
+            var rewardList = new TableScrollableCompactNewNew<QuestReward>()
                 .AddColumn(new(), "quantity", 32, qr => new Label(() => qr.Count.ToString(), () => showAdjustRewardCountGui(qr)), 0f)
                 .AddColumn("minus", "", iconW, q => IconButton.CreateSmall('-', () => confirm(() => Packets.SendAdjustRewardCount(quest.Manager.Net, quest.Manager.Net.GetPlayer(), q, q.Count - 1))), 0f)
                 .AddColumn("plus", "", iconW, q => IconButton.CreateSmall('+', () => confirm(() => Packets.SendAdjustRewardCount(quest.Manager.Net, quest.Manager.Net.GetPlayer(), q, q.Count + 1))), 0f)

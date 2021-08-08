@@ -57,7 +57,7 @@ namespace Start_a_Town_
         
         public class UI
         {
-            static readonly Lazy<TableScrollableCompactNewNew<Entry>> EntriesGUI = new(()=> new TableScrollableCompactNewNew<Entry>(10)
+            static readonly Lazy<TableScrollableCompactNewNew<Entry>> EntriesGUI = new(()=> new TableScrollableCompactNewNew<Entry>()
                     .AddColumn(null, "Time", (int)UIManager.Font.MeasureString("HH:mm:ss").X, (e) => new Label(e.Time.ToString("HH:mm:ss")), 0)
                     .AddColumn(null, "Description", 400, (e) => new GroupBox().AddControlsLineWrap(Label.ParseNew(e.Text)), 0));
 

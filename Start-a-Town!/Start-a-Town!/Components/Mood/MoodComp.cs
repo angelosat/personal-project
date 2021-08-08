@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
-using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     class MoodComp : EntityComponent, IProgressBar
     {
-        List<Moodlet> Moodlets = new List<Moodlet>();
+        readonly ObservableCollection<Moodlet> Moodlets = new();
         const float BaseMood = 50;
         public float Mood = BaseMood;
-        float Rate = 1f;
-        int TicksRemaining = Engine.TicksPerSecond, TicksDelay = Engine.TicksPerSecond;
+        readonly float Rate = 1f;
+        private int TicksRemaining = Engine.TicksPerSecond;
+        private readonly int TicksDelay = Engine.TicksPerSecond;
 
         private float ValueTarget => BaseMood + this.Moodlets.Sum(m => m.Def.Value);
 
@@ -23,9 +25,9 @@ namespace Start_a_Town_
 
         public float Max => 100;
 
-        public float Value => Mood;
+        public float Value => this.Mood;
 
-        public float Percentage => Value / Max;
+        public float Percentage => this.Value / this.Max;
 
         public override void Tick()
         {
@@ -43,43 +45,27 @@ namespace Start_a_Town_
                 this.TicksRemaining = (int)Math.Round(this.TicksDelay * resilience);
             }
             this.TicksRemaining--;
-            bool invalidatedMoodlets = false;
             var actor = parent as Actor;
             foreach (var m in MoodletDef.All)
-            {
-                invalidatedMoodlets = m.TryAssignOrRemove(actor);
-            }
+                m.TryAssignOrRemove(actor);
             var count = this.Moodlets.Count;
-            var nextMoodlets = new List<Moodlet>(count);
+            var nextMoodlets = new List<Moodlet>(this.Moodlets);
             for (int i = 0; i < count; i++)
             {
-                var m = this.Moodlets[i];
+                var m = nextMoodlets[i];
                 var result = m.Tick(actor);
-                if (result)
-                    nextMoodlets.Add(m);
-                else
-                {
-                    invalidatedMoodlets = true;
-                }
+                if (!result)
+                    this.Moodlets.Remove(m);
             }
-            this.Moodlets = nextMoodlets;
-            if (invalidatedMoodlets)
-                parent.Map.EventOccured(Message.Types.MoodletsUpdated, parent);
         }
 
-        public void Add(Actor actor, Moodlet m)
+        public void Add(Moodlet m)
         {
             this.Moodlets.Add(m);
-            actor.Net.Map.EventOccured(Message.Types.MoodletsUpdated, actor);
         }
-        public void Remove(Actor actor, MoodletDef mdef)
+        public void Remove(MoodletDef mdef)
         {
-            if (this.Moodlets.RemoveAll(m => m.Def == mdef) > 0)
-            {
-                actor.Net.Map.EventOccured(Message.Types.MoodletsUpdated, actor);
-            }
-            else
-                throw new Exception();
+            this.Moodlets.Remove(this.Moodlets.First(m => m.Def == mdef));
         }
         public bool Contains(MoodletDef mdef)
         {
@@ -105,20 +91,21 @@ namespace Start_a_Town_
 
             panelMoodValue.AddControlsBottomLeft(bar);
 
-            var panelMoodlets = new TableScrollableCompact<Moodlet>(8, BackgroundStyle.TickBox);
-            panelMoodlets.AddColumn(null, "Test", panelMoodValue.Width * 2, m => m.GetUI(), showColumnLabels: false);
-            panelMoodlets.Build(this.Moodlets, false);
-            
+            var panelMoodlets = new TableObservable<Moodlet>() { BackgroundStyle = BackgroundStyle.TickBox };
+            panelMoodlets.AddColumn("Test", panelMoodValue.Width * 2, m => m.GetUI());
+            panelMoodlets.Bind(this.Moodlets);
+            //panelMoodlets.Build(this.Moodlets, false);
+
             panelMoodlets.Location = panelMoodValue.BottomLeft;
             box.AddControls(panelMoodValue, panelMoodlets);
 
-            panelMoodlets.OnGameEventAction = (e) =>
-            {
-                if (e.Type == Message.Types.MoodletsUpdated && e.Parameters[0] == actor)
-                {
-                    panelMoodlets.Build(this.Moodlets, false);
-                }
-            };
+            //panelMoodlets.OnGameEventAction = (e) =>
+            //{
+            //    if (e.Type == Message.Types.MoodletsUpdated && e.Parameters[0] == actor)
+            //    {
+            //        panelMoodlets.Build(this.Moodlets, false);
+            //    }
+            //};
         }
 
         internal override void AddSaveData(SaveTag tag)
@@ -128,7 +115,7 @@ namespace Start_a_Town_
         }
         internal override void Load(SaveTag save)
         {
-            this.Moodlets.TryLoadAsList<List<Moodlet>, Moodlet>(save, "Moodlets");
+            this.Moodlets.LoadNewNew(save, "Moodlets");
             save.TryGetTagValueNew("Value", ref this.Mood);
         }
         public override void Write(BinaryWriter w)

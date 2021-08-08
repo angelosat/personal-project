@@ -160,7 +160,7 @@ namespace Start_a_Town_
         Window CreateUI()
         {
             var box = new GroupBox();
-            var qlist = new TableScrollableCompactNewNew<QuestDef>(10)
+            var qlist = new TableScrollableCompactNewNew<QuestDef>()
                 .AddColumn(new(), "text", 150, qg => new Label(qg).SetLeftClickAction(lbl =>
                 {
                     qg.ShowGUI();
@@ -191,11 +191,11 @@ namespace Start_a_Town_
         {
             var box = new GroupBox();
             Actor actor = null;
-            var questsAvailable = new TableScrollableCompactNewNew<QuestDef>(16)
+            var questsAvailable = new TableScrollableCompactNewNew<QuestDef>()
                 .AddColumn(new(), "questname", 200, q => new Label(q, () => edit(q)), 0)
                 .AddColumn(new(), "assign", 16, q => IconButton.CreateSmall(Icon.ArrowRight, () => assign(q), $"Assign {q} to {actor.Name}"), 0);
             var editbtnwidth = Button.GetWidth(UIManager.Font, "Edit");
-            var questsAssigned = new TableScrollableCompactNewNew<QuestDef>(16)
+            var questsAssigned = new TableScrollableCompactNewNew<QuestDef>()
                 .AddColumn(new(), "questname", 200, q => new Label(q, () => edit(q)), 0)
                 .AddColumn(new(), "unassign", 16, q => IconButton.CreateSmall(Icon.Cross, () => unassign(q), $"Assign {q} to {actor.Name}"), 0);
 

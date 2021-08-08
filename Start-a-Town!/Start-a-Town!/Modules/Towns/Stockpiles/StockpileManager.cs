@@ -11,6 +11,8 @@ namespace Start_a_Town_.Towns
         public override string Name => "Stockpiles";
 
         readonly StockpileContentTracker Tracker;
+        public Dictionary<int, Stockpile> Stockpiles = new();
+        public HashSet<Vector3> Storages = new();
 
         internal Stockpile GetStockpile(int stID)
         {
@@ -43,9 +45,7 @@ namespace Start_a_Town_.Towns
            
             if (this.Town.Map.Net is Client)
                 return;
-
         }
-
 
         internal static void Init()
         {
@@ -88,11 +88,7 @@ namespace Start_a_Town_.Towns
             }
             base.OnGameEvent(e);
         }
-
-        public Dictionary<int, Stockpile> Stockpiles = new();
-       
-        public HashSet<Vector3> Storages = new();
-
+     
         protected override void AddSaveData(SaveTag tag)
         {
             tag.Add(this._stockpileSequence.Save("IDSequence"));
@@ -143,7 +139,6 @@ namespace Start_a_Town_.Towns
         internal bool IsValidStorage(int hauledID, TargetArgs position, int amount)
         {
             throw new NotImplementedException();
-            
         }
 
         public IEnumerable<(Entity item, int amount)> FindItems(Func<Entity, bool> filter, int amount)

@@ -29,7 +29,7 @@ namespace Start_a_Town_
             var picker = new ColorPickerBox();
             var pickerPanel = picker.ToPanelLabeled("");
 
-            this.Table = new TableScrollableCompactNewNew<CharacterColor>(colorsListMaxVisibleItems) { ClientBoxColor = Color.Transparent }
+            this.Table = new TableScrollableCompactNewNew<CharacterColor>() { ClientBoxColor = Color.Transparent }
                 .AddColumn(null, "Name", 50, c => new Label(c.Name), 0)
                 .AddColumn(null, "Color", 16, cc =>
                 {

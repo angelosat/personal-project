@@ -12,13 +12,11 @@ namespace Start_a_Town_.UI
         readonly GroupBox ColumnLabels;
         ListBoxNoScroll<TObject, GroupBox> BoxItems;
         readonly Dictionary<TObject, Dictionary<object, Control>> Rows = new();
-        public int MaxVisibleItems;
         public bool ShowColumnLabels = true;
         public Color ClientBoxColor = Color.Black * .5f;
         ObservableCollection<TObject> BoundCollection;
-        public TableScrollableCompactNewNew(int maxVisibleItems, bool showColumnLabels = false, ScrollModes scrollbarMode = ScrollModes.Vertical)
+        public TableScrollableCompactNewNew(bool showColumnLabels = false)
         {
-            this.MaxVisibleItems = maxVisibleItems;
             this.ShowColumnLabels = showColumnLabels;
             this.ColumnLabels = new GroupBox() { AutoSize = true, BackgroundColor = Color.SlateGray * .5f };
         }

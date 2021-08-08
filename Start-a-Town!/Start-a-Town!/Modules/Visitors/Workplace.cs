@@ -357,7 +357,7 @@ namespace Start_a_Town_
         {
             var box = new GroupBox() { Name = "Workers" };
             Workplace tav = null;
-            var table = new TableScrollableCompactNewNew<Actor>(16, true);
+            var table = new TableScrollableCompactNewNew<Actor>(true);
 
             var btnworkers = new Button("Assign Workers", () =>
             {

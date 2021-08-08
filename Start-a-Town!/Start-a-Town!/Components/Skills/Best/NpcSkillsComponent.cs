@@ -54,7 +54,7 @@ namespace Start_a_Town_
             foreach (var skill in skills)
                 container.AddControlsBottomLeft(skill.GetControl());
         }
-        static readonly TableScrollableCompactNewNew<NpcSkill> GUI = new TableScrollableCompactNewNew<NpcSkill>(SkillDef.All.Length)
+        static readonly TableScrollableCompactNewNew<NpcSkill> GUI = new TableScrollableCompactNewNew<NpcSkill>()
             .AddColumn("name", "", 96, s => new Label(s.Def.Label) {
                 TooltipFunc = (t) =>
                 {
@@ -76,7 +76,7 @@ namespace Start_a_Town_
         
         public Control GetUI()
         {
-            var table = new TableScrollableCompactNewNew<NpcSkill>(this.SkillsNew.Length, scrollbarMode: ScrollModes.None)
+            var table = new TableScrollableCompactNewNew<NpcSkill>()
                 .AddColumn(null, "name", 80, s => new Label(s.Def.Label), 0)
                 .AddColumn(null, "value", 16, s => new Label() { TextFunc = () => s.Level.ToString() }, 0);
 

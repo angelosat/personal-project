@@ -101,8 +101,7 @@ namespace Start_a_Town_.Towns
                 var shopid = r.ReadInt32();
                 var stockpileid = r.ReadInt32();
                 var shopmanager = net.Map.Town.ShopManager;
-                var stockpilemanager = net.Map.Town.StockpileManager;
-                var stockpile = stockpilemanager.GetStockpile(stockpileid);
+                var stockpile = net.Map.Town.ZoneManager.GetZone<Stockpile>(stockpileid);
                 var shop = shopmanager.GetShop(shopid) as Shop;
                 shop.AddStockpile(stockpile);
 

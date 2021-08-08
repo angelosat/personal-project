@@ -81,8 +81,9 @@ namespace Start_a_Town_
                 InitAction = () =>
                 {
                     this.Actor.Reserve(this.Task.Product, -1);
-                    if (this.Task.Order.HaulOnFinish && Towns.StockpileManager.GetBestStoragePlace(this.Actor, this.Task.Product.Object as Entity, out TargetArgs target))
+                    if (this.Task.Order.HaulOnFinish && StockpileAIHelper.GetAllValidStoragePlacesNoReserveCheckLazy(this.Actor, this.Task.Product.Object as Entity) is var places && places.Any())// ; Towns.StockpileManager.GetBestStoragePlace(this.Actor, this.Task.Product.Object as Entity, out TargetArgs target))
                     {
+                        var target = places.First();
                         this.Task.SetTarget(WorkstationIndex, target);
                         this.Task.SetTarget(IngredientIndex, this.Task.Product);
                     }

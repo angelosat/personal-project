@@ -10,10 +10,6 @@ namespace Start_a_Town_
 {
     public partial class Stockpile : Zone, IStorageNew, IContextable
     {
-        internal static void Init()
-        {
-            Packets.Init();
-        }
         public override ZoneDef ZoneDef => ZoneDefOf.Stockpile;
         public StorageSettings Settings { get; } = new();
         public int Priority => (int)this.Settings.Priority;

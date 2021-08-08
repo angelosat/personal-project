@@ -152,7 +152,7 @@ namespace Start_a_Town_
         {
             foreach (var stID in this.Stockpiles)
             {
-                var st = this.Town.StockpileManager.GetStockpile(stID);
+                var st = this.Town.ZoneManager.GetZone<Stockpile>(stID);
                 var items = st.GetContents().Select(i => i as Entity);
                 foreach (var i in items)
                     if (condition(i))

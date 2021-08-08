@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Start_a_Town_.Towns;
@@ -31,6 +32,12 @@ namespace Start_a_Town_
                 this.Refresh();
             }
         }
+
+        internal IEnumerable<(Entity item, int amount)> FindItems(Func<Entity, bool> filter, int amount)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private void Refresh()
         {
             var stockpiles = this.Town.ZoneManager.GetZones<Stockpile>();

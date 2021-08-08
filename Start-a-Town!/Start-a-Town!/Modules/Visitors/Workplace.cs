@@ -273,7 +273,7 @@ namespace Start_a_Town_
                 if (box.Tag?.GetType() != shop.GetType())
                     boxLists.ClearControls();
                 
-                liststockpiles.Clear().AddItems(shop.Stockpiles.Select(i => shop.Town.StockpileManager.GetStockpile(i)));
+                liststockpiles.Clear().AddItems(shop.Stockpiles.Select(i => shop.Town.ZoneManager.GetZone<Stockpile>(i)));
                 listfacilities.Clear().AddItems(shop.GetFacilities().Select(f => new TargetArgs(shop.Town.Map, f)));
 
                 boxtabs.ClearControls();

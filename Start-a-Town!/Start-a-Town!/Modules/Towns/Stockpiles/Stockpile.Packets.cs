@@ -5,10 +5,11 @@ namespace Start_a_Town_
 {
     public partial class Stockpile
     {
+        [EnsureStaticCtorCall]
         class Packets
         {
-            static int PacketStockpileSync;
-            static internal void Init()
+            static readonly int PacketStockpileSync;
+            static Packets()
             {
                 PacketStockpileSync = Network.RegisterPacketHandler(Receive);
             }

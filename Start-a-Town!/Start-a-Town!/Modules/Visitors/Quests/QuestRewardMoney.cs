@@ -25,7 +25,7 @@ namespace Start_a_Town_
         void AwardFromTownStockpiles(Actor actor)
         {
             var qgiver = this.Parent.Giver;
-            var moneyItems = qgiver.Town.StockpileManager
+            var moneyItems = qgiver.Town.Storage
                 .FindItems(e => e.Def == ItemDefOf.Coins, this.Amount);
             if (!moneyItems.Any())
                 throw new Exception();
@@ -48,7 +48,7 @@ namespace Start_a_Town_
         internal override bool CanAward()
         {
             var qgiver = this.Parent.Giver;
-            return qgiver.Town.StockpileManager
+            return qgiver.Town.Storage
                 .FindItems(e => e.Def == ItemDefOf.Coins, this.Amount)
                 .Sum(i => i.amount) 
                 >= 

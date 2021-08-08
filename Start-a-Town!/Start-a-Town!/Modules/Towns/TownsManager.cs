@@ -35,17 +35,11 @@ namespace Start_a_Town_.Towns
             //PacketStorageFiltersNew.Init();
 
             ZoneManager.Init();
-            StockpileManager.Init();
         }
 
         public override void OnGameEvent(GameEvent e)
         {
             return;
-        }
-
-        public override void OnHudCreated(Hud hud)
-        {
-            StockpileManager.OnHudCreated(hud);
         }
 
         public override void OnContextActionBarCreated(ContextActionBar.ContextActionBarArgs args)

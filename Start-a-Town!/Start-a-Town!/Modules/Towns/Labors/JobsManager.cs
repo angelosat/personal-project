@@ -5,6 +5,7 @@ using Start_a_Town_.Towns;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System.IO;
+using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.AI
 {

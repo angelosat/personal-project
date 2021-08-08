@@ -19,10 +19,7 @@ namespace Start_a_Town_.UI
             Origin = new Vector2(w, h) * 0.5f;
             Color = Color.LightSeaGreen;
             ClipToBounds = false;
-            Animate = (box) =>
-            {
-                box.Rotation = (float)(4 * Math.PI * DateTime.Now.Millisecond / 2000f);
-            };
+            RotationFunc = () => (float)(4 * Math.PI * DateTime.Now.Millisecond / 2000f);
         }
         public override void OnBeforeDraw(SpriteBatch sb, Rectangle viewport)
         {

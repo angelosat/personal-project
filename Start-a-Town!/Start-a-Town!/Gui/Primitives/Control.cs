@@ -23,8 +23,8 @@ namespace Start_a_Town_.UI
                   + (this.Parent != null ? this.Parent.ScreenLocation + this.Parent.ClientLocation : Vector2.Zero);
         public int X => (int)this.ScreenLocation.X;
         public int Y => (int)this.ScreenLocation.Y;
-
         Control _Parent;
+        public bool Flashing;
         public Control Parent
         {
             get => this._Parent;
@@ -92,8 +92,16 @@ namespace Start_a_Town_.UI
             this.Location.X = Math.Max(0, Math.Min(UIManager.Width - this.Width, this.Location.X));
             this.Location.Y = Math.Max(0, Math.Min(UIManager.Height - this.Height, this.Location.Y));
         }
-
-        public float Rotation = 0;
+        public void Rotate(Vector2 origin, float radians)
+        {
+            this.Rotation = radians;
+            var w = this.Width;
+            var h = this.Height;
+            this.Width = (int)Math.Abs(h * Math.Sin(radians) + w * Math.Cos(radians));
+            this.Height = (int)Math.Abs(h * Math.Cos(radians) + w * Math.Sin(radians));
+            this.Anchor = origin;
+        }
+        protected float Rotation = 0;
         bool _mouseThrough = false;
         public virtual bool MouseThrough
         {
@@ -807,6 +815,8 @@ namespace Start_a_Town_.UI
                 }
             }
             this.OnAfterDraw(sb, viewport);
+            if (this.Flashing)
+                this.BoundsScreen.DrawFlashingBorder(sb);
             foreach (var control in this.Controls)
                 control.Draw(sb, Rectangle.Intersect(control.BoundsScreen, viewport));
         }

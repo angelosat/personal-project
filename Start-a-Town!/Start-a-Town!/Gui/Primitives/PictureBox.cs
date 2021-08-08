@@ -7,7 +7,8 @@ namespace Start_a_Town_.UI
 {
     public class PictureBox : ButtonBase
     {
-        public Action<PictureBox> Animate = (box) => { };
+        //public Action<PictureBox> Animate = (box) => { };
+        public Func<float> RotationFunc;
 
         Action<RenderTarget2D> _renderer;
 
@@ -86,7 +87,9 @@ namespace Start_a_Town_.UI
 
         public override void Update()
         {
-            this.Animate(this);
+            //this.Animate(this);
+            if (this.RotationFunc is not null)
+                this.Rotation = this.RotationFunc();
             base.Update();
         }
         public Action DrawAction;

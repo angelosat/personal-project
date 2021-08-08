@@ -1461,13 +1461,12 @@ namespace Start_a_Town_
         {
             string.Format("saving chunk {0}", this.MapCoords).ToConsole();
 
-            SaveTag chunktag;
-            chunktag = new SaveTag(SaveTag.Types.Compound, "Chunk");
+            var chunktag = new SaveTag(SaveTag.Types.Compound, "Chunk");
 
-            SaveTag heightTag = new SaveTag(SaveTag.Types.List, "Heightmap", SaveTag.Types.Byte);
-            SaveTag entitiestag = new SaveTag(SaveTag.Types.List, "Entities", SaveTag.Types.Compound);
-            SaveTag visibleCells = new SaveTag(SaveTag.Types.List, "VisibleCells", SaveTag.Types.Int);
-            SaveTag lightTag = new SaveTag(SaveTag.Types.List, "Light", SaveTag.Types.Byte);
+            var heightTag = new SaveTag(SaveTag.Types.List, "Heightmap", SaveTag.Types.Byte);
+            var entitiestag = new SaveTag(SaveTag.Types.List, "Entities", SaveTag.Types.Compound);
+            var visibleCells = new SaveTag(SaveTag.Types.List, "VisibleCells", SaveTag.Types.Int);
+            var lightTag = new SaveTag(SaveTag.Types.List, "Light", SaveTag.Types.Byte);
 
             var sw = Stopwatch.StartNew();
             this.SaveCellsToTagCompressed(chunktag);
@@ -1494,7 +1493,7 @@ namespace Start_a_Town_
             foreach (GameObject obj in this.Objects)
                 entitiestag.Add(new SaveTag(SaveTag.Types.Compound, obj.Name, obj.SaveInternal()));
 
-            SaveTag blockEntitiesTag = this.SaveBlockEntitiesDistinct();
+            var blockEntitiesTag = this.SaveBlockEntitiesDistinct();
 
             chunktag.Add(new SaveTag(SaveTag.Types.Bool, "LightValid", this.LightValid));
             chunktag.Add(new SaveTag(SaveTag.Types.Bool, "EdgesValid", this.EdgesValid));

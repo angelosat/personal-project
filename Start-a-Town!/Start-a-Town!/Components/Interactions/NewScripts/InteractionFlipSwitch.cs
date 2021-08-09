@@ -2,11 +2,13 @@
 {
     class InteractionFlipSwitch : Interaction
     {
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target;
             var e = a.Map.GetBlockEntity(t.Global);
             e.GetComp<BlockEntityCompSwitchable>().Toggle(a, t);
-            this.Finish(a, t);
+            this.Finish();
         }
         public override object Clone()
         {

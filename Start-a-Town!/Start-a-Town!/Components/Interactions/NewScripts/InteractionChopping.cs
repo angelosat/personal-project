@@ -12,8 +12,10 @@
             this.Skill = ToolAbilityDef.Chopping;
         }
       
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target; 
             var cell = a.Map.GetCell(t.Global);
             var block = cell.Block;
             block.Break(a, t.Global);

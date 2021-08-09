@@ -29,12 +29,15 @@ namespace Start_a_Town_
             return "Haul " + (this.Amount == -1 ? " All" : " x" + this.Amount.ToString());
         }
 
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
+            var a = this.Actor;
             a.CrossFade(this.Animation, false, 25);
         }
-        public override void OnUpdate(Actor actor, TargetArgs target)
+        public override void OnUpdate()
         {
+            var actor = this.Actor;
+            var target = this.Target;
             if (target.Object is Actor)
                 throw new Exception();
             switch (target.Type)
@@ -74,8 +77,7 @@ namespace Start_a_Town_
                 default:
                     break;
             }
-            this.Finish(actor, target);
-
+            this.Finish();
         }
 
         public override object Clone()

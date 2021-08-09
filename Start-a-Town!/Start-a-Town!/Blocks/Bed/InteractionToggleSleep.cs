@@ -11,8 +11,10 @@ namespace Start_a_Town_.Blocks.Bed
         {
 
         }
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target;
             var body = a.Body;
             var headBone = a.Body.FindBone(BoneDef.Head);
 
@@ -37,8 +39,10 @@ namespace Start_a_Town_.Blocks.Bed
         {
 
         }
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target;
             var body = a.Body;
             var head = body[BoneDef.Head];
             body.SetEnabled(true, true);

@@ -15,13 +15,16 @@ namespace Start_a_Town_
         {
             return new InteractionSwapCarried();
         }
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
+            var a = this.Actor;
             this.Animation = new Animation(AnimationDef.TouchItem);
             a.CrossFade(this.Animation, false, 25);
         }
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target; 
             var item = t.Object as Entity;
             var global = item.Global;
             var actor = a as Actor;

@@ -17,13 +17,17 @@ namespace Start_a_Town_
         public InteractionGiveItem() : base("GiveItem", seconds: .4f)
         {
         }
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
+            var a = this.Actor;
+            var t = this.Target;
             this.Animation = new Animation(AnimationDef.TouchItem);
             a.CrossFade(this.Animation, false, 25);
         }
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target;
             var item = a.Hauled as Entity;
             var seller = t.Object as Actor;
             var sellerCarriedItem = seller.Hauled as Entity;

@@ -651,7 +651,6 @@
     <Compile Include="Components\Combat\BlockingComponent.cs" />
     <Compile Include="Objects\Items\Consumables\Effects\ConsumableEffect.cs" />
     <Compile Include="Objects\Items\Consumables\NeedEffect.cs" />
-    <Compile Include="Components\Interactions\InteractionCustom.cs" />
     <Compile Include="Components\Interactions\InteractionPerpetual.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionChopping.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionStoreHauled.cs" />

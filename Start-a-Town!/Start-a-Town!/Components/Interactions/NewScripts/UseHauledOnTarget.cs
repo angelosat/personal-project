@@ -21,14 +21,18 @@ namespace Start_a_Town_
             this.Amount = amount;
         }
 
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
+            var a = this.Actor;
+            var t = this.Target;
             this.Animation = new Animation(AnimationDef.TouchItem);
             a.CrossFade(this.Animation, false, 25);
         }
         
-        public override void Perform(Actor actor, TargetArgs target)
+        public override void Perform()
         {
+            var actor = this.Actor;
+            var target = this.Target;
             var hauled = actor.Inventory.HaulSlot;// PersonalInventoryComponent.GetHauling(actor);
             var hauledObj = hauled.Object;
             if (this.Amount > hauledObj.StackSize)

@@ -9,15 +9,19 @@
         {
         }
 
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
+            var a = this.Actor;
+            var t = this.Target;
             a.CrossFade(this.Animation, false, 25);
         }
 
-        public override void OnUpdate(Actor a, TargetArgs t)
+        public override void OnUpdate()
         {
+            var a = this.Actor;
+            var t = this.Target;
             GearComponent.EquipToggle(a, t.Object as Entity);
-            this.Finish(a, t);
+            this.Finish();
         }
 
         public override object Clone()

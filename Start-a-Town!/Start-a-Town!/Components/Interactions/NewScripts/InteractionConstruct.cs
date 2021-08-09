@@ -10,9 +10,11 @@ namespace Start_a_Town_.Interactions
         {
         }
 
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
-            base.Start(a, t);
+            var a = this.Actor;
+            var t = this.Target; 
+            base.Start();
             var entity = a.Map.GetBlockEntity(t.Global) as IConstructible;
             this.BuildProgress = entity.BuildProgress;
             var tool = a.GetEquipmentSlot(GearType.Mainhand);
@@ -24,18 +26,22 @@ namespace Start_a_Town_.Interactions
         {
             return this.BuildProgress.IsFinished;
         }
-        public override void OnUpdate(Actor a, TargetArgs t)
+        public override void OnUpdate()
         {
+            var a = this.Actor;
+            var t = this.Target; 
             var workAmount = a.GetToolWorkAmount(ToolAbilityDef.Building.ID);
             this.BuildProgress.Value += workAmount;
             if (SuccessCondition())
             {
-                this.Done(a, t);
+                this.Done();
                 return;
             }
         }
-        public void Done(Actor a, TargetArgs t)
+        public void Done()
         {
+            var a = this.Actor;
+            var t = this.Target;
             var global = t.Global;
             var map = a.Map;
             var entity = map.GetBlockEntity(global) as BlockConstructionEntity;
@@ -49,7 +55,7 @@ namespace Start_a_Town_.Interactions
             }
             block.Place(map, entity.OriginGlobal, entity.Product.Material, entity.Product.Data, 0, ori, true);
             map.GetBlockEntity(t.Global)?.IsMadeFrom(new ItemMaterialAmount[] { entity.Product.Requirement });
-            this.Finish(a, t);
+            this.Finish();
         }
 
         public override object Clone()
@@ -57,8 +63,4 @@ namespace Start_a_Town_.Interactions
             return new InteractionConstruct();
         }
     }
-
-
-    
-
 }

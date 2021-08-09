@@ -90,8 +90,10 @@ namespace Start_a_Town_.Components
                 }
             }
 
-            public override void Perform(Actor actor, TargetArgs target)
+            public override void Perform()
             {
+                var actor = this.Actor;
+                var target = this.Target;
                 var consumable = target.Object as Entity;
 
                 var comp = consumable.GetComponent<ConsumableComponent>();

@@ -33,15 +33,15 @@ namespace Start_a_Town_.Components
         {
             if (this.Task == null)
                 return;
-            this.Task.Interrupt(this.Parent as Actor, success);
-            this.Task.FinishAction(this.Parent as Actor, this.Target);
+            this.Task.Interrupt(success);
+            this.Task.FinishAction();
             this.Task = null;
             this.Target = null;
         }
 
         internal void OnToolContact()
         {
-            this.Task.OnToolContact(this.Parent as Actor, this.Target);
+            this.Task.OnToolContact();
         }
 
         public void Perform(Interaction task, TargetArgs target)
@@ -54,7 +54,7 @@ namespace Start_a_Town_.Components
             this.Interrupt();
             this.Task = task;
             this.Target = target;
-            this.Task.InitAction(parent, target);
+            this.Task.InitAction();
             if (this.Task.HasFinished)
                 this.Task = null;
         }
@@ -63,29 +63,6 @@ namespace Start_a_Town_.Components
         {
             this.Interrupt(success);
         }
-        internal void UseTool(Actor parent, TargetArgs target)
-        {
-            var tool = parent.GetComponent<HaulComponent>().Holding.Object;//.EquipmentSlots[GearType.Mainhand].Object;
-
-            if (tool == null)
-            {
-                UseHands(parent, target);
-                return;
-            }
-            ToolAbilityDef skill = null;
-            if (!tool.TryGetComponent<ToolAbilityComponent>(c => skill = c.Skill))
-                return;
-            if (skill == null)
-                return;
-            var work = skill.GetInteraction(parent, target);
-            if (work == null)
-                return;
-            this.Perform(work, target);
-        }
-
-        private void UseHands(GameObject parent, TargetArgs target)
-        {
-        }
 
         public override void Tick()
         {
@@ -93,7 +70,7 @@ namespace Start_a_Town_.Components
             if (this.Task == null)
                 return;
 
-            this.Task.Update(parent as Actor, this.Target);
+            this.Task.Update();
 
             if (this.Task.State == Interaction.States.Running)
             {
@@ -106,7 +83,7 @@ namespace Start_a_Town_.Components
                 // WARNING: i had to move this here because if the interaction target was this entity itself, then the direction vector became zero and its normal became NaN
                 return;
             }
-            this.Task.FinishAction(parent as Actor, this.Target);
+            this.Task.FinishAction();
             this.Task = null;
             this.Target = null;
         }
@@ -115,7 +92,7 @@ namespace Start_a_Town_.Components
         {
             if (this.Task == null)
                 return;
-            this.Task.DrawUI(sb, camera, parent, this.Target);
+            this.Task.DrawUI(sb, camera);
         }
 
         public override void Write(System.IO.BinaryWriter w)
@@ -181,7 +158,7 @@ namespace Start_a_Town_.Components
                 if (this.Task.Animation != null)
                 {
                     parent.AddAnimation(this.Task.Animation);
-                    this.Task.AfterLoad(parent as Actor, this.Target);
+                    this.Task.AfterLoad();
                 }
             }
         }

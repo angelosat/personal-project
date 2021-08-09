@@ -4,9 +4,11 @@
     {
         public InteractionToggleDoor() : base("Open/close") { }
        
-        internal override void InitAction(Actor actor, TargetArgs target)
+        internal override void InitAction()
         {
-            base.InitAction(actor, target);
+            var actor = this.Actor;
+            var target = this.Target;
+            base.InitAction();
             BlockDoor.Toggle(actor.Map, target.Global);
         }
         public override object Clone()

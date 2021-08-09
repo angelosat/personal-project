@@ -13,8 +13,10 @@ namespace Start_a_Town_
         {
             this.RoomID = roomID;
         }
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target;
             var roomOwner = t.Object as Actor;
             var room = a.Map.Town.RoomManager.GetRoom(this.RoomID);
             roomOwner.Ownership.Claim(room);

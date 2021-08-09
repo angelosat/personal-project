@@ -17,9 +17,9 @@ namespace Start_a_Town_.Components.Interactions
             this.All = all;
         }
        
-        public override void Perform(Actor actor, TargetArgs target)
+        public override void Perform()
         {
-            actor.GetComponent<HaulComponent>().Throw(Vector3.Zero, actor, this.All);
+            this.Actor.GetComponent<HaulComponent>().Throw(Vector3.Zero, this.Actor, this.All);
         }
 
         // TODO: make it so i have access to the carried item's stacksize, and include it in the name ( Throw 1 vs Throw 16 for example)

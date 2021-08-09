@@ -30,9 +30,11 @@ namespace Start_a_Town_.Components.Interactions
         ParticleEmitterSphere EmitterBreak;
         List<Rectangle> ParticleTextures;
 
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
-            base.Start(a, t);
+            base.Start();
+            var a = this.Actor;
+            var t = this.Target;
             this.Animation.Speed = SpeedFormula(a);
             // cache variables
             this.Block = a.Map.GetBlock(t.Global);
@@ -69,9 +71,10 @@ namespace Start_a_Town_.Components.Interactions
 
             this.ParticleTextures = this.Block.GetParticleRects(25);
         }
-        public override void OnUpdate(Actor a, TargetArgs t)
+        public override void OnUpdate()
         {
-            var actor = a as Actor;
+            var actor = this.Actor;
+            var t = this.Target; 
             this.EmitStrike(actor);
           
             var material = actor.Map.GetBlockMaterial(t.Global);
@@ -83,12 +86,14 @@ namespace Start_a_Town_.Components.Interactions
             this.Animation.Speed = SpeedFormula(actor);
             if (this.Progress.Percentage == 1)
             {
-                this.Done(actor, t);
-                this.Finish(actor, t);
+                this.Done();
+                this.Finish();
             }
         }
-        public void Done(GameObject a, TargetArgs t)
+        public void Done()
         {
+            var a = this.Actor;
+            var t = this.Target;
             var cell = a.Map.GetCell(t.Global);
             var block = cell.Block;
             if (!IsMetalOrMineral(a, t))
@@ -129,8 +134,9 @@ namespace Start_a_Town_.Components.Interactions
         }
 
         BarSmooth BarSmooth;
-        public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
+        public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera)
         {
+            var parent = this.Actor;
             Vector3 global = parent.Global;
             Vector2 barLoc = camera.GetScreenPositionFloat(global);
             if (this.BarSmooth == null)

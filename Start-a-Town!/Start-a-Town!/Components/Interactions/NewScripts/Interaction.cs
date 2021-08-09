@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.UI;
 using Start_a_Town_.Animations;
 using Start_a_Town_.Components;
+using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Start_a_Town_
 {
@@ -14,24 +14,24 @@ namespace Start_a_Town_
         public bool IsFinished => this.State == States.Finished;
         public static readonly float DefaultRange = (float)Math.Sqrt(2);
 
-        readonly static Dictionary<string, Func<Interaction>> Factory = new();
-        
-        static public void AddInteraction<T>(Func<Interaction> factory)
+        static readonly Dictionary<string, Func<Interaction>> Factory = new();
+
+        public static void AddInteraction<T>(Func<Interaction> factory)
         {
             Factory[typeof(T).FullName] = factory;
         }
-        static public void AddInteraction<T>() where T : Interaction, new()
+        public static void AddInteraction<T>() where T : Interaction, new()
         {
             Factory[typeof(T).FullName] = () => new T();
         }
-        
-        internal virtual void OnToolContact(Actor parent, TargetArgs target)
+
+        internal virtual void OnToolContact()
         {
         }
 
         public static void Initialize()
         {
-            
+
         }
         public override string ToString()
         {
@@ -40,20 +40,19 @@ namespace Start_a_Town_
 
         public enum States { Unstarted, Running, Finished, Failed }
         public enum RunningTypes { Once, Continuous }
-        
+
         public int GetID()
         {
             return this.Name.GetHashCode();
         }
-       
+
         public States State { get; protected set; } = States.Unstarted;
 
         public RunningTypes RunningType = RunningTypes.Once;
 
         public string Name { get; set; }
         public string Verb { get; set; }
-        public Action<GameObject, TargetArgs> Callback { get; set; }
-        
+
         public float Length { get; set; }
         public float CurrentTick;
         public ToolAbilityDef Skill { get; set; }
@@ -68,83 +67,70 @@ namespace Start_a_Town_
         private Func<string> BarLabel;
 
         // TODO: i need a method that returns satisfaction score based on ai entity's state
-        static readonly Dictionary<Need.Types, float> _NeedSatisfaction = new();
-        public virtual Dictionary<Need.Types, float> NeedSatisfaction 
-        {
-            get { return _NeedSatisfaction; }
-        }
+        static readonly Dictionary<Need.Types, float> _needSatisfaction = new();
+        public virtual Dictionary<Need.Types, float> NeedSatisfaction => _needSatisfaction;
 
         public Interaction()
         {
-            this.Callback = (a, t) => { };
-        }
-        public Interaction(string name, Action<GameObject, TargetArgs> callback) : this(name, 0, callback, null) { }
-        public Interaction(string name, float seconds, Action<GameObject, TargetArgs> callback) : this(name, seconds, callback, null) { }
-        public Interaction(string name, float seconds, Action<GameObject, TargetArgs> callback, ToolAbilityDef skill)
-        {
-            this.Name = name;
-            this.Callback = callback;
-            this.Seconds = seconds;
-            this.CurrentTick = this.Length = seconds * Engine.TicksPerSecond;
-            this.Skill = skill;
         }
 
-        protected Interaction(string name, float seconds = 0) 
-            :this()
+        protected Interaction(string name, float seconds = 0)
+            : this()
         {
             this.Name = name;
             this.Seconds = seconds;
             this.CurrentTick = this.Length = seconds * Engine.TicksPerSecond;
         }
-        
-        public virtual void Interrupt(Actor parent, bool success)
+
+        public virtual void Interrupt(bool success)
         {
-            if(!success)
-                parent.Net.EventOccured(Message.Types.InteractionInterrupted, parent, this);
+            if (!success)
+                this.Actor.Net.EventOccured(Message.Types.InteractionInterrupted, this.Actor, this);
             this.State = States.Finished;
             this.Animation?.FadeOutAndRemove();
         }
 
-        public virtual void Perform(Actor a, TargetArgs t)
+        public virtual void Perform()
         {
-            this.Callback(a, t);
         }
 
-        public virtual void Start(Actor a, TargetArgs t)
+        public virtual void Start()
         {
             if (this.Animation != null)
-                a.AddAnimation(this.Animation);
+                this.Actor.AddAnimation(this.Animation);
         }
 
-        internal bool Evaluate(Actor a, TargetArgs t)
+        internal bool Evaluate()
         {
             return true;
         }
 
-        public virtual void Update(Actor actor, TargetArgs target)
+        public virtual void Update()
         {
+            var actor = this.Actor;
+            var target = this.Target;
             if (this.State == States.Finished) // TODO: maybe check for failed state too?
             {
-                Stop(actor);
+                this.Stop();
                 return;
             }
 
             if (this.State == States.Unstarted)
-                this.Start(actor, target);
+                this.Start();
             else if (this.State == States.Finished)
             {
-                Stop(actor);
+                this.Stop();
                 AILog.TryWrite(actor, "Success: " + this.GetCompletedText(actor, target));
                 return;
             }
 
             this.State = States.Running;
-            if(this.RunningType == RunningTypes.Continuous)
+            if (this.RunningType == RunningTypes.Continuous)
             {
-                this.Perform(actor, target);
+                this.Perform();
                 if (this.State == States.Finished)
                 {
-                    Stop(actor);
+                    this.Stop();
                     AILog.TryWrite(actor, "Success: " + this.GetCompletedText(actor, target));
                 }
                 return;
@@ -152,31 +138,29 @@ namespace Start_a_Town_
             this.CurrentTick--;
             if (this.CurrentTick <= 0)
             {
-                Finish(actor, target);
-                Stop(actor);
-                this.Perform(actor, target);
+                this.Finish();
+                this.Stop();
+                this.Perform();
             }
         }
 
-        protected virtual void Stop(GameObject actor)
+        protected virtual void Stop()
         {
             this.Animation.FadeOutAndRemove();
         }
-        
+
         public void GetTooltip(Control tooltip)
         {
             var panel = new PanelLabeled("Interact") { AutoSize = true, Location = tooltip.Controls.BottomLeft };
-            panel.Controls.Add(new Label(this.Name + (this.Length > 0 ? TimeSpan.FromMilliseconds(this.Length).TotalSeconds.ToString(" #0.##s")  : "")) { Location = panel.Controls.BottomLeft }); //this.Length.ToString("#0.##s")
+            panel.Controls.Add(new Label(this.Name + (this.Length > 0 ? TimeSpan.FromMilliseconds(this.Length).TotalSeconds.ToString(" #0.##s") : "")) { Location = panel.Controls.BottomLeft }); //this.Length.ToString("#0.##s")
             tooltip.Controls.Add(panel);
         }
 
-        public float Percentage
+        public float Percentage => (float)(1 - this.CurrentTick / this.Length);
+        public virtual void DrawUI(SpriteBatch sb, Camera camera)
         {
-            get { return (float)(1 - this.CurrentTick / this.Length); }
-        }
-        public virtual void DrawUI(SpriteBatch sb, Camera camera, GameObject parent)
-        {
-            if(this._drawProgressBar)
+            var parent = this.Actor;
+            if (this._drawProgressBar)
             {
                 Bar.Draw(sb, camera, this.BarPosition(), this.BarLabel(), this.BarProgress(), camera.Zoom * .2f);
                 return;
@@ -195,17 +179,13 @@ namespace Start_a_Town_
             InteractionBar.Draw(sb, barLoc, InteractionBar.DefaultWidth, this.Percentage);
             UIManager.DrawStringOutlined(sb, this.Verb, textLoc, HorizontalAlignment.Left, VerticalAlignment.Center, 0.5f);
         }
-        public virtual void DrawUI(SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
-        {
-            this.DrawUI(sb, camera, parent);
-        }
-
+        
         internal virtual void ResolveReferences()
         {
         }
 
         public abstract object Clone();
-        
+
         public virtual string GetCompletedText(Actor actor, TargetArgs target)
         {
             return this.Name + ": " + target.ToString();
@@ -237,13 +217,13 @@ namespace Start_a_Town_
             this.AddSaveData(tag);
             return tag;
         }
-        
+
         protected virtual void AddSaveData(SaveTag tag) { }
         public virtual void LoadData(SaveTag tag)
         {
         }
-        
-        static public Interaction Load(SaveTag tag)
+
+        public static Interaction Load(SaveTag tag)
         {
             var name = (string)tag["Name"].Value;
             var inter = Activator.CreateInstance(Type.GetType(name)) as Interaction;
@@ -257,24 +237,24 @@ namespace Start_a_Town_
         {
         }
 
-        internal virtual void InitAction(Actor actor, TargetArgs target)
+        internal virtual void InitAction()
         {
             if (this.Length == 0)
             {
-                this.Perform(actor, target);
-                this.Finish(actor, target);
+                this.Perform();
+                this.Finish();
             }
         }
-        internal virtual void FinishAction(Actor actor, TargetArgs target)
+        internal virtual void FinishAction()
         {
         }
-        public void Finish(Actor actor, TargetArgs target)
+        public void Finish()
         {
             this.State = States.Finished;
         }
-        internal virtual void AfterLoad(Actor actor, TargetArgs target)
+        internal virtual void AfterLoad()
         {
-            this.Animation.Entity = actor;
+            this.Animation.Entity = this.Actor;
         }
 
         public void DrawProgressBar(Func<Vector3> position, Func<float> progress, Func<string> label)
@@ -284,6 +264,6 @@ namespace Start_a_Town_
             this.BarProgress = progress;
             this.BarLabel = label;
         }
-        public bool HasFinished { get { return this.State == States.Finished; } }
+        public bool HasFinished => this.State == States.Finished;
     }
 }

@@ -17,9 +17,11 @@ namespace Start_a_Town_.Components
             this.DrawProgressBar(() => this.Actor.Global, () => this.Progress, () => this.Name);
         }
         float Progress => this.StrikeCount / (float)this.MaxStrikes;
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
-            base.Start(a, t);
+            base.Start();
+            var a = this.Actor;
+            var t = this.Target; 
             var plant = t.Object as Plant;
             this.MaxStrikes = plant.PlantComponent.PlantProperties.CutDownDifficulty;
             var particleColor = plant.PrimaryMaterial.Color; //MaterialDefOf.LightWood.Color
@@ -42,8 +44,10 @@ namespace Start_a_Town_.Components
             this.ParticleRects = ItemContent.LogsGrayscale.AtlasToken.Rectangle.Divide(25);
         }
 
-        public override void OnUpdate(Actor a, TargetArgs t)
+        public override void OnUpdate()
         {
+            var a = this.Actor;
+            var t = this.Target;
             if (a.Net is Net.Client)
             {
                 this.EmitterStrike.Emit(ItemContent.LogsGrayscale.AtlasToken.Atlas.Texture, this.ParticleRects, Vector3.Zero);
@@ -54,12 +58,14 @@ namespace Start_a_Town_.Components
             {
                 return;
             }
-            this.Done(a, t);
-            this.Finish(a, t);
+            this.Done();
+            this.Finish();
         }
-        public void Done(GameObject a, TargetArgs t)
+        public void Done()
         {
-            CutDownPlant(a as Actor, t.Object as Plant);
+            var a = this.Actor;
+            var t = this.Target;
+            CutDownPlant(a, t.Object as Plant);
         }
         public override object Clone()
         {

@@ -16,8 +16,9 @@ namespace Start_a_Town_
             this.Type = type;
         }
         
-        internal override void InitAction(Actor a, TargetArgs t)
+        internal override void InitAction()
         {
+            var a = this.Actor;
             var slot = a.Gear.GetSlot(this.Type);
             if (slot.Object == null)
                 return;

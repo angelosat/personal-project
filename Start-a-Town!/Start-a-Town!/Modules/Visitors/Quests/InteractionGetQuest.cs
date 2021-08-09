@@ -15,9 +15,9 @@ namespace Start_a_Town_
             this.QuestID = questID;
         }
 
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
-            var actor = a as Actor;
+            var actor = this.Actor;
             if (this.QuestID == -1)
                 throw new Exception();
 

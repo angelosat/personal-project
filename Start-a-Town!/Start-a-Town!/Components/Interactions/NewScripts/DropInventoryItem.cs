@@ -11,9 +11,9 @@
 
         }
        
-        public override void Perform(Actor actor, TargetArgs target)
+        public override void Perform()
         {
-            actor.Inventory.Drop(target.Object);
+            this.Actor.Inventory.Drop(this.Target.Object);
         }
 
         public override object Clone()

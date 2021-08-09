@@ -20,8 +20,9 @@ namespace Start_a_Town_.Components.Interactions
             this.TargetEquipment = targetArgs;
         }
         
-        internal override void InitAction(Actor a, TargetArgs t)
+        internal override void InitAction()
         {
+            var a = this.Actor;
             var slot = a.GetComponent<GearComponent>().Equipment.Slots.First(s => s.Object == this.TargetEquipment.Object);
             if (slot == null)
                 throw new Exception();

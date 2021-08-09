@@ -18,9 +18,11 @@ namespace Start_a_Town_
             this.All = all;
         }
 
-        internal override void InitAction(Actor actor, TargetArgs target)
+        internal override void InitAction()
         {
-            base.InitAction(actor, target);
+            var actor = this.Actor;
+            var target = this.Target;
+            base.InitAction();
             
             var slot = actor.Inventory.GetHauling();
             var obj = slot.Object;

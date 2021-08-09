@@ -8,8 +8,10 @@
             this.Verb = "Harvesting";
         }
         
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target;
             if (t.Object is not Plant plant)
                 throw new System.Exception();
             plant.PlantComponent.Harvest(t.Object, a);

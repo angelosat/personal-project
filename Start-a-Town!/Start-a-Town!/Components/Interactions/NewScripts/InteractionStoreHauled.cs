@@ -12,8 +12,10 @@ namespace Start_a_Town_
         {
         }
         
-        public override void Perform(Actor actor, TargetArgs target)
+        public override void Perform()
         {
+            var actor = this.Actor;
+            var target = this.Target;
             var cachedObject = target.Object;
             actor.StoreCarried();
             actor.Log.Write(string.Format("Stored {0} in inventory", cachedObject));

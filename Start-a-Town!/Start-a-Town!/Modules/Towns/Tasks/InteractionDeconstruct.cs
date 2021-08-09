@@ -25,9 +25,11 @@ namespace Start_a_Town_
         ParticleEmitterSphere EmitterBreak;
         List<Rectangle> ParticleTextures;
 
-        public override void Start(Actor a, TargetArgs t)
+        public override void Start()
         {
-            base.Start(a, t);
+            base.Start();
+            var a = this.Actor;
+            var t = this.Target; 
             this.Animation.Speed = SpeedFormula(a);
             // cache variables
             this.Block = a.Map.GetBlock(t.Global);
@@ -66,9 +68,9 @@ namespace Start_a_Town_
 
             this.ParticleTextures = this.Block.GetParticleRects(25);
         }
-        public override void OnUpdate(Actor a, TargetArgs t)
+        public override void OnUpdate()
         {
-            var actor = a as Actor;
+            var actor = this.Actor;
 
             this.EmitStrike(actor);
             var workAmount = actor.GetToolWorkAmount(ToolAbilityDef.Building.ID);
@@ -78,12 +80,14 @@ namespace Start_a_Town_
             this.Animation.Speed = SpeedFormula(actor);
             if (this.Progress.Percentage == 1)
             {
-                this.Done(actor, t);
-                this.Finish(actor, t);
+                this.Done();
+                this.Finish();
             }
         }
-        public void Done(Actor a, TargetArgs t)
+        public void Done()
         {
+            var a = this.Actor;
+            var t = this.Target;
             this.Block.Deconstruct(a, t.Global);
             this.EmitBreak(a);
         }
@@ -99,8 +103,9 @@ namespace Start_a_Town_
         }
 
         BarSmooth BarSmooth;
-        public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
+        public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera)
         {
+            var parent = this.Actor;
             Vector3 global = parent.Global;
             Vector2 barLoc = camera.GetScreenPositionFloat(global);
             if (this.BarSmooth == null)

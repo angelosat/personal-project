@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
-using Start_a_Town_.Crafting;
 
 namespace Start_a_Town_
 {
@@ -40,12 +38,11 @@ namespace Start_a_Town_
             this.IngredientsUsed = ingredientsUsed;
         }
 
-        public override void Start(Actor a, TargetArgs t)
+      
+        public override void Perform()
         {
-            base.Start(a, t);
-        }
-        public override void Perform(Actor a, TargetArgs t)
-        {
+            var a = this.Actor;
+            var t = this.Target;
             if (this.Progress.Value < this.Progress.Max)
                 return;
 
@@ -59,9 +56,9 @@ namespace Start_a_Town_
                 if (task != null)
                     task.Product = new TargetArgs(product);
             }
-            this.Finish(a, t);
+            this.Finish();
         }
-        internal override void OnToolContact(Actor a, TargetArgs t)
+        internal override void OnToolContact()
         {
             this.Progress.Value += 25;
         }
@@ -125,9 +122,9 @@ namespace Start_a_Town_
             this.IngredientsUsed.ReadNew(r, r => r.ReadString(), r => new ObjectRefIDsAmount().Read(r) as ObjectRefIDsAmount);
         }
 
-        public override void OnUpdate(Actor a, TargetArgs t)
+        public override void OnUpdate()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }

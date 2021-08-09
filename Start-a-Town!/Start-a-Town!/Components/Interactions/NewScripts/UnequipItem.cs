@@ -4,8 +4,10 @@
     {
         public UnequipItem() : base("Unequipping", 0) { }
 
-        public override void Perform(Actor a, TargetArgs t)
+        public override void Perform()
         {
+            var a = this.Actor;
+            var t = this.Target;
             a.Inventory.Unequip(t.Object);
         }
 

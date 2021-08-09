@@ -36,12 +36,10 @@ namespace Start_a_Town_.Crafting
             this.DrawProgressBar(() => this.Target.Global.Above(), () => this.Progress.Percentage, () => this.Order.Name);
         }
 
-        public override void Start(Actor a, TargetArgs t)
+        public override void Perform()
         {
-            base.Start(a, t);
-        }
-        public override void Perform(Actor a, TargetArgs t)
-        {
+            var a = this.Actor;
+            var t = this.Target;
             if (this.Progress.Value >= this.Progress.Max)
             {
                 var product = ProduceWithMaterialsOnTopNew(a, t.Global, this.Order);
@@ -52,11 +50,13 @@ namespace Start_a_Town_.Crafting
                     if (task != null)
                         task.Product = new TargetArgs(product);
                 }
-                this.Finish(a, t);
+                this.Finish();
             }
         }
-        internal override void OnToolContact(Actor a, TargetArgs t)
+        internal override void OnToolContact()
         {
+            var a = this.Actor;
+            var t = this.Target;
             var work = StatDefOf.ToolEffectiveness.GetValue(a);
             this.Progress.Value += work * BaseWorkAmount;// 25;
         }
@@ -127,14 +127,9 @@ namespace Start_a_Town_.Crafting
             this.Order = this.Actor.Map.GetBlockEntity(this.Target.Global).GetComp<BlockEntityCompWorkstation>().GetOrder(this.OrderID);
         }
 
-        public override void OnUpdate(Actor a, TargetArgs t)
+        public override void OnUpdate()
         {
             throw new NotImplementedException();
-        }
-       
-        public override void DrawUI(SpriteBatch sb, Camera camera, GameObject parent, TargetArgs target)
-        {
-            Bar.Draw(sb, camera, target.Global.Above(), this.Order.Name, this.Progress.Percentage, camera.Zoom * .2f);
         }
     }
 }

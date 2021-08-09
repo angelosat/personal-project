@@ -12,8 +12,10 @@ namespace Start_a_Town_
             this.RunningType = RunningTypes.Continuous;
             this.Animation = null;
         }
-        internal override void InitAction(Actor a, TargetArgs t)
+        internal override void InitAction()
         {
+            var a = this.Actor;
+            var t = this.Target;
             a.GetNeed(NeedDef.Energy).AddMod(NeedLetDefOf.Sleeping, 0, 1);
             a.GetNeed(NeedDef.Comfort).AddMod(NeedLetDefOf.Sleeping, -20, 0);
 
@@ -21,8 +23,10 @@ namespace Start_a_Town_
             body.RestingFrame = new Keyframe(0, Vector2.Zero, (float)(Math.PI / 2f));
             body.OriginGroundOffset = Vector2.Zero;
         }
-        internal override void FinishAction(Actor a, TargetArgs t)
+        internal override void FinishAction()
         {
+            var a = this.Actor;
+            var t = this.Target; 
             a.GetNeed(NeedDef.Energy).RemoveMod(NeedLetDefOf.Sleeping);
             a.GetNeed(NeedDef.Comfort).RemoveMod(NeedLetDefOf.Sleeping);
             var body = a.Body;

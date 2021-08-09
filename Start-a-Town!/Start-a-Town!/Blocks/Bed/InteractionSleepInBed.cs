@@ -14,8 +14,10 @@ namespace Start_a_Town_.Blocks.Bed
             this.RunningType = RunningTypes.Continuous;
             this.Animation = null;
         }
-        internal override void InitAction(Actor a, TargetArgs t)
+        internal override void InitAction()
         {
+            var a = this.Actor;
+            var t = this.Target; 
             this.PreviousStandingPosition = a.Global;
             var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
             a.SetPosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(a.Map, bedPos)));
@@ -40,8 +42,10 @@ namespace Start_a_Town_.Blocks.Bed
                     throw new Exception();
             }
         }
-        internal override void FinishAction(Actor a, TargetArgs t)
+        internal override void FinishAction()
         {
+            var a = this.Actor;
+            var t = this.Target;
             a.GetNeed(NeedDef.Energy).RemoveMod(NeedLetDefOf.Sleeping);
             a.GetNeed(NeedDef.Comfort).RemoveMod(NeedLetDefOf.Sleeping);
 

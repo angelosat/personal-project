@@ -368,7 +368,7 @@ namespace Start_a_Town_
             foreach (var comp in this.TownComponents)
                 actions.AddRange(comp.OnQuickMenuCreated());
             actions.Add(new Tuple<Func<string>, Action>(()=>"Debug commands", UIDebugCommands.Refresh));
-            actions.Add(new Tuple<Func<string>, Action>(()=>"Spawn objects", () => UI.Editor.ObjectsWindowDefs.Instance.Show()));
+            actions.Add(new Tuple<Func<string>, Action>(()=>"Spawn objects", () => UI.Editor.ObjectTemplatesWindow.Instance.Show()));
             actions.Add(new Tuple<Func<string>, Action>(() => "Edit blocks", () => UI.Editor.TerrainWindow.Instance.Show()));
 
             this.QuickMenu = new UIQuickMenu();

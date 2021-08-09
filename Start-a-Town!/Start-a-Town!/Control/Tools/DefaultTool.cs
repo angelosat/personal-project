@@ -378,7 +378,7 @@ namespace Start_a_Town_.PlayerControl
         {
             var cam = map.Camera;
             base.DrawAfterWorld(sb, map);
-            var haul = PersonalInventoryComponent.GetHauling(this.Actor).Object;
+            var haul = this.Actor.Inventory.HaulSlot.Object;// PersonalInventoryComponent.GetHauling(this.Actor).Object;
             if (haul != null)
             {
                 if (this.Target == null)

@@ -37,7 +37,7 @@ namespace Start_a_Town_
 
         private static void ToggleConstructionWindow()
         {
-            WindowBuild.Value.Toggle();
+            WindowBuild.Value.ToggleSmart();
         }
 
         public ConstructionsManager(Town town)
@@ -118,14 +118,20 @@ namespace Start_a_Town_
         bool TryAddPendingDesignation(IntVec3 global)
         {
             var map = this.Map;
+            var block = map.GetBlock(global);
             if (this.PendingDesignations.TryGetValue(global, out var pending))
             {
-                if (map.GetBlock(global) is BlockAir)
+                if (block is BlockAir)
                 {
                     this.PlaceDesignation(global, 0, 0, pending.Orientation, pending.Product);
                     this.PendingDesignations.Remove(global);
                     return true;
                 }
+            }
+            else if (this.Designations.Contains(global))
+            {
+                if (block is not BlockDesignation)
+                    this.Designations.Remove(global);
             }
             return false;
         }

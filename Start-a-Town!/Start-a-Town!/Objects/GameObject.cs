@@ -1143,12 +1143,10 @@ namespace Start_a_Town_
 
             return true;
         }
-
-       
         
         internal GameObject ClearCarried()
         {
-            var carried = PersonalInventoryComponent.GetHauling(this);
+            var carried = this.Inventory.HaulSlot;// PersonalInventoryComponent.GetHauling(this);
             var obj = carried.Object;
             carried.Clear();
             return obj;

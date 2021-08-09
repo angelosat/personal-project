@@ -33,7 +33,7 @@ namespace Start_a_Town_
         
         public override void Perform(Actor actor, TargetArgs target)
         {
-            var hauled = PersonalInventoryComponent.GetHauling(actor);
+            var hauled = actor.Inventory.HaulSlot;// PersonalInventoryComponent.GetHauling(actor);
             var hauledObj = hauled.Object;
             if(hauledObj == null)
             {

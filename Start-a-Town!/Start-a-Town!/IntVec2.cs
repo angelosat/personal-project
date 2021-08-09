@@ -91,5 +91,10 @@ namespace Start_a_Town_
             yield return this + new IntVec2(0, 1);
             yield return this - new IntVec2(0, 1);
         }
+
+        public override string ToString()
+        {
+            return $"{{X:{this.X} Y:{this.Y}}}";
+        }
     }
 }

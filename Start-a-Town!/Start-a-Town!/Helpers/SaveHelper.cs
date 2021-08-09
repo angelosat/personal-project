@@ -411,7 +411,7 @@ namespace Start_a_Town_
         {
             list.Clear();
             foreach (var pos in positions)
-                list.Add((IntVec3)pos.Value);
+                list.Add((Vector3)pos.Value);
             return list;
         }
         public static List<Vector3> Load(this List<Vector3> list, List<SaveTag> positions)

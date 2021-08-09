@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
 using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
@@ -31,7 +29,7 @@ namespace Start_a_Town_
         
         public override void Perform(Actor actor, TargetArgs target)
         {
-            var hauled = PersonalInventoryComponent.GetHauling(actor);
+            var hauled = actor.Inventory.HaulSlot;// PersonalInventoryComponent.GetHauling(actor);
             var hauledObj = hauled.Object;
             if (this.Amount > hauledObj.StackSize)
                 throw new Exception();

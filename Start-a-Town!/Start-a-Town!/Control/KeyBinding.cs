@@ -69,7 +69,7 @@ namespace Start_a_Town_
         static Interaction GetRB(GameObject parent, TargetArgs a)
         {
             // first try get interaction from hauled item, (then from mainhand item?), then from target
-            var hauled = PersonalInventoryComponent.GetHauling(parent);
+            var hauled = parent.Inventory.HaulSlot;// PersonalInventoryComponent.GetHauling(parent);
             if (hauled.Object != null)
             {
                 var hauledAction = hauled.Object.GetHauledActions(a).FirstOrDefault();

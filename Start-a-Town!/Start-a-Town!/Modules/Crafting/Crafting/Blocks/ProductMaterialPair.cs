@@ -48,6 +48,7 @@ namespace Start_a_Town_.Components.Crafting
             save.Save(this.Block, "Product");
             this.Data.Save(save, "Data");
             this.Requirement.Save(save, "Requirement");
+            tag.Add(save);
         }
         public void Write(BinaryWriter w)
         {

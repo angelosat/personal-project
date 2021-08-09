@@ -120,7 +120,8 @@ namespace Start_a_Town_
 
         internal void Carry(Entity item)
         {
-            PersonalInventoryComponent.GetHauling(this).Object = item;
+            this.Inventory.Haul(item);
+            //PersonalInventoryComponent.GetHauling(this).Object = item;
         }
 
         /// <summary>

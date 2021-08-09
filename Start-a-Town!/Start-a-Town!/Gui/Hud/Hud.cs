@@ -15,7 +15,7 @@ namespace Start_a_Town_
         {
             HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Open chat", delegate { Ingame.Instance.Hud.Chat.StartOrFinishTyping(); }, System.Windows.Forms.Keys.Enter);
             HotkeyManager.RegisterHotkey(ToolManager.HotkeyContextDebug, "Open console", delegate { ServerConsole.Instance.Toggle(); }, System.Windows.Forms.Keys.Oemtilde);
-            HotkeyManager.RegisterHotkey(ToolManager.HotkeyContextDebug, "Spawn objects", delegate { UI.Editor.ObjectsWindowDefs.Instance.Toggle(); }, System.Windows.Forms.Keys.O);
+            HotkeyManager.RegisterHotkey(ToolManager.HotkeyContextDebug, "Spawn objects", delegate { UI.Editor.ObjectTemplatesWindow.Instance.ToggleSmart(); }, System.Windows.Forms.Keys.O);
         }
         public new void Initialize()
         {

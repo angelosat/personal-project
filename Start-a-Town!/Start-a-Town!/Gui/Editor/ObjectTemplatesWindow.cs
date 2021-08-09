@@ -1,11 +1,11 @@
 ﻿namespace Start_a_Town_.UI.Editor
 {
-    class ObjectsWindowDefs : Window
+    class ObjectTemplatesWindow : Window
     {
-        static ObjectsWindowDefs _Instance;
-        public static ObjectsWindowDefs Instance => _Instance ??= new ObjectsWindowDefs();
+        static ObjectTemplatesWindow _Instance;
+        public static ObjectTemplatesWindow Instance => _Instance ??= new ObjectTemplatesWindow();
 
-        ObjectsWindowDefs()
+        ObjectTemplatesWindow()
         {
             Title = "Objects";
             AutoSize = true;

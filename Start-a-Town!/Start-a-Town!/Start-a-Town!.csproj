@@ -588,7 +588,7 @@
     <Compile Include="Gui\DragDrop\DragEventArgs.cs" />
     <Compile Include="Gui\DrawMode.cs" />
     <Compile Include="Gui\Editor\BlockBrowserEditor.cs" />
-    <Compile Include="Gui\Editor\ObjectsWindowDefs.cs" />
+    <Compile Include="Gui\Editor\ObjectTemplatesWindow.cs" />
     <Compile Include="Gui\Primitives\GroupBox.cs" />
     <Compile Include="Gui\Hud\QuickButtonBar.cs" />
     <Compile Include="GameEvents\EventBlocksChanged.cs" />

@@ -21,6 +21,10 @@ namespace Start_a_Town_
         public BlockSoil()
             : base("Soil")
         {
+            //this.LootTable = new LootTable(
+            //            new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), 1f, 1, RawMaterialDef.Bags.StackCapacity)
+            //            );
+            this.BreakProduct = RawMaterialDef.Bags;
             this.RequiresConstruction = false;
             this.LoadVariations("soil/soil1", "soil/soil2", "soil/soil3", "soil/soil4");
             this.Ingredient = 
@@ -52,10 +56,5 @@ namespace Start_a_Town_
                 return;
             }
         }
-      
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.Soil;
-        //}
     }
 }

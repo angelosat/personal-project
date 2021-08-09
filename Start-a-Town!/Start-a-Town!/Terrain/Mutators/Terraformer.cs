@@ -33,8 +33,8 @@ namespace Start_a_Town_
         public static readonly Terraformer Empty = new Empty();
         public static readonly Terraformer PerlinWorms = new PerlinWormGenerator();
 
-        static public Dictionary<Types, Terraformer> Dictionary { get { return _Dictionary; } }
-        static readonly Dictionary<Types, Terraformer> _Dictionary = new Dictionary<Types, Terraformer>()
+        static public Dictionary<Types, Terraformer> Dictionary => _dictionary; 
+        static readonly Dictionary<Types, Terraformer> _dictionary = new()
         {
             {Types.Land, Land},
             {Types.Sea, Sea},

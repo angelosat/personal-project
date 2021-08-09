@@ -5,10 +5,6 @@ namespace Start_a_Town_.Blocks
 {
     partial class BlockCampfire : BlockWithEntity
     {
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.LightWood;
-        //}
         public BlockCampfire()
             : base("Campfire", opaque: false, solid: false)
         {
@@ -22,7 +18,7 @@ namespace Start_a_Town_.Blocks
         {
             var table =
                 new LootTable(
-                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Logs, MaterialDefOf.Human))// this.GetMaterial(data)))
+                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Logs, MaterialDefOf.Human)) // TODO
                     );
             return table;
         }

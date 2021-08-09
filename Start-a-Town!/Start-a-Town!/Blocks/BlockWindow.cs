@@ -32,12 +32,11 @@ namespace Start_a_Town_.Blocks
                         new AtlasDepthNormals.Node.Token[]{
                             Atlas.Load("blocks/windows/windowframetop2", BlockDepthMap, NormalMap),
                             Atlas.Load("blocks/windows/glasstop2", BlockDepthMap, NormalMap)}}
-
-            
             };
 
             this.Variations.Add(this.PartsSeparate.First().First().First());
             this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
+            this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
 
 

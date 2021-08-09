@@ -411,10 +411,20 @@ namespace Start_a_Town_
         {
             return this.LootTable;
         }
-        public virtual void Break(MapBase map, IntVec3 global)
+        public ItemDef BreakProduct;
+        void BreakNew(MapBase map, IntVec3 global)
         {
             var net = map.Net;
-            net.PopLoot(this.GetLootTable(net.Map.GetBlockData(global)), global, Vector3.Zero);
+            var item = this.BreakProduct;
+            if(item is not null)
+                net.PopLoot(ItemFactory.CreateFrom(item, map.GetCell(global).Material).SetStackSize(item.StackCapacity), global, Vector3.Zero);
+            map.RemoveBlock(global);
+        }
+        public virtual void Break(MapBase map, IntVec3 global)
+        {
+            //var net = map.Net;
+            //net.PopLoot(this.GetLootTable(net.Map.GetBlockData(global)), global, Vector3.Zero);
+            this.BreakNew(map, global);
             map.RemoveBlock(global);
         }
         public virtual void Break(GameObject actor, IntVec3 global)
@@ -642,7 +652,7 @@ namespace Start_a_Town_
 
         public virtual IEnumerable<MaterialDef> GetEditorVariations()
         {
-            return this.Ingredient.GetAllValidMaterials();//.Select(m => (byte)m.ID);
+            return this.Ingredient?.GetAllValidMaterials() ?? Enumerable.Empty<MaterialDef>();//.Select(m => (byte)m.ID);
         }
         internal IEnumerable<ItemMaterialAmount> GetAllValidConstructionMaterialsNew()
         {

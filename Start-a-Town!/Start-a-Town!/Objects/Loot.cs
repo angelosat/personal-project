@@ -15,7 +15,9 @@ namespace Start_a_Town_
             obj.StackSize = stacksize;
             return obj;
         }
-       
+        public Loot(Func<GameObject> factory, float chance, int count, int amount) : this(factory, chance, count, amount, amount)
+        {
+        }
         public Loot(ItemDef def, float chance = 1, int count= 1, int amountmin= 1, int amountmax = 1) : this(() => def.Factory(def), chance, count, amountmin, amountmax)
         {
         }
@@ -27,13 +29,16 @@ namespace Start_a_Town_
             this.StackMin = stackmin;
             this.StackMax = stackmax;
         }
-        public Loot(Func<GameObject> factory, float chance = 1, int count = 1)
+        public Loot(Func<GameObject> factory, float chance, int count)
         {
             this.Factory = factory;
             Chance = chance;
             Count = count;
         }
-        
+        public Loot(Func<GameObject> factory)
+            : this(factory, 1, 1)
+        {
+        }
         public int Generate(RandomThreaded random)
         {
             int count = 0;

@@ -8,7 +8,7 @@ namespace Start_a_Town_
     sealed class BlockWorkstation : BlockWithEntity, IBlockWorkstation
     {
         readonly AtlasDepthNormals.Node.Token[] Orientations = Block.TexturesCounter;
-        Type BlockEntityType;
+        readonly Type BlockEntityType;
         public BlockWorkstation(string name, Type blockEntityType)
             : base(name, opaque: false, solid: true)
         {
@@ -17,7 +17,6 @@ namespace Start_a_Town_
             this.ToggleConstructionCategory(ConstructionsManager.Production, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.Ingredient.MaterialVolume = 1 / 4f;
-
         }
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {
@@ -27,15 +26,5 @@ namespace Start_a_Town_
         {
             return Activator.CreateInstance(this.BlockEntityType, originGlobal) as BlockEntity;
         }
-
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDef.Registry[blockdata];
-        //}
-       
-        //public override Vector4 GetColorVector(byte data)
-        //{
-        //    return this.GetColorFromMaterial(data);
-        //}
     }
 }

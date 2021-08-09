@@ -26,9 +26,10 @@ namespace Start_a_Town_
         public BlockGrass()
             : base("Grass", 0, 1, true, true)
         {
-            this.LootTable = new LootTable(
-                        new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), chance: 1f, count: 1)
-                        );
+            //this.LootTable = new LootTable(
+            //            new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), 1f, 1, RawMaterialDef.Bags.StackCapacity)
+            //            );
+            this.BreakProduct = RawMaterialDef.Bags;
 
             this.LoadVariations("grass/grass1", "grass/grass2", "grass/grass3", "grass/grass4");
 
@@ -90,11 +91,7 @@ namespace Start_a_Town_
                 return 0;
             return base.GetFertility(cell);
         }
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.Soil;
-        //}
-
+       
         public override MyVertex[] Draw(Chunk chunk, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             return base.Draw(chunk, blockcoords, camera, screenBounds, sunlight, blocklight, fog, tint, depth, variation, orientation, data, mat);

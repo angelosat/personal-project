@@ -62,6 +62,11 @@ namespace Start_a_Town_
         internal Actor Actor;
         internal TargetArgs Target;
 
+        private bool _drawProgressBar;
+        public Func<Vector3> BarPosition;
+        public Func<float> BarProgress;
+        private Func<string> BarLabel;
+
         // TODO: i need a method that returns satisfaction score based on ai entity's state
         static readonly Dictionary<Need.Types, float> _NeedSatisfaction = new();
         public virtual Dictionary<Need.Types, float> NeedSatisfaction 
@@ -171,6 +176,11 @@ namespace Start_a_Town_
         }
         public virtual void DrawUI(SpriteBatch sb, Camera camera, GameObject parent)
         {
+            if(this._drawProgressBar)
+            {
+                Bar.Draw(sb, camera, this.BarPosition(), this.BarLabel(), this.BarProgress(), camera.Zoom * .2f);
+                return;
+            }
             if (this.RunningType == RunningTypes.Continuous)
                 return;
             if (this.Length <= Engine.TicksPerSecond)
@@ -265,6 +275,14 @@ namespace Start_a_Town_
         internal virtual void AfterLoad(Actor actor, TargetArgs target)
         {
             this.Animation.Entity = actor;
+        }
+
+        public void DrawProgressBar(Func<Vector3> position, Func<float> progress, Func<string> label)
+        {
+            this._drawProgressBar = true;
+            this.BarPosition = position;
+            this.BarProgress = progress;
+            this.BarLabel = label;
         }
         public bool HasFinished { get { return this.State == States.Finished; } }
     }

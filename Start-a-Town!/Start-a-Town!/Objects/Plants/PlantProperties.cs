@@ -33,6 +33,7 @@ namespace Start_a_Town_
         public int GrowTicks;
         public int YieldThreshold;
         public int MaxYieldCutDown;
+        public int CutDownDifficulty = 1;
 
         [XmlIgnore]
         public ItemDef ProductCutDown;
@@ -57,21 +58,23 @@ namespace Start_a_Town_
 
         }
 
-        static public readonly PlantProperties Berry = new PlantProperties("Berry")
+        static public readonly PlantProperties Berry = new("Berry")
         {
             TextureGrowing = ItemContent.BerryBushGrowing.AssetPath,
             TextureGrown = ItemContent.BerryBushGrown.AssetPath,
             Shrub = new ShrubProperties(),
-            Growth = new GrowthProperties(ItemDefOf.Fruit, MaterialDefOf.Berry, 5, 6)
+            Growth = new GrowthProperties(ItemDefOf.Fruit, MaterialDefOf.Berry, 5, 6),
+            CutDownDifficulty = 3
         };
 
-        static public readonly PlantProperties LightTree = new PlantProperties("LightTree")
+        static public readonly PlantProperties LightTree = new("LightTree")
         {
             TextureGrowing = ItemContent.TreeFull.AssetPath,
             TextureGrown = ItemContent.TreeFull.AssetPath,
             Tree = new TreeProperties(MaterialDefOf.LightWood, 5),
             ProductCutDown = RawMaterialDef.Logs,
             MaxYieldCutDown = 5,
+            CutDownDifficulty = 10,
             GrowTicks = 6 * Engine.TicksPerSecond,
         };
 

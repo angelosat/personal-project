@@ -21,7 +21,7 @@ namespace Start_a_Town_
             //if (!trees.Any())
             //  return TaskHelper.TryStoreEquipped(actor, GearType.Mainhand); 
 
-            var task = new AITask(typeof(TaskBehaviorChoppingNew));
+            var task = new AITask(typeof(TaskBehaviorChopping));
             FindTool(actor, task, ToolAbilityDef.Chopping);
             task.TargetA = new TargetArgs(trees.First());
             return task;

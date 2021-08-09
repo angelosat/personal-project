@@ -367,7 +367,10 @@ namespace Start_a_Town_
             else if (this.Type == 10)
                 (Value as Dictionary<string, SaveTag>).Add(tag.Name, tag);
         }
-
+        public int LoadInt(string name)
+        {
+            return (int)this[name].Value;
+        }
         public IntVec3 LoadIntVec3(string name)
         {
             var tag = this[name];

@@ -3,6 +3,7 @@ using Start_a_Town_.UI;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -124,7 +125,6 @@ namespace Start_a_Town_
         {
             this.SaveFieldsToConfig();
             UIConnecting.Create(address);
-
             Engine.PlayGame();
             Task.Factory.StartNew(() =>
                 Net.Client.Instance.Connect(address, new PlayerData(this.Txt_Name.Text), ar =>

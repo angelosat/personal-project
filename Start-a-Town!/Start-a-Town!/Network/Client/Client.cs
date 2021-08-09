@@ -112,7 +112,6 @@ namespace Start_a_Town_.Net
             ScreenManager.Add(MainScreen.Instance);
             this.EventOccured(Message.Types.ServerNoResponse);
             this.ClientClock = new TimeSpan();
-
         }
 
         public void Connect(string address, string playername, AsyncCallback callBack)
@@ -142,7 +141,6 @@ namespace Start_a_Town_.Net
                 this.Host.Close();
             this.Host = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             this.Host.ReceiveBufferSize = this.Host.SendBufferSize = Packet.Size;
-
             if (!IPAddress.TryParse(address, out IPAddress ipAddress))
             {
                 try
@@ -150,12 +148,54 @@ namespace Start_a_Town_.Net
                     var fromdns = Dns.GetHostEntry(address);
                     ipAddress = fromdns.AddressList[0];
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     "error resolving hostname".ToConsole();
                     return;
                 }
             }
+            this.RemoteIP = new IPEndPoint(ipAddress, 5541);
+            var state = new UdpConnection("Server", this.Host) { Buffer = new byte[Packet.Size] };
+            this.Host.Bind(new IPEndPoint(IPAddress.Any, 0));
+
+            byte[] data = Packet.Create(this.PacketID, PacketType.RequestConnection, Network.Serialize(w =>
+            {
+                w.Write(playerData.Name);
+            })).ToArray();
+
+            this.Host.SendTo(data, this.RemoteIP);
+            this.Host.BeginReceive(state.Buffer, 0, state.Buffer.Length, SocketFlags.None, a =>
+            {
+                // connection established
+                // enter main receive loop
+                callBack(a);
+                this.ReceiveMessage(a);
+            }, state);
+        }
+
+        public void Connect(IPAddress ipAddress, PlayerData playerData, AsyncCallback callBack)
+        {
+            this.SyncedPackets = new Queue<Packet>();
+            this.Timeout = this.TimeoutLength;
+            this.LastReceivedTime = int.MinValue;
+            this.IsRunning = true;
+            this.ChunkCallBackEvents = new ConcurrentDictionary<Vector2, ConcurrentQueue<Action<Chunk>>>();
+            this.RecentPackets = new Queue<long>();
+            this.RemoteSequence = 0;
+            this.RemoteOrderedReliableSequence = 0;
+            this.PlayerData = playerData;
+            this._packetID = 1;
+            Instance.OutgoingStream = new BinaryWriter(new MemoryStream());
+            this.IncomingOrderedReliable.Clear();
+            this.IncomingOrdered.Clear();
+            this.IncomingSynced.Clear();
+            this.IncomingAll = new ConcurrentQueue<Packet>();
+            this.ClientClock = new TimeSpan();
+            this.Players = new PlayerList(this);
+            if (this.Host != null)
+                this.Host.Close();
+            this.Host = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            this.Host.ReceiveBufferSize = this.Host.SendBufferSize = Packet.Size;
 
             this.RemoteIP = new IPEndPoint(ipAddress, 5541);
             var state = new UdpConnection("Server", this.Host) { Buffer = new byte[Packet.Size] };

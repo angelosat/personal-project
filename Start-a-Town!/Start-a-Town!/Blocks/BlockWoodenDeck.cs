@@ -53,13 +53,6 @@ namespace Start_a_Town_
             return Def.GetDefs<MaterialDef>().Where(mat => mat.Type == MaterialType.Wood);
         }
        
-        public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
-        {
-            var list = new List<Interaction>();
-            list.Add(new InteractionChopping());
-            return list;
-        }
-
         public override void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
             var sourceRect = this.GrayScale.Rectangle;

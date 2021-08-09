@@ -394,7 +394,7 @@
     <Compile Include="Modules\Crafting\Crafting\New\Ingredient.cs" />
     <Compile Include="Modules\Crafting\Crafting\ReagentFilters\ReagentFilterItem.cs" />
     <Compile Include="Modules\Crafting\Crafting\ReagentFilters\ReagentFilterMaterial.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionCraftNew.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionCrafting.cs" />
     <Compile Include="Blocks\Workstations\BlockKitchenEntity.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorDomain.cs" />
     <Compile Include="AI\Behaviors\NodeTypes\BehaviorSelector.cs" />
@@ -779,7 +779,7 @@
     <Compile Include="Modules\Towns\Farming\Sowing\TaskGiverPlanting.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskBehaviorTilling.cs" />
     <Compile Include="Modules\Towns\Farming\Tilling\TaskGiverTilling.cs" />
-    <Compile Include="Modules\Towns\Forestry\AI\TaskBehaviorChoppingNew.cs" />
+    <Compile Include="Modules\Towns\Forestry\AI\TaskBehaviorChopping.cs" />
     <Compile Include="Modules\Towns\Forestry\AI\TaskGiverForaging.cs" />
     <Compile Include="Modules\Towns\Forestry\AI\TaskGiverChopping.cs" />
     <Compile Include="Modules\Towns\Forestry\ChoppingManager.cs" />

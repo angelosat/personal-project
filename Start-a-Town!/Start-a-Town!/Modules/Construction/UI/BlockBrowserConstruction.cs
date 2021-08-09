@@ -94,10 +94,17 @@ namespace Start_a_Town_
 
         private ProductMaterialPair GetLastSelectedVariantOrDefault(Block block)
         {
-            if (this.LastSelectedVariant.ContainsKey(block))
-                return this.LastSelectedVariant[block];
-            else
-                return new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First()); // store last selected variant instead of getting first in list
+            //if (this.LastSelectedVariant.ContainsKey(block))
+            //    return this.LastSelectedVariant[block];
+            //else
+            //    return new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First()); // store last selected variant instead of getting first in list
+
+            if(!this.LastSelectedVariant.TryGetValue(block, out var lastVariant))
+            {
+                lastVariant = new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First());
+                this.LastSelectedVariant[block] = lastVariant;
+            }
+            return lastVariant;
         }
         private void OnVariationSelected(ProductMaterialPair product)
         {

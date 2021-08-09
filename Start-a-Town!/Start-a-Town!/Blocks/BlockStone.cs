@@ -8,7 +8,9 @@
             : base("Cobblestone", 0, 1, true, true)
         {
             this.LoadVariations("stone5height19");
-            this.Ingredient = new Ingredient(RawMaterialDef.Boulders, MaterialDefOf.Stone, null, 1);
+            this.Ingredient = new Ingredient()//RawMaterialDef.Boulders, MaterialDefOf.Stone, null, 1);
+                .SetAllow(RawMaterialDef.Boulders, true)
+                .SetAllow(MaterialDefOf.Stone, true);
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
         public override Particles.ParticleEmitterSphere GetEmitter()

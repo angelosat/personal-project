@@ -253,13 +253,16 @@ namespace Start_a_Town_.Components
         public bool PickUp(GameObject obj, int amount)
         {
             var parent = this.Parent;
-            if(parent.Net is Client && amount < obj.StackSize)
+
+            /// added this here as a workaround because when hauling partial stacks, the packet to synchaul the new instantiated item arrived before the interaction is performed
+            /// which results in the interaction being performed while the actor already is carrying the new item, and the pickup amount being further added to the new item
+            if (parent.Net is Client && amount < obj.StackSize)
             {
-                /// added this here as a workaround because when hauling partial stacks, the packet to synchaul the new instantiated item arrived before the interaction is performed
-                /// which results in the interaction being performed while the actor already is carrying the new item, and the pickup amount being further added to the new item
+                
                 obj.StackSize -= amount;
                 return true;
             }
+
             if (this.HaulSlot.Object is GameObject currentHauled)
             {
                 if (currentHauled.CanAbsorb(obj))

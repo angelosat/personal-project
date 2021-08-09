@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Graphics;
 
@@ -17,6 +16,8 @@ namespace Start_a_Town_
             this.Variations.Add(this.Orientations.First());
             this.ToggleConstructionCategory(ConstructionsManager.Production, true);
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
+            this.Ingredient.MaterialVolume = 1 / 4f;
+
         }
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {

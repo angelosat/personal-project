@@ -15,7 +15,8 @@ namespace Start_a_Town_.Blocks
             : base("Sand")
         {
             this.LoadVariations("sand1");
-            this.Ingredient = new Ingredient(RawMaterialDef.Bags, MaterialDefOf.Sand, null, 1);
+            this.Ingredient = new Ingredient()//RawMaterialDef.Bags, MaterialDefOf.Sand, null, 1);
+                .SetAllow(MaterialDefOf.Sand, true);
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
         public override IEnumerable<MaterialDef> GetEditorVariations()

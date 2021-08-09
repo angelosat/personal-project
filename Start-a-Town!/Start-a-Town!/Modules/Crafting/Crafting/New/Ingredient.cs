@@ -10,6 +10,11 @@ namespace Start_a_Town_
         public MaterialDef Material;
         public MaterialType MaterialType;
         public int Amount = 1;
+        /// <summary>
+        /// The max value of 1 means that the amount of material required should be enough to completely fill the volume of a block.
+        /// Used for calculation of actualy ingredient amounts depending on item dimensions.
+        /// </summary>
+        public float MaterialVolume = 1;
         public string Name;
         readonly List<Modifier> Modifiers = new();
         readonly HashSet<ItemCategory> SpecifiedCategories = new();
@@ -31,12 +36,19 @@ namespace Start_a_Town_
         {
 
         }
-        public Ingredient(ItemDef item = null, MaterialDef material = null, MaterialType materialType = null, int amount = 1)
+        public Ingredient(ItemDef item = null, MaterialDef material = null, MaterialType materialType = null, int amount = 1, float materialVolume = 1)
         {
             ItemDef = item;
             Material = material;
             MaterialType = materialType;
             Amount = amount;
+            this.MaterialVolume = materialVolume;
+            if (item is not null)
+                this.SetAllow(item, true);
+            if (material is not null)
+                this.SetAllow(material, true);
+            if (materialType is not null)
+                this.SetAllow(materialType, true);
         }
 
         public IEnumerable<MaterialDef> GetAllValidMaterials()
@@ -44,6 +56,23 @@ namespace Start_a_Town_
             this.TryResolve();
             foreach (var i in ResolvedMaterials)
                 yield return i;
+        }
+        public IEnumerable<ItemMaterialAmount> GetItemMaterialAmounts()
+        {
+            this.TryResolve();
+            foreach(var item in this.ResolvedItemDefs)
+            {
+                foreach(var mat in this.ResolvedMaterials)
+                {
+                    if (mat.Type == item.DefaultMaterialType)
+                        yield return new ItemMaterialAmount(item, mat, this.GetFinalIngredientAmount(item));
+                }
+            }
+        }
+
+        private int GetFinalIngredientAmount(ItemDef item)
+        {
+            return (int)(this.MaterialVolume * item.StackCapacity);
         }
 
         [Obsolete]

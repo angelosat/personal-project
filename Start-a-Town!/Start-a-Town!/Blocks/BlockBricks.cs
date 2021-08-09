@@ -12,7 +12,10 @@ namespace Start_a_Town_
             this.LoadVariations("bricks/bricks");
             this.BuildProperties.WorkAmount = 20;
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
-            this.Ingredient = new Ingredient(RawMaterialDef.Boulders, null, null, 1);
+            this.Ingredient =// new Ingredient(RawMaterialDef.Boulders, null, null, 1);
+                new Ingredient()
+                    .SetAllow(MaterialType.Metal, true)
+                    .SetAllow(MaterialType.Stone, true);
         }
         public override IEnumerable<MaterialDef> GetEditorVariations()
         {

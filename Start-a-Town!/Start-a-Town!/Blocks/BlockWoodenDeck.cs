@@ -8,6 +8,16 @@ namespace Start_a_Town_
 {
     class BlockWoodenDeck : Block
     {
+        public BlockWoodenDeck()
+         : base("WoodenDeck", 0, 1, true, true)
+        {
+            this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
+            this.Variations.Add(this.GrayScale);
+            this.Ingredient = new Ingredient(RawMaterialDef.Planks, null, null, 1);// 4);
+            this.BuildProperties.WorkAmount = 2;
+            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+        }
+
         public override Particles.ParticleEmitterSphere GetEmitter()
         {
             return base.GetDustEmitter();
@@ -28,15 +38,7 @@ namespace Start_a_Town_
 
         readonly AtlasDepthNormals.Node.Token GrayScale;
 
-        public BlockWoodenDeck()
-            : base("WoodenDeck", 0, 1, true, true)
-        {
-            this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
-            this.Variations.Add(this.GrayScale);
-            this.Ingredient = new Ingredient(RawMaterialDef.Planks, null, null, 1);// 4);
-            this.BuildProperties.WorkAmount = 2;
-            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
-        }
+     
 
         public override LootTable GetLootTable(byte data)
         {

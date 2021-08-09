@@ -15,7 +15,7 @@ namespace Start_a_Town_
         {
             BaseValue = 5,
             Description = "Processed logs",
-            StackCapacity = 20,
+            StackCapacity = 24,
             Weight = .1f,
             Category = ItemCategory.Manufactured,
             Body = new Bone(BoneDef.Item, ItemContent.PlanksGrayscale) { DrawMaterialColor = true },
@@ -31,7 +31,7 @@ namespace Start_a_Town_
         {
             BaseValue = 1,
             Description = "It came from a tree",
-            StackCapacity = 10,
+            StackCapacity = 6,
             Body = new Bone(BoneDef.Item, ItemContent.LogsGrayscale) { DrawMaterialColor = true },
             Category = ItemCategory.RawMaterials,
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks, Reaction.Product.Types.Workbenches },

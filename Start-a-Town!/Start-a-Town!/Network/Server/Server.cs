@@ -617,21 +617,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.PlayerInput:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        TargetArgs target = TargetArgs.Read(Instance, r);
-                        var input = new PlayerInput(r);
-                        var interaction = PlayerInput.GetDefaultInput(msg.Player.ControllingEntity, target, input);
-                        if (interaction == null)
-                            return;
-                        msg.Player.ControllingEntity.Work.Perform(interaction, target);
-                        if (interaction.Evaluate())
-                            Instance.Enqueue(PacketType.PlayerInput, msg.Payload, SendType.OrderedReliable, msg.Player.ControllingEntity.Global, true);
-                    });
-                    return;
-
                 case PacketType.Ack:
                     Network.Deserialize(msg.Payload, r =>
                     {

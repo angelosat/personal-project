@@ -129,7 +129,6 @@ namespace Start_a_Town_
         internal virtual void KeyDown(InputState input) { }
         internal virtual void PickUp() { }
         internal virtual void Drop() { }
-        internal virtual void Activate() { }
         internal virtual void ManageEquipment() { }
 
         public virtual void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e) { }

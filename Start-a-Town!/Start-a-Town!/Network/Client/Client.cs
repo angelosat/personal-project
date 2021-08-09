@@ -509,19 +509,6 @@ namespace Start_a_Town_.Net
                     Instance.PlayerDisconnected(plid);
                     break;
 
-                case PacketType.PlayerInput:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        int netid = r.ReadInt32();
-                        var target = TargetArgs.Read(Instance, r);
-                        if (Instance.GetNetworkObject(netid) is not Actor obj)
-                            return;
-                        var input = new PlayerInput(r);
-                        var interaction = Start_a_Town_.PlayerInput.GetDefaultInput(obj, target, input);
-                        obj.Work.Perform(interaction, target);
-                    });
-                    return;
-
                 case PacketType.PlayerRemoteCall:
                     msg.Payload.Deserialize(r =>
                     {
@@ -1049,16 +1036,7 @@ namespace Start_a_Town_.Net
         {
             throw new NotImplementedException();
         }
-        [Obsolete]
-        internal static void PlayerInput(TargetArgs targetArgs, PlayerInput input)
-        {
-            Network.Serialize(w =>
-            {
-                w.Write(Instance.GetPlayer().ControllingEntity.RefID);
-                targetArgs.Write(w);
-                input.Write(w);
-            }).Send(Instance.PacketID, PacketType.PlayerInput, Instance.Host, Instance.RemoteIP);
-        }
+       
         [Obsolete]
         internal static void PlayerCommand(string command)
         {

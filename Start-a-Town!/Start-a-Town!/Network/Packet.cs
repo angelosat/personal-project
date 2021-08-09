@@ -24,7 +24,6 @@ namespace Start_a_Town_.Net
         SpawnChildObject,
         PlayerServerCommand,
         PlayerRemoteCall,
-        PlayerInput,
         EntityInventoryChange,
         PlayerInventoryOperationNew,
         MergedPackets,

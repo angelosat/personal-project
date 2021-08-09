@@ -186,12 +186,6 @@ namespace Start_a_Town_
                 e.Handled = true;
                 this.Right = true;
             }
-
-            if (this.KeyControls.TryGetValue(e.KeyCode, out KeyControl key))
-            {
-                key.Down();
-                e.Handled = true;
-            }
         }
         private static void ToggleForbidden()
         {

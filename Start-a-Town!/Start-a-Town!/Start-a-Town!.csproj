@@ -739,7 +739,6 @@
     <Compile Include="Components\Interactions\WorkComponent.cs" />
     <Compile Include="Control\BlockPainter.cs" />
     <Compile Include="Control\KeyBinding.cs" />
-    <Compile Include="Control\KeyControl.cs" />
     <Compile Include="GameModes\GameMode.cs" />
     <Compile Include="Terrain\MapBase.cs" />
     <Compile Include="Terrain\IWorld.cs" />

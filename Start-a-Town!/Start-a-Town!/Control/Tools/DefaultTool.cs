@@ -9,8 +9,6 @@ namespace Start_a_Town_.PlayerControl
 {
     public class DefaultTool : ControlTool
     {
-        protected Dictionary<System.Windows.Forms.Keys, KeyControl> KeyControls;
-
         bool MoveToggle = false;
         bool RButtonDown = false;
 
@@ -19,15 +17,6 @@ namespace Start_a_Town_.PlayerControl
 
         public DefaultTool()
         {
-            this.KeyControls = new Dictionary<System.Windows.Forms.Keys, KeyControl>
-            {
-                { GlobalVars.KeyBindings.PickUp, new KeyControl(() => Client.PlayerInput(this.Target, PlayerInput.PickUp), () => Client.PlayerInput(this.Target, PlayerInput.PickUpHold)) },
-                { GlobalVars.KeyBindings.Drop, new KeyControl(() => Client.PlayerInput(this.Target, PlayerInput.Drop), () => Client.PlayerInput(this.Target, PlayerInput.DropHold)) },
-                { GlobalVars.KeyBindings.Activate, new KeyControl(this.Activate, () => Client.PlayerInput(this.Target, PlayerInput.ActivateHold)) },
-                { GlobalVars.KeyBindings.Throw, new KeyControl(() => this.ThrowNew(), () => this.ThrowNew(true)) },
-                { System.Windows.Forms.Keys.X, new KeyControl(() => Client.PlayerInput(this.Target, PlayerInput.Seathe)) },
-                { System.Windows.Forms.Keys.Tab, new KeyControl(SwitchTool) }
-            };
         }
 
         protected virtual void SwitchTool()
@@ -67,22 +56,7 @@ namespace Start_a_Town_.PlayerControl
             var dir3d = GetDirection3(this.Actor);
             Client.PlayerThrow(dir3d, all);
         }
-        internal override void Activate()
-        {
-            base.Activate();
-            if (this.Target == null)
-                return;
-            var action = this.Target.GetContextActivate(this.Actor);
-            if (action != null)
-                if (action.Action != null)
-                {
-                    action.Action();
-                    return;
-                }
-            if (!InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey))
-                this.Target.Precise = Vector3.Zero;
-            Client.PlayerInput(this.Target, PlayerInput.Activate);
-        }
+       
         public override void Update()
         {
             base.Update();
@@ -90,9 +64,6 @@ namespace Start_a_Town_.PlayerControl
                 MoveMouse();
             else
                 MoveKeys();
-
-            foreach (var key in this.KeyControls.Values)
-                key.Update();
         }
 
         public virtual void MoveKeys()
@@ -179,9 +150,6 @@ namespace Start_a_Town_.PlayerControl
                 Client.PlayerToggleWalk(true);
             if (e.KeyCode == GlobalVars.KeyBindings.Sprint)
                 Client.PlayerToggleSprint(true);
-            
-            if (this.KeyControls.TryGetValue(e.KeyCode, out KeyControl key))
-                key.Down();
         }
         public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
@@ -229,8 +197,6 @@ namespace Start_a_Town_.PlayerControl
             }
 
             base.HandleKeyUp(e);
-            if (this.KeyControls.TryGetValue(e.KeyCode, out KeyControl key))
-                key.Up();
         }
 
         private void StartBlock()
@@ -366,7 +332,6 @@ namespace Start_a_Town_.PlayerControl
                 }
             if (!InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey))
                 this.Target.Precise = Vector3.Zero;
-            Client.PlayerInput(this.Target, PlayerInput.RButton);
         }
 
         internal override void GetContextActions(ContextArgs args)

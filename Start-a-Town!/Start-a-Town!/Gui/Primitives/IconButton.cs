@@ -98,6 +98,11 @@ namespace Start_a_Town_.UI
         {
             this.Icon = icon;
         }
+        public IconButton(Icon icon, Action action) : this()
+        {
+            this.Icon = icon;
+            this.LeftClickAction = action;
+        }
         public IconButton(Texture2D backgroundText) : this() { BackgroundTexture = backgroundText; }
         public IconButton() : this(Vector2.Zero)
         {

@@ -867,7 +867,7 @@
     <Compile Include="Gui\Lists\SearchBar.cs" />
     <Compile Include="Gui\NamePlates\NameplateManager.cs" />
     <Compile Include="Gui\NamePlates\NameplatesContainer.cs" />
-    <Compile Include="Gui\Online\MultiplayerWindowNew.cs" />
+    <Compile Include="Gui\Online\MultiplayerWindow.cs" />
     <Compile Include="Gui\Primitives\Panels\Panel.cs" />
     <Compile Include="Gui\Primitives\Panels\PanelLabeledNew.cs" />
     <Compile Include="Gui\Primitives\Panels\PanelTabs.cs" />

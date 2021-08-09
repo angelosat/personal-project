@@ -92,6 +92,7 @@ namespace Start_a_Town_.UI
                     break;
             }
         }
+
         public Label(int width) : base()
         {
             this.Text = "";

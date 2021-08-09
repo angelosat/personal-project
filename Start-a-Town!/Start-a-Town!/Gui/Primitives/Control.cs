@@ -63,7 +63,7 @@ namespace Start_a_Town_.UI
         }
         internal Control AnchorToParentCenter()
         {
-            this.LocationFunc = () => new Vector2(this.Parent.Width - this.Width , this.Parent.Height - this.Height) / 2 - this.Parent.ClientLocation;
+            this.LocationFunc = () => new Vector2(this.Parent.Width - this.Width, this.Parent.Height - this.Height) / 2 - this.Parent.ClientLocation;
             return this;
         }
         internal Control SetAnchor(Vector2 anchor)
@@ -85,7 +85,7 @@ namespace Start_a_Town_.UI
             this.Location = new(0, (UIManager.Height - this.Height) / 2);
             return this;
         }
-        
+
 
         public virtual void ConformToScreen()
         {
@@ -146,10 +146,10 @@ namespace Start_a_Town_.UI
             }
         }
 
-        public override Vector2 Dimensions 
-        { 
-            get => base.Dimensions; 
-            set => base.Dimensions = value; 
+        public override Vector2 Dimensions
+        {
+            get => base.Dimensions;
+            set => base.Dimensions = value;
         }
         float _opacity = 1;
         public virtual float Opacity
@@ -161,7 +161,7 @@ namespace Start_a_Town_.UI
         public bool Focused => Controller.Instance.Mouseover.Object == this;  //return WindowManager.ActiveControl == this; } }
         ControlCollection _controls;
         public ControlCollection Controls => this._controls ??= new ControlCollection(this);
-        
+
         public virtual void AlignTopToBottom(int spacing = 0)
         {
             var oldsize = this.ClientSize;
@@ -352,8 +352,8 @@ namespace Start_a_Town_.UI
         public virtual void PreparingPaint() { }
         public virtual void OnPaint(SpriteBatch sb) { }
         public virtual void OnAfterPaint(SpriteBatch sb) { }
-        protected virtual RenderTarget2D CreateTexture(GraphicsDevice gd) 
-        { 
+        protected virtual RenderTarget2D CreateTexture(GraphicsDevice gd)
+        {
             return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.Width, this.Height);
             //return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.Width, this.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
         }
@@ -402,7 +402,7 @@ namespace Start_a_Town_.UI
         }
 
         internal bool isPressed = false, Active = true;
-       
+
         [Obsolete]
         public event EventHandler<HandledMouseEventArgs> MouseScroll, MouseLeftPress;
 
@@ -618,10 +618,14 @@ namespace Start_a_Town_.UI
                 this.ClientSize = new Rectangle(0, 0, value.Width, value.Height);
             }
         }
-
+        public bool HasMouseHover => this.lastHitTest;
+        bool lastHitTest;
         public virtual bool HitTest(Rectangle viewport)
         {
-            return (!this.IsMouseThrough) && Rectangle.Intersect(viewport, this.BoundsScreen).Intersects(new Rectangle((int)(Controller.Instance.msCurrent.X / UIManager.Scale), (int)(Controller.Instance.msCurrent.Y / UIManager.Scale), 1, 1));
+            var scissor = Rectangle.Intersect(viewport, this.BoundsScreen);
+            var mouseRect = new Rectangle((int)(Controller.Instance.msCurrent.X / UIManager.Scale), (int)(Controller.Instance.msCurrent.Y / UIManager.Scale), 1, 1);
+            this.lastHitTest = scissor.Intersects(mouseRect);
+            return (!this.IsMouseThrough) && this.lastHitTest;
         }
 
         public virtual bool HitTest()
@@ -726,7 +730,7 @@ namespace Start_a_Town_.UI
 
             this.ClientSize = union;
         }
-       
+
         public virtual bool AutoSize { get; set; }
 
         internal virtual void OnControlAdded(Control control)
@@ -800,6 +804,9 @@ namespace Start_a_Town_.UI
         }
         public virtual void Draw(SpriteBatch sb, Rectangle viewport)
         {
+            if (this.DrawOnParentFocus)
+                if(!this.Parent?.HasMouseHover ?? false)
+                    return;
             this.OnBeforeDraw(sb, viewport);
             var c = this.Tint;
             if (this.Texture != null)
@@ -1244,12 +1251,12 @@ namespace Start_a_Town_.UI
 
             return false;
         }
-      
+
         public virtual bool Remove()
         {
             this.Dispose();
             this.Hide();
-            
+
             return false;
         }
 
@@ -1300,7 +1307,7 @@ namespace Start_a_Town_.UI
         }
         internal Control AnchorToBottomRight()
         {
-            this.LocationFunc = ()=>this.Parent.BottomRightLocal;
+            this.LocationFunc = () => this.Parent.BottomRightLocal;
             this.Anchor = Vector2.One;
             return this;
         }
@@ -1359,5 +1366,11 @@ namespace Start_a_Town_.UI
             this.OnGameEventAction = onGameEventAction;
             return this;
         }
-}
+        bool DrawOnParentFocus;
+        internal Control ShowOnParentFocus(bool enabled)
+        {
+            this.DrawOnParentFocus = enabled;
+            return this;
+        }
+    }
 }

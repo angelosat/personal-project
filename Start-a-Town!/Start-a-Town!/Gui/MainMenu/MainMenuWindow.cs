@@ -31,7 +31,7 @@ namespace Start_a_Town_.UI
             if (GameMode.Registry.Count == 1)
             {
                 GameMode.Current = GameMode.Registry.First();
-                MultiplayerWindowNew.Instance.Show();
+                MultiplayerWindow.Instance.Show();
             }
         }
 

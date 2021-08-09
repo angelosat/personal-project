@@ -6,12 +6,12 @@ using System.Linq;
 namespace Start_a_Town_.UI
 {
     public class ListBoxObservable<TObject> : GroupBox, IListSearchable<TObject>
-      where TObject : class, IListable
+      where TObject : /*class, */IListable
     {
         const int Spacing = 1;
         static readonly Func<TObject, bool> DefaultFilter = i => true;
         Func<TObject, bool> CurrentFilter = DefaultFilter;
-        public TObject SelectedItem => this.SelectedControl == null ? default : this.SelectedControl.Tag as TObject;
+        public TObject SelectedItem => this.SelectedControl == null ? default : (TObject)this.SelectedControl.Tag;
         Control SelectedControl;
         public Action<TObject> ItemChangedFunc = (item) => { };
         public ObservableCollection<TObject> List;
@@ -27,7 +27,7 @@ namespace Start_a_Town_.UI
 
         public void SelectItem(TObject obj)
         {
-            this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag == obj);
+            this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj));// i.Tag == obj);
         }
         
         ListBoxObservable<TObject> Clear()
@@ -103,9 +103,9 @@ namespace Start_a_Town_.UI
         {
             if (item is null)
                 return;
-            this.Items.Remove(this.Items.First(c => c.Tag == item));
+            this.Items.Remove(this.Items.First(c => c.Tag.Equals(item)));//
             var listControls = this.Controls;
-            var removedItemIndex = listControls.FindIndex(c => c.Tag == item);
+            var removedItemIndex = listControls.FindIndex(c => c.Tag.Equals(item));//
             var prevY = listControls[removedItemIndex].Location.Y;
             for (int i = removedItemIndex + 1; i < listControls.Count; i++)
             {
@@ -120,7 +120,7 @@ namespace Start_a_Town_.UI
         {
             this.CurrentFilter = filter ?? DefaultFilter;
             this.Controls.Clear();
-            var validControls = this.Items.Where(c => this.CurrentFilter(c.Tag as TObject)).ToArray();
+            var validControls = this.Items.Where(c => this.CurrentFilter((TObject)c.Tag)).ToArray();
             this.AddControlsVertically(Spacing, validControls);
         }
 
@@ -140,17 +140,18 @@ namespace Start_a_Town_.UI
 
     public class ListBoxObservable<TObject, TControl> : GroupBox, IListSearchable<TObject>
         where TControl : Control, new()
-        where TObject : class
+        //where TObject : class
     {
         const int Spacing = 1;
         static readonly Func<TObject, bool> DefaultFilter = i => true;
         Func<TObject, bool> CurrentFilter = DefaultFilter;
-        public TObject SelectedItem => this.SelectedControl == null ? default : this.SelectedControl.Tag as TObject;
+        public TObject SelectedItem => this.SelectedControl == null ? default : (TObject)this.SelectedControl.Tag;
         TControl SelectedControl;
 
         public void SelectItem(TObject obj)
         {
-            this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag == obj) as TControl;
+            this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj)) as TControl;
+            //this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag == obj) as TControl;
         }
 
         /// <summary>
@@ -165,6 +166,11 @@ namespace Start_a_Town_.UI
         {
             this.Controls.Clear();
             return this;
+        }
+        public ListBoxObservable(ObservableCollection<TObject> collection, Func<TObject, TControl> controlFactory)
+            : this(controlFactory)
+        {
+            this.Bind(collection);
         }
         public ListBoxObservable(Func<TObject, TControl> controlFactory)
         {
@@ -222,9 +228,9 @@ namespace Start_a_Town_.UI
         {
             if (item is null)
                 return;
-            this.Items.Remove(this.Items.First(c => c.Tag == item));
+            this.Items.Remove(this.Items.First(c => c.Tag.Equals(item)));
             var listControls = this.Controls;
-            var removedItemIndex = listControls.FindIndex(c => c.Tag == item);
+            var removedItemIndex = listControls.FindIndex(c => c.Tag.Equals(item));
             var prevY = listControls[removedItemIndex].Location.Y;
             for (int i = removedItemIndex + 1; i < listControls.Count; i++)
             {
@@ -239,7 +245,7 @@ namespace Start_a_Town_.UI
         {
             this.CurrentFilter = filter ?? DefaultFilter;
             this.Controls.Clear();
-            var validControls = this.Items.Where(c => this.CurrentFilter(c.Tag as TObject)).ToArray();
+            var validControls = this.Items.Where(c => this.CurrentFilter((TObject)c.Tag)).ToArray();
             this.AddControlsVertically(Spacing, validControls);
         }
 

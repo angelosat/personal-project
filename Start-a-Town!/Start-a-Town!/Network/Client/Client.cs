@@ -145,8 +145,16 @@ namespace Start_a_Town_.Net
 
             if (!IPAddress.TryParse(address, out IPAddress ipAddress))
             {
-                var fromdns = Dns.GetHostEntry(address);
-                ipAddress = fromdns.AddressList[0];
+                try
+                {
+                    var fromdns = Dns.GetHostEntry(address);
+                    ipAddress = fromdns.AddressList[0];
+                }
+                catch(Exception)
+                {
+                    "error resolving hostname".ToConsole();
+                    return;
+                }
             }
 
             this.RemoteIP = new IPEndPoint(ipAddress, 5541);

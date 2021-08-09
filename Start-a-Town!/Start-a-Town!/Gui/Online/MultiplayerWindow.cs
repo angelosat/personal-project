@@ -3,6 +3,7 @@ using Start_a_Town_.UI;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Start_a_Town_
@@ -35,13 +36,8 @@ namespace Start_a_Town_
             int btnWidth = 200;
             this.AutoSize = true;
             string hover() => !this.CheckName() ? "Invalid name" : "";
-            var joinButton = new Button("Join game", btnWidth)
+            var joinButton = new Button("Join game", connect, btnWidth)
             {
-                LeftClickAction = () =>
-                {
-                    if (this.CheckName())
-                        this.ConnectTo(this.TxtBox_HostName.Text);
-                },
                 HoverFunc = hover
             };
 
@@ -71,18 +67,25 @@ namespace Start_a_Town_
                 .AddColumn("name", guiHistory.Client.Width - Icon.Cross.Width, a => new Label(a, () => this.TxtBox_HostName.Text = a))
                 .AddColumn("delete", Icon.Cross.Width, a => IconButton.CreateSmall(Icon.Cross, () => removeFromHistory(a)).ShowOnParentFocus(true))
                 .Bind(this.History);
-            void removeFromHistory(string a)
-            {
-                this.History.Remove(a);
-                this.XHistory.Elements().First(x => x.Value == a).Remove();
-                Engine.SaveConfig();
-            }
+            
             guiHistory.AddControls(historyList);
 
             this.Client.AddControlsVertically(this.PanelTextBoxes,
                 guiHistory.ToPanelLabeled("Server History"),
                 this.PanelButtons
                 );
+
+            void removeFromHistory(string a)
+            {
+                this.History.Remove(a);
+                this.XHistory.Elements().First(x => x.Value == a).Remove();
+                Engine.SaveConfig();
+            }
+            void connect()
+            {
+                if (this.CheckName())
+                    this.ConnectTo(this.TxtBox_HostName.Text);
+            }
         }
 
         private void LoadServerHistory()
@@ -122,13 +125,12 @@ namespace Start_a_Town_
             this.SaveFieldsToConfig();
             UIConnecting.Create(address);
 
-
             Engine.PlayGame();
-            Net.Client.Instance.Connect(address, new PlayerData(this.Txt_Name.Text), ar =>
-            {
-            });
-
-            LobbyWindow.Instance.Console.Write("Connected to " + address);
+            Task.Factory.StartNew(() =>
+                Net.Client.Instance.Connect(address, new PlayerData(this.Txt_Name.Text), ar =>
+                {
+                    LobbyWindow.Instance.Console.Write("Connected to " + address);
+                }));
         }
         private void SaveFieldsToConfig()
         {
@@ -138,13 +140,15 @@ namespace Start_a_Town_
             this.XRoot.GetOrCreateElement("PlayerName").Value = name;
             this.XRoot.GetOrCreateElement("HostAddress").Value = host;
 
-            this.History.Insert(0, host);// new(host));
-            if (this.History.Count > HistoryMax)
-                this.History.RemoveAt(this.History.Count - 1);
-            this.XHistory.AddFirst(new XElement("Address", host));
-            if (this.XHistory.Descendants() is var children && children.Count() > HistoryMax)
-                children.Last().Remove();
-
+            if (!this.History.Contains(host))
+            {
+                this.History.Insert(0, host);// new(host));
+                if (this.History.Count > HistoryMax)
+                    this.History.RemoveAt(this.History.Count - 1);
+                this.XHistory.AddFirst(new XElement("Address", host));
+                if (this.XHistory.Descendants() is var children && children.Count() > HistoryMax)
+                    children.Last().Remove();
+            }
             Engine.SaveConfig();
         }
     }

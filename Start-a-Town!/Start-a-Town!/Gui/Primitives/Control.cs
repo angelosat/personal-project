@@ -74,9 +74,6 @@ namespace Start_a_Town_.UI
 
         public Control AnchorToScreenCenter()
         {
-            //this.Location = Vector2.Zero;
-            //this.LocationFunc = () => UIManager.Center;
-            //this.Anchor = new(.5f);
             this.LocationFunc = () => new Vector2(UIManager.Width - this.Width, UIManager.Height - this.Height) / 2;
             return this;
         }
@@ -1353,7 +1350,6 @@ namespace Start_a_Town_.UI
         public virtual bool ShowDialog()
         {
             this.Layer = UIManager.LayerDialog;
-            //this.MoveToScreenCenter();
             this.AnchorToScreenCenter();
             return this.Show();
         }

@@ -18,20 +18,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var guiname = TextBox.CreateWithLabel("Name", StaticWorld.GetRandomName(), 150, out _, out var txtboxname);
             txtboxname.InputFilter = char.IsLetterOrDigit;
 
-            //var seedBox = TextBox.CreateWithLabel("Seed", Path.GetRandomFileName().Replace(".", ""), 150, out var lbl_seed, out var txt_Seed);
-            //txt_Seed.InputFilter = char.IsLetterOrDigit;
-            //var btn_randomSeed = new IconButton()
-            //{
-            //    HoverText = "Randomize",
-            //    BackgroundTexture = UIManager.Icon16Background,
-            //    Name = "Randomize seed",
-            //    Location = txt_Seed.TopRight,
-            //    Icon = new Icon(UIManager.Icons16x16, 1, 16),
-            //    LeftClickAction = () => txt_Seed.Text = Path.GetRandomFileName().Replace(".", "")
-            //};
-            //seedBox.AddControls(
-            //    btn_randomSeed);
-
             var btn_randomName = new IconButton()
             {
                 HoverText = "Randomize",
@@ -47,8 +33,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
 
             tab_World.AddControlsVertically(1,
                 guiname,
-                //seedBox,
-                comboSize);//.ToPanelLabeled("Map Size"));
+                comboSize);
 
             var btn_create = new Button("Create", openActorCreationGui);
             var btn_cancel = new Button("Cancel", cancelAction);
@@ -69,7 +54,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     actorsui,
                     UIHelper.Wrap(btnstart, btnback)
                     );
-                var createActorsWindow = new Window(actorsCreateBox) { Closable = false, Movable = false };//, Previous = this.GetWindow() };
+                var createActorsWindow = new Window(actorsCreateBox) { Closable = false, Movable = false };
                 createActorsWindow.LocationFunc = () => UIManager.Center;
                 createActorsWindow.Anchor = Vector2.One * .5f;
                 createActorsWindow.Show();

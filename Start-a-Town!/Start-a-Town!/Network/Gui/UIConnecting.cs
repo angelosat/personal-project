@@ -19,7 +19,8 @@ namespace Start_a_Town_
             this.Address = address;
             this.AutoSize = false;
             this.Size = new Rectangle(0, 0, 300, 100);
-            this.LabelText = new Label(string.Format("Awaiting response from {0}", address)) { Location = this.ClientDimensions / 2, Anchor = Vector2.One / 2, TextHAlign = HorizontalAlignment.Center };
+            this.LabelText = new Label($"Awaiting response from {address}") { AutoSize = true };
+            this.LabelText.AnchorToParentCenter();
             this.AddControls(this.LabelText);
             this.BtnBack = new Button("Back") { Location = new Vector2(this.ClientDimensions.X / 2, this.ClientDimensions.Y), Anchor = new Vector2(.5f, 1), LeftClickAction = () => this.Hide() };
             this.AnchorToScreenCenter();
@@ -37,7 +38,7 @@ namespace Start_a_Town_
                     break;
 
                 case Components.Message.Types.ServerNoResponse:
-                    this.SetText(string.Format("No response from {0}", this.Address));
+                    this.SetText($"No response from {this.Address}");
                     this.AddControls(this.BtnBack);
                     break;
 
@@ -49,7 +50,7 @@ namespace Start_a_Town_
         private void SetText(string text)
         {
             this.LabelText.Text = text;
-            this.LabelText.AnchorTo(this.ClientDimensions / 2, Vector2.One / 2);
+            //this.LabelText.AnchorTo(this.ClientDimensions / 2, Vector2.One / 2);
         }
     }
 }

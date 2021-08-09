@@ -554,8 +554,6 @@
     <Compile Include="Objects\Plants\GrowthProperties.cs" />
     <Compile Include="Objects\Plants\PlantProperties.cs" />
     <Compile Include="Objects\Plants\PlantDefOf.cs" />
-    <Compile Include="Objects\Plants\ShrubProperties.cs" />
-    <Compile Include="Objects\Plants\TreeProperties.cs" />
     <Compile Include="Objects\Properties\ConsumableProperties.cs" />
     <Compile Include="Objects\Properties\RecipeProperties.cs" />
     <Compile Include="Objects\Properties\FoodClass.cs" />

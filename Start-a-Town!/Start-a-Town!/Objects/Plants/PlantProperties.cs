@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -36,18 +36,14 @@ namespace Start_a_Town_
         public int CutDownDifficulty = 1;
 
         [XmlIgnore]
+        public MaterialDef StemMaterial;
+        [XmlIgnore]
+        public ItemDef PlantEntity;
+        [XmlIgnore]
         public ItemDef ProductCutDown;
-
-        [XmlIgnore]
-        public TreeProperties Tree;
-
-        [XmlIgnore]
-        public ShrubProperties Shrub;
-
+     
         public GrowthProperties Growth;
 
-        public bool IsTree => this.Tree is not null;
-        public bool IsShrub => this.Shrub is not null;
         public bool ProducesFruit => this.Growth?.GrowthItemDef == ItemDefOf.Fruit;
         public PlantProperties()
         {
@@ -62,57 +58,46 @@ namespace Start_a_Town_
         {
             TextureGrowing = ItemContent.BerryBushGrowing.AssetPath,
             TextureGrown = ItemContent.BerryBushGrown.AssetPath,
-            Shrub = new ShrubProperties(),
+            StemMaterial = MaterialDefOf.ShrubStem,
             Growth = new GrowthProperties(ItemDefOf.Fruit, MaterialDefOf.Berry, 5, 6),
-            CutDownDifficulty = 3
+            CutDownDifficulty = 3,
+            PlantEntity = PlantDefOf.Bush
         };
 
         static public readonly PlantProperties LightTree = new("LightTree")
         {
             TextureGrowing = ItemContent.TreeFull.AssetPath,
             TextureGrown = ItemContent.TreeFull.AssetPath,
-            Tree = new TreeProperties(MaterialDefOf.LightWood, 5),
+            StemMaterial = MaterialDefOf.LightWood,
             ProductCutDown = RawMaterialDef.Logs,
             MaxYieldCutDown = 5,
             CutDownDifficulty = 10,
             GrowTicks = 6 * Engine.TicksPerSecond,
+            PlantEntity = PlantDefOf.Tree
         };
 
-        public ItemDef PlantEntity
-        {
-            get
-            {
-                if (this.IsTree)
-                    return PlantDefOf.Tree;
-                else if (this.IsShrub)
-                    return PlantDefOf.Bush;
-                else 
-                    throw new Exception();
-            }
-        }
         public Plant CreatePlant()
         {
             var entity = this.PlantEntity.Create() as Plant;
             entity.PlantComponent.PlantProperties = this;
-            if (this.IsTree)
-                entity.SetMaterial(this.Tree.Material);
+            if (this.PlantEntity == PlantDefOf.Tree)
+                entity.SetMaterial(this.StemMaterial);
             return entity;
         }
-        
+
         static public void Init()
         {
-            var ser = new XmlSerializer(typeof(PlantProperties));
+            var ser = new XmlSerializer(typeof(List<PlantProperties>));
+
             var path = $"{GlobalVars.SaveDir}/{Berry.Name}.xml";
-            //var lightTreeXml = new XmlDocument();
-            //lightTreeXml.Load(path);
-            //var lightTree = FromXml<PlantProperties>(lightTreeXml.FirstChild);
 
             Register(Berry);
             Register(LightTree);
 
-            
+
             System.IO.FileStream file = System.IO.File.Create(path);
-            ser.Serialize(file, Berry);
+            var list = new List<PlantProperties>(GetDefs<PlantProperties>());
+            ser.Serialize(file, list);
             file.Close();
         }
 

@@ -130,7 +130,7 @@ namespace Start_a_Town_
             }
             else if (this.Designations.Contains(global))
             {
-                if (block is not BlockDesignation)
+                if (block is not BlockDesignation && block is not BlockConstruction)
                     this.Designations.Remove(global);
             }
             return false;

@@ -50,6 +50,7 @@ namespace Start_a_Town_.Blocks
                     var pcell = map.GetCell(p);
                     map.SetBlock(p, BlockDefOf.Construction, product.Material, pcell.BlockData, pcell.Variation, pcell.Orientation, false);
                 }
+                map.NotifyBlocksChanged(positions);
             }
             else if(isReady)
             {

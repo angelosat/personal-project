@@ -377,9 +377,9 @@ namespace Start_a_Town_.UI
             {
                 case Message.Types.BlocksChanged:
                     var map = e.Parameters[0] as MapBase;
-                    var globals = e.Parameters[1] as IntVec3[];
-                    var targets = globals.Select(g => new TargetArgs(map, g));
-                    if (targets.Any(t => IsSelected(t)))
+                    var globals = e.Parameters[1] as IEnumerable<IntVec3>;// IntVec3[];
+                    //var targets = globals.Select(g => new TargetArgs(map, g));
+                    if (globals.Any(t => IsSelected(t)))
                         ClearTargets();
                     break;
 
@@ -438,6 +438,12 @@ namespace Start_a_Town_.UI
         public static bool IsSelected(TargetArgs tar)
         {
             return Instance.MultipleSelected.Any(t => t.IsEqual(tar)) || Instance.SelectedSource.IsEqual(tar);
+        }
+        public static bool IsSelected(IntVec3 tar)
+        {
+            return 
+                Instance.MultipleSelected.Any(t => t.Type == TargetType.Position && (IntVec3)t.Global == tar)  || 
+                Instance.SelectedSource.Type == TargetType.Position && (IntVec3)Instance.SelectedSource.Global == tar;
         }
         internal static bool ClearTargets()
         {

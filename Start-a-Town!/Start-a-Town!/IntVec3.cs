@@ -149,7 +149,30 @@ namespace Start_a_Town_
             yield return this + UnitZ;
             yield return this - UnitZ;
         }
-
+        public IEnumerable<IntVec3> GetAdjacentLazy()
+        {
+            for (int i = 0; i < 6; i++)
+                yield return this + AdjacentIntVec3[i];
+        }
+        public IEnumerable<IntVec3> GetAdjacentHorLazy()
+        {
+            for (int i = 0; i < 4; i++)
+                yield return this + AdjacentXYIntVec3[i];
+        }
+        static public readonly IntVec3[] AdjacentIntVec3 = new IntVec3[]{
+            new IntVec3(1, 0, 0),
+            new IntVec3(-1, 0, 0),
+            new IntVec3(0, 1, 0),
+            new IntVec3(0, -1, 0),
+            new IntVec3(0, 0, 1),
+            new IntVec3(0, 0, -1)
+        };
+        static public readonly IntVec3[] AdjacentXYIntVec3 = new IntVec3[]{
+            new IntVec3(1, 0, 0),
+            new IntVec3(-1, 0, 0),
+            new IntVec3(0, 1, 0),
+            new IntVec3(0, -1, 0)
+        };
         public float LengthSquared()
         {
             return this.X * this.X + this.Y * this.Y + this.Z * this.Z;

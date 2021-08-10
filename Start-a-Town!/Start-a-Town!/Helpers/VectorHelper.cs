@@ -78,26 +78,14 @@ namespace Start_a_Town_
             new Vector3(0, 0, 1),
             new Vector3(0, 0, -1)
         };
-        static public readonly IntVec3[] AdjacentIntVec3 = new IntVec3[]{
-            new IntVec3(1, 0, 0),
-            new IntVec3(-1, 0, 0),
-            new IntVec3(0, 1, 0),
-            new IntVec3(0, -1, 0),
-            new IntVec3(0, 0, 1),
-            new IntVec3(0, 0, -1)
-        };
+        
         static public readonly IntVec3[] AdjacentXY = new IntVec3[]{
             new IntVec3(1, 0, 0),
             new IntVec3(-1, 0, 0),
             new IntVec3(0, 1, 0),
             new IntVec3(0, -1, 0)
         };
-        static public readonly IntVec3[] AdjacentXYIntVec3 = new IntVec3[]{
-            new IntVec3(1, 0, 0),
-            new IntVec3(-1, 0, 0),
-            new IntVec3(0, 1, 0),
-            new IntVec3(0, -1, 0)
-        };
+       
         static public readonly IntVec3[] Column3 = new IntVec3[]{
             new IntVec3(0, 0, 1),
             new IntVec3(0, 0, 0),
@@ -121,17 +109,7 @@ namespace Start_a_Town_
             yield return global + new Vector3(0, 0, 1);
             yield return global - new Vector3(0, 0, 1);
         }
-        static public IEnumerable<IntVec3> GetAdjacentLazy(this IntVec3 global)
-        {
-            for (int i = 0; i < 6; i++)
-                yield return global + AdjacentIntVec3[i];
-        }
-        static public IEnumerable<IntVec3> GetAdjacentHorLazy(this IntVec3 global)
-        {
-            for (int i = 0; i < 4; i++)
-                yield return global + AdjacentXYIntVec3[i];
-        }
-
+        
 
         public static Vector2 Floor(this Vector2 vector)
         {

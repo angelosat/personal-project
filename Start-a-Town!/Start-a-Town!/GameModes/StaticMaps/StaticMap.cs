@@ -837,11 +837,11 @@ namespace Start_a_Town_.GameModes.StaticMaps
             yield return ("Calculating light", () =>
             {
                 watch = Stopwatch.StartNew();
-                foreach (var ch in this.ActiveChunks)
-                    ch.Value.UpdateSkyLight();
+                this.InitializeLight();
                 watch.Stop();
                 $"light updated in {watch.ElapsedMilliseconds} ms".ToConsole();
-            });
+            }
+            );
             yield return ("Generating plants", () =>
             {
                 watch = Stopwatch.StartNew();
@@ -850,6 +850,29 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 $"plants generated in {watch.ElapsedMilliseconds} ms".ToConsole();
             });
         }
+
+        /// <summary>
+        /// Called after terrain has been generated. Detects cells at the edges of 'caves' and enqueues them to receive light from their adjacent cells that are open to sunlight 
+        /// </summary>
+        private void InitializeLight()
+        {
+            var queued = new HashSet<IntVec3>();
+            for (int i = 0; i < Size.Blocks; i++)
+            {
+                for (int j = 0; j < Size.Blocks; j++)
+                {
+                    var h = this.GetHeightmapValue(i, j);
+                    for (int k = 0; k < h; k++)
+                    {
+                        var pos = new IntVec3(i, j, k);
+                        if (pos.GetAdjacentHorLazy().Any(n => this.GetCell(n) is Cell cell && this.GetHeightmapValue(n.X, n.Y) < k && !queued.Contains(n)))
+                            queued.Add(pos);
+                    }
+                }
+            }
+            this.UpdateLight(queued);
+        }
+
         internal void FinishLoading()
         {
             this.CacheObjects();

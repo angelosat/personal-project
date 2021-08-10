@@ -141,7 +141,7 @@ namespace Start_a_Town_
 
             if (nextLight > thisLight) //if the cell became brighter, queue surrounding cells to spread light to them
             {
-                var adj = VectorHelper.AdjacentIntVec3;
+                var adj = IntVec3.AdjacentIntVec3;
                 for (int i = 0; i < adj.Length; i++)
                 {
                     var n = global + adj[i];
@@ -162,7 +162,7 @@ namespace Start_a_Town_
         {
             byte next;
             byte maxAdjLight = 0;
-            var adj = VectorHelper.AdjacentIntVec3;
+            var adj = IntVec3.AdjacentIntVec3;
             for (int i = 0; i < adj.Length; i++)
             {
                 var n = center + adj[i];
@@ -206,7 +206,7 @@ namespace Start_a_Town_
                 var prevLight = chunk.GetBlockLight(local);
                 chunk.SetBlockLight(local, cell.Luminance);
 
-                var adj = VectorHelper.AdjacentIntVec3;
+                var adj = IntVec3.AdjacentIntVec3;
                 for (int i = 0; i < adj.Length; i++)
                 {
                     var n = global + adj[i];

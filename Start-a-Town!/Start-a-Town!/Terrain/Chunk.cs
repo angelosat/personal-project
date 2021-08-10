@@ -707,21 +707,7 @@ namespace Start_a_Town_
             }
         }
 
-        public void UpdateSkyLight()
-        {
-            var items = new Queue<IntVec3>();
-            for (int i = 0; i < Size; i++)
-            {
-                for (int j = 0; j < Size; j++)
-                {
-                    var h = this.GetHeightMapValue(i, j);
-                    for (int z = 0; z < h; z++) // enqueues all underground cells WRONG because if the deeper cells get processed first, they dont get reprocessed when the outer cells propagate their light to them
-                  // TODO for each sunlight column, scan neighbor cells and enqueue them if they are under overhangs
-                        items.Enqueue(new IntVec3(i, j, z).ToGlobal(this));
-                }
-            }
-            this.Map.UpdateLight(items);
-        }
+      
         #endregion
 
         #region Drawing

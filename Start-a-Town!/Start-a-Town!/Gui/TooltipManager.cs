@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_.UI
 {
@@ -74,9 +76,15 @@ namespace Start_a_Town_.UI
 
         void Controller_MouseoverObjectChanged(object sender, MouseoverEventArgs e)
         {
+            this.Reset();
+            this.Object = e.ObjectNext as ITooltippable;
+            //this.Object = Controller.Instance.MouseoverNext.Object as ITooltippable;
+        }
+
+        private void Reset()
+        {
             this.Tooltip = null;
             this.DelayValue = DelayInterval;
-            this.Object = Controller.Instance.MouseoverNext.Object as ITooltippable;
         }
 
         public Vector2 ScreenLocation
@@ -94,7 +102,19 @@ namespace Start_a_Town_.UI
 
         internal static void OnGameEvent(GameEvent e)
         {
-            Instance.Tooltip?.OnGameEvent(e);
+            switch(e.Type)
+            {
+                case Components.Message.Types.BlocksChanged:
+                    var map = e.Parameters[0] as MapBase;
+                    var cells = e.Parameters[1] as IEnumerable<IntVec3>;
+                    if (Instance.Object is TargetArgs target && target.Type == TargetType.Position && cells.Contains((IntVec3)target.Global))
+                        Instance.Reset();
+                    break;
+
+                default:
+                    Instance.Tooltip?.OnGameEvent(e);
+                    break;
+            }
         }
     }
 }

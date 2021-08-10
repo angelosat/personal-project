@@ -78,8 +78,9 @@ namespace Start_a_Town_
             }
             else
             {
-                var isblocktargetting = Controller.IsBlockTargeting();
-                var mouseover = (isblocktargetting || this.TargetOnlyBlocks) ? Controller.Instance.Mouseover : Controller.Instance.GetMouseover();
+                //var isblocktargetting = Controller.IsBlockTargeting();
+                //var mouseover = (isblocktargetting || this.TargetOnlyBlocks) ? Controller.Instance.Mouseover : Controller.Instance.GetMouseover();
+                var mouseover = Controller.Instance.Mouseover;
                 if (mouseover.Target != null)
                 {
                     this.Target = mouseover.Target;

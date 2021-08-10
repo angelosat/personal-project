@@ -1416,7 +1416,7 @@ namespace Start_a_Town_
             //if (Controller.Instance.MouseoverNext.Object != null)
             //    return;
             if (Controller.Instance.MouseoverNext.Object is TargetArgs target && target.Object is GameObject obj)
-                if(this.GetDrawDepthSimple(obj.CellIfSpawned.Value) > this.GetDrawDepthSimple(global)) // HACK
+                if (this.GetDrawDepthSimple(obj.CellIfSpawned.Value) > this.GetDrawDepthSimple(global)) // HACK
                     return;
 
             if (!map.TryGetAll(global, out var chunk, out var cell))
@@ -1449,7 +1449,6 @@ namespace Start_a_Town_
                 precise.Y = 0;
             else if (rotVec == Vector3.UnitZ || rotVec == -Vector3.UnitZ)
                 precise.Z = 0;
-
             Controller.SetMouseoverBlock(this, map, global, rotVec, precise);
         }
 

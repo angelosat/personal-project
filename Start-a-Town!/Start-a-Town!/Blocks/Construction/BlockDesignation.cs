@@ -11,11 +11,9 @@ namespace Start_a_Town_.Blocks
             this.Variations.Add(Atlas.Load("blocks/blockblueprint"));
             this.DrawMaterialColor = false;
         }
+
         public override bool IsStandableIn => true;
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return null;
-        //}
+       
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             var token = this.Variations[0];
@@ -76,7 +74,7 @@ namespace Start_a_Town_.Blocks
         internal override string GetName(MapBase map, IntVec3 global)
         {
             var e = map.GetBlockEntity<BlockDesignationEntity>(global);
-            return string.Format("{0} (Designation)", e.Product.Block.Name);
+            return $"{e.Product.Block.Name} (Designation)";
         }
     }
 }

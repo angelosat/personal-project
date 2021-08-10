@@ -45,7 +45,6 @@ namespace Start_a_Town_.UI
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb, this.BoundsScreen);
-
         }
 
         protected override void OnClientSizeChanged()

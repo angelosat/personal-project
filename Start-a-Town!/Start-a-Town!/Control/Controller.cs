@@ -74,7 +74,7 @@ namespace Start_a_Town_
 
             if (mouseover != mouseoverNext)
                 this.OnMouseoverObjectChanged(new MouseoverEventArgs(mouseoverNext, mouseover));
-
+          
             this.Mouseover = this.MouseoverNext;
             this.MouseoverNext = new Mouseover();
         }
@@ -115,13 +115,15 @@ namespace Start_a_Town_
         public static void SetMouseoverBlock(Camera camera, MapBase map, Vector3 global, Vector3 face, Vector3 precise)
         {
             var depth = global.GetDrawDepth(map, camera);
-
             if (Instance.MouseoverNext.Depth > depth)
                 return;
 
             var target = new TargetArgs(map, global, face, precise);
 
-            if (global != _LastMouseoverBlockGlobal || Instance.Mouseover.Object is Element) // very hacky
+            /// VERY HACKY
+            /// it's to not create a new mouseover while hovering withing the same cell (the cell global remains the same but the precise and face vectors change while moving cursor around block)
+            /// TODO tidy up
+            if (global != _LastMouseoverBlockGlobal || (Instance.Mouseover.Object is TargetArgs t && t.Type != TargetType.Position)) // very hacky
                 Instance.MouseoverNext.Object = target;
             else
                 Instance.MouseoverNext.Object = Instance.Mouseover.Object;

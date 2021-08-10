@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 using Start_a_Town_.AI;
 

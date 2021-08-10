@@ -71,15 +71,20 @@ namespace Start_a_Town_
                 //if (current.HasFailedOrEnded())
                 //    return BehaviorState.Fail;
                 //var result = failedorended ? BehaviorState.Fail : current.Execute(parent, state);
+
                 var result = current.Execute(parent, state);
-                if (current.HasFailedOrEnded())
-                    return BehaviorState.Fail;
+
+                /// added the success check because interactioncrafting in behaviorcrafting fails even after the interaction successfuly completes because the ingredients are disposed, and it fails on disposed ingredients
+                /// move the whole if block inside the switch block below?
+                //if (result != BehaviorState.Success && current.HasFailedOrEnded())
+                //    return BehaviorState.Fail;
+
                 switch (result)
                 {
                     case BehaviorState.Running:
                         FromJump = false;
-                        //if (current.HasFailedOrEnded()) // check this before or after executing the current step?
-                        //    return BehaviorState.Fail;
+                        if (current.HasFailedOrEnded())   /// have this here or before the switch block?
+                            return BehaviorState.Fail;
                         return BehaviorState.Running;
 
                     case BehaviorState.Success:

@@ -16,7 +16,7 @@ namespace Start_a_Town_.Crafting
         int _orderID;
         private int OrderID => this.Order?.ID ?? this._orderID;
         readonly List<ObjectRefIDsAmount> PlacedObjects = new();
-        readonly int BaseWorkAmount = 5;//25;
+        readonly int BaseWorkAmount = 25;//5;//25;
 
         public InteractionCrafting(CraftOrder order, List<ObjectAmount> placedObjects)
             : this()

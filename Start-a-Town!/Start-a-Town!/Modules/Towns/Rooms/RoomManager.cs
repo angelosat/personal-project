@@ -159,7 +159,7 @@ namespace Start_a_Town_
             var adjRooms = adjGlobals.Select(this.GetRoomAt);
             var nrooms = adjRooms.OfType<Room>().Distinct().ToArray();
 
-            if (adjGlobals.Any(g => !this.Map.GetCell(g).IsRoomBorder && this.GetRoomAt(g) is null))
+            if (adjGlobals.Any(g => this.Map.GetCell(g) is Cell cell && !cell.IsRoomBorder && this.GetRoomAt(g) is null))
             // if an adjacent cell is NOT a room boundary and it's not contained in an existing room
             // it means that it adjacent to an outdoors area. so delete all adjacent rooms
             {

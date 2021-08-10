@@ -46,7 +46,7 @@ namespace Start_a_Town_
 
         static public readonly MaterialDef Air = new(MaterialType.Gas, "Air", "Air", 0);
         // basalt? new Color(120, 109, 95, 255)
-        static public readonly MaterialDef Water = new(MaterialType.Water, "Water", "Water", Color.SeaGreen, 5);
+        static public readonly MaterialDef Water = new(MaterialType.Water, "Water", "Water", Color.SeaGreen, 5) { Viscosity = 30 };
         static public readonly MaterialDef Glass = new(MaterialType.Glass, "Glass", "Glass", Color.White, 40);
 
         static public readonly MaterialDef Human = 

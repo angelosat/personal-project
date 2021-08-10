@@ -354,18 +354,21 @@ namespace Start_a_Town_
         public ConstructionCategory ConstructionCategory => this.BuildProperties.Category;
         public readonly bool HasData;
 
+        [Obsolete]
         public static void UpdateBlocks()
         {
             foreach (var block in Registry.Values)
                 block.Update();
         }
+        [Obsolete]
         internal static void UpdateBlocks(MapBase map)
         {
             foreach (var block in Registry.Values)
                 block.Update(map);
         }
-
+        [Obsolete]
         public virtual void Update() { }
+        [Obsolete]
         public virtual void Update(MapBase map) { }
         /// <summary>
         /// TODO: maybe pass position of neighbor that changed?

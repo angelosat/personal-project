@@ -56,7 +56,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                         var local = current.ToLocal();
                         var c = chunk.GetCellLocal(local);
                         if (c.Block == BlockDefOf.Air ||
-                            c.Block == BlockDefOf.Water ||
+                            c.Block == BlockDefOf.Fluid ||
                             c.Block == BlockDefOf.Sand)
                             continue;
                         c.Block = BlockDefOf.Air;
@@ -192,7 +192,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                             var local = current.ToLocal();
                             var c = chunk.Cells[Chunk.GetCellIndex(local)];
                             if (c.Block == BlockDefOf.Air ||
-                                c.Block == BlockDefOf.Water ||
+                                c.Block == BlockDefOf.Fluid ||
                                 c.Block == BlockDefOf.Sand)
                                 continue;
                             c.Block = BlockDefOf.Air;

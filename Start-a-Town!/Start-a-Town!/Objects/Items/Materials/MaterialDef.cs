@@ -45,6 +45,12 @@ namespace Start_a_Town_
         public float WorkToBreak = 1;
         public int ValueBase = 1;
         public float ValueMultiplier = 1;
+
+        /// <summary>
+        /// How many ticks it takes for the liquid to flow to nearby cells
+        /// </summary>
+        internal int Viscosity;
+
         public int Value => (int)(this.ValueBase * this.ValueMultiplier);
 
         public MaterialDef()

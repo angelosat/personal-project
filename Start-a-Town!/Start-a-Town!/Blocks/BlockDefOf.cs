@@ -19,7 +19,7 @@ namespace Start_a_Town_
         static public readonly Block WoodPaneling = new BlockWoodPaneling();
         static public readonly Block Chest = new Blocks.Chest.BlockChest();
         static public readonly Block Bin = new BlockStorage();
-        static public readonly Block Water = new BlockWater();
+        static public readonly Block Fluid = new BlockFluid();
         static public readonly Block Stool = new BlockStool();
         static public readonly Block Chair = new BlockChair();
         static public readonly Block Bricks = new BlockBricks();

@@ -152,12 +152,12 @@ namespace Start_a_Town_.Components
                 var isStanding = PhysicsComponent.IsStanding(parent);
                 if (!isStanding)
                     return;
-                if (block == BlockDefOf.Water)
+                if (block == BlockDefOf.Fluid)
                 {
                     if (parent.Velocity.Z <= 0)// only allow jumping in water when sinking
                     {
                         force = Vector3.UnitZ * PhysicsComponent.Jump;// * (1 + StatsComponent.GetStatOrDefault(parent, Stat.Types.JumpHeight, 0f));
-                        var density = BlockDefOf.Water.GetDensity(cell.BlockData, feetposition);
+                        var density = BlockDefOf.Fluid.GetDensity(cell.BlockData, feetposition);
                         force *= (1 + 3 * density);
                     }
                 }

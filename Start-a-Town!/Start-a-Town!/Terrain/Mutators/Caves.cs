@@ -28,7 +28,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             if (z == 0)
                 return;
             if (c.Block == BlockDefOf.Air ||
-                c.Block == BlockDefOf.Water ||
+                c.Block == BlockDefOf.Fluid ||
                 c.Block == BlockDefOf.Sand)
                 return;
 

@@ -1,22 +1,19 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 
 namespace Start_a_Town_.Blocks
 {
-    class BlockWater : Block
+    class BlockFluid : Block
     {
         static readonly float AnimationSpeed = Engine.TicksPerSecond / 2f;
         static float AnimationT = AnimationSpeed;
         
         AtlasDepthNormals.Node.Token[][] Assets;
         enum Fullness { Half, Full };
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.Water;
-
-        //}
-        public BlockWater()
+       
+        public BlockFluid()
             : base("Water", opaque: false, density: 0.2f, solid: false)
         {
             this.LoadVariations("water/water1", "water/water2", "water/water3", "water/water4");
@@ -28,18 +25,24 @@ namespace Start_a_Town_.Blocks
                 Block.Atlas.Load("blocks/water/water1")
             };
         }
-
-        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+        public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            base.Place(map, global, material, data, variation, orientation, notify);
-            var flow = new LiduidFlowProcess(map, global, global);
-            LiduidFlowProcess.Add(flow);
+            yield return MaterialDefOf.Water;
         }
-
+        //public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+        //{
+        //    base.Place(map, global, material, data, variation, orientation, notify);
+        //    var flow = new LiduidFlowProcess(map, global, global);
+        //    LiduidFlowProcess.Add(flow);
+        //}
+        public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
+        {
+            return new BlockEntityFluid(originGlobal);
+        }
         public override void NeighborChanged(INetwork net, IntVec3 global)
         {
             var above = net.Map.GetBlock(global + IntVec3.UnitZ);
-            if (above == BlockDefOf.Water)
+            if (above == BlockDefOf.Fluid)
             {
                 net.Map.GetCell(global).BlockData = 1;
                 return;
@@ -80,6 +83,7 @@ namespace Start_a_Town_.Blocks
 
         public override void Update()
         {
+            return;
             AnimationT--;
             if (AnimationT <= 0)
             {

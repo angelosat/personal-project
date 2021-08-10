@@ -34,7 +34,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                 {
                     if (c.Block == BlockDefOf.Air)
                     {
-                        c.Block = BlockDefOf.Water;
+                        c.Block = BlockDefOf.Fluid;
                         c.Material = MaterialDefOf.Water;
                     }
                     else
@@ -47,9 +47,9 @@ namespace Start_a_Town_.Terraforming.Mutators
                 {
                     if (c.Block == BlockDefOf.Air)
                     {
-                        c.Block = BlockDefOf.Water;
+                        c.Block = BlockDefOf.Fluid;
                         c.Material = MaterialDefOf.Water;
-                        c.BlockData = BlockWater.GetData(1);
+                        c.BlockData = BlockFluid.GetData(1);
                     }
                 }
             }

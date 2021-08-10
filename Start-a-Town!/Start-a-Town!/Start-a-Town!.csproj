@@ -178,6 +178,7 @@
     <Compile Include="Blocks\BlockPlacer.cs" />
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />
+    <Compile Include="Blocks\Fluids\BlockEntityFluid.cs" />
     <Compile Include="Blocks\Helpers\BlockHelper.cs" />
     <Compile Include="Blocks\LiduidFlowProcess.cs" />
     <Compile Include="Blocks\Workstations\BlockCarpentryEntity.cs" />
@@ -377,7 +378,7 @@
     <Compile Include="Blocks\BlockRoof.cs" />
     <Compile Include="Blocks\BlockStool.cs" />
     <Compile Include="Blocks\BlockChair.cs" />
-    <Compile Include="Blocks\BlockWater.cs" />
+    <Compile Include="Blocks\Fluids\BlockFluid.cs" />
     <Compile Include="Blocks\BlockWindow.cs" />
     <Compile Include="Blocks\BlockWithEntity.cs" />
     <Compile Include="Blocks\Comps\BlockEntityCompDeconstructible.cs" />

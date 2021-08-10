@@ -10,16 +10,16 @@ using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_
 {
-    public abstract class Terraformer : IComparable<Terraformer>, ICloneable
+    public abstract class Terraformer : ICloneable //IComparable<Terraformer>, 
     {
-        public int CompareTo(Terraformer other)
-        {
-            if (this.ID < other.ID)
-                return -1;
-            else if (this.ID > other.ID)
-                return 1;
-            return 0;
-        }
+        //public int CompareTo(Terraformer other)
+        //{
+        //    if (this.ID < other.ID)
+        //        return -1;
+        //    else if (this.ID > other.ID)
+        //        return 1;
+        //    return 0;
+        //}
 
         public enum Types { None, Land, Sea, Normal, Caves, Minerals, Test, Grass, Empty, Flowers, Trees, MineralsSlow, PerlinWorms }
         public static readonly Terraformer Sea = new Sea();

@@ -28,7 +28,7 @@ namespace Start_a_Town_.GameModes
         Block DefaultBlock { get; set; }
         PopulationManager Population { get; }
 
-        SortedSet<Terraformer> GetMutators();
+        List<Terraformer> Mutators { get; }
 
         void WriteData(BinaryWriter w);
 

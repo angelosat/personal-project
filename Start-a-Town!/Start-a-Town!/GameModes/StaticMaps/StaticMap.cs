@@ -555,7 +555,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 var tasks = new List<(string label, Action action)>();
                 var size = this.Size.Chunks;
                 var max = size * size;
-                var mutatorlist = this.World.GetMutators().ToList();
+                var mutatorlist = this.World.Mutators.ToList();
                 mutatorlist.ForEach(m => m.SetWorld(this.World));
                 var watch = new Stopwatch();
                 Dictionary<Chunk, Dictionary<IntVec3, double>> gradCache = new();

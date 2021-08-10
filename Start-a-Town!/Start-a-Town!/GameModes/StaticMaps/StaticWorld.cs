@@ -46,7 +46,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public StaticMap Map { get { return this.Maps.Values.First() as StaticMap; } }
         public PopulationManager Population => this.PopulationManager;
 
-        public SortedSet<Terraformer> Mutators = new();
+        public List<Terraformer> Mutators { get; }
         ulong currentTick;
         public ulong CurrentTick { get => this.currentTick; set => this.currentTick = value; }
 
@@ -70,10 +70,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             return this.Random;
         }
-        public SortedSet<Terraformer> GetMutators()
-        {
-            return this.Mutators;
-        }
+  
         public MapCollection GetMaps()
         {
             return this.Maps;
@@ -96,7 +93,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             this.MaxHeight = 128;
             this.DefaultBlock = BlockDefOf.Soil;
-            this.Mutators = new SortedSet<Terraformer>();
+            this.Mutators = new List<Terraformer>();
             this.Trees = true;
             this.Maps = new MapCollection();
             this.PopulationManager = new PopulationManager(this);
@@ -109,7 +106,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             this.Name = name;
             this.Seed = name.GetHashCode();
             this.Random = new Random(this.Seed);
-            this.Mutators = new SortedSet<Terraformer>(mutators);
+            this.Mutators = new List<Terraformer>(mutators);
             this.DefaultBlock = BlockDefOf.Soil;
         }
         //public StaticWorld(string name, string seedString, IEnumerable<Terraformer> mutators)

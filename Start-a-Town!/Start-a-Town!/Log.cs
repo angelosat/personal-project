@@ -32,6 +32,7 @@ namespace Start_a_Town_
             System, Dialogue, DialogueOption, DialogueEnd, Jobs,
             ChatPlayer,
             Warning,
+            Error,
             Network
         }
         static Log _instance;
@@ -238,6 +239,10 @@ List of available commands:
         public static void Warning(string text)
         {
             _write(Entry.Warning(text));
+        }
+        public static void Error(string text)
+        {
+            _write(Entry.Error(text));
         }
         public static void System(string text)
         {

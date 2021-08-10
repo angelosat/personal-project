@@ -1368,5 +1368,16 @@ namespace Start_a_Town_.UI
             this.DrawOnParentFocus = enabled;
             return this;
         }
+        internal Control Box(int w, int h)
+        {
+            if (this.Width <= w && this.Height <= h)
+                return new GroupBox().AddControls(this);
+            var mode = ScrollModes.None;
+            if (this.Width > w)
+                mode = ScrollModes.Horizontal;
+            if (this.Height > h)
+                mode &= ScrollModes.Vertical;
+            return ScrollableBoxNewNew.FromClientSize(w, h, mode).AddControls(this);
+        }
     }
 }

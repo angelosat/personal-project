@@ -47,8 +47,15 @@ namespace Start_a_Town_.Components.Crafting
                 foreach (var a in this.ModifierActions)
                     a(dic, product);
                 product.SetQuality(DetermineQuality(actor, reaction));
-                if (ingrs.Values.All(i => i.Object.Def.StackDimension == 1)) // TODO refactor the way product quantity is determined from ingredient dimensions
-                    product.SetStackSize(this.Quantity);
+
+                /// TODO refactor the way product quantity is determined from ingredient dimensions
+                //if (ingrs.Values.All(i => i.Object.Def.StackDimension == 1)) 
+                //    product.SetStackSize(this.Quantity);
+
+                /// instead of using a specified quantity, calculate product quantity from ingredient dimensions
+                var dim = ingrs.Values.Sum(i => i.Amount / (float)i.Object.Def.StackCapacity);
+                product.SetStackSize((int)(dim * product.Def.StackCapacity));
+
                 var prodpair = new ProductMaterialPair(reaction, product, ingrs);
                 return prodpair;
             }

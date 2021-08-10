@@ -1,4 +1,7 @@
-﻿using Start_a_Town_.Components.Crafting;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Components.Crafting;
+using Start_a_Town_.Crafting;
+using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
@@ -155,7 +158,75 @@ namespace Start_a_Town_
 
         public Control GetListControlGui()
         {
-            return new UI(this);
+            var box = new GroupBox
+            {
+                BackgroundColor = UIManager.DefaultListItemBackgroundColor
+            };
+
+            var btnUp = new ButtonIcon(Icon.ArrowUp, MoveUp);
+            var btnDown = new ButtonIcon(Icon.ArrowDown, MoveDown) { Location = btnUp.BottomLeft };
+            box.AddControls(btnUp, btnDown);
+
+            var orderName = new Label(this.Reaction.Name) { Location = btnUp.TopRight };
+            var comboFinishMode = new ComboBoxNewNew<CraftOrderFinishMode>(CraftOrderFinishMode.AllModes, 100, c => c.GetString(this), ChangeFinishMode, () => this.FinishMode) { Location = orderName.BottomLeft };
+
+            box.AddControls(orderName,
+                comboFinishMode);
+
+            var btnClose = new IconButton(Icon.X) { LocationFunc = () => new Vector2(PanelTitled.GetClientLength(290), 0), BackgroundTexture = UIManager.Icon16Background };
+            btnClose.Anchor = Vector2.UnitX;
+            btnClose.LeftClickAction = RemoveOrder;
+            btnClose.ShowOnParentFocus(true);
+            box.AddControls(btnClose);
+
+            var btnMinus = new Button("-", Minus, Button.DefaultHeight) { Location = comboFinishMode.TopRight };
+            var btnPlus = new Button("+", Plus, Button.DefaultHeight) { Location = btnMinus.TopRight };
+            box.AddControls(btnMinus, btnPlus);
+
+            var panelDetails = new CraftOrderDetailsInterface(this);
+
+            var btnDetails = new Button("Details", ToggleDetails);
+            //btnDetails.LeftClickAction = ToggleDetails;
+            box.AddControls(btnDetails.AnchorToBottomRight());
+
+            panelDetails.ToWindow(this.Name);
+            return box;
+
+            void ToggleDetails()
+            {
+                var win = panelDetails.GetWindow();
+                win.Location = UIManager.Mouse;
+                //win.Location = btnDetails.ScreenLocation + btnDetails.Width * Vector2.UnitX;
+                win.Toggle();
+            }
+            void MoveDown()
+            {
+                ChangeOrderPriority(false);
+            }
+            void MoveUp()
+            {
+                ChangeOrderPriority(true);
+            }
+            void ChangeOrderPriority(bool p)
+            {
+                Towns.Crafting.CraftingManager.WriteOrderModifyPriority(Client.Instance.OutgoingStream, this, p);
+            }
+            void RemoveOrder()
+            {
+                PacketOrderRemove.Send(this.Map.Net, this);
+            }
+            void Minus()
+            {
+                Towns.Crafting.CraftingManager.WriteOrderModifyQuantityParams(Client.Instance.OutgoingStream, this, -1);
+            }
+            void Plus()
+            {
+                Towns.Crafting.CraftingManager.WriteOrderModifyQuantityParams(Client.Instance.OutgoingStream, this, 1);
+            }
+            void ChangeFinishMode(CraftOrderFinishMode obj)
+            {
+                PacketCraftOrderChangeMode.Send(this, (int)obj.Mode);
+            }
         }
 
         CraftOrder(SaveTag tag) : this(null, tag)

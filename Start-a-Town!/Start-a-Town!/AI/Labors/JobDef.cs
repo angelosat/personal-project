@@ -8,7 +8,7 @@ namespace Start_a_Town_
         readonly TaskGiver[] TaskGivers;
         readonly public HashSet<ToolAbilityDef> AssociatedTools = new();
         public ToolAbilityDef ToolUse;
-        public readonly string Label;
+        //public readonly string Label;
         public Icon Icon => Icon.Replace;
 
         public JobDef(string name, params TaskGiver[] taskGivers) : base(name)

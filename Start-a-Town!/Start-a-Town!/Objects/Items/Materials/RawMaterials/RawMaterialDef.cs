@@ -118,9 +118,9 @@ namespace Start_a_Town_
                 .AddBuildSite(IsWorkstation.Types.Carpentry)
                 .AddIngredient(new Ingredient("Base")
                     .SetAllow(MaterialType.Wood, true)
-                    .SetAllow(RawMaterialDef.Logs, true)
-                    .SetAllow(RawMaterialDef.Scraps, true))
-                .AddProduct(new Reaction.Product(RawMaterialDef.Planks, 4).GetMaterialFromIngredient("Base")));
+                    .SetAllow(Logs, true)
+                    .SetAllow(Scraps, true))
+                .AddProduct(new Reaction.Product(Planks).GetMaterialFromIngredient("Base")));
 
         }
 

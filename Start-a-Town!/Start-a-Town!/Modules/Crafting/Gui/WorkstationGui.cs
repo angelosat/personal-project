@@ -18,13 +18,18 @@ namespace Start_a_Town_.Modules.Crafting
             this.Global = global;
             this.Map = map;
             var panelOrders = new PanelTitled("Orders", 300, 500);
-            var btnAddOrder = new Button("Add Order") { LeftClickAction = this.AddOrder };
+            var btnAddOrder = new Button("Add Order", this.AddOrder);
 
             this.PanelReactions = new Panel() { AutoSize = true };
             var validreactions = Reaction.Dictionary.Values.Where(r => r.ValidWorkshops.Any(t => entity.IsWorkstationType(t))).ToList();
 
-            var reactions = new ButtonList<Reaction>(validreactions, 200, 400, r => r.Name, (r, b) => b.LeftClickAction = () => this.PlaceOrder(r));
-            this.PanelReactions.AddControls(reactions);
+            //var reactions = new ButtonList<Reaction>(validreactions, 200, 400, r => r.Label, (r, b) => b.LeftClickAction = () => this.PlaceOrder(r));
+            //this.PanelReactions.AddControls(reactions);
+
+            var reactionsList = new ListBoxNoScroll<Reaction>(r => new Label(r.Label, () => this.PlaceOrder(r)));
+            reactionsList.AddItems(validreactions);
+            var reactionsListContainer = reactionsList.Box(200, 400);
+            this.PanelReactions.AddControls(reactionsListContainer);
 
             var w = panelOrders.Client.ClientSize.Width;
             var h = panelOrders.Client.ClientSize.Height;

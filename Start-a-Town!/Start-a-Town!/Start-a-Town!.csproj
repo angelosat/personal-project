@@ -241,7 +241,6 @@
     <Compile Include="AI\Labors\JobDefOf.cs" />
     <Compile Include="Modules\Construction\Tools\ToolDrawing.Args.cs" />
     <Compile Include="Modules\Construction\Tools\ToolPlaceWall.Args.cs" />
-    <Compile Include="Modules\Crafting\CraftOrder.UI.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDef.cs" />
     <Compile Include="Modules\Towns\Rooms\Furniture\FurnitureDefOf.cs" />
     <Compile Include="Blocks\Workstations\IBlockWorkstation.cs" />

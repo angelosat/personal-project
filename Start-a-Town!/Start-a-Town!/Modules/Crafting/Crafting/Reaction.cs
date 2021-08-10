@@ -1,18 +1,17 @@
-﻿using System;
+﻿using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components.Crafting
 {
-    partial class Reaction : Def
+    partial class Reaction : Def, IListable
     {
         static int _IDSequence = 0;
         static public int GetNextID() => _IDSequence++;
         
         static Dictionary<int, Reaction> _Dictionary;
         public static Dictionary<int, Reaction> Dictionary => _Dictionary ??= new Dictionary<int, Reaction>();
-
         public float Fuel;
         public int ID;
         public List<Reagent> Reagents = new();
@@ -109,6 +108,11 @@ namespace Start_a_Town_.Components.Crafting
         static public void Initialize()
         {
            
+        }
+
+        public Control GetListControlGui()//Action<IListable> callback)
+        {
+            return new Label(this.Label);//, () => callback(this));
         }
     }
 }

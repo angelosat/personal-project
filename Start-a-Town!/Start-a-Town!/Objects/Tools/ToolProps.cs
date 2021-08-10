@@ -6,7 +6,9 @@ namespace Start_a_Town_
 {
     public class ToolProps : Def, IItemDefVariator
     {
-        public string Label, Description;
+        public string 
+           // Label,
+            Description;
         public ToolAbility Ability;
         public HashSet<JobDef> AssociatedJobs = new();
         public Sprite SpriteHandle, SpriteHead;

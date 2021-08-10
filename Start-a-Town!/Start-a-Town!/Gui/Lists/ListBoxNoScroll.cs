@@ -4,6 +4,94 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
+    public class ListBoxNoScroll : GroupBox, IListSearchable
+    {
+        public int Spacing = 1;
+
+        public IListable SelectedItem { get { return SelectedControl == null ? default : (IListable)SelectedControl.Tag; } }
+        Control SelectedControl;
+
+        public void SelectItem(IListable obj)
+        {
+            this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj));
+        }
+
+        public IList<Control> Items => this.Controls;
+
+        public Action<IListable> ItemChangedFunc = item => { };
+        public IEnumerable<IListable> List = new List<IListable>();
+        public ListBoxNoScroll(int spacing = 1)
+        {
+            this.Spacing = spacing;
+        }
+
+        public ListBoxNoScroll Clear()
+        {
+            this.Controls.Clear();
+            return this;
+        }
+
+        public ListBoxNoScroll AddItems(IEnumerable<IListable> items)
+        {
+            foreach (var i in items)
+                this.AddItem(i);
+            return this;
+        }
+        public ListBoxNoScroll AddItems(params IListable[] items)
+        {
+            foreach (var i in items)
+                this.AddItem(i);
+            return this;
+        }
+
+        Control AddItem(IListable item)
+        {
+            var control = item.GetListControlGui();
+            control.Tag = item;
+            this.AddControlsBottomLeft(control);
+            if (this.Controls.Count > 1) // HACK
+                control.Location.Y += Spacing;
+            return control;
+        }
+        public void RemoveItems(params IListable[] items)
+        {
+            foreach (var i in items)
+                this.RemoveItem(i);
+        }
+        public void RemoveItems(IEnumerable<IListable> items)
+        {
+            foreach (var i in items)
+                this.RemoveItem(i);
+        }
+        internal void RemoveWhere(Func<IListable, bool> filter)
+        {
+            this.RemoveItems(this.Items.Select(c => (IListable)c.Tag).Where(filter));
+        }
+        void RemoveItem(IListable item)
+        {
+            if (item is null)
+                return;
+            var listControls = this.Controls;
+            var removedItemIndex = listControls.FindIndex(c => c.Tag.Equals(item));
+            var prevY = listControls[removedItemIndex].Location.Y;
+            for (int i = removedItemIndex + 1; i < listControls.Count; i++)
+            {
+                var r = listControls[i];
+                r.Location.Y = prevY;
+                prevY = r.Bottom + Spacing;
+            }
+            listControls.RemoveAt(removedItemIndex);
+        }
+
+        public void Filter(Func<IListable, bool> filter)
+        {
+            this.Controls.Clear();
+            var validControls = this.Items.Where(c => filter((IListable)c.Tag)).ToArray();
+            this.AddControlsBottomLeft(validControls);
+        }
+    }
+
+
     public class ListBoxNoScroll<TObject> : GroupBox, IListSearchable<TObject>
     {
         public int Spacing = 1;

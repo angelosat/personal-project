@@ -1,11 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
     class ButtonIcon : Button
     {
         Icon Icon;
+        public ButtonIcon(Icon icon, Action action)
+            : this(icon)
+        {
+            this.LeftClickAction = action;
+        }
         public ButtonIcon(Icon icon)
         {
             this.Icon = icon;

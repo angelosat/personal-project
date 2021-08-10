@@ -24,9 +24,10 @@ namespace Start_a_Town_.Modules.Crafting
         }
         private static void Receive(INetwork net, BinaryReader r)
         {
-            var station = r.ReadVector3();
+            var station = r.ReadIntVec3();
             var id = r.ReadInt32();
-            var order = net.Map.GetBlockEntity<BlockEntityWorkstation>(station).GetOrder(id);
+            var order = net.Map.Town.CraftingManager.GetOrder(station, id);
+            //var order = net.Map.GetBlockEntity<BlockEntityWorkstation>(station).GetOrder(id);
             order.HaulOnFinish = r.ReadBoolean();
             net.Map.EventOccured(Components.Message.Types.OrderParametersChanged, order);
             if (net is Server)

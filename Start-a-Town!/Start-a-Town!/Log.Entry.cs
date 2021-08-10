@@ -35,7 +35,11 @@ namespace Start_a_Town_
             }
             public static Entry Warning(string text)
             {
-                return new Entry(EntryTypes.Warning, new object[] { text }) { Color = Color.Red };
+                return new Entry(EntryTypes.Warning, new object[] { text }) { Color = Color.Orange };
+            }
+            public static Entry Error(string text)
+            {
+                return new Entry(EntryTypes.Error, new object[] { text }) { Color = Color.Red };
             }
             public static Entry System(string text)
             {

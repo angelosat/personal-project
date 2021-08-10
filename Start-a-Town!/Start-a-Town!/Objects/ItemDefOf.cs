@@ -19,7 +19,6 @@ namespace Start_a_Town_
         
         static public readonly ItemDef Fruit = new ItemDef("Fruit")
         {
-            Label = "Fruit",
             ItemClass = typeof(Entity),
             StackCapacity = 8,
             Category = ItemCategory.FoodRaw,

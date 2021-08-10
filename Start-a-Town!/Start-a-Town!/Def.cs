@@ -5,9 +5,10 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    public abstract class Def
+    public abstract class Def : ILabeled
     {
         public string Name;
+        public string Label { get; set; }
         static public Dictionary<string, Def> Database = new();
         public Def()
         {
@@ -15,6 +16,7 @@ namespace Start_a_Town_
         }
         protected Def(string name)
         {
+            this.Label = name;
             this.Name = name.Replace(" ", "");
         }
        
@@ -31,7 +33,7 @@ namespace Start_a_Town_
                 return null;
             if (Database.TryGetValue(defName, out var result))
                 return result;
-            string.Format("def \"{0}\" does not exist", defName);
+            Log.Warning($"def \"{defName}\" does not exist");
             return null;
         }
         static public T GetDef<T>(BinaryReader r) where T : Def

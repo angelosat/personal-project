@@ -5,7 +5,7 @@ using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
 {
-    public class ItemDef : EntityDef, ILabeled
+    public class ItemDef : EntityDef//, ILabeled
     {
         public int StackCapacity = 1;
         public int StackDimension = 1;
@@ -38,9 +38,8 @@ namespace Start_a_Town_
         {
         }
 
-        string _Label;
-
-        public string Label { get => _Label ?? Name; set => _Label = value; }
+        //string _Label;
+        //public string Label { get => _Label ?? Name; set => _Label = value; }
 
         internal GameObject CreateRandom()
         {

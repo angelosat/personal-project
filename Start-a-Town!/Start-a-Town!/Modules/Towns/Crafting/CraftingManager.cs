@@ -28,7 +28,6 @@ namespace Start_a_Town_.Towns.Crafting
         
         internal IEnumerable<KeyValuePair<IntVec3, ICollection<CraftOrder>>> ByWorkstationNew()
         {
-            //return this.Map.GetBlockEntitiesCache().Where(e => e.Value.HasComp<BlockEntityCompWorkstation>()).Select(r => new KeyValuePair<IntVec3, List<CraftOrderNew>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
             return this.Map.GetBlockEntitiesCache()
                 .Where(e => e.Value.HasComp<BlockEntityCompWorkstation>())
                 .Select(r => new KeyValuePair<IntVec3, ICollection<CraftOrder>>(r.Key, r.Value.GetComp<BlockEntityCompWorkstation>().Orders));
@@ -42,8 +41,6 @@ namespace Start_a_Town_.Towns.Crafting
         int OrderSequence = 1;
 
         // TODO: add order priorities
-        readonly Dictionary<IntVec3, List<CraftOrder>> OrdersNew = new();
-        readonly List<CraftOrder> OrdersNewNew = new();
 
         public CraftingManager(Town town)
         {
@@ -150,12 +147,6 @@ namespace Start_a_Town_.Towns.Crafting
             w.Write(increase);
         }
        
-        public void AddOrderNew(CraftOrder order)
-        {
-            this.OrdersNewNew.Add(order);
-            this.Town.Map.EventOccured(Message.Types.OrdersUpdatedNew, order.Workstation);
-        }
-        
         internal bool RemoveOrder(IntVec3 station, string orderID)
         {
             var bench = this.GetWorkstation(station);
@@ -165,21 +156,6 @@ namespace Start_a_Town_.Towns.Crafting
         {
             var bench = this.GetWorkstation(station);
             return bench.RemoveOrder(orderID);
-        }
-        internal override void OnGameEvent(GameEvent e)
-        {
-            switch (e.Type)
-            {
-                case Message.Types.BlocksChanged:
-                    var cells = e.Parameters[1] as IEnumerable<IntVec3>;
-                    foreach (var global in cells)
-                        this.OrdersNew.Remove(global); //if a block containing a workstation is changed to another type, immediately clear all corresponding orders, no need to check for anything
-                    // TODO: close crafting window if it's open for the removed station
-                    break;
-
-                default:
-                    break;
-            }
         }
        
         internal void AddOrder(IntVec3 station, int reactionID)
@@ -200,7 +176,7 @@ namespace Start_a_Town_.Towns.Crafting
        
         public CraftOrder GetOrder(IntVec3 benchGlobal, int orderIndex)
         {
-            return this.OrdersNew[benchGlobal][orderIndex];
+            return this.GetWorkstation(benchGlobal).GetOrder(orderIndex);
         }
         internal List<CraftOrder> GetOrdersNew(IntVec3 workstationGlobal)
         {
@@ -211,21 +187,6 @@ namespace Start_a_Town_.Towns.Crafting
         protected override void AddSaveData(SaveTag tag)
         {
             tag.Add(this.OrderSequence.Save("IDSequence"));
-            var ordersTag = new SaveTag(SaveTag.Types.List, "Orders", SaveTag.Types.List);
-
-            foreach (var global in this.OrdersNew)
-            {
-                // error handling here, skip any orders for any coordinates that aren't workstations anymore and for some reason haven't been removed
-                if (this.Town.Map.GetBlockEntity(global.Key) as BlockEntityWorkstation == null)
-                    continue;
-                var globaltag = new SaveTag(SaveTag.Types.List, "", SaveTag.Types.Compound);
-                foreach (var order in global.Value)
-                {
-                    var ordertag = order.Save("");
-                    globaltag.Add(ordertag);
-                }
-                ordersTag.Add(globaltag);
-            }
         }
         public override void Load(SaveTag tag)
         {
@@ -235,20 +196,10 @@ namespace Start_a_Town_.Towns.Crafting
         public override void Write(BinaryWriter w)
         {
             w.Write(this.OrderSequence);
-            w.Write(this.OrdersNewNew.Count);
-            for (int i = 0; i < this.OrdersNewNew.Count; i++)
-            {
-                this.OrdersNewNew[i].Write(w);
-            }
         }
         public override void Read(BinaryReader r)
         {
             this.OrderSequence = r.ReadInt32();
-            var orderCount = r.ReadInt32();
-            for (int i = 0; i < orderCount; i++)
-            {
-                this.OrdersNewNew.Add(new CraftOrder(this.Town.Map, r));
-            }
         }
     }
 }

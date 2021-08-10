@@ -623,7 +623,7 @@ namespace Start_a_Town_
                     this.InvalidateCell(n);
 
                 if (nblock != null)
-                    nblock.NeighborChanged(this.Net, n);
+                    nblock.NeighborChanged(this, n);
             }
             //this.Town.InvalidateBlock(global); // handle blockchanged event in town class instead
             if (raiseEvent)

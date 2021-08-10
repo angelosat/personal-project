@@ -572,6 +572,8 @@ namespace Start_a_Town_
 
             Chunk.TryGetFinalLight(map, gx + rightx, gy - righty, z, out byte suneast, out byte blockeast);
             Chunk.TryGetFinalLight(map, gx - leftx, gy + lefty, z, out byte sunsouth, out byte blocksouth);
+            Chunk.TryGetFinalLight(map, gx, gy, z, out byte sunCenter, out byte blockCenter);
+
             byte suntop, blocktop;
             if (z + 1 < MapBase.MaxHeight)
             {
@@ -583,9 +585,9 @@ namespace Start_a_Town_
                 suntop = 15;
                 blocktop = 15;
             }
-
-            Color sun = new((suneast + 1) / 16f, (sunsouth + 1) / 16f, (suntop + 1) / 16f);
-            Vector4 block = new((blockeast + 1) / 16f, (blocksouth + 1) / 16f, (blocktop + 1) / 16f, 1f);
+            // add the current cell's light as the 4th coord?
+            Color sun = new((suneast + 1) / 16f, (sunsouth + 1) / 16f, (suntop + 1) / 16f, (sunCenter + 1)/ 16f);
+            Vector4 block = new((blockeast + 1) / 16f, (blocksouth + 1) / 16f, (blocktop + 1) / 16f, (blockCenter + 1) / 16f);// 1f);
 
             var light = new LightToken(global, sun, block);
             chunk.LightCache[global] = light;

@@ -267,7 +267,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var sw = Stopwatch.StartNew();
             mapTag.Add(this.UndiscoveredAreaManager.Save("UndiscoveredAreas"));
             sw.Stop();
-            string.Format("undiscovered areas saved in {0} ms", sw.ElapsedMilliseconds).ToConsole();
+            $"undiscovered areas saved in {sw.ElapsedMilliseconds} ms".ToConsole();
             sw.Stop();
 
             mapTag.Add(this.RandomOrderedChunkIndices.Save("_RandomOrderedChunkIndices")); //save the property to force it to initialize if it's not already
@@ -374,7 +374,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             var sw = Stopwatch.StartNew();
 
             this.ResetChunkEdges();
-            string.Format("chunk edges reset in {0} ms", sw.ElapsedMilliseconds).ToConsole();
+            $"chunk edges reset in {sw.ElapsedMilliseconds} ms".ToConsole();
 
             this.Regions.Init();
             callback?.Invoke("Cacheing objects", 0);
@@ -389,7 +389,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             {
                 var sw = Stopwatch.StartNew();
                 this.ResetChunkEdges();
-                string.Format("chunk edges reset in {0} ms", sw.ElapsedMilliseconds).ToConsole();
+                $"chunk edges reset in {sw.ElapsedMilliseconds} ms".ToConsole();
             });
             yield return ("Initializing Regions", this.Regions.Init);
             yield return ("Caching objects", this.FinishLoading);

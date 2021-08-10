@@ -29,34 +29,14 @@ namespace Start_a_Town_.Blocks
         {
             yield return MaterialDefOf.Water;
         }
-        //public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
-        //{
-        //    base.Place(map, global, material, data, variation, orientation, notify);
-        //    var flow = new LiduidFlowProcess(map, global, global);
-        //    LiduidFlowProcess.Add(flow);
-        //}
+        
         public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {
             return new BlockEntityFluid(originGlobal);
         }
-        public override void NeighborChanged(INetwork net, IntVec3 global)
+        public override void NeighborChanged(MapBase map, IntVec3 global)
         {
-            var above = net.Map.GetBlock(global + IntVec3.UnitZ);
-            if (above == BlockDefOf.Fluid)
-            {
-                net.Map.GetCell(global).BlockData = 1;
-                return;
-            }
-            var below = net.Map.GetBlock(global - IntVec3.UnitZ);
-            if (below == BlockDefOf.Air)
-            {
-                LiduidFlowProcess.Add(new LiduidFlowProcess(net.Map, global, global));
-                return;
-            }
-            var neighbors = global.GetNeighbors().Where(f => f.Z == global.Z);
-            foreach (var n in neighbors)
-                if (net.Map.GetBlock(n) == BlockDefOf.Air)
-                    LiduidFlowProcess.Add(new LiduidFlowProcess(net.Map, global, global));
+            map.AddBlockEntity(global, new BlockEntityFluid(global));
         }
 
         public override bool IsTargetable(Vector3 global)
@@ -110,7 +90,20 @@ namespace Start_a_Town_.Blocks
         }
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
-            return canvas.Transparent.DrawBlock(Block.Atlas.Texture, screenBounds, this.Assets[data][0], camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Color.Red.ToVector4(), depth, this, blockcoords);
+            //return canvas.Transparent.DrawBlock(Block.Atlas.Texture, screenBounds, this.Assets[data][0], camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Color.Red.ToVector4(), depth, this, blockcoords);
+            return canvas.Transparent.DrawBlock(Block.Atlas.Texture, 
+                screenBounds, 
+                this.Assets[data][0], 
+                camera.Zoom, 
+                fog, 
+                tint, 
+                Color.White, 
+                new Color(sunlight.R, sunlight.G, sunlight.A, sunlight.A), 
+                blocklight, 
+                Color.Red.ToVector4(), 
+                depth, 
+                this, 
+                blockcoords);
         }
     }
 }

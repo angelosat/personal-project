@@ -376,7 +376,7 @@ namespace Start_a_Town_
         /// </summary>
         /// <param name="net"></param>
         /// <param name="global"></param>
-        public virtual void NeighborChanged(INetwork net, IntVec3 global) { }
+        public virtual void NeighborChanged(MapBase map, IntVec3 global) { }
 
         public void Deconstruct(GameObject actor, Vector3 global)
         {

@@ -8,7 +8,7 @@ namespace Start_a_Town_
             : base(originGlobal)
         {
             this.AddComp(new BlockEntityCompWorkstation(IsWorkstation.Types.PlantProcessing));
-            this.AddComp(new BlockEntityCompDeconstructible());
+            //this.AddComp(new BlockEntityCompDeconstructible());
         }
     }
 }

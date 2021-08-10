@@ -6,7 +6,7 @@
                 : base(originGlobal)
             {
                 this.AddComp(new BlockEntityCompWorkstation(IsWorkstation.Types.Carpentry));
-                this.AddComp(new BlockEntityCompDeconstructible());
+                //this.AddComp(new BlockEntityCompDeconstructible());
             }
         }
 }

@@ -220,9 +220,14 @@ namespace Start_a_Town_
             yield return IntVec3.Zero;
         }
 
-        public virtual IntVec3 GetCenter(byte blockData, IntVec3 global) { return global; }
-
-        public virtual bool Multi => false;
+        public BuildProperties BuildProperties = new();
+        public FurnitureDef Furniture;
+        public List<Utility.Types> UtilitiesProvided = new();
+        /// <summary>
+        /// The index to the block's variation is stored within a cell. Add variations to this list so they can be picked at random whenever a block is placed.
+        /// </summary>
+        public List<AtlasDepthNormals.Node.Token> Variations = new();
+        public List<Sprite> Sprites = new();
 
         /// <summary>
         /// Defines the alpha channel of the block's sprite during drawing.
@@ -240,6 +245,20 @@ namespace Start_a_Town_
         /// Defines whether the block can be walked upon (maybe combine this with density to make things like moving sand?)
         /// </summary>
         public readonly bool Solid;
+
+        protected Block(string name, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
+        {
+            this.Label = name;
+            this.Hash = name.GetHashCode();
+            this.Transparency = transparency;
+            this.Density = density;
+            this.Opaque = opaque;
+            this.Solid = solid;
+            this.LootTable = new LootTable();
+            Registry[this.Hash] = this;
+        }
+
+
         /// <summary>
         /// Determines wether the block will be considered as a pathfinding finish node for the AI to stand IN
         /// </summary>
@@ -248,23 +267,27 @@ namespace Start_a_Town_
         /// Determines wether the block will be considered as a pathfinding finish node for the AI to stand ON
         /// </summary>
         public virtual bool IsStandableOn => this.Solid;
-        public FurnitureDef Furniture;
         public virtual byte Luminance { get; }
         public virtual bool IsMinable => false;
         public virtual bool IsDeconstructible => false;
         public virtual bool IsRoomBorder => this.Opaque;
+        public virtual bool Multi => false;
+        public virtual Color DirtColor => Color.White;
+        public LootTable LootTable { get; set; }
+
         public virtual FurnitureDef GetFurnitureRole(MapBase map, IntVec3 global) { return null; }
+        public virtual IntVec3 GetCenter(byte blockData, IntVec3 global) { return global; }
+
+
         public virtual bool IsTargetable(Vector3 global)
         {
             return true;
         }
-        public List<Utility.Types> UtilitiesProvided = new();
         public virtual float GetWorkToBreak(MapBase map, Vector3 global)
         {
             return map.GetBlockMaterial(global).WorkToBreak;
         }
 
-        public virtual Color DirtColor => Color.White;
         protected virtual ParticleEmitterSphere GetDustEmitter()
         {
             var emitter = new ParticleEmitterSphere()
@@ -316,14 +339,12 @@ namespace Start_a_Town_
             return list;
         }
 
-        public LootTable LootTable { get; set; }
 
         public virtual byte ParseData(string data)
         {
             return 0;
         }
       
-        public BuildProperties BuildProperties = new();
         public Ingredient Ingredient
         {
             get => this.BuildProperties.Ingredient;
@@ -356,6 +377,7 @@ namespace Start_a_Town_
         public void Deconstruct(GameObject actor, Vector3 global)
         {
             /// I DONT WANT EVERY BLOCK TO TO DECONSTRUCT INTO SCRAPS BY DEFAULT
+            /// or do i?
             //var map = actor.Map;
             //var cell = map.GetCell(global);
             //var material = this.GetMaterial(cell.BlockData);
@@ -375,9 +397,11 @@ namespace Start_a_Town_
             //var material = this.GetMaterial(cell.BlockData);
             var material = cell.Material;
             var scraps = RawMaterialDef.Scraps;
-            var materialQuantity = this.Ingredient.Amount;
-            var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
-            actor.Net.PopLoot(obj, global, Vector3.Zero);
+            var materialQuantity = this.Ingredient.Amount;// * scraps.StackCapacity;
+            //var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
+            //actor.Net.PopLoot(obj, global, Vector3.Zero);
+            //actor.Net.PopLoot(new LootTable(new Loot(() => scraps.CreateFrom(material), 1, 1, materialQuantity / 2, materialQuantity) { ItemDef = scraps }), global, Vector3.Zero);
+            actor.Net.PopLoot(new LootTable(new Loot(() => scraps.CreateFrom(material), 1, materialQuantity, scraps.StackCapacity / 2, scraps.StackCapacity)), global, Vector3.Zero);
         }
 
         public virtual bool IsValidPosition(MapBase map, IntVec3 global, int orientation) { return true; }
@@ -476,7 +500,7 @@ namespace Start_a_Town_
             var h = this.GetHeight(cell.BlockData, withinBlock.X, withinBlock.Y);
             return this.Solid && withinBlock.Z < h;
         }
-        public virtual bool IsOpaque(Cell cell) { return this.Opaque; }
+        public virtual bool IsOpaque(Cell cell) => this.Opaque;
         //public abstract MaterialDef GetMaterial(byte blockdata);
 
         public virtual void RandomBlockUpdate(INetwork net, IntVec3 global, Cell cell) { }
@@ -492,11 +516,7 @@ namespace Start_a_Town_
         {
             return Registry[name.GetHashCode()];
         }
-        /// <summary>
-        /// The index to the block's variation is stored within a cell. Add variations to this list so they can be picked at random whenever a block is placed.
-        /// </summary>
-        public List<AtlasDepthNormals.Node.Token> Variations = new();
-        public List<Sprite> Sprites = new();
+      
 
         protected void LoadVariations(params string[] assetNames)
         {
@@ -506,17 +526,7 @@ namespace Start_a_Town_
                 this.Variations.Add(token);
             }
         }
-        protected Block(string name, float transparency = 0f, float density = 1f, bool opaque = true, bool solid = true)
-        {
-            this.Label = name;
-            this.Hash = name.GetHashCode();
-            this.Transparency = transparency;
-            this.Density = density;
-            this.Opaque = opaque;
-            this.Solid = solid;
-            this.LootTable = new LootTable();
-            Registry[this.Hash] = this;
-        }
+       
         public virtual void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             if (this == BlockDefOf.Air)
@@ -855,6 +865,5 @@ namespace Start_a_Town_
             else
                 category.Remove(this);
         }
-
     }
 }

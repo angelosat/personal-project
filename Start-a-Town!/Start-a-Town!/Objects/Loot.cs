@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
     public class Loot
     {
-        public int Count, ObjID, StackMin = 1, StackMax = 1;
+        public int Count, ObjID, AmountMin = 1, AmountMax = 1;
         public float Chance;
         public Func<GameObject> Factory;
+        public ItemDef ItemDef;
         public GameObject GenerateNew(Random rand)
         {
             var obj = this.Factory();
-            var stacksize = rand.Next(this.StackMin, this.StackMax);
+            var stacksize = rand.Next(this.AmountMin, this.AmountMax);
             obj.StackSize = stacksize;
             return obj;
         }
@@ -26,8 +29,8 @@ namespace Start_a_Town_
             this.Factory = factory;
             Chance = chance;
             Count = count;
-            this.StackMin = stackmin;
-            this.StackMax = stackmax;
+            this.AmountMin = stackmin;
+            this.AmountMax = stackmax;
         }
         public Loot(Func<GameObject> factory, float chance, int count)
         {
@@ -39,7 +42,7 @@ namespace Start_a_Town_
             : this(factory, 1, 1)
         {
         }
-        public int Generate(RandomThreaded random)
+        public int GetRandomCount(RandomThreaded random)
         {
             int count = 0;
             for (int i = 0; i < Count; i++)
@@ -49,7 +52,7 @@ namespace Start_a_Town_
             }
             return count;
         }
-        public int Generate(Random random)
+        public int GetRandomCount(Random random)
         {
             int count = 0;
             for (int i = 0; i < Count; i++)
@@ -58,6 +61,44 @@ namespace Start_a_Town_
                     count++;
             }
             return count;
+        }
+       
+        internal IEnumerable<GameObject> Generate(RandomThreaded rand)
+        {
+            if (this.ItemDef is not null && this.AmountMin > this.ItemDef.StackCapacity)
+            {
+                var amount = rand.Next(this.AmountMin, this.AmountMax);
+                var amountRemaining = amount;
+                amountRemaining.ToConsole();
+                var cap = this.ItemDef.StackCapacity;
+                var count = amountRemaining <= cap ? 1 : 1 + amountRemaining / cap;
+                var minPerItem = (amount - cap) / (count - 1);
+                for (int i = 0; i < count; i++)
+                {
+                    var obj = this.Factory();
+                    if (i < count - 1)
+                    {
+                        obj.StackSize = rand.Next(minPerItem, cap);
+                        amountRemaining -= obj.StackSize;
+                    }
+                    else
+                    {
+                        Debug.Assert(amountRemaining <= cap);
+                        obj.StackSize = amountRemaining;
+                    }
+                    yield return obj;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < this.GetRandomCount(rand); i++)
+                {
+                    var obj = this.Factory();
+                    var stacksize = rand.Next(this.AmountMin, this.AmountMax);
+                    obj.StackSize = stacksize;
+                    yield return obj;
+                }
+            }
         }
     }
 }

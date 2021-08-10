@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
+using System;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     class BlockEntityCompDeconstructible : BlockEntityComp
     {
         public ItemMaterialAmount[] Materials = new ItemMaterialAmount[1] { new ItemMaterialAmount(RawMaterialDef.Logs, MaterialDefOf.Human, 2) };
@@ -12,6 +14,7 @@ namespace Start_a_Town_
         }
         internal override void Deconstruct(GameObject actor, IntVec3 global)
         {
+            return;
             // DO I NEED TO DO THIS HERE? or can i do this at the block base class?
             var map = actor.Map;
             var cell = map.GetCell(global);

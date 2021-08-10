@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
@@ -30,34 +31,19 @@ namespace Start_a_Town_
         public IEnumerable<GameObject> Generate(RandomThreaded rand)
         {
             foreach (var l in this)
-                for (int i = 0; i < l.Generate(rand); i++)
-                {
-                    var obj = l.Factory();
-                    var stacksize = rand.Next(l.StackMin, l.StackMax);
-                    obj.StackSize = stacksize;
+                foreach (var obj in l.Generate(rand))
                     yield return obj;
-                }
         }
-        public IEnumerable<GameObject> Generate(Random rand)
-        {
-            foreach (var l in this)
-                for (int i = 0; i < l.Generate(rand); i++)
-                {
-                    var obj = l.Factory();
-                    var stacksize = rand.Next(l.StackMin, l.StackMax);
-                    obj.StackSize = stacksize;
-                    yield return obj;
-                }
-        }
+      
         public static IEnumerable<GameObject> Generate(Random rand, params Loot[] loot)
         {
             for (int k = 0; k < loot.Length; k++)
             {
                 var l = loot[k];
-                for (int i = 0; i < l.Generate(rand); i++)
+                for (int i = 0; i < l.GetRandomCount(rand); i++)
                 {
                     var obj = l.Factory();
-                    var stacksize = rand.Next(l.StackMin, l.StackMax);
+                    var stacksize = rand.Next(l.AmountMin, l.AmountMax);
                     obj.StackSize = stacksize;
                     yield return obj;
                 }

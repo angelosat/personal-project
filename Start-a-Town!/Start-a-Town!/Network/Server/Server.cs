@@ -882,6 +882,8 @@ namespace Start_a_Town_.Net
         }
         public IEnumerable<GameObject> GenerateLoot(LootTable lootTable)
         {
+            //foreach (var i in lootTable.GenerateNew(Random))
+            //    yield return i;
             foreach (var i in lootTable.Generate(Random))
                 yield return i;
         }

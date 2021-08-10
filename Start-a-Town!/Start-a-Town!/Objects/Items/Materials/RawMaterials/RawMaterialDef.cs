@@ -84,10 +84,11 @@ namespace Start_a_Town_
             DefaultMaterialType = MaterialType.Stone,
             CraftingProperties = new CraftingProperties() { IsBuildingMaterial = true, IsCraftingMaterial = true },
         }.SetMadeFrom(MaterialType.Stone);
+
         static public readonly ItemDef Scraps = new ItemDef("Scraps")
         {
             StackDimension = 4,
-            StackCapacity = 20,
+            StackCapacity = 50,
             BaseValue = 0,
             Description = "Worthless but can be repurposed",
             Category = ItemCategory.RawMaterials,

@@ -398,12 +398,13 @@ namespace Start_a_Town_.GameModes.StaticMaps
         {
             foreach (var ch in this.ActiveChunks.Values)
             {
-                if (!ch.LightValid)
-                {
-                    this.ResetLight(ch);
-                    ch.LightValid = true;
-                    this.UpdateChunkNeighborsLight(ch);
-                }
+                /// i'm calculating light at the end of map generation
+                //if (!ch.LightValid)
+                //{
+                //    this.ResetLight(ch);
+                //    ch.LightValid = true;
+                //    this.UpdateChunkNeighborsLight(ch);
+                //}
                 foreach (var vector in ch.MapCoords.GetNeighbors())
                 {
                     if (this.ActiveChunks.TryGetValue(vector, out var neighbor))
@@ -807,9 +808,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
                     return Color.Lerp(ab, bc, t);
                 }
                 else if (nightAmount == c.Key)
-                {
                     return c.Value;
-                }
             }
 
             return Color.Lime;
@@ -841,14 +840,14 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 foreach (var ch in this.ActiveChunks)
                     ch.Value.UpdateSkyLight();
                 watch.Stop();
-                string.Format("light updated in {0} ms", watch.ElapsedMilliseconds).ToConsole();
+                $"light updated in {watch.ElapsedMilliseconds} ms".ToConsole();
             });
             yield return ("Generating plants", () =>
             {
                 watch = Stopwatch.StartNew();
                 Terraformer.Trees.Generate(this);
                 watch.Stop();
-                string.Format("plants generated in {0} ms", watch.ElapsedMilliseconds).ToConsole();
+                $"plants generated in {watch.ElapsedMilliseconds} ms".ToConsole();
             });
         }
         internal void FinishLoading()

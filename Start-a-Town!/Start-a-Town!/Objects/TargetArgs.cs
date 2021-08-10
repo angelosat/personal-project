@@ -22,7 +22,7 @@ namespace Start_a_Town_
                     break;
 
                 case TargetType.Position:
-                    this.Map.GetBlock(this.Global).GetTooltip(tooltip, this.Map, this.Global);
+                    this.Map.GetBlock(this.Global).GetTooltip(tooltip, this.Map, this.Global, this.Face);
 
                     break;
 

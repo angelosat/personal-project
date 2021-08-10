@@ -258,9 +258,9 @@ namespace Start_a_Town_
             yield return MaterialDefOf.Human;
         }
 
-        public override void GetTooltip(UI.Control tooltip, MapBase map, Vector3 global)
+        public override void GetTooltip(UI.Control tooltip, MapBase map, IntVec3 global, IntVec3 face)
         {
-            base.GetTooltip(tooltip, map, global);
+            base.GetTooltip(tooltip, map, global, face);
             var cell = map.GetCell(global);
             var data = cell.BlockData;// map.GetData(global); //
             var open = (data & 0x4) == 0x4;

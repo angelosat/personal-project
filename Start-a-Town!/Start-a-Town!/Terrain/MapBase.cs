@@ -332,7 +332,7 @@ namespace Start_a_Town_
                 return int.MinValue;
             return ch.GetHeightMapValue(global.ToLocal());
         }
-        public virtual int GetHeightmapValue(Vector3 global)
+        public virtual int GetHeightmapValue(IntVec3 global)
         {
             var ch = this.GetChunk(global);
             if (ch == null)

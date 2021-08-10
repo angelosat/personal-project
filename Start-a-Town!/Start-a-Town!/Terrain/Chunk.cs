@@ -715,7 +715,8 @@ namespace Start_a_Town_
                 for (int j = 0; j < Size; j++)
                 {
                     var h = this.GetHeightMapValue(i, j);
-                    for (int z = 0; z < h; z++)
+                    for (int z = 0; z < h; z++) // enqueues all underground cells WRONG because if the deeper cells get processed first, they dont get reprocessed when the outer cells propagate their light to them
+                  // TODO for each sunlight column, scan neighbor cells and enqueue them if they are under overhangs
                         items.Enqueue(new IntVec3(i, j, z).ToGlobal(this));
                 }
             }

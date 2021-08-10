@@ -41,7 +41,7 @@ namespace Start_a_Town_
             int d = nextLight - oldLight;
             if (d != 0)
                 thisChunk.SetSunlight(thisCell.LocalCoords, nextLight);
-
+         
             if (d > 1)
             {
                 foreach (var n in neighbors)
@@ -60,17 +60,6 @@ namespace Start_a_Town_
         {
             byte next, maxAdjLight = 0;
 
-            foreach (var n in neighbors)
-            {
-                if (!this.Map.TryGetAll(n, out var nchunk, out var ncell))
-                    continue;
-                if (ncell.Opaque)
-                    continue;
-              
-                var l = nchunk.GetSunlight(ncell.LocalCoords);
-                maxAdjLight = Math.Max(maxAdjLight, l);
-            }
-         
             if (cell.Opaque)
                 next = 0;
             else
@@ -78,7 +67,19 @@ namespace Start_a_Town_
                 if (chunk.IsAboveHeightMap(lx, ly, z))
                     next = 15;
                 else
+                {
+                    foreach (var n in neighbors)
+                    {
+                        if (!this.Map.TryGetAll(n, out var nchunk, out var ncell))
+                            continue;
+                        if (ncell.Opaque)
+                            continue;
+
+                        var l = nchunk.GetSunlight(ncell.LocalCoords);
+                        maxAdjLight = Math.Max(maxAdjLight, l);
+                    }
                     next = (byte)Math.Max(0, maxAdjLight - 1);
+                }
             }
             return next;
         }

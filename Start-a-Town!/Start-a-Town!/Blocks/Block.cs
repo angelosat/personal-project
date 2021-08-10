@@ -127,7 +127,7 @@ namespace Start_a_Town_
             tooltip.AddControls(this.Name.ToLabel());
         }
 
-        public virtual void GetTooltip(Control tooltip, MapBase map, Vector3 global)
+        public virtual void GetTooltip(Control tooltip, MapBase map, IntVec3 global, IntVec3 face)
         {
             var cell = map.GetCell(global);
             tooltip.Controls.Add(new Label($"Global: {global}") { Location = tooltip.Controls.BottomLeft });
@@ -149,6 +149,7 @@ namespace Start_a_Town_
             tooltip.Controls.Add(new Label("BlockData: " + datastring + " (" + data.ToString() + ")") { Location = tooltip.Controls.BottomLeft });
             tooltip.Controls.Add(new Label("Variation: " + cell.Variation.ToString()) { Location = tooltip.Controls.BottomLeft });
             tooltip.Controls.Add(new Label("Orientation: " + cell.Orientation.ToString()) { Location = tooltip.Controls.BottomLeft });
+            tooltip.Controls.Add(new Label("Face light: " + map.GetSunLight(global + face)) { Location = tooltip.Controls.BottomLeft });
 
             map.GetBlockEntity(global)?.GetTooltip(tooltip);
         }

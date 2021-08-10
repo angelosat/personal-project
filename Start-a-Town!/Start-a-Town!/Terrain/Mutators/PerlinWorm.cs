@@ -63,7 +63,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                     }
         }
 
-
         public override object Clone()
         {
             return new PerlinWormGenerator();

@@ -62,12 +62,14 @@ namespace Start_a_Town_.Terraforming.Mutators
             }
             if (z < seaLevel)
                 c.BlockData = Blocks.BlockFluid.GetData(1);
+
             if (z <= sandMaxLevel)
                 if (gradientSoil < this.GroundRatio + sandThickness)
                 {
                     c.Block = BlockDefOf.Sand;
                     c.Material = MaterialDefOf.Sand;
                 }
+
             return;
         }
 

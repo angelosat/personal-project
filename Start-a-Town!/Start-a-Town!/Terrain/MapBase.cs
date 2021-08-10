@@ -859,10 +859,6 @@ namespace Start_a_Town_
         {
             this.Camera.DrawMap(this, toolManager, windowManager, scene);
         }
-        internal void MousePicking()
-        {
-            this.Camera.MousePicking(this);
-        }
         internal virtual void CameraRecenter()
         {
         

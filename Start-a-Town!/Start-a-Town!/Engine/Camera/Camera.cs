@@ -1325,7 +1325,10 @@ namespace Start_a_Town_
                     if (slice is null)
                         continue;
 
-                    if (!slice.Valid)
+                    /// removing this check because it screws up mousepicking when slices are invalidated by blocks changing (like actors trampling grass)
+                    //if (!slice.Valid)
+                    //    continue;
+                    if (slice.Canvas is null)
                         continue;
 
                     var arrays = new List<MyVertex[]>(3) {

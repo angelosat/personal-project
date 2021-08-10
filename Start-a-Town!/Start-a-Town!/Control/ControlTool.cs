@@ -84,7 +84,6 @@ namespace Start_a_Town_
                 {
                     this.Target = mouseover.Target;
                     this.TargetLast = this.Target.Type != TargetType.Null ? this.Target : this.TargetLast;
-
                 }
                 else
                     this.Target = TargetArgs.Null;
@@ -92,7 +91,7 @@ namespace Start_a_Town_
         }
         protected void UpdateTarget()
         {
-            if ((Controller.Instance.Mouseover.Object is Element))
+            if (Controller.Instance.Mouseover.Object is Element)
                 this.Target = TargetArgs.Null;
             else
             {
@@ -100,7 +99,6 @@ namespace Start_a_Town_
                 {
                     this.Target = Controller.Instance.Mouseover.Target;
                     this.TargetLast = this.Target.Type != TargetType.Null ? this.Target : this.TargetLast;
-
                 }
                 else
                     this.Target = TargetArgs.Null;

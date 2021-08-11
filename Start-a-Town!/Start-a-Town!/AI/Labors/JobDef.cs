@@ -13,7 +13,7 @@ namespace Start_a_Town_
 
         public JobDef(string name, params TaskGiver[] taskGivers) : base(name)
         {
-            this.Label = name;
+            //this.Label = name;
             this.TaskGivers = taskGivers;
         }
         public IEnumerable<TaskGiver> GetTaskGivers()

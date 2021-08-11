@@ -5,10 +5,11 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    public abstract class Def : ILabeled
+    public abstract class Def : Inspectable// ILabeled, IInspectable
     {
         public string Name;
-        public string Label { get; set; }
+        string _label;
+        public override string Label => this._label;
         static public Dictionary<string, Def> Database = new();
         public Def()
         {
@@ -16,8 +17,9 @@ namespace Start_a_Town_
         }
         protected Def(string name)
         {
-            this.Label = name;
-            this.Name = name.Replace(" ", "");
+            this._label = name;
+            this.Name = $"{this.GetType().Name}:{name.Replace(" ", "")}";
+            this.Name.ToConsole();
         }
        
         static public void Register(Def def)
@@ -59,10 +61,7 @@ namespace Start_a_Town_
                 return result as T;
             return null;
         }
-        public override string ToString()
-        {
-            return this.GetType().Name + ": " + this.Name;
-        }
+        public override string ToString() => this.Name;
         public SaveTag Save(string name = "")
         {
             return this.Name.Save(name);
@@ -79,5 +78,13 @@ namespace Start_a_Town_
         {
             return Database.Values.OfType<T>();
         }
+
+        //public IEnumerable<(string item, object value)> Inspect()
+        //{
+        //    foreach (var field in this.GetType().GetFields())
+        //        yield return (field.Name, field.GetValue(this));
+        //    foreach (var field in this.GetType().GetProperties())
+        //        yield return (field.Name, field.GetValue(this));
+        //}
     }
 }

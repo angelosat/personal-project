@@ -19,14 +19,9 @@ namespace Start_a_Town_
         {
             return Dictionary[id];
         }
-        public override string ToString()
-        {
-            return "Material:Type:" + this.Name;
-        }
        
-        public MaterialType(string name) : base($"MaterialType:{name}")
+        public MaterialType(string name) : base(name)
         {
-            this.Label = name;
             this.Hash = name.GetHashCode();
             DictionaryByHash[this.Hash] = this;
             this.SubTypes = new HashSet<MaterialDef>();

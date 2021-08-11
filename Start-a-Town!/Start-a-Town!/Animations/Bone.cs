@@ -8,10 +8,10 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    public partial class Bone : ISaveable, ISerializable
+    public partial class Bone : Inspectable, ISaveable, ISerializable
     {
         public enum States { Unstarted, Stopped, Running, Finished, Manual }
-
+        public override string Label => this.Def.Label;
         public States State;
         public Dictionary<BoneDef, Bone> Children;
       
@@ -533,19 +533,19 @@ namespace Start_a_Town_
             }
         }
 
-        public override string ToString()
-        {
-            string text = this.Def.ToString();
-            foreach (var layer in this.Layers.Reverse())
-                foreach (var ani in layer.Value)
-                    text += "\n  " + layer.Key + ": " + ani.ToString();//.Name;
-            foreach (var node in this.Joints.Values)
-            {
-                if (node.Bone != null)
-                    text += "\n " + node.Bone.ToString();
-            }
-            return text;
-        }
+        //public override string ToString()
+        //{
+        //    string text = this.Def.ToString();
+        //    foreach (var layer in this.Layers.Reverse())
+        //        foreach (var ani in layer.Value)
+        //            text += "\n  " + layer.Key + ": " + ani.ToString();//.Name;
+        //    foreach (var node in this.Joints.Values)
+        //    {
+        //        if (node.Bone != null)
+        //            text += "\n " + node.Bone.ToString();
+        //    }
+        //    return text;
+        //}
 
         public void Stop()
         {
@@ -900,6 +900,11 @@ namespace Start_a_Town_
                 }
             });
             return this;
+        }
+        public override IEnumerable<(string item, object value)> Inspect()
+        {
+            foreach (var bone in this.GetAllBones())
+                yield return (bone.Def.Label, bone.Material);
         }
     }
 }

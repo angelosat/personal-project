@@ -43,11 +43,11 @@ namespace Start_a_Town_.UI
             };
             this.PanelInfo.Location = this.BoxTabs.BottomLeft;
             this.LabelName = new Label() { TextFunc = () => "<none>" };
-            this.IconInfo = new IconButton(Icon.ArrowUp)
+            this.IconInfo = new IconButton("?")
             {
                 BackgroundTexture = UIManager.Icon16Background,
                 LeftClickAction = ToggleInfo,
-                HoverText = "Show details"
+                HoverText = "Inspect"
             };
             this.IconCenter = new IconButton(Icon.ArrowUp)
             {
@@ -116,10 +116,9 @@ namespace Start_a_Town_.UI
         {
             this.LabelName.TextFunc = () => text;
         }
-        static Window WindowHelp;
         private static void ToggleInfo()
         {
-            if (Instance.SelectedSource.Object is IInspectable obj)
+            if (Instance.SelectedSource.Object is Inspectable obj)
                 Inspector.Refresh(obj);
             Inspector.Show();
         }

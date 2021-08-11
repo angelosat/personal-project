@@ -19,7 +19,7 @@ namespace Start_a_Town_
                 if (_gui is null)
                 {
                     _gui = new TableObservable<GameObject>()
-                        .AddColumn("name", 96, o => new Label(() => o.Name, () => SelectionManager.Select(o)) { TooltipFunc = o.GetInventoryTooltip })
+                        .AddColumn("name", 96, o => new Label(() => o.Name, () => Inspector.Refresh(o))/* SelectionManager.Select(o)) */{ TooltipFunc = o.GetInventoryTooltip })
                         .AddColumn("preference", 96, o => actor.ItemPreferences.GetListControl(o as Entity))
                         .AddColumn("weight", 32, o => new Label(() => o.TotalWeight.ToString("0.# kg")))
                         .AddColumn("drop", Icon.Cross.Width, o => IconButton.CreateSmall(Icon.Cross, delegate { drop(o); }, "Drop").ShowOnParentFocus(true));

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class MaterialDef : Def, ILabeled, IInspectable
+    public class MaterialDef : Def, ILabeled//, IInspectable
     {
         public static readonly Random Randomizer = new();
 
@@ -152,13 +152,17 @@ namespace Start_a_Town_
             return this;
         }
 
-        public IEnumerable<(string item, object value)> Inspect()
-        {
-            yield return (nameof(this.Type), this.Type);
-            yield return (nameof(this.Density), this.Density);
-            yield return (nameof(this.Color), this.Color);
-            yield return (nameof(this.Value), this.Value);
-            yield return (nameof(this.Shine), this.Shine);
-        }
+        //public IEnumerable<(string item, object value)> Inspect()
+        //{
+        //    //yield return (nameof(this.Type), this.Type);
+        //    //yield return (nameof(this.Density), this.Density);
+        //    //yield return (nameof(this.Color), this.Color);
+        //    //yield return (nameof(this.Value), this.Value);
+        //    //yield return (nameof(this.Shine), this.Shine);
+        //    foreach (var field in this.GetType().GetFields())
+        //        yield return (field.Name, field.GetValue(this));
+        //    foreach (var field in this.GetType().GetProperties())
+        //        yield return (field.Name, field.GetValue(this));
+        //}
     }
 }

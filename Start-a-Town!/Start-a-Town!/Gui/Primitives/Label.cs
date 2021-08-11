@@ -117,7 +117,7 @@ namespace Start_a_Town_.UI
             if (obj is not null)
             {
                 this.HoverText = this.Text;
-                if (obj is IInspectable objdetails)
+                if (obj is Inspectable objdetails)
                 {
                     this.Active = true;
                     this.LeftClickAction = () => Inspector.Refresh(objdetails);

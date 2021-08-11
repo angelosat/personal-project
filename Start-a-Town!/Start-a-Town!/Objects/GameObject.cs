@@ -11,10 +11,10 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class GameObject : IEntity, ITooltippable, IContextable, INameplateable, ISlottable, ISelectable, ILabeled, IInspectable
+    public class GameObject : Inspectable, IEntity, ITooltippable, IContextable, INameplateable, ISlottable, ISelectable//, ILabeled, IInspectable
     {
         public static Dictionary<int, GameObject> Templates = new();
-        public string Label => this.Def.Label;
+        public override string Label => this.Def.Label;
         static int GetNextTemplateID()
         {
             return Templates.Count + 1;
@@ -331,7 +331,7 @@ namespace Start_a_Town_
         public bool IsPlayerControlled => this.Net.GetPlayers().Any(p => p.ControllingEntity == this); 
         public virtual bool IsHaulable => this.Def.Haulable;
         public bool IsFuel => this.Material?.Fuel.Value > 0;
-        public GameObject Hauled => this.Inventory.GetHauling().Object;
+        public GameObject Hauled => this.Inventory?.GetHauling().Object;
 
         public GameObjectSlot Slot;
         #endregion
@@ -424,28 +424,17 @@ namespace Start_a_Town_
             this.Transform = this.AddComponent<PositionComponent>();
         }
 
-        public EntityComponent this[string componentName]
-        {
-            get => this.Components[componentName];
-            set
-            {
-                Components[value.Name] = value;
-                value.MakeChildOf(this);
-            }
-        }
-
-        DefComponent _Info;
+        DefComponent _info;
         public DefComponent GetInfo()
         {
-            return this._Info ??= GetComponent<DefComponent>("Info");
+            return this._info ??= GetComponent<DefComponent>("Info");
         }
        
-        PhysicsComponent _PhysicsCached;
-        public PhysicsComponent Physics => this._PhysicsCached ??= this.GetComponent<PhysicsComponent>();
+        PhysicsComponent _physicsCached;
+        public PhysicsComponent Physics => this._physicsCached ??= this.GetComponent<PhysicsComponent>();
 
-        
-        SpriteComponent _SpriteCompCached;
-        public SpriteComponent SpriteComp => this._SpriteCompCached ??= this.GetComponent<SpriteComponent>();
+        SpriteComponent _spriteCompCached;
+        public SpriteComponent SpriteComp => this._spriteCompCached ??= this.GetComponent<SpriteComponent>();
 
         PersonalInventoryComponent _inventoryCached;
         public PersonalInventoryComponent Inventory => this._inventoryCached ??= this.GetComponent<PersonalInventoryComponent>();
@@ -459,7 +448,7 @@ namespace Start_a_Town_
         {
             return this.GetComponent<T>();
         }
-
+      
         public T GetComponent<T>() where T : EntityComponent
         {
             return (from comp in Components.Values
@@ -637,13 +626,20 @@ namespace Start_a_Town_
                 new Button("Center Cam") { LeftClickAction = () => { ScreenManager.CurrentScreen.Camera.CenterOn(this.Global); } }
                 );
         }
+        //public IEnumerable<(string item, object value)> Inspect()
+        //{
+        //    yield return (nameof(this.Name), this.Name);
+        //    yield return (nameof(this.Def), this.Def);
+        //    foreach (var bone in Body.GetAllBones())
+        //        yield return (bone.Def.Label, bone.Material);
+        //}
         public IEnumerable<(string item, object value)> Inspect()
         {
-            yield return (nameof(this.Name), this.Name);
-            foreach (var bone in Body.GetAllBones())
-                yield return (bone.Def.Label, bone.Material);
+            foreach (var field in this.GetType().GetFields())
+                yield return (field.Name, field.GetValue(this));
+            foreach (var field in this.GetType().GetProperties())
+                yield return (field.Name, field.GetValue(this));
         }
-
         public Window GetUi()
         {
             throw new Exception();
@@ -852,7 +848,8 @@ namespace Start_a_Town_
             for (int i = 0; i < compCount; i++)
             {
                 string compName = r.ReadString();
-                obj[compName].Read(r);
+                //obj[compName].Read(r);
+                obj.Components[compName].Read(r);
             }
             obj.ObjectSynced();
             return obj;
@@ -867,7 +864,8 @@ namespace Start_a_Town_
             for (int i = 0; i < compCount; i++)
             {
                 string compName = reader.ReadString();
-                obj[compName].Read(reader);
+                //obj[compName].Read(reader);
+                obj.Components[compName].Read(reader);
             }
             obj.ObjectSynced();
             return obj;
@@ -945,7 +943,8 @@ namespace Start_a_Town_
                     continue;
 
                 if (obj.Components.ContainsKey(compTag.Name))
-                    obj[compTag.Name].Load(obj, compTag);
+                    obj.Components[compTag.Name].Load(obj, compTag);
+                    //obj[compTag.Name].Load(obj, compTag);
             }
             obj.Name = obj.Def.NameGetter?.Invoke(obj) ?? obj.Name; // reset name
             obj.ObjectLoaded();

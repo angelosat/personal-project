@@ -12,10 +12,10 @@ namespace Start_a_Town_
         public ToolUse Ability;
         public HashSet<JobDef> AssociatedJobs = new();
         public Sprite SpriteHandle, SpriteHead;
-        public ToolProps(string name)
-            : base($"{nameof(ToolProps)}:{name}")
+        public ToolProps(string name) :base(name)
+            //: base($"{nameof(ToolProps)}:{name}")
         {
-            this.Label = name;
+            //this.Label = name;
         }
         public ToolProps(ToolUse ability)
         {

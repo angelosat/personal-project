@@ -5,7 +5,7 @@ using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
 {
-    public class ItemDef : EntityDef//, ILabeled
+    public class ItemDef : EntityDef, IInspectable
     {
         public int StackCapacity = 1;
         public int StackDimension = 1;
@@ -44,10 +44,6 @@ namespace Start_a_Town_
         internal GameObject CreateRandom()
         {
             return this.Randomizer?.Invoke(this);
-        }
-        public override string ToString()
-        {
-            return this.GetType().Name + ": " + this.Name;
         }
         public virtual Entity Create()
         {
@@ -114,6 +110,14 @@ namespace Start_a_Town_
             var filter = new StorageFilterCategoryNewNew(this);
             filter.AddLeafs(this.StorageFilterVariations.Select(v => v.GetFilter()));
             return filter;
+        }
+
+        public IEnumerable<(string item, object value)> Inspect()
+        {
+            foreach (var field in this.GetType().GetFields())
+                yield return (field.Name, field.GetValue(this));
+            foreach (var field in this.GetType().GetProperties())
+                yield return (field.Name, field.GetValue(this));
         }
     }
 }

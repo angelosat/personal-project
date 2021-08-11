@@ -172,7 +172,7 @@ namespace Start_a_Town_
             info.AddButton(IconToggleCitizen, ToggleCitizenship, parent, true);
         }
 
-        static IconButton IconOrder = new IconButton("☞") { HoverText = "Order Move" };
+        static IconButton IconOrder = new IconButton('☞') { HoverText = "Order Move" };
         static IconButton IconControl = new IconButton(Icon.ArrowUp) { HoverText = "Take Control" };
         static IconButton IconToggleCitizen = new IconButton() { HoverText = "Toggle citizenship" };
 

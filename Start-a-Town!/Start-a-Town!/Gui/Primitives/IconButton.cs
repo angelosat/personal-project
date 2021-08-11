@@ -88,11 +88,11 @@ namespace Start_a_Town_.UI
         public IconButton(string character)
             : this()
         {
-            this.Font = UIManager.Symbols;
             this.Character = character;
         }
         public IconButton(char character) : this(character.ToString())
         {
+            this.Font = UIManager.Symbols;
         }
         public IconButton(Icon icon) : this()
         {

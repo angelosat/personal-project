@@ -105,7 +105,7 @@ namespace Start_a_Town_
         {
             var ser = new XmlSerializer(typeof(List<PlantProperties>));
 
-            var path = $"{GlobalVars.SaveDir}/{Berry.Name}.xml";
+            var path = $"{GlobalVars.SaveDir}/{Berry.Label}.xml";
 
             Register(Berry);
             Register(LightTree);

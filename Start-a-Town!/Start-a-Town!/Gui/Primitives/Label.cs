@@ -116,7 +116,8 @@ namespace Start_a_Town_.UI
             if(obj is IInspectable objdetails)
             {
                 this.Active = true;
-                this.LeftClickAction = () => WindowInspect.Refresh(objdetails);
+                this.LeftClickAction = () => Inspector.Refresh(objdetails);
+                this.TextColor = Color.LightBlue;
             }
         }
         public Label(object obj, Action action) : this(Vector2.Zero, obj.ToString())

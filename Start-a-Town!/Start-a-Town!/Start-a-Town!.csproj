@@ -211,7 +211,8 @@
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
     <Compile Include="Gui\ScrollBars\ScrollModes.cs" />
-    <Compile Include="Gui\Windows\WindowInspect.cs" />
+    <Compile Include="Gui\Windows\Stack.cs" />
+    <Compile Include="Gui\Windows\Inspector.cs" />
     <Compile Include="Helpers\Collections\ObservableDictionary.cs" />
     <Compile Include="Helpers\EnsureStaticCtorCall.cs" />
     <Compile Include="Interfaces\IListable.cs" />

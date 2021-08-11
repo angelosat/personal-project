@@ -120,8 +120,8 @@ namespace Start_a_Town_.UI
         private static void ToggleInfo()
         {
             if (Instance.SelectedSource.Object is IInspectable obj)
-                WindowInspect.Refresh(obj);
-            WindowInspect.Show();
+                Inspector.Refresh(obj);
+            Inspector.Show();
         }
 
         public static void Select(TargetArgs target)

@@ -51,6 +51,9 @@ namespace Start_a_Town_.UI
         }
         public virtual GroupBox AddControlsLineWrap(IEnumerable<ButtonBase> labels, int width = int.MaxValue)
         {
+            if (labels.Count() == 1)
+                return this.AddControls(labels.First()) as GroupBox;
+
             var lastControl = this.Controls.LastOrDefault();
             var currentX = lastControl?.Right ?? 0;
             var currentY = lastControl?.Top ?? 0;

@@ -34,7 +34,7 @@ namespace Start_a_Town_
             var table = new Table<(object item, object value)>()
                 .AddColumn("name", 128, i => new Label(i.item))
                 //.AddColumn("value", 128, i => new Label(i.value) { HoverText = i.value.ToString() });
-                .AddColumn("value", 128, i => Label.ParseNewNew(i.value));// { HoverText = i.value.ToString() });
+                .AddColumn("value", 128, i => new GroupBox().AddControlsLineWrap(128, Label.ParseNewNew(i.value).ToArray()));// { HoverText = i.value.ToString() });
 
             table.AddItems(obj.Inspect()
                 .Prepend((nameof(obj.Label), obj.Label))

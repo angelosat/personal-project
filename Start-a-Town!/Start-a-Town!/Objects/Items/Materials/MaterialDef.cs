@@ -36,7 +36,7 @@ namespace Start_a_Town_
         public Color Color;
         public Vector4 ColorVector;
         public string Prefix;
-        public float Shininess;
+        public float Shine;
         public int Density;
         public bool EdibleRaw, EdibleCooked;
         public MaterialState State;
@@ -109,7 +109,7 @@ namespace Start_a_Town_
         public MaterialDef SetColor(Color color)
         {
             this.Color = color;
-            this.ColorVector = new Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, this.Shininess);
+            this.ColorVector = new Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, this.Shine);
             return this;
         }
         public MaterialDef SetDensity(int density)
@@ -119,7 +119,7 @@ namespace Start_a_Town_
         }
         public MaterialDef SetReflectiveness(float reflectiveness)
         {
-            this.Shininess = reflectiveness;
+            this.Shine = reflectiveness;
             this.ColorVector = new Vector4(this.Color.R / 255.0f, this.Color.G / 255.0f, this.Color.B / 255.0f, reflectiveness);
             return this;
         }
@@ -159,7 +159,7 @@ namespace Start_a_Town_
             yield return (nameof(this.Density), this.Density);
             yield return (nameof(this.Color), this.Color);
             yield return (nameof(this.Value), this.Value);
-            yield return (nameof(this.Shininess), this.Shininess);
+            yield return (nameof(this.Shine), this.Shine);
         }
     }
 }

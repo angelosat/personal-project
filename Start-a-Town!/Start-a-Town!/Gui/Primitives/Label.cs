@@ -352,16 +352,25 @@ namespace Start_a_Town_.UI
             } while (posFrom != -1);
         }
 
-        internal static Control ParseNewNew(object value)
+        internal static IEnumerable<Label> ParseNewNew(object value)
         {
             if (value is string str)
-                return new GroupBox().AddControlsHorizontally(ParseNew(str).ToArray());
+                return ParseNew(str);
             else if (value is IEnumerable<string> strEnum)
-                return new GroupBox().AddControlsHorizontally(strEnum.SelectMany(s => ParseNew(s)).ToArray());
+                return strEnum.SelectMany(s => ParseNew(s));
             else if (value is IEnumerable<object> objEnum)
-                return new GroupBox().AddControlsHorizontally(objEnum.Select(o => new Label(o)).ToArray());
+                return objEnum.Select(o => new Label(o));
             else
-                return new Label(value);
+                return new Label[] { new Label(value) };
+            
+            //if (value is string str)
+            //    return new GroupBox().AddControlsHorizontally(ParseNew(str).ToArray());
+            //else if (value is IEnumerable<string> strEnum)
+            //    return new GroupBox().AddControlsHorizontally(strEnum.SelectMany(s => ParseNew(s)).ToArray());
+            //else if (value is IEnumerable<object> objEnum)
+            //    return new GroupBox().AddControlsHorizontally(objEnum.Select(o => new Label(o)).ToArray());
+            //else
+            //    return new Label(value);
         }
     }
 }

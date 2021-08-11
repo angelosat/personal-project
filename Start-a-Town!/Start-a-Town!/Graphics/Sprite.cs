@@ -354,7 +354,7 @@ namespace Start_a_Town_
         {
             if (material == null) // TEMPORARY UNTIL I REMOVE MATERIAL FROM SPRITE
                 material = this.Material;
-            var matcol = material != null ? new Color(material.Color.R, material.Color.G, material.Color.B, (byte)(material.Shininess * 255)) : new Color(1f, 1f, 1f, 0f);
+            var matcol = material != null ? new Color(material.Color.R, material.Color.G, material.Color.B, (byte)(material.Shine * 255)) : new Color(1f, 1f, 1f, 0f);
             overlayColors.TryGetColor(this.OverlayName, ref matcol); 
             var t = tint;
             if (this.AtlasToken != null)

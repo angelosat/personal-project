@@ -13,7 +13,7 @@ namespace Start_a_Town_
         public HashSet<JobDef> AssociatedJobs = new();
         public Sprite SpriteHandle, SpriteHead;
         public ToolProps(string name)
-            : base($"ToolProps_{name}")
+            : base($"{nameof(ToolProps)}:{name}")
         {
             this.Label = name;
         }
@@ -71,7 +71,7 @@ namespace Start_a_Town_
                     reagents.Add(reagent.Value);
 
                 var reaction = new Reaction(
-                    toolDef.Name,
+                    toolDef.Label,
                     Reaction.CanBeMadeAt(IsWorkstation.Types.None, IsWorkstation.Types.Workbench),
                     reagents,
                     new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },

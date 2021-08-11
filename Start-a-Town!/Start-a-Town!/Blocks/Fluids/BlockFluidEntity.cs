@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Start_a_Town_.Blocks;
+﻿using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_
 {
-    class BlockEntityFluid : BlockEntity
+    class BlockFluidEntity : BlockEntity
     {
         int FlowTimer;
 
-        public BlockEntityFluid(IntVec3 originGlobal) : base(originGlobal)
+        public BlockFluidEntity(IntVec3 originGlobal) : base(originGlobal)
         {
         }
 

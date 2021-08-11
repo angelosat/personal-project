@@ -133,6 +133,16 @@ namespace Start_a_Town_
             Register(Ore);
             Register(Boulders);
             Register(Scraps);
+
+            var smelting = new Reaction("Smelt", SkillDef.Crafting, JobDefOf.Smelter)
+                .AddBuildSite(IsWorkstation.Types.Smeltery)
+                .AddIngredient(new Ingredient("a")
+                    .SetAllow(RawMaterialDef.Scraps, true)
+                    .SetAllow(RawMaterialDef.Ore, true)
+                    .SetAllow(MaterialType.Metal, true))
+                .AddProduct(new Reaction.Product(RawMaterialDef.Ingots).GetMaterialFromIngredient("a")
+                );
+            Reaction.Register(smelting);
         }
         static public Entity CreateFrom(ItemDef def, MaterialDef mat)
         {

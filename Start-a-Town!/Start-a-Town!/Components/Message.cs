@@ -29,7 +29,6 @@ namespace Start_a_Town_.Components
             EntityHitCeiling,
             EntityHitGround,
             EntityFootStep,
-            OrdersUpdatedNew,
             MiningDesignation,
             ObjectDisposed,
             OrderParametersChanged,

@@ -4,7 +4,6 @@ using Start_a_Town_.Modules.Crafting;
 using Start_a_Town_.Towns.Crafting;
 using Start_a_Town_.UI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Start_a_Town_.Crafting
@@ -12,46 +11,38 @@ namespace Start_a_Town_.Crafting
     class CraftOrderDetailsInterface : GroupBox
     {
         public Action<Reaction.Product.ProductMaterialPair> Callback = a => { };
-        readonly Panel PanelParts, PanelItemTypes, PanelMaterials, PanelCollapsible;
-        readonly Dictionary<Reaction.Reagent, ListBoxNoScroll<ItemDef, CheckBoxNew>> CachedReagentLists = new();
-        readonly Dictionary<Reaction.Reagent, ListBoxNoScroll<MaterialDef, CheckBoxNew>> CachedReagentMaterialLists = new();
+        readonly Panel PanelCollapsible;
         readonly CheckBoxNew ChkHaulOnFinish;
-        readonly CraftOrder Order;
+        readonly Control ReagentsContainer;
+        CraftOrder Order => this.Tag as CraftOrder;
         public CraftOrderDetailsInterface(CraftOrder order)
-            //: base(300, 400)//70, 150)
+            :this()
         {
-            this.Order = order;
+            this.Tag = order;
+        }
+        CraftOrderDetailsInterface()
+        {
             this.AutoSize = true;
 
-            this.PanelParts = new Panel() { AutoSize = true };
-            var reagents = order.Reaction.Reagents;
-
-            var listParts = new ListBoxNoScroll<Reaction.Reagent, Label>(c => new Label(c.Name, () => this.SelectReagent(c)))
-                .AddItems(reagents);
-            this.PanelParts.AddControls(listParts);
-
-            var listbox = new ScrollableBoxNewNew(200, 200, ScrollModes.Vertical);
-            var listcollapsible = this.CreateList(order);
-            listcollapsible.Build();
-            listbox.AddControls(listcollapsible);
-
-            this.PanelItemTypes = new Panel() { Location = this.PanelParts.TopRight };
-
-            this.PanelMaterials = new PanelLabeledNew("Materials") { Location = this.PanelItemTypes.BottomLeft }.SetClientDimensions(200, 150);
+            this.ReagentsContainer = new ScrollableBoxNewNew(200, 200, ScrollModes.Vertical);
 
             this.PanelCollapsible = new Panel() { AutoSize = false }.SetClientDimensions(200, 200);
-            this.PanelCollapsible.AddControls(listbox);
+            this.PanelCollapsible.AddControls(this.ReagentsContainer);
             this.AddControls(this.PanelCollapsible);
 
-            this.ChkHaulOnFinish = new CheckBoxNew("Haul on finish", this.Order.HaulOnFinish)
+            this.ChkHaulOnFinish = new CheckBoxNew("Haul on finish", () => PacketCraftOrderToggleHaul.Send(this.Order, !this.Order.HaulOnFinish), () => this.Order.HaulOnFinish)
             {
-                Location = this.PanelCollapsible.BottomLeft,
-                TickedFunc = () =>  this.Order.HaulOnFinish,
-                LeftClickAction = () => PacketCraftOrderToggleHaul.Send(this.Order, !this.Order.HaulOnFinish)
+                Location = this.PanelCollapsible.BottomLeft
             };
             this.AddControls(this.ChkHaulOnFinish);
         }
-
+        protected override void OnTagChanged()
+        {
+            var list = this.CreateList(this.Order);
+            list.Build();
+            this.ReagentsContainer.ClearControls();
+            this.ReagentsContainer.AddControls(list);
+        }
         ListCollapsibleNew CreateList(CraftOrder order)
         {
             var list = new ListCollapsibleNew();// 200, 200);
@@ -99,15 +90,6 @@ namespace Start_a_Town_.Crafting
                 }
             }
             return list;
-        }
-
-        private void SelectReagent(Reaction.Reagent r)
-        {
-            this.PanelItemTypes.ClearControls();
-            this.PanelItemTypes.AddControls(this.CachedReagentLists[r]);
-
-            this.PanelMaterials.ClearControls();
-            this.PanelMaterials.AddControls(this.CachedReagentMaterialLists[r]);
         }
 
         internal override void OnGameEvent(GameEvent e)

@@ -20,7 +20,7 @@ namespace Start_a_Town_.Towns.Crafting
             pRestrictions = Network.RegisterPacketHandler(SetOrderRestrictions);
 
             PacketOrderAdd.Init();
-            PacketOrderRemove.Init();
+            //PacketOrderRemove.Init();
             PacketCraftingOrderSync.Init();
             PacketCraftOrderToggleHaul.Init();
             PacketCraftOrderChangeMode.Init();
@@ -100,7 +100,6 @@ namespace Start_a_Town_.Towns.Crafting
             var increase = r.ReadBoolean();
             if (!benchEntity.Reorder(orderIndex, increase))
                 return;
-            net.EventOccured(Message.Types.OrdersUpdatedNew, benchEntity);
             if (net is Server server)
                 WriteOrderModifyPriority(server.OutgoingStream, order, increase);
         }
@@ -163,7 +162,6 @@ namespace Start_a_Town_.Towns.Crafting
             var order = new CraftOrder(this.OrderSequence++, reactionID, this.Town.Map, station);
             var benchEntity = this.Map.GetBlockEntity(station).GetComp<BlockEntityCompWorkstation>();
             benchEntity.Orders.Add(order);
-            this.Town.Map.EventOccured(Message.Types.OrdersUpdatedNew, benchEntity);
         }
         
         internal bool OrderExists(CraftOrder craftOrderNew)

@@ -178,7 +178,7 @@
     <Compile Include="Blocks\BlockPlacer.cs" />
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />
-    <Compile Include="Blocks\Fluids\BlockEntityFluid.cs" />
+    <Compile Include="Blocks\Fluids\BlockFluidEntity.cs" />
     <Compile Include="Blocks\Helpers\BlockHelper.cs" />
     <Compile Include="Blocks\LiduidFlowProcess.cs" />
     <Compile Include="Blocks\Workstations\BlockCarpentryEntity.cs" />
@@ -187,6 +187,7 @@
     <Compile Include="AI\Components\Personality\TraitDefOf.cs" />
     <Compile Include="Animations\AnimationBlending.cs" />
     <Compile Include="Animations\AnimationExtensions.cs" />
+    <Compile Include="Blocks\Workstations\BlockSmelteryEntity.cs" />
     <Compile Include="Components\Inventory\ContainerList.cs" />
     <Compile Include="Control\Hotkeys\HotkeyContext.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.cs" />

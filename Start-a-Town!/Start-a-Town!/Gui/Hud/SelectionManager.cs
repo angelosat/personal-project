@@ -356,6 +356,8 @@ namespace Start_a_Town_.UI
         public override void Update()
         {
             base.Update();
+
+            /// move this to ongameevent?
             if (this.SelectedSource is not null && this.SelectedSource.Type == TargetType.Entity && this.SelectedSource.Object.IsDisposed)
                 this.SelectInternal(TargetArgs.Null);
 
@@ -385,6 +387,9 @@ namespace Start_a_Town_.UI
 
                 case Message.Types.EntityDespawned:
                     // TODO: deselect entity on despawn?
+                    var entity = e.Parameters[0] as GameObject;
+                    if (this.MultipleSelected.FirstOrDefault(t => t.Object == entity) is TargetArgs t)
+                        this.MultipleSelected.Remove(t);
                     break;
 
                 default:

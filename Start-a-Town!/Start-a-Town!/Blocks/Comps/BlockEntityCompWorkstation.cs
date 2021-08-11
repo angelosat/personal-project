@@ -40,6 +40,7 @@ namespace Start_a_Town_
         {
             var order = this.GetOrder(orderID);
             this.Orders.Remove(order);
+            order.Removed();
             return order;
         }
         internal bool Reorder(int orderID, bool increasePriority)

@@ -38,5 +38,6 @@ namespace Start_a_Town_
         static public readonly Block Kitchen = new BlockWorkstation("Kitchen", typeof(BlockKitchenEntity));
         static public readonly Block PlantProcessingBench = new BlockWorkstation("PlantProcessing", typeof(BlockPlantProcessingEntity));
         static public readonly Block CarpentryBench = new BlockWorkstation("CarpenterBench", typeof(BlockCarpentryEntity));
+        static public readonly Block Smeltery = new BlockWorkstation("Smeltery", typeof(BlockSmelteryEntity));
     }
 }

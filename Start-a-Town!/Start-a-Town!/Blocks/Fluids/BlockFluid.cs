@@ -32,11 +32,11 @@ namespace Start_a_Town_.Blocks
         
         public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {
-            return new BlockEntityFluid(originGlobal);
+            return new BlockFluidEntity(originGlobal);
         }
         public override void NeighborChanged(MapBase map, IntVec3 global)
         {
-            map.AddBlockEntity(global, new BlockEntityFluid(global));
+            map.AddBlockEntity(global, new BlockFluidEntity(global));
         }
 
         public override bool IsTargetable(Vector3 global)

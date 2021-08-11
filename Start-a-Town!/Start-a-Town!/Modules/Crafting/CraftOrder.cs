@@ -15,15 +15,12 @@ namespace Start_a_Town_
         enum CraftMode { XTimes, UntilX, Forever }
         
         static readonly Dictionary<int, CraftOrder> References = new();
-        public static CraftOrder GetOrder(int id) => References[id];
         static ListCollapsibleNew DetailsUIReagents;
         static Control DetailsUIContainer;
+        static Window DetailsWindow;
 
-        public string Name => this.Reaction.Name;
-        string IListable.Label => this.Name;
         public CraftOrderFinishMode FinishMode = CraftOrderFinishMode.AllModes.First();
         public int Quantity = 1;
-        CraftMode Mode = CraftMode.XTimes;
         public int ID;
         public Reaction Reaction;
         public IntVec3 Workstation;
@@ -31,16 +28,20 @@ namespace Start_a_Town_
         public bool HaulOnFinish;
         public bool Enabled;
         public Dictionary<string, IngredientRestrictions> Restrictions = new();
-        readonly Dictionary<string, HashSet<int>> ReagentRestrictions = new();
 
+        readonly Dictionary<string, HashSet<int>> ReagentRestrictions = new();
+        CraftOrderDetailsInterface DetailsGui;
+        CraftMode Mode = CraftMode.XTimes;
+
+        public string Name => this.Reaction.Name;
+        string IListable.Label => this.Name;
+        public static CraftOrder GetOrder(int id) => References[id];
         public bool IsActive
         {
             get
             {
                 if (!this.GetWorkstation().Orders.Contains(this))
-                {
                     return false;
-                }
 
                 return this.FinishMode.IsActive(this);
             }
@@ -143,7 +144,6 @@ namespace Start_a_Town_
         public void Complete(GameObject agent)
         {
             this.FinishMode.OnComplete(this);
-            agent.Net.EventOccured(Components.Message.Types.OrdersUpdatedNew, this.Workstation);
         }
 
         public BlockEntityCompWorkstation GetWorkstation()
@@ -154,79 +154,6 @@ namespace Start_a_Town_
         internal void ToggleReagentRestrictions(string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
         {
             this.Restrictions[reagent].ToggleRestrictions(defs, mats, matTypes);
-        }
-
-        public Control GetListControlGui()
-        {
-            var box = new GroupBox
-            {
-                BackgroundColor = UIManager.DefaultListItemBackgroundColor
-            };
-
-            var btnUp = new ButtonIcon(Icon.ArrowUp, MoveUp);
-            var btnDown = new ButtonIcon(Icon.ArrowDown, MoveDown) { Location = btnUp.BottomLeft };
-            box.AddControls(btnUp, btnDown);
-
-            var orderName = new Label(this.Reaction.Name) { Location = btnUp.TopRight };
-            var comboFinishMode = new ComboBoxNewNew<CraftOrderFinishMode>(CraftOrderFinishMode.AllModes, 100, c => c.GetString(this), ChangeFinishMode, () => this.FinishMode) { Location = orderName.BottomLeft };
-
-            box.AddControls(orderName,
-                comboFinishMode);
-
-            var btnClose = new IconButton(Icon.X) { LocationFunc = () => new Vector2(PanelTitled.GetClientLength(290), 0), BackgroundTexture = UIManager.Icon16Background };
-            btnClose.Anchor = Vector2.UnitX;
-            btnClose.LeftClickAction = RemoveOrder;
-            btnClose.ShowOnParentFocus(true);
-            box.AddControls(btnClose);
-
-            var btnMinus = new Button("-", Minus, Button.DefaultHeight) { Location = comboFinishMode.TopRight };
-            var btnPlus = new Button("+", Plus, Button.DefaultHeight) { Location = btnMinus.TopRight };
-            box.AddControls(btnMinus, btnPlus);
-
-            var panelDetails = new CraftOrderDetailsInterface(this);
-
-            var btnDetails = new Button("Details", ToggleDetails);
-            //btnDetails.LeftClickAction = ToggleDetails;
-            box.AddControls(btnDetails.AnchorToBottomRight());
-
-            panelDetails.ToWindow(this.Name);
-            return box;
-
-            void ToggleDetails()
-            {
-                var win = panelDetails.GetWindow();
-                win.Location = UIManager.Mouse;
-                //win.Location = btnDetails.ScreenLocation + btnDetails.Width * Vector2.UnitX;
-                win.Toggle();
-            }
-            void MoveDown()
-            {
-                ChangeOrderPriority(false);
-            }
-            void MoveUp()
-            {
-                ChangeOrderPriority(true);
-            }
-            void ChangeOrderPriority(bool p)
-            {
-                Towns.Crafting.CraftingManager.WriteOrderModifyPriority(Client.Instance.OutgoingStream, this, p);
-            }
-            void RemoveOrder()
-            {
-                PacketOrderRemove.Send(this.Map.Net, this);
-            }
-            void Minus()
-            {
-                Towns.Crafting.CraftingManager.WriteOrderModifyQuantityParams(Client.Instance.OutgoingStream, this, -1);
-            }
-            void Plus()
-            {
-                Towns.Crafting.CraftingManager.WriteOrderModifyQuantityParams(Client.Instance.OutgoingStream, this, 1);
-            }
-            void ChangeFinishMode(CraftOrderFinishMode obj)
-            {
-                PacketCraftOrderChangeMode.Send(this, (int)obj.Mode);
-            }
         }
 
         CraftOrder(SaveTag tag) : this(null, tag)
@@ -401,7 +328,6 @@ namespace Start_a_Town_
             tag.TryGetTagValue<int>("FinishMode", p => this.FinishMode = CraftOrderFinishMode.GetMode(p));
             tag.TryGetTagValue<int>("ID", out this.ID);
             tag.TryGetTagValue<int>("Quantity", p => this.Quantity = p);
-            //tag.TryGetTagValue<IntVec3>("Bench", p => this.Workstation = p);
             this.Workstation = tag.LoadIntVec3("Bench");
             tag.TryGetTagValue("Enabled", out this.Enabled);
             tag.TryGetTag("RestrictionsNew", t =>
@@ -435,7 +361,86 @@ namespace Start_a_Town_
         {
             return this.GetUniqueLoadID();
         }
+        internal void Removed()
+        {
+            if (DetailsGui.Tag == this)
+                DetailsGui.GetWindow().Hide();
+        }
+        
+        public Control GetListControlGui()
+        {
+            var box = new GroupBox
+            {
+                BackgroundColor = UIManager.DefaultListItemBackgroundColor
+            };
 
+            var btnUp = new ButtonIcon(Icon.ArrowUp, MoveUp);
+            var btnDown = new ButtonIcon(Icon.ArrowDown, MoveDown) { Location = btnUp.BottomLeft };
+            box.AddControls(btnUp, btnDown);
+
+            var orderName = new Label(this.Reaction.Name) { Location = btnUp.TopRight };
+            var comboFinishMode = new ComboBoxNewNew<CraftOrderFinishMode>(CraftOrderFinishMode.AllModes, 100, c => c.GetString(this), ChangeFinishMode, () => this.FinishMode) { Location = orderName.BottomLeft };
+
+            box.AddControls(orderName,
+                comboFinishMode);
+
+            var btnClose = new IconButton(Icon.X) { LocationFunc = () => new Vector2(PanelTitled.GetClientLength(290), 0), BackgroundTexture = UIManager.Icon16Background };
+            btnClose.Anchor = Vector2.UnitX;
+            btnClose.LeftClickAction = RemoveOrder;
+            btnClose.ShowOnParentFocus(true);
+            box.AddControls(btnClose);
+
+            var btnMinus = new Button("-", Minus, Button.DefaultHeight) { Location = comboFinishMode.TopRight };
+            var btnPlus = new Button("+", Plus, Button.DefaultHeight) { Location = btnMinus.TopRight };
+            box.AddControls(btnMinus, btnPlus);
+
+            DetailsGui = DetailsGui ??= new CraftOrderDetailsInterface(this);
+          
+            var btnDetails = new Button("Details", ToggleDetails);
+            box.AddControls(btnDetails.AnchorToBottomRight());
+
+            return box;
+
+            void ToggleDetails()
+            {
+                if (DetailsWindow is null)
+                    DetailsWindow = new Window() { Movable = true, Closable = true };
+                DetailsWindow.Client.ClearControls();
+                DetailsWindow.Client.AddControls(this.DetailsGui);
+                DetailsWindow.SetTitle(this.Name);
+                if (DetailsWindow.Show())
+                    DetailsWindow.Location = UIManager.Mouse;
+            }
+            void MoveDown()
+            {
+                ChangeOrderPriority(false);
+            }
+            void MoveUp()
+            {
+                ChangeOrderPriority(true);
+            }
+            void ChangeOrderPriority(bool p)
+            {
+                Towns.Crafting.CraftingManager.WriteOrderModifyPriority(Client.Instance.OutgoingStream, this, p);
+            }
+            void RemoveOrder()
+            {
+                PacketOrderRemove.Send(this.Map.Net, this);
+            }
+            void Minus()
+            {
+                Towns.Crafting.CraftingManager.WriteOrderModifyQuantityParams(Client.Instance.OutgoingStream, this, -1);
+            }
+            void Plus()
+            {
+                Towns.Crafting.CraftingManager.WriteOrderModifyQuantityParams(Client.Instance.OutgoingStream, this, 1);
+            }
+            void ChangeFinishMode(CraftOrderFinishMode obj)
+            {
+                PacketCraftOrderChangeMode.Send(this, (int)obj.Mode);
+            }
+        }
+        [Obsolete]
         public void ShowDetailsUI(Action<CraftOrder, string, ItemDef[], MaterialDef[], MaterialType[]> callback)
         {
             var box = new ScrollableBoxNewNew(200, 200, ScrollModes.Vertical);

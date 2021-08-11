@@ -41,9 +41,9 @@ namespace Start_a_Town_.UI
             return this;
         }
 
-        public Table<TObject> AddColumn(string label, int width, Func<TObject, Control> controlGetter)
+        public Table<TObject> AddColumn(string label, int width, Func<TObject, Control> controlGetter, float anchorX = 0)
         {
-            this.Columns.Add(new(label, width, controlGetter));
+            this.Columns.Add(new(label, width, controlGetter, anchorX));
             this.RowWidth += width;
             return this;
         }
@@ -66,7 +66,10 @@ namespace Start_a_Town_.UI
                 int currentX = 0;
                 foreach (var col in this.Columns)
                 {
-                    row.AddControls(col.ControlGetter(item).SetLocation(currentX, 0));
+                    var ctrl = col.ControlGetter(item);
+                    //ctrl.SetLocation(currentX, 0);
+                    ctrl.SetLocation(currentX + (int)(col.AnchorX * (col.Width - ctrl.Width)), 0);
+                    row.AddControls(ctrl);
                     currentX += col.Width;
                 }
                 row.Controls.AlignCenterHorizontally();
@@ -132,11 +135,13 @@ namespace Start_a_Town_.UI
             public string Label;
             public int Width;
             public Func<TObject, Control> ControlGetter;
-            public Column(string label, int width, Func<TObject, Control> controlGetter)
+            public float AnchorX;
+            public Column(string label, int width, Func<TObject, Control> controlGetter, float anchorx)
             {
                 this.Label = label;
                 this.Width = width;
                 this.ControlGetter = controlGetter;
+                this.AnchorX = anchorx;
             }
         }
     }

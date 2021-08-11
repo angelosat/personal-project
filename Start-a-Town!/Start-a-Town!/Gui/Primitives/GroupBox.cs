@@ -51,7 +51,7 @@ namespace Start_a_Town_.UI
         }
         public virtual GroupBox AddControlsLineWrap(IEnumerable<ButtonBase> labels, int width = int.MaxValue)
         {
-            if (labels.Count() == 1)
+            if (!this.Controls.Any() && labels.Count() == 1)
                 return this.AddControls(labels.First()) as GroupBox;
 
             var lastControl = this.Controls.LastOrDefault();
@@ -68,8 +68,8 @@ namespace Start_a_Town_.UI
                 currentX += l.Width;
                 this.AddControls(l);
             }
-            if (width != int.MaxValue)
-                this.Width = width;
+            //if (width != int.MaxValue)
+            //    this.Width = width;
             return this;
         }
 

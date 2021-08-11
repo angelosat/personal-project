@@ -60,7 +60,7 @@ namespace Start_a_Town_
             this.SubTypes.Add(mat);
         }
 
-        public IEnumerable<(object item, object value)> Inspect()
+        public IEnumerable<(string item, object value)> Inspect()
         {
             yield return (nameof(this.Category), this.Category);
             yield return (nameof(this.ReactionClass), this.ReactionClass);

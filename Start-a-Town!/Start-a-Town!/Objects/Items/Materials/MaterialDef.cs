@@ -11,7 +11,6 @@ namespace Start_a_Town_
 
         public static Dictionary<int, MaterialDef> RegistryByHash = new();
 
-        public string Label => this.Name;
 
         public static MaterialDef GetMaterial(int materialHash)
         {
@@ -153,7 +152,7 @@ namespace Start_a_Town_
             return this;
         }
 
-        public IEnumerable<(object item, object value)> Inspect()
+        public IEnumerable<(string item, object value)> Inspect()
         {
             yield return (nameof(this.Type), this.Type);
             yield return (nameof(this.Density), this.Density);

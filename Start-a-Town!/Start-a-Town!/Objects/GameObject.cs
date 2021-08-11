@@ -637,7 +637,7 @@ namespace Start_a_Town_
                 new Button("Center Cam") { LeftClickAction = () => { ScreenManager.CurrentScreen.Camera.CenterOn(this.Global); } }
                 );
         }
-        public IEnumerable<(object item, object value)> Inspect()
+        public IEnumerable<(string item, object value)> Inspect()
         {
             yield return (nameof(this.Name), this.Name);
             foreach (var bone in Body.GetAllBones())

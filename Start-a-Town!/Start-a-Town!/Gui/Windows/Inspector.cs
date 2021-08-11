@@ -31,10 +31,11 @@ namespace Start_a_Town_
                 };
             }
             Container.ClearControls();
-            var table = new Table<(object item, object value)>()
-                .AddColumn("name", 128, i => new Label(i.item))
-                //.AddColumn("value", 128, i => new Label(i.value) { HoverText = i.value.ToString() });
-                .AddColumn("value", 128, i => new GroupBox().AddControlsLineWrap(128, Label.ParseNewNew(i.value).ToArray()));// { HoverText = i.value.ToString() });
+            var table = new Table<(string item, object value)>()
+                //.AddColumn("name", 128, i => new Label(i.item), 1)
+                //.AddColumn("name", 96, i => new GroupBox().AddControlsLineWrap(96, new Label(i.item), new Label(": ")), 1)
+                .AddColumn("name", 128, i => new Label(i.item + ": "), 1)
+                .AddColumn("value", 256, i => new GroupBox().AddControlsLineWrap(256, Label.ParseNewNew(i.value).ToArray()));
 
             table.AddItems(obj.Inspect()
                 .Prepend((nameof(obj.Label), obj.Label))

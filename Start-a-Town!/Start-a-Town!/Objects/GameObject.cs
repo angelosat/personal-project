@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class GameObject : IEntity, ITooltippable, IContextable, INameplateable, ISlottable, ISelectable, ILabeled
+    public class GameObject : IEntity, ITooltippable, IContextable, INameplateable, ISlottable, ISelectable, ILabeled, IInspectable
     {
         public static Dictionary<int, GameObject> Templates = new();
         public string Label => this.Def.Label;
@@ -636,6 +636,12 @@ namespace Start_a_Town_
             ui.PanelActions.AddControls(
                 new Button("Center Cam") { LeftClickAction = () => { ScreenManager.CurrentScreen.Camera.CenterOn(this.Global); } }
                 );
+        }
+        public IEnumerable<(object item, object value)> Inspect()
+        {
+            yield return (nameof(this.Name), this.Name);
+            foreach (var bone in Body.GetAllBones())
+                yield return (bone.Def.Label, bone.Material);
         }
 
         public Window GetUi()

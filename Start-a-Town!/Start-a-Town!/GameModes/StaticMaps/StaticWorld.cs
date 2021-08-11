@@ -39,8 +39,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public bool Trees;
         TimeSpan ClockOffset = TimeSpan.FromHours(12);
         public TimeSpan Clock => ClockOffset + TimeSpan.FromMilliseconds((double)this.CurrentTick * Ticks.IngameMillisecondsPerTick);
-        
-
         public Random Random { get; set; }
         public MapCollection Maps;
         public StaticMap Map { get { return this.Maps.Values.First() as StaticMap; } }

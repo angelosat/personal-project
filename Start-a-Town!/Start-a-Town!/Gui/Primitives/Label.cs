@@ -105,9 +105,20 @@ namespace Start_a_Town_.UI
         {
             this.TextFunc = textFunc;
         }
-
+        //public Label(IDetails obj):this(obj.Label)
+        //{
+        //    this.Active = true;
+        //    this.LeftClickAction = () => throw new NotImplementedException();
+        //}
         public Label(string text) : this(Vector2.Zero, text) { }
-        public Label(object obj) : this(Vector2.Zero, obj.ToString()) { }
+        public Label(object obj) : this(Vector2.Zero, obj.ToString())
+        {
+            if(obj is IInspectable objdetails)
+            {
+                this.Active = true;
+                this.LeftClickAction = () => WindowInspect.Refresh(objdetails);
+            }
+        }
         public Label(object obj, Action action) : this(Vector2.Zero, obj.ToString())
         {
             this.Active = true;

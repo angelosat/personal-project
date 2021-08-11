@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class MaterialDef : Def, ILabeled
+    public class MaterialDef : Def, ILabeled, IInspectable
     {
         public static readonly Random Randomizer = new();
 
@@ -151,6 +151,15 @@ namespace Start_a_Town_
         {
             this.Type = type;
             return this;
+        }
+
+        public IEnumerable<(object item, object value)> Inspect()
+        {
+            yield return (nameof(this.Label), this.Label);
+            yield return (nameof(this.Density), this.Density);
+            yield return (nameof(this.Color), this.Color);
+            yield return (nameof(this.Value), this.Value);
+            yield return (nameof(this.Shininess), this.Shininess);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
@@ -12,7 +11,7 @@ namespace Start_a_Town_
         }
 
         private const string _description = "Hit Points";
-        private const string _format = "##0";//.00";
+        private const string _format = "##0";
         public override string Format => _format;
         public override string Description => _description; 
 

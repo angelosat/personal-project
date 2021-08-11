@@ -35,7 +35,10 @@ namespace Start_a_Town_
         public int YieldThreshold;
         public int MaxYieldCutDown;
        
-        public int StemHealRate; // ticks to heal 1 hitpoint // cutdown hit points recovered per one game day  TODO recover a fixed amount or a percentage?
+        /// <summary>
+        /// Ticks per 1 hitpoint recovery.
+        /// </summary>
+        public int StemHealRate;
 
         [Obsolete]
         ///instead of using cutdowndifficulty, determine cutdown hitpoints by stem material density

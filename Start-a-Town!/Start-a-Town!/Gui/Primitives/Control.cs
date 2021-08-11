@@ -1376,7 +1376,7 @@ namespace Start_a_Town_.UI
             if (this.Width > w)
                 mode = ScrollModes.Horizontal;
             if (this.Height > h)
-                mode &= ScrollModes.Vertical;
+                mode |= ScrollModes.Vertical;
             return ScrollableBoxNewNew.FromClientSize(w, h, mode).AddControls(this);
         }
     }

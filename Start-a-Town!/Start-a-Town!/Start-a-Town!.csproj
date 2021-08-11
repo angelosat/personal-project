@@ -211,6 +211,7 @@
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
     <Compile Include="Gui\ScrollBars\ScrollModes.cs" />
+    <Compile Include="Gui\Windows\WindowInspect.cs" />
     <Compile Include="Helpers\Collections\ObservableDictionary.cs" />
     <Compile Include="Helpers\EnsureStaticCtorCall.cs" />
     <Compile Include="Interfaces\IListable.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Modules\Towns\Stockpiles\ItemFilter.cs" />
     <Compile Include="Modules\Towns\Storage\StorageManager.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemPreferencesManager.ItemPreference.cs" />
+    <Compile Include="Objects\Items\Materials\IInspectable.cs" />
     <Compile Include="Objects\Loot.cs" />
     <Compile Include="Objects\LootTable.cs" />
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />

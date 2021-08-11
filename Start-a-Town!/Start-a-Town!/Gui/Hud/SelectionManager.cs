@@ -116,14 +116,12 @@ namespace Start_a_Town_.UI
         {
             this.LabelName.TextFunc = () => text;
         }
+        static Window WindowHelp;
         private static void ToggleInfo()
         {
-            if (Instance.WindowInfo is null)
-                Instance.WindowInfo = WindowTargetManagementStatic.Refresh(Instance.SelectedSource);
-            else
-            {
-                Instance.WindowInfo.Toggle();
-            }
+            if (Instance.SelectedSource.Object is IInspectable obj)
+                WindowInspect.Refresh(obj);
+            WindowInspect.Show();
         }
 
         public static void Select(TargetArgs target)

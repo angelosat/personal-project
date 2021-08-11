@@ -353,7 +353,7 @@ namespace Start_a_Town_.Components
         {
             var emitter = new ParticleEmitterSphere()
             {
-                Lifetime = Engine.TicksPerSecond / 2f,
+                Lifetime = Ticks.TicksPerSecond / 2f,
                 Offset = Vector3.Zero,
                 Rate = 0,
                 ParticleWeight = 0f,//1f,
@@ -371,7 +371,7 @@ namespace Start_a_Town_.Components
             var dustcolor = block.DirtColor;
             var emitter = new ParticleEmitterSphere()
             {
-                Lifetime = Engine.TicksPerSecond / 2f,
+                Lifetime = Ticks.TicksPerSecond / 2f,
                 Offset = Vector3.Zero,
                 Rate = 0,
                 ParticleWeight = 1f,
@@ -385,7 +385,7 @@ namespace Start_a_Town_.Components
         }
         static readonly ParticleEmitterSphere DustEmitter = new ParticleEmitterSphere()
         {
-            Lifetime = Engine.TicksPerSecond,
+            Lifetime = Ticks.TicksPerSecond,
             Offset = Vector3.Zero,
             Rate = 0,
             ParticleWeight = 1f,

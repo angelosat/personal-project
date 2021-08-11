@@ -11,7 +11,7 @@ namespace Start_a_Town_.AI.Behaviors
         public AIAwareness()
         {
             this.Timer = 0;
-            this.Period = Engine.TicksPerSecond;
+            this.Period = Ticks.TicksPerSecond;
         }
         public override BehaviorState Execute(Actor parent, AIState state)
         {

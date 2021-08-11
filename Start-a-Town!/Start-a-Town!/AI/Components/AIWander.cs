@@ -74,7 +74,7 @@ namespace Start_a_Town_.AI.Behaviors
         public Behavior Refresh(GameObject parent, AIState state)
         {
             ChooseDirection(parent, state);
-            this.Timer = Engine.TicksPerSecond;
+            this.Timer = Ticks.TicksPerSecond;
             return this;
         }
         public override void Write(System.IO.BinaryWriter w)

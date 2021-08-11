@@ -167,9 +167,9 @@ namespace Start_a_Town_.UI
             if (existing != null)
                 Instance.SelectInternal(Instance.MultipleSelected.Except(new TargetArgs[] { existing }));
             else
-                Instance.SelectInternal(Instance.MultipleSelected.Concat(new TargetArgs[] { target }));
+                Instance.SelectInternal(Instance.MultipleSelected.Concat(new TargetArgs[] { target }).ToList());
         }
-        private IEnumerable<TargetArgs> Filter(IEnumerable<TargetArgs> targets)
+        private IEnumerable<TargetArgs> FilterActors(IEnumerable<TargetArgs> targets)
         {
             if (targets.Any(i => i.Type == TargetType.Entity && i.Object.HasComponent<NpcComponent>()))
                 return targets.Where(i => i.Type == TargetType.Entity && i.Object.HasComponent<NpcComponent>());
@@ -179,7 +179,7 @@ namespace Start_a_Town_.UI
         private void SelectInternal(IEnumerable<TargetArgs> targets)
         {
             this.SelectInternal(TargetArgs.Null);
-            this.MultipleSelected = this.Filter(targets).Where(t => t.Exists).ToList();
+            this.MultipleSelected = this.FilterActors(targets).Where(t => t.Exists).ToList();
             if (this.MultipleSelected.Count == 0)
                 return;
             if (this.MultipleSelected.Count == 1)

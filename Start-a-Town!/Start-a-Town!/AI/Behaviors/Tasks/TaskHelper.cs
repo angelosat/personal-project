@@ -119,7 +119,7 @@ namespace Start_a_Town_
         {
             var actor = bhav.Actor;
             var patienceTrait = actor.GetTrait(TraitDefOf.Patience);
-            var patienceBase = Engine.TicksPerSecond * TimeSpan.FromMinutes(1).TotalSeconds;
+            var patienceBase = Ticks.TicksPerSecond * TimeSpan.FromMinutes(1).TotalSeconds;
             var patience = patienceBase * (1 + patienceTrait.Percentage * .5f);
             bhav.FailOn(() =>
             {

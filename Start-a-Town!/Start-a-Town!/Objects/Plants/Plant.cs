@@ -1,5 +1,4 @@
-﻿using System;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -15,6 +14,7 @@ namespace Start_a_Town_
         public Plant() : base()
         {
             this.AddComponent(new PlantComponent());
+            this.AddComponent(new ResourcesComponent(ResourceDef.HitPoints));
         }
 
         public Plant(ItemDef def):base()

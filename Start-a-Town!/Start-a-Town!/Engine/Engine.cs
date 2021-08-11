@@ -23,6 +23,8 @@ namespace Start_a_Town_
     }
     public class Engine
     {
+        
+
         static Engine()
         {
             try { Config = XDocument.Load("config.xml"); }
@@ -48,8 +50,7 @@ namespace Start_a_Town_
             get => _Map;
             set => _Map = value;
         }
-        static public int TicksPerSecond = 60;
-        static public float Tick = 1000 / (float)TicksPerSecond;
+        static public float Tick = 1000 / (float)Ticks.TicksPerSecond;
         static public int MaxChunkLoadThreads = 3;
         static public Stopwatch TileDrawTime = Stopwatch.StartNew();
         static public TimeSpan Average = TimeSpan.Zero;
@@ -152,5 +153,6 @@ namespace Start_a_Town_
             Nameplate.Reset();
             GC.Collect();
         }
+
     }
 }

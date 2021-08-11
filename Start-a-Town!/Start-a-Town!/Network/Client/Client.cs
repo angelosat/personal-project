@@ -44,7 +44,7 @@ namespace Start_a_Town_.Net
 
         public NetworkSideType Type => NetworkSideType.Local;
 
-        readonly int TimeoutLength = Engine.TicksPerSecond * 2;
+        readonly int TimeoutLength = Ticks.TicksPerSecond * 2;
         int Timeout = -1;
 
         const int OrderedReliablePacketsHistoryCapacity = 64;

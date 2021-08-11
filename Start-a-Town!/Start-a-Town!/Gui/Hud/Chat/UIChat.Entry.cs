@@ -7,9 +7,9 @@ namespace Start_a_Town_.UI
     {
         public class Entry : Label
         {
-            static readonly int TimerLength = Engine.TicksPerSecond * 8; 
+            static readonly int TimerLength = Ticks.TicksPerSecond * 8; 
             int TimerTick = TimerLength;
-            static readonly int FadeLength = Engine.TicksPerSecond;
+            static readonly int FadeLength = Ticks.TicksPerSecond;
             int FadeTick = FadeLength;
 
             public Entry(Color color, string text) : base(text)

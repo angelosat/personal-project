@@ -10,17 +10,29 @@ namespace Start_a_Town_
     public class Resource : IProgressBar, ISaveable, ISerializable, INamed
     {
         public readonly ResourceDef ResourceDef;
-        public List<ResourceRateModifier> Modifiers = new List<ResourceRateModifier>();
-        public float Max;
-        float _Value;
+        public List<ResourceRateModifier> Modifiers = new();
+        float ModValuePerTick;
+        public int TicksPerRecoverOne, TicksPerDrainOne;
+        int TickRecover, TickDrain;
+        float _max;
+        public float Max
+        {
+            get => this._max; set
+            {
+                var oldmax = this._max;
+                this._max = value;
+                this.Value += (value - oldmax);
+            }
+        }
+        float _value;
         public float Value
         {
-            get{ return this._Value; }
-            set { this._Value = Math.Max(0, Math.Min(value, this.Max)); }
+            get => this._value;
+            set =>this._value = Math.Max(0, Math.Min(value, this.Max)); 
         }
 
         public Progress Rec = ResourceDef.Recovery;
-        public float Percentage { get { return this.Value / this.Max; } set { this.Value = this.Max * value; } }
+        public float Percentage { get => this.Value / this.Max; set => this.Value = this.Max * value; }
         public float Min => 0;
 
         public string Name => this.ResourceDef.Name;
@@ -35,6 +47,23 @@ namespace Start_a_Town_
         public void Tick(GameObject parent)
         {
             this.ResourceDef.Tick(parent, this);
+            //this.Value += this.ModValuePerTick;
+            if (this.TicksPerRecoverOne > 0)
+            {
+                if (this.TickRecover-- <= 0)
+                {
+                    this.TickRecover = this.TicksPerRecoverOne;
+                    this.Value++;
+                }
+            }
+            if (this.TicksPerDrainOne > 0)
+            {
+                if (this.TickDrain-- <= 0)
+                {
+                    this.TickDrain = this.TicksPerDrainOne;
+                    this.Value--;
+                }
+            }
         }
 
         internal virtual void HandleRemoteCall(GameObject parent, ObjectEventArgs e)
@@ -81,7 +110,7 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return string.Format("{0}: {1} / {2}", this.ResourceDef.Name, this.Value.ToString(this.ResourceDef.Format), this.Max.ToString(this.ResourceDef.Format));
+            return $"{this.ResourceDef.Name}: {this.Value.ToString(this.ResourceDef.Format)} / {this.Max.ToString(this.ResourceDef.Format)}";
         }
 
         public SaveTag Save(string name = "")
@@ -94,20 +123,20 @@ namespace Start_a_Town_
 
         public ISaveable Load(SaveTag tag)
         {
-            tag.TryGetTagValue("Value", out this._Value);
-            tag.TryGetTagValue("Max", out this.Max);
+            tag.TryGetTagValue("Value", out this._value);
+            tag.TryGetTagValue("Max", out this._max);
             return this;
         }
 
         public void Write(BinaryWriter w)
         {
-            w.Write(this._Value);
+            w.Write(this._value);
             w.Write(this.Max);
         }
 
         public ISerializable Read(BinaryReader r)
         {
-            this._Value = r.ReadSingle();
+            this._value = r.ReadSingle();
             this.Max = r.ReadSingle();
             return this;
         }

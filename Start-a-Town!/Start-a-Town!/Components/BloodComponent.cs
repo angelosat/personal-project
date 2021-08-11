@@ -16,7 +16,7 @@ namespace Start_a_Town_.Components
 
         static readonly ParticleEmitterSphere BloodEmitter = new ParticleEmitterSphere()
         {
-            Lifetime = Engine.TicksPerSecond * 5,
+            Lifetime = Ticks.TicksPerSecond * 5,
             Offset = Vector3.UnitZ,
             Rate = 0,
             ParticleWeight = 1f,

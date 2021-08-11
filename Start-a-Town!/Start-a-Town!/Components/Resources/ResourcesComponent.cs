@@ -6,7 +6,7 @@ using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
-    class ResourcesComponent : EntityComponent
+    public class ResourcesComponent : EntityComponent
     {
         public Resource[] Resources;
         
@@ -144,7 +144,7 @@ namespace Start_a_Town_
         {
             info.AddInfo(this.CachedGui);
         }
-
+        
         internal void AddModifier(ResourceRateModifier resourceRateModifier)
         {
             var resource = this.GetResource(resourceRateModifier.Def.Source);

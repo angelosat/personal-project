@@ -10,7 +10,7 @@ namespace Start_a_Town_
         readonly IPowerSource PowerSource;
         readonly byte Intensity;
         readonly int Consumption;
-        readonly static int ConsumptionRate = Engine.TicksPerSecond;
+        readonly static int ConsumptionRate = Ticks.TicksPerSecond;
         readonly Func<bool> IsSwitchedOn;
 
         public bool Powered;

@@ -12,7 +12,7 @@ namespace Start_a_Town_
         GroupBox CreateGui()
         {
             this._tmpGuiScale = UIManager.Scale;
-            this._tmpTooltipDelay = TooltipManager.DelayInterval / Engine.TicksPerSecond;
+            this._tmpTooltipDelay = TooltipManager.DelayInterval / Ticks.TicksPerSecond;
 
             return new GroupBox() { Name = "Interface" }.AddControlsVertically(
                     SliderNew.CreateWithLabel("UI Scale", () => this._tmpGuiScale, v => this._tmpGuiScale = v, 100, 1, 2, 0.1f, "0%"),

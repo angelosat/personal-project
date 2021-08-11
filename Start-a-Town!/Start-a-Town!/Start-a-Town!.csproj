@@ -188,6 +188,7 @@
     <Compile Include="Animations\AnimationExtensions.cs" />
     <Compile Include="Blocks\Workstations\BlockSmelteryEntity.cs" />
     <Compile Include="Components\Inventory\ContainerList.cs" />
+    <Compile Include="Components\Resources\HitPoints.cs" />
     <Compile Include="Control\Hotkeys\HotkeyContext.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.Hotkey.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Control\Tools\CellRendering\BlockRendererNew.cs" />
     <Compile Include="Control\Tools\CellRendering\BlockRendererObservable.cs" />
     <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
+    <Compile Include="Engine\Ticks.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
     <Compile Include="Gui\Hud\Chat\UIChat.Entry.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListCollapsibleObservable.cs" />

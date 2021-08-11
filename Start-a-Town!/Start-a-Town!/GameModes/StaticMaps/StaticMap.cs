@@ -123,7 +123,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public void AddTime()
         {
             var clock = this.Clock;
-            double normal = (clock.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
+            double normal = (clock.TotalMinutes - Ticks.TicksPerSecond * (Zenith - 12)) / 1440f;
             double nn = normal * 2 * Math.PI;
             nn = 3 * Math.Cos(nn);
             this.DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
@@ -144,7 +144,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         #region Updating
         public override void Update()
         {
-            IconOffset = (float)Math.Sin(this.Net.Clock.TotalMilliseconds / Engine.TicksPerSecond);
+            IconOffset = (float)Math.Sin(this.Net.Clock.TotalMilliseconds / Ticks.TicksPerSecond);
 
             this.TryPerformQueuedRandomBlockUpdates();
             this.CachedAmbientColor = this.UpdateAmbientColor();
@@ -823,7 +823,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public override double GetDayTimeNormal()
         {
-            double normal = (this.Clock.TotalMinutes - Engine.TicksPerSecond * (Zenith - 12)) / 1440f;
+            double normal = (this.Clock.TotalMinutes - Ticks.TicksPerSecond * (Zenith - 12)) / 1440f;
             double nn = normal * 2 * Math.PI;
             nn = 3 * Math.Cos(nn);
             return Math.Max(0, Math.Min(1, (1 + nn) / 2f));

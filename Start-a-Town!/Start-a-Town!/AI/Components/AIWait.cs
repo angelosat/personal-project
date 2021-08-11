@@ -23,7 +23,7 @@ namespace Start_a_Town_.AI.Behaviors
             if (this.TimerNew <= 0)
             {
                 var composure = parent.GetTrait(TraitDefOf.Composure).Normalized;
-                this.TimerNew = (int)((BaseWaitTime + (.5f * BaseWaitTime * composure)) * Engine.TicksPerSecond);
+                this.TimerNew = (int)((BaseWaitTime + (.5f * BaseWaitTime * composure)) * Ticks.TicksPerSecond);
                 return BehaviorState.Success;
             }
             return BehaviorState.Running;

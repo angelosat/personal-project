@@ -8,7 +8,7 @@ namespace Start_a_Town_.Blocks
     class LiduidFlowProcess
     {
         static readonly List<LiduidFlowProcess> FlowProcesses = new List<LiduidFlowProcess>();
-        static readonly float FlowSpeed = Engine.TicksPerSecond / 2f;
+        static readonly float FlowSpeed = Ticks.TicksPerSecond / 2f;
         static float FlowT = FlowSpeed;
 
         static Random Rand = new(); 

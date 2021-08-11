@@ -35,7 +35,7 @@ namespace Start_a_Town_
             this.GrowthItemDef = growthItemDef;
             this.GrowthMaterial = growthMaterial;
             this.MaxYieldHarvest = maxYieldHarvest;
-            this.GrowthLengthTicks = growthLengthTicks * Engine.TicksPerSecond;
+            this.GrowthLengthTicks = growthLengthTicks * Ticks.TicksPerSecond;
         }
 
         public GameObject CreateEntity()

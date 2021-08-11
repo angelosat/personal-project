@@ -18,11 +18,10 @@ namespace Start_a_Town_
         {
             return this.Function(parent);
         }
-        static public readonly ResourceRateModifierDef HaulingStaminaDrain = new ResourceRateModifierDef("HaulingStaminaDrain", ResourceDef.Stamina) { 
+        static public readonly ResourceRateModifierDef HaulingStaminaDrain = new("HaulingStaminaDrain", ResourceDef.Stamina) { 
             Function = 
-                (actor) =>
+                actor =>
                 {
-                    
                     var val = StatDefOf.Encumberance.GetValue(actor);
                     var factor = .1f;
                     val *= factor;

@@ -10,11 +10,7 @@ namespace Start_a_Town_.Components.Resources
         {
 
         }
-        public override ResourceDef.ResourceTypes ID
-        {
-            get { return ResourceDef.ResourceTypes.Durability; }
-        }
-
+        
         public override string Description
         {
             get { return "Basic Durability resource"; }

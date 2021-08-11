@@ -15,8 +15,8 @@ namespace Start_a_Town_
         const float BaseMood = 50;
         public float Mood = BaseMood;
         readonly float Rate = 1f;
-        private int TicksRemaining = Engine.TicksPerSecond;
-        private readonly int TicksDelay = Engine.TicksPerSecond;
+        private int TicksRemaining = Ticks.TicksPerSecond;
+        private readonly int TicksDelay = Ticks.TicksPerSecond;
 
         private float ValueTarget => BaseMood + this.Moodlets.Sum(m => m.Def.Value);
 

@@ -12,7 +12,7 @@ namespace Start_a_Town_.UI
         readonly SliderNew Sldr_Opacity;
         readonly Dictionary<Control, float> Timers;
         public TextBox TextBox;
-        public static float FadeDelay = 6 * Engine.TicksPerSecond;
+        public static float FadeDelay = 6 * Ticks.TicksPerSecond;
 
         static LogWindow _Instance;
         public static LogWindow Instance => _Instance ??= new LogWindow();

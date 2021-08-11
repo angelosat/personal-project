@@ -5,7 +5,7 @@ namespace Start_a_Town_
 {
     class TaskBehaviorTavernCustomer : BehaviorPerformTask
     {
-        static int Patience = Engine.TicksPerSecond * 60; // TODO get patience value from actor
+        static int Patience = Ticks.TicksPerGameMinute; // TODO get patience value from actor
 
         protected override IEnumerable<Behavior> GetSteps()
         {

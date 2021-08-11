@@ -65,7 +65,7 @@ namespace Start_a_Town_.Components
             emitter.Source = parent.Global;
             emitter.Force = 3f;
             emitter.SizeBegin = 20;
-            emitter.Lifetime = Engine.TicksPerSecond * 4;
+            emitter.Lifetime = Ticks.TicksPerSecond * 4;
             emitter.ParticleWeight = -.5f;
             emitter.Acceleration = new Vector3(.5f, .5f, .5f);
             emitter.HasPhysics = false;
@@ -102,7 +102,7 @@ namespace Start_a_Town_.Components
             this.FuseLengthIndex++;
             this.FuseLengthIndex %= FuseLengths.Length;
             this.FuseMax = FuseLengths[this.FuseLengthIndex];
-            this.Fuse = this.FuseMax * Engine.TicksPerSecond;
+            this.Fuse = this.FuseMax * Ticks.TicksPerSecond;
             return this.FuseMax;
         }
 

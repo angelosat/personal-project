@@ -17,11 +17,6 @@ namespace Start_a_Town_.Components.Resources
             }
         }
 
-        public override ResourceDef.ResourceTypes ID
-        {
-            get { return ResourceDef.ResourceTypes.Stamina; }
-        }
-
         public override void Add(float add, Resource resource)
         {
             if (add < 0)
@@ -34,7 +29,7 @@ namespace Start_a_Town_.Components.Resources
             get { return "Required for sprinting and hauling heavy objects"; }
         }
        
-        public float TickRate = Engine.TicksPerSecond / 2f; // 2 ticks per second
+        public float TickRate = Ticks.TicksPerSecond / 2f; // 2 ticks per second
         public float Timer = 0;
         public float RegenerationRate = 1;
 

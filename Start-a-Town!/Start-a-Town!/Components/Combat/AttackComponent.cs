@@ -23,7 +23,7 @@ namespace Start_a_Town_.Components
         public GameObject Target;
         const float NearestEnemyIntervalSeconds = 0.5f;// in seconds TODO: store nearest entities with gameobject so individual components can access them without calculating them by themselves each time
         int NearestEnemyUpdateTimer = 0;
-        public int NearestEnemyUpdateTimerMax =>(int)(NearestEnemyIntervalSeconds * Engine.TicksPerSecond);
+        public int NearestEnemyUpdateTimerMax =>(int)(NearestEnemyIntervalSeconds * Ticks.TicksPerSecond);
 
         public int DamageValue
         {

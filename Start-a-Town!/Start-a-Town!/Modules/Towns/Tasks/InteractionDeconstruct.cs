@@ -49,7 +49,7 @@ namespace Start_a_Town_
             this.EmitterStrike.AlphaEnd = 0;
             this.EmitterStrike.ColorBegin = color;
             this.EmitterStrike.ColorEnd = color;
-            this.EmitterStrike.Lifetime = Engine.TicksPerSecond * 2;
+            this.EmitterStrike.Lifetime = Ticks.TicksPerSecond * 2;
 
             this.EmitterBreak = this.Block.GetEmitter();
             this.EmitterBreak.Source = t.Global + Vector3.UnitZ * 0.5f;
@@ -63,7 +63,7 @@ namespace Start_a_Town_
             this.EmitterBreak.AlphaEnd = 0;
             this.EmitterBreak.ColorBegin = color;
             this.EmitterBreak.ColorEnd = color;
-            this.EmitterBreak.Lifetime = Engine.TicksPerSecond * 2;
+            this.EmitterBreak.Lifetime = Ticks.TicksPerSecond * 2;
 
             this.ParticleTextures = this.Block.GetParticleRects(25);
         }

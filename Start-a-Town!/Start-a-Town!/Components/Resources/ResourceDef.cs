@@ -75,15 +75,17 @@ namespace Start_a_Town_
                 .AddThreshold("Energetic", 1f);
 
         static public readonly ResourceDef Durability = new Durability().AddThreshold("Durability", 1);
+        static public readonly ResourceDef HitPoints = new HitPoints();
 
         static ResourceDef()
         {
             Register(Health);
             Register(Stamina);
             Register(Durability);
+            Register(HitPoints);
         }
 
-        static public Progress Recovery { get { return new Progress(0, Engine.TicksPerSecond, Engine.TicksPerSecond); } }
+        static public Progress Recovery { get { return new Progress(0, Ticks.TicksPerSecond, Ticks.TicksPerSecond); } }
         public ResourceDef(string name) : base(name)
         {
 
@@ -92,12 +94,11 @@ namespace Start_a_Town_
         {
         }
         public virtual void SetMaterial(MaterialDef mat) { }
-        public enum ResourceTypes { Health, Mana, Stamina, Durability }
 
         readonly List<ResourceThreshold> Thresholds = new();
 
         ResourceThreshold Root;
-        public ResourceDef AddThreshold(string label, float value)
+        public ResourceDef AddThreshold(string label, float value = 1)
         {
             var t = new ResourceThreshold(label, value);
             this.Thresholds.Add(t);
@@ -149,7 +150,7 @@ namespace Start_a_Town_
         }
         public virtual string GetBarHoverText(Resource resource)
         {
-            return $"{resource.Value} / {resource.Max}";
+            return $"{resource.Value.ToString(this.Format)} / {resource.Max.ToString(this.Format)}";
         }
 
         public virtual Control GetControl(Resource resource)
@@ -164,7 +165,6 @@ namespace Start_a_Town_
             return bar;
         }
 
-        public abstract ResourceTypes ID { get; }
         public abstract string Description { get; }
         
         public virtual void Add(float add, Resource resource)
@@ -181,7 +181,7 @@ namespace Start_a_Town_
         }
         public virtual bool HandleMessage(Resource resource, GameObject parent, ObjectEventArgs e = null) { return false; }
         
-        public virtual string Format { get { return ""; } }
+        public virtual string Format => "";
 
         public virtual void OnHealthBarCreated(GameObject parent, UI.Nameplate plate, Resource values) { }
         public virtual void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent) { }

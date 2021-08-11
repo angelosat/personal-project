@@ -68,7 +68,7 @@ namespace Start_a_Town_
         const float TickRate = 1 / 3f, InitialChance = .05f, VisitChanceBaseRate = .001f;// 2 seconds per tick //1 tick per second 
         const int InitialApproval = 50;
 
-        int TickCount = (int)(Engine.TicksPerSecond / TickRate);
+        int TickCount = (int)(Ticks.TicksPerSecond / TickRate);
         public PopulationManager(StaticWorld world)
         {
             this.World = world;
@@ -82,7 +82,7 @@ namespace Start_a_Town_
             this.TickCount--;
             if (this.TickCount > 0)
                 return;
-            this.TickCount = (int)(Engine.TicksPerSecond / TickRate);
+            this.TickCount = (int)(Ticks.TicksPerSecond / TickRate);
             this.Tick(net);
         }
 

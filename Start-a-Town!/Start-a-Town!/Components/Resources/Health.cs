@@ -10,18 +10,14 @@ namespace Start_a_Town_.Components.Resources
         public Health():base("Health")
         {
         }
-        public override ResourceDef.ResourceTypes ID
-        {
-            get { return ResourceDef.ResourceTypes.Health; }
-        }
-
+      
         public override string Description
         {
             get { return "Basic health resource"; }
         }
-        public float TickRate = Engine.TicksPerSecond / 2f;
+        public float TickRate = Ticks.TicksPerSecond / 2f;
 
-        static readonly float SpriteFlashFramesCount = Engine.TicksPerSecond / 10f;
+        static readonly float SpriteFlashFramesCount = Ticks.TicksPerSecond / 10f;
         float SpriteFlashTimer;
 
 

@@ -14,7 +14,7 @@ namespace Start_a_Town_.Towns
         public MapBase Map { get { return this.Town.Map; } }
         public INetwork Net { get { return this.Map.Net; } }
         const float UpdateFrequency = 1; // per second
-        float UpdateTimerMax = (float)Engine.TicksPerSecond / UpdateFrequency;
+        float UpdateTimerMax = (float)Ticks.TicksPerSecond / UpdateFrequency;
         float UpdateTimer;
         protected TownComponent()
         {

@@ -293,7 +293,7 @@ namespace Start_a_Town_
         {
             var emitter = new ParticleEmitterSphere()
             {
-                Lifetime = Engine.TicksPerSecond / 2f,
+                Lifetime = Ticks.TicksPerSecond / 2f,
                 Offset = Vector3.Zero,
                 Rate = 0,
                 ParticleWeight = 0f,//1f,
@@ -311,7 +311,7 @@ namespace Start_a_Town_
             var dustcolor = this.DirtColor;
             var emitter = new ParticleEmitterSphere()
             {
-                Lifetime = Engine.TicksPerSecond / 2f,
+                Lifetime = Ticks.TicksPerSecond / 2f,
                 Offset = Vector3.Zero,
                 Rate = 0,
                 ParticleWeight = 1f,//1f,
@@ -476,7 +476,7 @@ namespace Start_a_Town_
             e.ColorBegin = color;
             e.ColorEnd = color;
 
-            e.Lifetime = Engine.TicksPerSecond * 2;
+            e.Lifetime = Ticks.TicksPerSecond * 2;
             var pieces = this.GetParticleRects(25);
             e.Emit(Atlas.Texture, pieces, Vector3.Zero);
             actor.Map.ParticleManager.AddEmitter(e);

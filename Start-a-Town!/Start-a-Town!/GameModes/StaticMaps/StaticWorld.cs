@@ -26,7 +26,6 @@ namespace Start_a_Town_.GameModes.StaticMaps
                 net.Map.World.CurrentTick++;
             }
         }
-        //public string SeedString { get; set; }
         public float Gravity => -0.015f;//-0.04f;// -0.05f; //35f;
         public const int Zenith = 14;
         string _Name;
@@ -35,17 +34,17 @@ namespace Start_a_Town_.GameModes.StaticMaps
         public Block DefaultBlock { get; set; }
         public string Name { get => this._Name; set => this._Name = value; }
         public int Seed { get; set; }
-        public const int TickTime = (int)(60 * 1.44f);
+        //public const int TickTime = (int)(60 * 1.44f);
         public bool Flat;
         public bool Trees;
         TimeSpan ClockOffset = TimeSpan.FromHours(12);
-        public TimeSpan Clock => ClockOffset + TimeSpan.FromMilliseconds((double)this.CurrentTick * TickLengthMilliseconds);
-        public int TickLengthMilliseconds = 1440; // one tick is 1.44 ingame minutes
+        public TimeSpan Clock => ClockOffset + TimeSpan.FromMilliseconds((double)this.CurrentTick * Ticks.IngameMillisecondsPerTick);
+        
+
         public Random Random { get; set; }
         public MapCollection Maps;
         public StaticMap Map { get { return this.Maps.Values.First() as StaticMap; } }
         public PopulationManager Population => this.PopulationManager;
-
         public List<Terraformer> Mutators { get; }
         ulong currentTick;
         public ulong CurrentTick { get => this.currentTick; set => this.currentTick = value; }

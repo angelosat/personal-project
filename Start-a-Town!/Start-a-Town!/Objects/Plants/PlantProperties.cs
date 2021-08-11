@@ -34,6 +34,8 @@ namespace Start_a_Town_
         public int GrowTicks;
         public int YieldThreshold;
         public int MaxYieldCutDown;
+       
+        public int StemHealRate; // ticks to heal 1 hitpoint // cutdown hit points recovered per one game day  TODO recover a fixed amount or a percentage?
 
         [Obsolete]
         ///instead of using cutdowndifficulty, determine cutdown hitpoints by stem material density
@@ -60,6 +62,7 @@ namespace Start_a_Town_
         {
 
         }
+        [Obsolete]
         public int GetCutDownHitPonts(GameObject plant) => (int)(this.StemMaterial.Density * plant.TotalWeight / 5f);
 
         static public readonly PlantProperties Berry = new("Berry")
@@ -80,9 +83,10 @@ namespace Start_a_Town_
             ProductCutDown = RawMaterialDef.Logs,
             MaxYieldCutDown = 5,
             CutDownDifficulty = 10,
-            GrowTicks = 6 * Engine.TicksPerSecond,
+            GrowTicks = 6 * Ticks.TicksPerSecond,
             PlantEntity = PlantDefOf.Tree,
-            ToolToCut = ToolUseDef.Chopping
+            ToolToCut = ToolUseDef.Chopping,
+            StemHealRate = Ticks.FromHours(1),
         };
 
         public Plant CreatePlant()

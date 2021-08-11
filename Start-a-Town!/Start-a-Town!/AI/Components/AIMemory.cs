@@ -7,7 +7,7 @@
         public AIMemory()
         {
             this.Timer = 0;
-            this.Period = Engine.TicksPerSecond;
+            this.Period = Ticks.TicksPerSecond;
         }
         public override BehaviorState Execute(Actor parent, AIState state)
         {

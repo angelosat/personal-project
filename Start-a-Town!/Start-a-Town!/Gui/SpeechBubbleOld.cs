@@ -44,7 +44,7 @@ namespace Start_a_Town_.UI
             this.Tag = obj;
             this.AutoSize = true;
             Graphic = new Panel() { Color = Color.White, MouseThrough = true };
-            this.Duration = Math.Max(text.Length * Engine.TicksPerSecond / 3, Engine.TicksPerSecond * 10);
+            this.Duration = Math.Max(text.Length * Ticks.TicksPerSecond / 3, Ticks.TicksPerSecond * 10);
             this.MouseThrough = true;
 
             Graphic.AutoSize = true;

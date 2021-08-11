@@ -9,7 +9,7 @@ namespace Start_a_Town_.UI
     public class TooltipManager
     {
         public static bool MouseTooltips = true;
-        public static float DelayInterval = Engine.TicksPerSecond / 4;
+        public static float DelayInterval = Ticks.TicksPerSecond / 4;
         float DelayValue;
         public static int Width = 300;
         protected static TooltipManager _Instance;

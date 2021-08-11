@@ -76,7 +76,7 @@ namespace Start_a_Town_.Animations
         }
         internal void FadeOut(int seconds)
         {
-            float frames = Engine.TicksPerSecond * seconds;
+            float frames = Ticks.TicksPerSecond * seconds;
             float dw = 1 / frames;
             this.WeightChange = -dw;
             this.State = AnimationStates.Finished;

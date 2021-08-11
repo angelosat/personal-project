@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -33,6 +34,9 @@ namespace Start_a_Town_
         public int GrowTicks;
         public int YieldThreshold;
         public int MaxYieldCutDown;
+
+        [Obsolete]
+        ///instead of using cutdowndifficulty, determine cutdown hitpoints by stem material density
         public int CutDownDifficulty = 1;
 
         [XmlIgnore]
@@ -43,8 +47,11 @@ namespace Start_a_Town_
         public ItemDef ProductCutDown;
      
         public GrowthProperties Growth;
+        internal ToolUseDef ToolToCut;
 
         public bool ProducesFruit => this.Growth?.GrowthItemDef == ItemDefOf.Fruit;
+
+
         public PlantProperties()
         {
 
@@ -53,6 +60,7 @@ namespace Start_a_Town_
         {
 
         }
+        public int GetCutDownHitPonts(GameObject plant) => (int)(this.StemMaterial.Density * plant.TotalWeight / 5f);
 
         static public readonly PlantProperties Berry = new("Berry")
         {
@@ -61,7 +69,7 @@ namespace Start_a_Town_
             StemMaterial = MaterialDefOf.ShrubStem,
             Growth = new GrowthProperties(ItemDefOf.Fruit, MaterialDefOf.Berry, 5, 6),
             CutDownDifficulty = 3,
-            PlantEntity = PlantDefOf.Bush
+            PlantEntity = PlantDefOf.Bush,
         };
 
         static public readonly PlantProperties LightTree = new("LightTree")
@@ -73,7 +81,8 @@ namespace Start_a_Town_
             MaxYieldCutDown = 5,
             CutDownDifficulty = 10,
             GrowTicks = 6 * Engine.TicksPerSecond,
-            PlantEntity = PlantDefOf.Tree
+            PlantEntity = PlantDefOf.Tree,
+            ToolToCut = ToolUseDef.Chopping
         };
 
         public Plant CreatePlant()

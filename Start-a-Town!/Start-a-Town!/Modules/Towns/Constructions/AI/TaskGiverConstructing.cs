@@ -88,7 +88,7 @@ namespace Start_a_Town_
 
             var construction = cachedBlockEntity as BlockConstructionEntity;
             if (construction.Product.Block.BuildProperties.ToolSensitivity > 0)
-                FindTool(actor, buildtask, ToolAbilityDef.Building);
+                FindTool(actor, buildtask, ToolUseDef.Building);
 
             return buildtask;
         }

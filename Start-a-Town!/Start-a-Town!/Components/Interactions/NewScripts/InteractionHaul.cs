@@ -8,20 +8,17 @@ namespace Start_a_Town_
     {
         int Amount;
         public InteractionHaul()
-            : base("Haul")
+            : this(-1)
         {
-            this.Animation = new Animation(AnimationDef.TouchItem);
-
-            this.Amount = -1;
         }
         public InteractionHaul(int amount)
             : base("Haul")
         {
             this.Animation = new Animation(AnimationDef.TouchItem);
-
             this.Amount = amount;
-            if (amount <= 0)
-                throw new Exception();
+            this.CrossFadeAnimationLength = 25;
+            //if (amount <= 0)
+            //    throw new Exception();
         }
 
         public override string ToString()
@@ -29,10 +26,11 @@ namespace Start_a_Town_
             return "Haul " + (this.Amount == -1 ? " All" : " x" + this.Amount.ToString());
         }
 
-        public override void Start()
+        protected override void Start()
         {
             var a = this.Actor;
-            a.CrossFade(this.Animation, false, 25);
+            return;
+            //a.CrossFade(this.Animation, false, 25);
         }
         public override void OnUpdate()
         {

@@ -55,7 +55,7 @@ namespace Start_a_Town_
 
         public float Length { get; set; }
         public float CurrentTick;
-        public ToolAbilityDef Skill { get; set; }
+        public ToolUseDef Skill { get; set; }
         public float Seconds { get; set; }
         public Animation Animation = new(AnimationDef.Work);
         internal Actor Actor;
@@ -93,13 +93,22 @@ namespace Start_a_Town_
         public virtual void Perform()
         {
         }
-
-        public virtual void Start()
+        protected int CrossFadeAnimationLength;
+        public void StartBase()
         {
-            if (this.Animation != null)
-                this.Actor.AddAnimation(this.Animation);
+            if (this.Animation is not null)
+            {
+                if(CrossFadeAnimationLength == 0)
+                    this.Actor.AddAnimation(this.Animation);
+                else
+                    this.Actor.CrossFade(this.Animation, false, CrossFadeAnimationLength);
+            }
+            this.Start();
         }
+        protected virtual void Start()
+        {
 
+        }
         internal bool Evaluate()
         {
             return true;
@@ -116,7 +125,7 @@ namespace Start_a_Town_
             }
 
             if (this.State == States.Unstarted)
-                this.Start();
+                this.StartBase();
             else if (this.State == States.Finished)
             {
                 this.Stop();

@@ -105,7 +105,7 @@ namespace Start_a_Town_
                   var material = tool?.GetMaterial(BoneDef.EquipmentHandle);
                   if (material is null)
                       return 1;
-                  var aa = 20f;
+                  var aa = 20f; // what is this?
                   var density = Math.Max(aa, material.Density); // in case for some reason the material is air
                   //var total = density / 100f; // density should add ticks between each tool hit (NOT POSSIBLE THE WAY I HAVE ANIMATIONS SET UP)
                   var total = aa / density;
@@ -131,6 +131,21 @@ namespace Start_a_Town_
             Label = "Work speed",
             Type = StatNewDef.Types.Scalar,
             StringFormat = "+##0%"
+        };
+        public static readonly StatNewDef WorkEffectiveness = new("WorkEffectiveness",
+              a =>
+              {
+                  var actor = a as Actor;
+                  var handDensity = actor.GetMaterial(BoneDef.RightHand).Density;
+                  var val = actor.GetEquipmentSlot(GearType.Mainhand)?.GetStat(StatDefOf.ToolEffectiveness) ?? handDensity;
+                  return val;
+                  //return 1 + val;
+              })
+        {
+            Description = "Work effectiveness",
+            Label = "Work effectiveness",
+            Type = StatNewDef.Types.Scalar,
+            StringFormat = "+##0"
         };
         public static readonly StatNewDef[] ToolStatPackage = { ToolEffectiveness, ToolSpeed };
         public static readonly StatNewDef[] NpcStatPackage = { MaxHaulWeight, Encumberance, WalkSpeed, Armor };

@@ -32,7 +32,7 @@ namespace Start_a_Town_
         static readonly Dictionary<IItemPreferenceContext, ItemRole> RegistryByContext = new();
 
         static readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
-        static readonly Dictionary<ToolAbilityDef, ItemRole> ItemRolesTool = new();
+        static readonly Dictionary<ToolUseDef, ItemRole> ItemRolesTool = new();
 
         static void GenerateItemRolesGear()
         {
@@ -42,7 +42,7 @@ namespace Start_a_Town_
         }
         static void GenerateItemRolesTools()
         {
-            var defs = Def.Database.Values.OfType<ToolAbilityDef>();
+            var defs = Def.Database.Values.OfType<ToolUseDef>();
             foreach (var d in defs)
                 ItemRolesTool.Add(d, new ItemRoleTool(d));
         }

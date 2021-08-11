@@ -6,8 +6,8 @@ namespace Start_a_Town_
     public sealed class JobDef : Def
     {
         readonly TaskGiver[] TaskGivers;
-        readonly public HashSet<ToolAbilityDef> AssociatedTools = new();
-        public ToolAbilityDef ToolUse;
+        readonly public HashSet<ToolUseDef> AssociatedTools = new();
+        public ToolUseDef ToolUse;
         //public readonly string Label;
         public Icon Icon => Icon.Replace;
 
@@ -28,13 +28,13 @@ namespace Start_a_Town_
             return this.Name;
         }
 
-        public JobDef AddTools(params ToolAbilityDef[] abilities)
+        public JobDef AddTools(params ToolUseDef[] abilities)
         {
             foreach (var a in abilities)
                 this.AssociatedTools.Add(a);
             return this;
         }
-        public JobDef AddTools(ToolAbilityDef toolUse)
+        public JobDef AddTools(ToolUseDef toolUse)
         {
             this.ToolUse = toolUse;
             return this;

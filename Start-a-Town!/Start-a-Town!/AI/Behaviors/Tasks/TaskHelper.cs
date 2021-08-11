@@ -1,45 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.AI.Behaviors.ItemOwnership;
-using Start_a_Town_.AI.Behaviors;
+
 namespace Start_a_Town_
 {
     static class TaskHelper
     {
-        static public AITask TryStoreEquipped(Actor actor, GearType type)
-        {
-            var mainhand = actor.GetEquipmentSlot(type);
-
-            if (mainhand != null)
-            {
-                var possesions = actor.GetPossesions();
-                if (possesions.Contains(mainhand))
-                {
-                    return new AITask(typeof(BehaviorUnequip)) { TargetA = new TargetArgs(mainhand) };
-                }
-                else
-                {
-                    // TODO: make a single drop item behavior that accepts a target item parameters and checks both inventory and equipment slots to find it and drop it
-                    return new AITask(typeof(BehaviorCarryItem)) { TargetA = new TargetArgs(mainhand) };
-                }
-            }
-            else
-            {
-                var hauling = actor.Hauled;
-                if (hauling != null)
-                {
-                    var destination = StockpileAIHelper.GetBestHaulDestination(actor, hauling);
-                    if (destination.Type != TargetType.Null)
-                    {
-                        // TODO: make a single drop item behavior that accepts a target item parameters and checks both inventory and equipment slots to find it and drop it
-                        return new AITask(typeof(BehaviorDropCarried)) { TargetA = destination };
-                    }
-                }
-            }
-
-            return null;
-        }
         static public AITask TryHaulAside(Actor actor, Entity item)
         {
             if (!item.IsHaulable)

@@ -20,7 +20,7 @@ namespace Start_a_Town_.Components.Interactions
             : base("Mine")
         {
             this.Verb = "Mining";
-            this.Skill = ToolAbilityDef.Digging;
+            this.Skill = ToolUseDef.Digging;
         }
 
         static public int ID = "Mine".GetHashCode();
@@ -30,9 +30,8 @@ namespace Start_a_Town_.Components.Interactions
         ParticleEmitterSphere EmitterBreak;
         List<Rectangle> ParticleTextures;
 
-        public override void Start()
+        protected override void Start()
         {
-            base.Start();
             var a = this.Actor;
             var t = this.Target;
             this.Animation.Speed = SpeedFormula(a);

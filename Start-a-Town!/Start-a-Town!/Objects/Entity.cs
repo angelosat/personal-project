@@ -68,7 +68,7 @@ namespace Start_a_Town_
            
         }
 
-        internal bool ProvidesSkill(ToolAbilityDef skill)
+        internal bool ProvidesSkill(ToolUseDef skill)
         {
             return this.ToolComponent?.Props?.Ability.Def == skill;
             //return ToolAbilityComponent.HasSkill(this, skill);

@@ -10,7 +10,7 @@ namespace Start_a_Town_.Interactions
         {
         }
 
-        public override void Start()
+        protected override void Start()
         {
             var a = this.Actor;
             var t = this.Target; 
@@ -30,7 +30,7 @@ namespace Start_a_Town_.Interactions
         {
             var a = this.Actor;
             var t = this.Target; 
-            var workAmount = a.GetToolWorkAmount(ToolAbilityDef.Building.ID);
+            var workAmount = a.GetToolWorkAmount(ToolUseDef.Building.ID);
             this.BuildProgress.Value += workAmount;
             if (SuccessCondition())
             {

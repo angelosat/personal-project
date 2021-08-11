@@ -19,7 +19,7 @@ namespace Start_a_Town_
             : base("Dig")
         {
             this.Verb = "Digging";
-            this.Skill = ToolAbilityDef.Digging;
+            this.Skill = ToolUseDef.Digging;
         }
         static public int ID = "Dig".GetHashCode();
        
@@ -28,11 +28,10 @@ namespace Start_a_Town_
         ParticleEmitterSphere EmitterBreak;
         List<Rectangle> ParticleTextures;
 
-        public override void Start()
+        protected override void Start()
         {
             var a = this.Actor;
             var t = this.Target;
-            base.Start();
             this.Animation.Speed = SpeedFormula(a);
             // cache variables
             this.Block = a.Map.GetBlock(t.Global);

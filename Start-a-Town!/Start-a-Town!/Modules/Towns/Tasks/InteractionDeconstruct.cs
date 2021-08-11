@@ -25,9 +25,8 @@ namespace Start_a_Town_
         ParticleEmitterSphere EmitterBreak;
         List<Rectangle> ParticleTextures;
 
-        public override void Start()
+        protected override void Start()
         {
-            base.Start();
             var a = this.Actor;
             var t = this.Target; 
             this.Animation.Speed = SpeedFormula(a);
@@ -73,7 +72,7 @@ namespace Start_a_Town_
             var actor = this.Actor;
 
             this.EmitStrike(actor);
-            var workAmount = actor.GetToolWorkAmount(ToolAbilityDef.Building.ID);
+            var workAmount = actor.GetToolWorkAmount(ToolUseDef.Building.ID);
             actor.AwardSkillXP(SkillDef.Construction, workAmount);
 
             this.Progress.Value += workAmount;

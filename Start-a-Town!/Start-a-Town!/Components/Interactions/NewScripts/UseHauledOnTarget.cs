@@ -8,9 +8,9 @@ namespace Start_a_Town_
         int Amount;
 
         public UseHauledOnTarget()
-             : base("UseHauledOnTarget", .4f)
+             : this(-1)
         {
-            this.Amount = -1;
+     
         }
 
         public UseHauledOnTarget(int amount = -1) // -1 means whole stack
@@ -19,13 +19,14 @@ namespace Start_a_Town_
             if (amount == 0)
                 throw new Exception();
             this.Amount = amount;
+            this.Animation = new Animation(AnimationDef.TouchItem);
         }
 
-        public override void Start()
+        protected override void Start()
         {
             var a = this.Actor;
             var t = this.Target;
-            this.Animation = new Animation(AnimationDef.TouchItem);
+            return;
             a.CrossFade(this.Animation, false, 25);
         }
         

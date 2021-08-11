@@ -10,18 +10,19 @@ namespace Start_a_Town_
         {
             return new InteractionGiveItem(this.Trade);
         }
-        public InteractionGiveItem(bool trade = false) : base("GiveItem", seconds: .4f)
+        public InteractionGiveItem(bool trade) : base("GiveItem", seconds: .4f)
         {
             this.Trade = trade;
+            this.Animation = new Animation(AnimationDef.TouchItem);
         }
-        public InteractionGiveItem() : base("GiveItem", seconds: .4f)
+        public InteractionGiveItem() : this(false)
         {
         }
-        public override void Start()
+        protected override void Start()
         {
             var a = this.Actor;
             var t = this.Target;
-            this.Animation = new Animation(AnimationDef.TouchItem);
+            return;
             a.CrossFade(this.Animation, false, 25);
         }
         public override void Perform()

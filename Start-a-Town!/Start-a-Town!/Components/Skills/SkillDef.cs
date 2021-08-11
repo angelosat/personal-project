@@ -53,7 +53,12 @@ namespace Start_a_Town_
             Description = "Crafting description",
             Icon = new Icon(UIManager.Icons32, 12, 32)
         };
-        static public readonly SkillDef[] All = { Digging, Mining, Construction, Cooking, Tinkering, Argiculture, Carpentry, Crafting };
+        static public readonly SkillDef Plantcutting = new("Plantcutting")
+        {
+            Description = "Plantcutting description",
+            Icon = new Icon(UIManager.Icons32, 12, 32)
+        };
+        static public readonly SkillDef[] All = { Digging, Mining, Construction, Cooking, Tinkering, Argiculture, Carpentry, Crafting, Plantcutting };
         static SkillDef()
         {
             Def.Register(Digging);
@@ -64,6 +69,7 @@ namespace Start_a_Town_
             Def.Register(Argiculture);
             Def.Register(Carpentry);
             Def.Register(Crafting);
+            Register(Plantcutting);
         }
     }
 }

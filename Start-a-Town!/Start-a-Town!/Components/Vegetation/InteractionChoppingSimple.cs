@@ -7,8 +7,8 @@ namespace Start_a_Town_.Components
 {
     public class InteractionChoppingSimple : InteractionPerpetual
     {
-        int MaxStrikes = 300;
-        int StrikeCount = 0;
+        int PlantHitPoints = 1;
+        float CutDownProgress = 0;
         ParticleEmitterSphere EmitterStrike;
         List<Rectangle> ParticleRects;
         public InteractionChoppingSimple()
@@ -16,14 +16,18 @@ namespace Start_a_Town_.Components
         {
             this.DrawProgressBar(() => this.Actor.Global, () => this.Progress, () => this.Name);
         }
-        float Progress => this.StrikeCount / (float)this.MaxStrikes;
-        public override void Start()
+        float Progress => this.CutDownProgress / (float)this.PlantHitPoints;
+        protected override void Start()
         {
-            base.Start();
             var a = this.Actor;
             var t = this.Target; 
             var plant = t.Object as Plant;
-            this.MaxStrikes = plant.PlantComponent.PlantProperties.CutDownDifficulty;
+            var plantProps = plant.PlantComponent.PlantProperties;
+            this.Skill = plantProps.ToolToCut;
+            this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);
+
+            this.PlantHitPoints = plantProps.StemMaterial.Density;// plantProps.GetCutDownHitPonts(plant);
+            $"plant hitpoints: {this.PlantHitPoints}".ToConsole();
             var particleColor = plant.PrimaryMaterial.Color; //MaterialDefOf.LightWood.Color
             this.EmitterStrike = new ParticleEmitterSphere
             {
@@ -53,13 +57,24 @@ namespace Start_a_Town_.Components
                 this.EmitterStrike.Emit(ItemContent.LogsGrayscale.AtlasToken.Atlas.Texture, this.ParticleRects, Vector3.Zero);
                 a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
             }
-            this.StrikeCount++;
-            if (this.StrikeCount < MaxStrikes)
-            {
+            var nextspeed = StatDefOf.WorkSpeed.GetValue(a);
+            this.Animation.Speed = nextspeed;
+            float amount = getCutDownAmount(a, t);
+            this.CutDownProgress += amount;
+            if (this.CutDownProgress < PlantHitPoints)
                 return;
-            }
             this.Done();
             this.Finish();
+
+            static float getCutDownAmount(Actor a, TargetArgs t)
+            {
+                var plant = t.Object as Plant;
+                var plantProps = plant.PlantComponent.PlantProperties;
+                var trunkHardness = plantProps.StemMaterial.Density;
+                var toolEffect = (int)StatDefOf.WorkEffectiveness.GetValue(a);
+                var amount = toolEffect / (float)trunkHardness;
+                return amount;
+            }
         }
         public void Done()
         {
@@ -80,23 +95,23 @@ namespace Start_a_Town_.Components
         }
         protected override void AddSaveData(SaveTag tag)
         {
-            this.StrikeCount.Save(tag, "Current");
-            this.MaxStrikes.Save(tag, "Max");
+            this.CutDownProgress.Save(tag, "Current");
+            this.PlantHitPoints.Save(tag, "Max");
         }
         public override void LoadData(SaveTag tag)
         {
-            this.StrikeCount = tag.LoadInt("Current");
-            this.MaxStrikes = tag.LoadInt("Max");
+            this.CutDownProgress = tag.LoadInt("Current");
+            this.PlantHitPoints = tag.LoadInt("Max");
         }
         protected override void WriteExtra(BinaryWriter w)
         {
-            w.Write(this.StrikeCount);
-            w.Write(this.MaxStrikes);
+            w.Write(this.CutDownProgress);
+            w.Write(this.PlantHitPoints);
         }
         protected override void ReadExtra(BinaryReader r)
         {
-            this.StrikeCount = r.ReadInt32();
-            this.MaxStrikes = r.ReadInt32();
+            this.CutDownProgress = r.ReadInt32();
+            this.PlantHitPoints = r.ReadInt32();
         }
     }
 }

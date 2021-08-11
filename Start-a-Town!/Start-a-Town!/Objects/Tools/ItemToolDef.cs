@@ -4,10 +4,10 @@ namespace Start_a_Town_
 {
     public class ItemToolDef
     {
-        public ToolAbility Ability;
+        public ToolUse Ability;
         public readonly HashSet<JobDef> AssociatedJobs = new();
         
-        public ItemToolDef(ToolAbility ability)
+        public ItemToolDef(ToolUse ability)
         {
             this.Ability = ability;
         }

@@ -1,5 +1,8 @@
-﻿namespace Start_a_Town_
+﻿using System;
+
+namespace Start_a_Town_
 {
+    [Obsolete]
     public class InteractionChopping : Interaction
     {
         public InteractionChopping()
@@ -9,7 +12,7 @@
                 )
         {
             this.Verb = "Chopping";
-            this.Skill = ToolAbilityDef.Chopping;
+            this.Skill = ToolUseDef.Chopping;
         }
       
         public override void Perform()

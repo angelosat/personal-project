@@ -22,20 +22,20 @@ namespace Start_a_Town_
 
         static public readonly MaterialDef Metal = new MaterialDef()
             .SetState(MaterialState.Solid)
-            .SetDensity(200)
+            .SetDensity(100)
             .SetReflectiveness(1)
             .SetType(MaterialType.Metal)
             ;
 
         static public readonly MaterialDef Stone = new MaterialDef()
             .SetState(MaterialState.Solid)
-            .SetDensity(100)
+            .SetDensity(75)
             .SetType(MaterialType.Stone)
             ;
 
         static public readonly MaterialDef Soil = new MaterialDef()
           .SetState(MaterialState.Solid)
-          .SetDensity(100)
+          .SetDensity(10)
           .SetType(MaterialType.Soil)
           ;
 
@@ -45,13 +45,13 @@ namespace Start_a_Town_
               EdibleCooked = true
           }
           .SetState(MaterialState.Solid)
-          .SetDensity(10)
+          .SetDensity(20)
           .SetColor(Color.LightPink)
           .SetType(MaterialType.Meat)
           ;
 
         static public readonly MaterialDef PlantStem = new MaterialDef()
-            .SetDensity(40)
+            .SetDensity(30)
             .SetState(MaterialState.Solid)
             .SetType(MaterialType.PlantStem);
 

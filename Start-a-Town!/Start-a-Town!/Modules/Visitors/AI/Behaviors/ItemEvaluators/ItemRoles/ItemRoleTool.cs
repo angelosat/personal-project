@@ -2,10 +2,10 @@
 {
     class ItemRoleTool : ItemRole
     {
-        public ToolAbilityDef ToolAbility;
+        public ToolUseDef ToolAbility;
         public override IItemPreferenceContext Context => this.ToolAbility;
 
-        public ItemRoleTool(ToolAbilityDef ttype)
+        public ItemRoleTool(ToolUseDef ttype)
         {
             this.ToolAbility = ttype;
         }

@@ -9,11 +9,11 @@ namespace Start_a_Town_.Components.Crafting
         public Block Block;
         public byte Data;
         public int Orientation;
-        public ToolAbilityDef Skill;
+        public ToolUseDef Skill;
         public ItemMaterialAmount Requirement;
         internal MaterialDef Material => this.Requirement.Material;// MaterialDefOf.Air;
 
-        public ToolAbilityDef GetSkill()
+        public ToolUseDef GetSkill()
         {
             return this.Skill;
         }

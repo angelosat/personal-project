@@ -14,7 +14,7 @@ namespace Start_a_Town_
             return new ToolAbilityComponent(this.Props);
         }
         public ToolProps Props;
-        readonly List<ToolAbilityDef> Skills = new();
+        readonly List<ToolUseDef> Skills = new();
         readonly Dictionary<int, float> WorkCapabilities = new();
         public ToolAbilityComponent(ToolProps props)
         {
@@ -25,11 +25,11 @@ namespace Start_a_Town_
 
         }
         
-        public ToolAbilityComponent(params ToolAbilityDef[] skills)
+        public ToolAbilityComponent(params ToolUseDef[] skills)
         {
 
         }
-        public ToolAbilityComponent Initialize(params ToolAbilityDef[] skills)
+        public ToolAbilityComponent Initialize(params ToolUseDef[] skills)
         {
             return this;
         }
@@ -44,9 +44,9 @@ namespace Start_a_Town_
         //    this.Parent.Body.Sprite = this.Props.SpriteHandle;
         //    this.Parent.Body[BoneDef.EquipmentHead].Sprite = this.Props.SpriteHead;
         //}
-        public ToolAbilityDef Skill { get { return this.Skills.FirstOrDefault(); } }
+        public ToolUseDef Skill { get { return this.Skills.FirstOrDefault(); } }
         
-        static public bool HasSkill(GameObject parent, ToolAbilityDef skill)
+        static public bool HasSkill(GameObject parent, ToolUseDef skill)
         {
             return parent.Def.ToolProperties?.Ability.Def == skill || HasSkill(parent, skill.ID);
         }
@@ -79,10 +79,10 @@ namespace Start_a_Town_
         {
             var box = new GroupBox();
             foreach(var s in this.WorkCapabilities)
-                box.AddControlsBottomLeft(ToolAbilityDef.GetUI(s.Key, s.Value));
+                box.AddControlsBottomLeft(ToolUseDef.GetUI(s.Key, s.Value));
             var ability = parent.Def.ToolProperties?.Ability ?? this.Props?.Ability;
             if (ability != null)
-                box.AddControlsBottomLeft(ToolAbilityDef.GetUI(ability.Value.Def.ID, ability.Value.Effectiveness));
+                box.AddControlsBottomLeft(ToolUseDef.GetUI(ability.Value.Def.ID, ability.Value.Effectiveness));
             return box;
         }
 

@@ -135,7 +135,6 @@
     <Compile Include="AI\Behaviors\Eating\TaskGiverEat.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorDropCarried.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorEquipItemNew.cs" />
-    <Compile Include="AI\Behaviors\ItemOwnership\BehaviorCarryItem.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorPickUpItemNew.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\BehaviorUnequip.cs" />
     <Compile Include="AI\Behaviors\ItemOwnership\TaskBehaviorDropItem.cs" />
@@ -419,7 +418,6 @@
     <Compile Include="Components\Interactions\NewScripts\DropEquippedTarget.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionDropEquipped.cs" />
     <Compile Include="Components\Interactions\NewScripts\DropInventoryItem.cs" />
-    <Compile Include="Components\Interactions\NewScripts\HaulNew.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionFlipSwitch.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionToggleDoor.cs" />
     <Compile Include="Components\Interactions\NewScripts\UnequipItem.cs" />
@@ -508,7 +506,7 @@
     <Compile Include="Components\Skills\Best\NpcSkillsComponent.cs" />
     <Compile Include="Components\Skills\Best\NpcSkill.cs" />
     <Compile Include="Components\Skills\SkillDef.cs" />
-    <Compile Include="Components\Skills\ToolAbility.cs" />
+    <Compile Include="Components\Skills\ToolUse.cs" />
     <Compile Include="Components\Stats\StatNewModifier.cs" />
     <Compile Include="Components\Stats\StatNewModifierDef.cs" />
     <Compile Include="Components\Stats\StatNewDef.cs" />
@@ -728,7 +726,7 @@
     <Compile Include="Components\Interactions\NewScripts\InteractionHaul.cs" />
     <Compile Include="Components\Interactions\NewScripts\Interaction.cs" />
     <Compile Include="Components\Skills\ToolAbilityComponent.cs" />
-    <Compile Include="Components\Skills\ToolAbilityDef.cs" />
+    <Compile Include="Components\Skills\ToolUseDef.cs" />
     <Compile Include="Components\Stats\StatModifier.cs" />
     <Compile Include="Components\Stats\StatsComponentNew.cs" />
     <Compile Include="Components\Stats\StatsGui.cs" />

@@ -31,7 +31,7 @@ namespace Start_a_Town_.UI
         ISelectable Selectable;
         Window WindowInfo;
         IEnumerator<ISelectable> SelectedStack;
-        public ICollection<TargetArgs> MultipleSelected = new List<TargetArgs>(); // TODO: make this a list of iselectables
+        public List<TargetArgs> MultipleSelected = new(); // TODO: make this a list of iselectables
 
         SelectionManager()
         {
@@ -212,7 +212,9 @@ namespace Start_a_Town_.UI
                 case TargetType.Entity:
                     var entity = target.Object;
                     this.LabelName.TextFunc = () => entity.GetName();
-                    this.MultipleSelected = new TargetArgs[] { target };
+                    //this.MultipleSelected = new TargetArgs[] { target };
+                    this.MultipleSelected.Clear();
+                    this.MultipleSelected.Add(target);
                     entity.GetSelectionInfo(this);
                     entity.GetQuickButtons(this);
                     this.InitInfoTabs(entity.GetTabs());
@@ -221,7 +223,9 @@ namespace Start_a_Town_.UI
                     break;
 
                 case TargetType.Position:
-                    this.MultipleSelected = new TargetArgs[1] { target };
+                    //this.MultipleSelected = new TargetArgs[1] { target };
+                    this.MultipleSelected.Clear();
+                    this.MultipleSelected.Add(target);
                     var selectables = target.Map.Town.QuerySelectables(target);
                     if (selectables.Any())
                     {
@@ -240,7 +244,8 @@ namespace Start_a_Town_.UI
                     this.WindowInfo = null;
                     this.SelectedSource = TargetArgs.Null;
                     this.Selectable = null;
-                    this.MultipleSelected = new TargetArgs[] { };
+                    //this.MultipleSelected = new TargetArgs[] { };
+                    this.MultipleSelected.Clear();
                     return;
 
                 default:

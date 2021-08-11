@@ -4,18 +4,18 @@ namespace Start_a_Town_
 {
     public sealed class JobDefOf
     {
-        static public readonly JobDef Digger = new JobDef("Digger", new TaskGiverDigging()).AddTools(ToolAbilityDef.Digging);
-        static public readonly JobDef Miner = new JobDef("Miner").AddTools(ToolAbilityDef.Mining);
+        static public readonly JobDef Digger = new JobDef("Digger", new TaskGiverDigging()).AddTools(ToolUseDef.Digging);
+        static public readonly JobDef Miner = new JobDef("Miner").AddTools(ToolUseDef.Mining);
         static public readonly JobDef Hauler = new("Hauler", new TaskGiverRefueling(), new TaskGiverHaulToStockpile());
-        static public readonly JobDef Lumberjack = new JobDef("Lumberjack", new TaskGiverChopping()).AddTools(ToolAbilityDef.Chopping);
+        static public readonly JobDef Lumberjack = new JobDef("Lumberjack", new TaskGiverChopping()).AddTools(ToolUseDef.Chopping);
         static public readonly JobDef Forester = new("Forester");
         static public readonly JobDef Craftsman = new("Craftsman", new TaskGiverCrafting());
         static public readonly JobDef Smelter = new("Smelter");
-        static public readonly JobDef Farmer = new JobDef("Farmer", new TaskGiverTilling(), new TaskGiverPlanting(), new TaskGiverHarvesting()).AddTools(ToolAbilityDef.Argiculture);
+        static public readonly JobDef Farmer = new JobDef("Farmer", new TaskGiverTilling(), new TaskGiverPlanting(), new TaskGiverHarvesting()).AddTools(ToolUseDef.Argiculture);
         static public readonly JobDef Harvester = new("Harvester");
         static public readonly JobDef Forager = new("Forager", new TaskGiverForaging());
-        static public readonly JobDef Builder = new JobDef("Builder", new TaskGiverDeconstruct(), new TaskGiverConstructing()).AddTools(ToolAbilityDef.Building);
-        static public readonly JobDef Carpenter = new JobDef("Carpenter").AddTools(ToolAbilityDef.Carpentry);
+        static public readonly JobDef Builder = new JobDef("Builder", new TaskGiverDeconstruct(), new TaskGiverConstructing()).AddTools(ToolUseDef.Building);
+        static public readonly JobDef Carpenter = new JobDef("Carpenter").AddTools(ToolUseDef.Carpentry);
         static public readonly JobDef Cook = new("Cook");
         static public readonly JobDef Guide = new("Guide");
         static public readonly JobDef QuestGiver = new("QuestGiver", new TaskGiverOfferQuest());

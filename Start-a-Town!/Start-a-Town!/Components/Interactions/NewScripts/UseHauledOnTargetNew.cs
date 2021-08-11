@@ -26,10 +26,11 @@ namespace Start_a_Town_
             this.Animation = new Animation(AnimationDef.TouchItem);
         }
 
-        public override void Start()
+        protected override void Start()
         {
             var a = this.Actor;
             var t = this.Target;
+            return;
             a.CrossFade(this.Animation, false, 25);
         }
         

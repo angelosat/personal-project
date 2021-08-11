@@ -16,7 +16,7 @@ namespace Start_a_Town_
         public readonly int Hash;
         public HashSet<MaterialDef> SubTypes = new();
         public float Shininess;
-        public ToolAbilityDef SkillToExtract;
+        public ToolUseDef SkillToExtract;
 
         static public MaterialType GetMaterialType(int id)
         {
@@ -44,9 +44,9 @@ namespace Start_a_Town_
             this.Category = category;
         }
 
-        static public readonly MaterialType Soil = new("Soil", MaterialCategory.Inorganic) { SkillToExtract = ToolAbilityDef.Digging };
-        static public readonly MaterialType Stone = new("Stone", MaterialCategory.Inorganic) { SkillToExtract = ToolAbilityDef.Mining };
-        static public readonly MaterialType Metal = new("Metal", MaterialCategory.Inorganic) { ReactionClass = ReactionClass.Tools,  SkillToExtract = ToolAbilityDef.Mining };
+        static public readonly MaterialType Soil = new("Soil", MaterialCategory.Inorganic) { SkillToExtract = ToolUseDef.Digging };
+        static public readonly MaterialType Stone = new("Stone", MaterialCategory.Inorganic) { SkillToExtract = ToolUseDef.Mining };
+        static public readonly MaterialType Metal = new("Metal", MaterialCategory.Inorganic) { ReactionClass = ReactionClass.Tools,  SkillToExtract = ToolUseDef.Mining };
         static public readonly MaterialType Gas = new("Gas", MaterialCategory.Inorganic);
         static public readonly MaterialType Water = new("Water", MaterialCategory.Inorganic);
         static public readonly MaterialType Glass = new("Glass", MaterialCategory.Inorganic);
@@ -57,7 +57,7 @@ namespace Start_a_Town_
 
         static public readonly MaterialType Fruit = new("Fruit", MaterialCategory.Plant) { ReactionClass = ReactionClass.Protein };
         static public readonly MaterialType Dye = new("Dye", MaterialCategory.Plant);
-        static public readonly MaterialType Wood = new("Wood", MaterialCategory.Plant) { ReactionClass = ReactionClass.Tools, SkillToExtract = ToolAbilityDef.Chopping, Shininess = .8f };
+        static public readonly MaterialType Wood = new("Wood", MaterialCategory.Plant) { ReactionClass = ReactionClass.Tools, SkillToExtract = ToolUseDef.Chopping, Shininess = .8f };
         static public readonly MaterialType PlantStem = new("PlantStem", MaterialCategory.Plant);
         static public readonly MaterialType Seed = new("Seed", MaterialCategory.Plant);
 

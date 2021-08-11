@@ -9,7 +9,7 @@ namespace Start_a_Town_
         public string 
            // Label,
             Description;
-        public ToolAbility Ability;
+        public ToolUse Ability;
         public HashSet<JobDef> AssociatedJobs = new();
         public Sprite SpriteHandle, SpriteHead;
         public ToolProps(string name)
@@ -17,7 +17,7 @@ namespace Start_a_Town_
         {
             this.Label = name;
         }
-        public ToolProps(ToolAbility ability)
+        public ToolProps(ToolUse ability)
         {
             this.Ability = ability;
         }

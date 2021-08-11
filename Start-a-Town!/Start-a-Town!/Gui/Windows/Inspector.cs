@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    class Inspector
+    static class Inspector
     {
         static Window WindowHelp;
         readonly static List<Control> History = new();
@@ -33,14 +33,15 @@ namespace Start_a_Town_
             Container.ClearControls();
             var table = new Table<(object item, object value)>()
                 .AddColumn("name", 128, i => new Label(i.item))
-                .AddColumn("value", 128, i => new Label(i.value) { HoverText = i.value.ToString() });
-            table.AddItems(obj.Inspect().Prepend((nameof(Type), obj.GetType())));
+                //.AddColumn("value", 128, i => new Label(i.value) { HoverText = i.value.ToString() });
+                .AddColumn("value", 128, i => Label.ParseNewNew(i.value));// { HoverText = i.value.ToString() });
+
+            table.AddItems(obj.Inspect()
+                .Prepend((nameof(obj.Label), obj.Label))
+                .Prepend((nameof(Type), obj.GetType())));
             table.Tag = obj;
             var box = table.Box(table.Width, 512);
             var panel = box.ToPanel();
-
-            //History.Add(panel);
-            //HistoryIndex = 0;
 
             if(HistoryIndex < History.Count -1)
                 History.RemoveRange(HistoryIndex + 1, History.Count - HistoryIndex - 1);
@@ -73,10 +74,7 @@ namespace Start_a_Town_
         internal static void Show()
         {
             if (!WindowHelp.IsOpen)
-            {
-               
                 WindowHelp.Show();
-            }
         }
     }
 }

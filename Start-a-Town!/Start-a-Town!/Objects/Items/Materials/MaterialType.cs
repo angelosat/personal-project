@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
-    public sealed class MaterialType : Def
+    public sealed class MaterialType : Def, IInspectable
     {
-        //static int _idSequence = 0;
-        //public static int IdSequence { get { return _idSequence++; } }
         public static Dictionary<int, MaterialType> Dictionary = new();
         public static Dictionary<int, MaterialType> DictionaryByHash = new();
 
         public ReactionClass ReactionClass;
         public readonly MaterialCategory Category;
-        //public int ID;
-        public string Label;
         public readonly int Hash;
         public HashSet<MaterialDef> SubTypes = new();
         public float Shininess;
@@ -29,10 +26,6 @@ namespace Start_a_Town_
        
         public MaterialType(string name) : base($"MaterialType:{name}")
         {
-            //int id = IdSequence;
-            //this.ID = id;
-            //Dictionary[id] = this;
-            //this.Name = name;
             this.Label = name;
             this.Hash = name.GetHashCode();
             DictionaryByHash[this.Hash] = this;
@@ -65,6 +58,15 @@ namespace Start_a_Town_
         {
             mat.Type = this;
             this.SubTypes.Add(mat);
+        }
+
+        public IEnumerable<(object item, object value)> Inspect()
+        {
+            yield return (nameof(this.Category), this.Category);
+            yield return (nameof(this.ReactionClass), this.ReactionClass);
+            yield return (nameof(this.SkillToExtract), this.SkillToExtract);
+            //yield return (nameof(this.SubTypes), string.Join(", ", this.SubTypes.Select(s => s.Label)));
+            yield return (nameof(this.SubTypes), this.SubTypes);// string.Join(", ", this.SubTypes.Select(s => s.Label)));
         }
     }
 }

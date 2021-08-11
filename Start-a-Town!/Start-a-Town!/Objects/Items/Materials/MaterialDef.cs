@@ -155,7 +155,7 @@ namespace Start_a_Town_
 
         public IEnumerable<(object item, object value)> Inspect()
         {
-            yield return (nameof(this.Label), this.Label);
+            yield return (nameof(this.Type), this.Type);
             yield return (nameof(this.Density), this.Density);
             yield return (nameof(this.Color), this.Color);
             yield return (nameof(this.Value), this.Value);

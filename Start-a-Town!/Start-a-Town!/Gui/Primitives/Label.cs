@@ -58,6 +58,7 @@ namespace Start_a_Town_.UI
                 this.Font);
         }
 
+
         protected override void OnTextChanged()
         {
             base.OnTextChanged();
@@ -111,13 +112,18 @@ namespace Start_a_Town_.UI
         //    this.LeftClickAction = () => throw new NotImplementedException();
         //}
         public Label(string text) : this(Vector2.Zero, text) { }
-        public Label(object obj) : this(Vector2.Zero, obj.ToString())
+        public Label(object obj) : this(Vector2.Zero, obj?.ToString() ?? "")
         {
-            if(obj is IInspectable objdetails)
+            if (obj is not null)
             {
-                this.Active = true;
-                this.LeftClickAction = () => Inspector.Refresh(objdetails);
-                this.TextColor = Color.LightBlue;
+                this.HoverText = this.Text;
+                if (obj is IInspectable objdetails)
+                {
+                    this.Active = true;
+                    this.LeftClickAction = () => Inspector.Refresh(objdetails);
+                    this.Text = $"[{this.Text}]";
+                    this.TextColor = Color.LightBlue;
+                }
             }
         }
         public Label(object obj, Action action) : this(Vector2.Zero, obj.ToString())
@@ -344,6 +350,18 @@ namespace Start_a_Town_.UI
                             yield return new Label(i);
                 }
             } while (posFrom != -1);
+        }
+
+        internal static Control ParseNewNew(object value)
+        {
+            if (value is string str)
+                return new GroupBox().AddControlsHorizontally(ParseNew(str).ToArray());
+            else if (value is IEnumerable<string> strEnum)
+                return new GroupBox().AddControlsHorizontally(strEnum.SelectMany(s => ParseNew(s)).ToArray());
+            else if (value is IEnumerable<object> objEnum)
+                return new GroupBox().AddControlsHorizontally(objEnum.Select(o => new Label(o)).ToArray());
+            else
+                return new Label(value);
         }
     }
 }

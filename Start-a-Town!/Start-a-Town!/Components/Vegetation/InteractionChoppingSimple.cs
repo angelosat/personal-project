@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
 
@@ -7,8 +6,6 @@ namespace Start_a_Town_.Components
 {
     public class InteractionChoppingSimple : InteractionPerpetual
     {
-        int PlantHitPoints = 1;
-        float CutDownProgress = 0;
         ParticleEmitterSphere EmitterStrike;
         Resource HitPoints;
         List<Rectangle> ParticleRects;
@@ -24,11 +21,9 @@ namespace Start_a_Town_.Components
             var t = this.Target;
             var plant = t.Object as Plant;
             var plantProps = plant.PlantComponent.PlantProperties;
-            this.Skill = plantProps.ToolToCut;
+            this.ToolUse = plantProps.ToolToCut;
             this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);
             this.HitPoints = plant.GetResource(ResourceDefOf.HitPoints);
-            this.PlantHitPoints = plantProps.StemMaterial.Density;// plantProps.GetCutDownHitPonts(plant);
-            $"plant hitpoints: {this.PlantHitPoints}".ToConsole();
             var particleColor = plant.PrimaryMaterial.Color; //MaterialDefOf.LightWood.Color
             this.EmitterStrike = new ParticleEmitterSphere
             {
@@ -61,9 +56,6 @@ namespace Start_a_Town_.Components
             var nextspeed = StatDefOf.WorkSpeed.GetValue(a);
             this.Animation.Speed = nextspeed;
             float amount = getCutDownAmount(a, t);
-            //this.CutDownProgress += amount;
-            //if (this.CutDownProgress < PlantHitPoints)
-            //    return;
             this.HitPoints.Value -= amount;
             if (this.Progress < 1)
                 return;
@@ -96,26 +88,6 @@ namespace Start_a_Town_.Components
             var comp = plant.PlantComponent;
             comp.Harvest(plant, actor);
             comp.CutDown(plant, actor);
-        }
-        protected override void AddSaveData(SaveTag tag)
-        {
-            this.CutDownProgress.Save(tag, "Current");
-            this.PlantHitPoints.Save(tag, "Max");
-        }
-        public override void LoadData(SaveTag tag)
-        {
-            this.CutDownProgress = tag.LoadInt("Current");
-            this.PlantHitPoints = tag.LoadInt("Max");
-        }
-        protected override void WriteExtra(BinaryWriter w)
-        {
-            w.Write(this.CutDownProgress);
-            w.Write(this.PlantHitPoints);
-        }
-        protected override void ReadExtra(BinaryReader r)
-        {
-            this.CutDownProgress = r.ReadInt32();
-            this.PlantHitPoints = r.ReadInt32();
         }
     }
     //public class InteractionChoppingSimple : InteractionPerpetual

@@ -10,9 +10,10 @@ namespace Start_a_Town_
         {
             yield return new BehaviorGrabTool();
             yield return new BehaviorGetAtNewNew(TargetIndex.A);
-            yield return new BehaviorInteractionNew(TargetIndex.A, new InteractionChoppingSimple());
+            //yield return new BehaviorInteractionNew(TargetIndex.A, new InteractionChoppingSimple());
+            yield return new BehaviorInteractionNew(TargetIndex.A, new InteractionChop());
         }
-        
+
         public override bool HasFailedOrEnded()
         {
             var tree = this.Task.TargetA.Object;

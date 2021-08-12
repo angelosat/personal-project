@@ -89,7 +89,7 @@ namespace Start_a_Town_.Components
         {
             var parent = this.Parent;
 
-            this.Wiggle(parent);
+            this.TickWiggle();
             if (this.GrowthBody.Percentage >= ForageThreshold)
             {
                 if (this.PlantProperties.ProducesFruit)
@@ -125,22 +125,46 @@ namespace Start_a_Town_.Components
             this.Growth.Set(parent, this.Growth.Max);
             this.Progress.Value = 0;
         }
-        private void Wiggle(GameObject parent)
+        public void Wiggle()
         {
-            var t = this.WiggleTime / this.WiggleTimeMax;
+            this.Wiggle(WiggleAngleMaxDefault, WiggleTickMaxDefault);
+        }
+        public void Wiggle(float angle, int ticks)
+        {
+            this.WiggleTime = 0;
+            this.WiggleTick = ticks;
+            this.WiggleAngleMax = angle;
+            this.WiggleDirection = (new int[] { -1, 1 })[new Random().Next(2)];
+        }
+        private void TickWiggle()
+        {
+            var parent = this.Parent;
+            var t = 1 - this.WiggleTick--/ (float)this.WiggleTickMax;
             if (t >= 1)
                 return;
-            float currentangle, currentdepth = (1 - t) * this.WiggleDepthMax;
-            currentangle = this.WiggleDirection * currentdepth * (float)Math.Sin(t * Math.PI * 2);
-            this.WiggleTime += 0.05f;
-            var sprCmp = parent.GetComponent<SpriteComponent>(); // TODO: optimize
-            sprCmp._Angle = currentangle;
-        }
+            var currentdepth = (1 - t) * this.WiggleAngleMax;
+            var radians = t * Math.PI * 2;
+            radians *= this.PlantProperties.StemMaterial.Density;
+            var currentangle = this.WiggleDirection * currentdepth * (float)Math.Sin(radians);
+            parent.SpriteComp._Angle = currentangle;
 
-        private float WiggleDepth;
+            //var parent = this.Parent;
+            //var t = this.WiggleTime / this.WiggleTimeMax;
+            //if (t >= 1)
+            //    return;
+            //float currentangle, currentdepth = (1 - t) * this.WiggleAngleMax;
+            //currentangle = this.WiggleDirection * currentdepth * (float)Math.Sin(t * Math.PI * 2);
+            //this.WiggleTime += 0.05f;
+            //var sprCmp = parent.GetComponent<SpriteComponent>(); // TODO: optimize
+            //sprCmp._Angle = currentangle;
+        }
+        private int WiggleTick;
+        private readonly int WiggleTickMax = 40;
         private float WiggleTime;
         private readonly float WiggleTimeMax = 2;
-        private readonly float WiggleDepthMax = (float)Math.PI / 4f;
+        private float WiggleAngleMax;
+        const float WiggleAngleMaxDefault = (float)Math.PI / 4f;
+        const int WiggleTickMaxDefault = 40;
         int WiggleDirection;
 
         public bool Harvest(GameObject parent, GameObject actor)
@@ -195,9 +219,7 @@ namespace Start_a_Town_.Components
             switch (msg)
             {
                 case Message.Types.EntityCollision:
-                    this.WiggleDepth = this.WiggleDepthMax;
-                    this.WiggleTime = 0;
-                    this.WiggleDirection = (new int[] { -1, 1 })[new Random().Next(2)];
+                    this.Wiggle();
                     break;
 
                 default:
@@ -206,6 +228,7 @@ namespace Start_a_Town_.Components
             return false;
         }
 
+       
 
         public override object Clone()
         {

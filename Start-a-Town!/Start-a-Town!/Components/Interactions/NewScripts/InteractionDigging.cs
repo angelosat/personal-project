@@ -19,7 +19,7 @@ namespace Start_a_Town_
             : base("Dig")
         {
             this.Verb = "Digging";
-            this.Skill = ToolUseDefOf.Digging;
+            this.ToolUse = ToolUseDefOf.Digging;
         }
         Block Block;
         ParticleEmitterSphere EmitterStrike;

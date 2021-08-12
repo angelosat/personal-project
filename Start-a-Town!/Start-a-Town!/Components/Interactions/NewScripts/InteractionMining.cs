@@ -20,7 +20,7 @@ namespace Start_a_Town_
             : base("Mine")
         {
             this.Verb = "Mining";
-            this.Skill = ToolUseDefOf.Digging;
+            this.ToolUse = ToolUseDefOf.Digging;
         }
 
         Block Block;

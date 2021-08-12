@@ -36,7 +36,8 @@
                 SkillDef.Tinkering,
                 SkillDef.Argiculture,
                 SkillDef.Carpentry,
-                SkillDef.Crafting }
+                SkillDef.Crafting,
+                SkillDef.Plantcutting }
             ,
             Traits = new TraitDef[]
             {

@@ -39,12 +39,12 @@ namespace Start_a_Town_
             var matType = cell.Material.Type;
             if (matType == MaterialType.Soil)
             {
-                this.Skill = ToolUseDefOf.Digging;
+                this.ToolUse = ToolUseDefOf.Digging;
                 this.SkillDef = SkillDef.Digging;
             }
             else if (matType == MaterialType.Stone || matType == MaterialType.Metal)
             {
-                this.Skill = ToolUseDefOf.Mining;
+                this.ToolUse = ToolUseDefOf.Mining;
                 this.SkillDef = SkillDef.Mining;
             }
             var maxWork = this.Block.GetWorkToBreak(a.Map, t.Global);

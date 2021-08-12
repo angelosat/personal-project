@@ -12,10 +12,7 @@ namespace Start_a_Town_
         public int Level;
         public float CurrentXP;
         const int XpToLevelBase = 5;
-        public int XpToLevel
-        {
-            get { return (int)Math.Pow(XpToLevelBase, this.Level + 1); }
-        }
+        public int XpToLevel => (int)Math.Pow(XpToLevelBase, this.Level + 1); 
 
         public NpcSkill(SkillDef def)
         {
@@ -32,13 +29,13 @@ namespace Start_a_Town_
         {
             var label = new Label()
             {
-                TextFunc = () => string.Format("{0}: {1}", this.Def.Name, this.Level),
+                TextFunc = () => $"{this.Def.Name}: {this.Level}",
                 TooltipFunc = (t) =>
                 {
                     t.AddControlsBottomLeft(
                         new Label(this.Def.Description),
-                        new Label() { TextFunc = () => string.Format("Current Level: {0}", this.Level) },
-                        new Label() { TextFunc = () => string.Format("Experience: {0} / {1}", this.CurrentXP, this.XpToLevel) });
+                        new Label() { TextFunc = () => $"Current Level: {this.Level}"},
+                        new Label() { TextFunc = () => $"Experience: {this.CurrentXP} / {this.XpToLevel}" });
                 }
             };
             return label;
@@ -82,6 +79,10 @@ namespace Start_a_Town_
         public NpcSkill Clone()
         {
             return new NpcSkill(this.Def) { CurrentXP = this.CurrentXP, Level = this.Level };
+        }
+        public override string ToString()
+        {
+            return $"{this.Def.Label}: {this.Level} ({this.CurrentXP} / {this.XpToLevel})";
         }
     }
 }

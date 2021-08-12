@@ -55,7 +55,7 @@ namespace Start_a_Town_
 
         public float Length { get; set; }
         public float CurrentTick;
-        public ToolUseDef Skill { get; set; }
+        public ToolUseDef ToolUse { get; set; }
         public float Seconds { get; set; }
         public Animation Animation = new(AnimationDef.Work);
         internal Actor Actor;

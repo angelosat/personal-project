@@ -5,10 +5,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketPlayerInputDirection
+    [EnsureStaticCtorCall]
+    static class PacketPlayerInputDirection
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketPlayerInputDirection()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

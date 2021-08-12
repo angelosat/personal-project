@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
+﻿using System.IO;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketPlayerSetItemOwner
+    [EnsureStaticCtorCall]
+    static class PacketPlayerSetItemOwner
     {
         static readonly int PacketIDPlayerSetItemOwner;
         static PacketPlayerSetItemOwner()
         {
             PacketIDPlayerSetItemOwner = Network.RegisterPacketHandler(Receive);
-        }
-        static public void Init()
-        {
         }
         static public void Send(INetwork net, int itemID, int ownerID)
         {

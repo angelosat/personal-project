@@ -7,12 +7,13 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketEntityDesignation
+    [EnsureStaticCtorCall]
+    static class PacketEntityDesignation
     {
         const int SelectionRectangle = 0;
         const int SelectionList = 1;
         static int p;
-        static public void Init()
+        static PacketEntityDesignation()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

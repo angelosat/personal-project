@@ -4,15 +4,13 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    class PacketZoneDesignation
+    [EnsureStaticCtorCall]
+    static class PacketZoneDesignation
     {
         static readonly int PacketPlayerZoneDesignation;
         static PacketZoneDesignation()
         {
             PacketPlayerZoneDesignation = Network.RegisterPacketHandler(Receive);
-        }
-        static public void Init()
-        {
         }
         static public void Send(INetwork net, ZoneDef zoneDef, int zoneID, Vector3 begin, int w, int h, bool remove)
         {

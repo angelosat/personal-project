@@ -5,10 +5,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketToggleForbidden
+    [EnsureStaticCtorCall]
+    static class PacketToggleForbidden
     {
-        static int p;
-        static public void Init()
+        static readonly int p;
+        static PacketToggleForbidden()
         {
             p = Network.RegisterPacketHandler(Receive);
         }
@@ -31,7 +32,5 @@ namespace Start_a_Town_
             if (net is Server)
                 Send(net, list);
         }
-
-        
     }
 }

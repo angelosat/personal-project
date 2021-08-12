@@ -3,10 +3,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketInventoryDrop
+    [EnsureStaticCtorCall]
+    static class PacketInventoryDrop
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketInventoryDrop()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

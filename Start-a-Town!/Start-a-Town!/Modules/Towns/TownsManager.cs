@@ -6,34 +6,8 @@ namespace Start_a_Town_.Towns
     {
         public override void Initialize()
         {
-            PacketInventoryDrop.Init();
-            PacketInventoryEquip.Init();
-            PacketInventoryInsertItem.Init();
             PopulationManager.Init();
-
-            PacketEditAppearance.Init();
-            PacketPlayerSetItemOwner.Init();
-            PacketZoneDelete.Init();
-            PacketZoneDesignation.Init();
-            PacketDesignateConstruction.Init();
-
-            PacketCommandNpc.Init();
-            PacketControlNpc.Init();
             NpcComponent.Init();
-            PacketPlayerInputDirection.Init();
-            PacketPlayerToggleMove.Init();
-            PacketPlayerToggleWalk.Init();
-            PacketPlayerToggleSprint.Init();
-            PacketPlayerJump.Init();
-
-            PacketPlayerSetBlock.Init();
-
-            PacketDiggingDesignate.Init();
-            PacketEntityDesignation.Init();
-            PacketToggleForbidden.Init();
-
-            //PacketStorageFiltersNew.Init();
-
             ZoneManager.Init();
         }
 

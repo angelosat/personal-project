@@ -4,10 +4,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketCommandNpc
+    [EnsureStaticCtorCall]
+    static class PacketCommandNpc
     {
-        static int p;
-        static internal void Init()
+        static readonly int p;
+        static PacketCommandNpc()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

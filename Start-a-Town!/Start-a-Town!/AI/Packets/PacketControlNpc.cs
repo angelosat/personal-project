@@ -4,14 +4,14 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketControlNpc
+    [EnsureStaticCtorCall]
+    static class PacketControlNpc
     {
         static readonly int PType;
         static PacketControlNpc()
         {
             PType = Network.RegisterPacketHandler(Receive);
         }
-        internal static void Init() { }
         internal static void Send(INetwork net, int entityid)
         {
             if (net is Server)

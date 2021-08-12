@@ -5,14 +5,14 @@ using Start_a_Town_.Modules.Construction;
 
 namespace Start_a_Town_
 {
-    class PacketDesignateConstruction
+    [EnsureStaticCtorCall]
+    static class PacketDesignateConstruction
     {
-        static int p;
-        static public void Init()
+        static readonly int p;
+        static PacketDesignateConstruction()
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        
         internal static void Send(INetwork net, ToolDrawing.Args a)
         {
             Send(net, null, a);

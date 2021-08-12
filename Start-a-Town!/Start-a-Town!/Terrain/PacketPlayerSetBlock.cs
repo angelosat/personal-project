@@ -4,6 +4,7 @@ using System.IO;
 
 namespace Start_a_Town_
 {
+    [EnsureStaticCtorCall]
     static class PacketPlayerSetBlock
     {
         static readonly int p;
@@ -11,7 +12,6 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        public static void Init() { }
         public static void Send(INetwork net, PlayerData player, IntVec3 global, Block block, MaterialDef material, byte data = 0, int variation = 0, int orientation = 0)
         {
             if (net is Server)

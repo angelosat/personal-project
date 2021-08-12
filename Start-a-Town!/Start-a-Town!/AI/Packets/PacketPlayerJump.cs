@@ -4,10 +4,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketPlayerJump
+    [EnsureStaticCtorCall]
+    static class PacketPlayerJump
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketPlayerJump()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

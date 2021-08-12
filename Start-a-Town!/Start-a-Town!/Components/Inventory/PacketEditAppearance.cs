@@ -3,10 +3,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
+    [EnsureStaticCtorCall]
     static class PacketEditAppearance
     {
-        static int p;
-        static public void Init()
+        static readonly int p;
+        static PacketEditAppearance()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

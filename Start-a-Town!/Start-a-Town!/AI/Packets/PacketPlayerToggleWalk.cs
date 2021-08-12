@@ -4,10 +4,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketPlayerToggleWalk
+    [EnsureStaticCtorCall]
+    static class PacketPlayerToggleWalk
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketPlayerToggleWalk()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

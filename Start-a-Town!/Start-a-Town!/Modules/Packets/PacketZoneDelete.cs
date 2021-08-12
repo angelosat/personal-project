@@ -4,7 +4,8 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketZoneDelete
+    [EnsureStaticCtorCall]
+    static class PacketZoneDelete
     {
         static readonly int PacketPlayerZoneDelete;
         static PacketZoneDelete()
@@ -25,10 +26,6 @@ namespace Start_a_Town_
             net.Map.Town.ZoneManager.Delete(zoneID);
             if (net is Server)
                 Send(net, zoneType, zoneID);
-        }
-        
-        static public void Init()
-        {
         }
     }
 }

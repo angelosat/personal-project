@@ -5,10 +5,11 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    class PacketDiggingDesignate : Packet
+    [EnsureStaticCtorCall]
+    static class PacketDiggingDesignate
     {
-        static int p;
-        static public void Init()
+        static readonly int p;
+        static PacketDiggingDesignate()
         {
             p = Network.RegisterPacketHandler(Receive);
         }
@@ -29,30 +30,6 @@ namespace Start_a_Town_
             net.EventOccured(Components.Message.Types.MiningDesignation, positions, remove);
             if (net is Server)
                 Send(net, begin, end, remove);
-        }
-        
-        public int EntityID;
-        public Vector3 Begin, End;
-        public bool Remove;
-
-        [Obsolete]
-        public PacketDiggingDesignate(byte[] data)
-        {
-            data.Deserialize(r =>
-            {
-                this.EntityID = r.ReadInt32();
-                this.Begin = r.ReadVector3();
-                this.End = r.ReadVector3();
-                this.Remove = r.ReadBoolean();
-            });
-        }
-
-        public override void Write(System.IO.BinaryWriter w)
-        {
-            w.Write(this.EntityID);
-            w.Write(this.Begin);
-            w.Write(this.End);
-            w.Write(this.Remove);
         }
     }
 }

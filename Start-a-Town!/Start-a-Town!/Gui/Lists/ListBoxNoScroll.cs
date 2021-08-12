@@ -16,7 +16,7 @@ namespace Start_a_Town_.UI
             this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj));
         }
 
-        public IList<Control> Items => this.Controls;
+        public List<Control> AllItems = new();// => this.Controls;
 
         public Action<IListable> ItemChangedFunc = item => { };
         public IEnumerable<IListable> List = new List<IListable>();
@@ -51,6 +51,7 @@ namespace Start_a_Town_.UI
             this.AddControlsBottomLeft(control);
             if (this.Controls.Count > 1) // HACK
                 control.Location.Y += Spacing;
+            this.AllItems.Add(control);
             return control;
         }
         public void RemoveItems(params IListable[] items)
@@ -65,7 +66,7 @@ namespace Start_a_Town_.UI
         }
         internal void RemoveWhere(Func<IListable, bool> filter)
         {
-            this.RemoveItems(this.Items.Select(c => (IListable)c.Tag).Where(filter));
+            this.RemoveItems(this.AllItems.Select(c => (IListable)c.Tag).Where(filter));
         }
         void RemoveItem(IListable item)
         {
@@ -80,14 +81,15 @@ namespace Start_a_Town_.UI
                 r.Location.Y = prevY;
                 prevY = r.Bottom + Spacing;
             }
+            this.AllItems.Remove(listControls[removedItemIndex]);
             listControls.RemoveAt(removedItemIndex);
         }
 
         public void Filter(Func<IListable, bool> filter)
         {
             this.Controls.Clear();
-            var validControls = this.Items.Where(c => filter((IListable)c.Tag)).ToArray();
-            this.AddControlsBottomLeft(validControls);
+            var validControls = this.AllItems.Where(c => filter((IListable)c.Tag)).ToArray();
+            this.AddControlsBottomLeft(this.Spacing, validControls);
         }
     }
 
@@ -104,7 +106,7 @@ namespace Start_a_Town_.UI
             this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj));
         }
 
-        public IList<Control> Items => this.Controls;
+        public List<Control> AllItems = new();// => this.Controls;
 
         readonly Func<TObject, Control> ControlFactory;
 
@@ -142,6 +144,7 @@ namespace Start_a_Town_.UI
             this.AddControlsBottomLeft(control);
             if(this.Controls.Count > 1) // HACK
                 control.Location.Y += Spacing;
+            this.AllItems.Add(control);
             return control;
         }
         public void RemoveItems(params TObject[] items)
@@ -156,7 +159,7 @@ namespace Start_a_Town_.UI
         }
         internal void RemoveWhere(Func<TObject, bool> filter)
         {
-            this.RemoveItems(this.Items.Select(c => (TObject)c.Tag).Where(filter));
+            this.RemoveItems(this.AllItems.Select(c => (TObject)c.Tag).Where(filter));
         }
         void RemoveItem(TObject item)
         {
@@ -171,16 +174,16 @@ namespace Start_a_Town_.UI
                 r.Location.Y = prevY;
                 prevY = r.Bottom + Spacing;
             }
+            this.AllItems.Remove(listControls[removedItemIndex]);
             listControls.RemoveAt(removedItemIndex);
         }
 
         public void Filter(Func<TObject, bool> filter)
         {
             this.Controls.Clear();
-            var validControls = this.Items.Where(c => filter((TObject)c.Tag)).ToArray();
-            this.AddControlsBottomLeft(validControls);
+            var validControls = this.AllItems.Where(c => filter((TObject)c.Tag)).ToArray();
+            this.AddControlsBottomLeft(this.Spacing, validControls);
         }
-
     }
 
     public class ListBoxNoScroll<TObject, TControl> : GroupBox, IListSearchable<TObject>
@@ -196,7 +199,7 @@ namespace Start_a_Town_.UI
             this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj)) as TControl;
         }
 
-        public List<TControl> Items => this.Controls.Cast<TControl>().ToList();
+        public List<Control> AllItems = new();// this.Controls.Cast<TControl>().ToList();
 
         readonly Func<TObject, TControl> ControlFactory;
 
@@ -228,6 +231,7 @@ namespace Start_a_Town_.UI
                 c.Location.Y = currentY;
                 c.TooltipFunc = tt => { if (i is ITooltippable tooltippable) tooltippable.GetTooltipInfo(tt); };
                 currentY += c.Height + Spacing;
+                this.AllItems.Add(c);
                 return c;
             });
             this.AddControls(newControls.ToArray());
@@ -245,7 +249,7 @@ namespace Start_a_Town_.UI
         }
         internal void RemoveWhere(Func<TObject, bool> filter)
         {
-            this.RemoveItems(this.Items.Select(c => (TObject)c.Tag).Where(filter));
+            this.RemoveItems(this.AllItems.Select(c => (TObject)c.Tag).Where(filter));
         }
         void RemoveItem(TObject item)
         {
@@ -260,16 +264,16 @@ namespace Start_a_Town_.UI
                 r.Location.Y = prevY;
                 prevY = r.Bottom + Spacing;
             }
+            this.AllItems.Remove(listControls[removedItemIndex]);
             listControls.RemoveAt(removedItemIndex);
         }
 
         public void Filter(Func<TObject, bool> filter)
         {
             this.Controls.Clear();
-            var validControls = this.Items.Where(c => filter((TObject)c.Tag)).ToArray();
-            this.AddControlsBottomLeft(validControls);
+            var validControls = this.AllItems.Where(c => filter((TObject)c.Tag)).ToArray();
+            this.AddControlsBottomLeft(this.Spacing, validControls);
         }
-
     }
 }
 

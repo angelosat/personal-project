@@ -8,14 +8,14 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components
 {
-    public abstract class EntityComponent : ICloneable, IInspectable
+    public abstract class EntityComponent : Inspectable, ICloneable
     {
         internal virtual void Initialize(ComponentProps componentProps)
         {
         }
-        public string Label => this.Name;
+        public override string Label => this.Name;
         public abstract string Name { get; }
-
+        public override string ToString() => this.Label;
         public virtual void OnNameplateCreated(GameObject parent, Nameplate plate) { }
         public virtual void OnHealthBarCreated(GameObject parent, Nameplate plate) { }
 
@@ -160,14 +160,6 @@ namespace Start_a_Town_.Components
 
         internal virtual void ResolveReferences()
         {
-        }
-
-        public IEnumerable<(string item, object value)> Inspect()
-        {
-            foreach (var field in this.GetType().GetFields())
-                yield return (field.Name, field.GetValue(this));
-            foreach (var field in this.GetType().GetProperties())
-                yield return (field.Name, field.GetValue(this));
         }
     }
 }

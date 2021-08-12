@@ -23,18 +23,15 @@ namespace Start_a_Town_
 
         static public readonly MaterialDef ShrubStem = new("Twig", MaterialTemplates.PlantStem);
 
-        static public readonly MaterialDef LightWood = new MaterialDef(MaterialTemplates.Wood)
-            .SetName("Light Wood")
+        static public readonly MaterialDef LightWood = new MaterialDef("Light Wood", MaterialTemplates.Wood)
             .SetPrefix("Light Wood")
             .SetColor(Color.SandyBrown)
             .SetValue(5);
-        static public readonly MaterialDef DarkWood = new MaterialDef(MaterialTemplates.Wood)
-            .SetName("Dark Wood")
+        static public readonly MaterialDef DarkWood = new MaterialDef("Dark Wood", MaterialTemplates.Wood)
             .SetPrefix("Dark Wood")
             .SetColor(Color.SaddleBrown)
             .SetValue(10);
-        static public readonly MaterialDef RedWood = new MaterialDef(MaterialTemplates.Wood)
-            .SetName("Red Wood")
+        static public readonly MaterialDef RedWood = new MaterialDef("Red Wood", MaterialTemplates.Wood)
             .SetPrefix("Red Wood")
             .SetColor(Color.Brown)
             .SetValue(20);
@@ -50,24 +47,20 @@ namespace Start_a_Town_
         static public readonly MaterialDef Glass = new(MaterialType.Glass, "Glass", "Glass", Color.White, 40);
 
         static public readonly MaterialDef Human = 
-            new MaterialDef(MaterialTemplates.Meat)
-            .SetName("Human")
+            new MaterialDef("Human", MaterialTemplates.Meat)
             .SetPrefix("Human")
             .SetValue(20);
         static public readonly MaterialDef Animal = 
-            new MaterialDef(MaterialTemplates.Meat)
-            .SetName("Animal")
+            new MaterialDef("Animal", MaterialTemplates.Meat)
             .SetPrefix("Animal")
             .SetValue(20);
         static public readonly MaterialDef Insect = 
-            new MaterialDef(MaterialTemplates.Meat)
-            .SetName("Insect")
+            new MaterialDef("Insect", MaterialTemplates.Meat)
             .SetPrefix("Insect")
             .SetValue(20);
 
         static public readonly MaterialDef Berry = 
-            new MaterialDef(MaterialTemplates.Fruit)
-            .SetName("Berry")
+            new MaterialDef("Berry", MaterialTemplates.Fruit)
             .SetPrefix("Berry")
             .SetColor(new Color(141, 78, 133));
         static public readonly MaterialDef Seed = new("Seed", MaterialTemplates.Seed);

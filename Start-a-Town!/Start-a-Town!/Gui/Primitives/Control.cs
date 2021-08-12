@@ -966,8 +966,17 @@ namespace Start_a_Town_.UI
         }
         public virtual void AddControlsBottomLeft(params Control[] controls)
         {
+            this.AddControlsBottomLeft(0, controls);
+        }
+        public virtual void AddControlsBottomLeft(int spacing, params Control[] controls)
+        {
+            var currentY = this.Controls.BottomLeft.Y + (this.Controls.Any() ? spacing : 0);
             foreach (var c in controls)
-                c.Location = this.Controls.BottomLeft;
+            {
+                //c.Location = this.Controls.BottomLeft;
+                c.Location.Y = currentY;
+                currentY += c.Height  + spacing;
+            }
             this.AddControls(controls);
         }
         public virtual Control AddControlsTopRight(params Control[] controls)

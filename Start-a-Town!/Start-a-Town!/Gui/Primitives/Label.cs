@@ -122,6 +122,7 @@ namespace Start_a_Town_.UI
                     this.Active = true;
                     this.LeftClickAction = () => Inspector.Refresh(objdetails);
                     this.Text = $"[{this.Text}]";
+                    //this.Text = $"[{objdetails.Label}]";
                     this.TextColor = Color.LightBlue;
                 }
             }

@@ -69,16 +69,6 @@ namespace Start_a_Town_
             this.Fuel = template.Fuel;
         }
 
-        public MaterialDef(MaterialDef template)
-        {
-            this.State = template.State;
-            this.Category = template.Category;
-            this.Density = template.Density;
-            this.SetColor(template.Color);
-            this.Type = template.Type;
-            this.Type.AddMaterial(this);
-            this.Fuel = template.Fuel;
-        }
         public MaterialDef(MaterialType type, string name, string prefix, Color color, int density) : base(name)
         {
             this.HashCode = name.GetHashCode();

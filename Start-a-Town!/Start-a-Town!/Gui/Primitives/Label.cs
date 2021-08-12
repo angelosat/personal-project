@@ -357,6 +357,8 @@ namespace Start_a_Town_.UI
         {
             if (value is string str)
                 return ParseNew(str);
+            else if(value is Inspectable objInspectable)
+                return new Label[] { new Label(value) };
             else if (value is IEnumerable<string> strEnum)
                 return strEnum.SelectMany(s => ParseNew(s));
             else if (value is IEnumerable<object> objEnum)

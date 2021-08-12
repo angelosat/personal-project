@@ -800,7 +800,8 @@ namespace Start_a_Town_
             GetTooltip(tooltip);
         }
         Sprite CachedSprite;
-        internal IList<GameObject> Container;
+        //public IList<GameObject> Container;
+        public ContainerList Container;
 
         public Sprite GetSprite()
         {

@@ -1,4 +1,5 @@
-﻿using Start_a_Town_.UI;
+﻿using Start_a_Town_.Net;
+using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Start_a_Town_
         static Inspector()
         {
         }
-        static Control DefDirectory;
+        static Control DefDirectory, ObjectsDirectory;
         static int MaxHeight = 512, Width = 384; // table columns TODO
         static Window WindowHelp;
         readonly static List<Control> History = new();
@@ -26,7 +27,12 @@ namespace Start_a_Town_
                 var toolbar = new GroupBox();
                 BtnBack = IconButton.CreateSmall(Icon.ArrowLeft, Back);
                 BtnForward = IconButton.CreateSmall(Icon.ArrowRight, Forward);
-                toolbar.AddControlsHorizontally(BtnBack, BtnForward, new Button("Defs", () => ShowContainer(DefDirectory)));
+                toolbar.AddControlsHorizontally(
+                    BtnBack, 
+                    BtnForward, 
+                    new Button("Defs", () => ShowContainer(DefDirectory)),
+                    new Button("Objects", () => ShowContainer(ObjectsDirectory))
+                    );
                 Container = new GroupBox();
                 WindowHelp.AddControlsVertically(toolbar, Container);
                 WindowHelp.HideAction = () =>
@@ -35,6 +41,7 @@ namespace Start_a_Town_
                     HistoryIndex = -1;
                 };
                 InitDefDirectory();
+                InitWorldObjects();
             }
             Container.ClearControls();
             var table = new Table<(string item, object value)>()
@@ -106,6 +113,16 @@ namespace Start_a_Town_
             scrollablebox.AddControls(list);
             var box = new GroupBox().AddControlsVertically(search, scrollablebox.ToPanel());
             DefDirectory = box;
+        }
+        static void InitWorldObjects()
+        {
+            var net = Client.Instance;
+            var list = new ListBoxObservable<GameObject, Label>(net.ObjectsObservable, o=>new Label(o.DebugName, ()=>Refresh(o)));
+            var search = new SearchBarNew<GameObject>(Width, o => o.Name).BindTo(list).ToPanelLabeled("Search");
+            var scrollablebox = new ScrollableBoxNewNew(Width, MaxHeight - search.Height, ScrollModes.Vertical);
+            scrollablebox.AddControls(list);
+            var box = new GroupBox().AddControlsVertically(search, scrollablebox.ToPanel());
+            ObjectsDirectory = box;
         }
     }
 }

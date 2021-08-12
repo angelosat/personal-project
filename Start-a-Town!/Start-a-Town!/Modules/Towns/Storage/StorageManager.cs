@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Start_a_Town_.Towns;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Start_a_Town_.Towns;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
     public class StorageManager : TownComponent
     {
-        string _name = "Storage";
-        public override string Name => _name;
-        ObservableCollection<ItemMaterialAmount> CacheObservable = new();
-        Dictionary<ItemDef, Dictionary<MaterialDef, ItemMaterialAmount>> Cache = new();
-        ObservableDictionary<StorageItemBranch, ObservableDictionary<MaterialDef, StorageItemLeaf>> CacheObservableNew = new();
-        StorageItemBranch RootNode = new();
+        readonly string _name = "Storage";
+        public override string Name => this._name;
+
+        readonly ObservableCollection<ItemMaterialAmount> CacheObservable = new();
+        readonly Dictionary<ItemDef, Dictionary<MaterialDef, ItemMaterialAmount>> Cache = new();
+        readonly StorageItemBranch RootNode = new();
         static readonly int TicksPerUpdate = Ticks.TicksPerSecond;
         int UpdateTimer;
 
@@ -44,9 +44,13 @@ namespace Start_a_Town_
             var sum = stockpiles
                 .SelectMany(s => s.CacheObservable)
                 .GroupBy(i => i.Def)
-                .Select(o => new { def = o.Key, matSums = o
+                .Select(o => new
+                {
+                    def = o.Key,
+                    matSums = o
                     .GroupBy(oo => oo.PrimaryMaterial)
-                    .ToDictionary(m => m.Key, m => m.Sum(o => o.StackSize)) })
+                    .ToDictionary(m => m.Key, m => m.Sum(o => o.StackSize))
+                })
                 .ToDictionary(o => o.def, o => o.matSums);
 
 
@@ -86,7 +90,7 @@ namespace Start_a_Town_
                     this.Cache.Add(iDef.Key, mats);
                     this.RootNode.Add(iDef.Key);
                 }
-                foreach(var mat in iDef.Value)
+                foreach (var mat in iDef.Value)
                 {
                     if (!mats.TryGetValue(mat.Key, out var itemAmount))
                     {
@@ -106,7 +110,7 @@ namespace Start_a_Town_
         }
         internal override void OnHudCreated(Hud hud)
         {
-            hud.AddControls(getGui());
+            hud.AddControls(this.getGui());
         }
         Control getGui()
         {
@@ -183,7 +187,7 @@ namespace Start_a_Town_
                 return this.ItemDef is ItemDef def ? $"{def.Label}: {this.Leafs.Count}" : $"Root: {this.Branches.Count}";
             }
         }
-        
+
         class StorageItemLeaf : IListable
         {
             public MaterialDef Key;

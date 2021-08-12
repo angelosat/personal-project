@@ -159,5 +159,10 @@ namespace Start_a_Town_
                     this.Add(obj);
             return this;
         }
+        public override IEnumerable<(string item, object value)> Inspect()
+        {
+            yield return (nameof(this.Parent), this.Parent);
+            yield return (nameof(this.Contents), this.Contents);
+        }
     }
 }

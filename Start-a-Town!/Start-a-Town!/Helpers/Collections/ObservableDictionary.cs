@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Start_a_Town_
 {
-    class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged
+    public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged
     {
         Dictionary<TKey, TValue> Dictionary;
 

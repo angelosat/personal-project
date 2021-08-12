@@ -5,6 +5,7 @@ using Start_a_Town_.UI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.IO.Compression;
@@ -36,6 +37,9 @@ namespace Start_a_Town_.Net
         long RemoteSequence = 0;
         public long RemoteOrderedReliableSequence = 0;
         readonly Dictionary<int, GameObject> NetworkObjects = new();
+        //public readonly ObservableDictionary<int, GameObject> NetworkObjects = new();
+        public ObservableCollection<GameObject> ObjectsObservable = new();
+
         public MapBase Map
         {
             set => Engine.Map = value;
@@ -695,6 +699,7 @@ namespace Start_a_Town_.Net
                 return false;
             Console.WriteLine($"{this} disposing {o.DebugName}");
             this.NetworkObjects.Remove(netID);
+            this.ObjectsObservable.Remove(o);
             o.Net = null;
             if (o.IsSpawned)
                 o.Despawn();
@@ -718,6 +723,7 @@ namespace Start_a_Town_.Net
         {
             ob.Net = this;
             Instance.NetworkObjects.Add(ob.RefID, ob);
+            this.ObjectsObservable.Add(ob);
         }
 
         public IWorld World;

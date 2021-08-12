@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -282,7 +283,11 @@ namespace Start_a_Town_.UI
             this.CursorVisible = true;
             this.CursorTimer = CursorTimerMax;
         }
-
+        private void RefreshCursor(int position)
+        {
+            this.RefreshCursor();
+            this.CursorPosition = position;
+        }
         public override void HandleKeyUp(KeyEventArgs e)
         {
             if (!this.Enabled)
@@ -322,6 +327,30 @@ namespace Start_a_Town_.UI
                 .AddControlsHorizontally(
                     label,
                     textBox) as GroupBox;
+        }
+
+        public override void HandleLButtonDown(HandledMouseEventArgs e)
+        {
+            base.HandleLButtonDown(e);
+            var mousex = UIManager.Mouse.X - this.ScreenLocation.X;
+            int currentx = 0;
+            for (int i = 0; i < this.Text.Length; i++)
+            {
+                var sub = this.Text.Substring(i, 1);
+                var charWidth = (int)this.Font.MeasureString(sub).X;
+                var charMiddle = currentx + charWidth / 2;
+                if (currentx < mousex && mousex <= charMiddle)
+                {
+                    this.RefreshCursor(i);
+                    return;
+                }
+                else if (charMiddle < mousex && mousex <= currentx + charWidth)
+                {   this.RefreshCursor(i + 1);
+                    return;
+                }
+                currentx += charWidth;
+            }
+            this.RefreshCursor(this.Text.Length);
         }
     }
 }

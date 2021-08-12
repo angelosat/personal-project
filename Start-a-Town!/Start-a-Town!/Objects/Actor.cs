@@ -416,7 +416,7 @@ namespace Start_a_Town_
         {
             get
             {
-                var stamina = this.GetResource(ResourceDef.Stamina);
+                var stamina = this.GetResource(ResourceDefOf.Stamina);
                 var staminaPercentage = stamina.Percentage;
                 var threshold = StatDefOf.StaminaThresholdForWork.GetValue(this);
                 var tired = staminaPercentage < threshold;

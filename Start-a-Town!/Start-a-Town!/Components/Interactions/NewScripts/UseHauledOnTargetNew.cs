@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
 using Start_a_Town_.Animations;
 
 namespace Start_a_Town_
@@ -10,13 +9,11 @@ namespace Start_a_Town_
         int Amount;
 
         public UseHauledOnTargetNew()
-             : base("UseHauledOnTarget", .4f)
+             : this(-1)
         {
-            this.Amount = -1;
-            this.Animation = new Animation(AnimationDef.TouchItem);
         }
 
-        public UseHauledOnTargetNew(int amount = -1) // -1 means whole stack
+        public UseHauledOnTargetNew(int amount) // -1 means whole stack
             : base(
             "UseHauledOnTarget", .4f)
         {
@@ -24,16 +21,9 @@ namespace Start_a_Town_
                 throw new Exception();
             this.Amount = amount;
             this.Animation = new Animation(AnimationDef.TouchItem);
+            this.CrossFadeAnimationLength = 25;
         }
 
-        protected override void Start()
-        {
-            var a = this.Actor;
-            var t = this.Target;
-            return;
-            a.CrossFade(this.Animation, false, 25);
-        }
-        
         public override void Perform()
         {
             var actor = this.Actor;
@@ -59,7 +49,6 @@ namespace Start_a_Town_
 
                 case TargetType.Entity:
                     var o = target.Object;
-                   
                     var amount = (this.Amount == -1) ? hauledObj.StackSize : this.Amount;
                     var transferAmount = Math.Min(o.StackAvailableSpace, amount); // do i want to check this here? 
                     if (o.StackSize + transferAmount > o.StackMax)
@@ -68,7 +57,6 @@ namespace Start_a_Town_
                         throw new Exception();
                     o.StackSize += transferAmount;
                     hauledObj.StackSize -= transferAmount;
-
                     break;
 
                 default:

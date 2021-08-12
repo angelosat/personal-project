@@ -284,7 +284,7 @@ namespace Start_a_Town_.Components
             Vector2 direction = parent.Transform.Direction;
             this.Acceleration = Math.Min(1, this.Acceleration + AccelerationStep);
 
-            var stamina = parent.GetResource(ResourceDef.Stamina);
+            var stamina = parent.GetResource(ResourceDefOf.Stamina);
 
             var newwalk = StatDefOf.WalkSpeed.GetValue(parent);
             var walkSpeed = newwalk * Acceleration * NormalWalkSpeed * (this.CurrentState.Speed + this.CurrentState.SprintSpeed * stamina.Percentage);

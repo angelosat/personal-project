@@ -6,27 +6,17 @@ namespace Start_a_Town_.Components.Resources
 {
     class Stamina : ResourceDef
     {
-        public Stamina():base("Stamina")
+        public Stamina() : base("Stamina")
         {
         }
-        public override string Format
-        {
-            get
-            {
-                return "##0.00";
-            }
-        }
+        public override string Format { get; } = "##0.00";
+        public override string Description { get; } = "Required for sprinting and hauling heavy objects";
 
         public override void Add(float add, Resource resource)
         {
             if (add < 0)
                 resource.Rec.Value = 0;
             base.Add(add, resource);
-        }
-
-        public override string Description
-        {
-            get { return "Required for sprinting and hauling heavy objects"; }
         }
        
         public float TickRate = Ticks.TicksPerSecond / 2f; // 2 ticks per second

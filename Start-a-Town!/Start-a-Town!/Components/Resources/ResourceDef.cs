@@ -7,6 +7,33 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
+    public static class ResourceDefOf
+    {
+        static public readonly ResourceDef Health =
+            new Health()
+                .AddThreshold("Dying", .25f)
+                .AddThreshold("Critical", .5f)
+                .AddThreshold("Injured", .75f)
+                .AddThreshold("Healthy", 1f);
+
+        static public readonly ResourceDef Stamina =
+            new Stamina()
+                .AddThreshold("Out of breath", .25f)
+                .AddThreshold("Exhausted", .5f)
+                .AddThreshold("Tired", .75f)
+                .AddThreshold("Energetic", 1f);
+
+        static public readonly ResourceDef Durability = new Durability().AddThreshold("Durability", 1);
+        static public readonly ResourceDef HitPoints = new HitPoints();
+        static ResourceDefOf()
+        {
+            Def.Register(Health);
+            Def.Register(Stamina);
+            Def.Register(Durability);
+            Def.Register(HitPoints);
+        }
+    }
+
     public abstract class ResourceDef : Def
     {
         public class ResourceThreshold : Def
@@ -57,32 +84,6 @@ namespace Start_a_Town_
             {
                 return string.Format("{0}: {1}", this.Name, this.Value.ToString("##0%"));
             }
-        }
-
-
-        static public readonly ResourceDef Health =
-            new Health()
-                .AddThreshold("Dying", .25f)
-                .AddThreshold("Critical", .5f)
-                .AddThreshold("Injured", .75f)
-                .AddThreshold("Healthy", 1f);
-
-        static public readonly ResourceDef Stamina =
-            new Stamina()
-                .AddThreshold("Out of breath", .25f)
-                .AddThreshold("Exhausted", .5f)
-                .AddThreshold("Tired", .75f)
-                .AddThreshold("Energetic", 1f);
-
-        static public readonly ResourceDef Durability = new Durability().AddThreshold("Durability", 1);
-        static public readonly ResourceDef HitPoints = new HitPoints();
-
-        static ResourceDef()
-        {
-            Register(Health);
-            Register(Stamina);
-            Register(Durability);
-            Register(HitPoints);
         }
 
         static public Progress Recovery { get { return new Progress(0, Ticks.TicksPerSecond, Ticks.TicksPerSecond); } }
@@ -140,7 +141,7 @@ namespace Start_a_Town_
 
         public string GetLabel(Resource res)
         {
-            var label = this.Thresholds.FirstOrDefault(t => res.Percentage <= t.Value)?.Name;
+            var label = this.Thresholds.FirstOrDefault(t => res.Percentage <= t.Value)?.Label;
             return label ?? "";
         }
         public abstract Color GetBarColor(Resource resource);

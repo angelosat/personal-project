@@ -20,16 +20,9 @@ namespace Start_a_Town_
                 throw new Exception();
             this.Amount = amount;
             this.Animation = new Animation(AnimationDef.TouchItem);
+            this.CrossFadeAnimationLength = 25;
         }
 
-        protected override void Start()
-        {
-            var a = this.Actor;
-            var t = this.Target;
-            return;
-            a.CrossFade(this.Animation, false, 25);
-        }
-        
         public override void Perform()
         {
             var actor = this.Actor;

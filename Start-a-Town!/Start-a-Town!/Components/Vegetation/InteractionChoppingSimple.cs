@@ -26,7 +26,7 @@ namespace Start_a_Town_.Components
             var plantProps = plant.PlantComponent.PlantProperties;
             this.Skill = plantProps.ToolToCut;
             this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);
-            this.HitPoints = plant.GetResource(ResourceDef.HitPoints);
+            this.HitPoints = plant.GetResource(ResourceDefOf.HitPoints);
             this.PlantHitPoints = plantProps.StemMaterial.Density;// plantProps.GetCutDownHitPonts(plant);
             $"plant hitpoints: {this.PlantHitPoints}".ToConsole();
             var particleColor = plant.PrimaryMaterial.Color; //MaterialDefOf.LightWood.Color

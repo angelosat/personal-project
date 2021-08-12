@@ -4,7 +4,7 @@ using Start_a_Town_.Net;
 using Start_a_Town_.Particles;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Components.Interactions
+namespace Start_a_Town_
 {
     class InteractionMining : InteractionPerpetual
     {
@@ -23,8 +23,6 @@ namespace Start_a_Town_.Components.Interactions
             this.Skill = ToolUseDef.Digging;
         }
 
-        static public int ID = "Mine".GetHashCode();
-       
         Block Block;
         ParticleEmitterSphere EmitterStrike;
         ParticleEmitterSphere EmitterBreak;

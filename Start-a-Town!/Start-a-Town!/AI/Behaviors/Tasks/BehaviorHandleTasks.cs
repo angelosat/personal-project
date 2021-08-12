@@ -75,7 +75,7 @@ namespace Start_a_Town_
                 if (parent.CurrentInteraction is not null) // added this here because when cleaning up, an unequip interaction might be in progress. and we dont want to interrupt it by starting another task
                     return BehaviorState.Running; // returning running until clean up interaction finishes, otherwise it might get interrupted by the next behaviors, like BehaviorIdle
                 /// OTHER SOLUTION: make a new behavior that cleans up before behaviorhandletask is ticked?
-                var stamina = parent.GetResource(ResourceDef.Stamina);
+                var stamina = parent.GetResource(ResourceDefOf.Stamina);
                 var staminaTaskThreshold = 20;
                 var tired = stamina.Value <= staminaTaskThreshold;
 

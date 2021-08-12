@@ -1,30 +1,32 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
+using Start_a_Town_.Net;
 using Start_a_Town_.Particles;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    class InteractionDigging : InteractionPerpetual
+    class InteractionMiningDigging : InteractionPerpetual
     {
-        static float SpeedFormula(GameObject actor)
+        static float SpeedFormula(Actor actor)
         {
-            var fromSkill = actor.GetSkill(SkillDef.Digging).Level * .1f + 1; 
+            var fromSkill = actor.GetSkill(SkillDef.Digging).Level * .1f + 1; //+.5f 
             var fromTool = StatDefOf.WorkSpeed.GetValue(actor);
             return fromSkill * fromTool;
         }
         Progress Progress;
-        
-        public InteractionDigging()
-            : base("Dig")
+
+        public InteractionMiningDigging()
+            : base("Mine")
         {
-            this.Verb = "Digging";
-            this.Skill = ToolUseDef.Digging;
+            this.Verb = "Mining";
         }
+
         Block Block;
         ParticleEmitterSphere EmitterStrike;
         ParticleEmitterSphere EmitterBreak;
         List<Rectangle> ParticleTextures;
+        SkillDef SkillDef;
 
         protected override void Start()
         {
@@ -32,7 +34,19 @@ namespace Start_a_Town_
             var t = this.Target;
             this.Animation.Speed = SpeedFormula(a);
             // cache variables
-            this.Block = a.Map.GetBlock(t.Global);
+            var cell = a.Map.GetCell(t.Global);
+            this.Block = cell.Block;
+            var matType = cell.Material.Type;
+            if (matType == MaterialType.Soil)
+            {
+                this.Skill = ToolUseDef.Digging;
+                this.SkillDef = SkillDef.Digging;
+            }
+            else if (matType == MaterialType.Stone || matType == MaterialType.Metal)
+            {
+                this.Skill = ToolUseDef.Mining;
+                this.SkillDef = SkillDef.Mining;
+            }
             var maxWork = this.Block.GetWorkToBreak(a.Map, t.Global);
             this.Progress = new Progress(0, maxWork, 0);
 
@@ -68,15 +82,12 @@ namespace Start_a_Town_
         }
         public override void OnUpdate()
         {
-            var a = this.Actor;
+            var actor = this.Actor;
             var t = this.Target;
-            var actor = a as Actor;
             this.EmitStrike(actor);
-           
-            var material = actor.Map.GetBlockMaterial(t.Global);
-            var skill = material.Type.SkillToExtract;
-            var workAmount = actor.GetToolWorkAmount(skill.ID);
-            actor.AwardSkillXP(SkillDef.Digging, (int)workAmount);
+
+            var workAmount = getWorkAmount();
+            actor.AwardSkillXP(this.SkillDef, workAmount);
 
             this.Progress.Value += workAmount;
             this.Animation.Speed = SpeedFormula(actor);
@@ -85,21 +96,53 @@ namespace Start_a_Town_
                 this.Done();
                 this.Finish();
             }
+
+            float getWorkAmount()
+            {
+                var material = actor.Map.GetCell(t.Global).Material;
+                var toolEffect = (int)StatDefOf.WorkEffectiveness.GetValue(actor);
+                var amount = toolEffect / (float)material.Density;
+                return amount;
+            }
         }
         public void Done()
         {
             var a = this.Actor;
             var t = this.Target;
-            this.Block.Break(a.Map, t.Global);
-            var tool = a.Gear.GetSlot(GearType.Mainhand).Object;
+            var cell = a.Map.GetCell(t.Global);
+            var block = cell.Block;
+            if (!IsMetalOrMineral(a, t))
+                return;
+            //var material = block.GetMaterial(cell.BlockData);
+            var material = cell.Material;
+            var server = a.Net as Server;
+            if (server != null)
+            {
+                if (material != MaterialDefOf.Stone)
+                {
+                    var resource = ItemFactory.CreateFrom(RawMaterialDef.Ore, material);
+                    server.PopLoot(resource, t.Global, Vector3.Zero);
+                }
+
+                var byproduct = ItemFactory.CreateFrom(RawMaterialDef.Boulders, MaterialDefOf.Stone);
+                server.PopLoot(byproduct, t.Global, Vector3.Zero);
+            }
+
+            a.Map.RemoveBlock(t.Global);
+
             this.EmitBreak(a);
         }
-        private void EmitStrike(Actor a)
+        static bool IsMetalOrMineral(GameObject a, TargetArgs t)
+        {
+            var mat = Block.GetBlockMaterial(a.Map, t.Global);
+            return mat.Type == MaterialType.Stone || mat.Type == MaterialType.Metal;
+        }
+        private void EmitStrike(GameObject a)
         {
             this.EmitterStrike.Emit(Block.Atlas.Texture, this.ParticleTextures, Vector3.Zero);
             a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
         }
-        private void EmitBreak(Actor a)
+        private void EmitBreak(GameObject a)
         {
             this.EmitterBreak.Emit(Block.Atlas.Texture, this.ParticleTextures, Vector3.Zero);
             a.Map.ParticleManager.AddEmitter(this.EmitterBreak);

@@ -103,7 +103,7 @@ namespace Start_a_Town_
         internal void AwardSkillXP(GameObject actor, SkillDef skill, float v)
         {
             var currentSkill = this.SkillsNew.First(s => s.Def == skill);
-            currentSkill.CurrentXP += (int)v;
+            currentSkill.CurrentXP += v;// (int)v;
             if (currentSkill.CurrentXP >= currentSkill.XpToLevel)
             {
                 currentSkill.Level++;

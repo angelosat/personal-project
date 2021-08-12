@@ -10,11 +10,9 @@ namespace Start_a_Town_.Components.Resources
         public Health():base("Health")
         {
         }
-      
-        public override string Description
-        {
-            get { return "Basic health resource"; }
-        }
+        public override string Format { get; } = "##0.00";
+        public override string Description { get; } = "Basic health resource";
+
         public float TickRate = Ticks.TicksPerSecond / 2f;
 
         static readonly float SpriteFlashFramesCount = Ticks.TicksPerSecond / 10f;
@@ -141,13 +139,6 @@ namespace Start_a_Town_.Components.Resources
             plate.SetMousethrough(true, true);
         }
 
-        public override string Format
-        {
-            get
-            {
-                return "##0.00";
-            }
-        }
        
         public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent)
         {

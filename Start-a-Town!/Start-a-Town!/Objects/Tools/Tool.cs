@@ -5,7 +5,7 @@
         public Tool(ItemDef def)
             : base(def)
         {
-            this.AddComponent(new ResourcesComponent(ResourceDef.Durability));
+            this.AddComponent(new ResourcesComponent(ResourceDefOf.Durability));
             this.AddComponent(new OwnershipComponent());
             this.AddComponent(new ToolAbilityComponent());
         }

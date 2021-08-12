@@ -15,7 +15,7 @@ namespace Start_a_Town_.Components
         public EquipComponent()
         {
             this.Type = null;
-            this.Durability = new Resource(ResourceDef.Durability);
+            this.Durability = new Resource(ResourceDefOf.Durability);
         }
 
         public EquipComponent Initialize(GearType slot)

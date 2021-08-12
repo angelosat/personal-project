@@ -9,7 +9,7 @@ namespace Start_a_Town_.Components.Crafting
             .AddBuildSite(IsWorkstation.Types.Workbench)
             .AddIngredient(new Ingredient("item")
                 .SetAllow(ItemCategory.Equipment, true)
-                .AddResourceFilter(ResourceDef.Durability)
+                .AddResourceFilter(ResourceDefOf.Durability)
                 .Preserve())
             .AddProduct(new Product("item").RestoreDurability());
     }

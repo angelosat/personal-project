@@ -17,8 +17,8 @@
                 AttributeDef.Dexterity },
             Resources = new ResourceDef[]
             {
-                ResourceDef.Health,
-                ResourceDef.Stamina
+                ResourceDefOf.Health,
+                ResourceDefOf.Stamina
             },
             GearSlots = new GearType[] { GearType.Mainhand,
                 GearType.Offhand,

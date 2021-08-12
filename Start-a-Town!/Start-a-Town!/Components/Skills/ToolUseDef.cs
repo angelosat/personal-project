@@ -41,12 +41,6 @@ namespace Start_a_Town_
             this.WorkFactory = workFactory;
         }
 
-        public virtual Interaction GetInteraction(GameObject actor, TargetArgs target)
-        {
-            if (this.WorkFactory == null)
-                return null;
-            return this.WorkFactory(target);
-        }
         public virtual Interaction GetInteraction()
         {
             if (this.WorkFactory == null)

@@ -40,7 +40,7 @@ namespace Start_a_Town_
             {
                 var actor = a as Actor;
                 var staminaBaseThreshold = .25f; //placeholder?
-                var stamina = actor.GetResource(ResourceDef.Stamina);
+                var stamina = actor.GetResource(ResourceDefOf.Stamina);
                 staminaBaseThreshold = stamina.GetThresholdValue(0);
                 var activity1 = actor.GetTrait(TraitDefOf.Activity).Normalized;
                 var num = activity1 * staminaBaseThreshold * .5f;

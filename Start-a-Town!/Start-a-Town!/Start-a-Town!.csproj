@@ -187,6 +187,7 @@
     <Compile Include="Animations\AnimationBlending.cs" />
     <Compile Include="Animations\AnimationExtensions.cs" />
     <Compile Include="Blocks\Workstations\BlockSmelteryEntity.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionMiningDigging.cs" />
     <Compile Include="Components\Inventory\ContainerList.cs" />
     <Compile Include="Components\Resources\HitPoints.cs" />
     <Compile Include="Control\Hotkeys\HotkeyContext.cs" />

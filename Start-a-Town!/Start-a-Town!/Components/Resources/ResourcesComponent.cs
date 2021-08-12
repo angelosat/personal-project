@@ -1,26 +1,24 @@
-﻿using System;
+﻿using Start_a_Town_.Components;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.UI;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
     public class ResourcesComponent : EntityComponent
     {
         public Resource[] Resources;
-        
+
         public override string Name { get; } = "Resources";
-            
+
         public ResourcesComponent(ItemDef def)
         {
             var defs = def.ActorProperties.Resources;
             var count = defs.Length;
             this.Resources = new Resource[count];
             for (int i = 0; i < count; i++)
-            {
                 this.Resources[i] = new Resource(defs[i]);
-            }
         }
         public ResourcesComponent()
         {
@@ -30,18 +28,14 @@ namespace Start_a_Town_
             var count = resources.Length;
             this.Resources = new Resource[count];
             for (int i = 0; i < count; i++)
-            {
                 this.Resources[i] = resources[i].Clone();
-            }
         }
         public ResourcesComponent(params ResourceDef[] defs)
         {
             var count = defs.Length;
             this.Resources = new Resource[count];
             for (int i = 0; i < count; i++)
-            {
                 this.Resources[i] = new Resource(defs[i]);
-            }
         }
         internal override void Initialize(ComponentProps componentProps)
         {
@@ -49,9 +43,7 @@ namespace Start_a_Town_
             var count = props.Defs.Length;
             this.Resources = new Resource[count];
             for (int i = 0; i < count; i++)
-            {
                 this.Resources[i] = new Resource(props.Defs[i]);
-            }
         }
         public override void Tick()
         {
@@ -59,10 +51,10 @@ namespace Start_a_Town_
             foreach (var item in this.Resources)
                 item.Tick(parent);
         }
-        
+
         public override bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
         {
-            
+
             foreach (var item in this.Resources)
                 item.HandleMessage(parent, e);
 
@@ -144,7 +136,7 @@ namespace Start_a_Town_
         {
             info.AddInfo(this.CachedGui);
         }
-        
+
         internal void AddModifier(ResourceRateModifier resourceRateModifier)
         {
             var resource = this.GetResource(resourceRateModifier.Def.Source);

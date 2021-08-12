@@ -11,7 +11,6 @@ namespace Start_a_Town_
     {
         public readonly ResourceDef ResourceDef;
         public List<ResourceRateModifier> Modifiers = new();
-        float ModValuePerTick;
         public int TicksPerRecoverOne, TicksPerDrainOne;
         int TickRecover, TickDrain;
         float _max;

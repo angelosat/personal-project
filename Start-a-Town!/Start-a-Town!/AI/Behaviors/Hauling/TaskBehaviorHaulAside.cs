@@ -9,7 +9,8 @@ namespace Start_a_Town_.AI.Behaviors
             yield return new BehaviorGetAtNewNew(TargetIndex.A);
             yield return BehaviorHaulHelper.StartCarrying(TargetIndex.A);
             yield return new BehaviorGetAtNewNew(TargetIndex.B);
-            yield return BehaviorHaulHelper.DropInStorage(TargetIndex.B);
+            //yield return BehaviorHaulHelper.DropInStorage(TargetIndex.B);
+            yield return new BehaviorInteractionNew(TargetIndex.B, () => new UseHauledOnTargetNew());
         }
         protected override bool InitExtraReservations()
         {

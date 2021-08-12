@@ -166,7 +166,7 @@ namespace Start_a_Town_
            
             Button createButton(DesignationDef d)
             {
-                var btn = new Button(d.Name, () => SetTool(d), 96) { Tag = d };
+                var btn = new Button(d.Label, () => SetTool(d), 96) { Tag = d };
                 btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDigging tool && btn.Tag == tool.DesignationDef;
                 return btn;
             }

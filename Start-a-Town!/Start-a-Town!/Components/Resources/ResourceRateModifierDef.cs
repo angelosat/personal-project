@@ -18,7 +18,7 @@ namespace Start_a_Town_
         {
             return this.Function(parent);
         }
-        static public readonly ResourceRateModifierDef HaulingStaminaDrain = new("HaulingStaminaDrain", ResourceDef.Stamina) { 
+        static public readonly ResourceRateModifierDef HaulingStaminaDrain = new("HaulingStaminaDrain", ResourceDefOf.Stamina) { 
             Function = 
                 actor =>
                 {

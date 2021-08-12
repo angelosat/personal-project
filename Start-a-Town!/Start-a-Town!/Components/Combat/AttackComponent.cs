@@ -172,7 +172,7 @@ namespace Start_a_Town_.Components
         static GameObject FindClosestEnemy(GameObject parent)
         {
             var list = parent.GetNearbyObjects(r => r <= 5, foo => foo != parent)
-                .Where(foo => foo.HasResource(ResourceDef.Health))
+                .Where(foo => foo.HasResource(ResourceDefOf.Health))
                 .OrderBy(f => Vector3.DistanceSquared(parent.Global, f.Global));
             return list.FirstOrDefault();
         }

@@ -8,21 +8,11 @@ namespace Start_a_Town_.Components.Resources
     {
         public Durability() : base("Durability")
         {
-
         }
         
-        public override string Description
-        {
-            get { return "Basic Durability resource"; }
-        }
-      
-        public override string Format
-        {
-            get
-            {
-                return "##0";
-            }
-        }
+        public override string Description { get; } = "Basic Durability resource";
+        public override string Format { get; } = "##0";
+
         internal override void InitMaterials(Entity obj, Dictionary<string, MaterialDef> materials)
         {
             var count = materials.Count;

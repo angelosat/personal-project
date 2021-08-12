@@ -114,7 +114,7 @@ namespace Start_a_Town_.Components.Crafting
 
             public Product RestoreDurability()
             {
-                this.ModifierActions.Add((mats, prod) => prod.GetResource(ResourceDef.Durability).Percentage = 1);
+                this.ModifierActions.Add((mats, prod) => prod.GetResource(ResourceDefOf.Durability).Percentage = 1);
                 return this;
             }
         }

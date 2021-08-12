@@ -10,7 +10,7 @@ namespace Start_a_Town_
         public SkillDef Def;
         public string Name { get { return this.Def.Name; } }
         public int Level;
-        public int CurrentXP;
+        public float CurrentXP;
         const int XpToLevelBase = 5;
         public int XpToLevel
         {
@@ -61,8 +61,9 @@ namespace Start_a_Town_
 
         public ISaveable Load(SaveTag tag)
         {
-            tag.TryGetTagValue<int>("Level", out this.Level);
-            tag.TryGetTagValue<int>("CurrentXP", out this.CurrentXP);
+            tag.TryGetTagValue("Level", out this.Level);
+            //tag.TryGetTagValue<int>("CurrentXP", out this.CurrentXP);
+            tag.TryGetTagValue<int>("CurrentXP", v=> this.CurrentXP = (float)v);
             return this;
         }
 
@@ -75,7 +76,7 @@ namespace Start_a_Town_
         public ISerializable Read(BinaryReader r)
         {
             this.Level = r.ReadInt32();
-            this.CurrentXP = r.ReadInt32();
+            this.CurrentXP = r.ReadSingle();// r.ReadInt32();
             return this;
         }
         public NpcSkill Clone()

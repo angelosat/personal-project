@@ -26,7 +26,7 @@ namespace Start_a_Town_.Components
             {
                 this._plantProps = value;
                 var parent = this.Parent;
-                var hitpoints = parent.GetResource(ResourceDef.HitPoints);
+                var hitpoints = parent.GetResource(ResourceDefOf.HitPoints);
                 hitpoints.Max = value.StemMaterial.Density;
                 //hitpoints.Modify(value.StemHealRate / (float)Engine.TicksPerGameDay);
                 hitpoints.TicksPerRecoverOne = value.StemHealRate;

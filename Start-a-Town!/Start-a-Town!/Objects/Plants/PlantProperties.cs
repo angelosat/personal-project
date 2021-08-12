@@ -88,7 +88,7 @@ namespace Start_a_Town_
             CutDownDifficulty = 10,
             GrowTicks = 6 * Ticks.TicksPerSecond,
             PlantEntity = PlantDefOf.Tree,
-            ToolToCut = ToolUseDef.Chopping,
+            ToolToCut = ToolUseDefOf.Chopping,
             StemHealRate = Ticks.FromHours(1),
         };
 

@@ -19,7 +19,7 @@ namespace Start_a_Town_
             : base("Dig")
         {
             this.Verb = "Digging";
-            this.Skill = ToolUseDef.Digging;
+            this.Skill = ToolUseDefOf.Digging;
         }
         Block Block;
         ParticleEmitterSphere EmitterStrike;
@@ -75,7 +75,7 @@ namespace Start_a_Town_
            
             var material = actor.Map.GetBlockMaterial(t.Global);
             var skill = material.Type.SkillToExtract;
-            var workAmount = actor.GetToolWorkAmount(skill.ID);
+            var workAmount = actor.GetToolWorkAmount(skill);
             actor.AwardSkillXP(SkillDef.Digging, (int)workAmount);
 
             this.Progress.Value += workAmount;

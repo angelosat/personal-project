@@ -12,7 +12,7 @@ namespace Start_a_Town_
                 )
         {
             this.Verb = "Chopping";
-            this.Skill = ToolUseDef.Chopping;
+            this.Skill = ToolUseDefOf.Chopping;
         }
       
         public override void Perform()

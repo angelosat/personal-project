@@ -74,13 +74,19 @@ namespace Start_a_Town_.Towns.Digging
         bool IsMinable(IntVec3 global)
         {
             var material = Block.GetBlockMaterial(this.Town.Map, global);
-            var skill = material.Type.SkillToExtract;
-            if (skill == null)
-                return false;
-            var interaction = skill.GetInteraction();
-            if (interaction == null)
-                return false;
-            return true;
+            var mattype = material.Type;
+            return
+                mattype == MaterialType.Soil ||
+                mattype == MaterialType.Stone || 
+                mattype == MaterialType.Metal;
+
+            //var skill = material.Type.SkillToExtract;
+            //if (skill == null)
+            //    return false;
+            //var interaction = skill.GetInteraction();
+            //if (interaction == null)
+            //    return false;
+            //return true;
         }
         public override GroupBox GetInterface()
         {

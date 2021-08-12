@@ -72,7 +72,9 @@ namespace Start_a_Town_
             var actor = this.Actor;
 
             this.EmitStrike(actor);
-            var workAmount = actor.GetToolWorkAmount(ToolUseDef.Building.ID);
+            //var workAmount = actor.GetToolWorkAmount(ToolUseDef.Building.ID);
+
+            var workAmount = getWorkAmount();
             actor.AwardSkillXP(SkillDef.Construction, workAmount);
 
             this.Progress.Value += workAmount;
@@ -81,6 +83,13 @@ namespace Start_a_Town_
             {
                 this.Done();
                 this.Finish();
+            }
+            float getWorkAmount()
+            {
+                var material = actor.Map.GetCell(this.Target.Global).Material;
+                var toolEffect = (int)StatDefOf.WorkEffectiveness.GetValue(actor);
+                var amount = toolEffect / (float)material.Density;
+                return amount;
             }
         }
         public void Done()

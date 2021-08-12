@@ -32,9 +32,9 @@ namespace Start_a_Town_
             this.Category = category;
         }
 
-        static public readonly MaterialType Soil = new("Soil", MaterialCategory.Inorganic) { SkillToExtract = ToolUseDef.Digging };
-        static public readonly MaterialType Stone = new("Stone", MaterialCategory.Inorganic) { SkillToExtract = ToolUseDef.Mining };
-        static public readonly MaterialType Metal = new("Metal", MaterialCategory.Inorganic) { ReactionClass = ReactionClass.Tools,  SkillToExtract = ToolUseDef.Mining };
+        static public readonly MaterialType Soil = new("Soil", MaterialCategory.Inorganic) { SkillToExtract = ToolUseDefOf.Digging };
+        static public readonly MaterialType Stone = new("Stone", MaterialCategory.Inorganic) { SkillToExtract = ToolUseDefOf.Mining };
+        static public readonly MaterialType Metal = new("Metal", MaterialCategory.Inorganic) { ReactionClass = ReactionClass.Tools,  SkillToExtract = ToolUseDefOf.Mining };
         static public readonly MaterialType Gas = new("Gas", MaterialCategory.Inorganic);
         static public readonly MaterialType Water = new("Water", MaterialCategory.Inorganic);
         static public readonly MaterialType Glass = new("Glass", MaterialCategory.Inorganic);
@@ -45,7 +45,7 @@ namespace Start_a_Town_
 
         static public readonly MaterialType Fruit = new("Fruit", MaterialCategory.Plant) { ReactionClass = ReactionClass.Protein };
         static public readonly MaterialType Dye = new("Dye", MaterialCategory.Plant);
-        static public readonly MaterialType Wood = new("Wood", MaterialCategory.Plant) { ReactionClass = ReactionClass.Tools, SkillToExtract = ToolUseDef.Chopping, Shininess = .8f };
+        static public readonly MaterialType Wood = new("Wood", MaterialCategory.Plant) { ReactionClass = ReactionClass.Tools, SkillToExtract = ToolUseDefOf.Chopping, Shininess = .8f };
         static public readonly MaterialType PlantStem = new("PlantStem", MaterialCategory.Plant);
         static public readonly MaterialType Seed = new("Seed", MaterialCategory.Plant);
 

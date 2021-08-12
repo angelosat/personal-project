@@ -30,7 +30,7 @@ namespace Start_a_Town_.Interactions
         {
             var a = this.Actor;
             var t = this.Target; 
-            var workAmount = a.GetToolWorkAmount(ToolUseDef.Building.ID);
+            var workAmount = a.GetToolWorkAmount(ToolUseDefOf.Building);
             this.BuildProgress.Value += workAmount;
             if (SuccessCondition())
             {

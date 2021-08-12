@@ -508,13 +508,13 @@ namespace Start_a_Town_
         {
             return ButtonNew.CreateBig(onLeftClick, width, this.RenderIcon(), () => this.Name, bottomText);
         }
-        internal float GetToolWorkAmount(int skillID)
+        internal float GetToolWorkAmount(ToolUseDef toolUse)
         {
             if (this.Gear.GetSlot(GearType.Mainhand).Object is not Tool tool)
                 return 1;
 
             var ability = tool.ToolComponent.Props.Ability;
-            return ability.Effectiveness;
+            return ability.Def == toolUse ? ability.Effectiveness : 1;
         }
         public int EvaluateItem(Entity item)
         {

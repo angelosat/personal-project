@@ -15,7 +15,6 @@ namespace Start_a_Town_
         }
         public ToolProps Props;
         readonly List<ToolUseDef> Skills = new();
-        readonly Dictionary<int, float> WorkCapabilities = new();
         public ToolAbilityComponent(ToolProps props)
         {
             this.Props = props;
@@ -46,16 +45,7 @@ namespace Start_a_Town_
         //}
         public ToolUseDef Skill { get { return this.Skills.FirstOrDefault(); } }
         
-        static public bool HasSkill(GameObject parent, ToolUseDef skill)
-        {
-            return parent.Def.ToolProperties?.Ability.Def == skill || HasSkill(parent, skill.ID);
-        }
-        static public bool HasSkill(GameObject parent, int skillID)
-        {
-            return 
-                parent.Def.ToolProperties?.Ability.Def.ID == skillID || 
-                (parent.GetComponent<ToolAbilityComponent>()?.WorkCapabilities.ContainsKey(skillID) ?? false);
-        }
+     
         public override string ToString()
         {
             if (this.Skills.Count == 0)
@@ -66,11 +56,6 @@ namespace Start_a_Town_
             return text.TrimEnd('\n');
         }
 
-        internal override void GetEquippedActionsWithTarget(GameObject gameObject, GameObject actor, TargetArgs t, List<Interaction> list)
-        {
-            list.Add(this.Skill.GetInteraction());
-        }
-       
         public override void OnTooltipCreated(GameObject parent, Control tooltip)
         {
             tooltip.AddControlsBottomLeft(this.GetUI(parent));
@@ -78,11 +63,10 @@ namespace Start_a_Town_
         GroupBox GetUI(GameObject parent)
         {
             var box = new GroupBox();
-            foreach(var s in this.WorkCapabilities)
-                box.AddControlsBottomLeft(ToolUseDef.GetUI(s.Key, s.Value));
-            var ability = parent.Def.ToolProperties?.Ability ?? this.Props?.Ability;
-            if (ability != null)
-                box.AddControlsBottomLeft(ToolUseDef.GetUI(ability.Value.Def.ID, ability.Value.Effectiveness));
+            var ability = this.Props?.Ability;
+            if (ability.HasValue)
+                box.AddControlsBottomLeft(ability.Value.GetListControlGui());
+                //box.AddControlsBottomLeft(ToolUseDef.GetUI(ability.Value.Def.ID, ability.Value.Effectiveness));
             return box;
         }
 

@@ -20,7 +20,7 @@ namespace Start_a_Town_
             : base("Mine")
         {
             this.Verb = "Mining";
-            this.Skill = ToolUseDef.Digging;
+            this.Skill = ToolUseDefOf.Digging;
         }
 
         Block Block;
@@ -76,7 +76,7 @@ namespace Start_a_Town_
           
             var material = actor.Map.GetBlockMaterial(t.Global);
             var skill = material.Type.SkillToExtract;
-            var workAmount = actor.GetToolWorkAmount(skill.ID);
+            var workAmount = actor.GetToolWorkAmount(skill);
             actor.AwardSkillXP(SkillDef.Mining, (int)workAmount);
 
             this.Progress.Value += workAmount;

@@ -15,7 +15,7 @@ namespace Start_a_Town_.Animations
                     new Keyframe(20, Vector2.Zero, -5 * (float)Math.PI / 8f, Interpolation.Exp)
                 );
 
-            ani.Add(BoneDef.RightHand, handani);
+            ani.Add(BoneDefOf.RightHand, handani);
 
             var weapon = 
                 new AnimationClip(WarpMode.Once,
@@ -23,9 +23,9 @@ namespace Start_a_Town_.Animations
                     new Keyframe(10, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Exp),
                     new Keyframe(20, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Exp)
                 );
-            ani.Add(BoneDef.Mainhand, weapon);
+            ani.Add(BoneDefOf.Mainhand, weapon);
 
-            ani.Add(BoneDef.Torso,
+            ani.Add(BoneDefOf.Torso,
                 new AnimationClip(WarpMode.Clamp,
                     new Keyframe(0, Vector2.Zero, -(float)Math.PI / 8f),
                     new Keyframe(10, Vector2.Zero, (float)Math.PI / 8f),

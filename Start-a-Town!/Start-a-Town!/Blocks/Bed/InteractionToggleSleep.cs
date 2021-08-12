@@ -16,9 +16,9 @@ namespace Start_a_Town_.Blocks.Bed
             var a = this.Actor;
             var t = this.Target;
             var body = a.Body;
-            var headBone = a.Body.FindBone(BoneDef.Head);
+            var headBone = a.Body.FindBone(BoneDefOf.Head);
 
-            body.RestingFrame = new Keyframe(0, a.Body[BoneDef.Head].GetTotalOffset(), 0);
+            body.RestingFrame = new Keyframe(0, a.Body[BoneDefOf.Head].GetTotalOffset(), 0);
             body.SetEnabled(false, true);
             headBone.SetEnabled(true, false);
             headBone.RestingFrame = new Keyframe(0, Vector2.Zero, -(float)(Math.PI / 3f));
@@ -44,7 +44,7 @@ namespace Start_a_Town_.Blocks.Bed
             var a = this.Actor;
             var t = this.Target;
             var body = a.Body;
-            var head = body[BoneDef.Head];
+            var head = body[BoneDefOf.Head];
             body.SetEnabled(true, true);
             body.RestingFrame = new Keyframe(0, Vector2.Zero, 0);
             head.RestingFrame = new Keyframe(0, Vector2.Zero, 0);

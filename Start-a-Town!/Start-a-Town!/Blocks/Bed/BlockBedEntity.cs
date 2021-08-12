@@ -23,7 +23,7 @@ namespace Start_a_Town_
             if (this.Occupied)
                 throw new Exception();
             this.CurrentOccupant = agent.RefID;
-            agent.GetComponent<SpriteComponent>().Body = agent.Body.FindBone(BoneDef.Head);
+            agent.GetComponent<SpriteComponent>().Body = agent.Body.FindBone(BoneDefOf.Head);
         }
         public void Wake(GameObject agent)
         {
@@ -40,7 +40,7 @@ namespace Start_a_Town_
                     throw new Exception();
                 this.CurrentOccupant = -1;
                 var body = agent.Body;
-                var head = body[BoneDef.Head];
+                var head = body[BoneDefOf.Head];
                 body.SetEnabled(true, true);
                 body.RestingFrame = new Keyframe(0, Vector2.Zero, 0);
                 head.RestingFrame = new Keyframe(0, Vector2.Zero, 0);
@@ -50,8 +50,8 @@ namespace Start_a_Town_
             {
                 this.CurrentOccupant = agent.RefID;
                 var body = agent.Body;
-                var headBone = agent.Body.FindBone(BoneDef.Head);
-                body.RestingFrame = new Keyframe(0, agent.Body[BoneDef.Head].GetTotalOffset(), 0);
+                var headBone = agent.Body.FindBone(BoneDefOf.Head);
+                body.RestingFrame = new Keyframe(0, agent.Body[BoneDefOf.Head].GetTotalOffset(), 0);
                 body.SetEnabled(false, true);
                 headBone.SetEnabled(true, false);
                 headBone.RestingFrame = new Keyframe(0, Vector2.Zero, -(float)(Math.PI / 3f));

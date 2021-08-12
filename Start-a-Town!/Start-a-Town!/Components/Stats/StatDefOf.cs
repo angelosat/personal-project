@@ -84,7 +84,7 @@ namespace Start_a_Town_
               a =>
               {
                   var tool = a as Entity;
-                  var material = tool.GetMaterial(BoneDef.EquipmentHead);
+                  var material = tool.GetMaterial(BoneDefOf.ToolHead);
                   if (material is null)
                       return 1;
                   var matStrength = material.Density;
@@ -102,7 +102,7 @@ namespace Start_a_Town_
               a =>
               {
                   var tool = a as Entity;
-                  var material = tool?.GetMaterial(BoneDef.EquipmentHandle);
+                  var material = tool?.GetMaterial(BoneDefOf.ToolHandle);
                   if (material is null)
                       return 1;
                   var aa = 20f; // what is this?
@@ -136,7 +136,7 @@ namespace Start_a_Town_
               a =>
               {
                   var actor = a as Actor;
-                  var handDensity = actor.GetMaterial(BoneDef.RightHand).Density;
+                  var handDensity = actor.GetMaterial(BoneDefOf.RightHand).Density;
                   var val = actor.GetEquipmentSlot(GearType.Mainhand)?.GetStat(StatDefOf.ToolEffectiveness) ?? handDensity;
                   return val;
                   //return 1 + val;

@@ -18,7 +18,7 @@ namespace Start_a_Town_
             StackCapacity = 24,
             Weight = .1f,
             Category = ItemCategory.Manufactured,
-            Body = new Bone(BoneDef.Item, ItemContent.PlanksGrayscale) { DrawMaterialColor = true },
+            Body = new Bone(BoneDefOf.Item, ItemContent.PlanksGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks, Reaction.Product.Types.Workbenches },
             DefaultMaterialType = MaterialType.Wood,
             CraftingProperties = new CraftingProperties() { 
@@ -32,7 +32,7 @@ namespace Start_a_Town_
             BaseValue = 1,
             Description = "It came from a tree",
             StackCapacity = 6,
-            Body = new Bone(BoneDef.Item, ItemContent.LogsGrayscale) { DrawMaterialColor = true },
+            Body = new Bone(BoneDefOf.Item, ItemContent.LogsGrayscale) { DrawMaterialColor = true },
             Category = ItemCategory.RawMaterials,
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks, Reaction.Product.Types.Workbenches },
             CraftingProperties = new CraftingProperties() { IsBuildingMaterial = true },
@@ -45,7 +45,7 @@ namespace Start_a_Town_
             Description = "A bag containing grainy material",
             StackCapacity = 10,
             Category = ItemCategory.RawMaterials,
-            Body = new Bone(BoneDef.Item, ItemContent.BagsGrayscale) { DrawMaterialColor = true },
+            Body = new Bone(BoneDefOf.Item, ItemContent.BagsGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Blocks },
             DefaultMaterialType = MaterialType.Soil,
         }.SetMadeFrom(MaterialType.Soil);
@@ -56,7 +56,7 @@ namespace Start_a_Town_
             Description = "Used for crafting of weapons, armor, and tools.",
             StackCapacity = 20,
             Category = ItemCategory.Manufactured,
-            Body = new Bone(BoneDef.Item, ItemContent.BarsGrayscale) { DrawMaterialColor = true },
+            Body = new Bone(BoneDefOf.Item, ItemContent.BarsGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools },
             DefaultMaterialType = MaterialType.Metal,
             CraftingProperties = new CraftingProperties() { IsCraftingMaterial = true, IsBuildingMaterial = true },
@@ -68,7 +68,7 @@ namespace Start_a_Town_
             Description = "A piece of mineral ore",
             StackCapacity = 10,
             Category = ItemCategory.RawMaterials,
-            Body = new Bone(BoneDef.Item, ItemContent.OreGrayscale) { DrawMaterialColor = true },
+            Body = new Bone(BoneDefOf.Item, ItemContent.OreGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks },
             DefaultMaterialType = MaterialType.Metal,
         }.SetMadeFrom(MaterialToken.Metal);
@@ -79,7 +79,7 @@ namespace Start_a_Town_
             Description = "Chunks of rock",
             StackCapacity = 10,
             Category = ItemCategory.RawMaterials,
-            Body = new Bone(BoneDef.Item, ItemContent.OreGrayscale) { DrawMaterialColor = true },
+            Body = new Bone(BoneDefOf.Item, ItemContent.OreGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks },
             DefaultMaterialType = MaterialType.Stone,
             CraftingProperties = new CraftingProperties() { IsBuildingMaterial = true, IsCraftingMaterial = true },
@@ -92,7 +92,7 @@ namespace Start_a_Town_
             BaseValue = 0,
             Description = "Worthless but can be repurposed",
             Category = ItemCategory.RawMaterials,
-            Body = new Bone(BoneDef.Item, Sprite.Default) { DrawMaterialColor = true },
+            Body = new Bone(BoneDefOf.Item, Sprite.Default) { DrawMaterialColor = true },
         }.SetMadeFrom(MaterialType.Wood, MaterialType.Stone, MaterialType.Metal);
 
         static public void Initialize()

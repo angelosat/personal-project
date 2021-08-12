@@ -33,7 +33,7 @@ namespace Start_a_Town_
             var tool = ToolDefs.Tool.CreateNew() as Tool;
             tool.ToolComponent.Props = this;
             tool.Body.Sprite = this.SpriteHandle;
-            tool.Body[BoneDef.EquipmentHead].Sprite = this.SpriteHead;
+            tool.Body[BoneDefOf.ToolHead].Sprite = this.SpriteHead;
             tool.Name = this.Label;
             return tool;
         }

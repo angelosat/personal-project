@@ -12,7 +12,7 @@ namespace Start_a_Town_
             ItemClass = typeof(Entity),
             StackCapacity = 16,
             Category = ItemCategory.RawMaterials,
-            Body = new Bone(BoneDef.Item, ItemContent.SeedsFull),
+            Body = new Bone(BoneDefOf.Item, ItemContent.SeedsFull),
             DefaultMaterial = MaterialDefOf.Seed,
             CompProps = new List<ComponentProps>() { new SeedComponent.Props() }
         };
@@ -22,7 +22,7 @@ namespace Start_a_Town_
             ItemClass = typeof(Entity),
             StackCapacity = 8,
             Category = ItemCategory.FoodRaw,
-            Body = new Bone(BoneDef.Item, ItemContent.BerriesFull),
+            Body = new Bone(BoneDefOf.Item, ItemContent.BerriesFull),
             ConsumableProperties = new ConsumableProperties()
             {
                 FoodClasses = new[] { FoodClass.Fruit }
@@ -38,7 +38,7 @@ namespace Start_a_Town_
             ItemClass = typeof(Entity),
             StackCapacity = 8,
             Category = ItemCategory.FoodRaw,
-            Body = new Bone(BoneDef.Item, Sprite.Default),
+            Body = new Bone(BoneDefOf.Item, Sprite.Default),
             DefaultMaterialType = MaterialType.Meat,
             ConsumableProperties = new ConsumableProperties(),
             CompProps = new List<ComponentProps>()
@@ -52,7 +52,7 @@ namespace Start_a_Town_
             ItemClass = typeof(Entity),
             StackCapacity = 4,
             Category = ItemCategory.FoodCooked,
-            Body = new Bone(BoneDef.Item, Sprite.Default),
+            Body = new Bone(BoneDefOf.Item, Sprite.Default),
             ConsumableProperties = new()
             {
                 FoodClasses = new[] { FoodClass.Dish }
@@ -76,7 +76,7 @@ namespace Start_a_Town_
         {
             ItemClass = typeof(Entity),
             StackCapacity = ushort.MaxValue,
-            Body = new Bone(BoneDef.Item, ItemContent.BarsGrayscale),
+            Body = new Bone(BoneDefOf.Item, ItemContent.BarsGrayscale),
             Category = ItemCategory.RawMaterials,
             DefaultMaterial = MaterialDefOf.Gold,
             BaseValue = 1,

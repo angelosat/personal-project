@@ -2,38 +2,64 @@
 {
     public class BoneDef : Def
     {
-        public string Label;
-        
-        BoneDef(string name, string label) : base(name)
+        public BoneDef(string name) : base(name)
         {
-          
-            this.Label = label;
         }
-        static BoneDef Create(string name, string label)
+    }
+    public static class BoneDefOf
+    {
+        static public readonly BoneDef Hips = new("Hips");
+        static public readonly BoneDef Torso = new("Torso");
+        static public readonly BoneDef RightHand = new("Right Hand");
+        static public readonly BoneDef LeftHand = new("Left Hand");
+        static public readonly BoneDef RightFoot = new("Right Foot");
+        static public readonly BoneDef LeftFoot = new("Left Foot");
+        static public readonly BoneDef Head = new("Head");
+        static public readonly BoneDef Mainhand = new("Mainhand");
+        static public readonly BoneDef Offhand = new("Offhand");
+        static public readonly BoneDef Hauled = new("Hauled");
+        static public readonly BoneDef Helmet = new("Helmet");
+        static public readonly BoneDef ToolHead = new("ToolHead");
+        static public readonly BoneDef ToolHandle = new("ToolHandle");
+        static public readonly BoneDef Item = new("Item");
+        static public readonly BoneDef PlantStem = new("Plant Stem");
+        static public readonly BoneDef TreeTrunk = new("Tree Trunk");
+
+        static BoneDefOf()
         {
-            var n = new BoneDef(name, label);
-            Register(n);
-            return n;
+            Def.Register(Hips);
+            Def.Register(Torso);
+            Def.Register(RightHand);
+            Def.Register(LeftHand);
+            Def.Register(RightFoot);
+            Def.Register(LeftFoot);
+            Def.Register(Head);
+            Def.Register(Mainhand);
+            Def.Register(Offhand);
+            Def.Register(Hauled);
+            Def.Register(Helmet);
+            Def.Register(ToolHead);
+            Def.Register(ToolHandle);
+            Def.Register(Item);
+            Def.Register(PlantStem);
+            Def.Register(TreeTrunk);
         }
-        static BoneDef Create(string name)
-        {
-            return Create(name, name);
-        }
-        static public readonly BoneDef Hips = Create("Hips");
-        static public readonly BoneDef Torso = Create("Torso");
-        static public readonly BoneDef RightHand = Create("RightHand", "Right Hand");
-        static public readonly BoneDef LeftHand = Create("LeftHand", "Left Hand");
-        static public readonly BoneDef RightFoot = Create("RightFoot", "Right Foot");
-        static public readonly BoneDef LeftFoot = Create("LeftFoot", "Left Foot");
-        static public readonly BoneDef Head = Create("Head");
-        static public readonly BoneDef Mainhand = Create("Mainhand");
-        static public readonly BoneDef Offhand = Create("Offhand");
-        static public readonly BoneDef Hauled = Create("Hauled");
-        static public readonly BoneDef Helmet = Create("Helmet");
-        static public readonly BoneDef EquipmentHead = Create("EquipmentHead", "Head");
-        static public readonly BoneDef EquipmentHandle = Create("EquipmentHandle", "Handle");
-        static public readonly BoneDef Item = Create("Item");
-        static public readonly BoneDef PlantStem = Create("PlantStem", "Plant Stem");
-        static public readonly BoneDef TreeTrunk = Create("TreeTrunk", "Tree Trunk");
+
+        //static public readonly BoneDef Hips = new("Hips");
+        //static public readonly BoneDef Torso = new("Torso");
+        //static public readonly BoneDef RightHand = new("RightHand", "Right Hand");
+        //static public readonly BoneDef LeftHand = new("LeftHand", "Left Hand");
+        //static public readonly BoneDef RightFoot = new("RightFoot", "Right Foot");
+        //static public readonly BoneDef LeftFoot = new("LeftFoot", "Left Foot");
+        //static public readonly BoneDef Head = new("Head");
+        //static public readonly BoneDef Mainhand = new("Mainhand");
+        //static public readonly BoneDef Offhand = new("Offhand");
+        //static public readonly BoneDef Hauled = new("Hauled");
+        //static public readonly BoneDef Helmet = new("Helmet");
+        //static public readonly BoneDef EquipmentHead = new("EquipmentHead", "Head");
+        //static public readonly BoneDef EquipmentHandle = new("EquipmentHandle", "Handle");
+        //static public readonly BoneDef Item = new("Item");
+        //static public readonly BoneDef PlantStem = new("PlantStem", "Plant Stem");
+        //static public readonly BoneDef TreeTrunk = new("TreeTrunk", "Tree Trunk");
     }
 }

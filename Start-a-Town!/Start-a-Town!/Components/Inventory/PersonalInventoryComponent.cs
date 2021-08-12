@@ -59,18 +59,17 @@ namespace Start_a_Town_.Components
         }
 
         public int Capacity = 16;//this.Slots.Slots.Count;
-        public float PercentageEmpty => this.Slots.Count / (float)this.Capacity;
+        public float PercentageEmpty => this.Contents.Count / (float)this.Capacity;
         public float PercentageFull => 1 - this.PercentageEmpty;
         public bool HasFreeSpace => this.PercentageEmpty < 1;
 
         readonly Container HaulContainer;
         public readonly GameObjectSlot HaulSlot;
-        //public Container Slots;
-        public ContainerList Slots = new();
+        public ContainerList Contents = new();
 
         internal void Remove(Entity obj)
         {
-            this.Slots.Remove(obj);
+            this.Contents.Remove(obj);
         }
         internal void Remove(GameObject obj)
         {
@@ -102,7 +101,7 @@ namespace Start_a_Town_.Components
         {
             this.Parent = parent;
 
-            this.Slots.Parent = parent;
+            this.Contents.Parent = parent;
             parent.RegisterContainer(this.HaulContainer);
         }
         public GameObjectSlot GetHauling()
@@ -148,7 +147,7 @@ namespace Start_a_Town_.Components
         public GameObject Drop(GameObject item, int amount)
         {
             var parent = this.Parent;
-            var slot = this.Slots.First(i => i == item);
+            var slot = this.Contents.First(i => i == item);
             // TODO instantiate new item if necessary
             if (amount < item.StackSize)
             {
@@ -169,7 +168,7 @@ namespace Start_a_Town_.Components
             if (amount == 0)
                 throw new Exception();
             amount = amount == -1 ? obj.StackSize : amount;
-            var slots = this.Slots;
+            var slots = this.Contents;
             var parent = this.Parent;
             var currentAmount = obj.StackSize;
             if (amount > currentAmount)
@@ -216,7 +215,7 @@ namespace Start_a_Town_.Components
         {
             if (this.HaulSlot.Object == null)
                 return false;
-            this.Slots.Add(this.HaulSlot.Object);
+            this.Contents.Add(this.HaulSlot.Object);
             //{
             //    // throw? or return false and raise event so we can handle it and display a message : not enough space?
             //    //inv.Throw(parent, Vector3.Zero);
@@ -238,7 +237,7 @@ namespace Start_a_Town_.Components
         {
             if (obj == null)
                 return false;
-            this.Slots.Add(obj);
+            this.Contents.Add(obj);
 
             //if (!this.Slots.Insert(obj))
             //{
@@ -313,7 +312,7 @@ namespace Start_a_Town_.Components
             // TODO: if can't receive, haul item instead or drop on ground?
             var obj = objSlot.Object as Entity;
             var parent = this.Parent;
-            this.Slots.Add(obj);
+            this.Contents.Add(obj);
             objSlot.Clear();
             if (report)
                 parent.Net.EventOccured(Message.Types.ItemGot, parent, obj);
@@ -323,14 +322,14 @@ namespace Start_a_Town_.Components
 
         public IEnumerable<Entity> GetItems()
         {
-            foreach (var sl in this.Slots)
+            foreach (var sl in this.Contents)
                 yield return sl as Entity;
         }
         public IEnumerable<Entity> All => this.GetItems();
 
         public GameObject First(Func<GameObject, bool> filter)
         {
-            foreach (var slot in this.Slots)
+            foreach (var slot in this.Contents)
                 if (filter(slot))
                     return slot;
             if (this.HaulSlot.Object != null && filter(this.HaulSlot.Object))
@@ -352,17 +351,17 @@ namespace Start_a_Town_.Components
         }
         public bool Contains(GameObject item)
         {
-            return this.Slots.FirstOrDefault(s => s == item) != null;
+            return this.Contents.FirstOrDefault(s => s == item) != null;
         }
         public bool Contains(Func<GameObject, bool> filter)// Predicate<GameObject> filter)
         {
-            return (from slot in this.Slots
+            return (from slot in this.Contents
                     where filter(slot)
                     select slot).FirstOrDefault() != null;
         }
         public bool Equip(GameObject item)
         {
-            foreach (var slot in this.Slots)
+            foreach (var slot in this.Contents)
                 if (slot == item)
                     return GearComponent.Equip(this.Parent, slot);
             return false;
@@ -457,19 +456,19 @@ namespace Start_a_Town_.Components
 
         public override void Write(BinaryWriter w)
         {
-            this.Slots.Write(w);
+            this.Contents.Write(w);
             this.HaulSlot.Write(w);
         }
         public override void Read(BinaryReader r)
         {
-            this.Slots.Read(r);
+            this.Contents.Read(r);
             this.HaulSlot.Read(r);
         }
 
         internal override List<SaveTag> Save()
         {
             var data = new List<SaveTag>();
-            data.Add(this.Slots.Save("Contents"));
+            data.Add(this.Contents.Save("Contents"));
             var isHauling = this.HaulSlot.Object != null;
             data.Add(new SaveTag(SaveTag.Types.Bool, "IsHauling", isHauling));
             if (isHauling)
@@ -480,14 +479,14 @@ namespace Start_a_Town_.Components
         internal override void Load(SaveTag data)
         {
             var container = new Container(16);
-            if(!data.TryGetTag("Contents", t => this.Slots.Load(t)))
+            if(!data.TryGetTag("Contents", t => this.Contents.Load(t)))
             {
                 var tmpslots = new Container(16);
                 data.TryGetTag("Inventory", tag => tmpslots.Load(tag));
 
                 /// temp
                 foreach (var i in tmpslots.Slots.Where(s => s.HasValue).Select(s => s.Object))
-                    this.Slots.Add(i);
+                    this.Contents.Add(i);
             }
             if (data.TryGetTagValue("IsHauling", out bool isHauling) && isHauling)
                 data.TryGetTag("Hauling", tag => this.HaulSlot.Load(tag));
@@ -510,7 +509,7 @@ namespace Start_a_Town_.Components
 
         public IEnumerable<Entity> FindItems(Func<Entity, bool> p)
         {
-            foreach (var s in this.Slots)
+            foreach (var s in this.Contents)
             {
                 if (s is not Entity e)
                     continue;
@@ -520,7 +519,7 @@ namespace Start_a_Town_.Components
         }
         public override void Instantiate(Action<GameObject> instantiator)
         {
-            this.Slots.Instantiate(instantiator);
+            this.Contents.Instantiate(instantiator);
         }
     }
 }

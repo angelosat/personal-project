@@ -30,14 +30,14 @@ namespace Start_a_Town_
         {
             this.Tag = actor;
             this.PanelSlots.ClearControls();
-            this.PanelSlots.AddControls(actor.Inventory.Slots.Gui);
+            this.PanelSlots.AddControls(actor.Inventory.Contents.Gui);
             colorsui.SetTag(actor);
         }
         private void InitInvSlots(Actor actor)
         {
             var inventory = actor.GetComponent<PersonalInventoryComponent>();
 
-            var container = inventory.Slots;
+            var container = inventory.Contents;
 
             Controls.Remove(this.PanelSlots);
             this.PanelSlots.Controls.Clear();

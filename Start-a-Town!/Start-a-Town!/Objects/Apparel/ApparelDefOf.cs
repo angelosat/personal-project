@@ -15,7 +15,7 @@ namespace Start_a_Town_
             GearType = GearType.Head,
             ApparelProperties = new ApparelDef(GearType.Head, 10),
             DefaultMaterial = MaterialDefOf.Iron,
-            Body = new Bone(BoneDef.Item, ItemContent.HelmetFull),
+            Body = new Bone(BoneDefOf.Item, ItemContent.HelmetFull),
             CompProps = new List<ComponentProps>() { new ComponentProps() { CompType = typeof(OwnershipComponent) } }
         };
 

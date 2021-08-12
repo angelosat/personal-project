@@ -25,7 +25,7 @@ namespace Start_a_Town_.Blocks.Bed
             a.GetNeed(NeedDef.Comfort).AddMod(NeedLetDefOf.Sleeping, 20, 0);
 
             var body = a.Body;
-            var headBone = a.Body.FindBone(BoneDef.Head);
+            var headBone = a.Body.FindBone(BoneDefOf.Head);
             var headOffset = headBone.GetTotalOffset();
             body.RestingFrame = new Keyframe(0, headOffset, 0);
 
@@ -51,7 +51,7 @@ namespace Start_a_Town_.Blocks.Bed
 
             var spriteComp = a.GetComponent<SpriteComponent>();
             var body = a.Body;
-            var head = body.FindBone(BoneDef.Head);
+            var head = body.FindBone(BoneDefOf.Head);
 
             body.SetEnabled(true, true);
             body.RestingFrame = new Keyframe(0, Vector2.Zero, 0);

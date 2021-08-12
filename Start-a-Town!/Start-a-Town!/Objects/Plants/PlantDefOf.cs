@@ -13,7 +13,7 @@ namespace Start_a_Town_
             Weight = 100,
             Haulable = false,
             DefaultMaterial = MaterialDefOf.LightWood,
-            Body = new Bone(BoneDef.TreeTrunk, ItemContent.TreeFull),
+            Body = new Bone(BoneDefOf.TreeTrunk, ItemContent.TreeFull),
         };
 
         static public ItemDef Bush = new("BerryBush")
@@ -24,7 +24,7 @@ namespace Start_a_Town_
             Weight = 5,
             Haulable = false,
             DefaultMaterial = MaterialDefOf.ShrubStem,
-            Body = new Bone(BoneDef.PlantStem, ItemContent.BerryBushGrowing),
+            Body = new Bone(BoneDefOf.PlantStem, ItemContent.BerryBushGrowing),
         };
         static PlantDefOf()
         {

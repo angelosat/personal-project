@@ -8,7 +8,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public class ContainerList : IList<GameObject>, ISerializable, ISaveable
+    public class ContainerList : Inspectable, IList<GameObject>, ISerializable, ISaveable
     {
         TableObservable<GameObject> _gui;
         public Control Gui
@@ -38,6 +38,8 @@ namespace Start_a_Town_
         public int Count => ((ICollection<GameObject>)this.Contents).Count;
 
         public bool IsReadOnly => ((ICollection<GameObject>)this.Contents).IsReadOnly;
+
+        public override string Label => this.ToString();
 
         public GameObject this[int index] { get => ((IList<GameObject>)this.Contents)[index]; set => ((IList<GameObject>)this.Contents)[index] = value; }
 

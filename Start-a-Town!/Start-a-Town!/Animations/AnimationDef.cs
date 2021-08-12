@@ -51,20 +51,20 @@ namespace Start_a_Town_.Animations
         static public readonly AnimationDef Null = new AnimationDef("AnimationNull", 0);
 
         static public readonly AnimationDef Tool = new AnimationDef("AnimationTool", 2)
-            .AddClip(BoneDef.RightHand, WarpMode.Loop,
+            .AddClip(BoneDefOf.RightHand, WarpMode.Loop,
                             new Keyframe(0, Vector2.Zero, -4 * (float)Math.PI / 3f),
                             new Keyframe(10, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Exp),
                             new Keyframe(20, Vector2.Zero, -(float)Math.PI / 2f),
                             new Keyframe(60, Vector2.Zero, -4 * (float)Math.PI / 3f, Interpolation.Sine)
                             )
-                .AddClip(BoneDef.Torso,
+                .AddClip(BoneDefOf.Torso,
                     new AnimationClip(WarpMode.Loop,
                         new Keyframe(0, Vector2.Zero, -(float)Math.PI / 8f, Interpolation.Exp),
                         new Keyframe(10, Vector2.Zero, (float)Math.PI / 8f, Interpolation.Exp),
                         new Keyframe(20, Vector2.Zero, (float)Math.PI / 8f),
                         new Keyframe(60, Vector2.Zero, -(float)Math.PI / 8f, Interpolation.Exp)
                         ))
-                .AddClip(BoneDef.Mainhand,
+                .AddClip(BoneDefOf.Mainhand,
                     new AnimationClip(WarpMode.Loop,
                         new Keyframe(0, Vector2.Zero, 0, Interpolation.Exp),
                         new Keyframe(10, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Exp),
@@ -74,54 +74,54 @@ namespace Start_a_Town_.Animations
             .AddEvent(10, e => (e as Actor).Work.OnToolContact());
 
         static public readonly AnimationDef Work = new AnimationDef("AnimationWork", 2)
-            .AddClip(BoneDef.RightHand, WarpMode.Loop,
+            .AddClip(BoneDefOf.RightHand, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, -(float)Math.PI, Interpolation.Exp),
                 new Keyframe(15, Vector2.Zero, -(float)Math.PI / 4f, Interpolation.Sine),
                 new Keyframe(25, Vector2.Zero, -(float)Math.PI, Interpolation.Exp))
-            .AddClip(BoneDef.Hips, WarpMode.Loop,
+            .AddClip(BoneDefOf.Hips, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0, Interpolation.Sine),
                 new Keyframe(15, new Vector2(0, -8), 0, Interpolation.Sine),
                 new Keyframe(25, Vector2.Zero, 0, Interpolation.Sine))
-            .AddClip(BoneDef.RightFoot, WarpMode.Loop,
+            .AddClip(BoneDefOf.RightFoot, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0, Interpolation.Sine),
                 new Keyframe(15, Vector2.Zero, (float)Math.PI / 4f, Interpolation.Sine),
                 new Keyframe(25, Vector2.Zero, 0, Interpolation.Sine))
-            .AddClip(BoneDef.LeftFoot, WarpMode.Loop,
+            .AddClip(BoneDefOf.LeftFoot, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0, Interpolation.Sine),
                 new Keyframe(15, Vector2.Zero, -(float)Math.PI / 4f, Interpolation.Sine),
                 new Keyframe(25, Vector2.Zero, 0, Interpolation.Sine));
 
         static public readonly AnimationDef Walk = new AnimationDef("AnimationWalk", 1)
-            .AddClip(BoneDef.Hips, WarpMode.Loop,
+            .AddClip(BoneDefOf.Hips, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0),
                 new Keyframe(10, new Vector2(0, -8), 0, Interpolation.Sine),
                 new Keyframe(20, new Vector2(0, 0), 0, Interpolation.Sine))
             .AddEvent(20, e => Components.MobileComponent.OnFootDown(e))
-            .AddClip(BoneDef.RightHand, WarpMode.Loop,
+            .AddClip(BoneDefOf.RightHand, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0),
                 new Keyframe(10, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(20, Vector2.Zero, 0, Interpolation.Sine),
                 new Keyframe(30, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(40, Vector2.Zero, 0, Interpolation.Sine))
-            .AddClip(BoneDef.LeftHand, WarpMode.Loop,
+            .AddClip(BoneDefOf.LeftHand, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0),
                 new Keyframe(10, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(20, Vector2.Zero, 0, Interpolation.Sine),
                 new Keyframe(30, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(40, Vector2.Zero, 0, Interpolation.Sine))
-            .AddClip(BoneDef.RightFoot, WarpMode.Loop,
+            .AddClip(BoneDefOf.RightFoot, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0),
                 new Keyframe(10, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(20, Vector2.Zero, 0, Interpolation.Sine),
                 new Keyframe(30, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(40, Vector2.Zero, 0, Interpolation.Sine))
-            .AddClip(BoneDef.LeftFoot, WarpMode.Loop,
+            .AddClip(BoneDefOf.LeftFoot, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0),
                 new Keyframe(10, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(20, Vector2.Zero, 0, Interpolation.Sine),
                 new Keyframe(30, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(40, Vector2.Zero, 0, Interpolation.Sine))
-            .AddClip(BoneDef.Head, WarpMode.Loop,
+            .AddClip(BoneDefOf.Head, WarpMode.Loop,
                 new Keyframe(0, Vector2.Zero, 0),
                 new Keyframe(5, new Vector2(0, 2), 0, Interpolation.Sine),
                 new Keyframe(10, new Vector2(0, 0), 0, Interpolation.Sine),
@@ -129,39 +129,39 @@ namespace Start_a_Town_.Animations
                 new Keyframe(20, new Vector2(0, 0), 0, Interpolation.Sine));
 
         static public readonly AnimationDef Jump = new AnimationDef("AnimationJump", 2) { Speed = 0 }
-            .AddClip(BoneDef.RightHand, new Keyframe(0, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Sine))
-            .AddClip(BoneDef.LeftHand, new Keyframe(0, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine))
-            .AddClip(BoneDef.RightFoot, new Keyframe(0, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine))
-            .AddClip(BoneDef.LeftFoot, new Keyframe(0, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Sine))
-            .AddClip(BoneDef.Torso, new Keyframe(0, Vector2.Zero, 0))
-            .AddClip(BoneDef.Hips, new Keyframe(0, Vector2.Zero, 0))
-            .AddClip(BoneDef.Head, new Keyframe(0, Vector2.Zero, 0));
+            .AddClip(BoneDefOf.RightHand, new Keyframe(0, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Sine))
+            .AddClip(BoneDefOf.LeftHand, new Keyframe(0, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine))
+            .AddClip(BoneDefOf.RightFoot, new Keyframe(0, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine))
+            .AddClip(BoneDefOf.LeftFoot, new Keyframe(0, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Sine))
+            .AddClip(BoneDefOf.Torso, new Keyframe(0, Vector2.Zero, 0))
+            .AddClip(BoneDefOf.Hips, new Keyframe(0, Vector2.Zero, 0))
+            .AddClip(BoneDefOf.Head, new Keyframe(0, Vector2.Zero, 0));
 
         static public readonly AnimationDef Crouch = new AnimationDef("AnimationCrouch", layer: 4) { Speed = 0 } //  layer: 2
-            .AddClip(BoneDef.Torso, new Keyframe(0, Vector2.Zero, (float)Math.PI / 2f));
+            .AddClip(BoneDefOf.Torso, new Keyframe(0, Vector2.Zero, (float)Math.PI / 2f));
 
         static public readonly AnimationDef Haul = new AnimationDef("AnimationHaul", 3) { WeightChangeFunc = actor=>actor.Hauled != null ? .1f : -1f }
-            .AddClip(BoneDef.RightHand, new AnimationClip(WarpMode.Once,
+            .AddClip(BoneDefOf.RightHand, new AnimationClip(WarpMode.Once,
                 new Keyframe(0, Vector2.Zero, -(float)Math.PI)
                 ))
-            .AddClip(BoneDef.LeftHand, new AnimationClip(WarpMode.Once,
+            .AddClip(BoneDefOf.LeftHand, new AnimationClip(WarpMode.Once,
                 new Keyframe(0, Vector2.Zero, -(float)Math.PI)
                 ))
-            .AddClip(BoneDef.Torso, new AnimationClip(WarpMode.Once,
+            .AddClip(BoneDefOf.Torso, new AnimationClip(WarpMode.Once,
                 new Keyframe(0, Vector2.Zero, 0)))
             ;
 
         static public readonly AnimationDef TouchItem = new AnimationDef("AnimationTouchItem", 4)
-            .AddClip(BoneDef.RightHand, WarpMode.Once,
+            .AddClip(BoneDefOf.RightHand, WarpMode.Once,
                 new Keyframe(0, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(25, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine)
                 )
 
-            .AddClip(BoneDef.LeftHand, new AnimationClip(WarpMode.Once,
+            .AddClip(BoneDefOf.LeftHand, new AnimationClip(WarpMode.Once,
                 new Keyframe(0, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine),
                 new Keyframe(25, Vector2.Zero, -(float)Math.PI / 2f, Interpolation.Sine)
                 ))
-            .AddClip(BoneDef.Torso, new AnimationClip(WarpMode.Once,
+            .AddClip(BoneDefOf.Torso, new AnimationClip(WarpMode.Once,
                 new Keyframe(0, Vector2.Zero, (float)Math.PI / 4f, Interpolation.Sine),
                 new Keyframe(25, Vector2.Zero, (float)Math.PI / 4f, Interpolation.Sine)
                 ))

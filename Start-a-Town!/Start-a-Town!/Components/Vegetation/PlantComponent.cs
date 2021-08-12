@@ -127,13 +127,14 @@ namespace Start_a_Town_.Components
         }
         public void Wiggle()
         {
-            this.Wiggle(WiggleAngleMaxDefault, WiggleTickMaxDefault);
+            this.Wiggle(WiggleAngleMaxDefault, WiggleTickMaxDefault, WiggleIntensityDefault);
         }
-        public void Wiggle(float angle, int ticks)
+        public void Wiggle(float angle, int ticks, int speed)
         {
             this.WiggleTime = 0;
             this.WiggleTick = ticks;
             this.WiggleAngleMax = angle;
+            this.WiggleIntensity = speed;
             this.WiggleDirection = (new int[] { -1, 1 })[new Random().Next(2)];
         }
         private void TickWiggle()
@@ -143,8 +144,7 @@ namespace Start_a_Town_.Components
             if (t >= 1)
                 return;
             var currentdepth = (1 - t) * this.WiggleAngleMax;
-            var radians = t * Math.PI * 2;
-            radians *= this.PlantProperties.StemMaterial.Density;
+            var radians = this.WiggleIntensity * t * Math.PI * 2;
             var currentangle = this.WiggleDirection * currentdepth * (float)Math.Sin(radians);
             parent.SpriteComp._Angle = currentangle;
 
@@ -165,6 +165,8 @@ namespace Start_a_Town_.Components
         private float WiggleAngleMax;
         const float WiggleAngleMaxDefault = (float)Math.PI / 4f;
         const int WiggleTickMaxDefault = 40;
+        private int WiggleIntensity;
+        const int WiggleIntensityDefault = 1;
         int WiggleDirection;
 
         public bool Harvest(GameObject parent, GameObject actor)

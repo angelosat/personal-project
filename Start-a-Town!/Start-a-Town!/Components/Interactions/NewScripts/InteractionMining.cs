@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.Particles;
@@ -6,6 +7,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     class InteractionMining : InteractionPerpetual
     {
         static float SpeedFormula(Actor actor)

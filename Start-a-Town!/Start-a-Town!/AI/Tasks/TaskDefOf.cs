@@ -53,7 +53,7 @@ namespace Start_a_Town_
             GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
         };
 
-        static public TaskDef Digging = new("Digging", typeof(TaskBehaviorDiggingNewNew))
+        static public TaskDef Digging = new("Digging", typeof(TaskBehaviorDigging))
         {
             Format = "Dig {0}",
             GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)

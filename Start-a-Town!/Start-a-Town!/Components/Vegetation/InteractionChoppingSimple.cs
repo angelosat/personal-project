@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
 
 namespace Start_a_Town_.Components
 {
+    [Obsolete]
     public class InteractionChoppingSimple : InteractionPerpetual
     {
         ParticleEmitterSphere EmitterStrike;

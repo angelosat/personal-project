@@ -3,7 +3,7 @@ using Start_a_Town_.AI.Behaviors;
 
 namespace Start_a_Town_
 {
-    class TaskBehaviorDiggingNewNew : BehaviorPerformTask
+    class TaskBehaviorDigging : BehaviorPerformTask
     {
         public const TargetIndex MineInd = TargetIndex.A;
         protected override IEnumerable<Behavior> GetSteps()

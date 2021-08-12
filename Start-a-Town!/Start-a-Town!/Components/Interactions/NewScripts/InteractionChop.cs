@@ -23,7 +23,7 @@ namespace Start_a_Town_
         protected override void ApplyWorkAmount(float workAmount)
         {
             this.HitPoints.Value -= workAmount;
-            this.Plant.PlantComponent.Wiggle((float)Math.PI / 32f, 20);
+            this.Plant.PlantComponent.Wiggle((float)Math.PI / 32f, 20, this.Plant.PlantComponent.PlantProperties.StemMaterial.Density);
         }
 
         protected override void Done()

@@ -2,9 +2,11 @@
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Particles;
+using System;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     class InteractionDigging : InteractionPerpetual
     {
         static float SpeedFormula(GameObject actor)

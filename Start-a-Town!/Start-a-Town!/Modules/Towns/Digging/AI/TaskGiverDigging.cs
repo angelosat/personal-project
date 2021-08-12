@@ -69,9 +69,9 @@ namespace Start_a_Town_
            
             task = new AITask()
             {
-                BehaviorType = typeof(TaskBehaviorDiggingNewNew),
+                BehaviorType = typeof(TaskBehaviorDigging),
             };
-            task.SetTarget(TaskBehaviorDiggingNewNew.MineInd, target);
+            task.SetTarget(TaskBehaviorDigging.MineInd, target);
             FindTool(actor, task, skill);
             return true;
         }

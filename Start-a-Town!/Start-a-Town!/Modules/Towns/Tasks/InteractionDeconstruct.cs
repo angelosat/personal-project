@@ -2,9 +2,11 @@
 using Start_a_Town_.Particles;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Start_a_Town_
 {
+    [Obsolete]
     class InteractionDeconstruct : InteractionPerpetual
     {
         static float SpeedFormula(GameObject actor)

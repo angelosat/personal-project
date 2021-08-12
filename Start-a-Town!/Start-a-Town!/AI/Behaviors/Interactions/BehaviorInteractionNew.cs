@@ -105,7 +105,7 @@ namespace Start_a_Town_
         }
         public override object Clone()
         {
-            return new BehaviorInteractionNew(this.TargetVariableName, this.Interaction.Clone() as Interaction);
+            return new BehaviorInteractionNew(this.TargetInd, this.InteractionFactory);// this.Interaction.Clone() as Interaction);
         }
     }
 }

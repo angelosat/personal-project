@@ -4,7 +4,7 @@ using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Towns
+namespace Start_a_Town_
 {
     public class ConstructionCategoryProduction : ConstructionCategory
     {

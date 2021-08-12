@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.GameModes.StaticMaps;
+using Start_a_Town_.Core;
 
 namespace Start_a_Town_
 {
@@ -39,7 +39,7 @@ namespace Start_a_Town_
             map.World = client.World as StaticWorld;
             map.World.GetMaps().Add(map.Coordinates, map);
             client.Map = map;
-            GameModes.GameMode.Current.MapReceived(map);
+            GameMode.Current.MapReceived(map);
         }
     }
 }

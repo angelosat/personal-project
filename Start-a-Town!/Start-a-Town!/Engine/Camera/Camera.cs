@@ -1587,15 +1587,6 @@ namespace Start_a_Town_
             this.Following = this.Following == gameObject ? null : gameObject;
         }
 
-        internal void CenterOn(GameModes.StaticMaps.StaticMap map)
-        {
-            var x = map.Size.Blocks / 2;
-            var y = x;
-            var z = map.GetHeightmapValue(x, y);
-
-            this.CenterOn(new Vector3(x, y, z));
-        }
-
         internal bool IsCompletelyHiddenByFog(float z)
         {
             return z < this.LastZTarget - FogZOffset - FogFadeLength + 1;

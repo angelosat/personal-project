@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.GameModes;
-using Start_a_Town_.UI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -726,7 +724,7 @@ namespace Start_a_Town_.Net
             this.ObjectsObservable.Add(ob);
         }
 
-        public IWorld World;
+        public WorldBase World;
 
         internal void AddPlayer(PlayerData player)
         {

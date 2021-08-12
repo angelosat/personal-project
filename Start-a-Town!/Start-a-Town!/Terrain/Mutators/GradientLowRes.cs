@@ -1,35 +1,35 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
-using Start_a_Town_.GameModes;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Terraforming
 {
     class GradientLowRes
     {
-        public IWorld World;
-        int StartX, StartY;
+        public WorldBase World;
+        readonly int StartX, StartY;
         static readonly int Hash = "gradient".GetHashCode();
-        byte[] Seed;
-        int Resolution = 8;
-        int Turbulence = 1;
-        public GradientLowRes(IWorld world, Chunk chunk, int turb = 1)
+        readonly byte[] Seed;
+        readonly int Resolution = 8;
+        readonly int Turbulence = 1;
+        public GradientLowRes(WorldBase world, Chunk chunk, int turb = 1)
         {
             this.World = world;
-            this.StartX = (int)chunk.Start.X;
-            this.StartY = (int)chunk.Start.Y;
-            this.Seed = BitConverter.GetBytes(this.World.GetSeed() + Hash);
+            this.StartX = chunk.Start.X;
+            this.StartY = chunk.Start.Y;
+            this.Seed = BitConverter.GetBytes(this.World.Seed + Hash);
             this.Turbulence = turb;
         }
-        public GradientLowRes(IWorld world, int startX, int startY, int turb = 1)
+        public GradientLowRes(WorldBase world, int startX, int startY, int turb = 1)
         {
             this.World = world;
             this.StartX = startX;
             this.StartY = startY;
-            this.Seed = BitConverter.GetBytes(this.World.GetSeed() + Hash);
+            this.Seed = BitConverter.GetBytes(this.World.Seed + Hash);
             this.Turbulence = turb;
         }
-        Dictionary<Vector3, double> noiseCache = new Dictionary<Vector3, double>();
+
+        readonly Dictionary<Vector3, double> noiseCache = new Dictionary<Vector3, double>();
         double SampleNoiseAt(int i, int j, int k)
         {
             var x = this.StartX + i;
@@ -37,13 +37,12 @@ namespace Start_a_Town_.Terraforming
             var z = k;
             var xyz = new Vector3(x, y, z);
             var vec = new Vector3(i, j, k);
-            double cached;
-            if (noiseCache.TryGetValue(vec, out cached))
+            if (this.noiseCache.TryGetValue(vec, out double cached))
                 return cached;
 
-            var sample = GenerateGradient(x, y, z);
-            timessampled++;
-            noiseCache[vec] = sample;
+            var sample = this.GenerateGradient(x, y, z);
+            this.timessampled++;
+            this.noiseCache[vec] = sample;
             return sample;
         }
         public int timessampled = 0;
@@ -59,12 +58,12 @@ namespace Start_a_Town_.Terraforming
             var dx = (i % this.Resolution) / (float)this.Resolution;
             var dy = (j % this.Resolution) / (float)this.Resolution;
             var dz = (k % this.Resolution) / (float)this.Resolution;
-           
-            var noise = linearInterpolate3d(
-                SampleNoiseAt(x1, y1, z1), SampleNoiseAt(x2, y1, z1),
-                SampleNoiseAt(x1, y2, z1), SampleNoiseAt(x2, y2, z1),
-                SampleNoiseAt(x1, y1, z2), SampleNoiseAt(x2, y1, z2),
-                SampleNoiseAt(x1, y2, z2), SampleNoiseAt(x2, y2, z2),
+
+            var noise = this.linearInterpolate3d(
+                this.SampleNoiseAt(x1, y1, z1), this.SampleNoiseAt(x2, y1, z1),
+                this.SampleNoiseAt(x1, y2, z1), this.SampleNoiseAt(x2, y2, z1),
+                this.SampleNoiseAt(x1, y1, z2), this.SampleNoiseAt(x2, y1, z2),
+                this.SampleNoiseAt(x1, y2, z2), this.SampleNoiseAt(x2, y2, z2),
                 dx, dy, dz
                 );
 

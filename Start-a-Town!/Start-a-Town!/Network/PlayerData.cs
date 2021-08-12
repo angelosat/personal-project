@@ -12,15 +12,12 @@ namespace Start_a_Town_.Net
     {
         public Vector2 MousePosition;
         long _packetSeq = 1;
-        public long PacketSequence
-        {
-            get { return _packetSeq++; }
-        }
+        public long PacketSequenceIncrement => _packetSeq++; 
         public long OrderedReliableSequence = 1;
         public Color Color;
-        public ConcurrentQueue<Packet> Incoming = new ConcurrentQueue<Packet>();
-        public ConcurrentDictionary<long, Packet> WaitingForAck = new ConcurrentDictionary<long, Packet>();
-        public Queue<Packet> OrderedPackets = new Queue<Packet>();
+        public ConcurrentQueue<Packet> Incoming = new();
+        public ConcurrentDictionary<long, Packet> WaitingForAck = new();
+        public Queue<Packet> OrderedPackets = new();
         public UdpConnection Connection;
         public EndPoint IP;
         public int ID;
@@ -29,15 +26,15 @@ namespace Start_a_Town_.Net
         public Actor ControllingEntity;
         public int Ping;
         public bool IsActive;
-        public Dictionary<Vector2, byte[]> PendingChunks = new Dictionary<Vector2, byte[]>();
-        public HashSet<Vector2> SentChunks = new HashSet<Vector2>();
+        public Dictionary<Vector2, byte[]> PendingChunks = new();
+        public HashSet<Vector2> SentChunks = new();
         public Vector2 CameraPosition;
         public ControlTool CurrentTool = ToolManager.Instance.GetDefaultTool();
         public float CameraZoom;
         public TargetArgs Target = TargetArgs.Null;
         public Vector2? LastPointer; // dont store this in the player class?
         public int SuggestedSpeed = 1;
-        static readonly Random Random = new Random();
+        static readonly Random Random = new();
         public ConcurrentQueue<Packet> OutUnreliable = new();
         public ConcurrentQueue<Packet> OutReliable = new();
 
@@ -81,7 +78,7 @@ namespace Start_a_Town_.Net
         }
         public bool IsWithin(Vector3 global, int radius = Engine.ChunkRadius)
         {
-            return GameModes.GameMode.Current.IsPlayerWithinRangeForPacket(this, global);
+            return GameMode.Current.IsPlayerWithinRangeForPacket(this, global);
         }
        
         static public Vector2 GetMousePosition(Vector2 cameraPos, Vector2 mousePos, float zoom, Camera camera)

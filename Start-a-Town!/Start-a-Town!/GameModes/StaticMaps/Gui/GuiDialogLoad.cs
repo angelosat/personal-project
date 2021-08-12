@@ -2,7 +2,7 @@
 using Start_a_Town_.UI;
 using System.IO;
 
-namespace Start_a_Town_.GameModes.StaticMaps
+namespace Start_a_Town_.Core
 {
     class GuiDialogLoad : ScrollableBoxNewNew
     {

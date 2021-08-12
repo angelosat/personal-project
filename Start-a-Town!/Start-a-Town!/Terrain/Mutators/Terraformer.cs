@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.Terraforming.Mutators;
 using Start_a_Town_.UI;
-using Start_a_Town_.GameModes;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
-    public abstract class Terraformer : ICloneable //IComparable<Terraformer>, 
+    public abstract class Terraformer : ICloneable
     {
-        //public int CompareTo(Terraformer other)
-        //{
-        //    if (this.ID < other.ID)
-        //        return -1;
-        //    else if (this.ID > other.ID)
-        //        return 1;
-        //    return 0;
-        //}
-
         public enum Types { None, Land, Sea, Normal, Caves, Minerals, Test, Grass, Empty, Flowers, Trees, MineralsSlow, PerlinWorms }
         public static readonly Terraformer Sea = new Sea();
         public static readonly Terraformer Land = new Land();
@@ -33,27 +23,27 @@ namespace Start_a_Town_
         public static readonly Terraformer Empty = new Empty();
         public static readonly Terraformer PerlinWorms = new PerlinWormGenerator();
 
-        static public Dictionary<Types, Terraformer> Dictionary => _dictionary; 
+        public static Dictionary<Types, Terraformer> Dictionary => _dictionary;
         static readonly Dictionary<Types, Terraformer> _dictionary = new()
         {
-            {Types.Land, Land},
-            {Types.Sea, Sea},
-            {Types.Normal, Normal},
-            {Types.Caves, Caves},
-            {Types.PerlinWorms, PerlinWorms},
-            {Types.Grass, Grass},
-            {Types.Flowers, Flowers},
-            {Types.Trees, Trees},
-            {Types.Minerals, Minerals},
-            {Types.Empty, Empty},
+            { Types.Land, Land },
+            { Types.Sea, Sea },
+            { Types.Normal, Normal },
+            { Types.Caves, Caves },
+            { Types.PerlinWorms, PerlinWorms },
+            { Types.Grass, Grass },
+            { Types.Flowers, Flowers },
+            { Types.Trees, Trees },
+            { Types.Minerals, Minerals },
+            { Types.Empty, Empty },
         };
         public string Name { get; protected set; }
         public Types ID { get; protected set; }
 
-        public Action<RandomThreaded, IWorld, Cell, int, int, int>
+        public Action<RandomThreaded, WorldBase, Cell, int, int, int>
             Finalize = (r, w, c, x, y, z) => { };
 
-        public virtual void Initialize(IWorld w, Cell c, int x, int y, int z, double g) { }
+        public virtual void Initialize(WorldBase w, Cell c, int x, int y, int z, double g) { }
         public virtual void Finally(Chunk chunk) { }
         internal virtual void Finally(Chunk newChunk, Dictionary<IntVec3, double> gradients)
         {
@@ -62,26 +52,14 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return Name;
+            return this.Name;
         }
         public virtual void Generate(MapBase map) { }
 
-        static public List<Terraformer> All
-        {
-            get
-            {
-                return Dictionary.Values.ToList();
-            }
-        }
-        static public List<Terraformer> Defaults
-        {
-            get
-            {
-                return new List<Terraformer>() { Normal, PerlinWorms, Minerals, Grass, Flowers, Trees };
-            }
-        }
+        public static List<Terraformer> All => Dictionary.Values.ToList();
+        public static List<Terraformer> Defaults => new List<Terraformer>() { Normal, PerlinWorms, Minerals, Grass, Flowers, Trees };
 
-        static protected int GetRandom(byte[] seedArray, int x, int y, int z, int min, int max)
+        protected static int GetRandom(byte[] seedArray, int x, int y, int z, int min, int max)
         {
             double seed = Generator.Perlin3D(x, y, z, 16, seedArray);
             Random random = new Random(seed.GetHashCode());
@@ -89,7 +67,7 @@ namespace Start_a_Town_
             int val = min + (int)Math.Floor((max - min) * r);
             return val;
         }
-        static protected int GetRandom(int seed, int min, int max)
+        protected static int GetRandom(int seed, int min, int max)
         {
             Random random = new Random(seed);
             double r = random.NextDouble();
@@ -102,7 +80,7 @@ namespace Start_a_Town_
 
         public GroupBox GetUI()
         {
-            GroupBox box = new GroupBox();
+            var box = new GroupBox();
             var props = this.GetAdjustableParameters();
             foreach (var item in props)
             {
@@ -156,8 +134,8 @@ namespace Start_a_Town_
         }
 
         public abstract object Clone();
-        public virtual Terraformer SetWorld(IWorld w) { return this; }
-        static public Terraformer Create(Terraformer.Types id, IWorld world)
+        public virtual Terraformer SetWorld(WorldBase w) { return this; }
+        public static Terraformer Create(Terraformer.Types id, WorldBase world)
         {
             return (Dictionary[id].Clone() as Terraformer).SetWorld(world);
         }

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Start_a_Town_.Net;
-using Start_a_Town_.GameModes.StaticMaps;
 using Start_a_Town_.UI;
+using Start_a_Town_.Core;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace Start_a_Town_.GameModes
+namespace Start_a_Town_
 {
     abstract class GameMode
     {

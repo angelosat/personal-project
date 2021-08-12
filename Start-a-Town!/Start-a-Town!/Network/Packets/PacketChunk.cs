@@ -24,7 +24,7 @@ namespace Start_a_Town_
             PacketChunkReceived.Send(client, Client.Instance.PlayerData, chunk.MapCoords);
             // change screen when player entity is assigned instead of here?
             if(net.Map.AreChunksLoaded)
-                GameModes.GameMode.Current.AllChunksReceived(net);
+                GameMode.Current.AllChunksReceived(net);
         }
     }
 }

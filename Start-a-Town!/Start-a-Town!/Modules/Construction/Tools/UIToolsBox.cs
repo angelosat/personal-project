@@ -5,7 +5,7 @@ using Start_a_Town_.UI;
 using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Components.Crafting;
 
-namespace Start_a_Town_.Towns.Constructions
+namespace Start_a_Town_
 {
     public class UIToolsBox : GroupBox
     {

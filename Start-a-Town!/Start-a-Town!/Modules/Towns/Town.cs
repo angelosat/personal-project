@@ -4,10 +4,6 @@ using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.AI;
-using Start_a_Town_.Towns.Digging;
-using Start_a_Town_.Towns.Crafting;
-using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_

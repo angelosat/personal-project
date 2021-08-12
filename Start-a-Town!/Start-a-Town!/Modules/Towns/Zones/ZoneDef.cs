@@ -5,13 +5,11 @@ namespace Start_a_Town_
 {
     public abstract class ZoneDef : Def
     {
-        public readonly string Label;
         public abstract Type ZoneType { get; }
         public abstract bool IsValidLocation(MapBase map, IntVec3 global);
         public ZoneDef(string name)
-            : base($"Zone{name}")
+            : base(name)
         {
-            this.Label = name;
         }
         public Zone Create()
         {

@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
 using Start_a_Town_.GameEvents;
 using Start_a_Town_.Net;
-using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
@@ -23,7 +22,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.GroundRatio = 0f;// .5f;
         }
 
-        public override void Initialize(IWorld w, Cell c, int x, int y, int z, double gradient)
+        public override void Initialize(WorldBase w, Cell c, int x, int y, int z, double gradient)
         {
             if (z == 0)
             {

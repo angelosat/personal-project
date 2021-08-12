@@ -1,6 +1,5 @@
 ﻿using System;
 using Start_a_Town_.Net;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
@@ -12,13 +11,13 @@ namespace Start_a_Town_.Terraforming.Mutators
         {
             this.ID = Terraformer.Types.Grass;
             this.Name = "Grass";
-            this.Finalize = (RandomThreaded random, IWorld w, Cell c, int x, int y, int z) =>
+            this.Finalize = (RandomThreaded random, WorldBase w, Cell c, int x, int y, int z) =>
             {
 
             };
         }
 
-        public override Terraformer SetWorld(IWorld w)
+        public override Terraformer SetWorld(WorldBase w)
         {
             this.Randomizer = new Random(w.Seed + "Grass".GetHashCode());
             return this;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -22,7 +21,7 @@ namespace Start_a_Town_
         {
             this.Town = town;
         }
-       
+
         internal Zone RegisterNewZone(ZoneDef zoneType, IEnumerable<IntVec3> allpositions)
         {
             var finalPositions = allpositions.Where(
@@ -59,8 +58,8 @@ namespace Start_a_Town_
         {
             ZoneDefOf.Init();
         }
-     
-     
+
+
         internal T GetZone<T>(int zoneID) where T : Zone
         {
             return this.Zones[zoneID] as T;
@@ -95,21 +94,17 @@ namespace Start_a_Town_
                 }
             }
         }
-     
+
         internal Zone PlayerEdit(int zoneID, ZoneDef zoneType, IntVec3 a, int w, int h, bool remove)
         {
             if (remove)
-            {
                 foreach (var zone in this.Zones.Values.ToList())
                     zone.Edit(a, a + new IntVec3(w - 1, h - 1, 0), remove);
-            }
             else
-            {
                 if (zoneID == 0)
-                    return RegisterNewZone(zoneType, a.GetBoxLazy(a + new IntVec3(w - 1, h - 1, 0)));
-                else
-                    this.Zones[zoneID].Edit(a, a + new IntVec3(w - 1, h - 1, 0), remove);
-            }
+                return RegisterNewZone(zoneType, a.GetBoxLazy(a + new IntVec3(w - 1, h - 1, 0)));
+            else
+                this.Zones[zoneID].Edit(a, a + new IntVec3(w - 1, h - 1, 0), remove);
             return null;
         }
         static readonly ZoneDef[] ZoneDefs = { ZoneDefOf.Stockpile, ZoneDefOf.Growing };
@@ -151,7 +146,7 @@ namespace Start_a_Town_
         }
         public override void Load(SaveTag tag)
         {
-            tag.TryGetTagValueNew<int>("IDSequence", ref this._zoneIDSequence);
+            tag.TryGetTagValueNew("IDSequence", ref this._zoneIDSequence);
             this.Zones.TryLoadByValueAbstractTypes(tag, "Zones", zone => zone.ID, this);
         }
         public override void Write(BinaryWriter w)

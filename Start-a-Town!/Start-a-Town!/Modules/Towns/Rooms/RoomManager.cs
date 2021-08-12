@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
-using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Start_a_Town_;
 
 namespace Start_a_Town_
 {
@@ -60,7 +60,7 @@ namespace Start_a_Town_
 
         private void ScanMap()
         {
-            var map = this.Map as GameModes.StaticMaps.StaticMap;
+            var map = this.Map as StaticMap;
             if (map.Net is Client)
                 return;
             HashSet<IntVec3> handled = new();

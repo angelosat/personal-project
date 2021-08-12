@@ -1,9 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Start_a_Town_.Net;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.Towns
+namespace Start_a_Town_
 {
     class PacketZoneDesignation
     {

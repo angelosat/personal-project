@@ -2,7 +2,7 @@
 using System.IO;
 using Start_a_Town_.Net;
 
-namespace Start_a_Town_.Towns
+namespace Start_a_Town_
 {
     public partial class WorkplaceManager
     {

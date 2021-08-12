@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Start_a_Town_.AI;
+using Start_a_Town_.Core;
 
 namespace Start_a_Town_
 {

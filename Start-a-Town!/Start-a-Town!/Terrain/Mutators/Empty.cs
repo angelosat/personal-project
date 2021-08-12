@@ -1,6 +1,4 @@
-﻿using Start_a_Town_.GameModes;
-
-namespace Start_a_Town_.Terraforming.Mutators
+﻿namespace Start_a_Town_.Terraforming.Mutators
 {
     class Empty : Terraformer
     {

@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Start_a_Town_.GameModes.StaticMaps
+namespace Start_a_Town_
 {
     public class StaticMap : MapBase, ITooltippable
     {
@@ -904,7 +904,10 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         internal override void CameraRecenter()
         {
-            this.Camera.CenterOn(this);
+            var x = this.Size.Blocks / 2;
+            var y = x;
+            var z = this.GetHeightmapValue(x, y);
+            this.Camera.CenterOn(new Vector3(x, y, z));
         }
 
         internal void AddStartingActors(Actor[] actors)

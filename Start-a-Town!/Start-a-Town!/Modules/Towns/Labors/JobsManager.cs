@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.Towns;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
+using Start_a_Town_.AI;
 using System.IO;
-using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.AI
+namespace Start_a_Town_
 {
     public class JobsManager : TownComponent
     {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Towns;
-using Start_a_Town_.GameModes.StaticMaps;
 
 namespace Start_a_Town_
 {

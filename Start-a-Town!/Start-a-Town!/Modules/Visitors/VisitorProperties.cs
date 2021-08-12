@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using Start_a_Town_.GameModes.StaticMaps;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 using Microsoft.Xna.Framework;

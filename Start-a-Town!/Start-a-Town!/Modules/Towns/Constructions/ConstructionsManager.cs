@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Start_a_Town_;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Net;
-using Start_a_Town_.Towns;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;

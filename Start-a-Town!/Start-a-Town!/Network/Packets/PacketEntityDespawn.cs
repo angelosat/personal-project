@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.GameModes.StaticMaps;
+using Start_a_Town_.Core;
 
 namespace Start_a_Town_
 {

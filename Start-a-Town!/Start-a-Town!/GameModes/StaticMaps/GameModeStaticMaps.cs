@@ -6,7 +6,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Start_a_Town_.GameModes.StaticMaps
+namespace Start_a_Town_.Core
 {
     class GameModeStaticMaps : GameMode
     {
@@ -164,7 +164,7 @@ namespace Start_a_Town_.GameModes.StaticMaps
             // all chunks received, enter world
             "all chunks loaded!".ToConsole();
             net.EventOccured(Components.Message.Types.ChunksLoaded);
-            var map = net.Map as GameModes.StaticMaps.StaticMap;
+            var map = net.Map as StaticMap;
             map.Regions.Init();
             map.InitUndiscoveredAreas();
             map.Init();

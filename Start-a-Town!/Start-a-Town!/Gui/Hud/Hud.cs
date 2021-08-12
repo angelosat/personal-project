@@ -101,7 +101,7 @@ namespace Start_a_Town_
 
             this.Chat = UIChat.Instance;
             this.IngameMenu = new IngameMenu();
-            GameModes.GameMode.Current.OnIngameMenuCreated(this.IngameMenu);
+            GameMode.Current.OnIngameMenuCreated(this.IngameMenu);
 
             this.ZLevelDrawBar = new ScrollbarVNew(MapBase.MaxHeight, MapBase.MaxHeight, 1, 16, 1,
                  () => MapBase.MaxHeight - Ingame.GetMap().Camera.DrawLevel,

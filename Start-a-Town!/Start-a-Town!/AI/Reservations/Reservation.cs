@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Start_a_Town_.AI
+namespace Start_a_Town_
 {
     public partial class ReservationManager
     {

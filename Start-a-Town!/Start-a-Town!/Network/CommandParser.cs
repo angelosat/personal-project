@@ -13,7 +13,7 @@
             switch (type)
             {
                 default:
-                    GameModes.GameMode.Current.ParseCommand(net, command);
+                    GameMode.Current.ParseCommand(net, command);
                     break;
             }
             return false;
@@ -36,7 +36,7 @@
                     break;
 
                 default:
-                    GameModes.GameMode.Current.ParseCommand(net, command);
+                    GameMode.Current.ParseCommand(net, command);
                     break;
             }
             return false;

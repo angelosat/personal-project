@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.GameEvents;
 using Start_a_Town_.Net;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Towns.Digging
+namespace Start_a_Town_
 {
     public class DiggingManager : TownComponent
     {
@@ -88,10 +86,7 @@ namespace Start_a_Town_.Towns.Digging
             //    return false;
             //return true;
         }
-        public override GroupBox GetInterface()
-        {
-            return new DiggingManagerUI(this);
-        }
+       
         protected override void AddSaveData(SaveTag tag)
         {
             tag.Add(this.AllPositions.ToList().Save("Positions"));

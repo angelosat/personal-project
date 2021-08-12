@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
@@ -22,7 +21,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.Name = "Land";
             this.LandLevel = MapBase.MaxHeight / 2;
         }
-        public override void Initialize(IWorld w, Cell c, int x, int y, int z, double g)
+        public override void Initialize(WorldBase w, Cell c, int x, int y, int z, double g)
         {
             if (z > this.LandLevel)
             {

@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Net;
 
 namespace Start_a_Town_

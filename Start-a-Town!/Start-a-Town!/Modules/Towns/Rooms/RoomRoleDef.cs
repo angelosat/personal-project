@@ -5,11 +5,9 @@ namespace Start_a_Town_
 {
     public class RoomRoleDef : Def
     {
-        public string Label;
         public readonly HashSet<FurnitureDef> Furniture = new();
-        public RoomRoleDef(string label) : base($"Room{label}")
+        public RoomRoleDef(string name) : base(name)
         {
-            this.Label = label;
         }
         public RoomRoleDef AddFurniture(params FurnitureDef[] furniture)
         {

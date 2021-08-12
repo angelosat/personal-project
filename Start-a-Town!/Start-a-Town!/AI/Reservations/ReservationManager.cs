@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.Towns;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.AI
+namespace Start_a_Town_
 {
     public partial class ReservationManager : TownComponent
     {

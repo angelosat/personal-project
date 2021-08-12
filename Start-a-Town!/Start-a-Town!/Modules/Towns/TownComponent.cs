@@ -6,15 +6,15 @@ using Start_a_Town_.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Start_a_Town_.Towns
+namespace Start_a_Town_
 {
     public abstract class TownComponent
     {
         public Town Town;
-        public MapBase Map { get { return this.Town.Map; } }
-        public INetwork Net { get { return this.Map.Net; } }
+        public MapBase Map => this.Town.Map;
+        public INetwork Net => this.Map.Net;
         const float UpdateFrequency = 1; // per second
-        float UpdateTimerMax = (float)Ticks.TicksPerSecond / UpdateFrequency;
+        float UpdateTimerMax = Ticks.TicksPerSecond / UpdateFrequency;
         float UpdateTimer;
         protected TownComponent()
         {
@@ -39,11 +39,6 @@ namespace Start_a_Town_.Towns
 
         public virtual void OnUpdate() { }
 
-        public virtual GroupBox GetInterface()
-        {
-            return null;
-        }
-
         internal virtual IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated() { yield break; }
         internal virtual void OnContextMenuCreated(IContextable obj, ContextArgs a) { }
         internal virtual void OnContextActionBarCreated(ContextActionBar.ContextActionBarArgs a) { }
@@ -57,7 +52,7 @@ namespace Start_a_Town_.Towns
             this.AddSaveData(tag);
             return tag;
         }
-        
+
         protected virtual void AddSaveData(SaveTag tag) { }
 
         public virtual void Load(SaveTag tag) { }

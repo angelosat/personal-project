@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Start_a_Town_.Net;
+using Start_a_Town_.Core;
 
-namespace Start_a_Town_.GameModes.StaticMaps
+namespace Start_a_Town_
 {
     class CommandParser
     {

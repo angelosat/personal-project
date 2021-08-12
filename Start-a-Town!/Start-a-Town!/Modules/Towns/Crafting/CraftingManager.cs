@@ -4,10 +4,9 @@ using System.Linq;
 using System.IO;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
-using Start_a_Town_.Crafting;
 using Start_a_Town_.Modules.Crafting;
 
-namespace Start_a_Town_.Towns.Crafting
+namespace Start_a_Town_
 {
     public class CraftingManager : TownComponent
     {

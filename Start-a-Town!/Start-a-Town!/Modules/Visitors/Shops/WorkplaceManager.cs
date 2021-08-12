@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Start_a_Town_;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Towns
+namespace Start_a_Town_
 {
     public partial class WorkplaceManager : TownComponent
     {

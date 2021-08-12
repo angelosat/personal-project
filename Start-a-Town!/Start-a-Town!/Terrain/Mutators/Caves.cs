@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
@@ -22,7 +21,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.Name = "Caves";
         }
         static public Stopwatch Watch = new Stopwatch();
-        public override void Initialize(IWorld w, Cell c, int x, int y, int z, double g)
+        public override void Initialize(WorldBase w, Cell c, int x, int y, int z, double g)
         {
             Watch.Start();
             if (z == 0)
@@ -49,10 +48,10 @@ namespace Start_a_Town_.Terraforming.Mutators
             if (ridged * distanceFromSeaLevel < -.2f)
                 c.Block = BlockDefOf.Air;
         }
-        public override Terraformer SetWorld(IWorld w)
+        public override Terraformer SetWorld(WorldBase w)
         {
-            this.RidgedSeed = BitConverter.GetBytes(w.GetSeed() + Hash1);
-            this.RidgedSeed2 = BitConverter.GetBytes(w.GetSeed() + Hash2);
+            this.RidgedSeed = BitConverter.GetBytes(w.Seed + Hash1);
+            this.RidgedSeed2 = BitConverter.GetBytes(w.Seed + Hash2);
             return this;
         }
         public override object Clone()

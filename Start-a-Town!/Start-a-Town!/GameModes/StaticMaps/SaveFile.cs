@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using Start_a_Town_.UI;
+using Start_a_Town_.Core;
 
-namespace Start_a_Town_.GameModes.StaticMaps
+namespace Start_a_Town_
 {
     static class SaveFile
     {

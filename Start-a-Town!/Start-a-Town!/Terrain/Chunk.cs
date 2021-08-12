@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Components;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Terraforming;
 using System;
 using System.Collections.Generic;
@@ -168,7 +167,7 @@ namespace Start_a_Town_
         public int X, Y;
         public int RectHeight;
         public MapBase Map;
-        public IWorld World => this.Map.World;
+        public WorldBase World => this.Map.World;
         public bool Valid;
         readonly Queue<Cell> CellsToValidate = new Queue<Cell>();
 
@@ -781,7 +780,7 @@ namespace Start_a_Town_
             string newFile = "_" + filename;
 
             string directory = this.GetDirectoryPath();
-            directory = @"/Saves/Worlds/" + this.Map.World.GetName() + "/" + this.Map.GetFolderName() + "/chunks/";
+            directory = @"/Saves/Worlds/" + this.Map.World.Name + "/" + this.Map.GetFolderName() + "/chunks/";
 
             string working = Directory.GetCurrentDirectory();
             string fullpath = this.Map.GetFullPath() + "/chunks/" + this.DirectoryName;

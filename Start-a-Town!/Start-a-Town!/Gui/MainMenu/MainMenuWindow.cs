@@ -1,6 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.GameModes;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Start_a_Town_.UI

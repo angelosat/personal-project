@@ -1,17 +1,16 @@
 ﻿using System;
-using Start_a_Town_.GameModes;
 
 namespace Start_a_Town_.Terraforming
 {
     class Gradient
     {
-        public IWorld World;
+        public WorldBase World;
         static readonly int Hash = "gradient".GetHashCode();
         byte[] Seed;
-        public Gradient(IWorld world)
+        public Gradient(WorldBase world)
         {
             this.World = world;
-            this.Seed = BitConverter.GetBytes(this.World.GetSeed() + Hash);
+            this.Seed = BitConverter.GetBytes(this.World.Seed + Hash);
         }
         public double GetGradientSlow(int x, int y, int z)
         {

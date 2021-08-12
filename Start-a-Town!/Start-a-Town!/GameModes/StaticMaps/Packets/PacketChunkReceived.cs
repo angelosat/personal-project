@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Net;
 using Microsoft.Xna.Framework;
 

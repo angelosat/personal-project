@@ -2,7 +2,7 @@
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 
-namespace Start_a_Town_.Towns.Digging
+namespace Start_a_Town_.Core
 {
     class DiggingManagerUI : GroupBox
     {

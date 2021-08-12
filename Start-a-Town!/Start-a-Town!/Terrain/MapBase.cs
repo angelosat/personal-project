@@ -8,8 +8,8 @@ using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Particles;
-using Start_a_Town_.GameModes;
 using Start_a_Town_.Components;
+using Start_a_Town_.Core;
 using System.Threading.Tasks;
 
 namespace Start_a_Town_
@@ -69,7 +69,7 @@ namespace Start_a_Town_
         public Biome Biome = new();
         protected Queue<IntVec3> RandomBlockUpdateQueue = new();
         public LightingEngine LightingEngine;
-        public IWorld World;
+        public WorldBase World;
         public Dictionary<IntVec2, Chunk> ActiveChunks;
         INetwork _net;
         public INetwork Net => this._net ??= this.World.Net;
@@ -575,6 +575,9 @@ namespace Start_a_Town_
         public abstract void LoadThumbnails();
         public abstract MapThumb GetThumb();
 
+        /// <summary>
+        /// TODO remove from mapbase class
+        /// </summary>
         public Town Town;
 
         public abstract void WriteData(BinaryWriter w);

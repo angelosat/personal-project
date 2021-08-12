@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
-using Start_a_Town_.GameModes;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -111,8 +110,8 @@ namespace Start_a_Town_.Net
         /// </summary>
         public MapBase Map { get; set; }
 
-        static IWorld _World;
-        static IWorld World
+        static WorldBase _World;
+        static WorldBase World
         {
             get => _World;
             set => _World = value;
@@ -656,18 +655,18 @@ namespace Start_a_Town_.Net
             }
         }
 
-        public static Vector3 FindValidSpawnPosition(GameObject obj)
-        {
-            // TODO: move to map
-            var xy = Vector3.Zero + (Vector3.UnitX + Vector3.UnitY) * (GameModes.StaticMaps.StaticMap.MapSize.Default.Blocks / 2);
-            int z = MapBase.MaxHeight - (int)Math.Ceiling(obj.Physics.Height);
-            while (!Instance.Map.IsSolid(xy + Vector3.UnitZ * z))
-                z--;
+        //public static Vector3 FindValidSpawnPosition(GameObject obj)
+        //{
+        //    // TODO: move to map
+        //    var xy = Vector3.Zero + (Vector3.UnitX + Vector3.UnitY) * (GameModes.StaticMaps.StaticMap.MapSize.Default.Blocks / 2);
+        //    int z = MapBase.MaxHeight - (int)Math.Ceiling(obj.Physics.Height);
+        //    while (!Instance.Map.IsSolid(xy + Vector3.UnitZ * z))
+        //        z--;
 
-            var zz = Vector3.UnitZ * (z + 1);
-            var spawnPosition = xy + zz;
-            return spawnPosition;
-        }
+        //    var zz = Vector3.UnitZ * (z + 1);
+        //    var spawnPosition = xy + zz;
+        //    return spawnPosition;
+        //}
 
         void SyncChild(GameObject obj, GameObject parent, int childIndex)
         {
@@ -881,13 +880,13 @@ namespace Start_a_Town_.Net
             return Random;
         }
 
-        public static void SetWorld(IWorld world)
+        public static void SetWorld(WorldBase world)
         {
             if (!UnloadWorld())
                 return;
             World = world;
             if (World is not null)
-                Instance.ConsoleBox.Write(Color.Lime, "SERVER", "World " + World.GetName() + " loaded");
+                Instance.ConsoleBox.Write(Color.Lime, "SERVER", "World " + World.Name + " loaded");
         }
         private static bool UnloadWorld()
         {
@@ -898,7 +897,7 @@ namespace Start_a_Town_.Net
             }
             if (World != null)
             {
-                Instance.ConsoleBox.Write(Color.Lime, "SERVER", "World " + World.GetName() + " unloaded");
+                Instance.ConsoleBox.Write(Color.Lime, "SERVER", "World " + World.Name + " unloaded");
             }
             World = null;
             return true;

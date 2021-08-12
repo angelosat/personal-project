@@ -1,4 +1,6 @@
-﻿namespace Start_a_Town_.Towns
+﻿using Start_a_Town_.Core;
+
+namespace Start_a_Town_
 {
     class ToolDesignateZone : ToolZoningPositionsNew
     {

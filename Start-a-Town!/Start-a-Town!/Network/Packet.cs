@@ -88,7 +88,7 @@ namespace Start_a_Town_.Net
         }
         static public Packet Create(PlayerData reciepient, PacketType type, byte[] data, SendType sendType = SendType.Unreliable)
         {
-            return new Packet(reciepient.PacketSequence, type, data.Length, data) { 
+            return new Packet(reciepient.PacketSequenceIncrement, type, data.Length, data) { 
                 Player = reciepient, 
                 SendType = sendType,
                 OrderedReliableID = sendType == SendType.OrderedReliable ? reciepient.OrderedReliableSequence++ : 0

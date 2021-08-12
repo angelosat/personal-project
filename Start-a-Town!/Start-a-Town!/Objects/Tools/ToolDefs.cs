@@ -61,7 +61,7 @@ namespace Start_a_Town_
                     Reaction.CanBeMadeAt(IsWorkstation.Types.None, IsWorkstation.Types.Workbench),
                     reagents,
                     new List<Reaction.Product>() { new Reaction.Product(dic => ItemFactory.CreateTool(tool, dic)) },
-                    SkillDef.Crafting);
+                    SkillDefOf.Crafting);
             }
         }
     }

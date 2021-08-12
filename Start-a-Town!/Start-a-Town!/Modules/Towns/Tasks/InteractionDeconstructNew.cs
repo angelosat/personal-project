@@ -16,7 +16,7 @@ namespace Start_a_Town_
         {
 
         }
-        protected override void OnInit()
+        protected override void Init()
         {
             var maxWork = this.Block.WorkAmount;
             this._progress = new Progress(0, maxWork, 0);
@@ -27,7 +27,7 @@ namespace Start_a_Town_
             throw new NotImplementedException();
         }
 
-        protected override void ApplyWorkAmount(float workAmount)
+        protected override void ApplyWork(float workAmount)
         {
             this._progress.Value += workAmount;
         }
@@ -50,7 +50,7 @@ namespace Start_a_Town_
 
         protected override SkillDef GetSkill()
         {
-            return SkillDef.Construction;
+            return SkillDefOf.Construction;
         }
 
         protected override ToolUseDef GetToolUse()

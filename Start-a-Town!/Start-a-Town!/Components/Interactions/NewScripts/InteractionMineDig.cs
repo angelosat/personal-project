@@ -19,7 +19,7 @@ namespace Start_a_Town_
         {
 
         }
-        protected override void OnInit()
+        protected override void Init()
         {
             var matType = this.Material.Type;
             if (matType == MaterialType.Soil)
@@ -50,7 +50,7 @@ namespace Start_a_Town_
             throw new NotImplementedException();
         }
 
-        protected override void ApplyWorkAmount(float workAmount)
+        protected override void ApplyWork(float workAmount)
         {
             this._progress.Value += workAmount;
         }
@@ -108,9 +108,9 @@ namespace Start_a_Town_
         {
             var matType = this.Material.Type;
             if (matType == MaterialType.Soil)
-                return SkillDef.Digging;
+                return SkillDefOf.Digging;
             else if (matType == MaterialType.Stone || matType == MaterialType.Metal)
-                return SkillDef.Mining;
+                return SkillDefOf.Mining;
             throw new Exception();
         }
 

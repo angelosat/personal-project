@@ -97,7 +97,7 @@ namespace Start_a_Town_
 
             GenerateCookingRecipes();
 
-            Reaction.Register(new Reaction("Extract Seeds", SkillDef.Argiculture)
+            Reaction.Register(new Reaction("Extract Seeds", SkillDefOf.Argiculture)
                 .AddBuildSite(IsWorkstation.Types.PlantProcessing)
                 .AddIngredient("a", new Ingredient()
                     .SetAllow(ItemDefOf.Fruit, true))

@@ -20,7 +20,7 @@ namespace Start_a_Town_
             throw new NotImplementedException();
         }
 
-        protected override void ApplyWorkAmount(float workAmount)
+        protected override void ApplyWork(float workAmount)
         {
             this.HitPoints.Value -= workAmount;
             this.Plant.PlantComponent.Wiggle((float)Math.PI / 32f, 20, this.Plant.PlantComponent.PlantProperties.StemMaterial.Density);
@@ -46,7 +46,7 @@ namespace Start_a_Town_
 
         protected override SkillDef GetSkill()
         {
-            return SkillDef.Plantcutting;
+            return SkillDefOf.Plantcutting;
         }
 
         protected override ToolUseDef GetToolUse()

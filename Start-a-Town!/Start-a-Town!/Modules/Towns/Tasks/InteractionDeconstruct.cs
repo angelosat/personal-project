@@ -11,7 +11,7 @@ namespace Start_a_Town_
     {
         static float SpeedFormula(GameObject actor)
         {
-            return .5f + actor.GetSkill(SkillDef.Construction).Level * .1f;
+            return .5f + actor.GetSkill(SkillDefOf.Construction).Level * .1f;
         }
         Progress Progress;
         
@@ -77,7 +77,7 @@ namespace Start_a_Town_
             //var workAmount = actor.GetToolWorkAmount(ToolUseDef.Building.ID);
 
             var workAmount = getWorkAmount();
-            actor.AwardSkillXP(SkillDef.Construction, workAmount);
+            actor.AwardSkillXP(SkillDefOf.Construction, workAmount);
 
             this.Progress.Value += workAmount;
             this.Animation.Speed = SpeedFormula(actor);

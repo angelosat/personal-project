@@ -78,13 +78,5 @@ namespace Start_a_Town_
         {
             return Database.Values.OfType<T>();
         }
-
-        //public IEnumerable<(string item, object value)> Inspect()
-        //{
-        //    foreach (var field in this.GetType().GetFields())
-        //        yield return (field.Name, field.GetValue(this));
-        //    foreach (var field in this.GetType().GetProperties())
-        //        yield return (field.Name, field.GetValue(this));
-        //}
     }
 }

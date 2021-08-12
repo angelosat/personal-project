@@ -193,6 +193,7 @@
     <Compile Include="Components\Interactions\NewScripts\InteractionToolUse.cs" />
     <Compile Include="Components\Inventory\ContainerList.cs" />
     <Compile Include="Components\Resources\HitPoints.cs" />
+    <Compile Include="Components\Skills\SkillDefOf.cs" />
     <Compile Include="Control\Hotkeys\HotkeyContext.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.Hotkey.cs" />

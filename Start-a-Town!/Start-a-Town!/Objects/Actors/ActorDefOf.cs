@@ -29,15 +29,15 @@
                 GearType.Legs },
             Skills =
             new SkillDef[] {
-                SkillDef.Digging,
-                SkillDef.Mining,
-                SkillDef.Construction,
-                SkillDef.Cooking,
-                SkillDef.Tinkering,
-                SkillDef.Argiculture,
-                SkillDef.Carpentry,
-                SkillDef.Crafting,
-                SkillDef.Plantcutting }
+                SkillDefOf.Digging,
+                SkillDefOf.Mining,
+                SkillDefOf.Construction,
+                SkillDefOf.Cooking,
+                SkillDefOf.Tinkering,
+                SkillDefOf.Argiculture,
+                SkillDefOf.Carpentry,
+                SkillDefOf.Crafting,
+                SkillDefOf.Plantcutting }
             ,
             Traits = new TraitDef[]
             {

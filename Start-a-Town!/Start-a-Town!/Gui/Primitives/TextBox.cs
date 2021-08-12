@@ -151,7 +151,7 @@ namespace Start_a_Town_.UI
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);
-            if (this.CursorVisible)
+            if (this.CursorVisible && this.Enabled)
             {
                 var textbounds = UIManager.Font.MeasureString(this.Text.Substring(0, this.CursorPosition));
                 sb.Draw(UIManager.Highlight, new Rectangle(this.BoundsScreen.X + (int)textbounds.X, this.BoundsScreen.Y, CursorWidth, this.Height), Color.White);

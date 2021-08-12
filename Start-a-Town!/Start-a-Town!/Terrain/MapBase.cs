@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Start_a_Town_
 {
-    public abstract class MapBase
+    public abstract class MapBase : Inspectable
     {
         class Packets
         { 
@@ -63,7 +63,7 @@ namespace Start_a_Town_
                     SyncSetCellData(net.Map, global, data);
             }
         }
-
+        public override string Label => this.ToString();
         public Camera Camera;
         public static float IconOffset = 0;
         public Biome Biome = new();
@@ -86,7 +86,6 @@ namespace Start_a_Town_
         public abstract float LoadProgress { get; }
         public ulong CurrentTick => this.World.CurrentTick;
         public TimeSpan Clock => this.World.Clock;
-        
         public abstract Vector2 GetOffset();
 
         static public Texture2D Shadow;
@@ -166,14 +165,14 @@ namespace Start_a_Town_
             return randomCell.ToGlobal(randomChunk);
         }
 
-        public IEnumerable<Cell> AllCells
+        public IEnumerable<Cell> GetAllCells()
         {
-            get
-            {
+            //get
+            //{
                 foreach (var ch in this.ActiveChunks.Values)
                     foreach (var c in ch.Cells)
                         yield return c;
-            }
+            //}
         }
 
         internal void ResolveReferences()

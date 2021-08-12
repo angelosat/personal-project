@@ -28,10 +28,11 @@ namespace Start_a_Town_.GameModes.StaticMaps
         }
         public float Gravity => -0.015f;//-0.04f;// -0.05f; //35f;
         public const int Zenith = 14;
-        string _Name;
+       
         public bool Lighting;
         public int MaxHeight { get; set; }
         public Block DefaultBlock { get; set; }
+        string _Name;
         public string Name { get => this._Name; set => this._Name = value; }
         public int Seed { get; set; }
         //public const int TickTime = (int)(60 * 1.44f);

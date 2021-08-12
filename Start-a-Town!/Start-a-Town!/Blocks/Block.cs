@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public abstract partial class Block : ISlottable, ITooltippable
+    public abstract partial class Block : Inspectable, ISlottable, ITooltippable
     {
         static Block()
         {
@@ -181,7 +181,7 @@ namespace Start_a_Town_
         }
 
         public virtual string Name => this.Label;
-        public readonly string Label;
+        public override string Label { get; }
         public readonly int Hash;
         public static readonly int Width = 32, Depth = 16, Height = 40, BlockHeight = 20;
         public static readonly Vector2 OriginCenter = new(Width / 2f, Height - Depth / 2f);

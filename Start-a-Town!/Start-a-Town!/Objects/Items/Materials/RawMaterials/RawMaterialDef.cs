@@ -114,7 +114,7 @@ namespace Start_a_Town_
         static void InitRecipes()
         {
             Reaction.Register(new Reaction(
-                "Make Planks new", SkillDef.Carpentry)
+                "Make Planks new", SkillDefOf.Carpentry)
                 .AddBuildSite(IsWorkstation.Types.Carpentry)
                 .AddIngredient(new Ingredient("Base")
                     .SetAllow(MaterialType.Wood, true)
@@ -134,7 +134,7 @@ namespace Start_a_Town_
             Register(Boulders);
             Register(Scraps);
 
-            var smelting = new Reaction("Smelt", SkillDef.Crafting, JobDefOf.Smelter)
+            var smelting = new Reaction("Smelt", SkillDefOf.Crafting, JobDefOf.Smelter)
                 .AddBuildSite(IsWorkstation.Types.Smeltery)
                 .AddIngredient(new Ingredient("a")
                     .SetAllow(RawMaterialDef.Scraps, true)

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public partial class Ingredient
+    public partial class Ingredient : Inspectable
     {
         public ItemDef ItemDef;
         public MaterialDef Material;
@@ -25,7 +25,6 @@ namespace Start_a_Town_
         HashSet<MaterialDef> ResolvedMaterials;
         HashSet<ItemDef> ResolvedItemDefs;
         bool Resolved;
-
         public bool IsPreserved;
 
         public Ingredient(string name)
@@ -50,7 +49,7 @@ namespace Start_a_Town_
             if (materialType is not null)
                 this.SetAllow(materialType, true);
         }
-
+        public override string Label => $"{typeof(Ingredient).Name}:{this.Name}";
         public IEnumerable<MaterialDef> GetAllValidMaterials()
         {
             this.TryResolve();

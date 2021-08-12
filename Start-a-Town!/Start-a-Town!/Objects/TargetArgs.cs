@@ -10,7 +10,7 @@ namespace Start_a_Town_
 {
     public enum TargetType { Null, Entity, Slot, BlockEntitySlot, Position, Direction }
 
-    public class TargetArgs : ITooltippable, IContextable, ISelectable, ILabeled
+    public class TargetArgs : Inspectable, ITooltippable, IContextable, ISelectable, ILabeled
     {
         public void GetTooltipInfo(Control tooltip)
         {
@@ -243,6 +243,9 @@ namespace Start_a_Town_
             this.ContainerName = slot.ContainerNew.Name;
             this.SlotID = slot.ID;
         }
+
+        public Cell Cell => this.Map.GetCell(this.Global);
+
         static public TargetArgs Write(BinaryWriter writer, GameObjectSlot slot)
         {
             return new TargetArgs(slot).Write(writer);
@@ -482,24 +485,17 @@ namespace Start_a_Town_
 
         static readonly public TargetArgs Null = new();
 
-        public string Label
+        public override string Label
         {
             get
             {
-                switch (this.Type)
+                return this.Type switch
                 {
-                    case TargetType.Entity:
-                        return string.Format("[id:{0}] {1}", this.EntityID, this.Object.Name);
-
-                    case TargetType.Position:
-                        return this.Map.GetBlock(this.Global).Name;
-
-                    case TargetType.Slot:
-                        return this.Slot.ToString();
-
-                    default:
-                        return this.Type.ToString();
-                }
+                    TargetType.Entity => this.Object.DebugName,
+                    TargetType.Position => this.Map.GetBlock(this.Global).Name,
+                    TargetType.Slot => this.Slot.ToString(),
+                    _ => this.Type.ToString(),
+                };
             }
         }
         public override string ToString()
@@ -801,22 +797,18 @@ namespace Start_a_Town_
         {
             get
             {
-                switch (this.Type)
+                return this.Type switch
                 {
-                    case TargetType.Entity:
-                        return this.Object != null && this.Object.Exists;
-
-                    case TargetType.Position:
-                        return this.GetBlock() != BlockDefOf.Air;
-
-                    default:
-                        throw new Exception();
-                }
+                    TargetType.Entity => this.Object != null && this.Object.Exists,
+                    TargetType.Position => this.GetBlock() != BlockDefOf.Air,
+                    _ => throw new Exception(),
+                };
             }
         }
         public bool IsForbidden => this.Type == TargetType.Entity && this.Object.IsForbidden;
            
         public bool HasObject { get { return this.Object != null; } }
+
 
         public static implicit operator GameObject(TargetArgs b) => b.Object;
         public static implicit operator Entity(TargetArgs b) => b.Object as Entity;
@@ -830,5 +822,7 @@ namespace Start_a_Town_
         {
             return new TargetArgs(location.map, location.global);
         }
+
+
     }
 }

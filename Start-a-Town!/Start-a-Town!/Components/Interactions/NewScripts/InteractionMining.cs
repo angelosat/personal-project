@@ -12,7 +12,7 @@ namespace Start_a_Town_
     {
         static float SpeedFormula(Actor actor)
         {
-            var fromSkill = actor.GetSkill(SkillDef.Digging).Level * .1f + 1; //+.5f 
+            var fromSkill = actor.GetSkill(SkillDefOf.Digging).Level * .1f + 1; //+.5f 
             var fromTool = StatDefOf.WorkSpeed.GetValue(actor);
             return fromSkill * fromTool;
         }
@@ -79,7 +79,7 @@ namespace Start_a_Town_
             var material = actor.Map.GetBlockMaterial(t.Global);
             var skill = material.Type.SkillToExtract;
             var workAmount = actor.GetToolWorkAmount(skill);
-            actor.AwardSkillXP(SkillDef.Mining, (int)workAmount);
+            actor.AwardSkillXP(SkillDefOf.Mining, (int)workAmount);
 
             this.Progress.Value += workAmount;
             this.Animation.Speed = SpeedFormula(actor);

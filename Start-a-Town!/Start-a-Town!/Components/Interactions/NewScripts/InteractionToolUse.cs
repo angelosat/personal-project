@@ -18,7 +18,7 @@ namespace Start_a_Town_
             var t = this.Target;
             this.ToolUse = this.GetToolUse();
             this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);
-            this.OnInit();
+            this.Init();
             var particleColor = this.GetParticleColor();
             this.EmitterStrike = new ParticleEmitterSphere
             {
@@ -51,7 +51,7 @@ namespace Start_a_Town_
             var nextspeed = StatDefOf.WorkSpeed.GetValue(a);
             this.Animation.Speed = nextspeed;
             float amount = GetWorkAmount();
-            this.ApplyWorkAmount(amount);
+            this.ApplyWork(amount);
             var skill = this.GetSkill();
             a.AwardSkillXP(skill, amount);
             if (this.Progress < 1)
@@ -59,9 +59,11 @@ namespace Start_a_Town_
             this.Done();
             this.Finish();
         }
-        protected virtual void OnInit() { }
-        protected abstract void ApplyWorkAmount(float workAmount);
+
         protected abstract float Progress { get; }
+
+        protected virtual void Init() { }
+        protected abstract void ApplyWork(float workAmount);
         protected abstract void Done();
         protected abstract ToolUseDef GetToolUse();
         protected abstract SkillDef GetSkill();

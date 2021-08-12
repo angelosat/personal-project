@@ -1,6 +1,6 @@
 ﻿namespace Start_a_Town_
 {
-    public class BuildProperties
+    public class BuildProperties : Inspectable
     {
         public Ingredient Ingredient;
         public float ToolSensitivity;
@@ -15,5 +15,7 @@
             this.Ingredient = ingredient;
             this.ToolSensitivity = toolContribution;
         }
+
+        public override string Label { get; } = typeof(BuildProperties).Name;
     }
 }

@@ -4,7 +4,7 @@ namespace Start_a_Town_
 {
     public abstract class Inspectable : ILabeled
     {
-        public abstract string Label { get; }
+        public virtual string Label => this.ToString();
         //set; }
         public virtual IEnumerable<(string item, object value)> Inspect()
         {

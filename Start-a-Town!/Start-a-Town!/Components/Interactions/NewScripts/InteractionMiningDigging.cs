@@ -12,7 +12,7 @@ namespace Start_a_Town_
     {
         static float SpeedFormula(Actor actor)
         {
-            var fromSkill = actor.GetSkill(SkillDef.Digging).Level * .1f + 1; //+.5f 
+            var fromSkill = actor.GetSkill(SkillDefOf.Digging).Level * .1f + 1; //+.5f 
             var fromTool = StatDefOf.WorkSpeed.GetValue(actor);
             return fromSkill * fromTool;
         }
@@ -42,12 +42,12 @@ namespace Start_a_Town_
             if (matType == MaterialType.Soil)
             {
                 this.ToolUse = ToolUseDefOf.Digging;
-                this.SkillDef = SkillDef.Digging;
+                this.SkillDef = SkillDefOf.Digging;
             }
             else if (matType == MaterialType.Stone || matType == MaterialType.Metal)
             {
                 this.ToolUse = ToolUseDefOf.Mining;
-                this.SkillDef = SkillDef.Mining;
+                this.SkillDef = SkillDefOf.Mining;
             }
             var maxWork = this.Block.GetWorkToBreak(a.Map, t.Global);
             this.Progress = new Progress(0, maxWork, 0);

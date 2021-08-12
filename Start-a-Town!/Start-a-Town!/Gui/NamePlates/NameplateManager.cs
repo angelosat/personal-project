@@ -7,6 +7,11 @@ namespace Start_a_Town_
 {
     class NameplateManager : Control
     {
+        static NameplateManager()
+        {
+            HotkeyManager.RegisterHotkey(Ingame.HotkeyContext, "Toggle nameplates", ToggleNameplates, System.Windows.Forms.Keys.N);
+        }
+        static NameplateManager Instance;
         public bool NameplatesEnabled { get { return this.Controls.Contains(this.Container); } }
         HashSet<GameObject> PreviousScene = new();
         readonly Dictionary<INameplateable, Nameplate> Cache = new();
@@ -18,6 +23,7 @@ namespace Start_a_Town_
 
         public NameplateManager()
         {
+            Instance = this;
             this.AddControls(this.ContainerActors);
             this.MouseThrough = true;
         }
@@ -75,38 +81,14 @@ namespace Start_a_Town_
             this.Cache.Remove(entity);
         }
         
-        public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
+        public static void ToggleNameplates()
         {
-            if (e.Handled)
-                return;
-            switch (e.KeyCode)
-            {
-                case System.Windows.Forms.Keys.N:
-                    ToggleNameplates();
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        public void ToggleNameplates()
-        {
-            if (!this.Controls.Contains(this.ContainerActors))
-                this.AddControls(this.ContainerActors);
-            else if (!this.Controls.Contains(this.Container))
-                this.AddControls(this.Container);
+            if (!Instance.Controls.Contains(Instance.ContainerActors))
+                Instance.AddControls(Instance.ContainerActors);
+            else if (!Instance.Controls.Contains(Instance.Container))
+                Instance.AddControls(Instance.Container);
             else
-                this.ClearControls();
+                Instance.ClearControls();
         }
-
-        //public override void Draw(SpriteBatch sb, Rectangle viewport)
-        //{
-        //    base.Draw(sb, viewport);
-        //}
-        //public override void DrawOnCamera(SpriteBatch sb, Camera camera)
-        //{
-        //    base.DrawOnCamera(sb, camera);
-        //}
     }
 }

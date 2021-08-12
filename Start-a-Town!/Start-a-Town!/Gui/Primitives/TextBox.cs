@@ -139,6 +139,7 @@ namespace Start_a_Town_.UI
                     {
                         this.CursorTimer = CursorTimerMax;
                         this.CursorVisible = true;
+                        this.CursorPosition = Math.Min(this.CursorPosition, this.Text.Length);
                     }
                 }
                 else

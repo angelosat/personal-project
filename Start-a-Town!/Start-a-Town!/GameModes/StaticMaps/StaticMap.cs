@@ -907,7 +907,7 @@ namespace Start_a_Town_
             var x = this.Size.Blocks / 2;
             var y = x;
             var z = this.GetHeightmapValue(x, y);
-            this.Camera.CenterOn(new Vector3(x, y, z));
+            this.Camera.CenterOn(new Vector3(x, y, z), true);
         }
 
         internal void AddStartingActors(Actor[] actors)

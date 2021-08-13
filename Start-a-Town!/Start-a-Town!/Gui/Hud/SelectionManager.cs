@@ -122,7 +122,7 @@ namespace Start_a_Town_.UI
         {
             if (this.SelectedSource != null)
                 if (this.SelectedSource.Type != TargetType.Null)
-                    ScreenManager.CurrentScreen.Camera.CenterOn(this.SelectedSource.Global);
+                    ScreenManager.CurrentScreen.Camera.CenterOn(this.SelectedSource.Global);// .CenterOn(this.SelectedSource.Global);
         }
         public void SetName(string text)
         {

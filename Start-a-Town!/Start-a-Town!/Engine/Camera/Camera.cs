@@ -8,46 +8,53 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using UI;
 
 namespace Start_a_Town_
 {
     public class Camera : IKeyEventHandler
     {
+        static XElement XCameraSettings = GameSettings.XmlNodeSettings.GetOrCreateElement("Camera");
+        static Camera()
+        {
+            SmoothCentering = (bool?)XCameraSettings.Element(nameof(SmoothCentering)) ?? true;
+        }
         public const int FogZOffset = 2, FogFadeLength = 8;
         Vector4 FogColor = Color.SteelBlue.ToVector4();
         GameObject Following;
         Vector2 _Coordinates;
-        bool _HideUnknownBlocks = true;
+        bool _hideUnknownBlocks = true;
         public bool HideUnknownBlocks // TODO: make it static
         {
-            get => this._HideUnknownBlocks;
+            get => this._hideUnknownBlocks;
             set
             {
-                this._HideUnknownBlocks = value;
+                this._hideUnknownBlocks = value;
                 Ingame.CurrentMap.InvalidateChunks();
                 this.TopSliceChanged = true;
             }
         }
-        bool _DrawTopSlice = true;
+        bool _drawTopSlice = true;
         public bool DrawTopSlice
         {
-            get => this._DrawTopSlice;
+            get => this._drawTopSlice;
             set
             {
-                this._DrawTopSlice = value;
+                this._drawTopSlice = value;
                 Ingame.CurrentMap.InvalidateChunks();
             }
         }
         public bool DrawZones = true;
         public static bool HideCeiling;
+        public static bool SmoothCentering;
         public Vector2 Location;
         public bool HideTerrainAbovePlayer;
         public int HideTerrainAbovePlayerOffset;
         public float ZoomMax = 8;// 16;
         public float ZoomMin = 0.125f;
         public int Width, Height;
-        public Vector3 Global = Vector3.Zero;
+        public Vector3? Center = Vector3.Zero;
         int _DrawLevel = MapBase.MaxHeight - 1;
         public int DrawLevel
         {
@@ -148,7 +155,8 @@ namespace Start_a_Town_
             this.ZoomNext = zoom;
             this.Rotation = rotation;
             this.CenterOn(new Vector3(x, y, z));
-            Game1.Instance.graphics.DeviceReset += new EventHandler<EventArgs>(this.gfx_DeviceReset);
+            Game1.Instance.graphics.DeviceReset += this.gfx_DeviceReset;
+            this.OnDeviceLost();
         }
 
         public override string ToString()
@@ -166,7 +174,8 @@ namespace Start_a_Town_
                 chunk.Value.OnCameraRotated(this);
                 chunk.Value.Invalidate();
             }
-            this.CenterOn(this.Global);
+            if (this.Center.HasValue)
+                this.CenterOn(this.Center.Value);
         }
 
         void gfx_DeviceReset(object sender, EventArgs e)
@@ -177,6 +186,7 @@ namespace Start_a_Town_
             this.Height = Game1.Bounds.Height;
             this.ViewPort = new Rectangle(0, 0, this.Width, this.Height);
             this.RenderTargetsInvalid = true;
+            this.OnDeviceLost();
         }
 
         public void Update(MapBase map)
@@ -192,6 +202,7 @@ namespace Start_a_Town_
         }
         public void Move(Vector2 coords)
         {
+            this.Center = null;
             this.Following = null;
             this.Coordinates = coords;
         }
@@ -226,18 +237,24 @@ namespace Start_a_Town_
             else if (PreviousDrawLevel != -1)
                 this.DrawLevel = PreviousDrawLevel;
         }
-        public void CenterOn(Vector3 global)
+        public void CenterOn(Vector3 global, bool forceSnap = false)
         {
-            this.Global = global;
-            Coords.Iso(this, global.X, global.Y, global.Z, out int xx, out int yy);
-            this.Coordinates = new Vector2(xx, yy);
+            this.Center = global;
             this.DrawLevel = (int)Math.Max(this.DrawLevel, global.Z + 1);
+            if (!SmoothCentering || forceSnap)
+            {
+                Coords.Iso(this, global.X, global.Y, global.Z, out int xx, out int yy);
+                this.Coordinates = new Vector2(xx, yy);
+            }
         }
         public void Follow()
         {
             if (this.Following is null)
+            {
+                if(this.Center.HasValue)
+                    this.Follow(this.Center.Value);
                 return;
-
+            }
             if (this.Following.IsIndoors())
                 this.DrawLevel = (int)(this.Following.Global.CeilingZ().Z + this.Following.Physics.Height - 1);
             else
@@ -246,7 +263,7 @@ namespace Start_a_Town_
         }
         public void Follow(Vector3 global)
         {
-            this.Global = global;
+            this.Center = global;
             Coords.Iso(this, global.X, global.Y, global.Z, out float xx, out float yy);
 
             Vector2
@@ -601,11 +618,11 @@ namespace Start_a_Town_
             if (map is null)
                 return;
 
-            if (this.RenderTargetsInvalid)
-            {
-                this.OnDeviceLost();
-                this.RenderTargetsInvalid = false;
-            }
+            //if (this.RenderTargetsInvalid)
+            //{
+            //    this.OnDeviceLost();
+            //    this.RenderTargetsInvalid = false;
+            //}
 
             this.RenderTargets[0] = this.MapRender;
             this.RenderTargets[1] = this.MapDepth;
@@ -699,29 +716,19 @@ namespace Start_a_Town_
             gd.SamplerStates[3] = SamplerState.PointClamp;
 
             if (this.SpriteBatch == null)
-            {
                 this.SpriteBatch = new MySpriteBatch(gd);
-            }
 
             if (this.WaterSpriteBatch == null)
-            {
                 this.WaterSpriteBatch = new MySpriteBatch(gd);
-            }
 
             if (this.ParticlesSpriteBatch == null)
-            {
                 this.ParticlesSpriteBatch = new MySpriteBatch(gd);
-            }
 
             if (this.TransparentBlocksSpriteBatch == null)
-            {
                 this.TransparentBlocksSpriteBatch = new MySpriteBatch(gd);
-            }
 
             if (this.BlockParticlesSpriteBatch == null)
-            {
                 this.BlockParticlesSpriteBatch = new MySpriteBatch(gd);
-            }
 
             var clearcol = new Color(1f, 1f, 1f, 0); // if i put 1 for the alpha than tsansparent blocks will be shaded white  // (old comment) i put 1 again because i dont draw water on the fog texture after all
             //var clearcol = new Color(1f, 1f, 1f, 1f); // causes unhandled white background
@@ -1292,10 +1299,10 @@ namespace Start_a_Town_
             var controller = Controller.Instance;
             var hidewalls = Engine.HideWalls;
             var actor = map.Net.GetPlayer()?.ControllingEntity;
-            bool playerExists = actor != null;
-            Vector3 playerGlobal = playerExists ? actor.Global : default;
-            float radius = .01f * this.Zoom * this.Zoom; //occlusion radius
-            bool found = false;
+            var playerExists = actor != null;
+            var playerGlobal = playerExists ? actor.Global : default;
+            var radius = .01f * this.Zoom * this.Zoom; //occlusion radius
+            var found = false;
             var foundDepth = float.MinValue;
             var foundGlobal = Vector3.Zero;
             var foundMouse = Vector2.Zero;
@@ -1306,10 +1313,10 @@ namespace Start_a_Town_
             var mouse = UIManager.Mouse;
             var mousex = (int)mouse.X;
             var mousey = (int)mouse.Y;
-            bool behind = InputState.IsKeyDown(Keys.Menu);
+            var behind = InputState.IsKeyDown(Keys.Menu);
 
-            int rectw = (int)(Block.Width * this.Zoom);
-            int recth = (int)(Block.Height * this.Zoom);
+            var rectw = (int)(Block.Width * this.Zoom);
+            var recth = (int)(Block.Height * this.Zoom);
             foreach (var chunk in visibleChunks)
             {
                 var chunkBounds = chunk.GetScreenBounds(this);

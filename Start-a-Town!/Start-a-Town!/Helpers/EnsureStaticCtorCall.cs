@@ -13,6 +13,10 @@ namespace Start_a_Town_
     public class ImportConfig : Attribute
     {
     }
+    [AttributeUsage(AttributeTargets.Field)]
+    public class PlayerSettings : Attribute
+    {
+    }
     public static class EnsureInitHelper
     { 
         static Type[] CachedTypes;

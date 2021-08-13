@@ -45,6 +45,10 @@ namespace Start_a_Town_
         }
         internal override void Apply()
         {
+            if (Game1.Instance.graphics.PreferredBackBufferHeight == this._tempResolution.Height &&
+                Game1.Instance.graphics.PreferredBackBufferWidth == this._tempResolution.Width)
+                return;
+
             Game1.Instance.graphics.PreferredBackBufferHeight = this._tempResolution.Height;
             Game1.Instance.graphics.PreferredBackBufferWidth = this._tempResolution.Width;
 

@@ -6,8 +6,10 @@ namespace Start_a_Town_
 {
     abstract class InteractionToolUse : InteractionPerpetual
     {
+        protected enum SkillAwardTypes { OnSwing, OnFinish }
         protected ParticleEmitterSphere EmitterStrike;
         protected List<Rectangle> ParticleRects;
+        float TotalWorkAmount;
         protected InteractionToolUse(string name) : base(name)
         {
             this.DrawProgressBar(() => this.Actor.Global, () => this.Progress, () => this.Name);
@@ -51,11 +53,15 @@ namespace Start_a_Town_
             var toolEffect = GetToolEffectiveness();
             var amount = toolEffect / WorkDifficulty;
             this.ApplyWork(amount);
+            this.TotalWorkAmount += amount;
             var skill = this.GetSkill();
             //if((this.Actor.Gear.GetGear(GearType.Mainhand) as Tool)?.ToolComponent.Props.Skill is SkillDef skill)
+            if(this.SkillAwardType == SkillAwardTypes.OnSwing)
                 a.AwardSkillXP(skill, amount);
             if (this.Progress < 1)
                 return;
+            if (this.SkillAwardType == SkillAwardTypes.OnFinish)
+                a.AwardSkillXP(skill, this.TotalWorkAmount);
             this.Done();
             this.Finish();
         }
@@ -69,7 +75,7 @@ namespace Start_a_Town_
 
         protected abstract float Progress { get; }
         protected abstract float WorkDifficulty { get; }
-
+        protected abstract SkillAwardTypes SkillAwardType { get; }
         protected virtual void Init() { }
         protected abstract void ApplyWork(float workAmount);
         protected abstract void Done();

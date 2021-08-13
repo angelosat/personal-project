@@ -11,6 +11,7 @@ namespace Start_a_Town_
 
         protected override float WorkDifficulty => this.Plant.PlantComponent.PlantProperties.StemMaterial.Density;
         protected override float Progress => 1 - this.HitPoints.Percentage;
+        protected override SkillAwardTypes SkillAwardType { get; } = SkillAwardTypes.OnSwing;
 
         public InteractionChop() : base("Chopping")
         {

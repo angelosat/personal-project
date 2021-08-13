@@ -13,6 +13,7 @@ namespace Start_a_Town_
 
         protected override float WorkDifficulty => this.Block.WorkAmount;
         protected override float Progress => this._progress.Percentage;
+        protected override SkillAwardTypes SkillAwardType { get; } = SkillAwardTypes.OnFinish;
 
         public InteractionDeconstructNew() : base("Deconstructing")
         {

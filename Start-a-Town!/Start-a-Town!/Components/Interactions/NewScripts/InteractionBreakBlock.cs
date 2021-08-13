@@ -16,10 +16,10 @@ namespace Start_a_Town_
 
         protected override float WorkDifficulty => this.Material.Density;
         protected override float Progress => this._progress.Percentage;
+        protected override SkillAwardTypes SkillAwardType { get; } = SkillAwardTypes.OnFinish;
 
         public InteractionBreakBlock() : base("MineDig")
         {
-
         }
         protected override void Init()
         {
@@ -64,11 +64,9 @@ namespace Start_a_Town_
             var cell = this.Cell;
             if (!isMetalOrMineral())
                 return;
-            //var material = block.GetMaterial(cell.BlockData);
-            var material = cell.Material;
-            var server = a.Net as Server;
-            if (server != null)
+            if (a.Net is Server server)
             {
+                var material = cell.Material;
                 if (material != MaterialDefOf.Stone)
                 {
                     var resource = ItemFactory.CreateFrom(RawMaterialDef.Ore, material);

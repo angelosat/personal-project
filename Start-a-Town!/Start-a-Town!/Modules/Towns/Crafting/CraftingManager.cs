@@ -156,9 +156,9 @@ namespace Start_a_Town_
             return bench.RemoveOrder(orderID);
         }
        
-        internal void AddOrder(IntVec3 station, int reactionID)
+        internal void AddOrder(IntVec3 station, Reaction reaction)// int reactionID)
         {
-            var order = new CraftOrder(this.OrderSequence++, reactionID, this.Town.Map, station);
+            var order = new CraftOrder(this.OrderSequence++, reaction, this.Town.Map, station);
             var benchEntity = this.Map.GetBlockEntity(station).GetComp<BlockEntityCompWorkstation>();
             benchEntity.Orders.Add(order);
         }

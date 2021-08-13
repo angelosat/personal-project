@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Start_a_Town_.Components;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
 {
@@ -108,9 +107,9 @@ namespace Start_a_Town_
 
         private static void GenerateCookingRecipes()
         {
-            var cookables = Def.GetDefs<ItemDef>().Where(d => d.RecipeProperties != null);
+            var cookables = Def.GetDefs<ItemDef>().Where(d => d.RecipeProperties != null).ToList();
             foreach (var def in cookables)
-                Reaction.AddRecipe(def.CreateRecipe());
+                Def.Register(def.CreateRecipe());
         }
     }
 }

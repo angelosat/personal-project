@@ -13,20 +13,20 @@ namespace Start_a_Town_
             p = Network.RegisterPacketHandler(Receive);
         }
 
-        internal static void Send(INetwork net, Vector3 global, int reactionID)
+        internal static void Send(INetwork net, Vector3 global, Reaction reaction)
         {
             var w = net.GetOutgoingStream();
             w.Write(p);
             w.Write(global);
-            w.Write(reactionID);
+            reaction.Write(w);
         }
         private static void Receive(INetwork net, BinaryReader r)
         {
             var station = r.ReadVector3();
-            var reactionID = r.ReadInt32();
-            net.Map.Town.CraftingManager.AddOrder(station, reactionID);
+            var reaction = r.ReadDef<Reaction>();
+            net.Map.Town.CraftingManager.AddOrder(station, reaction);
             if (net is Server)
-                Send(net, station, reactionID);
+                Send(net, station, reaction);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Crafting;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
@@ -51,8 +50,10 @@ namespace Start_a_Town_
         {
 
         }
-        public CraftOrder(int id, int reactionID, MapBase map, IntVec3 workstation)
-            : this(Reaction.Dictionary[reactionID])
+        //public CraftOrder(int id, int reactionID, MapBase map, IntVec3 workstation)
+        //    : this(Reaction.Dictionary[reactionID])
+         public CraftOrder(int id, Reaction reaction, MapBase map, IntVec3 workstation)
+            : this(reaction)
         {
             this.Map = map;
             this.Workstation = workstation;
@@ -162,10 +163,10 @@ namespace Start_a_Town_
         }
         CraftOrder(MapBase map, SaveTag tag)
         {
-            tag.TryGetTagValue<int>("ReactionID", p => this.Reaction = Reaction.Dictionary[p]);
+            //tag.TryGetTagValue<int>("ReactionID", p => this.Reaction = Reaction.Dictionary[p]);
+            this.Reaction = tag.LoadDef<Reaction>("Reaction");
             tag.TryGetTagValue<int>("Mode", p => this.Mode = (CraftMode)p);
             tag.TryGetTagValue<int>("FinishMode", p => this.FinishMode = CraftOrderFinishMode.GetMode(p));
-
             tag.TryGetTagValue<int>("Quantity", p => this.Quantity = p);
             tag.TryGetTagValue<IntVec3>("Bench", p => this.Workstation = p);
             this.ReagentRestrictions.Clear();
@@ -191,7 +192,8 @@ namespace Start_a_Town_
         public void Write(BinaryWriter w)
         {
             w.Write(this.ID);
-            w.Write(this.Reaction.ID);
+            //w.Write(this.Reaction.ID);
+            this.Reaction.Write(w);
             w.Write((int)this.Mode);
             w.Write((int)this.FinishMode.Mode);
             w.Write(this.Quantity);
@@ -219,7 +221,8 @@ namespace Start_a_Town_
         public ISerializable Read(BinaryReader r)
         {
             this.ID = r.ReadInt32();
-            this.Reaction = Reaction.Dictionary[r.ReadInt32()];
+            //this.Reaction = Reaction.Dictionary[r.ReadInt32()];
+            this.Reaction = r.ReadDef<Reaction>();
             this.Mode = (CraftMode)r.ReadInt32();
             this.FinishMode = CraftOrderFinishMode.GetMode(r.ReadInt32());
             this.Quantity = r.ReadInt32();
@@ -285,7 +288,8 @@ namespace Start_a_Town_
         public SaveTag Save(string name)
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            tag.Add(new SaveTag(SaveTag.Types.Int, "ReactionID", this.Reaction.ID));
+            //tag.Add(new SaveTag(SaveTag.Types.Int, "ReactionID", this.Reaction.ID));
+            this.Reaction.Save(tag, "Reaction");
             tag.Add(new SaveTag(SaveTag.Types.Int, "Mode", (int)this.Mode));
             tag.Add(new SaveTag(SaveTag.Types.Int, "FinishMode", (int)this.FinishMode.Mode));
             tag.Add(this.ID.Save("ID"));
@@ -323,7 +327,8 @@ namespace Start_a_Town_
 
         ISaveable ISaveable.Load(SaveTag tag)
         {
-            tag.TryGetTagValue<int>("ReactionID", p => this.Reaction = Reaction.Dictionary[p]);
+            //tag.TryGetTagValue<int>("ReactionID", p => this.Reaction = Reaction.Dictionary[p]);
+            this.Reaction = tag.LoadDef<Reaction>("Reaction");
             tag.TryGetTagValue<int>("Mode", p => this.Mode = (CraftMode)p);
             tag.TryGetTagValue<int>("FinishMode", p => this.FinishMode = CraftOrderFinishMode.GetMode(p));
             tag.TryGetTagValue<int>("ID", out this.ID);

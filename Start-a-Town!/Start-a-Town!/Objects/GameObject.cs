@@ -4,7 +4,6 @@ using Start_a_Town_.AI;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
-using Start_a_Town_.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -623,6 +623,8 @@ namespace Start_a_Town_
                     w.Write((decimal)arg);
                 else if (argType == typeof(IntVec3))
                     w.Write((IntVec3)arg);
+                else if (arg is Def def)
+                    def.Write(w);
                 else
                     throw new ArgumentException();
             }

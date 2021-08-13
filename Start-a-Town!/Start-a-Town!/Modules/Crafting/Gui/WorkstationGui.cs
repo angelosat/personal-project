@@ -1,5 +1,4 @@
-﻿using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.UI;
+﻿using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,9 @@ namespace Start_a_Town_.Modules.Crafting
             var btnAddOrder = new Button("Add Order", this.AddOrder);
 
             this.PanelReactions = new Panel() { AutoSize = true };
-            var validreactions = Reaction.Dictionary.Values.Where(r => r.ValidWorkshops.Any(t => entity.IsWorkstationType(t))).ToList();
+            //var allreactions = Reaction.Dictionary;
+            var allreactions = Def.GetDefs<Reaction>();
+            var validreactions = allreactions.Where(r => r.ValidWorkshops.Any(t => entity.IsWorkstationType(t))).ToList();
 
             //var reactions = new ButtonList<Reaction>(validreactions, 200, 400, r => r.Label, (r, b) => b.LeftClickAction = () => this.PlaceOrder(r));
             //this.PanelReactions.AddControls(reactions);
@@ -60,7 +61,7 @@ namespace Start_a_Town_.Modules.Crafting
         }
         void PlaceOrder(Reaction r)
         {
-            PacketOrderAdd.Send(this.Map.Net, this.Global, r.ID);
+            PacketOrderAdd.Send(this.Map.Net, this.Global, r);
             this.PanelReactions.Hide();
         }
         internal override void OnGameEvent(GameEvent e)

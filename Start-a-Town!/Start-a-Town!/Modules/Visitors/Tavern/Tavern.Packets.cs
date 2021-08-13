@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Net;
 using System.IO;
 
@@ -38,7 +37,7 @@ namespace Start_a_Town_
             {
                 var pl = net.GetPlayer(r.ReadInt32());
                 var tavern = net.Map.Town.ShopManager.GetShop(r.ReadInt32()) as Tavern;
-                var reaction = Reaction.GetReaction(r.ReadInt32());
+                var reaction = r.ReadDef<Reaction>();
                 var id = r.ReadInt32();
                 if (net is Client)
                     tavern.AddOrder(new CraftOrder(reaction) { ID = id });
@@ -53,7 +52,7 @@ namespace Start_a_Town_
                     id = tavern.MenuItemIDSequence++;
                     tavern.AddOrder(new CraftOrder(reaction) { ID = id });
                 }
-                net.GetOutgoingStream().Write(PacketOrderAdd, player.ID, tavern.ID, reaction.ID, id);
+                net.GetOutgoingStream().Write(PacketOrderAdd, player.ID, tavern.ID, reaction, id);
             }
 
             static public void SendOrderSync(INetwork net, PlayerData player, Tavern tavern, CraftOrder order, bool enabled)

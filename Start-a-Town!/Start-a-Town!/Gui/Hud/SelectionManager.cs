@@ -118,11 +118,10 @@ namespace Start_a_Town_.UI
         }
         private static void ToggleInfo()
         {
-            //Inspector.Refresh(Instance.SelectedSource);
             if (Instance.SelectedSource.Object is Inspectable obj)
                 Inspector.Refresh(obj);
             else
-                Inspector.Refresh(Instance.SelectedSource.Cell);
+                Inspector.Refresh(Instance.SelectedSource);
             Inspector.Show();
         }
 

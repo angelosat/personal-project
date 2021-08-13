@@ -230,6 +230,7 @@
     <Compile Include="Modules\Towns\Tasks\InteractionDeconstructNew.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemPreferencesManager.ItemPreference.cs" />
     <Compile Include="Objects\Items\Materials\IInspectable.cs" />
+    <Compile Include="Objects\Items\Materials\MaterialTypeDefOf.cs" />
     <Compile Include="Objects\Loot.cs" />
     <Compile Include="Objects\LootTable.cs" />
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />

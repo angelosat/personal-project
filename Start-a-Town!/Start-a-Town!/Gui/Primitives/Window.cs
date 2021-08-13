@@ -8,24 +8,24 @@ namespace Start_a_Town_.UI
     {
         public override string ToString()
         {
-            return "Window: " + this.title;
+            return "Window: " + this._title;
         }
-        private string title = "<undefined>";
+        private string _title = "<undefined>";
         readonly bool isResizable = false;
         public bool FocusLast = false, isMouseOverCurrent = false, isMouseOverPrevious = false;
         public bool Movable, IsDragged;
         protected Rectangle ScreenClientBounds = new();
-        protected bool _Closable = true;
+        protected bool _closable = true;
         public bool Closable
         {
-            get { return this._Closable; }
+            get => this._closable;
             set
             {
                 bool oldClosable = this.Closable;
-                this._Closable = value;
-                if (this._Closable != oldClosable)
+                this._closable = value;
+                if (this._closable != oldClosable)
                 {
-                    if (this._Closable)
+                    if (this._closable)
                         this.Controls.Add(this.CloseButton);
                     else
                         this.Controls.Remove(this.CloseButton);
@@ -178,15 +178,16 @@ namespace Start_a_Town_.UI
         public Func<string> TitleFunc;
         public string Title
         {
-            get { return this.TitleFunc != null ? this.TitleFunc() : this.title; }
+            get { return this.TitleFunc != null ? this.TitleFunc() : this._title; }
             set
             {
-                this.title = value;
+                this._title = value;
                 this.OnTitleChanged();
             }
         }
         public bool IsResizable
         { get { return this.isResizable; } }
+
 
         public void SizeToControl(Control control)
         {
@@ -298,6 +299,20 @@ namespace Start_a_Town_.UI
         {
             this.StopDragging();
             base.OnMouseLeftUp(e);
+        }
+
+        internal override void OnControlResized(Control control)
+        {
+            base.OnControlResized(control);
+            this.EnsureWithinScreenBounds();
+        }
+
+        private void EnsureWithinScreenBounds()
+        {
+            if (this.Location.X + this.Width > UIManager.Width)
+                this.Location.X = UIManager.Width - this.Width;
+            if (this.Location.Y + this.Height > UIManager.Height)
+                this.Location.Y = UIManager.Height - this.Height;
         }
     }
 }

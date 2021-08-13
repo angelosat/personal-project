@@ -1,21 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Start_a_Town_
 {
     public class MaterialDef : Def, ILabeled//, IInspectable
     {
         public static readonly Random Randomizer = new();
-
-        public static Dictionary<int, MaterialDef> RegistryByHash = new();
-
-
-        public static MaterialDef GetMaterial(int materialHash)
-        {
-            return RegistryByHash[materialHash];
-        }
 
         public static void Initialize()
         {
@@ -30,7 +20,6 @@ namespace Start_a_Town_
 
         public bool IsTemplate { get; private set; }
 
-        private readonly int HashCode;
         public MaterialTypeDef Type;
         public Color Color;
         public Vector4 ColorVector;
@@ -71,8 +60,6 @@ namespace Start_a_Town_
 
         public MaterialDef(MaterialTypeDef type, string name, string prefix, Color color, int density) : base(name)
         {
-            this.HashCode = name.GetHashCode();
-            RegistryByHash[this.HashCode] = this;
             this.Type = type;
             type.SubTypes.Add(this);
             this.Prefix = prefix;
@@ -84,11 +71,6 @@ namespace Start_a_Town_
         {
         }
 
-        internal static IEnumerable<MaterialDef> GetMaterials(Func<MaterialDef, bool> condition)
-        {
-            return RegistryByHash.Values.Where(condition);
-        }
-        
         public static MaterialDef CreateColor(Color color)
         {
             var mat = new MaterialDef(MaterialTypeDefOf.Dye, "Color", "Color", color, 1);
@@ -141,18 +123,5 @@ namespace Start_a_Town_
             this.Type = type;
             return this;
         }
-
-        //public IEnumerable<(string item, object value)> Inspect()
-        //{
-        //    //yield return (nameof(this.Type), this.Type);
-        //    //yield return (nameof(this.Density), this.Density);
-        //    //yield return (nameof(this.Color), this.Color);
-        //    //yield return (nameof(this.Value), this.Value);
-        //    //yield return (nameof(this.Shine), this.Shine);
-        //    foreach (var field in this.GetType().GetFields())
-        //        yield return (field.Name, field.GetValue(this));
-        //    foreach (var field in this.GetType().GetProperties())
-        //        yield return (field.Name, field.GetValue(this));
-        //}
     }
 }

@@ -34,7 +34,7 @@ namespace Start_a_Town_.Crafting
         public InteractionCrafting()
             : base("Produce")
         {
-            this.DrawProgressBar(() => this.Target.Global.Above(), () => this.Progress, () => this.Order.Name);
+            this.DrawProgressBar(() => this.Target.Global.Above(), () => this.Progress, () => this.Order.Label);
         }
 
         public override object Clone()
@@ -49,9 +49,10 @@ namespace Start_a_Town_.Crafting
             this._progress.Max = this.Product.WorkAmount;
             this._progress.Max.ToConsole();
         }
-        GameObject ProduceWithMaterialsOnTopNew(Actor a, Vector3 global)
+        GameObject ProduceWithMaterialsOnTopNew()
         {
-            var actor = a as Actor;
+            var global = this.Target.Global;
+            var actor = this.Actor;
             var product = this.Product;
             var reaction = this.Order.Reaction;
             var order = this.Order;
@@ -62,7 +63,8 @@ namespace Start_a_Town_.Crafting
             actor.AwardSkillXP(reaction.CraftSkill, skillAwardAmount);
 
             product.ConsumeMaterials();
-            actor.Map.GetBlockEntity(global)?.GetComp<BlockEntityCompRefuelable>()?.ConsumePower(actor.Map, order.Reaction.Fuel);
+            if (order.Reaction.Fuel > 0)
+                actor.Map.GetBlockEntity(global)?.GetComp<BlockEntityCompRefuelable>()?.ConsumePower(actor.Map, order.Reaction.Fuel);
 
             order.Complete(actor);
 
@@ -82,18 +84,21 @@ namespace Start_a_Town_.Crafting
             tag.TrySaveRef(this.Order, "Order");
             tag.Add(this.Progress.Save("CraftProgress"));
             tag.Add(this.PlacedObjects.SaveNewBEST("PlacedItems"));
+            this.Product.Save(tag, "Product");
         }
         public override void LoadData(SaveTag tag)
         {
             tag.TryLoadRef("Order", out this.Order);
             this._progress = new Progress(tag["CraftProgress"]);
             this.PlacedObjects.TryLoadMutable(tag, "PlacedItems");
+            this.Product = new Reaction.Product.ProductMaterialPair(tag["Product"]);
         }
         protected override void WriteExtra(BinaryWriter w)
         {
             w.Write(this.Order.ID);
             this._progress.Write(w);
             this.PlacedObjects.Write(w);
+            this.Product.Write(w);
         }
         protected override void ReadExtra(BinaryReader r)
         {
@@ -104,6 +109,7 @@ namespace Start_a_Town_.Crafting
                 this._orderID = orderID;
             this._progress = new Progress(r);
             this.PlacedObjects.ReadMutable(r);
+            this.Product = new Reaction.Product.ProductMaterialPair(r);
         }
 
         internal override void ResolveReferences()
@@ -120,7 +126,7 @@ namespace Start_a_Town_.Crafting
         {
             var a = this.Actor;
             var t = this.Target;
-            var product = this.ProduceWithMaterialsOnTopNew(a, t.Global);
+            var product = this.ProduceWithMaterialsOnTopNew();
             if (a.Net is Server)
             {
                 var task = a.CurrentTask;

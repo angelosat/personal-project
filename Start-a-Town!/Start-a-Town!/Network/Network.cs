@@ -37,6 +37,8 @@ namespace Start_a_Town_.Net
             }
         }
 
+        public static INetwork CurrentNetwork;
+
         static public ConsoleBoxAsync Console { get { return LobbyWindow.Instance.Console; } }
 
         public Client Client;
@@ -77,8 +79,11 @@ namespace Start_a_Town_.Net
         }
         public void Update(GameTime gt)
         {
+            CurrentNetwork = this.Server;
             this.Server.Update(gt);
+            CurrentNetwork = this.Client;
             this.Client.Update();
+            CurrentNetwork = null;
         }
         public static void SyncReport(Server server, string text)
         {

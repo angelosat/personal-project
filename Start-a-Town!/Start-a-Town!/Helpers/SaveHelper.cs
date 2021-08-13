@@ -689,6 +689,10 @@ namespace Start_a_Town_
                 defs.Add(Def.GetDef((string)item.Value));
             return true;
         }
+        public static GameObject LoadObject(this SaveTag tag, string name)
+        {
+            return GameObject.Load(tag[name]);
+        }
         public static T LoadDef<T>(this SaveTag tag, string name) where T : Def
         {
             return Def.GetDef<T>(tag[name].Value as string);
@@ -830,7 +834,7 @@ namespace Start_a_Town_
             return dic;
         }
 
-        public static void SaveNew<T>(this Dictionary<string, T> dic, SaveTag save, string name) where T : ISaveable, new()
+        public static void SaveZip<T>(this Dictionary<string, T> dic, SaveTag save, string name) where T : ISaveable, new()
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             tag.Add(dic.Keys.Save("Keys"));
@@ -838,7 +842,7 @@ namespace Start_a_Town_
             //return tag;
             save.Add(tag);
         }
-        public static Dictionary<string, T> LoadNew<T>(this Dictionary<string, T> dic, SaveTag save) where T : ISaveable, new()
+        public static Dictionary<string, T> LoadZip<T>(this Dictionary<string, T> dic, SaveTag save) where T : ISaveable, new()
         {
             var keys = new List<string>().Load(save["Keys"].Value as List<SaveTag>);
             var values = new List<T>();

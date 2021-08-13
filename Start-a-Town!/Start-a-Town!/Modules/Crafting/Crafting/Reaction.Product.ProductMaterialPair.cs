@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Start_a_Town_
@@ -8,25 +9,27 @@ namespace Start_a_Town_
     {
         public partial class Product
         {
-            public class ProductMaterialPair
+            public class ProductMaterialPair : ISaveable, ISerializable
             {
                 public GameObject Product;
-                public readonly Reaction Reaction;
-                public GameObject Tool;
+                public Reaction Reaction;
                 public Dictionary<string, ObjectAmount> RequirementsNew;
-               
+                
                 public ProductMaterialPair(Reaction reaction, GameObject product, Dictionary<string, ObjectAmount> ingredients)
                 {
                     this.Reaction = reaction;
                     this.Product = product;
                     this.RequirementsNew = ingredients;
                 }
-               
-                public void Write(System.IO.BinaryWriter w)
+
+                public ProductMaterialPair(SaveTag saveTag)
                 {
-                    this.Product.Write(w);
+                    this.Load(saveTag);
                 }
-               
+                public ProductMaterialPair(BinaryReader r)
+                {
+                    this.Read(r);
+                }
                 public void ConsumeMaterials()
                 {
                     foreach (var req in this.RequirementsNew)
@@ -47,8 +50,39 @@ namespace Start_a_Town_
                 }
 
                 public int WorkAmount => this.Reaction.GetWorkAmount(this.RequirementsNew);
+
+                public SaveTag Save(string name = "")
+                {
+                    var tag = new SaveTag(SaveTag.Types.Compound, name);
+                    tag.Add(this.Product.Save("Product"));
+                    this.Reaction.Save(tag, "Reaction");
+                    this.RequirementsNew.SaveZip(tag, "Materials");
+                    return tag;
+                }
+
+                public ISaveable Load(SaveTag tag)
+                {
+                    //this.Product = GameObject.Load(tag["Product"));
+                    this.Product = tag.LoadObject("Product");
+                    this.Reaction = tag.LoadDef<Reaction>("Reaction");
+                    this.RequirementsNew.LoadZip(tag["Materials"]);
+                    return this;
+                }
+                public void Write(BinaryWriter w)
+                {
+                    this.Product.Write(w);
+                    this.Reaction.Write(w);
+                    this.RequirementsNew.WriteNew(w, k => w.Write(k), v => v.Write(w));
+                }
+
+                public ISerializable Read(BinaryReader r)
+                {
+                    this.Product = GameObject.Create(r);
+                    this.Reaction = r.ReadDef<Reaction>();
+                    this.RequirementsNew.ReadNew(r, r => r.ReadString(), r => new ObjectAmount().Read(r) as ObjectAmount);
+                    return this;
+                }
             }
         }
-
     }
 }

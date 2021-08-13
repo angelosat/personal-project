@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
+using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    public class ObjectAmount : ISaveable
+    public class ObjectAmount : ISaveable, ISerializable
     {
         TargetArgs ObjectTarget;
         public GameObject Object
@@ -10,12 +12,12 @@ namespace Start_a_Town_
             get { return this.ObjectTarget.Object; }
             set { this.ObjectTarget = new TargetArgs(value); }
         }
-        int _Amount;
+        int _amount;
         public int Amount
         {
             get
             {
-                return this._Amount;
+                return this._amount;
             }
             set
             {
@@ -23,7 +25,7 @@ namespace Start_a_Town_
                     throw new Exception();
                 if (value > this.Object.StackMax)
                     throw new Exception();
-                this._Amount = Math.Max(0, value);
+                this._amount = Math.Max(0, value);
             }
         }
         public ObjectAmount()
@@ -55,7 +57,7 @@ namespace Start_a_Town_
         public ISaveable Load(SaveTag tag)
         {
             tag.TryGetTag("Object", t => this.ObjectTarget = new TargetArgs(t));
-            tag.TryGetTagValue<int>("Amount", t => this._Amount = t);
+            tag.TryGetTagValue<int>("Amount", t => this._amount = t);
             return this;
         }
         public override string ToString()
@@ -66,6 +68,19 @@ namespace Start_a_Town_
         internal void ResolveReferences(INetwork net)
         {
             this.ObjectTarget.Map = net.Map;
+        }
+
+        public void Write(BinaryWriter w)
+        {
+            this.ObjectTarget.Write(w);
+            w.Write(this._amount);
+        }
+
+        public ISerializable Read(BinaryReader r)
+        {
+            this.ObjectTarget = TargetArgs.Read(Network.CurrentNetwork, r);
+            this._amount = r.ReadInt32();
+            return this;
         }
     }
 }

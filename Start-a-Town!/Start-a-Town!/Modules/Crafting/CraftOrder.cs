@@ -34,7 +34,7 @@ namespace Start_a_Town_
         CraftMode Mode = CraftMode.XTimes;
 
         public string Name => this.Reaction.Name;
-        string IListable.Label => this.Name;
+        public string Label => this.Reaction.Label;
         public static CraftOrder GetOrder(int id) => References[id];
         public bool IsActive
         {

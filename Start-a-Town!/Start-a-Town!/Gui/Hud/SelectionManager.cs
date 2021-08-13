@@ -65,11 +65,11 @@ namespace Start_a_Town_.UI
 
             this.IconIssues = new IconButton("!") { BackgroundTexture = UIManager.Icon16Background, TooltipFunc = showIssuesTooltip }
                 .Flash(true)
-                .VisibleWhen(() => this.Selectable is TargetArgs t && (t.BlockEntity?.Errors.Any() ?? false)) as IconButton;
+                .VisibleWhen(() => SelectedBlockEntity?.Errors.Any() ?? false) as IconButton;
 
-            void showIssuesTooltip(Control tooltip)
+            static void showIssuesTooltip(Control tooltip)
             {
-                if (this.Selectable is TargetArgs t && t.BlockEntity is BlockEntity blentity)
+                if(SelectedBlockEntity is BlockEntity blentity)
                     tooltip.AddControlsBottomLeft(blentity.GetErrorsGui());
             }
 
@@ -586,5 +586,6 @@ namespace Start_a_Town_.UI
         internal static TargetArgs SingleSelected => Instance.MultipleSelected.Count == 1 ? Instance.MultipleSelected.Single() : null;
         internal static Entity SingleSelectedEntity => SingleSelected?.Object as Entity;
         internal static IntVec3? SingleSelectedCell => (SingleSelected is TargetArgs target && target.Type == TargetType.Position) ? target.Global : null;
+        internal static BlockEntity SelectedBlockEntity => (SingleSelected is TargetArgs target && target.Type == TargetType.Position) ? target.BlockEntity : null;
     }
 }

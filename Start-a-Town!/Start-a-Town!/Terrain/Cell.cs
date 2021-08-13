@@ -35,7 +35,6 @@ namespace Start_a_Town_
         {
             this.Block.DrawUI(sb, pos, this.BlockData);
         }
-
         
         public static void Initialize()
         {

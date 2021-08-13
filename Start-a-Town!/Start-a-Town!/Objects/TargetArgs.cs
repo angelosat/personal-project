@@ -48,10 +48,9 @@ namespace Start_a_Town_
 
         public Vector2 Direction;
         public TargetType Type { get; private set; }
-        Vector3 _Global;
+        Vector3 _global;
         public Vector3 Global
         {
-            set { this._Global = value; }
             get
             {
                 if (this.Type == TargetType.Slot)
@@ -59,8 +58,9 @@ namespace Start_a_Town_
                         return this.Slot.Object.Global;
                 if (this.Type == TargetType.Entity)
                     return this.Object.Global;
-                return this._Global;
+                return this._global;
             }
+            set => this._global = value;
         }
         public int EntityID = -1;
         GameObject CachedObject;
@@ -130,7 +130,7 @@ namespace Start_a_Town_
             this._Map = obj.Map;
 
             // struct assignments
-            this._Global = Vector3.Zero;
+            this._global = Vector3.Zero;
             this.Face = Vector3.Zero;
             this.Precise = Vector3.Zero;
             this.Direction = Vector2.Zero;

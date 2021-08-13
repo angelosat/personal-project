@@ -9,15 +9,15 @@ namespace Start_a_Town_.Crafting
     class InteractionCrafting : InteractionToolUse
     {
         CraftOrder Order;
+        Reaction.Product.ProductMaterialPair Product;
+        readonly List<ObjectRefIDsAmount> PlacedObjects = new();
         Progress _progress = new();
-        protected override float Progress => this._progress.Percentage;
-        int _orderID;
-        private int OrderID => this.Order?.ID ?? this._orderID;
 
+        protected override float Progress => this._progress.Percentage;
         protected override float WorkDifficulty => 1;
 
-        readonly List<ObjectRefIDsAmount> PlacedObjects = new();
-        readonly int BaseWorkAmount = 25;
+        int _orderID;
+        private int OrderID => this.Order?.ID ?? this._orderID;
 
         public InteractionCrafting(CraftOrder order, List<ObjectAmount> placedObjects)
             : this()
@@ -41,14 +41,23 @@ namespace Start_a_Town_.Crafting
         {
             return new InteractionCrafting(this.Order, this.PlacedObjects);
         }
-
-        GameObject ProduceWithMaterialsOnTopNew(Actor a, Vector3 global, CraftOrder order)
+        protected override void Init()
+        {
+            var actor = this.Actor;
+            var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
+            this.Product = this.Order.Reaction.Products.First().Make(actor, this.Order.Reaction, ingr);
+            this._progress.Max = this.Product.WorkAmount;
+            this._progress.Max.ToConsole();
+        }
+        GameObject ProduceWithMaterialsOnTopNew(Actor a, Vector3 global)
         {
             var actor = a as Actor;
-            var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
-
-            var reaction = order.Reaction;
-            var product = reaction.Products.First().Make(actor, reaction, ingr);
+            var product = this.Product;
+            var reaction = this.Order.Reaction;
+            var order = this.Order;
+            //var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
+            //var reaction = order.Reaction;
+            //var product = reaction.Products.First().Make(actor, reaction, ingr);
             var skillAwardAmount = 100;
             actor.AwardSkillXP(reaction.CraftSkill, skillAwardAmount);
 
@@ -104,14 +113,14 @@ namespace Start_a_Town_.Crafting
 
         protected override void ApplyWork(float workAmount)
         {
-            this._progress.Value += workAmount * BaseWorkAmount;// 25;
+            this._progress.Value += workAmount;// 25;
         }
 
         protected override void Done()
         {
             var a = this.Actor;
             var t = this.Target;
-            var product = ProduceWithMaterialsOnTopNew(a, t.Global, this.Order);
+            var product = this.ProduceWithMaterialsOnTopNew(a, t.Global);
             if (a.Net is Server)
             {
                 var task = a.CurrentTask;

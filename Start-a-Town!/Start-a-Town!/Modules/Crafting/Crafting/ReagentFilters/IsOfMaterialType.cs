@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Start_a_Town_.Components.Crafting
+namespace Start_a_Town_
 {
     class IsOfMaterialType : Reaction.Reagent.ReagentFilter
     {

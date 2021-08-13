@@ -1,4 +1,4 @@
-﻿namespace Start_a_Town_.Components.Crafting
+﻿namespace Start_a_Town_
 {
     class IsOfMaterial : Reaction.Reagent.ReagentFilter
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Start_a_Town_.Components.Crafting
+namespace Start_a_Town_
 {
     partial class Reaction
     {
@@ -45,7 +45,10 @@ namespace Start_a_Town_.Components.Crafting
                         //throw new Exception("leftover materials in reaction"); 
                     }
                 }
+
+                public int WorkAmount => this.Reaction.GetWorkAmount(this.RequirementsNew);
             }
         }
+
     }
 }

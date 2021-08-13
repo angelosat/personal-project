@@ -1,14 +1,15 @@
 ﻿using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Start_a_Town_.Components.Crafting
+namespace Start_a_Town_
 {
     partial class Reaction : Def, IListable
     {
         static int _IDSequence = 0;
         static public int GetNextID() => _IDSequence++;
-        
+
         static Dictionary<int, Reaction> _Dictionary;
         public static Dictionary<int, Reaction> Dictionary => _Dictionary ??= new Dictionary<int, Reaction>();
         public float Fuel;
@@ -41,7 +42,7 @@ namespace Start_a_Town_.Components.Crafting
             this.ValidWorkshops = sites.ToList();
             this.Labor = labor;
         }
-      
+
         static public int Register(Reaction reaction)
         {
             var id = GetNextID();
@@ -74,7 +75,7 @@ namespace Start_a_Town_.Components.Crafting
             this.Reagents.Add(new Reagent(ingredientName, ingredient));
             return this;
         }
-      
+
         public Reaction AddProduct(IEnumerable<Product> products)
         {
             foreach (var p in products)
@@ -99,19 +100,35 @@ namespace Start_a_Town_.Components.Crafting
         {
             Dictionary.Add(recipe.ID, recipe);
         }
-      
+
         static public List<IsWorkstation.Types> CanBeMadeAt(params IsWorkstation.Types[] blocks)
         {
             return new List<IsWorkstation.Types>(blocks);
         }
         static public void Initialize()
         {
-           
+
         }
 
         public Control GetListControlGui()//Action<IListable> callback)
         {
             return new Label(this.Label);//, () => callback(this));
+        }
+        int BaseWork = 100;
+        readonly List<(string name, WorkAmountGetter getter)> WorkGetters = new();
+        internal delegate int WorkAmountGetter(int baseAmount, GameObject material);
+        internal Reaction GetWorkRequiredFromMaterial(string materialName, WorkAmountGetter workGetter)
+        {
+            this.WorkGetters.Add((materialName, workGetter));
+            return this;
+        }
+
+        private int GetWorkAmount(Dictionary<string, ObjectAmount> ingredients)
+        {
+            var work = this.BaseWork;
+            foreach(var (material, getter) in this.WorkGetters)
+                work = getter(work, ingredients[material].Object);
+            return work;
         }
     }
 }

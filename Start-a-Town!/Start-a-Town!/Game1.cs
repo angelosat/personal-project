@@ -161,7 +161,7 @@ namespace Start_a_Town_
 
             Block.Initialize();
 
-            Start_a_Town_.Components.Crafting.Reaction.Initialize();
+            Reaction.Initialize();
           
             Cell.Initialize();
 

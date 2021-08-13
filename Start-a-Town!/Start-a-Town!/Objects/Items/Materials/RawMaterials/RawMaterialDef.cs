@@ -120,8 +120,8 @@ namespace Start_a_Town_
                     .SetAllow(MaterialTypeDefOf.Wood, true)
                     .SetAllow(Logs, true)
                     .SetAllow(Scraps, true))
-                .AddProduct(new Reaction.Product(Planks).GetMaterialFromIngredient("Base")));
-
+                .AddProduct(new Reaction.Product(Planks).GetMaterialFromIngredient("Base"))
+                .GetWorkRequiredFromMaterial("Base", (work, obj) => work * obj.PrimaryMaterial.Density));
         }
 
         static RawMaterialDef()

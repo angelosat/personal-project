@@ -4,8 +4,9 @@ namespace Start_a_Town_
 {
     public class Plant : Entity
     {
-        private PlantComponent _PlantComponent;
-        public PlantComponent PlantComponent => this._PlantComponent ??= this.GetComponent<PlantComponent>();
+        private PlantComponent _plantComponent;
+        [InspectorHidden]
+        public PlantComponent PlantComponent => this._plantComponent ??= this.GetComponent<PlantComponent>();
       
         public override GameObject Create()
         {

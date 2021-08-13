@@ -1,20 +1,26 @@
-﻿using Start_a_Town_.Blocks;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class BlockEntityCompCollection : ICollection<BlockEntityComp>
+    public class BlockEntityCompCollection : Inspectable, ICollection<BlockEntityComp>
     {
-        readonly BlockEntity Parent;
+        //readonly BlockEntity Parent;
         readonly Collection<BlockEntityComp> Comps = new();
 
-        public BlockEntityCompCollection(BlockEntity parent)
+        public override IEnumerable<(string item, object value)> Inspect()
         {
-            this.Parent = parent;
+            foreach (var c in this.Comps)
+                foreach (var i in c.Inspect())
+                    yield return i;
         }
+
+        //public BlockEntityCompCollection(BlockEntity parent)
+        //{
+        //    this.Parent = parent;
+        //}
 
         public int Count => ((ICollection<BlockEntityComp>)this.Comps).Count;
 
@@ -37,7 +43,7 @@ namespace Start_a_Town_
 
         public void Add(BlockEntityComp item)
         {
-            item.Parent = this.Parent;
+            //item.Parent = this.Parent;
             ((ICollection<BlockEntityComp>)this.Comps).Add(item);
         }
 
@@ -72,6 +78,23 @@ namespace Start_a_Town_
         }
     }
     public class BlockEntityCompCollection<T> : List<T> where T : IBlockEntityComp
+    {
+        public virtual SaveTag Save(string name)
+        {
+            var tag = new SaveTag(SaveTag.Types.Compound, name);
+            if (!this.Any())
+                return tag;
+            foreach (var c in this)
+                tag.Add(c.Save(c.GetType().FullName));
+            return tag;
+        }
+        public virtual void Load(SaveTag tag)
+        {
+            foreach (var c in this)
+                tag.TryGetTag(c.GetType().FullName, ct => c.Load(ct));
+        }
+    }
+    public class BlockEntityCompCollectionNew : List<BlockEntityComp> 
     {
         public virtual SaveTag Save(string name)
         {

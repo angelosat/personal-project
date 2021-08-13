@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -13,6 +11,8 @@ namespace Start_a_Town_
         public BlockEntity Parent;
         public MapBase Map => this.Parent.Map;
         public IntVec3 Global => this.Parent.OriginGlobal;
+        public override string Label => this.Name;
+        public abstract string Name { get; }
         public virtual void OnSpawned(BlockEntity entity, MapBase map, IntVec3 global) { }
         public virtual void Draw(Camera camera, MapBase map, IntVec3 global) { }
         public virtual void DrawUI(SpriteBatch sb, Camera camera) { }
@@ -44,7 +44,10 @@ namespace Start_a_Town_
 
         internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
-            var list = new ListBoxObservable<string, GroupBox>(this.Errors, e => new GroupBox().AddControlsLineWrap(UI.Label.ParseNewNew(e)));// new UI.Label(e));
+            //var list = new ListBoxObservable<string, GroupBox>(this.Errors, e => new GroupBox().AddControlsLineWrap(UI.Label.ParseNewNew(e)));// new UI.Label(e));
+            //var list = new ListBoxObservable<string, GroupBox>(this.Errors, e => new GroupBox().AddControlsLineWrap(UI.Label.ParseBest(e)));// new UI.Label(e));
+            var list = new ListBoxObservable<string, Label>(this.Errors, e => new UI.Label(e) { TextColor = Color.OrangeRed, Font = UIManager.FontBold });
+
             info.AddInfo(list);
         }
 

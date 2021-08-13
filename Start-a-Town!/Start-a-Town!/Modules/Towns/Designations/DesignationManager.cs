@@ -186,7 +186,7 @@ namespace Start_a_Town_
             if (this.Town.Net is Server)
                 return;
             var selectedCells = SelectionManager.GetSelectedCells();
-            var fromblockentities = selectedCells.Select(this.Map.GetBlockEntity).OfType<Blocks.BlockEntity>().Select(b => b.OriginGlobal);
+            var fromblockentities = selectedCells.Select(this.Map.GetBlockEntity).OfType<BlockEntity>().Select(b => b.OriginGlobal);
             selectedCells = selectedCells.Concat(fromblockentities).Distinct();
             
             var areTask = selectedCells.Where(e => this.Designations.Values.Any(t => t.Contains(e)));

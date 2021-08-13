@@ -7,6 +7,7 @@ namespace Start_a_Town_
     [Obsolete]
     class BlockEntityCompDeconstructible : BlockEntityComp
     {
+        public override string Name { get; } = "Deconstructible";
         public ItemMaterialAmount[] Materials = new ItemMaterialAmount[1] { new ItemMaterialAmount(RawMaterialDef.Logs, MaterialDefOf.Human, 2) };
         internal override void IsMadeFrom(ItemMaterialAmount[] itemDefMaterialAmounts)
         {

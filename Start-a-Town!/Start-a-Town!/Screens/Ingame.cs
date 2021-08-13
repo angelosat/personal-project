@@ -117,18 +117,6 @@ namespace Start_a_Town_
                 GetMap().Camera.TopSliceChanged = true;
                 this.Hud.Chat.Write(Log.EntryTypes.System, string.Format("draw server: {0}", DrawServer));
             }
-            if (pressed.Contains(GlobalVars.KeyBindings.DebugQuery))
-            {
-                var target = Controller.Instance.Mouseover.Target;
-                if (target != null)
-                {
-                    if (target.Type == TargetType.Entity)
-                    {
-                        var win = new DebugQueryWindow(target.Object);
-                        win.Show();
-                    }
-                }
-            }
         }
     }
 }

@@ -13,6 +13,44 @@ namespace Start_a_Town_
 {
     public class Actor : Entity
     {
+        MobileComponent _cachedMobile;
+        [InspectorHidden]
+        public MobileComponent Mobile => this._cachedMobile ??= this.GetComponent<MobileComponent>();
+
+        private NpcSkillsComponent _skills;
+        [InspectorHidden]
+        internal NpcSkillsComponent Skills => _skills ??= this.GetComponent<NpcSkillsComponent>();
+
+        private AttributesComponent _attributes;
+        [InspectorHidden]
+        internal AttributesComponent Attributes => _attributes ??= this.GetComponent<AttributesComponent>();
+
+        private NpcComponent _npc;
+        [InspectorHidden]
+        internal NpcComponent Npc => _npc ??= this.GetComponent<NpcComponent>();
+
+        PossessionsComponent _ownership;
+        [InspectorHidden]
+        public PossessionsComponent Ownership => this._ownership ??= this.GetComponent<PossessionsComponent>();
+
+        WorkComponent _work;
+        [InspectorHidden]
+        public WorkComponent Work => this._work ??= this.GetComponent<WorkComponent>();
+
+        AIComponent _ai;
+        [InspectorHidden]
+        public AIComponent AI => this._ai ??= this.GetComponent<AIComponent>();
+
+        private PersonalityComponent _personality;
+        [InspectorHidden]
+        internal PersonalityComponent Personality => _personality ??= this.GetComponent<PersonalityComponent>();
+
+        private MoodComp _mood;
+        [InspectorHidden]
+        public MoodComp Mood => _mood ??= this.GetComponent<MoodComp>();
+
+        public float MoodValue => this.Mood.Mood;
+
         public Actor()
         {
 
@@ -21,30 +59,15 @@ namespace Start_a_Town_
         public override float Height => this.Physics.Height - (this.Mobile.Crouching ? 1 : 0);
         public override bool IsHaulable => false;
 
-        MobileComponent _cachedMobile;
-        public MobileComponent Mobile => this._cachedMobile ??= this.GetComponent<MobileComponent>();
-
         public float Acceleration
         {
             get => this.Mobile.Acceleration;
             set => this.Mobile.Acceleration = value;
         }
 
-        internal NpcSkillsComponent Skills => this.GetComponent<NpcSkillsComponent>();
-        internal AttributesComponent Attributes => this.GetComponent<AttributesComponent>();
-        internal NpcComponent Npc => this.GetComponent<NpcComponent>();
-
-        PossessionsComponent _ownership;
-        public PossessionsComponent Ownership => this._ownership ??= this.GetComponent<PossessionsComponent>();
-
-        WorkComponent _work;
-        public WorkComponent Work => this._work ??= this.GetComponent<WorkComponent>();
         public Interaction CurrentInteraction => this.Work.Task;
-
-        AIComponent _ai;
-        public AIComponent AI => this._ai ??= this.GetComponent<AIComponent>();
-
         AIState _state;
+
         public AIState State => this._state ??= this.GetComponent<AIComponent>().State;
         internal AITask CurrentTask
         {
@@ -56,7 +79,6 @@ namespace Start_a_Town_
             get => this.State.CurrentTaskBehavior;
             set => this.State.CurrentTaskBehavior = value;
         }
-        internal PersonalityComponent Personality => this.GetComponent<PersonalityComponent>();
         public AILog Log => AIState.GetState(this).History;
         public IItemPreferencesManager ItemPreferences => this.GetState().ItemPreferences;
 
@@ -64,7 +86,6 @@ namespace Start_a_Town_
         internal Workplace Workplace => this.Net.Map.Town.ShopManager.GetShop(this); // replaced this.town with this.net.map.town because when the actor leaves the map, this.town returns null
         public bool IsCitizen => this.Net.Map.Town.Agents.Contains(this.RefID); // replaced this.town with this.net.map.town because when the actor leaves the map, this.town returns null
 
-        public float Mood => this.GetComponent<MoodComp>().Mood;
 
         public override string Name => this.Npc.FullName;
         internal override GameObject SetName(string name)

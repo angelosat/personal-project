@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Start_a_Town_.Blocks;
 using Start_a_Town_.Particles;
 
 namespace Start_a_Town_
 {
     class BlockEntityCompParticles : BlockEntityComp
     {
+        public override string Name { get; } = "Particles";
         readonly HashSet<ParticleEmitter> Emitters = new();
         public BlockEntityCompParticles(params ParticleEmitter[] emitters)
         {

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    class MoodComp : EntityComponent, IProgressBar
+    public class MoodComp : EntityComponent, IProgressBar
     {
         readonly ObservableCollection<Moodlet> Moodlets = new();
         const float BaseMood = 50;

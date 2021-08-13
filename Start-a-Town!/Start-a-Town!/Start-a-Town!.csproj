@@ -1031,7 +1031,6 @@
     <Compile Include="Gui\FloatingBar.cs" />
     <Compile Include="Gui\FloatingText.cs" />
     <Compile Include="Gui\UICameraSettings.cs" />
-    <Compile Include="Gui\DebugQueryWindow.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotWithText.cs">
       <SubType>Code</SubType>
     </Compile>

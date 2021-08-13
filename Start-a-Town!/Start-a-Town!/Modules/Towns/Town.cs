@@ -393,7 +393,7 @@ namespace Start_a_Town_
             }
         }
 
-        internal IEnumerable<KeyValuePair<IntVec3, Blocks.BlockEntity>> GetRefuelablesNew()
+        internal IEnumerable<KeyValuePair<IntVec3, BlockEntity>> GetRefuelablesNew()
         {
             var entities = this.Map.GetBlockEntitiesCache();
             var count = entities.Count;

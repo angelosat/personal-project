@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 using System.IO;
@@ -75,7 +74,7 @@ namespace Start_a_Town_
                 return net.Map.GetBlockEntity(global).GetComp<BlockEntityCompRefuelable>();
             }
         }
-      
+        public override string Name { get; } = "Refuelable";
         public Progress Fuel = new();
         readonly ObservableCollection<ItemMaterialAmount> StoredFuelItems = new();
         public StorageSettings Settings { get; } = new();

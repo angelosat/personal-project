@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     public abstract class BlockEntity : Inspectable, IDisposable, IEntityCompContainer<BlockEntityComp>//, IHasChildren
     {
@@ -14,7 +14,9 @@ namespace Start_a_Town_.Blocks
         public MapBase Map;
         public bool Exists => this.Map is not null;
         public IntVec3 OriginGlobal;
-        readonly BlockEntityCompCollection<BlockEntityComp> Comps = new();
+        //public readonly BlockEntityCompCollection Comps = new();
+        //public readonly BlockEntityCompCollection<BlockEntityComp> Comps = new();
+        public readonly BlockEntityCompCollectionNew Comps = new();
 
         public BlockEntity(IntVec3 originGlobal)
         {

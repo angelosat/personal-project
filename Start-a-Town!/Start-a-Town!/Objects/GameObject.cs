@@ -59,8 +59,7 @@ namespace Start_a_Town_
         public GameObject Debug() { return this; }
 
 
-        private DefComponent _defComponent;
-        public DefComponent DefComponent => this._defComponent ??= this.GetComponent<DefComponent>();
+        
         public ItemDef Def;
 
         public Quality Quality { get { return this.DefComponent.Quality; } set { this.DefComponent.Quality = value; } }
@@ -417,11 +416,10 @@ namespace Start_a_Town_
             return this.Map.GetNearbyObjectsNew(this.Global, range, filter).Except(new GameObject[] { this });
         }
 
-        public PositionComponent Transform;
 
         public GameObject()
         {
-            this.Transform = this.AddComponent<PositionComponent>();
+            /*this.Transform = */this.AddComponent<PositionComponent>();
         }
 
         DefComponent _info;
@@ -429,17 +427,29 @@ namespace Start_a_Town_
         {
             return this._info ??= GetComponent<DefComponent>("Info");
         }
-       
+
+        DefComponent _defComponent;
+        [InspectorHidden]
+        public DefComponent DefComponent => this._defComponent ??= this.GetComponent<DefComponent>();
+
+        PositionComponent _transform;
+        [InspectorHidden]
+        public PositionComponent Transform => this._transform ??= this.GetComponent<PositionComponent>();
+
         PhysicsComponent _physicsCached;
+        [InspectorHidden]
         public PhysicsComponent Physics => this._physicsCached ??= this.GetComponent<PhysicsComponent>();
 
         SpriteComponent _spriteCompCached;
+        [InspectorHidden]
         public SpriteComponent SpriteComp => this._spriteCompCached ??= this.GetComponent<SpriteComponent>();
 
         PersonalInventoryComponent _inventoryCached;
+        [InspectorHidden]
         public PersonalInventoryComponent Inventory => this._inventoryCached ??= this.GetComponent<PersonalInventoryComponent>();
 
         ResourcesComponent _resourcesCached;
+        [InspectorHidden]
         public ResourcesComponent Resources => this._resourcesCached ??= this.GetComponent<ResourcesComponent>();
 
         public ComponentCollection Components = new();

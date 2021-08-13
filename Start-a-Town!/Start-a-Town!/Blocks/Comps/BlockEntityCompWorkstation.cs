@@ -5,14 +5,16 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
     public class BlockEntityCompWorkstation : BlockEntityComp
     {
-        static string OperatingPositionUnreachableString = $"[Operating position unreachable!,{Color.Orange}]";
+        public override string Name { get; } = "Workstation";
+        static readonly string OperatingPositionUnreachableString = $"Operating position unreachable";
+        //static string OperatingPositionUnreachableString = $"[Operating position unreachable!,{Color.Orange}]";
+        //static string OperatingPositionUnreachableString = $"[text='Operating position unreachable!' color='{Color.Orange}']";
         public bool OperatingPositionUnreachable;
 
         readonly ObservableCollection<CraftOrder> _orders = new();

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_
 {
     class BlockEntityLuminance : BlockEntityComp
     {
+        public override string Name { get; } = "Lightsource";
         readonly IPowerSource PowerSource;
         readonly byte Intensity;
         readonly int Consumption;

@@ -20,7 +20,7 @@ namespace Start_a_Town_
 
             this.Sprite = new PictureBox(actor.Body.RenderIcon(actor, 1)) { LocationFunc = () => this.PictureBoxBox.Center, Anchor = Vector2.One * .5f };
             this.Sprite.MouseThrough = true;
-            this.PictureBoxBox.BackgroundColorFunc = () => Color.Lerp(Color.Red * .5f, Color.Lime * .5f, actor.Mood / 100f);
+            this.PictureBoxBox.BackgroundColorFunc = () => Color.Lerp(Color.Red * .5f, Color.Lime * .5f, actor.MoodValue / 100f);
             this.PictureBoxBox.Size = new Rectangle(0, 0, this.Sprite.Width * 2 + padding, this.Sprite.Width * 2 + padding);
 
             this.PictureBoxBox.AddControls(this.Sprite);

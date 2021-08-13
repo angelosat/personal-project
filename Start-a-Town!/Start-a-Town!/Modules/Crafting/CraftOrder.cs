@@ -257,7 +257,7 @@ namespace Start_a_Town_
             return this.Map.Town.CraftingManager.GetOrdersNew(this.Workstation).FindIndex(c => c == this);
         }
 
-        internal bool IsCompletable(Blocks.BlockEntity buildSite)
+        internal bool IsCompletable(BlockEntity buildSite)
         {
             if (this.Reaction.Fuel == 0)
             {

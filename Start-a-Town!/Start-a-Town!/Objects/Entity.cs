@@ -9,16 +9,19 @@ namespace Start_a_Town_
     public class Entity : GameObject
     {
         private SpriteComponent _sprite;
+        [InspectorHidden]
         public SpriteComponent Sprite => this._sprite ??= this.GetComponent<SpriteComponent>();
 
         /// <summary>
         /// here or in tool class?
         /// </summary>
         ToolAbilityComponent _toolComponent;
+        [InspectorHidden]
         public ToolAbilityComponent ToolComponent => this._toolComponent ??= this.GetComponent<ToolAbilityComponent>();
 
 
         GearComponent _gear;
+        [InspectorHidden]
         public GearComponent Gear => this._gear ??= this.GetComponent<GearComponent>();
 
         public override GameObject Create()

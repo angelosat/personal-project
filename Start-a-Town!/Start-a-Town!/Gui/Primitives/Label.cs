@@ -106,13 +106,9 @@ namespace Start_a_Town_.UI
         {
             this.TextFunc = textFunc;
         }
-        //public Label(IDetails obj):this(obj.Label)
-        //{
-        //    this.Active = true;
-        //    this.LeftClickAction = () => throw new NotImplementedException();
-        //}
+        
         public Label(string text) : this(Vector2.Zero, text) { }
-        public Label(object obj) : this(Vector2.Zero, obj?.ToString() ?? "")
+        public Label(object obj)
         {
             if (obj is not null)
             {
@@ -121,9 +117,13 @@ namespace Start_a_Town_.UI
                 {
                     this.Active = true;
                     this.LeftClickAction = () => Inspector.Refresh(objdetails);
-                    this.Text = $"[{this.Text}]";
-                    //this.Text = $"[{objdetails.Label}]";
+                    this.Text = $"[{objdetails.Label}]";
                     this.TextColor = Color.LightBlue;
+                }
+                else
+                {
+                    this.Active = false;
+                    this.Text = obj?.ToString() ?? "null";
                 }
             }
         }
@@ -365,7 +365,7 @@ namespace Start_a_Town_.UI
                 return objEnum.Select(o => new Label(o));
             else
                 return new Label[] { new Label(value) };
-            
+
             //if (value is string str)
             //    return new GroupBox().AddControlsHorizontally(ParseNew(str).ToArray());
             //else if (value is IEnumerable<string> strEnum)
@@ -374,6 +374,89 @@ namespace Start_a_Town_.UI
             //    return new GroupBox().AddControlsHorizontally(objEnum.Select(o => new Label(o)).ToArray());
             //else
             //    return new Label(value);
+        }
+
+        public static IEnumerable<Label> ParseBest(string text)
+        {
+            var posCurrent = 0;
+            int posFrom = 0;
+            do
+            {
+                posFrom = text.IndexOf('[', posCurrent);
+                if (posFrom != -1)
+                {
+                    var posTo = text.IndexOf(']', posFrom + 1);
+                    if (posTo != -1)
+                    {
+                        var token = text.Substring(posFrom + 1, posTo - posFrom - 1);
+                        posCurrent = posTo + 1;
+                        yield return Token.Parse(token).GetLabel();
+                    }
+                }
+                else
+                {
+                    var plainText = text.Substring(posCurrent, text.Length - posCurrent);
+                    foreach (var i in plainText.Split(' '))
+                        if (!i.IsNullEmptyOrWhiteSpace())
+                            yield return new Label(i);
+                }
+            } while (posFrom != -1);
+        }
+
+        struct Token
+        {
+            public string Text;
+            public Color Color;
+
+            public Label GetLabel()
+            {
+                return new Label(this.Text) { TextColor = this.Color };
+            }
+
+            public Token(string value, IEnumerable<(string, string)> atts) : this()
+            {
+                var dic = atts.ToDictionary(i => i.Item1, i => i.Item2);
+                this.Text = value.ToString();
+                if (dic.TryGetValue("color", out var item))
+                    ColorHelper.TryParseColor(item, out this.Color);
+                else
+                    this.Color = UIManager.DefaultTextColor;
+            }
+
+            Token(IEnumerable<(string, string)> atts) : this()
+            {
+                var dic = atts.ToDictionary(i => i.Item1, i => i.Item2);
+
+                if (dic.TryGetValue("text", out var text))
+                    this.Text = text.ToString();
+                else
+                    this.Text = "";
+
+                if (dic.TryGetValue("color", out var col))
+                    ColorHelper.TryParseColor(col, out this.Color);
+                else
+                    this.Color = UIManager.DefaultTextColor;
+            }
+
+            public static Token Parse(string text)
+            {
+                var originText = text;
+                List<(string, string)> atts = new();
+                do
+                {
+                    text = text.TrimStart(' ');
+                    var nextEqualSignIndex = text.IndexOf('=');
+                    var key = text.Substring(0, nextEqualSignIndex);
+                    text = text.Substring(nextEqualSignIndex + 1, text.Length - nextEqualSignIndex - 1);
+                    var quoteMarksBeginIndex = text.IndexOf('\'', 0);
+                    text = text.Substring(quoteMarksBeginIndex + 1, text.Length - quoteMarksBeginIndex - 1);
+                    var quoteMarksEndIndex = text.IndexOf('\'', 0);
+                    var inner = text.Substring(0, quoteMarksEndIndex);
+                    text = text.Substring(quoteMarksEndIndex + 1, text.Length - quoteMarksEndIndex - 1);
+                    atts.Add((key, inner));
+                } while (text.Length > 0);// (posFrom != -1);
+                return new(atts);
+            }
         }
     }
 }

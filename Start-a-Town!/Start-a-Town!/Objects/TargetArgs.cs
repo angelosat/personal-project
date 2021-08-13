@@ -710,11 +710,16 @@ namespace Start_a_Town_
         }
 
         public Block Block => this.GetBlock();
+        public BlockEntity BlockEntity => this.Map.GetBlockEntity(this.Global);
+        public RegionNode Node => this.Map.Regions.GetNodeAt(this.Global);
+        public Region Region => this.Node?.Region;
+        public RegionRoom RegionRoom => this.Region?.Room;
+
         internal Block GetBlock()
         {
             return this.Map.GetBlock(this.Global);
         }
-        internal Blocks.BlockEntity GetBlockEntity()
+        internal BlockEntity GetBlockEntity()
         {
             return this.Map.GetBlockEntity(this.Global);
         }
@@ -823,8 +828,6 @@ namespace Start_a_Town_
             return new TargetArgs(location.map, location.global);
         }
 
-        public RegionNode Node => this.Map.Regions.GetNodeAt(this.Global);
-        public Region Region => this.Node.Region;
-        public RegionRoom RegionRoom => this.Region.Room;
+       
     }
 }

@@ -4,6 +4,7 @@ namespace Start_a_Town_
 {
     class BlockEntityCompSwitchable : BlockEntityComp
     {
+        public override string Name { get; } = "Switchable";
         public bool SwitchedOn { get; private set; } = true;
         public bool IsSwitchedOn()
         {

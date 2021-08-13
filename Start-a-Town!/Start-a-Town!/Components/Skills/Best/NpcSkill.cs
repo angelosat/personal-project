@@ -45,7 +45,7 @@ namespace Start_a_Town_
         {
             var actor = a.Parameters[0] as GameObject;
             var skill = (string)a.Parameters[1];
-            FloatingText.Manager.Create(actor, string.Format("{0} increased!", skill), ft => ft.Font = UIManager.FontBold);
+            FloatingText.Manager.Create(actor, $"{skill} increased!", ft => ft.Font = UIManager.FontBold);
         }
 
         public SaveTag Save(string name = "")
@@ -59,8 +59,7 @@ namespace Start_a_Town_
         public ISaveable Load(SaveTag tag)
         {
             tag.TryGetTagValue("Level", out this.Level);
-            //tag.TryGetTagValue<int>("CurrentXP", out this.CurrentXP);
-            tag.TryGetTagValue<int>("CurrentXP", v=> this.CurrentXP = (float)v);
+            tag.TryGetTagValue("CurrentXP", out this.CurrentXP);
             return this;
         }
 

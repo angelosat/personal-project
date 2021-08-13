@@ -21,6 +21,14 @@ namespace Start_a_Town_
             this.Name = $"{this.GetType().Name}:{name.Replace(" ", "")}";
             this.Name.ToConsole();
         }
+        /// <summary>
+        /// TODO use attribute
+        /// </summary>
+        /// <param name="defOfType"></param>
+        public static void Register(Type defOfType)
+        {
+            Register(defOfType.GetFields().Select(f => f.GetValue(null) as Def));
+        }
         public static void Register(IEnumerable<Def> defs)
         {
             foreach (var d in defs)

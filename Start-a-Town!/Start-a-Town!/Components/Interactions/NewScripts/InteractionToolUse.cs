@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
-using System;
 using System.Collections.Generic;
 
 namespace Start_a_Town_
@@ -17,7 +16,6 @@ namespace Start_a_Town_
         {
             var a = this.Actor;
             var t = this.Target;
-            //this.ToolUse = this.GetToolUse();
             this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);
             this.Init();
             var particleColor = this.GetParticleColor();
@@ -44,15 +42,13 @@ namespace Start_a_Town_
         {
             var a = this.Actor;
             var t = this.Target;
-            if (a.Net is Net.Client)
+            if (a.Net is Net.Client && this.ParticleRects is not null)
             {
                 this.EmitterStrike.Emit(ItemContent.LogsGrayscale.AtlasToken.Atlas.Texture, this.ParticleRects, Vector3.Zero);
                 a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
             }
-            var nextspeed = StatDefOf.WorkSpeed.GetValue(a);
-            this.Animation.Speed = nextspeed;
-            var toolEffect = this.GetToolEffectiveness();
-            //float amount = GetWorkAmount(toolEffect);
+            this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);
+            var toolEffect = GetToolEffectiveness();
             var amount = toolEffect / WorkDifficulty;
             this.ApplyWork(amount);
             var skill = this.GetSkill();
@@ -63,8 +59,7 @@ namespace Start_a_Town_
             this.Done();
             this.Finish();
         }
-
-        protected float GetToolEffectiveness()
+        protected virtual float GetToolEffectiveness()
         {
             if (this.Actor.Gear.GetGear(GearType.Mainhand) is Tool tool && tool.ToolComponent.Props.Ability.Def == this.GetToolUse())
                 return tool.GetStat(StatDefOf.ToolEffectiveness);

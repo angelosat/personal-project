@@ -114,7 +114,7 @@ namespace Start_a_Town_
         static void InitRecipes()
         {
             Reaction.Register(new Reaction(
-                "Make Planks new", SkillDefOf.Carpentry)
+                "Make Planks new", SkillDefOf.Carpentry, JobDefOf.Carpenter)
                 .AddBuildSite(IsWorkstation.Types.Carpentry)
                 .AddIngredient(new Ingredient("Base")
                     .SetAllow(MaterialTypeDefOf.Wood, true)

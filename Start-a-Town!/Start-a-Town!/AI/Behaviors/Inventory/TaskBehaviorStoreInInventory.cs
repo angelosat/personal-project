@@ -12,7 +12,7 @@ namespace Start_a_Town_
             var index = TargetIndex.A;
             yield return new BehaviorGetAtNewNew(index, PathingSync.FinishMode.Any);
             yield return new BehaviorInteractionNew(index, () => new InteractionHaul(this.Actor.CurrentTask.GetAmount(index)));
-            yield return new BehaviorInteractionNew(index, ()=>new InteractionStoreHauled());
+            yield return new BehaviorInteractionNew(index, () => new InteractionStoreHauled());
         }
         protected override bool InitExtraReservations()
         {

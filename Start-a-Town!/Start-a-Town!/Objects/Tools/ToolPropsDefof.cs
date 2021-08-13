@@ -1,5 +1,6 @@
 ﻿namespace Start_a_Town_
 {
+    [EnsureStaticCtorCall]
     static class ToolPropsDefof
     {
         public static readonly ToolProps Shovel = new("Shovel")
@@ -56,5 +57,10 @@
             Skill = SkillDefOf.Argiculture,
             AssociatedJobs = new() { JobDefOf.Farmer }
         };
+        static ToolPropsDefof()
+        {
+            Def.Register(typeof(ToolPropsDefof));
+        }
+        public static void Init() { }
     }
 }

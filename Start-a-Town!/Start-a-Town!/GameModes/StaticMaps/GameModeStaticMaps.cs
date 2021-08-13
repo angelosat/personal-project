@@ -43,13 +43,14 @@ namespace Start_a_Town_.Core
             // TODO: store the map reference here? or pass something like a game state as an argument so i can select what to save?
             var map = Server.Instance.Map as StaticMap;
             DialogInput getSaveName = null;
-            var box = new GroupBox();
             ScrollableBoxNewNew groupBox = null;
-            var table = new TableObservable<FileInfo>();
+            var box = new GroupBox();
+            var overwriteBtnWidth = Button.GetWidth(UIManager.Font, "Overwrite");
+            var table = new Table<FileInfo>();
             table
                 .AddColumn("filename", 256, f => new Label(Path.GetFileNameWithoutExtension(f.Name)))
                 .AddColumn("datetime", 160, f => new Label(f.CreationTime.ToString("R")))
-                .AddColumn("overwrite", Button.GetWidth(UIManager.Font, "Overwrite"), f => new Button("Overwrite") { LeftClickAction = () => saveNew(Path.GetFileNameWithoutExtension(f.Name)) }.ShowOnParentFocus(true))
+                .AddColumn("overwrite", overwriteBtnWidth, f => new Button("Overwrite") { LeftClickAction = () => saveNew(Path.GetFileNameWithoutExtension(f.Name)) }.ShowOnParentFocus(true))
                 .AddColumn("delete", 16, f => IconButton.CreateCloseButton().SetLeftClickAction(b => SaveFile.Delete(f, () => table.RemoveItem(f))).ShowOnParentFocus(true))
                 ;
 
@@ -63,8 +64,7 @@ namespace Start_a_Town_.Core
 
             box.AddControlsVertically(
                 tablePanel, 
-                //table,
-                new Button("Create new save", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
+                new Button("Create new save file", tablePanel.Width) { LeftClickAction = delegate { getSaveName.ShowDialog(); } });
 
             box.ToWindow("Save", true, false).ShowDialog();
 

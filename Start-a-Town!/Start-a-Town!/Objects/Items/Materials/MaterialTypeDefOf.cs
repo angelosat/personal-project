@@ -21,7 +21,7 @@ namespace Start_a_Town_
 
         static MaterialTypeDefOf()
         {
-            Def.Register(typeof(MaterialTypeDefOf).GetFields().Select(f => f.GetValue(null) as Def));
+            Def.Register(typeof(MaterialTypeDefOf));
         }
     }
 }

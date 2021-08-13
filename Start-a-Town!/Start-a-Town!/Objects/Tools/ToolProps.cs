@@ -43,13 +43,8 @@ namespace Start_a_Town_
         }
         internal static void Init()
         {
-            Register(ToolPropsDefof.Shovel);
-            Register(ToolPropsDefof.Axe);
-            Register(ToolPropsDefof.Hammer);
-            Register(ToolPropsDefof.Handsaw);
-            Register(ToolPropsDefof.Hoe);
-            Register(ToolPropsDefof.Pickaxe);
-
+            
+            ToolPropsDefof.Init();
             foreach (var toolProp in GetDefs<ToolProps>())
             {
                 var obj = toolProp.Create();

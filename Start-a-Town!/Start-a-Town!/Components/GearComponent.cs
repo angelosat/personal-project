@@ -139,6 +139,8 @@ namespace Start_a_Town_
 
         public static bool EquipToggle(Actor actor, Entity item)
         {
+            if (item is null)
+                return true;
             if (actor.IsEquipping(item))
             {
                 //unequip

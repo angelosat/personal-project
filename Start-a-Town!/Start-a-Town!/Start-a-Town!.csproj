@@ -188,7 +188,7 @@
     <Compile Include="Animations\AnimationExtensions.cs" />
     <Compile Include="Blocks\Workstations\BlockSmelteryEntity.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionChop.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionMineDig.cs" />
+    <Compile Include="Components\Interactions\NewScripts\InteractionBreakBlock.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionMiningDigging.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionToolUse.cs" />
     <Compile Include="Components\Inventory\ContainerList.cs" />

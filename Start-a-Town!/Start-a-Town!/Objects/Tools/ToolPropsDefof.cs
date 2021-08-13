@@ -8,6 +8,7 @@
             SpriteHandle = ItemContent.ShovelHandle,
             SpriteHead = ItemContent.ShovelHead,
             Ability = new ToolUse(ToolUseDefOf.Digging, 5),
+            Skill = SkillDefOf.Digging,
             AssociatedJobs = new() { JobDefOf.Digger }
         };
         public static readonly ToolProps Axe = new("Axe")
@@ -16,6 +17,7 @@
             SpriteHandle = ItemContent.AxeHandle,
             SpriteHead = ItemContent.AxeHead,
             Ability = new ToolUse(ToolUseDefOf.Chopping, 5),
+            Skill = SkillDefOf.Plantcutting,
             AssociatedJobs = new() { JobDefOf.Lumberjack }
         };
         public static readonly ToolProps Hammer = new("Hammer")
@@ -24,6 +26,7 @@
             SpriteHandle = ItemContent.HammerHandle,
             SpriteHead = ItemContent.HammerHead,
             Ability = new ToolUse(ToolUseDefOf.Building, 5),
+            Skill = SkillDefOf.Construction,
             AssociatedJobs = new() { JobDefOf.Builder }
         };
         public static readonly ToolProps Pickaxe = new("Pickaxe")
@@ -32,6 +35,7 @@
             SpriteHandle = ItemContent.PickaxeHandle,
             SpriteHead = ItemContent.PickaxeHead,
             Ability = new ToolUse(ToolUseDefOf.Mining, 5),
+            Skill = SkillDefOf.Mining,
             AssociatedJobs = new() { JobDefOf.Miner }
         };
         public static readonly ToolProps Handsaw = new("Handsaw")
@@ -40,6 +44,7 @@
             SpriteHandle = ItemContent.HandsawHandle,
             SpriteHead = ItemContent.HandsawHead,
             Ability = new ToolUse(ToolUseDefOf.Carpentry, 5),
+            Skill = SkillDefOf.Carpentry,
             AssociatedJobs = new() { JobDefOf.Carpenter }
         };
         public static readonly ToolProps Hoe = new("Hoe")
@@ -48,6 +53,7 @@
             SpriteHandle = ItemContent.HoeHandle,
             SpriteHead = ItemContent.HoeHead,
             Ability = new ToolUse(ToolUseDefOf.Argiculture, 5),
+            Skill = SkillDefOf.Argiculture,
             AssociatedJobs = new() { JobDefOf.Farmer }
         };
     }

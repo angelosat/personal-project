@@ -6,10 +6,9 @@ namespace Start_a_Town_
 {
     public static class StatDefOf
     {
-        public static readonly StatNewDef MaxHaulWeight = new("MaxHaulWeight", a => a.GetAttribute(AttributeDef.Strength)?.Level ?? 0)
+        public static readonly StatNewDef MaxHaulWeight = new("Max Haul Weight", a => a.GetAttribute(AttributeDef.Strength)?.Level ?? 0)
         {
             Description = "Exceeding the limit will drain stamina",
-            Label = "Haul weight limit",
         };
         public static readonly StatNewDef Encumberance = new(
             "Encumberance",
@@ -25,17 +24,15 @@ namespace Start_a_Town_
             })
         {
             Description = "Being encumbered affects walking speed.",
-            Label = "Encumberance",
         };
 
-        public static readonly StatNewDef WalkSpeed = new("WalkSpeed")
+        public static readonly StatNewDef WalkSpeed = new("Walk Speed")
         {
             Description = "Speed of walking",
-            Label = "Walk speed",
             Type = StatNewDef.Types.Percentile
         };
 
-        public static readonly StatNewDef StaminaThresholdForWork = new("StaminaThresholdForWork",
+        public static readonly StatNewDef StaminaThresholdForWork = new("Stamina Threshold For Work",
             a =>
             {
                 var actor = a as Actor;
@@ -49,10 +46,9 @@ namespace Start_a_Town_
             })
         {
             Description = "Won't start new tasks if stamina below this percentage.",
-            Label = "Work Stamina Threshold",
         };
 
-        public static readonly StatNewDef MoodChangeRate = new("MoodChangeRate",
+        public static readonly StatNewDef MoodChangeRate = new("Mood Change Rate",
             a =>
             {
                 var actor = a as Actor;
@@ -62,7 +58,6 @@ namespace Start_a_Town_
             })
         {
             Description = "The speed at which mood changes to reach target value.",
-            Label = "Mood change rate",
         };
 
         public static readonly StatNewDef Armor = new("Armor",
@@ -75,30 +70,29 @@ namespace Start_a_Town_
               })
         {
             Description = "Protection against damage.",
-            Label = "Damage mitigation",
             Type = StatNewDef.Types.Scalar
         };
 
 
-        public static readonly StatNewDef ToolEffectiveness = new("ToolEfficiecy",
+        public static readonly StatNewDef ToolEffectiveness = new("Tool Efficiecy",
               a =>
               {
                   var tool = a as Entity;
                   var material = tool.GetMaterial(BoneDefOf.ToolHead);
                   if (material is null)
-                      return 1;
+                      return 1; // is it ever possible for this to be null?
                   var matStrength = material.Density;
-                  var efficiency = tool.Def.ToolProperties?.Ability.Effectiveness ?? tool.GetComponent<ToolAbilityComponent>().Props.Ability.Effectiveness;
+                  var efficiency = //tool.Def.ToolProperties?.Ability.Effectiveness ?? 
+                                    tool.GetComponent<ToolAbilityComponent>().Props.Ability.Effectiveness;
                   var total = (float)efficiency * matStrength;
                   total *= a.Quality.Multiplier;
                   return total;
               })
         {
             Description = "Amount of work produced with each hit of the tool.",
-            Label = "Tool efficiency",
             Type = StatNewDef.Types.Scalar
         };
-        public static readonly StatNewDef ToolSpeed = new("ToolSpeed",
+        public static readonly StatNewDef ToolSpeed = new("Tool Speed",
               a =>
               {
                   var tool = a as Entity;
@@ -114,11 +108,10 @@ namespace Start_a_Town_
               })
         {
             Description = "Determines time between each tool strike.",
-            Label = "Tool speed",
             Type = StatNewDef.Types.Scalar,
             StringFormat = "+##0%"
         };
-        public static readonly StatNewDef WorkSpeed = new("WorkSpeed",
+        public static readonly StatNewDef WorkSpeed = new("Work Speed",
               a =>
               {
                   var actor = a as Actor;
@@ -128,22 +121,19 @@ namespace Start_a_Town_
               })
         {
             Description = "Work speed",
-            Label = "Work speed",
             Type = StatNewDef.Types.Scalar,
             StringFormat = "+##0%"
         };
-        public static readonly StatNewDef WorkEffectiveness = new("WorkEffectiveness",
+        public static readonly StatNewDef WorkEffectiveness = new("Work Effectiveness",
               a =>
               {
                   var actor = a as Actor;
-                  var handDensity = actor.GetMaterial(BoneDefOf.RightHand).Density;
-                  var val = actor.GetEquipmentSlot(GearType.Mainhand)?.GetStat(StatDefOf.ToolEffectiveness) ?? handDensity;
+                  var val = actor.GetEquipmentSlot(GearType.Mainhand)?.GetStat(StatDefOf.ToolEffectiveness) ?? actor.GetMaterial(BoneDefOf.RightHand).Density;
                   return val;
                   //return 1 + val;
               })
         {
             Description = "Work effectiveness",
-            Label = "Work effectiveness",
             Type = StatNewDef.Types.Scalar,
             StringFormat = "+##0"
         };

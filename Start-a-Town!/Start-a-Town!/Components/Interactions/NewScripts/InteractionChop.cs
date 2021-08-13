@@ -6,9 +6,11 @@ namespace Start_a_Town_
 {
     class InteractionChop : InteractionToolUse
     {
-        protected override float Progress => 1 - this.HitPoints.Percentage;
         Resource HitPoints => this.Target.Object.GetResource(ResourceDefOf.HitPoints);
         Plant Plant => this.Target.Object as Plant;
+
+        protected override float WorkDifficulty => this.Plant.PlantComponent.PlantProperties.StemMaterial.Density;
+        protected override float Progress => 1 - this.HitPoints.Percentage;
 
         public InteractionChop() : base("Chopping")
         {
@@ -52,16 +54,6 @@ namespace Start_a_Town_
         protected override ToolUseDef GetToolUse()
         {
             return ToolUseDefOf.Chopping;
-        }
-
-        protected override float GetWorkAmount()
-        {
-            var plant = this.Plant;
-            var plantProps = plant.PlantComponent.PlantProperties;
-            var trunkHardness = plantProps.StemMaterial.Density;
-            var toolEffect = (int)StatDefOf.WorkEffectiveness.GetValue(this.Actor);
-            var amount = toolEffect / (float)trunkHardness;
-            return amount;
         }
     }
 }

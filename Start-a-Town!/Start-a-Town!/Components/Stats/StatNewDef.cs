@@ -24,11 +24,9 @@ namespace Start_a_Town_
 
             public class ExpressionDef : Def
             {
-                public string Label;
                 internal Func<float, float, float> Operator;
                 public ExpressionDef(string name, string label, Func<float, float, float> op) : base(name)
                 {
-                    this.Label = label;
                     this.Operator = op;
                 }
 
@@ -73,7 +71,6 @@ namespace Start_a_Town_
         public enum Types { Scalar, Percentile };
 
         public float BaseValue;
-        public string Label;
         public string Description;
         readonly Func<GameObject, float> Formula;
         public Types Type = Types.Scalar;

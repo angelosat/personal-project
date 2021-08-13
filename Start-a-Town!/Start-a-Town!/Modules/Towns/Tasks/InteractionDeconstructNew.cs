@@ -7,10 +7,12 @@ namespace Start_a_Town_
     class InteractionDeconstructNew : InteractionToolUse
     {
         Progress _progress;
-        protected override float Progress => this._progress.Percentage;
         Cell Cell => this.Actor.Map.GetCell(this.Target.Global);
         Block Block => this.Cell.Block;
         MaterialDef Material => this.Cell.Material;
+
+        protected override float WorkDifficulty => this.Block.WorkAmount;
+        protected override float Progress => this._progress.Percentage;
 
         public InteractionDeconstructNew() : base("Deconstructing")
         {
@@ -56,13 +58,6 @@ namespace Start_a_Town_
         protected override ToolUseDef GetToolUse()
         {
             return ToolUseDefOf.Building;
-        }
-
-        protected override float GetWorkAmount()
-        {
-            var toolEffect = (int)StatDefOf.WorkEffectiveness.GetValue(this.Actor);
-            var amount = toolEffect / this.Block.WorkAmount;
-            return amount;
         }
     }
 }

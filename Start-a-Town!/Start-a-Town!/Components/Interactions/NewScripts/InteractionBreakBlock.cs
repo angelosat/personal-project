@@ -6,16 +6,18 @@ using Start_a_Town_.Particles;
 
 namespace Start_a_Town_
 {
-    class InteractionMineDig : InteractionToolUse
+    class InteractionBreakBlock : InteractionToolUse
     {
         Progress _progress;
-        protected override float Progress => this._progress.Percentage;
         ParticleEmitterSphere EmitterBreak;
         Cell Cell => this.Actor.Map.GetCell(this.Target.Global);
         Block Block => this.Cell.Block;
         MaterialDef Material => this.Cell.Material;
 
-        public InteractionMineDig() : base("MineDig")
+        protected override float WorkDifficulty => this.Material.Density;
+        protected override float Progress => this._progress.Percentage;
+
+        public InteractionBreakBlock() : base("MineDig")
         {
 
         }
@@ -122,14 +124,6 @@ namespace Start_a_Town_
             else if (matType == MaterialTypeDefOf.Stone || matType == MaterialTypeDefOf.Metal)
                 return ToolUseDefOf.Mining;
             throw new Exception();
-        }
-
-        protected override float GetWorkAmount()
-        {
-            var material = this.Material;
-            var toolEffect = (int)StatDefOf.WorkEffectiveness.GetValue(this.Actor);
-            var amount = toolEffect / (float)material.Density;
-            return amount;
         }
     }
 }

@@ -6,16 +6,14 @@ namespace Start_a_Town_
 {
     public class ToolProps : Def, IItemDefVariator
     {
-        public string 
-           // Label,
-            Description;
+        public string Description;
         public ToolUse Ability;
         public HashSet<JobDef> AssociatedJobs = new();
         public Sprite SpriteHandle, SpriteHead;
-        public ToolProps(string name) :base(name)
-            //: base($"{nameof(ToolProps)}:{name}")
+        internal SkillDef Skill;
+
+        public ToolProps(string name) : base(name)
         {
-            //this.Label = name;
         }
         public ToolProps(ToolUse ability)
         {

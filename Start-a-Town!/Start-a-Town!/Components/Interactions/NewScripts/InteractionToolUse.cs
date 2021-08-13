@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
+using System;
 using System.Collections.Generic;
 
 namespace Start_a_Town_
@@ -16,7 +17,7 @@ namespace Start_a_Town_
         {
             var a = this.Actor;
             var t = this.Target;
-            this.ToolUse = this.GetToolUse();
+            //this.ToolUse = this.GetToolUse();
             this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);
             this.Init();
             var particleColor = this.GetParticleColor();
@@ -50,17 +51,29 @@ namespace Start_a_Town_
             }
             var nextspeed = StatDefOf.WorkSpeed.GetValue(a);
             this.Animation.Speed = nextspeed;
-            float amount = GetWorkAmount();
+            var toolEffect = this.GetToolEffectiveness();
+            //float amount = GetWorkAmount(toolEffect);
+            var amount = toolEffect / WorkDifficulty;
             this.ApplyWork(amount);
             var skill = this.GetSkill();
-            a.AwardSkillXP(skill, amount);
+            //if((this.Actor.Gear.GetGear(GearType.Mainhand) as Tool)?.ToolComponent.Props.Skill is SkillDef skill)
+                a.AwardSkillXP(skill, amount);
             if (this.Progress < 1)
                 return;
             this.Done();
             this.Finish();
         }
 
+        protected float GetToolEffectiveness()
+        {
+            if (this.Actor.Gear.GetGear(GearType.Mainhand) is Tool tool && tool.ToolComponent.Props.Ability.Def == this.GetToolUse())
+                return tool.GetStat(StatDefOf.ToolEffectiveness);
+            else
+                return this.Actor.GetMaterial(BoneDefOf.RightHand).Density;
+        }
+
         protected abstract float Progress { get; }
+        protected abstract float WorkDifficulty { get; }
 
         protected virtual void Init() { }
         protected abstract void ApplyWork(float workAmount);
@@ -68,7 +81,6 @@ namespace Start_a_Town_
         protected abstract ToolUseDef GetToolUse();
         protected abstract SkillDef GetSkill();
         protected abstract List<Rectangle> GetParticleRects();
-        protected abstract float GetWorkAmount();
         protected abstract Color GetParticleColor();
     }
 }

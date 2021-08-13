@@ -66,9 +66,10 @@ namespace Start_a_Town_
         }
         public static void DrawFlashingBorder(this Rectangle bounds, SpriteBatch sb)
         {
-            var lerp = (float)Math.Cos(Math.PI * 2 * UIManager.FlashingTimer / 120f);
-            lerp += 1;
-            lerp /= 2;
+            //var lerp = (float)Math.Cos(Math.PI * 2 * UIManager.FlashingTimer / 120f);
+            //lerp += 1;
+            //lerp /= 2;
+            float lerp = UIManager.FlashingValue;
             bounds.DrawHighlightBorder(sb, Color.Lerp(Color.Transparent, Color.White, lerp), Vector2.Zero);
         }
 

@@ -127,10 +127,11 @@ namespace Start_a_Town_.UI
         public void DrawFloating(SpriteBatch sb, Camera camera, Vector3 global, float scale = .5f)
         {
             var bounds = Block.Bounds;
-            var offset = MapBase.IconOffset;
+            var offset = -1 + 2*UIManager.FlashingValue;
+            //var offset = MapBase.IconOffset;
             scale *= camera.Zoom;
             var pos = camera.GetScreenPosition(global) - new Vector2(this.SourceRect.Width, this.SourceRect.Height) * scale / 2; ;
-            pos.Y -= bounds.Height * camera.Zoom;
+            pos.Y -= (bounds.Height / 2) * camera.Zoom ;
             pos.Y += offset * this.SourceRect.Height / 4 * scale;
             this.Draw(sb, pos, scale, alpha: .5f);
         }

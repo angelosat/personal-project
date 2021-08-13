@@ -24,7 +24,7 @@ namespace Start_a_Town_.UI
         public int X => (int)this.ScreenLocation.X;
         public int Y => (int)this.ScreenLocation.Y;
         Control _Parent;
-        public bool Flashing;
+        public bool FlashingBorder, Flashing;
         public Control Parent
         {
             get => this._Parent;
@@ -801,25 +801,27 @@ namespace Start_a_Town_.UI
         }
         public virtual void Draw(SpriteBatch sb, Rectangle viewport)
         {
-            if (this.DrawOnParentFocus)
-                if(!this.Parent?.HasMouseHover ?? false)
-                    return;
+            //if (this.DrawOnParentFocus)
+            //    if(!this.Parent?.HasMouseHover ?? false)
+            if (this.ShowConditions.Any(c => !c(this)))
+                return;
             this.OnBeforeDraw(sb, viewport);
             var c = this.Tint;
             if (this.Texture != null)
             {
                 // TODO: this is no use because if i add something outside the window's client area and the window has autosize, it expands the client area screwing up hittesting
+                var opacity = c * (this.Flashing ? UIManager.FlashingValue : this.Opacity);
                 if (!this.ClipToBounds)
-                    sb.Draw(this.Texture, this.BoundsScreen, null, c * this.Opacity, this.Rotation, this.Origin, SpriteEffects.None, 0);
+                    sb.Draw(this.Texture, this.BoundsScreen, null, opacity, this.Rotation, this.Origin, SpriteEffects.None, 0);
                 else
                 {
                     this.BoundsScreen.Clip(this.Texture.Bounds, viewport, out Rectangle final, out Rectangle source);
-                    sb.Draw(this.Texture, final, source, c * this.Opacity, this.Rotation, this.Origin, SpriteEffects.None, 0);
+                    sb.Draw(this.Texture, final, source, opacity, this.Rotation, this.Origin, SpriteEffects.None, 0);
                     this.OnDrawAction(sb, final);
                 }
             }
             this.OnAfterDraw(sb, viewport);
-            if (this.Flashing)
+            if (this.FlashingBorder)
                 this.BoundsScreen.DrawFlashingBorder(sb);
             foreach (var control in this.Controls)
                 control.Draw(sb, Rectangle.Intersect(control.BoundsScreen, viewport));
@@ -1371,10 +1373,31 @@ namespace Start_a_Town_.UI
             this.OnGameEventAction = onGameEventAction;
             return this;
         }
-        bool DrawOnParentFocus;
-        internal Control ShowOnParentFocus(bool enabled)
+        readonly HashSet<Func<Control, bool>> ShowConditions = new();
+        //bool DrawOnParentFocus;
+        readonly Func<Control, bool> drawOnParentFocusFunc = c => c.Parent?.HasMouseHover ?? true;
+        public Control VisibleWhen(Func<bool> p)
         {
-            this.DrawOnParentFocus = enabled;
+            this.ShowConditions.Add(c => p());
+            return this;
+        }
+        public Control ShowOnParentFocus(bool enabled)
+        {
+            //this.DrawOnParentFocus = enabled;
+            if (enabled && !this.ShowConditions.Contains(drawOnParentFocusFunc))
+                this.ShowConditions.Add(drawOnParentFocusFunc);
+            else if (!enabled && this.ShowConditions.Contains(drawOnParentFocusFunc))
+                this.ShowConditions.Remove(drawOnParentFocusFunc);
+            return this;
+        }
+        public Control Flash(bool enabled)
+        {
+            this.Flashing = enabled;
+            return this;
+        }
+        public Control FlashBorders(bool enabled)
+        {
+            this.FlashingBorder = enabled;
             return this;
         }
         internal Control Box(int w, int h)

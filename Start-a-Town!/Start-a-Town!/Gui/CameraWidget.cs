@@ -1,44 +1,45 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
     class CameraWidget : GroupBox
     {
-        GroupBox BoxRotation = new GroupBox();
-        GroupBox BoxZoom = new GroupBox();
-        IconButton BtnSettings;
-        UICameraSettings Widget;
+        readonly GroupBox BoxRotation = new();
+        readonly GroupBox BoxZoom = new();
+        readonly IconButton BtnSettings;
+        readonly UICameraSettings Widget;
         public CameraWidget(Camera camera)
         {
             this.BackgroundColorFunc = () => Color.Black * .5f;
             IconButton
-                btn_rotleft = new IconButton("↺") { HoverText = "Rotate camera counterclockwise", LeftClickAction = () => camera.RotateCounterClockwise() },
-                btn_rotright = new IconButton("↻") { HoverText = "Rotate camera clockwise", LeftClickAction = () => camera.RotateClockwise() },
-                btn_rotreset = new IconButton("↶") { HoverText = "Reset rotation", LeftClickAction = () => { camera.RotationReset(); } },
-                btn_zoomin = new IconButton("+") { HoverText = "Zoom in", LeftClickAction = () => camera.ZoomIncrease() },
-                btn_zoomreset = new IconButton("●") { HoverText = "Reset zoom", LeftClickAction = () => { camera.ZoomReset(); } },
-                btn_zoomout = new IconButton("-") { HoverText = "Zoom out", LeftClickAction = () => camera.ZoomDecrease() };
+                btn_rotleft = new('↺', camera.RotateCounterClockwise) { HoverText = "Rotate camera counterclockwise" },
+                btn_rotright = new('↻', camera.RotateClockwise) { HoverText = "Rotate camera clockwise" },
+                btn_rotreset = new('↶', camera.RotationReset) { HoverText = "Reset rotation" },
+                btn_zoomin = new('+', camera.ZoomIncrease) { HoverText = "Zoom in" },
+                btn_zoomreset = new('●', camera.ZoomReset) { HoverText = "Reset zoom" },
+                btn_zoomout = new('-', camera.ZoomDecrease) { HoverText = "Zoom out" };
 
             //↶⊘
             this.BoxRotation.AddControlsHorizontally(1, btn_rotleft, btn_rotreset, btn_rotright);
             this.BoxZoom.AddControlsHorizontally(1, btn_zoomin, btn_zoomreset, btn_zoomout);
-            this.AddControlsVertically(1, BoxRotation, BoxZoom);
+            this.AddControlsVertically(1, this.BoxRotation, this.BoxZoom);
 
-            Widget = new UICameraSettings(camera);
-            BtnSettings = new IconButton(Icon.ArrowDown) {
-                LocationFunc = () => BoxZoom.BottomRight,
+            this.Widget = new UICameraSettings(camera);
+            this.BtnSettings = new IconButton(Icon.ArrowDown)
+            {
+                LocationFunc = () => this.BoxZoom.BottomRight,
                 Anchor = Vector2.UnitX,
-                BackgroundTexture = UIManager.Icon16Background, 
+                BackgroundTexture = UIManager.Icon16Background,
                 LeftClickAction = OpenCameraSettings
             };
-            this.AddControls(BtnSettings);
+            this.AddControls(this.BtnSettings);
         }
 
         public void OpenCameraSettings()
         {
-            this.Widget.Location = BtnSettings.ScreenLocation + BtnSettings.Dimensions;
+            this.Widget.Location = this.BtnSettings.ScreenLocation + this.BtnSettings.Dimensions;
             this.Widget.Toggle();
         }
         public override void Draw(SpriteBatch sb, Rectangle viewport)

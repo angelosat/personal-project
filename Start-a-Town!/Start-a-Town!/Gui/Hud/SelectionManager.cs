@@ -15,6 +15,7 @@ namespace Start_a_Town_.UI
         public Label LabelName;
         readonly IconButton IconInfo, IconCenter;
         readonly IconButton IconCycle;
+        readonly IconButton IconIssues;
         static readonly BlockRendererNew Renderer = new(Block.BlockHighlight);
         static SelectionManager()
         {
@@ -62,6 +63,16 @@ namespace Start_a_Town_.UI
                 HoverText = "Cycle targets"
             };
 
+            this.IconIssues = new IconButton("!") { BackgroundTexture = UIManager.Icon16Background, TooltipFunc = showIssuesTooltip }
+                .Flash(true)
+                .VisibleWhen(() => this.Selectable is TargetArgs t && (t.BlockEntity?.Errors.Any() ?? false)) as IconButton;
+
+            void showIssuesTooltip(Control tooltip)
+            {
+                if (this.Selectable is TargetArgs t && t.BlockEntity is BlockEntity blentity)
+                    tooltip.AddControlsBottomLeft(blentity.GetErrorsGui());
+            }
+
             this.BoxIcons = new GroupBox();
             this.PopulateBoxIcons();
 
@@ -95,6 +106,7 @@ namespace Start_a_Town_.UI
         {
             this.BoxIcons.ClearControls();
             this.BoxIcons.AddControls(
+                IconIssues,
                 IconSlice,
                 this.IconCenter,
                 this.IconInfo

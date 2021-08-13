@@ -12,6 +12,7 @@ namespace Start_a_Town_
         public MapBase Map => this.Parent.Map;
         public IntVec3 Global => this.Parent.OriginGlobal;
         public override string Label => this.Name;
+        public ObservableCollection<string> Errors => this.Parent.Errors;
         public abstract string Name { get; }
         public virtual void OnSpawned(BlockEntity entity, MapBase map, IntVec3 global) { }
         public virtual void Draw(Camera camera, MapBase map, IntVec3 global) { }
@@ -46,9 +47,9 @@ namespace Start_a_Town_
         {
             //var list = new ListBoxObservable<string, GroupBox>(this.Errors, e => new GroupBox().AddControlsLineWrap(UI.Label.ParseNewNew(e)));// new UI.Label(e));
             //var list = new ListBoxObservable<string, GroupBox>(this.Errors, e => new GroupBox().AddControlsLineWrap(UI.Label.ParseBest(e)));// new UI.Label(e));
-            var list = new ListBoxObservable<string, Label>(this.Errors, e => new UI.Label(e) { TextColor = Color.OrangeRed, Font = UIManager.FontBold });
+            //var list = new ListBoxObservable<string, Label>(this.Errors, e => new UI.Label(e) { TextColor = Color.OrangeRed, Font = UIManager.FontBold });
 
-            info.AddInfo(list);
+            //info.AddInfo(list);
         }
 
         public virtual void Write(BinaryWriter w)
@@ -79,10 +80,6 @@ namespace Start_a_Town_
         internal virtual void NeighborChanged()
         {
         }
-        protected ObservableCollection<string> Errors = new();
-        //internal virtual IEnumerable<string> GetErrorMessages()
-        //{
-        //    yield break;
-        //}
+
     }
 }

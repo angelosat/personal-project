@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -12,7 +11,7 @@ namespace Start_a_Town_
     public class BlockEntityCompWorkstation : BlockEntityComp
     {
         public override string Name { get; } = "Workstation";
-        static readonly string OperatingPositionUnreachableString = $"Operating position unreachable";
+        static readonly string OperatingPositionUnreachableString = $"Interaction spot blocked";
         //static string OperatingPositionUnreachableString = $"[Operating position unreachable!,{Color.Orange}]";
         //static string OperatingPositionUnreachableString = $"[text='Operating position unreachable!' color='{Color.Orange}']";
         public bool OperatingPositionUnreachable;
@@ -120,15 +119,5 @@ namespace Start_a_Town_
         {
             this.CheckOperatingPositions();
         }
-        public override void DrawUI(SpriteBatch sb, Camera cam)
-        {
-            if(this.OperatingPositionUnreachable)
-                Icon.Cross.DrawFloating(sb, cam, this.Parent.OriginGlobal);
-        }
-        //internal override IEnumerable<string> GetErrorMessages()
-        //{
-        //    if (this.OperatingPositionUnreachable)
-        //        yield return OperatingPositionUnreachableString;
-        //}
     }
 }

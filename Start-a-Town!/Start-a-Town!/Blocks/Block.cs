@@ -828,13 +828,6 @@ namespace Start_a_Town_
         internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             map.GetBlockEntity(vector3)?.GetSelectionInfo(info, map, vector3);
-            //var node = map.Regions.GetNodeAt(vector3);
-            //if (node is null)
-            //    return;
-
-            //info.AddInfo(new Label(node.ToString()));
-            //info.AddInfo(new Label(node.Region.ToString()));
-            //info.AddInfo(new Label(node.Region.Room.ToString()));
         }
 
         internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3)

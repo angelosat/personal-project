@@ -65,9 +65,20 @@ namespace Start_a_Town_.UI
             }
         }
         public static int FlashingTimer { get; private set; }
-        public readonly DialogBlock DialogBlock = new DialogBlock();
 
-        public static Rectangle Bounds => new Rectangle(0, 0, Width, Height);
+        public static float FlashingValue
+        {
+            get
+            {
+                var lerp = (float)Math.Cos(Math.PI * 2 * FlashingTimer / 120f);
+                lerp += 1;
+                lerp /= 2;
+                return lerp;
+            }
+        }
+        public readonly DialogBlock DialogBlock = new();
+
+        public static Rectangle Bounds => new(0, 0, Width, Height);
         public static Vector2 Center => new Vector2(Game1.Bounds.Width, Game1.Bounds.Height) / (2 * Scale);
         //public static int Width => (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
         //public static int Height => (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
@@ -277,6 +288,7 @@ namespace Start_a_Town_.UI
             get { return Controller.Instance.Mouseover.Object as Control; }
             set { Controller.Instance.Mouseover.Object = value; }
         }
+
 
         public void Screen_MouseMove()
         {

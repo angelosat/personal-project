@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Components;
@@ -71,7 +71,7 @@ namespace Start_a_Town_.Blocks
                 var req = product.Requirement;
                 info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Name} {req.Item.Label} {0} / {req.Amount}" });
             }
-            public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera cam, IntVec3 global)
+            protected override void OnDrawUI(SpriteBatch sb, Camera cam, IntVec3 global)
             {
                 if (ToolManager.Instance.ActiveTool != null)
                     if (ToolManager.Instance.ActiveTool.Target != null)

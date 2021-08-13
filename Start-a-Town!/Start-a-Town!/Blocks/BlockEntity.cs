@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -17,6 +18,7 @@ namespace Start_a_Town_
         //public readonly BlockEntityCompCollection Comps = new();
         //public readonly BlockEntityCompCollection<BlockEntityComp> Comps = new();
         public readonly BlockEntityCompCollectionNew Comps = new();
+        public ObservableCollection<string> Errors = new();
 
         public BlockEntity(IntVec3 originGlobal)
         {
@@ -80,6 +82,11 @@ namespace Start_a_Town_
                 c.IsMadeFrom(itemDefMaterialAmounts);
         }
 
+        internal Control GetErrorsGui()
+        {
+            return new ListBoxObservable<string, Label>(this.Errors, e => new UI.Label(e) { TextColor = Color.OrangeRed, Font = UIManager.FontBold });
+        }
+
         internal virtual void Deconstruct(GameObject actor, IntVec3 global)
         {
             foreach (var c in this.Comps)
@@ -139,17 +146,20 @@ namespace Start_a_Town_
             }
         }
 
-        public virtual void Draw(Camera camera, MapBase map, IntVec3 global)
+        public void Draw(Camera camera, MapBase map, IntVec3 global)
         {
             foreach (var comp in this.Comps)
                 comp.Draw(camera, map, global);
         }
-        public virtual void DrawUI(SpriteBatch sb, Camera cam, IntVec3 global)
+        public void DrawUI(SpriteBatch sb, Camera cam, IntVec3 global)
         {
             foreach (var comp in this.Comps)
                 comp.DrawUI(sb, cam);
+            if (this.Errors.Any())
+                Icon.Cross.DrawFloating(sb, cam, this.OriginGlobal);
+            this.OnDrawUI(sb, cam, global);
         }
-
+        protected virtual void OnDrawUI(SpriteBatch sb, Camera cam, IntVec3 global) { }
         internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3)
         {
             foreach (var c in this.Comps)
@@ -190,5 +200,6 @@ namespace Start_a_Town_
             foreach (var comp in this.Comps)
                 comp.NeighborChanged();
         }
+        
     }
 }

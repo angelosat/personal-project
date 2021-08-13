@@ -80,6 +80,7 @@ namespace Start_a_Town_.UI
             else if (this.Icon != null)
                 this.Icon.Draw(sb, this.Dimensions * 0.5f, new Vector2(0.5f));
         }
+
         public override void OnAfterPaint(SpriteBatch sb)
         {
             base.OnAfterPaint(sb);
@@ -90,9 +91,10 @@ namespace Start_a_Town_.UI
         {
             this.Character = character;
         }
-        public IconButton(char character) : this(character.ToString())
+        public IconButton(char character, Action action = null) : this(character.ToString())
         {
             this.Font = UIManager.Symbols;
+            this.LeftClickAction = action ?? this.LeftClickAction;
         }
         public IconButton(Icon icon) : this()
         {

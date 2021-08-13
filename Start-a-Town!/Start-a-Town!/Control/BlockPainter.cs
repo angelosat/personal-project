@@ -108,10 +108,12 @@ namespace Start_a_Town_.PlayerControl
                 return;
 
             var atlastoken = this.Block.GetDefault();
-            var global = this.Target.FaceGlobal;
+            var global = (IntVec3)this.Target.FaceGlobal;
             atlastoken.Atlas.Begin(sb);
             this.Block.DrawPreview(sb, map, global, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
+            foreach (var pos in this.Block.GetOperatingPositions(this.Orientation))
+                cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + pos });
         }
         public override Icon GetIcon()
         {

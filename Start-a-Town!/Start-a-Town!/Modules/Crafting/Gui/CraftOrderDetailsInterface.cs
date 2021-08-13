@@ -1,12 +1,9 @@
 ﻿using Start_a_Town_.Components;
-using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Modules.Crafting;
 using Start_a_Town_.UI;
-using Start_a_Town_.Core;
 using System;
 using System.Linq;
 
-namespace Start_a_Town_.Crafting
+namespace Start_a_Town_
 {
     class CraftOrderDetailsInterface : GroupBox
     {

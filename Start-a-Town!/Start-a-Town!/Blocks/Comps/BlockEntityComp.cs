@@ -1,14 +1,21 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public abstract class BlockEntityComp : IBlockEntityComp, ISerializable
+    public abstract class BlockEntityComp : Inspectable, IBlockEntityComp, ISerializable
     {
         public BlockEntity Parent;
-        public virtual void OnEntitySpawn(BlockEntity entity, MapBase map, IntVec3 global) { }
+        public MapBase Map => this.Parent.Map;
+        public IntVec3 Global => this.Parent.OriginGlobal;
+        public virtual void OnSpawned(BlockEntity entity, MapBase map, IntVec3 global) { }
         public virtual void Draw(Camera camera, MapBase map, IntVec3 global) { }
+        public virtual void DrawUI(SpriteBatch sb, Camera camera) { }
         public virtual void Load(SaveTag tag)
         {
         }
@@ -22,8 +29,8 @@ namespace Start_a_Town_
         {
         }
 
-        public virtual void Tick(BlockEntity entity, MapBase map, IntVec3 global) { }
-        public virtual void Tick(MapBase map, IBlockEntityCompContainer entity) { }
+        public virtual void Tick() { }
+        //public virtual void Tick(MapBase map, IBlockEntityCompContainer entity) { }
 
         internal virtual void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
         {
@@ -35,7 +42,11 @@ namespace Start_a_Town_
 
         internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3) { }
 
-        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3) { }
+        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
+        {
+            var list = new ListBoxObservable<string, GroupBox>(this.Errors, e => new GroupBox().AddControlsLineWrap(UI.Label.ParseNewNew(e)));// new UI.Label(e));
+            info.AddInfo(list);
+        }
 
         public virtual void Write(BinaryWriter w)
         {
@@ -61,5 +72,14 @@ namespace Start_a_Town_
         internal virtual void Deconstruct(GameObject actor, IntVec3 global)
         {
         }
+
+        internal virtual void NeighborChanged()
+        {
+        }
+        protected ObservableCollection<string> Errors = new();
+        //internal virtual IEnumerable<string> GetErrorMessages()
+        //{
+        //    yield break;
+        //}
     }
 }

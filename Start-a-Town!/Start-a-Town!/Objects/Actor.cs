@@ -547,6 +547,5 @@ namespace Start_a_Town_
             this.GetComponent<NpcSkillsComponent>().AwardSkillXP(this, skill, v);
         }
 
-
     }
 }

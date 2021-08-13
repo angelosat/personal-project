@@ -11,7 +11,7 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return string.Format("Global: {0} Region: {1} Links: {2}", this.Global, this.Region.RegionID, this.GetLinks().Count());
+            return $"Global: {this.Global}\nRegion: {this.Region.RegionID}\nLinks: {this.GetLinks().Count()}";
         }
         
         public Region Region;

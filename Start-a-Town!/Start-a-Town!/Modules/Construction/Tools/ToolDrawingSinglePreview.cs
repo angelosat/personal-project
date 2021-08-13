@@ -7,11 +7,13 @@ namespace Start_a_Town_.Modules.Construction
 {
     class ToolDrawingSinglePreview : ToolDrawing
     {
+        private const string _name = "Single";
+
         public override ToolDrawing.Modes Mode
         {
             get { return Modes.Single; }
         }
-        public override string Name => "Single";
+        public override string Name => _name;
         public ToolDrawingSinglePreview()
         {
 

@@ -114,7 +114,7 @@ namespace Start_a_Town_.UI
             this.Draw(sb, UI.UIManager.Mouse + new Vector2(16, 0));
         }
 
-        public void DrawAboveEntity(SpriteBatch sb, Camera camera, GameObject entity, float scale = .5f)
+        public void DrawFloating(SpriteBatch sb, Camera camera, GameObject entity, float scale = .5f)
         {
             var bounds = entity.GetSprite().GetBounds();
             var offset = MapBase.IconOffset;
@@ -124,7 +124,7 @@ namespace Start_a_Town_.UI
             pos.Y += offset * this.SourceRect.Height / 4 * scale;
             this.Draw(sb, pos, scale, alpha: .5f);
         }
-        public void DrawAboveEntity(SpriteBatch sb, Camera camera, Vector3 global, float scale = .5f)
+        public void DrawFloating(SpriteBatch sb, Camera camera, Vector3 global, float scale = .5f)
         {
             var bounds = Block.Bounds;
             var offset = MapBase.IconOffset;

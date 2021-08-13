@@ -67,7 +67,6 @@ namespace Start_a_Town_
                 var w = parent.Map.Net.GetOutgoingStream();
                 w.Write(pCategory);
                 w.Write(parent.OriginGlobal);
-                //category.Write(w);
                 w.Write(category?.Name ?? "");
             }
             private static BlockEntityCompRefuelable getComp(INetwork net, BinaryReader r)
@@ -122,28 +121,12 @@ namespace Start_a_Town_
                 var item = i.Create();
                 map.Net.PopLoot(item, global, Vector3.Zero);
             }
-            //if (map.Net is Net.Client)
-            //    return;
-            //foreach (var oa in this.StoredFuelItems.ToList())
-            //{
-            //    do
-            //    {
-            //        var matEntity = oa.Create();
-            //        var amountToSpawn = Math.Min(oa.Amount, matEntity.StackMax);
-            //        if (amountToSpawn == 0)
-            //            throw new Exception();
-            //        matEntity.StackSize = amountToSpawn;
-            //        oa.Amount -= amountToSpawn;
-            //        map.Net.PopLoot(matEntity, global, Vector3.Zero);
-            //    } while (oa.Amount > 0);
-            //    this.StoredFuelItems.Remove(oa); // just in case
-            //}
         }
         internal override void OnDrop(GameObject actor, GameObject item, TargetArgs target, int quantity)
         {
             this.AddFuelNew(item, quantity);
         }
-        public override void OnEntitySpawn(BlockEntity entity, MapBase map, IntVec3 global)
+        public override void OnSpawned(BlockEntity entity, MapBase map, IntVec3 global)
         {
             var material = map.GetBlockMaterial(global);
             this.Fuel.Value += material.Fuel.Value;
@@ -182,7 +165,7 @@ namespace Start_a_Town_
             };
             bar.TextFunc = () => bar.Percentage.ToString("##0%");
             info.AddInfo(bar);
-            var box = new ScrollableBoxNewNew(150, Label.DefaultHeight * 2, ScrollModes.Vertical);
+            var box = new ScrollableBoxNewNew(150, UI.Label.DefaultHeight * 2, ScrollModes.Vertical);
             var boxcontents = new ListBoxObservable<ItemMaterialAmount>(this.StoredFuelItems);
             box.AddControls(boxcontents);
             info.AddInfo(box);

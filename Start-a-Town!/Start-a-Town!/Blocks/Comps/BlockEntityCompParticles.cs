@@ -20,10 +20,10 @@ namespace Start_a_Town_
             this.Emitters.Add(emitter);
         }
         
-        public override void Tick(BlockEntity entity, MapBase map, IntVec3 global)
+        public override void Tick()
         {
             foreach (var e in this.Emitters)
-                e.Update(map);
+                e.Update(this.Parent.Map);
         }
         public override void Draw(Camera camera, MapBase map, IntVec3 global)
         {

@@ -4,14 +4,19 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.Blocks;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
     public class BlockEntityCompWorkstation : BlockEntityComp
     {
-        readonly ObservableCollection<CraftOrder> _Orders = new();
-        public ObservableCollection<CraftOrder> Orders => this._Orders;
+        static string OperatingPositionUnreachableString = $"[Operating position unreachable!,{Color.Orange}]";
+        public bool OperatingPositionUnreachable;
+
+        readonly ObservableCollection<CraftOrder> _orders = new();
+        public ObservableCollection<CraftOrder> Orders => this._orders;
         readonly HashSet<IsWorkstation.Types> WorkstationTypes;
         static Window CraftingWindow;
 
@@ -72,16 +77,6 @@ namespace Start_a_Town_
             // draw workstation operating position
             cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + map.GetCell(global).Front });
         }
-
-        //public override void AddSaveData(SaveTag tag)
-        //{
-        //    tag.Add(this._Orders.SaveNewBEST("Orders"));
-        //}
-
-        //public override void Load(SaveTag tag)
-        //{
-        //    this._Orders.TryLoadMutable(tag, "Orders");
-        //}
         public override void AddSaveData(SaveTag tag)
         {
             tag.TrySaveRefs(this.Orders, "Orders");
@@ -92,17 +87,46 @@ namespace Start_a_Town_
         }
         public override void Write(BinaryWriter w)
         {
-            this._Orders.Write(w);
+            this._orders.Write(w);
         }
         public override ISerializable Read(BinaryReader r)
         {
-            this._Orders.ReadMutable(r);
+            this._orders.ReadMutable(r);
             return this;
         }
         internal override void MapLoaded(MapBase map, IntVec3 global)
         {
-            foreach (var ord in this._Orders)
+            foreach (var ord in this._orders)
                 ord.Map = map;
         }
+        internal override void NeighborChanged()
+        {
+            this.CheckOperatingPositions();
+        }
+
+        private void CheckOperatingPositions()
+        {
+            var prev = this.OperatingPositionUnreachable;
+            this.OperatingPositionUnreachable = this.Map.GetCell(this.Global).GetOperatingPositions().All(p => !ActorDefOf.Npc.CanFitIn(this.Map, this.Global + p));
+            if (!prev && this.OperatingPositionUnreachable)
+                this.Errors.Add(OperatingPositionUnreachableString);
+            else if (prev && !this.OperatingPositionUnreachable)
+                this.Errors.Remove(OperatingPositionUnreachableString);
+        }
+
+        public override void OnSpawned(BlockEntity entity, MapBase map, IntVec3 global)
+        {
+            this.CheckOperatingPositions();
+        }
+        public override void DrawUI(SpriteBatch sb, Camera cam)
+        {
+            if(this.OperatingPositionUnreachable)
+                Icon.Cross.DrawFloating(sb, cam, this.Parent.OriginGlobal);
+        }
+        //internal override IEnumerable<string> GetErrorMessages()
+        //{
+        //    if (this.OperatingPositionUnreachable)
+        //        yield return OperatingPositionUnreachableString;
+        //}
     }
 }

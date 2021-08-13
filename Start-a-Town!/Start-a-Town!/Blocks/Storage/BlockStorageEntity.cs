@@ -63,9 +63,9 @@ namespace Start_a_Town_
             {
                 this.Contents.Remove(item);
             }
-            public override void Place(MapBase map, IntVec3 global)
+            public override void OnSpawned(MapBase map, IntVec3 global)
             {
-                base.Place(map, global);
+                base.OnSpawned(map, global);
                 this.Global = global;
             }
             public override void OnRemoved(MapBase map, IntVec3 global)

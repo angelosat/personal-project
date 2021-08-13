@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using Start_a_Town_.Net;
-using Start_a_Town_.Crafting;
 
-namespace Start_a_Town_.Modules.Crafting
+namespace Start_a_Town_
 {
     class PacketCraftOrderToggleHaul
     {
@@ -27,7 +26,6 @@ namespace Start_a_Town_.Modules.Crafting
             var station = r.ReadIntVec3();
             var id = r.ReadInt32();
             var order = net.Map.Town.CraftingManager.GetOrder(station, id);
-            //var order = net.Map.GetBlockEntity<BlockEntityWorkstation>(station).GetOrder(id);
             order.HaulOnFinish = r.ReadBoolean();
             net.Map.EventOccured(Components.Message.Types.OrderParametersChanged, order);
             if (net is Server)

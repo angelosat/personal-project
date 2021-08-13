@@ -166,7 +166,7 @@ namespace Start_a_Town_
         private void DrawIcons(SpriteBatch sb, MapBase map, Camera camera, Icon icon, IEnumerable<GameObject> objects)
         {
             foreach (var parent in objects)
-                icon.DrawAboveEntity(sb, camera, parent);
+                icon.DrawFloating(sb, camera, parent);
         }
 
         internal bool IsChoppingTask(GameObject tree)

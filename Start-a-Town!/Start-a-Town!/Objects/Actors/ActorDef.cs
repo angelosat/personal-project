@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.Components;
-using System;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     public class ActorDef : ItemDef
     {
@@ -18,5 +13,7 @@ namespace Start_a_Town_
         {
             this.ItemClass = typeof(Actor);
         }
+
+
     }
 }

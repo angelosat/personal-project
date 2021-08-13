@@ -502,7 +502,7 @@ namespace Start_a_Town_
         {
             return this.Type switch
             {
-                TargetType.Entity => string.Format("[id:{0}] {1}", this.EntityID, this.Object.Name),
+                TargetType.Entity => this.Object.DebugName,
                 TargetType.Position => this.FinalGlobal.ToString(),
                 TargetType.Slot => this.Slot.ToString(),
                 _ => this.Type.ToString(),
@@ -823,6 +823,8 @@ namespace Start_a_Town_
             return new TargetArgs(location.map, location.global);
         }
 
-
+        public RegionNode Node => this.Map.Regions.GetNodeAt(this.Global);
+        public Region Region => this.Node.Region;
+        public RegionRoom RegionRoom => this.Region.Room;
     }
 }

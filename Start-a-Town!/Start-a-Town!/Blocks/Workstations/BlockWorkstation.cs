@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Start_a_Town_.Blocks;
 using Start_a_Town_.Graphics;
@@ -27,6 +28,10 @@ namespace Start_a_Town_
         public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {
             return Activator.CreateInstance(this.BlockEntityType, originGlobal) as BlockEntity;
+        }
+        internal override IEnumerable<IntVec3> GetOperatingPositions(int orientation)
+        {
+            yield return Cell.GetFront(orientation);
         }
     }
 }

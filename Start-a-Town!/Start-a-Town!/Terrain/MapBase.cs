@@ -282,9 +282,9 @@ namespace Start_a_Town_
         {
             entity.CellsOccupied.Add(global);
             Chunk chunk = this.GetChunk(global);
-            entity.Place(this, global);
             var local = global.ToLocal();
             chunk.AddBlockEntity(entity, local);
+            entity.OnSpawned(this, global);
         }
 
         internal IntVec3 GetFrontOfBlock(IntVec3 global)
@@ -616,7 +616,7 @@ namespace Start_a_Town_
 
             // maybe i can refresh cell edges here on the spot?
             this.InvalidateCell(global);
-            var neighbors = global.GetAdjacentLazy();
+            var neighbors = global.GetAdjacentCubeLazy(); // changed this to only get adjacent cells to get all cells (even diagonals) around a cell, in order to let workstations update their operatingpositionunreachable property
 
             foreach (var n in neighbors)
             {

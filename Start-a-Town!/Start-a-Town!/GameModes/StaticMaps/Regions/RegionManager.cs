@@ -43,7 +43,7 @@ namespace Start_a_Town_
             foreach (var room in this.Rooms.Values)
                 room.Init();
             watch.Stop();
-            string.Format("regions initialized in {0} ms", watch.ElapsedMilliseconds).ToConsole();
+            $"regions initialized in {watch.ElapsedMilliseconds} ms".ToConsole();
         }
 
         internal void Draw(IntVec3 global, MySpriteBatch sb, Camera cam)
@@ -82,12 +82,11 @@ namespace Start_a_Town_
 
         internal void OnGameEvent(GameEvent e)
         {
-            MapBase map;
             switch (e.Type)
             {
                 case Components.Message.Types.BlocksChanged:
                     IEnumerable<IntVec3> positions;
-                    GameEvents.EventBlocksChanged.Read(e.Parameters, out map, out positions);
+                    GameEvents.EventBlocksChanged.Read(e.Parameters, out MapBase map, out positions);
                     this.Update(positions);
                     break;
 
@@ -196,9 +195,9 @@ namespace Start_a_Town_
             if (source == target)
                 return 0;
             var all = source.GetConnected();
-            Dictionary<Region, int> dist = new Dictionary<Region, int>();
-            Dictionary<Region, Region> prev = new Dictionary<Region, Region>();
-            HashSet<Region> toHandle = new HashSet<Region>();
+            var dist = new Dictionary<Region, int>();
+            var prev = new Dictionary<Region, Region>();
+            var toHandle = new HashSet<Region>();
             foreach (var reg in all)
             {
                 dist[reg] = int.MaxValue;
@@ -255,9 +254,9 @@ namespace Start_a_Town_
         }
         internal bool AreConnected(Region reg1, Region reg2) // TODO can't just check if roomID of both regions is the same?
         {
-            Queue<Region> toCheck = new Queue<Region>();
+            var toCheck = new Queue<Region>();
             toCheck.Enqueue(reg1);
-            HashSet<Region> handled = new HashSet<Region>() { reg1 };
+            var handled = new HashSet<Region>() { reg1 };
             while(toCheck.Any())
             {
                 var currentRegion = toCheck.Dequeue();

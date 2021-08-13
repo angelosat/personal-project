@@ -376,7 +376,10 @@ namespace Start_a_Town_
         /// </summary>
         /// <param name="net"></param>
         /// <param name="global"></param>
-        public virtual void NeighborChanged(MapBase map, IntVec3 global) { }
+        public virtual void NeighborChanged(MapBase map, IntVec3 global) 
+        {
+            map.GetBlockEntity(global)?.NeighborChanged();
+        }
 
         public void Deconstruct(GameObject actor, Vector3 global)
         {
@@ -764,9 +767,9 @@ namespace Start_a_Town_
 
         public void PaintIcon(int width, int height, byte data, MaterialDef mat)
         {
-            GraphicsDevice gd = Game1.Instance.GraphicsDevice;
+            var gd = Game1.Instance.GraphicsDevice;
             var token = this.GetDefault();
-            Effect fx = Game1.Instance.Content.Load<Effect>("blur");
+            var fx = Game1.Instance.Content.Load<Effect>("blur");
             var mysb = new MySpriteBatch(gd);
             fx.CurrentTechnique = fx.Techniques["Combined"];
             fx.Parameters["Viewport"].SetValue(new Vector2(width, height));
@@ -783,14 +786,14 @@ namespace Start_a_Town_
         }
         public RenderTarget2D PaintIcon(byte data, MaterialDef mat)
         {
-            GraphicsDevice gd = Game1.Instance.GraphicsDevice;
+            var gd = Game1.Instance.GraphicsDevice;
             var token = this.GetDefault();
             var w = token.Texture.Bounds.Width;
             var h = token.Texture.Bounds.Height;
             var renderTarget = new RenderTarget2D(gd, w, h);
             gd.SetRenderTarget(renderTarget);
             gd.Clear(Color.Transparent);
-            Effect fx = Game1.Instance.Content.Load<Effect>("blur");
+            var fx = Game1.Instance.Content.Load<Effect>("blur");
             var mysb = new MySpriteBatch(gd);
             fx.CurrentTechnique = fx.Techniques["Combined"];
             fx.Parameters["Viewport"].SetValue(new Vector2(w, h));
@@ -807,7 +810,10 @@ namespace Start_a_Town_
             gd.SetRenderTarget(null);
             return renderTarget;
         }
-
+        internal virtual IEnumerable<IntVec3> GetOperatingPositions(int orientation)
+        {
+            yield break;
+        }
         internal virtual IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
         {
             yield break;
@@ -822,13 +828,13 @@ namespace Start_a_Town_
         internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             map.GetBlockEntity(vector3)?.GetSelectionInfo(info, map, vector3);
-            var node = map.Regions.GetNodeAt(vector3);
-            if (node is null)
-                return;
+            //var node = map.Regions.GetNodeAt(vector3);
+            //if (node is null)
+            //    return;
 
-            info.AddInfo(new Label(node.ToString()));
-            info.AddInfo(new Label(node.Region.ToString()));
-            info.AddInfo(new Label(node.Region.Room.ToString()));
+            //info.AddInfo(new Label(node.ToString()));
+            //info.AddInfo(new Label(node.Region.ToString()));
+            //info.AddInfo(new Label(node.Region.Room.ToString()));
         }
 
         internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3)

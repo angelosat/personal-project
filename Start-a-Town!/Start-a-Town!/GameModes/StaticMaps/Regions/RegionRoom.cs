@@ -20,7 +20,7 @@ namespace Start_a_Town_
         }
         public override string ToString()
         {
-            return string.Format("Room: {0} Regions: {1} Outdoors: {2}", this.ID, this.Regions.Count, this.IsOutdoors);
+            return $"Room: {this.ID}\nRegions: {this.Regions.Count}\nOutdoors: {this.IsOutdoors}";
         }
         public RegionRoom(RegionManager manager)
         {

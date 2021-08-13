@@ -108,5 +108,19 @@ namespace Start_a_Town_
             filter.AddLeafs(this.StorageFilterVariations.Select(v => v.GetFilter()));
             return filter;
         }
+
+
+        /// <summary>
+        /// Different than map.isstandablein because this takes into account actor's height and returns true only if the actor can stand upright (no crouching)
+        /// </summary>
+        /// <param name="cell">the lower cell occupied by the entity</param>
+        /// <returns></returns>
+        public bool CanFitIn(MapBase map, IntVec3 cell)
+        {
+            return
+                map.GetBlock(cell.Below).Solid
+                && Enumerable.Range(0, (int)Math.Ceiling(this.Height))
+                    .All(z => !map.GetBlock(cell + new IntVec3(0, 0, z)).Solid);
+        }
     }
 }

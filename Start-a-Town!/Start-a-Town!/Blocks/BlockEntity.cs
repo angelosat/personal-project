@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Start_a_Town_.Blocks
 {
-    public abstract class BlockEntity : IDisposable, IEntityCompContainer<BlockEntityComp>//, IHasChildren
+    public abstract class BlockEntity : Inspectable, IDisposable, IEntityCompContainer<BlockEntityComp>//, IHasChildren
     {
         public HashSet<IntVec3> CellsOccupied = new();
         public MapBase Map;
@@ -24,7 +24,7 @@ namespace Start_a_Town_.Blocks
         public virtual void Tick(MapBase map, IntVec3 global)
         {
             foreach (var comp in this.Comps)
-                comp.Tick(this, map, global);
+                comp.Tick();
         }
         public virtual void GetTooltip(Control tooltip) { }
 
@@ -38,10 +38,10 @@ namespace Start_a_Town_.Blocks
                 c.Remove(map, global, this);
         }
         public virtual void Break(MapBase map, IntVec3 global) { }
-        public virtual void Place(MapBase map, IntVec3 global)
+        public virtual void OnSpawned(MapBase map, IntVec3 global)
         {
             foreach (var comp in this.Comps)
-                comp.OnEntitySpawn(this, map, global);
+                comp.OnSpawned(this, map, global);
         }
 
         public virtual GameObjectSlot GetChild(string containerName, int slotID)
@@ -96,7 +96,6 @@ namespace Start_a_Town_.Blocks
             this.AddSaveData(tag);
             return tag;
         }
-
         public void Load(SaveTag tag)
         {
             tag.TryGetTag("Components", this.Comps.Load);
@@ -143,7 +142,11 @@ namespace Start_a_Town_.Blocks
             foreach (var comp in this.Comps)
                 comp.Draw(camera, map, global);
         }
-        public virtual void DrawUI(SpriteBatch sb, Camera cam, IntVec3 global) { }
+        public virtual void DrawUI(SpriteBatch sb, Camera cam, IntVec3 global)
+        {
+            foreach (var comp in this.Comps)
+                comp.DrawUI(sb, cam);
+        }
 
         internal virtual void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3)
         {
@@ -178,6 +181,12 @@ namespace Start_a_Town_.Blocks
         {
             foreach (var c in this.Comps)
                 c.DrawSelected(sb, cam, map, global);
+        }
+
+        internal void NeighborChanged()
+        {
+            foreach (var comp in this.Comps)
+                comp.NeighborChanged();
         }
     }
 }

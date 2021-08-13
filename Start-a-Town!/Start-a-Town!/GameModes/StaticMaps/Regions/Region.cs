@@ -40,7 +40,7 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return $"Region: {this.RegionID} Room: {this.RoomID} Nodes: {this.Nodes.Count} Neighbors: {this.Neighbors.Count}";
+            return $"Region: {this.RegionID}\nRoom: {this.RoomID}\nNodes: {this.Nodes.Count}\nNeighbors: {this.Neighbors.Count}";
         }
 
         internal RegionNode Add(Vector3 local)

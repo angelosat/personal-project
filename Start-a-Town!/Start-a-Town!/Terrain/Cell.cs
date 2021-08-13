@@ -172,23 +172,11 @@ namespace Start_a_Town_
 
         internal IEnumerable<IntVec3> GetOperatingPositions()
         {
-            return this.Block.GetOperatingPositions(this);
+            return this.Block.GetOperatingPositions(this.Orientation);
         }
         internal IEnumerable<IntVec3> GetOperatingPositionsGlobal(IntVec3 global)
         {
             return this.Block.GetOperatingPositions(this, global);
         }
-
-        //public override string ToString()
-        //{
-        //    return
-        //        "Local: " + this.LocalCoords +
-        //        "\nBlock: " + this.Block.Label +
-        //        "\nMaterial: " + this.Material.Label +
-        //        "\nVariation: " + this.Variation +
-        //        "\nOrientation: " + this.Orientation +
-        //        "\nDiscovered: " + this.Discovered +
-        //        "\nValid: " + this.Valid;
-        //}
     }
 }

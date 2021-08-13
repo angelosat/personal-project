@@ -3,13 +3,13 @@
     public class ReagentFilterMaterial
     {
         public MaterialDef SpecificMaterial;
-        public MaterialType SpecificMaterialType;
+        public MaterialTypeDef SpecificMaterialType;
 
         public ReagentFilterMaterial()
         {
         }
 
-        public ReagentFilterMaterial(MaterialDef mat, MaterialType matType)
+        public ReagentFilterMaterial(MaterialDef mat, MaterialTypeDef matType)
         {
             this.SpecificMaterial = mat;
             this.SpecificMaterialType = matType;

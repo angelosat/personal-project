@@ -50,7 +50,7 @@ namespace Start_a_Town_
         }
         public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            return Def.GetDefs<MaterialDef>().Where(mat => mat.Type == MaterialType.Wood);
+            return Def.GetDefs<MaterialDef>().Where(mat => mat.Type == MaterialTypeDefOf.Wood);
         }
        
         public override void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)

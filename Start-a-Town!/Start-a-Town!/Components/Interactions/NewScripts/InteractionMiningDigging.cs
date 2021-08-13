@@ -39,12 +39,12 @@ namespace Start_a_Town_
             var cell = a.Map.GetCell(t.Global);
             this.Block = cell.Block;
             var matType = cell.Material.Type;
-            if (matType == MaterialType.Soil)
+            if (matType == MaterialTypeDefOf.Soil)
             {
                 this.ToolUse = ToolUseDefOf.Digging;
                 this.SkillDef = SkillDefOf.Digging;
             }
-            else if (matType == MaterialType.Stone || matType == MaterialType.Metal)
+            else if (matType == MaterialTypeDefOf.Stone || matType == MaterialTypeDefOf.Metal)
             {
                 this.ToolUse = ToolUseDefOf.Mining;
                 this.SkillDef = SkillDefOf.Mining;
@@ -137,7 +137,7 @@ namespace Start_a_Town_
         static bool IsMetalOrMineral(GameObject a, TargetArgs t)
         {
             var mat = Block.GetBlockMaterial(a.Map, t.Global);
-            return mat.Type == MaterialType.Stone || mat.Type == MaterialType.Metal;
+            return mat.Type == MaterialTypeDefOf.Stone || mat.Type == MaterialTypeDefOf.Metal;
         }
         private void EmitStrike(GameObject a)
         {

@@ -18,7 +18,7 @@ namespace Start_a_Town_
 
         public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            return Def.GetDefs<MaterialDef>().Where(mat => mat.Type == MaterialType.Wood || mat.Type == MaterialType.Metal);
+            return Def.GetDefs<MaterialDef>().Where(mat => mat.Type == MaterialTypeDefOf.Wood || mat.Type == MaterialTypeDefOf.Metal);
         }
         public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         {

@@ -22,9 +22,9 @@ namespace Start_a_Town_
         protected override void Init()
         {
             var matType = this.Material.Type;
-            if (matType == MaterialType.Soil)
+            if (matType == MaterialTypeDefOf.Soil)
                 this.Name = "Digging";
-            else if (matType == MaterialType.Stone || matType == MaterialType.Metal)
+            else if (matType == MaterialTypeDefOf.Stone || matType == MaterialTypeDefOf.Metal)
                 this.Name = "Mining";
 
             var global = this.Target.Global;
@@ -84,7 +84,7 @@ namespace Start_a_Town_
             bool isMetalOrMineral()
             {
                 var mat = Block.GetBlockMaterial(a.Map, t.Global);
-                return mat.Type == MaterialType.Stone || mat.Type == MaterialType.Metal;
+                return mat.Type == MaterialTypeDefOf.Stone || mat.Type == MaterialTypeDefOf.Metal;
             }
             void emitBreak()
             {
@@ -107,9 +107,9 @@ namespace Start_a_Town_
         protected override SkillDef GetSkill()
         {
             var matType = this.Material.Type;
-            if (matType == MaterialType.Soil)
+            if (matType == MaterialTypeDefOf.Soil)
                 return SkillDefOf.Digging;
-            else if (matType == MaterialType.Stone || matType == MaterialType.Metal)
+            else if (matType == MaterialTypeDefOf.Stone || matType == MaterialTypeDefOf.Metal)
                 return SkillDefOf.Mining;
             throw new Exception();
         }
@@ -117,9 +117,9 @@ namespace Start_a_Town_
         protected override ToolUseDef GetToolUse()
         {
             var matType = this.Material.Type;
-            if (matType == MaterialType.Soil)
+            if (matType == MaterialTypeDefOf.Soil)
                 return ToolUseDefOf.Digging;
-            else if (matType == MaterialType.Stone || matType == MaterialType.Metal)
+            else if (matType == MaterialTypeDefOf.Stone || matType == MaterialTypeDefOf.Metal)
                 return ToolUseDefOf.Mining;
             throw new Exception();
         }

@@ -119,7 +119,7 @@ namespace Start_a_Town_
         static bool IsMetalOrMineral(GameObject a, TargetArgs t)
         {
             var mat = Block.GetBlockMaterial(a.Map, t.Global);
-            return mat.Type == MaterialType.Stone || mat.Type == MaterialType.Metal;
+            return mat.Type == MaterialTypeDefOf.Stone || mat.Type == MaterialTypeDefOf.Metal;
         }
         private void EmitStrike(GameObject a)
         {

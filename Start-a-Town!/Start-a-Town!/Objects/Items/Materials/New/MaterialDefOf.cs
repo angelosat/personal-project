@@ -18,8 +18,8 @@ namespace Start_a_Town_
             .SetValue(100);
 
 
-        static public readonly MaterialDef Coal = new(MaterialType.Stone, "Coal", "Coal", Color.DimGray, 100) { ValueBase = 1, Fuel = new Fuel(FuelDef.Organic, 20f), WorkToBreak = 25 };
-        static public readonly MaterialDef Stone = new(MaterialType.Stone, "Stone", "Stone", Color.White, 80) { ValueBase = 5, WorkToBreak = 20 };//LightSlateGray, 0.8f); new Color(213, 209, 201, 255) //Color.AntiqueWhite
+        static public readonly MaterialDef Coal = new(MaterialTypeDefOf.Stone, "Coal", "Coal", Color.DimGray, 100) { ValueBase = 1, Fuel = new Fuel(FuelDef.Organic, 20f), WorkToBreak = 25 };
+        static public readonly MaterialDef Stone = new(MaterialTypeDefOf.Stone, "Stone", "Stone", Color.White, 80) { ValueBase = 5, WorkToBreak = 20 };//LightSlateGray, 0.8f); new Color(213, 209, 201, 255) //Color.AntiqueWhite
 
         static public readonly MaterialDef ShrubStem = new("Twig", MaterialTemplates.PlantStem);
 
@@ -37,14 +37,14 @@ namespace Start_a_Town_
             .SetValue(20);
 
 
-        static public readonly MaterialDef Soil = new(MaterialType.Soil, "Soil", "Dirt", Color.SandyBrown, 20) { ValueBase = 2, WorkToBreak = 20 };
-        static public readonly MaterialDef Sand = new(MaterialType.Soil, "Sand", "Sand", Color.BlanchedAlmond, 10) { ValueBase = 2 };
+        static public readonly MaterialDef Soil = new(MaterialTypeDefOf.Soil, "Soil", "Dirt", Color.SandyBrown, 20) { ValueBase = 2, WorkToBreak = 20 };
+        static public readonly MaterialDef Sand = new(MaterialTypeDefOf.Soil, "Sand", "Sand", Color.BlanchedAlmond, 10) { ValueBase = 2 };
 
 
-        static public readonly MaterialDef Air = new(MaterialType.Gas, "Air", "Air", 0);
+        static public readonly MaterialDef Air = new(MaterialTypeDefOf.Gas, "Air", "Air", 0);
         // basalt? new Color(120, 109, 95, 255)
-        static public readonly MaterialDef Water = new(MaterialType.Water, "Water", "Water", Color.SeaGreen, 5) { Viscosity = 30 };
-        static public readonly MaterialDef Glass = new(MaterialType.Glass, "Glass", "Glass", Color.White, 40);
+        static public readonly MaterialDef Water = new(MaterialTypeDefOf.Water, "Water", "Water", Color.SeaGreen, 5) { Viscosity = 30 };
+        static public readonly MaterialDef Glass = new(MaterialTypeDefOf.Glass, "Glass", "Glass", Color.White, 40);
 
         static public readonly MaterialDef Human = 
             new MaterialDef("Human", MaterialTemplates.Meat)

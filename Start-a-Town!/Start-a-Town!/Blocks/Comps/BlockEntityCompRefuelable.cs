@@ -272,7 +272,7 @@ namespace Start_a_Town_
         static readonly StorageFilterCategoryNewNew DefaultFiltersNew =
             new StorageFilterCategoryNewNew("Wood")
                 .AddChildren(Def.Database.Values.OfType<ItemDef>()
-                    .Where(d => d.DefaultMaterialType == MaterialType.Wood)
+                    .Where(d => d.DefaultMaterialType == MaterialTypeDefOf.Wood)
                     .Select(d => new StorageFilterCategoryNewNew(d.Label).AddLeafs(d.DefaultMaterialType.SubTypes.Select(m => new StorageFilterNewNew(d, m)))));
     }
 }

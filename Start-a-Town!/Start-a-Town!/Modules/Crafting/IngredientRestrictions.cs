@@ -7,7 +7,7 @@ namespace Start_a_Town_
     public class IngredientRestrictions : ISaveable, ISerializable
     {
         public HashSet<MaterialDef> Material = new();
-        public HashSet<MaterialType> MaterialType = new();
+        public HashSet<MaterialTypeDef> MaterialType = new();
         public HashSet<ItemDef> ItemDef = new();
         public IngredientRestrictions()
         {
@@ -24,7 +24,7 @@ namespace Start_a_Town_
         {
             return this.Material.Contains(item);
         }
-        public bool IsRestricted(MaterialType item)
+        public bool IsRestricted(MaterialTypeDef item)
         {
             return this.MaterialType.Contains(item);
         }
@@ -38,7 +38,7 @@ namespace Start_a_Town_
             this.Material.Add(mat);
             return this;
         }
-        public IngredientRestrictions Restrict(MaterialType mattype)
+        public IngredientRestrictions Restrict(MaterialTypeDef mattype)
         {
             foreach (var m in mattype.SubTypes)
                 this.Restrict(m);
@@ -57,7 +57,7 @@ namespace Start_a_Town_
             else
                 this.Material.Remove(item);
         }
-        public void Toggle(MaterialType item)
+        public void Toggle(MaterialTypeDef item)
         {
             if (!this.MaterialType.Contains(item))
                 this.MaterialType.Add(item);
@@ -72,7 +72,7 @@ namespace Start_a_Town_
                 this.ItemDef.Remove(item);
         }
 
-        internal void ToggleRestrictions(ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
+        internal void ToggleRestrictions(ItemDef[] defs, MaterialDef[] mats, MaterialTypeDef[] matTypes)
         {
             for (int i = 0; i < defs.Length; i++)
             {
@@ -125,7 +125,7 @@ namespace Start_a_Town_
         {
             this.ItemDef = new HashSet<ItemDef>(r.ReadStringArray().Select(Def.GetDef<ItemDef>));
             this.Material = new HashSet<MaterialDef>(r.ReadStringArray().Select(Def.GetDef<MaterialDef>));
-            this.MaterialType = new HashSet<MaterialType>(r.ReadStringArray().Select(Def.GetDef<MaterialType>));
+            this.MaterialType = new HashSet<MaterialTypeDef>(r.ReadStringArray().Select(Def.GetDef<MaterialTypeDef>));
             return this;
         }
     }

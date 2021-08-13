@@ -31,7 +31,7 @@ namespace Start_a_Town_
         public bool IsTemplate { get; private set; }
 
         private readonly int HashCode;
-        public MaterialType Type;
+        public MaterialTypeDef Type;
         public Color Color;
         public Vector4 ColorVector;
         public string Prefix;
@@ -56,7 +56,7 @@ namespace Start_a_Town_
         {
             this.IsTemplate = true;
         }
-        public MaterialDef(MaterialType type, string name, string prefix, int density)
+        public MaterialDef(MaterialTypeDef type, string name, string prefix, int density)
             : this(type, name, prefix, Color.White, density) { }
         public MaterialDef(string name, MaterialDef template) : base(name)
         {
@@ -69,7 +69,7 @@ namespace Start_a_Town_
             this.Fuel = template.Fuel;
         }
 
-        public MaterialDef(MaterialType type, string name, string prefix, Color color, int density) : base(name)
+        public MaterialDef(MaterialTypeDef type, string name, string prefix, Color color, int density) : base(name)
         {
             this.HashCode = name.GetHashCode();
             RegistryByHash[this.HashCode] = this;
@@ -91,7 +91,7 @@ namespace Start_a_Town_
         
         public static MaterialDef CreateColor(Color color)
         {
-            var mat = new MaterialDef(MaterialType.Dye, "Color", "Color", color, 1);
+            var mat = new MaterialDef(MaterialTypeDefOf.Dye, "Color", "Color", color, 1);
             return mat;
         }
 
@@ -136,7 +136,7 @@ namespace Start_a_Town_
             return this;
         }
 
-        public MaterialDef SetType(MaterialType type)
+        public MaterialDef SetType(MaterialTypeDef type)
         {
             this.Type = type;
             return this;

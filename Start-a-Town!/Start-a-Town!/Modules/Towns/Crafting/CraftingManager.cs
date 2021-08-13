@@ -46,7 +46,7 @@ namespace Start_a_Town_
             this.Town = town;
         }
         
-        public static void SetOrderRestrictions(CraftOrder order, string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
+        public static void SetOrderRestrictions(CraftOrder order, string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialTypeDef[] matTypes)
         {
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();
@@ -65,7 +65,7 @@ namespace Start_a_Town_
             var reagent = r.ReadString();
             var defs = r.ReadStringArray().Select(Def.GetDef<ItemDef>).ToArray();
             var mats = r.ReadStringArray().Select(Def.GetDef<MaterialDef>).ToArray();
-            var matTypes = r.ReadStringArray().Select(Def.GetDef<MaterialType>).ToArray();
+            var matTypes = r.ReadStringArray().Select(Def.GetDef<MaterialTypeDef>).ToArray();
             order.ToggleReagentRestrictions(reagent, defs, mats, matTypes);
             if(net is Server)
             {

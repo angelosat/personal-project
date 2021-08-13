@@ -31,7 +31,7 @@ namespace Start_a_Town_.Components.Crafting
             public ReagentFilterItem ItemFilter = new();
             public List<Func<MaterialDef, bool>> Modifiers = new();
             public List<ReagentFilter> Conditions = new();
-            public static Reagent Create(string name, ItemDef itemDef, MaterialDef mat, MaterialType matType, int amount = 1)
+            public static Reagent Create(string name, ItemDef itemDef, MaterialDef mat, MaterialTypeDef matType, int amount = 1)
             {
                 var r = new Reagent
                 {
@@ -64,7 +64,7 @@ namespace Start_a_Town_.Components.Crafting
             {
                 return new IsOfMaterial(material);
             }
-            internal static ReagentFilter IsOfMaterialType(params MaterialType[] materialTypes)
+            internal static ReagentFilter IsOfMaterialType(params MaterialTypeDef[] materialTypes)
             {
                 return new IsOfMaterialType(materialTypes);
             }

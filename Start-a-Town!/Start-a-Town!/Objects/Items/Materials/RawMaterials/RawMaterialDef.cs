@@ -20,12 +20,12 @@ namespace Start_a_Town_
             Category = ItemCategory.Manufactured,
             Body = new Bone(BoneDefOf.Item, ItemContent.PlanksGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks, Reaction.Product.Types.Workbenches },
-            DefaultMaterialType = MaterialType.Wood,
+            DefaultMaterialType = MaterialTypeDefOf.Wood,
             CraftingProperties = new CraftingProperties() { 
                 IsBuildingMaterial = true, 
                 IsCraftingMaterial = true
             }
-        }.SetMadeFrom(MaterialType.Wood);
+        }.SetMadeFrom(MaterialTypeDefOf.Wood);
 
         static public readonly ItemDef Logs = new ItemDef("Logs")
         {
@@ -36,8 +36,8 @@ namespace Start_a_Town_
             Category = ItemCategory.RawMaterials,
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks, Reaction.Product.Types.Workbenches },
             CraftingProperties = new CraftingProperties() { IsBuildingMaterial = true },
-            DefaultMaterialType = MaterialType.Wood
-        }.SetMadeFrom(MaterialType.Wood);
+            DefaultMaterialType = MaterialTypeDefOf.Wood
+        }.SetMadeFrom(MaterialTypeDefOf.Wood);
 
         static public readonly ItemDef Bags = new ItemDef("Bag")
         {
@@ -47,8 +47,8 @@ namespace Start_a_Town_
             Category = ItemCategory.RawMaterials,
             Body = new Bone(BoneDefOf.Item, ItemContent.BagsGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Blocks },
-            DefaultMaterialType = MaterialType.Soil,
-        }.SetMadeFrom(MaterialType.Soil);
+            DefaultMaterialType = MaterialTypeDefOf.Soil,
+        }.SetMadeFrom(MaterialTypeDefOf.Soil);
 
         static public readonly ItemDef Ingots = new ItemDef("Ingot")
         {
@@ -58,9 +58,9 @@ namespace Start_a_Town_
             Category = ItemCategory.Manufactured,
             Body = new Bone(BoneDefOf.Item, ItemContent.BarsGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools },
-            DefaultMaterialType = MaterialType.Metal,
+            DefaultMaterialType = MaterialTypeDefOf.Metal,
             CraftingProperties = new CraftingProperties() { IsCraftingMaterial = true, IsBuildingMaterial = true },
-        }.SetMadeFrom(MaterialType.Metal);
+        }.SetMadeFrom(MaterialTypeDefOf.Metal);
 
         static public readonly ItemDef Ore = new ItemDef("Ore")
         {
@@ -70,7 +70,7 @@ namespace Start_a_Town_
             Category = ItemCategory.RawMaterials,
             Body = new Bone(BoneDefOf.Item, ItemContent.OreGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks },
-            DefaultMaterialType = MaterialType.Metal,
+            DefaultMaterialType = MaterialTypeDefOf.Metal,
         }.SetMadeFrom(MaterialToken.Metal);
 
         static public readonly ItemDef Boulders = new ItemDef("Boulders")
@@ -81,9 +81,9 @@ namespace Start_a_Town_
             Category = ItemCategory.RawMaterials,
             Body = new Bone(BoneDefOf.Item, ItemContent.OreGrayscale) { DrawMaterialColor = true },
             CanProcessInto = new List<Reaction.Product.Types>() { Reaction.Product.Types.Tools, Reaction.Product.Types.Blocks },
-            DefaultMaterialType = MaterialType.Stone,
+            DefaultMaterialType = MaterialTypeDefOf.Stone,
             CraftingProperties = new CraftingProperties() { IsBuildingMaterial = true, IsCraftingMaterial = true },
-        }.SetMadeFrom(MaterialType.Stone);
+        }.SetMadeFrom(MaterialTypeDefOf.Stone);
 
         static public readonly ItemDef Scraps = new ItemDef("Scraps")
         {
@@ -93,7 +93,7 @@ namespace Start_a_Town_
             Description = "Worthless but can be repurposed",
             Category = ItemCategory.RawMaterials,
             Body = new Bone(BoneDefOf.Item, Sprite.Default) { DrawMaterialColor = true },
-        }.SetMadeFrom(MaterialType.Wood, MaterialType.Stone, MaterialType.Metal);
+        }.SetMadeFrom(MaterialTypeDefOf.Wood, MaterialTypeDefOf.Stone, MaterialTypeDefOf.Metal);
 
         static public void Initialize()
         {
@@ -104,7 +104,7 @@ namespace Start_a_Town_
                     GameObject.AddTemplate(CreateFrom(def, m));
             }
 
-            foreach (var mt in new[] { MaterialType.Metal, MaterialType.Wood, MaterialType.Stone }) // TODO make scraps from solid rawmaterials
+            foreach (var mt in new[] { MaterialTypeDefOf.Metal, MaterialTypeDefOf.Wood, MaterialTypeDefOf.Stone }) // TODO make scraps from solid rawmaterials
                 foreach (var m in mt.SubTypes)
                     GameObject.AddTemplate(CreateFrom(Scraps, m));
 
@@ -117,7 +117,7 @@ namespace Start_a_Town_
                 "Make Planks new", SkillDefOf.Carpentry)
                 .AddBuildSite(IsWorkstation.Types.Carpentry)
                 .AddIngredient(new Ingredient("Base")
-                    .SetAllow(MaterialType.Wood, true)
+                    .SetAllow(MaterialTypeDefOf.Wood, true)
                     .SetAllow(Logs, true)
                     .SetAllow(Scraps, true))
                 .AddProduct(new Reaction.Product(Planks).GetMaterialFromIngredient("Base")));
@@ -139,7 +139,7 @@ namespace Start_a_Town_
                 .AddIngredient(new Ingredient("a")
                     .SetAllow(RawMaterialDef.Scraps, true)
                     .SetAllow(RawMaterialDef.Ore, true)
-                    .SetAllow(MaterialType.Metal, true))
+                    .SetAllow(MaterialTypeDefOf.Metal, true))
                 .AddProduct(new Reaction.Product(RawMaterialDef.Ingots).GetMaterialFromIngredient("a")
                 );
             Reaction.Register(smelting);

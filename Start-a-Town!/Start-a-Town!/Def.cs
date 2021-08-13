@@ -21,7 +21,11 @@ namespace Start_a_Town_
             this.Name = $"{this.GetType().Name}:{name.Replace(" ", "")}";
             this.Name.ToConsole();
         }
-       
+        public static void Register(IEnumerable<Def> defs)
+        {
+            foreach (var d in defs)
+                Register(d);
+        }
         static public void Register(Def def)
         {
             if (def.Name.IsNullEmptyOrWhiteSpace())

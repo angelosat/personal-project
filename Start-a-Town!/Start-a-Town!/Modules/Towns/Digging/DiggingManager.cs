@@ -74,9 +74,9 @@ namespace Start_a_Town_
             var material = Block.GetBlockMaterial(this.Town.Map, global);
             var mattype = material.Type;
             return
-                mattype == MaterialType.Soil ||
-                mattype == MaterialType.Stone || 
-                mattype == MaterialType.Metal;
+                mattype == MaterialTypeDefOf.Soil ||
+                mattype == MaterialTypeDefOf.Stone || 
+                mattype == MaterialTypeDefOf.Metal;
 
             //var skill = material.Type.SkillToExtract;
             //if (skill == null)

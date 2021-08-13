@@ -8,7 +8,7 @@ namespace Start_a_Town_
     {
         public ItemDef ItemDef;
         public MaterialDef Material;
-        public MaterialType MaterialType;
+        public MaterialTypeDef MaterialType;
         public int Amount = 1;
         /// <summary>
         /// The max value of 1 means that the amount of material required should be enough to completely fill the volume of a block.
@@ -35,7 +35,7 @@ namespace Start_a_Town_
         {
 
         }
-        public Ingredient(ItemDef item = null, MaterialDef material = null, MaterialType materialType = null, int amount = 1, float materialVolume = 1)
+        public Ingredient(ItemDef item = null, MaterialDef material = null, MaterialTypeDef materialType = null, int amount = 1, float materialVolume = 1)
         {
             ItemDef = item;
             Material = material;
@@ -133,7 +133,7 @@ namespace Start_a_Town_
             return this;
         }
        
-        public Ingredient SetAllow(IEnumerable<MaterialType> types, bool allow)
+        public Ingredient SetAllow(IEnumerable<MaterialTypeDef> types, bool allow)
         {
             foreach (var t in types)
                 this.SetAllow(t, allow);
@@ -157,7 +157,7 @@ namespace Start_a_Town_
                 this.SpecifiedMaterials.Remove(mat);
             return this;
         }
-        public Ingredient SetAllow(MaterialType matType, bool allow)
+        public Ingredient SetAllow(MaterialTypeDef matType, bool allow)
         {
             if (matType is null)
                 throw new Exception(); 

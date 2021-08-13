@@ -5,11 +5,11 @@ namespace Start_a_Town_.Components.Crafting
 {
     class IsOfMaterialType : Reaction.Reagent.ReagentFilter
     {
-        List<MaterialType> ValidMaterialTypes = new List<MaterialType>();
+        List<MaterialTypeDef> ValidMaterialTypes = new List<MaterialTypeDef>();
 
         public override string Name => "Is of (any) type";
          
-        public IsOfMaterialType(params MaterialType[] materialTypes)
+        public IsOfMaterialType(params MaterialTypeDef[] materialTypes)
         {
             this.ValidMaterialTypes = materialTypes.ToList();
         }

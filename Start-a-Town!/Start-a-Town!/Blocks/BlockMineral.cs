@@ -18,7 +18,7 @@ namespace Start_a_Town_
         }
         public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            return Def.GetDefs<MaterialDef>().Where(mat => mat.Type == MaterialType.Stone || mat.Type == MaterialType.Metal);
+            return Def.GetDefs<MaterialDef>().Where(mat => mat.Type == MaterialTypeDefOf.Stone || mat.Type == MaterialTypeDefOf.Metal);
         }
         public override void DrawUI(SpriteBatch sb, Vector2 pos)
         {

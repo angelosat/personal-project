@@ -198,7 +198,7 @@ namespace Start_a_Town_
         static public HashSet<MaterialDef> GenerateMaterialPreferences()
         {
             var list = new HashSet<MaterialDef>();
-            foreach (var type in MaterialType.Dictionary.Values)
+            foreach (var type in Def.GetDefs<MaterialTypeDef>())
             {
                 if (type.SubTypes.Any())
                     list.Add(type.SubTypes.SelectRandom(Randomizer));

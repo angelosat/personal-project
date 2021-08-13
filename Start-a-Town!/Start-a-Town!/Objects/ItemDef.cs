@@ -15,9 +15,9 @@ namespace Start_a_Town_
         public bool MadeFromMaterials;
         public List<Reaction.Product.Types> CanProcessInto = new();
         public int BaseValue = 1;
-        public MaterialType DefaultMaterialType;
+        public MaterialTypeDef DefaultMaterialType;
         public List<MaterialDef> CanBeMadeFrom = new();
-        public List<MaterialType> ValidMaterialTypes = new();
+        public List<MaterialTypeDef> ValidMaterialTypes = new();
         public Func<ItemDef, Entity> Factory = ItemFactory.CreateItem;
         public ActorDef ActorProperties;
         public PlantProperties PlantProperties;
@@ -65,7 +65,7 @@ namespace Start_a_Town_
                 yield return new ItemMaterialAmount(this, m, amount);
         }
 
-        public MaterialType MaterialType
+        public MaterialTypeDef MaterialType
         {
             get
             {
@@ -78,7 +78,7 @@ namespace Start_a_Town_
             this.MadeFrom.AddRange(tokens);
             return this;
         }
-        public ItemDef SetMadeFrom(params MaterialType[] types)
+        public ItemDef SetMadeFrom(params MaterialTypeDef[] types)
         {
             this.ValidMaterialTypes.AddRange(types);
             return this;

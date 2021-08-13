@@ -151,7 +151,7 @@ namespace Start_a_Town_
             return this.Map.GetBlockEntity(this.Workstation).GetComp<BlockEntityCompWorkstation>();
         }
 
-        internal void ToggleReagentRestrictions(string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialType[] matTypes)
+        internal void ToggleReagentRestrictions(string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialTypeDef[] matTypes)
         {
             this.Restrictions[reagent].ToggleRestrictions(defs, mats, matTypes);
         }
@@ -441,7 +441,7 @@ namespace Start_a_Town_
             }
         }
         [Obsolete]
-        public void ShowDetailsUI(Action<CraftOrder, string, ItemDef[], MaterialDef[], MaterialType[]> callback)
+        public void ShowDetailsUI(Action<CraftOrder, string, ItemDef[], MaterialDef[], MaterialTypeDef[]> callback)
         {
             var box = new ScrollableBoxNewNew(200, 200, ScrollModes.Vertical);
             var list = DetailsUIReagents ??= new ListCollapsibleNew();

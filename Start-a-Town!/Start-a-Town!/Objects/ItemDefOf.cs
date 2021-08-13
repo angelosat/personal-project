@@ -31,7 +31,7 @@ namespace Start_a_Town_
             {
                 new ConsumableComponent.Props(new[] { new NeedEffect(NeedDef.Hunger, 50) })
             },
-        }.SetMadeFrom(MaterialType.Fruit);
+        }.SetMadeFrom(MaterialTypeDefOf.Fruit);
 
         static public readonly ItemDef Meat = new ItemDef("Meat")
         {
@@ -39,13 +39,13 @@ namespace Start_a_Town_
             StackCapacity = 8,
             Category = ItemCategory.FoodRaw,
             Body = new Bone(BoneDefOf.Item, Sprite.Default),
-            DefaultMaterialType = MaterialType.Meat,
+            DefaultMaterialType = MaterialTypeDefOf.Meat,
             ConsumableProperties = new ConsumableProperties(),
             CompProps = new List<ComponentProps>()
             {
                 new ConsumableComponent.Props(new[] { new NeedEffect(NeedDef.Hunger, 50) })
             },
-        }.SetMadeFrom(MaterialType.Meat);
+        }.SetMadeFrom(MaterialTypeDefOf.Meat);
 
         static public readonly ItemDef Pie = new ItemDef("Pie")
         {
@@ -62,7 +62,7 @@ namespace Start_a_Town_
                 new RecipeProperties("Bake") { Job = JobDefOf.Cook }
                     .AddWorkstation(IsWorkstation.Types.Baking)
                     .AddIngredientMaker(def =>
-                        new Ingredient("Filling") { DefaultRestrictions = new IngredientRestrictions().Restrict(MaterialType.Meat) }
+                        new Ingredient("Filling") { DefaultRestrictions = new IngredientRestrictions().Restrict(MaterialTypeDefOf.Meat) }
                             .SetAllow(def.ValidMaterialTypes, true)
                             .SetAllow(ItemCategory.FoodRaw, true))
                     .AddProductMaker(def => new Reaction.Product(def).GetMaterialFromIngredient("Filling")),
@@ -70,7 +70,7 @@ namespace Start_a_Town_
             {
                 new ConsumableComponent.Props()
             },
-        }.SetMadeFrom(MaterialType.Fruit, MaterialType.Meat);
+        }.SetMadeFrom(MaterialTypeDefOf.Fruit, MaterialTypeDefOf.Meat);
 
         static public readonly ItemDef Coins = new("Coins")
         {

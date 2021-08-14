@@ -10,7 +10,7 @@ namespace Start_a_Town_.Blocks
         {
             this.BuildProperties = new BuildProperties(new Ingredient(item: RawMaterialDef.Logs), 0);
             this.Variations.Add(Block.Atlas.Load("blocks/campfire", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap));
-            this.BuildProperties.WorkAmount = 2;
+            this.BuildProperties.Complexity = 2;
             this.ToggleConstructionCategory(ConstructionsManager.Production, true);
             this.Ingredient = new Ingredient().SetAllow(RawMaterialDef.Logs, true);
         }

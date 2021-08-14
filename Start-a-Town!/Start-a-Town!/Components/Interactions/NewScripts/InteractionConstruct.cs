@@ -11,7 +11,8 @@ namespace Start_a_Town_.Interactions
         {
             this.BuildProgress = new(() => this.Target.GetBlockEntity<BlockConstructionEntity>().BuildProgress);
         }
-        Lazy<Progress> BuildProgress;
+
+        readonly Lazy<Progress> BuildProgress;
         protected override float Progress => this.BuildProgress.Value.Percentage;
 
         protected override float WorkDifficulty { get; } = 1;

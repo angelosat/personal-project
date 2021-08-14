@@ -13,7 +13,7 @@
         public override int Score(Actor actor, Entity item)
         {
             var ability = item.ToolComponent?.Props?.ToolUse;
-            if (ability is not null)
+            if (ability is null)
                 return -1;
             if (ability != this.ToolAbility)
                 return -1;

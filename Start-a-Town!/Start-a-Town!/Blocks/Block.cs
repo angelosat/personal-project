@@ -351,7 +351,7 @@ namespace Start_a_Town_
             get => this.BuildProperties.Ingredient;
             set => this.BuildProperties.Ingredient = value;
         }
-        public int BuildComplexity => this.BuildProperties.WorkAmount;
+        public int BuildComplexity => this.BuildProperties.Complexity;
         public ConstructionCategory ConstructionCategory => this.BuildProperties.Category;
         public readonly bool HasData;
 

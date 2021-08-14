@@ -10,7 +10,7 @@ namespace Start_a_Town_
             : base("Bricks")
         {
             this.LoadVariations("bricks/bricks");
-            this.BuildProperties.WorkAmount = 20;
+            this.BuildProperties.Complexity = 20;
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
             this.Ingredient =// new Ingredient(RawMaterialDef.Boulders, null, null, 1);
                 new Ingredient()

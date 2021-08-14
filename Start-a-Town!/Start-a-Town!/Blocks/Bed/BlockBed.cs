@@ -14,12 +14,6 @@ namespace Start_a_Town_
     {
         public enum Part { Top = 0x0, Bottom = 0x1 }
 
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    // TODO: implement
-        //    return MaterialDefOf.LightWood;
-        //}
-
         readonly AtlasDepthNormals.Node.Token[] TopParts, BottomParts;
         readonly AtlasDepthNormals.Node.Token[][] Parts;
         public BlockBed() 
@@ -27,6 +21,7 @@ namespace Start_a_Town_
         {
             this.Furniture = FurnitureDefOf.Bed;
             this.BuildProperties = new BuildProperties(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
+            this.BuildProperties.Complexity = 10;
             this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.TopParts = new AtlasDepthNormals.Node.Token[] {
                 Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),

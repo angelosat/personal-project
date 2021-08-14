@@ -5,7 +5,7 @@
         public Ingredient Ingredient;
         public float ToolSensitivity;
         public ConstructionCategory Category;
-        public int WorkAmount = 1;
+        public int Complexity = 1;
         public BuildProperties()
         {
 

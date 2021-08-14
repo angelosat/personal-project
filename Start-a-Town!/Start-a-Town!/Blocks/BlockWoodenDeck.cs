@@ -14,7 +14,7 @@ namespace Start_a_Town_
             this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
             this.Variations.Add(this.GrayScale);
             this.Ingredient = new Ingredient(RawMaterialDef.Planks, null, null, 1);// 4);
-            this.BuildProperties.WorkAmount = 2;
+            this.BuildProperties.Complexity = 2;
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
 

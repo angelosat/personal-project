@@ -32,7 +32,7 @@ namespace Start_a_Town_
         static readonly IHotkey HotkeyBuild;
         static ConstructionsManager()
         {
-            HotkeyBuild = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Build", ToggleConstructionWindow, System.Windows.Forms.Keys.B);
+            HotkeyBuild = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, "Build", ToggleConstructionWindow, System.Windows.Forms.Keys.B);
         }
 
         private static void ToggleConstructionWindow()

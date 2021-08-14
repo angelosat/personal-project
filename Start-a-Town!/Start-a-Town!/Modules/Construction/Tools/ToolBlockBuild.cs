@@ -92,40 +92,40 @@ namespace Start_a_Town_.Modules.Construction
             }
             base.HandleKeyDown(e);
         }
-        public override void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
-        {
-            if (e.Handled)
-                return;
-            switch (e.KeyChar)
-            {
-                //case '[':
-                case 'e':
-                    this.RotateClockwise();
-                    e.Handled = true;
-                    break;
+        //public override void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
+        //{
+        //    if (e.Handled)
+        //        return;
+        //    switch (e.KeyChar)
+        //    {
+        //        //case '[':
+        //        case 'e':
+        //            this.RotateClockwise();
+        //            e.Handled = true;
+        //            break;
 
-                //case ']':
-                case 'q':
-                    this.RotateAntiClockwise();
-                    e.Handled = true;
-                    break;
+        //        //case ']':
+        //        case 'q':
+        //            this.RotateAntiClockwise();
+        //            e.Handled = true;
+        //            break;
 
-                default:
-                    break;
-            }
-        }
+        //        default:
+        //            break;
+        //    }
+        //}
 
-        private void RotateAntiClockwise()
-        {
-            this.Orientation -= 1;
-            if (this.Orientation < 0)
-                this.Orientation = 3;
-        }
+        //internal override void RotateAntiClockwise()
+        //{
+        //    this.Orientation -= 1;
+        //    if (this.Orientation < 0)
+        //        this.Orientation = 3;
+        //}
 
-        private void RotateClockwise()
-        {
-            this.Orientation = (this.Orientation + 1) % 4;
-        }
+        //internal override void RotateClockwise()
+        //{
+        //    this.Orientation = (this.Orientation + 1) % 4;
+        //}
         Vector3 GetMouseover()
         {
             return IsReplacing() ? this.Target.Global : this.Target.FaceGlobal;
@@ -251,7 +251,7 @@ namespace Start_a_Town_.Modules.Construction
             this.Replacing = false;
             return a;
         }
-      
+
         private static bool IsGodMode()
         {
             return false;

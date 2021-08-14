@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_.PlayerControl
 {
@@ -343,7 +341,7 @@ namespace Start_a_Town_.PlayerControl
         {
             var cam = map.Camera;
             base.DrawAfterWorld(sb, map);
-            var haul = this.Actor.Inventory.HaulSlot.Object;// PersonalInventoryComponent.GetHauling(this.Actor).Object;
+            var haul = this.Actor.Inventory.HaulSlot.Object;
             if (haul != null)
             {
                 if (this.Target == null)
@@ -357,5 +355,6 @@ namespace Start_a_Town_.PlayerControl
         {
             Client.PlayerSlotInteraction(slot);
         }
+
     }
 }

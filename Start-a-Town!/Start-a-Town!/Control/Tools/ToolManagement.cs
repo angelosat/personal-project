@@ -12,22 +12,30 @@ namespace Start_a_Town_
     [EnsureStaticCtorCall]
     public class ToolManagement : DefaultTool
     {
-        bool Up, Down, Left, Right;
+        static bool Up, Down, Left, Right;
         private DateTime MouseMiddleTimestamp;
         Vector2 MouseScrollOrigin;
         Vector2 CameraCoordinatesOrigin;
         Action ScrollingMode;
-        public static readonly HotkeyContext HotkeyContext = new("Management");
+        public static readonly HotkeyContext HotkeyContextManagement = new("Management");
+        protected HotkeyContext HotkeyContext => HotkeyContextManagement;
         static ToolManagement()
         {
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Pause/Resume", PauseResume, Keys.Space);
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Normal", delegate { SetSpeed(1); }, Keys.D1);
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Fast", delegate { SetSpeed(2); }, Keys.D2);
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Speed: Faster", delegate { SetSpeed(3); }, Keys.D3);
-            HotkeyToggleForbidden = HotkeyManager.RegisterHotkey(HotkeyContext, "Toggle Forbidden", ToggleForbidden, Keys.F);
-            HotkeyManager.RegisterHotkey(HotkeyContext, "Set draw elevation to selection", Slice, Keys.Z);
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Pause/Resume", PauseResume, Keys.Space);
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Speed: Normal", delegate { SetSpeed(1); }, Keys.D1);
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Speed: Fast", delegate { SetSpeed(2); }, Keys.D2);
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Speed: Faster", delegate { SetSpeed(3); }, Keys.D3);
+            HotkeyToggleForbidden = HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Toggle Forbidden", ToggleForbidden, Keys.F);
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Set draw elevation to selection", Slice, Keys.Z);
+
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Camera: Up", () => Up = true, () => Up = false, Keys.W, Keys.Up);
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Camera: Down", () => Down = true, () => Down = false, Keys.S, Keys.Down);
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Camera: Left", () => Left = true, () => Left = false, Keys.A, Keys.Left);
+            HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Camera: Right", () => Right = true, () => Right = false, Keys.D, Keys.Right);
+
+            HotkeyCameraFaster = HotkeyManager.RegisterHotkey(HotkeyContextManagement, "Faster camera speed", delegate { }, Keys.ShiftKey);
         }
-        internal static readonly IHotkey HotkeyToggleForbidden;
+        internal static readonly IHotkey HotkeyToggleForbidden, HotkeyCameraFaster;
 
         public ToolManagement()
         {
@@ -124,22 +132,14 @@ namespace Start_a_Town_
         {
             int xx = 0, yy = 0;
 
-            if (this.Up)
-            {
+            if (Up)
                 yy -= 1;
-            }
-            else if (this.Down)
-            {
+            else if (Down)
                 yy += 1;
-            }
-            if (this.Left)
-            {
+            if (Left)
                 xx -= 1;
-            }
-            else if (this.Right)
-            {
+            else if (Right)
                 xx += 1;
-            }
             if (xx != 0 || yy != 0)
             {
                 var cam = Ingame.CurrentMap.Camera;
@@ -156,7 +156,7 @@ namespace Start_a_Town_
                 var nextStep = new Vector2(roundx, roundy);
                 nextStep.Normalize();
 
-                var speed = InputState.IsKeyDown(Keys.ShiftKey) ? 3 : 1;
+                var speed = HotkeyCameraFaster.ShortcutKeys.Any(k => InputState.IsKeyDown(k)) ? 3 : 1;
                 cam.Move(cam.Coordinates += new Vector2(xx, yy) * 4 * speed);
             }
         }
@@ -164,28 +164,7 @@ namespace Start_a_Town_
         {
             if (e.Handled)
                 return;
-            HotkeyManager.Press(e.KeyCode, HotkeyContext);
-        
-            if (e.KeyCode == GlobalVars.KeyBindings.North || e.KeyCode == Keys.Up)
-            {
-                e.Handled = true;
-                this.Up = true;
-            }
-            if (e.KeyCode == GlobalVars.KeyBindings.South || e.KeyCode == System.Windows.Forms.Keys.Down)
-            {
-                e.Handled = true;
-                this.Down = true;
-            }
-            if (e.KeyCode == GlobalVars.KeyBindings.West || e.KeyCode == System.Windows.Forms.Keys.Left)
-            {
-                e.Handled = true;
-                this.Left = true;
-            }
-            if (e.KeyCode == GlobalVars.KeyBindings.East || e.KeyCode == System.Windows.Forms.Keys.Right)
-            {
-                e.Handled = true;
-                this.Right = true;
-            }
+            e.Handled = HotkeyManager.Press(e.KeyCode, this.HotkeyContext);
         }
         private static void ToggleForbidden()
         {
@@ -201,28 +180,7 @@ namespace Start_a_Town_
         {
             if (e.Handled)
                 return;
-            switch (e.KeyCode)
-            {
-                case Keys.Up:
-                case Keys.W:
-                    this.Up = false;
-                    break;
-                case Keys.Left:
-                case Keys.A:
-                    this.Left = false;
-                    break;
-                case Keys.Right:
-                case Keys.D:
-                    this.Right = false;
-                    break;
-                case Keys.Down:
-                case Keys.S:
-                    this.Down = false;
-                    break;
-                default:
-                    break;
-            }
-            HotkeyManager.Release(e.KeyCode, HotkeyContext);
+            e.Handled = HotkeyManager.Release(e.KeyCode, this.HotkeyContext);
         }
         public override void HandleMouseWheel(HandledMouseEventArgs e)
         {
@@ -406,5 +364,6 @@ namespace Start_a_Town_
                 return;
             ScreenManager.CurrentScreen.Camera.SliceOn((int)SelectionManager.Instance.SelectedSource.Global.Z);
         }
+
     }
 }

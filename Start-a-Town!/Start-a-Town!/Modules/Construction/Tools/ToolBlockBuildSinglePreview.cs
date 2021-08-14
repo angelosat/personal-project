@@ -64,30 +64,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             this.DrawAfterWorld(sb, map);
         }
-        public override void HandleKeyPress(KeyPressEventArgs e)
-        {
-            if (e.Handled)
-                return;
-            switch (e.KeyChar)
-            {
-                //case '[':
-                case 'e':
-                    this.Orientation = (this.Orientation + 1) % 4;
-                    e.Handled = true;
-                    break;
 
-                //case ']':
-                case 'q':
-                    this.Orientation -= 1;
-                    if (this.Orientation < 0)
-                        this.Orientation = 3;
-                    e.Handled = true;
-                    break;
-
-                default:
-                    break;
-            }
-        }
         protected override void WriteData(System.IO.BinaryWriter w)
         {
             w.Write(this.Block);
@@ -95,6 +72,17 @@ namespace Start_a_Town_.Modules.Construction
         protected override void ReadData(System.IO.BinaryReader r)
         {
             this.Block = r.ReadBlock();
+        }
+        internal override void RotateAntiClockwise()
+        {
+            this.Orientation -= 1;
+            if (this.Orientation < 0)
+                this.Orientation = 3;
+        }
+
+        internal override void RotateClockwise()
+        {
+            this.Orientation = (this.Orientation + 1) % 4;
         }
     }
 }

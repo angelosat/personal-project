@@ -78,8 +78,6 @@ namespace Start_a_Town_
             }
             else
             {
-                //var isblocktargetting = Controller.IsBlockTargeting();
-                //var mouseover = (isblocktargetting || this.TargetOnlyBlocks) ? Controller.Instance.Mouseover : Controller.Instance.GetMouseover();
                 var mouseover = Controller.Instance.Mouseover;
                 if (mouseover.Target != null)
                 {
@@ -260,5 +258,10 @@ namespace Start_a_Town_
 
         public virtual string HelpText { get; } = "";
         public virtual bool TargetOnlyBlocks { get; } = false;
+
+
+        internal virtual void RotateAntiClockwise() { }
+
+        internal virtual void RotateClockwise() { }
     }
 }

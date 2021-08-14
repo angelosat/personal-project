@@ -20,10 +20,10 @@ namespace Start_a_Town_
         {
             PacketDesignation.Init();
 
-            Hotkey = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Designations", ToggleGui, System.Windows.Forms.Keys.U);
+            Hotkey = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, "Designations", ToggleGui, System.Windows.Forms.Keys.U);
             
             foreach(var d in DesignationDef.Dictionary)
-                HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, $"Designate: {d.Key}", delegate { SetTool(d.Value); });
+                HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, $"Designate: {d.Key}", delegate { SetTool(d.Value); });
         }
 
         internal ObservableCollection<IntVec3> GetDesignations(DesignationDef des)

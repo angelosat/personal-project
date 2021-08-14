@@ -23,12 +23,17 @@ namespace Start_a_Town_
             HotkeyManager.RegisterHotkey(HotkeyContextDebug, "Toggle draw regions", ToggleDrawRegions, System.Windows.Forms.Keys.F7);
             HotkeyManager.RegisterHotkey(HotkeyContext, "Rotate camera left", delegate { Ingame.CurrentMap.Camera.RotateClockwise(); }, System.Windows.Forms.Keys.Oemcomma);
             HotkeyManager.RegisterHotkey(HotkeyContext, "Rotate camera right", delegate { Ingame.CurrentMap.Camera.RotateCounterClockwise(); }, System.Windows.Forms.Keys.OemPeriod);
+
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Rotate construction clockwise", () => CurrentTool.RotateClockwise(), System.Windows.Forms.Keys.E);
+            HotkeyManager.RegisterHotkey(HotkeyContext, "Rotate construction anticlockwise", () => CurrentTool.RotateAntiClockwise(), System.Windows.Forms.Keys.Q);
         }
-        Type DefaultToolType = typeof(ToolManagement);
+
+        readonly Type DefaultToolType = typeof(ToolManagement);
         internal ControlTool GetDefaultTool()
         {
             return Activator.CreateInstance(DefaultToolType) as ControlTool;// new ToolManagement();
         }
+        public static ControlTool CurrentTool => Instance.ActiveTool;
         ControlTool _activeTool;
         public ControlTool ActiveTool
         {
@@ -280,7 +285,6 @@ namespace Start_a_Town_
                 return true;
             }
             return false;
-            //ScreenManager.CurrentScreen.ToolManager.ClearTool();
         }
 
         public static TargetArgs CurrentTarget => Instance.ActiveTool != null ? (Instance.ActiveTool.Target ?? TargetArgs.Null) : TargetArgs.Null;

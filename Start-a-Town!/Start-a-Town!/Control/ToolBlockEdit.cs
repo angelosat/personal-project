@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
+using Start_a_Town_.UI;
+using System;
+using System.Windows.Forms;
 
 namespace Start_a_Town_.PlayerControl
 {
@@ -14,10 +14,10 @@ namespace Start_a_Town_.PlayerControl
         bool Painting;
         readonly Random Random;
         int Orientation;
-        MaterialDef Material;
-        Vector3 LastPainted = new Vector3(float.MinValue);
-        Keys KeyReplace = Keys.ShiftKey;
-        Keys KeyRemove = Keys.ControlKey;
+        readonly MaterialDef Material;
+        Vector3 LastPainted = new(float.MinValue);
+        readonly Keys KeyReplace = Keys.ShiftKey;
+        readonly Keys KeyRemove = Keys.ControlKey;
         public ToolBlockEdit()
         {
 
@@ -59,11 +59,11 @@ namespace Start_a_Town_.PlayerControl
             this.LastPainted = new Vector3(float.MinValue); // lol wut?
             return base.MouseRightUp(e);
         }
-        
+
         void Paint()
         {
-            bool isDelete = InputState.IsKeyDown(KeyRemove);
-            bool isReplace = InputState.IsKeyDown(KeyReplace);
+            bool isDelete = InputState.IsKeyDown(this.KeyRemove);
+            bool isReplace = InputState.IsKeyDown(this.KeyReplace);
             var global = this.Target.Global + ((isDelete || isReplace) ? Vector3.Zero : this.Target.Face);
             var block = isDelete ? BlockDefOf.Air : this.Block;
             byte state = isDelete ? (byte)0 : this.State;
@@ -74,28 +74,18 @@ namespace Start_a_Town_.PlayerControl
 
             this.Variation = this.Random.Next(block.Variations.Count);
         }
-        
-        public override void HandleKeyPress(KeyPressEventArgs e)
+
+        internal override void RotateAntiClockwise()
         {
-            if (e.Handled)
-                return;
-            switch(e.KeyChar)
-            {
-                case 'e':// '[':
-                    this.Orientation = (this.Orientation + 1) % 4;
-                    break;
-
-                case 'q':// ']':
-                    this.Orientation -= 1;
-                    if (this.Orientation < 0)
-                        this.Orientation = 3;
-                    break;
-
-                default:
-                    break;
-            }
+            this.Orientation -= 1;
+            if (this.Orientation < 0)
+                this.Orientation = 3;
         }
-        
+
+        internal override void RotateClockwise()
+        {
+            this.Orientation = (this.Orientation + 1) % 4;
+        }
         internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
@@ -117,12 +107,12 @@ namespace Start_a_Town_.PlayerControl
         }
         public override Icon GetIcon()
         {
-            if (InputState.IsKeyDown(KeyReplace))
+            if (InputState.IsKeyDown(this.KeyReplace))
                 return Icon.Replace;
-            if (InputState.IsKeyDown(KeyRemove))
+            if (InputState.IsKeyDown(this.KeyRemove))
                 return Icon.Cross;
             return base.GetIcon();
-        }     
+        }
 
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {

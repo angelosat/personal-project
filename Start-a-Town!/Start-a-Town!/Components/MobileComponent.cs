@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Start_a_Town_.Animations;
 using Start_a_Town_.Particles;
 using Microsoft.Xna.Framework;
-using System.Linq;
 
 namespace Start_a_Town_.Components
 {

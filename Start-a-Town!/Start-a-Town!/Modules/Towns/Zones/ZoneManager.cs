@@ -15,7 +15,7 @@ namespace Start_a_Town_
         readonly public Dictionary<int, Zone> Zones = new();
         static ZoneManager()
         {
-            Hotkey = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContext, "Zones", ToggleGui, System.Windows.Forms.Keys.Y);
+            Hotkey = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, "Zones", ToggleGui, System.Windows.Forms.Keys.Y);
         }
         public ZoneManager(Town town)
         {

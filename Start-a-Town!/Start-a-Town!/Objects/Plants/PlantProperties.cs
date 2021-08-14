@@ -17,6 +17,8 @@ namespace Start_a_Town_
                 this.Grown = textureGrown;
             }
         }
+        public string TextureFruit;
+
         //public string TextureGrowing, TextureGrown;
         [XmlIgnore]
         public string TextureGrown
@@ -72,6 +74,7 @@ namespace Start_a_Town_
         {
             TextureGrowing = ItemContent.BerryBushGrowing.AssetPath,
             TextureGrown = ItemContent.BerryBushGrown.AssetPath,
+            TextureFruit = ItemContent.BerryBushFruit.AssetPath,
             StemMaterial = MaterialDefOf.ShrubStem,
             Growth = new GrowthProperties(ItemDefOf.Fruit, MaterialDefOf.Berry, 5, 6),
             CutDownDifficulty = 3,

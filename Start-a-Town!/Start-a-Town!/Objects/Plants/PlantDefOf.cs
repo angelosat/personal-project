@@ -1,5 +1,4 @@
 ﻿using Start_a_Town_.Components;
-using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
@@ -24,7 +23,7 @@ namespace Start_a_Town_
             Weight = 5,
             Haulable = false,
             DefaultMaterial = MaterialDefOf.ShrubStem,
-            Body = new Bone(BoneDefOf.PlantStem, ItemContent.BerryBushGrowing),
+            Body = new Bone(BoneDefOf.PlantStem, ItemContent.BerryBushGrowing).AddJoint(new Bone(BoneDefOf.PlantFruit))
         };
         static PlantDefOf()
         {

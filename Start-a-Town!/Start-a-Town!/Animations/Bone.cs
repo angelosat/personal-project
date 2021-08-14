@@ -38,17 +38,21 @@ namespace Start_a_Town_
             this.Joints.Add(bone.Def, joint);
             return this;
         }
+        public Bone AddJoint(Bone bone)
+        {
+            return this.AddJoint(Vector2.Zero, bone);
+        }
         public Joint GetJoint(BoneDef type)
         {
             return this.Joints.GetValueOrDefault(type);
         }
 
-        public Bone AddBone(Bone bone)
-        {
-            var joint = this.GetJoint(bone.Def);
-            joint.SetBone(bone);
-            return this;
-        }
+        //public Bone AddBone(Bone bone)
+        //{
+        //    var joint = this.GetJoint(bone.Def);
+        //    joint.SetBone(bone);
+        //    return this;
+        //}
 
         public Bone Parent;
         public MaterialDef Material;
@@ -89,7 +93,7 @@ namespace Start_a_Town_
             var index = (int)(orientation % this.Orientations.Count);
             return this.Orientations[index];
         }
-
+        
         public Sprite Sprite
         {
             get => this.SpriteFunc?.Invoke() ?? this.Orientations.FirstOrDefault();
@@ -848,8 +852,8 @@ namespace Start_a_Town_
             //w.Write(this.Material != null ? this.Material.ID : -1);
             w.Write(this.Material != null ? this.Material.Name : "");
 
-            this.Sprite.Write(w); // i decided to sync sprites as well instead of relying on initializing sprites after gameobject loading/syncing
-
+            //this.Sprite.Write(w); // i decided to sync sprites as well instead of relying on initializing sprites after gameobject loading/syncing
+            w.Write(this.Sprite?.Name ?? "");
             foreach (var j in this.Joints.Values)
                 j.Bone?.Write(w);
         }
@@ -859,7 +863,9 @@ namespace Start_a_Town_
             //this.Material = MaterialDef.GetMaterial(r.ReadInt32());
             if (r.ReadString() is string matName && !matName.IsNullEmptyOrWhiteSpace())
                 this.Material = Start_a_Town_.Def.GetDef<MaterialDef>(matName);
-            this.Sprite = Sprite.Load(r); // i decided to sync sprites as well instead of relying on initializing sprites after gameobject loading/syncing
+
+            //this.Sprite = Sprite.Load(r); // i decided to sync sprites as well instead of relying on initializing sprites after gameobject loading/syncing
+            this.Sprite = r.ReadString() is string spritename && !spritename.IsNullEmptyOrWhiteSpace() ? Sprite.LoadNew(spritename) : null;
 
             foreach (var j in this.Joints.Values)
                 j.Bone?.Read(r);

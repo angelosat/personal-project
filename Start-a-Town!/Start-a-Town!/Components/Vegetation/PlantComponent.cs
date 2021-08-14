@@ -21,18 +21,29 @@ namespace Start_a_Town_.Components
         public enum GrowthStates { Growing, Ready }
         public Growth Growth = new(.05f);
         PlantProperties _plantProps;
-        public PlantProperties PlantProperties { get => this._plantProps;
+        public PlantProperties PlantProperties
+        { 
+            get => this._plantProps;
             set
             {
                 this._plantProps = value;
                 var parent = this.Parent;
                 var hitpoints = parent.GetResource(ResourceDefOf.HitPoints);
                 hitpoints.Max = value.StemMaterial.Density;
-                //hitpoints.Modify(value.StemHealRate / (float)Engine.TicksPerGameDay);
                 hitpoints.TicksPerRecoverOne = value.StemHealRate;
-            }
-        }// = PlantProperties.Berry;
 
+                var body = parent.Body;
+                body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
+                body.Sprite = Sprite.Load(_plantProps.TextureGrowing);
+                this.UpdateFruitTexture();
+            }
+        }
+        void UpdateFruitTexture()
+        {
+            this._spriteFruit = _plantProps.TextureFruit is string fruitTexturePath ? Sprite.Load(fruitTexturePath) : null;
+            if (_spriteFruit is not null && this.Parent.Body.TryFindBone(BoneDefOf.PlantFruit, out var fruitBone) && this.IsHarvestable)
+                fruitBone.Sprite = this._spriteFruit;
+        }
         float Length;
         Progress Progress;
         public int Level;
@@ -70,21 +81,14 @@ namespace Start_a_Town_.Components
             this.FruitGrowth = new Progress(toCopy.FruitGrowth);
         }
        
-        public override void OnObjectCreated(GameObject parent)
-        {
-            parent.Body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
-            parent.Body.SpriteFunc = () => Sprite.Load(this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing);
-        }
+       
+
         public override void OnObjectLoaded(GameObject parent)
         {
             parent.Body.Sprite = Sprite.Load(this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing);
-            //parent.Body.SpriteFuncNew = o => Sprite.Load(this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing);
-            //parent.Body.Sprite = this.IsHarvestable ? this.PlantProperties.TextureGrown : this.PlantProperties.TextureGrowing;
+            this.UpdateFruitTexture();
         }
-        public override void MakeChildOf(GameObject parent)
-        {
-            //parent.Body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
-        }
+        
         public override void Tick()
         {
             var parent = this.Parent;
@@ -106,6 +110,7 @@ namespace Start_a_Town_.Components
                                     parent.Net.EventOccured(Message.Types.PlantReady, parent);
                                 //parent.Body.Sprite = this.PlantProperties.TextureGrown;
                                 parent.Body.Sprite = Sprite.Load(this.PlantProperties.TextureGrown);
+                                this.Parent.Body.FindBone(BoneDefOf.PlantFruit).Sprite = this._spriteFruit;
                             }
                         }
                     }
@@ -131,7 +136,6 @@ namespace Start_a_Town_.Components
         }
         public void Wiggle(float angle, int ticks, int speed)
         {
-            this.WiggleTime = 0;
             this.WiggleTick = ticks;
             this.WiggleAngleMax = angle;
             this.WiggleIntensity = speed;
@@ -147,27 +151,16 @@ namespace Start_a_Town_.Components
             var radians = this.WiggleIntensity * t * Math.PI * 2;
             var currentangle = this.WiggleDirection * currentdepth * (float)Math.Sin(radians);
             parent.SpriteComp._Angle = currentangle;
-
-            //var parent = this.Parent;
-            //var t = this.WiggleTime / this.WiggleTimeMax;
-            //if (t >= 1)
-            //    return;
-            //float currentangle, currentdepth = (1 - t) * this.WiggleAngleMax;
-            //currentangle = this.WiggleDirection * currentdepth * (float)Math.Sin(t * Math.PI * 2);
-            //this.WiggleTime += 0.05f;
-            //var sprCmp = parent.GetComponent<SpriteComponent>(); // TODO: optimize
-            //sprCmp._Angle = currentangle;
         }
         private int WiggleTick;
         private readonly int WiggleTickMax = 40;
-        private float WiggleTime;
-        private readonly float WiggleTimeMax = 2;
         private float WiggleAngleMax;
         const float WiggleAngleMaxDefault = (float)Math.PI / 4f;
         const int WiggleTickMaxDefault = 40;
         private int WiggleIntensity;
         const int WiggleIntensityDefault = 1;
         int WiggleDirection;
+        private Sprite _spriteFruit;
 
         public bool Harvest(GameObject parent, GameObject actor)
         {
@@ -205,8 +198,8 @@ namespace Start_a_Town_.Components
         {
             this.FruitGrowth.Value = 0;
             this.FruitGrowthTick = 0;
-            //parent.Body.Sprite = this.PlantProperties.TextureGrowing;
             parent.Body.Sprite = Sprite.Load(this.PlantProperties.TextureGrowing);
+            this.Parent.Body.FindBone(BoneDefOf.PlantFruit).Sprite = null;
         }
 
         public void ResetGrowth(GameObject parent)
@@ -229,8 +222,6 @@ namespace Start_a_Town_.Components
             }
             return false;
         }
-
-       
 
         public override object Clone()
         {

@@ -23,6 +23,7 @@
         static public readonly BoneDef ToolHandle = new("ToolHandle");
         static public readonly BoneDef Item = new("Item");
         static public readonly BoneDef PlantStem = new("Plant Stem");
+        static public readonly BoneDef PlantFruit = new("Plant Fruit");
         static public readonly BoneDef TreeTrunk = new("Tree Trunk");
 
         static BoneDefOf()

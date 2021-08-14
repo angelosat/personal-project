@@ -43,7 +43,9 @@ namespace Start_a_Town_
         static public readonly Sprite SeedsFull = new Sprite("seeds", new Vector2(16, 32), new Vector2(16, 24));
 
         static public readonly Sprite BerryBushGrowing = new Sprite("berrybush1", BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(30 / 2, 28 - 8) };
-        static public readonly Sprite BerryBushGrown = new Sprite("berrybush2", BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(30 / 2, 28 - 8) };
+        //static public readonly Sprite BerryBushGrown = new Sprite("berrybush2", BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(30 / 2, 28 - 8) };
+        static public readonly Sprite BerryBushGrown = new Sprite("berrybush1", BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(30 / 2, 28 - 8) };
+        static public readonly Sprite BerryBushFruit = new Sprite("berrybushFruit", BlockDepthMap) { OriginY = 8, OriginGround = new Vector2(30 / 2, 28 - 8) };
 
         static public readonly Sprite TreeFull = new Sprite("trees/tree1g").SetGroundContact(new Vector2(.5f, 1));
 

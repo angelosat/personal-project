@@ -205,7 +205,7 @@ namespace Start_a_Town_
             foreach (var pos in this.Positions)
             {
                 var above = pos.Above;
-                var grownPlants = this.Town.Map.GetObjects(above).OfType<Plant>().Where(p => p.FruitGrowth >= this.HarvestThreshold);
+                var grownPlants = this.Town.Map.GetObjects(above).OfType<Plant>().Where(p => p.PlantComponent.IsHarvestable);// p.FruitGrowth >= this.HarvestThreshold);
                 foreach (var obj in grownPlants)
                     yield return obj;
             }

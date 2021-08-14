@@ -236,9 +236,13 @@ namespace Start_a_Town_
         {
             w.Write(this.Name);
         }
-        public static Sprite Load(string assetPath)
+        public static Sprite LoadNew(string assetName)
         {
-            return Registry[assetPath];
+            return Registry[Path + assetName];
+        }
+        public static Sprite Load(string assetFullName)
+        {
+            return Registry[assetFullName];
         }
         public static Sprite Load(BinaryReader r)
         {
@@ -281,6 +285,11 @@ namespace Start_a_Town_
             this.Overlays.Add(overlayName, overlay);
             return this;
         }
+        public Sprite RemoveOverlay(string overlayName)
+        {
+            this.Overlays.Remove(overlayName);
+            return this;
+        }
         public List<Sprite> GetOverlays()
         {
             List<Sprite> list = new List<Sprite>() { this };
@@ -318,7 +327,11 @@ namespace Start_a_Town_
         }
         public static Sprite Load(SaveTag tag)
         {
-            return Registry[Path + (string)tag.Value];
+            var assetName = Path + (string)tag.Value;
+            //return Registry[assetName];
+            if(!Registry.TryGetValue(Path + (string)tag.Value, out var sprite))
+                Log.Warning($"Sprite \"{assetName}\" doesn't exist");
+            return sprite;
         }
 
         public void Draw(MySpriteBatch sb, Vector2 screenPos, Color color, float rotation, Vector2 origin, float scale, SpriteEffects sprFx, float depth)

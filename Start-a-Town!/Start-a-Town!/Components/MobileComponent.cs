@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Start_a_Town_.Animations;
 using Start_a_Town_.Particles;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace Start_a_Town_.Components
 {
@@ -326,19 +327,43 @@ namespace Start_a_Town_.Components
             if (this.CurrentState.Type != State.Types.Walking)
                 return;
             // WE DONT WANT TO STOP MOVING WHEN JUMPING
-            if (parent.Velocity.Z != 0) 
+            if (parent.Physics.MidAir)// parent.Velocity.Z != 0) 
                 return;
             if (parent.GetPath() != null)
                 return;
-            Vector3 global = parent.Global;
+            var global = parent.Global;
             var g = parent.Map.Gravity;
-            if (!parent.Map.IsSolid(new Vector3(global.X + walkX, global.Y, global.Z + g)))
+            var map = parent.Map;
+
+            /// code beloe prevents any fall by checking footprint corners instead of center position
+            //if (parent.Physics.GetFootprintCorners(new Vector3(global.X + walkX, global.Y, global.Z + g)).All(p => !map.IsSolid(p)))
+            //    walkX = 0;
+            //if (parent.Physics.GetFootprintCorners(new Vector3(global.X, global.Y + walkY, global.Z + g)).All(p => !map.IsSolid(p)))
+            //    walkY = 0;
+            //if (parent.Physics.GetFootprintCorners(new Vector3(global.X + walkX, global.Y + walkY, global.Z + g)).All(p => !map.IsSolid(p)))
+            //    walkY = walkX = 0;
+
+            /// code below only prevents fall if the fall distance will be greater than 1 full block height. allows stepping down from half blocks
+            var walkXvec = new Vector3(global.X + walkX, global.Y, global.Z + g);
+            var walkYvec = new Vector3(global.X, global.Y + walkY, global.Z + g);
+            var walkXYvec = new Vector3(global.X + walkX, global.Y + walkY, global.Z + g);
+
+            if (!map.IsSolid(walkXvec) && !map.IsSolid(walkXvec.Below()))
                 walkX = 0;
-            if (!parent.Map.IsSolid(new Vector3(global.X, global.Y + walkY, global.Z + g)))
+            if (!map.IsSolid(walkYvec) && !map.IsSolid(walkYvec.Below()))
                 walkY = 0;
-            if (!parent.Map.IsSolid(new Vector3(global.X + walkX, global.Y + walkY, global.Z + g)))
+            if (!map.IsSolid(walkXYvec) && !map.IsSolid(walkXYvec.Below()))
                 walkY = walkX = 0;
+
+            /// code below prevents any fall, even from half blocks
+            //if (!map.IsSolid(new Vector3(global.X + walkX, global.Y, global.Z + g)))
+            //    walkX = 0;
+            //if (!map.IsSolid(new Vector3(global.X, global.Y + walkY, global.Z + g)))
+            //    walkY = 0;
+            //if (!map.IsSolid(new Vector3(global.X + walkX, global.Y + walkY, global.Z + g)))
+            //    walkY = walkX = 0;
         }
+
         static public void EmitDust(GameObject parent)
         {
             if (parent.Net is Net.Client)

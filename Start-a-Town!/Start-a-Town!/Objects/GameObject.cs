@@ -1392,7 +1392,7 @@ namespace Start_a_Town_
         {
             return this.GetBoundingBox(this.Global, 0);
         }
-
+        
         internal void OnGameEvent(GameEvent e)
         {
             foreach (var c in this.Components)

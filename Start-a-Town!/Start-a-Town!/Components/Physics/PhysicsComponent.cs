@@ -136,7 +136,13 @@ namespace Start_a_Town_.Components
             new Vector3(-.25f, .25f, 0), 
             new Vector3(.25f, -.25f, 0), 
             new Vector3(.25f, .25f, 0) };
-
+        public IEnumerable<Vector3> GetFootprintCorners(Vector3 global)
+        {
+            yield return global + BoundingBoxCorners[0];
+            yield return global + BoundingBoxCorners[1];
+            yield return global + BoundingBoxCorners[2];
+            yield return global + BoundingBoxCorners[3];
+        }
         public IEnumerable<Vector3> GetBoundingBoxCorners(Vector3 global)
         {
             yield return global + BoundingBoxCorners[0];

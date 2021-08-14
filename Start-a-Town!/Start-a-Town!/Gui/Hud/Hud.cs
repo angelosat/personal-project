@@ -111,7 +111,6 @@ namespace Start_a_Town_
 
             this.ZLevelDrawBar.Location = this.ZLevelDrawBar.RightCenterScreen;
 
-
             this.Controls.Add(
                 this.ZLevelDrawBar,
                 camWidget, uiSpeed,

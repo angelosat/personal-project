@@ -591,7 +591,8 @@ namespace Start_a_Town_.UI
         public Vector2 Center => new(this.Width / 2, this.Height / 2);
         public Vector2 BottomCenter => this.TopLeft + new Vector2(this.Width / 2, this.Height);
 
-        public Vector2 BottomRightLocal => new Vector2(this.Width, this.Height);
+        public Vector2 BottomRightLocal => new(this.Width, this.Height);
+        public Vector2 BottomLeftLocal => new(0, this.Height);
 
         public Vector2 BottomLeft => this.TopLeft + Vector2.UnitY * this.Height;
         public Vector2 BottomRight => this.TopLeft + new Vector2(this.Width, this.Height);
@@ -1317,6 +1318,12 @@ namespace Start_a_Town_.UI
         {
             this.LocationFunc = () => this.Parent.BottomRightLocal;
             this.Anchor = Vector2.One;
+            return this;
+        }
+        internal Control AnchorToBottomLeft()
+        {
+            this.LocationFunc = () => this.Parent.BottomLeftLocal;
+            this.Anchor = Vector2.UnitY;
             return this;
         }
         public void SmartPosition()

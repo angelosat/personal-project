@@ -21,6 +21,7 @@ namespace Start_a_Town_.Modules.Construction
         public byte State;
         public int Variation, Orientation;
         int Height;
+        public override bool TargetOnlyBlocks => true;
 
         public ToolBlockBuild()
         {
@@ -30,12 +31,12 @@ namespace Start_a_Town_.Modules.Construction
         {
             this.Callback = callback;
         }
-        public override void Update()
-        {
-            base.Update();
-            if (this.Target.Type == TargetType.Entity)
-                this.Target = Controller.Instance.Mouseover.TargetCell;
-        }
+        //public override void Update()
+        //{
+        //    base.Update();
+        //    if (this.Target.Type == TargetType.Entity)
+        //        this.Target = Controller.Instance.Mouseover.TargetCell;
+        //}
         private void CheckValidity()
         {
             this.Valid = true;

@@ -751,6 +751,8 @@ namespace Start_a_Town_
         }
         public void DrawInterface(SpriteBatch sb, Camera cam)
         {
+            foreach (var obj in this.Objects)
+                obj.DrawInterface(sb, cam);
             foreach (var blockentity in this.BlockEntitiesByPosition)
                 blockentity.Value.DrawUI(sb, cam, blockentity.Key.ToGlobal(this));
         }

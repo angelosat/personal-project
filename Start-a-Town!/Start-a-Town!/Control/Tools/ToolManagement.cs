@@ -44,7 +44,7 @@ namespace Start_a_Town_
         {
             var map = Ingame.GetMap();
             var cam = map.Camera;
-            cam.MousePicking(map);
+            cam.MousePicking(map, this.TargetOnlyBlocks);
             this.UpdateTargetNew();
 
             if (this.Origin != null && this.Target != null && this.Origin.Global != this.Target.Global)

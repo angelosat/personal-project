@@ -1283,11 +1283,12 @@ namespace Start_a_Town_
             this.WaterComposite = new RenderTarget2D(gfx, w, h, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
         }
 
-        public void MousePicking(MapBase map)
+        public void MousePicking(MapBase map, bool ignoreEntities = false)
         {
             var visibleChunks = map.GetActiveChunks().Values.Where(ch => this.ViewPort.Intersects(ch.GetScreenBounds(this)));
-            foreach (var chunk in visibleChunks)
-                chunk.HitTestEntities(this);
+            if(!(ignoreEntities || Controller.IsBlockTargeting()))
+                foreach (var chunk in visibleChunks)
+                    chunk.HitTestEntities(this);
 
             /// uncomment this to prefer targetting entities even when they are behind blocks
             //if (Controller.Instance.MouseoverNext.Object is not null)

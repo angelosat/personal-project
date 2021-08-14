@@ -343,16 +343,16 @@ namespace Start_a_Town_.Components
             //if (parent.Physics.GetFootprintCorners(new Vector3(global.X + walkX, global.Y + walkY, global.Z + g)).All(p => !map.IsSolid(p)))
             //    walkY = walkX = 0;
 
-            /// code below only prevents fall if the fall distance will be greater than 1 full block height. allows stepping down from half blocks
+            /// code below only prevents fall if the fall distance will be greater than a half block. allows stepping down from half blocks
             var walkXvec = new Vector3(global.X + walkX, global.Y, global.Z + g);
             var walkYvec = new Vector3(global.X, global.Y + walkY, global.Z + g);
             var walkXYvec = new Vector3(global.X + walkX, global.Y + walkY, global.Z + g);
-
-            if (!map.IsSolid(walkXvec) && !map.IsSolid(walkXvec.Below()))
+            var halfBlock = Vector3.UnitZ * .5f;
+            if (!map.IsSolid(walkXvec) && !map.IsSolid(walkXvec - halfBlock))//.Below()))
                 walkX = 0;
-            if (!map.IsSolid(walkYvec) && !map.IsSolid(walkYvec.Below()))
+            if (!map.IsSolid(walkYvec) && !map.IsSolid(walkYvec - halfBlock))//.Below()))
                 walkY = 0;
-            if (!map.IsSolid(walkXYvec) && !map.IsSolid(walkXYvec.Below()))
+            if (!map.IsSolid(walkXYvec) && !map.IsSolid(walkXYvec - halfBlock))//.Below()))
                 walkY = walkX = 0;
 
             /// code below prevents any fall, even from half blocks

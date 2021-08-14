@@ -86,9 +86,9 @@ namespace Start_a_Town_.UI
 
             this.UISettings = new UIChatSettings(this);
 
-            this.Location = new Vector2(0, UIManager.Height);
-            this.Anchor = new Vector2(0, 1);
-
+            //this.Location = new Vector2(0, UIManager.Height);
+            //this.Anchor = new Vector2(0, 1);
+            this.AnchorToBottomLeft();
             this.SetOpacity(0, true, this.Client);
             this.TextBox.Enabled = false;
             this.SetMousethrough(true, true);

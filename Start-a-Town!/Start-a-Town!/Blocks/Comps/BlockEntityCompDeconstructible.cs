@@ -8,7 +8,7 @@ namespace Start_a_Town_
     class BlockEntityCompDeconstructible : BlockEntityComp
     {
         public override string Name { get; } = "Deconstructible";
-        public ItemMaterialAmount[] Materials = new ItemMaterialAmount[1] { new ItemMaterialAmount(RawMaterialDef.Logs, MaterialDefOf.Human, 2) };
+        public ItemMaterialAmount[] Materials = new ItemMaterialAmount[1] { new ItemMaterialAmount(RawMaterialDefOf.Logs, MaterialDefOf.Human, 2) };
         internal override void IsMadeFrom(ItemMaterialAmount[] itemDefMaterialAmounts)
         {
             this.Materials = itemDefMaterialAmounts;
@@ -22,7 +22,7 @@ namespace Start_a_Town_
             var block = cell.Block;
             //var material = block.GetMaterial(cell.BlockData);
             var material = cell.Material;
-            var scraps = RawMaterialDef.Scraps;
+            var scraps = RawMaterialDefOf.Scraps;
             var materialQuantity = block.Ingredient.Amount;
             var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
             actor.Net.PopLoot(obj, global, Vector3.Zero);

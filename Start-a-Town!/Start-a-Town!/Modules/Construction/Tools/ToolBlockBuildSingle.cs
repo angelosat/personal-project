@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingSingle : ToolDrawing
+    class ToolDrawingSingle : ToolBlockBuild
     {
-        public override string Name => "Single";
-        public override Modes Mode { get { return Modes.Single; } }
+        public override string Name { get; } = "Single";
+        public override Modes Mode { get; } = Modes.Single; 
         public ToolDrawingSingle()
         {
 
@@ -38,9 +37,10 @@ namespace Start_a_Town_.Modules.Construction
         {
             cam.DrawGridBlock(sb, this.Valid ? Color.Lime : Color.Red, this.Begin);
         }
-        public override List<IntVec3> GetPositions()
+        public override IEnumerable<IntVec3> GetPositions()
         {
-            return new List<IntVec3>() { this.Begin };
+            yield return this.Begin;
+            //return new List<IntVec3>() { this.Begin };
         }
         static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {

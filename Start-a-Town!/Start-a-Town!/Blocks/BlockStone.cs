@@ -9,7 +9,7 @@
         {
             this.LoadVariations("stone5height19");
             this.Ingredient = new Ingredient()//RawMaterialDef.Boulders, MaterialDefOf.Stone, null, 1);
-                .SetAllow(RawMaterialDef.Boulders, true)
+                .SetAllow(RawMaterialDefOf.Boulders, true)
                 .SetAllow(MaterialDefOf.Stone, true);
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }

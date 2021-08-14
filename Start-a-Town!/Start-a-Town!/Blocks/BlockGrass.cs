@@ -29,7 +29,7 @@ namespace Start_a_Town_
             //this.LootTable = new LootTable(
             //            new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), 1f, 1, RawMaterialDef.Bags.StackCapacity)
             //            );
-            this.BreakProduct = RawMaterialDef.Bags;
+            this.BreakProduct = RawMaterialDefOf.Bags;
 
             this.LoadVariations("grass/grass1", "grass/grass2", "grass/grass3", "grass/grass4");
 

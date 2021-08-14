@@ -6,7 +6,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_.PlayerControl
 {
-    class BlockPainter : ToolManagement
+    class ToolBlockEdit : ToolManagement
     {
         Block Block;
         byte State;
@@ -18,11 +18,11 @@ namespace Start_a_Town_.PlayerControl
         Vector3 LastPainted = new Vector3(float.MinValue);
         Keys KeyReplace = Keys.ShiftKey;
         Keys KeyRemove = Keys.ControlKey;
-        public BlockPainter()
+        public ToolBlockEdit()
         {
 
         }
-        public BlockPainter(Block block, MaterialDef mat, byte state)
+        public ToolBlockEdit(Block block, MaterialDef mat, byte state)
         {
             this.Material = mat;
             this.State = state;

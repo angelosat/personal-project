@@ -29,7 +29,7 @@ namespace Start_a_Town_.Modules.Construction
         }
         private static void RemoveZone(Vector3 min, Vector3 max, bool remove)
         {
-            var a = new ToolDrawing.Args(ToolDrawing.Modes.Box, min, max, true, InputState.IsKeyDown(System.Windows.Forms.Keys.LMenu), false, 0);
+            var a = new ToolBlockBuild.Args(ToolBlockBuild.Modes.Box, min, max, true, InputState.IsKeyDown(System.Windows.Forms.Keys.LMenu), false, 0);
             PacketDesignateConstruction.Send(Client.Instance, a);
         }
        

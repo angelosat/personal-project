@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.Blocks;
 using Start_a_Town_.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
@@ -56,7 +55,7 @@ namespace Start_a_Town_
         {
             var table =
                 new LootTable(
-                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Planks, MaterialDefOf.Human))// this.GetMaterial(data)))
+                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDefOf.Planks, MaterialDefOf.Human))// this.GetMaterial(data)))
                     );
             return table;
         }

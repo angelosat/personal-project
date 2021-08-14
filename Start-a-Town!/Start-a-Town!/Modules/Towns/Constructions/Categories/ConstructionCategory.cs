@@ -14,7 +14,7 @@ namespace Start_a_Town_
         protected GuiConstructionsBrowser Window => this._window ??= new GuiConstructionsBrowser();
       
         public abstract string Name { get; }
-        public ToolDrawing Tool;
+        public ToolBlockBuild Tool;
         public HashSet<Block> List = new();
 
         public void Add(Block constr)
@@ -29,18 +29,18 @@ namespace Start_a_Town_
         }
         public abstract IconButton GetButton();
        
-        static protected void CallBack(Func<ProductMaterialPair> itemGetter, ToolDrawing.Args a)
+        static protected void CallBack(Func<ProductMaterialPair> itemGetter, ToolBlockBuild.Args a)
         {
             PacketDesignateConstruction.Send(Client.Instance, itemGetter(), a);
         }
 
-        public abstract ToolDrawing GetTool(Func<ProductMaterialPair> itemGetter);
-        public abstract List<ToolDrawing> GetAvailableTools(Func<ProductMaterialPair> itemGetter);
+        public abstract ToolBlockBuild GetTool(Func<ProductMaterialPair> itemGetter);
+        public abstract List<ToolBlockBuild> GetAvailableTools(Func<ProductMaterialPair> itemGetter);
 
         static public Window WindowToolsBox;
         static public UIToolsBox ToolsBox;
 
-        internal ToolDrawing CreateTool(Type toolType, ProductMaterialPair productMaterialPair)
+        internal ToolBlockBuild CreateTool(Type toolType, ProductMaterialPair productMaterialPair)
         {
             var tools = GetAvailableTools(() => productMaterialPair);
             var tool = tools.First(t => t.GetType() == toolType);

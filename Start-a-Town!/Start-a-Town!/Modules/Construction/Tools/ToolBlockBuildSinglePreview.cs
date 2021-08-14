@@ -5,15 +5,10 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingSinglePreview : ToolDrawing
+    class ToolDrawingSinglePreview : ToolBlockBuild
     {
-        private const string _name = "Single";
-
-        public override ToolDrawing.Modes Mode
-        {
-            get { return Modes.Single; }
-        }
-        public override string Name => _name;
+        public override string Name { get; } = "Single";
+        public override Modes Mode { get; } = Modes.Single; 
         public ToolDrawingSinglePreview()
         {
 

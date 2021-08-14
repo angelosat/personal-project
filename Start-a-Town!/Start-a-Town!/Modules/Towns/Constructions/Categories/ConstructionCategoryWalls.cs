@@ -22,15 +22,15 @@ namespace Start_a_Town_
             return btn_Construct;
         }
       
-        public override ToolDrawing GetTool(Func<ProductMaterialPair> itemGetter)
+        public override ToolBlockBuild GetTool(Func<ProductMaterialPair> itemGetter)
         {
             return new ToolDrawingEnclosure(a => CallBack(itemGetter, a));
         }
-        public override List<ToolDrawing> GetAvailableTools(Func<ProductMaterialPair> itemGetter)
+        public override List<ToolBlockBuild> GetAvailableTools(Func<ProductMaterialPair> itemGetter)
         {
             var item = itemGetter();
 
-            return new List<ToolDrawing>()
+            return new List<ToolBlockBuild>()
             {
                 new ToolDrawingSingle(a => CallBack(itemGetter, a)),
                 new ToolDrawingLine(a => CallBack(itemGetter, a)),

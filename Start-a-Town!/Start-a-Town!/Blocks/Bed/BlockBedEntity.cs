@@ -1,7 +1,6 @@
 ﻿using System;
 using Start_a_Town_.Components;
 using Start_a_Town_.Animations;
-using Start_a_Town_.Blocks;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 

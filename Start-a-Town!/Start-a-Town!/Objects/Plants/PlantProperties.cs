@@ -83,7 +83,7 @@ namespace Start_a_Town_
             TextureGrowing = ItemContent.TreeFull.AssetPath,
             TextureGrown = ItemContent.TreeFull.AssetPath,
             StemMaterial = MaterialDefOf.LightWood,
-            ProductCutDown = RawMaterialDef.Logs,
+            ProductCutDown = RawMaterialDefOf.Logs,
             MaxYieldCutDown = 5,
             CutDownDifficulty = 10,
             GrowTicks = 6 * Ticks.TicksPerSecond,

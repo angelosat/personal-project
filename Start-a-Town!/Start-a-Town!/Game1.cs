@@ -146,7 +146,7 @@ namespace Start_a_Town_
             MapBase.Initialize();
             // TODO: use this.Content to load your game content here
             MaterialDef.Initialize();
-            RawMaterialDef.Initialize();
+            RawMaterialDefOf.Initialize();
 
             /// def init
             MoodletDef.Init();

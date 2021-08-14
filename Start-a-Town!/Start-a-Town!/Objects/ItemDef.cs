@@ -122,5 +122,13 @@ namespace Start_a_Town_
                 && Enumerable.Range(0, (int)Math.Ceiling(this.Height))
                     .All(z => !map.GetBlock(cell + new IntVec3(0, 0, z)).Solid);
         }
+        public IEnumerable<IntVec3> OccupyingCellsStanding()
+        {
+            return Enumerable.Range(0, (int)Math.Ceiling(this.Height)).Select(z => new IntVec3(0, 0, z));
+        }
+        public IEnumerable<IntVec3> OccupyingCellsStanding(IntVec3 pos)
+        {
+            return Enumerable.Range(0, (int)Math.Ceiling(this.Height)).Select(z => pos + new IntVec3(0, 0, z));
+        }
     }
 }

@@ -6,7 +6,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    abstract class ToolDrawingWithHeight : ToolDrawing
+    abstract class ToolDrawingWithHeight : ToolBlockBuild
     {
         protected bool SettingHeight;
         protected int Height;

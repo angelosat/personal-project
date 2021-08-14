@@ -13,12 +13,12 @@ namespace Start_a_Town_
         {
             p = Network.RegisterPacketHandler(Receive);
         }
-        internal static void Send(INetwork net, ToolDrawing.Args a)
+        internal static void Send(INetwork net, ToolBlockBuild.Args a)
         {
             Send(net, null, a);
         }
         
-        static public void Send(INetwork net, ProductMaterialPair item, ToolDrawing.Args a)
+        static public void Send(INetwork net, ProductMaterialPair item, ToolBlockBuild.Args a)
         {
             var stream = net.GetOutgoingStream();
             stream.Write(p);
@@ -28,9 +28,9 @@ namespace Start_a_Town_
         }
         static public void Receive(INetwork net, BinaryReader r)
         {
-            var args = new ToolDrawing.Args(r);
+            var args = new ToolBlockBuild.Args(r);
             var product = args.Removing ? null : new ProductMaterialPair(r);
-            var positions = ToolDrawing.GetPositions(args);
+            var positions = ToolBlockBuild.GetPositions(args);
             net.Map.Town.ConstructionsManager.Handle(args, product, positions);
 
             if (net is Server)

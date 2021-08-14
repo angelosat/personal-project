@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
     class ToolDrawingWall : ToolDrawingWithHeight
     {
-        public override string Name => "Wall"; 
-        public override Modes Mode { get { return Modes.Wall; } }
+        public override string Name { get; } = "Wall"; 
+        public override Modes Mode { get; } = Modes.Wall;
         public ToolDrawingWall()
         {
 
@@ -52,9 +51,10 @@ namespace Start_a_Town_.Modules.Construction
             return begin + new IntVec3(dx * axis.X, dy * axis.Y, 0);
         }
 
-        public override List<IntVec3> GetPositions()
+        public override IEnumerable<IntVec3> GetPositions()
         {
-            return this.Begin.GetBox(this.TopCorner);
+            foreach (var i in this.Begin.GetBox(this.TopCorner))
+                yield return i;
         }
         protected override IEnumerable<IntVec3> GetPositionsNew(IntVec3 a, IntVec3 b)
         {

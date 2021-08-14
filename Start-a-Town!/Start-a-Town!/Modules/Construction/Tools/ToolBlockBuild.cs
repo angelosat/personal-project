@@ -1,41 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    public abstract partial class ToolDrawing : ToolManagement, INamed
+    public abstract partial class ToolBlockBuild : ToolManagement, INamed
     {
         public enum Modes { Single, Line, Wall, Enclosure, BoxFilled, BoxHollow, Box, Roof, Pyramid }
         new readonly Icon Icon = new(UIManager.Icons32, 12, 32);
         public abstract Modes Mode { get; }
         public abstract string Name { get; }
-        private Action<Args> Callback;
+        private readonly Action<Args> Callback;
         protected bool Valid, Enabled;
         protected IntVec3 Begin, End, Axis;
-
         public Block Block;
         public MaterialDef Material;
         public byte State;
         public int Variation, Orientation;
+        int Height;
 
-        int 
-            Height;
-        public ToolDrawing()
+        public ToolBlockBuild()
         {
 
         }
-        public ToolDrawing(Action<Args> callback)
+        public ToolBlockBuild(Action<Args> callback)
         {
             this.Callback = callback;
         }
         public override void Update()
         {
             base.Update();
-            if(this.Target.Type == TargetType.Entity)
+            if (this.Target.Type == TargetType.Entity)
                 this.Target = Controller.Instance.Mouseover.TargetCell;
         }
         private void CheckValidity()
@@ -56,7 +54,7 @@ namespace Start_a_Town_.Modules.Construction
             this.End = this.Begin;
             this.Height = 0;
             this.Enabled = true;
-            Sync();
+            this.Sync();
             return Messages.Default;
         }
 
@@ -69,7 +67,7 @@ namespace Start_a_Town_.Modules.Construction
             {
 
             }
-            CheckValidity();
+            this.CheckValidity();
 
             return ControlTool.Messages.Default;
         }
@@ -79,7 +77,7 @@ namespace Start_a_Town_.Modules.Construction
             {
                 this.Enabled = false;
                 this.Replacing = false;
-                Sync();
+                this.Sync();
                 return Messages.Default;
             }
             else
@@ -101,13 +99,13 @@ namespace Start_a_Town_.Modules.Construction
             {
                 //case '[':
                 case 'e':
-                    RotateClockwise();
+                    this.RotateClockwise();
                     e.Handled = true;
                     break;
 
                 //case ']':
                 case 'q':
-                    RotateAntiClockwise();
+                    this.RotateAntiClockwise();
                     e.Handled = true;
                     break;
 
@@ -153,7 +151,7 @@ namespace Start_a_Town_.Modules.Construction
                 return;
             }
         }
-    
+
         protected virtual void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             if (!this.Enabled)
@@ -161,13 +159,13 @@ namespace Start_a_Town_.Modules.Construction
 
             var end = this.End + IntVec3.UnitZ * this.Height;
             var col = this.Valid ? Color.Lime : Color.Red;
-            int x = (int)Math.Min(this.Begin.X, end.X);
-            int y = (int)Math.Min(this.Begin.Y, end.Y);
-            int z = (int)Math.Min(this.Begin.Z, end.Z);
+            int x = Math.Min(this.Begin.X, end.X);
+            int y = Math.Min(this.Begin.Y, end.Y);
+            int z = Math.Min(this.Begin.Z, end.Z);
 
-            int dx = (int)Math.Abs(this.Begin.X - end.X);
-            int dy = (int)Math.Abs(this.Begin.Y - end.Y);
-            int dz = (int)Math.Abs(this.Begin.Z - end.Z);
+            int dx = Math.Abs(this.Begin.X - end.X);
+            int dy = Math.Abs(this.Begin.Y - end.Y);
+            int dz = Math.Abs(this.Begin.Z - end.Z);
 
             var minBegin = new IntVec3(x, y, z);
             for (int i = 0; i <= dx; i++)
@@ -186,13 +184,12 @@ namespace Start_a_Town_.Modules.Construction
         {
             var list = new List<Vector3>();
             return list;
-
         }
-        protected void DrawBlockPreviews(MySpriteBatch sb, MapBase map, Camera cam)
+        void DrawBlockPreviews(MySpriteBatch sb, MapBase map, Camera cam)
         {
             var atlastoken = this.Block.GetDefault();
             atlastoken.Atlas.Begin(sb);
-            foreach(var pos in this.GetPositions())
+            foreach (var pos in this.GetPositions().Where(map.IsValidBuildSpot))
                 this.Block.DrawPreview(sb, map, pos, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
         }
@@ -214,7 +211,7 @@ namespace Start_a_Town_.Modules.Construction
             yield return (Math.Abs(this.End.X - this.Begin.X) + 1).ToString();
             yield return (Math.Abs(this.End.Y - this.Begin.Y) + 1).ToString();
         }
-        
+
         private static bool IsRemoving()
         {
             return InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey);
@@ -225,8 +222,8 @@ namespace Start_a_Town_.Modules.Construction
             return InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey);
         }
 
-        public virtual List<IntVec3> GetPositions() { return new List<IntVec3>(); }
-        static public List<IntVec3> GetPositions(Modes mode, IntVec3 a, IntVec3 b)
+        public virtual IEnumerable<IntVec3> GetPositions() { yield break; }
+        public static List<IntVec3> GetPositions(Modes mode, IntVec3 a, IntVec3 b)
         {
             return mode switch
             {
@@ -241,7 +238,7 @@ namespace Start_a_Town_.Modules.Construction
                 _ => new List<IntVec3>(),
             };
         }
-        static public List<IntVec3> GetPositions(Args a)
+        public static List<IntVec3> GetPositions(Args a)
         {
             return GetPositions(a.Mode, a.Begin, a.End);
         }
@@ -253,7 +250,7 @@ namespace Start_a_Town_.Modules.Construction
             this.Replacing = false;
             return a;
         }
-
+      
         private static bool IsGodMode()
         {
             return false;

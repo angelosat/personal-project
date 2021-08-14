@@ -3,12 +3,8 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class RawMaterialDef : ItemDef
+    public class RawMaterialDefOf
     {
-        public RawMaterialDef(string name) : base(name)
-        {
-            this.ItemClass = typeof(Entity);
-        }
         static public readonly ItemDef Planks = new ItemDef("Plank")
         {
             BaseValue = 5,
@@ -99,12 +95,12 @@ namespace Start_a_Town_
             foreach (var def in defs.Where(d => d.DefaultMaterialType != null))
             {
                 foreach (var m in def.DefaultMaterialType.SubTypes)
-                    GameObject.AddTemplate(CreateFrom(def, m));
+                    GameObject.AddTemplate(def.CreateFrom(m));//  CreateFrom(def, m));
             }
 
             foreach (var mt in new[] { MaterialTypeDefOf.Metal, MaterialTypeDefOf.Wood, MaterialTypeDefOf.Stone }) // TODO make scraps from solid rawmaterials
                 foreach (var m in mt.SubTypes)
-                    GameObject.AddTemplate(CreateFrom(Scraps, m));
+                    GameObject.AddTemplate(Scraps.CreateFrom(m));// CreateFrom(Scraps, m));
 
             InitRecipes();
         }
@@ -122,30 +118,18 @@ namespace Start_a_Town_
                 .GetWorkRequiredFromMaterial("Base", (work, obj) => work * obj.PrimaryMaterial.Density));
         }
 
-        static RawMaterialDef()
+        static RawMaterialDefOf()
         {
-            Register(Logs);
-            Register(Planks);
-            Register(Bags);
-            Register(Ingots);
-            Register(Ore);
-            Register(Boulders);
-            Register(Scraps);
-
+            Def.Register(typeof(RawMaterialDefOf));
             var smelting = new Reaction("Smelt", SkillDefOf.Crafting, JobDefOf.Smelter)
                 .AddBuildSite(IsWorkstation.Types.Smeltery)
                 .AddIngredient(new Ingredient("a")
-                    .SetAllow(RawMaterialDef.Scraps, true)
-                    .SetAllow(RawMaterialDef.Ore, true)
+                    .SetAllow(RawMaterialDefOf.Scraps, true)
+                    .SetAllow(RawMaterialDefOf.Ore, true)
                     .SetAllow(MaterialTypeDefOf.Metal, true))
-                .AddProduct(new Reaction.Product(RawMaterialDef.Ingots).GetMaterialFromIngredient("a")
+                .AddProduct(new Reaction.Product(RawMaterialDefOf.Ingots).GetMaterialFromIngredient("a")
                 );
-            Reaction.Register(smelting);
-        }
-        static public Entity CreateFrom(ItemDef def, MaterialDef mat)
-        {
-            var item = ItemFactory.CreateFrom(def, mat);
-            return item;
+            Def.Register(smelting);
         }
     }
 }

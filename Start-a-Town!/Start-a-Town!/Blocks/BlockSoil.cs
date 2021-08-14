@@ -24,12 +24,12 @@ namespace Start_a_Town_
             //this.LootTable = new LootTable(
             //            new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Bags, MaterialDefOf.Soil), 1f, 1, RawMaterialDef.Bags.StackCapacity)
             //            );
-            this.BreakProduct = RawMaterialDef.Bags;
+            this.BreakProduct = RawMaterialDefOf.Bags;
             this.RequiresConstruction = false;
             this.LoadVariations("soil/soil1", "soil/soil2", "soil/soil3", "soil/soil4");
             this.Ingredient = 
                 new Ingredient()
-                .SetAllow(RawMaterialDef.Bags, true)
+                .SetAllow(RawMaterialDefOf.Bags, true)
                 .SetAllow(MaterialDefOf.Soil, true);
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
             this.DefaultMaterial = MaterialDefOf.Soil;

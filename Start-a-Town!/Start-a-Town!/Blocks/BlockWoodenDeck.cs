@@ -13,7 +13,7 @@ namespace Start_a_Town_
         {
             this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
             this.Variations.Add(this.GrayScale);
-            this.Ingredient = new Ingredient(RawMaterialDef.Planks, null, null, 1);// 4);
+            this.Ingredient = new Ingredient(RawMaterialDefOf.Planks, null, null, 1);// 4);
             this.BuildProperties.Complexity = 2;
             this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
         }
@@ -44,7 +44,7 @@ namespace Start_a_Town_
         {
             var table =
                 new LootTable(
-                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Planks, MaterialDefOf.Human))// this.GetMaterial(data)))
+                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDefOf.Planks, MaterialDefOf.Human))// this.GetMaterial(data)))
                     );
             return table;
         }

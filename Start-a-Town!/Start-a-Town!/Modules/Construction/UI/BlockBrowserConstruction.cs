@@ -31,7 +31,7 @@ namespace Start_a_Town_.Core
                 var grid = new ButtonGridIcons<Block>(4, 6, list, (slot, block) =>
                 {
                     slot.Tag = block;
-                    slot.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDrawing drawing && drawing.Block == block;
+                    slot.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolBlockBuild drawing && drawing.Block == block;
                     slot.PaintAction = () => block.PaintIcon(slot.Width, slot.Height, 0, this.GetLastSelectedVariantOrDefault(block).Requirement.Material);
                     slot.LeftClickAction = () =>
                     {

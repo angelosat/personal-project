@@ -121,6 +121,7 @@ namespace Start_a_Town_
         public abstract IEnumerable<GameObject> GetObjects();
         public abstract IEnumerable<GameObject> GetObjects(Vector3 min, Vector3 max);
         public abstract IEnumerable<GameObject> GetObjects(BoundingBox box);
+        IEnumerable<BlockEntity> BlockEntities => this.ActiveChunks.Values.SelectMany(ch => ch.BlockEntities).Distinct();
 
         public static int MaxHeight = 128;
 
@@ -165,14 +166,16 @@ namespace Start_a_Town_
             return randomCell.ToGlobal(randomChunk);
         }
 
+        internal bool IsValidBuildSpot(IntVec3 pos)
+        {
+            return !this.BlockEntities.Any(e => e.ReservedInteractionCells.Contains(pos));
+        }
+
         public IEnumerable<Cell> GetAllCells()
         {
-            //get
-            //{
-                foreach (var ch in this.ActiveChunks.Values)
-                    foreach (var c in ch.Cells)
-                        yield return c;
-            //}
+            foreach (var ch in this.ActiveChunks.Values)
+                foreach (var c in ch.Cells)
+                    yield return c;
         }
 
         internal void ResolveReferences()

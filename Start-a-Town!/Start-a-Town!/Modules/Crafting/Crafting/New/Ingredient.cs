@@ -12,7 +12,7 @@ namespace Start_a_Town_
         public int Amount = 1;
         /// <summary>
         /// The max value of 1 means that the amount of material required should be enough to completely fill the volume of a block.
-        /// Used for calculation of actualy ingredient amounts depending on item dimensions.
+        /// Used for calculation of actual ingredient amounts depending on ingredient dimensions.
         /// </summary>
         public float MaterialVolume = 1;
         public string Name;

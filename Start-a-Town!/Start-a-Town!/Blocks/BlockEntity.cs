@@ -14,6 +14,10 @@ namespace Start_a_Town_
         public HashSet<IntVec3> CellsOccupied = new();
         public MapBase Map;
         public bool Exists => this.Map is not null;
+
+        public virtual IEnumerable<IntVec3> InteractionSpots { get { yield break; } }
+        public IEnumerable<IntVec3> ReservedInteractionCells => this.InteractionSpots.SelectMany(ActorDefOf.Npc.OccupyingCellsStanding);
+
         public IntVec3 OriginGlobal;
         //public readonly BlockEntityCompCollection Comps = new();
         //public readonly BlockEntityCompCollection<BlockEntityComp> Comps = new();

@@ -122,11 +122,11 @@ namespace Start_a_Town_
             {
                 if (material != MaterialDefOf.Stone)
                 {
-                    var resource = ItemFactory.CreateFrom(RawMaterialDef.Ore, material);
+                    var resource = ItemFactory.CreateFrom(RawMaterialDefOf.Ore, material);
                     server.PopLoot(resource, t.Global, Vector3.Zero);
                 }
 
-                var byproduct = ItemFactory.CreateFrom(RawMaterialDef.Boulders, MaterialDefOf.Stone);
+                var byproduct = ItemFactory.CreateFrom(RawMaterialDefOf.Boulders, MaterialDefOf.Stone);
                 server.PopLoot(byproduct, t.Global, Vector3.Zero);
             }
 

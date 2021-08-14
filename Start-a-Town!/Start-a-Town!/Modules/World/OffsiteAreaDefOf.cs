@@ -7,11 +7,11 @@
             LootWeightRawMaterial = 1,
             LootWeightCurrency = 9
         }
-        .AddLootRawMaterial(RawMaterialDef.Logs,
+        .AddLootRawMaterial(RawMaterialDefOf.Logs,
             (MaterialDefOf.LightWood, 90),
             (MaterialDefOf.DarkWood, 9),
             (MaterialDefOf.RedWood, 1))
-        .AddLootRawMaterial(RawMaterialDef.Ore,
+        .AddLootRawMaterial(RawMaterialDefOf.Ore,
             (MaterialDefOf.Iron, 95),
             (MaterialDefOf.Gold, 5))
         .AddLootCurrency(1, 20)
@@ -22,10 +22,10 @@
             LootWeightRawMaterial = 1,
             LootWeightCurrency = 9
         }
-        .AddLootRawMaterial(RawMaterialDef.Logs,
+        .AddLootRawMaterial(RawMaterialDefOf.Logs,
             (MaterialDefOf.DarkWood, 95),
             (MaterialDefOf.RedWood, 5))
-        .AddLootRawMaterial(RawMaterialDef.Ore,
+        .AddLootRawMaterial(RawMaterialDefOf.Ore,
             (MaterialDefOf.Iron, 90),
             (MaterialDefOf.Gold, 10))
         .AddLootCurrency(20, 50)

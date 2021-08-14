@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
 using Start_a_Town_.Modules.Construction;
 
 namespace Start_a_Town_
@@ -17,11 +15,12 @@ namespace Start_a_Town_
         {
 
         }
-        public override string Name => "Pyramid";
-        public override Modes Mode { get { return Modes.Pyramid; } }
-        public override List<IntVec3> GetPositions()
+        public override string Name { get; } = "Pyramid";
+        public override Modes Mode { get; } = Modes.Pyramid; 
+        public override IEnumerable<IntVec3> GetPositions()
         {
-            return GetPositions(this.Begin, this.TopCorner).ToList();
+            foreach (var i in GetPositions(this.Begin, this.TopCorner))//.ToList())
+                yield return i;
         }
         static public IEnumerable<IntVec3> GetPositions(IntVec3 begin, IntVec3 end)
         {

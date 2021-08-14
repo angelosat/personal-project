@@ -5,10 +5,10 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingLine : ToolDrawing
+    class ToolDrawingLine : ToolBlockBuild
     {
-        public override string Name => "Line";
-        public override Modes Mode => Modes.Line;
+        public override string Name { get; } = "Line";
+        public override Modes Mode { get; } = Modes.Line;
         public ToolDrawingLine()
         {
         }
@@ -60,9 +60,11 @@ namespace Start_a_Town_.Modules.Construction
                 .Where(vec => this.Replacing ? map.GetBlock(vec) != BlockDefOf.Air : map.GetBlock(vec) == BlockDefOf.Air);
             cam.DrawGridBlocks(sb, Block.BlockBlueprint, box, color);
         }
-        public override List<IntVec3> GetPositions()
+        public override IEnumerable<IntVec3> GetPositions()
         {
-            return this.Begin.GetBox(this.End);
+            var box = this.Begin.GetBox(this.End);
+            foreach (var i in box)
+                yield return i;
         }
         static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {

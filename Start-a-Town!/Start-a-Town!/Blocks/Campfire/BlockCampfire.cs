@@ -8,17 +8,17 @@ namespace Start_a_Town_.Blocks
         public BlockCampfire()
             : base("Campfire", opaque: false, solid: false)
         {
-            this.BuildProperties = new BuildProperties(new Ingredient(item: RawMaterialDef.Logs), 0);
+            this.BuildProperties = new BuildProperties(new Ingredient(item: RawMaterialDefOf.Logs), 0);
             this.Variations.Add(Block.Atlas.Load("blocks/campfire", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap));
             this.BuildProperties.Complexity = 2;
             this.ToggleConstructionCategory(ConstructionsManager.Production, true);
-            this.Ingredient = new Ingredient().SetAllow(RawMaterialDef.Logs, true);
+            this.Ingredient = new Ingredient().SetAllow(RawMaterialDefOf.Logs, true);
         }
         public override LootTable GetLootTable(byte data)
         {
             var table =
                 new LootTable(
-                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDef.Logs, MaterialDefOf.Human)) // TODO
+                    new Loot(() => ItemFactory.CreateFrom(RawMaterialDefOf.Logs, MaterialDefOf.Human)) // TODO
                     );
             return table;
         }

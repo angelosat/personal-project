@@ -1,9 +1,8 @@
 ﻿using System.IO;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    public abstract partial class ToolDrawing
+    public abstract partial class ToolBlockBuild
     {
         public class Args
         {

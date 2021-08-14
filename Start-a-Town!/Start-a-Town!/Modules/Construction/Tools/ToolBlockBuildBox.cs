@@ -7,7 +7,8 @@ namespace Start_a_Town_.Modules.Construction
 {
     class ToolDrawingBox : ToolDrawingWithHeight
     {
-        public override string Name => "Box";
+        public override string Name { get; } = "Box";
+        public override Modes Mode { get; } = Modes.Box;
         public ToolDrawingBox()
         {
 
@@ -27,9 +28,10 @@ namespace Start_a_Town_.Modules.Construction
 
             cam.DrawGridBlocks(sb, Block.BlockBlueprint, box, color);
         }
-        public override List<IntVec3> GetPositions()
+        public override IEnumerable<IntVec3> GetPositions()
         {
-            return GetPositions(this.Begin, this.TopCorner);
+            foreach (var i in GetPositions(this.Begin, this.TopCorner))
+                yield return i;
         }
         static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {
@@ -59,9 +61,6 @@ namespace Start_a_Town_.Modules.Construction
             this.Height = r.ReadInt32();
         }
 
-        public override ToolDrawing.Modes Mode
-        {
-            get { return Modes.Box; }
-        }
+        
     }
 }

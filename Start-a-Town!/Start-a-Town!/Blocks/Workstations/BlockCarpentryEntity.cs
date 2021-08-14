@@ -1,6 +1,6 @@
 ﻿namespace Start_a_Town_.Blocks
 {
-        class BlockCarpentryEntity : BlockEntity
+        class BlockCarpentryEntity : BlockEntityWorkstation// BlockEntity
         {
             public BlockCarpentryEntity(IntVec3 originGlobal)
                 : base(originGlobal)

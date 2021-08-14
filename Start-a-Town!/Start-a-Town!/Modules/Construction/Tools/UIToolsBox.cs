@@ -10,8 +10,8 @@ namespace Start_a_Town_
     public class UIToolsBox : GroupBox
     {
         Panel PanelButtons;
-        public List<ToolDrawing> Tools;
-        public ToolDrawing LastSelectedTool;
+        public List<ToolBlockBuild> Tools;
+        public ToolBlockBuild LastSelectedTool;
         ConstructionCategory CurrentCategory;
         public UIToolsBox(ProductMaterialPair product, Action<Type> onToolSelected)
         {
@@ -37,11 +37,11 @@ namespace Start_a_Town_
             else
                 this.CurrentCategory = null;
         }
-        public void Refresh(List<ToolDrawing> tools, Action<Type> onToolSelected)
+        public void Refresh(List<ToolBlockBuild> tools, Action<Type> onToolSelected)
         {
             this.Tools = tools;
             this.PanelButtons.ClearControls();
-            var grid = new ButtonGridGenericNew<ToolDrawing>();                                   
+            var grid = new ButtonGridGenericNew<ToolBlockBuild>();                                   
             grid.AddItems(tools, (tool, btn) =>
                 {
                     btn.LeftClickAction = () =>

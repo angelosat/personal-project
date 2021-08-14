@@ -7,7 +7,8 @@ namespace Start_a_Town_.Modules.Construction
 {
     class ToolDrawingEnclosure : ToolDrawingBox
     {
-        public override string Name => "Enclosure";
+        public override string Name { get; } = "Enclosure";
+        public override Modes Mode { get; } = Modes.Enclosure;
         public ToolDrawingEnclosure()
         {
         }
@@ -35,9 +36,10 @@ namespace Start_a_Town_.Modules.Construction
         {
             this.DrawGrid(sb, map, camera, Color.Red);
         }
-        public override List<IntVec3> GetPositions()
+        public override IEnumerable<IntVec3> GetPositions()
         {
-            return GetPositions(this.Begin, this.TopCorner);
+            foreach (var i in GetPositions(this.Begin, this.TopCorner))
+                yield return i;
         }
         static new public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {
@@ -51,9 +53,6 @@ namespace Start_a_Town_.Modules.Construction
             return box;
         }
 
-        public override ToolDrawing.Modes Mode
-        {
-            get { return Modes.Enclosure; }
-        }
+     
     }
 }

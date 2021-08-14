@@ -144,7 +144,6 @@ namespace Start_a_Town_
         }
 
         public List<GameObject> Objects;
-        readonly Dictionary<int, GameObject> BlockObjects;
         readonly Dictionary<IntVec3, BlockEntity> BlockEntitiesByPosition = new();
 
         public bool IsQueuedForLight;
@@ -243,10 +242,6 @@ namespace Start_a_Town_
         }
         #endregion
 
-        public bool TryGetBlockObject(Vector3 local, out GameObject blockObj)
-        {
-            return this.BlockObjects.TryGetValue(GetCellIndex(local), out blockObj);
-        }
         public Chunk(MapBase map, Vector2 pos)
             : this()
         {
@@ -264,7 +259,6 @@ namespace Start_a_Town_
             this.Cells = new Cell[Chunk.Size * Chunk.Size * MapBase.MaxHeight];
             this.VisibleIndoorCells = new SortedList<int, Cell>();
             this.Objects = new List<GameObject>();
-            this.BlockObjects = new Dictionary<int, GameObject>();
             this.Sunlight = new List<byte>(Volume);
             for (int i = 0; i < Volume; i++)
                 this.Sunlight.Add(15);
@@ -757,8 +751,6 @@ namespace Start_a_Town_
         }
         public void DrawInterface(SpriteBatch sb, Camera cam)
         {
-            foreach (GameObject obj in this.Objects.ToList().Concat(this.BlockObjects.Values.ToList()))
-                obj.DrawInterface(sb, cam);
             foreach (var blockentity in this.BlockEntitiesByPosition)
                 blockentity.Value.DrawUI(sb, cam, blockentity.Key.ToGlobal(this));
         }
@@ -1303,10 +1295,6 @@ namespace Start_a_Town_
             foreach (var obj in this.Objects.ToList())
                 obj.Write(writer);
 
-            writer.Write(this.BlockObjects.Count);
-            foreach (var obj in this.BlockObjects.Values.ToList())
-                obj.Write(writer);
-
             this.WriteBlockEntitiesDistinct(writer);
 
             for (int i = 0; i < Size; i++)
@@ -1344,13 +1332,6 @@ namespace Start_a_Town_
             for (int i = 0; i < objCount; i++)
                 this.Add(GameObject.Create(reader));
 
-            int blockObjCount = reader.ReadInt32();
-            for (int i = 0; i < blockObjCount; i++)
-            {
-                GameObject blobj = GameObject.Create(reader);
-                this.BlockObjects[GetCellIndex(blobj.Global.ToLocal())] = blobj;
-            }
-
             this.ReadBlockEntitiesDistinct(reader);
 
             for (int i = 0; i < Size; i++)
@@ -1367,6 +1348,8 @@ namespace Start_a_Town_
         public string FullDirPath => this.Map.GetFullPath() + "/chunks/" + this.DirectoryName;
 
         public string DirectoryName => (((int)(this.MapCoords.X)).ToString() + "." + ((int)(this.MapCoords.Y)).ToString()) + "/";
+
+        public IEnumerable<BlockEntity> BlockEntities => this.BlockEntitiesByPosition.Values;
 
         public Canvas Canvas;
 
@@ -1528,14 +1511,6 @@ namespace Start_a_Town_
                 if (obj is not null)
                     this.Add(obj);
             }
-
-            if (chunktag.TryGetTag("Block Objects", out SaveTag blobjTag))
-                foreach (SaveTag tag in blobjTag.Value as List<SaveTag>)
-                {
-                    int index = (int)tag["Index"].Value;
-                    GameObject obj = GameObject.Load(tag["Object"]);
-                    this.BlockObjects[index] = obj;
-                }
 
             this.LoadBlockEntitiesDistinct(chunktag);
 

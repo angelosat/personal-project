@@ -169,7 +169,7 @@ namespace Start_a_Town_
                 PacketDesignation.Send(Client.Instance, DesignationDef.Remove, positions, false);
             }
         }
-        public void Handle(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions)
+        public void Handle(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
             var cheat = false;
             var map = this.Map;
@@ -179,7 +179,7 @@ namespace Start_a_Town_
                 this.PlaceDesignations(args, product, positions);
         }
 
-        private void PlaceDesignations(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions)
+        private void PlaceDesignations(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
             var map = this.Town.Map;
             if (args.Removing)
@@ -209,7 +209,7 @@ namespace Start_a_Town_
                 }
         }
 
-        private static void PlaceDesignationsGodMode(ToolDrawing.Args args, ProductMaterialPair product, List<IntVec3> positions, MapBase map)
+        private static void PlaceDesignationsGodMode(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions, MapBase map)
         {
             if (!args.Removing)
             {

@@ -11,7 +11,7 @@ namespace Start_a_Town_
         Block Block => this.Cell.Block;
         MaterialDef Material => this.Cell.Material;
 
-        protected override float WorkDifficulty => this.Block.WorkAmount;
+        protected override float WorkDifficulty => this.Block.BuildComplexity;
         protected override float Progress => this._progress.Percentage;
         protected override SkillAwardTypes SkillAwardType { get; } = SkillAwardTypes.OnFinish;
 
@@ -21,7 +21,7 @@ namespace Start_a_Town_
         }
         protected override void Init()
         {
-            var maxWork = this.Block.WorkAmount;
+            var maxWork = this.Block.BuildComplexity;
             this._progress = new Progress(0, maxWork, 0);
 
         }

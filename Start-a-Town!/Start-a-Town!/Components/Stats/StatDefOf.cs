@@ -81,12 +81,13 @@ namespace Start_a_Town_
                   var material = tool.GetMaterial(BoneDefOf.ToolHead);
                   if (material is null)
                       return 1; // is it ever possible for this to be null?
-                  var matStrength = material.Density;
-                  var efficiency = //tool.Def.ToolProperties?.Ability.Effectiveness ?? 
-                                    tool.GetComponent<ToolAbilityComponent>().Props.Ability.Effectiveness;
-                  var total = (float)efficiency * matStrength;
-                  total *= a.Quality.Multiplier;
-                  return total;
+                  return material.Density * a.Quality.Multiplier;
+                  //var matStrength = material.Density;
+                  //var efficiency = //tool.Def.ToolProperties?.Ability.Effectiveness ?? 
+                  //                  tool.GetComponent<ToolAbilityComponent>().Props.ToolUse.Effectiveness;
+                  //var total = (float)efficiency * matStrength;
+                  //total *= a.Quality.Multiplier;
+                  //return total;
               })
         {
             Description = "Amount of work produced with each hit of the tool.",

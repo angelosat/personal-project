@@ -67,7 +67,7 @@ namespace Start_a_Town_
         }
         protected virtual float GetToolEffectiveness()
         {
-            if (this.Actor.Gear.GetGear(GearType.Mainhand) is Tool tool && tool.ToolComponent.Props.Ability.Def == this.GetToolUse())
+            if (this.Actor.Gear.GetGear(GearType.Mainhand) is Tool tool && tool.ToolComponent.Props.ToolUse == this.GetToolUse())
                 return tool.GetStat(StatDefOf.ToolEffectiveness);
             else
                 return this.Actor.GetMaterial(BoneDefOf.RightHand).Density;

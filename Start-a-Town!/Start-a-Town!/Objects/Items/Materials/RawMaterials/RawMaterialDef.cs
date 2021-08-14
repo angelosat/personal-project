@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
 {
     public class RawMaterialDef : ItemDef
     {
-        public RawMaterialDef CanBeProcessedInto;
         public RawMaterialDef(string name) : base(name)
         {
             this.ItemClass = typeof(Entity);

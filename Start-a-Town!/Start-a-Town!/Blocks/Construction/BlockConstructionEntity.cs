@@ -27,9 +27,11 @@ namespace Start_a_Town_
             if (amount > initialMaterial.StackSize)
                 throw new Exception();
             this.Container.Add(new ItemMaterialAmount(initialMaterial.Def, initialMaterial.PrimaryMaterial, amount));
+            this.BuildProgress = new Progress(0, getWorkAmount(), 0);
 
-            this.BuildProgress = new Progress(0, product.Block.WorkAmount, 0);
+            int getWorkAmount() => this.Container.Sum(m => m.Material.Density * m.Amount) * this.Product.Block.BuildComplexity;
         }
+        
         public override void GetTooltip(UI.Control tooltip)
         {
             var product = this.Product;

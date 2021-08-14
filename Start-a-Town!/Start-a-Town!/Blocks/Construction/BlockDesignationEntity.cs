@@ -18,7 +18,7 @@ namespace Start_a_Town_.Blocks
                 set
                 {
                     if (this._product is null)
-                        this.BuildProgress = new Progress(0, value.Block.WorkAmount, 0);
+                        this.BuildProgress = new Progress(0, value.Block.BuildComplexity, 0);
                     this._product = value;
                 }
             }

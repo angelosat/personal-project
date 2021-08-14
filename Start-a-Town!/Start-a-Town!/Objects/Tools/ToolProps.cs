@@ -1,5 +1,4 @@
-﻿using Start_a_Town_.Components.Crafting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Start_a_Town_
@@ -7,17 +6,13 @@ namespace Start_a_Town_
     public class ToolProps : Def, IItemDefVariator
     {
         public string Description;
-        public ToolUse Ability;
+        public ToolUseDef ToolUse;
         public HashSet<JobDef> AssociatedJobs = new();
         public Sprite SpriteHandle, SpriteHead;
         internal SkillDef Skill;
 
         public ToolProps(string name) : base(name)
         {
-        }
-        public ToolProps(ToolUse ability)
-        {
-            this.Ability = ability;
         }
         public ToolProps AssociateJob(params JobDef[] jobs)
         {
@@ -68,7 +63,8 @@ namespace Start_a_Town_
                     Reaction.CanBeMadeAt(IsWorkstation.Types.None, IsWorkstation.Types.Workbench),
                     reagents,
                     new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },
-                    SkillDefOf.Crafting);
+                    SkillDefOf.Crafting,
+                    JobDefOf.Craftsman);
             }
         }
 

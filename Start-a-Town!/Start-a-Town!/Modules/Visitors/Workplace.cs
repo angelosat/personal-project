@@ -227,7 +227,7 @@ namespace Start_a_Town_
             var liststockpiles = new ListBoxNoScroll<Stockpile, Button>(i => new Button(i.Name));
             
             var listfacilities = new ListBoxNoScroll<TargetArgs, Button>(
-                t => new Button(t.GetBlock().Name,
+                t => new Button(t.Block.Name,
                     () =>
                     {
                         SelectionManager.Select(t);

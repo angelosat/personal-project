@@ -62,8 +62,8 @@ namespace Start_a_Town_
         }
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
-            var room = map.GetRoomAt(vector3);
-            room.GetSelectionInfo(info);
+            if(map.GetRoomAt(vector3) is Room room)
+                room.GetSelectionInfo(info);
         }
         protected override void WriteExtra(System.IO.BinaryWriter w)
         {

@@ -535,8 +535,8 @@ namespace Start_a_Town_
             if (this.Gear.GetSlot(GearType.Mainhand).Object is not Tool tool)
                 return 1;
 
-            var ability = tool.ToolComponent.Props.Ability;
-            return ability.Def == toolUse ? ability.Effectiveness : 1;
+            var ability = tool.ToolComponent.Props.ToolUse;
+            return ability == toolUse ? tool.GetStat(StatDefOf.ToolEffectiveness) : 1;
         }
         public int EvaluateItem(Entity item)
         {

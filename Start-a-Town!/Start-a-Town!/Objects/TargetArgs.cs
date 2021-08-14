@@ -85,11 +85,6 @@ namespace Start_a_Town_
             }
         }
 
-        internal T GetBlockEntity<T>() where T : class
-        {
-            return this.Map.GetBlockEntity(this.Global) as T;
-        }
-
         public Vector3 Face;
         public Vector3 Precise;
 
@@ -709,20 +704,14 @@ namespace Start_a_Town_
             return false;
         }
 
-        public Block Block => this.GetBlock();
+        public Block Block => this.Map.GetBlock(this.Global);
         public BlockEntity BlockEntity => this.Map.GetBlockEntity(this.Global);
         public RegionNode Node => this.Map.Regions.GetNodeAt(this.Global);
         public Region Region => this.Node?.Region;
         public RegionRoom RegionRoom => this.Region?.Room;
 
-        internal Block GetBlock()
-        {
-            return this.Map.GetBlock(this.Global);
-        }
-        internal BlockEntity GetBlockEntity()
-        {
-            return this.Map.GetBlockEntity(this.Global);
-        }
+        internal T GetBlockEntity<T>() where T : BlockEntity => this.Map.GetBlockEntity(this.Global) as T;
+
         public string GetName()
         {
             switch (this.Type)
@@ -731,7 +720,7 @@ namespace Start_a_Town_
                     return this.Object.Name;
 
                 case TargetType.Position:
-                    return this.GetBlock().GetName(this.Map, this.Global);
+                    return this.Block.GetName(this.Map, this.Global);
 
                 default:
                     return "";
@@ -749,7 +738,7 @@ namespace Start_a_Town_
                     break;
 
                 case TargetType.Position:
-                    foreach (var i in this.GetBlock().GetInfoTabs())
+                    foreach (var i in this.Block.GetInfoTabs())
                         yield return i;
                         break;
 
@@ -768,7 +757,7 @@ namespace Start_a_Town_
                     break;
 
                 case TargetType.Position:
-                    this.GetBlock().GetSelectionInfo(info, this.Map, this.Global);
+                    this.Block.GetSelectionInfo(info, this.Map, this.Global);
                     break;
 
                 default:
@@ -785,7 +774,7 @@ namespace Start_a_Town_
                     break;
 
                 case TargetType.Position:
-                    this.GetBlock().GetQuickButtons(info, this.Map, this.Global);
+                    this.Block.GetQuickButtons(info, this.Map, this.Global);
                     break;
 
                 default:
@@ -805,7 +794,7 @@ namespace Start_a_Town_
                 return this.Type switch
                 {
                     TargetType.Entity => this.Object != null && this.Object.Exists,
-                    TargetType.Position => this.GetBlock() != BlockDefOf.Air,
+                    TargetType.Position => this.Block != BlockDefOf.Air,
                     _ => throw new Exception(),
                 };
             }

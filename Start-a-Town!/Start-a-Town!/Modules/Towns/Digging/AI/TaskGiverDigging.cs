@@ -54,7 +54,7 @@ namespace Start_a_Town_
         {
             task = null;
             var global = target.Global;
-            var block = target.GetBlock();
+            var block = target.Block;
             if (!block.IsMinable)
                 return false;
             if (!actor.CanReserve(target))

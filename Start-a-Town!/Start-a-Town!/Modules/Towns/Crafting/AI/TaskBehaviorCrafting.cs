@@ -115,7 +115,7 @@ namespace Start_a_Town_
             }
             bool failOnInvalidWorkstation()
             {
-                return !(this.Workstation.GetBlockEntity()?.HasComp<BlockEntityCompWorkstation>() ?? false);
+                return !(this.Workstation.BlockEntity?.HasComp<BlockEntityCompWorkstation>() ?? false);
             };
             bool deliverFail()
             {

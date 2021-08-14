@@ -108,6 +108,12 @@ namespace Start_a_Town_
                 }
                 this.Handled.Add(current.Global);
                 var currentNode = current.RegionNodeGlobal;
+                if(currentNode is null)
+                {
+                    Log.Warning($"{this.Actor} tried to path from {current.Global} but the {nameof(current.RegionNodeGlobal)} is null!");
+                    this.Fail();
+                    return false;
+                }
                 var neighbors = currentNode.GetLinksLazy();
                 foreach (var n in neighbors) // put visibility check here
                 {

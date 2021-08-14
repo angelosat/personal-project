@@ -24,7 +24,7 @@ namespace Start_a_Town_
                 // see if there are better tools lying around
                 if (job.Enabled)
                 {
-                    var potentialTools = actor.Map.Find(i => i.ToolComponent?.Props?.Ability.Def == toolUse);
+                    var potentialTools = actor.Map.Find(i => i.ToolComponent?.Props?.ToolUse == toolUse);
                     var scoredTools = potentialTools.Select(i => new { item = i, score = itemmanager.GetScore(toolUse, i) }).OrderByDescending(i => i.score);
                     foreach (var tool in scoredTools)
                     {

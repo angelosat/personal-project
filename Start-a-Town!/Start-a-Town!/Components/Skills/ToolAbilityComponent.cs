@@ -63,9 +63,7 @@ namespace Start_a_Town_
         GroupBox GetUI(GameObject parent)
         {
             var box = new GroupBox();
-            var ability = this.Props?.Ability;
-            if (ability.HasValue)
-                box.AddControlsBottomLeft(ability.Value.GetListControlGui());
+            box.AddControlsBottomLeft(new Label(this.Props.ToolUse));
                 //box.AddControlsBottomLeft(ToolUseDef.GetUI(ability.Value.Def.ID, ability.Value.Effectiveness));
             return box;
         }

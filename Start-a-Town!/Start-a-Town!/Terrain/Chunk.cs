@@ -1108,7 +1108,7 @@ namespace Start_a_Town_
                 }
                 else
                 {
-                    var positionsLocal = r.ReadListVector3();
+                    var positionsLocal = r.ReadListIntVec3();
 
                     if (this.Map.TryGetBlockEntity(originGlobal, out var entity))
                         foreach (var local in positionsLocal)

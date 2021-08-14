@@ -8,7 +8,8 @@
             Description = "Used to dig out grainy material like soil dirt and sand.",
             SpriteHandle = ItemContent.ShovelHandle,
             SpriteHead = ItemContent.ShovelHead,
-            Ability = new ToolUse(ToolUseDefOf.Digging, 5),
+            //ToolUse = new ToolUse(ToolUseDefOf.Digging, 5),
+            ToolUse = ToolUseDefOf.Digging,
             Skill = SkillDefOf.Digging,
             AssociatedJobs = new() { JobDefOf.Digger }
         };
@@ -17,7 +18,8 @@
             Description = "Chops down trees.",
             SpriteHandle = ItemContent.AxeHandle,
             SpriteHead = ItemContent.AxeHead,
-            Ability = new ToolUse(ToolUseDefOf.Chopping, 5),
+            //ToolUse = new ToolUse(ToolUseDefOf.Chopping, 5),
+            ToolUse = ToolUseDefOf.Chopping,
             Skill = SkillDefOf.Plantcutting,
             AssociatedJobs = new() { JobDefOf.Lumberjack }
         };
@@ -26,7 +28,8 @@
             Description = "Used for building.",
             SpriteHandle = ItemContent.HammerHandle,
             SpriteHead = ItemContent.HammerHead,
-            Ability = new ToolUse(ToolUseDefOf.Building, 5),
+            ToolUse = ToolUseDefOf.Building,
+            //ToolUse = new ToolUse(ToolUseDefOf.Building, 5),
             Skill = SkillDefOf.Construction,
             AssociatedJobs = new() { JobDefOf.Builder }
         };
@@ -35,7 +38,8 @@
             Description = "Used for mining.",
             SpriteHandle = ItemContent.PickaxeHandle,
             SpriteHead = ItemContent.PickaxeHead,
-            Ability = new ToolUse(ToolUseDefOf.Mining, 5),
+            ToolUse = ToolUseDefOf.Mining,
+            //ToolUse = new ToolUse(ToolUseDefOf.Mining, 5),
             Skill = SkillDefOf.Mining,
             AssociatedJobs = new() { JobDefOf.Miner }
         };
@@ -44,7 +48,8 @@
             Description = "Used for carpentry.",
             SpriteHandle = ItemContent.HandsawHandle,
             SpriteHead = ItemContent.HandsawHead,
-            Ability = new ToolUse(ToolUseDefOf.Carpentry, 5),
+            ToolUse = ToolUseDefOf.Carpentry,
+            //ToolUse = new ToolUse(ToolUseDefOf.Carpentry, 5),
             Skill = SkillDefOf.Carpentry,
             AssociatedJobs = new() { JobDefOf.Carpenter }
         };
@@ -53,7 +58,8 @@
             Description = "Used to prepare soil for planting by converting it into farmland.",
             SpriteHandle = ItemContent.HoeHandle,
             SpriteHead = ItemContent.HoeHead,
-            Ability = new ToolUse(ToolUseDefOf.Argiculture, 5),
+            ToolUse = ToolUseDefOf.Argiculture,
+            //ToolUse = new ToolUse(ToolUseDefOf.Argiculture, 5),
             Skill = SkillDefOf.Argiculture,
             AssociatedJobs = new() { JobDefOf.Farmer }
         };

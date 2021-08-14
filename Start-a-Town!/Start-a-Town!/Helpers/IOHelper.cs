@@ -369,7 +369,7 @@ namespace Start_a_Town_
             var count = r.ReadInt32();
             var list = new List<IntVec3>(count);
             for (int i = 0; i < count; i++)
-                list.Add(r.ReadVector3());
+                list.Add(r.ReadIntVec3());
             return list;
         }
         public static List<Vector3> ReadListVector3(this BinaryReader r)

@@ -2271,6 +2271,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\Items\berrybushFruitColor.png">
+      <Name>berrybushFruitColor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Graphics\Items\berrybushFruit.png">
       <Name>berrybushFruit</Name>
       <Importer>TextureImporter</Importer>

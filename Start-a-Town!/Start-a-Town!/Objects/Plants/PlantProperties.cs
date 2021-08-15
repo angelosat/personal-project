@@ -49,6 +49,8 @@ namespace Start_a_Town_
         [XmlIgnore]
         public MaterialDef StemMaterial;
         [XmlIgnore]
+        public MaterialDef FruitMaterial;
+        [XmlIgnore]
         public ItemDef PlantEntity;
         [XmlIgnore]
         public ItemDef ProductCutDown;
@@ -76,6 +78,7 @@ namespace Start_a_Town_
             TextureGrown = ItemContent.BerryBushGrown.AssetPath,
             TextureFruit = ItemContent.BerryBushFruit.AssetPath,
             StemMaterial = MaterialDefOf.ShrubStem,
+            FruitMaterial = MaterialDefOf.Berry,
             Growth = new GrowthProperties(ItemDefOf.Fruit, MaterialDefOf.Berry, 5, 6),
             CutDownDifficulty = 3,
             PlantEntity = PlantDefOf.Bush,

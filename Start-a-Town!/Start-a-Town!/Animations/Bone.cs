@@ -875,9 +875,7 @@ namespace Start_a_Town_
         public SaveTag Save(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            //tag.Add((this.Material?.ID ?? -1).Save("MaterialID"));
-            if (this.Material is not null)
-                this.Material.Save(tag, "Material");
+            this.Material?.Save(tag, "Material");
             this.Sprite?.Save(tag, "Sprite");
             var tagjoints = new SaveTag(SaveTag.Types.Compound, "Joints");
             foreach (var joint in this.Joints)
@@ -894,9 +892,8 @@ namespace Start_a_Town_
 
         public ISaveable Load(SaveTag tag)
         {
-            //tag.TryGetTagValue<int>("MaterialID", i => this.Material = MaterialDef.GetMaterial(i));
-            tag.TryGetTagValue<string>("Material", i => this.Material = Start_a_Town_.Def.GetDef<MaterialDef>(i));
-
+            //tag.TryGetTagValue<string>("Material", i => this.Material = Start_a_Town_.Def.GetDef<MaterialDef>(i));
+            tag.TryLoadDef("Material", ref this.Material);
             tag.TryGetTag("Sprite", t => this.Sprite = Sprite.Load(t));
             tag.TryGetTag("Joints", t =>
             {

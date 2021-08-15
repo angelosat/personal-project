@@ -35,6 +35,9 @@ namespace Start_a_Town_.Components
                 var body = parent.Body;
                 body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
                 body.Sprite = Sprite.Load(_plantProps.TextureGrowing);
+                //body[BoneDefOf.PlantFruit].Material = _plantProps.FruitMaterial;
+                if(body.TryFindBone(BoneDefOf.PlantFruit, out var fruitBone))
+                    fruitBone.Material = _plantProps.FruitMaterial;
                 this.UpdateFruitTexture();
             }
         }

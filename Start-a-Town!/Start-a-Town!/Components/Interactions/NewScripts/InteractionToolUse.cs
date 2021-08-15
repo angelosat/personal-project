@@ -55,7 +55,7 @@ namespace Start_a_Town_
             this.TotalWorkAmount += amount;
             var skill = this.GetSkill();
             if(this.SkillAwardType == SkillAwardTypes.OnSwing)
-                a.AwardSkillXP(skill, amount);
+                a[skill].Award(amount);
             var energyConsumption = this.GetEnergyConsumption(amount, a.Skills[skill].Level); //amount / a.Skills[skill].Level;
 
             var stamina = a.Resources[ResourceDefOf.Stamina];
@@ -66,7 +66,7 @@ namespace Start_a_Town_
             if (this.Progress < 1)
                 return;
             if (this.SkillAwardType == SkillAwardTypes.OnFinish)
-                a.AwardSkillXP(skill, this.TotalWorkAmount);
+                a[skill].Award(this.TotalWorkAmount);
             this.Done();
             this.Finish();
         }

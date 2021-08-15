@@ -37,13 +37,7 @@ namespace Start_a_Town_
             this.LoadVariations("stone5height19");
         }
        
-        public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
-        {
-            return new List<Interaction>(){
-                new InteractionMining()
-            };
-        }
-
+       
         public override void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
             base.Draw(sb, screenPos, sunlight, blocklight, cell.Material.Color.Multiply(tint), zoom, depth, cell);

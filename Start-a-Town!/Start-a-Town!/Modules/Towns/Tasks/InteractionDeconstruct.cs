@@ -1,130 +1,64 @@
 ﻿using System.Collections.Generic;
-using Start_a_Town_.Particles;
-using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 using System;
 
 namespace Start_a_Town_
 {
-    [Obsolete]
-    class InteractionDeconstruct : InteractionPerpetual
+    class InteractionDeconstruct : InteractionToolUse
     {
-        static float SpeedFormula(GameObject actor)
+        Progress _progress;
+        Cell Cell => this.Actor.Map.GetCell(this.Target.Global);
+        Block Block => this.Cell.Block;
+        MaterialDef Material => this.Cell.Material;
+
+        protected override float WorkDifficulty => this.Block.BuildComplexity;
+        protected override float Progress => this._progress.Percentage;
+        protected override SkillAwardTypes SkillAwardType { get; } = SkillAwardTypes.OnFinish;
+
+        public InteractionDeconstruct() : base("Deconstructing")
         {
-            return .5f + actor.GetSkill(SkillDefOf.Construction).Level * .1f;
+
         }
-        Progress Progress;
-        
-        public InteractionDeconstruct()
-            : base("Deconstruct")
+        protected override void Init()
         {
-            this.Verb = "Deconstructing";
-        }
-        static public int ID = "Deconstruct".GetHashCode();
+            var maxWork = this.Block.BuildComplexity;
+            this._progress = new Progress(0, maxWork, 0);
 
-        Block Block;
-        ParticleEmitterSphere EmitterStrike;
-        ParticleEmitterSphere EmitterBreak;
-        List<Rectangle> ParticleTextures;
-
-        protected override void Start()
-        {
-            var a = this.Actor;
-            var t = this.Target; 
-            this.Animation.Speed = SpeedFormula(a);
-            // cache variables
-            this.Block = a.Map.GetBlock(t.Global);
-            var material = a.Map.GetBlockMaterial(t.Global);
-            var color = material.Color; //Color.White;
-            var maxWork = this.Block.GetWorkToBreak(a.Map, t.Global);
-            this.Progress = new Progress(0, maxWork, 0);
-
-            this.EmitterStrike = this.Block.GetEmitter();
-            this.EmitterStrike.Source = t.FaceGlobal;
-            this.EmitterStrike.SizeBegin = 1;
-            this.EmitterStrike.SizeEnd = 1;
-            this.EmitterStrike.ParticleWeight = 1;
-            this.EmitterStrike.Radius = 1f;// .5f;
-            this.EmitterStrike.Force = .1f;
-            this.EmitterStrike.Friction = .5f;
-            this.EmitterStrike.AlphaBegin = 1;
-            this.EmitterStrike.AlphaEnd = 0;
-            this.EmitterStrike.ColorBegin = color;
-            this.EmitterStrike.ColorEnd = color;
-            this.EmitterStrike.Lifetime = Ticks.TicksPerSecond * 2;
-
-            this.EmitterBreak = this.Block.GetEmitter();
-            this.EmitterBreak.Source = t.Global + Vector3.UnitZ * 0.5f;
-            this.EmitterBreak.SizeBegin = 1;
-            this.EmitterBreak.SizeEnd = 1;
-            this.EmitterBreak.ParticleWeight = 1;
-            this.EmitterBreak.Radius = 1f;// .5f;
-            this.EmitterBreak.Force = .1f;
-            this.EmitterBreak.Friction = .5f;
-            this.EmitterBreak.AlphaBegin = 1;
-            this.EmitterBreak.AlphaEnd = 0;
-            this.EmitterBreak.ColorBegin = color;
-            this.EmitterBreak.ColorEnd = color;
-            this.EmitterBreak.Lifetime = Ticks.TicksPerSecond * 2;
-
-            this.ParticleTextures = this.Block.GetParticleRects(25);
-        }
-        public override void OnUpdate()
-        {
-            var actor = this.Actor;
-
-            this.EmitStrike(actor);
-            //var workAmount = actor.GetToolWorkAmount(ToolUseDef.Building.ID);
-
-            var workAmount = getWorkAmount();
-            actor.AwardSkillXP(SkillDefOf.Construction, workAmount);
-
-            this.Progress.Value += workAmount;
-            this.Animation.Speed = SpeedFormula(actor);
-            if (this.Progress.Percentage == 1)
-            {
-                this.Done();
-                this.Finish();
-            }
-            float getWorkAmount()
-            {
-                var material = actor.Map.GetCell(this.Target.Global).Material;
-                var toolEffect = (int)StatDefOf.WorkEffectiveness.GetValue(actor);
-                var amount = toolEffect / (float)material.Density;
-                return amount;
-            }
-        }
-        public void Done()
-        {
-            var a = this.Actor;
-            var t = this.Target;
-            this.Block.Deconstruct(a, t.Global);
-            this.EmitBreak(a);
-        }
-        private void EmitStrike(Actor a)
-        {
-            this.EmitterStrike.Emit(Block.Atlas.Texture, this.ParticleTextures, Vector3.Zero);
-            a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
-        }
-        private void EmitBreak(Actor a)
-        {
-            this.EmitterBreak.Emit(Block.Atlas.Texture, this.ParticleTextures, Vector3.Zero);
-            a.Map.ParticleManager.AddEmitter(this.EmitterBreak);
-        }
-
-        BarSmooth BarSmooth;
-        public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera)
-        {
-            var parent = this.Actor;
-            Vector3 global = parent.Global;
-            Vector2 barLoc = camera.GetScreenPositionFloat(global);
-            if (this.BarSmooth == null)
-                this.BarSmooth = new BarSmooth(this.Progress);
-            this.BarSmooth.Draw(sb, UIManager.Bounds, barLoc, InteractionBar.DefaultWidth, camera.Zoom * .2f);
         }
         public override object Clone()
         {
-            return new InteractionDigging();
+            throw new NotImplementedException();
+        }
+
+        protected override void ApplyWork(float workAmount)
+        {
+            this._progress.Value += workAmount;
+        }
+
+        protected override void Done()
+        {
+            this.Block.Deconstruct(this.Actor, this.Target.Global);
+        }
+
+        protected override Color GetParticleColor()
+        {
+            return Color.White;
+            return this.Material.Color;
+        }
+
+        protected override List<Rectangle> GetParticleRects()
+        {
+            return this.Block.GetParticleRects(25);
+        }
+
+        protected override SkillDef GetSkill()
+        {
+            return SkillDefOf.Construction;
+        }
+
+        protected override ToolUseDef GetToolUse()
+        {
+            return ToolUseDefOf.Building;
         }
     }
 }

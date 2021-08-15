@@ -45,6 +45,8 @@ namespace Start_a_Town_
         [InspectorHidden]
         internal PersonalityComponent Personality => _personality ??= this.GetComponent<PersonalityComponent>();
 
+        [InspectorHidden]
+        public Skill this[SkillDef skill] => this.Skills.GetSkill(skill);
         
 
         private MoodComp _mood;
@@ -564,11 +566,5 @@ namespace Start_a_Town_
             if (this.GetVisitorProperties() is VisitorProperties props)
                 props.OffsiteArea = null;
         }
-
-        internal void AwardSkillXP(SkillDef skill, float v)
-        {
-            this.GetComponent<NpcSkillsComponent>().AwardSkillXP(this, skill, v);
-        }
-
     }
 }

@@ -1456,7 +1456,7 @@ namespace Start_a_Town_
             return this.HasComponent<PlantComponent>();
         }
 
-        internal NpcSkill GetSkill(SkillDef skill)
+        internal Skill GetSkill(SkillDef skill)
         {
             return this.GetComponent<NpcSkillsComponent>().GetSkill(skill);
         }

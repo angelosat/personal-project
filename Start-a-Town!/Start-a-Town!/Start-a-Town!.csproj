@@ -189,7 +189,6 @@
     <Compile Include="Blocks\Workstations\BlockSmelteryEntity.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionChop.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionBreakBlock.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionMiningDigging.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionToolUse.cs" />
     <Compile Include="Components\Inventory\ContainerList.cs" />
     <Compile Include="Components\Resources\HitPoints.cs" />
@@ -240,7 +239,7 @@
     <Compile Include="Components\IEntity.cs" />
     <Compile Include="Modules\Towns\Stockpiles\ItemFilter.cs" />
     <Compile Include="Modules\Towns\Storage\StorageManager.cs" />
-    <Compile Include="Modules\Towns\Tasks\InteractionDeconstructNew.cs" />
+    <Compile Include="Modules\Towns\Tasks\InteractionDeconstruct.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemPreferencesManager.ItemPreference.cs" />
     <Compile Include="Objects\Items\Materials\IInspectable.cs" />
     <Compile Include="Objects\Items\Materials\MaterialTypeDefOf.cs" />
@@ -276,7 +275,6 @@
     <Compile Include="Components\Inventory\PacketInventoryInsertItem.cs" />
     <Compile Include="Components\Needs\Types\NeedComfort.cs" />
     <Compile Include="Objects\Quality.cs" />
-    <Compile Include="Components\Vegetation\InteractionChoppingSimple.cs" />
     <Compile Include="Components\Vegetation\InteractionHarvest.cs" />
     <Compile Include="AI\Labors\ExtensionsJobs.cs" />
     <Compile Include="Modules\Towns\Labors\TaskGiverEquipSelf.cs" />
@@ -529,7 +527,7 @@
     <Compile Include="Components\Resources\ResourceRateModifier.cs" />
     <Compile Include="Components\Resources\ResourceRateModifierDef.cs" />
     <Compile Include="Components\Skills\Best\NpcSkillsComponent.cs" />
-    <Compile Include="Components\Skills\Best\NpcSkill.cs" />
+    <Compile Include="Components\Skills\Best\Skill.cs" />
     <Compile Include="Components\Skills\SkillDef.cs" />
     <Compile Include="Components\Skills\ToolUse.cs" />
     <Compile Include="Components\Stats\StatNewModifier.cs" />
@@ -564,7 +562,6 @@
     <Compile Include="Modules\Towns\Switch\TaskGiverSwitchToggle.cs" />
     <Compile Include="Modules\Towns\Tasks\BehaviorGrabTool.cs" />
     <Compile Include="Modules\Towns\Tasks\BehaviorItemIsInInventory.cs" />
-    <Compile Include="Modules\Towns\Tasks\InteractionDeconstruct.cs" />
     <Compile Include="Modules\Towns\Tasks\TaskBehaviorDeconstruct.cs" />
     <Compile Include="Modules\Towns\Tasks\TaskGiverDeconstruct.cs" />
     <Compile Include="Modules\Towns\UI\UINpcFrame.cs" />
@@ -744,8 +741,6 @@
     <Compile Include="Components\MobileComponent.cs" />
     <Compile Include="Components\Inventory\PersonalInventoryComponent.cs" />
     <Compile Include="Components\Resources\Stamina.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionMining.cs" />
-    <Compile Include="Components\Interactions\NewScripts\InteractionDigging.cs" />
     <Compile Include="Components\Interactions\NewScripts\EquipFromInventory.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionTilling.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionHaul.cs" />

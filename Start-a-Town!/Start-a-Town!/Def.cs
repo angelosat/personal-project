@@ -19,7 +19,7 @@ namespace Start_a_Town_
         {
             this._label = name;
             this.Name = $"{this.GetType().Name}:{name.Replace(" ", "")}";
-            this.Name.ToConsole();
+            //this.Name.ToConsole();
         }
         /// <summary>
         /// TODO use attribute

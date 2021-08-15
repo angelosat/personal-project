@@ -37,7 +37,7 @@ namespace Start_a_Town_.Modules.Base
 
         public override void InitHUD(Hud hud)
         {
-            NpcSkill.Init(hud);
+            Skill.Init(hud);
 
             hud.RegisterEventHandler(Components.Message.Types.NeedUpdated, e =>
             {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -8,7 +7,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    class NpcSkillsComponent : EntityComponent
+    public class NpcSkillsComponent : EntityComponent
     {
         public override string Name { get; } = "Npc Skills";
         static public Panel UI = new Panel(new Rectangle(0,0,500, 400));
@@ -19,32 +18,34 @@ namespace Start_a_Town_
         public NpcSkillsComponent(ItemDef def)
         {
             var defs = def.ActorProperties.Skills;
-            this.SkillsNew = new NpcSkill[defs.Length];
+            this.SkillsNew = new Skill[defs.Length];
             for (int i = 0; i < defs.Length; i++)
             {
-                this.SkillsNew[i] = new NpcSkill(defs[i]);
+                this.SkillsNew[i] = new Skill(defs[i]) { Container = this };
             }
         }
         public NpcSkillsComponent()
         {
 
         }
-        public NpcSkillsComponent(params NpcSkill[] skills)
+        public NpcSkillsComponent(params Skill[] skills)
         {
             var count = skills.Length;
-            this.SkillsNew = new NpcSkill[count];
+            this.SkillsNew = new Skill[count];
             for (int i = 0; i < count; i++)
             {
-                this.SkillsNew[i] = skills[i].Clone();
+                var newSkill = skills[i].Clone();
+                newSkill.Container = this;
+                this.SkillsNew[i] = newSkill;
             }
         }
-        NpcSkill[] SkillsNew;
+        Skill[] SkillsNew;
         public NpcSkillsComponent(params SkillDef[] defs)
         {
-            this.SkillsNew = new NpcSkill[defs.Length];
+            this.SkillsNew = new Skill[defs.Length];
             for (int i = 0; i < defs.Length; i++)
             {
-                this.SkillsNew[i] = new NpcSkill(defs[i]);
+                this.SkillsNew[i] = new Skill(defs[i]);
             }
         }
        
@@ -52,9 +53,9 @@ namespace Start_a_Town_
         {
             var skills = actor.GetComponent<NpcSkillsComponent>().SkillsNew;
             foreach (var skill in skills)
-                container.AddControlsBottomLeft(skill.GetControl());
+                container.AddControlsBottomLeft(skill.GetListControlGui());
         }
-        static readonly TableScrollableCompactNewNew<NpcSkill> GUI = new TableScrollableCompactNewNew<NpcSkill>()
+        static readonly TableScrollableCompactNewNew<Skill> GuiTable = new TableScrollableCompactNewNew<Skill>()
             .AddColumn("name", "", 96, s => new Label(s.Def.Label) {
                 TooltipFunc = (t) =>
                 {
@@ -65,18 +66,19 @@ namespace Start_a_Town_
                 }
             })
             .AddColumn("level", "", 16, s => new Label(()=>$"{s.Level}"));
+        static readonly ListBoxNoScroll GuiList = new();
 
         static public Control GetGUI(Actor actor)
         {
             var skills = actor.Skills.SkillsNew;
-            GUI.ClearItems();
-            GUI.AddItems(skills);
-            return GUI;
+            GuiTable.ClearItems();
+            GuiTable.AddItems(skills);
+            return GuiTable;
         }
         
         public Control GetUI()
         {
-            var table = new TableScrollableCompactNewNew<NpcSkill>()
+            var table = new TableScrollableCompactNewNew<Skill>()
                 .AddColumn(null, "name", 80, s => new Label(s.Def.Label), 0)
                 .AddColumn(null, "value", 16, s => new Label() { TextFunc = () => s.Level.ToString() }, 0);
 
@@ -85,38 +87,33 @@ namespace Start_a_Town_
 
             var container = new GroupBox();
             foreach (var skill in this.SkillsNew)
-                container.AddControlsBottomLeft(skill.GetControl());
+                container.AddControlsBottomLeft(skill.GetListControlGui());
             return container;
         }
         public static Control GetGui(GameObject actor)
         {
             var a = actor as Actor;
-            var win = GUI.GetWindow();
-            if(win is null)
-                win = GUI.ToWindow("Skills");
-            GUI.ClearItems();
-            GUI.AddItems(a.Skills.SkillsNew);
+            //var win = GuiTable.GetWindow();
+            //if(win is null)
+            //    win = GuiTable.ToWindow("Skills");
+            //GuiTable.ClearItems();
+            //GuiTable.AddItems(a.Skills.SkillsNew); 
+            var win = GuiList.GetWindow();
+            if (win is null)
+                win = GuiList.ToWindow("Skills");
+            GuiList.Clear();
+            GuiList.AddItems(a.Skills.SkillsNew);
             win.Validate(true);
             return win;
         }
 
-        internal void AwardSkillXP(GameObject actor, SkillDef skill, float v)
-        {
-            var currentSkill = this.SkillsNew.First(s => s.Def == skill);
-            currentSkill.CurrentXP += v;// (int)v;
-            if (currentSkill.CurrentXP >= currentSkill.XpToLevel)
-            {
-                currentSkill.Level++;
-                actor.Net.EventOccured(Message.Types.SkillIncrease, actor, currentSkill.Def.Name);
-            }
-        }
-
-        internal NpcSkill GetSkill(SkillDef skill)
+      
+        internal Skill GetSkill(SkillDef skill)
         {
             return this.SkillsNew.First(s => s.Def == skill);
         }
         [InspectorHidden]
-        internal NpcSkill this[SkillDef skill] => this.GetSkill(skill);
+        internal Skill this[SkillDef skill] => this.GetSkill(skill);
         public NpcSkillsComponent Randomize()
         {
             var range = 10;

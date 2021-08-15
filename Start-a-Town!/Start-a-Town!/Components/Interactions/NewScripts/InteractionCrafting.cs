@@ -61,7 +61,8 @@ namespace Start_a_Town_.Crafting
             //var reaction = order.Reaction;
             //var product = reaction.Products.First().Make(actor, reaction, ingr);
             var skillAwardAmount = 100;
-            actor.AwardSkillXP(reaction.CraftSkill, skillAwardAmount);
+            //actor.AwardSkillXP(reaction.CraftSkill, skillAwardAmount);
+            actor[reaction.CraftSkill].Award(skillAwardAmount);
 
             product.ConsumeMaterials();
             if (order.Reaction.Fuel > 0)

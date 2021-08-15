@@ -118,6 +118,10 @@ namespace Start_a_Town_
                   var actor = a as Actor;
                   var toolspeed = actor.GetEquipmentSlot(GearType.Mainhand)?.GetStat(StatDefOf.ToolSpeed) ?? 0;
                   var speed = 1 + toolspeed;
+
+                  var stamina = a.Resources[ResourceDefOf.Stamina];
+                  speed *= stamina.CurrentThreshold.Value;
+
                   return speed;
               })
         {

@@ -26,6 +26,10 @@ namespace Start_a_Town_
             if (state.CurrentTaskBehavior != null)
             {
                 var (result, source) = state.CurrentTaskBehavior.Tick(parent, state);
+
+                if (parent.Resources[ResourceDefOf.Stamina].Value == 0)
+                    result = BehaviorState.Fail;
+
                 switch (result)
                 {
                     case BehaviorState.Running:

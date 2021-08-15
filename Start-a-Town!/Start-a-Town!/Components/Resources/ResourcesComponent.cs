@@ -117,7 +117,8 @@ namespace Start_a_Town_
         {
             return this.Resources.FirstOrDefault(r => r.ResourceDef == def);
         }
-
+        [InspectorHidden]
+        public Resource this[ResourceDef def] => this.GetResource(def);
         GroupBox _cachedGui;
         GroupBox CachedGui
         {

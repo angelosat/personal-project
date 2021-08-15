@@ -19,7 +19,9 @@ namespace Start_a_Town_
             : base("Bed", 0f, 1f, false, true)
         {
             this.Furniture = FurnitureDefOf.Bed;
-            this.BuildProperties = new BuildProperties(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
+            //this.BuildProperties = new(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
+            this.BuildProperties.ToolSensitivity = 1;
+            this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.BuildProperties.Complexity = 10;
             this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
             this.TopParts = new AtlasDepthNormals.Node.Token[] {

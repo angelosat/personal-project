@@ -49,15 +49,20 @@ namespace Start_a_Town_
                 this.EmitterStrike.Emit(ItemContent.LogsGrayscale.AtlasToken.Atlas.Texture, this.ParticleRects, Vector3.Zero);
                 a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
             }
-            this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);
             var toolEffect = GetToolEffectiveness();
             var amount = toolEffect / WorkDifficulty;
             this.ApplyWork(amount);
             this.TotalWorkAmount += amount;
             var skill = this.GetSkill();
-            //if((this.Actor.Gear.GetGear(GearType.Mainhand) as Tool)?.ToolComponent.Props.Skill is SkillDef skill)
             if(this.SkillAwardType == SkillAwardTypes.OnSwing)
                 a.AwardSkillXP(skill, amount);
+            var energyConsumption = amount / a.Skills[skill].Level;
+
+            var stamina = a.Resources[ResourceDefOf.Stamina];
+            stamina.Adjust(-energyConsumption);
+            /// i moved the multiplication with the stamina threshold to inside the workspeed stat formula
+            this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);// * stamina.CurrentThreshold.Value;
+
             if (this.Progress < 1)
                 return;
             if (this.SkillAwardType == SkillAwardTypes.OnFinish)

@@ -1,91 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.Components.Resources;
 using Start_a_Town_.UI;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public static class ResourceDefOf
-    {
-        static public readonly ResourceDef Health =
-            new Health()
-                .AddThreshold("Dying", .25f)
-                .AddThreshold("Critical", .5f)
-                .AddThreshold("Injured", .75f)
-                .AddThreshold("Healthy", 1f);
-
-        static public readonly ResourceDef Stamina =
-            new Stamina()
-                .AddThreshold("Out of breath", .25f)
-                .AddThreshold("Exhausted", .5f)
-                .AddThreshold("Tired", .75f)
-                .AddThreshold("Energetic", 1f);
-
-        static public readonly ResourceDef Durability = new Durability().AddThreshold("Durability", 1);
-        static public readonly ResourceDef HitPoints = new HitPoints();
-        static ResourceDefOf()
-        {
-            Def.Register(Health);
-            Def.Register(Stamina);
-            Def.Register(Durability);
-            Def.Register(HitPoints);
-        }
-    }
-
     public abstract class ResourceDef : Def
     {
-        public class ResourceThreshold : Def
-        {
-            ResourceThreshold Next;
-            readonly public float Value;
-            public ResourceThreshold(string name, float value) : base(name)
-            {
-                this.Value = value;
-            }
-            public ResourceThreshold Get(float value)
-            {
-                if (value <= this.Value)
-                    return this;
-                else
-                    return this.Next?.Get(value) ?? this;
-            }
-            public int GetDepth(float value)
-            {
-                var n = 0;
-                var current = this;
-                do
-                {
-                    if (value <= current.Value || current.Next == null)
-                        return n;
-                    current = current.Next;
-                    n++;
-                } while (true);
-            }
-            public float GetThresholdValue(int index)
-            {
-                var current = this;
-                var n = 0;
-                while (n < index)
-                {
-                    current = current.Next;
-                }
-                return current.Value;
-            }
-            public ResourceThreshold Add(ResourceThreshold next)
-            {
-                this.Next = this.Next?.Add(next) ?? next;
-                if (next.Value <= this.Value)
-                    throw new Exception();
-                return this;
-            }
-            public override string ToString()
-            {
-                return string.Format("{0}: {1}", this.Name, this.Value.ToString("##0%"));
-            }
-        }
-
         static public Progress Recovery { get { return new Progress(0, Ticks.TicksPerSecond, Ticks.TicksPerSecond); } }
         public ResourceDef(string name) : base(name)
         {
@@ -96,7 +17,7 @@ namespace Start_a_Town_
         }
         public virtual void SetMaterial(MaterialDef mat) { }
 
-        readonly List<ResourceThreshold> Thresholds = new();
+        public readonly List<ResourceThreshold> Thresholds = new();
 
         ResourceThreshold Root;
         public ResourceDef AddThreshold(string label, float value = 1)
@@ -118,31 +39,15 @@ namespace Start_a_Town_
         {
             return this.Root.GetDepth(res.Value);
         }
-        static List<ResourceDef> _Registry;
-        public static List<ResourceDef> Registry
-        {
-            get
-            {
-                if (_Registry == null)
-                    Initialize();
-                return _Registry;
-            }
-        }
-
-        static void Initialize()
-        {
-            _Registry = new List<ResourceDef>()
-            {
-                new Health(),
-                new Durability(),
-                new Stamina()
-            };
-        }
-
+     
         public string GetLabel(Resource res)
         {
-            var label = this.Thresholds.FirstOrDefault(t => res.Percentage <= t.Value)?.Label;
+            var label = this.GetCurrentThreshold(res)?.Label;
             return label ?? "";
+        }
+        public ResourceThreshold GetCurrentThreshold(Resource res)
+        {
+            return this.Thresholds.FirstOrDefault(t => res.Percentage <= t.Value);
         }
         public abstract Color GetBarColor(Resource resource);
         public virtual string GetBarLabel(Resource resource)

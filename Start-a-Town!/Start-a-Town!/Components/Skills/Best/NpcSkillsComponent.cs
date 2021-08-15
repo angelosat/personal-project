@@ -115,7 +115,8 @@ namespace Start_a_Town_
         {
             return this.SkillsNew.First(s => s.Def == skill);
         }
-
+        [InspectorHidden]
+        internal NpcSkill this[SkillDef skill] => this.GetSkill(skill);
         public NpcSkillsComponent Randomize()
         {
             var range = 10;

@@ -11,6 +11,7 @@ namespace Start_a_Town_
         public enum Types { Citizen, Visitor };
         public bool Occupied { get { return this.CurrentOccupant != -1; } }
         public int CurrentOccupant = -1;
+        public Actor Owner;
         public Types Type = Types.Citizen;
         public BlockBedEntity(IntVec3 originGlobal)
             : base(originGlobal)
@@ -61,6 +62,7 @@ namespace Start_a_Town_
         }
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
+            info.AddInfo(new Label(() => $"Owner: {this.Owner?.Name ?? ""}"));
             if(map.GetRoomAt(vector3) is Room room)
                 room.GetSelectionInfo(info);
         }
@@ -95,5 +97,6 @@ namespace Start_a_Town_
                 _ => throw new Exception(),
             };
         }
+
     }
 }

@@ -9,7 +9,7 @@ namespace Start_a_Town_.Interactions
         public InteractionConstruct()
             : base("Construct")
         {
-            this.BuildProgress = new(() => this.Target.GetBlockEntity<BlockConstructionEntity>().BuildProgress);
+            this.BuildProgress = new(() => this.Target.GetBlockEntity<BlockConstructionEntity>().BuildProgress); // why has this thrown null?
         }
 
         readonly Lazy<Progress> BuildProgress;

@@ -7,7 +7,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    public class Resource : IProgressBar, ISaveable, ISerializable, INamed
+    public class Resource : Inspectable, IProgressBar, ISaveable, ISerializable, INamed
     {
         public readonly ResourceDef ResourceDef;
         public List<ResourceRateModifier> Modifiers = new();
@@ -27,9 +27,9 @@ namespace Start_a_Town_
         public float Value
         {
             get => this._value;
-            set =>this._value = Math.Max(0, Math.Min(value, this.Max)); 
+            set => this._value = Math.Max(0, Math.Min(value, this.Max));
         }
-
+        public ResourceThreshold CurrentThreshold => this.ResourceDef.GetCurrentThreshold(this);
         public Progress Rec = ResourceDef.Recovery;
         public float Percentage { get => this.Value / this.Max; set => this.Value = this.Max * value; }
         public float Min => 0;

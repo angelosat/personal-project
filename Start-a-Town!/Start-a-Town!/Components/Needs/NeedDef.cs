@@ -37,7 +37,7 @@ namespace Start_a_Town_
         static public readonly NeedDef Energy = new("Energy", typeof(NeedEnergy))
         {
             TaskGiver = new TaskGiverSleeping(),
-            CategoryDef = NeedCategoryDef.NeedCategoryPhysiological
+            CategoryDef = NeedCategoryDef.NeedCategoryPhysiological,
         };
         static public readonly NeedDef Work = new("Work", typeof(NeedWork))
         {

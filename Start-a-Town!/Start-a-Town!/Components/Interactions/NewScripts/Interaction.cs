@@ -203,14 +203,17 @@ namespace Start_a_Town_
         {
             w.Write(this.CurrentTick);
             w.Write((int)this.State);
-            this.Animation.Write(w);
+            w.Write(this.Animation is not null);
+            if(this.Animation is not null) // added this because InteractionSleepInBed doesn't have an animation
+                this.Animation.Write(w);
             this.WriteExtra(w);
         }
         public void Read(BinaryReader r)
         {
             this.CurrentTick = r.ReadSingle();
             this.State = (States)r.ReadInt32();
-            this.Animation.Read(r);
+            if(r.ReadBoolean())
+                this.Animation.Read(r);
             this.ReadExtra(r);
         }
         protected virtual void WriteExtra(BinaryWriter w) { }

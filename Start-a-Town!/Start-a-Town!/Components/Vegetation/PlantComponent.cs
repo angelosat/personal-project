@@ -209,9 +209,7 @@ namespace Start_a_Town_.Components
 
         public override bool HandleMessage(GameObject parent, ObjectEventArgs e)
         {
-            Message.Types msg = e.Type;
-            GameObject sender = e.Sender;
-            switch (msg)
+            switch (e.Type)
             {
                 case Message.Types.EntityCollision:
                     this.Wiggle();

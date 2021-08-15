@@ -9,6 +9,7 @@ namespace Start_a_Town_
     {
         public override string Name { get; } = "Possesions";
         readonly HashSet<Room> Rooms = new();
+        readonly HashSet<BlockEntity> Furniture = new();
         public override object Clone()
         {
             return new PossessionsComponent();
@@ -35,5 +36,7 @@ namespace Start_a_Town_
                 throw new Exception();
             room.RemoveOwner(this.Parent as Actor);
         }
+
+        public IEnumerable<T> GetOwned<T>() where T : BlockEntity => this.Furniture.OfType<T>();
     }
 }

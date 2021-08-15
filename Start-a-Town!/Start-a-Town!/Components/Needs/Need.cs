@@ -24,7 +24,7 @@ namespace Start_a_Town_
         public enum Types { Hunger, Water, Sleep, Achievement, Work, Brains, Curiosity, Social, Energy }
         const string Format = "P0";
         public virtual Types ID { get; set; }
-        public virtual string Name { get { return this.NeedDef.Name; } set { } }
+        public virtual string Name => this.NeedDef.Label;
         public float DecayDelay, DecayDelayMax = 3;
         float _Value;
         public double LastTick;
@@ -121,7 +121,6 @@ namespace Start_a_Town_
                 NameFunc = () => this.Name,
                 HoverFunc = () => this.ToString(),
                 HoverFormat = this.Name + ": " + Format,
-
             };
             bar.LeftClickAction = () =>
             {

@@ -123,6 +123,8 @@ namespace Start_a_Town_
         public abstract IEnumerable<GameObject> GetObjects(BoundingBox box);
         IEnumerable<BlockEntity> BlockEntities => this.ActiveChunks.Values.SelectMany(ch => ch.BlockEntities).Distinct();
 
+        public IEnumerable<T> GetBlockEntities<T>() where T : BlockEntity => this.BlockEntities.OfType<T>(); 
+
         public static int MaxHeight = 128;
 
         internal bool IsDesignation(IntVec3 global)

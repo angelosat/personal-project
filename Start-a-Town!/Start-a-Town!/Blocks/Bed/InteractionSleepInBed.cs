@@ -17,7 +17,8 @@ namespace Start_a_Town_.Blocks.Bed
         internal override void InitAction()
         {
             var a = this.Actor;
-            var t = this.Target; 
+            var t = this.Target;
+            var map = a.Map;
             this.PreviousStandingPosition = a.Global;
             var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
             a.SetPosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(a.Map, bedPos)));
@@ -33,7 +34,10 @@ namespace Start_a_Town_.Blocks.Bed
             headBone.SetEnabled(true, false);
             headBone.RestingFrame = new Keyframe(0, Vector2.Zero, -(float)(Math.PI / 3f));
 
-            var room = a.Map.Town.RoomManager.GetRoomAt(t.Global);
+            var bed = map.GetBlockEntity<BlockBedEntity>(t.Global);
+            bed.Owner = a;
+
+            var room = map.Town.RoomManager.GetRoomAt(t.Global);
             if (room is not null)
             {
                 if (room.Owner is null)

@@ -244,7 +244,8 @@ namespace Start_a_Town_
         {
             var d = DateTime.Now - this.MouseMiddleTimestamp;
             var c = TimeSpan.FromMilliseconds(100);
-            if (d < c && this.ScrollingMode != this.MouseScroll)
+            const int mouseScrollDistanceThreshold = 5;
+            if (d < c && this.ScrollingMode != this.MouseScroll && Vector2.DistanceSquared(UIManager.Mouse, this.MouseScrollOrigin) < mouseScrollDistanceThreshold)
                 this.ScrollingMode = this.MouseScroll;
             else
                 this.ScrollingMode = null;

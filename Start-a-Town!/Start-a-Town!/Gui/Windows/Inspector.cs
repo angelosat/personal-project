@@ -12,11 +12,11 @@ namespace Start_a_Town_
         {
         }
         static Control DefDirectory, ObjectsDirectory;
-        static int MaxHeight = 512, Width = 384; // table columns TODO
+        static readonly int MaxHeight = 512, Width = 384; // table columns TODO
         static Window WindowHelp;
-        readonly static List<Control> History = new();
+        static readonly List<Control> History = new();
         static int HistoryIndex = -1;
-        static IconButton BtnBack, BtnForward;
+        static IconButton BtnBack, BtnForward, BtnRefresh;
         static Control Container;
 
         public static void Refresh(Inspectable obj)
@@ -25,11 +25,14 @@ namespace Start_a_Town_
             {
                 WindowHelp = new Window() { Title = "Details", Movable = true, Closable = true, AutoSize = true }.MoveToScreenCenter() as Window;
                 var toolbar = new GroupBox();
-                BtnBack = IconButton.CreateSmall(Icon.ArrowLeft, Back);
-                BtnForward = IconButton.CreateSmall(Icon.ArrowRight, Forward);
+                BtnBack = IconButton.CreateSmall(Icon.ArrowLeft, Back).SetHoverText("Back") as IconButton;
+                BtnForward = IconButton.CreateSmall(Icon.ArrowRight, Forward).SetHoverText("Forward") as IconButton;
+                BtnRefresh = IconButton.CreateSmall(Icon.Replace, Refresh).SetHoverText("Refresh") as IconButton;
+
                 toolbar.AddControlsHorizontally(
-                    BtnBack, 
-                    BtnForward, 
+                    BtnBack,
+                    BtnForward,
+                    BtnRefresh,
                     new Button("Defs", () => ShowContainer(DefDirectory)),
                     new Button("Objects", () => ShowContainer(ObjectsDirectory))
                     );
@@ -48,14 +51,14 @@ namespace Start_a_Town_
                 //.AddColumn("name", 128, i => new Label(i.item), 1)
                 //.AddColumn("name", 96, i => new GroupBox().AddControlsLineWrap(96, new Label(i.item), new Label(": ")), 1)
                 .AddColumn("name", Width / 3, i => new Label(i.item + ": "), 1)
-                .AddColumn("value", 2*Width/3, i => new GroupBox().AddControlsLineWrap(256, Label.ParseNewNew(i.value).ToArray()));
+                .AddColumn("value", 2 * Width / 3, i => new GroupBox().AddControlsLineWrap(256, Label.ParseNewNew(i.value).ToArray()));
 
-            table.AddItems(obj.Inspect()
-                .Prepend((nameof(obj.Label), obj.Label))
-                .Prepend((nameof(Type), obj.GetType())));
+            PopulateTable(obj, table);
+
             table.Tag = obj;
             var box = table.Box(table.Width, MaxHeight);
             var panel = box.ToPanel();
+            panel.Tag = table;
 
             if (HistoryIndex < History.Count - 1)
                 History.RemoveRange(HistoryIndex + 1, History.Count - HistoryIndex - 1);
@@ -65,9 +68,18 @@ namespace Start_a_Town_
             Container.AddControls(panel);
             BtnBack.Active = HistoryIndex > 0;
             BtnForward.Active = HistoryIndex < History.Count - 1;
+            BtnRefresh.Active = true;
             WindowHelp.Validate(true);
             Show();
         }
+
+        private static void PopulateTable(Inspectable obj, Table<(string item, object value)> table)
+        {
+            table.AddItems(obj.Inspect()
+                            .Prepend((nameof(obj.Label), obj.Label))
+                            .Prepend((nameof(Type), obj.GetType())));
+        }
+
         private static void Back()
         {
             var prev = History[--HistoryIndex];
@@ -75,6 +87,7 @@ namespace Start_a_Town_
             Container.AddControls(prev);
             BtnBack.Active = HistoryIndex > 0;
             BtnForward.Active = HistoryIndex < History.Count - 1;
+            BtnRefresh.Active = prev.Tag is Inspectable;
             WindowHelp.Validate(true);
         }
         private static void Forward()
@@ -84,7 +97,17 @@ namespace Start_a_Town_
             Container.AddControls(next);
             BtnBack.Active = HistoryIndex > 0;
             BtnForward.Active = HistoryIndex < History.Count - 1;
+            BtnRefresh.Active = next.Tag is Inspectable;
             WindowHelp.Validate(true);
+        }
+        private static void Refresh()
+        {
+            var current = Container.Controls.Single();
+            if (current.Tag is not Table<(string item, object value)> table)
+                return;
+            var obj = table.Tag as Inspectable;
+            table.ClearControls();
+            PopulateTable(obj, table);
         }
         static void ShowContainer(Control container)
         {
@@ -98,7 +121,8 @@ namespace Start_a_Town_
             HistoryIndex++;
             BtnBack.Active = HistoryIndex > 0;
             BtnForward.Active = HistoryIndex < History.Count - 1;
-        } 
+            BtnRefresh.Active = container.Tag is Inspectable;
+        }
         internal static void Show()
         {
             if (!WindowHelp.IsOpen)
@@ -117,7 +141,7 @@ namespace Start_a_Town_
         static void InitWorldObjects()
         {
             var net = Client.Instance;
-            var list = new ListBoxObservable<GameObject, Label>(net.ObjectsObservable, o=>new Label(o.DebugName, ()=>Refresh(o)));
+            var list = new ListBoxObservable<GameObject, Label>(net.ObjectsObservable, o => new Label(o.DebugName, () => Refresh(o)));
             var search = new SearchBarNew<GameObject>(Width, o => o.Name).BindTo(list).ToPanelLabeled("Search");
             var scrollablebox = new ScrollableBoxNewNew(Width, MaxHeight - search.Height, ScrollModes.Vertical);
             scrollablebox.AddControls(list);
@@ -125,5 +149,4 @@ namespace Start_a_Town_
             ObjectsDirectory = box;
         }
     }
-    
 }

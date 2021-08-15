@@ -40,6 +40,7 @@ namespace Start_a_Town_.UI
             {
             }
         }
+
         public override int Height
         {
             get

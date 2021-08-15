@@ -1418,5 +1418,11 @@ namespace Start_a_Town_.UI
                 mode |= ScrollModes.Vertical;
             return ScrollableBoxNewNew.FromClientSize(w, h, mode).AddControls(this);
         }
+
+        internal Control SetHoverText(string text)
+        {
+            this.HoverText = text;
+            return this;
+        }
     }
 }

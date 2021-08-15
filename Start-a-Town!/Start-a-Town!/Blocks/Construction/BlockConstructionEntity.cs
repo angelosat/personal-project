@@ -48,7 +48,7 @@ namespace Start_a_Town_
             info.AddInfo(new Label() { TextFunc =
                 GetIngredientText }
             );
-        
+            info.AddInfo(this.BuildProgress.GetGui("Construction"));
         }
         string GetIngredientText()
         {

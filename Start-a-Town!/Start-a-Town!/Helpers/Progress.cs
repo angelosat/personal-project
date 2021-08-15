@@ -104,7 +104,15 @@ namespace Start_a_Town_
         }
         public string ToStringPercentage()
         {
-            return string.Format("{0}", this.Percentage.ToString("P0", CultureInfo.InvariantCulture));
+            return $"{this.Percentage.ToString("P0", CultureInfo.InvariantCulture)}";
+        }
+        public UI.Bar GetGui(string text)
+        {
+            return new UI.Bar(this)
+            {
+                TextFunc = () => text,
+                HoverFunc = () => $"{this.Value:0.00} / {this.Max:0}"
+            };
         }
     }
 }

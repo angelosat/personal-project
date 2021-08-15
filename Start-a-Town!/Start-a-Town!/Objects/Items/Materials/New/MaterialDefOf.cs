@@ -63,7 +63,7 @@ namespace Start_a_Town_
             new MaterialDef("Berry", MaterialTemplates.Fruit)
             .SetPrefix("Berry")
             //.SetColor(new Color(141, 78, 133));
-            .SetColor(Color.Red);
+            .SetColor(Color.MediumVioletRed);
 
         static public readonly MaterialDef Seed = new("Seed", MaterialTemplates.Seed);
 

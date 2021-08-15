@@ -3,7 +3,7 @@ using Start_a_Town_.AI;
 
 namespace Start_a_Town_
 {
-    public sealed class NeedDef : Def
+    public class NeedDef : Def
     {
         public Type Type;
         public float BaseThreshold = 20;
@@ -23,6 +23,7 @@ namespace Start_a_Town_
             this.Type = needType;
             this.CategoryDef = category;
         }
+
         static public readonly NeedDef Comfort = new("Comfort", typeof(NeedComfort))
         {
             CategoryDef = NeedCategoryDef.NeedCategoryPhysiological,

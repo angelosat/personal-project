@@ -89,13 +89,13 @@ namespace Start_a_Town_
                     float d = this.Decay * (1 + 5 * p * p);
                     d = this.Decay;
                     d = this.NeedDef.BaseDecayRate;
+                    d *= this.FinalDecayMultiplier;
                     newValue = this._Value - d;
                 }
             }
-
             SetValue(newValue, parent);
         }
-
+        protected virtual float FinalDecayMultiplier => 1;
         public virtual AITask GetTask(GameObject parent) { return null; }
         
         public virtual TaskGiver TaskGiver { get { return this.NeedDef.TaskGiver; } }
@@ -114,7 +114,7 @@ namespace Start_a_Town_
 
         public Bar ToBar(GameObject parent)
         {
-            Bar bar = new Bar()
+            var bar = new Bar()
             {
                 ColorFunc = () => Color.Lerp(Color.Red, Color.Lime, this.Value / 100f),
                 Object = this,

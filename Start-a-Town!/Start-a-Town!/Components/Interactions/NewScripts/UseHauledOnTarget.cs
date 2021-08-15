@@ -29,7 +29,7 @@ namespace Start_a_Town_
             var target = this.Target;
             var hauled = actor.Inventory.HaulSlot;// PersonalInventoryComponent.GetHauling(actor);
             var hauledObj = hauled.Object;
-            if (this.Amount > hauledObj.StackSize)
+            if (this.Amount > hauledObj.StackSize) //thrown
                 throw new Exception();
             this.Animation.FadeOutAndRemove();
             switch (target.Type)

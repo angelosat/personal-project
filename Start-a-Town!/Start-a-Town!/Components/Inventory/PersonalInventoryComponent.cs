@@ -249,18 +249,17 @@ namespace Start_a_Town_.Components
             return true;
         }
 
-        public bool PickUp(GameObject obj, int amount)
+        public void PickUp(GameObject obj, int amount)
         {
             var parent = this.Parent;
 
             /// added this here as a workaround because when hauling partial stacks, the packet to synchaul the new instantiated item arrived before the interaction is performed
             /// which results in the interaction being performed while the actor already is carrying the new item, and the pickup amount being further added to the new item
-            if (parent.Net is Client && amount < obj.StackSize)
-            {
-                
-                obj.StackSize -= amount;
-                return true;
-            }
+            //if (parent.Net is Client && amount < obj.StackSize)
+            //{
+            //    obj.StackSize -= amount;
+            //    return true;
+            //}
 
             if (this.HaulSlot.Object is GameObject currentHauled)
             {
@@ -271,22 +270,23 @@ namespace Start_a_Town_.Components
                         throw new Exception();
                     currentHauled.StackSize += transferAmount;
                     obj.StackSize -= transferAmount;
-                    return false;
+                    return;
                 }
                 //else
                 // if we maxed out our hauling stack, but there is some remaining amout of item on the ground, store hauled stack and haul the remaining item stack
                 else if (!this.StoreHauled())
-                    return false;
+                    return;
             }
             else
             {
                 if (amount == obj.StackSize)
                 {
                     this.Haul(obj);
-                    return true;
+                    return;
                 }
                 else
                 {
+                    /// if instantiating new stack
                     if (parent.Net is Server server)
                     {
                         var newobj = obj.Clone();
@@ -296,10 +296,9 @@ namespace Start_a_Town_.Components
                         this.Haul(newobj);
                         Packets.SyncSetHaulSlot(server, parent as Actor, newobj as Entity);
                     }
-                    return true;
+                    return;
                 }
             }
-            return false;
         }
 
         public bool Unequip(GameObject item)
@@ -504,7 +503,7 @@ namespace Start_a_Town_.Components
         readonly Label CachedGuiLabelCarrying = new();
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)
         {
-            info.AddInfo(this.CachedGuiLabelCarrying.SetTextFunc(() => $"Carrying: {this.HaulSlot.Object?.ToString() ?? "Nothing"}"));
+            info.AddInfo(this.CachedGuiLabelCarrying.SetTextFunc(() => $"Carrying: {this.HaulSlot.Object?.DebugName ?? "Nothing"}"));
         }
 
         public IEnumerable<Entity> FindItems(Func<Entity, bool> p)

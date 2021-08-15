@@ -56,7 +56,7 @@ namespace Start_a_Town_
             var skill = this.GetSkill();
             if(this.SkillAwardType == SkillAwardTypes.OnSwing)
                 a.AwardSkillXP(skill, amount);
-            var energyConsumption = amount / a.Skills[skill].Level;
+            var energyConsumption = this.GetEnergyConsumption(amount, a.Skills[skill].Level); //amount / a.Skills[skill].Level;
 
             var stamina = a.Resources[ResourceDefOf.Stamina];
             stamina.Adjust(-energyConsumption);
@@ -76,6 +76,11 @@ namespace Start_a_Town_
                 return tool[StatDefOf.ToolEffectiveness];
             else
                 return this.Actor.GetMaterial(BoneDefOf.RightHand).Density;
+        }
+        protected virtual float GetEnergyConsumption(float workAmount, int skillLevel)
+        {
+            const int skillFactor = 20;
+            return workAmount / (skillFactor * skillLevel);
         }
 
         protected abstract float Progress { get; }

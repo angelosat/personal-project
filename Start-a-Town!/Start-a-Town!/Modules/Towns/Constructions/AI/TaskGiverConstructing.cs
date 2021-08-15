@@ -29,7 +29,6 @@ namespace Start_a_Town_
                 if (actor.Map.GetBlockEntity(closest) is not IConstructible blockEntity)
                     continue; // because the list contains other block types as well
 
-
                 if (blockEntity.IsReadyToBuild(out ItemDef def, out MaterialDef mat, out int amount))
                 {
                     var buildtask = TryBuild(actor, closest, blockEntity);

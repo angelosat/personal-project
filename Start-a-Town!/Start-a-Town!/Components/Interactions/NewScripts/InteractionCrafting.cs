@@ -99,7 +99,9 @@ namespace Start_a_Town_.Crafting
             w.Write(this.Order.ID);
             this._progress.Write(w);
             this.PlacedObjects.Write(w);
-            this.Product.Write(w);
+            w.Write(this.Product is not null);
+            if (this.Product is not null)
+                this.Product.Write(w);
         }
         protected override void ReadExtra(BinaryReader r)
         {
@@ -110,7 +112,8 @@ namespace Start_a_Town_.Crafting
                 this._orderID = orderID;
             this._progress = new Progress(r);
             this.PlacedObjects.ReadMutable(r);
-            this.Product = new Reaction.Product.ProductMaterialPair(r);
+            if (r.ReadBoolean())
+                this.Product = new Reaction.Product.ProductMaterialPair(r);
         }
 
         internal override void ResolveReferences()

@@ -969,7 +969,9 @@ namespace Start_a_Town_
                     obj.Components[compTag.Name].Load(obj, compTag);
                     //obj[compTag.Name].Load(obj, compTag);
             }
-            obj.Name = obj.Def.NameGetter?.Invoke(obj) ?? obj.Name; // reset name
+            //obj.Name = obj.Def.NameGetter?.Invoke(obj) ?? obj.Name; // reset name
+            obj.DefComponent.ParentName = obj.Def.NameGetter?.Invoke(obj) ?? obj.DefComponent.ParentName; // reset name
+
             obj.ObjectLoaded();
             return obj;
         }

@@ -62,9 +62,11 @@ namespace Start_a_Town_
         }
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
-            info.AddInfo(new Label(() => $"Owner: {this.Owner?.Name ?? ""}"));
-            if(map.GetRoomAt(vector3) is Room room)
+            //info.AddInfo(new Label(() => $"Owner: {this.Owner?.Name ?? ""}"));
+            var room = map.GetRoomAt(vector3);
+            if (room is not null)
                 room.GetSelectionInfo(info);
+            info.AddInfo(new Label(() => $"Owner: {$"{room?.Owner} (from room)" ?? this.Owner?.Name ?? ""}"));
         }
         protected override void WriteExtra(System.IO.BinaryWriter w)
         {
@@ -97,6 +99,5 @@ namespace Start_a_Town_
                 _ => throw new Exception(),
             };
         }
-
     }
 }

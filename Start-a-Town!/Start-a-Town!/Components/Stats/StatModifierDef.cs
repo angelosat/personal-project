@@ -3,19 +3,19 @@
 namespace Start_a_Town_
 {
     public enum DurationTypes { Permanent, Finite }
-    class StatNewModifierDef : Def
+    class StatModifierDef : Def
     {
-        public StatNewDef Source;
+        public StatDef Source;
         public Func<GameObject, float, float> Mod;
         public DurationTypes DurationType;
         public int BaseDurationInTicks = 0;
-        public StatNewModifierDef(string name, StatNewDef source) : base(name)
+        public StatModifierDef(string name, StatDef source) : base(name)
         {
          
             this.Source = source;
         }
 
-        static public readonly StatNewModifierDef WalkSpeedHaulingWeight = new StatNewModifierDef("WalkSpeedHaulingWeight", StatDefOf.WalkSpeed)
+        static public readonly StatModifierDef WalkSpeedHaulingWeight = new StatModifierDef("WalkSpeedHaulingWeight", StatDefOf.WalkSpeed)
         {
             DurationType = DurationTypes.Permanent,
             Mod = (a,v)=>

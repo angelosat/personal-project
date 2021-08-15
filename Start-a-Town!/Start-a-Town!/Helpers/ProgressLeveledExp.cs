@@ -3,7 +3,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    class ProgressLeveledExp : Progress
+    public class ProgressLeveledExp : Progress
     {
         public int Level { get; private set; }
         

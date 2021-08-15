@@ -5,13 +5,13 @@ namespace Start_a_Town_
     public class ItemCategory : Def
     {
         public List<StorageFilter> Filters = new();
-        public List<StatNewDef> Stats = new();
+        public List<StatDef> Stats = new();
         public string Label;
         ItemCategory(string label) : base("StorageCategory:"+label)
         {
             this.Label = label;
         }
-        public ItemCategory AddStats(params StatNewDef[] stats)
+        public ItemCategory AddStats(params StatDef[] stats)
         {
             this.Stats.AddRange(stats);
             return this;

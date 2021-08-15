@@ -4,8 +4,56 @@ using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
-    public class StatNewDef : Def
+    public class StatDef : Def
     {
+        public enum Types { Scalar, Percentile };
+
+        public float BaseValue;
+        public string Description;
+        public Types Type = Types.Scalar;
+        public string StringFormat = "";
+        readonly Type ValueGetterType;
+        StatValueGetter _valueGetter;
+        StatValueGetter ValueGetter => this._valueGetter ??= Activator.CreateInstance(this.ValueGetterType, this) as StatValueGetter;
+
+        public StatDef(string name) : base(name)
+        {
+
+        }
+        public StatDef(string name, Type valueGetter) : base(name)
+        {
+            this.ValueGetterType = valueGetter;
+        }
+        float ApplyModifiers(GameObject parent, float value)
+        {
+            var mods = parent.GetStatModifiers(this);
+            if (mods is not null)
+                foreach (var mod in mods)
+                    value = mod.Def.Mod(parent, value);
+            return value;
+        }
+        public float GetValue(GameObject parent)
+        {
+            if (this.Type == Types.Scalar)
+            {
+                var value = this.ValueGetter.GetValue(parent);
+                var modified = this.ApplyModifiers(parent, value);
+                return this.BaseValue + modified;
+            }
+            else if (this.Type == Types.Percentile)
+            {
+                return this.ApplyModifiers(parent, 1);
+            }
+            else throw new Exception();
+        }
+        public Control GetControl(GameObject parent)
+        {
+            return new Label()
+            {
+                TextFunc = () => $"{this.Name}: {this.GetValue(parent)}",
+            };
+        }
+
         public abstract class ValueBuilder : Def
         {
             public ValueBuilder(string name) : base(name)
@@ -66,53 +114,6 @@ namespace Start_a_Town_
                 this.Expressions.Add(new Expression(ExpressionDef.Division, 2));
                 return this;
             }
-        }
-
-        public enum Types { Scalar, Percentile };
-
-        public float BaseValue;
-        public string Description;
-        readonly Func<GameObject, float> Formula;
-        public Types Type = Types.Scalar;
-        public string StringFormat = "";
-
-        public StatNewDef(string name, Func<GameObject, float> formula) : base(name)
-        {
-
-            this.Formula = formula;
-        }
-        public StatNewDef(string name) : base(name)
-        {
-
-        }
-        float ApplyModifiers(GameObject parent, float value)
-        {
-            var mods = parent.GetStatModifiers(this);
-            if (mods is not null)
-                foreach (var mod in mods)
-                    value = mod.Def.Mod(parent, value);
-            return value;
-        }
-        public float GetValue(GameObject parent)
-        {
-            if (this.Type == Types.Scalar)
-            {
-                var value = this.Formula(parent);
-                var modified = this.ApplyModifiers(parent, value);
-                return this.BaseValue + modified;
-            }
-            else if (this.Type == Types.Percentile)
-            {
-                return this.ApplyModifiers(parent, 1);
-            }
-            else throw new Exception();
-        }
-        public Control GetControl(GameObject parent)
-        {
-            return new Label()
-            {
-                TextFunc = () => $"{this.Name}: {this.GetValue(parent)}",
-            };
         }
     }
 }

@@ -55,6 +55,7 @@ namespace Start_a_Town_
         }
         internal AttributeStat GetAttribute(AttributeDef att) => this.GetComponent<AttributesComponent>().GetAttribute(att);
 
+
         [Obsolete]
         public GameObject Debug() { return this; }
 
@@ -451,6 +452,17 @@ namespace Start_a_Town_
         ResourcesComponent _resourcesCached;
         [InspectorHidden]
         public ResourcesComponent Resources => this._resourcesCached ??= this.GetComponent<ResourcesComponent>();
+
+        private StatsComponent _stats;
+        [InspectorHidden]
+        internal StatsComponent Stats => _stats ??= this.GetComponent<StatsComponent>();
+
+        [InspectorHidden]
+        public float this[StatDef stat] => stat.GetValue(this);
+        [InspectorHidden]
+        public Resource this[ResourceDef resource] => this.Resources[resource];
+        [InspectorHidden]
+        public AttributeStat this[AttributeDef att] => this.GetAttribute(att);
 
         public ComponentCollection Components = new();
 
@@ -1481,9 +1493,9 @@ namespace Start_a_Town_
 
         public string DebugName { get { return $"[{this.RefID}]{this.Name}"; } }
 
-        internal List<StatNewModifier> GetStatModifiers(StatNewDef statNewDef)
+        internal List<StatNewModifier> GetStatModifiers(StatDef statNewDef)
         {
-            return this.GetComponent<StatsComponentNew>()?.GetModifiers(statNewDef);
+            return this.GetComponent<StatsComponent>()?.GetModifiers(statNewDef);
         }
 
         internal void AddResourceModifier(ResourceRateModifier resourceModifier)
@@ -1493,7 +1505,7 @@ namespace Start_a_Town_
 
         internal void AddStatModifier(StatNewModifier statNewModifier)
         {
-            this.GetComponent<StatsComponentNew>().AddModifier(statNewModifier);
+            this.GetComponent<StatsComponent>().AddModifier(statNewModifier);
         }
 
         public int GetValue()

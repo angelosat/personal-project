@@ -14,7 +14,7 @@ namespace Start_a_Town_
         }
         public StatsGui(GameObject actor)
         {
-            var comp = actor.GetComponent<StatsComponentNew>();
+            var comp = actor.GetComponent<StatsComponent>();
             var attsComp = actor.GetComponent<AttributesComponent>();
             this.PanelAttributes = attsComp.GetGUI().ToPanelLabeled("Attributes");
             this.AddControlsTopRight(this.PanelAttributes);
@@ -23,7 +23,7 @@ namespace Start_a_Town_
         }
         public void Refresh(GameObject actor)
         {
-            var comp = actor.GetComponent<StatsComponentNew>();
+            var comp = actor.GetComponent<StatsComponent>();
             this.ClearControls();
           
             this.PanelAttributes.Client.ClearControls();

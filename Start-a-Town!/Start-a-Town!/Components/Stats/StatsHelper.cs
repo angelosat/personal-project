@@ -2,7 +2,7 @@
 {
     static class StatsHelper
     {
-        static public float GetStat(this GameObject parent, StatNewDef statDef)
+        static public float GetStat(this GameObject parent, StatDef statDef)
         {
             return statDef.GetValue(parent);
         }

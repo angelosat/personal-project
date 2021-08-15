@@ -4,12 +4,13 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components
 {
-    class StatsComponentNew : EntityComponent
+    class StatsComponent : EntityComponent
     {
         public override string Name { get; } = "StatsNew";
         
-        readonly Dictionary<StatNewDef, List<StatNewModifier>> Modifiers = new();
-        internal List<StatNewModifier> GetModifiers(StatNewDef statNewDef)
+
+        readonly Dictionary<StatDef, List<StatNewModifier>> Modifiers = new();
+        internal List<StatNewModifier> GetModifiers(StatDef statNewDef)
         {
             this.Modifiers.TryGetValue(statNewDef, out var item);
             return item ?? new List<StatNewModifier>();
@@ -36,7 +37,7 @@ namespace Start_a_Town_.Components
         }
         internal override void GetInterface(GameObject gameObject, UI.Control box)
         {
-            var gui = GUITable ??= new TableScrollableCompactNewNew<StatNewDef>()
+            var gui = GUITable ??= new TableScrollableCompactNewNew<StatDef>()
                 .AddColumn("name", "", 128, a => new Label(a.Label) { HoverText = a.Description })
                 .AddColumn("value", "", (int)UIManager.Font.MeasureString("###").X, a => new Label(() => a.GetValue(this.Parent).ToString()));
             gui.ClearItems();
@@ -48,10 +49,10 @@ namespace Start_a_Town_.Components
                 box.AddControlsBottomLeft(stat.GetControl(gameObject));
             
         }
-        TableScrollableCompactNewNew<StatNewDef> GUITable;
+        TableScrollableCompactNewNew<StatDef> GUITable;
         public override GroupBox GetGUI()
         {
-            var gui = GUITable ??= new TableScrollableCompactNewNew<StatNewDef>()
+            var gui = GUITable ??= new TableScrollableCompactNewNew<StatDef>()
                 .AddColumn("name", "", 64, a => new Label(a.Label))
                 .AddColumn("value", "", (int)UIManager.Font.MeasureString("###").X, a => new Label(() => a.GetValue(this.Parent).ToString()));
             gui.ClearItems();
@@ -61,7 +62,7 @@ namespace Start_a_Town_.Components
 
         public override object Clone()
         {
-            return new StatsComponentNew();
+            return new StatsComponent();
         }
     }
 }

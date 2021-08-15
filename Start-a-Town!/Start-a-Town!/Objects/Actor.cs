@@ -45,6 +45,8 @@ namespace Start_a_Town_
         [InspectorHidden]
         internal PersonalityComponent Personality => _personality ??= this.GetComponent<PersonalityComponent>();
 
+        
+
         private MoodComp _mood;
         [InspectorHidden]
         public MoodComp Mood => _mood ??= this.GetComponent<MoodComp>();
@@ -301,7 +303,7 @@ namespace Start_a_Town_
             obj.AddComponent(new NpcComponent());
             obj.AddComponent(new SpriteComponent(def.Body));
             obj.AddComponent(new PersonalInventoryComponent(16));
-            obj.AddComponent(new StatsComponentNew());
+            obj.AddComponent(new StatsComponent());
             obj.AddComponent(new MobileComponent());
             //obj.AddComponent(new WorkComponent());
             obj.AddComponent(new MoodComp());

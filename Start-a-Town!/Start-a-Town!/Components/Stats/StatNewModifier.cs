@@ -2,9 +2,9 @@
 {
     class StatNewModifier
     {
-        public StatNewModifierDef Def;
+        public StatModifierDef Def;
 
-        public StatNewModifier(StatNewModifierDef def)
+        public StatNewModifier(StatModifierDef def)
         {
             this.Def = def;
         }

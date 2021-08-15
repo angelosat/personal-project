@@ -197,6 +197,16 @@
     <Compile Include="Components\Resources\ResourceThreshold.cs" />
     <Compile Include="Components\Skills\SkillDefOf.cs" />
     <Compile Include="Components\Skills\ToolUseDefOf.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatArmor.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatEncumberance.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatMaxHaulWeight.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatMoodChangeRate.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatStaminaWorkThreshold.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatToolEffectiveness.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatToolSpeed.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatValueGetter.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatWorkEffectiveness.cs" />
+    <Compile Include="Components\Stats\ValueGetters\StatWorkSpeed.cs" />
     <Compile Include="Control\Hotkeys\HotkeyContext.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.Hotkey.cs" />
@@ -523,8 +533,8 @@
     <Compile Include="Components\Skills\SkillDef.cs" />
     <Compile Include="Components\Skills\ToolUse.cs" />
     <Compile Include="Components\Stats\StatNewModifier.cs" />
-    <Compile Include="Components\Stats\StatNewModifierDef.cs" />
-    <Compile Include="Components\Stats\StatNewDef.cs" />
+    <Compile Include="Components\Stats\StatModifierDef.cs" />
+    <Compile Include="Components\Stats\StatDef.cs" />
     <Compile Include="Components\Vegetation\Growth.cs" />
     <Compile Include="Control\Tools\ToolControlActor.cs" />
     <Compile Include="Control\Tools\ToolSelect.cs" />
@@ -743,7 +753,7 @@
     <Compile Include="Components\Skills\ToolAbilityComponent.cs" />
     <Compile Include="Components\Skills\ToolUseDef.cs" />
     <Compile Include="Components\Stats\StatModifier.cs" />
-    <Compile Include="Components\Stats\StatsComponentNew.cs" />
+    <Compile Include="Components\Stats\StatsComponent.cs" />
     <Compile Include="Components\Stats\StatsGui.cs" />
     <Compile Include="Components\Inventory\ItemContainer.cs" />
     <Compile Include="Components\Message.cs" />

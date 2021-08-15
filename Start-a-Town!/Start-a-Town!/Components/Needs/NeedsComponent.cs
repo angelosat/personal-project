@@ -85,7 +85,7 @@ namespace Start_a_Town_.Components
             var byCategory = this.NeedsNew.GroupBy(n => n.NeedDef.CategoryDef);
             foreach (var cat in byCategory)
             {
-                var panel = new PanelLabeled(cat.Key.Name) { Location = box.BottomLeft };
+                var panel = new PanelLabeled(cat.Key.Label) { Location = box.BottomLeft };
                 foreach (var n in cat)
                 {
                     var ui = n.GetUI(parent);

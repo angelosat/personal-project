@@ -26,7 +26,7 @@ namespace Start_a_Town_.Components
             if (this.Inventory == null || this.Inventory.Capacity == 0)
                 throw new Exception("HaulComponent requires a parent entity with PersonalInventoryComponent and an inventory of at least size 1");
             parent.AddResourceModifier(new ResourceRateModifier(ResourceRateModifierDef.HaulingStaminaDrain));
-            parent.AddStatModifier(new StatNewModifier(StatNewModifierDef.WalkSpeedHaulingWeight));
+            parent.AddStatModifier(new StatNewModifier(StatModifierDef.WalkSpeedHaulingWeight));
             parent.AddAnimation(this.AnimationHaul);
         }
         

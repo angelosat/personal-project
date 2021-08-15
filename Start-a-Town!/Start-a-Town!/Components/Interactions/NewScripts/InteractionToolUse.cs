@@ -61,7 +61,7 @@ namespace Start_a_Town_
             var stamina = a.Resources[ResourceDefOf.Stamina];
             stamina.Adjust(-energyConsumption);
             /// i moved the multiplication with the stamina threshold to inside the workspeed stat formula
-            this.Animation.Speed = StatDefOf.WorkSpeed.GetValue(a);// * stamina.CurrentThreshold.Value;
+            this.Animation.Speed = a[StatDefOf.WorkSpeed];
 
             if (this.Progress < 1)
                 return;
@@ -73,7 +73,7 @@ namespace Start_a_Town_
         protected virtual float GetToolEffectiveness()
         {
             if (this.Actor.Gear.GetGear(GearType.Mainhand) is Tool tool && tool.ToolComponent.Props.ToolUse == this.GetToolUse())
-                return tool.GetStat(StatDefOf.ToolEffectiveness);
+                return tool[StatDefOf.ToolEffectiveness];
             else
                 return this.Actor.GetMaterial(BoneDefOf.RightHand).Density;
         }

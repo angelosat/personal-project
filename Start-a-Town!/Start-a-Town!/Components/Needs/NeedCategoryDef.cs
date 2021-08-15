@@ -9,7 +9,6 @@
         }
         static public readonly NeedCategoryDef NeedCategoryPhysiological = new NeedCategoryDef("Physiological")
         {
-      
             BaseNeedDefs = new NeedDef[] {
                 NeedDef.Energy,
                 NeedDef.Hunger,
@@ -18,14 +17,12 @@
 
         static public readonly NeedCategoryDef NeedCategoryRelationships = new NeedCategoryDef("Relationships")
         {
-
             BaseNeedDefs = new NeedDef[] {
                 NeedDef.Social }
         };
 
         static public readonly NeedCategoryDef NeedCategoryEsteem = new NeedCategoryDef("Esteem")
         {
-
             BaseNeedDefs = new NeedDef[] {
                 NeedDef.Work }
         };

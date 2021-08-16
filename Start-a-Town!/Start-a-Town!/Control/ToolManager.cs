@@ -92,6 +92,7 @@ namespace Start_a_Town_
             var camera = map.Camera;
             foreach (var pl in GetOtherPlayers(map))
                 if (pl.CurrentTool is not null)
+                    if(pl.Target.Type == TargetType.Position)
                     DrawBlockHighlight(sb, map, camera, pl.Target.Global, pl.Color);
         }
 

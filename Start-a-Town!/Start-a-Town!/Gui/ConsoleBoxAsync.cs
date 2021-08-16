@@ -58,7 +58,8 @@ namespace Start_a_Town_.UI
                 if (this.Client.Controls.Count >= 16)
                     this.Client.RemoveControls(this.Client.Controls.First());
 
-                var line = new Label(text) { TextColorFunc = () => c };
+                //var line = new Label(text) { TextColorFunc = () => c };
+                var line = new ConsoleEntry(c, text);
                 line.BackgroundColor = Color.Black * .5f;
 
                 this.AddControls(line); //add line after removing oldest one so that the box height doesn't increase?
@@ -67,11 +68,16 @@ namespace Start_a_Town_.UI
                 this.Client.ClientLocation.Y = this.Client.Bottom - this.Client.ClientSize.Height;
             }
         }
-        public void Write(Label line)
+        public void Write(ConsoleEntry line)
         {
             this.Entries.Add(line.Text);
             this.AddControls(line); //add line after removing oldest one so that the box height doesn't increase?
             this.AlignTopToBottom();
+            this.Client.ClientLocation.Y = this.Client.Bottom - this.Client.ClientSize.Height;
+        }
+        public void Write(Log.Entry entry)
+        {
+            this.Write(entry.GetGui());
         }
         public void Write(ConsoleMessageTypes type, Color c, string name, string text)
         {

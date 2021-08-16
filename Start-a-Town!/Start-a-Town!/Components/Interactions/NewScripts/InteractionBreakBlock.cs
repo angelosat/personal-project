@@ -62,8 +62,8 @@ namespace Start_a_Town_
             var a = this.Actor;
             var t = this.Target;
             var cell = this.Cell;
-            if (!isMetalOrMineral())
-                return;
+            //if (!isMetalOrMineral())
+            //    return;
             if (a.Net is Server server)
             {
                 var material = cell.Material;
@@ -81,11 +81,11 @@ namespace Start_a_Town_
 
             emitBreak();
 
-            bool isMetalOrMineral()
-            {
-                var mat = Block.GetBlockMaterial(a.Map, t.Global);
-                return mat.Type == MaterialTypeDefOf.Stone || mat.Type == MaterialTypeDefOf.Metal;
-            }
+            //bool isMetalOrMineral()
+            //{
+            //    var mat = Block.GetBlockMaterial(a.Map, t.Global);
+            //    return mat.Type == MaterialTypeDefOf.Stone || mat.Type == MaterialTypeDefOf.Metal;
+            //}
             void emitBreak()
             {
                 this.EmitterBreak.Emit(Block.Atlas.Texture, this.ParticleRects, Vector3.Zero);

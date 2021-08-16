@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Linq;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -24,7 +24,10 @@ namespace Start_a_Town_
                 this.Source = source;
                 this.Values = values;
             }
-           
+            public ConsoleEntry GetGui()
+            {
+                return new ConsoleEntry(this.Color, this.ToString());
+            }
             public override string ToString()
             {
                 return this.ConvertToString();
@@ -32,6 +35,10 @@ namespace Start_a_Town_
             string ConvertToString()
             {
                 return $"[{this.Source}] {string.Join(" ", this.Values.Select(v => v is string ? v.ToString() : $"[{v}]"))}";
+            }
+            public static Entry Notification(string text)
+            {
+                return new Entry(EntryTypes.Notification, new object[] { text }) { Color = Color.Goldenrod };
             }
             public static Entry Warning(string text)
             {

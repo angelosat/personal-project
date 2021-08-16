@@ -57,7 +57,9 @@ namespace Start_a_Town_
             this.LvlProgress.Max = GetNextLvlXp(this.Level);
             this.LvlProgress.Value = remaining;
             var actor = this.Container.Parent;
-            Log.Write($"[{actor}]'s [{this.Label}] has been increased to {this.Level}!");
+            //Log.Write($"[{actor}]'s [{this.Label}] has been increased to {this.Level}!");
+            //actor.Net.ConsoleBox.Write($"[{actor}] has reached Level [{this.Level}] in [{this.Label}]!");
+            actor.Net.ConsoleBox.Write(Log.Entry.Notification($"[{actor}] has reached Level {this.Level} in [{this.Label}]!"));
             actor.Net.EventOccured(Message.Types.SkillIncrease, actor, this.Def.Name);
         }
         [Obsolete]

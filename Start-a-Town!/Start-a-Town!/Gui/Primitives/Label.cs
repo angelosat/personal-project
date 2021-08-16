@@ -375,7 +375,33 @@ namespace Start_a_Town_.UI
             //else
             //    return new Label(value);
         }
-
+        public static IEnumerable<T> ParseBest<T>(string text) where T : Label, new()
+        {
+            var posCurrent = 0;
+            int posFrom = 0;
+            do
+            {
+                posFrom = text.IndexOf('[', posCurrent);
+                if (posFrom != -1)
+                {
+                    var posTo = text.IndexOf(']', posFrom + 1);
+                    if (posTo != -1)
+                    {
+                        var token = text.Substring(posFrom + 1, posTo - posFrom - 1);
+                        posCurrent = posTo + 1;
+                        var parsed = Token.Parse(token);
+                        yield return new T() { Text = parsed.Text, TextColor = parsed.Color };
+                    }
+                }
+                else
+                {
+                    var plainText = text.Substring(posCurrent, text.Length - posCurrent);
+                    foreach (var i in plainText.Split(' '))
+                        if (!i.IsNullEmptyOrWhiteSpace())
+                            yield return new T() { Text = i };// new Label(i);
+                }
+            } while (posFrom != -1);
+        }
         public static IEnumerable<Label> ParseBest(string text)
         {
             var posCurrent = 0;

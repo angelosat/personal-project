@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Components;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
 
@@ -33,7 +31,8 @@ namespace Start_a_Town_
             ChatPlayer,
             Warning,
             Error,
-            Network
+            Network,
+            Notification
         }
         static Log _instance;
         static public Log Instance => _instance ??= new Log();

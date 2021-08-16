@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
-    public partial class UIChat : Window
+    public class UIChat : Window
     {
         public static UIChat Instance;
         static UIChat()
@@ -147,7 +147,7 @@ namespace Start_a_Town_.UI
             if (text.Length == 0)
                 return;
 
-            var line = new Entry(e.Color, text);
+            var line = new ConsoleEntry(e.Color, text);
             this.Console.Write(line);
 
             this.Console.Client.ClientLocation.Y = this.Console.Client.Bottom - this.Console.Client.ClientSize.Height;

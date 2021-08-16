@@ -217,7 +217,7 @@
     <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
     <Compile Include="Engine\Ticks.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
-    <Compile Include="Gui\Hud\Chat\UIChat.Entry.cs" />
+    <Compile Include="Gui\Hud\Chat\ConsoleEntry.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListCollapsibleObservable.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListCollapsibleNew.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListCollapsibleObservable.Node.cs" />

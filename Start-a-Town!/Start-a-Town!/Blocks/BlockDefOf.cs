@@ -17,7 +17,7 @@ namespace Start_a_Town_
         static public readonly Block Door = new BlockDoor(); // TODO: different door materials???
         static public readonly Block Bed = new BlockBed();
         static public readonly Block WoodPaneling = new BlockWoodPaneling();
-        static public readonly Block Chest = new Blocks.Chest.BlockChest();
+        static public readonly Block Chest = new BlockChest();
         static public readonly Block Bin = new BlockStorage();
         static public readonly Block Fluid = new BlockFluid();
         static public readonly Block Stool = new BlockStool();

@@ -1,11 +1,7 @@
-﻿namespace Start_a_Town_.Blocks
+﻿namespace Start_a_Town_
 {
     class BlockAir : Block
     {
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.Air;
-        //}
         public BlockAir()
             : base("Air", 1, 0, false, false)
         {

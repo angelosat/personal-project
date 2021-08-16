@@ -4,15 +4,15 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingSingle : ToolBlockBuild
+    class ToolBuildSingle : ToolBlockBuild
     {
         public override string Name { get; } = "Single";
         public override Modes Mode { get; } = Modes.Single; 
-        public ToolDrawingSingle()
+        public ToolBuildSingle()
         {
 
         }
-        public ToolDrawingSingle(Action<Args> callback)
+        public ToolBuildSingle(Action<Args> callback)
             : base(callback)
         {
 

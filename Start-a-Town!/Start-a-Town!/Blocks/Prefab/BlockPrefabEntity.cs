@@ -1,4 +1,4 @@
-﻿namespace Start_a_Town_.Blocks
+﻿namespace Start_a_Town_
 {
     partial class BlockPrefab : Block
     {

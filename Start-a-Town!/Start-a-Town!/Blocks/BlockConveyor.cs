@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     class BlockConveyor : Block
     {

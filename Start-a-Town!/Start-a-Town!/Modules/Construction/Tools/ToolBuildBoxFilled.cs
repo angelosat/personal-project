@@ -4,15 +4,15 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingBoxFilled : ToolDrawingWithHeight
+    class ToolBuildBoxFilled : ToolBuildWithHeight
     {
         public override string Name { get; } = "Box Filled";
         public override Modes Mode { get; } = Modes.BoxFilled; 
-        public ToolDrawingBoxFilled()
+        public ToolBuildBoxFilled()
         {
 
         }
-        public ToolDrawingBoxFilled(Action<Args> callback)
+        public ToolBuildBoxFilled(Action<Args> callback)
             : base(callback)
         {
         }

@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingSinglePreview : ToolBlockBuild
+    class ToolBuildSinglePreview : ToolBlockBuild
     {
         public override string Name { get; } = "Single";
         public override Modes Mode { get; } = Modes.Single; 
-        public ToolDrawingSinglePreview()
+        public ToolBuildSinglePreview()
         {
 
         }
-        public ToolDrawingSinglePreview(Action<Args> callback)
+        public ToolBuildSinglePreview(Action<Args> callback)
             : base(callback)
         {
 
         }
-        public ToolDrawingSinglePreview(Action<Args> callback, Func<Block> blockGetter)
+        public ToolBuildSinglePreview(Action<Args> callback, Func<Block> blockGetter)
             : this(callback)
         {
             this.Block = blockGetter();

@@ -6,18 +6,18 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingErase : ToolSelect3D
+    class ToolBuildErase : ToolSelect3D
     {
         public override Icon GetIcon()
         {
             return Icon.Cross;
         }
         ControlTool PreviousTool;
-        public ToolDrawingErase()
+        public ToolBuildErase()
         {
 
         }
-        public ToolDrawingErase(ControlTool previousTool)
+        public ToolBuildErase(ControlTool previousTool)
         {
             this.Add = RemoveZone;
             this.PreviousTool = previousTool;

@@ -179,7 +179,7 @@ namespace Start_a_Town_
                 if (block == BlockDefOf.Farmland)
                 {
                     if (!this.Town.Map.GetObjects(pos.Above).Any(o => o.IsPlant()))
-                        if (!Blocks.BlockFarmland.IsSeeded(cellData))
+                        if (!BlockFarmland.IsSeeded(cellData))
                             this.CachedSowing.Add(pos);
                 }
                 //else if (block.GetMaterial(cellData) == MaterialDefOf.Soil)

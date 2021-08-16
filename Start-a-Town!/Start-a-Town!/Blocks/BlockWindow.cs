@@ -4,15 +4,12 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     class BlockWindow : Block
     {
         AtlasDepthNormals.Node.Token[][][] PartsSeparate;
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.Glass;
-        //}
+        
         public BlockWindow()
             : base("Window", opaque: false)
         {

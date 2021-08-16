@@ -4,17 +4,13 @@ using Start_a_Town_.Graphics;
 using System;
 using System.Linq;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     class BlockRoof : Block
     {
         static readonly Texture2D Depth1 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth1height19");
         static readonly Texture2D Depth2 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/roof/depth2height19");
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.LightWood;
-        //}
-
+      
         readonly AtlasDepthNormals.Node.Token[] Parts = new AtlasDepthNormals.Node.Token[4];
         public BlockRoof() 
             : base("Roof", opaque: false)

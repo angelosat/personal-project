@@ -15,14 +15,15 @@ namespace Start_a_Town_
             void callback(ToolBlockBuild.Args a) => CallBack(this.ProductGetter, a);
             Tools = new()
             {
-                new ToolDrawingSingle(callback),
-                new ToolDrawingLine(callback),
-                new ToolDrawingWall(callback),
-                new ToolDrawingEnclosure(callback),
-                new ToolDrawingBox(callback),
-                new ToolDrawingBoxFilled(callback),
-                new ToolDrawingPyramid(callback),
-                new ToolDrawingRoof(callback)
+                new ToolBuildSingle(callback),
+                new ToolBuildLine(callback),
+                new ToolBuildWall(callback),
+                new ToolBuildFloor(callback),
+                new ToolBuildEnclosure(callback),
+                new ToolBuildBox(callback),
+                new ToolBuildBoxFilled(callback),
+                new ToolBuildPyramid(callback),
+                new ToolBuildRoof(callback)
             };
         }
         public override IconButton GetButton()
@@ -39,7 +40,7 @@ namespace Start_a_Town_
       
         public override ToolBlockBuild GetTool(Func<ProductMaterialPair> itemGetter)
         {
-            return new ToolDrawingEnclosure(a => CallBack(itemGetter, a));
+            return new ToolBuildEnclosure(a => CallBack(itemGetter, a));
         }
         Func<ProductMaterialPair> ProductGetter;
         public override List<ToolBlockBuild> GetAvailableTools(Func<ProductMaterialPair> itemGetter)

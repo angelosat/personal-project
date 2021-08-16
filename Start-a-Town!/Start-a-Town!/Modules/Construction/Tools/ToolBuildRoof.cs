@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
-    class ToolDrawingRoof : ToolDrawingPyramid
+    class ToolBuildRoof : ToolBuildPyramid
     {
-        public ToolDrawingRoof()
+        public ToolBuildRoof()
         {
 
         }
-        public ToolDrawingRoof(Action<Args> callback)
+        public ToolBuildRoof(Action<Args> callback)
             : base(callback)
         {
 

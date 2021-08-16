@@ -173,13 +173,15 @@
     <Compile Include="Animations\Bone.Props.cs" />
     <Compile Include="Blocks\Bed\InteractionAssignVisitorRoom.cs" />
     <Compile Include="Blocks\Block.DefaultState.cs" />
+    <Compile Include="Blocks\BlockDef.cs" />
     <Compile Include="Blocks\BlockDefOf.cs" />
+    <Compile Include="Blocks\BlockDefOfNew.cs" />
     <Compile Include="Blocks\BlockPlacer.cs" />
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />
     <Compile Include="Blocks\Fluids\BlockFluidEntity.cs" />
     <Compile Include="Blocks\Helpers\BlockHelper.cs" />
-    <Compile Include="Blocks\LiduidFlowProcess.cs" />
+    <Compile Include="Blocks\LiquidFlowProcess.cs" />
     <Compile Include="Blocks\Workstations\BlockCarpentryEntity.cs" />
     <Compile Include="Blocks\Workstations\BlockPlantProcessingEntity.cs" />
     <Compile Include="AI\Components\Memory.cs" />
@@ -233,6 +235,7 @@
     <Compile Include="Helpers\Collections\ObservableDictionary.cs" />
     <Compile Include="Helpers\EnsureStaticCtorCall.cs" />
     <Compile Include="Interfaces\IListable.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildFloor.cs" />
     <Compile Include="Modules\Crafting\Crafting\New\Ingredient.Modifier.cs" />
     <Compile Include="Modules\Crafting\Crafting\Reaction.Product.ProductMaterialPair.cs" />
     <Compile Include="Components\GearType.cs" />
@@ -627,17 +630,17 @@
     <Compile Include="Modules\Towns\Labors\NpcUIStatic.cs" />
     <Compile Include="Modules\Construction\Packets\PacketDesignateConstruction.cs" />
     <Compile Include="Modules\Construction\Tools\ToolBlockBuild.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildBoxFilled.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildBox.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildEnclosure.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildErase.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildRoof.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildPyramid.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildWithHeight.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildWall.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildLine.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildSinglePreview.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBlockBuildSingle.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildBoxFilled.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildBox.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildEnclosure.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildErase.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildRoof.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildPyramid.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildWithHeight.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildWall.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildLine.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildSinglePreview.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBuildSingle.cs" />
     <Compile Include="Modules\Construction\Tools\UIToolsBox.cs" />
     <Compile Include="Modules\Construction\UI\GuiConstructionsBrowser.cs" />
     <Compile Include="Modules\Crafting\CraftOrderFinishMode.cs" />
@@ -1145,7 +1148,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="bin\x86\Debug\Content\Data\Defs\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

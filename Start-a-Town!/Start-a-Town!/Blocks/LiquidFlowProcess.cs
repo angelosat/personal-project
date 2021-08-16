@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
-    class LiduidFlowProcess
+    class LiquidFlowProcess
     {
-        static readonly List<LiduidFlowProcess> FlowProcesses = new List<LiduidFlowProcess>();
+        static readonly List<LiquidFlowProcess> FlowProcesses = new List<LiquidFlowProcess>();
         static readonly float FlowSpeed = Ticks.TicksPerSecond / 2f;
         static float FlowT = FlowSpeed;
 
@@ -18,12 +18,12 @@ namespace Start_a_Town_.Blocks
         MapBase Map;
 
 
-        static public void Add(LiduidFlowProcess proc)
+        static public void Add(LiquidFlowProcess proc)
         {
             FlowProcesses.Add(proc);
         }
 
-        public LiduidFlowProcess(MapBase map, Vector3 source, Vector3 current)
+        public LiquidFlowProcess(MapBase map, Vector3 source, Vector3 current)
         {
             this.Map = map;
             this.Source = source;
@@ -68,7 +68,7 @@ namespace Start_a_Town_.Blocks
                 if (nblock != BlockDefOf.Air)
                     continue;
                 this.Map.SetBlock(n, BlockDefOf.Fluid, MaterialDefOf.Water, 0, Rand.Next(4));
-                FlowProcesses.Add(new LiduidFlowProcess(this.Map, this.Source, n));
+                FlowProcesses.Add(new LiquidFlowProcess(this.Map, this.Source, n));
             }
             return false;
         }

@@ -5,7 +5,7 @@ using Start_a_Town_.UI;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Components;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     partial class BlockDesignation
     {

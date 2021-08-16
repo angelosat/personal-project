@@ -9,7 +9,7 @@ namespace Start_a_Town_.Modules.Construction
 {
     public abstract partial class ToolBlockBuild : ToolManagement, INamed
     {
-        public enum Modes { Single, Line, Wall, Enclosure, BoxFilled, BoxHollow, Box, Roof, Pyramid }
+        public enum Modes { Single, Line, Floor, Wall, Enclosure, BoxFilled, BoxHollow, Box, Roof, Pyramid }
         new readonly Icon Icon = new(UIManager.Icons32, 12, 32);
         public abstract Modes Mode { get; }
         public abstract string Name { get; }
@@ -100,7 +100,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             if (e.KeyValue == 17) //control
             {
-                ToolManager.SetTool(new ToolDrawingErase(this));
+                ToolManager.SetTool(new ToolBuildErase(this));
             }
             base.HandleKeyDown(e);
         }
@@ -200,15 +200,16 @@ namespace Start_a_Town_.Modules.Construction
         {
             return mode switch
             {
-                Modes.Single => ToolDrawingSingle.GetPositions(a, b),
-                Modes.Line => ToolDrawingLine.GetPositions(a, b),
-                Modes.Enclosure => ToolDrawingEnclosure.GetPositions(a, b),
-                Modes.Box => ToolDrawingBox.GetPositions(a, b),
-                Modes.Wall => ToolDrawingWall.GetPositions(a, b),
-                Modes.Pyramid => ToolDrawingPyramid.GetPositions(a, b).ToList(),
-                Modes.Roof => ToolDrawingRoof.GetPositions(a, b).ToList(),
-                Modes.BoxFilled => ToolDrawingBoxFilled.GetPositions(a, b),
-                _ => new List<IntVec3>(),
+                Modes.Single => ToolBuildSingle.GetPositions(a, b),
+                Modes.Line => ToolBuildLine.GetPositions(a, b),
+                Modes.Enclosure => ToolBuildEnclosure.GetPositions(a, b),
+                Modes.Box => ToolBuildBox.GetPositions(a, b),
+                Modes.Wall => ToolBuildWall.GetPositions(a, b),
+                Modes.Pyramid => ToolBuildPyramid.GetPositions(a, b).ToList(),
+                Modes.Floor => ToolBuildFloor.GetPositions(a, b).ToList(),
+                Modes.Roof => ToolBuildRoof.GetPositions(a, b).ToList(),
+                Modes.BoxFilled => ToolBuildBoxFilled.GetPositions(a, b),
+                _ => throw new Exception()
             };
         }
         public static List<IntVec3> GetPositions(Args a)

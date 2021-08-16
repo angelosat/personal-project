@@ -4,13 +4,13 @@ using Start_a_Town_.Modules.Construction;
 
 namespace Start_a_Town_
 {
-    class ToolDrawingPyramid : ToolDrawingWithHeight
+    class ToolBuildPyramid : ToolBuildWithHeight
     {
-        public ToolDrawingPyramid()
+        public ToolBuildPyramid()
         {
 
         }
-        public ToolDrawingPyramid(Action<Args> callback)
+        public ToolBuildPyramid(Action<Args> callback)
             : base(callback)
         {
 

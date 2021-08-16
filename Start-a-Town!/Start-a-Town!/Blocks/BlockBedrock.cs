@@ -1,11 +1,7 @@
-﻿namespace Start_a_Town_.Blocks
+﻿namespace Start_a_Town_
 {
     class BlockBedrock : Block
     {
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.Stone;
-        //}
         public BlockBedrock()
             : base("Stone")
         {

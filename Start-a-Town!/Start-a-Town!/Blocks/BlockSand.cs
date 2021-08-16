@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     class BlockSand : Block
     {

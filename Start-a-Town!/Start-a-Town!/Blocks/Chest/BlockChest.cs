@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Start_a_Town_.Blocks.Chest
+namespace Start_a_Town_
 {
     partial class BlockChest : Block
     {

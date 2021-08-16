@@ -2,14 +2,10 @@
 using System.Linq;
 using Start_a_Town_.Graphics;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     class BlockCounter : Block
     {
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.LightWood;
-        //}
         AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
         public BlockCounter()
             : base("Counter", opaque: false)

@@ -1,16 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     partial class BlockFarmland : Block
     {
         public override bool IsMinable => true;
         readonly AtlasDepthNormals.Node.Token[] Textures;
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.Soil;
-        //}
         public BlockFarmland()
             : base("Farmland")
         {

@@ -5,14 +5,14 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingEnclosure : ToolDrawingBox
+    class ToolBuildEnclosure : ToolBuildBox
     {
         public override string Name { get; } = "Enclosure";
         public override Modes Mode { get; } = Modes.Enclosure;
-        public ToolDrawingEnclosure()
+        public ToolBuildEnclosure()
         {
         }
-        public ToolDrawingEnclosure(Action<Args> callback)
+        public ToolBuildEnclosure(Action<Args> callback)
             : base(callback)
         {
         }

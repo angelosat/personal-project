@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingWall : ToolDrawingWithHeight
+    class ToolBuildWall : ToolBuildWithHeight
     {
         public override string Name { get; } = "Wall"; 
         public override Modes Mode { get; } = Modes.Wall;
-        public ToolDrawingWall()
+        public ToolBuildWall()
         {
 
         }
-        public ToolDrawingWall(Action<Args> callback)
+        public ToolBuildWall(Action<Args> callback)
             : base(callback)
         {
         }

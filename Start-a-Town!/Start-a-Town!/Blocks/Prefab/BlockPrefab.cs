@@ -1,6 +1,6 @@
 ﻿using Start_a_Town_.Graphics;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     partial class BlockPrefab : Block
     {
@@ -14,9 +14,5 @@ namespace Start_a_Town_.Blocks
         {
             return Token;
         }
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.LightWood;
-        //}
     }
 }

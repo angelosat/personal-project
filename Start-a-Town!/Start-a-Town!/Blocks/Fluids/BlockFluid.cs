@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 
-namespace Start_a_Town_.Blocks
+namespace Start_a_Town_
 {
     class BlockFluid : Block
     {
@@ -76,8 +76,7 @@ namespace Start_a_Town_.Blocks
                 
                 this.Variations = newVariations.ToList();
             }
-            LiduidFlowProcess.UpdateProcesses();
-            
+            LiquidFlowProcess.UpdateProcesses();
         }
         
         public override MyVertex[] Draw(MySpriteBatch sb, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)

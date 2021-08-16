@@ -5,14 +5,14 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    class ToolDrawingLine : ToolBlockBuild
+    class ToolBuildFloor : ToolBlockBuild
     {
-        public override string Name { get; } = "Line";
-        public override Modes Mode { get; } = Modes.Line;
-        public ToolDrawingLine()
+        public override string Name { get; } = "Floor";
+        public override Modes Mode { get; } = Modes.Floor;
+        public ToolBuildFloor()
         {
         }
-        public ToolDrawingLine(Action<Args> callback)
+        public ToolBuildFloor(Action<Args> callback)
             : base(callback)
         {
         }
@@ -22,7 +22,7 @@ namespace Start_a_Town_.Modules.Construction
                 return Messages.Default;
             if (this.Target == null)
                 return Messages.Default;
-            this.Send(Modes.Line, this.Begin, this.End, this.Orientation);
+            this.Send(this.Mode, this.Begin, this.End, this.Orientation);
             this.Enabled = false;
             Sync();
             return Messages.Default;
@@ -38,19 +38,13 @@ namespace Start_a_Town_.Modules.Construction
                 return;
             this.End = GetEnd(this.Begin, this.Target.Global);
         }
-        static public Vector3 GetEnd(Vector3 begin, Vector3 end)
+        static public IntVec3 GetEnd(IntVec3 begin, IntVec3 end)
         {
             var dx = end.X - begin.X;
             var adx = Math.Abs(dx);
             var dy = end.Y - begin.Y;
             var ady = Math.Abs(dy);
-            var axis = Vector3.Zero;
-            if (adx > ady)
-                axis = Vector3.UnitX + Vector3.UnitZ;
-            else
-                axis = Vector3.UnitY + Vector3.UnitZ;
-
-            return begin + new Vector3(dx * axis.X, dy * axis.Y, 0);
+            return begin + new IntVec3(adx, ady, 0);
         }
         protected override void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
@@ -68,20 +62,7 @@ namespace Start_a_Town_.Modules.Construction
         }
         static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {
-            IntVec3 axis;
-            var end = b;
-            var dx = end.X - a.X;
-            var adx = Math.Abs(dx);
-            var dy = end.Y - a.Y;
-            var ady = Math.Abs(dy);
-            if (adx > ady)
-                axis = IntVec3.UnitX + IntVec3.UnitZ;
-            else
-                axis = IntVec3.UnitY + IntVec3.UnitZ;
-
-            var bb = a + new IntVec3(dx * axis.X, dy * axis.Y, 0);
-            var box = a.GetBox(bb);
-            return box;
+            return a.GetBox(GetEnd(a, b));
         }
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {

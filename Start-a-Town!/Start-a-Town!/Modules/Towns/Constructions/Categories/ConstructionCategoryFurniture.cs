@@ -24,7 +24,7 @@ namespace Start_a_Town_
         
         public override ToolBlockBuild GetTool(Func<ProductMaterialPair> itemGetter)
         {
-            return new ToolDrawingSinglePreview(a => CallBack(itemGetter, a), ()=>itemGetter().Block);
+            return new ToolBuildSinglePreview(a => CallBack(itemGetter, a), ()=>itemGetter().Block);
         }
         public override List<ToolBlockBuild> GetAvailableTools(Func<ProductMaterialPair> itemGetter)
         {

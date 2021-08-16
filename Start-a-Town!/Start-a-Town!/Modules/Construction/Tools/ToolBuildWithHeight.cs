@@ -6,17 +6,17 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Modules.Construction
 {
-    abstract class ToolDrawingWithHeight : ToolBlockBuild
+    abstract class ToolBuildWithHeight : ToolBlockBuild
     {
         protected bool SettingHeight;
         protected int Height;
         protected Vector3 TopCorner;
         
-        public ToolDrawingWithHeight()
+        public ToolBuildWithHeight()
         {
 
         }
-        public ToolDrawingWithHeight(Action<Args> callback)
+        public ToolBuildWithHeight(Action<Args> callback)
             : base(callback)
         {
 

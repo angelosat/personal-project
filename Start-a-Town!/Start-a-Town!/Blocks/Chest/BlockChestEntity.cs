@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 
-namespace Start_a_Town_.Blocks.Chest
+namespace Start_a_Town_
 {
     partial class BlockChest
     {

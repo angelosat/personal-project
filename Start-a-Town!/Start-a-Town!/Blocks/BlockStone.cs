@@ -7,6 +7,7 @@
         public BlockStone()
             : base("Cobblestone", 0, 1, true, true)
         {
+            this.BreakProduct = RawMaterialDefOf.Boulders;
             this.LoadVariations("stone5height19");
             this.Ingredient = new Ingredient()//RawMaterialDef.Boulders, MaterialDefOf.Stone, null, 1);
                 .SetAllow(RawMaterialDefOf.Boulders, true)

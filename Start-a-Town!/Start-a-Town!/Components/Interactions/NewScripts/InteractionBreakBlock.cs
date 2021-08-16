@@ -10,7 +10,8 @@ namespace Start_a_Town_
     {
         Progress _progress;
         ParticleEmitterSphere EmitterBreak;
-        Cell Cell => this.Actor.Map.GetCell(this.Target.Global);
+        Cell _cellCached;
+        Cell Cell => _cellCached ??= this.Actor.Map.GetCell(this.Target.Global);
         Block Block => this.Cell.Block;
         MaterialDef Material => this.Cell.Material;
 
@@ -62,30 +63,14 @@ namespace Start_a_Town_
             var a = this.Actor;
             var t = this.Target;
             var cell = this.Cell;
-            //if (!isMetalOrMineral())
-            //    return;
-            if (a.Net is Server server)
-            {
-                var material = cell.Material;
-                if (material != MaterialDefOf.Stone)
-                {
-                    var resource = ItemFactory.CreateFrom(RawMaterialDefOf.Ore, material);
-                    server.PopLoot(resource, t.Global, Vector3.Zero);
-                }
 
-                var byproduct = ItemFactory.CreateFrom(RawMaterialDefOf.Boulders, MaterialDefOf.Stone);
-                server.PopLoot(byproduct, t.Global, Vector3.Zero);
-            }
+            if (a.Net is Server server && cell.Block.BreakProduct is ItemDef productDef)
+                server.PopLoot(ItemFactory.CreateFrom(productDef, cell.Material), t.Global, Vector3.Zero);
 
             a.Map.RemoveBlock(t.Global);
 
             emitBreak();
 
-            //bool isMetalOrMineral()
-            //{
-            //    var mat = Block.GetBlockMaterial(a.Map, t.Global);
-            //    return mat.Type == MaterialTypeDefOf.Stone || mat.Type == MaterialTypeDefOf.Metal;
-            //}
             void emitBreak()
             {
                 this.EmitterBreak.Emit(Block.Atlas.Texture, this.ParticleRects, Vector3.Zero);

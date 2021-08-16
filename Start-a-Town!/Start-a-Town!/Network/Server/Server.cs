@@ -88,11 +88,11 @@ namespace Start_a_Town_.Net
         public static Server Instance => _Instance ??= new Server();
         public NetworkSideType Type => NetworkSideType.Server;
 
-        static int _objID = 1;
+        static int _refIdSequence = 1;
 
         public static int GetNextObjID()
         {
-            return _objID++;
+            return _refIdSequence++;
         }
         static int _playerID = 1;
         public static int PlayerID => _playerID++;
@@ -711,7 +711,7 @@ namespace Start_a_Town_.Net
             if (obj.RefID == 0)
                 obj.RefID = GetNextObjID();
             else
-                _objID = Math.Max(_objID, obj.RefID + 1);
+                _refIdSequence = Math.Max(_refIdSequence, obj.RefID + 1);
             obj.Net = this;
             Instance.NetworkObjects.Add(obj.RefID, obj);
         }
@@ -776,7 +776,7 @@ namespace Start_a_Town_.Net
             chunk.GetObjects().ForEach(obj =>
             {
                 Instance.Instantiate(obj);
-                _objID = Math.Max(_objID, obj.RefID + 1);
+                _refIdSequence = Math.Max(_refIdSequence, obj.RefID + 1);
                 //obj.Map = Instance.Map; // this isn't necessary, i set the entity's map field when loading the chunk
             });
 

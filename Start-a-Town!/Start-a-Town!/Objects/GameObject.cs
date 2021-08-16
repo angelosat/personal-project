@@ -1164,8 +1164,11 @@ namespace Start_a_Town_
             if (!this.HasMatchingBody(otherItem))
                 return false;
 
+            /// i need this here to prevent absorbing a reserved item
             //if (this.IsReserved || otherItem.IsReserved)
+            //if (otherItem.IsReserved)
             //    return false;
+            /// i'm moving this to physicscomponent right before syncabsorb, because there might be calls to this from an actor already on a behavior to haul/merge the item
 
             if (amount == -1)
                 return true;
@@ -1557,9 +1560,9 @@ namespace Start_a_Town_
         {
             if (net is Server)
                 throw new Exception();
-
+            var client = net as Client;
             var obj = Create(r);
-            net.Instantiate(obj);
+            client.Instantiate(obj);
         }
         public void SyncSetStackSize(int v)
         {

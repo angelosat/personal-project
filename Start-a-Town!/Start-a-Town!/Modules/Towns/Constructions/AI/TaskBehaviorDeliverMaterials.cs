@@ -25,8 +25,7 @@ namespace Start_a_Town_
             yield return extractDestination;
             var gotoStorage = new BehaviorGetAtNewNew(DestinationID).FailOn(deliverFail);
             yield return gotoStorage;
-            yield return new BehaviorInteractionNew(DestinationID, () =>
-                new UseHauledOnTarget(this.Actor.CurrentTask.GetAmount(DestinationID))
+            yield return new BehaviorInteractionNew(DestinationID, () => new UseHauledOnTarget(this.Actor.CurrentTask.GetAmount(DestinationID))
             ).FailOn(deliverFail);
             yield return BehaviorHelper.JumpIfMoreTargets(extractDestination, DestinationID);
 

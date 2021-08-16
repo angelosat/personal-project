@@ -44,7 +44,7 @@ namespace Start_a_Town_
         {
             this.Town = town;
         }
-        readonly Dictionary<Vector3, ConstructionParams> PendingDesignations = new();
+        readonly Dictionary<IntVec3, ConstructionParams> PendingDesignations = new();
         readonly HashSet<IntVec3> Designations = new();
 
         internal IEnumerable<IntVec3> GetAllBuildableCurrently()
@@ -86,7 +86,7 @@ namespace Start_a_Town_
                 /// I ACTUALLY NEED IT TO ADD PENDING DESIGNATIONS
                 case Components.Message.Types.BlocksChanged:
                     foreach (var pos in e.Parameters[1] as IEnumerable<IntVec3>)
-                        this.TryAddPendingDesignation(pos);
+                        this.TryHandlePendingDesignation(pos);
                     break;
 
                 case Components.Message.Types.ZoneDesignation:
@@ -115,7 +115,7 @@ namespace Start_a_Town_
             }
         }
 
-        bool TryAddPendingDesignation(IntVec3 global)
+        bool TryHandlePendingDesignation(IntVec3 global)
         {
             var map = this.Map;
             var block = map.GetBlock(global);
@@ -136,7 +136,7 @@ namespace Start_a_Town_
             return false;
         }
 
-        internal bool IsDesignatedConstruction(Vector3 vector3)
+        internal bool IsDesignatedConstruction(IntVec3 vector3)
         {
             return this.Designations.Contains(vector3);
         }
@@ -187,8 +187,13 @@ namespace Start_a_Town_
                 foreach (var pos in positions)
                 {
                     if (map.GetBlockEntity(pos) is BlockDesignation.BlockDesignationEntity desEntity)
-                    {
                         this.Designations.Remove(desEntity.OriginGlobal);
+                    else if (this.PendingDesignations.ContainsKey(pos))
+                    {
+                        var cell = map.GetCell(pos);
+                        var existingBlockRemovalDesignation = DetermineBlockRemovalDesignation(cell);
+                        this.Town.DesignationManager.RemoveDesignation(existingBlockRemovalDesignation, pos);
+                        this.PendingDesignations.Remove(pos);
                     }
                 }
                 map.RemoveBlocks(positions.Where(vec => map.GetBlock(vec) == BlockDefOf.Designation), false);
@@ -199,18 +204,25 @@ namespace Start_a_Town_
                     if (!map.IsValidBuildSpot(pos))
                         continue;
                     if (map.GetBlock(pos) == BlockDefOf.Air)
-                    {
                         this.PlaceDesignation(pos, 0, 0, args.Orientation, product);
-                        this.Designations.Add(pos);
-                    }
                     else
                     {
-                        this.Town.DesignationManager.Add(DesignationDef.Mine, pos);
+                        var cell = map.GetCell(pos);
+                        var existingBlockRemovalDesignation = DetermineBlockRemovalDesignation(cell);
+                        this.Town.DesignationManager.Add(existingBlockRemovalDesignation, pos);
                         this.PendingDesignations[pos] = new ConstructionParams(pos, args.Orientation, product);
                     }
                 }
         }
-
+        DesignationDef DetermineBlockRemovalDesignation(Cell cell)
+        {
+            if (cell.Block.IsDeconstructible)
+                return DesignationDef.Deconstruct;
+            else if (cell.Block.IsMinable)
+                return DesignationDef.Mine;
+            else
+                throw new Exception();
+        }
         private static void PlaceDesignationsGodMode(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions, MapBase map)
         {
             if (!args.Removing)
@@ -233,11 +245,13 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
-        public void PlaceDesignation(Vector3 global, byte data, int variation, int orientation, ProductMaterialPair product)
+        public void PlaceDesignation(IntVec3 global, byte data, int variation, int orientation, ProductMaterialPair product)
         {
             var map = this.Map;
             var entity = new BlockDesignation.BlockDesignationEntity(product, global);
             bool ismulti = product.Block.Multi;
+            this.Designations.Add(global);
+
             // LATEST DECISION: add the same entity to all occupied cells
             // NOT FOR BLOCKDESIGNATION because i add every entity and child entities should have their origin field set
             if (ismulti)

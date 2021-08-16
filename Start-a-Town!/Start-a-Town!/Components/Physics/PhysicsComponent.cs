@@ -448,7 +448,11 @@ namespace Start_a_Town_.Components
                 case Message.Types.EntityCollision:
                     if (parent.Net is Server)
                     {
-                        (e.Parameters[0] as GameObject).SyncAbsorb(parent);
+                        var otherItem = e.Parameters[0] as GameObject;
+                        if (otherItem.CanAbsorb(parent) && !parent.IsReserved) 
+                            /// revmoved the reserved check from canabsorb and placed it here, because canabsorb is called during legit behaviors that involve the items, 
+                            /// which means the items are reserved but still should be absorbable
+                            otherItem.SyncAbsorb(parent);
                     }
 
                     return true;

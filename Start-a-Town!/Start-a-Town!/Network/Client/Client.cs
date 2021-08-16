@@ -665,7 +665,6 @@ namespace Start_a_Town_.Net
                 long nextid = next.OrderedReliableID;
                 if (nextid == this.RemoteOrderedReliableSequence + 1)
                 {
-
                     this.RemoteOrderedReliableSequence = nextid;
                     Packet packet = this.IncomingOrderedReliable.Dequeue();
                     if (next.Tick > Instance.Clock.TotalMilliseconds) // TODO maybe use this while changing clock to ad
@@ -716,14 +715,20 @@ namespace Start_a_Town_.Net
             ob.Instantiate(this.Instantiator);
             return ob;
         }
-
+        public GameObject InstantiateLocal(GameObject ob)
+        {
+            ob.RefID = _nextRefIdSequence++;
+            ob.Instantiate(this.Instantiator);
+            return ob;
+        }
         public void Instantiator(GameObject ob)
         {
             ob.Net = this;
             Instance.NetworkObjects.Add(ob.RefID, ob);
+            _nextRefIdSequence = ob.RefID + 1;
             this.ObjectsObservable.Add(ob);
         }
-
+        int _nextRefIdSequence;
         public WorldBase World;
 
         internal void AddPlayer(PlayerData player)

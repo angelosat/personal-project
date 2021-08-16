@@ -68,6 +68,7 @@ namespace Start_a_Town_.UI
                 this.Client.ClientLocation.Y = this.Client.Bottom - this.Client.ClientSize.Height;
             }
         }
+       
         public void Write(ConsoleEntry line)
         {
             this.Entries.Add(line.Text);
@@ -77,7 +78,10 @@ namespace Start_a_Town_.UI
         }
         public void Write(Log.Entry entry)
         {
-            this.Write(entry.GetGui());
+            this.Entries.Add(entry.ToString());
+            this.AddControls(entry.GetGuiNew(this.Client.Width)); //add line after removing oldest one so that the box height doesn't increase?
+            this.AlignTopToBottom();
+            this.Client.ClientLocation.Y = this.Client.Bottom - this.Client.ClientSize.Height;
         }
         public void Write(ConsoleMessageTypes type, Color c, string name, string text)
         {

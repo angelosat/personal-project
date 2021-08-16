@@ -6,7 +6,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public abstract class Need : IProgressBar, ISerializable, ISaveable
+    public abstract class Need : Inspectable, IProgressBar, ISerializable, ISaveable
     {
         internal void AddMod(NeedLetDef needLetDef, float value, float rate)
         {

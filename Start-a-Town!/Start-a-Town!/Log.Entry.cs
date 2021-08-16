@@ -8,6 +8,7 @@ namespace Start_a_Town_
     {
         public class Entry
         {
+            bool ShowSource = true;
             public Color Color = Color.White;
             public object Source;
             public EntryTypes Type;
@@ -28,6 +29,16 @@ namespace Start_a_Town_
             {
                 return new ConsoleEntry(this.Color, this.ToString());
             }
+            public ConsoleEntryNew GetGuiNew(int maxWidth)
+            {
+                var box = new ConsoleEntryNew();
+                //box.AddControlsLineWrap(Label.ParseNewNew(this.ConvertToStringNew()).Prepend(new Label($"[{this.Source}]") { TextColor = this.Color }), maxWidth);
+                var controls = Label.ParseNewNew(this.Values);
+                if (this.ShowSource)
+                    controls.Prepend(new Label($"[{this.Source}]") { TextColor = this.Color, Font = UIManager.FontBold });
+                box.AddControlsLineWrap(controls, maxWidth);
+                return box;
+            }
             public override string ToString()
             {
                 return this.ConvertToString();
@@ -36,9 +47,17 @@ namespace Start_a_Town_
             {
                 return $"[{this.Source}] {string.Join(" ", this.Values.Select(v => v is string ? v.ToString() : $"[{v}]"))}";
             }
+            string ConvertToStringNew()
+            {
+                return $"{string.Join(" ", this.Values.Select(v => v is string ? v.ToString() : $"[{v}]"))}";
+            }
             public static Entry Notification(string text)
             {
-                return new Entry(EntryTypes.Notification, new object[] { text }) { Color = Color.Goldenrod };
+                return new Entry(EntryTypes.Notification, new object[] { text }) { Color = Color.Goldenrod, ShowSource = false };
+            }
+            public static Entry Notification(params object[] values)
+            {
+                return new Entry(EntryTypes.Notification, values) { Color = Color.Goldenrod };
             }
             public static Entry Warning(string text)
             {

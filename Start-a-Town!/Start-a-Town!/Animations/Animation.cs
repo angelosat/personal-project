@@ -4,8 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Animations
 {
-    public sealed class Animation
+    public sealed class Animation : Inspectable
     {
+        public override string Label => this.Def.Label;
         public AnimationDef Def { get; private set; }
         public GameObject Entity;
         public bool Enabled;
@@ -174,6 +175,7 @@ namespace Start_a_Town_.Animations
         }
 
         [Obsolete]
+        [InspectorHidden]
         static public Animation Block
         {
             get

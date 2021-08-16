@@ -84,10 +84,14 @@ namespace Start_a_Town_.UI
         {
             if (!this.HitTest())
                 return;
-
+            e.Handled = true;
+            if (this.Client.ClientSize.Height <= this.Client.Height)
+                /// if nothing to scroll, dont move the client container. added this after chat lines where moved from the bottom to the top when turning the mousewheel once,
+                /// even when their height was smaller than the chat window
+                return;
             int step = UIManager.LineHeight;
             this.Client.ClientLocation.Y = Math.Min(0, Math.Max(this.Client.Height - this.Client.ClientSize.Height, this.Client.ClientLocation.Y + step * e.Delta));
-            e.Handled = true;
+            //this.Client.ClientLocation.Y = Math.Max(0, Math.Min(this.Client.Height - this.Client.ClientSize.Height, this.Client.ClientLocation.Y + step * e.Delta));
         }
 
         public override void AlignTopToBottom(int spacing = 0)

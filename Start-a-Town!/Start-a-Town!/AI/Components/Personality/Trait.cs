@@ -3,7 +3,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public sealed class Trait : ISaveable, ISerializable, IProgressBar, INamed, IListable
+    public sealed class Trait : Inspectable, ISaveable, ISerializable, IProgressBar, INamed, IListable
     {
         public float Percentage
         {

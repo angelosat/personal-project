@@ -40,6 +40,7 @@ namespace Start_a_Town_.UI
             this.ClientSize = PreferredClientSize;
             this.Parent?.OnControlResized(this);
         }
+       
         public GroupBox AddControlsLineWrap(int width, params ButtonBase[] labels)
         {
             return this.AddControlsLineWrap(labels, width);

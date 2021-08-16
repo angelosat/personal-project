@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    public class AttributeStat : ISaveable, ISerializable
+    public class AttributeStat : Inspectable, ISaveable, ISerializable
     {
         public class ValueModifier
         {

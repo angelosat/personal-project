@@ -14,7 +14,7 @@ namespace Start_a_Town_
     public class GameObject : Inspectable, IEntity, ITooltippable, IContextable, INameplateable, ISlottable, ISelectable//, ILabeled, IInspectable
     {
         public static Dictionary<int, GameObject> Templates = new();
-        public override string Label => this.Def.Label;
+        public override string Label => this.Name;// this.Def.Label;
         static int GetNextTemplateID()
         {
             return Templates.Count + 1;

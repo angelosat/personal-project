@@ -117,6 +117,7 @@ namespace Start_a_Town_.UI
                 {
                     this.Active = true;
                     this.LeftClickAction = () => Inspector.Refresh(objdetails);
+                    this.Font = UIManager.FontBold;
                     this.Text = $"[{objdetails.Label}]";
                     this.TextColor = Color.LightBlue;
                 }
@@ -352,7 +353,10 @@ namespace Start_a_Town_.UI
                 }
             } while (posFrom != -1);
         }
-
+        internal static IEnumerable<Label> ParseNewNew(params object[] values)
+        {
+            return values.SelectMany(ParseNewNew);
+        }
         internal static IEnumerable<Label> ParseNewNew(object value)
         {
             if (value is string str)

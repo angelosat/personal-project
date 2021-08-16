@@ -5,7 +5,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public class Skill : ISaveable, ISerializable, INamed, IListable
+    public class Skill : Inspectable, ISaveable, ISerializable, INamed, IListable
     {
         public NpcSkillsComponent Container;
         public SkillDef Def;
@@ -21,7 +21,7 @@ namespace Start_a_Town_
         public int XpToLevel => (int)this.LvlProgress.Max;
         public float CurrentXP => this.LvlProgress.Value;
         public string Name => this.Def.Label;
-        public string Label => this.Name;
+        public override string Label => this.Name;
 
         [Obsolete]
         static int GetNextLvlXpOld(int currentLvl) => (int)Math.Pow(XpToLevelBase, currentLvl + 1);
@@ -59,7 +59,8 @@ namespace Start_a_Town_
             var actor = this.Container.Parent;
             //Log.Write($"[{actor}]'s [{this.Label}] has been increased to {this.Level}!");
             //actor.Net.ConsoleBox.Write($"[{actor}] has reached Level [{this.Level}] in [{this.Label}]!");
-            actor.Net.ConsoleBox.Write(Log.Entry.Notification($"[{actor}] has reached Level {this.Level} in [{this.Label}]!"));
+            //actor.Net.ConsoleBox.Write(Log.Entry.Notification($"[{actor}] has reached Level {this.Level} in [{this.Label}]!"));
+            actor.Net.ConsoleBox.Write(Log.Entry.Notification(actor, " has reached Level ", this.Level," in ", this, "!"));
             actor.Net.EventOccured(Message.Types.SkillIncrease, actor, this.Def.Name);
         }
         [Obsolete]

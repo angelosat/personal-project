@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Start_a_Town_.AI
 {
-    public sealed class AIState
+    public sealed class AIState : Inspectable
     {
         public SortedSet<Threat> Threats = new();
         public PathingSync PathFinder = new();

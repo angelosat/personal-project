@@ -18,9 +18,11 @@ namespace Start_a_Town_.UI
         {
             return this.Location + (this.Parent != null ? this.Parent.ClientLocation + this.Parent.GetLocation() : Vector2.Zero);
         }
-        public virtual Vector2 ScreenLocation => this.LocationFunc() + this.Location
+        Vector2? _cachedScreenLocation;
+        public virtual Vector2 ScreenLocation => _cachedScreenLocation ??= this.LocationFunc() + this.Location
                - this.Dimensions * this.Anchor
                   + (this.Parent != null ? this.Parent.ScreenLocation + this.Parent.ClientLocation : Vector2.Zero);
+
         public int X => (int)this.ScreenLocation.X;
         public int Y => (int)this.ScreenLocation.Y;
         Control _Parent;
@@ -148,10 +150,11 @@ namespace Start_a_Town_.UI
             get => base.Dimensions;
             set => base.Dimensions = value;
         }
+        public Func<float> OpacityFunc;
         float _opacity = 1;
         public virtual float Opacity
         {
-            get => this._opacity;
+            get => this.OpacityFunc?.Invoke() ?? this._opacity;
             set => this._opacity = value;
         }
         public virtual RenderTarget2D Texture { get; set; }
@@ -633,7 +636,9 @@ namespace Start_a_Town_.UI
 
         public Vector2 ScreenClientLocation => new(this.X + this.ClientLocation.X, this.Y + this.ClientLocation.Y);
         public Rectangle ScreenClientRectangle => new(this.X + (int)this.ClientLocation.X, this.Y + (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height);
-        public virtual Rectangle BoundsScreen => new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
+
+        Rectangle? _cachedBoundsScreen;
+        public virtual Rectangle BoundsScreen => _cachedBoundsScreen ??= new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
         public virtual Rectangle BoundsLocal => new((int)this.Location.X, (int)this.Location.Y, this.Width, this.Height);
 
         protected Rectangle _ClientSize;
@@ -868,6 +873,8 @@ namespace Start_a_Town_.UI
         }
         public override void Update()
         {
+            this._cachedScreenLocation = null;
+            this._cachedBoundsScreen = null;
             this.OnUpdate();
 
             base.Update();

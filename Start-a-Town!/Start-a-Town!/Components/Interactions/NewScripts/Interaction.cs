@@ -9,8 +9,9 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    public abstract class Interaction : ICloneable
+    public abstract class Interaction : Inspectable, ICloneable
     {
+        public override string Label => this.Name;
         public bool IsFinished => this.State == States.Finished;
         public static readonly float DefaultRange = (float)Math.Sqrt(2);
 

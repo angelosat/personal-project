@@ -39,7 +39,7 @@ namespace Start_a_Town_
                 this.SkillsNew[i] = newSkill;
             }
         }
-        Skill[] SkillsNew;
+        public readonly Skill[] SkillsNew;
         public NpcSkillsComponent(params SkillDef[] defs)
         {
             this.SkillsNew = new Skill[defs.Length];

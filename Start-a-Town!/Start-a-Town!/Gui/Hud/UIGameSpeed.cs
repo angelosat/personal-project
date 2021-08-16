@@ -32,7 +32,7 @@ namespace Start_a_Town_.UI
 
             this.AddControlsHorizontally(1, this.BtnPause, this.Btn1x, this.Btn2x, this.Btn3x);
         }
-        public override Vector2 ScreenLocation => base.ScreenLocation;
+        //public override Vector2 ScreenLocation => base.ScreenLocation; // hm?
 
         private int GameSpeedPlayerCount(int speed)
         {

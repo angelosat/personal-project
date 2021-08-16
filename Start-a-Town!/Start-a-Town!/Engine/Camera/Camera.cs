@@ -1540,7 +1540,7 @@ namespace Start_a_Town_
             if (global.Z > this.DrawLevel)
                 return;
 
-            //sprite.Atlas.Begin(sb);
+            sprite.Atlas.Begin(sb); // this was commented out
             var bounds = this.GetScreenBounds(global, Block.Bounds);
             var pos = new Vector2(bounds.X, bounds.Y);
             var depth = global.GetDrawDepth(Engine.Map, this);

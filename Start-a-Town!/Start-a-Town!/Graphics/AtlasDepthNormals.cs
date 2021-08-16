@@ -39,7 +39,15 @@ namespace Start_a_Town_.Graphics
             this.ToLoad.Add(token);
             return token;
         }
-
+        public Node.Token Load(string assetName, string depthMap)
+        {
+            if (this.Tokens.TryGetValue(assetName, out Node.Token token))
+                return token;
+            token = new Node.Token(this, assetName, depthMap, this.DefaultNormalMask);
+            this.Tokens.Add(assetName, token);
+            this.ToLoad.Add(token);
+            return token;
+        }
         public Node.Token Load(string assetName, string depthMap, string normalmap)
         {
             if (this.Tokens.TryGetValue(assetName, out Node.Token token))
@@ -50,13 +58,20 @@ namespace Start_a_Town_.Graphics
 
             return token;
         }
+        public Node.Token Load(string assetName, Texture2D depthtexture)
+        {
+            if (this.Tokens.TryGetValue(assetName, out var token))
+                return token;
+            token = new Node.Token(this, assetName, depthtexture, this.DefaultNormalMask);
+            this.Tokens.Add(assetName, token);
+            this.ToLoad.Add(token);
+
+            return token;
+        }
         public Node.Token Load(string assetName, Texture2D depthtexture, Texture2D normaltexture)
         {
-            Node.Token token;
-            if (this.Tokens.TryGetValue(assetName, out token))
-            {
+            if (this.Tokens.TryGetValue(assetName, out var token))
                 return token;
-            }
             token = new Node.Token(this, assetName, depthtexture, normaltexture);
             this.Tokens.Add(assetName, token);
             this.ToLoad.Add(token);
@@ -65,11 +80,8 @@ namespace Start_a_Town_.Graphics
         }
         public Node.Token Load(string assetName, Texture2D asset, Texture2D depthtexture, Texture2D normaltexture)
         {
-            Node.Token token;
-            if (this.Tokens.TryGetValue(assetName, out token))
-            {
+            if (this.Tokens.TryGetValue(assetName, out var token))
                 return token;
-            }
             token = new Node.Token(this, assetName, asset, depthtexture, normaltexture);
             this.Tokens.Add(assetName, token);
             this.ToLoad.Add(token);

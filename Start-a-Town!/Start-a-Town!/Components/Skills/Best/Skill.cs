@@ -38,7 +38,8 @@ namespace Start_a_Town_
         }
         internal void Award(float v)
         {
-            v *= 10;
+            const int debugMultiplier = 10;
+            v *= debugMultiplier;
             if (this.LvlProgress.Value + v < this.LvlProgress.Max)
             {
                 this.LvlProgress.Value += v;
@@ -113,7 +114,6 @@ namespace Start_a_Town_
         public void Write(BinaryWriter w)
         {
             w.Write(this.Level);
-            //w.Write(this.CurrentXP);
             this.LvlProgress.Write(w);
         }
 

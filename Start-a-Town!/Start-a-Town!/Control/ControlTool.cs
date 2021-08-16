@@ -205,7 +205,7 @@ namespace Start_a_Town_
         internal virtual void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var camera = map.Camera;
-            ToolManager.DrawBlockMouseover(sb, map, camera, this.Target);
+            ToolManager.DrawBlockHighlight(sb, map, camera, this.Target);
         }
         internal virtual void GetContextActions(ContextArgs args) { }
         internal virtual void OnActiveToolSet() { }

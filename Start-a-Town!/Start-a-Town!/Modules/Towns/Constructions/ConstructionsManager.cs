@@ -171,7 +171,7 @@ namespace Start_a_Town_
         }
         public void Handle(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
-            var cheat = false;
+            const bool cheat = false; 
             var map = this.Map;
             if (cheat)
                 PlaceDesignationsGodMode(args, product, positions, map);
@@ -196,6 +196,8 @@ namespace Start_a_Town_
             else
                 foreach (var pos in positions)
                 {
+                    if (!map.IsValidBuildSpot(pos))
+                        continue;
                     if (map.GetBlock(pos) == BlockDefOf.Air)
                     {
                         this.PlaceDesignation(pos, 0, 0, args.Orientation, product);

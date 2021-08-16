@@ -40,11 +40,10 @@ namespace Start_a_Town_.Modules.Construction
         public override IEnumerable<IntVec3> GetPositions()
         {
             yield return this.Begin;
-            //return new List<IntVec3>() { this.Begin };
         }
         static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {
-            return new List<IntVec3>() { a };
+            return new List<IntVec3> { a };
         }
     }
 }

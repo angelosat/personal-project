@@ -31,12 +31,6 @@ namespace Start_a_Town_.Modules.Construction
         {
             this.Callback = callback;
         }
-        //public override void Update()
-        //{
-        //    base.Update();
-        //    if (this.Target.Type == TargetType.Entity)
-        //        this.Target = Controller.Instance.Mouseover.TargetCell;
-        //}
         private void CheckValidity()
         {
             this.Valid = true;
@@ -58,7 +52,9 @@ namespace Start_a_Town_.Modules.Construction
             this.Sync();
             return Messages.Default;
         }
-
+        public override void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
+        {
+        }
         public override ControlTool.Messages MouseLeftUp(System.Windows.Forms.HandledMouseEventArgs e)
         {
             var target = this.Target;
@@ -92,67 +88,47 @@ namespace Start_a_Town_.Modules.Construction
             }
             base.HandleKeyDown(e);
         }
-        //public override void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
-        //{
-        //    if (e.Handled)
-        //        return;
-        //    switch (e.KeyChar)
-        //    {
-        //        //case '[':
-        //        case 'e':
-        //            this.RotateClockwise();
-        //            e.Handled = true;
-        //            break;
-
-        //        //case ']':
-        //        case 'q':
-        //            this.RotateAntiClockwise();
-        //            e.Handled = true;
-        //            break;
-
-        //        default:
-        //            break;
-        //    }
-        //}
-
-        //internal override void RotateAntiClockwise()
-        //{
-        //    this.Orientation -= 1;
-        //    if (this.Orientation < 0)
-        //        this.Orientation = 3;
-        //}
-
-        //internal override void RotateClockwise()
-        //{
-        //    this.Orientation = (this.Orientation + 1) % 4;
-        //}
-        Vector3 GetMouseover()
+        IntVec3 GetMouseover()
         {
             return IsReplacing() ? this.Target.Global : this.Target.FaceGlobal;
         }
-
         internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
-            if (!this.Enabled)
-            {
-                this.DrawBlockMouseover(sb, map, cam);
-                return;
-            }
-            else
+            //if (!this.Enabled)
+            //{
+            //    this.DrawBlockMouseover(sb, map, cam);
+            //    return;
+            //}
+            //else
+            //    this.DrawBlockPreviews(sb, map, cam);
+            this.DrawBlockMouseover(sb, map, cam);
+            if (this.Enabled)
                 this.DrawBlockPreviews(sb, map, cam);
         }
+        //public override void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
+        //{
+        //    Sprite.Atlas.Begin();
+        //    if (this.Target is not null)
+        //    //if (!this.Enabled && this.Target is not null)
+        //    {
+        //        var vec = this.GetMouseover();
+        //        var col = map.IsValidBuildSpot(vec) ? Color.Yellow : Color.Red;
+        //        camera.DrawGridBlock(sb, col, this.GetMouseover());
+        //    }
+        //}
         public override void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
         {
-            Sprite.Atlas.Begin();
-            if (!this.Enabled)
+            if (this.Target is not null)
+            //if (!this.Enabled && this.Target is not null)
             {
-                if (this.Target != null)
-                    camera.DrawGridBlock(sb, Color.Yellow, this.GetMouseover());
-                return;
+                var vec = this.GetMouseover();
+                var col = map.IsValidBuildSpot(vec) ? Color.Yellow : Color.Red;
+                ToolManager.DrawBlockHighlight(sb, map, camera, this.GetMouseover(), col);
+                //camera.DrawGridBlock(sb, Block.BlockHightlightBack, col, this.GetMouseover());
+                //camera.DrawGridBlock(sb, Block.BlockHighlight, col, this.GetMouseover());
             }
         }
-
         protected virtual void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             if (!this.Enabled)

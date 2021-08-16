@@ -52,7 +52,5 @@ namespace Start_a_Town_.Modules.Construction
             }
             return box;
         }
-
-     
     }
 }

@@ -83,6 +83,7 @@ namespace Start_a_Town_
             if (this.ActiveTool is null)
                 return;
             this.ActiveTool.DrawAfterWorld(sb, map);
+            sb.Flush();
             DrawPlayersBlockMouseover(sb, map);
         }
 
@@ -91,7 +92,7 @@ namespace Start_a_Town_
             var camera = map.Camera;
             foreach (var pl in GetOtherPlayers(map))
                 if (pl.CurrentTool is not null)
-                    DrawBlockMouseover(sb, map, camera, pl.Target, pl.Color);
+                    DrawBlockHighlight(sb, map, camera, pl.Target.Global, pl.Color);
         }
 
         internal void DrawUI(SpriteBatch sb, MapBase map)
@@ -303,11 +304,32 @@ namespace Start_a_Town_
                 return null;
             }
         }
-        internal static void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera, TargetArgs target)
+        internal static void DrawBlockHighlight(MySpriteBatch sb, MapBase map, Camera camera, TargetArgs target)
         {
-            DrawBlockMouseover(sb, map, camera, target, Color.White);
+            DrawBlockHighlight(sb, map, camera, target.Global, Color.White);
         }
-        internal static void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera, TargetArgs target, Color color)
+        internal static void DrawBlockHighlight(MySpriteBatch sb, MapBase map, Camera camera, IntVec3 global, Color color)
+        {
+            var bounds = Block.Bounds;
+            camera.GetEverything(map, global, bounds, out float cd, out Rectangle screenBounds, out Vector2 screenLoc);
+            var scrbnds = camera.GetScreenBoundsVector4(global.X, global.Y, global.Z, bounds, Vector2.Zero);
+            screenLoc = new Vector2(scrbnds.X, scrbnds.Y);
+            cd = global.GetDrawDepth(map, camera);
+            var cdback = cd - 2; // TODO: why -2?
+            var highlight = Block.BlockHighlight;
+            var highlightBack = Block.BlockHighlightBack;
+            Block.Atlas.Begin();
+            var c = color * .5f;
+
+            sb.Draw(highlightBack.Atlas.Texture, screenLoc, highlightBack.Rectangle, 0, Vector2.Zero, new Vector2(camera.Zoom),
+                Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cdback);
+            sb.Draw(highlight.Atlas.Texture, screenLoc, highlight.Rectangle, 0, Vector2.Zero, new Vector2(camera.Zoom),
+                Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cd);
+
+            sb.Flush(); // flush here because i might have to switch textures in an overriden tool draw call
+        }
+        [Obsolete]
+        internal static void DrawBlockMouseoverOld(MySpriteBatch sb, MapBase map, Camera camera, TargetArgs target, Color color)
         {
             if (target is null)
                 return;
@@ -332,7 +354,6 @@ namespace Start_a_Town_
 
             sb.Flush(); // flush here because i might have to switch textures in an overriden tool draw call
         }
-
         private static IEnumerable<PlayerData> GetOtherPlayers(MapBase map)
         {
             return map.Net.GetPlayers();

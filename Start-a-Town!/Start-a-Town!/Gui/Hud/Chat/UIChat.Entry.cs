@@ -17,6 +17,7 @@ namespace Start_a_Town_.UI
                 this.BackgroundColor = Color.Black * .5f;
                 this.TextColorFunc = () => color;
                 this.MouseHover = true;
+                this.MouseThrough = true;
             }
 
             float Fade => this.FadeTick / (float)FadeLength;

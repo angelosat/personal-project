@@ -170,9 +170,27 @@ namespace Start_a_Town_
 
         internal bool IsValidBuildSpot(IntVec3 pos)
         {
-            return !this.BlockEntities.Any(e => e.ReservedInteractionCells.Contains(pos));
+            //return !this.BlockEntities.Any(e => e.ReservedInteractionCells.Contains(pos));
+            var error = "";
+            return this.IsValidBuildSpot(pos, ref error);
         }
-
+        internal bool IsValidBuildSpot(IntVec3 pos, ref string errorText)
+        {
+            if (this.BlockEntities.Any(e => e.ReservedInteractionCells.Contains(pos)))
+            {
+                errorText = "Building block by interaction spot";
+                return false;
+            }
+            return true;
+        }
+        internal bool IsValidBuildSpot(IntVec3 pos, bool showError)
+        {
+            var error = "";
+            var result = this.IsValidBuildSpot(pos, ref error);
+            if (!result && showError)
+                Log.Warning(error);
+            return result;
+        }
         public IEnumerable<Cell> GetAllCells()
         {
             foreach (var ch in this.ActiveChunks.Values)

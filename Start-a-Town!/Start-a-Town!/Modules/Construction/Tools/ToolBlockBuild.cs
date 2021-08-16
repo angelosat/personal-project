@@ -45,6 +45,8 @@ namespace Start_a_Town_.Modules.Construction
                 return Messages.Default;
             this.Replacing = IsReplacing();
             var pos = this.Replacing ? this.Target.Global : this.Target.FaceGlobal;
+            if (!this.IsValid(pos))
+                return Messages.Default;
             this.Begin = pos;
             this.End = this.Begin;
             this.Height = 0;
@@ -52,6 +54,20 @@ namespace Start_a_Town_.Modules.Construction
             this.Sync();
             return Messages.Default;
         }
+
+        private bool IsValid(IntVec3 pos)
+        {
+            var map = Ingame.GetMap();
+            return map.IsValidBuildSpot(pos, true);
+            //string error = "";
+            //if (!map.IsValidBuildSpot(pos, ref error))
+            //{
+            //    Log.Warning(error);
+            //    return false;
+            //}
+            //return true;
+        }
+
         public override void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
         {
         }
@@ -95,38 +111,18 @@ namespace Start_a_Town_.Modules.Construction
         internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
-            //if (!this.Enabled)
-            //{
-            //    this.DrawBlockMouseover(sb, map, cam);
-            //    return;
-            //}
-            //else
-            //    this.DrawBlockPreviews(sb, map, cam);
             this.DrawBlockMouseover(sb, map, cam);
             if (this.Enabled)
                 this.DrawBlockPreviews(sb, map, cam);
         }
-        //public override void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
-        //{
-        //    Sprite.Atlas.Begin();
-        //    if (this.Target is not null)
-        //    //if (!this.Enabled && this.Target is not null)
-        //    {
-        //        var vec = this.GetMouseover();
-        //        var col = map.IsValidBuildSpot(vec) ? Color.Yellow : Color.Red;
-        //        camera.DrawGridBlock(sb, col, this.GetMouseover());
-        //    }
-        //}
+      
         public override void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (this.Target is not null)
-            //if (!this.Enabled && this.Target is not null)
             {
                 var vec = this.GetMouseover();
                 var col = map.IsValidBuildSpot(vec) ? Color.Yellow : Color.Red;
                 ToolManager.DrawBlockHighlight(sb, map, camera, this.GetMouseover(), col);
-                //camera.DrawGridBlock(sb, Block.BlockHightlightBack, col, this.GetMouseover());
-                //camera.DrawGridBlock(sb, Block.BlockHighlight, col, this.GetMouseover());
             }
         }
         protected virtual void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)

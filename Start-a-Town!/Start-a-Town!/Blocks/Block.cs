@@ -52,9 +52,7 @@ namespace Start_a_Town_
             BlockBlueprintGrayscale = Atlas.Load(Game1.Instance.Content.Load<Texture2D>("Graphics/items/blocks/blockblueprint").ToGrayscale(), "blocks/blockblueprint-grayscale");
 
             BlockHighlight = Atlas.Load("blocks/highlightfull");
-            //BlockHightlightBack = new Sprite("blocks/highlightfullback", Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09back")) { OriginGround = Block.OriginCenter };
-            BlockHighlightBack = Atlas.Load("blocks/highlightfullback", BlockDepthMapBack);// "Graphics/blockDepth09back");
-
+            BlockHighlightBack = Atlas.Load("blocks/highlightfullback", BlockDepthMapBack);
 
             Atlas.Initialize();
         }

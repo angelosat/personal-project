@@ -13,9 +13,10 @@ namespace Start_a_Town_
         public List<ToolBlockBuild> Tools;
         public ToolBlockBuild LastSelectedTool;
         ConstructionCategory CurrentCategory;
-        public UIToolsBox(ProductMaterialPair product, Action<Type> onToolSelected)
+        Action<Type> OnToolSelectedCallback;
+        public UIToolsBox(Action<Type> onToolSelected)
         {
-
+            this.OnToolSelectedCallback = onToolSelected;
             this.Name = "Brushes";
             this.PanelButtons = new Panel()
             {
@@ -24,20 +25,23 @@ namespace Start_a_Town_
             this.AddControls(
                 this.PanelButtons);
         }
-
-        public void SetProduct(ProductMaterialPair product, Action<Type> onToolSelected)
+        ProductMaterialPair CurrentProduct;
+        ProductMaterialPair GetCurrentProduct() => this.CurrentProduct;
+        public void SetProduct(ProductMaterialPair product)
         {
+            this.CurrentProduct = product;
             if (product is not null)
             {
                 var cat = product.Block.ConstructionCategory;
                 if (cat != this.CurrentCategory)
-                    this.Refresh(cat.GetAvailableTools(() => product), onToolSelected);
+                    this.Refresh(cat.GetAvailableTools(GetCurrentProduct));
                 this.CurrentCategory = cat;
             }
             else
                 this.CurrentCategory = null;
         }
-        public void Refresh(List<ToolBlockBuild> tools, Action<Type> onToolSelected)
+      
+        public void Refresh(List<ToolBlockBuild> tools)
         {
             this.Tools = tools;
             this.PanelButtons.ClearControls();
@@ -47,7 +51,7 @@ namespace Start_a_Town_
                     btn.LeftClickAction = () =>
                     {
                         this.LastSelectedTool = tool;
-                        onToolSelected(tool.GetType());
+                        this.OnToolSelectedCallback(tool.GetType());
                     };
                     btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool != null && ToolManager.Instance.ActiveTool.GetType() == tool.GetType();
                 });

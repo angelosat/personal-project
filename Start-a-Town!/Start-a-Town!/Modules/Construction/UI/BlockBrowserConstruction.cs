@@ -22,7 +22,7 @@ namespace Start_a_Town_.Core
             this.Panel_Blocks = new Panel() { AutoSize = true };
 
             var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air LOL FIX THIS
-            this.ToolBox = new UIToolsBox(null, this.OnToolSelected);
+            this.ToolBox = new UIToolsBox(this.OnToolSelected);
             var categories = ConstructionsManager.AllCategories;
             foreach (var cat in categories)
             {
@@ -37,10 +37,7 @@ namespace Start_a_Town_.Core
                     {
                         this.CurrentSelected = block;
                         var product = this.GetLastSelectedVariantOrDefault(block);
-                        this.ToolBox.SetProduct(product, this.OnToolSelected);
-                        var tools = product.Block.ConstructionCategory.GetAvailableTools(() => this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
-
-                        this.ToolBox.SetProduct(product, this.OnToolSelected);
+                        this.ToolBox.SetProduct(product);
                         this.OnToolSelected(this.ToolBox.LastSelectedTool.GetType());
                         var win = this.ToolBox.GetWindow();
                         if (win is null)
@@ -87,18 +84,13 @@ namespace Start_a_Town_.Core
 
         void OnToolSelected(Type toolType)
         {
-            var tool = this.SelectedCategory.CreateTool(toolType, this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
+            var tool = this.SelectedCategory.GetTool(toolType, this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
             this.ToolBox.LastSelectedTool = tool;
             ToolManager.SetTool(tool);
         }
 
         private ProductMaterialPair GetLastSelectedVariantOrDefault(Block block)
         {
-            //if (this.LastSelectedVariant.ContainsKey(block))
-            //    return this.LastSelectedVariant[block];
-            //else
-            //    return new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First()); // store last selected variant instead of getting first in list
-
             if(!this.LastSelectedVariant.TryGetValue(block, out var lastVariant))
             {
                 lastVariant = new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First());
@@ -114,7 +106,7 @@ namespace Start_a_Town_.Core
             this.CurrentSelected = product.Block;
             if (this.ToolBox.LastSelectedTool != null)
             {
-                var tool = this.SelectedCategory.CreateTool(this.ToolBox.LastSelectedTool.GetType(), product);
+                var tool = this.SelectedCategory.GetTool(this.ToolBox.LastSelectedTool.GetType(), product);
                 this.ToolBox.LastSelectedTool = tool;
                 ToolManager.SetTool(tool);
             }

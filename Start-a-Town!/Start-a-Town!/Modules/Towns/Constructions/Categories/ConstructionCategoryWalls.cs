@@ -9,7 +9,22 @@ namespace Start_a_Town_
     public class ConstructionCategoryWalls : ConstructionCategory
     {
         public override string Name => "Blocks";
-
+        List<ToolBlockBuild> Tools;
+        public ConstructionCategoryWalls()
+        {
+            void callback(ToolBlockBuild.Args a) => CallBack(this.ProductGetter, a);
+            Tools = new()
+            {
+                new ToolDrawingSingle(callback),
+                new ToolDrawingLine(callback),
+                new ToolDrawingWall(callback),
+                new ToolDrawingEnclosure(callback),
+                new ToolDrawingBox(callback),
+                new ToolDrawingBoxFilled(callback),
+                new ToolDrawingPyramid(callback),
+                new ToolDrawingRoof(callback)
+            };
+        }
         public override IconButton GetButton()
         {
             IconButton btn_Construct = new IconButton()
@@ -26,21 +41,11 @@ namespace Start_a_Town_
         {
             return new ToolDrawingEnclosure(a => CallBack(itemGetter, a));
         }
+        Func<ProductMaterialPair> ProductGetter;
         public override List<ToolBlockBuild> GetAvailableTools(Func<ProductMaterialPair> itemGetter)
         {
-            var item = itemGetter();
-
-            return new List<ToolBlockBuild>()
-            {
-                new ToolDrawingSingle(a => CallBack(itemGetter, a)),
-                new ToolDrawingLine(a => CallBack(itemGetter, a)),
-                new ToolDrawingWall(a => CallBack(itemGetter, a)),
-                new ToolDrawingEnclosure(a => CallBack(itemGetter, a)),
-                new ToolDrawingBox(a => CallBack(itemGetter, a)),
-                new ToolDrawingBoxFilled(a => CallBack(itemGetter, a)),
-                new ToolDrawingPyramid(a => CallBack(itemGetter, a)),
-                new ToolDrawingRoof(a => CallBack(itemGetter, a))
-            };
+            this.ProductGetter = itemGetter;
+            return this.Tools;
         }
     }
 }

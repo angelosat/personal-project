@@ -40,7 +40,7 @@ namespace Start_a_Town_
         static public Window WindowToolsBox;
         static public UIToolsBox ToolsBox;
 
-        internal ToolBlockBuild CreateTool(Type toolType, ProductMaterialPair productMaterialPair)
+        internal ToolBlockBuild GetTool(Type toolType, ProductMaterialPair productMaterialPair)
         {
             var tools = GetAvailableTools(() => productMaterialPair);
             var tool = tools.First(t => t.GetType() == toolType);

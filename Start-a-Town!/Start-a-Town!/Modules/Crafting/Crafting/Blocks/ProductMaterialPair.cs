@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using Start_a_Town_.UI;
+using System;
+using System.IO;
 
 namespace Start_a_Town_.Components.Crafting
 {
@@ -55,6 +57,12 @@ namespace Start_a_Town_.Components.Crafting
             w.Write(this.Block);
             w.Write(this.Data);
             this.Requirement.Write(w);
+        }
+
+        internal Control GetGui()
+        {
+            var req = this.Requirement;
+            return new Label() { TextFunc = () => $"{req.Material.Label} {req.Item.Label} {0} / {req.Amount}" };
         }
     }
 }

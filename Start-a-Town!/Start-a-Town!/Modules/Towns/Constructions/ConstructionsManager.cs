@@ -1,4 +1,5 @@
-﻿using Start_a_Town_.Components.Crafting;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
@@ -108,11 +109,16 @@ namespace Start_a_Town_
                         this.Map.RemoveBlock(origin);
                     }
                     else if (this.PendingDesignations.ContainsKey(pos))
-                        this.PendingDesignations.Remove(pos);
+                        RemovePendingDesignation(pos);
                 }
             }
         }
-
+        void RemovePendingDesignation(IntVec3 pos)
+        {
+            this.PendingDesignations.Remove(pos);
+            if (SelectionManager.SelectedCells.Contains(pos))
+                SelectionManager.RemoveInfo(PendingDesignationLabel);
+        }
         bool TryHandlePendingDesignation(IntVec3 global)
         {
             var map = this.Map;
@@ -122,7 +128,8 @@ namespace Start_a_Town_
                 if (block is BlockAir)
                 {
                     this.PlaceDesignation(global, 0, 0, pending.Orientation, pending.Product);
-                    this.PendingDesignations.Remove(global);
+                    //this.PendingDesignations.Remove(global);
+                    RemovePendingDesignation(global);
                     return true;
                 }
             }
@@ -162,10 +169,7 @@ namespace Start_a_Town_
                 return;
             SelectionManager.AddButton(IconCancel, cancel, selectedDesignations);
 
-            static void cancel(List<TargetArgs> positions)
-            {
-                PacketDesignation.Send(Client.Instance, false, positions, null);// DesignationDefOf.Remove, positions, false);
-            }
+            static void cancel(List<TargetArgs> positions) => PacketDesignation.Send(Client.Instance, false, positions, null);
         }
         public void Handle(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
@@ -191,7 +195,8 @@ namespace Start_a_Town_
                         var cell = map.GetCell(pos);
                         var existingBlockRemovalDesignation = DetermineBlockRemovalDesignation(cell);
                         this.Town.DesignationManager.RemoveDesignation(existingBlockRemovalDesignation, pos);
-                        this.PendingDesignations.Remove(pos);
+                        //this.PendingDesignations.Remove(pos);
+                        this.RemovePendingDesignation(pos);
                     }
                 }
                 map.RemoveBlocks(positions.Where(vec => map.GetBlock(vec) == BlockDefOf.Designation), false);
@@ -275,12 +280,28 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
+        GroupBox _pendingDesignationLabel;
+        GroupBox PendingDesignationLabel => _pendingDesignationLabel ??= new GroupBox();
 
-        class ConstructionParams : ISaveable, ISerializable
+        internal override void OnTargetSelected(IUISelection info, TargetArgs targetArgs)
+        {
+            var global = (IntVec3)targetArgs.Global;
+            if (this.PendingDesignations.TryGetValue(global, out var pending))
+            {
+                PendingDesignationLabel.ClearControls();
+                info.AddInfo(PendingDesignationLabel.AddControlsVertically(
+                    new Label($"{pending.Product.Block.Name} (Pending Designation)"),
+                    pending.Product.GetGui()));
+            }
+        }
+        class ConstructionParams : ISaveable, ISerializable//, ISelectable
         {
             public IntVec3 Global;
             public int Orientation;
             public ProductMaterialPair Product;
+
+            public bool Exists => throw new NotImplementedException();
+
             public ConstructionParams()
             {
 
@@ -321,6 +342,31 @@ namespace Start_a_Town_
                 this.Product = new(r);
                 return this;
             }
+
+            //public string GetName()
+            //{
+            //    throw new NotImplementedException();
+            //}
+
+            //public void GetSelectionInfo(IUISelection panel)
+            //{
+            //    throw new NotImplementedException();
+            //}
+
+            //public IEnumerable<(string name, Action action)> GetInfoTabs()
+            //{
+            //    throw new NotImplementedException();
+            //}
+
+            //public void GetQuickButtons(SelectionManager panel)
+            //{
+            //    throw new NotImplementedException();
+            //}
+
+            //public void TabGetter(Action<string, Action> getter)
+            //{
+            //    throw new NotImplementedException();
+            //}
         }
     }
 }

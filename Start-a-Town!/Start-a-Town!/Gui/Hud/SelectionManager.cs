@@ -500,6 +500,10 @@ namespace Start_a_Town_.UI
             this.BoxInfo.AddControls(ctrl);
             this.BoxInfo.AlignVertically();
         }
+        public static void RemoveInfo(Control ctrl)
+        {
+            Instance.BoxInfo.RemoveControls(ctrl);
+        }
 
         public static void RemoveButton(IconButton button)
         {

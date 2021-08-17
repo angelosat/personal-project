@@ -67,9 +67,10 @@ namespace Start_a_Town_
             }
             internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
             {
-                var product = this.Product;
-                var req = product.Requirement;
-                info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Label} {req.Item.Label} {0} / {req.Amount}" });
+                info.AddInfo(this.Product.GetGui());
+                //var product = this.Product;
+                //var req = product.Requirement;
+                //info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Label} {req.Item.Label} {0} / {req.Amount}" });
             }
             protected override void OnDrawUI(SpriteBatch sb, Camera cam, IntVec3 global)
             {

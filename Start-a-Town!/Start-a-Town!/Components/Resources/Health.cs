@@ -5,10 +5,14 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components.Resources
 {
-    class Health : ResourceDef
+    class Health : ResourceWorker
     {
-        public Health():base("Health")
+        public Health()
         {
+            this.AddThreshold("Dying", .25f);
+            this.AddThreshold("Critical", .5f);
+            this.AddThreshold("Injured", .75f);
+            this.AddThreshold("Healthy", 1f);
         }
         public override string Format { get; } = "##0.00";
         public override string Description { get; } = "Basic health resource";
@@ -46,7 +50,7 @@ namespace Start_a_Town_.Components.Resources
                 return;
             }
             this.Add(this.GetRate(values), values);
-            
+
         }
         float GetRate(Resource values)
         {
@@ -139,7 +143,7 @@ namespace Start_a_Town_.Components.Resources
             plate.SetMousethrough(true, true);
         }
 
-       
+
         public override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera, GameObject parent)
         {
             base.DrawUI(sb, camera, parent);

@@ -4,10 +4,14 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_.Components.Resources
 {
-    class Stamina : ResourceDef
+    class Stamina : ResourceWorker
     {
-        public Stamina() : base("Stamina")
+        public Stamina()
         {
+            this.AddThreshold("Out of breath", .25f);
+            this.AddThreshold("Exhausted", .5f);
+            this.AddThreshold("Tired", .75f);
+            this.AddThreshold("Energetic", 1f);
         }
         public override string Format { get; } = "##0.00";
         public override string Description { get; } = "Required for sprinting and hauling heavy objects";

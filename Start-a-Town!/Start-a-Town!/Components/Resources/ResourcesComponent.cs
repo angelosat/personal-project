@@ -147,7 +147,7 @@ namespace Start_a_Town_
         {
             for (int i = 0; i < this.Resources.Length; i++)
             {
-                this.Resources[i].ResourceDef.InitMaterials(parent, materials);
+                this.Resources[i].InitMaterials(parent, materials);
             }
         }
         public override void OnTooltipCreated(GameObject parent, Control tooltip)

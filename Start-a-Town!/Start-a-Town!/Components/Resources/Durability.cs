@@ -4,10 +4,11 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components.Resources
 {
-    class Durability : ResourceDef
+    class Durability : ResourceWorker
     {
-        public Durability() : base("Durability")
+        public Durability()
         {
+            this.AddThreshold("Durability", 1);
         }
         
         public override string Description { get; } = "Basic Durability resource";
@@ -17,7 +18,7 @@ namespace Start_a_Town_.Components.Resources
         {
             var count = materials.Count;
             var totaldensity = materials.Values.Sum(m => m.Density);
-            var dur = obj.GetResource(this);
+            var dur = obj.GetResource(this.ResourceDef);
             dur.Initialize(this.BaseMax + totaldensity / count, 1);
             dur.Value = 1; // HACK
         }

@@ -79,7 +79,7 @@ namespace Start_a_Town_
         }
         protected virtual float GetEnergyConsumption(float workAmount, int skillLevel)
         {
-            const int skillFactor = 20;
+            const int skillFactor = 1;// 20;
             return workAmount / (skillFactor * skillLevel);
         }
 

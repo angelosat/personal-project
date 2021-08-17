@@ -2,10 +2,9 @@
 
 namespace Start_a_Town_
 {
-    class HitPoints : ResourceDef
+    class HitPoints : ResourceWorker
     {
         public HitPoints()
-            : base("HitPoints")
         {
             this.AddThreshold("Hit points");
         }

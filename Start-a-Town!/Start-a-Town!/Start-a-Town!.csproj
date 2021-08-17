@@ -196,6 +196,7 @@
     <Compile Include="Components\Resources\HitPoints.cs" />
     <Compile Include="Components\Resources\ResourceDefOf.cs" />
     <Compile Include="Components\Resources\ResourceThreshold.cs" />
+    <Compile Include="Components\Resources\ResourceWorker.cs" />
     <Compile Include="Components\Skills\SkillDefOf.cs" />
     <Compile Include="Components\Skills\ToolUseDefOf.cs" />
     <Compile Include="Components\Stats\ValueGetters\StatArmor.cs" />

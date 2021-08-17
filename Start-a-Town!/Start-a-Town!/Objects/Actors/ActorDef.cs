@@ -13,7 +13,5 @@
         {
             this.ItemClass = typeof(Actor);
         }
-
-
     }
 }

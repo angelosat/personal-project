@@ -29,7 +29,7 @@ namespace Start_a_Town_
             get => this._value;
             set => this._value = Math.Max(0, Math.Min(value, this.Max));
         }
-        public ResourceThreshold CurrentThreshold => this.ResourceDef.GetCurrentThreshold(this);
+        public ResourceThreshold CurrentThreshold => this.ResourceDef.Worker.GetCurrentThreshold(this);
         public Progress Rec = ResourceDef.Recovery;
         public float Percentage { get => this.Value / this.Max; set => this.Value = this.Max * value; }
         public float Min => 0;
@@ -45,7 +45,7 @@ namespace Start_a_Town_
 
         public void Tick(GameObject parent)
         {
-            this.ResourceDef.Tick(parent, this);
+            this.ResourceDef.Worker.Tick(parent, this);
             //this.Value += this.ModValuePerTick;
             if (this.TicksPerRecoverOne > 0)
             {
@@ -67,7 +67,7 @@ namespace Start_a_Town_
 
         internal virtual void HandleRemoteCall(GameObject parent, ObjectEventArgs e)
         {
-            this.ResourceDef.HandleRemoteCall(parent, e, this);
+            this.ResourceDef.Worker.HandleRemoteCall(parent, e, this);
         }
         public void SyncAdjust(Entity parent, float value)
         {
@@ -75,7 +75,7 @@ namespace Start_a_Town_
         }
         public void Adjust(float add)
         {
-            this.ResourceDef.Add(add, this);
+            this.ResourceDef.Worker.Add(add, this);
         }
         public Resource Initialize(float max, float initPercentage)
         {
@@ -89,22 +89,22 @@ namespace Start_a_Town_
 
         internal void HandleMessage(GameObject parent, ObjectEventArgs e)
         {
-            this.ResourceDef.HandleMessage(this, parent, e);
+            this.ResourceDef.Worker.HandleMessage(this, parent, e);
         }
 
         internal void OnNameplateCreated(GameObject parent, Nameplate plate)
         {
-            this.ResourceDef.OnHealthBarCreated(parent, plate, this);
+            this.ResourceDef.Worker.OnHealthBarCreated(parent, plate, this);
         }
 
         internal void OnHealthBarCreated(GameObject parent, Nameplate plate)
         {
-            this.ResourceDef.OnHealthBarCreated(parent, plate, this);
+            this.ResourceDef.Worker.OnHealthBarCreated(parent, plate, this);
         }
 
         internal Control GetControl()
         {
-            return this.ResourceDef.GetControl(this);
+            return this.ResourceDef.Worker.GetControl(this);
         }
 
         public override string ToString()
@@ -147,18 +147,19 @@ namespace Start_a_Town_
             this.Modifiers.Add(resourceModifier);
         }
 
-        internal float GetThresholdDepth()
-        {
-            return this.ResourceDef.GetThresholdDepth(this);
-        }
         public float GetThresholdValue(int index)
         {
-            return this.ResourceDef.GetThresholdValue(this, index);
+            return this.ResourceDef.Worker.GetThresholdValue(this, index);
         }
         static Resource()
         {
             Packets.Init();
         }
+        internal void InitMaterials(Entity obj, Dictionary<string, MaterialDef> materials)
+        {
+            this.ResourceDef.Worker.InitMaterials(obj, materials);
+        }
+
         class Packets
         {
             static int PacketSyncAdjust;

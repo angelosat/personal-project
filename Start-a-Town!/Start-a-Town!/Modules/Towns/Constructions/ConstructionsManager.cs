@@ -14,18 +14,18 @@ namespace Start_a_Town_
 
         public override string Name => "Constructions";
 
-        public static ConstructionCategoryWalls Walls = new();
-        public static ConstructionCategoryDoors Doors = new();
-        public static ConstructionCategoryProduction Production = new();
-        public static ConstructionCategoryFurniture Furniture = new();
+        //public static ConstructionCategoryWalls Walls = new();
+        //public static ConstructionCategoryDoors Doors = new();
+        //public static ConstructionCategoryProduction Production = new();
+        //public static ConstructionCategoryFurniture Furniture = new();
 
-        public static List<ConstructionCategory> AllCategories = new()
-        {
-            Walls,
-            Doors,
-            Production,
-            Furniture
-        };
+        //public static List<ConstructionCategory> AllCategories = new()
+        //{
+        //    Walls,
+        //    Doors,
+        //    Production,
+        //    Furniture
+        //};
         static readonly Lazy<GuiConstructionsBrowser> WindowBuild = new();
         static readonly IHotkey HotkeyBuild;
         static ConstructionsManager()

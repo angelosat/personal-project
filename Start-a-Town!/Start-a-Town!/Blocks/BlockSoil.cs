@@ -31,7 +31,7 @@ namespace Start_a_Town_
                 new Ingredient()
                 .SetAllow(RawMaterialDefOf.Bags, true)
                 .SetAllow(MaterialDefOf.Soil, true);
-            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Walls;
             this.DefaultMaterial = MaterialDefOf.Soil;
             this.DrawMaterialColor = false;
         }

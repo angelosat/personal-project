@@ -23,7 +23,7 @@ namespace Start_a_Town_
             this.BuildProperties.ToolSensitivity = 1;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.BuildProperties.Complexity = 10;
-            this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Furniture;
             this.TopParts = new AtlasDepthNormals.Node.Token[] {
                 Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
                 Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),

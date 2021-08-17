@@ -93,8 +93,7 @@ namespace Start_a_Town_
             Orientations[1] = Atlas.Load("blocks/doors/doore", BlockDepthMap, NormalMap);
             Orientations[2] = Atlas.Load("blocks/doors/doorn", ndepth, nnormals);
             Orientations[3] = Atlas.Load("blocks/doors/doorw", wdepth, wnormals);
-
-            this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Doors;
         }
         public override bool IsDeconstructible => true;
 

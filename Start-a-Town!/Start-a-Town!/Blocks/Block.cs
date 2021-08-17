@@ -354,7 +354,7 @@ namespace Start_a_Town_
             set => this.BuildProperties.Ingredient = value;
         }
         public int BuildComplexity => this.BuildProperties.Complexity;
-        public ConstructionCategory ConstructionCategory => this.BuildProperties.Category;
+        public ConstructionCategoryDef ConstructionCategory => this.BuildProperties.Category;
         public readonly bool HasData;
 
         [Obsolete]
@@ -861,14 +861,6 @@ namespace Start_a_Town_
         {
             map.GetBlockEntity(global)?.DrawSelected(sb, cam, map, global);
             this.OnDrawSelected(sb, cam, map, global);
-        }
-
-        protected void ToggleConstructionCategory(ConstructionCategory category, bool v)
-        {
-            if (v)
-                category.Add(this);
-            else
-                category.Remove(this);
         }
     }
 }

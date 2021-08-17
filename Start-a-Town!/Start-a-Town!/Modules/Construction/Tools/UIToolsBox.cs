@@ -10,7 +10,7 @@ namespace Start_a_Town_
     {
         Panel PanelButtons;
         public BuildToolDef LastSelectedTool;
-        ConstructionCategory CurrentCategory;
+        ConstructionCategoryDef CurrentCategory;
         Action<BuildToolDef> OnToolSelectedCallback;
 
         public UIToolsBox(Action<BuildToolDef> onToolSelected)
@@ -34,8 +34,8 @@ namespace Start_a_Town_
                 var cat = product.Block.ConstructionCategory;
                 if (cat != this.CurrentCategory)
                 {
-                    cat.ProductGetter = this.GetCurrentProduct;
-                    this.Refresh(cat.GetAvailableTools());
+                    //cat.ProductGetter = this.GetCurrentProduct;
+                    this.Refresh(cat.Tools);//.GetAvailableTools());
                 }
                 this.CurrentCategory = cat;
             }

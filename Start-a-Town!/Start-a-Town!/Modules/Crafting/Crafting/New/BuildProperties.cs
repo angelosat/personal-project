@@ -4,7 +4,7 @@
     {
         public Ingredient Ingredient;
         public float ToolSensitivity;
-        public ConstructionCategory Category;
+        public ConstructionCategoryDef Category;
         public int Complexity = 1;
         public BuildProperties()
         {

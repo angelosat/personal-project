@@ -12,8 +12,7 @@ namespace Start_a_Town_
             Orientations[1] = Atlas.Load("blocks/furniture/chair2", Block.HalfBlockDepthMap, Block.NormalMap);
             Orientations[2] = Atlas.Load("blocks/furniture/chairback2", Block.HalfBlockDepthMap, Block.NormalMap);
             Orientations[3] = Atlas.Load("blocks/furniture/chairback", Block.HalfBlockDepthMap, Block.NormalMap);
-
-            this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Furniture;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
         public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)

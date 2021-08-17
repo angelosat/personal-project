@@ -9,23 +9,21 @@ namespace Start_a_Town_.Core
     class BlockBrowserConstruction : GroupBox
     {
         readonly Dictionary<Block, ProductMaterialPair> LastSelectedVariant = new();
-        ConstructionCategory SelectedCategory;
+        ConstructionCategoryDef SelectedCategory;
         readonly Panel Panel_Blocks;
         readonly UIToolsBox ToolBox;
         Block CurrentSelected;
-        readonly Dictionary<ConstructionCategory, ButtonGridIcons<Block>> Categories = new();
-       
+        readonly Dictionary<ConstructionCategoryDef, ButtonGridIcons<Block>> Categories = new();
+
         public BlockBrowserConstruction()
         {
             this.Panel_Blocks = new Panel() { AutoSize = true };
 
-            var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air LOL FIX THIS
-            //this.ToolBox = new UIToolsBox(this.OnToolSelected);
             this.ToolBox = new UIToolsBox(this.OnToolSelectedNew);
-            var categories = ConstructionsManager.AllCategories;
+            var categories = Block.Registry.Values.Where(b => b.BuildProperties.Category is not null && b.Ingredient is not null).GroupBy(b => b.BuildProperties.Category);
             foreach (var cat in categories)
             {
-                var list = cat.List.Where(b => b.Ingredient != null);
+                var list = cat;
 
                 var grid = new ButtonGridIcons<Block>(4, 6, list, (slot, block) =>
                 {
@@ -37,7 +35,7 @@ namespace Start_a_Town_.Core
                         this.CurrentSelected = block;
                         var product = this.GetLastSelectedVariantOrDefault(block);
                         this.ToolBox.SetProduct(product);
-                    this.OnToolSelectedNew(this.ToolBox.LastSelectedTool);//.GetType());
+                        this.OnToolSelectedNew(this.ToolBox.LastSelectedTool);
                         var win = this.ToolBox.GetWindow();
                         if (win is null)
                         {
@@ -47,22 +45,18 @@ namespace Start_a_Town_.Core
                         if (win.Show())
                             win.Location = this.GetWindow().BottomLeft;
                     };
-                    slot.RightClickAction = () =>
-                    {
-                        UIBlockVariationPickerNew.Refresh(block, this.OnVariationSelected);
-                    };
-
+                    slot.RightClickAction = () => UIBlockVariationPickerNew.Refresh(block, this.OnVariationSelected);
                     slot.HoverFunc = () => $"{block.Name}\n{this.GetLastSelectedVariantOrDefault(block).Requirement}\nTool necessity: {block.BuildProperties.ToolSensitivity:##0%}\nRight click to select variation";
                 })
                 { Location = this.Panel_Blocks.Controls.BottomLeft };
-                this.Categories[cat] = grid;
+                this.Categories[cat.Key] = grid;
             }
             this.SelectedCategory = this.Categories.First().Key;
             this.Panel_Blocks.Controls.Add(this.Categories[this.SelectedCategory]);
 
-            var cbox = new ComboBoxNew<ConstructionCategory>(
-                        new ButtonGridGenericNew<ConstructionCategory>(
-                            categories,
+            var cbox = new ComboBoxNew<ConstructionCategoryDef>(
+                        new ButtonGridGenericNew<ConstructionCategoryDef>(
+                            Def.GetDefs<ConstructionCategoryDef>(),
                             (c, b) =>
                             {
                                 b.LeftClickAction = () =>
@@ -72,7 +66,7 @@ namespace Start_a_Town_.Core
                                     this.SelectedCategory = c;
                                 };
                             }),
-                        this.SelectedCategory.Name,
+                        this.SelectedCategory.Label,
                         this.Categories[this.SelectedCategory].Width);
 
             this.AddControlsVertically(
@@ -90,7 +84,7 @@ namespace Start_a_Town_.Core
 
         private ProductMaterialPair GetLastSelectedVariantOrDefault(Block block)
         {
-            if(!this.LastSelectedVariant.TryGetValue(block, out var lastVariant))
+            if (!this.LastSelectedVariant.TryGetValue(block, out var lastVariant))
             {
                 lastVariant = new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First());
                 this.LastSelectedVariant[block] = lastVariant;

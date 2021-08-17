@@ -13,7 +13,7 @@ namespace Start_a_Town_
             this.LoadVariations("sand1");
             this.Ingredient = new Ingredient()//RawMaterialDef.Bags, MaterialDefOf.Sand, null, 1);
                 .SetAllow(MaterialDefOf.Sand, true);
-            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Walls;
         }
         public override IEnumerable<MaterialDef> GetEditorVariations()
         {

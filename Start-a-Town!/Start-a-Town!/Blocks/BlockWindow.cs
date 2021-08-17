@@ -32,10 +32,9 @@ namespace Start_a_Town_
             };
 
             this.Variations.Add(this.PartsSeparate.First().First().First());
-            this.ToggleConstructionCategory(ConstructionsManager.Doors, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Doors;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
-
 
         /// <summary>
         /// 

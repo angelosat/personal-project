@@ -10,7 +10,7 @@ namespace Start_a_Town_
             var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/stool").ToGrayscale();
             this.Variations.Add(Atlas.Load("stoolgrayscale", tex, BlockDepthMap, NormalMap));
             this.Furniture = FurnitureDefOf.Table;
-            this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Furniture;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.UtilitiesProvided.Add(Utility.Types.Eating);
         }

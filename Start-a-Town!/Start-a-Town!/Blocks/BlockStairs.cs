@@ -17,11 +17,6 @@ namespace Start_a_Town_
         static Texture2D Normal3 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/stairs/stairs3normal");
         static Texture2D Normal4 = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/stairs/stairs4normal");
 
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.LightWood;
-        //}
-
         AtlasDepthNormals.Node.Token[] Parts = new AtlasDepthNormals.Node.Token[4];
         public BlockStairs()
             : base("Stairs", opaque: false)
@@ -31,7 +26,7 @@ namespace Start_a_Town_
             this.Parts[2] = Block.Atlas.Load("blocks/stairs/stairs3", Depth3, Normal3);
             this.Parts[3] = Block.Atlas.Load("blocks/stairs/stairs4", Depth4, Normal4);
             this.Variations.Add(this.Parts.First());
-            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Walls;
             this.Ingredient = new Ingredient().IsBuildingMaterial();
         }
         public override float GetHeight(byte data, float x, float y)

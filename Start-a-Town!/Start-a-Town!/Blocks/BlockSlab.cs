@@ -10,7 +10,7 @@ namespace Start_a_Town_
             var txt = Block.Atlas.Load("blocks/slab", Block.QuarterBlockMapDepth, Block.QuarterBlockMapNormal);
             this.Variations.Add(txt);
             this.Ingredient = new Ingredient(RawMaterialDefOf.Ingots, null, null, 1);
-            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Walls;
         }
         public override float GetPathingCost(byte data)
         {

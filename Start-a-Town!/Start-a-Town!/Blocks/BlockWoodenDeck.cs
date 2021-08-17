@@ -15,7 +15,7 @@ namespace Start_a_Town_
             this.Variations.Add(this.GrayScale);
             this.Ingredient = new Ingredient(RawMaterialDefOf.Planks, null, null, 1);// 4);
             this.BuildProperties.Complexity = 2;
-            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Walls;
         }
 
         public override Particles.ParticleEmitterSphere GetEmitter()

@@ -11,7 +11,7 @@ namespace Start_a_Town_
             this.BuildProperties = new BuildProperties(new Ingredient(item: RawMaterialDefOf.Logs), 0);
             this.Variations.Add(Block.Atlas.Load("blocks/campfire", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap));
             this.BuildProperties.Complexity = 2;
-            this.ToggleConstructionCategory(ConstructionsManager.Production, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Production;
             this.Ingredient = new Ingredient().SetAllow(RawMaterialDefOf.Logs, true);
         }
         public override LootTable GetLootTable(byte data)

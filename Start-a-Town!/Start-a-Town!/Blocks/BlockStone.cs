@@ -12,7 +12,7 @@
             this.Ingredient = new Ingredient()//RawMaterialDef.Boulders, MaterialDefOf.Stone, null, 1);
                 .SetAllow(RawMaterialDefOf.Boulders, true)
                 .SetAllow(MaterialDefOf.Stone, true);
-            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Walls;
         }
         public override Particles.ParticleEmitterSphere GetEmitter()
         {

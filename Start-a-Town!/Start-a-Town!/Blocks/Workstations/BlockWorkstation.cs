@@ -16,7 +16,7 @@ namespace Start_a_Town_
         {
             this.BlockEntityType = blockEntityType;
             this.Variations.Add(this.Orientations.First());
-            this.ToggleConstructionCategory(ConstructionsManager.Production, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Production;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.Ingredient.MaterialVolume = 1 / 4f;
         }

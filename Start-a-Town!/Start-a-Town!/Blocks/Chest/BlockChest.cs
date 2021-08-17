@@ -12,7 +12,7 @@ namespace Start_a_Town_
         {
             var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chest").ToGrayscale();
             this.Variations.Add(Atlas.Load("chestgrayscale", tex, BlockDepthMap, ChestNormalMap));
-            this.ToggleConstructionCategory(ConstructionsManager.Furniture, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Furniture;
         }
         public override IEnumerable<MaterialDef> GetEditorVariations()
         {

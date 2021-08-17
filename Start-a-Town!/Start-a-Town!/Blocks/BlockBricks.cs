@@ -11,7 +11,7 @@ namespace Start_a_Town_
         {
             this.LoadVariations("bricks/bricks");
             this.BuildProperties.Complexity = 20;
-            this.ToggleConstructionCategory(ConstructionsManager.Walls, true);
+            this.BuildProperties.Category = ConstructionCategoryDefOf.Walls;
             this.Ingredient =// new Ingredient(RawMaterialDef.Boulders, null, null, 1);
                 new Ingredient()
                     .SetAllow(MaterialTypeDefOf.Metal, true)

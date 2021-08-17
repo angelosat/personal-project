@@ -21,9 +21,9 @@ namespace Start_a_Town_
             PacketDesignation.Init();
 
             Hotkey = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, "Designations", ToggleGui, System.Windows.Forms.Keys.U);
-            
-            foreach(var d in DesignationDef.Dictionary)
-                HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, $"Designate: {d.Key}", delegate { SetTool(d.Value); });
+
+            foreach (var d in Def.GetDefs<DesignationDef>())
+                HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, $"Designate: {d.Label}", delegate { SetTool(d); });
         }
 
         internal ObservableCollection<IntVec3> GetDesignations(DesignationDef des)
@@ -45,7 +45,7 @@ namespace Start_a_Town_
                 new Dictionary<DesignationDef, ObservableCollection<IntVec3>>() {
                 { DesignationDef.Deconstruct, new ObservableCollection<IntVec3>() },
                 { DesignationDef.Mine, new ObservableCollection<IntVec3>()},
-                { DesignationDef.Switch, new ObservableCollection<IntVec3>()} 
+                { DesignationDef.Switch, new ObservableCollection<IntVec3>()}
             });
 
             Renderers.Add(DesignationDef.Deconstruct, new(Designations[DesignationDef.Deconstruct]));
@@ -115,13 +115,12 @@ namespace Start_a_Town_
 
         private void HandleBlocksChanged(IEnumerable<IntVec3> globals)
         {
-            foreach (var desType in Designations)
+            foreach (var des in Designations)
             {
-                var des = DesignationDef.Dictionary[desType.Key.Name];
                 foreach (var global in globals)
                 {
-                    if (!des.IsValid(this.Map, global))
-                        desType.Value.Remove(global);
+                    if (!des.Key.IsValid(this.Map, global))
+                        des.Value.Remove(global);
                 }
             }
         }
@@ -138,7 +137,7 @@ namespace Start_a_Town_
         }
         public override void Write(System.IO.BinaryWriter w)
         {
-            foreach(var des in Designations)
+            foreach (var des in Designations)
                 w.Write(des.Value);
         }
         public override void Read(System.IO.BinaryReader r)
@@ -163,7 +162,7 @@ namespace Start_a_Town_
                 _gui.Location = Controller.Instance.MouseLocation;
             }
             _gui.Toggle();
-           
+
             Button createButton(DesignationDef d)
             {
                 var btn = new Button(d.Label, () => SetTool(d), 96) { Tag = d };
@@ -188,7 +187,7 @@ namespace Start_a_Town_
             var selectedCells = SelectionManager.GetSelectedCells();
             var fromblockentities = selectedCells.Select(this.Map.GetBlockEntity).OfType<BlockEntity>().Select(b => b.OriginGlobal);
             selectedCells = selectedCells.Concat(fromblockentities).Distinct();
-            
+
             var areTask = selectedCells.Where(e => this.Designations.Values.Any(t => t.Contains(e)));
             foreach (var d in this.Designations) // need to handle construction designations differently because of multi-celled designations 
             {
@@ -200,10 +199,10 @@ namespace Start_a_Town_
             }
 
             var areNotTask = selectedCells.Except(areTask).Where(t =>
-                DesignationDef.All.Any(d => d.IsValid(this.Town.Map, t))).ToList();
+                AllDesignationDefs.Any(d => d.IsValid(this.Town.Map, t))).ToList();
 
-            var splits = DesignationDef.All.ToDictionary(d => d, d => areNotTask.FindAll(t => d.IsValid(this.Map, t)));
-            foreach (var s in DesignationDef.All)
+            var splits = AllDesignationDefs.ToDictionary(d => d, d => areNotTask.FindAll(t => d.IsValid(this.Map, t)));
+            foreach (var s in AllDesignationDefs)
             {
                 if (!splits.TryGetValue(s, out var list) || !list.Any())
                     SelectionManager.RemoveButton(s.IconAdd);
@@ -216,6 +215,9 @@ namespace Start_a_Town_
                 PacketDesignation.Send(Client.Instance, DesignationDef.Remove, positions, false);
             }
         }
+        List<DesignationDef> designationDefs;
+        List<DesignationDef> AllDesignationDefs => designationDefs ??= Def.GetDefs<DesignationDef>().Except(new DesignationDef[] { DesignationDef.Remove }).ToList();
+
         static public readonly Icon MineIcon = new(ItemContent.PickaxeFull);
         private static readonly IHotkey Hotkey;
 

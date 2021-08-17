@@ -252,6 +252,7 @@
     <Compile Include="Modules\Crafting\Crafting\Reaction.Product.ProductMaterialPair.cs" />
     <Compile Include="Components\GearType.cs" />
     <Compile Include="Components\IEntity.cs" />
+    <Compile Include="Modules\Towns\Designations\DesignationWorker.cs" />
     <Compile Include="Modules\Towns\Stockpiles\ItemFilter.cs" />
     <Compile Include="Modules\Towns\Storage\StorageManager.cs" />
     <Compile Include="Modules\Towns\Tasks\InteractionDeconstruct.cs" />

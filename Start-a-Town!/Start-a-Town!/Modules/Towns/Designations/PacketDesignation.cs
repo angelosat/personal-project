@@ -26,18 +26,18 @@ namespace Start_a_Town_
         }
         static public void Send(INetwork net, DesignationDef designation, Vector3 begin, Vector3 end, bool remove)
         {
-            var stream = net.GetOutgoingStream();
-            stream.Write(p);
-            stream.Write(designation.Name);
-            stream.Write(remove);
-            stream.Write((int)SelectionType.Box);
-            stream.Write(begin);
-            stream.Write(end);
+            var w = net.GetOutgoingStream();
+            w.Write(p);
+            designation.Write(w);
+            w.Write(remove);
+            w.Write((int)SelectionType.Box);
+            w.Write(begin);
+            w.Write(end);
         }
         static public void Receive(INetwork net, BinaryReader r)
         {
             var typeName = r.ReadString();
-            var designation = DesignationDef.Dictionary[typeName];
+            var designation = r.ReadDef<DesignationDef>();
             var remove = r.ReadBoolean();
             var selectionType = (SelectionType)r.ReadInt32();
             List<IntVec3> positions;

@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Start_a_Town_.AI;
-using Start_a_Town_.Core;
 
 namespace Start_a_Town_
 {
     public enum TargetIndex { A, B, C, Tool = 15 }
     public class AITask
     {
-        static readonly Dictionary<string, Func<AITask>> Factory = new();
-
         public TargetArgs GetTarget(TargetIndex targetInd)
         {
             return targetInd switch

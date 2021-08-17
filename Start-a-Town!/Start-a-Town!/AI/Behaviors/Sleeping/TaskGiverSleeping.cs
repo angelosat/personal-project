@@ -24,6 +24,8 @@ namespace Start_a_Town_.AI
             {
                 // determine exact cell from which to operate bed
                 var bedglobal = bed.OriginGlobal;
+                if (!actor.CanReserve(bedglobal))
+                    continue;
                 var bedCell = map.GetCell(bedglobal);
                 var operatingPositions = bedCell.GetOperatingPositionsGlobal(bedglobal);
                 foreach (var p in operatingPositions)

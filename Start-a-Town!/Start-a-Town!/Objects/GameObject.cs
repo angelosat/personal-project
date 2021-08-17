@@ -1384,7 +1384,7 @@ namespace Start_a_Town_
             var global = this.Global;
             var below = global.CeilingZ().Below().ToCell();
             var belownode = this.Map.GetNodeAt(below);
-            if (belownode is null)
+            if (belownode is not null)
             {
                 return below;
             }

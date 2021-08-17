@@ -31,5 +31,13 @@ namespace Start_a_Town_
             var needenergy = this.Actor.GetNeed(NeedDef.Energy);
             return needenergy.Percentage == 1;
         }
+
+        protected override bool InitExtraReservations()
+        {
+            return
+                this.Actor.Reserve(this.Task.TargetA) &&
+                this.Actor.Reserve(this.Task.TargetB)
+                ;
+        }
     }
 }

@@ -2,7 +2,6 @@
 using Start_a_Town_.Net;
 using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -114,11 +113,11 @@ namespace Start_a_Town_
 
         public void Edit()
         {
-            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, DesignationDef.Mine, a, b, r)));
+            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, r, a, b, DesignationDefOf.Mine)));
         }
         public void EditDeconstruct()
         {
-            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, DesignationDef.Deconstruct, a, b, r)));
+            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, r, a, b, DesignationDefOf.Deconstruct)));
         }
     }
 }

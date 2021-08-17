@@ -11,7 +11,7 @@ namespace Start_a_Town_
                 return null;
             var map = actor.Map;
             
-            var jobs = actor.Map.Town.DesignationManager.GetDesignations(DesignationDef.Mine);
+            var jobs = actor.Map.Town.DesignationManager.GetDesignations(DesignationDefOf.Mine);
 
             var mainhand = actor.GetEquipmentSlot(GearType.Mainhand);
 

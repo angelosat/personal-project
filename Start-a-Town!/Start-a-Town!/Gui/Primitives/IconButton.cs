@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,8 +25,13 @@ namespace Start_a_Town_.UI
             }
         }
 
-        readonly Icon[] IconStack = new Icon[] { };
-
+        //readonly Icon[] IconStack = new Icon[] { };
+        readonly List<Icon> IconStack = new();
+        public IconButton AddOverlay(Icon icon)
+        {
+            this.IconStack.Add(icon);
+            return this;
+        }
         public override int Width
         {
             get
@@ -117,7 +123,9 @@ namespace Start_a_Town_.UI
 
         public IconButton(params Icon[] icons) : this()
         {
-            this.IconStack = icons;
+            //this.IconStack = icons;
+            foreach (var i in icons)
+                this.IconStack.Add(i);
         }
         public override Vector2 ScreenLocation { get => base.ScreenLocation + new Vector2(0, (Pressed ? 1 : 0)); }
         public override void Validate(bool cascade = false)

@@ -8,7 +8,7 @@ namespace Start_a_Town_
         public const TargetIndex DeconstructInd = TargetIndex.A;
         protected override IEnumerable<Behavior> GetSteps()
         {
-            this.FailOnNoDesignation(DeconstructInd, DesignationDef.Deconstruct);
+            this.FailOnNoDesignation(DeconstructInd, DesignationDefOf.Deconstruct);
             this.FailOnCellStandedOn(DeconstructInd);
             yield return new BehaviorGrabTool();
             yield return new BehaviorGetAtNewNew(DeconstructInd);

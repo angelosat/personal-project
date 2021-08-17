@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Linq;
 
 namespace Start_a_Town_.UI
 {

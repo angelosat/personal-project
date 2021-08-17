@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Start_a_Town_;
-using Start_a_Town_.Blocks;
-using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Modules.Construction;
+﻿using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
@@ -14,6 +10,8 @@ namespace Start_a_Town_
 {
     public class ConstructionsManager : TownComponent
     {
+        public static readonly QuickButton IconCancel = new QuickButton(UI.Icon.X, KeyBind.Cancel) { HoverText = "Cancel designation" };
+
         public override string Name => "Constructions";
 
         public static ConstructionCategoryWalls Walls = new();
@@ -100,7 +98,7 @@ namespace Start_a_Town_
 
         private void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
-            if (designation == DesignationDef.Remove)
+            if (designation is null)// == DesignationDefOf.Remove)
             {
                 foreach (var pos in positions)
                 {
@@ -162,11 +160,11 @@ namespace Start_a_Town_
             var selectedDesignations = cells.Intersect(this.Designations);
             if (!selectedDesignations.Any())
                 return;
-            SelectionManager.AddButton(DesignationDef.IconCancel, cancel, selectedDesignations);
+            SelectionManager.AddButton(IconCancel, cancel, selectedDesignations);
 
             static void cancel(List<TargetArgs> positions)
             {
-                PacketDesignation.Send(Client.Instance, DesignationDef.Remove, positions, false);
+                PacketDesignation.Send(Client.Instance, false, positions, null);// DesignationDefOf.Remove, positions, false);
             }
         }
         public void Handle(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
@@ -217,9 +215,9 @@ namespace Start_a_Town_
         DesignationDef DetermineBlockRemovalDesignation(Cell cell)
         {
             if (cell.Block.IsDeconstructible)
-                return DesignationDef.Deconstruct;
+                return DesignationDefOf.Deconstruct;
             else if (cell.Block.IsMinable)
-                return DesignationDef.Mine;
+                return DesignationDefOf.Mine;
             else
                 throw new Exception();
         }

@@ -6,7 +6,7 @@
         {
             if (!actor.HasJob(JobDefOf.Builder))
                 return null;
-            var allPositions = actor.Map.Town.DesignationManager.GetDesignations(DesignationDef.Deconstruct);
+            var allPositions = actor.Map.Town.DesignationManager.GetDesignations(DesignationDefOf.Deconstruct);
             foreach(var pos in allPositions)
             {
                 if (!actor.CanReserve(pos))

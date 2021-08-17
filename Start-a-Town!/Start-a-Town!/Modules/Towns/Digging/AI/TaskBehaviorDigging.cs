@@ -8,7 +8,7 @@ namespace Start_a_Town_
         public const TargetIndex MineInd = TargetIndex.A;
         protected override IEnumerable<Behavior> GetSteps()
         {
-            this.FailOnNoDesignation(MineInd, DesignationDef.Mine);
+            this.FailOnNoDesignation(MineInd, DesignationDefOf.Mine);
             this.FailOnCellStandedOn(MineInd);
             yield return new BehaviorGrabTool();
             var gotomine = new BehaviorGetAtNewNew(MineInd);

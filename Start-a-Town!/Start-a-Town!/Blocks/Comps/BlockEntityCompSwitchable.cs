@@ -13,7 +13,7 @@ namespace Start_a_Town_
         public void Toggle(GameObject actor, TargetArgs target)
         {
             this.SwitchedOn = !this.SwitchedOn;
-            actor.Map.Town.DesignationManager.RemoveDesignation(DesignationDef.Switch, target.Global);
+            actor.Map.Town.DesignationManager.RemoveDesignation(DesignationDefOf.Switch, target.Global);
         }
         public override void AddSaveData(SaveTag tag)
         {

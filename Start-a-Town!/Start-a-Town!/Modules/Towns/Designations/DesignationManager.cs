@@ -43,14 +43,14 @@ namespace Start_a_Town_
         {
             Designations = new ReadOnlyDictionary<DesignationDef, ObservableCollection<IntVec3>>(
                 new Dictionary<DesignationDef, ObservableCollection<IntVec3>>() {
-                { DesignationDef.Deconstruct, new ObservableCollection<IntVec3>() },
-                { DesignationDef.Mine, new ObservableCollection<IntVec3>()},
-                { DesignationDef.Switch, new ObservableCollection<IntVec3>()}
+                { DesignationDefOf.Deconstruct, new ObservableCollection<IntVec3>() },
+                { DesignationDefOf.Mine, new ObservableCollection<IntVec3>()},
+                { DesignationDefOf.Switch, new ObservableCollection<IntVec3>()}
             });
 
-            Renderers.Add(DesignationDef.Deconstruct, new(Designations[DesignationDef.Deconstruct]));
-            Renderers.Add(DesignationDef.Mine, new(Designations[DesignationDef.Mine]));
-            Renderers.Add(DesignationDef.Switch, new(Designations[DesignationDef.Switch]));
+            Renderers.Add(DesignationDefOf.Deconstruct, new(Designations[DesignationDefOf.Deconstruct]));
+            Renderers.Add(DesignationDefOf.Mine, new(Designations[DesignationDefOf.Mine]));
+            Renderers.Add(DesignationDefOf.Switch, new(Designations[DesignationDefOf.Switch]));
         }
         internal void Add(DesignationDef designation, IntVec3 position, bool remove = false)
         {
@@ -58,7 +58,7 @@ namespace Start_a_Town_
         }
         internal void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
-            if (designation == DesignationDef.Remove)
+            if (designation is null)// == DesignationDef.Remove)
             {
                 foreach (var l in Designations)
                     foreach (var p in positions)
@@ -156,7 +156,7 @@ namespace Start_a_Town_
         {
             if (_gui is null)
             {
-                var box = new ListBoxNoScroll<DesignationDef, Button>(createButton, 0).AddItems(Ingame.CurrentMap.Town.DesignationManager.Designations.Keys.Prepend(DesignationDef.Remove));
+                var box = new ListBoxNoScroll<DesignationDef, Button>(createButton, 0).AddItems(Ingame.CurrentMap.Town.DesignationManager.Designations.Keys.Prepend(null));// DesignationDef.Remove));
                 box.BackgroundColor = Microsoft.Xna.Framework.Color.Black * .5f;
                 _gui = box.ToWindow("Designations").Transparent();
                 _gui.Location = Controller.Instance.MouseLocation;
@@ -165,7 +165,7 @@ namespace Start_a_Town_
 
             Button createButton(DesignationDef d)
             {
-                var btn = new Button(d.Label, () => SetTool(d), 96) { Tag = d };
+                var btn = new Button(d?.Label ?? "Remove", () => SetTool(d), 96) { Tag = d };
                 btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolDigging tool && btn.Tag == tool.DesignationDef;
                 return btn;
             }
@@ -173,12 +173,12 @@ namespace Start_a_Town_
 
         private static void SetTool(DesignationDef d)
         {
-            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, d, a, b, r)) { DesignationDef = d });
+            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, r, a, b, d)) { DesignationDef = d });
         }
 
         static void Cancel()
         {
-            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, DesignationDef.Remove, a, b, r)));
+            ToolManager.SetTool(new ToolDigging((a, b, r) => PacketDesignation.Send(Client.Instance, r, a, b, null)));
         }
         internal override void UpdateQuickButtons()
         {
@@ -212,18 +212,18 @@ namespace Start_a_Town_
 
             static void cancel(List<TargetArgs> positions)
             {
-                PacketDesignation.Send(Client.Instance, DesignationDef.Remove, positions, false);
+                PacketDesignation.Send(Client.Instance, false, positions, null);
             }
         }
         List<DesignationDef> designationDefs;
-        List<DesignationDef> AllDesignationDefs => designationDefs ??= Def.GetDefs<DesignationDef>().Except(new DesignationDef[] { DesignationDef.Remove }).ToList();
+        List<DesignationDef> AllDesignationDefs => designationDefs ??= Def.GetDefs<DesignationDef>().ToList();//.Except(new DesignationDef[] { DesignationDefOf.Remove }).ToList();
 
         static public readonly Icon MineIcon = new(ItemContent.PickaxeFull);
         private static readonly IHotkey Hotkey;
 
         static void MineAdd(List<TargetArgs> targets, DesignationDef des)
         {
-            PacketDesignation.Send(Client.Instance, des, targets, false);
+            PacketDesignation.Send(Client.Instance, false, targets, des);
         }
     }
 }

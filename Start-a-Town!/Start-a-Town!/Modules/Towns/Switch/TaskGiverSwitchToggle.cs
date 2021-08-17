@@ -4,7 +4,7 @@
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            var sites = actor.Map.Town.DesignationManager.GetDesignations(DesignationDef.Switch);
+            var sites = actor.Map.Town.DesignationManager.GetDesignations(DesignationDefOf.Switch);
 
             foreach (var site in sites)
             {

@@ -67,7 +67,7 @@ namespace Start_a_Town_
             }
             internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
             {
-                info.AddInfo(this.Product.GetGui());
+                info.AddInfo(new Label(this.Product));// this.Product.GetGui());
                 //var product = this.Product;
                 //var req = product.Requirement;
                 //info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Label} {req.Item.Label} {0} / {req.Amount}" });

@@ -504,7 +504,10 @@ namespace Start_a_Town_.UI
         {
             Instance.BoxInfo.RemoveControls(ctrl);
         }
-
+        public static void AddInfoNew(Control ctrl)
+        {
+            Instance.BoxInfo.AddControls(ctrl);
+        }
         public static void RemoveButton(IconButton button)
         {
             Instance.BoxButtons.RemoveControls(button);

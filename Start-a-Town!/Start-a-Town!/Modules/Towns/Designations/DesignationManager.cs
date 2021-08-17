@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Start_a_Town_;
+using Start_a_Town_.Net;
+using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Start_a_Town_.UI;
-using Start_a_Town_.Net;
-using Start_a_Town_;
 
 namespace Start_a_Town_
 {
@@ -48,31 +48,51 @@ namespace Start_a_Town_
             //    { DesignationDefOf.Mine, new ObservableCollection<IntVec3>()},
             //    { DesignationDefOf.Switch, new ObservableCollection<IntVec3>()}
             //});
-            Designations = new ReadOnlyDictionary<DesignationDef, ObservableHashSet<IntVec3>>( new Dictionary<DesignationDef, ObservableHashSet<IntVec3>>() {
+            this.Designations = new ReadOnlyDictionary<DesignationDef, ObservableHashSet<IntVec3>>(new Dictionary<DesignationDef, ObservableHashSet<IntVec3>>() {
                 { DesignationDefOf.Deconstruct, new ObservableHashSet<IntVec3>() },
                 { DesignationDefOf.Mine, new ObservableHashSet<IntVec3>()},
                 { DesignationDefOf.Switch, new ObservableHashSet<IntVec3>()}
                        });
 
-            Renderers.Add(DesignationDefOf.Deconstruct, new(Designations[DesignationDefOf.Deconstruct]));
-            Renderers.Add(DesignationDefOf.Mine, new(Designations[DesignationDefOf.Mine]));
-            Renderers.Add(DesignationDefOf.Switch, new(Designations[DesignationDefOf.Switch]));
+            this.Renderers.Add(DesignationDefOf.Deconstruct, new(this.Designations[DesignationDefOf.Deconstruct]));
+            this.Renderers.Add(DesignationDefOf.Mine, new(this.Designations[DesignationDefOf.Mine]));
+            this.Renderers.Add(DesignationDefOf.Switch, new(this.Designations[DesignationDefOf.Switch]));
+
+            foreach (var r in this.Designations.Values)
+                r.CollectionChanged += this.R_CollectionChanged;
         }
+
+        private void R_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Network.CurrentNetwork != Ingame.Net)
+                return;
+
+            var removed = e.OldItems?.Cast<IntVec3>() ?? Enumerable.Empty<IntVec3>();
+            foreach (var pos in removed)
+                if (SelectionManager.SingleSelectedCell == pos)
+                    SelectionManager.RemoveInfo(this.PendingDesignationLabel);
+
+            var added = e.NewItems?.Cast<IntVec3>() ?? Enumerable.Empty<IntVec3>();
+            foreach (var pos in added)
+                if (SelectionManager.SingleSelectedCell == pos)
+                    SelectionManager.AddInfoNew(this.UpdatePendingDesignationLabel(this.Designations.First(d => d.Value.Contains(pos)).Key));
+        }
+
         internal void Add(DesignationDef designation, IntVec3 position, bool remove = false)
         {
             this.Add(designation, new List<IntVec3>(1) { position }, remove);
         }
         internal void Add(DesignationDef designation, List<IntVec3> positions, bool remove)
         {
-            if (designation is null)// == DesignationDef.Remove)
+            if (designation is null)
             {
-                foreach (var l in Designations)
+                foreach (var l in this.Designations)
                     foreach (var p in positions)
                         l.Value.Remove(p);
             }
             else
             {
-                var list = Designations[designation];
+                var list = this.Designations[designation];
                 foreach (var pos in positions)
                 {
                     if (remove)
@@ -95,11 +115,11 @@ namespace Start_a_Town_
         }
         internal bool IsDesignation(IntVec3 global)
         {
-            return Designations.Values.Any(v => v.Contains(global));
+            return this.Designations.Values.Any(v => v.Contains(global));
         }
         internal bool IsDesignation(IntVec3 global, DesignationDef desType)
         {
-            var contains = Designations[desType].Contains(global);
+            var contains = this.Designations[desType].Contains(global);
             return contains;
         }
         internal override void OnGameEvent(GameEvent e)
@@ -107,7 +127,7 @@ namespace Start_a_Town_
             switch (e.Type)
             {
                 case Components.Message.Types.BlocksChanged:
-                    HandleBlocksChanged(e.Parameters[1] as IEnumerable<IntVec3>);
+                    this.HandleBlocksChanged(e.Parameters[1] as IEnumerable<IntVec3>);
                     break;
 
                 case Components.Message.Types.ZoneDesignation:
@@ -121,7 +141,7 @@ namespace Start_a_Town_
 
         private void HandleBlocksChanged(IEnumerable<IntVec3> globals)
         {
-            foreach (var des in Designations)
+            foreach (var des in this.Designations)
             {
                 foreach (var global in globals)
                 {
@@ -133,23 +153,23 @@ namespace Start_a_Town_
 
         protected override void AddSaveData(SaveTag tag)
         {
-            foreach (var des in Designations)
+            foreach (var des in this.Designations)
                 tag.Add(des.Value.ToList().Save(des.Key.Name));
         }
         public override void Load(SaveTag tag)
         {
-            foreach (var des in Designations.Keys.ToList())
-                tag.TryGetTag(des.Name, v => Designations[des].LoadIntVecs(v));
+            foreach (var des in this.Designations.Keys.ToList())
+                tag.TryGetTag(des.Name, v => this.Designations[des].LoadIntVecs(v));
         }
         public override void Write(System.IO.BinaryWriter w)
         {
-            foreach (var des in Designations)
+            foreach (var des in this.Designations)
                 w.Write(des.Value);
         }
         public override void Read(System.IO.BinaryReader r)
         {
-            foreach (var des in Designations.Keys.ToList())
-                Designations[des].ReadIntVec3(r);
+            foreach (var des in this.Designations.Keys.ToList())
+                this.Designations[des].ReadIntVec3(r);
         }
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
@@ -205,10 +225,10 @@ namespace Start_a_Town_
             }
 
             var areNotTask = selectedCells.Except(areTask).Where(t =>
-                AllDesignationDefs.Any(d => d.IsValid(this.Town.Map, t))).ToList();
+                this.AllDesignationDefs.Any(d => d.IsValid(this.Town.Map, t))).ToList();
 
-            var splits = AllDesignationDefs.ToDictionary(d => d, d => areNotTask.FindAll(t => d.IsValid(this.Map, t)));
-            foreach (var s in AllDesignationDefs)
+            var splits = this.AllDesignationDefs.ToDictionary(d => d, d => areNotTask.FindAll(t => d.IsValid(this.Map, t)));
+            foreach (var s in this.AllDesignationDefs)
             {
                 if (!splits.TryGetValue(s, out var list) || !list.Any())
                     SelectionManager.RemoveButton(s.IconAdd);
@@ -222,14 +242,29 @@ namespace Start_a_Town_
             }
         }
         List<DesignationDef> designationDefs;
-        List<DesignationDef> AllDesignationDefs => designationDefs ??= Def.GetDefs<DesignationDef>().ToList();//.Except(new DesignationDef[] { DesignationDefOf.Remove }).ToList();
+        List<DesignationDef> AllDesignationDefs => this.designationDefs ??= Def.GetDefs<DesignationDef>().ToList();//.Except(new DesignationDef[] { DesignationDefOf.Remove }).ToList();
 
-        static public readonly Icon MineIcon = new(ItemContent.PickaxeFull);
+        public static readonly Icon MineIcon = new(ItemContent.PickaxeFull);
         private static readonly IHotkey Hotkey;
 
         static void MineAdd(List<TargetArgs> targets, DesignationDef des)
         {
             PacketDesignation.Send(Client.Instance, false, targets, des);
+        }
+
+        GroupBox _pendingDesignationLabel;
+        GroupBox PendingDesignationLabel => this._pendingDesignationLabel ??= new GroupBox();
+        GroupBox UpdatePendingDesignationLabel(DesignationDef des)
+        {
+            this.PendingDesignationLabel.ClearControls();
+            this.PendingDesignationLabel.AddControlsLineWrap(Label.ParseNewNew("Designation: ", des));// ( new Label(des));
+            return this.PendingDesignationLabel;
+        }
+        internal override void OnTargetSelected(IUISelection info, TargetArgs targetArgs)
+        {
+            var pos = (IntVec3)targetArgs.Global;
+            if (this.Designations.FirstOrDefault(d => d.Value.Contains(pos)).Key is DesignationDef des)
+                info.AddInfo(this.UpdatePendingDesignationLabel(des));
         }
     }
 }

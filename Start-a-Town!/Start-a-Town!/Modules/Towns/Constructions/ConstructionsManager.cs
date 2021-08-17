@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.Components.Crafting;
+﻿using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
@@ -53,7 +52,7 @@ namespace Start_a_Town_
 
         internal override IEnumerable<Tuple<Func<string>, Action>> OnQuickMenuCreated()
         {
-            yield return new Tuple<Func<string>, Action>(()=>$"Build [{HotkeyBuild.GetLabel()}]", () => WindowBuild.Value.Toggle());
+            yield return new Tuple<Func<string>, Action>(() => $"Build [{HotkeyBuild.GetLabel()}]", () => WindowBuild.Value.Toggle());
         }
 
         public override void Write(BinaryWriter w)
@@ -109,15 +108,24 @@ namespace Start_a_Town_
                         this.Map.RemoveBlock(origin);
                     }
                     else if (this.PendingDesignations.ContainsKey(pos))
-                        RemovePendingDesignation(pos);
+                        this.RemovePendingDesignation(pos);
                 }
             }
+        }
+        void AddPendingDesignation(IntVec3 pos, int orientation, ProductMaterialPair product)
+        {
+            var pending = new ConstructionParams(pos, orientation, product);
+            this.PendingDesignations[pos] = pending;
+            if(Network.CurrentNetwork == Ingame.Net)
+                if (SelectionManager.SingleSelectedCell == pos)
+                    SelectionManager.AddInfoNew(UpdatePendingDesignationLabel(pending));
         }
         void RemovePendingDesignation(IntVec3 pos)
         {
             this.PendingDesignations.Remove(pos);
-            if (SelectionManager.SelectedCells.Contains(pos))
-                SelectionManager.RemoveInfo(PendingDesignationLabel);
+            if(Network.CurrentNetwork == Ingame.Net)
+                if (SelectionManager.SingleSelectedCell == pos)
+                    SelectionManager.RemoveInfo(this.PendingDesignationLabel);
         }
         bool TryHandlePendingDesignation(IntVec3 global)
         {
@@ -129,7 +137,7 @@ namespace Start_a_Town_
                 {
                     this.PlaceDesignation(global, 0, 0, pending.Orientation, pending.Product);
                     //this.PendingDesignations.Remove(global);
-                    RemovePendingDesignation(global);
+                    this.RemovePendingDesignation(global);
                     return true;
                 }
             }
@@ -169,11 +177,14 @@ namespace Start_a_Town_
                 return;
             SelectionManager.AddButton(IconCancel, cancel, selectedDesignations);
 
-            static void cancel(List<TargetArgs> positions) => PacketDesignation.Send(Client.Instance, false, positions, null);
+            static void cancel(List<TargetArgs> positions)
+            {
+                PacketDesignation.Send(Client.Instance, false, positions, null);
+            }
         }
         public void Handle(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
-            const bool cheat = false; 
+            const bool cheat = false;
             var map = this.Map;
             if (cheat)
                 PlaceDesignationsGodMode(args, product, positions, map);
@@ -193,7 +204,7 @@ namespace Start_a_Town_
                     else if (this.PendingDesignations.ContainsKey(pos))
                     {
                         var cell = map.GetCell(pos);
-                        var existingBlockRemovalDesignation = DetermineBlockRemovalDesignation(cell);
+                        var existingBlockRemovalDesignation = this.DetermineBlockRemovalDesignation(cell);
                         this.Town.DesignationManager.RemoveDesignation(existingBlockRemovalDesignation, pos);
                         //this.PendingDesignations.Remove(pos);
                         this.RemovePendingDesignation(pos);
@@ -211,12 +222,14 @@ namespace Start_a_Town_
                     else
                     {
                         var cell = map.GetCell(pos);
-                        var existingBlockRemovalDesignation = DetermineBlockRemovalDesignation(cell);
+                        var existingBlockRemovalDesignation = this.DetermineBlockRemovalDesignation(cell);
                         this.Town.DesignationManager.Add(existingBlockRemovalDesignation, pos);
-                        this.PendingDesignations[pos] = new ConstructionParams(pos, args.Orientation, product);
+                        //this.PendingDesignations[pos] = new ConstructionParams(pos, args.Orientation, product);
+                        this.AddPendingDesignation(pos, args.Orientation, product);
                     }
                 }
         }
+       
         DesignationDef DetermineBlockRemovalDesignation(Cell cell)
         {
             if (cell.Block.IsDeconstructible)
@@ -281,26 +294,28 @@ namespace Start_a_Town_
             throw new NotImplementedException();
         }
         GroupBox _pendingDesignationLabel;
-        GroupBox PendingDesignationLabel => _pendingDesignationLabel ??= new GroupBox();
+        GroupBox PendingDesignationLabel => this._pendingDesignationLabel ??= new GroupBox();
+        GroupBox UpdatePendingDesignationLabel(ConstructionParams pending)
+        {
+            this.PendingDesignationLabel.ClearControls();
+            this.PendingDesignationLabel.AddControlsLineWrap(Label.ParseNewNew("Pending Construction: ", pending));
+            return this.PendingDesignationLabel;
+        }
 
         internal override void OnTargetSelected(IUISelection info, TargetArgs targetArgs)
         {
             var global = (IntVec3)targetArgs.Global;
             if (this.PendingDesignations.TryGetValue(global, out var pending))
             {
-                PendingDesignationLabel.ClearControls();
-                info.AddInfo(PendingDesignationLabel.AddControlsVertically(
-                    new Label($"{pending.Product.Block.Name} (Pending Designation)"),
-                    pending.Product.GetGui()));
+                info.AddInfo(this.UpdatePendingDesignationLabel(pending));
             }
         }
-        class ConstructionParams : ISaveable, ISerializable//, ISelectable
+        class ConstructionParams : Inspectable, ISaveable, ISerializable
         {
             public IntVec3 Global;
             public int Orientation;
             public ProductMaterialPair Product;
-
-            public bool Exists => throw new NotImplementedException();
+            public override string Label => this.Product.Block.Label;
 
             public ConstructionParams()
             {

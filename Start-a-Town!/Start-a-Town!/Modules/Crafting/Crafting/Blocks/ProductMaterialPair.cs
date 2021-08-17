@@ -1,10 +1,8 @@
-﻿using Start_a_Town_.UI;
-using System;
-using System.IO;
+﻿using System.IO;
 
 namespace Start_a_Town_.Components.Crafting
 {
-    public class ProductMaterialPair
+    public class ProductMaterialPair : Inspectable
     {
         public override string ToString() => "Type: " + this.Block.Label + "\nData: " + this.Data.ToString();
         public string GetName() => this.Requirement.ToString();
@@ -58,11 +56,12 @@ namespace Start_a_Town_.Components.Crafting
             w.Write(this.Data);
             this.Requirement.Write(w);
         }
-
-        internal Control GetGui()
-        {
-            var req = this.Requirement;
-            return new Label() { TextFunc = () => $"{req.Material.Label} {req.Item.Label} {0} / {req.Amount}" };
-        }
+        public override string Label => $"{this.Requirement.Material.Label} {this.Requirement.Item.Label} {0} / {this.Requirement.Amount}";
+        //internal Control GetGui()
+        //{
+        //    var req = this.Requirement;
+        //    //return new Label() { TextFunc = () => $"{req.Material.Label} {req.Item.Label} {0} / {req.Amount}" };
+        //    return new GroupBox().AddControlsLineWrap(Label.ParseNewNew(req.Material, " ", req.Item, $" 0 / {req.Amount}"));
+        //}
     }
 }

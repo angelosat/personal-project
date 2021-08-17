@@ -968,6 +968,8 @@ namespace Start_a_Town_.UI
             this.AddControls(controls);
             return this;
         }
+        public Control AddControls(IEnumerable<Control> controls) => this.AddControls(controls.ToArray());
+        
         public virtual Control AddControls(params Control[] controls)
         {
             foreach (var ctrl in controls)

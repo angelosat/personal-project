@@ -15,15 +15,8 @@ namespace Start_a_Town_
             this._toolDefs = tools;
         }
 
-        public IEnumerable<BuildToolDef> Tools
-        {
-            get
-            {
-                foreach (var t in this._toolDefs)
-                    yield return t;
-            }
-        }
-
+        public IEnumerable<BuildToolDef> Tools => this._toolDefs;
+     
         string INamed.Name => this.Label;
 
         static void CallBack(Func<ProductMaterialPair> itemGetter, ToolBlockBuild.Args a)

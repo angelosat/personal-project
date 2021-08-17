@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_.UI
 {
@@ -49,7 +48,7 @@ namespace Start_a_Town_.UI
 
             this.Panel_Bars.Location = Label_Name.BottomLeft;
             this.Controls.Add(Label_Name,
-                Panel_Picture, 
+                Panel_Picture,
                 Panel_Bars
                 );
 

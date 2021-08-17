@@ -7,7 +7,7 @@ namespace Start_a_Town_
     class UINpcFrameContainer : GroupBox
     {
         List<Actor> PrevActors = new List<Actor>();
-        const int Spacing = 5;
+        const int Spacing = 1;//5;
         public UINpcFrameContainer()
         {
         }

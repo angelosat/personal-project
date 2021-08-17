@@ -768,22 +768,7 @@ namespace Start_a_Town_.UI
         }
 
         public Vector2 Origin = new Vector2(0);
-        public virtual void DrawHighlight(SpriteBatch sb, float alpha = 0.5f)
-        {
-            sb.Draw(UIManager.Highlight, new Rectangle((int)(this.ScreenLocation.X - this.Origin.X), (int)(this.ScreenLocation.Y - this.Origin.Y), this.BoundsScreen.Width, this.BoundsScreen.Height), null, Color.Lerp(Color.Transparent, Color.White, alpha), 0, Vector2.Zero, SpriteEffects.None, this.Depth);
-        }
-        public virtual void DrawHighlight(SpriteBatch sb, Rectangle destinationRect, float alpha = 0.5f)
-        {
-            sb.Draw(UIManager.Highlight, destinationRect, null, Color.Lerp(Color.Transparent, Color.White, alpha), 0, Vector2.Zero, SpriteEffects.None, this.Depth);
-        }
-        public virtual void DrawHighlight(SpriteBatch sb, Rectangle destinationRect, Color color, float depth = 0)
-        {
-            sb.Draw(UIManager.Highlight, destinationRect, null, color, 0, Vector2.Zero, SpriteEffects.None, depth);
-        }
-        public virtual void DrawShade(SpriteBatch sb, float alpha = 0.5f)
-        {
-            sb.Draw(UIManager.Shade, new Rectangle((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height), null, Color.Lerp(Color.Transparent, Color.White, alpha), 0, this.Origin, SpriteEffects.None, 0);//Depth);
-        }
+      
 
         public virtual Rectangle PreferredClientSize
         {
@@ -1432,6 +1417,29 @@ namespace Start_a_Town_.UI
         {
             this.HoverText = text;
             return this;
+        }
+
+        public virtual void DrawHighlight(SpriteBatch sb, float alpha = 0.5f)
+        {
+            sb.Draw(UIManager.Highlight, new Rectangle((int)(this.ScreenLocation.X - this.Origin.X), (int)(this.ScreenLocation.Y - this.Origin.Y), this.BoundsScreen.Width, this.BoundsScreen.Height), null, Color.Lerp(Color.Transparent, Color.White, alpha), 0, Vector2.Zero, SpriteEffects.None, this.Depth);
+        }
+        public virtual void DrawHighlight(SpriteBatch sb, Rectangle destinationRect, float alpha = 0.5f)
+        {
+            sb.Draw(UIManager.Highlight, destinationRect, null, Color.Lerp(Color.Transparent, Color.White, alpha), 0, Vector2.Zero, SpriteEffects.None, this.Depth);
+        }
+        public virtual void DrawHighlight(SpriteBatch sb, Rectangle destinationRect, Color color, float depth = 0)
+        {
+            sb.Draw(UIManager.Highlight, destinationRect, null, color, 0, Vector2.Zero, SpriteEffects.None, depth);
+        }
+        public virtual void DrawShade(SpriteBatch sb, float alpha = 0.5f)
+        {
+            sb.Draw(UIManager.Shade, new Rectangle((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height), null, Color.Lerp(Color.Transparent, Color.White, alpha), 0, this.Origin, SpriteEffects.None, 0);//Depth);
+        }
+
+        public void DrawHighlightBorder(SpriteBatch sb) => this.DrawHighlightBorder(sb, .5f, 1, 0);
+        public void DrawHighlightBorder(SpriteBatch sb, float alpha = .5f, float thickness = 1, int padding = 0)
+        {
+            this.BoundsScreen.DrawHighlightBorder(sb, Color.White * alpha, Vector2.Zero, thickness, padding);
         }
     }
 }

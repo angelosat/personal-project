@@ -12,6 +12,8 @@ namespace Start_a_Town_.UI
         {
             this.Name = name;
         }
+        public GroupBox(int size) : this(size, size) { }
+
         public GroupBox(int width, int height)
             :this(null, width, height)
         {

@@ -9,21 +9,33 @@ namespace Start_a_Town_
     public class ConstructionCategoryWalls : ConstructionCategory
     {
         public override string Name => "Blocks";
-        List<ToolBlockBuild> Tools;
+        readonly List<ToolBlockBuild> Tools;
+        //readonly List<ToolBlockBuildNew> ToolsNew;
+
         public ConstructionCategoryWalls()
         {
             void callback(ToolBlockBuild.Args a) => CallBack(this.ProductGetter, a);
+            //Tools = new()
+            //{
+            //    new ToolBuildLine(callback),
+            //    new ToolBuildWall(callback),
+            //    new ToolBuildFloor(callback),
+            //    new ToolBuildEnclosure(callback),
+            //    new ToolBuildBox(callback),
+            //    new ToolBuildBoxFilled(callback),
+            //    new ToolBuildPyramid(callback),
+            //    new ToolBuildRoof(callback)
+            //};
             Tools = new()
             {
-                new ToolBuildSingle(callback),
-                new ToolBuildLine(callback),
-                new ToolBuildWall(callback),
-                new ToolBuildFloor(callback),
-                new ToolBuildEnclosure(callback),
-                new ToolBuildBox(callback),
-                new ToolBuildBoxFilled(callback),
-                new ToolBuildPyramid(callback),
-                new ToolBuildRoof(callback)
+                BuildToolDefOf.Single.Create(callback),
+                BuildToolDefOf.Line.Create(callback),
+                BuildToolDefOf.Wall.Create(callback),
+                BuildToolDefOf.Enclosure.Create(callback),
+                BuildToolDefOf.Box.Create(callback),
+                BuildToolDefOf.BoxFilled.Create(callback),
+                BuildToolDefOf.Pyramid.Create(callback),
+                BuildToolDefOf.Roof.Create(callback)
             };
         }
         public override IconButton GetButton()

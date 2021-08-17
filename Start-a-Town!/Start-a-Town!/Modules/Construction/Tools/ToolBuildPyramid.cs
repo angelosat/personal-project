@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Start_a_Town_.Modules.Construction;
 
 namespace Start_a_Town_
 {
@@ -15,8 +14,6 @@ namespace Start_a_Town_
         {
 
         }
-        public override string Name { get; } = "Pyramid";
-        public override Modes Mode { get; } = Modes.Pyramid; 
         public override IEnumerable<IntVec3> GetPositions()
         {
             foreach (var i in GetPositions(this.Begin, this.TopCorner))//.ToList())

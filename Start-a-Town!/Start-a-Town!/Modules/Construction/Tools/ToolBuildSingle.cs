@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
     class ToolBuildSingle : ToolBlockBuild
     {
-        public override string Name { get; } = "Single";
-        public override Modes Mode { get; } = Modes.Single; 
         public ToolBuildSingle()
         {
 
@@ -23,7 +21,7 @@ namespace Start_a_Town_.Modules.Construction
                 return Messages.Default;
             if (this.Target == null)
                 return Messages.Default;
-            this.Send(Modes.Single, this.Begin, this.Begin, this.Orientation);
+            this.Send(this.Begin, this.Begin, this.Orientation);
             this.Enabled = false;
             return Messages.Default;
         }

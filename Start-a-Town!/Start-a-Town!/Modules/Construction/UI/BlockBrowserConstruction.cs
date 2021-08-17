@@ -1,5 +1,4 @@
 ﻿using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Towns.Constructions;
 using Start_a_Town_.UI;
 using System;
@@ -22,7 +21,8 @@ namespace Start_a_Town_.Core
             this.Panel_Blocks = new Panel() { AutoSize = true };
 
             var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air LOL FIX THIS
-            this.ToolBox = new UIToolsBox(this.OnToolSelected);
+            //this.ToolBox = new UIToolsBox(this.OnToolSelected);
+            this.ToolBox = new UIToolsBox(this.OnToolSelectedNew);
             var categories = ConstructionsManager.AllCategories;
             foreach (var cat in categories)
             {
@@ -85,6 +85,12 @@ namespace Start_a_Town_.Core
         void OnToolSelected(Type toolType)
         {
             var tool = this.SelectedCategory.GetTool(toolType, this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
+            this.ToolBox.LastSelectedTool = tool;
+            ToolManager.SetTool(tool);
+        }
+        void OnToolSelectedNew(BuildToolDef toolDef)
+        {
+            var tool = this.SelectedCategory.GetTool(toolDef, this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
             this.ToolBox.LastSelectedTool = tool;
             ToolManager.SetTool(tool);
         }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
     class ToolBuildWall : ToolBuildWithHeight
     {
-        public override string Name { get; } = "Wall"; 
-        public override Modes Mode { get; } = Modes.Wall;
         public ToolBuildWall()
         {
 
@@ -15,7 +13,7 @@ namespace Start_a_Town_.Modules.Construction
             : base(callback)
         {
         }
-        
+
         protected override IntVec3 GetBottomCorner()
         {
             return GetBottomCorner(this.Begin, this.Target.Global);
@@ -62,7 +60,7 @@ namespace Start_a_Town_.Modules.Construction
             var box = a.GetBox(end);
             return box;
         }
- 
+
         static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
         {
             IntVec3 axis;
@@ -81,7 +79,7 @@ namespace Start_a_Town_.Modules.Construction
             var box = a.GetBox(bb);
             return box;
         }
-       
+
         protected override void WriteData(System.IO.BinaryWriter w)
         {
             base.WriteData(w);

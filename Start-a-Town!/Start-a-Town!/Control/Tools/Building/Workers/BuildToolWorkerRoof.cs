@@ -3,24 +3,9 @@ using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
-    class ToolBuildRoof : ToolBuildPyramid
+    class BuildToolWorkerRoof : BuildToolWorker
     {
-        public ToolBuildRoof()
-        {
-
-        }
-        public ToolBuildRoof(Action<Args> callback)
-            : base(callback)
-        {
-
-        }
-        public override IEnumerable<IntVec3> GetPositions()
-        {
-            foreach (var i in GetPositions(this.Begin, this.TopCorner))
-                yield return i;
-        }
-
-        static public new IEnumerable<IntVec3> GetPositions(IntVec3 begin, IntVec3 end)
+        public override IEnumerable<IntVec3> GetPositions(IntVec3 begin, IntVec3 end)
         {
             VectorHelper.GetMinMaxVector3(begin, end, out var min, out var max);
             var maxh = GetMaxHeight(min, max);
@@ -33,6 +18,21 @@ namespace Start_a_Town_
                 foreach (var pos in a.GetBox(b))
                     yield return pos;
             }
+        }
+        protected static int GetMaxHeight(IntVec3 min, IntVec3 max)
+        {
+            var dx = max.X - min.X;
+            var dy = max.Y - min.Y;
+            var shortestside = Math.Min(dx, dy);
+            return (int)(shortestside / 2);
+        }
+        protected static IntVec3 GetAxis(IntVec3 min, IntVec3 max)
+        {
+            var dx = max.X - min.X;
+            var dy = max.Y - min.Y;
+            if (dx < dy)
+                return IntVec3.UnitY;
+            else return IntVec3.UnitX;
         }
     }
 }

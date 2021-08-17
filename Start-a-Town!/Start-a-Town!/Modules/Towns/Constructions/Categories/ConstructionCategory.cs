@@ -49,5 +49,14 @@ namespace Start_a_Town_
             tool.State = productMaterialPair.Data;
             return tool;
         }
+        internal ToolBlockBuild GetTool(BuildToolDef toolDef, ProductMaterialPair productMaterialPair)
+        {
+            var tools = GetAvailableTools(() => productMaterialPair);
+            var tool = tools.First(t => t.ToolDef == toolDef);
+            tool.Block = productMaterialPair.Block;
+            tool.Material = productMaterialPair.Material;
+            tool.State = productMaterialPair.Data;
+            return tool;
+        }
     }
 }

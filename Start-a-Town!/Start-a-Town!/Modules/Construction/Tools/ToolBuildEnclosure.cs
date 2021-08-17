@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
     class ToolBuildEnclosure : ToolBuildBox
     {
-        public override string Name { get; } = "Enclosure";
-        public override Modes Mode { get; } = Modes.Enclosure;
         public ToolBuildEnclosure()
         {
         }

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
     class ToolBuildFloor : ToolBlockBuild
     {
-        public override string Name { get; } = "Floor";
-        public override Modes Mode { get; } = Modes.Floor;
         public ToolBuildFloor()
         {
         }
@@ -22,7 +20,7 @@ namespace Start_a_Town_.Modules.Construction
                 return Messages.Default;
             if (this.Target == null)
                 return Messages.Default;
-            this.Send(this.Mode, this.Begin, this.End, this.Orientation);
+            this.Send(this.Begin, this.End, this.Orientation);
             this.Enabled = false;
             Sync();
             return Messages.Default;

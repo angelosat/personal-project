@@ -4,20 +4,20 @@ using Start_a_Town_.Towns;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
-    class ToolBuildErase : ToolSelect3D
+    class ToolBlockErase : ToolSelect3D
     {
         public override Icon GetIcon()
         {
             return Icon.Cross;
         }
         ControlTool PreviousTool;
-        public ToolBuildErase()
+        public ToolBlockErase()
         {
 
         }
-        public ToolBuildErase(ControlTool previousTool)
+        public ToolBlockErase(ControlTool previousTool)
         {
             this.Add = RemoveZone;
             this.PreviousTool = previousTool;
@@ -29,7 +29,8 @@ namespace Start_a_Town_.Modules.Construction
         }
         private static void RemoveZone(Vector3 min, Vector3 max, bool remove)
         {
-            var a = new ToolBlockBuild.Args(ToolBlockBuild.Modes.Box, min, max, true, InputState.IsKeyDown(System.Windows.Forms.Keys.LMenu), false, 0);
+            //var a = new ToolBlockBuildOld.Args(ToolBlockBuildOld.Modes.Box, min, max, true, InputState.IsKeyDown(System.Windows.Forms.Keys.LMenu), false, 0);
+            var a = new ToolBlockBuild.Args(BuildToolDefOf.Box, min, max, true, InputState.IsKeyDown(System.Windows.Forms.Keys.LMenu), false, 0);
             PacketDesignateConstruction.Send(Client.Instance, a);
         }
        

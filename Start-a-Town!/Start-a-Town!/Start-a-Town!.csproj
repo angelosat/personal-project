@@ -213,6 +213,18 @@
     <Compile Include="Control\Hotkeys\HotkeyManager.Hotkey.cs" />
     <Compile Include="Control\Hotkeys\HotkeyManager.WindowInputKey.cs" />
     <Compile Include="Control\Hotkeys\IHotkey.cs" />
+    <Compile Include="Control\Tools\Building\BuildToolDef.cs" />
+    <Compile Include="Control\Tools\Building\BuildToolDefOf.cs" />
+    <Compile Include="Control\Tools\Building\BuildToolWorker.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerBox.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerBoxFilled.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerEnclosure.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerFloor.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerLine.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerPyramid.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerRoof.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerSingle.cs" />
+    <Compile Include="Control\Tools\Building\Workers\BuildToolWorkerWall.cs" />
     <Compile Include="Control\Tools\CellRendering\BlockRenderer.cs" />
     <Compile Include="Control\Tools\CellRendering\BlockRendererNew.cs" />
     <Compile Include="Control\Tools\CellRendering\BlockRendererObservable.cs" />
@@ -633,7 +645,7 @@
     <Compile Include="Modules\Construction\Tools\ToolBuildBoxFilled.cs" />
     <Compile Include="Modules\Construction\Tools\ToolBuildBox.cs" />
     <Compile Include="Modules\Construction\Tools\ToolBuildEnclosure.cs" />
-    <Compile Include="Modules\Construction\Tools\ToolBuildErase.cs" />
+    <Compile Include="Modules\Construction\Tools\ToolBlockErase.cs" />
     <Compile Include="Modules\Construction\Tools\ToolBuildRoof.cs" />
     <Compile Include="Modules\Construction\Tools\ToolBuildPyramid.cs" />
     <Compile Include="Modules\Construction\Tools\ToolBuildWithHeight.cs" />

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Start_a_Town_.Net;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Modules.Construction;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -30,7 +30,7 @@ namespace Start_a_Town_
         {
             var args = new ToolBlockBuild.Args(r);
             var product = args.Removing ? null : new ProductMaterialPair(r);
-            var positions = ToolBlockBuild.GetPositions(args);
+            var positions = args.ToolDef.Worker.GetPositions(args.Begin, args.End).ToList();
             net.Map.Town.ConstructionsManager.Handle(args, product, positions);
 
             if (net is Server)

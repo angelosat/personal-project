@@ -4,14 +4,15 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
     abstract class ToolBuildWithHeight : ToolBlockBuild
     {
         protected bool SettingHeight;
         protected int Height;
-        protected Vector3 TopCorner;
-        
+        protected IntVec3 TopCorner;
+        protected override IntVec3 EndFinal => this.TopCorner;
+
         public ToolBuildWithHeight()
         {
 
@@ -25,7 +26,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             if (this.SettingHeight && this.Enabled)
             {
-                this.Send(this.Mode, this.Begin, this.TopCorner, this.Orientation);
+                this.Send(this.Begin, this.TopCorner, this.Orientation);
                 this.SettingHeight = false;
                 this.Enabled = false;
                 return Messages.Default;
@@ -88,7 +89,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             if (this.SettingHeight)
             {
-                this.TopCorner = new Vector3(this.End.X, this.End.Y, Math.Min(this.End.Z + this.Height, Net.Client.Instance.Map.GetMaxHeight() - 1));
+                this.TopCorner = new IntVec3(this.End.X, this.End.Y, Math.Min(this.End.Z + this.Height, Net.Client.Instance.Map.GetMaxHeight() - 1));
                 return;
             }
             else
@@ -140,7 +141,7 @@ namespace Start_a_Town_.Modules.Construction
         }
         public override IEnumerable<string> GetDimensionSize()
         {
-            foreach(var t in base.GetDimensionSize())
+            foreach (var t in base.GetDimensionSize())
                 yield return t;
             yield return (Math.Abs(this.TopCorner.Z - this.Begin.Z) + 1).ToString();
         }

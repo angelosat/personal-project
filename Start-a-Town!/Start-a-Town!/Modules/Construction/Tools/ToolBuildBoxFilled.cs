@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
     class ToolBuildBoxFilled : ToolBuildWithHeight
     {
-        public override string Name { get; } = "Box Filled";
-        public override Modes Mode { get; } = Modes.BoxFilled; 
         public ToolBuildBoxFilled()
         {
 

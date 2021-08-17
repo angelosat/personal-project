@@ -1,6 +1,4 @@
-﻿using Start_a_Town_.Blocks;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     static class BlockDefOf
     {

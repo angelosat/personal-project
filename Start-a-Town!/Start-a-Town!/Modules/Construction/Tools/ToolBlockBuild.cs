@@ -5,15 +5,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
-    public abstract partial class ToolBlockBuild : ToolManagement, INamed
+    public abstract class ToolBlockBuild : ToolManagement, INamed
     {
-        public enum Modes { Single, Line, Floor, Wall, Enclosure, BoxFilled, BoxHollow, Box, Roof, Pyramid }
+        public BuildToolDef ToolDef;
+        public string Name => this.ToolDef.Label;
         new readonly Icon Icon = new(UIManager.Icons32, 12, 32);
-        public abstract Modes Mode { get; }
-        public abstract string Name { get; }
-        private readonly Action<Args> Callback;
+        public Action<ToolBlockBuild.Args> Callback;
         protected bool Valid, Enabled;
         protected IntVec3 Begin, End, Axis;
         public Block Block;
@@ -27,7 +26,7 @@ namespace Start_a_Town_.Modules.Construction
         {
 
         }
-        public ToolBlockBuild(Action<Args> callback)
+        public ToolBlockBuild(Action<ToolBlockBuild.Args> callback)
         {
             this.Callback = callback;
         }
@@ -59,13 +58,6 @@ namespace Start_a_Town_.Modules.Construction
         {
             var map = Ingame.GetMap();
             return map.IsValidBuildSpot(pos, true);
-            //string error = "";
-            //if (!map.IsValidBuildSpot(pos, ref error))
-            //{
-            //    Log.Warning(error);
-            //    return false;
-            //}
-            //return true;
         }
 
         public override void HandleLButtonDoubleClick(System.Windows.Forms.HandledMouseEventArgs e)
@@ -100,7 +92,7 @@ namespace Start_a_Town_.Modules.Construction
         {
             if (e.KeyValue == 17) //control
             {
-                ToolManager.SetTool(new ToolBuildErase(this));
+                ToolManager.SetTool(new ToolBlockErase(this));
             }
             base.HandleKeyDown(e);
         }
@@ -115,7 +107,7 @@ namespace Start_a_Town_.Modules.Construction
             if (this.Enabled)
                 this.DrawBlockPreviews(sb, map, cam);
         }
-      
+
         public override void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
         {
             if (this.Target is not null)
@@ -162,10 +154,11 @@ namespace Start_a_Town_.Modules.Construction
         {
             var atlastoken = this.Block.GetDefault();
             atlastoken.Atlas.Begin(sb);
-            foreach (var pos in this.GetPositions().Where(map.IsValidBuildSpot))
+            foreach (var pos in this.ToolDef.Worker.GetPositions(this.Begin, this.EndFinal).Where(map.IsValidBuildSpot))
                 this.Block.DrawPreview(sb, map, pos, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
         }
+        protected virtual IntVec3 EndFinal => this.End;
 
         internal override void DrawUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Camera camera)
         {
@@ -195,35 +188,20 @@ namespace Start_a_Town_.Modules.Construction
             return InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey);
         }
 
-        public virtual IEnumerable<IntVec3> GetPositions() { yield break; }
-        public static List<IntVec3> GetPositions(Modes mode, IntVec3 a, IntVec3 b)
+        public IEnumerable<IntVec3> GetPositions(IntVec3 a, IntVec3 b) 
         {
-            return mode switch
-            {
-                Modes.Single => ToolBuildSingle.GetPositions(a, b),
-                Modes.Line => ToolBuildLine.GetPositions(a, b),
-                Modes.Enclosure => ToolBuildEnclosure.GetPositions(a, b),
-                Modes.Box => ToolBuildBox.GetPositions(a, b),
-                Modes.Wall => ToolBuildWall.GetPositions(a, b),
-                Modes.Pyramid => ToolBuildPyramid.GetPositions(a, b).ToList(),
-                Modes.Floor => ToolBuildFloor.GetPositions(a, b).ToList(),
-                Modes.Roof => ToolBuildRoof.GetPositions(a, b).ToList(),
-                Modes.BoxFilled => ToolBuildBoxFilled.GetPositions(a, b),
-                _ => throw new Exception()
-            };
+            foreach (var pos in this.ToolDef.Worker.GetPositions(a, b))
+                yield return pos;
         }
-        public static List<IntVec3> GetPositions(Args a)
+        public ToolBlockBuild.Args Send(IntVec3 start, IntVec3 end, int orientation)// = 0)
         {
-            return GetPositions(a.Mode, a.Begin, a.End);
-        }
-        public Args Send(Modes mode, Vector3 start, Vector3 end, int orientation)// = 0)
-        {
-            var a = new Args(mode, start, end, IsRemoving(), IsGodMode(), this.Replacing, orientation);
+            var a = new ToolBlockBuild.Args(this.ToolDef, start, end, IsRemoving(), IsGodMode(), this.Replacing, orientation);
             this.Callback(a);
             this.Enabled = false;
             this.Replacing = false;
             return a;
         }
+        public virtual IEnumerable<IntVec3> GetPositions() { yield break; }
 
         private static bool IsGodMode()
         {
@@ -238,6 +216,43 @@ namespace Start_a_Town_.Modules.Construction
         {
             this.Enabled = r.ReadBoolean();
             this.Begin = r.ReadVector3();
+        }
+        public class Args
+        {
+            public IntVec3 Begin, End;
+            public BuildToolDef ToolDef;
+            public bool Removing, Replacing, Cheat;
+            public int Orientation;
+            public Args(BuildToolDef toolDef, IntVec3 begin, IntVec3 end, bool modkey, bool cheat, bool replacing = false, int orientation = 0)
+            {
+                this.ToolDef = toolDef;
+                this.Begin = begin;
+                this.End = end;
+                this.Removing = modkey;
+                this.Replacing = replacing;
+                this.Orientation = orientation;
+                this.Cheat = cheat;
+            }
+            public void Write(BinaryWriter w)
+            {
+                this.ToolDef.Write(w);
+                w.Write(this.Begin);
+                w.Write(this.End);
+                w.Write(this.Removing);
+                w.Write(this.Replacing);
+                w.Write(this.Orientation);
+                w.Write(this.Cheat);
+            }
+            public Args(BinaryReader r)
+            {
+                this.ToolDef = r.ReadDef<BuildToolDef>();
+                this.Begin = r.ReadIntVec3();
+                this.End = r.ReadIntVec3();
+                this.Removing = r.ReadBoolean();
+                this.Replacing = r.ReadBoolean();
+                this.Orientation = r.ReadInt32();
+                this.Cheat = r.ReadBoolean();
+            }
         }
     }
 }

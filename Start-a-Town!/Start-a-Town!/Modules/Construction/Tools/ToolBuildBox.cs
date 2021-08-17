@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace Start_a_Town_.Modules.Construction
+namespace Start_a_Town_
 {
     class ToolBuildBox : ToolBuildWithHeight
     {
-        public override string Name { get; } = "Box";
-        public override Modes Mode { get; } = Modes.Box;
         public ToolBuildBox()
         {
 
@@ -60,7 +58,5 @@ namespace Start_a_Town_.Modules.Construction
             this.SettingHeight = r.ReadBoolean();
             this.Height = r.ReadInt32();
         }
-
-        
     }
 }

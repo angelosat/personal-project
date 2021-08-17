@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
@@ -34,25 +33,16 @@ namespace Start_a_Town_
             PacketDesignateConstruction.Send(Client.Instance, itemGetter(), a);
         }
 
-        public abstract ToolBlockBuild GetTool(Func<ProductMaterialPair> itemGetter);
-        public abstract List<ToolBlockBuild> GetAvailableTools(Func<ProductMaterialPair> itemGetter);
+        public abstract IEnumerable<BuildToolDef> GetAvailableTools();
+
+        public Func<ProductMaterialPair> ProductGetter;
 
         static public Window WindowToolsBox;
         static public UIToolsBox ToolsBox;
 
-        internal ToolBlockBuild GetTool(Type toolType, ProductMaterialPair productMaterialPair)
-        {
-            var tools = GetAvailableTools(() => productMaterialPair);
-            var tool = tools.First(t => t.GetType() == toolType);
-            tool.Block = productMaterialPair.Block;
-            tool.Material = productMaterialPair.Material;
-            tool.State = productMaterialPair.Data;
-            return tool;
-        }
         internal ToolBlockBuild GetTool(BuildToolDef toolDef, ProductMaterialPair productMaterialPair)
         {
-            var tools = GetAvailableTools(() => productMaterialPair);
-            var tool = tools.First(t => t.ToolDef == toolDef);
+            var tool = toolDef.Create(a => CallBack(() => productMaterialPair, a)); // TODO improve
             tool.Block = productMaterialPair.Block;
             tool.Material = productMaterialPair.Material;
             tool.State = productMaterialPair.Data;

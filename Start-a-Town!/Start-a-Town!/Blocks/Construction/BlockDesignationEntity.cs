@@ -69,7 +69,7 @@ namespace Start_a_Town_
             {
                 var product = this.Product;
                 var req = product.Requirement;
-                info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Name} {req.Item.Label} {0} / {req.Amount}" });
+                info.AddInfo(new Label() { TextFunc = () => $"{req.Material.Label} {req.Item.Label} {0} / {req.Amount}" });
             }
             protected override void OnDrawUI(SpriteBatch sb, Camera cam, IntVec3 global)
             {

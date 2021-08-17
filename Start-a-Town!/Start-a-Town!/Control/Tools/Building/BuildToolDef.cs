@@ -2,7 +2,7 @@
 
 namespace Start_a_Town_
 {
-    public class BuildToolDef : Def
+    public class BuildToolDef : Def, INamed
     {
         readonly Type ToolClass;
         readonly Type ToolWorkerClass;
@@ -22,5 +22,7 @@ namespace Start_a_Town_
         }
         BuildToolWorker _cachedWorker;
         public BuildToolWorker Worker => _cachedWorker ??= (BuildToolWorker)Activator.CreateInstance(this.ToolWorkerClass);
+
+        string INamed.Name => this.Label;
     }
 }

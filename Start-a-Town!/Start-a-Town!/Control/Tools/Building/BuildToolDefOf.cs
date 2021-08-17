@@ -4,6 +4,7 @@
     static class BuildToolDefOf
     {
         public static readonly BuildToolDef Single = new("Single", typeof(ToolBuildSingle), typeof(BuildToolWorkerSingle));
+        public static readonly BuildToolDef SinglePreview = new("SinglePreview", typeof(ToolBuildSinglePreview), typeof(BuildToolWorkerSingle));
         public static readonly BuildToolDef Line = new("Line", typeof(ToolBuildLine), typeof(BuildToolWorkerLine));
         public static readonly BuildToolDef Floor = new("Floor", typeof(ToolBuildFloor), typeof(BuildToolWorkerFloor));
         public static readonly BuildToolDef Wall = new("Wall", typeof(ToolBuildWall), typeof(BuildToolWorkerWall));

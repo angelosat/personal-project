@@ -21,15 +21,10 @@ namespace Start_a_Town_
             };
             return btn_ConstructProduction;
         }
-        
-        public override ToolBlockBuild GetTool(Func<ProductMaterialPair> itemGetter)
+       
+        public override IEnumerable<BuildToolDef> GetAvailableTools()
         {
-            return new ToolBuildSinglePreview(a => CallBack(itemGetter, a), () => itemGetter().Block);
+            yield return BuildToolDefOf.SinglePreview;
         }
-        public override List<ToolBlockBuild> GetAvailableTools(Func<ProductMaterialPair> itemGetter)
-        {
-            return new List<ToolBlockBuild>() { this.GetTool(itemGetter) };
-        }
-
     }
 }

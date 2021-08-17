@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Start_a_Town_.Modules.Construction;
 using Start_a_Town_.Components.Crafting;
 using Start_a_Town_.UI;
 
@@ -49,16 +48,17 @@ namespace Start_a_Town_
             };
             return btn_Construct;
         }
-      
-        public override ToolBlockBuild GetTool(Func<ProductMaterialPair> itemGetter)
+
+        public override IEnumerable<BuildToolDef> GetAvailableTools()
         {
-            return new ToolBuildEnclosure(a => CallBack(itemGetter, a));
-        }
-        Func<ProductMaterialPair> ProductGetter;
-        public override List<ToolBlockBuild> GetAvailableTools(Func<ProductMaterialPair> itemGetter)
-        {
-            this.ProductGetter = itemGetter;
-            return this.Tools;
+            yield return BuildToolDefOf.Single;
+            yield return BuildToolDefOf.Line;
+            yield return BuildToolDefOf.Wall;
+            yield return BuildToolDefOf.Enclosure;
+            yield return BuildToolDefOf.Box;
+            yield return BuildToolDefOf.BoxFilled;
+            yield return BuildToolDefOf.Pyramid;
+            yield return BuildToolDefOf.Roof;
         }
     }
 }

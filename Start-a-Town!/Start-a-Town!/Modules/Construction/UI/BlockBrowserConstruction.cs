@@ -38,7 +38,7 @@ namespace Start_a_Town_.Core
                         this.CurrentSelected = block;
                         var product = this.GetLastSelectedVariantOrDefault(block);
                         this.ToolBox.SetProduct(product);
-                        this.OnToolSelected(this.ToolBox.LastSelectedTool.GetType());
+                    this.OnToolSelectedNew(this.ToolBox.LastSelectedTool);//.GetType());
                         var win = this.ToolBox.GetWindow();
                         if (win is null)
                         {
@@ -82,16 +82,10 @@ namespace Start_a_Town_.Core
                 );
         }
 
-        void OnToolSelected(Type toolType)
-        {
-            var tool = this.SelectedCategory.GetTool(toolType, this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
-            this.ToolBox.LastSelectedTool = tool;
-            ToolManager.SetTool(tool);
-        }
         void OnToolSelectedNew(BuildToolDef toolDef)
         {
             var tool = this.SelectedCategory.GetTool(toolDef, this.GetLastSelectedVariantOrDefault(this.CurrentSelected));
-            this.ToolBox.LastSelectedTool = tool;
+            this.ToolBox.LastSelectedTool = toolDef;
             ToolManager.SetTool(tool);
         }
 
@@ -112,8 +106,8 @@ namespace Start_a_Town_.Core
             this.CurrentSelected = product.Block;
             if (this.ToolBox.LastSelectedTool != null)
             {
-                var tool = this.SelectedCategory.GetTool(this.ToolBox.LastSelectedTool.GetType(), product);
-                this.ToolBox.LastSelectedTool = tool;
+                var tool = this.SelectedCategory.GetTool(this.ToolBox.LastSelectedTool, product);
+                this.ToolBox.LastSelectedTool = tool.ToolDef;
                 ToolManager.SetTool(tool);
             }
             this.Categories[this.SelectedCategory].FindChild(c => c.Tag == product.Block).Invalidate();

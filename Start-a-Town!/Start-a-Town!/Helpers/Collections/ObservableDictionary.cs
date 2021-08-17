@@ -6,7 +6,7 @@ namespace Start_a_Town_
 {
     public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged
     {
-        Dictionary<TKey, TValue> Dictionary;
+        readonly Dictionary<TKey, TValue> Dictionary = new();
 
         public TValue this[TKey key] { get => ((IDictionary<TKey, TValue>)this.Dictionary)[key]; set => ((IDictionary<TKey, TValue>)this.Dictionary)[key] = value; }
 

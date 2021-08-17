@@ -13,7 +13,8 @@ namespace Start_a_Town_
     {
         public override string Name => "Designation Manager";
 
-        readonly ReadOnlyDictionary<DesignationDef, ObservableCollection<IntVec3>> Designations;
+        //readonly ReadOnlyDictionary<DesignationDef, ObservableCollection<IntVec3>> Designations;
+        readonly ReadOnlyDictionary<DesignationDef, ObservableHashSet<IntVec3>> Designations;
         readonly Dictionary<DesignationDef, BlockRendererObservable> Renderers = new();
 
         static DesignationManager()
@@ -26,7 +27,7 @@ namespace Start_a_Town_
                 HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, $"Designate: {d.Label}", delegate { SetTool(d); });
         }
 
-        internal ObservableCollection<IntVec3> GetDesignations(DesignationDef des)
+        internal ObservableHashSet<IntVec3> GetDesignations(DesignationDef des)
         {
             return this.Designations[des];
         }
@@ -41,12 +42,17 @@ namespace Start_a_Town_
 
         public DesignationManager(Town town) : base(town)
         {
-            Designations = new ReadOnlyDictionary<DesignationDef, ObservableCollection<IntVec3>>(
-                new Dictionary<DesignationDef, ObservableCollection<IntVec3>>() {
-                { DesignationDefOf.Deconstruct, new ObservableCollection<IntVec3>() },
-                { DesignationDefOf.Mine, new ObservableCollection<IntVec3>()},
-                { DesignationDefOf.Switch, new ObservableCollection<IntVec3>()}
-            });
+            //Designations = new ReadOnlyDictionary<DesignationDef, ObservableCollection<IntVec3>>(
+            //    new Dictionary<DesignationDef, ObservableCollection<IntVec3>>() {
+            //    { DesignationDefOf.Deconstruct, new ObservableCollection<IntVec3>() },
+            //    { DesignationDefOf.Mine, new ObservableCollection<IntVec3>()},
+            //    { DesignationDefOf.Switch, new ObservableCollection<IntVec3>()}
+            //});
+            Designations = new ReadOnlyDictionary<DesignationDef, ObservableHashSet<IntVec3>>( new Dictionary<DesignationDef, ObservableHashSet<IntVec3>>() {
+                { DesignationDefOf.Deconstruct, new ObservableHashSet<IntVec3>() },
+                { DesignationDefOf.Mine, new ObservableHashSet<IntVec3>()},
+                { DesignationDefOf.Switch, new ObservableHashSet<IntVec3>()}
+                       });
 
             Renderers.Add(DesignationDefOf.Deconstruct, new(Designations[DesignationDefOf.Deconstruct]));
             Renderers.Add(DesignationDefOf.Mine, new(Designations[DesignationDefOf.Mine]));

@@ -122,7 +122,7 @@ namespace Start_a_Town_
         {
             if (!this.Positions.Contains(pos))
                 return;
-            if (!this.ZoneDef.IsValidLocation(this.Map, pos))
+            if (!this.ZoneDef.Worker.IsValidLocation(this.Map, pos))
                 this.RemovePosition(pos);
             this.Validate();
         }

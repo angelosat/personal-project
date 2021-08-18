@@ -261,6 +261,7 @@
     <Compile Include="Modules\Towns\Stockpiles\ItemFilter.cs" />
     <Compile Include="Modules\Towns\Storage\StorageManager.cs" />
     <Compile Include="Modules\Towns\Tasks\InteractionDeconstruct.cs" />
+    <Compile Include="Modules\Towns\Zones\ZoneWorker.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemPreferencesManager.ItemPreference.cs" />
     <Compile Include="Objects\Items\Materials\IInspectable.cs" />
     <Compile Include="Objects\Items\Materials\MaterialTypeDefOf.cs" />
@@ -306,9 +307,9 @@
     <Compile Include="Modules\Towns\Stockpiles\Stockpile.Packets.cs" />
     <Compile Include="Modules\Towns\Zones\ZoneDef.cs" />
     <Compile Include="Modules\Towns\Zones\ZoneDefOf.cs" />
-    <Compile Include="Modules\Towns\Zones\ZoneGrowingDef.cs" />
+    <Compile Include="Modules\Towns\Zones\ZoneGrowingWorker.cs" />
     <Compile Include="Modules\Towns\Zones\ZoneManager.cs" />
-    <Compile Include="Modules\Towns\Zones\ZoneStockpileDef.cs" />
+    <Compile Include="Modules\Towns\Zones\ZoneStockpileWorker.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemRoleDef.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemRoleGearDef.cs" />
     <Compile Include="Modules\Visitors\AI\Needs\NeedInventorySpace.cs" />

@@ -27,7 +27,7 @@ namespace Start_a_Town_
         {
             var finalPositions = allpositions.Where(
                 po => this.Town.GetZoneAt(po) == null &&
-                zoneType.IsValidLocation(this.Town.Map, po));
+                zoneType.Worker.IsValidLocation(this.Town.Map, po));
             if (!finalPositions.Any())
                 return null;
             if (!finalPositions.IsConnectedNew())

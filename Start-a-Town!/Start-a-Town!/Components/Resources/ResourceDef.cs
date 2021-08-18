@@ -16,7 +16,7 @@ namespace Start_a_Town_
         }
 
         ResourceWorker workerCached;
-        public ResourceWorker Worker => workerCached ??= (ResourceWorker)Activator.CreateInstance(this.WorkerClass);
+        public ResourceWorker Worker => workerCached ??= (ResourceWorker)Activator.CreateInstance(this.WorkerClass, this);
 
         public string Format => "";
 

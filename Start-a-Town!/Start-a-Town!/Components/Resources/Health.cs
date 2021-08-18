@@ -7,7 +7,7 @@ namespace Start_a_Town_.Components.Resources
 {
     class Health : ResourceWorker
     {
-        public Health()
+        public Health(ResourceDef def) : base(def)
         {
             this.AddThreshold("Dying", .25f);
             this.AddThreshold("Critical", .5f);

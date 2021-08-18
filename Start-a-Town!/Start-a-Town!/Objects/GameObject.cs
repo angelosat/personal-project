@@ -1440,7 +1440,7 @@ namespace Start_a_Town_
 
         internal int GetOwner()
         {
-            return this.GetComponent<OwnershipComponent>().Owner;
+            return this.GetComponent<OwnershipComponent>().OwnerRef;
         }
         internal void SetOwner(GameObject actor)
         {

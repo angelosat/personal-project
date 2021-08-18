@@ -6,7 +6,7 @@ namespace Start_a_Town_.Components.Resources
 {
     class Durability : ResourceWorker
     {
-        public Durability()
+        public Durability(ResourceDef def) : base(def)
         {
             this.AddThreshold("Durability", 1);
         }

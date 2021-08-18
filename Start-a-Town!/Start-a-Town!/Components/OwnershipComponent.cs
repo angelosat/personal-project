@@ -10,11 +10,12 @@ namespace Start_a_Town_
     public class OwnershipComponent : EntityComponent
     {
         public override string Name { get; } = "Ownership";
-        public int Owner { get; private set; } = -1;
+        public int OwnerRef { get; private set; } = -1;
+        public Actor Owner;
 
         public new OwnershipComponent Initialize(GameObject owner = null)
         {
-            this.Owner = owner == null ? -1 : owner.RefID;
+            this.OwnerRef = owner == null ? -1 : owner.RefID;
             return this;
         }
         public OwnershipComponent()
@@ -24,44 +25,45 @@ namespace Start_a_Town_
         
         OwnershipComponent(int owner)
         {
-            this.Owner = owner;
+            this.OwnerRef = owner;
         }
 
         public override object Clone()
         {
-            return new OwnershipComponent(this.Owner);
+            return new OwnershipComponent(this.OwnerRef);
         }
 
         public override void Write(System.IO.BinaryWriter w)
         {
-            w.Write(this.Owner);
+            w.Write(this.OwnerRef);
         }
         public override void Read(System.IO.BinaryReader r)
         {
-            this.Owner = r.ReadInt32();
+            this.OwnerRef = r.ReadInt32();
         }
         internal override void AddSaveData(SaveTag tag)
         {
-            tag.Add(this.Owner.Save("Owner"));
+            tag.Add(this.OwnerRef.Save("Owner"));
         }
         internal override void Load(SaveTag tag)
         {
-            tag.TryGetTagValue<int>("Owner", v => this.Owner = v);
+            tag.TryGetTagValue<int>("Owner", v => this.OwnerRef = v);
         }
 
         public override void OnTooltipCreated(GameObject parent, UI.Control tooltip)
         {
             if (parent.Net == null)
                 return;
-            var owner = parent.Net.GetNetworkObject(this.Owner);
-            tooltip.AddControlsBottomLeft(new UI.Label("Owner: " + (owner != null ? owner.Name : "<None>"), fill: Color.Lime));
+            var owner = parent.Net.GetNetworkObject(this.OwnerRef);
+            //tooltip.AddControlsBottomLeft(new UI.Label("Owner: " + (owner != null ? owner.Name : "<None>"), fill: Color.Lime));
+            tooltip.AddControlsBottomLeft(UI.Label.ParseWrap("Owner: ", this.Owner));
         }
 
         static public bool Owns(GameObject owner, GameObject obj)
         {
             if (!obj.TryGetComponent("Ownership", out OwnershipComponent ownership))
                 throw new Exception();
-            return ownership.Owner == owner.RefID;
+            return ownership.OwnerRef == owner.RefID;
         }
 
         internal override void GetManagementInterface(GameObject gameObject, Control box)
@@ -83,7 +85,7 @@ namespace Start_a_Town_
             var setownercombo = new ComboBoxNewNew<GameObject>(150, "Owner",
                 A => A?.Name ?? "None",
                 o => PacketPlayerSetItemOwner.Send(Net.Client.Instance, gameObject.RefID, o != null ? o.RefID : -1),
-                () => comp.Owner == -1 ? null : gameObject.Net.GetNetworkObject(comp.Owner),
+                () => comp.OwnerRef == -1 ? null : gameObject.Net.GetNetworkObject(comp.OwnerRef),
                 () => alllist.Prepend(null));
 
             setownercombo.OnGameEventAction = a =>
@@ -104,7 +106,7 @@ namespace Start_a_Town_
 
         public void SetOwner(GameObject parent, int actorID)
         {
-            this.Owner = actorID;
+            this.OwnerRef = actorID;
             parent.Net.EventOccured(Message.Types.ItemOwnerChanged, parent.RefID);
         }
         static Control ActorList;

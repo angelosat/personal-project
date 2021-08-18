@@ -8,7 +8,6 @@ namespace Start_a_Town_.Towns
         {
             PopulationManager.Init();
             NpcComponent.Init();
-            ZoneManager.Init();
         }
 
         public override void OnGameEvent(GameEvent e)

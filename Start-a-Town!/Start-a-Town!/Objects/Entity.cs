@@ -27,7 +27,6 @@ namespace Start_a_Town_
         [InspectorHidden]
         public OwnershipComponent Ownership => this._ownership ??= this.GetComponent<OwnershipComponent>();
 
-
         public override GameObject Create()
         {
             return new Entity();

@@ -57,12 +57,6 @@ namespace Start_a_Town_
             FloatingText.Create(this.Town.Map, zone.Average(), $"{zone.GetType()} created", ft => ft.Font = UIManager.FontBold);
         }
 
-        internal static void Init()
-        {
-            ZoneDefOf.Init();
-        }
-
-
         internal T GetZone<T>(int zoneID) where T : Zone
         {
             return this.Zones[zoneID] as T;

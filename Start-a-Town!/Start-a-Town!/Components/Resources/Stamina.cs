@@ -6,7 +6,7 @@ namespace Start_a_Town_.Components.Resources
 {
     class Stamina : ResourceWorker
     {
-        public Stamina()
+        public Stamina(ResourceDef def) : base(def)
         {
             this.AddThreshold("Out of breath", .25f);
             this.AddThreshold("Exhausted", .5f);

@@ -9,7 +9,11 @@ namespace Start_a_Town_
     {
         protected ResourceDef ResourceDef;
         static public Progress Recovery { get { return new Progress(0, Ticks.TicksPerSecond, Ticks.TicksPerSecond); } }
-        
+        public ResourceWorker(ResourceDef resourceDef)
+        {
+            this.ResourceDef = resourceDef;
+
+        }
         internal virtual void HandleRemoteCall(GameObject parent, ObjectEventArgs e, Resource resource)
         {
         }

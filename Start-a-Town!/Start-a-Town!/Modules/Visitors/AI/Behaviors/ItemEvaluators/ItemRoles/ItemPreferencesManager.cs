@@ -177,7 +177,7 @@ namespace Start_a_Town_
             var pref = this.PreferencesNew[context];
             pref.Item = item;
             pref.Score = score;
-            
+            item.Ownership.Owner = this.Actor;
             if (this.PreferencesObs.Contains(pref))
                 this.PreferencesObs.Remove(pref);
             this.PreferencesObs.Add(pref); // HACK to trigger observable syncing
@@ -253,6 +253,7 @@ namespace Start_a_Town_
             existing.ResolveReferences(this.Actor);
             if (!this.PreferencesObs.Contains(existing))
                 this.PreferencesObs.Add(existing);
+            existing.Item.Ownership.Owner = this.Actor;
         }
         void SyncRemovePref(ItemPreference pref)
         {
@@ -262,6 +263,7 @@ namespace Start_a_Town_
             existing.Clear();
             if (this.PreferencesObs.Contains(existing))
                 this.PreferencesObs.Remove(existing);
+            existing.Item.Ownership.Owner = null;
         }
 
         public void ResolveReferences()

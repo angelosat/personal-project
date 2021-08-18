@@ -7,7 +7,7 @@ using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
-    class OwnershipComponent : EntityComponent
+    public class OwnershipComponent : EntityComponent
     {
         public override string Name { get; } = "Ownership";
         public int Owner { get; private set; } = -1;

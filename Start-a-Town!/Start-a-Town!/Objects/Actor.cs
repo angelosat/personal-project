@@ -174,7 +174,7 @@ namespace Start_a_Town_
 
         internal void ForceTask(TaskGiver taskGiver, TargetArgs target)
         {
-            var task = taskGiver.TryTaskOn(this, target, true);
+            var task = taskGiver.TryForceTaskOn(this, target, true);
             if (task is not null)
                 this.GetState().ForceTask(task);
         }
@@ -504,7 +504,7 @@ namespace Start_a_Town_
             var givers = TaskGiver.CitizenTaskGivers.Concat(TaskGiver.EssentialTaskGivers);
             foreach (var giver in givers)
             {
-                var task = giver.TryTaskOn(this, target);
+                var task = giver.TryForceTaskOn(this, target);
                 if (task != null) yield return new TaskGiverResult(task, giver);// task;
             }
         }

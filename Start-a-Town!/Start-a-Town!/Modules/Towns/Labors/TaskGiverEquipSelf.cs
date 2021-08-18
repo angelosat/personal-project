@@ -66,5 +66,9 @@ namespace Start_a_Town_
                 return new AITask(typeof(TaskBehaviorDropInventoryItem), item);
             return null;
         }
+        public override AITask TryForceTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
+        {
+            return base.TryForceTaskOn(actor, target, ignoreOtherReservations);
+        }
     }
 }

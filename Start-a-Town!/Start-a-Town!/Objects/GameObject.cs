@@ -14,7 +14,7 @@ namespace Start_a_Town_
     public class GameObject : Inspectable, IEntity, ITooltippable, IContextable, INameplateable, ISlottable, ISelectable//, ILabeled, IInspectable
     {
         public static Dictionary<int, GameObject> Templates = new();
-        public override string Label => this.Name;// this.Def.Label;
+        public override string Label => this.Name;
         static int GetNextTemplateID()
         {
             return Templates.Count + 1;
@@ -362,9 +362,7 @@ namespace Start_a_Town_
         public GameObject Split(int amount)
         {
             if (amount >= this.StackSize)
-            {
                 throw new Exception();
-            }
 
             return this.SetStackSize(this.StackSize - amount).Clone().SetStackSize(amount);
         }
@@ -417,10 +415,9 @@ namespace Start_a_Town_
             return this.Map.GetNearbyObjectsNew(this.Global, range, filter).Except(new GameObject[] { this });
         }
 
-
         public GameObject()
         {
-            /*this.Transform = */this.AddComponent<PositionComponent>();
+            this.AddComponent<PositionComponent>();
         }
 
         DefComponent _info;

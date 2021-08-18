@@ -177,6 +177,7 @@ namespace Start_a_Town_
             var pref = this.PreferencesNew[context];
             pref.Item = item;
             pref.Score = score;
+            
             if (this.PreferencesObs.Contains(pref))
                 this.PreferencesObs.Remove(pref);
             this.PreferencesObs.Add(pref); // HACK to trigger observable syncing

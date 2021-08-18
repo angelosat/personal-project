@@ -19,10 +19,14 @@ namespace Start_a_Town_
         [InspectorHidden]
         public ToolAbilityComponent ToolComponent => this._toolComponent ??= this.GetComponent<ToolAbilityComponent>();
 
-
         GearComponent _gear;
         [InspectorHidden]
         public GearComponent Gear => this._gear ??= this.GetComponent<GearComponent>();
+
+        OwnershipComponent _ownership;
+        [InspectorHidden]
+        public OwnershipComponent Ownership => this._ownership ??= this.GetComponent<OwnershipComponent>();
+
 
         public override GameObject Create()
         {
@@ -33,7 +37,7 @@ namespace Start_a_Town_
             this.AddComponent(new DefComponent());
             this.AddComponent<PhysicsComponent>();
         }
-        public Entity(ItemDef def):this()
+        public Entity(ItemDef def) : this()
         {
             Def = def;
             this.AddComponent(new SpriteComponent(def));
@@ -55,26 +59,20 @@ namespace Start_a_Town_
             {
                 var compType = props.CompType;
                 if (this.TryGetComponent(compType, out var c))
-                {
                     c.Initialize(props);
-                }
                 else
                 {
                     var comp = props.CreateComponent();
                     this.AddComponent(comp);
                 }
             }
-            foreach(var c in this.Components.Values)
-            {
+            foreach (var c in this.Components.Values)
                 c.OnObjectCreated(this);
-            }
-           
         }
 
         internal bool ProvidesSkill(ToolUseDef skill)
         {
             return this.ToolComponent?.Props?.ToolUse == skill;
-            //return ToolAbilityComponent.HasSkill(this, skill);
         }
 
         internal MaterialDef GetMaterial(BoneDef def)

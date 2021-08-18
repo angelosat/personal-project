@@ -30,7 +30,7 @@ namespace Start_a_Town_.AI.Behaviors.ItemOwnership
             return null;
         }
 
-        public override AITask TryTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
+        public override AITask TryForceTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
         {
             if (target.Object is not Entity item)
                 return null;

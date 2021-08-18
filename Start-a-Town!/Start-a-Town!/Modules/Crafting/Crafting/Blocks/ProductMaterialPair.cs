@@ -38,7 +38,8 @@ namespace Start_a_Town_.Components.Crafting
 
         public override string ToString() => $"Type: {this.Block.Label}\nData: {this.Data}";
 
-        public override string Label => $"{this.Requirement.Material.Label} {this.Requirement.Item.Label} {0} / {this.Requirement.Amount}";
+        //public override string Label => $"{this.Requirement.Material.Label} {this.Requirement.Item.Label} {0} / {this.Requirement.Amount}";
+        public override string Label => this.Requirement.Label;// $"{this.Requirement.Amount}x {this.Requirement.Material.Label} {this.Requirement.Item.Label}";
 
         public string GetName() => this.Requirement.ToString();
 

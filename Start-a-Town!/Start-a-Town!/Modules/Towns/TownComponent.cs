@@ -8,11 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Start_a_Town_
 {
-    public abstract class TownComponent
+    public abstract class TownComponent : Inspectable
     {
         public Town Town;
         public MapBase Map => this.Town.Map;
         public INetwork Net => this.Map.Net;
+        public override string Label => this.Name;
         const float UpdateFrequency = 1; // per second
         float UpdateTimerMax = Ticks.TicksPerSecond / UpdateFrequency;
         float UpdateTimer;

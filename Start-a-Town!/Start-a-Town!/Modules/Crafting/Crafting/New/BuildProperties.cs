@@ -6,6 +6,7 @@
         public float ToolSensitivity;
         public ConstructionCategoryDef Category;
         public int Complexity = 1;
+        public int Dimension = 1;
         public BuildProperties()
         {
 

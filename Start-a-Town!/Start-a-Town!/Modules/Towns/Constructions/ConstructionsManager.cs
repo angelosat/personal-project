@@ -298,7 +298,7 @@ namespace Start_a_Town_
         GroupBox UpdatePendingDesignationLabel(ConstructionParams pending)
         {
             this.PendingDesignationLabel.ClearControls();
-            this.PendingDesignationLabel.AddControlsLineWrap(Label.ParseNewNew("Pending Construction: ", pending));
+            this.PendingDesignationLabel.AddControlsLineWrap(UI.Label.ParseNewNew("Pending Construction: ", pending));
             return this.PendingDesignationLabel;
         }
 

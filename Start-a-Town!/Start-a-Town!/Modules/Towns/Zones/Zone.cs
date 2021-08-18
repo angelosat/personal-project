@@ -4,16 +4,16 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
-using Start_a_Town_.Core;
 using System.IO;
 
 namespace Start_a_Town_
 {
-    abstract public class Zone : ISelectable, ISaveable, ISerializable
+    abstract public class Zone : Inspectable, ISelectable, ISaveable, ISerializable
     {
         public Town Town => this.Manager.Town;
         public MapBase Map => this.Town.Map;
         public INetwork Net => this.Map.Net;
+        public override string Label => this.Name;
         protected readonly DrawableCellCollection Positions = new(Block.FaceHighlights[IntVec3.UnitZ]);
         public string Name;
         public ZoneManager Manager;

@@ -4,8 +4,9 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class RegionNode
+    public class RegionNode : Inspectable
     {
+        public override string Label => nameof(RegionNode);
         public IntVec3 Local, Global;
         public RegionNode North, West, East, South;
 

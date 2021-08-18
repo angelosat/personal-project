@@ -675,9 +675,7 @@ namespace Start_a_Town_
         }
         internal IEnumerable<ItemMaterialAmount> GetAllValidConstructionMaterialsNew()
         {
-            return this.Ingredient?.GetItemMaterialAmounts() ?? Enumerable.Empty<ItemMaterialAmount>();
-
-            return this.Ingredient?.GetAllValidMaterialsNew() ?? Enumerable.Empty<ItemMaterialAmount>();
+            return this.Ingredient?.GetItemMaterialAmounts(this.BuildProperties.Dimension) ?? Enumerable.Empty<ItemMaterialAmount>();
         }
         internal void IngredientRequirements(MaterialDef mainMaterial, out ItemDef def, out int amount)
         {

@@ -112,7 +112,6 @@ namespace Start_a_Town_.UI
         {
             if (obj is not null)
             {
-                this.HoverText = this.Text;
                 if (obj is Inspectable objdetails)
                 {
                     this.Active = true;
@@ -126,8 +125,10 @@ namespace Start_a_Town_.UI
                     this.Active = false;
                     this.Text = obj?.ToString() ?? "null";
                 }
+                this.HoverText = this.Text;
             }
         }
+     
         public Label(object obj, Action action) : this(Vector2.Zero, obj.ToString())
         {
             this.Active = true;
@@ -359,25 +360,39 @@ namespace Start_a_Town_.UI
         }
         internal static IEnumerable<Label> ParseNewNew(object value)
         {
-            if (value is string str)
-                return ParseNew(str);
-            else if(value is Inspectable objInspectable)
-                return new Label[] { new Label(value) };
-            else if (value is IEnumerable<string> strEnum)
-                return strEnum.SelectMany(s => ParseNew(s));
-            else if (value is IEnumerable<object> objEnum)
-                return objEnum.Select(o => new Label(o));
-            else
-                return new Label[] { new Label(value) };
-
             //if (value is string str)
-            //    return new GroupBox().AddControlsHorizontally(ParseNew(str).ToArray());
+            //    return ParseNew(str);
+            //else if (value is Inspectable objInspectable)
+            //    return new Label[] { new Label(value) };
             //else if (value is IEnumerable<string> strEnum)
-            //    return new GroupBox().AddControlsHorizontally(strEnum.SelectMany(s => ParseNew(s)).ToArray());
+            //    return strEnum.SelectMany(s => ParseNew(s));
             //else if (value is IEnumerable<object> objEnum)
-            //    return new GroupBox().AddControlsHorizontally(objEnum.Select(o => new Label(o)).ToArray());
+            //    return objEnum.Select(o => new Label(o));
+            //else if (value is Func<string> textFunc)
+            //    return new Label[] { new Label(textFunc) };
             //else
-            //    return new Label(value);
+            //    return new Label[] { new Label(value) };
+
+            if (value is string str)
+                foreach (var i in ParseNew(str)) yield return i;
+            else if (value is Inspectable objInspectable)
+                yield return new Label(value);
+            else if (value is IEnumerable<string> strEnum)
+                foreach (var i in strEnum.SelectMany(s => ParseNew(s))) yield return i;
+            else if (value is IEnumerable<object> objEnum)
+                foreach (var i in objEnum.Select(o => new Label(o))) yield return i;
+            else if (value is Func<string> textFunc)
+                yield return new Label(textFunc);
+            else
+                yield return new Label(value);
+        }
+        internal static GroupBox ParseWrap(int wrapWidth, params object[] values)
+        {
+            return new GroupBox().AddControlsLineWrap(ParseNewNew(values), wrapWidth);
+        }
+        internal static GroupBox ParseWrap(params object[] values)
+        {
+            return new GroupBox().AddControlsLineWrap(ParseNewNew(values));
         }
         public static IEnumerable<T> ParseBest<T>(string text) where T : Label, new()
         {

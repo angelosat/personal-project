@@ -43,12 +43,7 @@ namespace Start_a_Town_.AI
         readonly Dictionary<JobDef, Job> Jobs = JobDefOf.All.ToDictionary(i => i, i => new Job(i));
 
         public Dictionary<string, object> Blackboard = new();
-        public object this[string key]
-        {
-            get => this.Blackboard[key];
-            set => this.Blackboard[key] = value;
-        }
-
+       
         public static AIConversationManager ConversationManager = new();
         public AIConversationManager.Conversation CurrentConversation;
         public IItemPreferencesManager ItemPreferences;

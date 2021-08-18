@@ -5,8 +5,9 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public class Region
+    public class Region : Inspectable
     {
+        public override string Label => nameof(Region);
         internal Chunk Chunk;
         MapBase Map => this.Chunk.Map;
         internal int RoomID

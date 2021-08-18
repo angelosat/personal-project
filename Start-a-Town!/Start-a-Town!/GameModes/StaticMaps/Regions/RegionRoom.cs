@@ -4,8 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public class RegionRoom
+    public class RegionRoom : Inspectable
     {
+        public override string Label => nameof(RegionRoom);
         public int ID;
         public Color Color;
         static readonly Random ColorRand = new();

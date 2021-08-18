@@ -2,7 +2,7 @@
 
 namespace Start_a_Town_.Graphics
 {
-    public abstract class AtlasBase
+    public abstract class AtlasBase : Inspectable
     {
         public Texture2D Texture;
         public Texture2D DepthTexture;

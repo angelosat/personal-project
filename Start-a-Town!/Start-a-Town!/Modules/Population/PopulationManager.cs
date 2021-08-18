@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public class PopulationManager : ISaveable, ISerializable
+    public class PopulationManager : Inspectable, ISaveable, ISerializable
     {
         internal static class Packets
         {
@@ -62,6 +62,7 @@ namespace Start_a_Town_
 
         bool Populated;
         readonly ObservableCollection<VisitorProperties> ActorsAdventuring = new();// ActorsCap);
+        public IEnumerable<VisitorProperties> AllActors => this.ActorsAdventuring;
         public readonly StaticWorld World;
         const int ActorsCap = 8;
         const float TickRate = 1 / 3f, InitialChance = .05f, VisitChanceBaseRate = .001f;// 2 seconds per tick //1 tick per second 

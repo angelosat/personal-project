@@ -382,7 +382,6 @@
     <Compile Include="Modules\Visitors\AI\Behaviors\TaskGiverEquipPreferredItems.cs" />
     <Compile Include="Modules\Visitors\AI\Behaviors\TaskGiverOfferGuidance.cs" />
     <Compile Include="AI\Conditions\BehaviorCondition.cs" />
-    <Compile Include="AI\Conditions\BehaviorTargetEntityExists.cs" />
     <Compile Include="AI\Conditions\ConditionAny.cs" />
     <Compile Include="AI\Conditions\ConditionAll.cs" />
     <Compile Include="AI\Conditions\ConditionNot.cs" />

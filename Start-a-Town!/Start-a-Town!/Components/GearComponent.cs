@@ -170,7 +170,7 @@ namespace Start_a_Town_
             return;
             if (toattach == null)
                 return;
-            var found = body.Descendants(toattach.Def).FirstOrDefault();
+            var found = body.GetAllBones(toattach.Def).FirstOrDefault();
             if (found != null)
                 found.SetBone(toattach);
         }

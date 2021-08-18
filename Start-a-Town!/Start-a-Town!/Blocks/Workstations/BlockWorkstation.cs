@@ -17,8 +17,8 @@ namespace Start_a_Town_
             this.BlockEntityType = blockEntityType;
             this.Variations.Add(this.Orientations.First());
             this.BuildProperties.Category = ConstructionCategoryDefOf.Production;
+            this.BuildProperties.Dimension = 4;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
-            this.Ingredient.MaterialVolume = 1 / 4f;
         }
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {

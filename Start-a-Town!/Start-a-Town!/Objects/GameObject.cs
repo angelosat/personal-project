@@ -330,7 +330,7 @@ namespace Start_a_Town_
         public bool IsReserved => this.Town.ReservationManager.IsReserved(this);
         public bool IsPlayerControlled => this.Net.GetPlayers().Any(p => p.ControllingEntity == this); 
         public virtual bool IsHaulable => this.Def.Haulable;
-        public bool IsFuel => this.Material?.Fuel.Value > 0;
+        public bool IsFuel => this.Material?.Fuel?.Value > 0;
         public GameObject Hauled => this.Inventory?.GetHauling().Object;
 
         public GameObjectSlot Slot;
@@ -1468,7 +1468,7 @@ namespace Start_a_Town_
         {
             get
             {
-                return this.Material?.Fuel.Value ?? 0;
+                return this.Material?.Fuel?.Value ?? 0;
             }
         }
         public float TotalFuel

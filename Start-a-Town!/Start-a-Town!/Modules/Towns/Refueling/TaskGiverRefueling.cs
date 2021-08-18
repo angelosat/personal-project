@@ -30,7 +30,7 @@ namespace Start_a_Town_
                         continue;
                     if (!refComp.Accepts(fuel as Entity))
                         continue;
-                    if (fuel.Material?.Fuel.Value > 0)
+                    if (fuel.Material?.Fuel?.Value > 0)
                     {
                         var task = new AITask(typeof(TaskBehaviorRefueling));
                         task.SetTarget(TaskBehaviorRefueling.DestinationIndex, new TargetArgs(actor.Map, destination.Key));

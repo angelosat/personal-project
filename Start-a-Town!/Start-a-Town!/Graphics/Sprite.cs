@@ -8,7 +8,7 @@ using Start_a_Town_.Graphics;
 
 namespace Start_a_Town_
 {
-    public class Sprite : IDisposable
+    public class Sprite : Inspectable, IDisposable
     {
         static public AtlasWithDepth Atlas = new("Entities");
 

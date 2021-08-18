@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Animations
 {
-    public class Joint
+    public class Joint : Inspectable
     {
         public float Angle;
         public Bone Parent;
@@ -22,13 +22,12 @@ namespace Start_a_Town_.Animations
         public Vector2 Position = Vector2.Zero;
         public Func<GameObject, GameObjectSlot> SlotGetter = (entity) => null;
         public Func<Entity, GameObject> AttachmentFunc;
-
         GameObjectSlot Slot;
         public void MakeChildOf(GameObject parent)
         {
             this.Slot = SlotGetter(parent);
         }
-
+        public override string ToString() => $"Joint:{this.Bone}";
         public Joint()
         {
 

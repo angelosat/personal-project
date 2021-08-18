@@ -34,7 +34,7 @@ namespace Start_a_Town_
                     BtnForward,
                     BtnRefresh,
                     new Button("Defs", () => ShowContainer(DefDirectory)),
-                    new Button("Objects", () => ShowContainer(ObjectsDirectory))
+                    new Button("Refs", () => ShowContainer(ObjectsDirectory))
                     );
                 Container = new GroupBox();
                 WindowHelp.AddControlsVertically(toolbar, Container);

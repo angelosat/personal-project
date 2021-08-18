@@ -8,7 +8,7 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    public partial class Town
+    public partial class Town : Inspectable
     {
         UIQuickMenu QuickMenu;
         public static HotkeyContext HotkeyContext = new("Town");
@@ -32,18 +32,32 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
+
+        [InspectorHidden]
         public ZoneManager ZoneManager;
+        [InspectorHidden]
         public ConstructionsManager ConstructionsManager;
+        [InspectorHidden]
         public ChoppingManager ChoppingManager;
+        [InspectorHidden]
         public DiggingManager DiggingManager;
+        [InspectorHidden]
         public DesignationManager DesignationManager;
+        [InspectorHidden]
         public RoomManager RoomManager;
+        [InspectorHidden]
         public CraftingManager CraftingManager;
+        [InspectorHidden]
         public JobsManager JobsManager;
+        [InspectorHidden]
         public ReservationManager ReservationManager;
+        [InspectorHidden]
         public TerrainManager TerrainManager;
+        [InspectorHidden]
         public WorkplaceManager ShopManager;
+        [InspectorHidden]
         public QuestsManager QuestManager;
+        [InspectorHidden]
         public StorageManager Storage;
 
         public List<TownComponent> TownComponents = new();

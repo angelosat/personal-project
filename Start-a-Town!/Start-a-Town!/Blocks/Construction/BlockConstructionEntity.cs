@@ -11,6 +11,7 @@ namespace Start_a_Town_
     {
         public ProductMaterialPair Product;
         public List<ItemMaterialAmount> Container = new();
+
         public Progress BuildProgress { get; set; }
         public List<IntVec3> Children { get; set; } = new List<IntVec3>();
 
@@ -45,18 +46,20 @@ namespace Start_a_Town_
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var product = this.Product;
-            info.AddInfo(new Label() { TextFunc =
-                GetIngredientText }
+            info.AddInfo(
+                //UI.Label.ParseWrap($"{product.Requirement.Material} {product.Requirement.Item} ", new Func<string>(() => this.Container.First().Amount.ToString()), $" / {product.Requirement.Amount}")
+                //UI.Label.ParseWrap(product.Requirement.Material, " ", product.Requirement.Item, " ", new Func<string>(() => this.Container.First().Amount.ToString()), $" / {product.Requirement.Amount}")
+                //UI.Label.ParseWrap(new Func<string>(this.Container.First().Amount.ToString), " / ", product)
+                UI.Label.ParseWrap(product, " ", new Func<string>(this.Container.First().Amount.ToString), " / ", product.Requirement.Amount)
+            //new Label(this.Product) { TextFunc = this.GetIngredientText }
+            //new Label() { TextFunc = GetIngredientText }
             );
             info.AddInfo(this.BuildProgress.GetGui("Construction"));
         }
         string GetIngredientText()
         {
             var product = this.Product;
-            var req = product.Requirement;
-            var block = product.Block;
-            var ing = block.Ingredient;
-            return $"{product.Requirement.Material.Name} {product.Requirement.Item.Label} {this.Container.First().Amount} / {product.Requirement.Amount}";
+            return $"{product.Requirement.Material.Label} {product.Requirement.Item.Label} {this.Container.First().Amount} / {product.Requirement.Amount}";
         }
 
         internal void HandleDepositedItem(GameObject dropped, int amount)

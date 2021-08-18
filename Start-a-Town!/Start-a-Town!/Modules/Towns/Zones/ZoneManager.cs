@@ -13,6 +13,7 @@ namespace Start_a_Town_
         int _zoneIDSequence = 1;
         public int GetNextID() => _zoneIDSequence++;
         readonly public Dictionary<int, Zone> Zones = new();
+        public IEnumerable<Zone> AllZones => this.Zones.Values;
         static ZoneManager()
         {
             Hotkey = HotkeyManager.RegisterHotkey(ToolManagement.HotkeyContextManagement, "Zones", ToggleGui, System.Windows.Forms.Keys.Y);
@@ -27,6 +28,8 @@ namespace Start_a_Town_
             var finalPositions = allpositions.Where(
                 po => this.Town.GetZoneAt(po) == null &&
                 zoneType.IsValidLocation(this.Town.Map, po));
+            if (!finalPositions.Any())
+                return null;
             if (!finalPositions.IsConnectedNew())
                 return null;
             var zone = zoneType.Create(this, finalPositions);

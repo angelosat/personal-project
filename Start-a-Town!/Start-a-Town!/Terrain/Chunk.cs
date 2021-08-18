@@ -15,7 +15,7 @@ namespace Start_a_Town_
 {
     [Flags]
     public enum Edges { None = 0x0, West = 0x1, North = 0x2, East = 0x4, South = 0x8, All = 0xF }
-    public class Chunk
+    public class Chunk : Inspectable
     {
         public Chunk Clone()
         {
@@ -132,6 +132,7 @@ namespace Start_a_Town_
             return this.RandomOrderedCells[index];
         }
 
+        [InspectorHidden]
         public Cell[] Cells;
 
         public void CopyFrom(Chunk chunk)
@@ -148,7 +149,6 @@ namespace Start_a_Town_
 
         public bool IsQueuedForLight;
         public const int Size = 16;
-        public SortedList<int, Cell> VisibleIndoorCells;
         public IntVec2 Start;
         public Vector2  bottomRight;
         public void Invalidate()
@@ -179,6 +179,7 @@ namespace Start_a_Town_
         }
 
         #region Public Properties
+        [InspectorHidden]
         public Cell this[int localx, int localy, int localz]
         {
             get
@@ -190,6 +191,7 @@ namespace Start_a_Town_
                 return this.Cells[ind];
             }
         }
+        [InspectorHidden]
         public Cell this[float localx, float localy, float localz]
         {
             get
@@ -201,13 +203,7 @@ namespace Start_a_Town_
                 return this.Cells[ind];
             }
         }
-
-        internal void ResolveReferences()
-        {
-            foreach (var obj in this.Objects)
-                obj.ResolveReferences();
-        }
-
+        [InspectorHidden]
         public Cell this[IntVec3 localCoords]
         {
             get
@@ -218,6 +214,7 @@ namespace Start_a_Town_
                 return this.Cells[GetCellIndex(localCoords)];
             }
         }
+        [InspectorHidden]
         public Cell this[int cellIndex] => this.Cells[cellIndex];
 
         public IntVec2 MapCoords
@@ -229,6 +226,11 @@ namespace Start_a_Town_
                 this.Y = (int)value.Y;
                 this.Start = this.MapCoords * Size;
             }
+        }
+        internal void ResolveReferences()
+        {
+            foreach (var obj in this.Objects)
+                obj.ResolveReferences();
         }
 
         public static readonly int Width = Block.Width * Size;
@@ -257,7 +259,6 @@ namespace Start_a_Town_
         Chunk()
         {
             this.Cells = new Cell[Chunk.Size * Chunk.Size * MapBase.MaxHeight];
-            this.VisibleIndoorCells = new SortedList<int, Cell>();
             this.Objects = new List<GameObject>();
             this.Sunlight = new List<byte>(Volume);
             for (int i = 0; i < Volume; i++)
@@ -1717,6 +1718,7 @@ namespace Start_a_Town_
             }
         }
 
+        [InspectorHidden]
         public Slice[] Slices = new Slice[128];
         public class Slice
         {

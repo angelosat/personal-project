@@ -1,6 +1,6 @@
 ﻿namespace Start_a_Town_
 {
-    public struct Fuel
+    public class Fuel : Inspectable
     {
         public readonly FuelDef Def;
         public float Value;

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public partial class Room : ISelectable, ISaveable, ISerializable
+    public partial class Room : Inspectable, ISelectable, ISaveable, ISerializable
     {
         static Room()
         {

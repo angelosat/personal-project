@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
-    public class VisitorProperties : ITooltippable, ISerializable, ISaveable, ISyncable
+    public class VisitorProperties : Inspectable, ITooltippable, ISerializable, ISaveable, ISyncable
     {
         static readonly int PacketSyncAwardTownRating, PacketSync;
         static VisitorProperties()

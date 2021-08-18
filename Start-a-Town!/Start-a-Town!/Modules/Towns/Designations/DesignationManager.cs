@@ -257,7 +257,7 @@ namespace Start_a_Town_
         GroupBox UpdatePendingDesignationLabel(DesignationDef des)
         {
             this.PendingDesignationLabel.ClearControls();
-            this.PendingDesignationLabel.AddControlsLineWrap(Label.ParseNewNew("Designation: ", des));// ( new Label(des));
+            this.PendingDesignationLabel.AddControlsLineWrap(UI.Label.ParseNewNew("Designation: ", des));// ( new Label(des));
             return this.PendingDesignationLabel;
         }
         internal override void OnTargetSelected(IUISelection info, TargetArgs targetArgs)

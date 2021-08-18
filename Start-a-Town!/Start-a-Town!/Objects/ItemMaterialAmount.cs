@@ -3,13 +3,13 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    public class ItemMaterialAmount : ISerializable, ISaveable, IListable
+    public class ItemMaterialAmount : Inspectable, ISerializable, ISaveable, IListable
     {
         public ItemDef Item;
         public MaterialDef Material;
         public int Amount;
 
-        public string Label => throw new System.NotImplementedException();
+        public override string Label => $"{this.Amount}x {this.Material.Label} {this.Item.Label}";
 
         public ItemMaterialAmount()
         {

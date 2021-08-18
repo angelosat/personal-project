@@ -10,9 +10,7 @@ namespace Start_a_Town_.Core
 {
     class GameModeStaticMaps : GameMode
     {
-        readonly CommandParser Parser = new CommandParser();
-
-        GuiDialogLoad DialogLoad;
+        readonly CommandParser Parser = new();
 
         public GameModeStaticMaps()
         {
@@ -181,11 +179,7 @@ namespace Start_a_Town_.Core
 
         internal override Control Load()
         {
-            if (this.DialogLoad is null)
-                this.DialogLoad = new GuiDialogLoad();
-
-            this.DialogLoad.Populate();
-            return this.DialogLoad.ToPanel();
+            return SaveFileManager.Gui.ToPanel();
         }
         internal override Control GetNewGameGui(Action cancelAction)
         {

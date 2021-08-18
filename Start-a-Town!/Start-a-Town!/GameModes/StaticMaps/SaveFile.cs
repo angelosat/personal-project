@@ -5,14 +5,18 @@ using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
-    class SaveFile
+    class SaveFile : IListable
     {
+        public static readonly string SaveFolderFullPath = Directory.GetCurrentDirectory() + $"/Saves/Worlds/";
+
         public HeaderInfo Header;
 
         public FileInfo File;
 
         StaticWorld _world;
         public StaticWorld World => _world ??= this.ReadTag();
+
+        public string Label => this.File.Name;
 
         long tagReaderPosition;
 
@@ -54,7 +58,9 @@ namespace Start_a_Town_
             using var writer = new BinaryWriter(stream);
             HeaderInfo.Write(writer);
             tag.WriteWithRefs(writer);
-            var fullPath = Directory.GetCurrentDirectory() + $"/Saves/Worlds/{name}.sat";
+            //var fullPath = Directory.GetCurrentDirectory() + $"/Saves/Worlds/{name}.sat";
+            var fullPath = SaveFolderFullPath + $"{name}.sat";
+
             Chunk.Compress(stream, fullPath);
             stream.Close();
         }
@@ -71,23 +77,37 @@ namespace Start_a_Town_
             }
         }
 
-        //public Control GetGui(int width, Action callBack)
-        //{
-        //    var btn = ButtonNew.CreateBig(callBack, width, () => Path.GetFileNameWithoutExtension(this.File.Name), () => this.Header.Version); //() => save.Header.CreationTime.ToString("R")); //
-        //    btn.AddControls(IconButton.CreateCloseButton().SetLeftClickAction(b => showDeleteDialogue(this)).SetLocation(btn.TopRight).SetAnchor(1,0).ShowOnParentFocus(true));
-        //    return btn;
-        //    void showDeleteDialogue(SaveFile save)
-        //    {
-        //        var msgbox = new MessageBox("", $"Delete {save.File.Name}?", () => delete(save));
-        //        msgbox.ShowDialog();
-
-        //        void delete(SaveFile save)
-        //        {
-        //            save.File.Delete();
-        //            this.List.RemoveItems(save);
-        //        }
-        //    }
-        //}
+        public Control GetGui(int width, Action<SaveFile> callBack)
+        {
+            var btn = ButtonNew.CreateBig(()=>callBack(this), width, () => Path.GetFileNameWithoutExtension(this.File.Name), () => this.Header.Version); //() => save.Header.CreationTime.ToString("R")); //
+            btn.AddControls(IconButton.CreateCloseButton().SetLeftClickAction(b => showDeleteDialogue(this)).SetLocation(btn.TopRight).SetAnchor(1, 0).ShowOnParentFocus(true));
+            return btn;
+            void showDeleteDialogue(SaveFile save)
+            {
+                var msgbox = new MessageBox("", $"Delete {save.File.Name}?", () => SaveFileManager.Delete(save));
+                msgbox.ShowDialog();
+            }
+        }
+        static SaveFile()
+        {
+            Gui.Width = 320;
+        }
+        public static GuiInfo Gui;
+        public struct GuiInfo
+        {
+            public int Width;
+        }
+        public Control GetListControlGui()
+        {
+            var btn = ButtonNew.CreateBig(() => SaveFileManager.Load(this), Gui.Width, () => Path.GetFileNameWithoutExtension(this.File.Name), () => this.Header.Version); //() => save.Header.CreationTime.ToString("R")); //
+            btn.AddControls(IconButton.CreateCloseButton().SetLeftClickAction(b => showDeleteDialogue(this)).SetLocation(btn.TopRight).SetAnchor(1, 0).ShowOnParentFocus(true));
+            return btn;
+            void showDeleteDialogue(SaveFile save)
+            {
+                var msgbox = new MessageBox("", $"Delete {save.File.Name}?", () => SaveFileManager.Delete(save));
+                msgbox.ShowDialog();
+            }
+        }
 
         public struct HeaderInfo
         {

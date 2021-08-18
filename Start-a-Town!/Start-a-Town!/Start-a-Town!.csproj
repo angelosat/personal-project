@@ -231,6 +231,7 @@
     <Compile Include="Control\Tools\CellRendering\BlockRendererObservable.cs" />
     <Compile Include="Control\Tools\CellRendering\DrawableCellCollection.cs" />
     <Compile Include="Engine\Ticks.cs" />
+    <Compile Include="GameModes\StaticMaps\SaveFileManager.cs" />
     <Compile Include="Graphics\ColorCustomization\CharacterColor.cs" />
     <Compile Include="Gui\Hud\Chat\ConsoleEntry.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListCollapsibleObservable.cs" />
@@ -634,7 +635,6 @@
     <Compile Include="GameModes\StaticMaps\Screens\GuiNewGame.cs" />
     <Compile Include="Modules\Towns\Rooms\RoomManager.cs" />
     <Compile Include="GameModes\StaticMaps\SaveFile.cs" />
-    <Compile Include="GameModes\StaticMaps\Gui\GuiDialogLoad.cs" />
     <Compile Include="GameModes\StaticMaps\Packets\PacketChunkReceived.cs" />
     <Compile Include="GameModes\StaticMaps\Packets\PacketChunkRequest.cs" />
     <Compile Include="GameModes\StaticMaps\Packets\PacketWorld.cs" />

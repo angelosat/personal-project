@@ -4,10 +4,11 @@ using Start_a_Town_.AI;
 
 namespace Start_a_Town_
 {
-    class PacketTaskUpdate
+    [EnsureStaticCtorCall]
+    static class PacketTaskUpdate
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketTaskUpdate()
         {
             p = Network.RegisterPacketHandler(PacketTaskUpdate.Receive);
         }

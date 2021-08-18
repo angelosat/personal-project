@@ -65,6 +65,7 @@ namespace Start_a_Town_
                 return TaskHelper.FindItemAnywhere(actor, o => o is Tool tool && tool.ProvidesSkill(skill));
         }
         
-        public virtual AITask TryForceTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false) { return null; }
+        public virtual AITask TryTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false) { return null; }
+        public virtual TaskDef CanGiveTask(Actor actor, TargetArgs target) { return null; }
     }
 }

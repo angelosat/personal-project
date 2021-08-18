@@ -3,10 +3,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Components.Needs
 {
-    class PacketNeedModify
+    [EnsureStaticCtorCall]
+    static class PacketNeedModify
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketNeedModify()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

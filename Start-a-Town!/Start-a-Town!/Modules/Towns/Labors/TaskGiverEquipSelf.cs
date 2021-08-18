@@ -35,7 +35,8 @@ namespace Start_a_Town_
                         if (!actor.CanReach(tool.item))
                             continue;
                         itemmanager.AddPreference(toolUse, tool.item, tool.score);
-                        return new AITask(typeof(TaskBehaviorStoreInInventory)) { TargetA = tool.item, AmountA = 1 };
+                        //return new AITask(typeof(TaskBehaviorStoreInInventory)) { TargetA = tool.item, AmountA = 1 };
+                        return new AITask(TaskDefOf.PickUp) { TargetA = tool.item, AmountA = 1 };
                     }
                 }
 
@@ -66,9 +67,27 @@ namespace Start_a_Town_
                 return new AITask(typeof(TaskBehaviorDropInventoryItem), item);
             return null;
         }
-        public override AITask TryForceTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
+
+        public override AITask TryTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
         {
-            return base.TryForceTaskOn(actor, target, ignoreOtherReservations);
+            if (target.Object is not Entity item)
+                return null;
+            var itemmanager = actor.ItemPreferences;
+            var (role, score) = itemmanager.FindBestRole(item);
+            if (role is null)
+                return null;
+            itemmanager.AddPreference(role, item, score);
+            return new AITask(typeof(TaskBehaviorStoreInInventory)) { TargetA = target, AmountA = 1 };
+        }
+        public override TaskDef CanGiveTask(Actor actor, TargetArgs target)
+        {
+            if (target.Object is not Entity item)
+                return null;
+            var itemmanager = actor.ItemPreferences;
+            var (role, _) = itemmanager.FindBestRole(item);
+            if (role is not null)
+                return TaskDefOf.PickUp;
+            return null;
         }
     }
 }

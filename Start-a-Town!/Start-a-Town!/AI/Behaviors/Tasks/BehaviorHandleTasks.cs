@@ -136,8 +136,6 @@ namespace Start_a_Town_
             var bhav = task.CreateBehavior(parent);
             if (!bhav.InitBaseReservations())
                 return false;
-
-            $"found followup task from same taskgiver {this.CurrentTaskGiver}".ToConsole();
             state.CurrentTaskBehavior = bhav;
             state.CurrentTask = task;
             return true;

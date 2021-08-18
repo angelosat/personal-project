@@ -2,9 +2,6 @@
 using Start_a_Town_.Net;
 using Start_a_Town_.Components;
 using Start_a_Town_.UI;
-using Start_a_Town_.Modules.AI.Net.Packets;
-using Start_a_Town_.Components.Needs;
-using Start_a_Town_.Modules.AI.Net;
 
 namespace Start_a_Town_.AI
 {
@@ -12,10 +9,6 @@ namespace Start_a_Town_.AI
     {
         public override void Initialize()
         {
-            PacketAILogWrite.Init();
-            PacketForceTask.Init();
-            PacketNeedModify.Init();
-            PacketTaskUpdate.Init();
             AITask.Initialize();
         }
         

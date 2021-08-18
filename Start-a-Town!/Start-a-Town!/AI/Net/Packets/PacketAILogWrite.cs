@@ -3,10 +3,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Modules.AI.Net.Packets
 {
-    class PacketAILogWrite
+    [EnsureStaticCtorCall]
+    static class PacketAILogWrite
     {
-        static int p;
-        internal static void Init()
+        static readonly int p;
+        static PacketAILogWrite()
         {
             p = Network.RegisterPacketHandler(Receive);
         }

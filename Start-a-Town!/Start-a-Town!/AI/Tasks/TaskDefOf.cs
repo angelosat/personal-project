@@ -2,7 +2,7 @@
 
 namespace Start_a_Town_
 {
-    // TODO: load from external file?
+    [EnsureStaticCtorCall]
     public static class TaskDefOf
     {
         static public TaskDef Crafting = new("Crafting", typeof(TaskBehaviorCrafting))
@@ -70,5 +70,15 @@ namespace Start_a_Town_
             Format = "Chat",
             GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
         };
+
+        static public TaskDef PickUp = new("Picking Up", typeof(TaskBehaviorStoreInInventory))
+        {
+            Format = "Force equip {0}",
+            GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
+        };
+        static TaskDefOf()
+        {
+            Def.Register(typeof(TaskDefOf));
+        }
     }
 }

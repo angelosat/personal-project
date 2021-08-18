@@ -24,8 +24,6 @@ namespace Start_a_Town_
             public ItemPreference(ItemRole role)
             {
                 this.Role = role;
-                //this.ItemRefId = 0;
-                //this.Score = 0;
             }
             public void CopyFrom(ItemPreference pref)
             {

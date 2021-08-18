@@ -174,7 +174,7 @@ namespace Start_a_Town_
 
         internal void ForceTask(TaskGiver taskGiver, TargetArgs target)
         {
-            var task = taskGiver.TryForceTaskOn(this, target, true);
+            var task = taskGiver.TryTaskOn(this, target, true);
             if (task is not null)
                 this.GetState().ForceTask(task);
         }
@@ -497,16 +497,14 @@ namespace Start_a_Town_
             this.Mobile.Jump(this);
         }
 
-        internal IEnumerable<TaskGiverResult> GetPossibleTasksOnTarget(TargetArgs target)
+        internal IEnumerable<(TaskDef task, TaskGiver giver)> CanForceTaskOn(TargetArgs target)
         {
             if (target == null || target.Type == TargetType.Null)
                 yield break;
             var givers = TaskGiver.CitizenTaskGivers.Concat(TaskGiver.EssentialTaskGivers);
             foreach (var giver in givers)
-            {
-                var task = giver.TryForceTaskOn(this, target);
-                if (task != null) yield return new TaskGiverResult(task, giver);// task;
-            }
+                if (giver.CanGiveTask(this, target) is TaskDef taskDef) 
+                    yield return (taskDef, giver);
         }
 
         internal bool OwnsOrCanClaim(Entity item)

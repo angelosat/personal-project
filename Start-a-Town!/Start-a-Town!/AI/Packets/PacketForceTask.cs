@@ -4,10 +4,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
-    class PacketForceTask
+    [EnsureStaticCtorCall]
+    static class PacketForceTask
     {
-        static int PType;
-        internal static void Init()
+        static readonly int PType;
+        static PacketForceTask()
         {
             PType = Network.RegisterPacketHandler(Receive);
         }

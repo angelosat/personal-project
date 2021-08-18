@@ -298,7 +298,6 @@ namespace Start_a_Town_
             if (slot.Object is not null)
                 WindowTargetManagement.Refresh(new TargetArgs(slot.Object));
         }
-
         private bool TryShowForceTaskGUI(TargetArgs target)
         {
             var actor = SelectionManager.SingleSelectedEntity as Actor;
@@ -306,20 +305,23 @@ namespace Start_a_Town_
             if (!(actor?.IsCitizen ?? false))
                 return false;
 
-            var tasks = actor.GetPossibleTasksOnTarget(target);
-            if (tasks?.Any() ?? false)
+            var taskGivers = actor.CanForceTaskOn(target);
+            if (taskGivers.Any())
             {
+                //if(UIForceTask.IsOpen)
+                //{
+                //    UIForceTask.Hide();
+                //    return true;
+                //}
                 UIForceTask.ClearControls();
-                UIForceTask.AddControlsBottomLeft(tasks
-                    .Select(t =>
+                UIForceTask.AddControlsBottomLeft(taskGivers
+                    .Select(result =>
                     {
-                        var task = t.Task;
-                        var giver = t.Source;
-                        return new UI.Button(task.GetForceTaskText())
+                        return new UI.Button(result.task.GetForceText(target))// .ToString())
                         {
                             LeftClickAction = () =>
                             {
-                                PacketForceTask.Send(giver, actor, target);
+                                PacketForceTask.Send(result.giver, actor, target);
                                 UIForceTask.Hide();
                             }
                         };
@@ -330,14 +332,53 @@ namespace Start_a_Town_
                 UIForceTask.Show();
                 return true;
             }
-            else
-            {
-                UIForceTask?.Hide();
-                return false;
-            }
+            //else
+            //{
+            //    UIForceTask?.Hide();
+            //    return false;
+            //}
+            return false;
         }
 
-        static readonly UI.Control UIForceTask = new UI.Panel() { AutoSize = true };
+        //private bool TryShowForceTaskGUI(TargetArgs target)
+        //{
+        //    var actor = SelectionManager.SingleSelectedEntity as Actor;
+
+        //    if (!(actor?.IsCitizen ?? false))
+        //        return false;
+
+        //    var tasks = actor.GetPossibleTasksOnTarget(target);
+        //    if (tasks?.Any() ?? false)
+        //    {
+        //        UIForceTask.ClearControls();
+        //        UIForceTask.AddControlsBottomLeft(tasks
+        //            .Select(t =>
+        //            {
+        //                var task = t.Task;
+        //                var giver = t.Source;
+        //                return new UI.Button(task.GetForceTaskText())
+        //                {
+        //                    LeftClickAction = () =>
+        //                    {
+        //                        PacketForceTask.Send(giver, actor, target);
+        //                        UIForceTask.Hide();
+        //                    }
+        //                };
+
+        //            }).ToArray());
+
+        //        UIForceTask.Location = UIManager.Mouse;
+        //        UIForceTask.Show();
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        UIForceTask?.Hide();
+        //        return false;
+        //    }
+        //}
+
+        static readonly UI.Control UIForceTask = new UI.Panel() { AutoSize = true }.HideOnAnyClick();
 
         internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {

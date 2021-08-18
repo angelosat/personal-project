@@ -70,6 +70,22 @@ namespace Start_a_Town_
             foreach (var r in ItemRolesTool.Values.Concat(ItemRolesGear.Values))
                 this.PreferencesNew.Add(r.Context, new(r));
         }
+        public (IItemPreferenceContext role, int score) FindBestRole(Entity item)
+        {
+            ItemPreference bestPreference = null;
+            int bestScore = -1;
+            foreach (var pref in this.PreferencesNew.Values)
+            {
+                var role = pref.Role;
+                var score = role.Score(this.Actor, item);
+                if (score > bestScore)
+                {
+                    bestPreference = pref;
+                    bestScore = score;
+                }
+            }
+            return (bestPreference?.Role.Context, bestScore);
+        }
         public void HandleItem(Entity item)
         {
             foreach (var pref in this.PreferencesNew.Values)
@@ -177,7 +193,7 @@ namespace Start_a_Town_
             var pref = this.PreferencesNew[context];
             pref.Item = item;
             pref.Score = score;
-            item.Ownership.Owner = this.Actor;
+            //item.Ownership.Owner = this.Actor;
             if (this.PreferencesObs.Contains(pref))
                 this.PreferencesObs.Remove(pref);
             this.PreferencesObs.Add(pref); // HACK to trigger observable syncing
@@ -253,7 +269,7 @@ namespace Start_a_Town_
             existing.ResolveReferences(this.Actor);
             if (!this.PreferencesObs.Contains(existing))
                 this.PreferencesObs.Add(existing);
-            existing.Item.Ownership.Owner = this.Actor;
+            //existing.Item.Ownership.Owner = this.Actor;
         }
         void SyncRemovePref(ItemPreference pref)
         {
@@ -263,7 +279,7 @@ namespace Start_a_Town_
             existing.Clear();
             if (this.PreferencesObs.Contains(existing))
                 this.PreferencesObs.Remove(existing);
-            existing.Item.Ownership.Owner = null;
+            //existing.Item.Ownership.Owner = null;
         }
 
         public void ResolveReferences()
@@ -282,6 +298,7 @@ namespace Start_a_Town_
             var p = this.GetPreference(entity);
             return new Label(p) { HoverText = $"[{this.Actor.Name}] prefers [{entity.Name}] for [{p}]" };
         }
+
 
         [EnsureStaticCtorCall]
         static class Packets

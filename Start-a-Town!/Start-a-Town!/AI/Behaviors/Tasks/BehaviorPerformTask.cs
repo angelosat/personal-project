@@ -46,6 +46,8 @@ namespace Start_a_Town_
         }
         public override BehaviorState Execute(Actor parent, AIState state)
         {
+            if(this.Task.IsCancelled)
+                return BehaviorState.Fail;
             if (this.HasFailedOrEnded())
                 return BehaviorState.Fail;
             var current = this.CachedBehaviors[this.CurrentStepIndex];

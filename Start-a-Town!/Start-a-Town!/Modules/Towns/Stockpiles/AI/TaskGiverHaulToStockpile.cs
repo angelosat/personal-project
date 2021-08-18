@@ -15,7 +15,7 @@
             return task;
         }
         
-        public override AITask TryForceTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
+        public override AITask TryTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
         {
             return target.Object is Entity item ? StockpileAIHelper.TryHaulNew(actor, item, ignoreOtherReservations) : null;
         }

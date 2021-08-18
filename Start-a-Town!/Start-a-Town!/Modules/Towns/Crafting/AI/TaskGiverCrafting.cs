@@ -89,7 +89,7 @@ namespace Start_a_Town_
             }
             return null;
         }
-        public override AITask TryForceTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
+        public override AITask TryTaskOn(Actor actor, TargetArgs target, bool ignoreOtherReservations = false)
         {
             if (target.Type != TargetType.Position)
                 return null;

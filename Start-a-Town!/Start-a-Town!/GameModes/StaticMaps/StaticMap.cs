@@ -76,9 +76,6 @@ namespace Start_a_Town_
             return new Vector3(vec2.X, vec2.Y, this.GetHeightmapValue(vec2.X, vec2.Y));
         }
 
-        public static List<MapSize> Sizes
-        { get { return new List<MapSize>() { MapSize.Micro, MapSize.Tiny, MapSize.Small, MapSize.Normal, MapSize.Huge }; } }
-
         public List<GameObject> SavedPlayers = new();
 
         public override bool AddChunk(Chunk chunk)

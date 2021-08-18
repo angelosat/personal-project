@@ -44,7 +44,7 @@ namespace Start_a_Town_
                     HistoryIndex = -1;
                 };
                 InitDefDirectory();
-                InitWorldObjects();
+                InitRefDirectory();
             }
             Container.ClearControls();
             var table = new Table<(string item, object value)>()
@@ -138,7 +138,7 @@ namespace Start_a_Town_
             var box = new GroupBox().AddControlsVertically(search, scrollablebox.ToPanel());
             DefDirectory = box;
         }
-        static void InitWorldObjects()
+        static void InitRefDirectory()
         {
             var net = Client.Instance;
             var list = new ListBoxObservable<GameObject, Label>(net.ObjectsObservable, o => new Label(o.DebugName, () => Refresh(o)));

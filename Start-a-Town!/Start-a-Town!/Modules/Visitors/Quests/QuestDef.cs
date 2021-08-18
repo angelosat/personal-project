@@ -361,7 +361,7 @@ namespace Start_a_Town_
             {
                 var box = new GroupBox();
 
-                var items = Def.Database.Values.OfType<ItemDef>().Where(d => d.Category == ItemCategory.RawMaterials).SelectMany(d => d.GenerateVariants());
+                var items = Def.Database.Values.OfType<ItemDef>().Where(d => d.Category == ItemCategoryDefOf.RawMaterials).SelectMany(d => d.GenerateVariants());
                 listAvailableReqs = new ListBoxNoScroll<ItemMaterialAmount, Button>(def => new(def.ToString(), () =>
                 {
                     Packets.SendQuestCreateObjective(quest.Manager.Town.Net, quest.Manager.Town.Net.GetPlayer(), quest, new QuestObjectiveItem(quest, def));

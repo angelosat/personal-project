@@ -133,7 +133,12 @@ namespace Start_a_Town_.UI
             if (Instance.SelectedSource.Object is Inspectable obj)
                 Inspector.Refresh(obj);
             else
-                Inspector.Refresh(Instance.SelectedSource);
+            {
+                if (Instance.SelectedStack.Current is Inspectable insp)
+                    Inspector.Refresh(insp);
+                else
+                    Inspector.Refresh(Instance.SelectedSource);
+            }
             Inspector.Show();
         }
 

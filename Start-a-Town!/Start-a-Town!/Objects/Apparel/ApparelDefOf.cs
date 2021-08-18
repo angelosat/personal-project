@@ -8,7 +8,7 @@ namespace Start_a_Town_
         {
             BaseValue = 5,
             QualityLevels = true,
-            Category = ItemCategory.Wearables,
+            Category = ItemCategoryDefOf.Wearables,
             Description = "Protects the head but ruins the hairstyle.",
             DefaultSprite = ItemContent.HelmetFull,
             MadeFromMaterials = true,

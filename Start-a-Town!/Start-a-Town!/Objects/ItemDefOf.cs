@@ -10,7 +10,7 @@ namespace Start_a_Town_
         {
             ItemClass = typeof(Entity),
             StackCapacity = 16,
-            Category = ItemCategory.RawMaterials,
+            Category = ItemCategoryDefOf.RawMaterials,
             Body = new Bone(BoneDefOf.Item, ItemContent.SeedsFull),
             DefaultMaterial = MaterialDefOf.Seed,
             CompProps = new List<ComponentProps>() { new SeedComponent.Props() }
@@ -20,7 +20,7 @@ namespace Start_a_Town_
         {
             ItemClass = typeof(Entity),
             StackCapacity = 8,
-            Category = ItemCategory.FoodRaw,
+            Category = ItemCategoryDefOf.FoodRaw,
             Body = new Bone(BoneDefOf.Item, ItemContent.BerriesFull),
             ConsumableProperties = new ConsumableProperties()
             {
@@ -36,7 +36,7 @@ namespace Start_a_Town_
         {
             ItemClass = typeof(Entity),
             StackCapacity = 8,
-            Category = ItemCategory.FoodRaw,
+            Category = ItemCategoryDefOf.FoodRaw,
             Body = new Bone(BoneDefOf.Item, Sprite.Default),
             DefaultMaterialType = MaterialTypeDefOf.Meat,
             ConsumableProperties = new ConsumableProperties(),
@@ -50,20 +50,20 @@ namespace Start_a_Town_
         {
             ItemClass = typeof(Entity),
             StackCapacity = 4,
-            Category = ItemCategory.FoodCooked,
+            Category = ItemCategoryDefOf.FoodCooked,
             Body = new Bone(BoneDefOf.Item, Sprite.Default),
             ConsumableProperties = new()
             {
                 FoodClasses = new[] { FoodClass.Dish }
             },
-            CraftingProperties = new CraftingProperties().MakeableFrom(ItemCategory.FoodRaw),
+            CraftingProperties = new CraftingProperties().MakeableFrom(ItemCategoryDefOf.FoodRaw),
             RecipeProperties =
                 new RecipeProperties("Bake") { Job = JobDefOf.Cook }
                     .AddWorkstation(IsWorkstation.Types.Baking)
                     .AddIngredientMaker(def =>
                         new Ingredient("Filling") { DefaultRestrictions = new IngredientRestrictions().Restrict(MaterialTypeDefOf.Meat) }
                             .SetAllow(def.ValidMaterialTypes, true)
-                            .SetAllow(ItemCategory.FoodRaw, true))
+                            .SetAllow(ItemCategoryDefOf.FoodRaw, true))
                     .AddProductMaker(def => new Reaction.Product(def).GetMaterialFromIngredient("Filling")),
             CompProps = new List<ComponentProps>()
             {
@@ -76,7 +76,7 @@ namespace Start_a_Town_
             ItemClass = typeof(Entity),
             StackCapacity = ushort.MaxValue,
             Body = new Bone(BoneDefOf.Item, ItemContent.BarsGrayscale),
-            Category = ItemCategory.RawMaterials,
+            Category = ItemCategoryDefOf.RawMaterials,
             DefaultMaterial = MaterialDefOf.Gold,
             BaseValue = 1,
         };

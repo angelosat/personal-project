@@ -11,7 +11,7 @@ namespace Start_a_Town_
         public override string Name { get; } = "Info";
        
         public bool InCatalogue = true;
-        public Quality Quality = Quality.Common;
+        public Quality Quality = QualityDefOf.Common;
 
         public string CustomName = "";
         public string ParentName
@@ -30,7 +30,7 @@ namespace Start_a_Town_
         public DefComponent()
             : base()
         {
-            Quality = Quality.Common;
+            Quality = QualityDefOf.Common;
         }
        
         public override object Clone()

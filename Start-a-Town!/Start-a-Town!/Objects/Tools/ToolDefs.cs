@@ -15,8 +15,8 @@ namespace Start_a_Town_
         {
             Reagents = new Dictionary<BoneDef, Reaction.Reagent>()
                 {
-                    { BoneDefOf.ToolHandle, new Reaction.Reagent(HandleIngredientIndex, new Ingredient(null, null, null).SetAllow(ItemCategory.Manufactured, true)) }, //.IsBuildingMaterial()
-                    { BoneDefOf.ToolHead, new Reaction.Reagent(HeadIngredientIndex, new Ingredient(null, null, null).SetAllow(ItemCategory.Manufactured, true))  }
+                    { BoneDefOf.ToolHandle, new Reaction.Reagent(HandleIngredientIndex, new Ingredient(null, null, null).SetAllow(ItemCategoryDefOf.Manufactured, true)) }, //.IsBuildingMaterial()
+                    { BoneDefOf.ToolHead, new Reaction.Reagent(HeadIngredientIndex, new Ingredient(null, null, null).SetAllow(ItemCategoryDefOf.Manufactured, true))  }
                 }
         };
 
@@ -24,7 +24,7 @@ namespace Start_a_Town_
         {
             ItemClass = typeof(Tool),
             QualityLevels = true,
-            Category = ItemCategory.Equipment,
+            Category = ItemCategoryDefOf.Equipment,
             MadeFromMaterials = true,
             GearType = GearType.Mainhand,
             DefaultMaterial = MaterialDefOf.Iron,

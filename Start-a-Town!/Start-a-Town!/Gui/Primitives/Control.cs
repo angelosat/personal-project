@@ -1419,6 +1419,7 @@ namespace Start_a_Town_.UI
                 mode = ScrollModes.Horizontal;
             if (this.Height > h)
                 mode |= ScrollModes.Vertical;
+            return new ScrollableBoxNewNew(w, h, mode).AddControls(this); // comment this if controls are overlapped by scrollbars
             return ScrollableBoxNewNew.FromClientSize(w, h, mode).AddControls(this);
         }
 

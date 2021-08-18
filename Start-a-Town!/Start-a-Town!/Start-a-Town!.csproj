@@ -264,6 +264,7 @@
     <Compile Include="Modules\Visitors\AI\Behaviors\ItemEvaluators\ItemRoles\ItemPreferencesManager.ItemPreference.cs" />
     <Compile Include="Objects\Items\Materials\IInspectable.cs" />
     <Compile Include="Objects\Items\Materials\MaterialTypeDefOf.cs" />
+    <Compile Include="Objects\Items\Storage\ItemCategoryDefOf.cs" />
     <Compile Include="Objects\Loot.cs" />
     <Compile Include="Objects\LootTable.cs" />
     <Compile Include="Components\Ownership\PossessionsComponent.cs" />
@@ -518,6 +519,7 @@
     <Compile Include="Objects\Items\Materials\RawMaterials\RawMaterialDefOf.cs" />
     <Compile Include="Objects\Items\Storage\New\StorageFilterCategoryNew.cs" />
     <Compile Include="Objects\Items\Storage\New\StorageFilterNew.cs" />
+    <Compile Include="Objects\QualityDefOf.cs" />
     <Compile Include="Objects\Tools\IItemDefVariator.cs" />
     <Compile Include="Objects\Tools\Tool.cs" />
     <Compile Include="Objects\Tools\ToolDefs.cs" />

@@ -91,16 +91,16 @@ namespace Start_a_Town_.Core
                 {
                     Server.StartSaving();
                     tag.Add(world.SaveToTag());
-
-                    using (MemoryStream stream = new())
-                    {
-                        BinaryWriter writer = new(stream);
-                        tag.WriteWithRefs(writer);
-                        if (!Directory.Exists(directory))
-                            Directory.CreateDirectory(directory);
-                        Chunk.Compress(stream, workingDir + fullPath);
-                        stream.Close();
-                    }
+                    SaveFile.Save(tag, name);
+                    //using (MemoryStream stream = new())
+                    //{
+                    //    BinaryWriter writer = new(stream);
+                    //    tag.WriteWithRefs(writer);
+                    //    if (!Directory.Exists(directory))
+                    //        Directory.CreateDirectory(directory);
+                    //    Chunk.Compress(stream, workingDir + fullPath);
+                    //    stream.Close();
+                    //}
                     Server.FinishSaving();
                     getSaveName.Hide();
                     box.GetWindow().Hide();

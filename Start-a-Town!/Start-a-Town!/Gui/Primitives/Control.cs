@@ -73,7 +73,16 @@ namespace Start_a_Town_.UI
             this.Anchor = anchor;
             return this;
         }
-
+        internal Control SetAnchor(float x, float y)
+        {
+            this.Anchor = new(x, y);
+            return this;
+        }
+        internal Control SetAnchor(float xy)
+        {
+            this.Anchor = new(xy);
+            return this;
+        }
         public Control AnchorToScreenCenter()
         {
             this.LocationFunc = () => new Vector2(UIManager.Width - this.Width, UIManager.Height - this.Height) / 2;

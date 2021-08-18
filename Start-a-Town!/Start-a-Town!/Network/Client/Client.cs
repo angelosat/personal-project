@@ -725,7 +725,7 @@ namespace Start_a_Town_.Net
         {
             ob.Net = this;
             Instance.NetworkObjects.Add(ob.RefID, ob);
-            _nextRefIdSequence = ob.RefID + 1;
+            _nextRefIdSequence = Math.Max(_nextRefIdSequence, ob.RefID + 1);
             this.ObjectsObservable.Add(ob);
         }
         int _nextRefIdSequence;

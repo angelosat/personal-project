@@ -3,7 +3,6 @@ using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
 using Start_a_Town_.Components.Crafting;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -22,7 +21,6 @@ namespace Start_a_Town_
                     this._product = value;
                 }
             }
-            public Container Material;
             public Progress BuildProgress { get; set; }
             public List<IntVec3> Children { get; set; } = new List<IntVec3>();
             public BlockDesignationEntity(IntVec3 origin)
@@ -108,7 +106,7 @@ namespace Start_a_Town_
             }
             public int GetMissingAmount(ItemDef def)
             {
-                return this.Product.GetMaterialRequirement(def);
+                return this.Product.Requirement.Amount;// .GetMaterialRequirement(def);
             }
         }
     }

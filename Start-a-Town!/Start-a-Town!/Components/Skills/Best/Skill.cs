@@ -11,7 +11,7 @@ namespace Start_a_Town_
         public SkillDef Def;
         public int Level;
         Progress LvlProgress = new();
-        const int XpToLevelBase = 5;
+        const int XpToLevelBase = 100;
 
         public Skill(SkillDef def)
         {
@@ -23,9 +23,11 @@ namespace Start_a_Town_
         public string Name => this.Def.Label;
         public override string Label => this.Name;
 
-        [Obsolete]
-        static int GetNextLvlXpOld(int currentLvl) => (int)Math.Pow(XpToLevelBase, currentLvl + 1);
-        static int GetNextLvlXp(int currentLvl) => currentLvl > 0 ? (int)Math.Pow(XpToLevelBase, currentLvl) * (XpToLevelBase - 1) : XpToLevelBase;
+        //static int GetNextLvlXpTest1(int currentLvl) => (int)Math.Pow(XpToLevelBase, currentLvl + 1);
+        //static int GetNextLvlXpTest2(int currentLvl) => currentLvl > 0 ? (int)Math.Pow(XpToLevelBase, currentLvl) * (XpToLevelBase - 1) : XpToLevelBase;
+        //static int GetNextLvlXpTest3(int currentLvl) => (currentLvl + 1) * XpToLevelBaseNew + (currentLvl == 0 ? 0 : GetNextLvlXpTest3(currentLvl - 1));
+        static int GetNextLvlXp(int currentLvl) => (int)Math.Pow(2, currentLvl) * XpToLevelBase;
+
         static public void Init(Hud hud)
         {
             hud.RegisterEventHandler(Components.Message.Types.SkillIncrease, OnSkillIncrease);
@@ -57,11 +59,15 @@ namespace Start_a_Town_
             this.LvlProgress.Max = GetNextLvlXp(this.Level);
             this.LvlProgress.Value = remaining;
             var actor = this.Container.Parent;
-            //Log.Write($"[{actor}]'s [{this.Label}] has been increased to {this.Level}!");
-            //actor.Net.ConsoleBox.Write($"[{actor}] has reached Level [{this.Level}] in [{this.Label}]!");
-            //actor.Net.ConsoleBox.Write(Log.Entry.Notification($"[{actor}] has reached Level {this.Level} in [{this.Label}]!"));
             actor.Net.ConsoleBox.Write(Log.Entry.Notification(actor, " has reached Level ", this.Level," in ", this, "!"));
             actor.Net.EventOccured(Message.Types.SkillIncrease, actor, this.Def.Name);
+        }
+        static Skill()
+        {
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    $"{i}: {GetNextLvlXp(i)}".ToConsole();
+            //}
         }
         [Obsolete]
         internal void AwardOld(float v)
@@ -98,9 +104,9 @@ namespace Start_a_Town_
 
         public SaveTag Save(string name = "")
         {
-            var tag = new SaveTag(SaveTag.Types.Compound, this.Def.Name);
+            var tag = new SaveTag(SaveTag.Types.Compound, this.Name);
             tag.Add(this.Level.Save("Level"));
-            tag.Add(this.LvlProgress.Save("Progress"));
+            tag.Add(this.LvlProgress.Value.Save("Progress"));
             return tag;
         }
 
@@ -108,9 +114,7 @@ namespace Start_a_Town_
         {
             tag.TryGetTagValue("Level", out this.Level);
             this.LvlProgress.Max = GetNextLvlXp(this.Level);
-            if (!tag.TryGetTag("Progress", t => this.LvlProgress.Load(t)))
-                tag.TryGetTagValue<float>("CurrentXP", v => this.LvlProgress.Value = v);
-            
+            this.LvlProgress.Value = (float)tag["Progress"].Value;
             return this;
         }
 

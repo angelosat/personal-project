@@ -4,42 +4,47 @@ namespace Start_a_Town_.Components.Crafting
 {
     public class ProductMaterialPair : Inspectable
     {
-        public override string ToString() => "Type: " + this.Block.Label + "\nData: " + this.Data.ToString();
-        public string GetName() => this.Requirement.ToString();
         public Block Block;
-        public byte Data;
-        public int Orientation;
-        public ToolUseDef Skill;
-        public ItemMaterialAmount Requirement;
-        internal MaterialDef Material => this.Requirement.Material;// MaterialDefOf.Air;
 
-        public ToolUseDef GetSkill()
-        {
-            return this.Skill;
-        }
+        public byte Data;
+
+        public int Orientation;
+
+        public ToolUseDef Skill;
+
+        public ItemMaterialAmount Requirement;
 
         public ProductMaterialPair(Block block, ItemMaterialAmount itemMaterial)
         {
             this.Block = block;
             this.Requirement = itemMaterial;
-            //this.Data = block.GetDataFromMaterial(this.Requirement.Material);
         }
+
         public ProductMaterialPair(BinaryReader r)
         {
             this.Block = r.ReadBlock();
             this.Data = r.ReadByte();
             this.Requirement = new ItemMaterialAmount(r);
         }
+
         public ProductMaterialPair(SaveTag tag)
         {
-            this.Block = tag.LoadBlock("Product");// Block.Registry[(Block.Types)tag.GetValue<int>("Product")];
+            this.Block = tag.LoadBlock("Product");
             this.Data = tag.TagValueOrDefault<byte>("Data", 0);
             this.Requirement = new ItemMaterialAmount(tag["Requirement"]);
         }
 
-        internal int GetMaterialRequirement(ItemDef def)
+        internal MaterialDef Material => this.Requirement.Material;
+
+        public override string ToString() => $"Type: {this.Block.Label}\nData: {this.Data}";
+
+        public override string Label => $"{this.Requirement.Material.Label} {this.Requirement.Item.Label} {0} / {this.Requirement.Amount}";
+
+        public string GetName() => this.Requirement.ToString();
+
+        public ToolUseDef GetSkill()
         {
-            return this.Block.Ingredient.Amount;
+            return this.Skill;
         }
 
         internal void Save(SaveTag tag, string name)
@@ -50,18 +55,12 @@ namespace Start_a_Town_.Components.Crafting
             this.Requirement.Save(save, "Requirement");
             tag.Add(save);
         }
+
         public void Write(BinaryWriter w)
         {
             w.Write(this.Block);
             w.Write(this.Data);
             this.Requirement.Write(w);
         }
-        public override string Label => $"{this.Requirement.Material.Label} {this.Requirement.Item.Label} {0} / {this.Requirement.Amount}";
-        //internal Control GetGui()
-        //{
-        //    var req = this.Requirement;
-        //    //return new Label() { TextFunc = () => $"{req.Material.Label} {req.Item.Label} {0} / {req.Amount}" };
-        //    return new GroupBox().AddControlsLineWrap(Label.ParseNewNew(req.Material, " ", req.Item, $" 0 / {req.Amount}"));
-        //}
     }
 }

@@ -13,7 +13,7 @@ namespace Start_a_Town_
         {
             this.GrayScale = Block.Atlas.Load("blocks/woodvertical");
             this.Variations.Add(this.GrayScale);
-            this.Ingredient = new Ingredient(RawMaterialDefOf.Planks, null, null, 1);// 4);
+            this.Ingredient = new Ingredient(RawMaterialDefOf.Planks, null, null, 1, 1/4f);// 4);
             this.BuildProperties.Complexity = 2;
             this.BuildProperties.Category = ConstructionCategoryDefOf.Walls;
         }

@@ -6,14 +6,15 @@ namespace Start_a_Town_
 {
     abstract public class TaskGiver
     {
+        public static readonly TaskGiver Idle = new TaskGiverIdle();
+
         static readonly public List<TaskGiver> EssentialTaskGivers = new()
         {
             new TaskGiverLeaveUnstandableCell(),
             new TaskGiverItemOwnership(),
             new TaskGiverEquipSelf(),
 
-            new TaskGiverIdle(),
-            //new TaskGiverWander()
+            //new TaskGiverIdle(),
         };
 
         static readonly public List<TaskGiver> CitizenTaskGivers = new()

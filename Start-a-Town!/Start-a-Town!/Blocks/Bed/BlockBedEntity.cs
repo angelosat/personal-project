@@ -66,7 +66,10 @@ namespace Start_a_Town_
             var room = map.GetRoomAt(vector3);
             if (room is not null)
                 room.GetSelectionInfo(info);
-            info.AddInfo(new Label(() => $"Owner: {$"{room?.Owner} (from room)" ?? this.Owner?.Name ?? ""}"));
+            //info.AddInfo(new Label(() => $"Owner: {$"{room?.Owner} (from room)" ?? this.Owner?.Name ?? ""}"));
+
+            var roomOwner = room?.Owner;
+            info.AddInfo(new Label(() => $"Owner: {(roomOwner is not null ? (roomOwner.Name  + " (from room)") : (this.Owner?.Name ?? ""))}"));
         }
         protected override void WriteExtra(System.IO.BinaryWriter w)
         {

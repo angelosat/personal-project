@@ -79,6 +79,9 @@ namespace Start_a_Town_
         }
         protected virtual float GetEnergyConsumption(float workAmount, int skillLevel)
         {
+            var fromWorkSkill = workAmount / skillLevel;
+            var fromToolWeight = this.Actor[GearType.Mainhand]?.TotalWeight / this.Actor[AttributeDef.Strength].Level ?? 1;
+            return fromWorkSkill * fromToolWeight;
             const int skillFactor = 1;// 20;
             return workAmount / (skillFactor * skillLevel);
         }

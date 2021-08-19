@@ -51,6 +51,11 @@ namespace Start_a_Town_
         [InspectorHidden]
         public Trait this[TraitDef trait] => this.GetTrait(trait);
 
+        [InspectorHidden]
+        public Entity this[GearType slot] => this.GetEquipmentSlot(slot);
+
+        [InspectorHidden]
+        public AttributeStat this[AttributeDef attribute] => this.Attributes.GetAttribute(attribute);
 
         private MoodComp _mood;
         [InspectorHidden]
@@ -463,6 +468,7 @@ namespace Start_a_Town_
             jobs.OrderBy(j => j.Priority);
             var jobTaskGivers = jobs.SelectMany(j => j.Def.GetTaskGivers());
             givers = this.IsCitizen ? givers.Concat(jobTaskGivers) : givers.Concat(TaskGiver.VisitorTaskGivers);
+            givers.Append(TaskGiver.Idle);
             return givers;
         }
 

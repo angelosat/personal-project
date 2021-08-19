@@ -13,7 +13,7 @@ namespace Start_a_Town_.AI
             var need = actor.GetNeed(NeedDef.Energy);
             var energyValue = need.Value;
 
-            if (energyValue > 99)// need.Threshold)
+            if (energyValue > need.Threshold)
                 return null;
 
             var possibleBeds = actor.Ownership.GetOwned<BlockBedEntity>();

@@ -21,7 +21,7 @@ namespace Start_a_Town_
 
             var body = a.Body;
             body.RestingFrame = new Keyframe(0, Vector2.Zero, (float)(Math.PI / 2f));
-            body.OriginGroundOffset = Vector2.Zero;
+            body.OriginGroundOffset = new Vector2(0, -4);/// Vector2.Zero;
         }
         internal override void FinishAction()
         {

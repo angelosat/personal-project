@@ -3,7 +3,7 @@ using System;
 
 namespace Start_a_Town_
 {
-    class BehaviorHandleTasks : Behavior
+    sealed class BehaviorHandleTasks : Behavior
     {
         static readonly int TimerMax = Ticks.TicksPerSecond;
         int Timer = TimerMax;
@@ -83,7 +83,7 @@ namespace Start_a_Town_
                 var staminaTaskThreshold = 20;
                 var tired = stamina.Value <= staminaTaskThreshold;
 
-                if (this.CurrentTaskGiver != null)
+                if (this.CurrentTaskGiver != null && !parent.CurrentTask.Def.Idle)
                 {
                     if (tired)
                     {

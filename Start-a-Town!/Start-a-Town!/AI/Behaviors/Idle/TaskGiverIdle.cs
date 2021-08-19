@@ -7,7 +7,6 @@ namespace Start_a_Town_
     {
         const float MaxRange = 2;
 
-
         protected override AITask TryAssignTask(Actor actor)
         {
             int BaseWaitTime = 5;
@@ -16,7 +15,6 @@ namespace Start_a_Town_
             var dir = ChooseDirection(actor);
             return new AITask(TaskDefOf.Idle, new TargetArgs(dir)) { TicksTimeout = waitTicks };
         }
-
 
         static Vector2 ChooseDirection(Actor actor)
         {

@@ -14,7 +14,7 @@ namespace Start_a_Town_
                 parent.MoveToggle(true);
                 parent.WalkToggle(true);
             })
-            { SuccessCondition = a => task.TicksTotal >= task.TicksTimeout };
+            { SuccessCondition = a => task.TicksCounter >= task.TicksTimeout };
         }
     }
 }

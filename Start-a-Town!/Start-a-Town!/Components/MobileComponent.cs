@@ -343,14 +343,17 @@ namespace Start_a_Town_.Components
             //    walkY = walkX = 0;
 
             /// code below only prevents fall if the fall distance will be greater than a half block. allows stepping down from half blocks
-            var walkXvec = new Vector3(global.X + walkX, global.Y, global.Z + g);
-            var walkYvec = new Vector3(global.X, global.Y + walkY, global.Z + g);
-            var walkXYvec = new Vector3(global.X + walkX, global.Y + walkY, global.Z + g);
             var halfBlock = Vector3.UnitZ * .5f;
+
+            var walkXvec = new Vector3(global.X + walkX, global.Y, global.Z + g);
             if (!map.IsSolid(walkXvec) && !map.IsSolid(walkXvec - halfBlock))//.Below()))
                 walkX = 0;
+
+            var walkYvec = new Vector3(global.X, global.Y + walkY, global.Z + g);
             if (!map.IsSolid(walkYvec) && !map.IsSolid(walkYvec - halfBlock))//.Below()))
                 walkY = 0;
+
+            var walkXYvec = new Vector3(global.X + walkX, global.Y + walkY, global.Z + g);
             if (!map.IsSolid(walkXYvec) && !map.IsSolid(walkXYvec - halfBlock))//.Below()))
                 walkY = walkX = 0;
 

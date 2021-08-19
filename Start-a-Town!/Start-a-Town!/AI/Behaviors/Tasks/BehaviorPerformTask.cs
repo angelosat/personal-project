@@ -75,7 +75,7 @@ namespace Start_a_Town_
                 //var result = failedorended ? BehaviorState.Fail : current.Execute(parent, state);
 
                 var result = current.Execute(parent, state);
-                this.Task.TicksTotal++;
+                this.Task.TicksCounter++;
                 /// added the success check because interactioncrafting in behaviorcrafting fails even after the interaction successfuly completes because the ingredients are disposed, and it fails on disposed ingredients
                 /// move the whole if block inside the switch block below?
                 //if (result != BehaviorState.Success && current.HasFailedOrEnded())

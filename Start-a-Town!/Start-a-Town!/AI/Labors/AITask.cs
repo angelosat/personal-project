@@ -200,7 +200,7 @@ namespace Start_a_Town_
         int ReservedBy = -1;
         public int TicksWaited = 0;
         public int TicksTimeout;
-        public int TicksTotal;
+        public int TicksCounter;
         public int Quest;
         public int ShopID; // TODO store shopid instead of shop object
         public Transaction Transaction;
@@ -311,6 +311,11 @@ namespace Start_a_Town_
             tag.TrySaveRef(this.Order, "Order");
             tag.Add(this.Product.Save("Product"));
             tag.Add(this.Forced.Save("Forced"));
+
+            this.TicksWaited.Save(tag, "TicksWaited");
+            this.TicksCounter.Save(tag, "TicksCounter");
+            this.TicksTimeout.Save(tag, "TicksTimeout");
+
             var targetqueues = new SaveTag(SaveTag.Types.List, "Queues", SaveTag.Types.List);
             for (int i = 0; i < this.TargetQueues.Count; i++)
 			{
@@ -350,9 +355,9 @@ namespace Start_a_Town_
 
             tag.TryGetTag("Tool", t => this.Tool = new TargetArgs(null, t));
 
-            tag.TryGetTagValue<int>("AmountA", out this.AmountA);
-            tag.TryGetTagValue<int>("AmountB", out this.AmountB);
-            tag.TryGetTagValue<int>("AmountC", out this.AmountC);
+            tag.TryGetTagValue("AmountA", out this.AmountA);
+            tag.TryGetTagValue("AmountB", out this.AmountB);
+            tag.TryGetTagValue("AmountC", out this.AmountC);
 
             tag.TryGetTag("TargetsA", t => this.TargetsA.Load(t));
             tag.TryGetTag("TargetsB", t => this.TargetsB.Load(t));
@@ -361,6 +366,10 @@ namespace Start_a_Town_
             tag.TryGetTag("AmountsA", t => this.AmountsA.Load(t));
             tag.TryGetTag("AmountsB", t => this.AmountsB.Load(t));
             tag.TryGetTag("AmountsC", t => this.AmountsC.Load(t));
+
+            tag.TryGetTagValue("TicksCounter", out this.TicksCounter);
+            tag.TryGetTagValue("TicksWaited", out this.TicksWaited);
+            tag.TryGetTagValue("TicksTimeout", out this.TicksTimeout);
 
             tag.TryGetTag("PlacedItems", t => this.PlacedObjects.Load(t));
 
@@ -411,6 +420,11 @@ namespace Start_a_Town_
             w.Write(this.Count);
             w.Write(this.Quest);
             w.Write(this.ShopID);
+
+            w.Write(this.TicksWaited);
+            w.Write(this.TicksCounter);
+            w.Write(this.TicksTimeout);
+
             this.Transaction.Write(w);
         }
         protected virtual void Read(BinaryReader r)
@@ -434,6 +448,11 @@ namespace Start_a_Town_
             this.Count = r.ReadInt32();
             this.Quest = r.ReadInt32();
             this.ShopID = r.ReadInt32();
+
+            this.TicksWaited = r.ReadInt32();
+            this.TicksCounter = r.ReadInt32();
+            this.TicksTimeout = r.ReadInt32();
+
             this.Transaction = new Transaction(r);
         }
         

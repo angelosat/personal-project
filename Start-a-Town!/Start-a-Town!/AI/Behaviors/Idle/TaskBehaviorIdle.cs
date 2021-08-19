@@ -11,14 +11,14 @@ namespace Start_a_Town_
             yield return new BehaviorWait(() => task.TicksWaited >= task.TicksTimeout);
             yield return new BehaviorCustom(delegate
             {
-                task.TicksTotal = 0;
+                task.TicksCounter = 0;
                 actor.Direction = new(task.TargetA.Direction, 0);
                 actor.MoveToggle(true);
                 actor.WalkToggle(true);
             })
             {
                 Mode = BehaviorCustom.Modes.Continuous,
-                SuccessCondition = a => task.TicksTotal >= Ticks.TicksPerSecond 
+                SuccessCondition = a => task.TicksCounter >= Ticks.TicksPerSecond 
             };
         }
     }

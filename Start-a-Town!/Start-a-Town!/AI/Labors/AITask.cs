@@ -199,6 +199,8 @@ namespace Start_a_Town_
         public bool Urgent = true; // TODO default should be false
         int ReservedBy = -1;
         public int TicksWaited = 0;
+        public int TicksTimeout;
+        public int TicksTotal;
         public int Quest;
         public int ShopID; // TODO store shopid instead of shop object
         public Transaction Transaction;
@@ -265,14 +267,14 @@ namespace Start_a_Town_
         }
         
         Type _BehaviorType;
+
         public Type BehaviorType
         {
             get { return this.Def?.BehaviorClass ?? this._BehaviorType; }
             set { this._BehaviorType = value; }
         }
 
-        //public virtual Behavior GetBehavior(GameObject actor) { return null; }
-        //public virtual void Succeeded(GameObject actor) { }
+        //public bool TimedOut => this.TicksTotal >= this.TicksTimeout;
 
         public BehaviorPerformTask CreateBehavior(Actor actor)
         {

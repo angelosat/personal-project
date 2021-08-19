@@ -8,6 +8,7 @@ namespace Start_a_Town_
         public string Format;
         public TargetIndex PrimaryTargetIndex;
         public Func<AITask, TargetArgs> GetPrimaryTarget;
+        public bool Idle;
         public TaskDef(string name, Type bhavClass) : base(name)
         {
             this.BehaviorClass = bhavClass;

@@ -47,7 +47,10 @@ namespace Start_a_Town_
 
         [InspectorHidden]
         public Skill this[SkillDef skill] => this.Skills.GetSkill(skill);
-        
+
+        [InspectorHidden]
+        public Trait this[TraitDef trait] => this.GetTrait(trait);
+
 
         private MoodComp _mood;
         [InspectorHidden]
@@ -291,8 +294,8 @@ namespace Start_a_Town_
                    new AIMemory(),
                    new BehaviorHandleResources(),
                    new BehaviorHandleOrders(),
-                   new BehaviorHandleTasks(),
-                   new BehaviorIdle()
+                   new BehaviorHandleTasks()
+                   //new BehaviorIdle()
                    )));
             obj.AddComponent(new AttributesComponent(def).Randomize());
             obj.AddComponent(new NpcSkillsComponent(def).Randomize());

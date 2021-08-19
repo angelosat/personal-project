@@ -12,19 +12,10 @@ namespace Start_a_Town_.AI.Behaviors
         const float MaxRange = 2;
         int Seed;
 
-        public override string Name
-        {
-            get
-            {
-                return "Wander";
-            }
-        }
+        public override string Name => "Wander";
 
-        public override object Clone()
-        {
-            return new AIWander();
-        }
-
+        public override object Clone() => new AIWander();
+        
         public AIWander()
         {
             this.Direction = Vector3.UnitX;

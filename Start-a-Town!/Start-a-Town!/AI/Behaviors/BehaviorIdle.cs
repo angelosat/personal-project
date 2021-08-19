@@ -16,10 +16,5 @@ namespace Start_a_Town_.AI.Behaviors
         {
             return new BehaviorIdle();
         }
-        internal override void Load(SaveTag tag)
-        {
-            base.Load(tag);
-            this.Children.Count.ToConsole();
-        }
     }
 }

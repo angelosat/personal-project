@@ -11,6 +11,9 @@ namespace Start_a_Town_
             new TaskGiverLeaveUnstandableCell(),
             new TaskGiverItemOwnership(),
             new TaskGiverEquipSelf(),
+
+            new TaskGiverIdle(),
+            //new TaskGiverWander()
         };
 
         static readonly public List<TaskGiver> CitizenTaskGivers = new()

@@ -121,6 +121,10 @@
     <Compile Include="AI\Behaviors\Helpers\BehaviorHaulHelper.cs" />
     <Compile Include="AI\Behaviors\Helpers\BehaviorHelper.cs" />
     <Compile Include="AI\Behaviors\Control\BehaviorHandleOrders.cs" />
+    <Compile Include="AI\Behaviors\Idle\TaskBehaviorIdle.cs" />
+    <Compile Include="AI\Behaviors\Idle\TaskBehaviorWander.cs" />
+    <Compile Include="AI\Behaviors\Idle\TaskGiverIdle.cs" />
+    <Compile Include="AI\Behaviors\Idle\TaskGiverWander.cs" />
     <Compile Include="AI\Behaviors\Interactions\BehaviorInteractionNew.cs" />
     <Compile Include="AI\Behaviors\BehaviorIdle.cs" />
     <Compile Include="AI\Behaviors\Inventory\TaskBehaviorDropInventoryItem.cs" />

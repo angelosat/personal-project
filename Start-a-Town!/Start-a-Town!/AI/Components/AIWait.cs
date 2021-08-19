@@ -4,13 +4,8 @@ namespace Start_a_Town_.AI.Behaviors
 {
     class AIWait : Behavior
     {
-        public override string Name
-        {
-            get
-            {
-                return "Idle";
-            }
-        }
+        public override string Name => "Idle";
+            
         int TimerNew = 0;
         public AIWait() : this(new TimeSpan(0, 0, 1)) { }
         int BaseWaitTime = 5;

@@ -44,7 +44,7 @@ namespace Start_a_Town_
             var result = this.Execute(parent, state);
             return (result, current);
         }
-        public override BehaviorState Execute(Actor parent, AIState state)
+        public sealed override BehaviorState Execute(Actor parent, AIState state)
         {
             if(this.Task.IsCancelled)
                 return BehaviorState.Fail;
@@ -75,7 +75,7 @@ namespace Start_a_Town_
                 //var result = failedorended ? BehaviorState.Fail : current.Execute(parent, state);
 
                 var result = current.Execute(parent, state);
-
+                this.Task.TicksTotal++;
                 /// added the success check because interactioncrafting in behaviorcrafting fails even after the interaction successfuly completes because the ingredients are disposed, and it fails on disposed ingredients
                 /// move the whole if block inside the switch block below?
                 //if (result != BehaviorState.Success && current.HasFailedOrEnded())

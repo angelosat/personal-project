@@ -11,9 +11,9 @@ namespace Start_a_Town_
         {
 
         }
-        public BehaviorWait(Func<bool> p)
+        public BehaviorWait(Func<bool> endCondition)
         {
-            this.EndCondition = p;
+            this.EndCondition = endCondition;
         }
 
         public override object Clone()

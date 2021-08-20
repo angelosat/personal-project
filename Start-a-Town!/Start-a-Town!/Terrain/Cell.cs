@@ -40,7 +40,7 @@ namespace Start_a_Town_
         {
 
         }
-        static readonly BitVector32.Section _orientation, _variation,_luminance, _blockData, _valid, _discovered;
+        static readonly BitVector32.Section _orientation, _variation,_luminance, _blockData, _valid, _discovered, _originx, _originy, _originz;
 
         static Cell()
         {
@@ -50,6 +50,77 @@ namespace Start_a_Town_
             _variation = BitVector32.CreateSection(3, _orientation); //2 bits
             _luminance = BitVector32.CreateSection(15, _variation); //4 bits
             _blockData = BitVector32.CreateSection(15, _luminance); //4 bits // sum: 14bits
+            _originx = BitVector32.CreateSection(2, _blockData); //2 bits // sum: 16bits
+            _originy = BitVector32.CreateSection(2, _originx); //2 bits // sum: 18bits
+            _originz = BitVector32.CreateSection(2, _originy); //2 bits // sum: 20bits
+
+        }
+
+        public int OriginX
+        {
+            get
+            {
+                var val = this.Data[_originx];
+                return val == 3 ? -1 : val; // because 3 == 0b11
+            }
+            set
+            {
+                if (value > 1 || value < -1)
+                    throw new Exception();
+                this.Data[_originx] = value;// + 1;
+            }
+        }
+        public int OriginY
+        {
+            get
+            {
+                var val = this.Data[_originy];
+                return val == 3 ? -1 : val; // because 3 == 0b11
+            }
+            set
+            {
+                if (value > 1 || value < -1)
+                    throw new Exception();
+                this.Data[_originy] = value;// + 1;
+            }
+        }
+        public int OriginZ
+        {
+            get
+            {
+                var val = this.Data[_originz];
+                return val == 3 ? -1 : val; // because 3 == 0b11
+            }
+            set
+            {
+                if (value > 1 || value < -1)
+                    throw new Exception();
+                this.Data[_originz] = value;// + 1;
+            }
+        }
+        public IntVec3 Origin
+        {
+            get => new(this.OriginX, this.OriginY, this.OriginZ);
+            set
+            {
+                this.OriginX = value.X;
+                this.OriginY = value.Y;
+                this.OriginZ = value.Z;
+            }
+        }
+        public static IntVec3 GetOrigin(MapBase map, IntVec3 current)
+        {
+            var source = map.GetCell(current).Origin;
+            var handled = new HashSet<IntVec3>() { current };
+            while (source != IntVec3.Zero)
+            {
+                current += source;
+                if (handled.Contains(current))
+                    throw new Exception("loop detected in cell sources");
+                handled.Add(current);
+                source = map.GetCell(current).Origin;
+            }
+            return current;
         }
 
         public byte X; // 1 byte
@@ -57,7 +128,6 @@ namespace Start_a_Town_
         public byte Z; // 1 byte
         public Block Block = BlockDefOf.Air; // 4 bytes
         public MaterialDef Material = MaterialDefOf.Air;
-        //public MaterialDef Material => this.Block.GetMaterial(this.BlockData);
         public BitVector32 Data; // 4 bytes
 
         public Cell()
@@ -71,7 +141,8 @@ namespace Start_a_Town_
             this.Z = (byte)localZ;
         }
 
-        public IntVec3 Front => GetFront(this.Orientation);
+        public static IntVec3 FrontDefault = new(0, 1, 0);
+        public IntVec3 Front => Coords.Rotate(FrontDefault, this.Orientation);// GetFront(this.Orientation);
         public IntVec3 Back => -this.Front;
         public override string Label => this.Block.Label;
         public bool Valid
@@ -156,19 +227,7 @@ namespace Start_a_Town_
             this.Data = new BitVector32(r.ReadInt32());
             return this;
         }
-        public static IntVec3 FrontLocal = new(0, 1, 0);
-        public static IntVec3 GetFront(int orientation)
-        {
-            return orientation switch
-            {
-                0 => new IntVec3(0, 1, 0),
-                1 => new IntVec3(-1, 0, 0),
-                2 => new IntVec3(0, -1, 0),
-                3 => new IntVec3(1, 0, 0),
-                _ => throw new Exception(),
-            };
-        }
-
+       
         internal IEnumerable<IntVec3> GetInteractionSpotLocal()
         {
             return this.Block.GetInteractionSpotsLocal(this.Orientation);

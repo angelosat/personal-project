@@ -79,6 +79,7 @@ namespace Start_a_Town_
                 return "Part:" + this.Part.ToString() + ":" + (this.Open ? "Closed" : "Open");
             }
         }
+
         public BlockDoor()
          : base("Door", 0, 1, false, true)
         {
@@ -101,20 +102,7 @@ namespace Start_a_Town_
         {
             return new State(data);
         }
-        public static BoundingBox GetBoundingBox(MapBase map, Vector3 global)
-        {
-            var children = BlockDefOf.Door.GetParts(map, global);
-            var minx = children.Min(c => c.X);
-            var miny = children.Min(c => c.Y);
-            var minz = children.Min(c => c.Z);
-            var maxx = children.Max(c => c.X);
-            var maxy = children.Max(c => c.Y);
-            var maxz = children.Max(c => c.Z);
-            var min = new Vector3(minx, miny, minz);
-            var max = new Vector3(maxx, maxy, maxz);
-            var box = new BoundingBox(min - new Vector3(.5f, .5f, 0), max + new Vector3(.5f, .5f, 0));
-            return box;
-        }
+        
         public static void Read(byte data, out bool locked, out bool open, out int part)
         {
             locked = IsLocked(data);
@@ -172,9 +160,12 @@ namespace Start_a_Town_
                 dic.Add(global + new IntVec3(0, 0, i), GetData(i));
             return dic;
         }
-
-        [Flags]
-        enum States { Open = 0x0, Closed = 0x1 };
+        protected override IEnumerable<IntVec3> GetParts(byte data)
+        {
+            var center = GetCenter(data);
+            for (int i = 0; i < 2; i++)
+                yield return center + new IntVec3(0, 0, i);
+        }
 
         static readonly AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
 
@@ -222,12 +213,6 @@ namespace Start_a_Town_
             return baseLoc;
         }
 
-        public override IEnumerable<IntVec3> GetParts(byte data)
-        {
-            var center = GetCenter(data);
-            for (int i = 0; i < 2; i++)
-                yield return center + new IntVec3(0, 0, i);
-        }
         public override bool IsSolid(Cell cell)
         {
             Read(cell.BlockData, out var locked, out var open, out var part);
@@ -329,6 +314,22 @@ namespace Start_a_Town_
             sb.DrawBlock(Block.Atlas.Texture, map, global, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
             sb.DrawBlock(Block.Atlas.Texture, map, global + Vector3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
             sb.DrawBlock(Block.Atlas.Texture, map, global + Vector3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
+        }
+
+        [Obsolete]
+        public static BoundingBox GetBoundingBox(MapBase map, Vector3 global)
+        {
+            var children = BlockDefOf.Door.GetParts(map, global);
+            var minx = children.Min(c => c.X);
+            var miny = children.Min(c => c.Y);
+            var minz = children.Min(c => c.Z);
+            var maxx = children.Max(c => c.X);
+            var maxy = children.Max(c => c.Y);
+            var maxz = children.Max(c => c.Z);
+            var min = new Vector3(minx, miny, minz);
+            var max = new Vector3(maxx, maxy, maxz);
+            var box = new BoundingBox(min - new Vector3(.5f, .5f, 0), max + new Vector3(.5f, .5f, 0));
+            return box;
         }
     }
 }

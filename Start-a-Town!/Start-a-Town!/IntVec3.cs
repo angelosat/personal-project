@@ -14,15 +14,15 @@ namespace Start_a_Town_
             this.Y = y;
             this.Z = z;
         }
-        public IntVec3(int xyz, int z) : this(xyz, xyz, xyz)
-        {
+        //public IntVec3(int xy, int z) : this(xy, xy, z)
+        //{
 
-        }
+        //}
         public IntVec3(IntVec2 xy, int z) : this(xy.X, xy.Y, z)
         {
 
         }
-        public IntVec3(int a) : this(a, a, a)
+        public IntVec3(int xyz) : this(xyz, xyz, xyz)
         {
 
         }

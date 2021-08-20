@@ -30,8 +30,7 @@ namespace Start_a_Town_
         }
         internal override IEnumerable<IntVec3> GetInteractionSpotsLocal()//int orientation)
         {
-            yield return Cell.FrontLocal;
-            //yield return Cell.GetFront(orientation);
+            yield return Cell.FrontDefault;
         }
     }
 }

@@ -52,7 +52,6 @@ namespace Start_a_Town_.Components.Crafting
         public void Place(MapBase map, IntVec3 global)
         {
             var block = this.Block;
-            var cell = map.GetCell(global);
             var ori = this.Orientation;
             var mat = this.Material ?? MaterialDefOf.Air;
             block.Place(map, global, mat, this.Data, 0, ori, true);

@@ -44,7 +44,8 @@ namespace Start_a_Town_
             this.Parts[0] = this.TopParts;
             this.Parts[1] = this.BottomParts;
             this.UtilitiesProvided.Add(Utility.Types.Sleeping);
-            this.Size = new(1, 2);
+            //this.Size = new(1, 2, 1);
+            this.Size = new(2, 1, 1);
         }
         public override bool IsRoomBorder => false;
         public override bool IsStandableOn => false;
@@ -82,7 +83,7 @@ namespace Start_a_Town_
             dic[top] = topdata;
             return dic;
         }
-        public override IEnumerable<IntVec3> GetParts(byte data)
+        protected override IEnumerable<IntVec3> GetParts(byte data)
         {
             GetState(data, out var part, out var ori);
             IntVec3 top, bottom;
@@ -188,6 +189,10 @@ namespace Start_a_Town_
 
             map.SetBlock(bottom, this, material, GetData(Part.Bottom, orientation), 0, 0, notify);
             map.SetBlock(top, this, material, GetData(Part.Top, orientation), 0, 0, notify);
+            var children = this.GetChildrenWithParents(global, orientation);
+            foreach (var (child, source) in children)
+                map.GetCell(child).Origin = source;
+
             var entity = new BlockBedEntity(global);
             map.AddBlockEntity(top, entity);
             map.Town.AddUtility(Utility.Types.Sleeping, top);

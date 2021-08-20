@@ -58,7 +58,7 @@ namespace Start_a_Town_
             base.Place(map, global, material, GetData(0), variation, orientation);
             base.Place(map, global + IntVec3.UnitZ, material, GetData(1), variation, orientation, notify);
         }
-        public override IEnumerable<IntVec3> GetParts(byte data)
+        protected override IEnumerable<IntVec3> GetParts(byte data)
         {
             yield return IntVec3.Zero;
             switch (data)

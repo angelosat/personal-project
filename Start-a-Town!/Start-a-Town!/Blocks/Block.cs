@@ -204,10 +204,7 @@ namespace Start_a_Town_
             return BlockObjects[this];
         }
 
-        public virtual Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation) // TODO: depend on orientation
-        {
-            return new Dictionary<IntVec3, byte>() { { global, 0 } };
-        }
+        
         public IEnumerable<IntVec3> GetParts(MapBase map, IntVec3 global) 
         {
             foreach (var part in this.GetParts(map.GetBlockData(global), global))
@@ -218,11 +215,44 @@ namespace Start_a_Town_
             foreach (var part in this.GetParts(data))
                 yield return global + part;
         }
-        public virtual IEnumerable<IntVec3> GetParts(byte data)
+        protected virtual IEnumerable<IntVec3> GetParts(byte data)
         {
             yield return IntVec3.Zero;
         }
-        public IntVec2 Size = IntVec2.One;
+        public virtual Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation) // TODO: depend on orientation
+        {
+            return new Dictionary<IntVec3, byte>() { { global, 0 } };
+        }
+        public IEnumerable<IntVec3> GetPartsNew(MapBase map, IntVec3 global)
+        {
+            var cell = map.GetCell(global);
+            var ori = cell.Orientation;
+            for (int i = 0; i < this.Size.X; i++)
+                for (int j = 0; j < this.Size.Y; j++)
+                    for (int k = 0; k < this.Size.Z; k++)
+                        yield return global + Coords.Rotate(new IntVec3(i, j, k), ori);
+        }
+        public IEnumerable<(IntVec3 global, IntVec3 source)> GetChildrenWithParents(IntVec3 global, int ori)
+        {
+            for (int i = 0; i < this.Size.X; i++)
+            {
+                for (int j = 0; j < this.Size.Y; j++)
+                {
+                    for (int k = 0; k < this.Size.Z; k++)
+                    {
+                        var local = new IntVec3(i, j, k);
+                        var parent = new IntVec3(i == 0 ? 0 : -1, j == 0 ? 0 : -1, k == 0 ? 0 : -1);
+                        yield return (global + Coords.Rotate(local, ori), Coords.Rotate(parent, ori));
+                    }
+                }
+            }
+        }
+        public Dictionary<IntVec3, IntVec3> GetChildrenWithParentsDic(IntVec3 global, int ori)
+        {
+            return this.GetChildrenWithParents(global, ori).ToDictionary(i => i.global, i => i.source);
+        }
+
+        public IntVec3 Size = IntVec3.One;
         public BuildProperties BuildProperties = new();
         public FurnitureDef Furniture;
         public List<Utility.Types> UtilitiesProvided = new();
@@ -821,6 +851,8 @@ namespace Start_a_Town_
         }
         internal IEnumerable<IntVec3> GetInteractionSpots(MapBase map, IntVec3 global)
         {
+            //var cell = map.GetCell(global);
+            global = Cell.GetOrigin(map, global);
             var cell = map.GetCell(global);
             foreach (var p in this.GetInteractionSpotsLocal(cell.Orientation))
                 yield return p + global;

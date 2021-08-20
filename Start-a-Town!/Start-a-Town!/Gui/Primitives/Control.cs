@@ -295,6 +295,8 @@ namespace Start_a_Town_.UI
         internal Control SnapToMouse()
         {
             this.SetLocation(UIManager.Mouse);
+            this._cachedScreenLocation = null;
+            this._cachedBoundsScreen = null;
             return this;
         }
         public Control SetTag(object tag)

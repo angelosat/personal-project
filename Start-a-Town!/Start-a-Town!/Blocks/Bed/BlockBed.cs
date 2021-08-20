@@ -315,6 +315,7 @@ namespace Start_a_Town_
         {
             yield return new IntVec3(-1, 0, 0); //new IntVec3(1, 0, 0); //
         }
+        [EnsureStaticCtorCall]
         static class Packets
         {
             static readonly int PacketChangeType;

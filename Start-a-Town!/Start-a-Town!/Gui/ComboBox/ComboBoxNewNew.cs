@@ -87,7 +87,7 @@ namespace Start_a_Town_.UI
             if (this.ItemsGetter is not null)
                 this.Initialize(this.ItemsGetter());
             var panel = this.ListControl.TopLevelControl;
-            panel.Location = UIManager.Mouse;
+            panel.SnapToMouse();
             panel.Show();
         }
 

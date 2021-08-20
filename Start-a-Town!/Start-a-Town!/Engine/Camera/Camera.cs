@@ -1593,6 +1593,7 @@ namespace Start_a_Town_
             sb.Draw(Block.Atlas.Texture, screenLoc, Block.BlockHighlightBack.Rectangle, 0, Vector2.Zero, zoom,
                 Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cd);
 
+            /// this code draw individual faces instead of the whole highlight
             //sb.Draw(Block.Atlas.Texture, screenLoc, Block.FaceHighlights[-IntVec3.UnitX].Rectangle, 0, Vector2.Zero, zoom,
             //  Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, global.West().GetDrawDepth(map, this));
             //sb.Draw(Block.Atlas.Texture, screenLoc, Block.FaceHighlights[-IntVec3.UnitY].Rectangle, 0, Vector2.Zero, zoom,

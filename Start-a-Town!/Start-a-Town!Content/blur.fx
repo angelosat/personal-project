@@ -1076,8 +1076,9 @@ float4 BlockHighlightShader(MyVertexOutput input, out float depthBuffer : DEPTH0
 	float4 color = tex2D(s, input.TexCoord.xy);
 	clip(color.a == 0 ? -1 : 1);
 	float4 d = tex2D(s1, input.TexCoord.xy);
-	float adjustedD = d.r * 0.9 - 0.45f;
-	float dd = adjustedD * DepthResolution + input.Depth.x - DepthResolution / 10; // GetDepth(d.r, input.Depth.x) - DepthResolution / 12;
+	//float adjustedD = d.r * 0.9 - 0.45f;
+	//float dd = adjustedD * DepthResolution + input.Depth.x - DepthResolution / 10; // GetDepth(d.r, input.Depth.x) - DepthResolution / 12;
+	float dd = GetDepth(d.r, input.Depth.x); // replaced above two lines with this and fixed the small depth glitch that block highlights had
 	depthBuffer = dd;
 	float a = input.Color.a;
 	

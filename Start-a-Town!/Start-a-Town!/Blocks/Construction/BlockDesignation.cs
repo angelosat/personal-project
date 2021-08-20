@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Start_a_Town_.Components.Crafting;
 
 namespace Start_a_Town_
 {
@@ -14,11 +16,11 @@ namespace Start_a_Town_
 
         public override bool IsStandableIn => true;
        
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             var token = this.Variations[0];
             var color = Color.White;
-            return canvas.Designations.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, color, sunlight, blocklight, depth, this, blockCoordinates);
+            return canvas.Designations.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, color, sunlight, blocklight, depth, this, global);
         }
        
         public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
@@ -75,6 +77,34 @@ namespace Start_a_Town_
         {
             var e = map.GetBlockEntity<BlockDesignationEntity>(global);
             return $"{e.Product.Block.Name} (Designation)";
+        }
+
+        public static void Place(MapBase map, IntVec3 global, byte data, int variation, int orientation, ProductMaterialPair product)
+        {
+            var entity = new BlockDesignation.BlockDesignationEntity(product, global);
+            bool ismulti = product.Block.Multi;
+
+            // LATEST DECISION: add the same entity to all occupied cells
+            // NOT FOR BLOCKDESIGNATION because i add every entity and child entities should have their origin field set
+            if (ismulti)
+            {
+                //var parts = product.Block.GetParts(global, orientation);
+                var parts = product.Block.GetPartsWithSource(orientation).Select(c => (global + c.local, c.source));
+                foreach (var p in parts)
+                {
+                    var pos = p.Item1;
+                    var source = p.Item2;
+                    map.AddBlockEntity(pos, entity);// DIDNT I DECIDE THAT BLOCKENTITIES WILL BE PLACE ONLY IN THE ORIGIN CELL???
+                    entity.Children.Add(pos);
+                    map.SetBlock(pos, BlockDefOf.Designation, MaterialDefOf.Air, 0, source, variation, orientation, false);
+                }
+            }
+            else
+            {
+                map.AddBlockEntity(global, entity);// DIDNT I DECIDE THAT BLOCKENTITIES WILL BE PLACE ONLY IN THE ORIGIN CELL???
+                entity.Children.Add(global);
+                map.SetBlock(global, BlockDefOf.Designation, MaterialDefOf.Air, data, variation, orientation, false); // i put this last because there are blockchanged event handlers that look up the block entity which hadn't beeen added yet when I set the block beforehand
+            }
         }
     }
 }

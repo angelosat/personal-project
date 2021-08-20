@@ -98,7 +98,22 @@ namespace Start_a_Town_
             if (InputState.IsKeyDown(System.Windows.Forms.Keys.LShiftKey))
                 SelectionManager.AddToSelection(target);
             else
-                SelectionManager.Select(target);
+            {
+                if (false) // for testing
+                {
+                    if (target.Type == TargetType.Position)
+                    {
+                        var map = Ingame.GetMap();
+                        var origin = Cell.GetOrigin(map, target.Global);
+                        var cell = map.GetCell(origin);
+                        var box = new BoundingBox(origin, origin + cell.SizeRotated - IntVec3.One);
+                        var cells = box.GetBoxIntVec3Lazy();
+                        SelectionManager.Select(map, cells);
+                    }
+                }
+                else
+                    SelectionManager.Select(target);
+            }
         }
 
         private void MouseScroll()

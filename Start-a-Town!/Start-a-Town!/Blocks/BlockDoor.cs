@@ -10,78 +10,11 @@ namespace Start_a_Town_
 {
     public class BlockDoor : Block
     {
-        public class State : IBlockState
-        {
-            public bool Open { get; set; }
-            public int Part { get; set; }
-
-            public State(bool open, int part)
-            {
-                this.Open = open;
-                this.Part = part;
-            }
-            public State(INetwork net, Vector3 global)
-            {
-                Cell cell = net.Map.GetCell(global);
-
-                this.Open = (cell.BlockData & 0x4) == 0x4;
-                this.Part = cell.BlockData & 0x3;
-            }
-            public State(byte data)
-            {
-                this.Open = (data & 0x4) == 0x4;
-                this.Part = data & 0x3;
-            }
-            public void Apply(MapBase map, Vector3 global)
-            {
-                Cell cell = map.GetCell(global);
-
-                if (cell.Block is not BlockDoor)
-                    throw new Exception("Block type mismatch");
-
-                int baseZ = (int)global.Z - this.Part;
-                for (int i = 0; i < 3; i++)
-                {
-                    var g = new Vector3(global.X, global.Y, baseZ + i);
-                    cell = map.GetCell(g);
-
-                    cell.BlockData = (byte)i;
-
-                    if (this.Open)
-                        cell.BlockData |= 0x4;
-                    else
-                        cell.BlockData = cell.BlockData ^= 0x4;
-                }
-            }
-            public void Apply(ref byte data)
-            {
-                data = (byte)this.Part;
-
-                if (this.Open)
-                    data |= 0x4;
-                else
-                    data = (byte)(data & ~0x4);
-            }
-            public void Apply(Block.Data data)
-            {
-                data.Value = (byte)this.Part;
-
-                if (this.Open)
-                    data.Value |= 0x4;
-                else
-                    data.Value = (byte)(data.Value & ~0x4);
-            }
-            public void FromCraftingReagent(GameObject material) { }
-            public Color GetTint(byte d)
-            { return Color.White; }
-            public string GetName(byte d)
-            {
-                return "Part:" + this.Part.ToString() + ":" + (this.Open ? "Closed" : "Open");
-            }
-        }
+        const byte MaskOpen = 0b1, MaskLocked = 0b10;
+        static readonly AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
 
         public BlockDoor()
-         : base("Door", 0, 1, false, true)
+            : base("Door", 0, 1, false, true)
         {
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
 
@@ -95,54 +28,48 @@ namespace Start_a_Town_
             Orientations[2] = Atlas.Load("blocks/doors/doorn", ndepth, nnormals);
             Orientations[3] = Atlas.Load("blocks/doors/doorw", wdepth, wnormals);
             this.BuildProperties.Category = ConstructionCategoryDefOf.Doors;
-        }
-        public override bool IsDeconstructible => true;
 
-        public static State GetState(byte data)
-        {
-            return new State(data);
+            this.Size = new(1, 1, 2);
         }
-        
+
+        public override bool IsDeconstructible => true;
+        public override bool IsRoomBorder => true;
+        public override bool Multi => true;
+
+        public static byte GetData(bool open, bool locked)
+        {
+            byte val = 0;
+            if (open)
+                val |= MaskOpen;
+            if (locked)
+                val |= MaskLocked;
+            return val;
+        }
+        public static (bool open, bool locked) GetState(byte data)
+        {
+            return ((data & MaskOpen) == MaskOpen, (data & MaskLocked) == MaskLocked);
+        }
+
         public static void Read(byte data, out bool locked, out bool open, out int part)
         {
             locked = IsLocked(data);
             open = IsOpen(data);
             part = GetPart(data);
         }
-        public static byte WriteOpen(byte data, bool open)
-        {
-            if (open)
-                data |= 0x4;
-            else
-                data ^= 0x4;
-            return data;
-        }
-        public static byte WritePart(byte data, int part)
-        {
-            data &= (byte)part;
-            return data;
-        }
-        public static byte WriteLocked(byte data, bool locked)
-        {
-            if (locked)
-                data |= 0x8;
-            else
-                data ^= 0x8;
-            return data;
-        }
         public static bool IsLocked(byte data)
         {
-            return (data & 0x8) == 0x8;
+            return GetState(data).locked;
         }
         public static bool IsOpen(byte data)
         {
-            return (data & 0x4) == 0x4;
+            return GetState(data).open;
         }
         /// <summary>
         /// returns z-distance from bottom block
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
+        /// 
         public static int GetPart(byte data)
         {
             return data & 0x3;
@@ -151,24 +78,14 @@ namespace Start_a_Town_
         {
             return (byte)verticalPos;
         }
-        public override bool IsRoomBorder => true;
 
-        public override Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation)
-        {
-            var dic = new Dictionary<IntVec3, byte>();
-            for (int i = 0; i < 3; i++)
-                dic.Add(global + new IntVec3(0, 0, i), GetData(i));
-            return dic;
-        }
         protected override IEnumerable<IntVec3> GetParts(byte data)
         {
             var center = GetCenter(data);
             for (int i = 0; i < 2; i++)
                 yield return center + new IntVec3(0, 0, i);
         }
-
-        static readonly AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
-
+        
         public override bool IsOpaque(Cell cell)
         {
             return !IsOpen(cell.BlockData);
@@ -177,7 +94,6 @@ namespace Start_a_Town_
         {
             return !IsLocked(cell.BlockData);
         }
-        public override bool Multi => true;
         protected override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             var positions = new IntVec3[2];
@@ -227,12 +143,7 @@ namespace Start_a_Town_
             Read(data, out var locked, out var open, out var part);
             return open ? 0 : 1;
         }
-        //public override MaterialDef GetMaterial(byte blockdata)
-        //{
-        //    return MaterialDefOf.LightWood;
-        //}
 
-     
         public override Icon GetIcon()
         {
             return new Icon(this.GetDefault());
@@ -298,7 +209,7 @@ namespace Start_a_Town_
             sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth);
         }
 
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             Read(data, out bool locked, out bool open, out int part);
             int ori = (orientation - (int)camera.Rotation + (open ? 1 : 0)); // FASTER???
@@ -306,14 +217,14 @@ namespace Start_a_Town_
                 ori += 4;
             else
                 ori %= 4;
-            return canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, Orientations[ori], camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, blockCoordinates);
+            return canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, Orientations[ori], camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, global);
         }
-        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, MaterialDef material, int variation = 0, int orientation = 0)
+        public override void DrawPreview(MySpriteBatch sb, MapBase map, IntVec3 global, Camera cam, Color tint, byte data, MaterialDef material, int variation = 0, int orientation = 0)
         {
             var token = Orientations[orientation];
             sb.DrawBlock(Block.Atlas.Texture, map, global, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
-            sb.DrawBlock(Block.Atlas.Texture, map, global + Vector3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
-            sb.DrawBlock(Block.Atlas.Texture, map, global + Vector3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
+            sb.DrawBlock(Block.Atlas.Texture, map, global + IntVec3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
+            sb.DrawBlock(Block.Atlas.Texture, map, global + IntVec3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
         }
 
         [Obsolete]

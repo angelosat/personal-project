@@ -617,8 +617,11 @@ namespace Start_a_Town_
         public abstract void DrawBeforeWorld(MySpriteBatch sb, Camera cam);
 
         public abstract void GetTooltipInfo(Control tooltip);
-
         public virtual bool SetBlock(IntVec3 global, Block block, MaterialDef material, byte data, int variation = 0, int orientation = 0, bool raiseEvent = true)
+        {
+            return this.SetBlock(global, block, material, data, IntVec3.Zero, variation, orientation, raiseEvent);
+        }
+        public virtual bool SetBlock(IntVec3 global, Block block, MaterialDef material, byte data, IntVec3 source, int variation = 0, int orientation = 0, bool raiseEvent = true)
         {
             if (global.Z == 0)
                 return false;
@@ -633,6 +636,7 @@ namespace Start_a_Town_
             cell.Variation = (byte)variation;
             cell.BlockData = data;
             cell.Orientation = orientation;
+            cell.Origin = source;
             // maybe put block entity creation here?
 
             chunk.InvalidateHeightmap(cell.X, cell.Y);

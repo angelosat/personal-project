@@ -26,16 +26,16 @@ namespace Start_a_Town_
             this.BuildProperties.Complexity = 10;
             this.BuildProperties.Category = ConstructionCategoryDefOf.Furniture;
             this.TopParts = new AtlasDepthNormals.Node.Token[] {
-                Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
                 Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
                 Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
-                Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal")
+                Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
+                Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal")
             };
             this.BottomParts = new AtlasDepthNormals.Node.Token[] {
-                Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal"),
                 Atlas.Load("blocks/bed/bedslimbottom2", "blocks/bed/bedslimbottom2depth", "blocks/bed/bedslimbottom2normal"),
                 Atlas.Load("blocks/bed/bedslimtop", "blocks/bed/bedslimtopdepth", "blocks/bed/bedslimtopnormal"),
-                Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal")
+                Atlas.Load("blocks/bed/bedslimtop2", "blocks/bed/bedslimtop2depth", "blocks/bed/bedslimtop2normal"),
+                Atlas.Load("blocks/bed/bedslimbottom", "blocks/bed/bedslimbottomdepth", "blocks/bed/bedslimbottomnormal")
             };
 
             this.Variations.Add(this.BottomParts.First());
@@ -44,8 +44,8 @@ namespace Start_a_Town_
             this.Parts[0] = this.TopParts;
             this.Parts[1] = this.BottomParts;
             this.UtilitiesProvided.Add(Utility.Types.Sleeping);
-            //this.Size = new(1, 2, 1);
-            this.Size = new(2, 1, 1);
+            this.Size = new(1, 2, 1);
+            //this.Size = new(2, 1, 1);
         }
         public override bool IsRoomBorder => false;
         public override bool IsStandableOn => false;
@@ -64,25 +64,7 @@ namespace Start_a_Town_
                     );
             return table;
         }
-        public override Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation) // TODO: depend on orientation
-        {
-            var dic = new Dictionary<IntVec3, byte>();
-
-            var top = global;
-            var bottom = orientation switch
-            {
-                0 => global + IntVec3.UnitX,
-                1 => global + IntVec3.UnitY,
-                2 => global - IntVec3.UnitX,
-                3 => global - IntVec3.UnitY,
-                _ => throw new Exception(),
-            };
-            var bottomdata = GetData(Part.Bottom, orientation);
-            var topdata = GetData(Part.Top, orientation);
-            dic[bottom] = bottomdata;
-            dic[top] = topdata;
-            return dic;
-        }
+      
         protected override IEnumerable<IntVec3> GetParts(byte data)
         {
             GetState(data, out var part, out var ori);
@@ -177,21 +159,20 @@ namespace Start_a_Town_
                 return;
 
             var top = global;
+            var bottom = global + Coords.Rotate(IntVec3.UnitY, orientation);
+            //var bottom = orientation switch
+            //{
+            //    0 => top + IntVec3.UnitX,
+            //    1 => top + IntVec3.UnitY,
+            //    2 => top - IntVec3.UnitX,
+            //    3 => top - IntVec3.UnitY,
+            //    _ => throw new NotImplementedException()
+            //};
 
-            var bottom = orientation switch
-            {
-                0 => top + IntVec3.UnitX,
-                1 => top + IntVec3.UnitY,
-                2 => top - IntVec3.UnitX,
-                3 => top - IntVec3.UnitY,
-                _ => throw new NotImplementedException()
-            };
-
-            map.SetBlock(bottom, this, material, GetData(Part.Bottom, orientation), 0, 0, notify);
-            map.SetBlock(top, this, material, GetData(Part.Top, orientation), 0, 0, notify);
-            //var children = this.GetChildrenWithParents(global, orientation);
-            //foreach (var (child, source) in children)
-            //    map.GetCell(child).Origin = source;
+            //map.SetBlock(bottom, this, material, GetData(Part.Bottom, orientation), 0, 0, notify);
+            //map.SetBlock(top, this, material, GetData(Part.Top, orientation), 0, 0, notify);
+            map.SetBlock(bottom, this, material, 0, 0, orientation, notify);
+            map.SetBlock(top, this, material, 0, 0, orientation, notify);
 
             var entity = new BlockBedEntity(global);
             map.AddBlockEntity(top, entity);
@@ -219,37 +200,41 @@ namespace Start_a_Town_
             return true;
         }
 
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
-            GetState(data, out var part, out var ori);
-            var entity = GetEntity(chunk.Map, blockCoordinates);
+            //GetState(data, out var part, out var ori);
+            //var entity = GetEntity(chunk.Map, global);
+            var map = chunk.Map;
+            var origin = Cell.GetOrigin(map, global);// map.GetCell(global)
+            var part = origin == global ? Part.Top : Part.Bottom;
+            var entity = chunk.Map.GetBlockEntity<BlockBedEntity>(origin);
             var col = entity.GetColorFromType();
-            var token = this.Parts[(int)part][(ori + (int)camera.Rotation) % 4];
-            return canvas.NonOpaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, col /*Color.White*/, sunlight, blocklight, depth, this, blockCoordinates);
+            var token = this.Parts[(int)part][(orientation + (int)camera.Rotation) % 4];
+            return canvas.NonOpaque.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, col /*Color.White*/, sunlight, blocklight, depth, this, global);
         }
-        public override void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, MaterialDef material, int variation = 0, int orientation = 0)
+        public override void DrawPreview(MySpriteBatch sb, MapBase map, IntVec3 global, Camera cam, Color tint, byte data, MaterialDef material, int variation = 0, int orientation = 0)
         {
             var top = global;
-            var bottom = global + Vector3.UnitX;
+            var bottom = global + Coords.Rotate(IntVec3.UnitY, orientation);
             var bottomSecIndex = (int)cam.Rotation;
             var topSrcIndex = (int)cam.Rotation;
 
             switch (orientation)
             {
                 case 1:
-                    bottom = global + Vector3.UnitY;
+                    //bottom = global + IntVec3.UnitY;
                     bottomSecIndex += 1;
                     topSrcIndex += 1;
                     break;
 
                 case 2:
-                    bottom = global - Vector3.UnitX;
+                    //bottom = global - IntVec3.UnitX;
                     bottomSecIndex += 2;
                     topSrcIndex += 2;
                     break;
 
                 case 3:
-                    bottom = global - Vector3.UnitY;
+                    //bottom = global - IntVec3.UnitY;
                     bottomSecIndex += 3;
                     topSrcIndex += 3;
                     break;
@@ -281,9 +266,10 @@ namespace Start_a_Town_
        
         public static BlockBedEntity GetEntity(MapBase map, IntVec3 global)
         {
-            var parts = GetPartsDic(map, global);
-            var entity = map.GetBlockEntity<BlockBedEntity>(parts[Part.Top]);
-            return entity;
+            return map.GetBlockEntity<BlockBedEntity>(Cell.GetOrigin(map, global));
+            //var parts = GetPartsDic(map, global);
+            //var entity = map.GetBlockEntity<BlockBedEntity>(parts[Part.Top]);
+            //return entity;
         }
         public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
         {
@@ -327,7 +313,7 @@ namespace Start_a_Town_
         }
         internal override IEnumerable<IntVec3> GetInteractionSpotsLocal()
         {
-            yield return new IntVec3(0, 1, 0);
+            yield return new IntVec3(-1, 0, 0); //new IntVec3(1, 0, 0); //
         }
         static class Packets
         {

@@ -38,10 +38,10 @@ namespace Start_a_Town_.AI.Behaviors
                     continue;
                 if (cell.Block is not BlockDoor)
                     continue;
-                var doorstate = BlockDoor.GetState(cell.BlockData);
+                var (open, locked) = BlockDoor.GetState(cell.BlockData);
                 this.CurrentOpenDoor = door; // IF IT'S ALREADY OPEN, STORE IT ANYWAY SO THAT THE ACTOR CLOSES IT WHEN HE LEAVES THE CELL
 
-                if (doorstate.Open) // IF IT'S ALREADY OPEN, STORE IT ANYWAY SO THAT THE ACTOR CLOSES IT WHEN HE LEAVES THE CELL
+                if (open) // IF IT'S ALREADY OPEN, STORE IT ANYWAY SO THAT THE ACTOR CLOSES IT WHEN HE LEAVES THE CELL
                     continue;
 
                 var openInteraction = new InteractionToggleDoor();
@@ -61,10 +61,10 @@ namespace Start_a_Town_.AI.Behaviors
                 return BehaviorState.Fail;
             if (cell.Block is not BlockDoor)
                 return BehaviorState.Fail;
-            var doorstate = BlockDoor.GetState(cell.BlockData);
+            var (open, locked) = BlockDoor.GetState(cell.BlockData);
             this.CurrentOpenDoor = door; // IF IT'S ALREADY OPEN, STORE IT ANYWAY SO THAT THE ACTOR CLOSES IT WHEN HE LEAVES THE CELL
 
-            if (doorstate.Open) // IF IT'S ALREADY OPEN, STORE IT ANYWAY SO THAT THE ACTOR CLOSES IT WHEN HE LEAVES THE CELL
+            if (open) // IF IT'S ALREADY OPEN, STORE IT ANYWAY SO THAT THE ACTOR CLOSES IT WHEN HE LEAVES THE CELL
                 return BehaviorState.Fail;
 
             var openInteraction = new InteractionToggleDoor();

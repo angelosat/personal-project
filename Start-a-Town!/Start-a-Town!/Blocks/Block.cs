@@ -219,20 +219,42 @@ namespace Start_a_Town_
         {
             yield return IntVec3.Zero;
         }
-        public virtual Dictionary<IntVec3, byte> GetParts(IntVec3 global, int orientation) // TODO: depend on orientation
-        {
-            return new Dictionary<IntVec3, byte>() { { global, 0 } };
-        }
+        
         public IEnumerable<IntVec3> GetPartsNew(MapBase map, IntVec3 global)
         {
-            var cell = map.GetCell(global);
-            var ori = cell.Orientation;
-            for (int i = 0; i < this.Size.X; i++)
-                for (int j = 0; j < this.Size.Y; j++)
-                    for (int k = 0; k < this.Size.Z; k++)
-                        yield return global + Coords.Rotate(new IntVec3(i, j, k), ori);
+            return this.GetPartsNew(map.GetCell(global).Orientation).Select(l => global + l);
+            //var cell = map.GetCell(global);
+            //var ori = cell.Orientation;
+            //for (int i = 0; i < this.Size.X; i++)
+            //    for (int j = 0; j < this.Size.Y; j++)
+            //        for (int k = 0; k < this.Size.Z; k++)
+            //            yield return global + Coords.Rotate(new IntVec3(i, j, k), ori);
         }
-        public IEnumerable<(IntVec3 global, IntVec3 source)> GetChildrenWithParents(IntVec3 global, int ori)
+        public IEnumerable<IntVec3> GetPartsNew(int ori)
+        {
+            return this.GetPartsWithSource(ori).Select(i => i.local);
+            //for (int i = 0; i < this.Size.X; i++)
+            //    for (int j = 0; j < this.Size.Y; j++)
+            //        for (int k = 0; k < this.Size.Z; k++)
+            //            yield return Coords.Rotate(new IntVec3(i, j, k), ori);
+        }
+        public IEnumerable<(IntVec3 global, IntVec3 source)> GetPartsWithSource(IntVec3 global, int ori)
+        {
+            return this.GetPartsWithSource(ori).Select(l => (global + l.local, l.source));
+        //    for (int i = 0; i < this.Size.X; i++)
+        //    {
+        //        for (int j = 0; j < this.Size.Y; j++)
+        //        {
+        //            for (int k = 0; k < this.Size.Z; k++)
+        //            {
+        //                var local = new IntVec3(i, j, k);
+        //                var parent = new IntVec3(i == 0 ? 0 : -1, j == 0 ? 0 : -1, k == 0 ? 0 : -1);
+        //                yield return (global + Coords.Rotate(local, ori), Coords.Rotate(parent, ori));
+        //            }
+        //        }
+        //    }
+        }
+        public IEnumerable<(IntVec3 local, IntVec3 source)> GetPartsWithSource(int ori)
         {
             for (int i = 0; i < this.Size.X; i++)
             {
@@ -242,14 +264,14 @@ namespace Start_a_Town_
                     {
                         var local = new IntVec3(i, j, k);
                         var parent = new IntVec3(i == 0 ? 0 : -1, j == 0 ? 0 : -1, k == 0 ? 0 : -1);
-                        yield return (global + Coords.Rotate(local, ori), Coords.Rotate(parent, ori));
+                        yield return (Coords.Rotate(local, ori), Coords.Rotate(parent, ori));
                     }
                 }
             }
         }
-        public Dictionary<IntVec3, IntVec3> GetChildrenWithParentsDic(IntVec3 global, int ori)
+        public Dictionary<IntVec3, IntVec3> GetPartsWithSourceDic(IntVec3 global, int ori)
         {
-            return this.GetChildrenWithParents(global, ori).ToDictionary(i => i.global, i => i.source);
+            return this.GetPartsWithSource(global, ori).ToDictionary(i => i.global, i => i.source);
         }
 
         public IntVec3 Size = IntVec3.One;
@@ -448,7 +470,7 @@ namespace Start_a_Town_
         public static void Place(Block block, MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             block.Place(map, global, material, data, variation, orientation, notify);
-            var children = block.GetChildrenWithParents(global, orientation);
+            var children = block.GetPartsWithSource(global, orientation);
             foreach (var (child, source) in children)
                 map.GetCell(child).Origin = source;
         }
@@ -593,7 +615,7 @@ namespace Start_a_Town_
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
 
         }
-        public virtual MyVertex[] Draw(Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        public virtual MyVertex[] Draw(Chunk chunk, IntVec3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
                 return null;
@@ -606,7 +628,7 @@ namespace Start_a_Town_
                 token,
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
         }
-        public virtual MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        public virtual MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
                 return null;
@@ -618,7 +640,7 @@ namespace Start_a_Town_
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return mesh.DrawBlock(Atlas.Texture, screenBounds,
                 token,
-                camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
+                camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, global);
         }
         public virtual void Draw(MySpriteBatch sb, Vector2 screenPos, Color sunlight, Vector4 blocklight, Color tint, float zoom, float depth, Cell cell)
         {
@@ -627,11 +649,11 @@ namespace Start_a_Town_
 
             sb.DrawBlock(Atlas.Texture, screenPos, this.Variations[cell.Variation], zoom, tint, sunlight, blocklight, depth);
         }
-        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, byte data, MaterialDef mat, int variation = 0, int orientation = 0)
+        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, IntVec3 global, Camera cam, byte data, MaterialDef mat, int variation = 0, int orientation = 0)
         {
             this.DrawPreview(sb, map, global, cam, Color.White * .5f, data, mat, variation, orientation);
         }
-        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, Vector3 global, Camera cam, Color tint, byte data, MaterialDef mat, int variation = 0, int orientation = 0)
+        public virtual void DrawPreview(MySpriteBatch sb, MapBase map, IntVec3 global, Camera cam, Color tint, byte data, MaterialDef mat, int variation = 0, int orientation = 0)
         {
             var depth = global.GetDrawDepth(map, cam);
             var materialcolor = this.DrawMaterialColor ? mat.Color : Color.White;// this.GetColor(data);
@@ -639,7 +661,7 @@ namespace Start_a_Town_
             var bounds = cam.GetScreenBoundsVector4(global.X, global.Y, global.Z, Bounds, Vector2.Zero);
             sb.DrawBlock(Atlas.Texture, bounds, token, cam.Zoom, Color.Transparent, tint, materialcolor, Color.White, Vector4.One, Vector4.Zero, depth, this);
         }
-        protected static void DrawShadow(MySpriteBatch nonopaquemesh, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth)
+        protected static void DrawShadow(MySpriteBatch nonopaquemesh, IntVec3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth)
         {
             nonopaquemesh.DrawBlock(Atlas.Texture, screenBounds, BlockShadow, camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Vector4.Zero, depth, null, blockCoordinates);
         }

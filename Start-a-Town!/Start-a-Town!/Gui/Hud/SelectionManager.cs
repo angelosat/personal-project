@@ -158,11 +158,15 @@ namespace Start_a_Town_.UI
         {
             Instance.SelectInternal(targets);
         }
-
-        //public static void Select(IEnumerable<IntVec3> cells)
-        //{
-        //    Instance.Select(cells.Select(c => new TargetArgs(c)));
-        //}
+        /// <summary>
+        /// why did i have this commented out?
+        /// because it doesn't set the map field in targetargs
+        /// </summary>
+        /// <param name="cells"></param>
+        public static void Select(MapBase map, IEnumerable<IntVec3> cells)
+        {
+            Instance.SelectInternal(cells.Select(c => new TargetArgs(map, c)));
+        }
         internal static void SelectAllVisible(ItemDef def)
         {
             var objects = Ingame.Instance.Scene.ObjectsDrawn.Where(i => i.Def == def).Select(o => new TargetArgs(o));

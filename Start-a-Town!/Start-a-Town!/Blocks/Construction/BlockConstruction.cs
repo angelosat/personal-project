@@ -14,16 +14,16 @@ namespace Start_a_Town_
         }
         public override bool IsStandableIn => false;
        
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
-            var entity = chunk.Map.GetBlockEntity(blockCoordinates) as BlockConstructionEntity;
+            var entity = chunk.Map.GetBlockEntity(global) as BlockConstructionEntity;
             var block = entity.Product.Block;
             
             AtlasDepthNormals.Node.Token token;
                 token = block.GetToken(variation, orientation, (int)camera.Rotation, data);
 
             var color = Color.White;
-            return canvas.Designations.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, color, sunlight, blocklight, depth, this, blockCoordinates);
+            return canvas.Designations.DrawBlock(Block.Atlas.Texture, screenBounds, token, camera.Zoom, fog, color, sunlight, blocklight, depth, this, global);
         }
         internal override void PreRemove(MapBase map, IntVec3 global)
         {

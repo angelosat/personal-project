@@ -237,29 +237,8 @@ namespace Start_a_Town_
         public void PlaceDesignation(IntVec3 global, byte data, int variation, int orientation, ProductMaterialPair product)
         {
             var map = this.Map;
-            var entity = new BlockDesignation.BlockDesignationEntity(product, global);
-            bool ismulti = product.Block.Multi;
+            BlockDesignation.Place(map, global, data, variation, orientation, product);
             this.Designations.Add(global);
-
-            // LATEST DECISION: add the same entity to all occupied cells
-            // NOT FOR BLOCKDESIGNATION because i add every entity and child entities should have their origin field set
-            if (ismulti)
-            {
-                var parts = product.Block.GetParts(global, orientation);
-                foreach (var p in parts)
-                {
-                    map.AddBlockEntity(p.Key, entity);// DIDNT I DECIDE THAT BLOCKENTITIES WILL BE PLACE ONLY IN THE ORIGIN CELL???
-                    entity.Children.Add(p.Key);
-                    map.SetBlock(p.Key, BlockDefOf.Designation, MaterialDefOf.Air, p.Value, variation, orientation, false);
-                }
-            }
-            else
-            {
-                map.AddBlockEntity(global, entity);// DIDNT I DECIDE THAT BLOCKENTITIES WILL BE PLACE ONLY IN THE ORIGIN CELL???
-                entity.Children.Add(global);
-                map.SetBlock(global, BlockDefOf.Designation, MaterialDefOf.Air, data, variation, orientation, false); // i put this last because there are blockchanged event handlers that look up the block entity which hadn't beeen added yet when I set the block beforehand
-            }
-            // TODO: add blockentities on construction manager instead?
         }
 
         public IEnumerable<(string name, Action action)> GetInfoTabs()

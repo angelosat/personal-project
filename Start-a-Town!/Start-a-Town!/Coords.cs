@@ -113,7 +113,7 @@ namespace Start_a_Town_
             0, 1, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1);
-        static readonly Matrix MatrixRot1 = new(
+        static readonly Matrix MatrixRot3 = new(
            0, -1, 0, 0,
            1, 0, 0, 0,
            0, 0, 1, 0,
@@ -123,7 +123,7 @@ namespace Start_a_Town_
             0, -1, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1);
-        static readonly Matrix MatrixRot3 = new(
+        static readonly Matrix MatrixRot1 = new(
             0, 1, 0, 0,
             -1, 0, 0, 0,
             0, 0, 1, 0,

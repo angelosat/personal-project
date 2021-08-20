@@ -108,6 +108,7 @@ namespace Start_a_Town_
                 this.OriginZ = value.Z;
             }
         }
+
         public static IntVec3 GetOrigin(MapBase map, IntVec3 current)
         {
             var source = map.GetCell(current).Origin;
@@ -179,6 +180,8 @@ namespace Start_a_Town_
         }
         public float Fertility => this.Block.GetFertility(this);
         public IntVec3 LocalCoords => new(this.X, this.Y, this.Z);
+
+        public IntVec3 SizeRotated => Coords.Rotate(this.Block.Size, this.Orientation);
 
         public IntVec3 GetGlobalCoords(Chunk chunk)
         {

@@ -67,7 +67,7 @@ namespace Start_a_Town_
         {
             base.Place(map, global, material, GetData(orientation), variation, orientation, notify);
         }
-        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        public override MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
                 return null;
@@ -75,7 +75,7 @@ namespace Start_a_Town_
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds,
                 token,
-                camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
+                camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, global);
         }
     }
 }

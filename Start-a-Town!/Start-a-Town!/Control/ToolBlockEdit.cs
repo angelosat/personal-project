@@ -2,6 +2,7 @@
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Start_a_Town_.PlayerControl
@@ -102,8 +103,7 @@ namespace Start_a_Town_.PlayerControl
             atlastoken.Atlas.Begin(sb);
             this.Block.DrawPreview(sb, map, global, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
-            foreach (var pos in this.Block.GetInteractionSpotsLocal(this.Orientation))
-                cam.DrawGridCells(sb, Color.Lime * .5f, new IntVec3[] { global + pos });
+            this.Block.DrawInteractionCells(sb, cam, map, global, this.Orientation);
         }
         public override Icon GetIcon()
         {

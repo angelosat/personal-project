@@ -8,7 +8,7 @@ namespace Start_a_Town_
         protected BlockEntityWorkstation(IntVec3 originGlobal) : base(originGlobal)
         {
         }
-        public override IEnumerable<IntVec3> InteractionSpots => BlockDefOf.Workbench.GetInteractionSpotsLocal(this.Map.GetCell(this.OriginGlobal).Orientation).Select(c=>this.OriginGlobal + c);
+        //public override IEnumerable<IntVec3> InteractionSpots => BlockDefOf.Workbench.GetInteractionSpotsLocal(this.Map.GetCell(this.OriginGlobal).Orientation).Select(c=>this.OriginGlobal + c);
     }
     //public abstract class BlockEntityWorkstation : BlockEntity
     //{

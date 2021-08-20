@@ -66,7 +66,7 @@ namespace Start_a_Town_
                         continue;
                     if (!actor.CanReserve(benchglobal.Above))
                         continue;
-                    var operatingPos = map.GetFrontOfBlock(benchglobal);
+                    var operatingPos = map.GetFrontOfBlock(benchglobal); // TODO use the getinteractionspot from block class
                     if (!actor.CanReserve(operatingPos))
                         continue;
                     if (!actor.CanReserve(operatingPos.Below))

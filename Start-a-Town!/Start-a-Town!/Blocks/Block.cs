@@ -879,6 +879,10 @@ namespace Start_a_Town_
         {
             return this.GetInteractionSpotsLocal().Select(s => Coords.Rotate(s, orientation));   
         }
+        internal IEnumerable<IntVec3> GetInteractionSpots(IntVec3 global, int orientation)
+        {
+            return this.GetInteractionSpotsLocal().Select(s => global + Coords.Rotate(s, orientation));
+        }
         internal IEnumerable<IntVec3> GetInteractionSpots(Cell cell, IntVec3 global)
         {
             foreach (var p in this.GetInteractionSpotsLocal(cell.Orientation))
@@ -887,11 +891,16 @@ namespace Start_a_Town_
         internal IEnumerable<IntVec3> GetInteractionSpots(MapBase map, IntVec3 global)
         {
             //var cell = map.GetCell(global);
+            if (!map.Contains(global))
+                yield break;
             global = Cell.GetOrigin(map, global);
             var cell = map.GetCell(global);
             foreach (var p in this.GetInteractionSpotsLocal(cell.Orientation))
                 yield return p + global;
         }
+        internal IEnumerable<IntVec3> GetReservedInteractionCells(IntVec3 global, int orientation) => this.GetInteractionSpots(global, orientation).SelectMany(ActorDefOf.Npc.OccupyingCellsStanding);
+        internal IEnumerable<IntVec3> GetReservedInteractionCells(MapBase map, IntVec3 global) => this.GetInteractionSpots(map, global).SelectMany(ActorDefOf.Npc.OccupyingCellsStanding);
+
         public virtual IEnumerable<(string name, Action action)> GetInfoTabs() { yield break; }
         internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
@@ -935,6 +944,12 @@ namespace Start_a_Town_
             var interactionSpots = this.GetInteractionSpots(map, global);
             var col = Color.Lime; // color red if interaction spots are obstructed?
             cam.DrawCellHighlights(sb, FaceHighlights[-IntVec3.UnitZ], interactionSpots, col * .5f);
+        }
+        internal void DrawInteractionCells(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global, int orientation)
+        {
+            var interactionCells = this.GetReservedInteractionCells(global, orientation);
+            var col = interactionCells.All(c => map.Contains(c) && !map.IsSolid(c)) ? Color.Lime : Color.Red;
+            cam.DrawCellHighlights(sb, Block.BlockHighlight, interactionCells, col * .5f);
         }
     }
 }

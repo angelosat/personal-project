@@ -15,7 +15,8 @@ namespace Start_a_Town_
         public MapBase Map;
         public bool Exists => this.Map is not null;
 
-        public virtual IEnumerable<IntVec3> InteractionSpots { get { yield break; } }
+        //public virtual IEnumerable<IntVec3> InteractionSpots { get { yield break; } }
+        public IEnumerable<IntVec3> InteractionSpots => this.Map.GetCell(this.OriginGlobal).GetInteractionSpots(this.OriginGlobal);
         public IEnumerable<IntVec3> ReservedInteractionCells => this.InteractionSpots.SelectMany(ActorDefOf.Npc.OccupyingCellsStanding);
 
         public IntVec3 OriginGlobal;

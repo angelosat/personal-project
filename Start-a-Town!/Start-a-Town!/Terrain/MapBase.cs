@@ -178,7 +178,7 @@ namespace Start_a_Town_
         {
             if (this.BlockEntities.Any(e => e.ReservedInteractionCells.Contains(pos)))
             {
-                errorText = "Building block by interaction spot";
+                errorText = "Building blocked by interaction spot";
                 return false;
             }
             return true;

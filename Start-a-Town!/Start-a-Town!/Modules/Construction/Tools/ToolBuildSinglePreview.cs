@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -27,11 +28,24 @@ namespace Start_a_Town_
                 return Messages.Default;
             if (this.Target == null)
                 return Messages.Default;
-            this.Send(this.Begin, this.Begin, this.Orientation);
             this.Enabled = false;
+
+            if(this.Validate())
+                this.Send(this.Begin, this.Begin, this.Orientation);
+
             return Messages.Default;
         }
-       
+        bool Validate()
+        {
+            var map = this.Target.Map;
+            var interactionCells = this.Block.GetReservedInteractionCells(this.Begin, this.Orientation);
+            if (!interactionCells.All(c => map.Contains(c) && !map.IsSolid(c)))
+            {
+                Log.Warning("Interaction spots blocked.");
+                return false;
+            }
+            return true;
+        }
         protected override void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             if (!this.Enabled)
@@ -54,10 +68,7 @@ namespace Start_a_Town_
             this.Block.DrawPreview(sb, map, global, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
 
-            // show operation position of workstation 
-            //var interactionSpots 
-            //cam.DrawGridCells(sb, Color.White *.5f, new IntVec3[] { global + Cell.GetFront(this.Orientation) });
-            cam.DrawGridCells(sb, Color.White *.5f, this.Block.GetInteractionSpotsLocal(this.Orientation));
+            this.Block.DrawInteractionCells(sb, cam, map, global, this.Orientation);
         }
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {

@@ -181,7 +181,8 @@ namespace Start_a_Town_.Particles
         public void Draw(Camera cam, MapBase map, Vector3 global)
         {
             // TODO: slow if many emmiters
-            SortParticlesByDepth(cam, map);
+            // why do i have to sort?
+            //SortParticlesByDepth(cam, map);
 
             // TODO: find better way to do this OPTIMIZE FIX
             if (this.Texture == Sprite.Atlas.Texture)

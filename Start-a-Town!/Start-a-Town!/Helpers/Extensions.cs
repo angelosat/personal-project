@@ -23,20 +23,19 @@ namespace Start_a_Town_
              .ForEach(slot => amount += slot.StackSize);
             return amount;
         }
-        public static Vector2 ToVector(this Point point)
-        { return new Vector2(point.X, point.Y); }
+        public static Vector2 ToVector(this Point point) => new(point.X, point.Y); 
 
         public static float GetMouseoverDepth(this Vector3 worldGlobal, MapBase map, Camera camera)
         {
             Vector3 local = worldGlobal - new Vector3(map.GetOffset(), 0);
             Vector3 rotated = local.Rotate(camera);
-            return (rotated.X + rotated.Y + worldGlobal.Z);
+            return rotated.X + rotated.Y + worldGlobal.Z;
         }
         public static float GetDrawDepth(this Vector3 worldGlobal, MapBase map, Camera camera)
         {
             Vector3 local = worldGlobal - new Vector3(map.GetOffset(), 0);
             Vector3 rotated = local.Rotate(camera);
-            return (rotated.X + rotated.Y);
+            return rotated.X + rotated.Y;
         }
         public static float GetDrawDepth(this IntVec3 worldGlobal, MapBase map, Camera camera)
         {

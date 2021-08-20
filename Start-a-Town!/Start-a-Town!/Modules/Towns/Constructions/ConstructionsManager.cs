@@ -160,15 +160,13 @@ namespace Start_a_Town_
         internal override void UpdateQuickButtons()
         {
             var cells = SelectionManager.SelectedCells;
-            var selectedDesignations = cells.Intersect(this.Designations);
+            var distinctCellOrigins = cells.Select(c => Cell.GetOrigin(this.Map, c)).Distinct();
+            var selectedDesignations = distinctCellOrigins.Intersect(this.Designations);
             if (!selectedDesignations.Any())
                 return;
             SelectionManager.AddButton(IconCancel, cancel, selectedDesignations);
 
-            static void cancel(List<TargetArgs> positions)
-            {
-                PacketDesignation.Send(Client.Instance, false, positions, null);
-            }
+            static void cancel(List<TargetArgs> positions) => PacketDesignation.Send(Client.Instance, false, positions, null);
         }
         public void Handle(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {

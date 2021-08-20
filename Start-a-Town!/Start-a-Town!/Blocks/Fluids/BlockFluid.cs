@@ -79,17 +79,16 @@ namespace Start_a_Town_
             LiquidFlowProcess.UpdateProcesses();
         }
         
-        public override MyVertex[] Draw(MySpriteBatch sb, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
-        {
-            return camera.WaterSpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Assets[data][0], camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Color.Red.ToVector4(), depth, this, blockcoords);
-        }
+        //public override MyVertex[] Draw(MySpriteBatch sb, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        //{
+        //    return camera.WaterSpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Assets[data][0], camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Color.Red.ToVector4(), depth, this, blockcoords);
+        //}
         public override MyVertex[] Draw(Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             return chunk.Canvas.Transparent.DrawBlock(Block.Atlas.Texture, screenBounds, this.Assets[data][0], camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Color.Red.ToVector4(), depth, this, global);
         }
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
-            //return canvas.Transparent.DrawBlock(Block.Atlas.Texture, screenBounds, this.Assets[data][0], camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Color.Red.ToVector4(), depth, this, blockcoords);
             return canvas.Transparent.DrawBlock(Block.Atlas.Texture, 
                 screenBounds, 
                 this.Assets[data][0], 

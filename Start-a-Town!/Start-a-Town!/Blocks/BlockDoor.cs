@@ -101,7 +101,7 @@ namespace Start_a_Town_
             {
                 var g = global + new IntVec3(0, 0, i);
                 positions[i] = g;
-                byte _data = (byte)i;
+                byte _data = 0;// (byte)i;
                 map.SetBlock(g, this, material, _data, variation, orientation, false);
             }
             if (notify)
@@ -150,7 +150,7 @@ namespace Start_a_Town_
         }
         public override IEnumerable<MaterialDef> GetEditorVariations()
         {
-            yield return MaterialDefOf.Human;
+            return Def.GetDefs<MaterialDef>().Where(m => m.Type == MaterialTypeDefOf.Stone || m.Type == MaterialTypeDefOf.Metal || m.Type == MaterialTypeDefOf.Wood);
         }
 
         public override void GetTooltip(UI.Control tooltip, MapBase map, IntVec3 global, IntVec3 face)

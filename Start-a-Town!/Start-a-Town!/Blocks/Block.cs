@@ -602,6 +602,19 @@ namespace Start_a_Town_
 
             sb.DrawBlock(Atlas.Texture, screenBounds, this.Variations[Math.Min(cell.Variation, this.Variations.Count - 1)], zoom, fog, tint, sunlight, blocklight, depth, this);
         }
+        public virtual MyVertex[] Draw(MySpriteBatch sb, Vector3 blockCoordinates, float zoom, int rotation, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
+        {
+            if (this == BlockDefOf.Air)
+                return null;
+
+            var material = this.DrawMaterialColor ? mat.ColorVector : DefaultColorVector;// this.GetColorVector(data);
+
+            var token = this.GetToken(variation, orientation, rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
+            return sb.DrawBlock(Atlas.Texture, screenBounds,
+                token,
+                zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
+
+        }
         public virtual MyVertex[] Draw(MySpriteBatch sb, Vector3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
@@ -828,11 +841,11 @@ namespace Start_a_Town_
             gd.Textures[1] = Atlas.DepthTexture;
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             var bounds = new Vector4((width - Width) / 2, (height - Height) / 2, token.Texture.Bounds.Width, token.Texture.Bounds.Height);
-            var cam = new Camera
-            {
-                SpriteBatch = mysb
-            };
-            this.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data, mat ?? MaterialDefOf.Air);
+            //var cam = new Camera
+            //{
+            //    SpriteBatch = mysb
+            //};
+            this.Draw(mysb, Vector3.Zero, 1, 0, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data, mat ?? MaterialDefOf.Air);
             mysb.Flush();
         }
         public RenderTarget2D PaintIcon(byte data, MaterialDef mat)
@@ -852,11 +865,11 @@ namespace Start_a_Town_
             gd.Textures[1] = Atlas.DepthTexture;
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             var bounds = new Vector4(0, 0, w, h);
-            var cam = new Camera
-            {
-                SpriteBatch = mysb
-            };
-            this.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data, mat);
+            //var cam = new Camera
+            //{
+            //    SpriteBatch = mysb
+            //};
+            this.Draw(mysb, Vector3.Zero, 1, 0, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data, mat);
             mysb.Flush();
             gd.SetRenderTarget(null);
             return renderTarget;

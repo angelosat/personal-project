@@ -37,7 +37,7 @@ namespace Start_a_Town_.UI.Editor
                 this.Panel_Variants.Controls.Remove(this.GridVariations2);
             var variations = new List<Cell>();
             foreach (var item in block.GetEditorVariations())
-                variations.Add(new Cell() { Block = block, Material = item }); //BlockData = item, 
+                variations.Add(new Cell() { Block = block, Material = item });
             this.GridVariations2 = new SlotGridCustom<SlotCustom<Cell>, Cell>(variations, 8, (slot, cell) =>
             {
                 slot.LeftClickAction = () =>
@@ -57,11 +57,9 @@ namespace Start_a_Town_.UI.Editor
                     gd.Textures[0] = Block.Atlas.Texture;
                     gd.Textures[1] = Block.Atlas.DepthTexture;
                     fx.CurrentTechnique.Passes["Pass1"].Apply();
-                    //var material = tag.Block.GetColor(tag.BlockData);
                     var material = tag.Material;
                     var bounds = new Vector4(3, 3 - Block.Depth / 2, token.Texture.Bounds.Width, token.Texture.Bounds.Height);
-                    var cam = new Camera { SpriteBatch = mysb };
-                    tag.Block.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, tag.BlockData, material);
+                    tag.Block.Draw(mysb, Vector3.Zero, 1, 0, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, tag.BlockData, material);
                     mysb.Flush();
                 };
                 slot.CustomTooltip = true;

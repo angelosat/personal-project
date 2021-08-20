@@ -34,9 +34,7 @@ namespace Start_a_Town_.Particles
         public void Draw(Camera camera)
         {
             foreach (var e in this.Emitters)
-            {
                 e.Draw(camera, this.Map, e.Source);
-            }
         }
 
         public void OnGameEvent(GameEvent e)

@@ -101,7 +101,8 @@ namespace Start_a_Town_
         bool RenderTargetsInvalid = true;
         float DepthFar, DepthNear;
         public MySpriteBatch SpriteBatch;
-        public MySpriteBatch WaterSpriteBatch, ParticlesSpriteBatch, BlockParticlesSpriteBatch, TransparentBlocksSpriteBatch;
+        public MySpriteBatch WaterSpriteBatch, // waterspritebatch is not used!?
+            ParticlesSpriteBatch, BlockParticlesSpriteBatch, TransparentBlocksSpriteBatch;
         float FogT = 0;
         public Effect Effect;
         public static bool DrawnOnce = false;

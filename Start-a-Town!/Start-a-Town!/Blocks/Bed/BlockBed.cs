@@ -171,7 +171,7 @@ namespace Start_a_Town_
             return map.GetBlockEntity(global) is BlockBedEntity;
         }
 
-        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+        protected override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             if (!IsValidPosition(map, global, orientation))
                 return;
@@ -189,9 +189,9 @@ namespace Start_a_Town_
 
             map.SetBlock(bottom, this, material, GetData(Part.Bottom, orientation), 0, 0, notify);
             map.SetBlock(top, this, material, GetData(Part.Top, orientation), 0, 0, notify);
-            var children = this.GetChildrenWithParents(global, orientation);
-            foreach (var (child, source) in children)
-                map.GetCell(child).Origin = source;
+            //var children = this.GetChildrenWithParents(global, orientation);
+            //foreach (var (child, source) in children)
+            //    map.GetCell(child).Origin = source;
 
             var entity = new BlockBedEntity(global);
             map.AddBlockEntity(top, entity);

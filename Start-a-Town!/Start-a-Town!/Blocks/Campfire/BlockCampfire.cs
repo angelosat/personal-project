@@ -27,7 +27,7 @@ namespace Start_a_Town_
             return new BlockCampfireEntity(originGlobal);
         }
 
-        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+        protected override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             if (!map.GetBlock(global - IntVec3.UnitZ).Opaque)
                 return;

@@ -44,7 +44,7 @@ namespace Start_a_Town_
                 return;
 
             // make grass grow anywhere, not just spread from existing grass
-            BlockDefOf.Grass.Place(net.Map, global, celll.Material, 0, celll.Variation, 0);
+            Block.Place(BlockDefOf.Grass, net.Map, global, celll.Material, 0, celll.Variation, 0);
 
             foreach (var n in global.GetNeighborsDiag())
             {
@@ -52,7 +52,7 @@ namespace Start_a_Town_
                     continue;
                 if (cell.Block != BlockDefOf.Grass)
                     continue;
-                BlockDefOf.Grass.Place(net.Map, global, cell.Material, 0, celll.Variation, 0);
+                Block.Place(BlockDefOf.Grass, net.Map, global, cell.Material, 0, celll.Variation, 0);
                 return;
             }
         }

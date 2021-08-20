@@ -172,12 +172,7 @@ namespace Start_a_Town_
         }
         public void Handle(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
         {
-            const bool cheat = false;
-            var map = this.Map;
-            if (cheat)
-                PlaceDesignationsGodMode(args, product, positions, map);
-            else
-                this.PlaceDesignations(args, product, positions);
+            this.PlaceDesignations(args, product, positions);
         }
 
         private void PlaceDesignations(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions)
@@ -234,24 +229,7 @@ namespace Start_a_Town_
             else
                 throw new Exception();
         }
-        private static void PlaceDesignationsGodMode(ToolBlockBuild.Args args, ProductMaterialPair product, List<IntVec3> positions, MapBase map)
-        {
-            if (!args.Removing)
-            {
-                product.Block.Place(
-                    map,
-                    positions.Where(vec => args.Replacing ? map.GetBlock(vec) != BlockDefOf.Air : map.GetBlock(vec) == BlockDefOf.Air).ToList(),
-                    product.Material,
-                    product.Data,
-                    args.Orientation
-                    , true);
-            }
-            else
-            {
-                map.RemoveBlocks(positions);
-            }
-        }
-
+       
         public void TabGetter(Action<string, Action> getter)
         {
             throw new NotImplementedException();

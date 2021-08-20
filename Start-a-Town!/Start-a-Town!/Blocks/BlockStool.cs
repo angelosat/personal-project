@@ -14,8 +14,8 @@ namespace Start_a_Town_
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.UtilitiesProvided.Add(Utility.Types.Eating);
         }
-        
-        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+
+        protected override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, material, data, variation, orientation, notify);
             map.Town.AddUtility(Utility.Types.Eating, global);

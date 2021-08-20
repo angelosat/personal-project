@@ -56,7 +56,7 @@ namespace Start_a_Town_
                     map.RemoveBlock(p, false);
                 var block = product.Block;
                 var cell = map.GetCell(global);
-                block.Place(map, global, product.Material, product.Data, 0, cell.Orientation, true);
+                Block.Place(block, map, global, product.Material, product.Data, 0, cell.Orientation, true);
                 map.GetBlockEntity(global)?.IsMadeFrom(new ItemMaterialAmount[] { product.Requirement });
             }
            

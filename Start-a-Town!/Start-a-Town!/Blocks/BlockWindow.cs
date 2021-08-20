@@ -53,7 +53,7 @@ namespace Start_a_Town_
             return data;
         }
 
-        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+        protected override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, material, GetData(0), variation, orientation);
             base.Place(map, global + IntVec3.UnitZ, material, GetData(1), variation, orientation, notify);

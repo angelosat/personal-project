@@ -444,15 +444,15 @@ namespace Start_a_Town_
         }
 
         public virtual bool IsValidPosition(MapBase map, IntVec3 global, int orientation) { return true; }
-        internal void Place(MapBase map, IEnumerable<IntVec3> positions, MaterialDef material, byte data, int orientation, bool notify)
+       
+        public static void Place(Block block, MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
-            foreach (var pos in positions)
-                this.Place(map, pos, material, data, 0, orientation, false);
-
-            if (notify)
-                map.NotifyBlocksChanged(positions);
+            block.Place(map, global, material, data, variation, orientation, notify);
+            var children = block.GetChildrenWithParents(global, orientation);
+            foreach (var (child, source) in children)
+                map.GetCell(child).Origin = source;
         }
-        public virtual void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+        protected virtual void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             map.SetBlock(global, this, material, data, variation, orientation, notify);
             var entity = this.CreateBlockEntity(global);

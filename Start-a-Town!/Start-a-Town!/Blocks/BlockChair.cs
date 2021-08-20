@@ -15,7 +15,7 @@ namespace Start_a_Town_
             this.BuildProperties.Category = ConstructionCategoryDefOf.Furniture;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
         }
-        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+        protected override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             base.Place(map, global, material, data, orientation, 0, notify);
         }

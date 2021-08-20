@@ -178,7 +178,7 @@ namespace Start_a_Town_
             return !IsLocked(cell.BlockData);
         }
         public override bool Multi => true;
-        public override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
+        protected override void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             var positions = new IntVec3[2];
             for (int i = 0; i < 2; i++)

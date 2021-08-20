@@ -54,7 +54,7 @@ namespace Start_a_Town_.Components.Crafting
             var block = this.Block;
             var ori = this.Orientation;
             var mat = this.Material ?? MaterialDefOf.Air;
-            block.Place(map, global, mat, this.Data, 0, ori, true);
+            Block.Place(block, map, global, mat, this.Data, 0, ori, true);
         }
 
         internal void Save(SaveTag tag, string name)

@@ -24,7 +24,7 @@ namespace Start_a_Town_
             var belowBlock = this.Map.GetBlock(below);
             if (belowBlock == BlockDefOf.Air)
             {
-                BlockDefOf.Fluid.Place(map, below, mat, 1, 0, 0);
+                Block.Place(BlockDefOf.Fluid, map, below, mat, 1, 0, 0);
                 this.Map.SetBlock(below, BlockDefOf.Fluid, mat, 1);
             }
             else
@@ -34,7 +34,7 @@ namespace Start_a_Town_
                     var nblock = this.Map.GetBlock(n);
                     if (nblock != BlockDefOf.Air)
                         continue;
-                    BlockDefOf.Fluid.Place(map, n, mat, 0, 0, 0);
+                    Block.Place(BlockDefOf.Fluid, map, n, mat, 0, 0, 0);
                 }
             }
             /// remove entity after updating once, all flowing must complete in first update

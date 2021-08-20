@@ -56,7 +56,7 @@ namespace Start_a_Town_
             map.RemoveBlock(global);
 
             if (block != BlockDefOf.Air)
-                block.Place(map, global, material, data, variation, orientation);
+                Block.Place(block, map, global, material, data, variation, orientation);
         }
     }
 }

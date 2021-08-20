@@ -42,7 +42,7 @@ namespace Start_a_Town_.Interactions
             var ori = cell.Orientation;
             foreach (var child in entity.Children)
                 map.RemoveBlock(child, false);
-            block.Place(map, entity.OriginGlobal, entity.Product.Material, entity.Product.Data, 0, ori, true);
+            Block.Place(block, map, entity.OriginGlobal, entity.Product.Material, entity.Product.Data, 0, ori, true);
             map.GetBlockEntity(t.Global)?.IsMadeFrom(new ItemMaterialAmount[] { entity.Product.Requirement });
         }
 

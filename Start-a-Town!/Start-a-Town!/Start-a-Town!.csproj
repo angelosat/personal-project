@@ -656,7 +656,6 @@
     <Compile Include="AI\Labors\AITask.cs" />
     <Compile Include="AI\Net\Packets\PacketAILogWrite.cs" />
     <Compile Include="AI\Net\Packets\PacketTaskUpdate.cs" />
-    <Compile Include="Modules\Towns\Labors\NpcUIStatic.cs" />
     <Compile Include="Modules\Construction\Packets\PacketDesignateConstruction.cs" />
     <Compile Include="Modules\Construction\Tools\ToolBlockBuild.cs" />
     <Compile Include="Modules\Construction\Tools\ToolBuildBoxFilled.cs" />
@@ -1056,8 +1055,6 @@
     <Compile Include="Gui\SpeechBubble.cs" />
     <Compile Include="Gui\Tables\TableScrollableCompact.cs" />
     <Compile Include="Gui\Tables\TableScrollableCompactNewNew.cs" />
-    <Compile Include="Gui\WindowTargetManagementStatic.cs" />
-    <Compile Include="Gui\WindowTargetManagement.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotGrid.cs" />
     <Compile Include="Network\Server\ServerUI.cs" />
     <Compile Include="Gui\Hud\UnitFrame.cs" />

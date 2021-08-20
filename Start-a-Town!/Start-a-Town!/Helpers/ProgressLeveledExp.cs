@@ -48,8 +48,8 @@ namespace Start_a_Town_
         {
             var box = new GroupBox();
             box.AddControlsBottomLeft(
-                new Label() { TextFunc = () => string.Format("Current Level: {0}", this.Level) },
-                new Label() { TextFunc = () => string.Format("Next Level: {0} / {1}", (int)this.Value, (int)this.Max) });
+                new Label() { TextFunc = () => $"Current Level: {this.Level}" },
+                new Label() { TextFunc = () => $"Next Level: {(int)this.Value} / {(int)this.Max}"});
             return box;
         }
 

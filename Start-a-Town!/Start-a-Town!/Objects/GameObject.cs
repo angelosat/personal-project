@@ -621,37 +621,7 @@ namespace Start_a_Town_
             this.ChildrenSequence = 0;
             return this;
         }
-        public void GetManagementInterface(WindowTargetManagement ui)
-        {
-            ui.Title = this.Name;
-            foreach (var comp in this.Components)
-            {
-                comp.Value.GetManagementInterface(this, ui.PanelInfo);
-            }
-
-            ui.PanelActions.AddControls(
-                new Button("Center Cam") { LeftClickAction = () => { ScreenManager.CurrentScreen.Camera.CenterOn(this.Global); } }
-                );
-        }
-        public void GetManagementInterface(WindowTargetManagementStatic ui)
-        {
-            ui.Title = this.Name;
-            foreach (var comp in this.Components)
-            {
-                comp.Value.GetManagementInterface(this, ui.PanelInfo);
-            }
-
-            ui.PanelActions.AddControls(
-                new Button("Center Cam") { LeftClickAction = () => { ScreenManager.CurrentScreen.Camera.CenterOn(this.Global); } }
-                );
-        }
-        //public IEnumerable<(string item, object value)> Inspect()
-        //{
-        //    yield return (nameof(this.Name), this.Name);
-        //    yield return (nameof(this.Def), this.Def);
-        //    foreach (var bone in Body.GetAllBones())
-        //        yield return (bone.Def.Label, bone.Material);
-        //}
+       
         public IEnumerable<(string item, object value)> Inspect()
         {
             foreach (var field in this.GetType().GetFields())

@@ -12,22 +12,14 @@ namespace Start_a_Town_
             this.PanelAttributes = new PanelLabeledNew("Attributes") { AutoSize = true };
             this.PanelStats = new PanelLabeledNew("Stats") { AutoSize = true };
         }
-        public StatsGui(GameObject actor)
-        {
-            var comp = actor.GetComponent<StatsComponent>();
-            var attsComp = actor.GetComponent<AttributesComponent>();
-            this.PanelAttributes = attsComp.GetGUI().ToPanelLabeled("Attributes");
-            this.AddControlsTopRight(this.PanelAttributes);
-            this.PanelStats = comp.GetGUI().ToPanelLabeled("Stats");
-            this.AddControlsBottomLeft(this.PanelStats);
-        }
-        public void Refresh(GameObject actor)
+        
+        public void Refresh(Actor actor)
         {
             var comp = actor.GetComponent<StatsComponent>();
             this.ClearControls();
           
             this.PanelAttributes.Client.ClearControls();
-            actor.GetComponent<AttributesComponent>().GetInterface(actor, this.PanelAttributes.Client);
+            PanelAttributes.Client.AddControls(actor.Attributes.GetGui());
             this.AddControlsTopRight(this.PanelAttributes);
 
             this.PanelStats.Client.ClearControls();
@@ -48,7 +40,7 @@ namespace Start_a_Town_
             else
                 window = Instance.GetWindow();
             Instance.Tag = actor;
-            window.Title = $"{actor.Name} needs";
+            window.Title = $"{actor.Name} stats";
             Instance.Refresh(actor);
             return window;
         }

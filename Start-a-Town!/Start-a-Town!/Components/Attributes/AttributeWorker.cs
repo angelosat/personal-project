@@ -3,10 +3,12 @@
     public abstract class AttributeWorker
     {
         AttributeDef Def;
-        public abstract void Tick(GameObject obj, AttributeStat attributeStat);
+
         public AttributeWorker(AttributeDef def)
         {
             this.Def = def;
         }
+
+        public abstract void Tick(GameObject obj, AttributeStat attributeStat);
     }
 }

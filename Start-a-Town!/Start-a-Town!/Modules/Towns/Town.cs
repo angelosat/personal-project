@@ -345,12 +345,6 @@ namespace Start_a_Town_
             }
         }
         
-        internal void GetManagementInterface(TargetArgs t, UI.WindowTargetManagement inter)
-        {
-            foreach (var c in this.TownComponents)
-                c.GetManagementInterface(t, inter);
-        }
-
         internal Zone GetZoneAt(Vector3 pos)
         {
             return this.ZoneManager.GetZoneAt(pos);

@@ -308,11 +308,7 @@ namespace Start_a_Town_
             this.DblClicked = true;
             e.Handled = true;
         }
-        internal override void SlotLeftClick(GameObjectSlot slot)
-        {
-            if (slot.Object is not null)
-                WindowTargetManagement.Refresh(new TargetArgs(slot.Object));
-        }
+       
         private bool TryShowForceTaskGUI(TargetArgs target)
         {
             var actor = SelectionManager.SingleSelectedEntity as Actor;

@@ -823,7 +823,6 @@ namespace Start_a_Town_
             return !this.IsSolid(cell, blockCoords);
         }
 
-        public virtual void GetInterface(MapBase map, IntVec3 global, WindowTargetManagement window) { }
         public virtual void ShowUI(IntVec3 global)
         {
 

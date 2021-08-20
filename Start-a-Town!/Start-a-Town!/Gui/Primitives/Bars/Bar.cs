@@ -40,6 +40,12 @@ namespace Start_a_Town_.UI
         {
             this.Object = progress;
         }
+        public Bar(IProgressBar progress, int width, Func<string> textFunc)
+            : this(progress)
+        {
+            this.Width = width;
+            this.TextFunc = textFunc;
+        }
         public override void Update()
         {
             if (Math.Round(this.LastPercentage * this.Width) != Math.Round(Percentage * this.Width))

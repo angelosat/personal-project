@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Start_a_Town_
 {
-    public class AttributeStat : Inspectable, ISaveable, ISerializable
+    public class AttributeStat : Inspectable, ISaveable, ISerializable, IListable
     {
         public class ValueModifier
         {
@@ -51,7 +51,6 @@ namespace Start_a_Town_
         public void Update(GameObject parent)
         {
             this.Def.Worker.Tick(parent, this);
-            //this.Def.Tick(parent, this);
         }
 
         public override string ToString()
@@ -82,7 +81,7 @@ namespace Start_a_Town_
         {
             var label = new Label()
             {
-                TextFunc = () => string.Format("{0}: {1}", this.Def.Name, this.Level),
+                TextFunc = () => $"{this.Def.Name}: {this.Level}",
                 TooltipFunc = (t) =>
                 {
                     t.AddControlsBottomLeft(
@@ -118,6 +117,14 @@ namespace Start_a_Town_
         {
             this.Progress.Read(r);
             return this;
+        }
+
+        public Control GetListControlGui()
+        {
+            return new Bar(this.Progress, 200, () => $"{this.Def.Label}: {this.Level}")
+            {
+                TooltipFunc = t => t.AddControls(this.Progress.GetControl())
+            };
         }
     }
 }

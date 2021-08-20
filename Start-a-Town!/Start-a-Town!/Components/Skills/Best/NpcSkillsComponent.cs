@@ -9,8 +9,9 @@ namespace Start_a_Town_
 {
     public class NpcSkillsComponent : EntityComponent
     {
-        public override string Name { get; } = "Npc Skills";
-        static public Panel UI = new Panel(new Rectangle(0,0,500, 400));
+        public readonly Skill[] SkillsNew;
+        static public Panel UI = new Panel(new Rectangle(0, 0, 500, 400));
+
         public override object Clone()
         {
             return new NpcSkillsComponent(this.SkillsNew.ToArray());
@@ -39,7 +40,6 @@ namespace Start_a_Town_
                 this.SkillsNew[i] = newSkill;
             }
         }
-        public readonly Skill[] SkillsNew;
         public NpcSkillsComponent(params SkillDef[] defs)
         {
             this.SkillsNew = new Skill[defs.Length];
@@ -48,35 +48,13 @@ namespace Start_a_Town_
                 this.SkillsNew[i] = new Skill(defs[i]);
             }
         }
-       
-        public static void GetUI(GameObject actor, Control container)
-        {
-            var skills = actor.GetComponent<NpcSkillsComponent>().SkillsNew;
-            foreach (var skill in skills)
-                container.AddControlsBottomLeft(skill.GetListControlGui());
-        }
-        static readonly TableScrollableCompactNewNew<Skill> GuiTable = new TableScrollableCompactNewNew<Skill>()
-            .AddColumn("name", "", 96, s => new Label(s.Def.Label) {
-                TooltipFunc = (t) =>
-                {
-                    t.AddControlsBottomLeft(
-                        new Label(s.Def.Description),
-                        new Label() { TextFunc = () => $"Current Level: {s.Level}" },
-                        new Label() { TextFunc = () => $"Experience: {s.CurrentXP} / {s.XpToLevel}" });
-                }
-            })
-            .AddColumn("level", "", 16, s => new Label(()=>$"{s.Level}"));
-        static readonly ListBoxNoScroll GuiList = new();
 
-        static public Control GetGUI(Actor actor)
-        {
-            var skills = actor.Skills.SkillsNew;
-            GuiTable.ClearItems();
-            GuiTable.AddItems(skills);
-            return GuiTable;
-        }
-        
-        public Control GetUI()
+        public override string Name { get; } = "Npc Skills";
+
+        [InspectorHidden]
+        internal Skill this[SkillDef skill] => this.GetSkill(skill);
+      
+        public Control GetCreationGui()
         {
             var table = new TableScrollableCompactNewNew<Skill>()
                 .AddColumn(null, "name", 80, s => new Label(s.Def.Label), 0)
@@ -84,20 +62,11 @@ namespace Start_a_Town_
 
             table.AddItems(this.SkillsNew);
             return table;
-
-            var container = new GroupBox();
-            foreach (var skill in this.SkillsNew)
-                container.AddControlsBottomLeft(skill.GetListControlGui());
-            return container;
         }
+        static readonly ListBoxNoScroll GuiList = new();
         public static Control GetGui(GameObject actor)
         {
             var a = actor as Actor;
-            //var win = GuiTable.GetWindow();
-            //if(win is null)
-            //    win = GuiTable.ToWindow("Skills");
-            //GuiTable.ClearItems();
-            //GuiTable.AddItems(a.Skills.SkillsNew); 
             var win = GuiList.GetWindow();
             if (win is null)
                 win = GuiList.ToWindow("Skills");
@@ -106,14 +75,12 @@ namespace Start_a_Town_
             win.Validate(true);
             return win;
         }
-
       
         internal Skill GetSkill(SkillDef skill)
         {
             return this.SkillsNew.First(s => s.Def == skill);
         }
-        [InspectorHidden]
-        internal Skill this[SkillDef skill] => this.GetSkill(skill);
+        
         public NpcSkillsComponent Randomize()
         {
             var range = 10;

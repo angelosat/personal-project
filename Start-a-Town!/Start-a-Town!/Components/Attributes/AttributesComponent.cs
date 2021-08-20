@@ -102,7 +102,7 @@ namespace Start_a_Town_.Components
             box.AddControlsBottomLeft(GUITableAttributes);
         }
         
-        internal Control GetUI()
+        internal Control GetCreationGui()
         {
             var table = new TableScrollableCompactNewNew<AttributeStat>()
                .AddColumn(null, "name", 80, s => new Label(s.Def.Label), 0)
@@ -111,6 +111,21 @@ namespace Start_a_Town_.Components
             table.AddItems(this.Attributes);
             return table;
         }
+
+        static readonly ListBoxNoScroll GuiList = new();
+        public Control GetGui()
+        {
+            //var win = GuiList.GetWindow();
+            //if (win is null)
+            //    win = GuiList.ToWindow("Skills");
+            GuiList.Clear();
+            GuiList.AddItems(this.Attributes);
+            GuiList.Validate(true);
+            return GuiList;//
+            //win.Validate(true);
+            //return win;
+        }
+
         public AttributesComponent Randomize()
         {
             var range = 20;

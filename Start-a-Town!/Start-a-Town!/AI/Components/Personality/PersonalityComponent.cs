@@ -54,7 +54,7 @@ namespace Start_a_Town_
             }
             this.Randomize();
         }
-        public Control GetUI()
+        public Control GetCreationGui()
         {
             var box = new GroupBox();
             foreach (var t in this.Traits)

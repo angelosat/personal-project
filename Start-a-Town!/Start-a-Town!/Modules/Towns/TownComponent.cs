@@ -60,8 +60,6 @@ namespace Start_a_Town_
         public virtual void Write(BinaryWriter w) { }
         public virtual void Read(BinaryReader r) { }
 
-        public virtual void GetManagementInterface(TargetArgs t, WindowTargetManagement inter) { }
-
         public virtual IContextable QueryPosition(Vector3 global) { return null; }
         public virtual ISelectable QuerySelectable(TargetArgs selected) { return null; }
 

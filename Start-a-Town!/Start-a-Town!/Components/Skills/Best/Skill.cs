@@ -69,22 +69,7 @@ namespace Start_a_Town_
             //    $"{i}: {GetNextLvlXp(i)}".ToConsole();
             //}
         }
-        [Obsolete]
-        internal void AwardOld(float v)
-        {
-            v *= 500;
-            if (this.LvlProgress.Value + v < this.LvlProgress.Max)
-            {
-                this.LvlProgress.Value += v;
-                return;
-            }
-            this.LvlProgress.Value = this.LvlProgress.Value + v - this.LvlProgress.Max; // carry over superfluous xp to next lvl
-            this.LvlProgress.Max = GetNextLvlXp(++this.Level);
-            var actor = this.Container.Parent;
-            Log.Write($"[{actor}]'s [{this.Label}] has been increased to {this.Level}!");
-            actor.Net.EventOccured(Message.Types.SkillIncrease, actor, this.Def.Name);
-            return;
-        }
+      
         public Control GetListControlGui()
         {
             var label = new Bar(this.LvlProgress)// Label()

@@ -14,6 +14,7 @@
         static public readonly Block Soil = new BlockSoil();
         static public readonly Block Door = new BlockDoor(); // TODO: different door materials???
         static public readonly Block Bed = new BlockBed();
+        static public readonly Block SleepingSpot = new BlockSleepingSpot();
         static public readonly Block WoodPaneling = new BlockWoodPaneling();
         static public readonly Block Chest = new BlockChest();
         static public readonly Block Bin = new BlockStorage();

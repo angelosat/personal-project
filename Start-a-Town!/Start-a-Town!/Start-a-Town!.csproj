@@ -175,11 +175,13 @@
     <Compile Include="AI\Reservations\Reservation.cs" />
     <Compile Include="AI\Reservations\ReservationExtensions.cs" />
     <Compile Include="Animations\Bone.Props.cs" />
+    <Compile Include="Blocks\Bed\BlockSleepingSpot.cs" />
     <Compile Include="Blocks\Bed\InteractionAssignVisitorRoom.cs" />
     <Compile Include="Blocks\Block.DefaultState.cs" />
     <Compile Include="Blocks\BlockDef.cs" />
     <Compile Include="Blocks\BlockDefOf.cs" />
     <Compile Include="Blocks\BlockDefOfNew.cs" />
+    <Compile Include="Blocks\StructureDef.cs" />
     <Compile Include="Blocks\BlockPlacer.cs" />
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />

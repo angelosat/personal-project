@@ -308,16 +308,11 @@ namespace Start_a_Town_
             var taskGivers = actor.CanForceTaskOn(target);
             if (taskGivers.Any())
             {
-                //if(UIForceTask.IsOpen)
-                //{
-                //    UIForceTask.Hide();
-                //    return true;
-                //}
                 UIForceTask.ClearControls();
                 UIForceTask.AddControlsBottomLeft(taskGivers
                     .Select(result =>
                     {
-                        return new UI.Button(result.task.GetForceText(target))// .ToString())
+                        return new UI.Button(result.task.GetForceText(target))
                         {
                             LeftClickAction = () =>
                             {
@@ -332,51 +327,9 @@ namespace Start_a_Town_
                 UIForceTask.Show();
                 return true;
             }
-            //else
-            //{
-            //    UIForceTask?.Hide();
-            //    return false;
-            //}
+          
             return false;
         }
-
-        //private bool TryShowForceTaskGUI(TargetArgs target)
-        //{
-        //    var actor = SelectionManager.SingleSelectedEntity as Actor;
-
-        //    if (!(actor?.IsCitizen ?? false))
-        //        return false;
-
-        //    var tasks = actor.GetPossibleTasksOnTarget(target);
-        //    if (tasks?.Any() ?? false)
-        //    {
-        //        UIForceTask.ClearControls();
-        //        UIForceTask.AddControlsBottomLeft(tasks
-        //            .Select(t =>
-        //            {
-        //                var task = t.Task;
-        //                var giver = t.Source;
-        //                return new UI.Button(task.GetForceTaskText())
-        //                {
-        //                    LeftClickAction = () =>
-        //                    {
-        //                        PacketForceTask.Send(giver, actor, target);
-        //                        UIForceTask.Hide();
-        //                    }
-        //                };
-
-        //            }).ToArray());
-
-        //        UIForceTask.Location = UIManager.Mouse;
-        //        UIForceTask.Show();
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        UIForceTask?.Hide();
-        //        return false;
-        //    }
-        //}
 
         static readonly UI.Control UIForceTask = new UI.Panel() { AutoSize = true }.HideOnAnyClick();
 
@@ -384,14 +337,14 @@ namespace Start_a_Town_
         {
             var cam = map.Camera;
             this.DrawBlockMouseover(sb, map, cam);
+            if (this.Target is null || this.Target.Type == TargetType.Null)
+                return;
+            // draw interaction spot hightlights on mouseover? or on selection?
+            //var interactionSpots = this.Target.Block.GetInteractionSpots(map, this.Target.Global);
+            //cam.DrawCellHighlights(sb,Block.FaceHighlights[-IntVec3.UnitZ], interactionSpots, Color.White * .5f);
 
-            if (Engine.DrawRegions)
-                if (this.Target != null)
-                    if (this.Target.Type != TargetType.Null)
-                    {
-                        map.Regions.Draw(this.Target.Global, sb, cam);
-                    }
-
+            if (Engine.DrawRegions && this.Target.Type != TargetType.Null)
+                map.Regions.Draw(this.Target.Global, sb, cam);
         }
         internal override void DrawUI(SpriteBatch sb, Camera camera)
         {

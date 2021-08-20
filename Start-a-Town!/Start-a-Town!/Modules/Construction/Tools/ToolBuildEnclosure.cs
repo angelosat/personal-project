@@ -28,7 +28,7 @@ namespace Start_a_Town_
                 var boxInner = (a + new IntVec3(1, 1, 0)).GetBox(b - new IntVec3(1, 1, 0));
                 box = box.Except(boxInner).ToList();
             }
-            cam.DrawGridBlocks(sb, Block.BlockBlueprint, box, color);
+            cam.DrawCellHighlights(sb, Block.BlockBlueprint, box, color);
         }
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {

@@ -57,7 +57,7 @@ namespace Start_a_Town_
                 return;
             var positions = this.Begin.GetBox(this.End)
                 .Where(v => map.GetBlock(v) != BlockDefOf.Air);
-            camera.DrawGridBlocks(sb, Block.BlockBlueprint, positions, Color.Red);
+            camera.DrawCellHighlights(sb, Block.BlockBlueprint, positions, Color.Red);
         }
     }
 }

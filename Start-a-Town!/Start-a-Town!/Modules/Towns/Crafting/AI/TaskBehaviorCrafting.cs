@@ -23,7 +23,7 @@ namespace Start_a_Town_
                 {
                     var benchglobal = this.Workstation.Global;
                     var cell = this.Actor.Map.GetCell(benchglobal);
-                    this._CachedOperatingPositions = cell.Block.GetOperatingPositions(cell, benchglobal).ToArray();
+                    this._CachedOperatingPositions = cell.Block.GetInteractionSpots(cell, benchglobal).ToArray();
                 }
                 return this._CachedOperatingPositions;
             }

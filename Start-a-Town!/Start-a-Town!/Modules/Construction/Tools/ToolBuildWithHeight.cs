@@ -122,7 +122,7 @@ namespace Start_a_Town_
                 return;
             var positions = this.GetPositionsNew(this.Begin, this.End)
                 .Where(vec => this.Replacing ? map.GetBlock(vec) != BlockDefOf.Air : map.GetBlock(vec) == BlockDefOf.Air);
-            cam.DrawGridBlocks(sb, Block.BlockBlueprint, positions, color);
+            cam.DrawCellHighlights(sb, Block.BlockBlueprint, positions, color);
         }
         protected virtual IEnumerable<IntVec3> GetPositionsNew(IntVec3 a, IntVec3 b) { yield break; }
         protected override void WriteData(System.IO.BinaryWriter w)

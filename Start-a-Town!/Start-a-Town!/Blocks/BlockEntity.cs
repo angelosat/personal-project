@@ -19,8 +19,6 @@ namespace Start_a_Town_
         public IEnumerable<IntVec3> ReservedInteractionCells => this.InteractionSpots.SelectMany(ActorDefOf.Npc.OccupyingCellsStanding);
 
         public IntVec3 OriginGlobal;
-        //public readonly BlockEntityCompCollection Comps = new();
-        //public readonly BlockEntityCompCollection<BlockEntityComp> Comps = new();
         public readonly BlockEntityCompCollectionNew Comps = new();
         public ObservableCollection<string> Errors = new();
 

@@ -13,7 +13,7 @@ namespace Start_a_Town_.AI
             var need = actor.GetNeed(NeedDef.Energy);
             var energyValue = need.Value;
 
-            if (energyValue > need.Threshold)
+            if (energyValue > 98)// need.Threshold)
                 return null;
 
             var possibleBeds = actor.Ownership.GetOwned<BlockBedEntity>();
@@ -27,7 +27,7 @@ namespace Start_a_Town_.AI
                 if (!actor.CanReserve(bedglobal))
                     continue;
                 var bedCell = map.GetCell(bedglobal);
-                var operatingPositions = bedCell.GetOperatingPositionsGlobal(bedglobal);
+                var operatingPositions = bedCell.GetInteractionSpots(bedglobal);
                 foreach (var p in operatingPositions)
                 {
                     if (!actor.CanReach(p))
@@ -37,7 +37,7 @@ namespace Start_a_Town_.AI
                     // check to reserve operating position solid block below?
                     var operatingPosition = new TargetArgs(map, p);
 
-                    var task = new AITask(typeof(TaskBehaviorSleepingNew), new TargetArgs(map, bedglobal), operatingPosition);//, bed);
+                    var task = new AITask(TaskDefOf.SleepingOnBed, new TargetArgs(map, bedglobal), operatingPosition);//, bed);
                     return task;
                 }
             }

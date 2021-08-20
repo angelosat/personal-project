@@ -20,7 +20,8 @@ namespace Start_a_Town_.Core
             this.Panel_Blocks = new Panel() { AutoSize = true };
 
             this.ToolBox = new UIToolsBox(this.OnToolSelectedNew);
-            var categories = Block.Registry.Values.Where(b => b.BuildProperties.Category is not null && b.Ingredient is not null).GroupBy(b => b.BuildProperties.Category);
+            //var categories = Block.Registry.Values.Where(b => b.BuildProperties.Category is not null && b.Ingredient is not null).GroupBy(b => b.BuildProperties.Category);
+            var categories = Block.Registry.Values.Where(b => b.BuildProperties.Category is not null).GroupBy(b => b.BuildProperties.Category); // blocks without ingredients are buildable (sleeping spots)
             foreach (var cat in categories)
             {
                 var list = cat;
@@ -29,7 +30,7 @@ namespace Start_a_Town_.Core
                 {
                     slot.Tag = block;
                     slot.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolBlockBuild drawing && drawing.Block == block;
-                    slot.PaintAction = () => block.PaintIcon(slot.Width, slot.Height, 0, this.GetLastSelectedVariantOrDefault(block).Requirement.Material);
+                    slot.PaintAction = () => block.PaintIcon(slot.Width, slot.Height, 0, this.GetLastSelectedVariantOrDefault(block).Requirement?.Material);
                     slot.LeftClickAction = () =>
                     {
                         this.CurrentSelected = block;
@@ -86,7 +87,7 @@ namespace Start_a_Town_.Core
         {
             if (!this.LastSelectedVariant.TryGetValue(block, out var lastVariant))
             {
-                lastVariant = new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().First());
+                lastVariant = new ProductMaterialPair(block, block.GetAllValidConstructionMaterialsNew().FirstOrDefault()); // building might have no construction materials (sleeping spots)
                 this.LastSelectedVariant[block] = lastVariant;
             }
             return lastVariant;

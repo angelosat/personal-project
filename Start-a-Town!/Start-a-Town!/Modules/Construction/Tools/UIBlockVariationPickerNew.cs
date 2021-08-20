@@ -20,6 +20,8 @@ namespace Start_a_Town_.Towns.Constructions
         public static void Refresh(Block block, Action<ProductMaterialPair> callback)
         {
             var variants = block.GetAllValidConstructionMaterialsNew().Select(m => new ProductMaterialPair(block, m)).GroupBy(p => p.Requirement.Material).ToList();
+            if (!variants.Any())
+                return;
             var count = variants.Sum(v => v.Count());
             Instance.Panel.Controls.Clear();
             Instance.Panel.AutoSize = true;

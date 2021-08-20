@@ -38,13 +38,13 @@ namespace Start_a_Town_
         protected override void OnDeconstruct(GameObject actor, Vector3 global)
         {
         }
-        internal override IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
-        {
-            yield return new IntVec3(-1, 0, 0);
-            yield return new IntVec3(1, 0, 0);
-            yield return new IntVec3(0, -1, 0);
-            yield return new IntVec3(0, 1, 0);
-        }
+        //internal override IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
+        //{
+        //    yield return new IntVec3(-1, 0, 0);
+        //    yield return new IntVec3(1, 0, 0);
+        //    yield return new IntVec3(0, -1, 0);
+        //    yield return new IntVec3(0, 1, 0);
+        //}
 
         protected override void OnBlockBelowChanged(MapBase map, IntVec3 global)
         {

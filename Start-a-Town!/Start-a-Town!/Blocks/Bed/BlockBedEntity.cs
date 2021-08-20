@@ -32,7 +32,7 @@ namespace Start_a_Town_
             this.CurrentOccupant = -1;
             agent.GetComponent<SpriteComponent>().Body = null;
         }
-        public void ToggleSleep(GameObject agent, Vector3 bedGlobal)
+        public void ToggleSleep(GameObject agent, IntVec3 bedGlobal)
         {
             if (this.CurrentOccupant != -1)
             {
@@ -55,8 +55,11 @@ namespace Start_a_Town_
                 body.SetEnabled(false, true);
                 headBone.SetEnabled(true, false);
                 headBone.RestingFrame = new Keyframe(0, Vector2.Zero, -(float)(Math.PI / 3f));
-                var bedPos = BlockBed.GetPartsDic(agent.Map, bedGlobal)[BlockBed.Part.Top];
-                agent.SetPosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(agent.Map, bedPos)));
+                //var bedPos = BlockBed.GetPartsDic(agent.Map, bedGlobal)[BlockBed.Part.Top];
+                var bedPos = this.OriginGlobal;
+                //agent.SetPosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(agent.Map, bedPos)));
+                var cell = agent.Map.GetCell(bedPos);
+                agent.SetPosition(bedPos + new IntVec3(0, 0, cell.Block.GetHeight(cell.BlockData, 0, 0)));
                 agent.GetNeed(NeedDef.Energy).Mod += 1;
             }
         }

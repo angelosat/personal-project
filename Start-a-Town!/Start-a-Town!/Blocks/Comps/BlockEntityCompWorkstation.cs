@@ -76,7 +76,7 @@ namespace Start_a_Town_
         internal override void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
         {
             // draw workstation operating position
-            cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + map.GetCell(global).Front });
+            //cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + map.GetCell(global).Front });
         }
         public override void AddSaveData(SaveTag tag)
         {
@@ -112,7 +112,7 @@ namespace Start_a_Town_
             /// we dont need to query the cell for the interaction spots, we already know that the block is a blockworkstation, we also know the originglobal of the blockentity
             /// BUT we dont know the orientation, so we still need the cell
             var orientation = this.Map.GetCell(this.Global).Orientation;
-            var interactionSpots = BlockDefOf.Workbench.GetOperatingPositions(orientation);// this.Map.GetCell(this.Global).GetOperatingPositions();
+            var interactionSpots = BlockDefOf.Workbench.GetInteractionSpotsLocal(orientation);// this.Map.GetCell(this.Global).GetOperatingPositions();
             this.OperatingPositionUnreachable = interactionSpots.All(p => !ActorDefOf.Npc.CanFitIn(this.Map, this.Global + p));
             if (!prev && this.OperatingPositionUnreachable)
                 this.Errors.Add(OperatingPositionUnreachableString);

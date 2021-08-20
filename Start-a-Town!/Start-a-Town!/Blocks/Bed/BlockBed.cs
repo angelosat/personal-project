@@ -44,6 +44,7 @@ namespace Start_a_Town_
             this.Parts[0] = this.TopParts;
             this.Parts[1] = this.BottomParts;
             this.UtilitiesProvided.Add(Utility.Types.Sleeping);
+            this.Size = new(1, 2);
         }
         public override bool IsRoomBorder => false;
         public override bool IsStandableOn => false;
@@ -286,35 +287,6 @@ namespace Start_a_Town_
             return list;
         }
 
-        internal override IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
-        {
-            byte blockData = cell.BlockData;
-            var parts = this.GetParts(blockData);
-            var o = GetOrientation(blockData);
-            switch (o)
-            {
-                case 2:
-                case 0:
-                    foreach (var pos in parts)
-                    {
-                        yield return pos + IntVec3.UnitY;
-                        yield return pos - IntVec3.UnitY;
-                    }
-                    break;
-
-                case 1:
-                case 3:
-                    foreach (var pos in parts)
-                    {
-                        yield return pos + IntVec3.UnitX;
-                        yield return pos - IntVec3.UnitX;
-                    }
-                    break;
-
-                default:
-                    throw new Exception();
-            }
-        }
         static readonly IconButton ButtonSetVisitor = new(Icon.Construction) { HoverText = "Set to visitor bed" };
         static readonly IconButton ButtonUnsetVisitor = new(Icon.Construction, Icon.Cross) { HoverText = "Set to citizen bed" };
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
@@ -323,7 +295,7 @@ namespace Start_a_Town_
             entity.GetSelectionInfo(info, map, vector3);
         }
 
-        private static void UpdateQuickButtons(MapBase map, Vector3 vector3, BlockBedEntity.Types t)
+        private static void UpdateQuickButtons(MapBase map, IntVec3 vector3, BlockBedEntity.Types t)
         {
             switch (t)
             {
@@ -347,6 +319,10 @@ namespace Start_a_Town_
             map.InvalidateCell(vector3);
             if (map.IsActive && SelectionManager.SingleSelectedCell == vector3)
                     UpdateQuickButtons(map, vector3, type);
+        }
+        internal override IEnumerable<IntVec3> GetInteractionSpotsLocal()
+        {
+            yield return new IntVec3(0, 1, 0);
         }
         static class Packets
         {

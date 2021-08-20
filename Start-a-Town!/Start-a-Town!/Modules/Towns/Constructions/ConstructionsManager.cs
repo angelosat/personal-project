@@ -14,18 +14,6 @@ namespace Start_a_Town_
 
         public override string Name => "Constructions";
 
-        //public static ConstructionCategoryWalls Walls = new();
-        //public static ConstructionCategoryDoors Doors = new();
-        //public static ConstructionCategoryProduction Production = new();
-        //public static ConstructionCategoryFurniture Furniture = new();
-
-        //public static List<ConstructionCategory> AllCategories = new()
-        //{
-        //    Walls,
-        //    Doors,
-        //    Production,
-        //    Furniture
-        //};
         static readonly Lazy<GuiConstructionsBrowser> WindowBuild = new();
         static readonly IHotkey HotkeyBuild;
         static ConstructionsManager()
@@ -217,6 +205,13 @@ namespace Start_a_Town_
                 {
                     if (!map.IsValidBuildSpot(pos))
                         continue;
+
+                    if(product.Requirement is null)
+                    {
+                        product.Place(map, pos);
+                        return;
+                    }
+
                     if (map.GetBlock(pos) == BlockDefOf.Air)
                         this.PlaceDesignation(pos, 0, 0, args.Orientation, product);
                     else

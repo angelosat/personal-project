@@ -156,7 +156,7 @@ namespace Start_a_Town_
             this.Data = new BitVector32(r.ReadInt32());
             return this;
         }
-
+        public static IntVec3 FrontLocal = new(0, 1, 0);
         public static IntVec3 GetFront(int orientation)
         {
             return orientation switch
@@ -169,13 +169,13 @@ namespace Start_a_Town_
             };
         }
 
-        internal IEnumerable<IntVec3> GetOperatingPositions()
+        internal IEnumerable<IntVec3> GetInteractionSpotLocal()
         {
-            return this.Block.GetOperatingPositions(this.Orientation);
+            return this.Block.GetInteractionSpotsLocal(this.Orientation);
         }
-        internal IEnumerable<IntVec3> GetOperatingPositionsGlobal(IntVec3 global)
+        internal IEnumerable<IntVec3> GetInteractionSpots(IntVec3 global)
         {
-            return this.Block.GetOperatingPositions(this, global);
+            return this.Block.GetInteractionSpots(this, global);
         }
     }
 }

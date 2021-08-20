@@ -65,6 +65,12 @@ namespace Start_a_Town_
             GetPrimaryTarget = t => TargetArgs.Null
         };
 
+        static public TaskDef SleepingOnBed = new("SleepingOnBed", typeof(TaskBehaviorSleepingNew))
+        {
+            Format = "Sleep on bed",
+            GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
+        };
+
         static public TaskDef Chatting = new("Chatting", typeof(TaskBehaviorTalkToAboutTopic))
         {
             Format = "Chat",

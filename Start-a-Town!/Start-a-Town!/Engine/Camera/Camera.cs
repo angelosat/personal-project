@@ -638,6 +638,8 @@ namespace Start_a_Town_
             gd.RasterizerState = RasterizerState.CullNone;
             this.NewDraw(map, gd, a, scene, toolManager, ui);
         }
+        Effect Shader => Game1.Instance.Content.Load<Effect>("blur");
+        EffectTechnique TechniqueBlockHighlight => this.Shader.Techniques["BlockHighlight"];
 
         private void NewDraw(MapBase map, GraphicsDevice gd, EngineArgs a, SceneState scene, ToolManager toolManager, UIManager ui)
         {
@@ -1514,7 +1516,7 @@ namespace Start_a_Town_
 
             sb.Flush();
         }
-        public void DrawGridCell(MySpriteBatch sb, Color col, Vector3 global)
+        public void DrawGridCell(MySpriteBatch sb, Color col, IntVec3 global)
         {
             if (global.Z > this.DrawLevel + 1)
                 return;
@@ -1539,13 +1541,13 @@ namespace Start_a_Town_
         {
             if (global.Z > this.DrawLevel)
                 return;
-
+            //col *= .5f;
             sprite.Atlas.Begin(sb); // this was commented out
             var bounds = this.GetScreenBounds(global, Block.Bounds);
             var pos = new Vector2(bounds.X, bounds.Y);
             var depth = global.GetDrawDepth(Engine.Map, this);
-            //sb.Draw(Sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col * .5f, SpriteEffects.None, depth);
-            sb.Draw(sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col * .5f, SpriteEffects.None, depth);
+            //sb.Draw(Sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
+            sb.Draw(sprite.Atlas.Texture, pos, sprite.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
         }
         public void DrawGridBlocks(MySpriteBatch sb, IEnumerable<IntVec3> positions, Color col)
         {
@@ -1554,11 +1556,14 @@ namespace Start_a_Town_
                 this.DrawGridBlock(sb, col, pos);
             sb.Flush();
         }
-        public void DrawGridBlocks(MySpriteBatch sb, Graphics.AtlasDepthNormals.Node.Token sprite, IEnumerable<IntVec3> positions, Color col)
+        public void DrawCellHighlights(MySpriteBatch sb, AtlasDepthNormals.Node.Token sprite, IEnumerable<IntVec3> positions, Color col)
         {
             if (!positions.Any())
                 return;
             sb.Flush();
+            var fx = this.Shader;
+            fx.CurrentTechnique = this.TechniqueBlockHighlight;// fx.Techniques["BlockHighlight"];
+            fx.CurrentTechnique.Passes["Pass1"].Apply();
             sprite.Atlas.Begin(sb);
             foreach (var pos in positions)
                 this.DrawGridBlock(sb, sprite, col, pos);

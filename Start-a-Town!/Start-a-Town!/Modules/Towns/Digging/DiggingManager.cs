@@ -104,7 +104,7 @@ namespace Start_a_Town_
         }
         public override void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
-            cam.DrawGridBlocks(sb, Block.BlockBlueprint, this.AllPositions, Color.White);
+            cam.DrawCellHighlights(sb, Block.BlockBlueprint, this.AllPositions, Color.White);
         }
         bool IsDiggingTask(IntVec3 global)
         {

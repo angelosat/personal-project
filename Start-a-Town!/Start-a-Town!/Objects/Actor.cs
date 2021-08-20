@@ -412,7 +412,7 @@ namespace Start_a_Town_
         }
         public IntVec3? FindOperatablePosition(IntVec3 facilityGlobal)
         {
-            var operatingPositions = this.Map.GetCell(facilityGlobal).GetOperatingPositions();
+            var operatingPositions = this.Map.GetCell(facilityGlobal).GetInteractionSpotLocal();
             if (!operatingPositions.Any())
                 return null;
             foreach (var pos in operatingPositions)
@@ -468,7 +468,7 @@ namespace Start_a_Town_
             jobs.OrderBy(j => j.Priority);
             var jobTaskGivers = jobs.SelectMany(j => j.Def.GetTaskGivers());
             givers = this.IsCitizen ? givers.Concat(jobTaskGivers) : givers.Concat(TaskGiver.VisitorTaskGivers);
-            givers.Append(TaskGiver.Idle);
+            givers = givers.Append(TaskGiver.Idle);
             return givers;
         }
 

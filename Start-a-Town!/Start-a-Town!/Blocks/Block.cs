@@ -222,7 +222,7 @@ namespace Start_a_Town_
         {
             yield return IntVec3.Zero;
         }
-
+        public IntVec2 Size = IntVec2.One;
         public BuildProperties BuildProperties = new();
         public FurnitureDef Furniture;
         public List<Utility.Types> UtilitiesProvided = new();
@@ -727,14 +727,13 @@ namespace Start_a_Town_
             var h = cell.Block.GetHeight(cell.BlockData, offset.X, offset.Y);
             return h;
         }
+        public virtual Vector3 GetVelocityTransform(byte data, Vector3 blockcoords) { return Vector3.Zero; }
 
         public virtual float GetHeight(byte data, float x, float y)
         {
             return this.GetHeight(x, y);
         }
         public virtual float GetHeight(float x, float y) { return this.Solid ? 1f : 0f; }
-        public virtual Vector3 GetVelocityTransform(byte data, Vector3 blockcoords) { return Vector3.Zero; }
-        public float GetHeight(Vector3 blockcoords) { return this.GetHeight(blockcoords.X, blockcoords.Y); }
         public float GetHeight(byte data, Vector3 blockcoords) { return this.GetHeight(data, blockcoords.X, blockcoords.Y); }
 
         public static readonly AtlasDepthNormals.Node.Token ParticlePixel = Atlas.Load(UI.UIManager.Highlight, "particle");
@@ -781,7 +780,7 @@ namespace Start_a_Town_
             {
                 SpriteBatch = mysb
             };
-            this.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data, mat);
+            this.Draw(mysb, Vector3.Zero, cam, bounds, Color.White, Vector4.One, Color.Transparent, Color.White, 0.5f, 0, 0, data, mat ?? MaterialDefOf.Air);
             mysb.Flush();
         }
         public RenderTarget2D PaintIcon(byte data, MaterialDef mat)
@@ -810,20 +809,22 @@ namespace Start_a_Town_
             gd.SetRenderTarget(null);
             return renderTarget;
         }
-        internal virtual IEnumerable<IntVec3> GetOperatingPositions(int orientation)
+        internal virtual IEnumerable<IntVec3> GetInteractionSpotsLocal() { yield break; }
+        internal IEnumerable<IntVec3> GetInteractionSpotsLocal(int orientation)
         {
-            yield break;
+            return this.GetInteractionSpotsLocal().Select(s => Coords.Rotate(s, orientation));   
         }
-        internal virtual IEnumerable<IntVec3> GetOperatingPositions(Cell cell)
+        internal IEnumerable<IntVec3> GetInteractionSpots(Cell cell, IntVec3 global)
         {
-            yield break;
-        }
-        internal IEnumerable<IntVec3> GetOperatingPositions(Cell cell, IntVec3 global)
-        {
-            foreach (var p in this.GetOperatingPositions(cell))
+            foreach (var p in this.GetInteractionSpotsLocal(cell.Orientation))
                 yield return p + global;
         }
-
+        internal IEnumerable<IntVec3> GetInteractionSpots(MapBase map, IntVec3 global)
+        {
+            var cell = map.GetCell(global);
+            foreach (var p in this.GetInteractionSpotsLocal(cell.Orientation))
+                yield return p + global;
+        }
         public virtual IEnumerable<(string name, Action action)> GetInfoTabs() { yield break; }
         internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
@@ -858,7 +859,15 @@ namespace Start_a_Town_
         internal void DrawSelected(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
         {
             map.GetBlockEntity(global)?.DrawSelected(sb, cam, map, global);
+            this.DrawInteractionSpots(sb, cam, map, global);
             this.OnDrawSelected(sb, cam, map, global);
+        }
+
+        internal void DrawInteractionSpots(MySpriteBatch sb, Camera cam, MapBase map, IntVec3 global)
+        {
+            var interactionSpots = this.GetInteractionSpots(map, global);
+            var col = Color.Lime; // color red if interaction spots are obstructed?
+            cam.DrawCellHighlights(sb, FaceHighlights[-IntVec3.UnitZ], interactionSpots, col * .5f);
         }
     }
 }

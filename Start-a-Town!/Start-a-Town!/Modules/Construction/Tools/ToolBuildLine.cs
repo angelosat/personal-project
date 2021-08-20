@@ -56,7 +56,7 @@ namespace Start_a_Town_
                 return;
             var box = this.Begin.GetBox(this.End)
                 .Where(vec => this.Replacing ? map.GetBlock(vec) != BlockDefOf.Air : map.GetBlock(vec) == BlockDefOf.Air);
-            cam.DrawGridBlocks(sb, Block.BlockBlueprint, box, color);
+            cam.DrawCellHighlights(sb, Block.BlockBlueprint, box, color);
         }
         public override IEnumerable<IntVec3> GetPositions()
         {
@@ -91,7 +91,7 @@ namespace Start_a_Town_
             var box = this.Begin.GetBox(this.End)
                 .Where(vec => this.Replacing ? map.GetBlock(vec) != BlockDefOf.Air : map.GetBlock(vec) == BlockDefOf.Air);
 
-            camera.DrawGridBlocks(sb, Block.BlockBlueprint, box, Color.Red);
+            camera.DrawCellHighlights(sb, Block.BlockBlueprint, box, Color.Red);
         }
     }
 }

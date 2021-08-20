@@ -106,5 +106,37 @@ namespace Start_a_Town_
             xx = (int)(x * RotCos - y * RotSin);
             yy = (int)(x * RotSin + y * RotCos);
         }
+        
+        
+        static readonly Matrix MatrixRot0 = new(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+        static readonly Matrix MatrixRot1 = new(
+           0, -1, 0, 0,
+           1, 0, 0, 0,
+           0, 0, 1, 0,
+           0, 0, 0, 1);
+        static readonly Matrix MatrixRot2 = new(
+            -1, 0, 0, 0,
+            0, -1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+        static readonly Matrix MatrixRot3 = new(
+            0, 1, 0, 0,
+            -1, 0, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+
+        public static readonly Matrix[] Orientations = { MatrixRot0, MatrixRot1, MatrixRot2, MatrixRot3 };
+        public static Vector3 Rotate(Vector3 vec3, int orientation)
+        {
+            return Vector3.Transform(vec3, Orientations[orientation]);
+        }
+        public static IntVec3 Rotate(IntVec3 vec3, int orientation)
+        {
+            return IntVec3.Transform(vec3, Orientations[orientation]);
+        }
     }
 }

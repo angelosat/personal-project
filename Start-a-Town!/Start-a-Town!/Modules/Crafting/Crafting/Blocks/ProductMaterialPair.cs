@@ -24,17 +24,19 @@ namespace Start_a_Town_.Components.Crafting
         {
             this.Block = r.ReadBlock();
             this.Data = r.ReadByte();
-            this.Requirement = new ItemMaterialAmount(r);
+            if(r.ReadBoolean()) // has requirement
+                this.Requirement = new ItemMaterialAmount(r);
         }
 
         public ProductMaterialPair(SaveTag tag)
         {
             this.Block = tag.LoadBlock("Product");
             this.Data = tag.TagValueOrDefault<byte>("Data", 0);
-            this.Requirement = new ItemMaterialAmount(tag["Requirement"]);
+            //this.Requirement = new ItemMaterialAmount(tag["Requirement"]);
+            tag.TryGetTag("Requirement", t => this.Requirement = new ItemMaterialAmount(t));
         }
 
-        internal MaterialDef Material => this.Requirement.Material;
+        internal MaterialDef Material => this.Requirement?.Material;
 
         public override string ToString() => $"Type: {this.Block.Label}\nData: {this.Data}";
 
@@ -47,21 +49,32 @@ namespace Start_a_Town_.Components.Crafting
         {
             return this.Skill;
         }
+        public void Place(MapBase map, IntVec3 global)
+        {
+            var block = this.Block;
+            var cell = map.GetCell(global);
+            var ori = this.Orientation;
+            var mat = this.Material ?? MaterialDefOf.Air;
+            block.Place(map, global, mat, this.Data, 0, ori, true);
+        }
 
         internal void Save(SaveTag tag, string name)
         {
             var save = new SaveTag(SaveTag.Types.Compound, name);
             save.Save(this.Block, "Product");
             this.Data.Save(save, "Data");
-            this.Requirement.Save(save, "Requirement");
+            if(this.HasReq)
+                this.Requirement.Save(save, "Requirement");
             tag.Add(save);
         }
-
+        bool HasReq => this.Requirement is not null;
         public void Write(BinaryWriter w)
         {
             w.Write(this.Block);
             w.Write(this.Data);
-            this.Requirement.Write(w);
+            w.Write(this.HasReq);
+            if (this.HasReq)
+                this.Requirement.Write(w);
         }
     }
 }

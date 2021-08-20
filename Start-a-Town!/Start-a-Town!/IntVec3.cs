@@ -213,5 +213,10 @@ namespace Start_a_Town_
         {
             return this.X * this.X + this.Y * this.Y + this.Z * this.Z;
         }
+
+        public static IntVec3 Transform(IntVec3 vec3, Matrix matrix)
+        {
+            return Vector3.Transform(vec3, matrix);
+        }
     }
 }

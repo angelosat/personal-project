@@ -102,7 +102,7 @@ namespace Start_a_Town_.PlayerControl
             atlastoken.Atlas.Begin(sb);
             this.Block.DrawPreview(sb, map, global, cam, this.State, this.Material, this.Variation, this.Orientation);
             sb.Flush();
-            foreach (var pos in this.Block.GetOperatingPositions(this.Orientation))
+            foreach (var pos in this.Block.GetInteractionSpotsLocal(this.Orientation))
                 cam.DrawGridCells(sb, Color.White * .5f, new IntVec3[] { global + pos });
         }
         public override Icon GetIcon()

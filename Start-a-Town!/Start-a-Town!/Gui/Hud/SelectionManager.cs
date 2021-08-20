@@ -436,10 +436,17 @@ namespace Start_a_Town_.UI
                 //        //map.GetBlock(global).DrawSelected(sb, camera, map, global);
                 //    }
                 var first = this.MultipleSelected.First();
+                var map = first.Map;
                 if (first.Type == TargetType.Position)
-                    Renderer.DrawBlocks(first.Map, camera, this.MultipleSelected.Select(t => (IntVec3)t.Global));
+                    Renderer.DrawBlocks(map, camera, this.MultipleSelected.Select(t => (IntVec3)t.Global));
+                if (SingleSelectedCell.HasValue)
+                {
+                    var singleCell = SingleSelectedCell.Value;
+                    map.GetBlock(singleCell).DrawSelected(sb, camera, map, singleCell);
+                    //map.GetBlock(singleCell).DrawInteractionSpots(sb, camera, map, singleCell);
+                }
             }
-            else if (this.SelectedSource != null)
+            else if (this.SelectedSource != null) // this block never executes aymore because even single selections are contained in the multipleselected collection
             {
                 if (this.SelectedSource.Type == TargetType.Position)
                 {
@@ -447,6 +454,7 @@ namespace Start_a_Town_.UI
                     var map = this.SelectedSource.Map;
                     var global = this.SelectedSource.Global;
                     map.GetBlock(global).DrawSelected(sb, camera, map, global);
+
                 }
             }
         }

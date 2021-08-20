@@ -24,7 +24,7 @@ namespace Start_a_Town_
 
             var box = this.Begin.GetBox(end);
 
-            cam.DrawGridBlocks(sb, Block.BlockBlueprint, box, color);
+            cam.DrawCellHighlights(sb, Block.BlockBlueprint, box, color);
         }
         public override IEnumerable<IntVec3> GetPositions()
         {

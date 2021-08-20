@@ -30,18 +30,19 @@ namespace Start_a_Town_
                 return Messages.Default;
             this.Enabled = false;
 
-            if(this.Validate())
+            if(this.Validate(true))
                 this.Send(this.Begin, this.Begin, this.Orientation);
 
             return Messages.Default;
         }
-        bool Validate()
+        bool Validate(bool notify)
         {
             var map = this.Target.Map;
             var interactionCells = this.Block.GetReservedInteractionCells(this.Begin, this.Orientation);
             if (!interactionCells.All(c => map.Contains(c) && !map.IsSolid(c)))
             {
-                Log.Warning("Interaction spots blocked.");
+                if(notify)
+                    Log.Warning("Interaction spots blocked.");
                 return false;
             }
             return true;

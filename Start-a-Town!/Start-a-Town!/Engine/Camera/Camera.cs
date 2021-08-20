@@ -928,7 +928,7 @@ namespace Start_a_Town_
             gd.Textures[0] = Sprite.Atlas.Texture;
             gd.Textures[1] = Sprite.Atlas.DepthTexture;
             fx.CurrentTechnique = fx.Techniques["BlockHighlight"];
-            // gd.DepthStencilState = new DepthStencilState() { DepthBufferWriteEnable = true }; // this broke depth on block highlights
+            //gd.DepthStencilState = new DepthStencilState() { DepthBufferWriteEnable = true }; // this broke depth on block highlights
             fx.CurrentTechnique.Passes["Pass1"].Apply();
             toolManager.DrawAfterWorld(this.SpriteBatch, map);
 
@@ -1525,9 +1525,11 @@ namespace Start_a_Town_
             var bounds = this.GetScreenBounds(global, Block.Bounds);
             var pos = new Vector2(bounds.X, bounds.Y);
             var depth = global.GetDrawDepth(Engine.Map, this);
-
-            sb.Draw(this.GridSprite.AtlasToken.Atlas.Texture, pos, this.GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
+            var highlight = Block.FaceHighlights[IntVec3.UnitZ];
+            //sb.Draw(this.GridSprite.AtlasToken.Atlas.Texture, pos, this.GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
+            sb.Draw(highlight.Atlas.Texture, pos, highlight.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
         }
+        [Obsolete]
         public void DrawGridBlock(MySpriteBatch sb, Color col, IntVec3 global)
         {
             if (global.Z > this.DrawLevel)
@@ -1557,6 +1559,10 @@ namespace Start_a_Town_
                 this.DrawGridBlock(sb, col, pos);
             sb.Flush();
         }
+        public void DrawCellHighlights(AtlasDepthNormals.Node.Token sprite, IEnumerable<IntVec3> positions, Color col)
+        {
+            this.DrawCellHighlights(this.SpriteBatch, sprite, positions, col);
+        }
         public void DrawCellHighlights(MySpriteBatch sb, AtlasDepthNormals.Node.Token sprite, IEnumerable<IntVec3> positions, Color col)
         {
             if (!positions.Any())
@@ -1580,17 +1586,26 @@ namespace Start_a_Town_
             var scrbnds = this.GetScreenBoundsVector4(global.X, global.Y, global.Z, bounds, Vector2.Zero);
             screenLoc = new Vector2(scrbnds.X, scrbnds.Y);
             cd = global.GetDrawDepth(map, this);
-            var cdback = cd - 2;
-            var highlight = Sprite.BlockHighlight;
-            Sprite.Atlas.Begin(Game1.Instance.GraphicsDevice);
+            
+            Block.Atlas.Begin();
             var c = color * .5f;
-            sb.Draw(Sprite.BlockHightlightBack.AtlasToken.Atlas.Texture, screenLoc, Sprite.BlockHightlightBack.AtlasToken.Rectangle, 0, Vector2.Zero, new Vector2(this.Zoom),
-                Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cdback);
-            sb.Draw(highlight.AtlasToken.Atlas.Texture, screenLoc, highlight.AtlasToken.Rectangle, 0, Vector2.Zero, new Vector2(this.Zoom),
+            var zoom = new Vector2(this.Zoom);
+            sb.Draw(Block.Atlas.Texture, screenLoc, Block.BlockHighlightBack.Rectangle, 0, Vector2.Zero, zoom,
+                Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cd);
+
+            //sb.Draw(Block.Atlas.Texture, screenLoc, Block.FaceHighlights[-IntVec3.UnitX].Rectangle, 0, Vector2.Zero, zoom,
+            //  Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, global.West().GetDrawDepth(map, this));
+            //sb.Draw(Block.Atlas.Texture, screenLoc, Block.FaceHighlights[-IntVec3.UnitY].Rectangle, 0, Vector2.Zero, zoom,
+            //  Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, global.North().GetDrawDepth(map, this));
+            //sb.Draw(Block.Atlas.Texture, screenLoc, Block.FaceHighlights[-IntVec3.UnitZ].Rectangle, 0, Vector2.Zero, zoom,
+            //              Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, global.Below().GetDrawDepth(map, this));
+
+
+            sb.Draw(Block.Atlas.Texture, screenLoc, Block.BlockHighlight.Rectangle, 0, Vector2.Zero, zoom,
                 Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cd);
             sb.Flush(); // flush here because i might have to switch textures in an overriden tool draw call
         }
-
+       
         internal bool IsDrawable(MapBase map, Vector3 global)
         {
             return global.Z <= this.GetMaxDrawLevel(map) + 1;

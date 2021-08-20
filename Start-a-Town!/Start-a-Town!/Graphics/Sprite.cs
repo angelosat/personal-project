@@ -100,7 +100,8 @@ namespace Start_a_Town_
             BlockFaceHighlights[Vector3.UnitY] = new Sprite("blocks/highlightnorth", "blockDepthFarLeft", Block.OriginCenter);
             BlockFaceHighlights[Vector3.UnitZ] = new Sprite("blocks/highlightdown", "blockDepthFarRight", Block.OriginCenter);
             BlockHighlight = new Sprite("blocks/highlightfull", Block.BlockDepthMap) { OriginGround = Block.OriginCenter };
-            BlockHightlightBack = new Sprite("blocks/highlightfullback", Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09back")) { OriginGround = Block.OriginCenter };
+            //BlockHightlightBack = new Sprite("blocks/highlightfullback", Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09back")) { OriginGround = Block.OriginCenter };
+            BlockHightlightBack = new Sprite("blocks/highlightfullback", Block.BlockDepthMapFar) { OriginGround = Block.OriginCenter };
             Atlas.Initialize();
         }
         

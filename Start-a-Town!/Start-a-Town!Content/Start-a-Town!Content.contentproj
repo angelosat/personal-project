@@ -1679,13 +1679,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphics\blockDepth09back.png">
-      <Name>blockDepth09back</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Graphics\Items\blocks\highlightfullback.png">
       <Name>highlightfullback</Name>
       <Importer>TextureImporter</Importer>

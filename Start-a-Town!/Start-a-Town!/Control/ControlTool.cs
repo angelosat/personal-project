@@ -169,34 +169,7 @@ namespace Start_a_Town_
         {
             return Controller.Input.GetKeyDown(System.Windows.Forms.Keys.LShiftKey);
         }
-        
-        public virtual void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
-        {
-            if (this.Target == null)
-                return;
-            if (this.Target.Face == Vector3.Zero)
-                return;
 
-            Rectangle bounds = Block.Bounds;
-            camera.GetEverything(map, this.Target.Global, bounds, out float cd, out Rectangle screenBounds, out Vector2 screenLoc);
-            var scrbnds = camera.GetScreenBoundsVector4(this.Target.Global.X, this.Target.Global.Y, this.Target.Global.Z, bounds, Vector2.Zero);
-            screenLoc = new Vector2(scrbnds.X, scrbnds.Y);
-            cd = this.Target.Global.GetDrawDepth(map, camera);
-            var cdback = cd - 2; // TODO: why - 2???
-            var highlight = Sprite.BlockHighlight; // WHY DO I USE AN ENTITY SPRITE INSTEAD OF A BLOCK TEXTURE IN THE BLOCK TEXTURE ATLAS???
-            Game1.Instance.GraphicsDevice.Textures[0] = Sprite.Atlas.Texture;
-            Game1.Instance.GraphicsDevice.Textures[1] = Sprite.Atlas.DepthTexture;
-
-            var c = Color.White *.5f;
-
-            sb.Draw(Sprite.BlockHightlightBack.AtlasToken.Atlas.Texture, screenLoc, Sprite.BlockHightlightBack.AtlasToken.Rectangle, 0, Vector2.Zero, new Vector2(camera.Zoom),
-                Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cdback);
-            sb.Draw(highlight.AtlasToken.Atlas.Texture, screenLoc, highlight.AtlasToken.Rectangle, 0, Vector2.Zero, new Vector2(camera.Zoom), 
-                Color.White, Color.White, c, Color.Transparent, SpriteEffects.None, cd);
-
-            sb.Flush(); // flush here because i might have to switch textures in an overriden tool draw call
-        }
-       
         internal virtual void OnGameEvent(GameEvent e)
         {
           
@@ -205,8 +178,9 @@ namespace Start_a_Town_
         internal virtual void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var camera = map.Camera;
-            if(this.Target is not null)
-                ToolManager.DrawBlockHighlight(sb, map, camera, this.Target);
+            if (this.Target is not null)
+                //ToolManager.DrawBlockHighlight(sb, map, camera, this.Target);
+                camera.DrawBlockMouseover(sb, map, this.Target.Global, Color.White);
         }
         internal virtual void GetContextActions(ContextArgs args) { }
         internal virtual void OnActiveToolSet() { }

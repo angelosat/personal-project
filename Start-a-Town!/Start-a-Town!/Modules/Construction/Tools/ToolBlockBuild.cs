@@ -103,20 +103,16 @@ namespace Start_a_Town_
         internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
-            this.DrawBlockMouseover(sb, map, cam);
+            if (this.Target is not null)
+            {
+                var vec = this.GetMouseover();
+                var col = map.IsValidBuildSpot(vec) ? Color.Lime : Color.Red;
+                cam.DrawBlockMouseover(sb, map, vec, col);
+            }
             if (this.Enabled)
                 this.DrawBlockPreviews(sb, map, cam);
         }
 
-        public override void DrawBlockMouseover(MySpriteBatch sb, MapBase map, Camera camera)
-        {
-            if (this.Target is not null)
-            {
-                var vec = this.GetMouseover();
-                var col = map.IsValidBuildSpot(vec) ? Color.Yellow : Color.Red;
-                ToolManager.DrawBlockHighlight(sb, map, camera, this.GetMouseover(), col);
-            }
-        }
         protected virtual void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
             if (!this.Enabled)

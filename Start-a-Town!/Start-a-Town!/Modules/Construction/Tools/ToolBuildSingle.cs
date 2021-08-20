@@ -33,7 +33,8 @@ namespace Start_a_Town_
         
         protected override void DrawGrid(MySpriteBatch sb, MapBase map, Camera cam, Color color)
         {
-            cam.DrawGridBlock(sb, this.Valid ? Color.Lime : Color.Red, this.Begin);
+            cam.DrawBlockMouseover(sb, map, this.Begin, this.Valid ? Color.Lime : Color.Red);
+            //cam.DrawGridBlock(sb, this.Valid ? Color.Lime : Color.Red, this.Begin);
         }
         public override IEnumerable<IntVec3> GetPositions()
         {

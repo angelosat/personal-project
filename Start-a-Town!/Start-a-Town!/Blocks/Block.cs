@@ -51,7 +51,7 @@ namespace Start_a_Town_
             BlockBlueprintGrayscale = Atlas.Load(Game1.Instance.Content.Load<Texture2D>("Graphics/items/blocks/blockblueprint").ToGrayscale(), "blocks/blockblueprint-grayscale");
 
             BlockHighlight = Atlas.Load("blocks/highlightfull");
-            BlockHighlightBack = Atlas.Load("blocks/highlightfullback", BlockDepthMapBack);
+            BlockHighlightBack = Atlas.Load("blocks/highlightfullback", BlockDepthMapFar);// BlockDepthMapBack);
 
             Atlas.Initialize();
         }
@@ -67,7 +67,7 @@ namespace Start_a_Town_
 
         public static readonly Texture2D NormalMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsFilled19");
         public static readonly Texture2D BlockDepthMap = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09height19");
-        public static readonly Texture2D BlockDepthMapBack = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09back");
+        //public static readonly Texture2D BlockDepthMapBack = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepth09back");
 
         public static readonly Texture2D NormalMapFar = Game1.Instance.Content.Load<Texture2D>("Graphics/blockNormalsInner");
         public static readonly Texture2D BlockDepthMapFar = Game1.Instance.Content.Load<Texture2D>("Graphics/blockDepthFar09");

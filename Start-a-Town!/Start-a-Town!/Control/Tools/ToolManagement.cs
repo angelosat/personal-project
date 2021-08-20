@@ -351,13 +351,10 @@ namespace Start_a_Town_
         internal override void DrawAfterWorld(MySpriteBatch sb, MapBase map)
         {
             var cam = map.Camera;
-            this.DrawBlockMouseover(sb, map, cam);
+            if(this.Target is TargetArgs tar && tar.Type == TargetType.Position)
+                cam.DrawBlockMouseover(sb, map, tar.Global, Color.White);
             if (this.Target is null || this.Target.Type == TargetType.Null)
                 return;
-            // draw interaction spot hightlights on mouseover? or on selection?
-            //var interactionSpots = this.Target.Block.GetInteractionSpots(map, this.Target.Global);
-            //cam.DrawCellHighlights(sb,Block.FaceHighlights[-IntVec3.UnitZ], interactionSpots, Color.White * .5f);
-
             if (Engine.DrawRegions && this.Target.Type != TargetType.Null)
                 map.Regions.Draw(this.Target.Global, sb, cam);
         }

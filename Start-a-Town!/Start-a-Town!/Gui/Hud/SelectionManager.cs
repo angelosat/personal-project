@@ -454,11 +454,11 @@ namespace Start_a_Town_.UI
             {
                 if (this.SelectedSource.Type == TargetType.Position)
                 {
-                    camera.DrawBlockMouseover(sb, this.SelectedSource.Map, this.SelectedSource.Global, Color.Yellow);
+                    //camera.DrawBlockMouseover(sb, this.SelectedSource.Map, this.SelectedSource.Global, Color.Yellow);
+                    camera.DrawCellHighlights(Block.BlockHighlight, new IntVec3[] { this.SelectedSource.Global }, Color.Yellow);
                     var map = this.SelectedSource.Map;
                     var global = this.SelectedSource.Global;
                     map.GetBlock(global).DrawSelected(sb, camera, map, global);
-
                 }
             }
         }

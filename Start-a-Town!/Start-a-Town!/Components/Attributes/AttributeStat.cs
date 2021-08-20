@@ -50,7 +50,8 @@ namespace Start_a_Town_
         }
         public void Update(GameObject parent)
         {
-            this.Def.TryAward(parent, this);
+            this.Def.Worker.Tick(parent, this);
+            //this.Def.Tick(parent, this);
         }
 
         public override string ToString()

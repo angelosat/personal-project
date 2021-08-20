@@ -8,7 +8,7 @@
 
         public override float GetValue(GameObject obj)
         {
-            return obj[AttributeDef.Strength]?.Level ?? 0;
+            return obj[AttributeDefOf.Strength]?.Level ?? 0;
         }
     }
 }

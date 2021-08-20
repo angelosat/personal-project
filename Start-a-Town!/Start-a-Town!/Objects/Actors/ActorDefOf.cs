@@ -12,9 +12,9 @@
                 NeedDef.Work
             },
             Attributes = new AttributeDef[] {
-                AttributeDef.Strength,
-                AttributeDef.Intelligence,
-                AttributeDef.Dexterity },
+                AttributeDefOf.Strength,
+                AttributeDefOf.Intelligence,
+                AttributeDefOf.Dexterity },
             Resources = new ResourceDef[]
             {
                 ResourceDefOf.Health,

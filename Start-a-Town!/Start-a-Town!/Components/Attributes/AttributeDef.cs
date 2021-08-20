@@ -1,39 +1,17 @@
-﻿namespace Start_a_Town_
+﻿using System;
+
+namespace Start_a_Town_
 {
     public class AttributeDef : Def
     {
-        public static readonly AttributeDef Strength = new AttributeDef("Strength").AddAwarders(AttributeProgressAwarderDef.FromCarrying);
-        public static readonly AttributeDef Intelligence = new AttributeDef("Intelligence");
-        public static readonly AttributeDef Dexterity = new AttributeDef("Dexterity");
-
+        readonly Type WorkerClass;
+        AttributeWorker _workerCached;
+        public AttributeWorker Worker => _workerCached ??= (AttributeWorker)Activator.CreateInstance(this.WorkerClass, this);
         public string Description;
-        AttributeProgressAwarderDef[] Awarders;
-        public readonly string Label;
-        AttributeDef(string label, string description = "") : base($"Attributename{label}")
+        public AttributeDef(string name, Type workerClass, string description = "") : base(name)
         {
-            this.Label = label;
+            this.WorkerClass = workerClass;
             this.Description = description;
-            this.Awarders = new AttributeProgressAwarderDef[0];
-        }
-        AttributeDef AddAwarders(params AttributeProgressAwarderDef[] awarders)
-        {
-            this.Awarders = awarders;
-            return this;
-        }
-
-        internal void TryAward(GameObject parent, AttributeStat attributeStat)
-        {
-            for (int i = 0; i < this.Awarders.Length; i++)
-            {
-                var value = this.Awarders[i].GetValue(parent);
-                attributeStat.Progress.Value += value;
-            }
-        }
-        static AttributeDef()
-        {
-            Register(Strength);
-            Register(Intelligence);
-            Register(Dexterity);
         }
     }
 }

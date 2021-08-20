@@ -195,6 +195,10 @@
     <Compile Include="Animations\AnimationBlending.cs" />
     <Compile Include="Animations\AnimationExtensions.cs" />
     <Compile Include="Blocks\Workstations\BlockSmelteryEntity.cs" />
+    <Compile Include="Components\Attributes\AttributeDefOf.cs" />
+    <Compile Include="Components\Attributes\AttributeDexterity.cs" />
+    <Compile Include="Components\Attributes\AttributeIntelligence.cs" />
+    <Compile Include="Components\Attributes\AttributeStrength.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionChop.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionBreakBlock.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionToolUse.cs" />
@@ -462,7 +466,7 @@
     <Compile Include="AI\Components\Personality\PersonalityUI.cs" />
     <Compile Include="AI\Components\Personality\TraitDef.cs" />
     <Compile Include="Components\Attributes\AttributeDef.cs" />
-    <Compile Include="Components\Attributes\AttributeProgressAwarderDef.cs" />
+    <Compile Include="Components\Attributes\AttributeWorker.cs" />
     <Compile Include="Components\ComponentProps.cs" />
     <Compile Include="Components\Fuel\Fuel.cs" />
     <Compile Include="Components\Fuel\FuelDef.cs" />

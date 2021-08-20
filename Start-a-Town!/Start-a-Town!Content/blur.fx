@@ -1086,26 +1086,26 @@ float4 BlockHighlightShader(MyVertexOutput input, out float depthBuffer : DEPTH0
 	color *= input.Color;
 	return color;
 }
-float4 BlockHighlightShaderLastWorking(MyVertexOutput input, out float depthBuffer : DEPTH0) : COLOR0
-{
-	float4 color = tex2D(s, input.TexCoord.xy);
-	clip(color.a == 0 ? -1 : 1);
-	float4 d = tex2D(s1, input.TexCoord.xy);
-	float adjustedD = d.r*0.9 - 0.45f;
-	float dd = adjustedD * DepthResolution + input.Depth.x - DepthResolution / 10;// GetDepth(d.r, input.Depth.x) - DepthResolution / 12;
-	depthBuffer = dd;// dd;
-	return color * input.Color;
-}
-float4 BlockHighlightShader2(MyVertexOutput input, out float depthBuffer : DEPTH0) : COLOR0
-{
-	float4 color = tex2D(s, input.TexCoord.xy);
-	clip(color.a == 0 ? -1 : 1);
-	float4 d = tex2D(s1, input.TexCoord.xy);
-	float adjustedD = d.r*0.8 - 0.4f;// (1 - v - 0.5f);
-	float dd = adjustedD * DepthResolution + input.Depth.x -DepthResolution / 12; // to bring it a bit out from the ground plane
-	depthBuffer = dd;
-	return color * input.Color;
-}
+//float4 BlockHighlightShaderLastWorking(MyVertexOutput input, out float depthBuffer : DEPTH0) : COLOR0
+//{
+//	float4 color = tex2D(s, input.TexCoord.xy);
+//	clip(color.a == 0 ? -1 : 1);
+//	float4 d = tex2D(s1, input.TexCoord.xy);
+//	float adjustedD = d.r*0.9 - 0.45f;
+//	float dd = adjustedD * DepthResolution + input.Depth.x - DepthResolution / 10;// GetDepth(d.r, input.Depth.x) - DepthResolution / 12;
+//	depthBuffer = dd;// dd;
+//	return color * input.Color;
+//}
+//float4 BlockHighlightShader2(MyVertexOutput input, out float depthBuffer : DEPTH0) : COLOR0
+//{
+//	float4 color = tex2D(s, input.TexCoord.xy);
+//	clip(color.a == 0 ? -1 : 1);
+//	float4 d = tex2D(s1, input.TexCoord.xy);
+//	float adjustedD = d.r*0.8 - 0.4f;// (1 - v - 0.5f);
+//	float dd = adjustedD * DepthResolution + input.Depth.x -DepthResolution / 12; // to bring it a bit out from the ground plane
+//	depthBuffer = dd;
+//	return color * input.Color;
+//}
 
 technique Technique1
 {

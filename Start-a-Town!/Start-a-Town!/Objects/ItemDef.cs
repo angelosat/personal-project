@@ -130,5 +130,9 @@ namespace Start_a_Town_
         {
             return Enumerable.Range(0, (int)Math.Ceiling(this.Height)).Select(z => pos + new IntVec3(0, 0, z));
         }
+        public IEnumerable<IntVec3> OccupyingCellsStandingWithBase(IntVec3 pos)
+        {
+            return this.OccupyingCellsStanding(pos).Prepend(pos);
+        }
     }
 }

@@ -186,7 +186,14 @@ namespace Start_a_Town_
             if (task is not null)
                 this.GetState().ForceTask(task);
         }
-
+        internal bool CanStandInNew(Vector3 global)
+        {
+            var map = this.Map;
+            var occupyingCells = this.Def.OccupyingCellsStanding(global);
+            if (occupyingCells.Any(c => this.Map.IsSolid(c)))
+                return false;
+            return map.IsSolid(global.Below());
+        }
         internal bool CanStandIn(Vector3 global)
         {
             var map = this.Map;

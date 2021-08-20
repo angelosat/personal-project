@@ -66,11 +66,16 @@ namespace Start_a_Town_
                         continue;
                     if (!actor.CanReserve(benchglobal.Above))
                         continue;
-                    var operatingPos = map.GetFrontOfBlock(benchglobal); // TODO use the getinteractionspot from block class
-                    if (!actor.CanReserve(operatingPos))
+                    //var operatingPos = map.GetFrontOfBlock(benchglobal); // TODO use the getinteractionspot from block class
+                    var operatingPos = map.GetCell(benchglobal).GetInteractionSpots(benchglobal).First();
+                    if (!actor.CanStandInNew(operatingPos))
                         continue;
-                    if (!actor.CanReserve(operatingPos.Below))
+                    if (actor.Def.OccupyingCellsStandingWithBase(operatingPos).Any(c => !actor.CanReserve(c)))
                         continue;
+                    //if (!actor.CanReserve(operatingPos))
+                    //    continue;
+                    //if (!actor.CanReserve(operatingPos.Below))
+                    //    continue;
                     if (order.IsActive && order.IsCompletable())
                         if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))
                         {

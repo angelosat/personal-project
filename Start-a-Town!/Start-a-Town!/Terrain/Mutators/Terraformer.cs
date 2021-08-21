@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
+﻿using Start_a_Town_.Net;
 using Start_a_Town_.Terraforming.Mutators;
 using Start_a_Town_.UI;
 using System;

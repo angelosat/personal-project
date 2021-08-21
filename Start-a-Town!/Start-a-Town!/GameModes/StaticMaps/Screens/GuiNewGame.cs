@@ -30,7 +30,7 @@ namespace Start_a_Town_.Core
             var selectedSize = defaultSizes.First();
             var comboSize = new ComboBoxNewNew<StaticMap.MapSize>(defaultSizes, guiname.Width, "Size", s => s.Name, () => selectedSize, s => selectedSize = s);
 
-            var terraformers = Terraformer.Defaults.Select(d => d.Create());
+            var terraformers = Terraformer.Defaults.Select(d => d.Create()).ToList();
             var winTerraformers = terraformers.Select(t => t.GetUI()).ToGroupBoxVertically().ToPanel().ToWindow("Terraformers Properties", closable: true, movable: false);
             var btnadvanced = new Button("Advanced", toggleAdvanced, guiname.Width);
 
@@ -52,7 +52,7 @@ namespace Start_a_Town_.Core
                 var actorsCreateBox = new GroupBox();
                 var actors = new List<Actor>();
                 var actorsui = new GuiActorCreation(actors);
-                var btnstart = new Button("Start", () => this.CreateMap(txtboxname.Text, selectedSize, actors.ToArray()));
+                var btnstart = new Button("Start", () => this.CreateMap(txtboxname.Text, selectedSize, terraformers, actors.ToArray()));
                 var btnback = new Button("Back", () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); });
                 actorsCreateBox.AddControlsVertically(0, HorizontalAlignment.Right,
                     actorsui,
@@ -77,9 +77,9 @@ namespace Start_a_Town_.Core
             };
         }
 
-        void CreateMap(string name, StaticMap.MapSize size, Actor[] actors)
+        void CreateMap(string name, StaticMap.MapSize size, List<Terraformer> terraformers, Actor[] actors)
         {
-            var world = new StaticWorld(name, Terraformer.Defaults);
+            var world = new StaticWorld(name, terraformers);
             var map = new StaticMap(world, "test", Vector2.Zero, size);
             this.Hide();
             Server.Start();

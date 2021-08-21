@@ -10,16 +10,20 @@ namespace Start_a_Town_.Terraforming.Mutators
         public readonly float DefaultValue;
         public float Min;
         public float Max;
-        float _Value;
+        public float Step;// { get; set; }
+
+        float _value;
         public float Value
         {
-            get { return _Value; }
+            get => this._value;
             set
             {
-                _Value = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
+                //_Value = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
+                //_Value = Math.Max(this.Min, Math.Min(this.Max, value));
+                var v = Math.Ceiling(value / this.Step) * this.Step;
+                this._value = (float)Math.Max(this.Min, Math.Min(this.Max, v));
             }
         }
-        public float Step { get; set; }
         public TerraformerProperty(string name, float value, float min, float max, float step = 1, string format = "")
         {
             if (step <= 0)
@@ -27,8 +31,8 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.Name = name;
             this.Min = min;
             this.Max = max;
-            this.Value = this.DefaultValue = value;
             this.Step = step;
+            this.Value = this.DefaultValue = value;
             this.Format = format;
         }
         public Control GetGui()

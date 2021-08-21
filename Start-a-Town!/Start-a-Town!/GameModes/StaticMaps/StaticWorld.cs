@@ -79,7 +79,7 @@ namespace Start_a_Town_
             this.Maps = new MapCollection();
             this.PopulationManager = new PopulationManager(this);
         }
-        public StaticWorld(string name, IEnumerable<TerraformerDef> mutators)
+        public StaticWorld(string name, List<Terraformer> mutators)
            : this()
         {
             if (name.IsNullEmptyOrWhiteSpace())
@@ -92,7 +92,7 @@ namespace Start_a_Town_
                 (byte)(this.Seed >> 8),
                 (byte)this.Seed};
             this.Random = new Random(this.Seed);
-            this.Mutators = mutators.Select(mdef => mdef.Create()).ToList();// new List<Terraformer>(mutators);
+            this.Mutators = mutators;//.Select(mdef => mdef.Create()).ToList();// new List<Terraformer>(mutators);
             this.DefaultBlock = BlockDefOf.Soil;
         }
         

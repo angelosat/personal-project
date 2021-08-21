@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
     class TerraformerSea : Terraformer
     {
-        int _seaLevel = MapBase.MaxHeight / 2 - 1;
+        readonly TerraformerProperty SeaLevelProp = new("Sea Level", MapBase.MaxHeight / 2 - 1, 0, MapBase.MaxHeight - 1, 1);
         public int SeaLevel
         {
-            get => this._seaLevel; 
-            set => this._seaLevel = Math.Max(0, Math.Min(MapBase.MaxHeight - 1, value));
+            get => (int)this.SeaLevelProp.Value;
+            set => this.SeaLevelProp.Value = value;
         }
 
         public override void Finally(Chunk chunk)
@@ -46,7 +45,7 @@ namespace Start_a_Town_.Terraforming.Mutators
       
         public override IEnumerable<TerraformerProperty> GetAdjustableParameters()
         {
-            yield return new TerraformerProperty("Sea Level", MapBase.MaxHeight / 2 - 1, 0, MapBase.MaxHeight - 1, 1);
+            yield return this.SeaLevelProp;
         }
        
         protected override void SaveExtra(SaveTag tag)

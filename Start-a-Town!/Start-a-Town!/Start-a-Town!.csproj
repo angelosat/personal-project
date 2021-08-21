@@ -249,6 +249,7 @@
     <Compile Include="Gui\Lists\IListCollapsibleDataSource.cs" />
     <Compile Include="Gui\Lists\ListBoxNoScroll.cs" />
     <Compile Include="Gui\Lists\ListBoxObservable.cs" />
+    <Compile Include="Gui\Tables\Table.cs" />
     <Compile Include="Gui\Tables\TableObservable.cs" />
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />
     <Compile Include="Gui\ScrollBars\ScrollableBoxNewNew.cs" />
@@ -622,7 +623,7 @@
     <Compile Include="Terrain\Lighting\LightingEngine.BatchToken.cs" />
     <Compile Include="Terrain\Map.MapSize.cs" />
     <Compile Include="Terrain\Mutators\GradientLowRes.cs" />
-    <Compile Include="Terrain\Mutators\MutatorProperty.cs" />
+    <Compile Include="Terrain\Mutators\TerraformerProperty.cs" />
     <Compile Include="Gui\ITooltippable.cs" />
     <Compile Include="Gui\LayerTypes.cs" />
     <Compile Include="Gui\Primitives\Anchor.cs" />

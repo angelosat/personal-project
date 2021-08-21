@@ -5,7 +5,6 @@ using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -29,7 +28,15 @@ namespace Start_a_Town_
         }
         public virtual void Generate(MapBase map) { }
 
-        public static List<TerraformerDef> Defaults = new() { TerraformerDefOf.Normal, TerraformerDefOf.PerlinWorms, TerraformerDefOf.Minerals, TerraformerDefOf.Grass, TerraformerDefOf.Flowers, TerraformerDefOf.Trees };
+        public static List<TerraformerDef> Defaults = new() { 
+            TerraformerDefOf.Normal,
+            TerraformerDefOf.Sea,
+            TerraformerDefOf.PerlinWorms, // caves after sea because we dont want underwater caves filled with water
+            TerraformerDefOf.Minerals, 
+            TerraformerDefOf.Grass, 
+            TerraformerDefOf.Flowers, 
+            TerraformerDefOf.Trees 
+        };
 
         protected static int GetRandom(byte[] seedArray, int x, int y, int z, int min, int max)
         {
@@ -49,12 +56,12 @@ namespace Start_a_Town_
 
         public virtual IEnumerable<(string label, Action<float> setter)> GetModifiableProperties() { yield break; }
 
-        public virtual IEnumerable<MutatorProperty> GetAdjustableParameters() { yield break; }
+        public virtual IEnumerable<TerraformerProperty> GetAdjustableParameters() { yield break; }
 
-        readonly Table<MutatorProperty> GuiTable = new Table<MutatorProperty>()
+        readonly Table<TerraformerProperty> GuiTable = new Table<TerraformerProperty>()
             .AddColumn("name", 96, m => new Label(m.Name + ": "), 1)
-            .AddColumn("slider", 200, m => new SliderNew(() => m.Value, v => m.Value = v, 200, m.Min, m.Max, m.Step, "##0%"))
-            .AddColumn("value", 32, m => new Label(() => m.Value.ToString("##0%")) { Anchor = new(.5f, 0) }, .5f)
+            .AddColumn("slider", 200, m => new SliderNew(() => m.Value, v => m.Value = v, 200, m.Min, m.Max, m.Step, m.Format))
+            .AddColumn("value", 32, m => new Label(() => m.Value.ToString(m.Format)) { Anchor = new(.5f, 0) }, .5f)
             .AddColumn("reset", 16, m => IconButton.CreateSmall(Icon.Replace, m.ResetValue).ShowOnParentFocus(true).SetHoverText("Reset to default"));
 
         public GroupBox GetUI()

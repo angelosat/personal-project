@@ -26,9 +26,9 @@ namespace Start_a_Town_.Terraforming.Mutators
             c.Block = w.DefaultBlock;
             c.Material = c.Block.DefaultMaterial;
         }
-        public override IEnumerable<MutatorProperty> GetAdjustableParameters()
+        public override IEnumerable<TerraformerProperty> GetAdjustableParameters()
         {
-            yield return new MutatorProperty("Land Level", this.LandLevel, 0, MapBase.MaxHeight, 1);
+            yield return new TerraformerProperty("Land Level", this.LandLevel, 0, MapBase.MaxHeight, 1);
         }
 
         protected override void SaveExtra(SaveTag tag)

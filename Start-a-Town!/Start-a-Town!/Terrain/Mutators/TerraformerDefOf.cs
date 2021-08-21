@@ -19,14 +19,4 @@ namespace Start_a_Town_
             Def.Register(typeof(TerraformerDefOf));
         }
     }
-    //public class TerraFormer
-    //{
-    //    public readonly TerraformerDef Def;
-    //    public WorldBase World;
-
-    //    public TerraFormer(TerraformerDef def)
-    //    {
-    //        this.Def = def;
-    //    }
-    //}
 }

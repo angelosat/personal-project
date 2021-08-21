@@ -6,8 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.UI
 {
-    public class TableObservable<TObject> : GroupBox, IListSearchable<TObject>
-        where TObject : class
+    public class Table<TObject> : GroupBox, IListSearchable<TObject>
     {
         const int Spacing = 1;
         readonly List<Column> Columns = new();
@@ -23,13 +22,13 @@ namespace Start_a_Town_.UI
             return rowCount * (this.RowHeight + Spacing) - Spacing;
         }
 
-        TableObservable< TObject> Clear()
+        Table<TObject> Clear()
         {
             this.Controls.Clear();
             return this;
         }
 
-        public TableObservable<TObject> Bind(ObservableCollection<TObject> collection)
+        public Table<TObject> Bind(ObservableCollection<TObject> collection)
         {
             if (collection == this.List)
                 return this;
@@ -42,9 +41,9 @@ namespace Start_a_Town_.UI
             return this;
         }
 
-        public TableObservable<TObject> AddColumn(string label, int width, Func<TObject, Control> controlGetter)
+        public Table<TObject> AddColumn(string label, int width, Func<TObject, Control> controlGetter, float anchorX = 0)
         {
-            this.Columns.Add(new(label, width, controlGetter));
+            this.Columns.Add(new(label, width, controlGetter, anchorX));
             this.RowWidth += width;
             return this;
         }
@@ -67,7 +66,16 @@ namespace Start_a_Town_.UI
                 int currentX = 0;
                 foreach (var col in this.Columns)
                 {
-                    row.AddControls(col.ControlGetter(item).SetLocation(currentX, 0));
+                    var ctrl = col.ControlGetter(item);
+                    //ctrl.SetLocation(currentX, 0);
+                    //ctrl.SetLocation(currentX + (int)((col.AnchorX + ctrl.Anchor.X) * (col.Width - ctrl.Width)), 0); // addede + ctrl.Anchor.X as a workaround
+
+                    if (ctrl.Anchor.X > 0)   /// HACK workaround
+                        ctrl.SetLocation(currentX + col.Width / 2, 0);
+                    else
+                        ctrl.SetLocation(currentX + (int)(col.AnchorX * (col.Width - ctrl.Width)), 0);
+
+                    row.AddControls(ctrl);
                     currentX += col.Width;
                 }
                 row.Controls.AlignCenterHorizontally();
@@ -110,7 +118,7 @@ namespace Start_a_Town_.UI
             if (item is null)
                 return;
             var listControls = this.Controls;
-            var removedItemIndex = listControls.FindIndex(c => c.Tag == item);
+            var removedItemIndex = listControls.FindIndex(c => c.Tag.Equals(item));
             var prevY = listControls[removedItemIndex].Location.Y;
             for (int i = removedItemIndex + 1; i < listControls.Count; i++)
             {
@@ -124,7 +132,7 @@ namespace Start_a_Town_.UI
         public void Filter(Func<TObject, bool> filter)
         {
             this.Controls.Clear();
-            var validControls = this.Controls.Where(c => filter(c.Tag as TObject)).ToArray();
+            var validControls = this.Controls.Where(c => filter((TObject)c.Tag)).ToArray();
             this.AddControlsBottomLeft(validControls);
         }
 
@@ -133,11 +141,13 @@ namespace Start_a_Town_.UI
             public string Label;
             public int Width;
             public Func<TObject, Control> ControlGetter;
-            public Column(string label, int width, Func<TObject, Control> controlGetter)
+            public float AnchorX;
+            public Column(string label, int width, Func<TObject, Control> controlGetter, float anchorx)
             {
                 this.Label = label;
                 this.Width = width;
                 this.ControlGetter = controlGetter;
+                this.AnchorX = anchorx;
             }
         }
     }

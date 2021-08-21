@@ -4,9 +4,9 @@ using System;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
-    public class MutatorProperty
+    public class TerraformerProperty
     {
-        public string Name;
+        public string Name, Format;
         public readonly float DefaultValue;
         public float Min;
         public float Max;
@@ -20,7 +20,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             }
         }
         public float Step { get; set; }
-        public MutatorProperty(string name, float value, float min, float max, float step = 1)
+        public TerraformerProperty(string name, float value, float min, float max, float step = 1, string format = "")
         {
             if (step <= 0)
                 throw new ArgumentException();
@@ -29,6 +29,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.Max = max;
             this.Value = this.DefaultValue = value;
             this.Step = step;
+            this.Format = format;
         }
         public Control GetGui()
         {

@@ -5,11 +5,11 @@ namespace Start_a_Town_.Terraforming.Mutators
 {
     class TerraformerSea : Terraformer
     {
-        int _seaLevel = MapBase.MaxHeight / 2;
+        int _seaLevel = MapBase.MaxHeight / 2 - 1;
         public int SeaLevel
         {
             get => this._seaLevel; 
-            set => this._seaLevel = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
+            set => this._seaLevel = Math.Max(0, Math.Min(MapBase.MaxHeight - 1, value));
         }
 
         public override void Finally(Chunk chunk)
@@ -26,11 +26,11 @@ namespace Start_a_Town_.Terraforming.Mutators
                         c.Block = BlockDefOf.Fluid;
                         c.Material = MaterialDefOf.Water;
                     }
-                    else
-                    {
-                        c.Block = BlockDefOf.Sand;
-                        c.Material = MaterialDefOf.Sand;
-                    }
+                    //else /// sand is applied by the default terraformer (currently normal.cs)
+                    //{
+                    //    c.Block = BlockDefOf.Sand;
+                    //    c.Material = MaterialDefOf.Sand;
+                    //}
                 }
                 else
                 {
@@ -44,9 +44,9 @@ namespace Start_a_Town_.Terraforming.Mutators
             }
         }
       
-        public override IEnumerable<MutatorProperty> GetAdjustableParameters()
+        public override IEnumerable<TerraformerProperty> GetAdjustableParameters()
         {
-            yield return new MutatorProperty("Sea Level", MapBase.MaxHeight / 2, 0, MapBase.MaxHeight, 1);
+            yield return new TerraformerProperty("Sea Level", MapBase.MaxHeight / 2 - 1, 0, MapBase.MaxHeight - 1, 1);
         }
        
         protected override void SaveExtra(SaveTag tag)

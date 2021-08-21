@@ -42,7 +42,7 @@ namespace Start_a_Town_
         {
             Def.Register(Tool);
 
-            ToolProps.Init();
+            //ToolProps.Init();
         }
         
         private static void GenerateRecipes()

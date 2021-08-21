@@ -1,4 +1,7 @@
-﻿namespace Start_a_Town_
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Start_a_Town_
 {
     [EnsureStaticCtorCall]
     static class ToolPropsDefof
@@ -8,7 +11,6 @@
             Description = "Used to dig out grainy material like soil dirt and sand.",
             SpriteHandle = ItemContent.ShovelHandle,
             SpriteHead = ItemContent.ShovelHead,
-            //ToolUse = new ToolUse(ToolUseDefOf.Digging, 5),
             ToolUse = ToolUseDefOf.Digging,
             Skill = SkillDefOf.Digging,
             AssociatedJobs = new() { JobDefOf.Digger }
@@ -18,7 +20,6 @@
             Description = "Chops down trees.",
             SpriteHandle = ItemContent.AxeHandle,
             SpriteHead = ItemContent.AxeHead,
-            //ToolUse = new ToolUse(ToolUseDefOf.Chopping, 5),
             ToolUse = ToolUseDefOf.Chopping,
             Skill = SkillDefOf.Plantcutting,
             AssociatedJobs = new() { JobDefOf.Lumberjack }
@@ -29,7 +30,6 @@
             SpriteHandle = ItemContent.HammerHandle,
             SpriteHead = ItemContent.HammerHead,
             ToolUse = ToolUseDefOf.Building,
-            //ToolUse = new ToolUse(ToolUseDefOf.Building, 5),
             Skill = SkillDefOf.Construction,
             AssociatedJobs = new() { JobDefOf.Builder }
         };
@@ -39,7 +39,6 @@
             SpriteHandle = ItemContent.PickaxeHandle,
             SpriteHead = ItemContent.PickaxeHead,
             ToolUse = ToolUseDefOf.Mining,
-            //ToolUse = new ToolUse(ToolUseDefOf.Mining, 5),
             Skill = SkillDefOf.Mining,
             AssociatedJobs = new() { JobDefOf.Miner }
         };
@@ -49,7 +48,6 @@
             SpriteHandle = ItemContent.HandsawHandle,
             SpriteHead = ItemContent.HandsawHead,
             ToolUse = ToolUseDefOf.Carpentry,
-            //ToolUse = new ToolUse(ToolUseDefOf.Carpentry, 5),
             Skill = SkillDefOf.Carpentry,
             AssociatedJobs = new() { JobDefOf.Carpenter }
         };
@@ -59,14 +57,43 @@
             SpriteHandle = ItemContent.HoeHandle,
             SpriteHead = ItemContent.HoeHead,
             ToolUse = ToolUseDefOf.Argiculture,
-            //ToolUse = new ToolUse(ToolUseDefOf.Argiculture, 5),
             Skill = SkillDefOf.Argiculture,
             AssociatedJobs = new() { JobDefOf.Farmer }
         };
         static ToolPropsDefof()
         {
             Def.Register(typeof(ToolPropsDefof));
+
+            foreach (var toolProp in Def.GetDefs<ToolProps>())
+            {
+                var obj = toolProp.Create();
+                GameObject.AddTemplate(obj);
+            }
+
+            GenerateRecipesNew();
         }
-        public static void Init() { }
+
+        private static void GenerateRecipesNew()
+        {
+            var defs = Def.Database.Values.OfType<ToolProps>().ToList();
+            foreach (var toolDef in defs)
+            {
+                var reagents = new List<Reaction.Reagent>();
+
+                foreach (var reagent in ToolDefs.ToolCraftingProperties.Reagents)
+                    reagents.Add(reagent.Value);
+
+                var reaction = new Reaction(
+                    toolDef.Label,
+                    Reaction.CanBeMadeAt(IsWorkstation.Types.None, IsWorkstation.Types.Workbench),
+                    reagents,
+                    new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },
+                    SkillDefOf.Crafting,
+                    JobDefOf.Craftsman);
+
+                Def.Register(reaction);
+            }
+        }
+
     }
 }

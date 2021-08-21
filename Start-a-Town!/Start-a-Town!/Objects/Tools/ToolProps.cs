@@ -21,7 +21,7 @@ namespace Start_a_Town_
             return this;
         }
 
-        GameObject Create()
+        public GameObject Create()
         {
             var tool = ToolDefs.Tool.CreateNew() as Tool;
             tool.ToolComponent.Props = this;
@@ -35,37 +35,6 @@ namespace Start_a_Town_
             var tool = Create() as Tool;
             tool.SetMaterials(ingredients.ToDictionary(i => i.Key, i => i.Value.PrimaryMaterial));
             return tool;
-        }
-        internal static void Init()
-        {
-            
-            ToolPropsDefof.Init();
-            foreach (var toolProp in GetDefs<ToolProps>())
-            {
-                var obj = toolProp.Create();
-                GameObject.AddTemplate(obj);
-            }
-
-            GenerateRecipesNew();
-        }
-        private static void GenerateRecipesNew()
-        {
-            var defs = Def.Database.Values.OfType<ToolProps>();
-            foreach (var toolDef in defs)
-            {
-                var reagents = new List<Reaction.Reagent>();
-
-                foreach (var reagent in ToolDefs.ToolCraftingProperties.Reagents)
-                    reagents.Add(reagent.Value);
-
-                var reaction = new Reaction(
-                    toolDef.Label,
-                    Reaction.CanBeMadeAt(IsWorkstation.Types.None, IsWorkstation.Types.Workbench),
-                    reagents,
-                    new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },
-                    SkillDefOf.Crafting,
-                    JobDefOf.Craftsman);
-            }
         }
 
         public StorageFilterNewNew GetFilter()

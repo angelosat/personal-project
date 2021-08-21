@@ -1006,7 +1006,7 @@
     <Compile Include="Terrain\Mutators\Flowers.cs" />
     <Compile Include="Terrain\Mutators\Land.cs" />
     <Compile Include="Terrain\Mutators\Minerals.cs" />
-    <Compile Include="Terrain\Mutators\Sea.cs" />
+    <Compile Include="Terrain\Mutators\TerraformerSea.cs" />
     <Compile Include="Terrain\Mutators\Grass.cs" />
     <Compile Include="Terrain\Mutators\Normal.cs" />
     <Compile Include="Terrain\Mutators\Terraformer.cs" />

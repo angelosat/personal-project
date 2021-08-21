@@ -70,13 +70,10 @@ namespace Start_a_Town_.Terraforming.Mutators
             return;
         }
 
-        public override List<MutatorProperty> GetAdjustableParameters()
+        public override IEnumerable<MutatorProperty> GetAdjustableParameters()
         {
-            return new List<MutatorProperty>()
-            {
-                new MutatorProperty("Ground ratio", this.GroundRatio, 0, 1),
-                new MutatorProperty("Soil thickness", this.SoilThickness, 0, 1)
-            };
+            yield return new MutatorProperty("Ground ratio", this.GroundRatio, 0, 1, .01f);
+            yield return new MutatorProperty("Soil thickness", this.SoilThickness, 0, 1, .01f);
         }
     }
 }

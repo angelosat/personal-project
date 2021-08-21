@@ -30,9 +30,14 @@ namespace Start_a_Town_.Core
             var selectedSize = defaultSizes.First();
             var comboSize = new ComboBoxNewNew<StaticMap.MapSize>(defaultSizes, guiname.Width, "Size", s => s.Name, () => selectedSize, s => selectedSize = s);
 
+            var terraformers = Terraformer.Defaults.Select(d => d.Create());
+            var winTerraformers = terraformers.Select(t => t.GetUI()).ToGroupBoxVertically().ToPanel().ToWindow("Terraformers Properties", closable: true, movable: false);
+            var btnadvanced = new Button("Advanced", toggleAdvanced, guiname.Width);
+
             tab_World.AddControlsVertically(1,
                 guiname,
-                comboSize);
+                comboSize,
+                btnadvanced);
 
             var btn_create = new Button("Create", openActorCreationGui);
             var btn_cancel = new Button("Cancel", cancelAction);
@@ -59,6 +64,17 @@ namespace Start_a_Town_.Core
                 createActorsWindow.Show();
                 this.GetWindow().Hide();
             }
+
+            void toggleAdvanced() 
+            {
+                //var allProps = terraformers.SelectMany(t => t.GetModifiableProperties());
+                //var allProps = terraformers.SelectMany(t => t.GetAdjustableParameters());
+                //foreach(var p in allProps)
+                //{
+
+                //}
+                winTerraformers.ToggleDialog();
+            };
         }
 
         void CreateMap(string name, StaticMap.MapSize size, Actor[] actors)

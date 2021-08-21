@@ -8,7 +8,8 @@ namespace Start_a_Town_.UI
     {
         readonly Panel PanelValue;
         readonly Label LabelValue;
-
+        public bool DrawValueWhileDragging;
+        public float NextValue, PrevValue;
         readonly Func<float> ValueGetter;
         readonly Action<float> ValueSetter;
         public string Format;// = "##0%";
@@ -24,7 +25,6 @@ namespace Start_a_Town_.UI
                 this.Thumb.Location.X = (int)(this.Border + (this.Width - 2 * this.Border) * (this.Value - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2);
             }
         }
-        public float NextValue;
 
         public override int Height
         {
@@ -89,6 +89,7 @@ namespace Start_a_Town_.UI
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
             this.SelectingValue = true;
+            this.PrevValue = this.NextValue;
             base.OnMouseLeftPress(e);
         }
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
@@ -101,14 +102,21 @@ namespace Start_a_Town_.UI
             if (this.NextValue != this.Value)
                 this.ValueSetter(this.NextValue);
         }
-
+        public override void HandleRButtonDown(System.Windows.Forms.HandledMouseEventArgs e)
+        {
+            if (!this.SelectingValue)
+                return;
+            this.SelectingValue = false;
+            this.NextValue = this.PrevValue;
+            e.Handled = true;
+        }
         public override void Update()
         {
             base.Update();
             if (!this.SelectingValue)
                 return;
             this.LabelValue.Text = this.NextValue.ToString();
-            float mouseX = (Controller.Instance.msCurrent.X / UIManager.Scale - (this.ScreenLocation.X + this.Border));
+            float mouseX = Controller.Instance.msCurrent.X / UIManager.Scale - (this.ScreenLocation.X + this.Border);
             float mousePerc = MathHelper.Clamp(mouseX / (float)(this.Width - 2 * this.Border), 0, 1);
 
             var newValue = (this.Min + mousePerc * (this.Max - this.Min)) / this.Step;
@@ -136,7 +144,8 @@ namespace Start_a_Town_.UI
             sb.Draw(UIManager.DefaultTrackBarThumbSprite,
                 this.ScreenLocation + loc,
                 Color.White * .5f);
-            UIManager.DrawStringOutlined(sb, this.NextValue.ToString(this.Format), this.ScreenLocation + new Vector2(this.Width, 0));//, Vector2.One);
+            if(this.DrawValueWhileDragging)
+                UIManager.DrawStringOutlined(sb, this.NextValue.ToString(this.Format), this.ScreenLocation + new Vector2(this.Width, 0));//, Vector2.One);
         }
 
         public static Control CreateWithLabel(string label, Func<float> valueGetter, Action<float> valueSetter, int width, float min = 0, float max = 1, float step = 0.1f, string format = null)
@@ -145,6 +154,16 @@ namespace Start_a_Town_.UI
                 .AddControlsVertically(
                 new Label(() => $"{label}: {valueGetter().ToString(format)}"),
                 new SliderNew(valueGetter, valueSetter, width, min, max, step, format));
+        }
+
+        public static Control CreateWithLabelNew(string name, Func<float> valueGetter, Action<float> valueSetter, int width, float min = 0, float max = 1, float step = 0.1f, string format = null)
+        {
+            var slider = new SliderNew(valueGetter, valueSetter, width, min, max, step, format);
+            var label = new Label(() => $"{name}: {slider.NextValue.ToString(format)}");
+            return new GroupBox()
+                .AddControlsHorizontally(
+                    slider,
+                    label);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
-    class Sea : Terraformer
+    class TerraformerSea : Terraformer
     {
         int _seaLevel = MapBase.MaxHeight / 2;
         public int SeaLevel
@@ -44,13 +44,11 @@ namespace Start_a_Town_.Terraforming.Mutators
             }
         }
       
-        public override List<MutatorProperty> GetAdjustableParameters()
+        public override IEnumerable<MutatorProperty> GetAdjustableParameters()
         {
-            var list = new List<MutatorProperty>();
-            list.Add(new MutatorProperty("Sea Level", MapBase.MaxHeight / 2, 0, MapBase.MaxHeight, 1));
-            return list;
+            yield return new MutatorProperty("Sea Level", MapBase.MaxHeight / 2, 0, MapBase.MaxHeight, 1);
         }
-
+       
         protected override void SaveExtra(SaveTag tag)
         {
             tag.Add(new SaveTag(SaveTag.Types.Int, "Level", this.SeaLevel));

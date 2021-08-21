@@ -159,6 +159,10 @@ namespace Start_a_Town_
                 box.Width = width;
             return box;
         }
+        static public GroupBox ToGroupBoxVertically<T>(this IEnumerable<T> controls) where T : Control
+        {
+            return new GroupBox().AddControlsVertically(controls) as GroupBox;
+        }
 
         static public Control ToTabbedContainer(params Control[] namedControls)
         {

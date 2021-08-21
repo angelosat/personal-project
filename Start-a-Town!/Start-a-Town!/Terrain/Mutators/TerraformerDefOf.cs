@@ -4,7 +4,7 @@ namespace Start_a_Town_
 {
     public static class TerraformerDefOf
     {
-        public static readonly TerraformerDef Sea = new("Sea", typeof(Sea));
+        public static readonly TerraformerDef Sea = new("Sea", typeof(TerraformerSea));
         public static readonly TerraformerDef Land = new("Land", typeof(Land));
         public static readonly TerraformerDef Normal = new("Normal", typeof(Normal));
         public static readonly TerraformerDef Grass = new("Grass", typeof(Grass));

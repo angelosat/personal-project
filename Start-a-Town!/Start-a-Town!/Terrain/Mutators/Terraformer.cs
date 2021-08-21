@@ -5,6 +5,7 @@ using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -46,17 +47,26 @@ namespace Start_a_Town_
             return val;
         }
 
+        public virtual IEnumerable<(string label, Action<float> setter)> GetModifiableProperties() { yield break; }
 
-        public virtual List<MutatorProperty> GetAdjustableParameters() { return new List<MutatorProperty>(); }
+        public virtual IEnumerable<MutatorProperty> GetAdjustableParameters() { yield break; }
 
+        GroupBox GetGuiNew()
+        {
+            var box = new GroupBox();
+            return box;
+        }
         public GroupBox GetUI()
         {
             var box = new GroupBox();
             var props = this.GetAdjustableParameters();
+            box.AddControlsVertically(props.Select(p => p.GetGui()));
+            return box;
+
             foreach (var item in props)
             {
                 var name = new Label(item.Name) { Location = box.Controls.BottomLeft };
-                box.Controls.Add(name);
+                //box.Controls.Add(name);
                 TextBox input;
                 var slider = new SliderNew(() => item.Value, v => item.Value = v, 100, item.Min, item.Max, item.Step);
                 input = new TextBox(50) { Location = slider.TopRight, Text = item.Value.ToString() };
@@ -86,7 +96,8 @@ namespace Start_a_Town_
                     float newValue = int.Parse(txt);
                     slider.Value = newValue;
                 };
-                box.Controls.Add(slider, input);
+                //box.Controls.Add(slider, input);
+                box.AddControlsBottomLeft(new GroupBox().AddControlsHorizontally(slider, name));//, input));
             }
             return box;
         }

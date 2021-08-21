@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Start_a_Town_.UI;
+using System;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
@@ -26,6 +27,10 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.Max = max;
             this.Value = value;
             this.Step = step;
+        }
+        public Control GetGui()
+        {
+            return SliderNew.CreateWithLabelNew(this.Name, () => this.Value, v => this.Value = v, 100, this.Min, this.Max, this.Step, "##0%");
         }
     }
 }

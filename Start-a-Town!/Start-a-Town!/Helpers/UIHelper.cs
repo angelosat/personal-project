@@ -163,7 +163,10 @@ namespace Start_a_Town_
         {
             return new GroupBox().AddControlsVertically(controls) as GroupBox;
         }
-
+        static public GroupBox ToGroupBoxHorizontally<T>(this IEnumerable<T> controls) where T : Control
+        {
+            return new GroupBox().AddControlsHorizontally(controls) as GroupBox;
+        }
         static public Control ToTabbedContainer(params Control[] namedControls)
         {
             var box = new GroupBox();

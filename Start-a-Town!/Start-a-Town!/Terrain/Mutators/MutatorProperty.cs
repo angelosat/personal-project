@@ -1,4 +1,5 @@
-﻿using Start_a_Town_.UI;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.UI;
 using System;
 
 namespace Start_a_Town_.Terraforming.Mutators
@@ -6,6 +7,7 @@ namespace Start_a_Town_.Terraforming.Mutators
     public class MutatorProperty
     {
         public string Name;
+        public readonly float DefaultValue;
         public float Min;
         public float Max;
         float _Value;
@@ -25,12 +27,17 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.Name = name;
             this.Min = min;
             this.Max = max;
-            this.Value = value;
+            this.Value = this.DefaultValue = value;
             this.Step = step;
         }
         public Control GetGui()
         {
-            return SliderNew.CreateWithLabelNew(this.Name, () => this.Value, v => this.Value = v, 100, this.Min, this.Max, this.Step, "##0%");
+            return new GroupBox() { BackgroundColor = Color.SlateGray * .5f }.AddControlsHorizontally(
+                SliderNew.CreateWithLabelNew(this.Name, () => this.Value, v => this.Value = v, 100, this.Min, this.Max, this.Step, "##0%"),
+                IconButton.CreateSmall(Icon.Replace, ResetValue));
+
         }
+        public void ResetValue() => this.Value = this.DefaultValue;
+
     }
 }

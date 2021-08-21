@@ -6,6 +6,8 @@ namespace Start_a_Town_.UI
 {
     class SliderNew : Control
     {
+        public static int DefaultHeight = UIManager.DefaultTrackBarThumbSprite.Height;
+       
         readonly Panel PanelValue;
         readonly Label LabelValue;
         public bool DrawValueWhileDragging;
@@ -14,15 +16,15 @@ namespace Start_a_Town_.UI
         readonly Action<float> ValueSetter;
         public string Format;// = "##0%";
         readonly PictureBox Thumb;
-        public static int DefaultHeight = UIManager.DefaultTrackBarThumbSprite.Height;
-        protected float _Value;
+        bool SelectingValue;
+        readonly float Border = 5;// UIManager.DefaultTrackBarSprite.Width / 4;
+        protected float _value;
         public float Value
         {
-            get => this.ValueGetter?.Invoke() ?? this._Value;
+            get => this.ValueGetter?.Invoke() ?? this._value;
             set
             {
-                this._Value = value;
-                this.Thumb.Location.X = (int)(this.Border + (this.Width - 2 * this.Border) * (this.Value - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2);
+                this._value = value;
             }
         }
 
@@ -84,8 +86,6 @@ namespace Start_a_Town_.UI
             sb.Draw(UIManager.DefaultTrackBarSprite, new Rectangle((int)position.X + this.Width - this.Height / 2, (int)position.Y, this.Height / 2, this.Height), new Rectangle(UIManager.DefaultTrackBarSprite.Height / 2 + 1, 0, UIManager.DefaultTrackBarSprite.Height / 2, UIManager.DefaultTrackBarSprite.Height), Color.White);
         }
 
-        bool SelectingValue;
-        readonly float Border = UIManager.DefaultTrackBarSprite.Width / 4;
         protected override void OnMouseLeftPress(System.Windows.Forms.HandledMouseEventArgs e)
         {
             this.SelectingValue = true;
@@ -109,6 +109,15 @@ namespace Start_a_Town_.UI
             this.SelectingValue = false;
             this.NextValue = this.PrevValue;
             e.Handled = true;
+        }
+        public override void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
+        {
+            if (e.Handled)
+                return;
+            if (!this.HasMouseHover)
+                return;
+            e.Handled = true;
+            this.ValueSetter(this.Value + this.Step * e.Delta);
         }
         public override void Update()
         {
@@ -139,12 +148,12 @@ namespace Start_a_Town_.UI
             base.Draw(sb, viewport);
             if (!this.SelectingValue)
                 return;
-            var loc = new Vector2((int)(this.Border + (this.Width - 2 * this.Border) * (this.NextValue - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2), 0);
+            var loc = new Vector2(this.Border + (this.Width - 2 * this.Border) * (this.NextValue - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2, 0);
 
             sb.Draw(UIManager.DefaultTrackBarThumbSprite,
                 this.ScreenLocation + loc,
                 Color.White * .5f);
-            if(this.DrawValueWhileDragging)
+            if (this.DrawValueWhileDragging)
                 UIManager.DrawStringOutlined(sb, this.NextValue.ToString(this.Format), this.ScreenLocation + new Vector2(this.Width, 0));//, Vector2.One);
         }
 
@@ -159,7 +168,9 @@ namespace Start_a_Town_.UI
         public static Control CreateWithLabelNew(string name, Func<float> valueGetter, Action<float> valueSetter, int width, float min = 0, float max = 1, float step = 0.1f, string format = null)
         {
             var slider = new SliderNew(valueGetter, valueSetter, width, min, max, step, format);
-            var label = new Label(() => $"{name}: {slider.NextValue.ToString(format)}");
+            //var label = Label.ParseNewNew(name + ": ", new Func<string>(() => slider.NextValue.ToString(format))).ToGroupBoxHorizontally();//
+            var label = Label.ParseNewNew(name + ": ", new Func<string>(() => valueGetter().ToString(format))).ToGroupBoxHorizontally();//
+            //var label = new Label(() => $"{name}: {slider.NextValue.ToString(format)}");
             return new GroupBox()
                 .AddControlsHorizontally(
                     slider,

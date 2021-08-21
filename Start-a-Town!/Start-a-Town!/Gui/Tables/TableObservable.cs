@@ -68,7 +68,7 @@ namespace Start_a_Town_.UI
                 {
                     var ctrl = col.ControlGetter(item);
                     //ctrl.SetLocation(currentX, 0);
-                    ctrl.SetLocation(currentX + (int)(col.AnchorX * (col.Width - ctrl.Width)), 0);
+                    ctrl.SetLocation(currentX + (int)((col.AnchorX + ctrl.Anchor.X) * (col.Width - ctrl.Width)), 0); // addede + ctrl.Anchor.X as a workaround
                     row.AddControls(ctrl);
                     currentX += col.Width;
                 }

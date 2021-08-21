@@ -93,7 +93,6 @@ namespace Start_a_Town_.UI
                     break;
             }
         }
-
         public Label(int width) : base()
         {
             this.Text = "";
@@ -104,6 +103,7 @@ namespace Start_a_Town_.UI
         public Label() : this(Vector2.Zero, "") { }
         public Label(Func<string> textFunc) : this(Vector2.Zero)
         {
+            this.AutoSize = true; // TESTING PUTTING THIS HERE. if there are any problems, this here could be the case
             this.TextFunc = textFunc;
         }
         

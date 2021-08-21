@@ -135,7 +135,8 @@ namespace Start_a_Town_.UI
             foreach (var c in this)
             {
                 c.Location = new Vector2(c.Location.X, maxheight * .5f);
-                c.Anchor = new Vector2(0, .5f);
+                //c.Anchor = new Vector2(0, .5f);
+                c.Anchor = new Vector2(c.Anchor.X, .5f); // DONT reset contrl's x anchor
             }
         }
         public void RemoveAll(Func<Control, bool> predicate)

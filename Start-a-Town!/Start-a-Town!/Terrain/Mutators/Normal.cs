@@ -8,11 +8,10 @@ namespace Start_a_Town_.Terraforming.Mutators
         static readonly int HashMagnitude = "75745".GetHashCode();
         static readonly int HashRock = "rock".GetHashCode();
         static readonly int HashSoil = "soil".GetHashCode();
+        readonly float GroundRatio;
+        readonly float SoilThickness;
+        readonly Random SoilRandomizer = new Random(HashSoil);
 
-        float GroundRatio;
-        float SoilThickness;
-        Random SoilRandomizer = new Random(HashSoil);
-        
         public Normal()
         {
             // TODO these should be in the world class?
@@ -31,7 +30,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             float zNormal = z / maxZ - 0.5f;
             double gradientSoil = zNormal + gradient;
             var rockTurbulence = 2;//5
-            double gradientRock = zNormal + gradient * rockTurbulence + SoilThickness;
+            double gradientRock = zNormal + gradient * rockTurbulence + this.SoilThickness;
             var seaLevel = maxZ / 2 - 2;
 
             if (gradientRock < this.GroundRatio)

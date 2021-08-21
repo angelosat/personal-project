@@ -82,7 +82,7 @@ namespace Start_a_Town_.UI
         }
         public override void HandleMouseWheel(System.Windows.Forms.HandledMouseEventArgs e)
         {
-            if (!this.HitTest())
+            if (!this.HitTest()) // why hittest again? i hittest during update. just check if has focus
                 return;
             e.Handled = true;
             if (this.Client.ClientSize.Height <= this.Client.Height)

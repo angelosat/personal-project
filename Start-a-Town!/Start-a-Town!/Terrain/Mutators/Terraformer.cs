@@ -51,54 +51,19 @@ namespace Start_a_Town_
 
         public virtual IEnumerable<MutatorProperty> GetAdjustableParameters() { yield break; }
 
-        GroupBox GetGuiNew()
-        {
-            var box = new GroupBox();
-            return box;
-        }
+        readonly Table<MutatorProperty> GuiTable = new Table<MutatorProperty>()
+            .AddColumn("name", 96, m => new Label(m.Name + ": "), 1)
+            .AddColumn("slider", 200, m => new SliderNew(() => m.Value, v => m.Value = v, 200, m.Min, m.Max, m.Step, "##0%"))
+            .AddColumn("value", 32, m => new Label(() => m.Value.ToString("##0%")) { Anchor = new(.5f, 0) }, .5f)
+            .AddColumn("reset", 16, m => IconButton.CreateSmall(Icon.Replace, m.ResetValue).ShowOnParentFocus(true).SetHoverText("Reset to default"));
+
         public GroupBox GetUI()
         {
             var box = new GroupBox();
             var props = this.GetAdjustableParameters();
-            box.AddControlsVertically(props.Select(p => p.GetGui()));
-            return box;
-
-            foreach (var item in props)
-            {
-                var name = new Label(item.Name) { Location = box.Controls.BottomLeft };
-                //box.Controls.Add(name);
-                TextBox input;
-                var slider = new SliderNew(() => item.Value, v => item.Value = v, 100, item.Min, item.Max, item.Step);
-                input = new TextBox(50) { Location = slider.TopRight, Text = item.Value.ToString() };
-                input.TextChangedFunc = newtxt =>
-                {
-                    float newValue = int.Parse(newtxt);
-                    newValue = (float)(Math.Round(newValue / item.Step) * item.Step);
-                    newValue = MathHelper.Clamp(newValue, item.Min, item.Max);
-                    input.Text = newValue.ToString();
-                };
-                /// THIS IS THE OLD CODE TO CORRECT INVALID VALUE ENTERED
-                //input.InputFunc = (txt, ch) =>
-                //{
-                //    if (!char.IsDigit(ch))
-                //        return txt;
-                //    string newtxt = txt + ch;
-                //    float newValue = int.Parse(newtxt);
-                //    newValue = (float)(Math.Round(newValue / item.Step) * item.Step);
-                //    newValue = MathHelper.Clamp(newValue, item.Min, item.Max);
-                //    newtxt = newValue.ToString();
-                //    return newtxt;
-                //};
-                input.TextChangedFunc = txt =>
-                {
-                    if (string.IsNullOrEmpty(txt) || string.IsNullOrWhiteSpace(txt))
-                        txt = "0";
-                    float newValue = int.Parse(txt);
-                    slider.Value = newValue;
-                };
-                //box.Controls.Add(slider, input);
-                box.AddControlsBottomLeft(new GroupBox().AddControlsHorizontally(slider, name));//, input));
-            }
+            GuiTable.ClearControls();
+            GuiTable.AddItems(props);
+            box.AddControls(GuiTable);
             return box;
         }
 

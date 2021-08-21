@@ -930,7 +930,10 @@ namespace Start_a_Town_.UI
             this.AddControls(controls);
             return this;
         }
-
+        public Control AddControlsHorizontally(IEnumerable<Control> controls)
+        {
+            return this.AddControlsHorizontally(controls.ToArray());
+        }
         public virtual Control AddControlsHorizontally(params Control[] controls)
         {
             return this.AddControlsHorizontally(0, controls);

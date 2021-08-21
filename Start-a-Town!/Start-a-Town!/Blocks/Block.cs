@@ -199,11 +199,6 @@ namespace Start_a_Town_
         // TODO find a way to make this method required for blocks tha have entity
         public virtual BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         { return null; }
-        public GameObject GetEntity()
-        {
-            return BlockObjects[this];
-        }
-
         
         public IEnumerable<IntVec3> GetParts(MapBase map, IntVec3 global) 
         {
@@ -223,12 +218,6 @@ namespace Start_a_Town_
         public IEnumerable<IntVec3> GetPartsNew(MapBase map, IntVec3 global)
         {
             return this.GetPartsNew(map.GetCell(global).Orientation).Select(l => global + l);
-            //var cell = map.GetCell(global);
-            //var ori = cell.Orientation;
-            //for (int i = 0; i < this.Size.X; i++)
-            //    for (int j = 0; j < this.Size.Y; j++)
-            //        for (int k = 0; k < this.Size.Z; k++)
-            //            yield return global + Coords.Rotate(new IntVec3(i, j, k), ori);
         }
         public IEnumerable<IntVec3> GetPartsNew(int ori)
         {
@@ -757,12 +746,6 @@ namespace Start_a_Town_
             return this.Ingredient.GetLabel();
         }
 
-        public virtual GameObject Create(List<GameObjectSlot> reagents)
-        {
-            return this.GetEntity().Clone();
-        }
-
-
         public virtual void OnSteppedOn(GameObject actor, IntVec3 global) { }
 
         public virtual void OnDrop(GameObject actor, GameObject dropped, TargetArgs target, int amount = -1)
@@ -949,6 +932,24 @@ namespace Start_a_Town_
             var interactionCells = this.GetReservedInteractionCells(global, orientation);
             var col = interactionCells.All(c => map.Contains(c) && !map.IsSolid(c)) ? Color.Lime : Color.Red;
             cam.DrawCellHighlights(sb, Block.BlockHighlight, interactionCells, col * .5f);
+        }
+        public class DefaultState : IBlockState
+        {
+            public void Apply(MapBase map, Vector3 global)
+            { }
+            public void Apply(ref byte data)
+            {
+            }
+            public void Apply(Block.Data data)
+            {
+            }
+            public void FromCraftingReagent(GameObject item) { }
+            public Color GetTint(byte d)
+            { return Color.White; }
+            public string GetName(byte d)
+            {
+                return "";
+            }
         }
     }
 }

@@ -69,17 +69,21 @@ namespace Start_a_Town_
 
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
-            //info.AddInfo(new Label(() => $"Owner: {this.Owner?.Name ?? ""}"));
             var room = map.GetRoomAt(vector3);
             if (room is not null)
                 room.GetSelectionInfo(info);
             //info.AddInfo(new Label(() => $"Owner: {$"{room?.Owner} (from room)" ?? this.Owner?.Name ?? ""}"));
-
             var roomOwner = room?.Owner;
             //info.AddInfo(new Label(() => $"Owner: {(roomOwner is not null ? (roomOwner.Name  + " (from room)") : (this.Owner?.Name ?? ""))}"));
             info.AddInfo(new ComboBoxNewNew<Actor>(128, "Owner", a => a?.Name ?? "none", setOwner, () => this.Owner, () => map.Town.GetAgents().Prepend(null)));
+            info.AddInfo(new ComboBoxNewNew<Types>(128, "Type", t => t.ToString(), setType, () => this.Type, () => Enum.GetValues(typeof(Types)).Cast<Types>()));
+
             void setOwner(Actor newOwner) => Packets.SetOwner(map.Net, map.Net.GetPlayer(), vector3, newOwner);
+            void setType(Types newType) => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, newType);
+
+            UpdateQuickButtons();
         }
+
         protected override void WriteExtra(System.IO.BinaryWriter w)
         {
             w.Write(this.CurrentOccupant);
@@ -116,14 +120,46 @@ namespace Start_a_Town_
         {
             map.GetBlockEntity<BlockBedEntity>(global).Owner = owner;
         }
+        private static void SetType(MapBase map, IntVec3 global, BlockBedEntity.Types type)
+        {
+            var bentity = map.GetBlockEntity<BlockBedEntity>(global);
+            bentity.Type = type;
+            map.InvalidateCell(global);
+            if (map.IsActive && SelectionManager.SingleSelectedCell == global)
+                bentity.UpdateQuickButtons();
+        }
 
+        static readonly IconButton ButtonSetVisitor = new(Icon.Construction) { HoverText = "Set to visitor bed" };
+        static readonly IconButton ButtonUnsetVisitor = new(Icon.Construction, Icon.Cross) { HoverText = "Set to citizen bed" };
+        void UpdateQuickButtons()
+        {
+            var t = this.Type;
+            var map = this.Map;
+            var vector3 = this.OriginGlobal;
+            switch (t)
+            {
+                case BlockBedEntity.Types.Citizen:
+                    SelectionManager.RemoveButton(ButtonUnsetVisitor);
+                    SelectionManager.AddButton(ButtonSetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Visitor), (map, vector3));
+                    return;
+
+                case BlockBedEntity.Types.Visitor:
+                    SelectionManager.RemoveButton(ButtonSetVisitor);
+                    SelectionManager.AddButton(ButtonUnsetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Citizen), (map, vector3));
+                    return;
+
+                default:
+                    throw new Exception();
+            }
+        }
         [EnsureStaticCtorCall]
         static class Packets
         {
-            static readonly int pOwner;
+            static readonly int pOwner, pChangeType;
             static Packets()
             {
                 pOwner = Network.RegisterPacketHandler(SetOwner);
+                pChangeType = Network.RegisterPacketHandler(SetType);
             }
 
             internal static void SetOwner(INetwork net, PlayerData playerData, IntVec3 global, Actor owner)
@@ -143,6 +179,25 @@ namespace Start_a_Town_
                     BlockBedEntity.SetOwner(net.Map, global, owner);
                 else
                     SetOwner(net, player, global, owner);
+            }
+
+            internal static void SetType(INetwork net, PlayerData playerData, IntVec3 vector3, BlockBedEntity.Types type)
+            {
+                if (net is Server)
+                    BlockBedEntity.SetType(net.Map, vector3, type);
+
+                net.GetOutgoingStream().Write(pChangeType, playerData.ID, vector3, (int)type);
+            }
+
+            private static void SetType(INetwork net, BinaryReader r)
+            {
+                var player = net.GetPlayer(r.ReadInt32());
+                var vec = r.ReadIntVec3();
+                var type = (BlockBedEntity.Types)r.ReadInt32();
+                if (net is Client)
+                    BlockBedEntity.SetType(net.Map, vec, type);
+                else
+                    SetType(net, player, vec, type);
             }
         }
     }

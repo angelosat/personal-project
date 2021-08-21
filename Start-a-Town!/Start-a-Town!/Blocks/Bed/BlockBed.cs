@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
-using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Start_a_Town_
@@ -19,7 +17,6 @@ namespace Start_a_Town_
             : base("Bed", 0f, 1f, false, true)
         {
             this.Furniture = FurnitureDefOf.Bed;
-            //this.BuildProperties = new(new Ingredient(amount: 4).IsBuildingMaterial(), 1);
             this.BuildProperties.ToolSensitivity = 1;
             this.BuildProperties.Dimension = 3;
             this.Ingredient = new Ingredient().IsBuildingMaterial();
@@ -45,7 +42,6 @@ namespace Start_a_Town_
             this.Parts[1] = this.BottomParts;
             this.UtilitiesProvided.Add(Utility.Types.Sleeping);
             this.Size = new(1, 2, 1);
-            //this.Size = new(2, 1, 1);
         }
         public override bool IsRoomBorder => false;
         public override bool IsStandableOn => false;
@@ -160,17 +156,7 @@ namespace Start_a_Town_
 
             var top = global;
             var bottom = global + Coords.Rotate(IntVec3.UnitY, orientation);
-            //var bottom = orientation switch
-            //{
-            //    0 => top + IntVec3.UnitX,
-            //    1 => top + IntVec3.UnitY,
-            //    2 => top - IntVec3.UnitX,
-            //    3 => top - IntVec3.UnitY,
-            //    _ => throw new NotImplementedException()
-            //};
-
-            //map.SetBlock(bottom, this, material, GetData(Part.Bottom, orientation), 0, 0, notify);
-            //map.SetBlock(top, this, material, GetData(Part.Top, orientation), 0, 0, notify);
+            
             map.SetBlock(bottom, this, material, 0, 0, orientation, notify);
             map.SetBlock(top, this, material, 0, 0, orientation, notify);
 
@@ -222,19 +208,16 @@ namespace Start_a_Town_
             switch (orientation)
             {
                 case 1:
-                    //bottom = global + IntVec3.UnitY;
                     bottomSecIndex += 1;
                     topSrcIndex += 1;
                     break;
 
                 case 2:
-                    //bottom = global - IntVec3.UnitX;
                     bottomSecIndex += 2;
                     topSrcIndex += 2;
                     break;
 
                 case 3:
-                    //bottom = global - IntVec3.UnitY;
                     bottomSecIndex += 3;
                     topSrcIndex += 3;
                     break;
@@ -267,81 +250,25 @@ namespace Start_a_Town_
         public static BlockBedEntity GetEntity(MapBase map, IntVec3 global)
         {
             return map.GetBlockEntity<BlockBedEntity>(Cell.GetOrigin(map, global));
-            //var parts = GetPartsDic(map, global);
-            //var entity = map.GetBlockEntity<BlockBedEntity>(parts[Part.Top]);
-            //return entity;
         }
         public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
         {
-            var list = new List<Interaction>();
-            list.Add(new Blocks.Bed.InteractionStartSleep()); // commented out until i figure out how to seperate ai planting job on farmlands and player planting anywher
+            var list = new List<Interaction>
+            {
+                new Blocks.Bed.InteractionStartSleep() // commented out until i figure out how to seperate ai planting job on farmlands and player planting anywher
+            };
             return list;
         }
 
-        static readonly IconButton ButtonSetVisitor = new(Icon.Construction) { HoverText = "Set to visitor bed" };
-        static readonly IconButton ButtonUnsetVisitor = new(Icon.Construction, Icon.Cross) { HoverText = "Set to citizen bed" };
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var entity = GetEntity(map, vector3);
             entity.GetSelectionInfo(info, map, vector3);
         }
 
-        private static void UpdateQuickButtons(MapBase map, IntVec3 vector3, BlockBedEntity.Types t)
-        {
-            switch (t)
-            {
-                case BlockBedEntity.Types.Citizen:
-                    SelectionManager.RemoveButton(ButtonUnsetVisitor);
-                    SelectionManager.AddButton(ButtonSetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Visitor), (map, vector3));
-                    return;
-
-                case BlockBedEntity.Types.Visitor:
-                    SelectionManager.RemoveButton(ButtonSetVisitor);
-                    SelectionManager.AddButton(ButtonUnsetVisitor, t => Packets.SetType(map.Net, map.Net.GetPlayer(), vector3, BlockBedEntity.Types.Citizen), (map, vector3));
-                    return;
-
-                default:
-                    throw new Exception();
-            }
-        }
-        public static void SetType(MapBase map, IntVec3 vector3, BlockBedEntity.Types type)
-        {
-            GetEntity(map, vector3).Type = type;
-            map.InvalidateCell(vector3);
-            if (map.IsActive && SelectionManager.SingleSelectedCell == vector3)
-                    UpdateQuickButtons(map, vector3, type);
-        }
         internal override IEnumerable<IntVec3> GetInteractionSpotsLocal()
         {
-            yield return new IntVec3(-1, 0, 0); //new IntVec3(1, 0, 0); //
-        }
-        [EnsureStaticCtorCall]
-        static class Packets
-        {
-            static readonly int PacketChangeType;
-            static Packets()
-            {
-                PacketChangeType = Network.RegisterPacketHandler(SetType);
-            }
-
-            internal static void SetType(INetwork net, PlayerData playerData, IntVec3 vector3, BlockBedEntity.Types type)
-            {
-                if (net is Server)
-                    BlockBed.SetType(net.Map, vector3, type);
-
-                net.GetOutgoingStream().Write(PacketChangeType, playerData.ID, vector3, (int)type);
-            }
-
-            private static void SetType(INetwork net, BinaryReader r)
-            {
-                var player = net.GetPlayer(r.ReadInt32());
-                var vec = r.ReadIntVec3();
-                var type = (BlockBedEntity.Types)r.ReadInt32();
-                if (net is Client)
-                    BlockBed.SetType(net.Map, vec, type);
-                else
-                    SetType(net, player, vec, type);
-            }
+            yield return new IntVec3(-1, 0, 0);
         }
     }
 }

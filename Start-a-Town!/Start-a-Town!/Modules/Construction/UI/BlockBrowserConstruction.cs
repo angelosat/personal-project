@@ -18,14 +18,11 @@ namespace Start_a_Town_.Core
         public BlockBrowserConstruction()
         {
             this.Panel_Blocks = new Panel() { AutoSize = true };
-
             this.ToolBox = new UIToolsBox(this.OnToolSelectedNew);
-            //var categories = Block.Registry.Values.Where(b => b.BuildProperties.Category is not null && b.Ingredient is not null).GroupBy(b => b.BuildProperties.Category);
             var categories = Block.Registry.Values.Where(b => b.BuildProperties.Category is not null).GroupBy(b => b.BuildProperties.Category); // blocks without ingredients are buildable (sleeping spots)
             foreach (var cat in categories)
             {
                 var list = cat;
-
                 var grid = new ButtonGridIcons<Block>(4, 6, list, (slot, block) =>
                 {
                     slot.Tag = block;

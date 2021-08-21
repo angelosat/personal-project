@@ -109,6 +109,8 @@ namespace Start_a_Town_
         public IntVec3 East => this + UnitX;
         public IntVec3 West => this - UnitX;
 
+        public int Volume => this.X * this.Y * this.Z;
+
         public static bool operator ==(IntVec3 a, Vector3 b)
         {
             return a.X == b.X && a.Y == b.Y && a.Z == b.Z;

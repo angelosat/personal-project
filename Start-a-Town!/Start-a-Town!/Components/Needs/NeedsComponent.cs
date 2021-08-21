@@ -108,7 +108,7 @@ namespace Start_a_Town_.Components
         }
         internal override void AddSaveData(SaveTag tag)
         {
-            this.NeedsNew.SaveVariableTypes(tag, "Needs");
+            this.NeedsNew.SaveAbstract(tag, "Needs");
         }
         internal override void Load(SaveTag tag)
         {

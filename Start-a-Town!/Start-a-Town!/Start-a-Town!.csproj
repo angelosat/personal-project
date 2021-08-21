@@ -790,7 +790,9 @@
     <Compile Include="Control\KeyBinding.cs" />
     <Compile Include="GameModes\GameMode.cs" />
     <Compile Include="Terrain\MapBase.cs" />
-    <Compile Include="Terrain\IWorld.cs" />
+    <Compile Include="Terrain\Mutators\TerraformerDef.cs" />
+    <Compile Include="Terrain\Mutators\TerraformerDefOf.cs" />
+    <Compile Include="Terrain\WorldBase.cs" />
     <Compile Include="GameModes\StaticMaps\GameModeStaticMaps.cs" />
     <Compile Include="GameModes\StaticMaps\StaticMap.cs" />
     <Compile Include="GameModes\StaticMaps\StaticWorld.cs" />

@@ -12,13 +12,11 @@ namespace Start_a_Town_.Terraforming.Mutators
         float GroundRatio;
         float SoilThickness;
         Random SoilRandomizer = new Random(HashSoil);
-
+        
         public Normal()
         {
-            this.ID = Terraformer.Types.Normal;
-            this.Name = "Normal";
+            // TODO these should be in the world class?
             this.SoilThickness = .02f;
-
             this.GroundRatio = 0f;// .5f;
         }
 
@@ -72,10 +70,6 @@ namespace Start_a_Town_.Terraforming.Mutators
             return;
         }
 
-        public override object Clone()
-        {
-            return new Normal();
-        }
         public override List<MutatorProperty> GetAdjustableParameters()
         {
             return new List<MutatorProperty>()

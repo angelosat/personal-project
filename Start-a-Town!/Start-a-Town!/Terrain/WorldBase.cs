@@ -38,40 +38,4 @@ namespace Start_a_Town_
 
         public abstract void ResolveReferences();
     }
-
-    //public interface IWorld
-    //{
-    //    string Name { get; set; }
-    //    //string SeedString { get; set; }
-    //    string GetName();
-    //    string GetPath();
-    //    MapBase GetMap(Vector2 mapCoords);
-    //    Random Random { get; set; }
-    //    int GetSeed();
-    //    float Gravity { get; }
-    //    int Seed { get; }
-    //    int MaxHeight { get; }
-    //    ulong CurrentTick { get; set; }
-    //    TimeSpan Clock { get; }
-    //    INetwork Net { get; set; }
-
-    //    byte[] GetSeedArray();
-
-    //    Block DefaultBlock { get; set; }
-    //    PopulationManager Population { get; }
-
-    //    List<Terraformer> Mutators { get; }
-
-    //    void WriteData(BinaryWriter w);
-
-    //    MapCollection GetMaps();
-
-    //    void Draw(SpriteBatch sb, Camera cam);
-    //    void Tick(INetwork net);
-    //    void OnHudCreated(Hud hud);
-    //    void OnTargetSelected(IUISelection info, ISelectable selection);
-
-    //    void ResolveReferences();
-
-    //}
 }

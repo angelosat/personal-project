@@ -40,7 +40,11 @@ namespace Start_a_Town_
                 throw new Exception();
             Database.Add(def.Name, def);
         }
-       
+
+        static public Def GetDef(BinaryReader r)
+        {
+            return GetDef(r.ReadString());
+        }
         static public Def GetDef(string defName)
         {
             if (defName == null || string.IsNullOrEmpty(defName) || string.IsNullOrWhiteSpace(defName))
@@ -50,11 +54,11 @@ namespace Start_a_Town_
             Log.Warning($"def \"{defName}\" does not exist");
             return null;
         }
+
         static public T GetDef<T>(BinaryReader r) where T : Def
         {
             return GetDef<T>(r.ReadString());
         }
-      
         static public T GetDef<T>(string defName) where T : Def
         {
             if (TryGetDef<T>(defName) is not T def)

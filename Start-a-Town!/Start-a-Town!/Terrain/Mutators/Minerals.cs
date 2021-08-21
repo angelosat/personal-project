@@ -49,12 +49,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                 this.Templates.Add(item.Value.Clone().SetWorld(w));
             return this;
         }
-        public Minerals()
-        {
-            this.ID = Terraformer.Types.Minerals;
-            this.Name = "Minerals";
-        }
-
+     
         public override void Generate(MapBase map)
         {
             var mapSize = map.GetSizeInChunks() * Chunk.Size;
@@ -94,9 +89,5 @@ namespace Start_a_Town_.Terraforming.Mutators
             }
         }
 
-        public override object Clone()
-        {
-            return new Minerals();
-        }
     }
 }

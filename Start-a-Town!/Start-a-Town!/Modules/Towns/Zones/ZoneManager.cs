@@ -139,7 +139,7 @@ namespace Start_a_Town_
         protected override void AddSaveData(SaveTag tag)
         {
             this._zoneIDSequence.Save(tag, "IDSequence");
-            this.Zones.Values.SaveVariableTypes(tag, "Zones");
+            this.Zones.Values.SaveAbstract(tag, "Zones");
         }
         public override void Load(SaveTag tag)
         {

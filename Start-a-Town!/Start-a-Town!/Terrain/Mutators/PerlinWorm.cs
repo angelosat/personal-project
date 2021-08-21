@@ -6,11 +6,6 @@ namespace Start_a_Town_.Terraforming.Mutators
 {
     class PerlinWormGenerator : Terraformer
     {
-        public PerlinWormGenerator()
-        {
-            this.ID = Terraformer.Types.PerlinWorms;
-            this.Name = "PerlinWorms";
-        }
         public override void Finally(Chunk chunk)
         {
             var s = chunk.World.Seed;
@@ -56,16 +51,13 @@ namespace Start_a_Town_.Terraforming.Mutators
                         var local = current.ToLocal();
                         var c = chunk.GetCellLocal(local);
                         if (c.Block == BlockDefOf.Air ||
-                            c.Block == BlockDefOf.Fluid ||
-                            c.Block == BlockDefOf.Sand)
+                            c.Block == BlockDefOf.Fluid
+                            //||
+                            //c.Block == BlockDefOf.Sand
+                            )
                             continue;
                         c.Block = BlockDefOf.Air;
                     }
-        }
-
-        public override object Clone()
-        {
-            return new PerlinWormGenerator();
         }
 
         static List<PerlinWorm> GetWorms(Vector2 chunkCoords, int seed, int radius)

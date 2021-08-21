@@ -249,18 +249,14 @@ namespace Start_a_Town_
         {
             var count = r.ReadInt32();
             for (int i = 0; i < count; i++)
-            {
-                list.Add(Def.GetDef(r.ReadString()));
-            }
+                list.Add(Def.GetDef(r));//.ReadString()));
             return list;
         }
         public static ICollection<T> ReadDefs<T>(this ICollection<T> list, BinaryReader r) where T : Def
         {
             var count = r.ReadInt32();
             for (int i = 0; i < count; i++)
-            {
-                list.Add(Def.GetDef<T>(r.ReadString()));
-            }
+                list.Add(Def.GetDef<T>(r));//.ReadString()));
             return list;
         }
         public static void WriteAbstract<T>(this ICollection<T> list, BinaryWriter w) where T : ISerializable

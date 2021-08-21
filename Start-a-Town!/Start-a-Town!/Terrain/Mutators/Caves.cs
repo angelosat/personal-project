@@ -15,12 +15,9 @@ namespace Start_a_Town_.Terraforming.Mutators
         byte[] RidgedSeed2;
         int CaveFrequency = 16;//64
         float Threshold = 0.1f;//0.05f
-        public Caves()
-        {
-            this.ID = Terraformer.Types.Caves;
-            this.Name = "Caves";
-        }
-        static public Stopwatch Watch = new Stopwatch();
+        
+        static public Stopwatch Watch = new();
+
         public override void Initialize(WorldBase w, Cell c, int x, int y, int z, double g)
         {
             Watch.Start();
@@ -53,10 +50,6 @@ namespace Start_a_Town_.Terraforming.Mutators
             this.RidgedSeed = BitConverter.GetBytes(w.Seed + Hash1);
             this.RidgedSeed2 = BitConverter.GetBytes(w.Seed + Hash2);
             return this;
-        }
-        public override object Clone()
-        {
-            return new Caves();
         }
     }
 }

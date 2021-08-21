@@ -35,7 +35,6 @@ namespace Start_a_Town_
                         if (!actor.CanReach(tool.item))
                             continue;
                         itemmanager.AddPreference(toolUse, tool.item, tool.score);
-                        //return new AITask(typeof(TaskBehaviorStoreInInventory)) { TargetA = tool.item, AmountA = 1 };
                         return new AITask(TaskDefOf.PickUp) { TargetA = tool.item, AmountA = 1 };
                     }
                 }

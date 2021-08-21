@@ -187,7 +187,7 @@ namespace Start_a_Town_
             var tag = new SaveTag(SaveTag.Types.Compound, name);
             this.ID.Save(tag, "ID");
             this.GiverID.Save(tag, "GiverID");
-            this.Objectives.SaveVariableTypes(tag, "Objectives");
+            this.Objectives.SaveAbstract(tag, "Objectives");
             return tag;
         }
 

@@ -654,7 +654,6 @@ namespace Start_a_Town_
                 if (nblock != null)
                     nblock.NeighborChanged(this, n);
             }
-            //this.Town.InvalidateBlock(global); // handle blockchanged event in town class instead
             if (raiseEvent)
                 NotifyBlockChanged(global);
             return true;

@@ -248,12 +248,12 @@ namespace Start_a_Town_
         protected override void AddSaveData(SaveTag tag)
         {
             tag.Add(this.CurrentShopID.Save("ShopIDSequence"));
-            this.Shopss.SaveVariableTypes(tag, "Shops");
+            this.Shopss.SaveAbstract(tag, "Shops");
         }
         public override void Load(SaveTag tag)
         {
             tag.TryGetTagValueNew("ShopIDSequence", ref this.CurrentShopID);
-            this.Shopss.LoadVariableTypes(tag, "Shops", this);
+            this.Shopss.LoadAbstract(tag, "Shops", this);
             this.Shops = this.Shopss.ToDictionary(i => i.ID, i => i);
         }
         public override void Write(BinaryWriter w)

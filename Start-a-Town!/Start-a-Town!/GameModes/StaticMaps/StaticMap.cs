@@ -556,7 +556,7 @@ namespace Start_a_Town_
                 var mutatorlist = this.World.Mutators.ToList();
                 mutatorlist.ForEach(m => m.SetWorld(this.World));
                 var watch = new Stopwatch();
-                Dictionary<Chunk, Dictionary<IntVec3, double>> gradCache = new();
+                var gradCache = new Dictionary<Chunk, Dictionary<IntVec3, double>>();
                 tasks.Add(("Initializing Chunks", () =>
                 {
                     watch.Start();
@@ -577,7 +577,7 @@ namespace Start_a_Town_
 
                 foreach (var m in mutatorlist)
                 {
-                    tasks.Add(("Applying " + m.Name, () =>
+                    tasks.Add(("Applying " + m.Def.Label, () =>
                     {
                         watch.Restart();
                         foreach (var chunk in this.ActiveChunks.Values)
@@ -842,7 +842,7 @@ namespace Start_a_Town_
             yield return ("Generating plants", () =>
             {
                 watch = Stopwatch.StartNew();
-                Terraformer.Trees.Generate(this);
+                TerraformerDefOf.Trees.Create().Generate(this); // wtf
                 watch.Stop();
                 $"plants generated in {watch.ElapsedMilliseconds} ms".ToConsole();
             });

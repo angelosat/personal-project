@@ -1,27 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Start_a_Town_.Blocks;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
     class Sea : Terraformer
     {
-        int _SeaLevel = MapBase.MaxHeight / 2;
+        int _seaLevel = MapBase.MaxHeight / 2;
         public int SeaLevel
         {
-            get { return _SeaLevel; }
-            set
-            {
-                _SeaLevel = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
-            }
+            get => this._seaLevel; 
+            set => this._seaLevel = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
         }
 
-        public Sea()
-        {
-            this.ID = Terraformer.Types.Sea;
-            this.Name = "Sea";
-        }
-       
         public override void Finally(Chunk chunk)
         {
             foreach(var c in chunk.Cells)
@@ -61,27 +51,20 @@ namespace Start_a_Town_.Terraforming.Mutators
             return list;
         }
 
-        public override List<SaveTag> Save()
+        protected override void SaveExtra(SaveTag tag)
         {
-            var tag = new List<SaveTag>();
             tag.Add(new SaveTag(SaveTag.Types.Int, "Level", this.SeaLevel));
-            return tag;
         }
-        public override Terraformer Load(SaveTag save)
+        protected override void LoadExtra(SaveTag save)
         {
             this.SeaLevel = save.TagValueOrDefault("Level", MapBase.MaxHeight / 2 - 1);
-            return this;
         }
 
-        public override object Clone()
-        {
-            return new Sea();
-        }
-        public override void Write(System.IO.BinaryWriter w)
+        protected override void WriteExtra(System.IO.BinaryWriter w)
         {
             w.Write(this.SeaLevel);
         }
-        public override void Read(System.IO.BinaryReader r)
+        protected override void ReadExtra(System.IO.BinaryReader r)
         {
             this.SeaLevel = r.ReadInt32();
         }

@@ -8,17 +8,12 @@ namespace Start_a_Town_.Terraforming.Mutators
         int _LandLevel;
         public int LandLevel
         {
-            get { return _LandLevel; }
-            set
-            {
-                _LandLevel = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
-            }
+            get => this._LandLevel;
+            set => this._LandLevel = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
         }
 
         public Land()
         {
-            this.ID = Terraformer.Types.Land;
-            this.Name = "Land";
             this.LandLevel = MapBase.MaxHeight / 2;
         }
         public override void Initialize(WorldBase w, Cell c, int x, int y, int z, double g)
@@ -38,27 +33,20 @@ namespace Start_a_Town_.Terraforming.Mutators
             return list;
         }
 
-        public override List<SaveTag> Save()
+        protected override void SaveExtra(SaveTag tag)
         {
-            var tag = new List<SaveTag>();
             tag.Add(new SaveTag(SaveTag.Types.Int, "Level", this.LandLevel));
-            return tag;
         }
-        public override Terraformer Load(SaveTag save)
+        protected override void LoadExtra(SaveTag save)
         {
             this.LandLevel = save.TagValueOrDefault<int>("Level", MapBase.MaxHeight / 2);
-            return this;
         }
 
-        public override object Clone()
-        {
-            return new Land();
-        }
-        public override void Write(System.IO.BinaryWriter w)
+        protected override void WriteExtra(System.IO.BinaryWriter w)
         {
             w.Write(this.LandLevel);
         }
-        public override void Read(System.IO.BinaryReader r)
+        protected override void ReadExtra(System.IO.BinaryReader r)
         {
             this.LandLevel = r.ReadInt32();
         }

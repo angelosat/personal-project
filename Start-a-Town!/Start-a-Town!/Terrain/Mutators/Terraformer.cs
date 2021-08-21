@@ -5,41 +5,13 @@ using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Start_a_Town_
 {
-    public abstract class Terraformer : ICloneable
+    public abstract class Terraformer : ISaveable, ISerializable
     {
-        public enum Types { None, Land, Sea, Normal, Caves, Minerals, Test, Grass, Empty, Flowers, Trees, MineralsSlow, PerlinWorms }
-        public static readonly Terraformer Sea = new Sea();
-        public static readonly Terraformer Land = new Land();
-        public static readonly Terraformer Normal = new Normal();
-        public static readonly Terraformer Grass = new Grass();
-        public static readonly Terraformer Flowers = new Flowers();
-        public static readonly Terraformer Trees = new GeneratorPlants();
-        public static readonly Terraformer Caves = new Caves();
-        public static readonly Terraformer Minerals = new Minerals();
-        public static readonly Terraformer Empty = new Empty();
-        public static readonly Terraformer PerlinWorms = new PerlinWormGenerator();
-
-        public static Dictionary<Types, Terraformer> Dictionary => _dictionary;
-        static readonly Dictionary<Types, Terraformer> _dictionary = new()
-        {
-            { Types.Land, Land },
-            { Types.Sea, Sea },
-            { Types.Normal, Normal },
-            { Types.Caves, Caves },
-            { Types.PerlinWorms, PerlinWorms },
-            { Types.Grass, Grass },
-            { Types.Flowers, Flowers },
-            { Types.Trees, Trees },
-            { Types.Minerals, Minerals },
-            { Types.Empty, Empty },
-        };
-        public string Name { get; protected set; }
-        public Types ID { get; protected set; }
-
+        public TerraformerDef Def;
+       
         public Action<RandomThreaded, WorldBase, Cell, int, int, int>
             Finalize = (r, w, c, x, y, z) => { };
 
@@ -52,26 +24,25 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return this.Name;
+            return this.Def.Label;
         }
         public virtual void Generate(MapBase map) { }
 
-        public static List<Terraformer> All => Dictionary.Values.ToList();
-        public static List<Terraformer> Defaults => new List<Terraformer>() { Normal, PerlinWorms, Minerals, Grass, Flowers, Trees };
+        public static List<TerraformerDef> Defaults = new() { TerraformerDefOf.Normal, TerraformerDefOf.PerlinWorms, TerraformerDefOf.Minerals, TerraformerDefOf.Grass, TerraformerDefOf.Flowers, TerraformerDefOf.Trees };
 
         protected static int GetRandom(byte[] seedArray, int x, int y, int z, int min, int max)
         {
-            double seed = Generator.Perlin3D(x, y, z, 16, seedArray);
-            Random random = new Random(seed.GetHashCode());
-            double r = random.NextDouble();
-            int val = min + (int)Math.Floor((max - min) * r);
+            var seed = Generator.Perlin3D(x, y, z, 16, seedArray);
+            var random = new Random(seed.GetHashCode());
+            var r = random.NextDouble();
+            var val = min + (int)Math.Floor((max - min) * r);
             return val;
         }
         protected static int GetRandom(int seed, int min, int max)
         {
-            Random random = new Random(seed);
-            double r = random.NextDouble();
-            int val = min + (int)Math.Floor((max - min) * r);
+            var random = new Random(seed);
+            var r = random.NextDouble();
+            var val = min + (int)Math.Floor((max - min) * r);
             return val;
         }
 
@@ -120,24 +91,39 @@ namespace Start_a_Town_
             return box;
         }
 
-        public virtual List<SaveTag> Save()
-        {
-            return null;
-        }
-        public virtual Terraformer Load(SaveTag save)
-        { return this; }
-        public virtual void Write(BinaryWriter w)
-        {
-        }
-        public virtual void Read(BinaryReader r)
-        {
-        }
-
-        public abstract object Clone();
         public virtual Terraformer SetWorld(WorldBase w) { return this; }
-        public static Terraformer Create(Terraformer.Types id, WorldBase world)
+
+        public SaveTag Save(string name = "")
         {
-            return (Dictionary[id].Clone() as Terraformer).SetWorld(world);
+            var tag = new SaveTag(SaveTag.Types.Compound, name);
+            this.Def.Save(tag, "Def");
+            this.SaveExtra(tag);
+            return tag;
         }
+        protected virtual void SaveExtra(SaveTag tag) { }
+
+        public ISaveable Load(SaveTag tag)
+        {
+            this.Def = tag.LoadDef<TerraformerDef>("Def");
+            this.LoadExtra(tag);
+            return this;
+        }
+        protected virtual void LoadExtra(SaveTag tag) { }
+
+        public void Write(BinaryWriter w)
+        {
+            this.Def.Write(w);
+            this.WriteExtra(w);
+        }
+        protected virtual void WriteExtra(BinaryWriter w) { }
+
+        public ISerializable Read(BinaryReader r)
+        {
+            this.Def = r.ReadDef<TerraformerDef>();
+            this.ReadExtra(r);
+            return this;
+        }
+        protected virtual void ReadExtra(BinaryReader r) { }
+
     }
 }

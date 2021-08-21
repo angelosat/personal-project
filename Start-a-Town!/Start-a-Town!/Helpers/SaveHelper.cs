@@ -96,7 +96,7 @@ namespace Start_a_Town_
                 list.Add(item.Save(""));
             save.Add(list);
         }
-        public static void SaveVariableTypes(this IEnumerable<ISaveable> items, SaveTag save, string name)
+        public static void SaveAbstract(this IEnumerable<ISaveable> items, SaveTag save, string name)
         {
             var list = new SaveTag(SaveTag.Types.List, name, SaveTag.Types.Compound);
             foreach (var item in items)
@@ -135,7 +135,7 @@ namespace Start_a_Town_
                 }
             });
         }
-        public static void LoadVariableTypes<T>(this ICollection<T> items, SaveTag save, string name, params object[] ctorArgs) where T : class, ISaveable
+        public static void LoadAbstract<T>(this ICollection<T> items, SaveTag save, string name, params object[] ctorArgs) where T : class, ISaveable
         {
             var list = save[name].Value as List<SaveTag>;
             for (int i = 0; i < list.Count; i++)
@@ -670,7 +670,13 @@ namespace Start_a_Town_
                 list.Add(item.Name.Save(""));
             save.Add(list);
         }
-       
+        public static bool LoadDefs<T>(this ICollection<T> defs, SaveTag tag, string name) where T : Def
+        {
+            var list = tag[name].Value as List<SaveTag>;
+            foreach (var item in list)
+                defs.Add(Def.GetDef<T>((string)item.Value));
+            return true;
+        }
         public static bool TryLoadDefs<T>(this ICollection<T> defs, SaveTag tag, string name) where T : Def
         {
             if (!tag.TryGetTag(name, out var listTag))

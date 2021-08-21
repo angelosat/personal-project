@@ -2,14 +2,6 @@
 {
     class Empty : Terraformer
     {
-        public Empty()
-        {
-            this.ID = Terraformer.Types.Empty;
-            this.Name = "Empty";
-        }
-        public override object Clone()
-        {
-            return new Empty();
-        }
+        
     }
 }

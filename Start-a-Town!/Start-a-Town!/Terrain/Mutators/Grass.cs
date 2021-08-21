@@ -9,8 +9,6 @@ namespace Start_a_Town_.Terraforming.Mutators
 
         public Grass()
         {
-            this.ID = Terraformer.Types.Grass;
-            this.Name = "Grass";
             this.Finalize = (RandomThreaded random, WorldBase w, Cell c, int x, int y, int z) =>
             {
 
@@ -41,11 +39,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                     c.Variation = variation;
                 }
             }
-        }
-
-        public override object Clone()
-        {
-            return new Grass();
         }
     }
 }

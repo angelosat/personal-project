@@ -8,8 +8,6 @@ namespace Start_a_Town_
         PlantProperties[] ValidPlants;
         public GeneratorPlants()
         {
-            this.ID = Terraformer.Types.Trees;
-            this.Name = "Trees";
         }
         public override void Generate(MapBase map)
         {
@@ -41,13 +39,10 @@ namespace Start_a_Town_
                 }
             }
         }
-        public override object Clone()
-        {
-            return new GeneratorPlants();
-        }
+       
         PlantProperties[] GetValidPlants()
         {
-            return Def.GetDefs<PlantProperties>().ToArray();
+            return Start_a_Town_.Def.GetDefs<PlantProperties>().ToArray();
         }
     }
 }

@@ -5,12 +5,6 @@ namespace Start_a_Town_.Terraforming.Mutators
     class Flowers : Terraformer
     {
         float Density;
-        public Flowers()
-        {
-            this.ID = Terraformer.Types.Flowers;
-            this.Name = "Flowers";
-            this.Density = 0.3f;
-        }
         public override void Finally(Chunk chunk)
         {
             int zSlice = MapBase.MaxHeight / 2;
@@ -59,11 +53,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                     }
                 }
             }
-        }
-        
-        public override object Clone()
-        {
-            return new Flowers();
         }
     }
 }

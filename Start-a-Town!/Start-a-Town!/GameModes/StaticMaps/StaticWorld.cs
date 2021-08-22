@@ -257,7 +257,8 @@ namespace Start_a_Town_
         }
 
         static string[] NameFirst = {"glory", "thunder", "realm", "world", "city", "town", "far", "outer", "rim", "border",
-            "land", "ville", "honor", "elder", "rock", "stone", "wood", "gold", "silver", "iron", "vale", "srping", "lake" };
+            "land", "ville", "honor", "elder", "rock", "stone", "wood", "gold", "silver", "iron", "vale", "spring", "lake",
+            "high", "view", "mount", "valor", "thorn"};
         public static string GetRandomName()
         {
             var rand = new Random();

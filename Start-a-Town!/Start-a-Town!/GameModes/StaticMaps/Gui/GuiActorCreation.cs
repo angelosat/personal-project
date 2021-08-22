@@ -13,8 +13,7 @@ namespace Start_a_Town_
             actors.AddRange(new[] { Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc), Actor.Create(ActorDefOf.Npc) });
             var actorslistbox = new ScrollableBoxNewNew(200, UIManager.LargeButton.Height * 8, ScrollModes.Vertical);
 
-            var editbox = new Panel(0, 0, 500, actorslistbox.Height) { AutoSize = false };
-
+            Panel editbox = null;
             ListBoxNoScroll<Actor, ButtonNew> actorsUI = null;
             actorsUI = new ListBoxNoScroll<Actor, ButtonNew>(btnInit);
             var addactorbutton = new Button("Create", addActor, actorslistbox.Client.Width);
@@ -22,11 +21,13 @@ namespace Start_a_Town_
             actorslistbox.AddControlsVertically(addactorbutton, actorsUI);
 
             actorsUI.AddItems(actors);
+            var actorsListPanel = actorslistbox.ToPanel();
 
-            this.AddControlsVertically(actorslistbox);
+            //this.AddControlsVertically(actorsListPanel);
 
-            editbox.Location = actorslistbox.TopRight;
-            this.AddControls(editbox);
+            editbox = new Panel(0, 0, 500, actorsListPanel.Height) { AutoSize = false };
+            //editbox.Location = actorsListPanel.TopRight;
+            this.AddControlsHorizontally(actorsListPanel, editbox);
 
             void addActor()
             {
@@ -41,6 +42,7 @@ namespace Start_a_Town_
                 var deleteBtn = IconButton.CreateCloseButton();
                 deleteBtn.Location = btn.TopRight;
                 deleteBtn.Anchor = Vector2.UnitX;
+                deleteBtn.ShowOnParentFocus(true);
                 deleteBtn.LeftClickAction = () => new MessageBox("", "Delete " + a.Name + " ?", () =>
                 {
                     actors.Remove(a);

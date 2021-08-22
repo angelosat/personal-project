@@ -32,8 +32,8 @@ namespace Start_a_Town_.UI
                     base.Width = Math.Max(base.Width, value);
             }
         }
-        public SpriteEffects SpriteEffects => SpriteEffects.None;
-        public override Vector2 ScreenLocation => base.ScreenLocation + Vector2.UnitY * (this.Pressed ? 1 : 0);
+        //public SpriteEffects SpriteEffects => SpriteEffects.None;
+        public override Vector2 ScreenLocation => base.ScreenLocation + Vector2.UnitY * (this.IsPressed && this.HasMouseHover ? 1 : 0);
 
         public Color IdleColor = Color.White * 0.1f;
         Color _TexBackgroundColor;
@@ -72,10 +72,7 @@ namespace Start_a_Town_.UI
         }
 
         public ButtonNew() : base() {
-            TexBackgroundColorFunc = () =>
-            {
-                return DefaultBackgroundColorFunc();
-            };
+            TexBackgroundColorFunc = DefaultBackgroundColorFunc;
             this.BackgroundStyle = UI.BackgroundStyle.LargeButton;
             this.Height = this.BackgroundStyle.Left.Height;
             Text = "";
@@ -84,7 +81,7 @@ namespace Start_a_Town_.UI
 
         public Color DefaultBackgroundColorFunc()
         {
-            if (this.IsPressed)
+            if (this.IsPressed && this.HasMouseHover)
                 return this.Color;
             return (this.MouseHover && this.Active) ? this.Color : IdleColor;
         }
@@ -108,7 +105,7 @@ namespace Start_a_Town_.UI
         }
         public override void OnPaint(SpriteBatch sb)
         {
-            ButtonNew.Draw(sb, this, Vector2.Zero, (MouseHover || IsPressed) ? 1 : 0.5f);
+            ButtonNew.Draw(sb, this, Vector2.Zero, 1);
         }
         public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
         {
@@ -131,10 +128,11 @@ namespace Start_a_Town_.UI
        
         static public void Draw(SpriteBatch sb, ButtonNew button, Vector2 location, float opacity = 1)
         {
-            button.BackgroundStyle.Draw(sb, button.Size, button.TexBackgroundColor, button.SpriteEffects);
+            var c = Color.Lerp(Color.Transparent, button.TexBackgroundColor, opacity);
+            button.BackgroundStyle.Draw(sb, button.Size, c, button.SprFx);// SpriteEffects);
             var halign = button.HAlign;
             var actualwidth = button.Width - Button.SpriteLeft.Width - Button.SpriteRight.Width;
-            var pos = new Vector2(Button.SpriteLeft.Width + actualwidth * halign, Button.SpriteCenter.Height / 2 + (button.Pressed ? 1 : 0));
+            var pos = new Vector2(Button.SpriteLeft.Width + actualwidth * halign, Button.SpriteCenter.Height / 2 + (button.IsPressed && button.HasMouseHover ? 1 : 0));
             var origin = new Vector2(halign, .5f);
             UIManager.DrawStringOutlined(sb, button.Text, pos, origin, button.TextColor, button.TextOutline, button.Font);
         }

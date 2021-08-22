@@ -10,7 +10,7 @@ namespace Start_a_Town_.UI
         {
             this.AutoSize = true;
             this.Closable = false;
-            Panel panel = new() { AutoSize = true, Color = Color.Black };
+            Panel panel = new() { AutoSize = true };//, Color = Color.Black };
             Button newgame = new("Play", this.Newgame, 100);
             Button load = new("Load", this.Load, 100);
             Button online = new("Multiplayer", this.Online, 100);

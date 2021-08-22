@@ -223,7 +223,7 @@ namespace Start_a_Town_.UI
         }
         public ListBoxNoScroll<TObject, TControl> AddItems(params TObject[] items)
         {
-            var currentY = this.Controls.Any() ? this.BottomLeft.Y + Spacing : 0;
+            var currentY = this.Controls.Any() ? this.Controls.Last().BottomLeft.Y + Spacing : 0;
             var newControls = items.Select(i =>
             {
                 var c = this.ControlFactory(i);
@@ -234,7 +234,8 @@ namespace Start_a_Town_.UI
                 this.AllItems.Add(c);
                 return c;
             });
-            this.AddControls(newControls.ToArray());
+            var array = newControls.ToArray();
+            this.AddControls(array);
             return this;
         }
         public void RemoveItems(params TObject[] items)

@@ -1,4 +1,5 @@
-﻿using Start_a_Town_.Net;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Net;
 using Start_a_Town_.Terraforming.Mutators;
 using Start_a_Town_.UI;
 using System;
@@ -53,11 +54,9 @@ namespace Start_a_Town_
             return val;
         }
 
-        public virtual IEnumerable<(string label, Action<float> setter)> GetModifiableProperties() { yield break; }
-
         public virtual IEnumerable<TerraformerProperty> GetAdjustableParameters() { yield break; }
 
-        readonly Table<TerraformerProperty> GuiTable = new Table<TerraformerProperty>()
+        public static readonly Table<TerraformerProperty> GuiTable = new Table<TerraformerProperty>() { RowColor = Color.Black * .5f }// { Spacing = 0 }
             .AddColumn("name", 128, m => new Label(m.Name + ": "), 1)
             .AddColumn("slider", 196, m => new SliderNew(() => m.Value, v => m.Value = v, 200, m.Min, m.Max, m.Step, m.Format))
             .AddColumn("value", 32, m => new Label(() => m.Value.ToString(m.Format)) { Anchor = new(.5f, 0) }, .5f)
@@ -69,7 +68,8 @@ namespace Start_a_Town_
             var props = this.GetAdjustableParameters();
             GuiTable.ClearControls();
             GuiTable.AddItems(props);
-            box.AddControls(GuiTable);
+           
+            box.AddControlsVertically(GuiTable);
             return box;
         }
 

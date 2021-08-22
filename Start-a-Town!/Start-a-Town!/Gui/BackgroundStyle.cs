@@ -44,7 +44,22 @@ namespace Start_a_Town_.UI
             Border = 11,// 5;// 11;
             Name = "Window"
         };
-        
+        public static readonly BackgroundStyle PanelNew = new BackgroundStyle()
+        {
+            TopLeft = new Rectangle(0, 0, 11, 11),
+            TopRight = new Rectangle(12, 0, 11, 11),
+            BottomLeft = new Rectangle(0, 12, 11, 11),
+            BottomRight = new Rectangle(12, 12, 11, 11),
+            Top = new Rectangle(12, 0, 1, 11),
+            Left = new Rectangle(0, 12, 11, 1),
+            Right = new Rectangle(12, 11, 11, 1),
+            Bottom = new Rectangle(11, 12, 1, 11),
+            Center = new Rectangle(11, 11, 1, 1),
+            Color = Color.White,
+            SpriteSheet = UIManager.frameSprite,
+            Border = 5,// 5;// 11;
+            Name = "PanelNew"
+        };
         public static BackgroundStyle Tooltip = new BackgroundStyle()
         {
             TopLeft = new Rectangle(0, 0, 11, 11),

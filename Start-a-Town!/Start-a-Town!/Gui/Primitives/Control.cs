@@ -120,7 +120,7 @@ namespace Start_a_Town_.UI
         public GuiLayer Layer = UIManager.LayerWindows;
 
         public DrawMode DrawMode = DrawMode.Normal;
-        public Vector2 ClientLocation = Vector2.Zero;
+      
 
         object _tag;
         public virtual object Tag { get => this._tag; set { this._tag = value; this.OnTagChanged(); } }
@@ -621,15 +621,15 @@ namespace Start_a_Town_.UI
         public Vector2 BottomCenterScreen => new((UIManager.Width - this.Width) / 2, UIManager.Height - this.Height);
         public Vector2 TopRightScreen => new(UIManager.Width - this.Width, 0);
 
-        public Rectangle ClientRectangle
-        {
-            get => new Rectangle((int)this.ClientLocation.X, (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height);
-            set
-            {
-                this.ClientLocation.X = value.X; this.ClientLocation.Y = value.Y;
-                this.ClientSize = new Rectangle(0, 0, value.Width, value.Height);
-            }
-        }
+        //public Rectangle ClientRectangle
+        //{
+        //    get => new Rectangle((int)this.ClientLocation.X, (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height);
+        //    set
+        //    {
+        //        this.ClientLocation.X = value.X; this.ClientLocation.Y = value.Y;
+        //        this.ClientSize = new Rectangle(0, 0, value.Width, value.Height);
+        //    }
+        //}
         public bool HasMouseHover => this.lastHitTest;
         bool lastHitTest;
         public virtual bool HitTest(Rectangle viewport)
@@ -652,23 +652,7 @@ namespace Start_a_Town_.UI
         public virtual Rectangle BoundsScreen => _cachedBoundsScreen ??= new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
         public virtual Rectangle BoundsLocal => new((int)this.Location.X, (int)this.Location.Y, this.Width, this.Height);
 
-        protected Rectangle _ClientSize;
-        public virtual Rectangle ClientSize
-        {
-            get => this._ClientSize;
-            set
-            {
-                this._ClientSize = value;
-
-                if (this.AutoSize)
-                {
-                    this.Width = this.ClientSize.Width + (this._BackgroundStyle != null ? 2 * this._BackgroundStyle.Border : 0);
-                    this.Height = this.ClientSize.Height + (this._BackgroundStyle != null ? 2 * this._BackgroundStyle.Border : 0);
-                }
-                this.Invalidate();
-                this.OnClientSizeChanged();
-            }
-        }
+       
         protected virtual void OnClientSizeChanged()
         {
         }
@@ -708,11 +692,58 @@ namespace Start_a_Town_.UI
             return this;
         }
 
+        public Vector2 ClientLocation = Vector2.Zero;
+        protected Rectangle _clientSize;
+        public virtual Rectangle ClientSize
+        {
+            get => this._clientSize;
+            set
+            {
+                this._clientSize = value;
+
+                if (this.AutoSize)
+                {
+                    this.Width = this.ClientSize.Width + (this._BackgroundStyle != null ? 2 * this._BackgroundStyle.Border : 0);
+                    this.Height = this.ClientSize.Height + (this._BackgroundStyle != null ? 2 * this._BackgroundStyle.Border : 0);
+                }
+                this.Invalidate();
+                this.OnClientSizeChanged();
+            }
+        }
         public virtual Vector2 ClientDimensions
         {
             get => new Vector2(this.ClientSize.Width, this.ClientSize.Height);
             set => this.ClientSize = new Rectangle(0, 0, (int)value.X, (int)value.Y);
         }
+
+        //public Vector2 ClientLocation
+        //{
+        //    get => new(this._clientSize.X, this._clientSize.Y);
+        //    set => this._clientSize = new((int)value.X, (int)value.Y, this._clientSize.Width, this._clientSize.Height);
+        //}
+        //protected Rectangle _clientSize;
+        //public virtual Rectangle ClientSize
+        //{
+        //    get => this._clientSize;
+        //    set
+        //    {
+        //        this._clientSize = value;
+
+        //        if (this.AutoSize)
+        //        {
+        //            this.Width = this.ClientSize.Width + (this._BackgroundStyle != null ? 2 * this._BackgroundStyle.Border : 0);
+        //            this.Height = this.ClientSize.Height + (this._BackgroundStyle != null ? 2 * this._BackgroundStyle.Border : 0);
+        //        }
+        //        this.Invalidate();
+        //        this.OnClientSizeChanged();
+        //    }
+        //}
+        //public virtual Vector2 ClientDimensions
+        //{
+        //    get => new Vector2(this.ClientSize.Width, this.ClientSize.Height);
+        //    set => this.ClientSize = new Rectangle(this._clientSize.X, this._clientSize.Y, (int)value.X, (int)value.Y);
+        //}
+
         public virtual Rectangle Size
         {
             get => new Rectangle(0, 0, this.Width, this.Height);
@@ -721,8 +752,8 @@ namespace Start_a_Town_.UI
                 this.Width = value.Width;
                 this.Height = value.Height;
                 var border = this.BackgroundStyle != null ? this.BackgroundStyle.Border : 0;
-                this._ClientSize.Width = this.Width - 2 * border;
-                this._ClientSize.Height = this.Height - 2 * border;
+                this._clientSize.Width = this.Width - 2 * border;
+                this._clientSize.Height = this.Height - 2 * border;
             }
         }
         internal void ConformToControls()
@@ -766,6 +797,12 @@ namespace Start_a_Town_.UI
                 this.Width = this.ClientSize.Width + 2 * this.BackgroundStyle.Border;
                 this.Height = this.ClientSize.Height + this.BackgroundStyle.Border * 2;
             }
+            //else if (this is not UI.Window) // HACK
+            //{
+            //    this.ClientLocation = new(this.Padding);
+            //    this.Width = this.ClientSize.Width + 2 * this.Padding;
+            //    this.Height = this.ClientSize.Height + 2 * this.Padding;
+            //}
         }
         internal virtual void OnControlRemoved(Control control)
         {
@@ -791,7 +828,7 @@ namespace Start_a_Town_.UI
                     width = Math.Max(width, (int)control.TopLeft.X + control.Width - (int)control.Origin.X);
                     height = Math.Max(height, (int)control.TopLeft.Y + control.Height - (int)control.Origin.Y);
                 }
-                return new Rectangle(0, 0, width, height);
+                return new Rectangle(this._clientSize.X, this._clientSize.Y, width, height);
             }
         }
 
@@ -897,7 +934,7 @@ namespace Start_a_Town_.UI
         {
             return this.AddControlsVertically(0, controls);
         }
-        public virtual Control AddControlsVertically(int spacing, params Control[] controls)
+        public virtual Control AddControlsVertically(IEnumerable<Control> controls, int spacing)
         {
             var y = 0;
             foreach (var ctrl in controls)
@@ -907,6 +944,18 @@ namespace Start_a_Town_.UI
             }
             this.AddControls(controls);
             return this;
+        }
+        public virtual Control AddControlsVertically(int spacing, params Control[] controls)
+        {
+            return this.AddControlsVertically(controls, spacing);
+            //var y = 0;
+            //foreach (var ctrl in controls)
+            //{
+            //    ctrl.Location = new Vector2(0, y);
+            //    y += ctrl.Height + spacing;
+            //}
+            //this.AddControls(controls);
+            //return this;
         }
         public virtual Control AddControlsVertically(int spacing, HorizontalAlignment horAlignment, params Control[] controls)
         {
@@ -975,11 +1024,11 @@ namespace Start_a_Town_.UI
                 this.Controls.Add(ctrl);
             return this;
         }
-        public virtual void AddControlsBottomLeft(params Control[] controls)
+        public virtual Control AddControlsBottomLeft(params Control[] controls)
         {
-            this.AddControlsBottomLeft(0, controls);
+            return this.AddControlsBottomLeft(0, controls);
         }
-        public virtual void AddControlsBottomLeft(int spacing, params Control[] controls)
+        public virtual Control AddControlsBottomLeft(int spacing, params Control[] controls)
         {
             var currentY = this.Controls.BottomLeft.Y + (this.Controls.Any() ? spacing : 0);
             foreach (var c in controls)
@@ -988,7 +1037,7 @@ namespace Start_a_Town_.UI
                 c.Location.Y = currentY;
                 currentY += c.Height  + spacing;
             }
-            this.AddControls(controls);
+            return this.AddControls(controls);
         }
         public virtual Control AddControlsTopRight(params Control[] controls)
         {
@@ -1456,5 +1505,15 @@ namespace Start_a_Town_.UI
         {
             this.BoundsScreen.DrawHighlightBorder(sb, Color.White * alpha, Vector2.Zero, thickness, padding);
         }
+        //public override int Padding 
+        //{ 
+        //    get => base.Padding;
+        //    set
+        //    {
+        //        base.Padding = value;
+        //        this.ConformToClientSize();
+        //        //this.ClientSize = new Rectangle(0, 0, this.Width - 2 * value, this.Height - 2 * value);
+        //    }
+        //}
     }
 }

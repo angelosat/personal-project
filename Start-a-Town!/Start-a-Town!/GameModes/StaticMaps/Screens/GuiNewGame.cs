@@ -30,8 +30,22 @@ namespace Start_a_Town_.Core
             var selectedSize = defaultSizes.First();
             var comboSize = new ComboBoxNewNew<StaticMap.MapSize>(defaultSizes, guiname.Width, "Size", s => s.Name, () => selectedSize, s => selectedSize = s);
 
+            Window winTerraformers = null;
             var terraformers = Terraformer.Defaults.Select(d => d.Create()).ToList();
-            var winTerraformers = terraformers.Select(t => t.GetUI()).ToGroupBoxVertically().ToPanel().ToWindow("Terraformers Properties", closable: true, movable: false);
+            var btnbox = new GroupBox().AddControlsHorizontally(
+               new Button("Apply", apply),
+               new Button("Cancel", cancel),
+               new Button("Defaults", defaults));
+            var terraformersTable = Terraformer.GuiTable;
+            terraformersTable.AddItems(terraformers.SelectMany(t => t.GetAdjustableParameters()));
+            //winTerraformers = terraformers.Select(t => t.GetUI()).ToGroupBoxVertically().AddControlsBottomLeft(btnbox).ToPanel().ToWindow("Terraformers Properties", closable: false, movable: false);
+            winTerraformers = new GroupBox()// { BackgroundColor = Color.Lime * .5f, Padding = 10 }
+                .AddControlsVertically(0, HorizontalAlignment.Center,
+                    terraformersTable.ToPanel(),//.ToPanel(BackgroundStyle.TickBox, opacity: .5f), 
+                    //new GroupBox() { BackgroundColor = Color.Black * .5f, Padding = 5 }.AddControls(btnbox))//.ToPanel(BackgroundStyle.TickBox, opacity: .5f))
+                    btnbox.ToPanel())//BackgroundStyle.TickBox, opacity: .5f))
+                .ToWindow("Terraformers Properties", closable: false, movable: false);
+
             var btnadvanced = new Button("Advanced", toggleAdvanced, guiname.Width);
 
             tab_World.AddControlsVertically(1,
@@ -75,6 +89,22 @@ namespace Start_a_Town_.Core
                 //}
                 winTerraformers.ToggleDialog();
             };
+
+            void apply()
+            {
+                winTerraformers.Hide();
+            }
+            void cancel()
+            {
+                defaults();
+                apply();
+            }
+            void defaults()
+            {
+                foreach (var t in terraformers)
+                    foreach(var p in t.GetAdjustableParameters())
+                        p.ResetValue();
+            }
         }
 
         void CreateMap(string name, StaticMap.MapSize size, List<Terraformer> terraformers, Actor[] actors)

@@ -11,7 +11,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         
         readonly Random SoilRandomizer = new(HashSoil);
 
-        readonly TerraformerProperty GroundAirThresholdProp = new("Land/air threshold", 0f, -.3f, .3f, .01f);// "##0%");
+        readonly TerraformerProperty GroundAirThresholdProp = new("Land/air threshold", 0f, -.3f, .3f, .01f, "0.00");// "##0%");
         readonly TerraformerProperty SoilDepthProp = new("Soil layer depth", .02f, 0, 1, .01f, "##0%"); // .5f;
 
         float GroundAirThreshold

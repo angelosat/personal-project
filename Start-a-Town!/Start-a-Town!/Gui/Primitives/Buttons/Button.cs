@@ -88,13 +88,13 @@ namespace Start_a_Town_.UI
         }
         public Color DefaultBackgroundColorFunc()
         {
-            if (this.IsPressed)
+            if (this.IsPressed && this.HasMouseHover)
                 return this.Color;
             return (this.MouseHover && this.Active) ? this.Color : IdleColor;
         }
         public Button() : base()
         {
-            TexBackgroundColorFunc = () => DefaultBackgroundColorFunc();
+            TexBackgroundColorFunc = DefaultBackgroundColorFunc;
             Height = UIManager.DefaultButtonHeight;
             Text = "";
             this.AutoSize = true;
@@ -147,7 +147,7 @@ namespace Start_a_Town_.UI
 
         public override void OnPaint(SpriteBatch sb)
         {
-            Button.Draw(sb, this, Vector2.Zero, (MouseHover || IsPressed) ? 1 : 0.5f);
+            Button.Draw(sb, this, Vector2.Zero, 1);// (MouseHover || IsPressed) ? 1 : 0.5f);
         }
 
         public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
@@ -178,7 +178,7 @@ namespace Start_a_Town_.UI
             var halign = button.HAlign;
             var actualwidth = button.Width - Button.SpriteLeft.Width - Button.SpriteRight.Width;
 
-            var pos = new Vector2(Button.SpriteLeft.Width + actualwidth * halign, Button.SpriteCenter.Height / 2 + (button.IsPressed ? 1 : 0));
+            var pos = new Vector2(Button.SpriteLeft.Width + actualwidth * halign, Button.SpriteCenter.Height / 2 + (button.IsPressed && button.HasMouseHover ? 1 : 0));
 
             var origin = new Vector2(halign, .5f);
             UIManager.DrawStringOutlined(sb, button.Text, pos, origin, button.TextColor, button.TextOutline, button.Font);

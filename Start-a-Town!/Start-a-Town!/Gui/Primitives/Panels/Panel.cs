@@ -7,67 +7,64 @@ namespace Start_a_Town_.UI
     {
         public override void OnPaint(SpriteBatch sb)
         {
-            Color tint = Color;
-            BackgroundStyle.Draw(sb, this.Size, tint);
+            Color tint = this.Color;
+            this.BackgroundStyle.Draw(sb, this.Size, tint);
         }
         public override Rectangle ContainerSize => this.ClientSize;
-       
+        static readonly Color DefaultColor = Color.DarkSlateGray;// Color.Black; //Color.DarkSlateGray;// 
         public Rectangle GetClientSize()
         {
-            return new Rectangle(0, 0, Width - 2 * UIManager.BorderPx, Height - 2 * UIManager.BorderPx);
+            return new Rectangle(0, 0, this.Width - 2 * UIManager.BorderPx, this.Height - 2 * UIManager.BorderPx);
         }
         public override Vector2 Dimensions
         {
-            get
-            {
-                return base.Dimensions;
-            }
+            get => base.Dimensions;
             set
             {
                 base.Dimensions = value;
-                this.ClientSize = new Rectangle(0, 0, Width - 2 * UIManager.BorderPx, Height - 2 * UIManager.BorderPx);
+                this.ClientSize = new Rectangle(0, 0, this.Width - 2 * UIManager.BorderPx, this.Height - 2 * UIManager.BorderPx);
             }
         }
-        public override int Padding => BackgroundStyle.Border;
+        public override int Padding => this.BackgroundStyle.Border;
         public Panel(Vector2 location)
             : base(location)
         {
-            ClientLocation = new Vector2(UIManager.BorderPx);
-            BackgroundStyle = DefaultStyle;
-            Color = Color.Black;
+            this.ClientLocation = new Vector2(UIManager.BorderPx);
+            this.BackgroundStyle = DefaultStyle;
+            this.Color = DefaultColor;
         }
         public Panel(Vector2 location, Vector2 size)
             : base(location, size)
         {
-            ClientLocation = new Vector2(UIManager.BorderPx);
-            ClientSize = new Rectangle(0, 0, Width - 2 * UIManager.BorderPx, Height - 2 * UIManager.BorderPx);
-            BackgroundStyle = DefaultStyle;
-            Color = Color.Black;
+            this.ClientLocation = new Vector2(UIManager.BorderPx);
+            this.ClientSize = new Rectangle(0, 0, this.Width - 2 * UIManager.BorderPx, this.Height - 2 * UIManager.BorderPx);
+            this.BackgroundStyle = DefaultStyle;
+            this.Color = DefaultColor;
         }
         public Panel(Rectangle rect)
             : base(new Vector2(rect.X, rect.Y), new Vector2(rect.Width, rect.Height))
         {
-            ClientLocation = new Vector2(UIManager.BorderPx);
-            ClientSize = new Rectangle(0, 0, Width - 2 * UIManager.BorderPx, Height - 2 * UIManager.BorderPx);
-            BackgroundStyle = DefaultStyle;
+            this.ClientLocation = new Vector2(UIManager.BorderPx);
+            this.ClientSize = new Rectangle(0, 0, this.Width - 2 * UIManager.BorderPx, this.Height - 2 * UIManager.BorderPx);
+            this.BackgroundStyle = DefaultStyle;
             this.Width = rect.Width;
             this.Height = rect.Height;
-            Color = Color.Black;
+            this.Color = DefaultColor;
         }
         public Panel()
         {
-            ClientLocation = new Vector2(UIManager.BorderPx);
-            BackgroundStyle = DefaultStyle;
-            Color = Color.Black;
+            this.ClientLocation = new Vector2(UIManager.BorderPx);
+            this.BackgroundStyle = DefaultStyle;
+            this.Color = DefaultColor;
         }
         public Panel(int x, int y, int w, int h) : this(new Rectangle(x, y, w, h)) { }
-      
+
         public static readonly BackgroundStyle DefaultStyle = BackgroundStyle.Window;
-        static public int GetClientWidth(int totalWidth)
+        public static int GetClientWidth(int totalWidth)
         {
-            return totalWidth - UIManager.BorderPx - UIManager.BorderPx; 
+            return totalWidth - UIManager.BorderPx - UIManager.BorderPx;
         }
-        static public int GetClientHeight(int totalHeight)
+        public static int GetClientHeight(int totalHeight)
         {
             return totalHeight - UIManager.BorderPx - UIManager.BorderPx;
         }
@@ -83,34 +80,28 @@ namespace Start_a_Town_.UI
 
         public override Rectangle ClientSize
         {
-            get
-            {
-                return base.ClientSize;
-            }
-            set
-            {
-                base.ClientSize = value;
-            }
+            get => base.ClientSize;
+            set => base.ClientSize = value;
         }
         public Panel SetClientDimensions(Rectangle clientSize)
         {
             this.ClientSize = clientSize;
-            this.Width = ClientSize.Width + 2 * BackgroundStyle.Border;
-            this.Height = ClientSize.Height + 2 * BackgroundStyle.Border;
+            this.Width = this.ClientSize.Width + 2 * this.BackgroundStyle.Border;
+            this.Height = this.ClientSize.Height + 2 * this.BackgroundStyle.Border;
             return this;
         }
         public Panel SetClientDimensions(Vector2 clientDimensions)
         {
             this.ClientSize = new Rectangle(0, 0, (int)clientDimensions.X, (int)clientDimensions.Y);
-            this.Width = ClientSize.Width + 2 * BackgroundStyle.Border;
-            this.Height = ClientSize.Height + 2 * BackgroundStyle.Border;
+            this.Width = this.ClientSize.Width + 2 * this.BackgroundStyle.Border;
+            this.Height = this.ClientSize.Height + 2 * this.BackgroundStyle.Border;
             return this;
         }
         public Panel SetClientDimensions(int w, int h)
         {
             this.ClientSize = new Rectangle(0, 0, w, h);
-            this.Width = ClientSize.Width + 2 * BackgroundStyle.Border;
-            this.Height = ClientSize.Height + 2 * BackgroundStyle.Border;
+            this.Width = this.ClientSize.Width + 2 * this.BackgroundStyle.Border;
+            this.Height = this.ClientSize.Height + 2 * this.BackgroundStyle.Border;
             return this;
         }
     }

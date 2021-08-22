@@ -90,6 +90,7 @@ namespace Start_a_Town_.UI
         {
             this.SelectingValue = true;
             this.PrevValue = this.NextValue;
+            UpdateNextValue();
             base.OnMouseLeftPress(e);
         }
         public override void HandleLButtonUp(System.Windows.Forms.HandledMouseEventArgs e)
@@ -125,9 +126,13 @@ namespace Start_a_Town_.UI
             if (!this.SelectingValue)
                 return;
             this.LabelValue.Text = this.NextValue.ToString();
+            UpdateNextValue();
+        }
+
+        private void UpdateNextValue()
+        {
             float mouseX = Controller.Instance.msCurrent.X / UIManager.Scale - (this.ScreenLocation.X + this.Border);
             float mousePerc = MathHelper.Clamp(mouseX / (float)(this.Width - 2 * this.Border), 0, 1);
-
             var newValue = (this.Min + mousePerc * (this.Max - this.Min)) / this.Step;
             this.NextValue = (float)Math.Round(newValue) * this.Step;
         }
@@ -148,7 +153,8 @@ namespace Start_a_Town_.UI
             base.Draw(sb, viewport);
             if (!this.SelectingValue)
                 return;
-            var loc = new Vector2(this.Border + (this.Width - 2 * this.Border) * (this.NextValue - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2, 0);
+            //var loc = new Vector2(this.Border + (this.Width - 2 * this.Border) * (this.NextValue - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2, 0);
+            var loc = new Vector2((int)(this.Border + (this.Width - 2 * this.Border) * (this.NextValue - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width * .5f), 0);
 
             sb.Draw(UIManager.DefaultTrackBarThumbSprite,
                 this.ScreenLocation + loc,

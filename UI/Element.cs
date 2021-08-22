@@ -41,7 +41,8 @@ namespace UI
         }
         public bool MouseHoverLast;
         public int Depth = 0;
-        public virtual int Padding { get; }
+        int _padding;
+        public virtual int Padding { get => this._padding; set => this._padding = value; }
         protected int z = 0;
         public int Z => z; 
 

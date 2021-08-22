@@ -77,10 +77,13 @@ namespace Start_a_Town_
         public static Label ToLabel(this string text, Vector2 location) { return new UI.Label(location, text); }
         public static Label ToLabel(this string text, Vector2 location, int width) { return new UI.Label(location, text) { Width = width }; }
 
-
         static public Panel ToPanel(this Control ctrl)
         {
-            var panel = new Panel() { AutoSize = true };
+            return ctrl.ToPanel(Panel.DefaultStyle);
+        }
+        static public Panel ToPanel(this Control ctrl, BackgroundStyle panelBackgroundStyle, float opacity = 1)
+        {
+            var panel = new Panel() { AutoSize = true, BackgroundStyle = panelBackgroundStyle, Opacity = opacity };
             panel.AddControls(ctrl);
             return panel;
         }
@@ -159,9 +162,9 @@ namespace Start_a_Town_
                 box.Width = width;
             return box;
         }
-        static public GroupBox ToGroupBoxVertically<T>(this IEnumerable<T> controls) where T : Control
+        static public GroupBox ToGroupBoxVertically<T>(this IEnumerable<T> controls, int spacing = 0) where T : Control
         {
-            return new GroupBox().AddControlsVertically(controls) as GroupBox;
+            return new GroupBox().AddControlsVertically(spacing, controls.ToArray()) as GroupBox;
         }
         static public GroupBox ToGroupBoxHorizontally<T>(this IEnumerable<T> controls) where T : Control
         {

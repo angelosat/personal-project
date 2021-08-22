@@ -20,7 +20,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             {
                 //_Value = Math.Max(0, Math.Min(MapBase.MaxHeight, value));
                 //_Value = Math.Max(this.Min, Math.Min(this.Max, value));
-                var v = Math.Ceiling(value / this.Step) * this.Step;
+                var v = Math.Round(value / this.Step) * this.Step;
                 this._value = (float)Math.Max(this.Min, Math.Min(this.Max, v));
             }
         }

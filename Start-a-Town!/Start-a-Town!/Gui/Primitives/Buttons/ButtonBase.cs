@@ -18,7 +18,7 @@ namespace Start_a_Town_.UI
                 this.OnTextChanged();
             }
         }
-        public virtual SpriteEffects SprFx => this.IsPressed ? SpriteEffects.FlipVertically : SpriteEffects.None;
+        public virtual SpriteEffects SprFx => (this.IsPressed && this.HasMouseHover) ? SpriteEffects.FlipVertically : SpriteEffects.None;
 
         public Action
             LeftClickAction = () => { },
@@ -192,7 +192,7 @@ namespace Start_a_Town_.UI
 
         public override void OnLostFocus()
         {
-            this.Pressed = false;
+            //this.Pressed = false;
             this.Alpha = Color.Lerp(Color.Transparent, Color.White, 0.5f);
             base.OnLostFocus();
         }
@@ -206,8 +206,8 @@ namespace Start_a_Town_.UI
         }
         public override void OnMouseLeave()
         {
-            this.Pressed = false;
-            this.RightPressed = false;
+            //this.Pressed = false;
+            //this.RightPressed = false;
             base.OnMouseLeave();
             if (this.Active)
                 this.Invalidate();
@@ -258,7 +258,7 @@ namespace Start_a_Town_.UI
             {
                 this.LeftPressed = false;
                 this.Pressed = false;
-                if (!e.Handled)
+                if (!e.Handled && this.HasMouseHover)
                     this.OnLeftClick();
 
                 e.Handled = true;

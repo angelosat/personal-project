@@ -8,15 +8,17 @@ namespace Start_a_Town_.UI
 {
     public class Table<TObject> : GroupBox, IListSearchable<TObject>
     {
-        const int Spacing = 1;
+        public int Spacing = 1;
         readonly List<Column> Columns = new();
         public Action<TObject> ItemChangedFunc = (item) => { };
         public ObservableCollection<TObject> List;
         static readonly Color DefaultRowColor = Color.SlateGray * .2f;
+        public Color RowColor = DefaultRowColor;
+
         public int RowWidth;// => this.Columns.Sum(c => c.Width);
         //public int RowHeight => Label.DefaultHeight + Spacing;
         public int RowHeight;// => Label.DefaultHeight;
-
+      
         public int GetHeightFromRowCount(int rowCount)
         {
             return rowCount * (this.RowHeight + Spacing) - Spacing;
@@ -62,7 +64,7 @@ namespace Start_a_Town_.UI
             var newControls = items.Select(item =>
             //this.AddItem(i);
             {
-                var row = new GroupBox() { BackgroundColor = DefaultRowColor };
+                var row = new GroupBox() { BackgroundColor = RowColor };
                 int currentX = 0;
                 foreach (var col in this.Columns)
                 {

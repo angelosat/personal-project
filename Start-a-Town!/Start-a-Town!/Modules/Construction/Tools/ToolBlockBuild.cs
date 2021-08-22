@@ -22,7 +22,8 @@ namespace Start_a_Town_
         int Height;
         public override bool TargetOnlyBlocks => true;
         readonly string _helpText = "Hold control to clear designations\nHold shift to replace blocks";
-        public override string HelpText => _helpText;
+        public override string HelpText =>  _helpText;
+        public virtual string Status => this.Enabled ? "Select end point" : "Select start point";
 
         public ToolBlockBuild()
         {
@@ -199,7 +200,6 @@ namespace Start_a_Town_
             this.Replacing = false;
             return a;
         }
-        public virtual IEnumerable<IntVec3> GetPositions() { yield break; }
 
         private static bool IsGodMode()
         {

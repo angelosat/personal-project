@@ -25,16 +25,6 @@ namespace Start_a_Town_
 
             cam.DrawCellHighlights(sb, Block.BlockBlueprint, box, color);
         }
-        public override IEnumerable<IntVec3> GetPositions()
-        {
-            foreach (var i in GetPositions(this.Begin, this.TopCorner))
-                yield return i;
-        }
-        static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
-        {
-            var box = a.GetBox(b);
-            return box;
-        }
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
             this.DrawGrid(sb, map, camera, Color.Red);
@@ -51,6 +41,5 @@ namespace Start_a_Town_
             this.SettingHeight = r.ReadBoolean();
             this.Height = r.ReadInt32();
         }
-
     }
 }

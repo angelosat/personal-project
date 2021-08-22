@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
@@ -33,22 +32,6 @@ namespace Start_a_Town_
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
             this.DrawGrid(sb, map, camera, Color.Red);
-        }
-        public override IEnumerable<IntVec3> GetPositions()
-        {
-            foreach (var i in GetPositions(this.Begin, this.TopCorner))
-                yield return i;
-        }
-        static new public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
-        {
-            var box = a.GetBox(b);
-            if (Math.Abs(b.X - a.X) > 1 && Math.Abs(b.Y - a.Y) > 1)
-            {
-                VectorHelper.GetMinMaxVector3(a, b, out a, out b);
-                var boxInner = (a + new IntVec3(1, 1, 0)).GetBox(b - new IntVec3(1, 1, 0));
-                box = box.Except(boxInner).ToList();
-            }
-            return box;
         }
     }
 }

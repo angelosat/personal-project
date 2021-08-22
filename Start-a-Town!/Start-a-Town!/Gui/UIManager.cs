@@ -386,7 +386,8 @@ namespace Start_a_Town_.UI
             if (text.IsNullEmptyOrWhiteSpace())
                 return;
             position = position.Round();
-            var origin = font.MeasureString(text) * texOrigin;
+            var txtBounds = font.MeasureString(text);
+            var origin = txtBounds * texOrigin;
             origin = new Vector2((int)origin.X, (int)origin.Y);
             foreach (var n in Vector2.Zero.GetNeighbors8())
                 sb.DrawString(font, text, position + n, outline, 0, origin, 1, SpriteEffects.None, 0);

@@ -150,25 +150,6 @@ namespace Start_a_Town_.UI
             Button.Draw(sb, this, Vector2.Zero, 1);// (MouseHover || IsPressed) ? 1 : 0.5f);
         }
 
-        //public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
-        //{
-        //    DrawSprite(sb, destRect, sourceRect, color, opacity, SprFx);
-        //}
-        public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity, SpriteEffects sprFx)
-        {
-            SpriteEffects fx = Active ? sprFx : SpriteEffects.FlipVertically;
-            Color c = Color.Lerp(Color.Transparent, color, opacity);
-            sb.Draw(UIManager.defaultButtonSprite, new Vector2(destRect.X, destRect.Y), Rectangle.Intersect(Button.SpriteLeft, sourceRect.Value), c, 0, Vector2.Zero, 1, fx, Depth);
-            sb.Draw(UIManager.defaultButtonSprite,
-                new Rectangle(
-                    destRect.X + Button.SpriteLeft.Width, 
-                    destRect.Y, 
-                    destRect.Width - Button.SpriteLeft.Width - Button.SpriteRight.Width, 
-                    Rectangle.Intersect(Button.SpriteCenter, sourceRect.Value).Height),
-                Rectangle.Intersect(Button.SpriteCenter, sourceRect.Value), c, 0, Vector2.Zero, fx, Depth);
-            sb.Draw(UIManager.defaultButtonSprite, new Vector2(destRect.X + destRect.Width - Button.SpriteRight.Width, destRect.Y), Rectangle.Intersect(Button.SpriteRight, sourceRect.Value), c, 0, Vector2.Zero, 1, fx, Depth);
-        }
-       
         static public void Draw(SpriteBatch sb, Button button, Vector2 location, float opacity = 1)
         {
             DrawSprite(sb, button, new Rectangle((int)location.X, (int)location.Y, button.Width, button.Height),
@@ -178,7 +159,7 @@ namespace Start_a_Town_.UI
             var halign = button.HAlign;
             var actualwidth = button.Width - Button.SpriteLeft.Width - Button.SpriteRight.Width;
 
-            var pos = new Vector2(Button.SpriteLeft.Width + actualwidth * halign, Button.SpriteCenter.Height / 2 + (button.IsPressed && button.HasMouseHover ? 1 : 0));
+            var pos = new Vector2(Button.SpriteLeft.Width + actualwidth * halign, Button.SpriteCenter.Height / 2 + (button.IsPushed ? 1 : 0));
 
             var origin = new Vector2(halign, .5f);
             UIManager.DrawStringOutlined(sb, button.Text, pos, origin, button.TextColor, button.TextOutline, button.Font);

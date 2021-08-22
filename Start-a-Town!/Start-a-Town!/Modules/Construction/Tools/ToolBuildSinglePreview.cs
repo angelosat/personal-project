@@ -7,6 +7,8 @@ namespace Start_a_Town_
 {
     class ToolBuildSinglePreview : ToolBlockBuild
     {
+        public override string Status => "Select location";
+
         public ToolBuildSinglePreview()
         {
 

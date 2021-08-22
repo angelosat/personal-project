@@ -12,6 +12,7 @@ namespace Start_a_Town_
         protected int Height;
         protected IntVec3 TopCorner;
         protected override IntVec3 EndFinal => this.TopCorner;
+        public override string Status => this.SettingHeight ? "Select height" : base.Status;
 
         public ToolBuildWithHeight()
         {

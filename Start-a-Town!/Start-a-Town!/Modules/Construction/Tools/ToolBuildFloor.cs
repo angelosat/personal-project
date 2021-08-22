@@ -52,16 +52,7 @@ namespace Start_a_Town_
                 .Where(vec => this.Replacing ? map.GetBlock(vec) != BlockDefOf.Air : map.GetBlock(vec) == BlockDefOf.Air);
             cam.DrawCellHighlights(sb, Block.BlockBlueprint, box, color);
         }
-        public override IEnumerable<IntVec3> GetPositions()
-        {
-            var box = this.Begin.GetBox(this.End);
-            foreach (var i in box)
-                yield return i;
-        }
-        static public List<IntVec3> GetPositions(IntVec3 a, IntVec3 b)
-        {
-            return a.GetBox(GetEnd(a, b));
-        }
+       
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
             throw new NotImplementedException();

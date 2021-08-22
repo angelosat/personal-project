@@ -107,25 +107,7 @@ namespace Start_a_Town_.UI
         {
             ButtonNew.Draw(sb, this, Vector2.Zero, 1);
         }
-        //public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
-        //{
-        //    DrawSprite(sb, destRect, sourceRect, color, opacity, SprFx);
-        //}
-        public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity, SpriteEffects sprFx)
-        {
-            SpriteEffects fx = Active ? sprFx : SpriteEffects.FlipVertically;
-            Color c = Color.Lerp(Color.Transparent, color, opacity);
-            sb.Draw(UIManager.defaultButtonSprite, new Vector2(destRect.X, destRect.Y), Rectangle.Intersect(Button.SpriteLeft, sourceRect.Value), c, 0, Vector2.Zero, 1, fx, Depth);
-            sb.Draw(UIManager.defaultButtonSprite,
-                new Rectangle(
-                    destRect.X + Button.SpriteLeft.Width, 
-                    destRect.Y, 
-                    destRect.Width - Button.SpriteLeft.Width - Button.SpriteRight.Width, 
-                    Rectangle.Intersect(Button.SpriteCenter, sourceRect.Value).Height), 
-                Rectangle.Intersect(Button.SpriteCenter, sourceRect.Value), c, 0, Vector2.Zero, fx, Depth);
-            sb.Draw(UIManager.defaultButtonSprite, new Vector2(destRect.X + destRect.Width - Button.SpriteRight.Width, destRect.Y), Rectangle.Intersect(Button.SpriteRight, sourceRect.Value), c, 0, Vector2.Zero, 1, fx, Depth);
-        }
-       
+      
         static public void Draw(SpriteBatch sb, ButtonNew button, Vector2 location, float opacity = 1)
         {
             var c = Color.Lerp(Color.Transparent, button.TexBackgroundColor, opacity);

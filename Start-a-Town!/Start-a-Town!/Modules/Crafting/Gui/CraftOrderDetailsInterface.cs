@@ -56,7 +56,7 @@ namespace Start_a_Town_
 
                     if (mats.Count() <= 1) // UNDONE
                     {
-                        itemTypesNode.AddLeaf(new CheckBoxNew(i.Name)
+                        itemTypesNode.AddLeaf(new CheckBoxNew(i.Label)
                         {
                             TickedFunc = () => !order.IsRestricted(r.Name, i),
                             LeftClickAction = () => CraftingManager.SetOrderRestrictions(order, r.Name, new[] { i }, null, null)
@@ -64,7 +64,7 @@ namespace Start_a_Town_
                     }
                     else
                     {
-                        var itemNode = new ListBoxCollapsibleNode(i.Name, () => new CheckBoxNew()
+                        var itemNode = new ListBoxCollapsibleNode(i.Label, () => new CheckBoxNew()
                         {
                             TickedFunc = () => !mats.Any(v => order.IsRestricted(r.Name, v)),
                             LeftClickAction = () => CraftingManager.SetOrderRestrictions(
@@ -77,7 +77,7 @@ namespace Start_a_Town_
                         itemTypesNode.AddNode(itemNode);
                         foreach (var mat in mats)
                         {
-                            itemNode.AddLeaf(new CheckBoxNew(mat.Name)
+                            itemNode.AddLeaf(new CheckBoxNew(mat.Label)
                             {
                                 TickedFunc = () => !order.IsRestricted(r.Name, mat),
                                 LeftClickAction = () => CraftingManager.SetOrderRestrictions(order, r.Name, null, new MaterialDef[] { mat }, null)

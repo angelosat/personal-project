@@ -367,8 +367,8 @@ namespace Start_a_Town_
         }
         internal void Removed()
         {
-            if (DetailsGui.Tag == this)
-                DetailsGui.GetWindow().Hide();
+            if (DetailsGui is not null && DetailsGui.Tag == this)
+                DetailsGui.GetWindow()?.Hide();
         }
         
         public Control GetListControlGui()
@@ -382,7 +382,7 @@ namespace Start_a_Town_
             var btnDown = new ButtonIcon(Icon.ArrowDown, MoveDown) { Location = btnUp.BottomLeft };
             box.AddControls(btnUp, btnDown);
 
-            var orderName = new Label(this.Reaction.Name) { Location = btnUp.TopRight };
+            var orderName = new Label(this.Reaction.Label) { Location = btnUp.TopRight };
             var comboFinishMode = new ComboBoxNewNew<CraftOrderFinishMode>(CraftOrderFinishMode.AllModes, 100, c => c.GetString(this), ChangeFinishMode, () => this.FinishMode) { Location = orderName.BottomLeft };
 
             box.AddControls(orderName,

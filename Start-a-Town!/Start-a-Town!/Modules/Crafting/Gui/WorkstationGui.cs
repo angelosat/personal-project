@@ -20,12 +20,8 @@ namespace Start_a_Town_.Modules.Crafting
             var btnAddOrder = new Button("Add Order", this.AddOrder);
 
             this.PanelReactions = new Panel() { AutoSize = true };
-            //var allreactions = Reaction.Dictionary;
             var allreactions = Def.GetDefs<Reaction>();
             var validreactions = allreactions.Where(r => r.ValidWorkshops.Any(t => entity.IsWorkstationType(t))).ToList();
-
-            //var reactions = new ButtonList<Reaction>(validreactions, 200, 400, r => r.Label, (r, b) => b.LeftClickAction = () => this.PlaceOrder(r));
-            //this.PanelReactions.AddControls(reactions);
 
             var reactionsList = new ListBoxNoScroll<Reaction>(r => new Label(r.Label, () => this.PlaceOrder(r)));
             reactionsList.AddItems(validreactions);

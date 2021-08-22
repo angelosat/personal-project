@@ -84,7 +84,7 @@ namespace Start_a_Town_
                     reagents.Add(reagent.Value);
 
                 var reaction = new Reaction(
-                    toolDef.Label,
+                    $"Craft {toolDef.Label}",
                     Reaction.CanBeMadeAt(IsWorkstation.Types.None, IsWorkstation.Types.Workbench),
                     reagents,
                     new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },

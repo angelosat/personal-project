@@ -15,16 +15,16 @@ namespace Start_a_Town_
         {
             var net = order.Map.Net;
             var w = net.GetOutgoingStream();
-            var bench = order.Workstation;
+            //var bench = order.Workstation;
             w.Write(p);
-            w.Write(bench);
-            w.Write(order.GetUniqueLoadID());
+            w.Write(order.Workstation);
+            w.Write(order.ID);// GetUniqueLoadID());
             w.Write(value);
         }
         private static void Receive(INetwork net, BinaryReader r)
         {
-            var station = r.ReadVector3();
-            var index = r.ReadString();
+            var station = r.ReadIntVec3();//.ReadVector3();
+            var index = r.ReadInt32();// r.ReadString();
             var bench = net.Map.Town.CraftingManager.GetWorkstation(station);
             var order = bench.GetOrder(index);
             order.FinishMode = CraftOrderFinishMode.GetMode(r.ReadInt32());

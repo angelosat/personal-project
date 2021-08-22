@@ -15,7 +15,8 @@ namespace Start_a_Town_.UI.Editor
         public BlockBrowserEditor()
         {
             this.Panel_Blocks = new PanelLabeled("Blocks") { AutoSize = true };
-            var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air
+            //var blocks = Block.Registry.Values.Skip(1).ToList(); //skip air
+            var blocks = Block.Registry.Values.Where(b=>b.GetEditorVariations().Any()).ToList(); //skip air
             this.GridBlocks = new SlotGrid<Slot<Block>, Block>(blocks, 8, (slot, bl) =>
             {
                 slot.LeftClickAction = () => this.RefreshVariations(bl);

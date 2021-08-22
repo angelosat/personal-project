@@ -404,6 +404,7 @@ namespace Start_a_Town_
             var cellTile = cell.Block;
             if (cellTile is BlockAir)
             {
+                throw new Exception(); /// drawcell should never be called for air blocks, there are problems elsewhere
                 chunk.InvalidateCell(cell);
                 ("tried to draw air at " + cell.GetGlobalCoords(chunk).ToString()).ToConsole();
                 return false;

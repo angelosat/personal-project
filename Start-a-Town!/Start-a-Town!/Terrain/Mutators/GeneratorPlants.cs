@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -9,7 +10,7 @@ namespace Start_a_Town_
         public GeneratorPlants()
         {
         }
-        public override void Generate(MapBase map)
+        public override void Generate(MapBase map)//, Dictionary<IntVec3, double> gradients)
         {
             var size = Chunk.Size;
             var rand = map.Random;

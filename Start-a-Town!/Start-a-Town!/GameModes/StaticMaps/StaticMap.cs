@@ -573,6 +573,8 @@ namespace Start_a_Town_
                     $"chunks initialized in {watch.ElapsedMilliseconds} ms".ToConsole();
                 }
                 ));
+                //var gradients = new Dictionary<IntVec3, double>();
+                var gradients = gradCache.SelectMany(c => c.Value.Select(cc => (cc.Key.ToGlobal(c.Key), cc.Value))).ToDictionary(c => c.Item1, c => c.Value);
 
                 foreach (var m in mutatorlist)
                 {
@@ -596,7 +598,7 @@ namespace Start_a_Town_
                 foreach (var a in this.InitChunksNew())
                     tasks.Add(a);
 
-                foreach (var a in this.FinishCreatingNew())
+                foreach (var a in finishCreatingNew())
                     tasks.Add(a);
 
                 tasks.Add(("Detecting undiscovered areas", () => this.InitUndiscoveredAreas(null)));
@@ -610,6 +612,28 @@ namespace Start_a_Town_
                 if (showDialog) 
                     loadingDialog.Close();
             });
+
+            IEnumerable<(string, Action)> finishCreatingNew()
+            {
+                Stopwatch watch;
+
+                yield return ("Calculating light", () =>
+                {
+                    watch = Stopwatch.StartNew();
+                    this.InitializeLight();
+                    watch.Stop();
+                    $"light updated in {watch.ElapsedMilliseconds} ms".ToConsole();
+                }
+                );
+                yield return ("Generating plants", () =>
+                {
+                    watch = Stopwatch.StartNew();
+                    TerraformerDefOf.Trees.Create().Generate(this); // wtf
+                    watch.Stop();
+                    $"plants generated in {watch.ElapsedMilliseconds} ms".ToConsole();
+                }
+                );
+            }
         }
 
         public override void DrawWorld(MySpriteBatch mySB, Camera camera)
@@ -826,26 +850,7 @@ namespace Start_a_Town_
         }
         #endregion
 
-        internal IEnumerable<(string, Action)> FinishCreatingNew()
-        {
-            Stopwatch watch;
-
-            yield return ("Calculating light", () =>
-            {
-                watch = Stopwatch.StartNew();
-                this.InitializeLight();
-                watch.Stop();
-                $"light updated in {watch.ElapsedMilliseconds} ms".ToConsole();
-            }
-            );
-            yield return ("Generating plants", () =>
-            {
-                watch = Stopwatch.StartNew();
-                TerraformerDefOf.Trees.Create().Generate(this); // wtf
-                watch.Stop();
-                $"plants generated in {watch.ElapsedMilliseconds} ms".ToConsole();
-            });
-        }
+     
 
         /// <summary>
         /// Called after terrain has been generated. Detects cells at the edges of 'caves' and enqueues them to receive light from their adjacent cells that are open to sunlight 

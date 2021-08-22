@@ -1009,7 +1009,7 @@
     <Compile Include="Terrain\Mutators\Minerals.cs" />
     <Compile Include="Terrain\Mutators\TerraformerSea.cs" />
     <Compile Include="Terrain\Mutators\Grass.cs" />
-    <Compile Include="Terrain\Mutators\Normal.cs" />
+    <Compile Include="Terrain\Mutators\TerraformerNormal.cs" />
     <Compile Include="Terrain\Mutators\Terraformer.cs" />
     <Compile Include="Terrain\MapThumb.cs" />
     <Compile Include="Objects\GameObject.cs" />

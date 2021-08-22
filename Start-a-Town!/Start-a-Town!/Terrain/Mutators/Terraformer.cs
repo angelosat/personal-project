@@ -25,7 +25,7 @@ namespace Start_a_Town_
         {
             return this.Def.Label;
         }
-        public virtual void Generate(MapBase map) { }
+        public virtual void Generate(MapBase map) { }//, Dictionary<IntVec3, double> gradients) { }
 
         public static List<TerraformerDef> Defaults = new() { 
             TerraformerDefOf.Normal,
@@ -58,8 +58,8 @@ namespace Start_a_Town_
         public virtual IEnumerable<TerraformerProperty> GetAdjustableParameters() { yield break; }
 
         readonly Table<TerraformerProperty> GuiTable = new Table<TerraformerProperty>()
-            .AddColumn("name", 96, m => new Label(m.Name + ": "), 1)
-            .AddColumn("slider", 200, m => new SliderNew(() => m.Value, v => m.Value = v, 200, m.Min, m.Max, m.Step, m.Format))
+            .AddColumn("name", 128, m => new Label(m.Name + ": "), 1)
+            .AddColumn("slider", 196, m => new SliderNew(() => m.Value, v => m.Value = v, 200, m.Min, m.Max, m.Step, m.Format))
             .AddColumn("value", 32, m => new Label(() => m.Value.ToString(m.Format)) { Anchor = new(.5f, 0) }, .5f)
             .AddColumn("reset", 16, m => IconButton.CreateSmall(Icon.Replace, m.ResetValue).ShowOnParentFocus(true).SetHoverText("Reset to default"));
 

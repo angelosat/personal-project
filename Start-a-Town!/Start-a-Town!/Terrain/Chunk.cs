@@ -32,6 +32,7 @@ namespace Start_a_Town_
         }
 
         #region Initialization
+        [Obsolete]
         public Dictionary<IntVec3, double> InitCells(List<Terraformer> mutators)
         {
             var gradientCache = new Dictionary<IntVec3, double>();
@@ -39,7 +40,7 @@ namespace Start_a_Town_
             int n = 0; ;
             var grad = new GradientLowRes(this.World, this);
             mutators.ForEach(m => m.SetWorld(this.World));
-
+            var mingrad = double.MaxValue;
             for (int z = 0; z < MapBase.MaxHeight; z++)
                 for (int i = 0; i < Size; i++)
                     for (int j = 0; j < Size; j++)
@@ -50,11 +51,21 @@ namespace Start_a_Town_
                         foreach (var m in mutators)
                             m.Initialize(world, cell, (int)this.Start.X + i, (int)this.Start.Y + j, z, gradient);
                         this.Cells[n++] = cell;
+                        if (gradient < mingrad)
+                            mingrad = gradient;
                     }
+            $"mingrad = {mingrad}".ToConsole();
             return gradientCache;
         }
+        public double GetGradientAt(int localx, int localy, int localz)
+        {
+            throw new NotImplementedException();
+            //return this.GradientCache[GetCellIndex(localx, localy, localz)];
+        }
+        //double[] GradientCache;
         public Dictionary<IntVec3, double> InitCells2(List<Terraformer> mutators)
         {
+            //this.GradientCache = new double[this.Cells.Length];
             var gradientCache = new Dictionary<IntVec3, double>();
             int n = 0; ;
             var grad = new GradientLowRes(this.World, this);
@@ -65,6 +76,7 @@ namespace Start_a_Town_
                     {
                         Cell cell = new(i, j, z);
                         double gradient = grad.GetGradient(i, j, z);
+                        //this.GradientCache[n] = gradient;
                         gradientCache.Add(new IntVec3(i, j, z), gradient);
                         this.Cells[n++] = cell;
                     }
@@ -177,7 +189,7 @@ namespace Start_a_Town_
         {
             this.EdgesValid = false;
         }
-
+       
         #region Public Properties
         [InspectorHidden]
         public Cell this[int localx, int localy, int localz]
@@ -1569,17 +1581,22 @@ namespace Start_a_Town_
                     // DO I NEED THIS?
                     if (!camera.HideUnknownBlocks)
                     {
-                        if (!map.IsVisible(global))
-                            unknown.Add(cell);
-                        else if (cell.Block != BlockDefOf.Air) // did i need visibleoutercells list afterall?
-                            visible.Add(cell);
+                        if (cell.Block != BlockDefOf.Air)
+                        {
+                            if (!map.IsVisible(global))
+                                unknown.Add(cell);
+                            else // did i need visibleoutercells list afterall?
+                                visible.Add(cell);
+                        }
                         //if (cell.Block != BlockDefOf.Air && map.IsVisible(global)) // did i need visibleoutercells list afterall?
                         //        visible.Add(cell);
                     }
                     else
                     {
                         if (map.IsUndiscovered(global) || !map.IsVisible(global)) // did i need visibleoutercells list afterall?
+                        {
                             unknown.Add(cell);
+                        }
                         else
                         {
                             if (cell.Block != BlockDefOf.Air)
@@ -1720,6 +1737,7 @@ namespace Start_a_Town_
 
         [InspectorHidden]
         public Slice[] Slices = new Slice[128];
+
         public class Slice
         {
             public bool Valid;

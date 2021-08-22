@@ -181,7 +181,8 @@ namespace Start_a_Town_.UI
             {
                 case Keys.Enter:
                     this.EnterFunc(this.Text);
-                    this.Text = "";
+                    //this.Text = "";
+                    //this.CursorPosition = 0;
                     break;
                 default:
                     break;

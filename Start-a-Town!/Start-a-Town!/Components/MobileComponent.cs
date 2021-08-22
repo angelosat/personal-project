@@ -81,16 +81,15 @@ namespace Start_a_Town_.Components
             this.AnimationJump = new(AnimationDef.Jump);
             this.AnimationCrouch = new(AnimationDef.Crouch);
 
-            this.AnimationJump.Weight = 0;
-            this.AnimationWalk.Weight = 0;
-            this.AnimationCrouch.Weight = 0;
-
             this.Acceleration = 0f;
             this.Moving = false;
             this.CurrentState = State.States[State.Types.Running];
             this.CurrentState.Apply(this);
-        }
 
+            this.AnimationJump.Weight = 0;
+            this.AnimationWalk.Weight = 0;
+            this.AnimationCrouch.Weight = 0;
+        }
         
         static public void OnFootDown(GameObject parent)
         {

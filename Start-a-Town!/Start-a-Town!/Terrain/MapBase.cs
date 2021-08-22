@@ -222,6 +222,8 @@ namespace Start_a_Town_
 
             this.SetBlock(global, block, material, data, variation, orientation, raiseEvent);
         }
+
+     
         internal void SyncSetCellData(IntVec3 global, byte data)
         {
             Packets.SyncSetCellData(this, global, data);
@@ -370,6 +372,15 @@ namespace Start_a_Town_
                 }
                 return false;
         }
+        internal double GetGradient(IntVec3 pos)
+        {
+            var x = pos.X;
+            var y = pos.Y;
+            var z = pos.Z;
+            var chunk = GetChunk(x, y);
+            var g = chunk.GetGradientAt(x - chunk.Start.X, y - chunk.Start.Y, z);
+            return g;
+        }
 
         public Cell GetCell(int x, int y, int z)
         {
@@ -452,13 +463,18 @@ namespace Start_a_Town_
         
         internal bool IsStandableIn(Vector3 global)
         {
-            var curblock = this.GetBlock(global);
-            var belowBlock = this.GetBlock(global.Below());
-            return curblock.IsStandableIn && belowBlock.IsStandableOn;
+            //if (!this.Contains(global))
+            //    return false;
+            var belowBlockStandableOn = this.GetBlock(global.Below()).IsStandableOn;
+            var curblockStandableIn = this.GetBlock(global)?.IsStandableIn ?? true;
+            return curblockStandableIn && belowBlockStandableOn;
         }
         internal bool IsStandableOn(Vector3 global)
         {
             var above = global.Above();
+            if (!this.Contains(above))
+                /// are entities allowed to stand on topmost blocks of a map?
+                return true;// false;
             return this.GetBlock(global).IsStandableOn && this.GetBlock(above).IsStandableIn;
         }
 

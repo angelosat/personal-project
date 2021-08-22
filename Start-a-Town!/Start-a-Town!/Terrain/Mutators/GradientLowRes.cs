@@ -29,7 +29,7 @@ namespace Start_a_Town_.Terraforming
             this.Turbulence = turb;
         }
 
-        readonly Dictionary<Vector3, double> noiseCache = new Dictionary<Vector3, double>();
+        readonly Dictionary<Vector3, double> noiseCache = new();
         double SampleNoiseAt(int i, int j, int k)
         {
             var x = this.StartX + i;

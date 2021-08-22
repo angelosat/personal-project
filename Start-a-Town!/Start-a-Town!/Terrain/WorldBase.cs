@@ -9,6 +9,8 @@ namespace Start_a_Town_
 {
     public abstract class WorldBase : Inspectable
     {
+        internal float GroundAirThreshold;
+
         public string Name { get; set; }
         public override string Label => this.Name;
         public abstract MapBase GetMap(Vector2 mapCoords);

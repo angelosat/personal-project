@@ -394,9 +394,9 @@ namespace Start_a_Town_.UI
                 return;
             }
 
-            if (!this.Selectable.Exists)
-                this.SelectInternal(TargetArgs.Null);
-
+            /// do i really need this? i handle the blockschanged message anyway, and this causes problems for selecting undiscovered air blocks 
+            //if (!this.Selectable.Exists) 
+            //    this.SelectInternal(TargetArgs.Null);
         }
         internal override void OnGameEvent(GameEvent e)
         {

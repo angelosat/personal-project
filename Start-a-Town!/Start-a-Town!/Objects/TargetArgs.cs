@@ -794,8 +794,8 @@ namespace Start_a_Town_
                 return this.Type switch
                 {
                     TargetType.Entity => this.Object != null && this.Object.Exists,
-                    TargetType.Position => this.Block != BlockDefOf.Air,
-                    _ => throw new Exception(),
+                    //TargetType.Position => this.Block != BlockDefOf.Air, /// I WANT TO BE ABLE TO SELECT AIR BLOCKS IN SOME CASES
+                    _ => true//throw new Exception(),
                 };
             }
         }

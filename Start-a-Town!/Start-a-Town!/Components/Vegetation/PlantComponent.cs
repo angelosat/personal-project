@@ -13,9 +13,21 @@ namespace Start_a_Town_.Components
 
         public override string Name { get; } = "Plant";
 
-        public Progress GrowthBody = new(0, 100, 5);
-        public Progress FruitGrowth = new(0, 100, 0);
+        Progress GrowthBody = new(0, 100, 5);
+        Progress FruitGrowth = new(0, 100, 0);
 
+        public void SetBodyGrowth(float percentage)
+        {
+            this.GrowthBody.Percentage = percentage;
+           
+        }
+        public void SetFruitGrowth(float percentage)
+        {
+            this.FruitGrowth.Percentage = percentage;
+            if (this._fruitBone is not null)
+                this._fruitBone.Sprite = this.IsHarvestable ? this._spriteFruit : null;
+        }
+        Bone _fruitBone;
 
         int GrowthTick, FruitGrowthTick;
         public enum GrowthStates { Growing, Ready }
@@ -32,18 +44,21 @@ namespace Start_a_Town_.Components
                 hitpoints.Max = value.StemMaterial.Density;
                 hitpoints.TicksPerRecoverOne = value.StemHealRate;
 
+                this._spriteFruit = _plantProps.TextureFruit is string fruitTexturePath ? Sprite.Load(fruitTexturePath) : null;
+
+
                 var body = parent.Body;
                 body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
                 body.Sprite = Sprite.Load(_plantProps.TextureGrowing);
                 //body[BoneDefOf.PlantFruit].Material = _plantProps.FruitMaterial;
-                if(body.TryFindBone(BoneDefOf.PlantFruit, out var fruitBone))
-                    fruitBone.Material = _plantProps.FruitMaterial;
+                if(body.TryFindBone(BoneDefOf.PlantFruit, out this._fruitBone))
+                    this._fruitBone.Material = _plantProps.FruitMaterial;
                 this.UpdateFruitTexture();
             }
         }
         void UpdateFruitTexture()
         {
-            this._spriteFruit = _plantProps.TextureFruit is string fruitTexturePath ? Sprite.Load(fruitTexturePath) : null;
+            //this._spriteFruit = _plantProps.TextureFruit is string fruitTexturePath ? Sprite.Load(fruitTexturePath) : null;
             if (_spriteFruit is not null && this.Parent.Body.TryFindBone(BoneDefOf.PlantFruit, out var fruitBone) && this.IsHarvestable)
                 fruitBone.Sprite = this._spriteFruit;
         }
@@ -83,8 +98,6 @@ namespace Start_a_Town_.Components
             this.GrowthBody = new Progress(toCopy.GrowthBody);
             this.FruitGrowth = new Progress(toCopy.FruitGrowth);
         }
-       
-       
 
         public override void OnObjectLoaded(GameObject parent)
         {

@@ -1349,10 +1349,19 @@ namespace Start_a_Town_
                         slice.Canvas.Opaque.vertices,
                         slice.Canvas.NonOpaque.vertices,
                         slice.Canvas.Designations.vertices };
-
+                    //if (j == this.MaxDrawZ)
+                    //    arrays.Add(slice.Unknown.vertices);
                     if (j == this.MaxDrawZ)
+                    {
+                        if(this.HideUnknownBlocks)
                         arrays.Add(slice.Unknown.vertices);
-
+                        else
+                        {
+                            arrays.Add(slice.TopCover.Opaque.vertices);
+                            arrays.Add(slice.TopCover.NonOpaque.vertices);
+                            arrays.Add(slice.TopCover.Designations.vertices);
+                        }
+                    }
                     foreach (var array in arrays)
                     {
                         var count = array.Length;

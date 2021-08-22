@@ -249,7 +249,10 @@ namespace Start_a_Town_
         {
             return Registry[Path + r.ReadString()];
         }
-
+        public override string ToString()
+        {
+            return this.AssetPath;
+        }
         /// <summary>
         /// Creates an array used for hit testing
         /// </summary>

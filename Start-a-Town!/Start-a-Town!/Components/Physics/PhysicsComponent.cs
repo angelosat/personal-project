@@ -313,7 +313,7 @@ namespace Start_a_Town_.Components
                             new Vector3(nextbox.Max.X, nextbox.Min.Y, next.Z),
                             new Vector3(nextbox.Max.X, nextbox.Max.Y, next.Z)
                         };
-                    if (corners.Any(c => GetDensity(map, c + new Vector3(0, 0, grav)) > 0))
+                    if (corners.Any(c => map.IsSolid(c + new Vector3(0, 0, grav))))// GetDensity(map, c + new Vector3(0, 0, grav)) > 0)) // DONT CHECK DENSITY BECAUSE THEN THE ENTITY WONT SINK IN WATER
                     {
                         var f = speed.Z;
                         speed.Z = 0;

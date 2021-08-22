@@ -1,4 +1,5 @@
 ﻿using System;
+using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -6,6 +7,16 @@ namespace Start_a_Town_
     {
         readonly Type ToolClass;
         readonly Type ToolWorkerClass;
+        //string IconTexturePath;
+        public Icon Icon;
+
+        public BuildToolDef(string name, string iconTexturePath, Type toolClass, Type toolWorkerClass) : base(name)
+        {
+            this.ToolClass = toolClass;
+            this.ToolWorkerClass = toolWorkerClass;
+            //this.IconTexturePath = iconTexturePath;
+            this.Icon = new(UIManager.Atlas.Load(iconTexturePath));
+        }
 
         public BuildToolDef(string name, Type toolClass, Type toolWorkerClass ) : base(name)
         {

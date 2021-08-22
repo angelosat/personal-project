@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Graphics;
+using System;
 
 namespace Start_a_Town_.UI
 {
@@ -30,8 +31,10 @@ namespace Start_a_Town_.UI
             this.SpriteSheet = spritesheet;
             this.SourceRect = new Rectangle((int)index % (this.SpriteSheet.Width / size) * size, ((int)index / (this.SpriteSheet.Width / size)) * size, size, size);
         }
+        [Obsolete]
         public Icon(string assetName)
         {
+            /// TODO why load it in the sprite atlas???
             this.AtlasToken = Sprite.Atlas.Load(assetName);
         }
         public Icon(Texture2D spritesheet, Rectangle source)
@@ -69,10 +72,8 @@ namespace Start_a_Town_.UI
 
         public void Draw(SpriteBatch sb, Vector2 loc, Rectangle? sourceRect)
         {
-            if (this.AtlasToken == null)
-            {
+            if (this.AtlasToken is null)
                 sb.Draw(this.SpriteSheet, loc, sourceRect.HasValue ? Rectangle.Intersect(this.SourceRect, new Rectangle(this.SourceRect.X + sourceRect.Value.X, this.SourceRect.Y + sourceRect.Value.Y, sourceRect.Value.Width, sourceRect.Value.Height)) : this.SourceRect, Color.White);
-            }
             else
             {
                 sb.Draw(this.AtlasToken.Atlas.Texture, loc, this.AtlasToken.Rectangle, Color.White);
@@ -80,13 +81,12 @@ namespace Start_a_Town_.UI
         }
         public void Draw(SpriteBatch sb, Vector2 loc, Vector2 originPercentage)
         {
-            if (this.AtlasToken == null)
-            {
+            if (this.AtlasToken is null)
                 sb.Draw(this.SpriteSheet, new Vector2((int)loc.X, (int)loc.Y), this.SourceRect, Color.White, 0, new Vector2(this.SourceRect.Width * originPercentage.X, this.SourceRect.Height * originPercentage.Y), 1, SpriteEffects.None, 0);
-            }
             else
             {
-                sb.Draw(this.AtlasToken.Atlas.Texture, loc.Floor(), this.AtlasToken.Rectangle, Color.White, 0, new Vector2(this.SourceRect.Width * originPercentage.X, this.SourceRect.Height * originPercentage.Y), 1, SpriteEffects.None, 0);
+                var sourceRect = this.AtlasToken.Rectangle;
+                sb.Draw(this.AtlasToken.Atlas.Texture, loc.Floor(), sourceRect, Color.White, 0, new Vector2(sourceRect.Width * originPercentage.X, sourceRect.Height * originPercentage.Y), 1, SpriteEffects.None, 0);
             }
         }
 
@@ -96,14 +96,10 @@ namespace Start_a_Town_.UI
         }
         public void Draw(SpriteBatch sb, Vector2 loc, Color color, float scale = 1)
         {
-            if (this.AtlasToken == null)
-            {
+            if (this.AtlasToken is null)
                 sb.Draw(this.SpriteSheet, loc, this.SourceRect, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-            }
             else
-            {
                 sb.Draw(this.AtlasToken.Atlas.Texture, loc, this.AtlasToken.Rectangle, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-            }
         }
         /// <summary>
         /// Draws near mouse

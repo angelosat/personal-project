@@ -19,9 +19,20 @@ namespace Start_a_Town_.UI
             return this.Location + (this.Parent != null ? this.Parent.ClientLocation + this.Parent.GetLocation() : Vector2.Zero);
         }
         Vector2? _cachedScreenLocation;
-        public virtual Vector2 ScreenLocation => _cachedScreenLocation ??= this.LocationFunc() + this.Location
+        public virtual Vector2 ScreenLocation => _cachedScreenLocation ??=
+            this.LocationFunc() + this.Location
                - this.Dimensions * this.Anchor
                   + (this.Parent != null ? this.Parent.ScreenLocation + this.Parent.ClientLocation : Vector2.Zero);
+        Rectangle? _cachedBoundsScreen;
+        public virtual Rectangle BoundsScreen => _cachedBoundsScreen ??= new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
+
+        //void CachePosition()
+        //{
+        //    _cachedScreenLocation = this.LocationFunc() + this.Location
+        //       - this.Dimensions * this.Anchor
+        //          + (this.Parent != null ? this.Parent.ScreenLocation + this.Parent.ClientLocation : Vector2.Zero);
+        //    _cachedBoundsScreen = new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
+        //}
 
         public int X => (int)this.ScreenLocation.X;
         public int Y => (int)this.ScreenLocation.Y;
@@ -295,10 +306,16 @@ namespace Start_a_Town_.UI
         internal Control SnapToMouse()
         {
             this.SetLocation(UIManager.Mouse);
-            this._cachedScreenLocation = null;
-            this._cachedBoundsScreen = null;
+            //this.InvalidatePosition();
             return this;
         }
+
+        private void InvalidatePosition()
+        {
+            this._cachedScreenLocation = null;
+            this._cachedBoundsScreen = null;
+        }
+
         public Control SetTag(object tag)
         {
             this.Tag = tag;
@@ -648,8 +665,7 @@ namespace Start_a_Town_.UI
         public Vector2 ScreenClientLocation => new(this.X + this.ClientLocation.X, this.Y + this.ClientLocation.Y);
         public Rectangle ScreenClientRectangle => new(this.X + (int)this.ClientLocation.X, this.Y + (int)this.ClientLocation.Y, this.ClientSize.Width, this.ClientSize.Height);
 
-        Rectangle? _cachedBoundsScreen;
-        public virtual Rectangle BoundsScreen => _cachedBoundsScreen ??= new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
+       
         public virtual Rectangle BoundsLocal => new((int)this.Location.X, (int)this.Location.Y, this.Width, this.Height);
 
        
@@ -673,7 +689,7 @@ namespace Start_a_Town_.UI
         {
             return this.SetLocation(new(x, y));
         }
-        public virtual void SetOpacity(float value, bool children = false, params Control[] exclude)
+        public virtual Control SetOpacity(float value, bool children = false, params Control[] exclude)
         {
             if (!exclude.Contains(this))
                 this.Opacity = value;
@@ -681,6 +697,8 @@ namespace Start_a_Town_.UI
             if (children)
                 foreach (Control control in this.Controls)
                     control.SetOpacity(value, children, exclude);
+
+            return this;
         }
         public virtual Control SetMousethrough(bool value, bool children = false)
         {
@@ -840,6 +858,7 @@ namespace Start_a_Town_.UI
         }
         public virtual void Draw(SpriteBatch sb, Rectangle viewport)
         {
+            this.InvalidatePosition();
             //if (this.DrawOnParentFocus)
             //    if(!this.Parent?.HasMouseHover ?? false)
             if (this.ShowConditions.Any(c => !c(this)))
@@ -906,8 +925,8 @@ namespace Start_a_Town_.UI
         }
         public override void Update()
         {
-            this._cachedScreenLocation = null;
-            this._cachedBoundsScreen = null;
+            //this.InvalidatePosition();
+            //this.CachePosition();
             this.OnUpdate();
 
             base.Update();
@@ -1261,6 +1280,8 @@ namespace Start_a_Town_.UI
         }
         public virtual bool Show(GuiLayer layer)
         {
+            //this.InvalidatePosition();
+
             this.Layer = layer;
             this.OnShow();
 
@@ -1309,6 +1330,8 @@ namespace Start_a_Town_.UI
         }
         public virtual bool Hide()
         {
+            //this.InvalidatePosition();
+
             if (this.WindowManager.Remove(this))
             {
                 this.OnHidden();
@@ -1336,7 +1359,22 @@ namespace Start_a_Town_.UI
             foreach (var ch in this.Controls)
                 ch.DrawWorld(sb, camera);
         }
-
+        public virtual Window ToWidget(string name)
+        {
+            if (this is Window)
+                return this as Window;
+            this.BackgroundColor = Color.Black * .5f;
+            Window window = new Window()
+            {
+                Title = name,
+                Movable = true,
+                AutoSize = true,
+                Closable = true
+            };
+            window.Client.Controls.Add(this);
+            window.Transparent();
+            return window;
+        }
         public virtual Window ToWindow(string name = "", bool closable = true, bool movable = true)
         {
             if (this is Window)

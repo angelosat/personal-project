@@ -93,6 +93,22 @@ namespace Start_a_Town_.UI
             Name = "LargeButton"
         };
 
+        public static BackgroundStyle ButtonMedium = new BackgroundStyle()
+        {
+            Left = new(0, 0, 4, 23),
+            Right = new(5, 0, 4, 23),
+            BottomLeft = new Rectangle(0, 0, 0, 0),
+            BottomRight = new Rectangle(0, 0, 0, 0),
+            Top = new Rectangle(0, 0, 0, 0),
+            TopLeft = new Rectangle(0, 0, 0, 0),
+            TopRight = new Rectangle(0, 0, 0, 0),
+            Bottom = new Rectangle(0, 0, 0, 0),
+            Center = new(4, 0, 1, 23),
+            Color = Color.White,
+            SpriteSheet = UIManager.defaultButtonSprite,
+            Name = "ButtonMedium"
+        };
+
         public static readonly BackgroundStyle Panel =  new BackgroundStyle()
         {
                 TopLeft = new Rectangle(0, 0, 19, 19),

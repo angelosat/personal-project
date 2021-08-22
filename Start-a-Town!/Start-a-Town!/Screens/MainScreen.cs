@@ -20,7 +20,7 @@ namespace Start_a_Town_
         {
             base.Initialize(net);
             WindowManager.Initialize();
-            var mainmenu = new MainMenuWindow(null);
+            var mainmenu = new MainMenuWindow();
             mainmenu.Show();
             new Label($"{GlobalVars.Version}").Show();
             return this;

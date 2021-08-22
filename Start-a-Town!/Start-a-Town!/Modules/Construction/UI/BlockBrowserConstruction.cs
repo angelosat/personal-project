@@ -37,7 +37,7 @@ namespace Start_a_Town_.Core
                         var win = this.ToolBox.GetWindow();
                         if (win is null)
                         {
-                            win = this.ToolBox.ToWindow("Brushes");
+                            win = this.ToolBox.ToWidget("Brushes");
                             win.HideAction = () => ToolManager.SetTool(null);
                         }
                         if (win.Show())

@@ -178,7 +178,7 @@ namespace Start_a_Town_
             // TODO put these in each respective initialize/loadcontent call above
             Sprite.Atlas.Bake();
             Block.Atlas.Bake();
-            UIManager.Atlas.Bake();
+            UIManager.Atlas.Initialize();//.Bake();
         }
 
         /// <summary>

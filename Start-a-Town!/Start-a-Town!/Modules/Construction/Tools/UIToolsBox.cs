@@ -45,30 +45,46 @@ namespace Start_a_Town_
 
         public void Refresh(IEnumerable<BuildToolDef> tools)
         {
-            this.PanelButtons.ClearControls();
-            var grid = new ButtonGridGenericNew<BuildToolDef>();
-            grid.AddItems(tools, (tool, btn) =>
+            //this.PanelButtons.ClearControls();
+            this.ClearControls();
+            //var grid = new ButtonGridGenericNew<BuildToolDef>();
+            //grid.AddItems(tools, (tool, btn) =>
+            //{
+            //    btn.LeftClickAction = () =>
+            //    {
+            //        this.LastSelectedTool = tool;
+            //        this.OnToolSelectedCallback(tool);
+            //    };
+            //    btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolBlockBuild buildTool && buildTool.ToolDef == tool;
+            //});
+
+            var grid = new GroupBox().AddControlsHorizontally(tools.Select(t =>
             {
-                btn.LeftClickAction = () =>
-                {
-                    this.LastSelectedTool = tool;
-                    this.OnToolSelectedCallback(tool);
-                };
-                btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolBlockBuild buildTool && buildTool.ToolDef == tool;
-            });
+                //var btn = IconButton.CreateSmall(t.Icon, () => selectTool(t));
+                var btn = ButtonNew.CreateMedium(t.Icon, () => selectTool(t));
+                btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolBlockBuild buildTool && buildTool.ToolDef == t;
+                return btn;
+            }));
 
             this.LastSelectedTool = tools.First();
-            this.PanelButtons.AddControls(grid);
-            this.Controls.Remove(this.PanelButtons);
-            this.AddControls(this.PanelButtons);
+            //this.PanelButtons.AddControls(grid);
+            //this.Controls.Remove(this.PanelButtons);
+            //this.AddControls(this.PanelButtons);
+            this.AddControls(grid);
+
+            void selectTool(BuildToolDef t)
+            {
+                this.LastSelectedTool = t;
+                this.OnToolSelectedCallback(t);
+            }
         }
     }
 
     //public class UIToolsBox : GroupBox
     //{
     //    Panel PanelButtons;
-    //    public ToolBlockBuild LastSelectedTool;
-    //    ConstructionCategory CurrentCategory;
+    //    public BuildToolDef LastSelectedTool;
+    //    ConstructionCategoryDef CurrentCategory;
     //    Action<BuildToolDef> OnToolSelectedCallback;
 
     //    public UIToolsBox(Action<BuildToolDef> onToolSelected)
@@ -91,25 +107,28 @@ namespace Start_a_Town_
     //        {
     //            var cat = product.Block.ConstructionCategory;
     //            if (cat != this.CurrentCategory)
-    //                this.Refresh(cat.GetAvailableTools(GetCurrentProduct));
+    //            {
+    //                //cat.ProductGetter = this.GetCurrentProduct;
+    //                this.Refresh(cat.Tools);//.GetAvailableTools());
+    //            }
     //            this.CurrentCategory = cat;
     //        }
     //        else
     //            this.CurrentCategory = null;
     //    }
 
-    //    public void Refresh(List<ToolBlockBuild> tools)
+    //    public void Refresh(IEnumerable<BuildToolDef> tools)
     //    {
     //        this.PanelButtons.ClearControls();
-    //        var grid = new ButtonGridGenericNew<ToolBlockBuild>();
+    //        var grid = new ButtonGridGenericNew<BuildToolDef>();
     //        grid.AddItems(tools, (tool, btn) =>
     //        {
     //            btn.LeftClickAction = () =>
     //            {
     //                this.LastSelectedTool = tool;
-    //                this.OnToolSelectedCallback(tool.ToolDef);
+    //                this.OnToolSelectedCallback(tool);
     //            };
-    //            btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolBlockBuild buildTool && buildTool.ToolDef == tool.ToolDef;
+    //            btn.IsToggledFunc = () => ToolManager.Instance.ActiveTool is ToolBlockBuild buildTool && buildTool.ToolDef == tool;
     //        });
 
     //        this.LastSelectedTool = tools.First();

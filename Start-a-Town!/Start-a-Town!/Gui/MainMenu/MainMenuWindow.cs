@@ -6,16 +6,16 @@ namespace Start_a_Town_.UI
     class MainMenuWindow : Window
     {
         MessageBox quitbox;
-        public MainMenuWindow(Game1 game)
+        public MainMenuWindow()
         {
             this.AutoSize = true;
             this.Closable = false;
-            Panel panel = new() { AutoSize = true };//, Color = Color.Black };
-            Button newgame = new("Play", this.Newgame, 100);
-            Button load = new("Load", this.Load, 100);
-            Button online = new("Multiplayer", this.Online, 100);
-            Button settings = new("Settings", this.Settings, 100);
-            Button quit = new("Quit", this.Quit, 100);
+            var panel = new Panel() { AutoSize = true };
+            var newgame = new Button("Play", this.Newgame, 100);
+            var load = new Button("Load", this.Load, 100);
+            var online = new Button("Multiplayer", this.Online, 100);
+            var settings = new Button("Settings", this.Settings, 100);
+            var quit = new Button("Quit", this.Quit, 100);
 
             panel.AddControlsVertically(newgame, load, online, settings, quit);
 

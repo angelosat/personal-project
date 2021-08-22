@@ -1,6 +1,4 @@
-﻿using Start_a_Town_.Core;
-
-namespace Start_a_Town_
+﻿namespace Start_a_Town_
 {
     class ToolDesignateZone : ToolZoningPositionsNew
     {
@@ -8,7 +6,7 @@ namespace Start_a_Town_
         readonly int CurrentZoneID;
         int ClickedZoneID;
         int EditingZone => this.CurrentZoneID != 0 ? this.CurrentZoneID : this.ClickedZoneID;
-        readonly string _helpText = "Hold down control to clear zone tiles";
+        readonly string _helpText = "Hold control to clear designations";
         public override string HelpText => _helpText;
         readonly Town Town;
         public ToolDesignateZone()

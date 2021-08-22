@@ -10,11 +10,12 @@ namespace Start_a_Town_.UI
         readonly ScrollbarH HScroll;
         public GroupBox Client;
         public override Rectangle ClientSize => this.Client.ClientSize; 
-        public override void SetOpacity(float value, bool children, params Control[] exclude)
+        public override Control SetOpacity(float value, bool children, params Control[] exclude)
         {
             base.SetOpacity(value, children, exclude);
             this.VScroll.SetOpacity(value, true);
             this.HScroll.SetOpacity(value, true);
+            return this;
         }
         
         public static ScrollableBoxNewNew FromClientSize(int width, int height, ScrollModes mode = ScrollModes.Both)

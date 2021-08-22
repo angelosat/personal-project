@@ -21,6 +21,8 @@ namespace Start_a_Town_
         public int Variation, Orientation;
         int Height;
         public override bool TargetOnlyBlocks => true;
+        readonly string _helpText = "Hold control to clear designations\nHold shift to replace blocks";
+        public override string HelpText => _helpText;
 
         public ToolBlockBuild()
         {

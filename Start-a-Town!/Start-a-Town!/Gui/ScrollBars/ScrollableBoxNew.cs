@@ -10,11 +10,12 @@ namespace Start_a_Town_.UI
         readonly ScrollbarH HScroll;
         public Control Client;
 
-        public override void SetOpacity(float value, bool children, params Control[] exclude)
+        public override Control SetOpacity(float value, bool children, params Control[] exclude)
         {
             base.SetOpacity(value, children, exclude);
             this.VScroll.SetOpacity(value, true);
             this.HScroll.SetOpacity(value, true);
+            return this;
         }
         public override void OnPaint(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
         {

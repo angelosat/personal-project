@@ -33,7 +33,7 @@ namespace Start_a_Town_.UI
             }
         }
         //public SpriteEffects SpriteEffects => SpriteEffects.None;
-        public override Vector2 ScreenLocation => base.ScreenLocation + Vector2.UnitY * (this.IsPressed && this.HasMouseHover ? 1 : 0);
+        public override Vector2 ScreenLocation => base.ScreenLocation + Vector2.UnitY * (this.IsPushed ? 1 : 0);
 
         public Color IdleColor = Color.White * 0.1f;
         Color _TexBackgroundColor;
@@ -78,10 +78,10 @@ namespace Start_a_Town_.UI
             Text = "";
             this.AutoSize = true;
         }
-
+        
         public Color DefaultBackgroundColorFunc()
         {
-            if (this.IsPressed && this.HasMouseHover)
+            if (this.IsPushed)
                 return this.Color;
             return (this.MouseHover && this.Active) ? this.Color : IdleColor;
         }
@@ -107,10 +107,10 @@ namespace Start_a_Town_.UI
         {
             ButtonNew.Draw(sb, this, Vector2.Zero, 1);
         }
-        public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
-        {
-            DrawSprite(sb, destRect, sourceRect, color, opacity, SprFx);
-        }
+        //public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
+        //{
+        //    DrawSprite(sb, destRect, sourceRect, color, opacity, SprFx);
+        //}
         public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity, SpriteEffects sprFx)
         {
             SpriteEffects fx = Active ? sprFx : SpriteEffects.FlipVertically;
@@ -132,7 +132,7 @@ namespace Start_a_Town_.UI
             button.BackgroundStyle.Draw(sb, button.Size, c, button.SprFx);// SpriteEffects);
             var halign = button.HAlign;
             var actualwidth = button.Width - Button.SpriteLeft.Width - Button.SpriteRight.Width;
-            var pos = new Vector2(Button.SpriteLeft.Width + actualwidth * halign, Button.SpriteCenter.Height / 2 + (button.IsPressed && button.HasMouseHover ? 1 : 0));
+            var pos = new Vector2(Button.SpriteLeft.Width + actualwidth * halign, Button.SpriteCenter.Height / 2 + (button.IsPushed ? 1 : 0));
             var origin = new Vector2(halign, .5f);
             UIManager.DrawStringOutlined(sb, button.Text, pos, origin, button.TextColor, button.TextOutline, button.Font);
         }
@@ -177,6 +177,24 @@ namespace Start_a_Town_.UI
             if (textBottom != null)
                 btn.AddControls(new Label() { TextFunc = textBottom, Location = new Vector2(padding, btn.Height - padding), Anchor = Vector2.UnitY, MouseThrough = true });
 
+            return btn;
+        }
+        public static ButtonNew CreateMedium(Icon icon, Action leftClickAction)
+        {
+            var style = BackgroundStyle.ButtonMedium;
+            var width = style.Left.Height;
+            var btn = new ButtonNew(width)
+            {
+                AutoSize = false,
+                BackgroundStyle = style,
+                LeftClickAction = leftClickAction
+            };
+            btn.Width = width;
+            var iconctrl = new PictureBox(icon.AtlasToken) { MouseThrough = true };
+            iconctrl.Location = new(btn.Width / 2 - iconctrl.Width / 2, btn.Height / 2 - iconctrl.Height / 2);
+            //iconctrl.AnchorToParentCenter();
+            //iconctrl.LocationFunc += () => btn.IsPushed ? Vector2.UnitY : Vector2.Zero;
+            btn.AddControls(iconctrl);
             return btn;
         }
     }

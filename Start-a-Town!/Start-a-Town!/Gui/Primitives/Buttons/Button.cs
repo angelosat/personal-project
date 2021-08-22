@@ -88,7 +88,7 @@ namespace Start_a_Town_.UI
         }
         public Color DefaultBackgroundColorFunc()
         {
-            if (this.IsPressed && this.HasMouseHover)
+            if (this.IsPushed)
                 return this.Color;
             return (this.MouseHover && this.Active) ? this.Color : IdleColor;
         }
@@ -150,10 +150,10 @@ namespace Start_a_Town_.UI
             Button.Draw(sb, this, Vector2.Zero, 1);// (MouseHover || IsPressed) ? 1 : 0.5f);
         }
 
-        public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
-        {
-            DrawSprite(sb, destRect, sourceRect, color, opacity, SprFx);
-        }
+        //public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
+        //{
+        //    DrawSprite(sb, destRect, sourceRect, color, opacity, SprFx);
+        //}
         public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity, SpriteEffects sprFx)
         {
             SpriteEffects fx = Active ? sprFx : SpriteEffects.FlipVertically;

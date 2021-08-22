@@ -6,7 +6,7 @@ namespace Start_a_Town_.UI
 {
     public abstract class ButtonBase : Control
     {
-        bool IsToggled;
+        protected bool IsToggled;
         public Func<bool> IsToggledFunc = () => false;
         SpriteFont _font = UIManager.Font;
         public SpriteFont Font
@@ -18,14 +18,18 @@ namespace Start_a_Town_.UI
                 this.OnTextChanged();
             }
         }
-        public virtual SpriteEffects SprFx => (this.IsPressed && this.HasMouseHover) ? SpriteEffects.FlipVertically : SpriteEffects.None;
+        public virtual SpriteEffects SprFx => this.IsPushed ? SpriteEffects.FlipVertically : SpriteEffects.None;
+
+        protected bool IsPushed => (this.IsPressed && this.HasMouseHover) || this.IsToggled;
 
         public Action
-            LeftClickAction = () => { },
+            LeftClickAction = () => { }
+        ,
             LeftDownAction,
             RightClickAction = () => { };
         public Action<ButtonBase>
-            LeftClickActionNew = bb => { },
+            LeftClickActionNew = bb => { }
+        ,
             RightClickActionNew = bb => { };
 
         /// <summary>

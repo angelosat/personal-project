@@ -169,7 +169,7 @@ namespace Start_a_Town_.UI
         public static Texture2D Cursor;
         public RenderTarget2D DimScreen;
 
-        public static Atlas Atlas = new Atlas("UI");
+        public static readonly Atlas Atlas = new("UI");
         public static readonly Atlas.Node.Token Btn16 = Atlas.Load("Graphics/Gui/gui-icon");
         public static readonly Atlas.Node.Token ArrowUp = Atlas.Load("Graphics/Gui/gui-up1");
         public static readonly Atlas.Node.Token ArrowDown = Atlas.Load("Graphics/Gui/gui-down1");
@@ -190,7 +190,8 @@ namespace Start_a_Town_.UI
         public static void LoadContent()
         {
             Cursor = Game1.Instance.Content.Load<Texture2D>("Graphics/cursor-default");
-            LineHeight = (int)Font.MeasureString("(gA1,|)").Y;
+            //LineHeight = (int)Font.MeasureString("(gA1,|)").Y;
+            LineHeight = Font.LineSpacing + 2; // 2 accounts for  1px text outline
             SlotSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-frame1");
             frameSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-window2");
             defaultButtonSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/guiButton");
@@ -212,8 +213,8 @@ namespace Start_a_Town_.UI
             TextureTickBox = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/CheckBox");
             DefaultLoadingSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/spinning3");
 
-            Atlas.Initialize();
-            Atlas.Bake();
+            //Atlas.Initialize(); 
+            //Atlas.Bake(); /// initialize calls bake
 
             var scaleNode = Engine.Config.Descendants("Scale").FirstOrDefault();
             if (float.TryParse(scaleNode.Value, out float scale)) // do i need to check for scalenode == null?

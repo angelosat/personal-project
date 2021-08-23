@@ -94,6 +94,7 @@ namespace Start_a_Town_.UI
         }
         public Button() : base()
         {
+            this.Color = Color.White * .5f;
             TexBackgroundColorFunc = DefaultBackgroundColorFunc;
             Height = UIManager.DefaultButtonHeight;
             Text = "";

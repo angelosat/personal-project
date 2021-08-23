@@ -334,7 +334,7 @@ namespace Start_a_Town_.UI
             }
         }
 
-        Color _color = Color.White * .5f;
+        Color _color = Color.White;// * .5f;
         public Func<Color> ColorFunc;
         public virtual Color Color
         {
@@ -865,7 +865,7 @@ namespace Start_a_Town_.UI
                 return;
             this.OnBeforeDraw(sb, viewport);
             var c = this.Tint;
-            if (this.Texture != null)
+            if (this.Texture is not null)
             {
                 // TODO: this is no use because if i add something outside the window's client area and the window has autosize, it expands the client area screwing up hittesting
                 var opacity = c * (this.Flashing ? UIManager.FlashingValue : this.Opacity);

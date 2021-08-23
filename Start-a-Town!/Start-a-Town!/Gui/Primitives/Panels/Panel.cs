@@ -10,8 +10,9 @@ namespace Start_a_Town_.UI
             Color tint = this.Color;
             this.BackgroundStyle.Draw(sb, this.Size, tint);
         }
+        public override Color Tint { get => DefaultColor; set => base.Tint = value; }
         public override Rectangle ContainerSize => this.ClientSize;
-        static readonly Color DefaultColor = Color.DarkSlateGray;// Color.Black; //Color.DarkSlateGray;// 
+        public static Color DefaultColor = Color.DarkSlateGray;// Color.Black; //Color.DarkSlateGray;// 
         public Rectangle GetClientSize()
         {
             return new Rectangle(0, 0, this.Width - 2 * UIManager.BorderPx, this.Height - 2 * UIManager.BorderPx);
@@ -31,7 +32,7 @@ namespace Start_a_Town_.UI
         {
             this.ClientLocation = new Vector2(UIManager.BorderPx);
             this.BackgroundStyle = DefaultStyle;
-            this.Color = DefaultColor;
+            //this.Color = DefaultColor;
         }
         public Panel(Vector2 location, Vector2 size)
             : base(location, size)
@@ -39,7 +40,7 @@ namespace Start_a_Town_.UI
             this.ClientLocation = new Vector2(UIManager.BorderPx);
             this.ClientSize = new Rectangle(0, 0, this.Width - 2 * UIManager.BorderPx, this.Height - 2 * UIManager.BorderPx);
             this.BackgroundStyle = DefaultStyle;
-            this.Color = DefaultColor;
+            //this.Color = DefaultColor;
         }
         public Panel(Rectangle rect)
             : base(new Vector2(rect.X, rect.Y), new Vector2(rect.Width, rect.Height))
@@ -49,13 +50,13 @@ namespace Start_a_Town_.UI
             this.BackgroundStyle = DefaultStyle;
             this.Width = rect.Width;
             this.Height = rect.Height;
-            this.Color = DefaultColor;
+            //this.Color = DefaultColor;
         }
         public Panel()
         {
             this.ClientLocation = new Vector2(UIManager.BorderPx);
             this.BackgroundStyle = DefaultStyle;
-            this.Color = DefaultColor;
+            //this.Color = DefaultColor;
         }
         public Panel(int x, int y, int w, int h) : this(new Rectangle(x, y, w, h)) { }
 

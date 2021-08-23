@@ -40,7 +40,7 @@ namespace Start_a_Town_
                     };
                     btn.LeftClickAction = () =>
                     {
-                        pickerPanel.Label.Text = string.Format("Choose {0} color", cc.Name);
+                        pickerPanel.Label.Text = $"Choose {cc.Name} color";
                         var oldColor = cc.Color;
                         picker.CancelAction = () => cc.Color = oldColor;
                         picker.SelectColor(btn.SelectedColor);

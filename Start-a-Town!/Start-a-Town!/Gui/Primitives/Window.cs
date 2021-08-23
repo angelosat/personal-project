@@ -96,7 +96,9 @@ namespace Start_a_Town_.UI
         public Window()
         {
             //this.Padding = UIManager.BorderPx;
-            this.Color = UIManager.Tint;
+            //this.Color = UIManager.Tint;
+            //this.ColorFunc = () => UIManager.Tint;
+            this.TintFunc = () => UIManager.Tint;
             this.ClientLocation = new Vector2(UIManager.BorderPx, UIManager.BorderPx);
             this.Client = new GroupBox() { Name = "Window client area", MouseThrough = true, Size = ClientSize, Location = new Vector2(0, Label.DefaultHeight) };
             this.CloseButton = IconButton.CreateCloseButton();
@@ -153,7 +155,7 @@ namespace Start_a_Town_.UI
 
         private void DrawOuterPadding(SpriteBatch sb, Vector2 loc)
         {
-            Color color = this.Color;
+            var color = this.Color;
             sb.Draw(UIManager.frameSprite, loc, OuterPadding.TopLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
             sb.Draw(UIManager.frameSprite, loc + new Vector2(-11 + this.Width, 0), OuterPadding.TopRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
             sb.Draw(UIManager.frameSprite, loc + new Vector2(0, -11 + this.Height), OuterPadding.BottomLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);

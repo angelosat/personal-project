@@ -23,10 +23,7 @@ namespace Start_a_Town_
             actorsUI.AddItems(actors);
             var actorsListPanel = actorslistbox.ToPanel();
 
-            //this.AddControlsVertically(actorsListPanel);
-
             editbox = new Panel(0, 0, 500, actorsListPanel.Height) { AutoSize = false };
-            //editbox.Location = actorsListPanel.TopRight;
             this.AddControlsHorizontally(actorsListPanel, editbox);
 
             void addActor()

@@ -48,8 +48,8 @@ namespace Start_a_Town_.UI
             base.Update();
             if (!this.PressedNew)
                 return;
-            if (!this.MouseHover)
-                return;
+            //if (!this.MouseHover)
+            //    return;
             Vector2 pos = UIManager.Mouse - this.ScreenLocation;
             var x = (int)Math.Max(0, Math.Min(GradientTexture.Width - 1, pos.X));
             var y = (int)Math.Max(0, Math.Min(GradientTexture.Height - 1, pos.Y));
@@ -72,7 +72,8 @@ namespace Start_a_Town_.UI
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);
-            var rect = new Rectangle((int)this.ScreenLocation.X + (int)this.SelectedCoords.X - 1, (int)this.ScreenLocation.Y + (int)this.SelectedCoords.Y - 1, 3, 3);
+            //var rect = new Rectangle((int)this.ScreenLocation.X + (int)this.SelectedCoords.X - 1, (int)this.ScreenLocation.Y + (int)this.SelectedCoords.Y - 1, 3, 3);
+            var rect = new Rectangle((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y + (int)this.SelectedCoords.Y, this.Width, 1);
             rect.DrawHighlight(sb, Color.White, Vector2.Zero, 0);
         }
     }

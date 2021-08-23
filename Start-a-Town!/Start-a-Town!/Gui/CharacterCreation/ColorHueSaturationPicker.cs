@@ -50,8 +50,8 @@ namespace Start_a_Town_.UI
             base.Update();
             if (!this.PressedNew)
                 return;
-            if (!this.MouseHover)
-                return;
+            //if (!this.MouseHover)
+            //    return;
             var pos = UIManager.Mouse - this.ScreenLocation;
             var x = (int)Math.Max(0, Math.Min(ColorWheel.Width - 1, pos.X));
             var y = (int)Math.Max(0, Math.Min(ColorWheel.Height - 1, pos.Y));
@@ -74,10 +74,8 @@ namespace Start_a_Town_.UI
         public override void Draw(SpriteBatch sb, Rectangle viewport)
         {
             base.Draw(sb, viewport);
-            if (this.Selected == null)
-                return;
             var rect = new Rectangle((int)this.ScreenLocation.X + (int)this.SelectedCoords.X - 1, (int)this.ScreenLocation.Y + (int)this.SelectedCoords.Y - 1, 3, 3);
-            rect.DrawHighlight(sb, Color.Black, Vector2.Zero, 0);
+            rect.DrawHighlightBorder(sb, Color.Black, Vector2.Zero, 0);
         }
 
         public static void RGBtoHSV(Color rgb, ref float h, ref float s, ref float v)
@@ -93,31 +91,46 @@ namespace Start_a_Town_.UI
             return new Color(r, g, b);
         }
 
+        /// <summary>
+        /// https://www.programmingalgorithms.com/algorithm/rgb-to-hsv/
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="g"></param>
+        /// <param name="b"></param>
+        /// <param name="h"></param>
+        /// <param name="s"></param>
+        /// <param name="v"></param>
         public static void RGBtoHSV(float r, float g, float b, ref float h, ref float s, ref float v)
         {
-            float min, max, delta;
-            min = Math.Min(r, Math.Min(g, b));
-            max = Math.Max(r, Math.Max(g, b));
-            v = max;               // v
-            delta = max - min;
-            if (max != 0)
-                s = delta / max;       // s
+            float delta, min;
+            //double h = 0, s, v;
+            h = 0;
+            min = Math.Min(Math.Min(r, g), b);
+            v = Math.Max(Math.Max(r, g), b);
+            delta = v - min;
+
+            if (v == 0.0)
+                s = 0;
+            else
+                s = delta / v;
+
+            if (s == 0)
+                h = 0f;
+
             else
             {
-                // r = g = b = 0        // s = 0, v is undefined
-                s = 0;
-                h = -1;
-                return;
+                if (r == v)
+                    h = (g - b) / delta;
+                else if (g == v)
+                    h = 2 + (b - r) / delta;
+                else if (b == v)
+                    h = 4 + (r - g) / delta;
+
+                h *= 60;
+
+                if (h < 0.0)
+                    h += 360;
             }
-            if (r == max)
-                h = (g - b) / delta;     // between yellow & magenta
-            else if (g == max)
-                h = 2 + (b - r) / delta; // between cyan & yellow
-            else
-                h = 4 + (r - g) / delta; // between magenta & cyan
-            h *= 60;               // degrees
-            if (h < 0)
-                h += 360;
         }
         public static void HSVtoRGB(ref float r, ref float g, ref float b, float h, float s, float v)
         {

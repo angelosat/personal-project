@@ -1521,11 +1521,11 @@ namespace Start_a_Town_
         }
         public void DrawGridCells(MySpriteBatch sb, Color col, IEnumerable<IntVec3> globals)
         {
-            this.GridSprite.AtlasToken.Atlas.Begin(sb);
+            //this.GridSprite.AtlasToken.Atlas.Begin(sb);
             foreach (var pos in globals)
                 this.DrawGridCell(sb, col, pos);
 
-            sb.Flush();
+            //sb.Flush();
         }
         public void DrawGridCell(MySpriteBatch sb, Color col, IntVec3 global)
         {

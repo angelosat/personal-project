@@ -98,7 +98,7 @@ namespace Start_a_Town_.UI
             //this.Padding = UIManager.BorderPx;
             //this.Color = UIManager.Tint;
             //this.ColorFunc = () => UIManager.Tint;
-            this.TintFunc = () => UIManager.Tint;
+            this.TintFunc = () => UIManager.TintPrimary;
             this.ClientLocation = new Vector2(UIManager.BorderPx, UIManager.BorderPx);
             this.Client = new GroupBox() { Name = "Window client area", MouseThrough = true, Size = ClientSize, Location = new Vector2(0, Label.DefaultHeight) };
             this.CloseButton = IconButton.CreateCloseButton();

@@ -14,7 +14,7 @@ namespace Start_a_Town_
             {
                 this.Width = 256;
                 this.Height = 64;
-                this.Color = UIManager.Tint;
+                this.Color = UIManager.TintPrimary;
                 var label = new Label(() => $"Rebind key for: [{this.ActionLabel}]") { AutoSize = true };
                 var boxLabels = new GroupBox(this.Width - 2 * this.Padding, Label.DefaultHeight * 2);
                 boxLabels.AddControlsVertically(0, HorizontalAlignment.Center,

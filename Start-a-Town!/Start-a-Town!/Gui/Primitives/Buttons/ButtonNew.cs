@@ -77,8 +77,9 @@ namespace Start_a_Town_.UI
             this.Height = this.BackgroundStyle.Left.Height;
             Text = "";
             this.AutoSize = true;
+            this.Color = Color.White * .5f;
         }
-        
+
         public Color DefaultBackgroundColorFunc()
         {
             if (this.IsPushed)

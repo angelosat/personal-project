@@ -10,6 +10,7 @@ namespace Start_a_Town_
         ParticleDensityLevel TempParticles;
         GroupBox _Gui;
         internal override GroupBox Gui => this._Gui ??= this.CreateGui();
+        internal override string Name => "Graphics";
 
         public GraphicsSettings()
         {

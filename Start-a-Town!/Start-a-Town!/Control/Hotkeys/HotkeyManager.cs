@@ -11,6 +11,7 @@ namespace Start_a_Town_
         GroupBox _gui;
         internal override GroupBox Gui => this._gui ??= this.CreateGui();
         readonly Lazy<WindowInputKey> EnterKeyGui = new();
+        internal override string Name => "Hotkeys";
 
         public static IHotkey RegisterHotkey(HotkeyContext context, string label, Action action, System.Windows.Forms.Keys key1 = System.Windows.Forms.Keys.None, System.Windows.Forms.Keys key2 = System.Windows.Forms.Keys.None)
         {

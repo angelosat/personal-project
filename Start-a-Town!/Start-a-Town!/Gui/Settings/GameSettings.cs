@@ -8,6 +8,8 @@ namespace Start_a_Town_
         internal abstract GroupBox Gui { get; }
         internal abstract void Apply();
         internal abstract void Cancel();
+        internal virtual void Defaults() { }
+        internal abstract string Name { get; }
 
         static XElement _xmlNodeSettings;
         public static XElement XmlNodeSettings => _xmlNodeSettings ??= Engine.XmlNodeSettings.GetOrCreateElement("Settings");

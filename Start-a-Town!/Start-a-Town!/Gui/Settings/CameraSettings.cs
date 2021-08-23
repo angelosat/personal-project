@@ -7,6 +7,7 @@ namespace Start_a_Town_
         GroupBox _Gui;
         internal override GroupBox Gui => this._Gui ??= this.CreateGui();
         bool _tmpFog, _tmpSmooth;
+        internal override string Name => "Camera";
 
         GroupBox CreateGui()
         {

@@ -92,7 +92,24 @@ namespace Start_a_Town_.UI
         public static SpriteFont Font = Game1.Instance.Content.Load<SpriteFont>("DefaultFont");
         public static SpriteFont FontBold = Game1.Instance.Content.Load<SpriteFont>("BoldFont");
         public static SpriteFont Symbols = Game1.Instance.Content.Load<SpriteFont>("Symbols");
-        public static Color Tint = Color.SteelBlue;
+
+        public static readonly Color TintPrimaryDefault = Color.SteelBlue;
+        public static readonly Color TintSecondaryDefault = Color.DarkSlateGray;
+        public static Color TintPrimary = TintPrimaryDefault;
+        public static Color TintSecondary = TintSecondaryDefault;
+
+        static UIManager()
+        {
+            if (uint.TryParse(InterfaceSettings.XTintPrimary.Value, System.Globalization.NumberStyles.HexNumber, null, out uint packed))
+                TintPrimary.PackedValue = packed;
+            else
+                TintPrimary = TintPrimaryDefault;
+            if (uint.TryParse(InterfaceSettings.XTintSecondary.Value, System.Globalization.NumberStyles.HexNumber, null, out packed))
+                TintSecondary.PackedValue = packed;
+            else
+                TintSecondary = TintPrimaryDefault;
+        }
+
         public static Texture2D frameSprite, SlotSprite, defaultButtonSprite, DefaultIconButtonSprite, ItemSheet, DefaultProgressBar, DefaultProgressBarStrip, ProgressBarBorder, DefaultDropdownSprite, DefaultLoadingSprite,
             DefaultVScrollbarSprite, DefaultHScrollbarSprite,
             DefaultTrackBarSprite, DefaultTrackBarThumbSprite, SampleButton, Icons16x16, LargeButton, Icons32, Icon16Background, TextureTickBox;

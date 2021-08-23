@@ -9,6 +9,7 @@ namespace Start_a_Town_
     {
         GroupBox _Gui;
         internal override GroupBox Gui => this._Gui ??= this.CreateGui();
+        internal override string Name => "Video";
 
         bool _tempFullscreen;
         Rectangle _tempResolution;

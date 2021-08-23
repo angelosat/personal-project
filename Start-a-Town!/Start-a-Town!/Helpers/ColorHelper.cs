@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -96,6 +95,45 @@ namespace Start_a_Town_
             color = Color.White;
             return false;
         }
-
+        public static XElement ToXml(this Color col, string name)
+        {
+            var x = new XElement(name, col.PackedValue.ToString("x"));
+            return x;
+        }
+        public static Color ReadColor(this XElement x)
+        {
+            return new Color() { PackedValue = uint.Parse(x.Value, System.Globalization.NumberStyles.HexNumber) };
+        }
+        public static bool TryReadColor(this XElement x, ref Color col)
+        {
+            if (!uint.TryParse(x.Value, System.Globalization.NumberStyles.HexNumber, null, out var packed))
+                return false;
+            col.PackedValue = packed;
+            return true;
+        }
+        public static Color ParseColor(this XElement x)
+        {
+            var r = byte.Parse(x.Attribute("R").Value);
+            var g = byte.Parse(x.Attribute("G").Value);
+            var b = byte.Parse(x.Attribute("B").Value);
+            var a = byte.Parse(x.Attribute("A").Value);
+            return new Color(r, g, b, a);
+        }
+        public static bool TryParseColor(this XElement x, ref Color col)
+        {
+            if (!byte.TryParse(x.Attribute("R").Value, out var r))
+                return false;
+            if (!byte.TryParse(x.Attribute("G").Value, out var g))
+                return false;
+            if (!byte.TryParse(x.Attribute("B").Value, out var b))
+                return false;
+            if (!byte.TryParse(x.Attribute("A").Value, out var a))
+                return false;
+            col.R = r;
+            col.G = g;
+            col.B = b;
+            col.A = a;
+            return true;
+        }
     }
 }

@@ -353,7 +353,7 @@ namespace Start_a_Town_.UI
         }
         void AddTabAction(Button button)
         {
-            button.BackgroundColor = UIManager.Tint * .5f;
+            button.BackgroundColor = UIManager.TintPrimary * .5f;
             this.BoxTabs.AddControlsLineWrap(new[] { button }, this.PanelInfo.Width);
         }
         void AddTabAction(string label, Action action, Color col)

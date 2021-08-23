@@ -10,7 +10,7 @@ namespace Start_a_Town_.UI
             Color tint = this.Color;
             this.BackgroundStyle.Draw(sb, this.Size, tint);
         }
-        public override Color Tint { get => DefaultColor; set => base.Tint = value; }
+        public override Color Tint { get => UIManager.TintSecondary; set => base.Tint = value; }
         public override Rectangle ContainerSize => this.ClientSize;
         public static Color DefaultColor = Color.DarkSlateGray;// Color.Black; //Color.DarkSlateGray;// 
         public Rectangle GetClientSize()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -198,6 +199,11 @@ namespace Start_a_Town_
         {
             this.IsPreserved = true;
             return this;
+        }
+
+        public Control GetGui()
+        {
+            return new Label($"{this.Amount}x material");
         }
     }
 }

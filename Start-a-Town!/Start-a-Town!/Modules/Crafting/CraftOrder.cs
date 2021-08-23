@@ -28,7 +28,7 @@ namespace Start_a_Town_
         public Dictionary<string, IngredientRestrictions> Restrictions = new();
 
         readonly Dictionary<string, HashSet<int>> ReagentRestrictions = new();
-        CraftOrderDetailsInterface DetailsGui;
+        CraftOrderDetailsGui DetailsGui;
         CraftMode Mode = CraftMode.XTimes;
 
         public string Name => this.Reaction.Name;
@@ -398,7 +398,7 @@ namespace Start_a_Town_
             var btnPlus = new Button("+", Plus, Button.DefaultHeight) { Location = btnMinus.TopRight };
             box.AddControls(btnMinus, btnPlus);
 
-            DetailsGui = DetailsGui ??= new CraftOrderDetailsInterface(this);
+            DetailsGui = DetailsGui ??= new CraftOrderDetailsGui(this);
           
             var btnDetails = new Button("Details", ToggleDetails);
             box.AddControls(btnDetails.AnchorToBottomRight());
@@ -504,7 +504,7 @@ namespace Start_a_Town_
             }
 
             container.Tag = this;
-            container.GetWindow().SetTitle($"\"{this.Name}\" details");
+            container.GetWindow().SetTitle($"\"{this.Label}\" details");
         }
     }
 }

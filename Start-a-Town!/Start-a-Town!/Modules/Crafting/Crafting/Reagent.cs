@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -98,6 +99,11 @@ namespace Start_a_Town_
             {
                 this.Modifiers.Add(mat => mat.Type.ReactionClass == type);
                 return this;
+            }
+
+            internal Control GetGui()
+            {
+                return new GroupBox().AddControlsHorizontally(new Label($"{this.Name}: "), this.Ingredient.GetGui());
             }
         }
     }

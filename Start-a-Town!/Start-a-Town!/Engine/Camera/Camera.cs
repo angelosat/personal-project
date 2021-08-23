@@ -1521,11 +1521,8 @@ namespace Start_a_Town_
         }
         public void DrawGridCells(MySpriteBatch sb, Color col, IEnumerable<IntVec3> globals)
         {
-            //this.GridSprite.AtlasToken.Atlas.Begin(sb);
             foreach (var pos in globals)
                 this.DrawGridCell(sb, col, pos);
-
-            //sb.Flush();
         }
         public void DrawGridCell(MySpriteBatch sb, Color col, IntVec3 global)
         {
@@ -1536,7 +1533,6 @@ namespace Start_a_Town_
             var pos = new Vector2(bounds.X, bounds.Y);
             var depth = global.GetDrawDepth(Engine.Map, this);
             var highlight = Block.FaceHighlights[IntVec3.UnitZ];
-            //sb.Draw(this.GridSprite.AtlasToken.Atlas.Texture, pos, this.GridSprite.AtlasToken.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
             sb.Draw(highlight.Atlas.Texture, pos, highlight.Rectangle, 0, Vector2.Zero, this.Zoom, col, SpriteEffects.None, depth);
         }
         [Obsolete]

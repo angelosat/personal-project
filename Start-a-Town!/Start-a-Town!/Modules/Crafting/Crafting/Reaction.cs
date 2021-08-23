@@ -103,5 +103,12 @@ namespace Start_a_Town_
                 work = getter(work, ingredients[material].Object);
             return work;
         }
+
+        public Control GetInfoGui()
+        {
+            var box = new GroupBox();
+            box.AddControlsVertically(this.Reagents.Select(r=>r.GetGui()));
+            return box;
+        }
     }
 }

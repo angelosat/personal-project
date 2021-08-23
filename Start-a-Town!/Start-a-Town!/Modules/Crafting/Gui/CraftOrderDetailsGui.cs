@@ -5,19 +5,20 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    class CraftOrderDetailsInterface : GroupBox
+    class CraftOrderDetailsGui : GroupBox
     {
         public Action<Reaction.Product.ProductMaterialPair> Callback = a => { };
         readonly Panel PanelCollapsible;
+        readonly GroupBox PanelInfo;
         readonly CheckBoxNew ChkHaulOnFinish;
         readonly Control ReagentsContainer;
         CraftOrder Order => this.Tag as CraftOrder;
-        public CraftOrderDetailsInterface(CraftOrder order)
+        public CraftOrderDetailsGui(CraftOrder order)
             :this()
         {
             this.Tag = order;
         }
-        CraftOrderDetailsInterface()
+        CraftOrderDetailsGui()
         {
             this.AutoSize = true;
 
@@ -25,7 +26,11 @@ namespace Start_a_Town_
 
             this.PanelCollapsible = new Panel() { AutoSize = false }.SetClientDimensions(200, 200);
             this.PanelCollapsible.AddControls(this.ReagentsContainer);
-            this.AddControls(this.PanelCollapsible);
+
+            var boxinfo = new GroupBox();
+            this.PanelInfo = new(128, 128);// this.PanelCollapsible.Size);
+
+            this.AddControlsHorizontally(this.PanelInfo, this.PanelCollapsible);
 
             this.ChkHaulOnFinish = new CheckBoxNew("Haul on finish", () => PacketCraftOrderToggleHaul.Send(this.Order, !this.Order.HaulOnFinish), () => this.Order.HaulOnFinish)
             {
@@ -39,6 +44,9 @@ namespace Start_a_Town_
             list.Build();
             this.ReagentsContainer.ClearControls();
             this.ReagentsContainer.AddControls(list);
+
+            this.PanelInfo.ClearControls();
+            this.PanelInfo.AddControls(this.Order.Reaction.GetInfoGui());
         }
         ListCollapsibleNew CreateList(CraftOrder order)
         {

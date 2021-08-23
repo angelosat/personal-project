@@ -741,11 +741,7 @@ namespace Start_a_Town_
             def = this.Ingredient.ItemDef;
             amount = this.Ingredient.Amount;
         }
-        internal string GetIngredientLabel()
-        {
-            return this.Ingredient.GetLabel();
-        }
-
+       
         public virtual void OnSteppedOn(GameObject actor, IntVec3 global) { }
 
         public virtual void OnDrop(GameObject actor, GameObject dropped, TargetArgs target, int amount = -1)

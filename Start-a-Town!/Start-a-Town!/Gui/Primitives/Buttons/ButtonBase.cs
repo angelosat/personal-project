@@ -36,17 +36,17 @@ namespace Start_a_Town_.UI
         /// This is applied to the text when drawing it to the control's texture. The color can't change until after the text is updated. Use TintColorFunc instead.
         /// </summary>
         public Func<Color> TextColorFunc;
-        Color _TextColor = UIManager.DefaultTextColor;
+        Color _textColor = UIManager.DefaultTextColor;
         public virtual Color TextColor
         {
             get
             {
                 if (this.TextColorFunc == null)
-                    return this._TextColor;
+                    return this._textColor;
                 else
                     return this.TextColorFunc();
             }
-            set => this._TextColor = value;
+            set => this._textColor = value;
         }
 
         public virtual void PerformLeftClick()
@@ -260,13 +260,14 @@ namespace Start_a_Town_.UI
         {
             if (this.LeftPressed && this.Active)
             {
-                this.LeftPressed = false;
-                this.Pressed = false;
                 if (!e.Handled && this.HasMouseHover)
                     this.OnLeftClick();
-
+                this.LeftPressed = false;
+                this.Pressed = false;
+                this.IsToggled = this.IsToggledFunc(); // HACK because it wont get updated until next update, and since these events are on a seperate thread, draw might get called before the next update
                 e.Handled = true;
                 base.OnMouseLeftUp(e);
+                this.Invalidate();
             }
         }
 

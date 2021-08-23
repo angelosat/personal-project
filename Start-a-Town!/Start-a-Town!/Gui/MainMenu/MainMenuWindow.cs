@@ -65,7 +65,7 @@ namespace Start_a_Town_.UI
         {
             if (GameMode.Registry.Count == 1)
                 GameMode.Current = GameMode.Registry.First();
-            var control = GameMode.Current.Load().ToWindow("Load");
+            var control = GameMode.Current.LoadGame().ToWindow("Load");
             control.LocationFunc = () => UIManager.Center;
             control.Movable = false;
             control.Anchor = Vector2.One * .5f;

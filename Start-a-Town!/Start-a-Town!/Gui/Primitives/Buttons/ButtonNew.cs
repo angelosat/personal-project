@@ -32,8 +32,8 @@ namespace Start_a_Town_.UI
                     base.Width = Math.Max(base.Width, value);
             }
         }
-        //public SpriteEffects SpriteEffects => SpriteEffects.None;
-        public override Vector2 ScreenLocation => base.ScreenLocation + Vector2.UnitY * (this.IsPushed ? 1 : 0);
+        //public override Vector2 ScreenLocation => base.ScreenLocation + Vector2.UnitY * (this.IsPushed ? 1 : 0);
+        //public override Vector2 ClientLocation { get => base.ClientLocation + Vector2.UnitY * (this.IsPushed ? 1 : 0); set => base.ClientLocation = value; }
 
         public Color IdleColor = Color.White * 0.1f;
         Color _TexBackgroundColor;
@@ -150,16 +150,21 @@ namespace Start_a_Town_.UI
             {
                 AutoSize = false,
                 BackgroundStyle = BackgroundStyle.LargeButton,
-                LeftClickAction = leftClickAction
+                LeftClickAction = leftClickAction,
+                Padding = BackgroundStyle.LargeButton.Left.Width
             };
             btn.Width = width;
             var padding = btn.BackgroundStyle.Left.Width;
             var label = new Label() { TextFunc = textTop, Location = Vector2.One * padding, MouseThrough = true };
 
-            btn.AddControls(label);
+            //btn.AddControls(label);
+            //if (textBottom != null)
+            //    btn.AddControls(new Label() { TextFunc = textBottom, Location = new Vector2(padding, btn.Height - padding), Anchor = Vector2.UnitY, MouseThrough = true });
+            var box = new GroupBox(btn.Width, btn.Height) { MouseThrough = true, LocationFunc = () => btn.IsPushed ? Vector2.UnitY : Vector2.Zero };
+            box.AddControls(label);
             if (textBottom != null)
-                btn.AddControls(new Label() { TextFunc = textBottom, Location = new Vector2(padding, btn.Height - padding), Anchor = Vector2.UnitY, MouseThrough = true });
-
+                box.AddControls(new Label() { TextFunc = textBottom, Location = new Vector2(padding, btn.Height - padding), Anchor = Vector2.UnitY, MouseThrough = true });
+            btn.AddControls(box);
             return btn;
         }
         public static ButtonNew CreateMedium(Icon icon, Action leftClickAction)
@@ -173,10 +178,11 @@ namespace Start_a_Town_.UI
                 LeftClickAction = leftClickAction
             };
             btn.Width = width;
-            var iconctrl = new PictureBox(icon.AtlasToken) { MouseThrough = true };
+            var iconctrl = new PictureBox(icon.AtlasToken) { MouseThrough = true, LocationFunc = () => btn.IsPushed ? Vector2.UnitY : Vector2.Zero };
             iconctrl.Location = new(btn.Width / 2 - iconctrl.Width / 2, btn.Height / 2 - iconctrl.Height / 2);
-            //iconctrl.AnchorToParentCenter();
-            //iconctrl.LocationFunc += () => btn.IsPushed ? Vector2.UnitY : Vector2.Zero;
+            //var box = new GroupBox(btn.Width, btn.Height) { MouseThrough = true, LocationFunc = () => btn.IsPushed ? Vector2.UnitY : Vector2.Zero };
+            //box.AddControls(iconctrl);
+            //btn.AddControls(box);
             btn.AddControls(iconctrl);
             return btn;
         }

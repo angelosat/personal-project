@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 
 namespace Start_a_Town_
@@ -89,7 +90,7 @@ namespace Start_a_Town_
         public Control GetListControlGui()
         {
             var btn = ButtonNew.CreateBig(() => SaveFileManager.Load(this), Gui.Width, () => Path.GetFileNameWithoutExtension(this.File.Name), () => this.Header.Version + " - " + this.Header.CreationTime.ToString("R"));
-            btn.AddControls(IconButton.CreateCloseButton().SetLeftClickAction(b => showDeleteDialogue(this)).SetLocation(btn.TopRight).SetAnchor(1, 0).ShowOnParentFocus(true));
+            btn.AddControls(IconButton.CreateCloseButton().SetLeftClickAction(b => showDeleteDialogue(this)).SetLocation(btn.TopRight + new Vector2(- btn.Padding,btn.Padding)).SetAnchor(1, 0).ShowOnParentFocus(true));
             return btn;
             void showDeleteDialogue(SaveFile save)
             {

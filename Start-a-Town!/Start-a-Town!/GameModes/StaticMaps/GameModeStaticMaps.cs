@@ -177,7 +177,7 @@ namespace Start_a_Town_.Core
             ScreenManager.Add(ingame); // TODO: find out why there's a freeze when ingame screen begins (and causing rendertargets during ingame.initialize() not work
         }
 
-        internal override Control Load()
+        internal override Control LoadGame()
         {
             return SaveFileManager.Gui.ToPanel();
         }

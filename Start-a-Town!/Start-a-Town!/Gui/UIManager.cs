@@ -100,14 +100,8 @@ namespace Start_a_Town_.UI
 
         static UIManager()
         {
-            if (uint.TryParse(InterfaceSettings.XTintPrimary.Value, System.Globalization.NumberStyles.HexNumber, null, out uint packed))
-                TintPrimary.PackedValue = packed;
-            else
-                TintPrimary = TintPrimaryDefault;
-            if (uint.TryParse(InterfaceSettings.XTintSecondary.Value, System.Globalization.NumberStyles.HexNumber, null, out packed))
-                TintSecondary.PackedValue = packed;
-            else
-                TintSecondary = TintPrimaryDefault;
+            TintPrimary.PackedValue = uint.TryParse(InterfaceSettings.XTintPrimary.Value, System.Globalization.NumberStyles.HexNumber, null, out uint packed) ? packed : TintPrimaryDefault.PackedValue;
+            TintSecondary.PackedValue = uint.TryParse(InterfaceSettings.XTintSecondary.Value, System.Globalization.NumberStyles.HexNumber, null, out packed) ? packed : TintSecondaryDefault.PackedValue;
         }
 
         public static Texture2D frameSprite, SlotSprite, defaultButtonSprite, DefaultIconButtonSprite, ItemSheet, DefaultProgressBar, DefaultProgressBarStrip, ProgressBarBorder, DefaultDropdownSprite, DefaultLoadingSprite,

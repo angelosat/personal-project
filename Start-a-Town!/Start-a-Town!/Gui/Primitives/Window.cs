@@ -289,6 +289,7 @@ namespace Start_a_Town_.UI
             this.SetOpacity(0);
             this.SetMousethrough(true);
             this.Label_Title.MouseThrough = false;
+            this.Label_Title.BackgroundColor = Color.Black * .5f;
             this.Label_Title.Active = true;
             return this;
         }

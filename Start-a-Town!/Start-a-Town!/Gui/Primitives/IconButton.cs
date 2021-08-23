@@ -115,6 +115,7 @@ namespace Start_a_Town_.UI
         public IconButton(Texture2D backgroundText) : this() { BackgroundTexture = backgroundText; }
         public IconButton() : this(Vector2.Zero)
         {
+            this.Color = Color.White * .5f;
         }
         public IconButton(Vector2 location) : base(location)
         {

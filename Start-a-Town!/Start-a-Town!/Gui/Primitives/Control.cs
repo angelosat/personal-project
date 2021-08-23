@@ -19,12 +19,12 @@ namespace Start_a_Town_.UI
             return this.Location + (this.Parent != null ? this.Parent.ClientLocation + this.Parent.GetLocation() : Vector2.Zero);
         }
         Vector2? _cachedScreenLocation;
-        public virtual Vector2 ScreenLocation => _cachedScreenLocation ??=
-            this.LocationFunc() + this.Location
-               - this.Dimensions * this.Anchor
-                  + (this.Parent != null ? this.Parent.ScreenLocation + this.Parent.ClientLocation : Vector2.Zero);
+        public virtual Vector2 ScreenLocation =>  _cachedScreenLocation ??= 
+            this.LocationFunc() + this.Location - this.Dimensions * this.Anchor
+            + (this.Parent != null ? this.Parent.ScreenLocation + this.Parent.ClientLocation : Vector2.Zero);
         Rectangle? _cachedBoundsScreen;
-        public virtual Rectangle BoundsScreen => _cachedBoundsScreen ??= new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
+        public virtual Rectangle BoundsScreen => _cachedBoundsScreen ??= 
+            new((int)this.ScreenLocation.X, (int)this.ScreenLocation.Y, this.Width, this.Height);
 
         //void CachePosition()
         //{
@@ -647,7 +647,7 @@ namespace Start_a_Town_.UI
         //        this.ClientSize = new Rectangle(0, 0, value.Width, value.Height);
         //    }
         //}
-        public bool HasMouseHover => this.lastHitTest;
+        public bool HasMouseHover => this.lastHitTest; //this.MouseHover;// 
         bool lastHitTest;
         public virtual bool HitTest(Rectangle viewport)
         {
@@ -710,7 +710,14 @@ namespace Start_a_Town_.UI
             return this;
         }
 
+        //Vector2 _clientLocation = Vector2.Zero;
+        //public virtual Vector2 ClientLocation
+        //{
+        //    get => this._clientLocation;
+        //    set => this._clientLocation = value;
+        //}
         public Vector2 ClientLocation = Vector2.Zero;
+
         protected Rectangle _clientSize;
         public virtual Rectangle ClientSize
         {

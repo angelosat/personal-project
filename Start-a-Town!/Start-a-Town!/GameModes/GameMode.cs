@@ -55,7 +55,7 @@ namespace Start_a_Town_
         internal virtual void Update(Client client) { }
         internal virtual void Update(Server server) { }
 
-        internal abstract Control Load();
+        internal abstract Control LoadGame();
         internal virtual Control GetNewGameGui(Action cancelAction) { return null; }
 
         internal virtual void ChunkReceived(Server server, int playerid, Vector2 vec) { }

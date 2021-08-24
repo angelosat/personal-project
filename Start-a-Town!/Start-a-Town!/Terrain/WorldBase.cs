@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.UI;
@@ -27,7 +28,9 @@ namespace Start_a_Town_
         public virtual Block DefaultBlock { get; set; }
         public virtual PopulationManager Population { get; }
 
-        public virtual List<Terraformer> Mutators { get; set; }
+        public virtual List<Terraformer> Terraformers { get; set; }
+
+        public T GetTerraformer<T>() where T : Terraformer => this.Terraformers.First(t => t is T) as T;
 
         public abstract void WriteData(BinaryWriter w);
 

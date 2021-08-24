@@ -31,7 +31,7 @@ namespace Start_a_Town_.Terraforming.Mutators
                 }
             }
         }
-        public override void Finally(Chunk chunk)
+        protected override void Finally(Chunk chunk)
         {
             return;
             var s = chunk.World.Seed;

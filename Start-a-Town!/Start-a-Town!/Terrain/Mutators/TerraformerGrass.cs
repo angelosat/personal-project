@@ -21,7 +21,7 @@ namespace Start_a_Town_.Terraforming.Mutators
             return this;
         }
 
-        public override void Finally(Chunk chunk)
+        protected override void Finally(Chunk chunk)
         {
             int varCount = BlockDefOf.Grass.Variations.Count;
             var count = Chunk.Size;

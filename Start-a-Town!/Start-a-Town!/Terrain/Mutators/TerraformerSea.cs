@@ -10,12 +10,16 @@ namespace Start_a_Town_.Terraforming.Mutators
             get => (int)this.SeaLevelProp.Value;
             set => this.SeaLevelProp.Value = value;
         }
-
-        public override void Finally(Chunk chunk)
+        internal override void Finally(Chunk chunk, Dictionary<IntVec3, double> gradients)
         {
-            foreach(var c in chunk.Cells)
+            var sandThickness = .01f;
+            var landTerraformer = chunk.Map.World.GetTerraformer<TerraformerNormal>();
+            var landThreshold = landTerraformer.GroundAirThreshold;
+            var sandThreshold = landThreshold - sandThickness;
+            foreach (var c in chunk.Cells)
             {
                 var z = c.Z;
+                float zNormal = z / (float)MapBase.MaxHeight - 0.5f;
                 if (z > this.SeaLevel)
                     continue;
                 else if (z == this.SeaLevel)
@@ -24,11 +28,19 @@ namespace Start_a_Town_.Terraforming.Mutators
                     {
                         c.Block = BlockDefOf.Fluid;
                         c.Material = MaterialDefOf.Water;
+                        continue;
                     }
-                    //else /// sand is applied by the default terraformer (currently normal.cs)
+                    //else /// sand is applied by the normal terraformer
                     //{
-                    //    c.Block = BlockDefOf.Sand;
-                    //    c.Material = MaterialDefOf.Sand;
+                    //    var cellCoords = c.LocalCoords;
+                    //    var soilGradient = landTerraformer.GetSoilGradient(z, gradients[cellCoords]);
+                    //    if (soilGradient < sandThreshold)
+                    //    {
+                    //        c.Block = BlockDefOf.Sand;
+                    //        c.Material = MaterialDefOf.Sand;
+                    //    }
+                    //    //c.Block = BlockDefOf.Sand;
+                    //    //c.Material = MaterialDefOf.Sand;
                     //}
                 }
                 else
@@ -38,7 +50,20 @@ namespace Start_a_Town_.Terraforming.Mutators
                         c.Block = BlockDefOf.Fluid;
                         c.Material = MaterialDefOf.Water;
                         c.BlockData = BlockFluid.GetData(1);
+                        continue;
                     }
+                }
+                if (z == 0)
+                    continue;
+                if (c.Material != MaterialDefOf.Soil)
+                    continue;
+                var cellCoords = c.LocalCoords;
+                var soilGradient = zNormal + gradients[cellCoords];
+                //if (landThreshold < soilGradient && soilGradient <= sandThreshold)
+                if (sandThreshold <= soilGradient && soilGradient < landThreshold)
+                {
+                    c.Block = BlockDefOf.Sand;
+                    c.Material = MaterialDefOf.Sand;
                 }
             }
         }

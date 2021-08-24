@@ -5,7 +5,7 @@ namespace Start_a_Town_.Terraforming.Mutators
     class TerraformerFlowers : Terraformer
     {
         float Density = 0.3f;
-        public override void Finally(Chunk chunk)
+        protected override void Finally(Chunk chunk)
         {
             int zSlice = MapBase.MaxHeight / 2;
             int varCount = BlockGrass.FlowerOverlays.Count;

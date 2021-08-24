@@ -552,7 +552,7 @@ namespace Start_a_Town_
                 var tasks = new List<(string label, Action action)>();
                 var size = this.Size.Chunks;
                 var max = size * size;
-                var mutatorlist = this.World.Mutators.ToList();
+                var mutatorlist = this.World.Terraformers.ToList();
                 mutatorlist.ForEach(m => m.SetWorld(this.World));
                 var watch = new Stopwatch();
                 var gradCache = new Dictionary<Chunk, Dictionary<IntVec3, double>>();

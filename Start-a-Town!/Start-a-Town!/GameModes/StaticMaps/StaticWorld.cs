@@ -74,7 +74,7 @@ namespace Start_a_Town_
         {
             this.MaxHeight = 128;
             this.DefaultBlock = BlockDefOf.Soil;
-            this.Mutators = new List<Terraformer>();
+            this.Terraformers = new List<Terraformer>();
             this.Trees = true;
             this.Maps = new MapCollection();
             this.PopulationManager = new PopulationManager(this);
@@ -92,7 +92,7 @@ namespace Start_a_Town_
                 (byte)(this.Seed >> 8),
                 (byte)this.Seed};
             this.Random = new Random(this.Seed);
-            this.Mutators = mutators;//.Select(mdef => mdef.Create()).ToList();// new List<Terraformer>(mutators);
+            this.Terraformers = mutators;//.Select(mdef => mdef.Create()).ToList();// new List<Terraformer>(mutators);
             this.DefaultBlock = BlockDefOf.Soil;
         }
         
@@ -112,7 +112,7 @@ namespace Start_a_Town_
             if (!save.TryGetTagValue<int>("DefaultBlock", v => { this.DefaultBlock = Block.GetBlock(v); }))
                 this.DefaultBlock = BlockDefOf.Soil;
             this.Name = (string)save["Name"].Value;
-            this.Mutators.LoadAbstract(save, "Mutators");
+            this.Terraformers.LoadAbstract(save, "Mutators");
             this.Population.TryLoad(save, "Population");
             var mapsList = save["Maps"].Value as List<SaveTag>;
             foreach (var tag in mapsList)
@@ -129,7 +129,7 @@ namespace Start_a_Town_
             this.CurrentTick = r.ReadUInt64();
             this.Trees = r.ReadBoolean();
             this.DefaultBlock = Block.GetBlock(r.ReadInt32());
-            this.Mutators.ReadListAbstract(r);
+            this.Terraformers.ReadListAbstract(r);
             this.Population.Read(r);
         }
         public MapBase CreateMap(Vector2 mapCoords)
@@ -156,7 +156,7 @@ namespace Start_a_Town_
             this.DefaultBlock.Hash.Save(tag, "DefaultBlock");
             this.Name.Save(tag, "Name");
             this.Population.Save(tag, "Population");
-            this.Mutators.SaveAbstract(tag, "Mutators");
+            this.Terraformers.SaveAbstract(tag, "Mutators");
             var mapsTag = new SaveTag(SaveTag.Types.List, "Maps", SaveTag.Types.Compound);
             foreach (var map in Maps.Values)
                 mapsTag.Add(map.Save());
@@ -222,7 +222,7 @@ namespace Start_a_Town_
             w.Write(this.CurrentTick);
             w.Write(this.Trees);
             w.Write(this.DefaultBlock.Hash);
-            this.Mutators.WriteAbstract(w);
+            this.Terraformers.WriteAbstract(w);
             this.Population.Write(w);
         }
 

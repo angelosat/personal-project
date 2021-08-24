@@ -16,7 +16,7 @@ namespace Start_a_Town_
             Finalize = (r, w, c, x, y, z) => { };
 
         public virtual void Initialize(WorldBase w, Cell c, int x, int y, int z, double g) { }
-        public virtual void Finally(Chunk chunk) { }
+        protected virtual void Finally(Chunk chunk) { }
         internal virtual void Finally(Chunk newChunk, Dictionary<IntVec3, double> gradients)
         {
             this.Finally(newChunk);

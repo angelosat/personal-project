@@ -6,7 +6,7 @@ namespace Start_a_Town_
 {
     partial class ItemPreferencesManager
     {
-        class ItemPreference : ISaveable, ISerializable
+        public class ItemPreference : Inspectable, ISaveable, ISerializable
         {
             public ItemRole Role;
             int _itemRefId;
@@ -35,7 +35,7 @@ namespace Start_a_Town_
             }
             public override string ToString()
             {
-                return $"{Role}:{Item?.DebugName ?? ItemRefId.ToString()}:{Score}";
+                return $"{Role}"+ (this.Item is not null ? $":{this.Item.DebugName}:{Score}" : "");
             }
 
             public void Write(BinaryWriter w)

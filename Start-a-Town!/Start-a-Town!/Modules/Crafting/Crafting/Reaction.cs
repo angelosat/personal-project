@@ -99,7 +99,7 @@ namespace Start_a_Town_
         private int GetWorkAmount(Dictionary<string, ObjectAmount> ingredients)
         {
             var work = this.BaseWork;
-            foreach(var (material, getter) in this.WorkGetters)
+            foreach (var (material, getter) in this.WorkGetters)
                 work = getter(work, ingredients[material].Object);
             return work;
         }
@@ -107,7 +107,7 @@ namespace Start_a_Town_
         public Control GetInfoGui()
         {
             var box = new GroupBox();
-            box.AddControlsVertically(this.Reagents.Select(r=>r.GetGui()));
+            box.AddControlsVertically(this.Reagents.Select(r => r.GetGui()));
             return box;
         }
     }

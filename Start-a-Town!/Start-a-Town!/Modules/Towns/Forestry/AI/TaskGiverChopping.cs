@@ -22,7 +22,7 @@ namespace Start_a_Town_
             //  return TaskHelper.TryStoreEquipped(actor, GearType.Mainhand); 
 
             var task = new AITask(typeof(TaskBehaviorChopping));
-            FindTool(actor, task, ToolUseDefOf.Chopping);
+            FindTool(actor, task, JobDefOf.Lumberjack);
             task.TargetA = new TargetArgs(trees.First());
             return task;
         }

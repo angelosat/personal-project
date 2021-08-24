@@ -6,7 +6,7 @@ using System.Linq;
 namespace Start_a_Town_.UI
 {
     public class ListBoxObservable<TObject> : GroupBox, IListSearchable<TObject>
-      where TObject : /*class, */IListable
+      where TObject : IListable
     {
         const int Spacing = 1;
         static readonly Func<TObject, bool> DefaultFilter = i => true;
@@ -18,7 +18,7 @@ namespace Start_a_Town_.UI
         /// <summary>
         /// A list containing all item controls, not just the currently displayed ones. Used for filtering.
         /// </summary>
-        readonly List<Control> Items = new();// => this.Controls.Cast<TControl>().ToList();
+        readonly List<Control> Items = new();
 
         public ListBoxObservable(ObservableCollection<TObject> objects)
         {
@@ -27,7 +27,7 @@ namespace Start_a_Town_.UI
 
         public void SelectItem(TObject obj)
         {
-            this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj));// i.Tag == obj);
+            this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj));
         }
         
         ListBoxObservable<TObject> Clear()
@@ -83,11 +83,7 @@ namespace Start_a_Town_.UI
             control.Tag = item;
             this.Items.Add(control);
             if (this.Controls.Any())
-            {
-                //this.AddControlsBottomLeft(control);
-                //control.Location.Y += Spacing;
                 this.AddControlsBottomLeft(Spacing, control);
-            }
             else
                 this.AddControls(control);
             return control;
@@ -141,7 +137,6 @@ namespace Start_a_Town_.UI
 
     public class ListBoxObservable<TObject, TControl> : GroupBox, IListSearchable<TObject>
         where TControl : Control, new()
-        //where TObject : class
     {
         const int Spacing = 1;
         static readonly Func<TObject, bool> DefaultFilter = i => true;
@@ -152,13 +147,12 @@ namespace Start_a_Town_.UI
         public void SelectItem(TObject obj)
         {
             this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj)) as TControl;
-            //this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag == obj) as TControl;
         }
 
         /// <summary>
         /// A list containing all item controls, not just the currently displayed ones. Used for filtering.
         /// </summary>
-        readonly List<TControl> Items = new();// => this.Controls.Cast<TControl>().ToList();
+        readonly List<TControl> Items = new();
 
         public Action<TObject> ItemChangedFunc = (item) => { };
         public ObservableCollection<TObject> List;

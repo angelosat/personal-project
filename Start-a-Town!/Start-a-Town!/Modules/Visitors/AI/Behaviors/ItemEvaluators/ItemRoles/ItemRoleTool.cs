@@ -2,10 +2,10 @@
 {
     class ItemRoleTool : ItemRole
     {
-        public ToolUseDef ToolAbility;
+        public JobDef ToolAbility;
         public override IItemPreferenceContext Context => this.ToolAbility;
 
-        public ItemRoleTool(ToolUseDef ttype)
+        public ItemRoleTool(JobDef ttype)
         {
             this.ToolAbility = ttype;
         }
@@ -15,21 +15,13 @@
             var ability = item.ToolComponent?.Props?.ToolUse;
             if (ability is null)
                 return -1;
-            if (ability != this.ToolAbility)
+            if (ability != this.ToolAbility.ToolUse)
                 return -1;
             return (int)StatDefOf.ToolEffectiveness.GetValue(item);
-
-            //var ability = item.ToolComponent?.Props?.ToolUse;
-            //if (!ability.HasValue)
-            //    return -1;
-            //if (ability.Value.Def != this.ToolAbility)
-            //    return -1;
-            //return (int)StatDefOf.ToolEffectiveness.GetValue(item);
-            //return ability.Value.Effectiveness;
         }
         public override string ToString()
         {
-            return $"{this.GetType().Name}:{this.ToolAbility.Name}";
+            return $"{this.ToolAbility.Label}";
         }
     }
 }

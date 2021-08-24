@@ -19,7 +19,7 @@
         }
         public override string ToString()
         {
-            return $"{this.GetType().Name}:{this.GearType.Name}";
+            return $"{this.GearType.Label}";
         }
     }
 }

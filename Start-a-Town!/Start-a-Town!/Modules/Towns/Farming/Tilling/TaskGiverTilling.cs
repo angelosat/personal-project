@@ -13,7 +13,7 @@ namespace Start_a_Town_
                 return null;
             var task = new AITask(typeof(TaskBehaviorTilling));
             task.SetTarget(TaskBehaviorTilling.TargetInd, new TargetArgs(actor.Map, loc.Value));
-            FindTool(actor, task, ToolUseDefOf.Argiculture);
+            FindTool(actor, task, JobDefOf.Farmer);
             return task;
         }
 

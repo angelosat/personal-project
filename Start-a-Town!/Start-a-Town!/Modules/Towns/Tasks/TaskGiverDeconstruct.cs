@@ -20,7 +20,7 @@
                     BehaviorType = typeof(TaskBehaviorDeconstruct),
                 };
                 task.SetTarget(TaskBehaviorDeconstruct.DeconstructInd, new TargetArgs(actor.Map, pos));
-                FindTool(actor, task, ToolUseDefOf.Building);
+                FindTool(actor, task, JobDefOf.Builder);
                 return task;
             }
             return null;   

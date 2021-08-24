@@ -9,7 +9,7 @@ using System.Linq;
 namespace Start_a_Town_
 {
     [EnsureStaticCtorCall]
-    partial class ItemPreferencesManager : IItemPreferencesManager, ISaveable, ISerializable
+    partial class ItemPreferencesManager : Inspectable, IItemPreferencesManager, ISaveable, ISerializable
     {
         static ItemPreferencesManager()
         {
@@ -32,7 +32,7 @@ namespace Start_a_Town_
         static readonly Dictionary<IItemPreferenceContext, ItemRole> RegistryByContext = new();
 
         static readonly Dictionary<GearType, ItemRole> ItemRolesGear = new();
-        static readonly Dictionary<ToolUseDef, ItemRole> ItemRolesTool = new();
+        static readonly Dictionary<JobDef, ItemRole> ItemRolesTool = new();
 
         static void GenerateItemRolesGear()
         {
@@ -42,7 +42,7 @@ namespace Start_a_Town_
         }
         static void GenerateItemRolesTools()
         {
-            var defs = Def.Database.Values.OfType<ToolUseDef>();
+            var defs = Def.Database.Values.OfType<JobDef>();
             foreach (var d in defs)
                 ItemRolesTool.Add(d, new ItemRoleTool(d));
         }
@@ -61,6 +61,8 @@ namespace Start_a_Town_
             this.PreferencesObs.CollectionChanged += this.PreferencesObs_CollectionChanged;
         }
 
+        public IEnumerable<ItemPreference> Preferences => this.PreferencesObs;
+
         private void PreferencesObs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (this.Actor.Net is Server)
@@ -77,19 +79,19 @@ namespace Start_a_Town_
             var allRoles = this.FindAllRoles(item);
             return allRoles.OrderByDescending(i => i.score).FirstOrDefault();
 
-            ItemPreference bestPreference = null;
-            int bestScore = -1;
-            foreach (var pref in this.PreferencesNew.Values)
-            {
-                var role = pref.Role;
-                var score = role.Score(this.Actor, item);
-                if (score > bestScore)
-                {
-                    bestPreference = pref;
-                    bestScore = score;
-                }
-            }
-            return (bestPreference?.Role.Context, bestScore);
+            //ItemPreference bestPreference = null;
+            //int bestScore = -1;
+            //foreach (var pref in this.PreferencesNew.Values)
+            //{
+            //    var role = pref.Role;
+            //    var score = role.Score(this.Actor, item);
+            //    if (score > bestScore)
+            //    {
+            //        bestPreference = pref;
+            //        bestScore = score;
+            //    }
+            //}
+            //return (bestPreference?.Role.Context, bestScore);
         }
         public IEnumerable<(IItemPreferenceContext role, int score)> FindAllRoles(Entity item)
         {

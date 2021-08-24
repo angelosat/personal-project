@@ -8,7 +8,7 @@ namespace Start_a_Town_
         public readonly MaterialCategory Category;
         public HashSet<MaterialDef> SubTypes = new();
         public float Shininess;
-        public ToolUseDef SkillToExtract;
+        public JobDef SkillToExtract;
 
         public MaterialTypeDef(string name, MaterialCategory category)
             : base(name)

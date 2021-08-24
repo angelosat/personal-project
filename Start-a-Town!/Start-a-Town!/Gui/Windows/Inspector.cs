@@ -23,7 +23,7 @@ namespace Start_a_Town_
         {
             if (WindowHelp is null)
             {
-                WindowHelp = new Window() { Title = "Details", Movable = true, Closable = true, AutoSize = true }.MoveToScreenCenter() as Window;
+                WindowHelp = new Window() { Title = "Details", Movable = true, Closable = true, AutoSize = true };//.MoveToScreenCenter() as Window;
                 var toolbar = new GroupBox();
                 BtnBack = IconButton.CreateSmall(Icon.ArrowLeft, Back).SetHoverText("Back") as IconButton;
                 BtnForward = IconButton.CreateSmall(Icon.ArrowRight, Forward).SetHoverText("Forward") as IconButton;
@@ -48,8 +48,6 @@ namespace Start_a_Town_
             }
             Container.ClearControls();
             var table = new Table<(string item, object value)>()
-                //.AddColumn("name", 128, i => new Label(i.item), 1)
-                //.AddColumn("name", 96, i => new GroupBox().AddControlsLineWrap(96, new Label(i.item), new Label(": ")), 1)
                 .AddColumn("name", Width / 3, i => new Label(i.item + ": "), 1)
                 .AddColumn("value", 2 * Width / 3, i => new GroupBox().AddControlsLineWrap(256, Label.ParseNewNew(i.value).ToArray()));
 

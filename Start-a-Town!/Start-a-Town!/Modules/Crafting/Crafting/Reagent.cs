@@ -103,7 +103,8 @@ namespace Start_a_Town_
 
             internal Control GetGui()
             {
-                return new GroupBox().AddControlsHorizontally(new Label($"{this.Name}: "), this.Ingredient.GetGui());
+                //return new GroupBox().AddControlsHorizontally(new Label($"{this.Name}: "), this.Ingredient.GetGui());
+                return new GroupBox().AddControlsHorizontally(UI.Label.ParseNewNew($"{this.Name}: ", this.Ingredient));
             }
         }
     }

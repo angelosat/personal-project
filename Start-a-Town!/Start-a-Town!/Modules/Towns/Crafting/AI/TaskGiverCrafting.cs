@@ -87,7 +87,7 @@ namespace Start_a_Town_
                             task.SetTarget(TaskBehaviorCrafting.WorkstationIndex, workstationTarget);
                             task.Order = order;
                             if(order.Reaction.Labor is not null)
-                                task.Tool = FindTool(actor, order.Reaction.Labor.ToolUse);
+                                task.Tool = FindTool(actor, order.Reaction.Labor);
                             return task;
                         }
                 }

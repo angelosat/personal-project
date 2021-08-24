@@ -65,7 +65,6 @@ namespace Start_a_Town_
             if (materialType is not null)
                 this.SetAllow(materialType, true);
         }
-        public override string Label => $"{typeof(Ingredient).Name}:{this.Name}";
         public IEnumerable<MaterialDef> GetAllValidMaterials()
         {
             this.TryResolve();
@@ -200,7 +199,8 @@ namespace Start_a_Town_
             this.IsPreserved = true;
             return this;
         }
-
+        public override string Label => $"{this.Amount}x material";//$"{typeof(Ingredient).Name}:{this.Name}";
+       
         public Control GetGui()
         {
             return new Label($"{this.Amount}x material");

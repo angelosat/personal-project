@@ -52,6 +52,11 @@ namespace Start_a_Town_
             this.Max = io.ReadSingle();
             this.Value = io.ReadSingle();
         }
+        public Progress Save(SaveTag tag, string name)
+        {
+            tag.Add(this.Save(name));
+            return this;
+        }
         public SaveTag Save(string name)
         {
             SaveTag tag = new SaveTag(SaveTag.Types.Compound, name);

@@ -11,6 +11,8 @@ namespace Start_a_Town_
 {
     public class Cell : Inspectable, ISlottable
     {
+        const int HitPointsMax = 4;
+
         public string GetName()
         {
             return this.Block.Label;
@@ -40,7 +42,7 @@ namespace Start_a_Town_
         {
 
         }
-        static readonly BitVector32.Section _orientation, _variation,_luminance, _blockData, _valid, _discovered, _originx, _originy, _originz;
+        static readonly BitVector32.Section _orientation, _variation,_luminance, _blockData, _valid, _discovered, _originx, _originy, _originz, _damage;
 
         static Cell()
         {
@@ -53,9 +55,20 @@ namespace Start_a_Town_
             _originx = BitVector32.CreateSection(2, _blockData); //2 bits // sum: 16bits
             _originy = BitVector32.CreateSection(2, _originx); //2 bits // sum: 18bits
             _originz = BitVector32.CreateSection(2, _originy); //2 bits // sum: 20bits
+            _damage = BitVector32.CreateSection(HitPointsMax, _originz); //3 bits // sum: 23bits
 
         }
-
+        public float HitPointsPercentage => this.HitPoints / (float)HitPointsMax;
+        public int HitPoints
+        {
+            get => HitPointsMax - this.Damage;
+            set => this.Damage = HitPointsMax - value;
+        }
+        public int Damage
+        {
+            get => this.Data[_damage];
+            set => this.Data[_damage] = value;
+        }
         public int OriginX
         {
             get
@@ -238,6 +251,12 @@ namespace Start_a_Town_
         internal IEnumerable<IntVec3> GetInteractionSpots(IntVec3 global)
         {
             return this.Block.GetInteractionSpots(this, global);
+        }
+
+        internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
+        {
+            info.AddInfo(new BarNew(() => HitPointsMax, () => this.HitPoints) { Color = Color.CornflowerBlue, Format = "Hit Points: {0} / {1}" });
+            map.GetBlockEntity(vector3)?.GetSelectionInfo(info, map, vector3);
         }
     }
 }

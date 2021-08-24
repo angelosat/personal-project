@@ -158,6 +158,7 @@ namespace Start_a_Town_
 
         public List<GameObject> Objects;
         readonly Dictionary<IntVec3, BlockEntity> BlockEntitiesByPosition = new();
+        public IEnumerable<BlockEntity> BlockEntities => this.BlockEntitiesByPosition.Values;
 
         public bool IsQueuedForLight;
         public const int Size = 16;
@@ -908,74 +909,6 @@ namespace Start_a_Town_
             }
         }
 
-        //private void SaveCellsToTagCompressed(SaveTag chunktag)
-        //{
-        //    SaveTag cellstag = new(SaveTag.Types.List, "Cells", SaveTag.Types.Compound);
-        //    var airLength = 0;
-        //    bool airIsDiscovered = false;
-        //    foreach (var cell in this.Cells)
-        //    {
-        //        if (cell.Block == BlockDefOf.Air)
-        //        {
-        //            airLength++;
-        //            airIsDiscovered = cell.Discovered;
-        //            continue;
-        //        }
-        //        // TODO when the last cell in the cell array is air, the air savetag isn't written
-        //        if (airLength > 0)
-        //        {
-        //            saveAirTag(cellstag, airLength, airIsDiscovered);
-        //            airLength = 0;
-        //        }
-
-        //        cellstag.Add(cell.Save());
-        //    }
-        //    // TODO when the last cell in the cell array is air, the air savetag isn't written
-        //    if (airLength > 0)
-        //        saveAirTag(cellstag, airLength, airIsDiscovered);
-
-        //    chunktag.Add(cellstag);
-
-        //    static void saveAirTag(SaveTag cellstag, int airLength, bool airIsDiscovered)
-        //    {
-        //        var airtag = new SaveTag(SaveTag.Types.Compound);
-        //        airtag.Save(BlockDefOf.Air, "Block");
-        //        airtag.Add(new SaveTag(SaveTag.Types.Int, "Data", airLength));
-        //        airtag.Add(new SaveTag(SaveTag.Types.Bool, "Discovered", airIsDiscovered));
-        //        cellstag.Add(airtag);
-        //    }
-        //}
-        //private void LoadCellsFromTagCompressed(SaveTag chunktag)
-        //{
-        //    var celllist = chunktag["Cells"].Value as List<SaveTag>;
-        //    int n = 0;
-        //    var airCount = 0;
-        //    bool airDiscovered = true;
-        //    var listPosition = 0;
-        //    var maxn = Size * Size * MapBase.MaxHeight;
-        //    while (listPosition < celllist.Count)
-        //    {
-        //        var celltag = celllist[listPosition++];
-        //        var block = celltag.LoadBlock("Block");
-        //        if (block == BlockDefOf.Air)
-        //        {
-        //            airCount = (int)celltag["Data"].Value;
-        //            celltag.TryGetTagValueNew("Discovered", ref airDiscovered);
-        //            for (int i = n; i < n + airCount; i++)
-        //            {
-        //                var c = this.Cells[i];
-        //                c.Discovered = false;// airDiscovered;
-        //            }
-
-        //            n += airCount;
-
-        //            continue;
-        //        }
-        //        var cell = this.Cells[n++];
-        //        cell.Load(celltag);
-        //    }
-        //}
-
         private Dictionary<BlockEntity, List<IntVec3>> GetDistinctBlockEntities()
         {
             var distinct = new Dictionary<BlockEntity, List<IntVec3>>();
@@ -1364,7 +1297,6 @@ namespace Start_a_Town_
 
         public string DirectoryName => (((int)(this.MapCoords.X)).ToString() + "." + ((int)(this.MapCoords.Y)).ToString()) + "/";
 
-        public IEnumerable<BlockEntity> BlockEntities => this.BlockEntitiesByPosition.Values;
 
         public Canvas Canvas;
 

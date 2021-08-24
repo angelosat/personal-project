@@ -1082,7 +1082,6 @@
     <Compile Include="Gui\HelpWindow.cs" />
     <Compile Include="Gui\Primitives\TextBox.cs" />
     <Compile Include="Gui\Tooltip.cs" />
-    <Compile Include="Gui\TrackBar.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Control\Tools\DefaultTool.cs">
       <SubType>Code</SubType>

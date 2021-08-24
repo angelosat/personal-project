@@ -757,7 +757,8 @@ namespace Start_a_Town_
                     break;
 
                 case TargetType.Position:
-                    this.Block.GetSelectionInfo(info, this.Map, this.Global);
+                    //this.Block.GetSelectionInfo(info, this.Map, this.Global);
+                    this.Cell.GetSelectionInfo(info, this.Map, this.Global);
                     break;
 
                 default:

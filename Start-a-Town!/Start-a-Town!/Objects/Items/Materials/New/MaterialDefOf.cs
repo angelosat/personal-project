@@ -18,8 +18,8 @@ namespace Start_a_Town_
             .SetValue(100);
 
 
-        static public readonly MaterialDef Coal = new(MaterialTypeDefOf.Stone, "Coal", "Coal", Color.DimGray, 100) { ValueBase = 1, Fuel = new Fuel(FuelDef.Organic, 20f), WorkToBreak = 25 };
-        static public readonly MaterialDef Stone = new(MaterialTypeDefOf.Stone, "Stone", "Stone", Color.White, 80) { ValueBase = 5, WorkToBreak = 20 };//LightSlateGray, 0.8f); new Color(213, 209, 201, 255) //Color.AntiqueWhite
+        static public readonly MaterialDef Coal = new(MaterialTypeDefOf.Stone, "Coal", "Coal", Color.DimGray, 100) { ValueBase = 1, Fuel = new Fuel(FuelDef.Organic, 20f), BreakResistance = 25 };
+        static public readonly MaterialDef Stone = new(MaterialTypeDefOf.Stone, "Stone", "Stone", Color.White, 80) { ValueBase = 5, BreakResistance = 20 };//LightSlateGray, 0.8f); new Color(213, 209, 201, 255) //Color.AntiqueWhite
 
         static public readonly MaterialDef ShrubStem = new MaterialDef("Twig", MaterialTemplates.PlantStem)
             .SetColor(new Color(139, 136, 95, 255));// Color.DarkOliveGreen
@@ -38,7 +38,7 @@ namespace Start_a_Town_
             .SetValue(20);
 
 
-        static public readonly MaterialDef Soil = new(MaterialTypeDefOf.Soil, "Soil", "Dirt", Color.SandyBrown, 20) { ValueBase = 2, WorkToBreak = 20 };
+        static public readonly MaterialDef Soil = new(MaterialTypeDefOf.Soil, "Soil", "Dirt", Color.SandyBrown, 20) { ValueBase = 2, BreakResistance = 20 };
         static public readonly MaterialDef Sand = new(MaterialTypeDefOf.Soil, "Sand", "Sand", Color.BlanchedAlmond, 10) { ValueBase = 2 };
 
 

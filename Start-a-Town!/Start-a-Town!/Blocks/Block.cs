@@ -327,9 +327,9 @@ namespace Start_a_Town_
         {
             return true;
         }
-        public virtual float GetWorkToBreak(MapBase map, Vector3 global)
+        public virtual float GetBreakResistance(MapBase map, Vector3 global)
         {
-            return map.GetBlockMaterial(global).WorkToBreak;
+            return map.GetBlockMaterial(global).BreakResistance;
         }
 
         protected virtual ParticleEmitterSphere GetDustEmitter()

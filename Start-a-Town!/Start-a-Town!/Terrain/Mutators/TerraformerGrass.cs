@@ -3,11 +3,11 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
-    class Grass : Terraformer
+    class TerraformerGrass : Terraformer
     {
         Random Randomizer;
 
-        public Grass()
+        public TerraformerGrass()
         {
             this.Finalize = (RandomThreaded random, WorldBase w, Cell c, int x, int y, int z) =>
             {

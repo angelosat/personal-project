@@ -2,54 +2,52 @@
 
 namespace Start_a_Town_.Terraforming.Mutators
 {
-    class Flowers : Terraformer
+    class TerraformerFlowers : Terraformer
     {
-        float Density;
+        float Density = 0.3f;
         public override void Finally(Chunk chunk)
         {
             int zSlice = MapBase.MaxHeight / 2;
             int varCount = BlockGrass.FlowerOverlays.Count;
-            byte[][] seed = new byte[varCount][];
+            byte[][] flowerNoiseSeeds = new byte[varCount][];
             int s = chunk.Map.World.Seed + "flowers".GetHashCode();
             var random = new Random(s);
             for (int i = 0; i < varCount; i++)
-                seed[i] = BitConverter.GetBytes(s * i);
+                flowerNoiseSeeds[i] = BitConverter.GetBytes(s * i);
             var size = Chunk.Size;
             for (int lx = 0; lx < size; lx++)
             {
                 for (int ly = 0; ly < size; ly++)
                 {
-                    Cell cell = chunk.GetLocalCell(lx, ly, chunk.HeightMap[lx][ly]);
+                    var cell = chunk.GetLocalCell(lx, ly, chunk.HeightMap[lx][ly]);
                     if (cell.Block != BlockDefOf.Grass)
                         continue;
 
-                    int gx = lx + (int)chunk.Start.X, gy = ly + (int)chunk.Start.Y;
+                    int gx = lx + chunk.Start.X, gy = ly + chunk.Start.Y;
 
                     int oct = 2;
                     double[] n = new double[varCount];
                     double nmax = 0;
-                    int flowermax = 0;
+                    int selectedFlower = 0;
                     for (int i = 0; i < varCount; i++)
                     {
                         n[i] = 0;
-                        var seedByte = seed[i];
+                        var currentSeed = flowerNoiseSeeds[i];
                         for (int o = 0; o < oct; o++)
-                            n[i] += Generator.Perlin3D(gx, gy, zSlice, 16 >> o, seedByte) / Math.Pow(2, o);
-                        if (n[i] > nmax)
+                            n[i] += Generator.Perlin3D(gx, gy, zSlice, 16 >> o, currentSeed) / Math.Pow(2, o);
+                        if (n[i] > nmax) /// select the flower variation that has the highest noise value
                         {
                             nmax = n[i]; //slow?
-                            flowermax = i;
+                            selectedFlower = i;
                         }
                     }
 
-                    nmax += ((this.Density) * 2 - 1);
+                    nmax += this.Density * 2 - 1;
                     if (nmax > 0)
                     {
                         var r = random.NextDouble();
                         if (r < nmax)
-                        {
-                            cell.BlockData = (byte)(flowermax + 1);
-                        }
+                            cell.BlockData = (byte)(selectedFlower + 1); // because 0 == no flowers
                     }
                 }
             }

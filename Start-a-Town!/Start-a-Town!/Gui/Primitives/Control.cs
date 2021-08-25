@@ -314,6 +314,9 @@ namespace Start_a_Town_.UI
         {
             this._cachedScreenLocation = null;
             this._cachedBoundsScreen = null;
+            this.lastHitTest = false;
+            foreach (var ctrl in this.Controls)
+                ctrl.InvalidatePosition();
         }
 
         public Control SetTag(object tag)
@@ -1287,7 +1290,7 @@ namespace Start_a_Town_.UI
         }
         public virtual bool Show(GuiLayer layer)
         {
-            //this.InvalidatePosition();
+            this.InvalidatePosition();
 
             this.Layer = layer;
             this.OnShow();
@@ -1518,7 +1521,7 @@ namespace Start_a_Town_.UI
                 mode = ScrollModes.Horizontal;
             if (this.Height > h)
                 mode |= ScrollModes.Vertical;
-            return new ScrollableBoxNewNew(w, h, mode).AddControls(this); // comment this if controls are overlapped by scrollbars
+            //return new ScrollableBoxNewNew(w, h, mode).AddControls(this); // comment this if controls are overlapped by scrollbars
             return ScrollableBoxNewNew.FromClientSize(w, h, mode).AddControls(this);
         }
 

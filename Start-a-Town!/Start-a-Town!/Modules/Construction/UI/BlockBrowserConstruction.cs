@@ -40,8 +40,13 @@ namespace Start_a_Town_.Core
                             win = this.ToolBox.ToWidget("Brushes");
                             win.HideAction = () => ToolManager.SetTool(null);
                         }
-                        if (win.Show())
+                        //if (win.Show())
+                        //    win.Location = this.GetWindow().BottomLeft;
+                        if(!win.IsOpen)
+                        {
                             win.Location = this.GetWindow().BottomLeft;
+                            win.Show();
+                        }
                     };
                     slot.RightClickAction = () => UIBlockVariationPickerNew.Refresh(block, this.OnVariationSelected);
                     slot.HoverFunc = () => $"{block.Name}\n{this.GetLastSelectedVariantOrDefault(block).Requirement}\nTool necessity: {block.BuildProperties.ToolSensitivity:##0%}\nRight click to select variation";

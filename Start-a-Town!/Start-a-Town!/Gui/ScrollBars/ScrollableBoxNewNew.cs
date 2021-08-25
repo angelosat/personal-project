@@ -9,7 +9,8 @@ namespace Start_a_Town_.UI
         readonly ScrollbarV VScroll;
         readonly ScrollbarH HScroll;
         public GroupBox Client;
-        public override Rectangle ClientSize => this.Client.ClientSize; 
+        public override Rectangle ClientSize => this.Client.ClientSize;
+        ScrollModes Mode;
         public override Control SetOpacity(float value, bool children, params Control[] exclude)
         {
             base.SetOpacity(value, children, exclude);
@@ -27,6 +28,7 @@ namespace Start_a_Town_.UI
         public ScrollableBoxNewNew(int width, int height, ScrollModes mode = ScrollModes.Both)
             : base(width, height)
         {
+            this.Mode = mode;
             var modeFactor = new IntVec2((mode & ScrollModes.Vertical) == ScrollModes.Vertical ? 1 : 0, (mode & ScrollModes.Horizontal) == ScrollModes.Horizontal ? 1 : 0);
             this.Client = new GroupBox(width - buttonSize * modeFactor.X, height - buttonSize * modeFactor.Y) { AutoSize = false };
             this.VScroll = new ScrollbarV(new Vector2(this.Client.Width, 0), this.Client.Height, this.Client);
@@ -62,7 +64,7 @@ namespace Start_a_Town_.UI
         {
             var prefsize = this.Client.PreferredClientSize;
             var prefw = prefsize.Width;
-            if (this.Client.Width < prefw)
+            if ((this.Mode & ScrollModes.Horizontal) == ScrollModes.Horizontal && this.Client.Width < prefw)
             {
                 if (!this.Controls.Contains(this.HScroll))
                     this.Controls.Add(this.HScroll);
@@ -71,7 +73,7 @@ namespace Start_a_Town_.UI
                 this.Controls.Remove(this.HScroll);
 
             var prefh = prefsize.Height;
-            if (this.Client.Height < prefh)
+            if ((this.Mode & ScrollModes.Vertical) == ScrollModes.Vertical && this.Client.Height < prefh)
             {
                 if (!this.Controls.Contains(this.VScroll))
                     this.Controls.Add(this.VScroll);

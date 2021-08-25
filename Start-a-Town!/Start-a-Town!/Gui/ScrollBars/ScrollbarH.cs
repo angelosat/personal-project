@@ -75,7 +75,7 @@ namespace Start_a_Town_.UI
             if (scr is not null)
             {
                 float percentage = scr.Size.Width / (float)scr.ClientSize.Width;
-                this.Thumb.Size = new Rectangle(0, 0, (int)((this.Size.Width - 32) * percentage), 16);
+                //this.Thumb.Size = new Rectangle(0, 0, (int)((this.Size.Width - 32) * percentage), 16);
                 float pos = -scr.ClientLocation.X / scr.ClientSize.Width;
 
                 this.Thumb.Width = (int)((this.Size.Width - 32) * percentage);

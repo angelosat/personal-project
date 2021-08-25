@@ -865,7 +865,7 @@ namespace Start_a_Town_.UI
         }
         public virtual void Draw(SpriteBatch sb, Rectangle viewport)
         {
-            this.InvalidatePosition();
+            //this.InvalidatePosition();
             //if (this.DrawOnParentFocus)
             //    if(!this.Parent?.HasMouseHover ?? false)
             if (this.ShowConditions.Any(c => !c(this)))
@@ -932,7 +932,7 @@ namespace Start_a_Town_.UI
         }
         public override void Update()
         {
-            //this.InvalidatePosition();
+            this.InvalidatePosition();
             //this.CachePosition();
             this.OnUpdate();
 

@@ -85,7 +85,7 @@ namespace Start_a_Town_.UI
 
                 float percentage = scr.Size.Height / (float)scr.ClientSize.Height;
 
-                this.Thumb.Size = new Rectangle(0, 0, w, (int)((this.Size.Height - ww) * percentage));
+                //this.Thumb.Size = new Rectangle(0, 0, w, (int)((this.Size.Height - ww) * percentage));
                 float pos = -scr.ClientLocation.Y / scr.ClientSize.Height;
 
                 this.Thumb.Height = (int)((this.Size.Height - ww) * percentage);

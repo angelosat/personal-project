@@ -164,8 +164,10 @@ namespace Start_a_Town_.UI
             get => base.Width;
             set
             {
+                var oldw = base.Width;
                 base.Width = value;
-                this.Invalidate();
+                if (value != oldw)
+                    this.Invalidate();
             }
         }
 

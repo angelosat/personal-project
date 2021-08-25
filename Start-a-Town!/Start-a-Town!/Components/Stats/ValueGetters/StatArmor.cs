@@ -12,7 +12,7 @@ namespace Start_a_Town_
         {
             var actor = obj as Actor;
             var gear = actor.GetGear();
-            var value = gear.Sum(g => g.Def.ApparelProperties.ArmorValue);
+            var value = gear.Sum(g => g.Def.ApparelProperties?.ArmorValue ?? 0);
             return value;
         }
     }

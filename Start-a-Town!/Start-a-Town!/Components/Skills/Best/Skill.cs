@@ -9,7 +9,7 @@ namespace Start_a_Town_
     {
         public NpcSkillsComponent Container;
         public SkillDef Def;
-        public int Level;
+        public int Level = 1;
         Progress LvlProgress = new();
         const int XpToLevelBase = 100;
 
@@ -26,7 +26,7 @@ namespace Start_a_Town_
         //static int GetNextLvlXpTest1(int currentLvl) => (int)Math.Pow(XpToLevelBase, currentLvl + 1);
         //static int GetNextLvlXpTest2(int currentLvl) => currentLvl > 0 ? (int)Math.Pow(XpToLevelBase, currentLvl) * (XpToLevelBase - 1) : XpToLevelBase;
         //static int GetNextLvlXpTest3(int currentLvl) => (currentLvl + 1) * XpToLevelBaseNew + (currentLvl == 0 ? 0 : GetNextLvlXpTest3(currentLvl - 1));
-        static int GetNextLvlXp(int currentLvl) => (int)Math.Pow(2, currentLvl) * XpToLevelBase;
+        static int GetNextLvlXp(int currentLvl) => (int)Math.Pow(2, currentLvl - 1) * XpToLevelBase;
 
         static public void Init(Hud hud)
         {
@@ -64,7 +64,7 @@ namespace Start_a_Town_
         }
         static Skill()
         {
-            //for (int i = 0; i < 10; i++)
+            //for (int i = 1; i < 10; i++)
             //{
             //    $"{i}: {GetNextLvlXp(i)}".ToConsole();
             //}

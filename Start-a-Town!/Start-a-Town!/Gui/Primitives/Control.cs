@@ -306,7 +306,6 @@ namespace Start_a_Town_.UI
         internal Control SnapToMouse()
         {
             this.SetLocation(UIManager.Mouse);
-            //this.InvalidatePosition();
             return this;
         }
 

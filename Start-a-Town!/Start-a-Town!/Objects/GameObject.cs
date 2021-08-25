@@ -1454,7 +1454,7 @@ namespace Start_a_Town_
         {
             get
             {
-                return this.Def.Weight * this.StackSize;
+                return this.Physics.Weight * this.StackSize;
             }
         }
         

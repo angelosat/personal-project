@@ -36,7 +36,7 @@ namespace Start_a_Town_
         public ProgressLeveledExp Progress;
         public AttributeDef Def;
 
-        public int Level { get => this.Progress.Level; set => this.Progress.SetLevel(value); }
+        public int Level { get => this.Progress.Level; set => this.Progress.Level = value; }//.SetLevel(value); }
         public int Min = 10;
         const int BaseXpToLevel = 100;//5; //placeholder
         public AttributeStat(AttributeDef def, int value = 10)
@@ -63,18 +63,18 @@ namespace Start_a_Town_
             this.Progress.Value += p;
             if (p > 0)
                 this.Rec.Value = this.Rec.Max;
-            if (this.Progress.Percentage == 1)
-            {
-                this.Progress.Value++;
-                this.Progress.Value = 0;
-            }
-            else if (this.Progress.Percentage == 0)
-            {
-                if (this.Level == this.Min)
-                    return;
-                this.Progress.Value--;
-                this.Progress.Value = this.Progress.Max;
-            }
+            //if (this.Progress.Percentage == 1)
+            //{
+            //    this.Progress.Value++;
+            //    this.Progress.Value = 0;
+            //}
+            //else if (this.Progress.Percentage == 0)
+            //{
+            //    if (this.Level == this.Min)
+            //        return;
+            //    this.Progress.Value--;
+            //    this.Progress.Value = this.Progress.Max;
+            //}
         }
 
         public Control GetControl()

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Particles;
+using System;
 using System.Collections.Generic;
 
 namespace Start_a_Town_
@@ -50,16 +51,15 @@ namespace Start_a_Town_
                 a.Map.ParticleManager.AddEmitter(this.EmitterStrike);
             }
             var toolEffect = GetToolEffectiveness();
-            var amount = toolEffect / WorkDifficulty;
+            var amount = (int)Math.Max(1, toolEffect / WorkDifficulty);
             this.ApplyWork(amount);
             this.TotalWorkAmount += amount;
             var skill = this.GetSkill();
-            if(this.SkillAwardType == SkillAwardTypes.OnSwing)
+            if (this.SkillAwardType == SkillAwardTypes.OnSwing)
                 a[skill].Award(amount);
             var energyConsumption = this.GetEnergyConsumption(amount, a.Skills[skill].Level); //amount / a.Skills[skill].Level;
 
-            var stamina = a.Resources[ResourceDefOf.Stamina];
-            stamina.Adjust(-energyConsumption);
+            ConsumeEnergy(a, energyConsumption);
             /// i moved the multiplication with the stamina threshold to inside the workspeed stat formula
             this.Animation.Speed = a[StatDefOf.WorkSpeed];
 
@@ -70,6 +70,18 @@ namespace Start_a_Town_
             this.Done();
             this.Finish();
         }
+
+        private static void ConsumeEnergy(Actor a, float energyConsumption)
+        {
+            var stamina = a.Resources[ResourceDefOf.Stamina];
+            stamina.Adjust(-energyConsumption);
+
+            //var strAwardMultiplier = 2 - stamina.Percentage; // working while exhausted raises strength faster
+            /// strength increases faster the more tired the actor is while working
+            var strAwardMultiplier = 1 + (int)(stamina.ResourceDef.Worker.Thresholds.Count * (1 - stamina.CurrentThreshold.Value));
+            a[AttributeDefOf.Strength].AddToProgress(a, strAwardMultiplier * energyConsumption);
+        }
+
         protected virtual float GetToolEffectiveness()
         {
             if (this.Actor.Gear.GetGear(GearType.Mainhand) is Tool tool && tool.ToolComponent.Props.ToolUse == this.GetToolUse())
@@ -82,9 +94,10 @@ namespace Start_a_Town_
             //var fromWorkSkill = workAmount / (skillLevel+1);
             var toolWeight = this.Actor[GearType.Mainhand]?.TotalWeight ?? 1;
             var strength = this.Actor[AttributeDefOf.Strength].Level;
-            var fromToolWeight = 10 * toolWeight / strength;
+            var fromToolWeight = //10 * 
+                toolWeight / strength;
             //return fromWorkSkill * fromToolWeight;
-            return fromToolWeight;
+            return (int)fromToolWeight;
 
             const int skillFactor = 1;// 20;
             return workAmount / (skillFactor * skillLevel);

@@ -23,8 +23,10 @@ namespace Start_a_Town_
 
         public void SetPlant(PlantProperties props)
         {
+            /// do all this here or do it wherever this is called from?
             this.Plant = props;
-            this.Parent.Name = $"{props.Name} {this.Parent.Def.Label}";
+            //this.Parent.Name = $"{props.Name} {this.Parent.Def.Label}";
+            //this.Parent.Name = $"{props.Label} {props.SeedsName}";
         }
 
         public override object Clone()

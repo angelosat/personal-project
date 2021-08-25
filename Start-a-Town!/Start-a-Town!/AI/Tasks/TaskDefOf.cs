@@ -82,7 +82,11 @@ namespace Start_a_Town_
             Format = "Force equip {0}",
             GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
         };
-
+        static public TaskDef Chopping = new("Chopping", typeof(TaskBehaviorChopping))
+        {
+            Format = "Chop down {0}",
+            GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
+        };
         static public TaskDef Idle = new("Idleing", typeof(TaskBehaviorIdle)) { Idle = true };
         static public TaskDef Wander = new("Wandering", typeof(TaskBehaviorWander)) { Idle = true };
 

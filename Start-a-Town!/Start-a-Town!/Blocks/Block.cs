@@ -764,6 +764,8 @@ namespace Start_a_Town_
             //var mat = cell.Block.GetMaterial(cell.BlockData);
             //return mat;
         }
+        [Obsolete]
+        /// calling this doesnt check if cell exists
         public static float GetBlockHeight(MapBase map, Vector3 global)
         {
             var offset = global.ToBlock();

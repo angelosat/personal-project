@@ -99,7 +99,7 @@ namespace Start_a_Town_
                 var item = obj as Entity;
                 if (item == null)
                     continue;
-                if (item.Physics.Size == Components.ObjectSize.Immovable)
+                if (item.Physics.Size == ObjectSize.Immovable)
                     continue;
                 if (!item.IsStockpilable())
                     continue;

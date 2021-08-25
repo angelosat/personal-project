@@ -9,17 +9,27 @@ namespace Start_a_Town_
         static public readonly ItemDef Seeds = new("Seeds")
         {
             ItemClass = typeof(Entity),
-            StackCapacity = 16,
+            StackCapacity = 64,
             Category = ItemCategoryDefOf.RawMaterials,
             Body = new Bone(BoneDefOf.Item, ItemContent.SeedsFull),
             DefaultMaterial = MaterialDefOf.Seed,
             CompProps = new List<ComponentProps>() { new SeedComponent.Props() }
         };
-        
+
+        //static public readonly ItemDef Saplings = new("Saplings")
+        //{
+        //    ItemClass = typeof(Entity),
+        //    StackCapacity = 16,
+        //    Category = ItemCategoryDefOf.RawMaterials,
+        //    Body = new Bone(BoneDefOf.Item, ItemContent.SeedsFull),
+        //    DefaultMaterial = MaterialDefOf.Seed,
+        //    CompProps = new List<ComponentProps>() { new SeedComponent.Props() }
+        //};
+
         static public readonly ItemDef Fruit = new ItemDef("Fruit")
         {
             ItemClass = typeof(Entity),
-            StackCapacity = 8,
+            StackCapacity = 32,
             Category = ItemCategoryDefOf.FoodRaw,
             Body = new Bone(BoneDefOf.Item, ItemContent.BerriesFull),
             ConsumableProperties = new ConsumableProperties()

@@ -59,7 +59,8 @@
             Body = BodyDef.NpcNew,
             DefaultMaterial = MaterialDefOf.Human,
             ActorProperties = NpcProps,
-            Factory = Actor.Create
+            Factory = Actor.Create,
+            Size = ObjectSize.Haulable
         };
 
         static ActorDefOf()

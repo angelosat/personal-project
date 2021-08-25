@@ -3,15 +3,18 @@ using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Start_a_Town_.Components;
 
-namespace Start_a_Town_.Components
+namespace Start_a_Town_
 {
-    public enum ObjectSize { Immovable = -1, Inventoryable, Haulable }
+    //public enum ObjectSize { Immovable = -1, Inventoryable, Haulable }
+    public enum ObjectSize { Inventoryable, Haulable, Immovable }
     public class PhysicsComponent : EntityComponent
     {
         public override string Name { get; } = "Physics";
-        public ObjectSize Size;
+        public ObjectSize Size => this.Parent.Def.Size;
         public bool Solid;
         public float Height;
         public float Weight;
@@ -26,21 +29,21 @@ namespace Start_a_Town_.Components
         public PhysicsComponent()
             : base()
         {
-            this.Initialize();
+            //this.Initialize();
         }
         public PhysicsComponent(PhysicsComponent toCopy)
         {
             this.Height = toCopy.Height;
         }
        
-        public PhysicsComponent Initialize(int size = 0, bool solid = false, float height = 1, float weight = 1)
-        {
-            this.Size = (ObjectSize)size;
-            this.Solid = false;
-            this.Height = height;
-            this.Weight = weight;
-            return this;
-        }
+        //public PhysicsComponent Initialize(int size = 0, bool solid = false, float height = 1, float weight = 1)
+        //{
+        //    this.Size = (ObjectSize)size;
+        //    this.Solid = false;
+        //    this.Height = height;
+        //    this.Weight = weight;
+        //    return this;
+        //}
 
         public int Reach => (int)Math.Ceiling(this.Height) + 2;
 
@@ -321,7 +324,8 @@ namespace Start_a_Town_.Components
                         this.HitGround(parent, next);
 
                         float blockheightbelow = 0;
-                        blockheightbelow = corners.Max(c => Block.GetBlockHeight(map, c));
+                        //blockheightbelow = corners.Max(c => Block.GetBlockHeight(map, c));
+                        blockheightbelow = corners.Max(c => map.GetCell(c)?.GetBlockHeight(c) ?? 0);
                         return (int)next.Z + blockheightbelow;
                     }
                 }
@@ -464,8 +468,8 @@ namespace Start_a_Town_.Components
 
         public override object Clone()
         {
-            PhysicsComponent phys = new PhysicsComponent(this);
-            phys.Size = this.Size;
+            var phys = new PhysicsComponent(this);
+            //phys.Size = this.Size;
             phys.Weight = this.Weight;
             phys.Height = this.Height;
             phys.Solid = this.Solid;
@@ -568,6 +572,29 @@ namespace Start_a_Town_.Components
                     new Vector3(box.Max.X, box.Max.Y, global.Z)
                 };
             return corners.Any(c => map.GetBlock(c + new Vector3(0, 0, gravity)).Density > 0);
+        }
+
+        public override void OnObjectLoaded(GameObject parent)
+        {
+            // update def changes
+            var bones = parent.Body.GetAllBones();
+            this.Weight = bones.Sum(b => b.Material.Density) / bones.Count();
+            this.Weight = this.Size switch
+            {
+                ObjectSize.Immovable => this.Weight,
+                ObjectSize.Inventoryable => this.Weight / 10f,
+                ObjectSize.Haulable => this.Weight,
+                _ => throw new Exception()
+            };
+        }
+
+        public override void Write(BinaryWriter w)
+        {
+            w.Write(this.Weight);
+        }
+        public override void Read(BinaryReader r)
+        {
+            this.Weight = r.ReadSingle();
         }
     }
 }

@@ -30,18 +30,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                         c.Material = MaterialDefOf.Water;
                         continue;
                     }
-                    //else /// sand is applied by the normal terraformer
-                    //{
-                    //    var cellCoords = c.LocalCoords;
-                    //    var soilGradient = landTerraformer.GetSoilGradient(z, gradients[cellCoords]);
-                    //    if (soilGradient < sandThreshold)
-                    //    {
-                    //        c.Block = BlockDefOf.Sand;
-                    //        c.Material = MaterialDefOf.Sand;
-                    //    }
-                    //    //c.Block = BlockDefOf.Sand;
-                    //    //c.Material = MaterialDefOf.Sand;
-                    //}
                 }
                 else
                 {
@@ -59,7 +47,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                     continue;
                 var cellCoords = c.LocalCoords;
                 var soilGradient = zNormal + gradients[cellCoords];
-                //if (landThreshold < soilGradient && soilGradient <= sandThreshold)
                 if (sandThreshold <= soilGradient && soilGradient < landThreshold)
                 {
                     c.Block = BlockDefOf.Sand;

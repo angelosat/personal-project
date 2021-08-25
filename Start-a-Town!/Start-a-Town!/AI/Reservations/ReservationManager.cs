@@ -75,48 +75,6 @@ namespace Start_a_Town_
             Reservations.Add(vation);
             return true;
         }
-        internal bool ReserveOld(Actor actor, AITask task, TargetArgs target, int stackCount)
-        {
-            if (target.Type == TargetType.Null)
-                throw new Exception();
-
-            /// MOVED THIS HERE FROM BELOW (check comment below)
-            if (target.Type == TargetType.Position)
-                stackCount = 1;
-            else if (target.Type == TargetType.Entity)
-                stackCount = (stackCount != -1) ? stackCount : target.Object.StackSize;
-
-            // update existing reservation if it exists
-            var existing = this.Reservations.FirstOrDefault(r => r.Target.IsEqual(target) && r.Actor == actor.RefID);
-            if(existing!=null)
-            {
-                if (stackCount == existing.Amount)
-                    return true;
-                var availableAmount = this.GetUnreservedAmount(target) + existing.Amount;
-                if (availableAmount < stackCount)
-                    return false;
-                existing.Amount = stackCount;
-                return true;
-            }
-
-            if (!actor.CanReserve(target, stackCount))
-                throw new Exception(); // this will probably throw if the canreserve check has been omitted in a taskgiver, or a reservation has been omitted in the initreservations of another behavior
-            /// I MOVED THIS TO THE BEGINNING OF THE FUNCTION because I check the stackCount against any existing reservations which are NEVER -1
-            ///if (target.Type == TargetType.Position)
-            ///    stackCount = 1;
-            ///else if (target.Type == TargetType.Entity)
-            ///    stackCount = (stackCount != -1) ? stackCount : target.Object.StackSize;//.StackMax; // UNDONE was there a reason i put stackmax?
-            var vation = new Reservation(actor, target, stackCount)
-            {
-                Task = task
-            };
-            if (target.HasObject && stackCount > target.Object.StackSize)
-                throw new Exception();
-            // signal holders of possible existing reservations
-            TryCancelExistingReservations(target, stackCount);
-            Reservations.Add(vation);
-            return true;
-        }
         internal bool ReserveAsManyAsPossible(Actor actor, AITask task, TargetArgs target, int desiredAmount = -1)
         {
             if (target.Type == TargetType.Null || target.Type == TargetType.Position)
@@ -181,19 +139,10 @@ namespace Start_a_Town_
         {
             Reservations.RemoveAll(r => r.Actor == actor.RefID);
         }
-        internal void Unreserve(GameObject actor, AITask task)
-        {
-            Reservations.RemoveAll(r => r.Actor == actor.RefID && r.TaskID == task.ID);
-        }
+        
         internal void Unreserve(GameObject actor, TargetArgs target)
         {
             Reservations.RemoveAll(r => r.Actor == actor.RefID && r.Target.IsEqual(target));
-        }
-        internal bool ReservedBy(TargetArgs t, GameObject actor, AITask task)
-        {
-            return Reservations.Any(r =>
-                r.Target.IsEqual(t) && r.Actor == actor.RefID && r.TaskID == task.ID
-            );
         }
         internal bool CanReserve(GameObject actor, TargetArgs target, int stackcount = -1, bool ignoreOtherReservations = false)
         {

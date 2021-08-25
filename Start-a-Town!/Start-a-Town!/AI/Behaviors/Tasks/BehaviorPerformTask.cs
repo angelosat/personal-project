@@ -171,6 +171,7 @@ namespace Start_a_Town_
         }
         internal override void ObjectLoaded(GameObject parent)
         {
+            this.Actor = parent as Actor;
             this.CurrentBehavior.ObjectLoaded(parent);
         }
         protected void AddFinishAction(Action a)

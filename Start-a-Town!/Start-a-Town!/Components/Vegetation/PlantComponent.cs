@@ -203,8 +203,15 @@ namespace Start_a_Town_.Components
             var yield = (int)(this.GrowthBody.Percentage * plantdef.MaxYieldCutDown);
             if (plantdef.ProductCutDown != null && yield > 0)
             {
-                var product = plantdef.ProductCutDown.CreateFrom(plant.Body.Material ?? MaterialDefOf.LightWood).SetStackSize(yield);                                                                                                                           //,new Loot(ItemTemplate.Sapling.Factory.Create, 1, 1, 1, 3)
+                var product = plantdef.ProductCutDown.CreateFrom(plant.Body.Material ?? MaterialDefOf.LightWood).SetStackSize(yield);
                 actor.Net.PopLoot(product, plant.Global, plant.Velocity);
+
+                /// if the plant doesnt produce fruit, then the only seed source is by cutting the plant itself
+                if(!plantdef.ProducesFruit)
+                {
+                    var seeds = plantdef.CreateSeeds().SetStackSize(yield);
+                    actor.Net.PopLoot(seeds, plant.Global, plant.Velocity);
+                }
             }
             plant.Despawn();
             actor.Net.DisposeObject(plant);

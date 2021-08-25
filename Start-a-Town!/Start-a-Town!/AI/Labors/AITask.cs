@@ -287,7 +287,8 @@ namespace Start_a_Town_
         public SaveTag Save(string name = "") 
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            tag.Add(this.GetType().FullName.Save("Type"));
+            //tag.Add(this.GetType().FullName.Save("Type"));
+            this.Def.Save(tag, "Def");
             tag.Add(this.ID.Save("ID"));
             tag.Add(this.Tool.Save("Tool"));
             tag.Add(this.TargetA.Save("TargetA"));
@@ -348,6 +349,7 @@ namespace Start_a_Town_
         }
         public virtual void LoadData(SaveTag tag)
         {
+            this.Def = tag.LoadDef<TaskDef>("Def");
             tag.TryGetTagValue<int>("ID", t => this.ID = t);
             tag.TryGetTag("TargetA", t => this.TargetA = new TargetArgs(null, t));
             tag.TryGetTag("TargetB", t => this.TargetB = new TargetArgs(null, t));

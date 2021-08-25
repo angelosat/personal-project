@@ -1484,7 +1484,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graphics\Items\blocks\sapling.png">
+    <Compile Include="Graphics\Items\sapling.png">
       <Name>sapling</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -2320,6 +2320,13 @@
     </Compile>
     <Compile Include="Graphics\Gui\toolwall.png">
       <Name>toolwall</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\Items\blocks\saplingBlock.png">
+      <Name>saplingBlock</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

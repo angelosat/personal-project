@@ -46,11 +46,6 @@ namespace Start_a_Town_
             return this.Gear.GetSlot(GearType.Dictionary[type]);
         }
 
-        public Entity SetMaterial(BoneDef bone, MaterialDef mat)
-        {
-            this.Sprite.SetMaterial(bone, mat);
-            return this;
-        }
 
         internal void InitComps()
         {
@@ -88,6 +83,7 @@ namespace Start_a_Town_
         {
             return this.Body.RenderIcon(this, scale);
         }
+
         internal Entity SetMaterial(MaterialDef mat)
         {
             foreach (var c in this.Components.Values)

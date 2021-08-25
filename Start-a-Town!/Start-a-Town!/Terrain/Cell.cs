@@ -258,5 +258,11 @@ namespace Start_a_Town_
             info.AddInfo(new BarNew(() => HitPointsMax, () => this.HitPoints) { Color = Color.CornflowerBlue, Format = "Hit Points: {0} / {1}" });
             map.GetBlockEntity(vector3)?.GetSelectionInfo(info, map, vector3);
         }
+
+        internal float GetBlockHeight(Vector3 vec3)
+        {
+            var offset = vec3.ToBlock();
+            return this.Block.GetHeight(this.BlockData, offset.X, offset.Y);
+        }
     }
 }

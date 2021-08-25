@@ -17,7 +17,7 @@ namespace Start_a_Town_
                 this.Grown = textureGrown;
             }
         }
-        public string TextureFruit;
+        public string TextureFruit, TextureSeeds, SeedsName;
 
         //public string TextureGrowing, TextureGrown;
         [XmlIgnore]
@@ -77,6 +77,8 @@ namespace Start_a_Town_
             TextureGrowing = ItemContent.BerryBushGrowing.AssetPath,
             TextureGrown = ItemContent.BerryBushGrown.AssetPath,
             TextureFruit = ItemContent.BerryBushFruit.AssetPath,
+            TextureSeeds = ItemContent.SeedsFull.AssetPath,
+            SeedsName = "Seeds",
             StemMaterial = MaterialDefOf.ShrubStem,
             FruitMaterial = MaterialDefOf.Berry,
             Growth = new GrowthProperties(ItemDefOf.Fruit, MaterialDefOf.Berry, 5, 6),
@@ -88,6 +90,8 @@ namespace Start_a_Town_
         {
             TextureGrowing = ItemContent.TreeFull.AssetPath,
             TextureGrown = ItemContent.TreeFull.AssetPath,
+            TextureSeeds = ItemContent.Sapling.AssetPath,
+            SeedsName = "Saplings",
             StemMaterial = MaterialDefOf.LightWood,
             ProductCutDown = RawMaterialDefOf.Logs,
             MaxYieldCutDown = 5,
@@ -127,6 +131,8 @@ namespace Start_a_Town_
         {
             var seeds = ItemDefOf.Seeds.Create();
             seeds.GetComponent<SeedComponent>().SetPlant(this);
+            seeds.Name = $"{this.Label} {this.SeedsName}";
+            seeds.Body.Sprite = Sprite.Load(this.TextureSeeds);
             return seeds;
         }
 

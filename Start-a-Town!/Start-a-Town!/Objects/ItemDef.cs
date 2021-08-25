@@ -33,6 +33,7 @@ namespace Start_a_Town_
         internal IEnumerable<IItemDefVariator> StorageFilterVariations;
         public Func<Entity, string> NameGetter;
         public Func<Entity, Def> VariationGetter;
+        public ObjectSize Size;
 
         public ItemDef(string name) : base(name)
         {

@@ -59,28 +59,6 @@ namespace Start_a_Town_.Terraforming.Mutators
                 c.Material = MaterialDefOf.Soil;
                 return;
             }
-
-            /// MOVING CODE BELOW TO THE SEA TERRAFORMER
-
-            //var seaLevel = maxZ / 2 - 2;
-            //var sandThickness = .01f;
-            //var sandMaxLevel = seaLevel + 1;// 2;
-
-            //if (z <= seaLevel)
-            //{
-            //    c.Block = BlockDefOf.Fluid;
-            //    c.Material = MaterialDefOf.Water;
-            //}
-            //if (z < seaLevel)
-            //    c.BlockData = BlockFluid.GetData(1);
-
-            //if (z <= sandMaxLevel)
-            //    if (gradientSoil < this.GroundAirThreshold + sandThickness)
-            //    {
-            //        c.Block = BlockDefOf.Sand;
-            //        c.Material = MaterialDefOf.Sand;
-            //    }
-
             return;
         }
 

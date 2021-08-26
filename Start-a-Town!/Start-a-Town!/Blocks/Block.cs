@@ -426,16 +426,6 @@ namespace Start_a_Town_
 
         public void Deconstruct(GameObject actor, Vector3 global)
         {
-            /// I DONT WANT EVERY BLOCK TO TO DECONSTRUCT INTO SCRAPS BY DEFAULT
-            /// or do i?
-            //var map = actor.Map;
-            //var cell = map.GetCell(global);
-            //var material = this.GetMaterial(cell.BlockData);
-            //var scraps = RawMaterialDef.Scraps;
-            //var materialQuantity = this.Ingredient.Amount;
-            //var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
-            //actor.Net.PopLoot(obj, global, Vector3.Zero);
-
             this.OnDeconstruct(actor, global);
             actor.Map.GetBlockEntity(global)?.Deconstruct(actor, global);
             actor.Map.RemoveBlock(global);
@@ -444,13 +434,9 @@ namespace Start_a_Town_
         {
             var map = actor.Map;
             var cell = map.GetCell(global);
-            //var material = this.GetMaterial(cell.BlockData);
             var material = cell.Material;
             var scraps = RawMaterialDefOf.Scraps;
-            var materialQuantity = this.Ingredient.Amount;// * scraps.StackCapacity;
-            //var obj = scraps.CreateFrom(material).SetStackSize(materialQuantity);
-            //actor.Net.PopLoot(obj, global, Vector3.Zero);
-            //actor.Net.PopLoot(new LootTable(new Loot(() => scraps.CreateFrom(material), 1, 1, materialQuantity / 2, materialQuantity) { ItemDef = scraps }), global, Vector3.Zero);
+            var materialQuantity = this.Ingredient.Amount;
             actor.Net.PopLoot(new LootTable(new Loot(() => scraps.CreateFrom(material), 1, materialQuantity, scraps.StackCapacity / 2, scraps.StackCapacity)), global, Vector3.Zero);
         }
 

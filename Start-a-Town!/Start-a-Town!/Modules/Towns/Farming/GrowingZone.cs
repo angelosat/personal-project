@@ -163,7 +163,18 @@ namespace Start_a_Town_
             foreach (var pos in this.CachedSowing)
                 yield return pos;
         }
-
+        public IEnumerable<IntVec3> GetSowingPositions(int spacing)
+        {
+            if (!this.Valid)
+                this.Validate();
+            var first = this.Positions.First();
+            foreach(var pos in this.CachedSowing)
+            { 
+                var d = pos - first;
+                if (d.X % (spacing + 1) == 0 && d.Y % (spacing + 1) == 0)
+                    yield return pos;
+            }
+        }
         public IEnumerable<IntVec3> GetTillingPositions()
         {
             if (!this.Valid)

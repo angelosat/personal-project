@@ -21,7 +21,7 @@ namespace Start_a_Town_
                     continue;
                 if (!zone.Planting)
                     continue;
-                var allLocs = zone.GetSowingPositions();
+                var allLocs = zone.GetSowingPositions(plant.PlantingSpacing);
                 if (!allLocs.Any())
                     continue;
                 if (!actor.CanReachNew(allLocs.First()))
@@ -40,7 +40,7 @@ namespace Start_a_Town_
                 if(!sources.Any() || !destinations.Any())
                     continue;
 
-                var task = new AITask(TaskDefOf.Sowing);// typeof(TaskBehaviorDeliverMaterials));
+                var task = new AITask(TaskDefOf.Sowing);
                 task.AddTargets(TaskBehaviorDeliverMaterials.MaterialID, sources);
                 task.AddTargets(TaskBehaviorDeliverMaterials.DestinationID, destinations);
 
@@ -55,20 +55,20 @@ namespace Start_a_Town_
 
             var enumSources = sources.GetEnumerator();
             var enumTargets = destinations.GetEnumerator();
-            var remaining = maxAmount;
-            while (enumSources.MoveNext() && remaining > 0)
+            var remainingTotal = maxAmount;
+            while (remainingTotal > 0 && enumSources.MoveNext())
             {
                 var count = 0;
                 var currentSource = enumSources.Current;
                 var unreservedAmount = actor.GetUnreservedAmount(currentSource);
-                var carryFromCurrent = Math.Min(remaining, unreservedAmount);// currentSource.StackSize);
-                while (enumTargets.MoveNext() && carryFromCurrent > 0)
+                var remainingFromCurrentStack = Math.Min(remainingTotal, unreservedAmount);// currentSource.StackSize);
+                while (remainingFromCurrentStack > 0 && enumTargets.MoveNext())
                 {
                     var currentDest = enumTargets.Current;
                     var idealAmountToDistribute = targetAmountGetter(currentDest);
-                    var actualAmountToDistribute = Math.Min(idealAmountToDistribute, carryFromCurrent);
-                    carryFromCurrent -= actualAmountToDistribute;
-                    remaining -= actualAmountToDistribute;
+                    var actualAmountToDistribute = Math.Min(idealAmountToDistribute, remainingFromCurrentStack);
+                    remainingFromCurrentStack -= actualAmountToDistribute;
+                    remainingTotal -= actualAmountToDistribute;
                     count += actualAmountToDistribute;
                     destinationsAmounts.Add((currentDest, actualAmountToDistribute));
                 }
@@ -76,53 +76,5 @@ namespace Start_a_Town_
             }
             return (sourcesAmounts, destinationsAmounts);
         }
-
-        //protected override AITask TryAssignTask(Actor actor)
-        //{
-        //    var map = actor.Map;
-        //    if (!actor.HasLabor(JobDefOf.Farmer))
-        //        return null;
-        //    // TODO: iterate through all zones until one with an available seed type is found
-
-        //    var zones = map.Town.ZoneManager.GetZones<GrowingZone>();
-        //    foreach (var zone in zones)
-        //    {
-        //        var plant = zone.Plant;
-        //        if (plant == null)
-        //            continue;
-
-        //        var allSowablePositions = zone.GetSowingPositions()
-        //                                      .Where(g => actor.CanReserve(g) && actor.CanReach(g));
-        //        if (!allSowablePositions.Any())
-        //            return null;
-        //        var destinationsEnumerator = allSowablePositions.GetEnumerator();
-
-        //        var allseeds = actor.Map.GetObjectsLazy().Where(c => c.IsSeedFor(plant) && actor.CanReserve(c)
-        //                                                             ).OrderByReachableRegionDistance(actor);
-        //        var enumSources = allseeds.GetEnumerator();
-
-        //        var remaining = actor.MaxCarryable(ItemDefOf.Seeds);
-        //        var enumTargets = allSowablePositions.GetEnumerator();
-        //        var task = new AITask(typeof(TaskBehaviorDeliverMaterials));
-        //        while (enumSources.MoveNext() && remaining > 0)
-        //        {
-        //            var count = 0;
-        //            var currentSource = enumSources.Current;
-        //            var carryFromCurrent = Math.Min(remaining, currentSource.StackSize);
-        //            while (enumTargets.MoveNext() && carryFromCurrent > 0)
-        //            {
-        //                var currentTarget = enumTargets.Current;
-        //                carryFromCurrent--;
-        //                remaining--;
-        //                count++;
-        //                task.AddTarget(TaskBehaviorDeliverMaterials.DestinationID, (map, currentTarget), 1);
-        //            }
-        //            task.AddTarget(TaskBehaviorDeliverMaterials.MaterialID, currentSource, count);
-        //        }
-        //        if (task.TargetsA.Any())
-        //            return task;
-        //    }
-        //    return null;
-        //}
     }
 }

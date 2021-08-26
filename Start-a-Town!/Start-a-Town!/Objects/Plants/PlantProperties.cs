@@ -45,7 +45,7 @@ namespace Start_a_Town_
         [Obsolete]
         ///instead of using cutdowndifficulty, determine cutdown hitpoints by stem material density
         public int CutDownDifficulty = 1;
-
+        public int PlantingSpacing;
         [XmlIgnore]
         public MaterialDef StemMaterial;
         [XmlIgnore]
@@ -100,6 +100,7 @@ namespace Start_a_Town_
             PlantEntity = PlantDefOf.Tree,
             ToolToCut = ToolUseDefOf.Chopping,
             StemHealRate = Ticks.FromHours(1),
+            PlantingSpacing = 1
         };
 
         public Plant CreatePlant()

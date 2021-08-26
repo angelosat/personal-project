@@ -127,7 +127,7 @@ namespace Start_a_Town_
         }
         public override void OnSpawned(BlockEntity entity, MapBase map, IntVec3 global)
         {
-            var material = map.GetBlockMaterial(global);
+            var material = map.GetMaterial(global);
             this.Fuel.Value += material.Fuel.Value;
         }
         private void AddFuelNew(GameObject item, int quantity)

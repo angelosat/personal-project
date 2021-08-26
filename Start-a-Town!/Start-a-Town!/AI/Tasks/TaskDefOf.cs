@@ -40,7 +40,11 @@ namespace Start_a_Town_
             Format = "Sow {0}",
             GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
         };
-
+        static public TaskDef Tilling = new("Tilling", typeof(TaskBehaviorTilling))
+        {
+            Format = "Till {0}",
+            GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
+        };
         static public TaskDef Moving = new("Moving", typeof(TaskBehaviorLeaveUnstandableCell))
         {
             Format = "Move {0}",

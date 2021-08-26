@@ -3,13 +3,13 @@
     abstract class BlockPlacer
     {
         protected abstract Block Block { get; }
-        MaterialDef Material;
-        byte CellData;
-        int Orientation;
-        int Variation;
+        protected MaterialDef Material;
+        protected byte CellData;
+        protected int Orientation;
+        protected int Variation;
         public void Place(MapBase map, IntVec3 global, bool notify = true)
         {
-            Block.Place(this.Block, map, global, this.Material, this.CellData, this.Variation, this.Orientation, notify);
+            Block.Place(this.Block, map, global, this.Material ?? this.Block.DefaultMaterial, this.CellData, this.Variation, this.Orientation, notify);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Start_a_Town_
                 if(!sources.Any() || !destinations.Any())
                     continue;
 
-                var task = new AITask(typeof(TaskBehaviorDeliverMaterials));
+                var task = new AITask(TaskDefOf.Sowing);// typeof(TaskBehaviorDeliverMaterials));
                 task.AddTargets(TaskBehaviorDeliverMaterials.MaterialID, sources);
                 task.AddTargets(TaskBehaviorDeliverMaterials.DestinationID, destinations);
 

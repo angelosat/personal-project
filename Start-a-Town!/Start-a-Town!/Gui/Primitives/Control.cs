@@ -313,7 +313,7 @@ namespace Start_a_Town_.UI
         {
             this._cachedScreenLocation = null;
             this._cachedBoundsScreen = null;
-            this.lastHitTest = false;
+            //this.lastHitTest = false;
             foreach (var ctrl in this.Controls)
                 ctrl.InvalidatePosition();
         }
@@ -1290,7 +1290,7 @@ namespace Start_a_Town_.UI
         public virtual bool Show(GuiLayer layer)
         {
             this.InvalidatePosition();
-
+            this.lastHitTest = false;
             this.Layer = layer;
             this.OnShow();
 

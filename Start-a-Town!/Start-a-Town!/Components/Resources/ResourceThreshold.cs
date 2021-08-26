@@ -2,12 +2,14 @@
 
 namespace Start_a_Town_
 {
-    public class ResourceThreshold : Def
+    public class ResourceThreshold// : Def
     {
+        public readonly string Label;
         ResourceThreshold Next;
         readonly public float Value;
-        public ResourceThreshold(string name, float value) : base(name)
+        public ResourceThreshold(string name, float value)// : base(name)
         {
+            this.Label = name;
             this.Value = value;
         }
         public ResourceThreshold Get(float value)
@@ -48,7 +50,7 @@ namespace Start_a_Town_
         }
         public override string ToString()
         {
-            return $"{this.Name}: {this.Value:##0%}";
+            return $"{this.Label}: {this.Value:##0%}";
         }
     }
 }

@@ -8,6 +8,10 @@ namespace Start_a_Town_
         public class Placer : BlockPlacer
         {
             protected override Block Block => BlockDefOf.Soil;
+            //public Placer()
+            //{
+            //    this.Material = 
+            //}
         }
 
         public override bool IsMinable => true;

@@ -822,9 +822,10 @@ namespace Start_a_Town_
             return los;
         }
 
-        internal MaterialDef GetBlockMaterial(Vector3 global)
+        internal MaterialDef GetMaterial(IntVec3 global)
         {
-            return Block.GetBlockMaterial(this, global);
+            return this.GetCell(global).Material;
+            //return Block.GetBlockMaterial(this, global);
         }
 
         internal Region GetRegionAt(Vector3 north)

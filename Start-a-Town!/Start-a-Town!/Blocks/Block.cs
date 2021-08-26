@@ -329,7 +329,7 @@ namespace Start_a_Town_
         }
         public virtual float GetBreakResistance(MapBase map, Vector3 global)
         {
-            return map.GetBlockMaterial(global).BreakResistance;
+            return map.GetMaterial(global).BreakResistance;
         }
 
         protected virtual ParticleEmitterSphere GetDustEmitter()

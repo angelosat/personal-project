@@ -1,4 +1,5 @@
 ﻿using Start_a_Town_.Components;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -44,7 +45,10 @@ namespace Start_a_Town_
             var tree = PlantProperties.LightTree.CreatePlant();
             tree.Growth = 1;
             GameObject.AddTemplate(tree);
-            GameObject.AddTemplate(PlantProperties.Berry.CreateSeeds());
+
+            //GameObject.AddTemplate(PlantProperties.Berry.CreateSeeds());
+            var allPlants = Def.GetDefs<PlantProperties>();
+            GameObject.AddTemplates(allPlants.Select(p => p.CreateSeeds()));
         }
     }
 }

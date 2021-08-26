@@ -39,8 +39,9 @@ namespace Start_a_Town_
             var plant = plantdef.CreatePlant();
             plant.SyncInstantiate(map.Net);
             plant.SyncSpawn(map, global.Above());
-            var placer = new BlockSoil.Placer();
-            placer.Place(map, global);
+            //var placer = new BlockSoil.Placer();
+            //placer.Place(map, global);
+            Block.Place(BlockDefOf.Soil, map, global, map.GetCell(global).Material, 0, 0, 0);
             map.Town.ZoneManager.GetZoneAt(global)?.Invalidate();
             obj.StackSize--;
         }

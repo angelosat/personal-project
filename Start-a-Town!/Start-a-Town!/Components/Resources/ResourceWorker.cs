@@ -43,8 +43,7 @@ namespace Start_a_Town_
 
         public string GetLabel(Resource res)
         {
-            var label = this.GetCurrentThreshold(res)?.Label;
-            return label ?? "";
+            return this.GetCurrentThreshold(res)?.Label ?? "";
         }
         public ResourceThreshold GetCurrentThreshold(Resource res)
         {

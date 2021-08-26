@@ -10,5 +10,9 @@
         }
 
         public abstract void Tick(GameObject obj, AttributeStat attributeStat);
+        internal virtual void Award(GameObject obj, AttributeStat attributeStat, float p)
+        {
+            attributeStat.AddToProgress(p);
+        }
     }
 }

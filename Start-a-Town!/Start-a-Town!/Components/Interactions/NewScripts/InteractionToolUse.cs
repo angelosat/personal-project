@@ -75,11 +75,12 @@ namespace Start_a_Town_
         {
             var stamina = a.Resources[ResourceDefOf.Stamina];
             stamina.Adjust(-energyConsumption);
+            a[AttributeDefOf.Strength].Award(a, energyConsumption);
 
-            //var strAwardMultiplier = 2 - stamina.Percentage; // working while exhausted raises strength faster
-            /// strength increases faster the more tired the actor is while working
-            var strAwardMultiplier = 1 + (int)(stamina.ResourceDef.Worker.Thresholds.Count * (1 - stamina.CurrentThreshold.Value));
-            a[AttributeDefOf.Strength].AddToProgress(a, strAwardMultiplier * energyConsumption);
+            ////var strAwardMultiplier = 2 - stamina.Percentage; // working while exhausted raises strength faster
+            ///// strength increases faster the more tired the actor is while working
+            //var strAwardMultiplier = 1 + (int)(stamina.ResourceDef.Worker.Thresholds.Count * (1 - stamina.CurrentThreshold.Value));
+            //a[AttributeDefOf.Strength].AddToProgress(strAwardMultiplier * energyConsumption);
         }
 
         protected virtual float GetToolEffectiveness()

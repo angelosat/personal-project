@@ -48,9 +48,7 @@ namespace Start_a_Town_.Components
         {
             var parent = this.Parent;
             for (int i = 0; i < this.Attributes.Length; i++)
-            {
                 this.Attributes[i].Update(parent);
-            }
         }
 
         public override object Clone()
@@ -85,7 +83,7 @@ namespace Start_a_Town_.Components
                     {
                         t.AddControlsBottomLeft(
                             new Label(a.Def.Description),
-                            a.Progress.GetControl());
+                            a.GetProgressControl());
                     }
                 })
                 .AddColumn("value", "", (int) UIManager.Font.MeasureString("###").X, a => new Label(() => a.Level.ToString()));

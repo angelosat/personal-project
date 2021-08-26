@@ -33,7 +33,7 @@ namespace Start_a_Town_
         public float DecayRate = -0.5f;
         public float GainRate = 0;
         public List<ValueModifier> Modifiers = new();
-        public ProgressLeveledExp Progress;
+        ProgressLeveledExp Progress;
         public AttributeDef Def;
 
         public int Level { get => this.Progress.Level; set => this.Progress.Level = value; }//.SetLevel(value); }
@@ -57,40 +57,22 @@ namespace Start_a_Town_
         {
             return this.Def.Name + ": " + this.Level;
         }
-
-        internal void AddToProgress(GameObject parent, float p)
+        public void Award(GameObject parent, float p)
+        {
+            this.Def.Worker.Award(parent, this, p);
+        }
+        internal void AddToProgress(float p)
         {
             this.Progress.Value += p;
             if (p > 0)
                 this.Rec.Value = this.Rec.Max;
-            //if (this.Progress.Percentage == 1)
-            //{
-            //    this.Progress.Value++;
-            //    this.Progress.Value = 0;
-            //}
-            //else if (this.Progress.Percentage == 0)
-            //{
-            //    if (this.Level == this.Min)
-            //        return;
-            //    this.Progress.Value--;
-            //    this.Progress.Value = this.Progress.Max;
-            //}
         }
 
-        public Control GetControl()
+        internal Control GetProgressControl()
         {
-            var label = new Label()
-            {
-                TextFunc = () => $"{this.Def.Name}: {this.Level}",
-                TooltipFunc = (t) =>
-                {
-                    t.AddControlsBottomLeft(
-                        new Label(this.Def.Description),
-                        this.Progress.GetControl());
-                }
-            };
-            return label;
+            return this.Progress.GetControl();
         }
+
         public AttributeStat Clone()
         {
             return new AttributeStat(this.Def, this.Level);

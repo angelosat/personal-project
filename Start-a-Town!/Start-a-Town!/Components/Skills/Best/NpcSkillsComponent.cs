@@ -56,7 +56,7 @@ namespace Start_a_Town_
       
         public Control GetCreationGui()
         {
-            var table = new TableScrollableCompactNewNew<Skill>()
+            var table = new TableScrollableCompact<Skill>()
                 .AddColumn(null, "name", 80, s => new Label(s.Def.Label), 0)
                 .AddColumn(null, "value", 16, s => new Label() { TextFunc = () => s.Level.ToString() }, 0);
 

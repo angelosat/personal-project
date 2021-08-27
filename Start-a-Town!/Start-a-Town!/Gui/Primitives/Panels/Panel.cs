@@ -63,9 +63,12 @@ namespace Start_a_Town_.UI
 
         public static Panel FromClientSize(int w, int h)
         {
-            var panel = new Panel();
-            panel.Width = w + 2 * panel.BackgroundStyle.Border;
-            panel.Height = h + 2 * panel.BackgroundStyle.Border;
+            var panel = new Panel(Vector2.Zero, new(w + 2 * UIManager.BorderPx, h + 2 * UIManager.BorderPx));
+            //panel.ClientSize = new Rectangle(0, 0, w, h);
+
+            //panel.Width = w + 2 * panel.BackgroundStyle.Border;
+            //panel.Height = h + 2 * panel.BackgroundStyle.Border;
+
             return panel;
         }
 

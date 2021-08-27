@@ -185,7 +185,7 @@ namespace Start_a_Town_
             var win = new Lazy<Window>(() => shopUI.Value.control.ToWindow("Shop"));
             
 
-            var shoplist = new TableScrollableCompactNewNew<Workplace>()
+            var shoplist = new TableScrollableCompact<Workplace>()
                 .AddColumn(new(), "name", 200, sh => new Label(sh.Name, ()=> {
                         shopUI.Value.refresh(sh);
                 }), 0)

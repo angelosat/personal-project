@@ -216,7 +216,7 @@ namespace Start_a_Town_
         {
             var ordersBox = new GroupBox() { Name = "Orders" };
             Tavern tav = null;
-            var ordersTable = new TableScrollableCompactNewNew<CraftOrder>()
+            var ordersTable = new TableScrollableCompact<CraftOrder>()
                 .AddColumn(new(), "enabled", UIManager.TextureTickBox.Width, o => new CheckBoxNew() { TickedFunc = () => o.Enabled, LeftClickAction = () => Packets.SendOrderSync(tav.Town.Net, tav.Town.Net.GetPlayer(), tav, o, !o.Enabled) })
                 .AddColumn(new(), "name", 130, o => new Label(o.Name, () => o.ShowDetailsUI((o, n, i, m, t) => Packets.UpdateOrderIngredients(tav.Town.Net, tav.Town.Net.GetPlayer(), tav, o, n, i, m, t))), 0)
                 .AddColumn(new(), "price", 70 - Icon.Cross.SourceRect.Width, o => new Label("-"))

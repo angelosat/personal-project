@@ -830,7 +830,6 @@
     <Compile Include="Modules\Packets\PacketEntityDesignation.cs" />
     <Compile Include="Modules\Packets\PacketZoneDelete.cs" />
     <Compile Include="Modules\Packets\PacketZoneDesignation.cs" />
-    <Compile Include="Modules\Towns\Stockpiles\UI\UIStockpileInventoryIcons.cs" />
     <Compile Include="Modules\Towns\Stockpiles\IStorage.cs" />
     <Compile Include="Modules\Towns\Stockpiles\StockpileAIHelper.cs" />
     <Compile Include="Modules\Towns\Stockpiles\AI\TaskBehaviorHaulToStockpile.cs" />
@@ -1056,7 +1055,6 @@
     <Compile Include="Gui\Primitives\Slots\SlotGridNew.cs" />
     <Compile Include="Gui\SpeechBubble.cs" />
     <Compile Include="Gui\Tables\TableScrollableCompact.cs" />
-    <Compile Include="Gui\Tables\TableScrollableCompactNewNew.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotGrid.cs" />
     <Compile Include="Network\Server\ServerUI.cs" />
     <Compile Include="Gui\Hud\UnitFrame.cs" />
@@ -1173,6 +1171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\x86\Debug\Content\Data\Defs\" />
+    <Folder Include="Modules\Towns\Stockpiles\UI\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

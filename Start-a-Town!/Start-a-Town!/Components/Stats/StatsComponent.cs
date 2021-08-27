@@ -37,7 +37,7 @@ namespace Start_a_Town_.Components
         }
         internal override void GetInterface(GameObject gameObject, UI.Control box)
         {
-            var gui = GUITable ??= new TableScrollableCompactNewNew<StatDef>()
+            var gui = GUITable ??= new TableScrollableCompact<StatDef>()
                 .AddColumn("name", "", 128, a => new Label(a.Label) { HoverText = a.Description })
                 .AddColumn("value", "", (int)UIManager.Font.MeasureString("###").X, a => new Label(() => a.GetValue(this.Parent).ToString()));
             gui.ClearItems();
@@ -49,10 +49,10 @@ namespace Start_a_Town_.Components
                 box.AddControlsBottomLeft(stat.GetControl(gameObject));
             
         }
-        TableScrollableCompactNewNew<StatDef> GUITable;
+        TableScrollableCompact<StatDef> GUITable;
         public override GroupBox GetGUI()
         {
-            var gui = GUITable ??= new TableScrollableCompactNewNew<StatDef>()
+            var gui = GUITable ??= new TableScrollableCompact<StatDef>()
                 .AddColumn("name", "", 64, a => new Label(a.Label))
                 .AddColumn("value", "", (int)UIManager.Font.MeasureString("###").X, a => new Label(() => a.GetValue(this.Parent).ToString()));
             gui.ClearItems();

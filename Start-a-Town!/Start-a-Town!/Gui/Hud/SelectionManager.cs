@@ -100,7 +100,8 @@ namespace Start_a_Town_.UI
         private void RepositionsBoxIcons()
         {
             this.BoxIcons.AlignLeftToRight();
-            this.BoxIcons.Location = new Vector2(this.PanelInfo.ClientSize.Right - Panel.DefaultStyle.Border, this.PanelInfo.ClientSize.Top);
+            //this.BoxIcons.Location = new Vector2(this.PanelInfo.ClientSize.Right - Panel.DefaultStyle.Border, this.PanelInfo.ClientSize.Top);
+            this.BoxIcons.Location = new Vector2(this.PanelInfo.ClientSize.Right, this.PanelInfo.ClientSize.Top);
             this.BoxIcons.Anchor = new Vector2(1, 0);
         }
 

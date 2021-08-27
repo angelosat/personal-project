@@ -198,7 +198,6 @@ namespace Start_a_Town_.UI
         {
             this.SelectedControl = this.Controls.FirstOrDefault(i => i.Tag.Equals(obj)) as TControl;
         }
-
         public List<Control> AllItems = new();// this.Controls.Cast<TControl>().ToList();
 
         readonly Func<TObject, TControl> ControlFactory;

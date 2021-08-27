@@ -125,9 +125,9 @@ namespace Start_a_Town_
         {
             var box = new GroupBox();
             var tableBox = new GroupBox();
-            var tableAuto = new TableScrollableCompactNewNew<Actor>(true)
+            var tableAuto = new TableScrollableCompact<Actor>(true)
                             .AddColumn(null, "Name", 100, o => new Label(o.Name, () => { }));
-            var tableManual = new TableScrollableCompactNewNew<Actor>(true)
+            var tableManual = new TableScrollableCompact<Actor>(true)
                            .AddColumn(null, "Name", 100, o => new Label(o.Name, () => { }));
             var player = this.Player;
             foreach (var labor in JobDefOf.All)

@@ -138,7 +138,7 @@ namespace Start_a_Town_.UI
     public class ListBoxObservable<TObject, TControl> : GroupBox, IListSearchable<TObject>
         where TControl : Control, new()
     {
-        const int Spacing = 1;
+        public int Spacing = 1;
         static readonly Func<TObject, bool> DefaultFilter = i => true;
         Func<TObject, bool> CurrentFilter = DefaultFilter;
         public TObject SelectedItem => this.SelectedControl == null ? default : (TObject)this.SelectedControl.Tag;

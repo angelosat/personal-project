@@ -1074,11 +1074,19 @@ namespace Start_a_Town_.UI
             this.AddControls(controls);
             return this;
         }
-        public virtual void AddControlsTopRight(int spacing, params Control[] controls)
+        public virtual Control AddControlsTopRight(int spacing, params Control[] controls)
         {
+            var currentX = this.Controls.TopRight.X + (this.Controls.Any() ? spacing : 0);
             foreach (var c in controls)
-                c.Location = this.Controls.TopRight + spacing * Vector2.One;
-            this.AddControls(controls);
+            {
+                c.Location.X = currentX;
+                currentX += c.Width + spacing;
+            }
+            return this.AddControls(controls);
+
+            //foreach (var c in controls)
+            //    c.Location = this.Controls.TopRight + spacing * Vector2.One;
+            //this.AddControls(controls);
         }
         public virtual void RemoveControls(params Control[] controls)
         {

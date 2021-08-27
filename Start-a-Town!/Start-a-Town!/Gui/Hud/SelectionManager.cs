@@ -36,11 +36,13 @@ namespace Start_a_Town_.UI
 
         SelectionManager()
         {
-            this.PanelInfo = new Panel(new Rectangle(0, 0, 300, 100));
+            //this.PanelInfo = new Panel(new Rectangle(0, 0, 300, 100));
+            this.PanelInfo = Panel.FromClientSize(302, Label.DefaultHeight * 6);// 100); (302 = fit 3 x 100px widt bars, width 1 px spacing between them
             this.BoxTabs = new GroupBox()
             {
                 AutoSize = false,
-                Size = new Rectangle(0, 0, 300, Button.DefaultHeight)
+                //Size = new Rectangle(0, 0, 300, Button.DefaultHeight)
+                Size = new Rectangle(0, 0, this.PanelInfo.Width, Button.DefaultHeight)
             };
             this.PanelInfo.Location = this.BoxTabs.BottomLeft;
             this.LabelName = new Label() { TextFunc = () => "<none>" };

@@ -26,6 +26,7 @@ namespace Start_a_Town_.Components
                 this._fruitBone.Sprite = this.IsHarvestable ? this._spriteFruit : null;
         }
         Bone _fruitBone;
+        float GrowthRate => (this.Parent.Map.Sunlight - .5f) * 2;
 
         int GrowthTick, FruitGrowthTick;
         public enum GrowthStates { Growing, Ready }
@@ -106,8 +107,10 @@ namespace Start_a_Town_.Components
             var parent = this.Parent;
             var growthRate = this.PlantProperties.GrowthRate;
             this.TickWiggle();
-            if (this.Parent.Map.Sunlight <= .5f)
+            var sunlight = this.Parent.Map.Sunlight;
+            if (sunlight <= .5f)
                 return;
+            float growthAmount = GrowthRate;
             if (this.GrowthBody.Percentage >= ForageThreshold)
             {
                 if (this.PlantProperties.ProducesFruit)
@@ -117,7 +120,8 @@ namespace Start_a_Town_.Components
                         {
                             this.FruitGrowthTick = 0;
                             var prevPercentage = this.GrowthFruit.Percentage;
-                            this.GrowthFruit.Value++;
+                            //this.GrowthFruit.Value++;
+                            this.GrowthFruit.Value += growthAmount;
                             if (this.IsHarvestable)
                             {
                                 if (prevPercentage < ForageThreshold)
@@ -134,10 +138,14 @@ namespace Start_a_Town_.Components
             if (this.GrowthTick++ >= growthRate)
             {
                 this.GrowthTick = 0;
-                this.GrowthBody.Value++;
+                //this.GrowthBody.Value++;
+                this.GrowthBody.Value += growthAmount;
             }
             return;
         }
+
+        
+
         public void FinishGrowing(GameObject parent)
         {
             this.Growth.Set(parent, this.Growth.Max);
@@ -257,12 +265,26 @@ namespace Start_a_Town_.Components
                 TextFunc = () => this.GrowthBody.Percentage.ToString("##0%")
             });
         }
+        //internal override void GetSelectionInfo(IUISelection info, GameObject parent)
+        //{
+        //    //info.AddInfo(UI.Label.ParseWrap("Sunlight: ", new Func<string>(() => $"{parent.Map.Sunlight:##0%}"), new Func<string>(()=> parent.Map.Sunlight > .5f ? "" : "(not growing)")));
+        //    info.AddInfo(UI.Label.ParseWrap("Sunlight: ", new Func<string>(() => $"{parent.Map.Sunlight:##0%}")));
+        //    info.AddInfo(UI.Label.ParseWrap("Growth rate: ", new Func<string>(() => $"{this.GrowthRate:##0%}")));
+        //    info.AddInfo(new Bar(this.GrowthBody) { Color = Color.MediumAquamarine, Name = "Growth: ", TextFunc = () => this.GrowthBody.Percentage.ToString("##0%") });
+        //    if (this.PlantProperties.ProducesFruit)
+        //        info.AddInfo(new Bar(this.GrowthFruit) { Color = Color.MediumAquamarine, Name = "Fruit: ", TextFunc = () => this.GrowthFruit.Percentage.ToString("##0%") });
+        //}
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)
         {
-            info.AddInfo(UI.Label.ParseWrap("Sunlight: ", new Func<string>(() => $"{parent.Map.Sunlight:##0%}"), new Func<string>(()=> parent.Map.Sunlight > .5f ? "" : "(not growing)")));
-            info.AddInfo(new Bar(this.GrowthBody) { Color = Color.MediumAquamarine, Name = "Growth: ", TextFunc = () => this.GrowthBody.Percentage.ToString("##0%") });
+            var guisunlight = UI.Label.ParseWrap("Sunlight: ", new Func<string>(() => $"{parent.Map.Sunlight:##0%}"));
+            var guigrowth = UI.Label.ParseWrap("Growth rate: ", new Func<string>(() => $"{this.GrowthRate:##0%}"));
+            var bargrowth = new Bar(this.GrowthBody) { Color = Color.MediumAquamarine, Name = "Growth: ", TextFunc = () => this.GrowthBody.Percentage.ToString("##0%") };
+            var boxBars = new GroupBox().AddControls(bargrowth);
+
             if (this.PlantProperties.ProducesFruit)
-                info.AddInfo(new Bar(this.GrowthFruit) { Color = Color.MediumAquamarine, Name = "Fruit: ", TextFunc = () => this.GrowthFruit.Percentage.ToString("##0%") });
+                boxBars.AddControlsTopRight(1, new Bar(this.GrowthFruit) { Color = Color.MediumAquamarine, Name = "Fruit: ", TextFunc = () => this.GrowthFruit.Percentage.ToString("##0%") });
+
+            info.AddInfo(new GroupBox().AddControlsVertically(1, boxBars, guisunlight, guigrowth));
         }
         string GrowthTimeSpan
         {

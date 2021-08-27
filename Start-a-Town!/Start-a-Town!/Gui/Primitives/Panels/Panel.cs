@@ -10,6 +10,7 @@ namespace Start_a_Town_.UI
             Color tint = this.Color;
             this.BackgroundStyle.Draw(sb, this.Size, tint);
         }
+        public static readonly BackgroundStyle DefaultStyle = BackgroundStyle.Window;
         public override Color Tint { get => UIManager.TintSecondary; set => base.Tint = value; }
         public override Rectangle ContainerSize => this.ClientSize;
         public static Color DefaultColor = Color.DarkSlateGray;// Color.Black; //Color.DarkSlateGray;// 
@@ -60,7 +61,14 @@ namespace Start_a_Town_.UI
         }
         public Panel(int x, int y, int w, int h) : this(new Rectangle(x, y, w, h)) { }
 
-        public static readonly BackgroundStyle DefaultStyle = BackgroundStyle.Window;
+        public static Panel FromClientSize(int w, int h)
+        {
+            var panel = new Panel();
+            panel.Width = w + 2 * panel.BackgroundStyle.Border;
+            panel.Height = h + 2 * panel.BackgroundStyle.Border;
+            return panel;
+        }
+
         public static int GetClientWidth(int totalWidth)
         {
             return totalWidth - UIManager.BorderPx - UIManager.BorderPx;

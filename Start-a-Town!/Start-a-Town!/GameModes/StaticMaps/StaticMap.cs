@@ -119,7 +119,7 @@ namespace Start_a_Town_
         public void AddTime()
         {
             var clock = this.Clock;
-            double normal = (clock.TotalMinutes - Ticks.TicksPerSecond * (Zenith - 12)) / 1440f;
+            double normal = (clock.TotalMinutes - Ticks.PerSecond * (Zenith - 12)) / 1440f;
             double nn = normal * 2 * Math.PI;
             nn = 3 * Math.Cos(nn);
             this.DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
@@ -140,8 +140,8 @@ namespace Start_a_Town_
         #region Updating
         public override void Update()
         {
-            IconOffset = (float)Math.Sin(this.Net.Clock.TotalMilliseconds / Ticks.TicksPerSecond);
-
+            IconOffset = (float)Math.Sin(this.Net.Clock.TotalMilliseconds / Ticks.PerSecond);
+            this.Sunlight = 1 - (float)this.GetDayTimeNormal();
             this.TryPerformQueuedRandomBlockUpdates();
             this.CachedAmbientColor = this.UpdateAmbientColor();
 
@@ -810,10 +810,9 @@ namespace Start_a_Town_
         {
             return this.CachedAmbientColor;
         }
-
         private Color UpdateAmbientColor()
         {
-            var nightAmount = (float)this.GetDayTimeNormal();
+            var nightAmount = 1 - this.Sunlight;// (float)this.GetDayTimeNormal();
             for (int i = 0; i < AmbientColors.Count - 2; i++)
             {
                 var a = AmbientColors.ElementAt(i);
@@ -843,7 +842,8 @@ namespace Start_a_Town_
         }
         public override double GetDayTimeNormal()
         {
-            double normal = (this.Clock.TotalMinutes - Ticks.TicksPerSecond * (Zenith - 12)) / 1440f;
+            //double normal = (this.Clock.TotalMinutes - Ticks.PerSecond * (Zenith - 12)) / 1440f;
+            double normal = (this.Clock.TotalMinutes - Ticks.PerGameMinute * (Zenith - 12)) / 1440f;
             double nn = normal * 2 * Math.PI;
             nn = 3 * Math.Cos(nn);
             return Math.Max(0, Math.Min(1, (1 + nn) / 2f));

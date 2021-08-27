@@ -16,7 +16,7 @@ namespace Start_a_Town_.Particles
         public float Radius;
         public Vector3 Offset = Vector3.Zero;
         public float ParticleWeight;
-        public float Lifetime = Ticks.TicksPerSecond;
+        public float Lifetime = Ticks.PerSecond;
         public float Friction = 0.5f;
         int _Rate = 1;
         public int Rate
@@ -215,7 +215,7 @@ namespace Start_a_Town_.Particles
                 return new ParticleEmitterSphere()
                 {
                     Offset = new Vector3(0, 0, .5f),
-                    Lifetime = Ticks.TicksPerSecond,
+                    Lifetime = Ticks.PerSecond,
                     Radius = .2f,
                     ParticleWeight = -.1f,
                     Force = .01f,
@@ -234,7 +234,7 @@ namespace Start_a_Town_.Particles
             {
                 var emitter = new ParticleEmitterSphere() 
                 {
-                    Lifetime = Ticks.TicksPerSecond / 2f,
+                    Lifetime = Ticks.PerSecond / 2f,
                     Offset = Vector3.Zero,
                     Rate = 0,
                     ParticleWeight = 0f,//1f,

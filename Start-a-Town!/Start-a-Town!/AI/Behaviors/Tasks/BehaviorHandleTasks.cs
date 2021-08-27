@@ -5,7 +5,7 @@ namespace Start_a_Town_
 {
     sealed class BehaviorHandleTasks : Behavior
     {
-        static readonly int TimerMax = Ticks.TicksPerSecond;
+        static readonly int TimerMax = Ticks.PerSecond;
         int Timer = TimerMax;
 
         TaskGiver CurrentTaskGiver;

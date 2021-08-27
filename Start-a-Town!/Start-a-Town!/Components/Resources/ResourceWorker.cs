@@ -8,7 +8,7 @@ namespace Start_a_Town_
     public abstract class ResourceWorker
     {
         protected ResourceDef ResourceDef;
-        static public Progress Recovery { get { return new Progress(0, Ticks.TicksPerSecond, Ticks.TicksPerSecond); } }
+        static public Progress Recovery { get { return new Progress(0, Ticks.PerSecond, Ticks.PerSecond); } }
         public ResourceWorker(ResourceDef resourceDef)
         {
             this.ResourceDef = resourceDef;

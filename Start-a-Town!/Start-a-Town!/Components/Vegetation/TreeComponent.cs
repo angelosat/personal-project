@@ -18,7 +18,7 @@ namespace Start_a_Town_.Components
 
         public Progress GrowthNew = new(0, 100, 5);
         int GrowthTick;
-        int GrowthRate = Ticks.TicksPerSecond;
+        int GrowthRate = Ticks.PerSecond;
         const float InitialGrowthPercentage = .05f;
         public Growth Growth = new Growth(100);
         public void FinishGrowing(GameObject parent)

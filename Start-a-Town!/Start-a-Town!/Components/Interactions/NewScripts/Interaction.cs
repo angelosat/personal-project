@@ -80,7 +80,7 @@ namespace Start_a_Town_
         {
             this.Name = name;
             this.Seconds = seconds;
-            this.CurrentTick = this.Length = seconds * Ticks.TicksPerSecond;
+            this.CurrentTick = this.Length = seconds * Ticks.PerSecond;
         }
 
         public virtual void Interrupt(bool success)
@@ -177,7 +177,7 @@ namespace Start_a_Town_
             }
             if (this.RunningType == RunningTypes.Continuous)
                 return;
-            if (this.Length <= Ticks.TicksPerSecond)
+            if (this.Length <= Ticks.PerSecond)
                 return;
             var global = parent.Global;
 

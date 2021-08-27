@@ -4,7 +4,7 @@ namespace Start_a_Town_
 {
     public sealed class ResourceDef : Def
     {
-        static public Progress Recovery => new(0, Ticks.TicksPerGameMinute, Ticks.TicksPerGameMinute); 
+        static public Progress Recovery => new(0, Ticks.PerGameMinute, Ticks.PerGameMinute); 
 
         public Type WorkerClass;
        

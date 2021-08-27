@@ -18,7 +18,7 @@ namespace Start_a_Town_
             })
             {
                 Mode = BehaviorCustom.Modes.Continuous,
-                SuccessCondition = a => task.TicksCounter >= Ticks.TicksPerSecond 
+                SuccessCondition = a => task.TicksCounter >= Ticks.PerSecond 
             };
         }
     }

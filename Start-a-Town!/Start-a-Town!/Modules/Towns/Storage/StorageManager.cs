@@ -15,7 +15,7 @@ namespace Start_a_Town_
         readonly ObservableCollection<ItemMaterialAmount> CacheObservable = new();
         readonly Dictionary<ItemDef, Dictionary<MaterialDef, ItemMaterialAmount>> Cache = new();
         readonly StorageItemBranch RootNode = new();
-        static readonly int TicksPerUpdate = Ticks.TicksPerSecond;
+        static readonly int TicksPerUpdate = Ticks.PerSecond;
         int UpdateTimer;
 
         public StorageManager(Town town) : base(town)

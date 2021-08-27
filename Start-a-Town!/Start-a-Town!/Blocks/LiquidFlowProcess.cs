@@ -8,7 +8,7 @@ namespace Start_a_Town_
     class LiquidFlowProcess
     {
         static readonly List<LiquidFlowProcess> FlowProcesses = new List<LiquidFlowProcess>();
-        static readonly float FlowSpeed = Ticks.TicksPerSecond / 2f;
+        static readonly float FlowSpeed = Ticks.PerSecond / 2f;
         static float FlowT = FlowSpeed;
 
         static Random Rand = new(); 

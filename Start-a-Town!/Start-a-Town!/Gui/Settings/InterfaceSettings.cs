@@ -37,7 +37,7 @@ namespace Start_a_Town_
         GroupBox CreateGui()
         {
             this._tmpGuiScale = UIManager.Scale;
-            this._tmpTooltipDelay = TooltipManager.DelayInterval / Ticks.TicksPerSecond;
+            this._tmpTooltipDelay = TooltipManager.DelayInterval / Ticks.PerSecond;
 
             this._prevPrimary = UIManager.TintPrimary;
             this._prevSecondary = UIManager.TintSecondary;

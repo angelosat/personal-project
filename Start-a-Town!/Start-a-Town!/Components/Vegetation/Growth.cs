@@ -22,7 +22,7 @@ namespace Start_a_Town_
             if (this.IsFinished)
                 return;
             this.GrowthTimer++;
-            if (this.GrowthTimer == Ticks.TicksPerSecond)
+            if (this.GrowthTimer == Ticks.PerSecond)
             {
                 this.GrowthTimer = 0;
                 this.Value++;

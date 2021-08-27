@@ -17,7 +17,7 @@ namespace Start_a_Town_.AI
             public enum States { Requested, Accepted, Declined, Started, Finished}
             public States State;
             public GameObject Initiator, Target;
-            public Progress Progress = new Progress(0, Ticks.TicksPerSecond, 0);
+            public Progress Progress = new Progress(0, Ticks.PerSecond, 0);
             public Conversation(GameObject initiator, GameObject target)
             {
                 this.Initiator = initiator;

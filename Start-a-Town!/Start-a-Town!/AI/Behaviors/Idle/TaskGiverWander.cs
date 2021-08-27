@@ -10,7 +10,7 @@ namespace Start_a_Town_
         protected override AITask TryAssignTask(Actor actor)
         {
             var direction = new TargetArgs(ChooseDirection(actor));
-            return new AITask(TaskDefOf.Wander, direction) { TicksTimeout = Ticks.TicksPerSecond };
+            return new AITask(TaskDefOf.Wander, direction) { TicksTimeout = Ticks.PerSecond };
         }
 
         static Vector2 ChooseDirection(Actor actor)

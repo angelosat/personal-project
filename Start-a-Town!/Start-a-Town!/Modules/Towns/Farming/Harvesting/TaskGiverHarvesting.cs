@@ -15,11 +15,22 @@
                 var plants = zone.GetHarvestablePlantsLazy();
                 foreach (var plant in plants)
                 {
-                    if (!actor.CanReserve(plant) ||
+                    if (!actor.CanReserve(plant as GameObject) ||
                         !actor.CanReachNew(plant))
                         continue;
-                    var task = new AITask(TaskDefOf.Harvesting, new TargetArgs(plant));
-                    return task;
+                    if (plant.PlantComponent.PlantProperties.ProducesFruit)
+                    {
+                        var task = new AITask(TaskDefOf.Harvesting, new TargetArgs(plant));
+                        return task;
+                    }
+                    else
+                    {
+                        var task = new AITask(TaskDefOf.Chopping, plant)
+                        {
+                            Tool = FindTool(actor, JobDefOf.Lumberjack)
+                        };
+                        return task;
+                    }
                 }
             }
             return null;

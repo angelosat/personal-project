@@ -26,10 +26,10 @@ namespace Start_a_Town_
             }
         }
 
-        public float Tick = Ticks.TicksPerSecond / 0.5f; //1 tick per 2 seconds
+        public float Tick = Ticks.PerSecond / 0.5f; //1 tick per 2 seconds
         public float Timer = 0;
         public float RegenerationRate = 1;
-        public Progress Rec = new(0, Ticks.TicksPerSecond, Ticks.TicksPerSecond);
+        public Progress Rec = new(0, Ticks.PerSecond, Ticks.PerSecond);
         public float DecayRate = -0.5f;
         public float GainRate = 0;
         public List<ValueModifier> Modifiers = new();

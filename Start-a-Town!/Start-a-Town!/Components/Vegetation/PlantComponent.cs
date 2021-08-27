@@ -9,8 +9,6 @@ namespace Start_a_Town_.Components
     {
         const float ForageThreshold = .5f;
 
-        static readonly int GrowthRate = 20;
-
         public override string Name { get; } = "Plant";
 
         Progress GrowthBody = new(0, 100, 5);
@@ -108,14 +106,14 @@ namespace Start_a_Town_.Components
         public override void Tick()
         {
             var parent = this.Parent;
-
+            var growthRate = this.PlantProperties.GrowthRate;
             this.TickWiggle();
             if (this.GrowthBody.Percentage >= ForageThreshold)
             {
                 if (this.PlantProperties.ProducesFruit)
                     if (!this.FruitGrowth.IsFinished)
                     {
-                        if (this.FruitGrowthTick++ >= GrowthRate)
+                        if (this.FruitGrowthTick++ >= growthRate)
                         {
                             this.FruitGrowthTick = 0;
                             var prevPercentage = this.FruitGrowth.Percentage;
@@ -133,8 +131,8 @@ namespace Start_a_Town_.Components
             }
             if (this.GrowthBody.IsFinished)
                 return;
-            this.GrowthTick++;
-            if (this.GrowthTick >= GrowthRate)
+            //if(this.Parent.Map.World.light)
+            if (this.GrowthTick++ >= growthRate)
             {
                 this.GrowthTick = 0;
                 this.GrowthBody.Value++;
@@ -262,6 +260,7 @@ namespace Start_a_Town_.Components
         }
         internal override void GetSelectionInfo(IUISelection info, GameObject parent)
         {
+            info.AddInfo(UI.Label.ParseWrap("Sunlight: ", new Func<string>(() => $"{parent.Map.Sunlight:##0%}"), new Func<string>(()=> parent.Map.Sunlight > .5f ? "" : "(not growing)")));
             info.AddInfo(new Bar(this.GrowthBody) { Color = Color.MediumAquamarine, Name = "Growth: ", TextFunc = () => this.GrowthBody.Percentage.ToString("##0%") });
             if (this.PlantProperties.ProducesFruit)
                 info.AddInfo(new Bar(this.FruitGrowth) { Color = Color.MediumAquamarine, Name = "Fruit: ", TextFunc = () => this.FruitGrowth.Percentage.ToString("##0%") });
@@ -323,8 +322,16 @@ namespace Start_a_Town_.Components
             actions.Add(new ContextAction("Debug: Grow", () => { return false; }));
         }
 
-        internal bool IsHarvestable => this.PlantProperties.ProducesFruit && this.FruitGrowth.Percentage >= ForageThreshold;
-
+        internal bool IsHarvestable //=> this.PlantProperties.ProducesFruit && this.FruitGrowth.Percentage >= ForageThreshold;
+        {
+            get
+            {
+                if (this.PlantProperties.ProducesFruit)
+                    return this.FruitGrowth.Percentage >= ForageThreshold;
+                else
+                    return this.GrowthBody.Percentage > 0.4f;
+            }
+        }
         public class Props : ComponentProps
         {
             public override Type CompType => typeof(PlantComponent);

@@ -30,7 +30,7 @@ namespace Start_a_Town_
         static ContextMenuManager _Instance;
         public static ContextMenuManager Instance => _Instance ??= new ContextMenuManager();
         static IContextable Object;
-        static float DelayInterval = Ticks.TicksPerSecond / 2f;
+        static float DelayInterval = Ticks.PerSecond / 2f;
         static float Delay;
 
         static public void PopUp(params ContextAction[] a)

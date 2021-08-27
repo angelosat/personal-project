@@ -11,7 +11,7 @@ namespace Start_a_Town_
         {
             int BaseWaitTime = 5;
             var composure = actor[TraitDefOf.Composure].Normalized;
-            var waitTicks = (int)((BaseWaitTime + (.5f * BaseWaitTime * composure)) * Ticks.TicksPerSecond);
+            var waitTicks = (int)((BaseWaitTime + (.5f * BaseWaitTime * composure)) * Ticks.PerSecond);
             var dir = ChooseDirection(actor);
             return new AITask(TaskDefOf.Idle, new TargetArgs(dir)) { TicksTimeout = waitTicks };
         }

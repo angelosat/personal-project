@@ -35,7 +35,7 @@ namespace Start_a_Town_
                 AlphaEnd = 0,
                 ColorBegin = particleColor,
                 ColorEnd = particleColor,
-                Lifetime = Ticks.TicksPerSecond * 2,
+                Lifetime = Ticks.PerSecond * 2,
                 Rate = 0
             };
             this.ParticleRects = GetParticleRects();
@@ -76,11 +76,6 @@ namespace Start_a_Town_
             var stamina = a.Resources[ResourceDefOf.Stamina];
             stamina.Adjust(-energyConsumption);
             a[AttributeDefOf.Strength].Award(a, energyConsumption);
-
-            ////var strAwardMultiplier = 2 - stamina.Percentage; // working while exhausted raises strength faster
-            ///// strength increases faster the more tired the actor is while working
-            //var strAwardMultiplier = 1 + (int)(stamina.ResourceDef.Worker.Thresholds.Count * (1 - stamina.CurrentThreshold.Value));
-            //a[AttributeDefOf.Strength].AddToProgress(strAwardMultiplier * energyConsumption);
         }
 
         protected virtual float GetToolEffectiveness()
@@ -92,16 +87,11 @@ namespace Start_a_Town_
         }
         protected virtual float GetEnergyConsumption(float workAmount, int skillLevel)
         {
-            //var fromWorkSkill = workAmount / (skillLevel+1);
             var toolWeight = this.Actor[GearType.Mainhand]?.TotalWeight ?? 1;
             var strength = this.Actor[AttributeDefOf.Strength].Level;
             var fromToolWeight = //10 * 
                 toolWeight / strength;
-            //return fromWorkSkill * fromToolWeight;
             return (int)fromToolWeight;
-
-            const int skillFactor = 1;// 20;
-            return workAmount / (skillFactor * skillLevel);
         }
 
         protected abstract float Progress { get; }

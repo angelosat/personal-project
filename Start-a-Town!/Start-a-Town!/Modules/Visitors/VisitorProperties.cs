@@ -50,7 +50,7 @@ namespace Start_a_Town_
         public TimeSpan Timer = new();
 
         public OffsiteAreaDef OffsiteArea;
-        static readonly int OffsiteTickLength = Ticks.TicksPerSecond * 10;
+        static readonly int OffsiteTickLength = Ticks.PerSecond * 10;
         int OffsiteTick;
 
         public HashSet<int> ShopBlacklist = new();

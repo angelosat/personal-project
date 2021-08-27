@@ -7,7 +7,7 @@ namespace Start_a_Town_
 {
     class BlockFluid : Block
     {
-        static readonly float AnimationSpeed = Ticks.TicksPerSecond / 2f;
+        static readonly float AnimationSpeed = Ticks.PerSecond / 2f;
         static float AnimationT = AnimationSpeed;
         
         AtlasDepthNormals.Node.Token[][] Assets;

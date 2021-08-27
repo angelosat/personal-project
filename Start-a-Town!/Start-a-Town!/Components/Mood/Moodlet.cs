@@ -42,7 +42,7 @@ namespace Start_a_Town_
         {
             return new Label(string.Format("{0} {1}", this.Def.Description, this.Def.Value.ToString("+#;-#;0"))) {
                 TextColorFunc = () => this.Def.Value < 0 ? Color.Red : Color.Lime,
-                HoverFunc = () => this.Def.Mode == Modes.Finite ? string.Format("{0} remaining", (this.TicksRemaining / Ticks.TicksPerSecond).ToString(" #0.##s")) : ""
+                HoverFunc = () => this.Def.Mode == Modes.Finite ? string.Format("{0} remaining", (this.TicksRemaining / Ticks.PerSecond).ToString(" #0.##s")) : ""
             };
         }
 

@@ -76,7 +76,7 @@ namespace Start_a_Town_
         public RegionManager Regions;
         protected List<GameObject> CachedObjects = new();
         protected Dictionary<IntVec3, BlockEntity> CachedBlockEntities = new();
-
+        public float Sunlight;
         public abstract Color GetAmbientColor();
         public abstract void SetAmbientColor(Color color);
         public abstract double GetDayTimeNormal();

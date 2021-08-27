@@ -29,7 +29,7 @@ namespace Start_a_Town_
             Description = "Just had a nice meal",
             Value = 20,
             Mode = Moodlet.Modes.Finite,
-            Duration = Ticks.TicksPerSecond * 10
+            Duration = Ticks.PerSecond * 10
         };
 
         static public readonly HashSet<MoodletDef> All = new HashSet<MoodletDef>() { NoRoom, JustAte };

@@ -3,22 +3,22 @@
     static class Ticks
     {
         public const int IngameMillisecondsPerTick = 1440; // one tick is 1.44 ingame seconds
-        public const int TicksPerSecond = 60;
-        public const int TicksPerGameMinute = (int)(TicksPerSecond * 1.44f);
-        public const int TicksPerGameHour = 60 * TicksPerGameMinute;
-        public const int TicksPerGameDay = 24 * TicksPerGameHour;
+        public const int PerSecond = 60;
+        public const int PerGameMinute = (int)(PerSecond * 1.44f);
+        public const int PerGameHour = 60 * PerGameMinute;
+        public const int PerGameDay = 24 * PerGameHour;
 
         public static int FromMinutes(int minutes)
         {
-            return TicksPerGameMinute * minutes;
+            return PerGameMinute * minutes;
         }
         public static int FromHours(int hours)
         {
-            return TicksPerGameHour * hours;
+            return PerGameHour * hours;
         }
         public static int FromDays(int days)
         {
-            return TicksPerGameDay * days;
+            return PerGameDay * days;
         }
         public static int From( int days, int hours, int minutes)
         {

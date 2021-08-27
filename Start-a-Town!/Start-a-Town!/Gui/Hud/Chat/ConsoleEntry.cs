@@ -5,9 +5,9 @@ namespace Start_a_Town_.UI
 {
     public class ConsoleEntryNew : GroupBox
     {
-        static readonly int TimerLength = Ticks.TicksPerSecond * 8;
+        static readonly int TimerLength = Ticks.PerSecond * 8;
         int TimerTick = TimerLength;
-        static readonly int FadeLength = Ticks.TicksPerSecond;
+        static readonly int FadeLength = Ticks.PerSecond;
         int FadeTick = FadeLength;
         float Fade => this.FadeTick / (float)FadeLength;
         public ConsoleEntryNew()
@@ -69,9 +69,9 @@ namespace Start_a_Town_.UI
     }
     public class ConsoleEntry : Label
     {
-        static readonly int TimerLength = Ticks.TicksPerSecond * 8;
+        static readonly int TimerLength = Ticks.PerSecond * 8;
         int TimerTick = TimerLength;
-        static readonly int FadeLength = Ticks.TicksPerSecond;
+        static readonly int FadeLength = Ticks.PerSecond;
         int FadeTick = FadeLength;
 
         public ConsoleEntry(Color color, string text) : base(text)

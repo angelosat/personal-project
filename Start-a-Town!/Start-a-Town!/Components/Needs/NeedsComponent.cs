@@ -10,7 +10,7 @@ namespace Start_a_Town_.Components
     {
         public override string Name { get; } = "Needs";
            
-        float Timer = Ticks.TicksPerSecond;
+        float Timer = Ticks.PerSecond;
         public List<Need> NeedsNew;
         public NeedsComponent(Actor actor)
         {
@@ -43,7 +43,7 @@ namespace Start_a_Town_.Components
                 return;
             var parent = this.Parent;
 
-            Timer = Ticks.TicksPerSecond;
+            Timer = Ticks.PerSecond;
 
             for (int i = 0; i < this.NeedsNew.Count; i++)
             {

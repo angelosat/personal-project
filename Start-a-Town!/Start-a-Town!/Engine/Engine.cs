@@ -50,7 +50,7 @@ namespace Start_a_Town_
             get => _Map;
             set => _Map = value;
         }
-        static public float Tick = 1000 / (float)Ticks.TicksPerSecond;
+        static public float Tick = 1000 / (float)Ticks.PerSecond;
         static public int MaxChunkLoadThreads = 3;
         static public Stopwatch TileDrawTime = Stopwatch.StartNew();
         static public TimeSpan Average = TimeSpan.Zero;

@@ -23,7 +23,7 @@ namespace Start_a_Town_.Components.Resources
             base.Add(add, resource);
         }
        
-        public float TickRate = Ticks.TicksPerGameMinute / 2f; // 2 ticks per second
+        public float TickRate = Ticks.PerGameMinute / 2f; // 2 ticks per second
         public float Timer = 0;
         public float RegenerationRate = 1;
 

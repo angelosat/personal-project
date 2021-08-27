@@ -83,7 +83,7 @@ namespace Start_a_Town_.UI
             this.Height = DefaultHeight;
             this.CursorPosition = this.Text.Length;
         }
-        static readonly int CursorTimerMax = (int)(Ticks.TicksPerSecond / 2f);
+        static readonly int CursorTimerMax = (int)(Ticks.PerSecond / 2f);
         public override void Update()
         {
             base.Update();

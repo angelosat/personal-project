@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Start_a_Town_.AI.Behaviors;
-using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
@@ -20,8 +19,8 @@ namespace Start_a_Town_
             var isvalid =
                 !this.Task.Tool.IsForbidden &&
                 !tree.IsForbidden &&
-                tree != null && tree.Exists &&
-                this.Actor.Map.Town.ChoppingManager.IsChoppingTask(tree);
+                tree != null && tree.Exists;//&& this.Actor.Map.Town.ChoppingManager.IsChoppingTask(tree);
+            /// removed the designation check because the behavior might have been created without a specific designation, such as from a growing zone or to clear area for construction
             return !isvalid;
         }
 

@@ -43,7 +43,7 @@ namespace Start_a_Town_.UI
             this.Owner = obj;
             this.AutoSize = true;
             Graphic = new Panel() { Color = Color.White, MouseThrough = true };
-            this.Duration = Math.Max(text.Length * Ticks.TicksPerSecond / 3, Ticks.TicksPerSecond * 3);//10);
+            this.Duration = Math.Max(text.Length * Ticks.PerSecond / 3, Ticks.PerSecond * 3);//10);
             this.MouseThrough = true;
             Graphic.AutoSize = true;
             Graphic.Controls.Add(new Label(Vector2.Zero, text, fill: Color.Black, outline: Color.White, font: UIManager.FontBold ) { TextColor = Color.Black }.SetMousethrough(true));

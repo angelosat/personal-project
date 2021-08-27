@@ -190,7 +190,7 @@ namespace Start_a_Town_
             // TODO: Unload any non ContentManager content here
         }
 
-        readonly double UPDATE_INTERVAL = 1f / Ticks.TicksPerSecond;
+        readonly double UPDATE_INTERVAL = 1f / Ticks.PerSecond;
         double lastFrameTime = 0.0;
         double cyclesLeftOver = 0.0;
         /// <summary>

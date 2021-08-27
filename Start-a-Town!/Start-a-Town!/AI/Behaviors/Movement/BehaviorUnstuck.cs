@@ -6,7 +6,7 @@ namespace Start_a_Town_.AI.Behaviors
     class BehaviorUnstuck : Behavior
     {
         int Timer;
-        readonly int TimerMax = Ticks.TicksPerSecond;
+        readonly int TimerMax = Ticks.PerSecond;
         Vector3 LastPosition;
         public override BehaviorState Execute(Actor parent, AIState state)
         {

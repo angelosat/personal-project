@@ -17,9 +17,9 @@ namespace Start_a_Town_.Components.Resources
         public override string Format { get; } = "##0.00";
         public override string Description { get; } = "Basic health resource";
 
-        public float TickRate = Ticks.TicksPerSecond / 2f;
+        public float TickRate = Ticks.PerSecond / 2f;
 
-        static readonly float SpriteFlashFramesCount = Ticks.TicksPerSecond / 10f;
+        static readonly float SpriteFlashFramesCount = Ticks.PerSecond / 10f;
         float SpriteFlashTimer;
 
 

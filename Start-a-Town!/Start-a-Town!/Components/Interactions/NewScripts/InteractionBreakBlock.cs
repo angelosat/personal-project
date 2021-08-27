@@ -48,7 +48,7 @@ namespace Start_a_Town_
             this.EmitterBreak.AlphaEnd = 0;
             this.EmitterBreak.ColorBegin = Color.White;
             this.EmitterBreak.ColorEnd = Color.White;
-            this.EmitterBreak.Lifetime = Ticks.TicksPerSecond * 2;
+            this.EmitterBreak.Lifetime = Ticks.PerSecond * 2;
         }
         public override object Clone()
         {

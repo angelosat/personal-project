@@ -28,7 +28,7 @@ namespace Start_a_Town_.UI
                 Finished(this, EventArgs.Empty);
         }
 
-        static public float Speed = 0.5f, Life = 3 * Ticks.TicksPerSecond;
+        static public float Speed = 0.5f, Life = 3 * Ticks.PerSecond;
         float ScaleTime;
         float ScaleLength;
         float CurrentLife;

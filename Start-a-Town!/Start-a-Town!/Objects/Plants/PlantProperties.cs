@@ -54,7 +54,8 @@ namespace Start_a_Town_
         public ItemDef PlantEntity;
         [XmlIgnore]
         public ItemDef ProductCutDown;
-     
+
+        public int GrowthRate = Ticks.PerGameHour; //ticks per 1 growth
         public GrowthProperties Growth;
         internal ToolUseDef ToolToCut;
 
@@ -96,7 +97,7 @@ namespace Start_a_Town_
             ProductCutDown = RawMaterialDefOf.Logs,
             MaxYieldCutDown = 5,
             CutDownDifficulty = 10,
-            GrowTicks = 6 * Ticks.TicksPerSecond,
+            GrowTicks = 6 * Ticks.PerSecond,
             PlantEntity = PlantDefOf.Tree,
             ToolToCut = ToolUseDefOf.Chopping,
             StemHealRate = Ticks.FromHours(1),

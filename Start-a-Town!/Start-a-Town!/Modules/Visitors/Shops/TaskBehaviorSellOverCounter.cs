@@ -8,7 +8,7 @@ namespace Start_a_Town_
         const TargetIndex Item = TargetIndex.A;
         const TargetIndex Counter = TargetIndex.B;
         const TargetIndex Money = TargetIndex.C;
-        static int Patience = Ticks.TicksPerSecond * 5; // TODO get patience value from actor
+        static int Patience = Ticks.PerSecond * 5; // TODO get patience value from actor
 
         protected override IEnumerable<Behavior> GetSteps()
         {

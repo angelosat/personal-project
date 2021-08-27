@@ -217,12 +217,12 @@ namespace Start_a_Town_
                 && map.GetBlock(arg + Vector3.UnitZ) == BlockDefOf.Air;
         }
 
-        internal IEnumerable<GameObject> GetHarvestablePlantsLazy()
+        internal IEnumerable<Plant> GetHarvestablePlantsLazy()
         {
             foreach (var pos in this.Positions)
             {
                 var above = pos.Above;
-                var grownPlants = this.Town.Map.GetObjects(above).OfType<Plant>().Where(p => p.PlantComponent.IsHarvestable);// p.FruitGrowth >= this.HarvestThreshold);
+                var grownPlants = this.Town.Map.GetObjects(above).OfType<Plant>().Where(p => p.PlantComponent.IsHarvestable);
                 foreach (var obj in grownPlants)
                     yield return obj;
             }

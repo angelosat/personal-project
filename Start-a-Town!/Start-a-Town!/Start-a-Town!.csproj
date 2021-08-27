@@ -249,6 +249,7 @@
     <Compile Include="Gui\Lists\IListCollapsibleDataSource.cs" />
     <Compile Include="Gui\Lists\ListBoxNoScroll.cs" />
     <Compile Include="Gui\Lists\ListBoxObservable.cs" />
+    <Compile Include="Gui\ScrollBars\ScrollableBoxTest.cs" />
     <Compile Include="Gui\Tables\Table.cs" />
     <Compile Include="Gui\Tables\TableObservable.cs" />
     <Compile Include="Gui\Primitives\Panels\PanelLabeledScrollable.cs" />

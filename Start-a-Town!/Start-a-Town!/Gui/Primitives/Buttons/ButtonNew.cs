@@ -186,5 +186,25 @@ namespace Start_a_Town_.UI
             btn.AddControls(iconctrl);
             return btn;
         }
+        public static ButtonNew CreateMedium(string text, Action leftClickAction)
+        {
+            var btn = CreateSquare(leftClickAction);
+            var iconctrl = new Label(text) { MouseThrough = true, LocationFunc = () => btn.IsPushed ? Vector2.UnitY : Vector2.Zero };
+            iconctrl.Location = new(btn.Width / 2 - iconctrl.Width / 2, btn.Height / 2 - iconctrl.Height / 2);
+            btn.AddControls(iconctrl);
+            return btn;
+        }
+        static ButtonNew CreateSquare(Action leftClickAction)
+        {
+            var style = BackgroundStyle.ButtonMedium;
+            var width = style.Left.Height;
+            var btn = new ButtonNew(width)
+            {
+                AutoSize = false,
+                BackgroundStyle = style,
+                LeftClickAction = leftClickAction,
+            };
+            return btn;
+        }
     }
 }

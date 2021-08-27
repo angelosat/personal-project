@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Start_a_Town_.UI;
-using Start_a_Town_.Net;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Start_a_Town_.Net;
+using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -13,7 +13,7 @@ namespace Start_a_Town_
     {
         static class Packets
         {
-            static public readonly int PacketClockAdvanced;
+            public static readonly int PacketClockAdvanced;
             static Packets()
             {
                 PacketClockAdvanced = Network.RegisterPacketHandler(ReceiveClockAdvanced);
@@ -30,19 +30,19 @@ namespace Start_a_Town_
         public const int Zenith = 14;
 
         public bool Lighting;
-       
+
         //public const int TickTime = (int)(60 * 1.44f);
         public bool Flat;
         public bool Trees;
         TimeSpan ClockOffset = TimeSpan.FromHours(12);
-        public override TimeSpan Clock => ClockOffset + TimeSpan.FromMilliseconds((double)this.CurrentTick * Ticks.IngameMillisecondsPerTick);
+        public override TimeSpan Clock => this.ClockOffset + TimeSpan.FromMilliseconds((double)this.CurrentTick * Ticks.IngameMillisecondsPerTick);
         public MapCollection Maps;
-        public StaticMap Map { get { return this.Maps.Values.First() as StaticMap; } }
+        public StaticMap Map => this.Maps.Values.First() as StaticMap;
         public override PopulationManager Population => this.PopulationManager;
         ulong currentTick;
         public override ulong CurrentTick { get => this.currentTick; set => this.currentTick = value; }
 
-        PopulationManager PopulationManager;
+        readonly PopulationManager PopulationManager;
         public override void Tick(INetwork net)
         {
             this.PopulationManager.Update(net);
@@ -95,7 +95,7 @@ namespace Start_a_Town_
             this.Terraformers = mutators;//.Select(mdef => mdef.Create()).ToList();// new List<Terraformer>(mutators);
             this.DefaultBlock = BlockDefOf.Soil;
         }
-        
+
         public StaticWorld(SaveTag save)
             : this()
         {
@@ -151,14 +151,14 @@ namespace Start_a_Town_
             var currentRandomState = this.Random.Next();
             this.Random = new Random(currentRandomState);
             tag.Add(new SaveTag(SaveTag.Types.Int, "RandomState", currentRandomState));
-            tag.Add(new SaveTag(SaveTag.Types.Double, "Time", Clock.TotalSeconds));
+            tag.Add(new SaveTag(SaveTag.Types.Double, "Time", this.Clock.TotalSeconds));
             this.CurrentTick.Save(tag, "CurrentTick");
             this.DefaultBlock.Hash.Save(tag, "DefaultBlock");
             this.Name.Save(tag, "Name");
             this.Population.Save(tag, "Population");
             this.Terraformers.SaveAbstract(tag, "Mutators");
             var mapsTag = new SaveTag(SaveTag.Types.List, "Maps", SaveTag.Types.Compound);
-            foreach (var map in Maps.Values)
+            foreach (var map in this.Maps.Values)
                 mapsTag.Add(map.Save());
             tag.Add(mapsTag);
             return tag;
@@ -168,8 +168,8 @@ namespace Start_a_Town_
         {
             return WorldsPath + this.Name + "/";
         }
-        static string WorldsPath = GlobalVars.SaveDir + "/Worlds/Static/";
-        static public DirectoryInfo[] GetWorlds()
+        static readonly string WorldsPath = GlobalVars.SaveDir + "/Worlds/Static/";
+        public static DirectoryInfo[] GetWorlds()
         {
             DirectoryInfo directory = new DirectoryInfo(WorldsPath);
             if (!Directory.Exists(directory.FullName))
@@ -182,7 +182,7 @@ namespace Start_a_Town_
             return new DirectoryInfo(GlobalVars.SaveDir + @"\Worlds\Static\" + this.Name + @"\");
         }
 
-        static public string GetLastWorldName()
+        public static string GetLastWorldName()
         {
             return (string)Engine.Config.Descendants("LastWorld").FirstOrDefault();
         }
@@ -198,8 +198,8 @@ namespace Start_a_Town_
             {
                 foreach (var mapdir in world.GetDirectory().GetDirectories("*.*", SearchOption.TopDirectoryOnly))
                 {
-                    string[] c = mapdir.Name.Split('.');
-                    Vector2 coords = new Vector2(Convert.ToInt32(c[0]), Convert.ToInt32(c[1]));
+                    var c = mapdir.Name.Split('.');
+                    var coords = new Vector2(Convert.ToInt32(c[0]), Convert.ToInt32(c[1]));
                     var newPos = coords + n;
                     if (!world.Maps.ContainsKey(newPos))
                         StaticMap.Create(world, newPos);
@@ -256,7 +256,7 @@ namespace Start_a_Town_
             this.PopulationManager.OnTargetSelected(info, selected);
         }
 
-        static string[] NameFirst = {"glory", "thunder", "realm", "world", "city", "town", "far", "outer", "rim", "border",
+        static readonly string[] NameFirst = {"glory", "thunder", "realm", "world", "city", "town", "far", "outer", "rim", "border",
             "land", "ville", "honor", "elder", "rock", "stone", "wood", "gold", "silver", "iron", "vale", "spring", "lake",
             "high", "view", "mount", "valor", "thorn"};
         public static string GetRandomName()

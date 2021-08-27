@@ -66,7 +66,7 @@ namespace Start_a_Town_
         {
 
         }
-        public PlantProperties(string name) : base($"Plant_{name}")
+        public PlantProperties(string name) : base(name)
         {
 
         }
@@ -121,7 +121,6 @@ namespace Start_a_Town_
 
             Register(Berry);
             Register(LightTree);
-
 
             System.IO.FileStream file = System.IO.File.Create(path);
             var list = new List<PlantProperties>(GetDefs<PlantProperties>());

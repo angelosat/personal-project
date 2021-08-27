@@ -12,7 +12,7 @@ namespace Start_a_Town_.Components
         public override string Name { get; } = "Plant";
 
         Progress GrowthBody = new(0, 100, 5);
-        Progress FruitGrowth = new(0, 100, 0);
+        Progress GrowthFruit = new(0, 100, 0);
 
         public void SetBodyGrowth(float percentage)
         {
@@ -21,7 +21,7 @@ namespace Start_a_Town_.Components
         }
         public void SetFruitGrowth(float percentage)
         {
-            this.FruitGrowth.Percentage = percentage;
+            this.GrowthFruit.Percentage = percentage;
             if (this._fruitBone is not null)
                 this._fruitBone.Sprite = this.IsHarvestable ? this._spriteFruit : null;
         }
@@ -48,7 +48,6 @@ namespace Start_a_Town_.Components
                 var body = parent.Body;
                 body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
                 body.Sprite = Sprite.Load(_plantProps.TextureGrowing);
-                //body[BoneDefOf.PlantFruit].Material = _plantProps.FruitMaterial;
                 if(body.TryFindBone(BoneDefOf.PlantFruit, out this._fruitBone))
                     this._fruitBone.Material = _plantProps.FruitMaterial;
                 this.UpdateFruitTexture();
@@ -56,7 +55,6 @@ namespace Start_a_Town_.Components
         }
         void UpdateFruitTexture()
         {
-            //this._spriteFruit = _plantProps.TextureFruit is string fruitTexturePath ? Sprite.Load(fruitTexturePath) : null;
             if (_spriteFruit is not null && this.Parent.Body.TryFindBone(BoneDefOf.PlantFruit, out var fruitBone) && this.IsHarvestable)
                 fruitBone.Sprite = this._spriteFruit;
         }
@@ -82,7 +80,7 @@ namespace Start_a_Town_.Components
         internal void SetGrowth(float growth, float fruitGrowth)
         {
             this.GrowthBody.Percentage = growth;
-            this.FruitGrowth.Percentage = fruitGrowth;
+            this.GrowthFruit.Percentage = fruitGrowth;
         }
 
         public PlantComponent(float fruitGrowTicks)
@@ -94,7 +92,7 @@ namespace Start_a_Town_.Components
         public PlantComponent(PlantComponent toCopy)
         {
             this.GrowthBody = new Progress(toCopy.GrowthBody);
-            this.FruitGrowth = new Progress(toCopy.FruitGrowth);
+            this.GrowthFruit = new Progress(toCopy.GrowthFruit);
         }
 
         public override void OnObjectLoaded(GameObject parent)
@@ -113,13 +111,13 @@ namespace Start_a_Town_.Components
             if (this.GrowthBody.Percentage >= ForageThreshold)
             {
                 if (this.PlantProperties.ProducesFruit)
-                    if (!this.FruitGrowth.IsFinished)
+                    if (!this.GrowthFruit.IsFinished)
                     {
                         if (this.FruitGrowthTick++ >= growthRate)
                         {
                             this.FruitGrowthTick = 0;
-                            var prevPercentage = this.FruitGrowth.Percentage;
-                            this.FruitGrowth.Value++;
+                            var prevPercentage = this.GrowthFruit.Percentage;
+                            this.GrowthFruit.Value++;
                             if (this.IsHarvestable)
                             {
                                 if (prevPercentage < ForageThreshold)
@@ -183,7 +181,7 @@ namespace Start_a_Town_.Components
             var props = plant.PlantComponent.PlantProperties;
             if (props.Growth is null)
                 return false;
-            var yield = (int)(this.FruitGrowth.Percentage * props.Growth.MaxYieldHarvest);
+            var yield = (int)(this.GrowthFruit.Percentage * props.Growth.MaxYieldHarvest);
             if (yield == 0)
                 return false;
 
@@ -218,7 +216,7 @@ namespace Start_a_Town_.Components
 
         private void ResetFruitGrowth(GameObject parent)
         {
-            this.FruitGrowth.Value = 0;
+            this.GrowthFruit.Value = 0;
             this.FruitGrowthTick = 0;
             parent.Body.Sprite = Sprite.Load(this.PlantProperties.TextureGrowing);
             this.Parent.Body.FindBone(BoneDefOf.PlantFruit).Sprite = null;
@@ -264,7 +262,7 @@ namespace Start_a_Town_.Components
             info.AddInfo(UI.Label.ParseWrap("Sunlight: ", new Func<string>(() => $"{parent.Map.Sunlight:##0%}"), new Func<string>(()=> parent.Map.Sunlight > .5f ? "" : "(not growing)")));
             info.AddInfo(new Bar(this.GrowthBody) { Color = Color.MediumAquamarine, Name = "Growth: ", TextFunc = () => this.GrowthBody.Percentage.ToString("##0%") });
             if (this.PlantProperties.ProducesFruit)
-                info.AddInfo(new Bar(this.FruitGrowth) { Color = Color.MediumAquamarine, Name = "Fruit: ", TextFunc = () => this.FruitGrowth.Percentage.ToString("##0%") });
+                info.AddInfo(new Bar(this.GrowthFruit) { Color = Color.MediumAquamarine, Name = "Fruit: ", TextFunc = () => this.GrowthFruit.Percentage.ToString("##0%") });
         }
         string GrowthTimeSpan
         {
@@ -285,13 +283,13 @@ namespace Start_a_Town_.Components
         public override void Write(System.IO.BinaryWriter writer)
         {
             this.PlantProperties.Write(writer);
-            this.FruitGrowth.Write(writer);
+            this.GrowthFruit.Write(writer);
             this.GrowthBody.Write(writer);
         }
         public override void Read(System.IO.BinaryReader reader)
         {
             this.PlantProperties = Def.GetDef<PlantProperties>(reader.ReadString());
-            this.FruitGrowth = new Progress(reader);
+            this.GrowthFruit = new Progress(reader);
             this.GrowthBody = new Progress(reader);
 
         }
@@ -309,13 +307,13 @@ namespace Start_a_Town_.Components
         {
             this.PlantProperties.Save(tag, "Plant");
             tag.Add(this.GrowthBody.Save("GrowthNew"));
-            tag.Add(this.FruitGrowth.Save("FruitGrowth"));
+            tag.Add(this.GrowthFruit.Save("FruitGrowth"));
         }
         internal override void Load(SaveTag tag)
         {
             this.PlantProperties = tag.LoadDef<PlantProperties>("Plant");
             tag.TryGetTag("GrowthNew", t => this.GrowthBody = new Progress(t));
-            tag.TryGetTag("FruitGrowth", t => this.FruitGrowth = new Progress(t));
+            tag.TryGetTag("FruitGrowth", t => this.GrowthFruit = new Progress(t));
         }
         public override void GetClientActions(GameObject parent, List<ContextAction> actions)
         {
@@ -323,14 +321,12 @@ namespace Start_a_Town_.Components
             actions.Add(new ContextAction("Debug: Grow", () => { return false; }));
         }
 
-        internal bool IsHarvestable //=> this.PlantProperties.ProducesFruit && this.FruitGrowth.Percentage >= ForageThreshold;
+        internal bool IsHarvestable
         {
             get
             {
-                if (this.PlantProperties.ProducesFruit)
-                    return this.FruitGrowth.Percentage >= ForageThreshold;
-                else
-                    return this.GrowthBody.Percentage > 0.4f;
+                var relevantProgress = this.PlantProperties.ProducesFruit ? this.GrowthFruit : this.GrowthBody;
+                return relevantProgress.IsFinished;
             }
         }
         public class Props : ComponentProps

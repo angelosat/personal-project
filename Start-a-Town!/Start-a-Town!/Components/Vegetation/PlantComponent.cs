@@ -108,6 +108,8 @@ namespace Start_a_Town_.Components
             var parent = this.Parent;
             var growthRate = this.PlantProperties.GrowthRate;
             this.TickWiggle();
+            if (this.Parent.Map.Sunlight <= .5f)
+                return;
             if (this.GrowthBody.Percentage >= ForageThreshold)
             {
                 if (this.PlantProperties.ProducesFruit)
@@ -131,7 +133,6 @@ namespace Start_a_Town_.Components
             }
             if (this.GrowthBody.IsFinished)
                 return;
-            //if(this.Parent.Map.World.light)
             if (this.GrowthTick++ >= growthRate)
             {
                 this.GrowthTick = 0;

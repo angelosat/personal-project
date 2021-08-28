@@ -18,10 +18,10 @@ namespace Start_a_Town_
             Size = ObjectSize.Haulable
         };
 
-        static public ItemDef Bush = new("BerryBush")
+        static public ItemDef Bush = new("Bush")
         {
             ItemClass = typeof(Plant),
-            Description = "A lovely berry bush",
+            Description = "A lovely fluffy bush.",
             Height = 1,
             Weight = 5,
             Haulable = false,
@@ -39,11 +39,12 @@ namespace Start_a_Town_
 
             var bush = PlantProperties.Berry.CreatePlant();
             bush.GetComponent<PlantComponent>().SetProperties(PlantProperties.Berry);
-            bush.Growth = 1;
+            bush.GrowthBody = 1;
+            bush.GrowthFruit = 1;
             GameObject.AddTemplate(bush);
 
             var tree = PlantProperties.LightTree.CreatePlant();
-            tree.Growth = 1;
+            tree.GrowthBody = 1;
             GameObject.AddTemplate(tree);
 
             //GameObject.AddTemplate(PlantProperties.Berry.CreateSeeds());

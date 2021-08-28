@@ -38,22 +38,47 @@ namespace Start_a_Town_.Components
             set
             {
                 this._plantProps = value;
-                var parent = this.Parent;
-                var hitpoints = parent.GetResource(ResourceDefOf.HitPoints);
-                hitpoints.Max = value.StemMaterial.Density;
-                hitpoints.TicksPerRecoverOne = value.StemHealRate;
+                if (this.Parent is not null)
+                    this.UpdateParent();
+                //var parent = this.Parent;
+                //var hitpoints = parent.GetResource(ResourceDefOf.HitPoints);
+                //hitpoints.Max = value.StemMaterial.Density;
+                //hitpoints.TicksPerRecoverOne = value.StemHealRate;
 
-                this._spriteFruit = _plantProps.TextureFruit is string fruitTexturePath ? Sprite.Load(fruitTexturePath) : null;
+                //this._spriteFruit = _plantProps.TextureFruit is string fruitTexturePath ? Sprite.Load(fruitTexturePath) : null;
 
-
-                var body = parent.Body;
-                body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
-                body.Sprite = Sprite.Load(_plantProps.TextureGrowing);
-                if(body.TryFindBone(BoneDefOf.PlantFruit, out this._fruitBone))
-                    this._fruitBone.Material = _plantProps.FruitMaterial;
-                this.UpdateFruitTexture();
+                //var body = parent.Body;
+                //body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
+                //body.Sprite = Sprite.Load(_plantProps.TextureGrowing);
+                //if(body.TryFindBone(BoneDefOf.PlantFruit, out this._fruitBone))
+                //    this._fruitBone.Material = _plantProps.FruitMaterial;
+                //this.UpdateFruitTexture();
             }
         }
+       
+        public override void OnObjectCreated(GameObject parent)
+        {
+            if (this.PlantProperties is not null)
+                this.UpdateParent();
+        }
+        private void UpdateParent()
+        {
+            var parent = this.Parent;
+            var plant = this.PlantProperties;
+            var hitpoints = parent.GetResource(ResourceDefOf.HitPoints);
+            hitpoints.Max = plant.StemMaterial.Density;
+            hitpoints.TicksPerRecoverOne = plant.StemHealRate;
+
+            this._spriteFruit = _plantProps.TextureFruit is string fruitTexturePath ? Sprite.Load(fruitTexturePath) : null;
+
+            var body = parent.Body;
+            body.ScaleFunc = () => .25f + .75f * this.GrowthBody.Percentage;
+            body.Sprite = Sprite.Load(_plantProps.TextureGrowing);
+            if (body.TryFindBone(BoneDefOf.PlantFruit, out this._fruitBone))
+                this._fruitBone.Material = _plantProps.FruitMaterial;
+            this.UpdateFruitTexture();
+        }
+
         void UpdateFruitTexture()
         {
             if (_spriteFruit is not null && this.Parent.Body.TryFindBone(BoneDefOf.PlantFruit, out var fruitBone) && this.IsHarvestable)
@@ -251,7 +276,10 @@ namespace Start_a_Town_.Components
 
         public override object Clone()
         {
-            return new PlantComponent(this) { PlantProperties = this.PlantProperties };
+            var newcomp = new PlantComponent(this) { PlantProperties = this.PlantProperties };
+            newcomp.GrowthBody.Value = this.GrowthBody.Value;
+            newcomp.GrowthFruit.Value = this.GrowthFruit.Value;
+            return newcomp;
         }
 
         public override void OnTooltipCreated(GameObject parent, UI.Control tooltip)

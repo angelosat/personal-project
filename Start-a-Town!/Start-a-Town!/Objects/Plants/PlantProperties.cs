@@ -110,6 +110,8 @@ namespace Start_a_Town_
             entity.PlantComponent.PlantProperties = this;
             if (this.PlantEntity == PlantDefOf.Tree)
                 entity.SetMaterial(this.StemMaterial);
+            else if (this.ProducesFruit)
+                entity.Name = entity.Name.Insert(0, $"{this.FruitMaterial.Label} ");
             return entity;
         }
 

@@ -14,6 +14,7 @@ namespace Start_a_Town_
         public string Verb;
         public string IngredientName;
         public JobDef Job;
+        public SkillDef Skill;
 
         public RecipeProperties(string verb, ItemCategory ingCat)
         {
@@ -53,7 +54,7 @@ namespace Start_a_Town_
         }
         public Reaction CreateRecipe(ItemDef def)
         {
-            return new Reaction($"{this.Verb} {def.Label}", this.Job, this.Workstations.ToArray())
+            return new Reaction($"{this.Verb} {def.Label}", this.Job, this.Workstations.ToArray()) { CraftSkill = this.Skill }
                 .AddIngredients(this.MakeIngredients(def))
                 .AddProduct(this.MakeProducts(def));
         }

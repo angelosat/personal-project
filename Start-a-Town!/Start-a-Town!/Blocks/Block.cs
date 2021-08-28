@@ -860,7 +860,7 @@ namespace Start_a_Town_
             gd.SetRenderTarget(null);
             return renderTarget;
         }
-        internal virtual IEnumerable<IntVec3> GetInteractionSpotsLocal() { yield break; }
+        protected virtual IEnumerable<IntVec3> GetInteractionSpotsLocal() { yield break; }
         internal IEnumerable<IntVec3> GetInteractionSpotsLocal(int orientation)
         {
             return this.GetInteractionSpotsLocal().Select(s => Coords.Rotate(s, orientation));   

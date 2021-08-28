@@ -28,7 +28,7 @@ namespace Start_a_Town_
         {
             return Activator.CreateInstance(this.BlockEntityType, originGlobal) as BlockEntity;
         }
-        internal override IEnumerable<IntVec3> GetInteractionSpotsLocal()//int orientation)
+        protected override IEnumerable<IntVec3> GetInteractionSpotsLocal()//int orientation)
         {
             yield return Cell.FrontDefault;
         }

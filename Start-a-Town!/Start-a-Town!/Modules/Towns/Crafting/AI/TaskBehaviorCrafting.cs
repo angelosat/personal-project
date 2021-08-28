@@ -31,7 +31,7 @@ namespace Start_a_Town_
 
         protected override IEnumerable<Behavior> GetSteps()
         {
-            
+            var workstationGlobal = this.Workstation.Global; // capture this here because later i replace the workstation's target index with the product
             this.FailOn(noOperatingPositions);
             
             var nextIngredient = BehaviorHelper.ExtractNextTargetAmount(IngredientIndex);
@@ -75,7 +75,8 @@ namespace Start_a_Town_
             yield return new BehaviorGrabTool();
             yield return new BehaviorGetAtNewNew(AuxiliaryIndex, PathingSync.FinishMode.Exact).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
             yield return new BehaviorInteractionNew(WorkstationIndex, () => new InteractionCrafting(this.Task.Order, this.Task.PlacedObjects)).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
-            yield return new BehaviorInteractionNew(TargetIndex.Tool, () => new Equip()); // unequip the tool before hauling product
+            if(this.Task.Tool?.Type != TargetType.Null) // dont unequip tool if not using any
+                yield return new BehaviorInteractionNew(TargetIndex.Tool, () => new Equip()); // unequip the tool before hauling product // TODO dont do that if no tool equipped
             // assign a new haul behavior directly to the actor instead of adding the steps here?
             yield return new BehaviorCustom()
             {
@@ -131,7 +132,7 @@ namespace Start_a_Town_
                 /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
 
                 var map = this.Actor.Map;
-                var front = map.GetFrontOfBlock(this.Workstation.Global);
+                var front = map.GetFrontOfBlock(workstationGlobal);
                 if (!map.IsStandableIn(front))
                 {
                     "no operating position available".ToConsole();

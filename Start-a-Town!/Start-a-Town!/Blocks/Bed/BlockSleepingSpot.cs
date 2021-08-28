@@ -18,8 +18,8 @@ namespace Start_a_Town_
             this.RequiresConstruction = false;
             this.DrawMaterialColor = false;
         }
-        
-        internal override IEnumerable<IntVec3> GetInteractionSpotsLocal()
+
+        protected override IEnumerable<IntVec3> GetInteractionSpotsLocal()
         {
             yield return IntVec3.Zero;
         }

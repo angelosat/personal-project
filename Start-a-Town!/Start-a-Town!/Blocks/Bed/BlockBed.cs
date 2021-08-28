@@ -266,7 +266,7 @@ namespace Start_a_Town_
             entity.GetSelectionInfo(info, map, vector3);
         }
 
-        internal override IEnumerable<IntVec3> GetInteractionSpotsLocal()
+        protected override IEnumerable<IntVec3> GetInteractionSpotsLocal()
         {
             yield return new IntVec3(-1, 0, 0);
         }

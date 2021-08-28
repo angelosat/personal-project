@@ -59,7 +59,7 @@ namespace Start_a_Town_
             },
             CraftingProperties = new CraftingProperties().MakeableFrom(ItemCategoryDefOf.FoodRaw),
             RecipeProperties =
-                new RecipeProperties("Bake") { Job = JobDefOf.Cook }
+                new RecipeProperties("Bake") { Job = JobDefOf.Cook, Skill = SkillDefOf.Cooking }
                     .AddWorkstation(IsWorkstation.Types.Baking)
                     .AddIngredientMaker(def =>
                         new Ingredient("Filling") { DefaultRestrictions = new IngredientRestrictions().Restrict(MaterialTypeDefOf.Meat) }

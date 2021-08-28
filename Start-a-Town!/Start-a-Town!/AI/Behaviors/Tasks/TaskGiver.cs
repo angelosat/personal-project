@@ -53,11 +53,11 @@ namespace Start_a_Town_
             var task = TryAssignTask(actor);
             return task != null ? new TaskGiverResult(task, this) : TaskGiverResult.Empty;
         }
-        protected static void FindTool(Actor actor, AITask task, JobDef job)
+        public static void FindTool(Actor actor, AITask task, JobDef job)
         {
             task.Tool = FindTool(actor, job);
         }
-        protected static TargetArgs FindTool(Actor actor, JobDef job)
+        public static TargetArgs FindTool(Actor actor, JobDef job)
         {
             var preference = actor.ItemPreferences.GetPreference(job);
             var equipped = actor.GetEquipmentSlot(GearType.Mainhand);//.Object;

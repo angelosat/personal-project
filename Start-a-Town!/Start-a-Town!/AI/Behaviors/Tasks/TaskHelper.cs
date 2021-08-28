@@ -6,6 +6,36 @@ namespace Start_a_Town_
 {
     static class TaskHelper
     {
+        public static bool TryClearArea(Actor actor, IntVec3 global, out AITask clearTask)
+        {
+            clearTask = null;
+            var items = actor.Map.GetObjectsOccupyingCell(global);
+            if (!items.Any())
+                return true;
+            if (items.All(i => i == actor)) // HACK
+                return true;
+            foreach (var i in items)
+            {
+                if (i is not Entity ientity)
+                    continue;
+                if (i is Plant && actor.CanReserve(i))
+                {
+                    var plantCutTask = new AITask(TaskDefOf.Chopping, i)
+                    {
+                        Tool = TaskGiver.FindTool(actor, JobDefOf.Lumberjack)
+                    };
+                    clearTask = plantCutTask;
+                    return false;
+                }
+                var haulAsideTask = TryHaulAside(actor, ientity);
+                if (haulAsideTask != null)
+                {
+                    clearTask = haulAsideTask;
+                    return false;
+                }
+            }
+            return false;
+        }
         static public AITask TryHaulAside(Actor actor, Entity item)
         {
             if (!item.IsHaulable)

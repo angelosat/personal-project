@@ -79,6 +79,14 @@ namespace Start_a_Town_
                     if (order.IsActive && order.IsCompletable())
                         if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))
                         {
+                            /// clear workstation first and enqueue the crafting task?
+                            if (!TaskHelper.TryClearArea(actor, benchglobal.Above, out var clearTask))
+                            {
+                                if (clearTask is null)
+                                    continue;
+                                return clearTask;
+                            }
+
                             var workstationTarget = new TargetArgs(map, benchglobal);
                             var task = new AITask(TaskDefOf.Crafting);
                             foreach (var i in itemAmounts)
@@ -88,6 +96,7 @@ namespace Start_a_Town_
                             task.Order = order;
                             if(order.Reaction.Labor is not null)
                                 task.Tool = FindTool(actor, order.Reaction.Labor);
+
                             return task;
                         }
                 }

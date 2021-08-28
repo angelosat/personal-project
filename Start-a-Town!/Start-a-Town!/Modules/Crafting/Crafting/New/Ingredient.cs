@@ -159,18 +159,19 @@ namespace Start_a_Town_
 
         private void ResolveAllowedItems()
         {
-            var allDefs = Def.GetDefs<ItemDef>();
+            var finalDefs = Def.GetDefs<ItemDef>();
 
             if (this.SpecifiedItemDefs.Any())
                 this._resolvedItemDefs = this.SpecifiedItemDefs;
             else
             {
                 if (this.Modifiers.Any())
-                    this._resolvedItemDefs = new(allDefs.Where(d => this.Modifiers.All(m => m.Evaluate(d))));
-                else if (this.SpecifiedMaterials.Any())
-                    this._resolvedItemDefs = new(allDefs.Where(d => d.ValidMaterialTypes.Any(t => this.SpecifiedMaterials.Any(m => m.Type == t))));
-                else
-                    this._resolvedItemDefs = new(allDefs.Where(d => this.SpecifiedCategories.Contains(d.Category)));
+                    finalDefs = finalDefs.Where(d => this.Modifiers.All(m => m.Evaluate(d)));
+                if (this.SpecifiedMaterials.Any())
+                    finalDefs = finalDefs.Where(d => d.ValidMaterialTypes.Any(t => this.SpecifiedMaterials.Any(m => m.Type == t)));
+                if(this.SpecifiedCategories.Any())
+                    finalDefs = finalDefs.Where(d => this.SpecifiedCategories.Contains(d.Category));
+                this._resolvedItemDefs = new(finalDefs);
             }
         }
 

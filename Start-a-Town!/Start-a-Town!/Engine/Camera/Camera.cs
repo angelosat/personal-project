@@ -420,14 +420,14 @@ namespace Start_a_Town_
             var depth = rlx + rly;
 
             var finalFogColor = Color.Transparent; // i calculate fog inside the shader from now on
-            var global = new Vector3(gx, gy, z);
+            var global = new IntVec3(gx, gy, z);
             var isDiscovered = !map.IsUndiscovered(global);
             /// DONT ERASE
             ///if (cell.AllEdges == 0 && HideUnknownBlocks)  // do i want cells that have already been discoverd, to remain visible even if they become obstructed again?
             if (!isDiscovered && this.HideUnknownBlocks)// && isAir) // do i want cells that have already been discoverd, to remain visible even if they become obstructed again?
-                Block.DrawUnknown(canvas.Opaque, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth);
+                Block.DrawUnknown(canvas.Opaque, new IntVec3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth);
             else
-                block.Draw(canvas, chunk, new Vector3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell.Variation, cell.Orientation, cell.BlockData, cell.Material);
+                block.Draw(canvas, chunk, new IntVec3(gx, gy, z), this, screenBoundsVector4, light.Sun, light.Block, finalFogColor, Color.White, depth, cell);//.Variation, cell.Orientation, cell.BlockData, cell.Material);
 
             return true;
         }

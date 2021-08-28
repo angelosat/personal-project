@@ -11,7 +11,7 @@ namespace Start_a_Town_
 {
     public class Cell : Inspectable, ISlottable
     {
-        const int HitPointsMax = 4;
+        public const int HitPointsMax = 4;
 
         public string GetName()
         {

@@ -90,6 +90,13 @@ namespace Start_a_Town_
 
         public static AtlasDepthNormals Atlas = new("Blocks") { DefaultDepthMask = BlockDepthMap, DefaultNormalMask = NormalMap };
 
+        public static readonly AtlasDepthNormals.Node.Token[] Cracks =
+        {
+            Atlas.Load("blocks/cracks1", BlockDepthMap, NormalMap),
+            Atlas.Load("blocks/cracks2", BlockDepthMap, NormalMap),
+            Atlas.Load("blocks/cracks3", BlockDepthMap, NormalMap)
+        };
+
         public static readonly Dictionary<IntVec3, AtlasDepthNormals.Node.Token> FaceHighlights = new()
         {
             { IntVec3.UnitX, Atlas.Load("blocks/highlighteast", BlockDepthMap, NormalMap) },
@@ -349,6 +356,8 @@ namespace Start_a_Town_
             };
             return emitter;
         }
+
+        
         protected virtual ParticleEmitterSphere GetDirtEmitter()
         {
             var dustcolor = this.DirtColor;
@@ -616,6 +625,13 @@ namespace Start_a_Town_
                 token,
                 camera.Zoom, fog, tint, material, sunlight, blocklight, Vector4.Zero, depth, this, blockCoordinates);
         }
+        internal void Draw(Canvas canvas, Chunk chunk, IntVec3 vector3, Camera camera, Vector4 screenBoundsVector4, Color sun, Vector4 block, Color finalFogColor, Color tint, int depth, Cell cell)
+        {
+            this.Draw(canvas, chunk, vector3, camera, screenBoundsVector4, sun, block, finalFogColor, tint, depth, cell.Variation, cell.Orientation, cell.BlockData, cell.Material);
+            if (cell.Damage > 0)
+                DrawCracks(canvas.Opaque, vector3, camera, screenBoundsVector4, sun, block, finalFogColor, tint, depth, cell.Damage);
+        }
+
         public virtual MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         {
             if (this == BlockDefOf.Air)
@@ -624,7 +640,7 @@ namespace Start_a_Town_
             //var material = this.GetColorVector(data);
             var material = this.DrawMaterialColor ? mat.ColorVector : DefaultColorVector;// this.GetColorVector(data);
 
-            MySpriteBatch mesh = this.Opaque ? canvas.Opaque : canvas.NonOpaque;
+            var mesh = this.Opaque ? canvas.Opaque : canvas.NonOpaque;
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return mesh.DrawBlock(Atlas.Texture, screenBounds,
                 token,
@@ -653,7 +669,11 @@ namespace Start_a_Town_
         {
             nonopaquemesh.DrawBlock(Atlas.Texture, screenBounds, BlockShadow, camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Vector4.Zero, depth, null, blockCoordinates);
         }
-
+        protected static void DrawCracks(MySpriteBatch opaquemesh, IntVec3 blockCoordinates, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int damage)
+        {
+            var cracksTexture = Cracks[damage - 1];
+            opaquemesh.DrawBlock(Atlas.Texture, screenBounds, cracksTexture, camera.Zoom, fog, Color.White, Color.White, sunlight, blocklight, Vector4.Zero, depth, null, blockCoordinates);
+        }
         public virtual AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {
             return this.Variations[Math.Min(variation, this.Variations.Count - 1)];

@@ -1586,6 +1586,10 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
+        public IEnumerable<IntVec3> GetOccupyingCells()
+        {
+            return this.Def.OccupyingCellsStanding(this.Global.ToCell());
+        }
         #endregion
     }
 }

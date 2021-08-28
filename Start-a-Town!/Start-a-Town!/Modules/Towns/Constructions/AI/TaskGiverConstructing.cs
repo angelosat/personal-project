@@ -29,13 +29,18 @@ namespace Start_a_Town_
                 if (actor.Map.GetBlockEntity(closest) is not IConstructible blockEntity)
                     continue; // because the list contains other block types as well
 
+                if(!TryClearArea(actor, closest, out var clearTask))
+                {
+                    if (clearTask is null)
+                        continue;
+                    return clearTask;
+                }
+
                 if (blockEntity.IsReadyToBuild(out ItemDef def, out MaterialDef mat, out int amount))
                 {
                     var buildtask = TryBuild(actor, closest, blockEntity);
                     if (buildtask != null)
-                    {
                         return buildtask;
-                    }
                     else
                         continue;
                 }
@@ -69,18 +74,27 @@ namespace Start_a_Town_
             if (!IsOperatable(actor, global))
                 return null;
            
-            ///move aside any obstructing items
-            var items = actor.Map.GetObjects(global);
-            foreach(var i in items)
-            {
-                if (i is not Entity ientity)
-                    continue;
-                var haulAsideTask = TaskHelper.TryHaulAside(actor, ientity);
-                if (haulAsideTask != null)
-                    return haulAsideTask;
-            }
-            if (items.Any()) // return null if failure to return haul aside task
-                return null;
+            /////move aside any obstructing items
+            //var items = actor.Map.GetObjects(global);
+            //foreach(var i in items)
+            //{
+            //    if (i is not Entity ientity)
+            //        continue;
+            //    if(i is Plant && actor.CanReserve(i))
+            //    {
+            //        var plantCutTask = new AITask(TaskDefOf.Chopping, i)
+            //        {
+            //            Tool = FindTool(actor, JobDefOf.Lumberjack)
+            //        };
+            //        return plantCutTask;
+            //    }
+            //    var haulAsideTask = TaskHelper.TryHaulAside(actor, ientity);
+            //    if (haulAsideTask != null)
+            //        return haulAsideTask;
+            //}
+
+            //if (items.Any()) // return null if failure to return haul aside task
+            //    return null;
 
             var buildtask = new AITask(TaskDefOf.Construct);
             buildtask.SetTarget(TaskBehaviorConstruct.ConstructionsID, new TargetArgs(actor.Map, global));
@@ -91,7 +105,42 @@ namespace Start_a_Town_
 
             return buildtask;
         }
-        
+        /// <summary>
+        /// returns true if area is clear. if it's not clear, returns false and tries to find an appropriate task to clear it. if the out task is null, it means that it's unclearable
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <param name="global"></param>
+        /// <param name="clearAreaTask"></param>
+        /// <returns></returns>
+        static bool TryClearArea(Actor actor, IntVec3 global, out AITask clearAreaTask)
+        {
+            clearAreaTask = null;
+            //var items = actor.Map.GetObjects(global);
+            var items = actor.Map.GetObjectsOccupyingCell(global);
+            if (!items.Any())
+                return true;
+            foreach (var i in items)
+            {
+                if (i is not Entity ientity)
+                    continue;
+                if (i is Plant && actor.CanReserve(i))
+                {
+                    var plantCutTask = new AITask(TaskDefOf.Chopping, i)
+                    {
+                        Tool = FindTool(actor, JobDefOf.Lumberjack)
+                    };
+                    clearAreaTask = plantCutTask;
+                    return false;
+                }
+                var haulAsideTask = TaskHelper.TryHaulAside(actor, ientity);
+                if (haulAsideTask != null)
+                {
+                    clearAreaTask= haulAsideTask;
+                    return false;
+                }
+            }
+            return false;
+        }
         AITask TryDeliverMaterialNewNew(Actor actor, Vector3 origin, IEnumerable<IntVec3> allConstructions, ItemDef ingredientDef, MaterialDef ingredientMat)
         {
             if (!IsOperatable(actor, origin))

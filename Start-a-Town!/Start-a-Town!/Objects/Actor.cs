@@ -194,6 +194,7 @@ namespace Start_a_Town_
                 return false;
             return map.IsSolid(global.Below());
         }
+
         internal bool CanStandIn(Vector3 global)
         {
             var map = this.Map;

@@ -556,6 +556,18 @@ namespace Start_a_Town_
                     yield return e;
             }
         }
+        public IEnumerable<GameObject> GetObjectsOccupyingCell(IntVec3 global)
+        {
+            var ch = this.GetChunk(global);
+            var objects = ch.Objects;
+            var count = objects.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var e = objects[i];
+                if (e.GetOccupyingCells().Contains(global))
+                    yield return e;
+            }
+        }
         public bool IsCellEmptyNew(IntVec3 global)
         {
             return !this.GetObjects(global).Any();

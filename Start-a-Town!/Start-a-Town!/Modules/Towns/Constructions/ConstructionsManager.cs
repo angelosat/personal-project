@@ -204,15 +204,14 @@ namespace Start_a_Town_
                         product.Place(map, pos);
                         return;
                     }
+                    var cell = map.GetCell(pos);
 
-                    if (map.GetBlock(pos) == BlockDefOf.Air)
+                    if (cell.Block == BlockDefOf.Air)
                         this.PlaceDesignation(pos, 0, 0, args.Orientation, product);
-                    else
+                    else if(cell.Block != BlockDefOf.Designation)
                     {
-                        var cell = map.GetCell(pos);
                         var existingBlockRemovalDesignation = this.DetermineBlockRemovalDesignation(cell);
                         this.Town.DesignationManager.Add(existingBlockRemovalDesignation, pos);
-                        //this.PendingDesignations[pos] = new ConstructionParams(pos, args.Orientation, product);
                         this.AddPendingDesignation(pos, args.Orientation, product);
                     }
                 }

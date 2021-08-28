@@ -49,6 +49,16 @@ namespace Start_a_Town_
             //GameObject.AddTemplate(PlantProperties.Berry.CreateSeeds());
             var allPlants = Def.GetDefs<PlantProperties>();
             GameObject.AddTemplates(allPlants.Select(p => p.CreateSeeds()));
+
+
+            Def.Register(new Reaction("Extract Seeds", SkillDefOf.Argiculture)
+                .AddBuildSite(IsWorkstation.Types.PlantProcessing)
+                .AddIngredient("a", new Ingredient()
+                    .SetAllow(ItemDefOf.Fruit, true))
+                //.AddProduct(new Reaction.Product(ItemDefOf.Seeds, 4)
+                //    .GetMaterialFromIngredient("a"))
+                .AddProduct(new Reaction.Product(i => Def.GetDefs<PlantProperties>().First(d => d.FruitMaterial == i["a"].PrimaryMaterial).CreateSeeds() as Entity, 4))
+                );
         }
     }
 }

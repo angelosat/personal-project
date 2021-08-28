@@ -937,12 +937,12 @@ namespace Start_a_Town_
                     //obj[compTag.Name].Load(obj, compTag);
             }
             //obj.Name = obj.Def.NameGetter?.Invoke(obj) ?? obj.Name; // reset name
-            obj.DefComponent.ParentName = obj.Def.NameGetter?.Invoke(obj) ?? obj.DefComponent.ParentName; // reset name
-
+            //obj.DefComponent.ParentName = obj.Def.NameGetter?.Invoke(obj) ?? obj.DefComponent.ParentName; // reset name
+            obj.ResetName();
             obj.ObjectLoaded();
             return obj;
         }
-
+        
         public IEnumerable<ContextAction> GetInventoryContextActions(GameObject actor)
         {
             if (this.Def.GearType is not null)

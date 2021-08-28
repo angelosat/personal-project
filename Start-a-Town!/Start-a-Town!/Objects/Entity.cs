@@ -88,7 +88,10 @@ namespace Start_a_Town_
         {
             foreach (var c in this.Components.Values)
                 c.SetMaterial(mat);
-            this.Name = $"{mat.Prefix} {this.Def.Label}";
+            this.Name = $"{mat.Prefix}";
+            if (!this.Def.ReplaceName)
+                this.Name += $" {this.Def.Label}";
+            //this.Name = $"{mat.Prefix} {this.Def.Label}";
             mat.Apply(this);
             return this;
         }
@@ -121,6 +124,13 @@ namespace Start_a_Town_
         internal void Select()
         {
             SelectionManager.Select(this);
+        }
+        /// <summary>
+        /// reset name in case of errors or def changes
+        /// </summary>
+        internal void ResetName()
+        {
+            this.DefComponent.ParentName = this.Def.NameGetter?.Invoke(this) ?? this.DefComponent.ParentName; // reset name
         }
     }
 }

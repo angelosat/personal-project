@@ -9,22 +9,12 @@ namespace Start_a_Town_
         static public readonly ItemDef Seeds = new("Seeds")
         {
             ItemClass = typeof(Entity),
-            StackCapacity = 64,
+            StackCapacity = 32,//64,
             Category = ItemCategoryDefOf.RawMaterials,
             Body = new Bone(BoneDefOf.Item, ItemContent.SeedsFull),
             DefaultMaterial = MaterialDefOf.Seed,
             CompProps = new List<ComponentProps>() { new SeedComponent.Props() }
         };
-
-        //static public readonly ItemDef Saplings = new("Saplings")
-        //{
-        //    ItemClass = typeof(Entity),
-        //    StackCapacity = 16,
-        //    Category = ItemCategoryDefOf.RawMaterials,
-        //    Body = new Bone(BoneDefOf.Item, ItemContent.SeedsFull),
-        //    DefaultMaterial = MaterialDefOf.Seed,
-        //    CompProps = new List<ComponentProps>() { new SeedComponent.Props() }
-        //};
 
         static public readonly ItemDef Fruit = new ItemDef("Fruit")
         {
@@ -32,6 +22,7 @@ namespace Start_a_Town_
             StackCapacity = 32,
             Category = ItemCategoryDefOf.FoodRaw,
             Body = new Bone(BoneDefOf.Item, ItemContent.BerriesFull),
+            ReplaceName = true,
             ConsumableProperties = new ConsumableProperties()
             {
                 FoodClasses = new[] { FoodClass.Fruit }
@@ -106,13 +97,13 @@ namespace Start_a_Town_
 
             GenerateCookingRecipes();
 
-            Reaction.Register(new Reaction("Extract Seeds", SkillDefOf.Argiculture)
-                .AddBuildSite(IsWorkstation.Types.PlantProcessing)
-                .AddIngredient("a", new Ingredient()
-                    .SetAllow(ItemDefOf.Fruit, true))
-                .AddProduct(new Reaction.Product(ItemDefOf.Seeds, 4)
-                    .GetMaterialFromIngredient("a"))
-                ); 
+            //Reaction.Register(new Reaction("Extract Seeds", SkillDefOf.Argiculture)
+            //    .AddBuildSite(IsWorkstation.Types.PlantProcessing)
+            //    .AddIngredient("a", new Ingredient()
+            //        .SetAllow(ItemDefOf.Fruit, true))
+            //    .AddProduct(new Reaction.Product(ItemDefOf.Seeds, 4)
+            //        .GetMaterialFromIngredient("a"))
+            //    ); 
         }
 
         private static void GenerateCookingRecipes()

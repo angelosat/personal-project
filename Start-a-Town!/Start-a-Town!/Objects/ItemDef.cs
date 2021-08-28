@@ -34,6 +34,8 @@ namespace Start_a_Town_
         public Func<Entity, string> NameGetter;
         public Func<Entity, Def> VariationGetter;
         public ObjectSize Size;
+        public string Prefix, Suffix;
+        public bool ReplaceName;
 
         public ItemDef(string name) : base(name)
         {

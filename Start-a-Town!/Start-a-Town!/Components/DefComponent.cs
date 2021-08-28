@@ -20,8 +20,6 @@ namespace Start_a_Town_
             set => this.CustomName = value;
         }
 
-        public string Prefix = "";
-       
         internal override void Initialize(Entity parent, Quality quality)
         {
             this.Quality = quality;

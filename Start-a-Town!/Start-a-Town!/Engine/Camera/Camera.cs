@@ -673,7 +673,6 @@ namespace Start_a_Town_
             fx.Parameters["Zoom"].SetValue(this.Zoom);
             float borderPx = 1;
             fx.Parameters["BorderResolution"].SetValue(new Vector2(borderPx / gd.Viewport.Width, borderPx / gd.Viewport.Height) * this.Zoom);
-            fx.Parameters["CullDark"].SetValue(Engine.CullDarkFaces);
             var nightAmount = (float)map.GetDayTimeNormal();
             Color ambientColor = Color.Lerp(Color.White, map.GetAmbientColor(), nightAmount);
             ambientColor = map.GetAmbientColor();
@@ -1085,7 +1084,6 @@ namespace Start_a_Town_
             fx.Parameters["Zoom"].SetValue(this.Zoom);
             float borderPx = 1;
             fx.Parameters["BorderResolution"].SetValue(new Vector2(borderPx / target.Width, borderPx / target.Height) * this.Zoom);
-            fx.Parameters["CullDark"].SetValue(Engine.CullDarkFaces);
             Color ambientColor = Color.Lerp(Color.White, map.GetAmbientColor(), 0);
             Vector4 ambient = ambientColor.ToVector4();
             fx.Parameters["AmbientLight"].SetValue(ambient);

@@ -17,7 +17,6 @@ float AtlasHeight;
 float NearDepth;
 float FarDepth;
 
-bool CullDark = false;
 float DepthResolution;
 float BorderThicknessPx = 1;
 float BorderThickness = 0.0005;
@@ -972,49 +971,6 @@ MyPixelOutput MyWaterShader(MyVertexOutput input)
 
 	float4 lightcolor = sunlight * AmbientLight + float4(blocklight, blocklight, blocklight, 1);
 	output.Light = lightcolor;
-
-	return output;
-}
-
-MyPixelOutput MyPixelShader2(MyVertexOutput input)
-{
-	MyPixelOutput output;
-	float4 color = tex2D(s, input.TexCoord.xy);
-	clip(color.a == 0 ? -1 : 1);
-	clip(color.r == 1 && color.g == 0 && color.b == 0 ? -1 : 1);
-
-	// TODO: pack flags instead of color in vertex for lit face (FASTER!)
-	// get local UV
-	float u = ((input.TexCoord.x * AtlasWidth) % BlockWidth) / BlockWidth;
-	float v = ((input.TexCoord.y * AtlasHeight) % BlockHeight) / BlockHeight;
-	float2 uv = float2(u, v);
-
-	// find current block face
-	float4 face = tex2D(s2, uv);
-	float l = 0;
-
-	if (v < TileVertEnsureDraw || face.r > 0)
-		l = input.Light.b;
-	else if (face.g > 0)
-		l = input.Light.g;
-	else if (face.b > 0)
-		l = input.Light.r;
-	if (CullDark)
-		clip(l == 0 ? -1 : 1);
-	// blend sampled color with source color
-	float a = input.Color.a;
-
-	// sample depth map from blockdepthmap at uv coords
-	float4 d = tex2D(s3, uv);
-	float depthToWrite = GetDepth(d.r, input.Depth.x);
-	//output.Color = depthToWrite + float4(0, 0, 0, 1); // to draw opaque depth
-	output.Color = d.a * ((1 - a) * color + float4(a * color.rgb * input.Color.rgb, color.a));
-
-	// blend sampled depth with input depth
-	// add interpolated depth resolution (by factor from sampled depth) to input depth
-	output.Depth = depthToWrite + float4(0, 0, 0, 1); // to draw opaque depth //d.r*DepthResolution + 
-	output.DepthBuffer = depthToWrite; //d.r*DepthResolution + input.Depth.x; //
-	output.Light = float4(l, l, l, 1);
 
 	return output;
 }

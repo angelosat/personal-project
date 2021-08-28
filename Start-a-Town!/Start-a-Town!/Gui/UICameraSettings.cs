@@ -17,7 +17,7 @@ namespace Start_a_Town_.UI
             this.AddControlsVertically(
                 new CheckBoxNew("Hide Walls", () => Engine.HideWalls = !Engine.HideWalls, () => Engine.HideWalls) { HoverText = "Hides blocks obscuring an entity when the camera is following it" },
                 new CheckBoxNew("Hide Terrain", () => camera.ToggleHideBlocksAbove(), () => camera.HideTerrainAbovePlayer),
-                new CheckBoxNew("Block Outlines", () => Engine.BlockOutlines = !Engine.BlockOutlines, () => Engine.BlockOutlines),
+                //new CheckBoxNew("Block Outlines", () => Engine.BlockOutlines = !Engine.BlockOutlines, () => Engine.BlockOutlines),
                 new CheckBoxNew("Fog", () => Camera.Fog = !Camera.Fog, () => Camera.Fog) { HoverText = "Toggles drawing fog at lower elevation levels than the one under the mouse cursor" },
                 new CheckBoxNew("Hide blocks", () => camera.HideUnknownBlocks = !camera.HideUnknownBlocks, () => camera.HideUnknownBlocks) { HoverText = "Toggles blocks not exposed to air being drawn as unknown blocks" },
                 new CheckBoxNew("Map boundaries", () => camera.DrawTopSlice = !camera.DrawTopSlice, () => camera.DrawTopSlice) { HoverText = "Draws blocks at the boundaries of the map" },

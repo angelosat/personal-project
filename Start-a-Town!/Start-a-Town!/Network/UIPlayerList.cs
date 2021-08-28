@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
 using Start_a_Town_.UI;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Net
 {
     class UIPlayerList : GroupBox
     {
         ListBoxNoScroll<PlayerData, Button> List_Players;
-
+        static readonly int DefaultWidth = 150;
         public UIPlayerList(IEnumerable<PlayerData> pList)
-            : base(150, 300)
+            //: base(150, 300)
         {
             this.AutoSize = true;
             List_Players = new ListBoxNoScroll<PlayerData, Button>(foo =>
             {
-                var ctrl = new Button(foo.Name)
+                var ctrl = new Button(foo.Name, DefaultWidth)
                 {
                     TextColorFunc = () => foo.Color
                 };

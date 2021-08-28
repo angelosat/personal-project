@@ -13,13 +13,32 @@ namespace Start_a_Town_
         public CameraWidget(Camera camera)
         {
             this.BackgroundColorFunc = () => Color.Black * .5f;
-            IconButton
-                btn_rotleft = new('↺', camera.RotateCounterClockwise) { HoverText = "Rotate camera counterclockwise" },
-                btn_rotright = new('↻', camera.RotateClockwise) { HoverText = "Rotate camera clockwise" },
-                btn_rotreset = new('↶', camera.RotationReset) { HoverText = "Reset rotation" },
-                btn_zoomin = new('+', camera.ZoomIncrease) { HoverText = "Zoom in" },
-                btn_zoomreset = new('●', camera.ZoomReset) { HoverText = "Reset zoom" },
-                btn_zoomout = new('-', camera.ZoomDecrease) { HoverText = "Zoom out" };
+            //IconButton
+            //    btn_rotleft = new('↺', camera.RotateCounterClockwise) { HoverText = "Rotate camera counterclockwise" },
+            //    btn_rotright = new('↻', camera.RotateClockwise) { HoverText = "Rotate camera clockwise" },
+            //    btn_rotreset = new('↶', camera.RotationReset) { HoverText = "Reset rotation" },
+            //    btn_zoomin = new('+', camera.ZoomIncrease) { HoverText = "Zoom in" },
+            //    btn_zoomreset = new('●', camera.ZoomReset) { HoverText = "Reset zoom" },
+            //    btn_zoomout = new('-', camera.ZoomDecrease) { HoverText = "Zoom out" };
+
+
+            var btn_rotleft = ButtonNew.CreateMedium("↺", camera.RotateCounterClockwise);
+            btn_rotleft.HoverText = "Rotate camera counterclockwise";
+
+            var btn_rotright = ButtonNew.CreateMedium("↻", camera.RotateClockwise);
+            btn_rotright.HoverText = "Rotate camera clockwise";
+
+            var btn_rotreset = ButtonNew.CreateMedium("↶", camera.RotationReset);
+            btn_rotreset.HoverText = "Reset rotation";
+
+            var btn_zoomin = ButtonNew.CreateMedium("+", camera.ZoomIncrease);
+            btn_zoomin.HoverText = "Zoom in";
+
+            var btn_zoomreset = ButtonNew.CreateMedium("●", camera.ZoomReset);
+            btn_zoomreset.HoverText = "Reset zoom";
+
+            var btn_zoomout = ButtonNew.CreateMedium("-", camera.ZoomDecrease);
+            btn_zoomout.HoverText = "Zoom out";
 
             //↶⊘
             this.BoxRotation.AddControlsHorizontally(1, btn_rotleft, btn_rotreset, btn_rotright);

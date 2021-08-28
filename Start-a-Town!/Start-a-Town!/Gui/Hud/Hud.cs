@@ -62,14 +62,14 @@ namespace Start_a_Town_
             {
                 BackgroundTexture = UIManager.DefaultIconButtonSprite,
                 Icon = new Icon(UIManager.Icons32, 0, 32),
-                HoverFunc = () => "Menu [" + GlobalVars.KeyBindings.Menu + "]",
+                HoverFunc = () => "Player list",
                 LeftClickAction = () => this.TogglePlayerList(net)
             };
 
             this.UnitFrames = new UINpcFrameContainer() { LocationFunc = () => new Vector2(UIManager.Width / 2, 0), Anchor = Vector2.UnitX * .5f };
             this.PartyFrame = new Panel();
 
-            this.Box_Buttons = new Panel() { AutoSize = true, Location = UIManager.Size, Color = Color.Black };
+            this.Box_Buttons = new Panel() { AutoSize = true, Location = UIManager.Size };//, Color = Color.Black };
             this.Box_Buttons.AddControlsHorizontally(
                 this.BtnPlayers,
                 BTN_Options
@@ -126,14 +126,11 @@ namespace Start_a_Town_
             if (this.WindowPlayers is null)
             {
                 this.WindowPlayers = new UIPlayerList(net.GetPlayers())
-                    .ToWindow("Players")
-                    .Transparent()
-                    .AnchorTo(this.BtnPlayers.ScreenLocation + this.BtnPlayers.TopRight, Vector2.One);
+                    .ToWidget("Players");
                 this.WindowPlayers.Layer = UIManager.LayerHud;
             }
             this.WindowPlayers.Toggle();
         }
-
 
         internal override void OnGameEvent(GameEvent e)
         {

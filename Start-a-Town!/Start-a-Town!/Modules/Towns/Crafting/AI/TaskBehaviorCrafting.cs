@@ -100,7 +100,8 @@ namespace Start_a_Town_
             };
            
             yield return new BehaviorGetAtNewNew(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
-            yield return BehaviorHelper.StartCarrying(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
+            //yield return BehaviorHelper.StartCarrying(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
+            yield return BehaviorHaulHelper.StartCarrying(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
             yield return new BehaviorGetAtNewNew(WorkstationIndex).FailOn(deliverFail);
             yield return BehaviorHelper.PlaceCarried(WorkstationIndex).FailOn(deliverFail);
 

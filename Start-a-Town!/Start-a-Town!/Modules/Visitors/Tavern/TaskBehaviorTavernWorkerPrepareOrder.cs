@@ -17,7 +17,8 @@ namespace Start_a_Town_
             var customerProps = shop.GetCustomerProperties(actor);
             yield return beginHaul;
             yield return BehaviorHelper.MoveTo(ingredientIndex);
-            yield return BehaviorHelper.StartCarrying(ingredientIndex, ingredientIndex);
+            //yield return BehaviorHelper.StartCarrying(ingredientIndex, ingredientIndex);
+            yield return BehaviorHaulHelper.StartCarrying(ingredientIndex);
             yield return BehaviorHelper.MoveTo(workstationIndex);
             yield return BehaviorHelper.SetTarget(workstationAbove, (actor.Map, task.GetTarget(workstationIndex).Global.Above()));
             yield return BehaviorHelper.PlaceCarried(workstationAbove);

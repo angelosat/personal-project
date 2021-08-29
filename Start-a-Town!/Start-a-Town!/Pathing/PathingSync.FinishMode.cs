@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
 {
@@ -13,13 +12,12 @@ namespace Start_a_Town_
             static public readonly FinishMode Any = new FinishModeOnGoalOrTouching();
             static public readonly FinishMode InteractionSpot = new FinishModeInteractionSpot();
 
-
-            public virtual bool IsFinish(Vector3 goal, Vector3 current, Vector3 neighbor) { throw new Exception(); }
-            public abstract bool IsFinish(Actor actor, Vector3 goal, Vector3 current);
+            public virtual bool IsFinish(IntVec3 goal, IntVec3 current, IntVec3 neighbor) { throw new Exception(); }
+            public abstract bool IsFinish(Actor actor, IntVec3 goal, IntVec3 current);
 
             public class FinishModeDefault : FinishMode
             {
-                public override bool IsFinish(Actor actor, Vector3 goal, Vector3 current)
+                public override bool IsFinish(Actor actor, IntVec3 goal, IntVec3 current)
                 {
                     if ((goal.Z < current.Z - 1) || (goal.Z > current.Z + actor.Physics.Reach))
                         return false;
@@ -32,21 +30,21 @@ namespace Start_a_Town_
             }
             class FinishModeOnGoal : FinishMode
             {
-                public override bool IsFinish(Actor actor, Vector3 g, Vector3 c)
+                public override bool IsFinish(Actor actor, IntVec3 g, IntVec3 c)
                 {
                     return g == c;
                 }
             }
             class FinishModeInteractionSpot : FinishMode
             {
-                public override bool IsFinish(Actor actor, Vector3 g, Vector3 c)
+                public override bool IsFinish(Actor actor, IntVec3 g, IntVec3 c)
                 {
                     return Cell.GetFreeInteractionSpots(actor.Map, g, actor).Contains(c);
                 }
             }
             class FinishModeOnGoalOrTouching : FinishMode
             {
-                public override bool IsFinish(Actor actor, Vector3 g, Vector3 c)
+                public override bool IsFinish(Actor actor, IntVec3 g, IntVec3 c)
                 {
                     if (g == c)
                         return true;

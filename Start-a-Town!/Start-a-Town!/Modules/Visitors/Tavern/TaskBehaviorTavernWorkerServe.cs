@@ -12,7 +12,8 @@ namespace Start_a_Town_
             var tableSurfaceIndex = TargetIndex.B;
             var shop = actor.Workplace as Tavern;
             yield return BehaviorHelper.MoveTo(dishIndex);
-            yield return BehaviorHelper.StartCarrying(dishIndex);
+            //yield return BehaviorHelper.StartCarrying(dishIndex);
+            yield return BehaviorHaulHelper.StartCarrying(dishIndex);
             yield return BehaviorHelper.MoveTo(tableSurfaceIndex);
             yield return BehaviorHelper.PlaceCarried(tableSurfaceIndex);
             yield return new BehaviorCustom(() =>

@@ -32,7 +32,7 @@ namespace Start_a_Town_
         protected override IEnumerable<Behavior> GetSteps()
         {
             var workstationGlobal = this.Workstation.Global; // capture this here because later i replace the workstation's target index with the product
-
+            var actor = this.Actor;
             /// TODO constantly check for operating positions? or let pathing fail when no free operating position found?
             //this.FailOn(noOperatingPositions);
 
@@ -67,17 +67,20 @@ namespace Start_a_Town_
                 InitAction = () =>
                 {
                     var haulamount = this.Task.Product.Object.StackSize;
-                    this.Actor.Reserve(this.Task.Product, haulamount); // was using -1 to denote full stack, but want to phase it out
-                    if (this.Task.Order.HaulOnFinish && StockpileAIHelper.GetAllValidStoragePlacesNoReserveCheckLazy(this.Actor, this.Task.Product.Object as Entity) is var places && places.Any())// ; Towns.StockpileManager.GetBestStoragePlace(this.Actor, this.Task.Product.Object as Entity, out TargetArgs target))
+                    var product = this.Task.Product.Object;
+                    var productTar = this.Task.Product;
+                    var order = this.Task.Order;
+                    this.Actor.Reserve(productTar, haulamount); // was using -1 to denote full stack, but want to phase it out
+                    if (order.Output is Stockpile stockpile && stockpile.GetPotentialHaulTargets(actor, product) is var places && places.Any())// ; Towns.StockpileManager.GetBestStoragePlace(this.Actor, this.Task.Product.Object as Entity, out TargetArgs target))
                     {
                         var target = places.First();
                         this.Task.SetTarget(WorkstationIndex, target);
-                        this.Task.SetTarget(IngredientIndex, this.Task.Product, haulamount);
+                        this.Task.SetTarget(IngredientIndex, productTar, haulamount);
                     }
-                    else if (HaulHelper.TryFindNearbyPlace(this.Actor, this.Task.Product.Object, this.Task.GetTarget(WorkstationIndex).Global, out TargetArgs nearby))
+                    else if (HaulHelper.TryFindNearbyPlace(actor, product, this.Task.GetTarget(WorkstationIndex).Global, out TargetArgs nearby))
                     {
                         this.Task.SetTarget(WorkstationIndex, nearby);
-                        this.Task.SetTarget(IngredientIndex, this.Task.Product, haulamount);
+                        this.Task.SetTarget(IngredientIndex, productTar, haulamount);
                     }
                     else
                         this.Actor.EndCurrentTask();

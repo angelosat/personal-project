@@ -54,6 +54,8 @@ namespace Start_a_Town_
                 foreach (var item in this.Map.GetObjects(pos.Above).Where(i => i.IsStockpilable()))
                     this.CacheObservable.Add(item);
         }
+        public IEnumerable<GameObject> Contents => this.Cache;
+
         public IEnumerable<GameObject> GetContentsNew()
         {
             foreach (var i in this.Cache)
@@ -168,6 +170,8 @@ namespace Start_a_Town_
 
         public IEnumerable<TargetArgs> GetPotentialHaulTargets(Actor actor, GameObject item)
         {
+            if (!this.Accepts(item))
+                yield break;
             foreach (var target in this.DistributeToStorageSpotsNewLazy(actor, item))
                 yield return target;
         }

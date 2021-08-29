@@ -16,7 +16,7 @@ namespace Start_a_Town_
 
             var allOrders = manager.ByWorkstationNew();
 
-            var allObjects = map.GetEntities().OfType<Entity>().ToArray();
+            //var allObjects = map.GetEntities().OfType<Entity>().ToArray();
 
             var itemAmounts = new List<Dictionary<TargetArgs, int>>();
             var materialsUsed = new Dictionary<string, Entity>();
@@ -48,7 +48,7 @@ namespace Start_a_Town_
                         continue;
                   
                     if (order.IsActive && order.IsCompletable())
-                        if (TryFindAllIngredients(actor, allObjects, ref itemAmounts, materialsUsed, order))
+                        if (TryFindAllIngredients(actor, ref itemAmounts, materialsUsed, order))
                         {
                             /// clear workstation first and enqueue the crafting task?
                             if (!TaskHelper.TryClearArea(actor, benchglobal.Above, itemAmounts.SelectMany(d => d.Keys.Select(t => t.Object)).Distinct(), out var clearTask))
@@ -78,8 +78,12 @@ namespace Start_a_Town_
         {
             return AllReagentsAvailable(actor, allObjects, ref itemAmounts, materialsUsed, order);
         }
-        private static bool TryFindAllIngredients(Actor actor, IEnumerable<Entity> allObjects, ref List<Dictionary<TargetArgs, int>> itemAmounts, Dictionary<string, Entity> materialsUsed, CraftOrder order)
+        private static bool TryFindAllIngredients(Actor actor, ref List<Dictionary<TargetArgs, int>> itemAmounts, Dictionary<string, Entity> materialsUsed, CraftOrder order)
         {
+            var map = actor.Map;
+            
+            var allObjects = order.Input is Stockpile input ? input.Contents.OfType<Entity>() : map.GetEntities().OfType<Entity>().ToArray();
+
             //var handled = new HashSet<GameObject>();
             Dictionary<Entity, int> alreadyFound = new();
             List<Dictionary<Entity, int>> trips = new();

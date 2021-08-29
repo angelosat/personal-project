@@ -300,7 +300,7 @@ namespace Start_a_Town_
                 Def = def
             };
             obj.Physics.Height = def.Height;
-            obj.Physics.Weight = def.Weight;
+            //obj.Physics.Weight = def.Weight;
 
             obj.AddComponent(new AIComponent().Initialize( /// MOVING AICOMPONENT TO THE TOP because it generates packets that are being processed in the client before the entities even get ticked
                new BehaviorQueue(

@@ -32,7 +32,7 @@ namespace Start_a_Town_
                         continue;
                     if (fuel.Material?.Fuel?.Value > 0)
                     {
-                        var task = new AITask(typeof(TaskBehaviorRefueling));
+                        var task = new AITask(TaskDefOf.Refueling);// 
                         task.SetTarget(TaskBehaviorRefueling.DestinationIndex, new TargetArgs(actor.Map, destination.Key));
                         foreach (var similar in CollectUntilFull(actor, refComp, fuel, fuelMissing, handled))
                             task.AddTarget(TaskBehaviorRefueling.SourceIndex, new TargetArgs(similar.Key), similar.Value);

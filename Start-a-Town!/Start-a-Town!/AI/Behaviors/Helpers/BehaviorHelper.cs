@@ -131,10 +131,12 @@ namespace Start_a_Town_
             };
             return bhav;
         }
+        [Obsolete]
         static public Behavior StartCarrying(TargetIndex index)
         {
             return new BehaviorInteractionNew(index, () => new InteractionHaul()).FailOnUnavailableTarget(index);
         }
+        [Obsolete]
         static public Behavior StartCarrying(TargetIndex index, TargetIndex amountIndex)
         {
             var bhav = new BehaviorInteractionNew(index);

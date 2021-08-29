@@ -17,7 +17,9 @@ namespace Start_a_Town_
         public ObjectSize Size => this.Parent.Def.Size;
         public bool Solid;
         public float Height;
-        public float Weight;
+        //public float Weight;
+        float? _weight;
+        public float Weight => this._weight ??= this.UpdateWeight();
         public bool Enabled = true;
         const float FrictionFactor = .5f;
         public static float Jump = 0.2f;//-0.04f;// -0.05f; //35f;
@@ -470,7 +472,7 @@ namespace Start_a_Town_
         {
             var phys = new PhysicsComponent(this);
             //phys.Size = this.Size;
-            phys.Weight = this.Weight;
+            //phys.Weight = this.Weight;
             phys.Height = this.Height;
             phys.Solid = this.Solid;
             return phys;
@@ -574,27 +576,37 @@ namespace Start_a_Town_
             return corners.Any(c => map.GetBlock(c + new Vector3(0, 0, gravity)).Density > 0);
         }
 
-        public override void OnObjectLoaded(GameObject parent)
+        //public override void OnObjectLoaded(GameObject parent)
+        //{
+        //    // update def changes
+        //    this._weight = UpdateWeight();
+        //}
+        //public override void OnObjectCreated(GameObject parent)
+        //{
+        //    //this.UpdateWeight();
+        //}
+        private float UpdateWeight()
         {
-            // update def changes
+            var parent = this.Parent;
             var bones = parent.Body.GetAllBones();
-            this.Weight = bones.Sum(b => b.Material.Density) / bones.Count();
-            this.Weight = this.Size switch
+            float w = bones.Sum(b => b.Material.Density) / bones.Count();
+            w = this.Size switch
             {
-                ObjectSize.Immovable => this.Weight,
-                ObjectSize.Inventoryable => this.Weight / 10f,
-                ObjectSize.Haulable => this.Weight,
+                ObjectSize.Immovable => w,
+                ObjectSize.Inventoryable => w / 10f,
+                ObjectSize.Haulable => w,
                 _ => throw new Exception()
             };
+            return w;
         }
 
-        public override void Write(BinaryWriter w)
-        {
-            w.Write(this.Weight);
-        }
-        public override void Read(BinaryReader r)
-        {
-            this.Weight = r.ReadSingle();
-        }
+        //public override void Write(BinaryWriter w)
+        //{
+        //    w.Write(this.Weight);
+        //}
+        //public override void Read(BinaryReader r)
+        //{
+        //    this.Weight = r.ReadSingle();
+        //}
     }
 }

@@ -91,7 +91,7 @@ namespace Start_a_Town_
             var strength = this.Actor[AttributeDefOf.Strength].Level;
             var fromToolWeight = //10 * 
                 toolWeight / strength;
-            return (int)fromToolWeight;
+            return fromToolWeight;
         }
 
         protected abstract float Progress { get; }

@@ -16,7 +16,11 @@ namespace Start_a_Town_
             Format = "Force haul {0}",
             GetPrimaryTarget = t => t.GetTarget(TaskBehaviorHaulToStockpile.ItemInd)
         };
-
+        public static TaskDef Refueling = new("Refueling", typeof(TaskBehaviorRefueling))
+        {
+            Format = "Refuel {0}",
+            GetPrimaryTarget = t => t.GetTarget(TargetIndex.A)
+        };
         static public TaskDef HaulAside = new("HaulAside", typeof(TaskBehaviorHaulAside))
         {
             Format = "Haul aside {0}",

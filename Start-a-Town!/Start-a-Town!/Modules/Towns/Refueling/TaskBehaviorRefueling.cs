@@ -21,7 +21,8 @@ namespace Start_a_Town_
             //yield return BehaviorHelper.StartCarrying(SourceIndex, SourceIndex).FailOn(failOnInvalidRefuelable).FailOnForbidden(SourceIndex);
             yield return BehaviorHaulHelper.StartCarrying(SourceIndex).FailOn(failOnInvalidRefuelable).FailOnForbidden(SourceIndex);
             yield return BehaviorHelper.JumpIfMoreTargets(extract, SourceIndex);
-            yield return new BehaviorGetAtNewNew(DestinationIndex).FailOnNotCarrying().FailOn(failOnInvalidRefuelable);
+            //yield return new BehaviorGetAtNewNew(DestinationIndex).FailOnNotCarrying().FailOn(failOnInvalidRefuelable);
+            yield return new BehaviorGetAtNewNew(DestinationIndex, PathingSync.FinishMode.InteractionSpot).FailOnNotCarrying().FailOn(failOnInvalidRefuelable);
             yield return new BehaviorInteractionNew(DestinationIndex,  () => new UseHauledOnTarget()).FailOnNotCarrying().FailOn(failOnInvalidRefuelable);
         }
         protected override bool InitExtraReservations()

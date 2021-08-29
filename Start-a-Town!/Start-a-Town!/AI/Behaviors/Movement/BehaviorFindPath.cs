@@ -4,11 +4,12 @@ namespace Start_a_Town_.AI.Behaviors
 {
     class BehaviorFindPath : Behavior
     {
-        string TargetName, PathName= "path";
-        int TargetInd;
-        TargetArgs Target { get { return this.Actor.CurrentTask.GetTarget(this.TargetInd); } set { } }
-        float Range;
-        PathingSync.FinishMode FinishMode = PathingSync.FinishMode.Touching;
+        readonly string TargetName, PathName = "path";
+        readonly int TargetInd;
+        TargetArgs Target { get => this.Actor.CurrentTask.GetTarget(this.TargetInd); set { } }
+
+        readonly float Range;
+        readonly PathingSync.FinishMode FinishMode = PathingSync.FinishMode.Touching;
         public BehaviorFindPath(string variableName, string pathName, float range = 0)
         {
             this.TargetName = variableName;

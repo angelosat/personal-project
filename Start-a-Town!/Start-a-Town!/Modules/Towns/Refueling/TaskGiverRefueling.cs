@@ -1,18 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     class TaskGiverRefueling : TaskGiver
     {
+        //protected override AITask TryAssignTask(Actor actor)
+        //{
+        //    var refuelables = actor.Town.GetRefuelablesNew();
+        //    foreach (var target in refuelables)
+        //    {
+        //        if (!actor.CanReserve(target.Key))
+        //            continue;
+        //        var refComp = target.Value.GetComp<BlockEntityCompRefuelable>();
+        //        if (refComp?.Fuel.Percentage > .5f)
+        //            continue;
+        //        var fuelProgress = refComp.Fuel;
+        //        var fuelMissing = fuelProgress.Max - fuelProgress.Value;
+        //        var allObjects = actor.Map.GetObjectsLazy();
+        //        var handled = new HashSet<GameObject>();
+        //        foreach (var fuel in allObjects)
+        //        {
+        //            handled.Add(fuel);
+        //            if (!actor.CanReachNew(fuel))
+        //                continue;
+        //            if (!actor.CanReserve(fuel))
+        //                continue;
+        //            if (!fuel.IsHaulable)
+        //                continue;
+        //            if (!refComp.Accepts(fuel as Entity))
+        //                continue;
+        //            if (fuel.Material?.Fuel?.Value > 0)
+        //            {
+        //                var task = new AITask(TaskDefOf.Refueling);// 
+        //                task.SetTarget(TaskBehaviorRefueling.DestinationIndex, new TargetArgs(actor.Map, target.Key));
+        //                foreach (var similar in CollectUntilFull(actor, refComp, fuel, fuelMissing, handled))
+        //                    task.AddTarget(TaskBehaviorRefueling.SourceIndex, new TargetArgs(similar.Key), similar.Value);
+        //                return task;
+        //            }
+        //        }
+        //    }
+        //    return null;
+        //}
         protected override AITask TryAssignTask(Actor actor)
         {
             var refuelables = actor.Town.GetRefuelablesNew();
-            foreach (var destination in refuelables)
+            foreach (var target in refuelables)
             {
-                if (!actor.CanReserve(destination.Key))
+                if (!actor.CanReserve(target.Key))
                     continue;
-                var refComp = destination.Value.GetComp<BlockEntityCompRefuelable>();
+                var freeInteractionSpots = Cell.GetFreeInteractionSpots(actor.Map, target.Key, actor);
+                if (!freeInteractionSpots.Any())
+                    continue;
+                var refComp = target.Value.GetComp<BlockEntityCompRefuelable>();
                 if (refComp?.Fuel.Percentage > .5f)
                     continue;
                 var fuelProgress = refComp.Fuel;
@@ -33,7 +74,7 @@ namespace Start_a_Town_
                     if (fuel.Material?.Fuel?.Value > 0)
                     {
                         var task = new AITask(TaskDefOf.Refueling);// 
-                        task.SetTarget(TaskBehaviorRefueling.DestinationIndex, new TargetArgs(actor.Map, destination.Key));
+                        task.SetTarget(TaskBehaviorRefueling.DestinationIndex, new TargetArgs(actor.Map, target.Key));
                         foreach (var similar in CollectUntilFull(actor, refComp, fuel, fuelMissing, handled))
                             task.AddTarget(TaskBehaviorRefueling.SourceIndex, new TargetArgs(similar.Key), similar.Value);
                         return task;
@@ -42,6 +83,7 @@ namespace Start_a_Town_
             }
             return null;
         }
+
         static IEnumerable<KeyValuePair<GameObject, int>> CollectUntilFull(Actor actor, BlockEntityCompRefuelable refComp, GameObject center, float fuelMissing, HashSet<GameObject> handled)
         {
             var similarNearby = center.Map.GetNearbyObjectsNew(center.Global, r => r <= 5, f => f.IsFuel);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_
@@ -10,6 +11,8 @@ namespace Start_a_Town_
             static public readonly FinishMode Touching = new FinishModeDefault();
             static public readonly FinishMode Exact = new FinishModeOnGoal();
             static public readonly FinishMode Any = new FinishModeOnGoalOrTouching();
+            static public readonly FinishMode InteractionSpot = new FinishModeInteractionSpot();
+
 
             public virtual bool IsFinish(Vector3 goal, Vector3 current, Vector3 neighbor) { throw new Exception(); }
             public abstract bool IsFinish(Actor actor, Vector3 goal, Vector3 current);
@@ -32,6 +35,13 @@ namespace Start_a_Town_
                 public override bool IsFinish(Actor actor, Vector3 g, Vector3 c)
                 {
                     return g == c;
+                }
+            }
+            class FinishModeInteractionSpot : FinishMode
+            {
+                public override bool IsFinish(Actor actor, Vector3 g, Vector3 c)
+                {
+                    return Cell.GetFreeInteractionSpots(actor.Map, g, actor).Contains(c);
                 }
             }
             class FinishModeOnGoalOrTouching : FinishMode

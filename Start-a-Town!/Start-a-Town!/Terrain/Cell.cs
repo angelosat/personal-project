@@ -252,6 +252,11 @@ namespace Start_a_Town_
         {
             return this.Block.GetInteractionSpots(this, global);
         }
+        public static IEnumerable<IntVec3> GetFreeInteractionSpots(MapBase map, IntVec3 global, Actor actor)
+        {
+            var interactionSpots = map.GetCell(global).GetInteractionSpots(global);
+            return interactionSpots.Where(s => actor.CanStandInNew(s));
+        }
 
         internal virtual void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {

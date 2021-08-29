@@ -157,7 +157,7 @@ namespace Start_a_Town_
         }
         public class Props : ComponentProps
         {
-            public override Type CompType => typeof(ResourcesComponent);
+            public override Type CompClass => typeof(ResourcesComponent);
             public ResourceDef[] Defs;
             public Props(params ResourceDef[] defs)
             {

@@ -861,7 +861,7 @@ namespace Start_a_Town_.Net
             foreach (var (local, entity) in chunk.GetBlockEntitiesByPosition())
             {
                 var global = local.ToGlobal(chunk);
-                entity.MapLoaded(this.Map, global);
+                entity.ResolveReferences(this.Map, global);
                 entity.Instantiate(global, Instance.Instantiator);
             }
 

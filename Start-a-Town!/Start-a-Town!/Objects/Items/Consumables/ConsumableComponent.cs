@@ -115,7 +115,7 @@ namespace Start_a_Town_.Components
         public class Props : ComponentProps
         {
             public NeedEffect[] Effects;
-            public override Type CompType => typeof(ConsumableComponent);
+            public override Type CompClass => typeof(ConsumableComponent);
             public Props()
             {
                 this.Effects = new NeedEffect[] { };

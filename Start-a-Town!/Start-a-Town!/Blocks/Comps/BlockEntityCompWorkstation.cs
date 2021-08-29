@@ -95,10 +95,13 @@ namespace Start_a_Town_
             this._orders.ReadMutable(r);
             return this;
         }
-        internal override void MapLoaded(MapBase map, IntVec3 global)
+        internal override void ResolveReferences(MapBase map, IntVec3 global)
         {
             foreach (var ord in this._orders)
-                ord.Map = map;
+            {
+                ord.ResolveReferences(map);
+                //ord.Map = map;
+            }
         }
         internal override void NeighborChanged()
         {

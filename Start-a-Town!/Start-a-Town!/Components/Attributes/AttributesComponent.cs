@@ -154,7 +154,7 @@ namespace Start_a_Town_.Components
         }
         public class Props : ComponentProps
         {
-            public override Type CompType => typeof(AttributesComponent);
+            public override Type CompClass => typeof(AttributesComponent);
             public AttributeDef[] Items;
             public Props(params AttributeDef[] defs)
             {

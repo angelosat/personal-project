@@ -27,6 +27,7 @@ namespace Start_a_Town_
         public bool Enabled;
         public Dictionary<string, IngredientRestrictions> Restrictions = new();
         public Stockpile Input, Output;
+        int _inputID = -1, _outputID = -1;
 
         readonly Dictionary<string, HashSet<int>> ReagentRestrictions = new();
         CraftOrderDetailsGui DetailsGui;
@@ -135,6 +136,13 @@ namespace Start_a_Town_
             }
         }
 
+        internal void ResolveReferences(MapBase map)
+        {
+            this.Map = map;
+            this.Input = this._inputID > -1 ? map.Town.ZoneManager.GetZone<Stockpile>(this._inputID) : null;
+            this.Output = this._outputID > -1 ? map.Town.ZoneManager.GetZone<Stockpile>(this._outputID) : null;
+        }
+
         public bool IsItemAllowed(string reagentName, Entity item)
         {
             return
@@ -196,6 +204,8 @@ namespace Start_a_Town_
             this.Reaction.Write(w);
             w.Write((int)this.Mode);
             w.Write((int)this.FinishMode.Mode);
+            w.Write(this.Input?.ID ?? -1);
+            w.Write(this.Output?.ID ?? -1);
             w.Write(this.Quantity);
             w.Write(this.Workstation);
             w.Write(this.ReagentRestrictions.Count);
@@ -225,6 +235,10 @@ namespace Start_a_Town_
             this.Reaction = r.ReadDef<Reaction>();
             this.Mode = (CraftMode)r.ReadInt32();
             this.FinishMode = CraftOrderFinishMode.GetMode(r.ReadInt32());
+            //this.Input = r.ReadInt32() is int input && input == -1 ? null : this.Map.Town.ZoneManager.GetZone<Stockpile>(input);
+            //this.Output = r.ReadInt32() is int output && output == -1 ? null : this.Map.Town.ZoneManager.GetZone<Stockpile>(output);
+            this._inputID = r.ReadInt32();
+            this._outputID = r.ReadInt32();
             this.Quantity = r.ReadInt32();
             this.Workstation = r.ReadIntVec3();
             var rCount = r.ReadInt32();
@@ -297,6 +311,9 @@ namespace Start_a_Town_
             tag.Add(new SaveTag(SaveTag.Types.Int, "Quantity", this.Quantity));
             tag.Add(this.Workstation.Save("Bench"));
 
+            tag.Add("Input", this.Input?.ID ?? -1);
+            tag.Add("Output", this.Output?.ID ?? -1);
+
             var tagRestr = new SaveTag(SaveTag.Types.Compound, "RestrictionsNew");
             tagRestr.Add(this.Restrictions.Keys.Save("Keys"));
             tagRestr.Add(this.Restrictions.Values.SaveNewBEST("Values"));
@@ -342,6 +359,11 @@ namespace Start_a_Town_
                     values.TryLoadMutable(t, "Values");
                     this.Restrictions = keys.ToDictionary(values);
                 });
+
+            //tag.TryGetTagValue<int>("Input", i => this.Input = i == -1 ? null : this.Map.Town.ZoneManager.GetZone<Stockpile>(i));
+            //tag.TryGetTagValue<int>("Output", i => this.Output = i == -1 ? null : this.Map.Town.ZoneManager.GetZone<Stockpile>(i));
+            tag.TryGetTagValue("Input", out this._inputID);
+            tag.TryGetTagValue("Output", out this._outputID);
 
             this.ReagentRestrictions.Clear();
             tag.TryGetTagValue<List<SaveTag>>("Restrictions", restrictionsTag =>

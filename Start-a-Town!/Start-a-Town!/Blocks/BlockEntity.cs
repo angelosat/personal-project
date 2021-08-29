@@ -181,10 +181,10 @@ namespace Start_a_Town_
                 c.OnBlockBelowChanged(map, global);
         }
 
-        internal void MapLoaded(MapBase map, IntVec3 global)
+        internal void ResolveReferences(MapBase map, IntVec3 global)
         {
             foreach (var c in this.Comps)
-                c.MapLoaded(map, global);
+                c.ResolveReferences(map, global);
             this.OnMapLoaded(map, global);
         }
 

@@ -51,7 +51,7 @@ namespace Start_a_Town_
         {
             foreach (var props in this.Def.CompProps)
             {
-                var compType = props.CompType;
+                var compType = props.CompClass;
                 if (this.TryGetComponent(compType, out var c))
                     c.Initialize(props);
                 else

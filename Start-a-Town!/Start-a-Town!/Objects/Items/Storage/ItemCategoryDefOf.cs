@@ -9,6 +9,8 @@
         static public readonly ItemCategory Manufactured = new("Manufactured");
         static public readonly ItemCategory FoodRaw = new("FoodRaw");
         static public readonly ItemCategory FoodCooked = new("FoodCooked");
+        static public readonly ItemCategory Unfinished = new("Unfinished");
+
         static ItemCategoryDefOf()
         {
             Def.Register(typeof(ItemCategoryDefOf));

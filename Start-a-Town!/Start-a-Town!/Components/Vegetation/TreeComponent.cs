@@ -105,7 +105,7 @@ namespace Start_a_Town_.Components
 
         public class Props : ComponentProps
         {
-            public override Type CompType => typeof(TreeComponent);
+            public override Type CompClass => typeof(TreeComponent);
         }
     }
 }

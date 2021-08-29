@@ -72,6 +72,16 @@ namespace Start_a_Town_
             },
         }.SetMadeFrom(MaterialTypeDefOf.Fruit, MaterialTypeDefOf.Meat);
 
+        static public readonly ItemDef UnfinishedCraft = new ItemDef("UnfinishedCraft")
+        {
+            ItemClass = typeof(Entity),
+            Category = ItemCategoryDefOf.Unfinished,
+            Body = new Bone(BoneDefOf.Item, Sprite.Default),
+            CompProps = new() { 
+                new ComponentProps(typeof(UnfinishedItemComp))
+            },
+        };
+
         static public readonly ItemDef Coins = new("Coins")
         {
             ItemClass = typeof(Entity),

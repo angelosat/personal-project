@@ -58,7 +58,7 @@ namespace Start_a_Town_
 
         public class Props : ComponentProps
         {
-            public override Type CompType => typeof(SeedComponent);
+            public override Type CompClass => typeof(SeedComponent);
         }
     }
 }

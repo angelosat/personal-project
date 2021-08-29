@@ -65,7 +65,7 @@ namespace Start_a_Town_
         {
         }
 
-        internal virtual void MapLoaded(MapBase map, IntVec3 global)
+        internal virtual void ResolveReferences(MapBase map, IntVec3 global)
         {
         }
 

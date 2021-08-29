@@ -187,7 +187,7 @@ namespace Start_a_Town_
 
         public class Props : ComponentProps
         {
-            public override Type CompType => typeof(NpcSkillsComponent);
+            public override Type CompClass => typeof(NpcSkillsComponent);
             public TraitDef[] Items;
             public Props(params TraitDef[] defs)
             {

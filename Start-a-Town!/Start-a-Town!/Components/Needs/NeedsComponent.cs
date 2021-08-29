@@ -117,7 +117,7 @@ namespace Start_a_Town_.Components
         }
         public class Props : ComponentProps
         {
-            public override Type CompType => typeof(NeedsComponent);
+            public override Type CompClass => typeof(NeedsComponent);
             public NeedDef[] Needs;
             public Props(params NeedDef[] defs)
             {

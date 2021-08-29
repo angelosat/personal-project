@@ -186,7 +186,7 @@ namespace Start_a_Town_
 
         public class Props : ComponentProps
         {
-            public override Type CompType => typeof(GearComponent);
+            public override Type CompClass => typeof(GearComponent);
             public GearType[] Slots;
             public Props(params GearType[] defs)
             {

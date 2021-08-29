@@ -32,8 +32,10 @@ namespace Start_a_Town_
         protected override IEnumerable<Behavior> GetSteps()
         {
             var workstationGlobal = this.Workstation.Global; // capture this here because later i replace the workstation's target index with the product
-            this.FailOn(noOperatingPositions);
-            
+
+            /// TODO constantly check for operating positions? or let pathing fail when no free operating position found?
+            //this.FailOn(noOperatingPositions);
+
             var nextIngredient = BehaviorHelper.ExtractNextTargetAmount(IngredientIndex);
             yield return nextIngredient;
             yield return new BehaviorGetAtNewNew(IngredientIndex).FailOnUnavailableTarget(IngredientIndex).FailOn(failOnInvalidWorkstation).FailOn(orderIncompletable).FailOn(noOperatingPositions);
@@ -48,32 +50,14 @@ namespace Start_a_Town_
                 InitAction = () =>
                     this.Task.SetTarget(AuxiliaryIndex, new TargetArgs(this.Actor.Map, this.Workstation.Global.Above()))
             };
-            yield return new BehaviorGetAtNewNew(AuxiliaryIndex).FailOn(failOnInvalidWorkstation).FailOn(orderIncompletable).FailOn(noOperatingPositions);
+            yield return new BehaviorGetAtNewNew(WorkstationIndex, PathEndMode.InteractionSpot).FailOn(failOnInvalidWorkstation).FailOn(orderIncompletable).FailOn(noOperatingPositions);
             yield return new BehaviorInteractionNew(AuxiliaryIndex, ()=>new UseHauledOnTarget()).FailOn(failOnInvalidWorkstation).FailOn(orderIncompletable).FailOn(noOperatingPositions);
             yield return BehaviorHelper.JumpIfMoreTargets(nextIngredient, IngredientIndex);
             ///NO!!!! if they collected more than one item in the same stack, this code will only add the last (disposed) target that was merged to the stack
             ///add code in usehauledontarget interaction instead
 
-            // choose operating position
-            /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
-            yield return new BehaviorCustom()
-            {
-                InitAction = () => {
-                    /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
-                    //var chosen = this.CachedOperatingPositions.Where(g => this.Actor.Map.IsStandableIn(g) && this.Actor.CanReserve(g)).OrderBy(g => Vector3.DistanceSquared(g, this.Actor.Global)).FirstOrDefault();
-                    //if (chosen == null)
-                    //{
-                    //    this.Actor.EndCurrentTask();
-                    //    return;
-                    //}
-                    /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
-                    var map = this.Actor.Map;
-                    var front = map.GetFrontOfBlock(this.Workstation.Global);
-                    this.Task.SetTarget(AuxiliaryIndex, new TargetArgs(map, front));
-                }
-            };
             yield return new BehaviorGrabTool();
-            yield return new BehaviorGetAtNewNew(AuxiliaryIndex, PathingSync.FinishMode.Exact).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
+            yield return new BehaviorGetAtNewNew(WorkstationIndex, PathEndMode.InteractionSpot).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
             yield return new BehaviorInteractionNew(WorkstationIndex, () => new InteractionCrafting(this.Task.Order, this.Task.PlacedObjects)).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
             if(this.Task.Tool?.Type != TargetType.Null) // dont unequip tool if not using any
                 yield return new BehaviorInteractionNew(TargetIndex.Tool, () => new Equip()); // unequip the tool before hauling product // TODO dont do that if no tool equipped
@@ -100,19 +84,15 @@ namespace Start_a_Town_
             };
            
             yield return new BehaviorGetAtNewNew(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
-            //yield return BehaviorHelper.StartCarrying(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
             yield return BehaviorHaulHelper.StartCarrying(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
             yield return new BehaviorGetAtNewNew(WorkstationIndex).FailOn(deliverFail);
             yield return BehaviorHelper.PlaceCarried(WorkstationIndex).FailOn(deliverFail);
 
             bool orderIncompletable()
             {
-                //return !this.Task.Order.IsActive(this.Actor.Map);
                 var val = !this.Task.Order.IsActive || !this.Task.Order.IsCompletable();
                 if (val)
-                {
                     "order incompletable".ToConsole();
-                }
                 return val;
             }
             bool failOnInvalidWorkstation()
@@ -126,12 +106,9 @@ namespace Start_a_Town_
                 else
                     return !this.IsValidStorage(this.Task.GetTarget(WorkstationIndex));
             };
-            bool noOperatingPositions() // 
+            bool noOperatingPositions() 
             {
-                // fail if no available operating positions
-                /// CHECK MULTIPLE POSITIONS OR ONLY FRONT?
-                /// WILL I HAVE WORKSTATIONS WITH MULTIPLE OPERATING POSITIONS???
-
+                /// TODO constantly check for operating positions? or let pathing fail when no free operating position found?
                 var map = this.Actor.Map;
                 var front = map.GetFrontOfBlock(workstationGlobal);
                 if (!map.IsStandableIn(front))

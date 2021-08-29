@@ -24,7 +24,7 @@ namespace Start_a_Town_
             yield return BehaviorHelper.SetTarget(Customer, customer);
             yield return BehaviorHelper.SetTarget(Counter, () => (map, counter + counterCell.Back));
 
-            yield return BehaviorHelper.MoveTo(Counter, PathingSync.FinishMode.Exact);
+            yield return BehaviorHelper.MoveTo(Counter, PathEndMode.Exact);
             yield return new BehaviorWait(() => customer.CellIfSpawned.Value == counter + counterCell.Front);
             yield return new BehaviorWait(() =>
             {

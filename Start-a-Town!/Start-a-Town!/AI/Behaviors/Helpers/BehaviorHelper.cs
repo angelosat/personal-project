@@ -152,7 +152,7 @@ namespace Start_a_Town_
         {
             return new BehaviorGetAtNewNew(targetIndex);
         }
-        static public Behavior MoveTo(TargetIndex targetIndex, PathingSync.FinishMode mode)
+        static public Behavior MoveTo(TargetIndex targetIndex, PathEndMode mode)
         {
             return new BehaviorGetAtNewNew(targetIndex, mode);
         }

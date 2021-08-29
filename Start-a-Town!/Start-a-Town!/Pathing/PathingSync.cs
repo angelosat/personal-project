@@ -84,13 +84,13 @@ namespace Start_a_Town_
             this.State = States.Finished;
             this.PathInProgress = null;
         }
-        public void WorkMode(FinishMode mode)
+        public void WorkMode(PathEndMode mode)
         {
             do { } while (this.WorkModeStepFaster(mode) && this.Ticks < 100);
             this.Ticks = 0;
         }
         
-        public bool WorkModeStepFaster(FinishMode mode)
+        public bool WorkModeStepFaster(PathEndMode mode)
         {
             if (this.State != States.Working)
                 throw new Exception(); //why is pathfinder called if it's not working?

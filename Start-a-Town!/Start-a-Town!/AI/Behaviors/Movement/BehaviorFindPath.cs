@@ -9,20 +9,20 @@ namespace Start_a_Town_.AI.Behaviors
         TargetArgs Target { get => this.Actor.CurrentTask.GetTarget(this.TargetInd); set { } }
 
         readonly float Range;
-        readonly PathingSync.FinishMode FinishMode = PathingSync.FinishMode.Touching;
+        readonly PathEndMode FinishMode = PathEndMode.Touching;
         public BehaviorFindPath(string variableName, string pathName, float range = 0)
         {
             this.TargetName = variableName;
             this.Range = range;
             this.PathName = pathName;
         }
-        public BehaviorFindPath(TargetArgs target, PathingSync.FinishMode mode, string pathname)
+        public BehaviorFindPath(TargetArgs target, PathEndMode mode, string pathname)
         {
             this.Target = target;
             this.PathName = pathname;
             this.FinishMode = mode;
         }
-        public BehaviorFindPath(int targetInd, PathingSync.FinishMode mode, string pathname)
+        public BehaviorFindPath(int targetInd, PathEndMode mode, string pathname)
         {
             this.TargetInd = targetInd;
             this.PathName = pathname;

@@ -616,7 +616,7 @@
     <Compile Include="Objects\Tools\ItemToolDef.cs" />
     <Compile Include="Objects\Tools\ToolProps.cs" />
     <Compile Include="Objects\Tools\ToolPropsDefof.cs" />
-    <Compile Include="Pathing\PathingSync.FinishMode.cs" />
+    <Compile Include="Pathing\PathEndMode.cs" />
     <Compile Include="Pathing\PathingSync.Node.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Terrain\Biome.cs" />

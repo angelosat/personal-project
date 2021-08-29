@@ -28,7 +28,7 @@
                     parent.StopPathing();
                     var target = new TargetArgs(parent.Map, destination);
                     parent.CurrentTask = new AITask() { TargetA = target };
-                    this.CurrentBehav = new BehaviorGetAtNewNew(TargetIndex.A, PathingSync.FinishMode.Exact);
+                    this.CurrentBehav = new BehaviorGetAtNewNew(TargetIndex.A, PathEndMode.Exact);
                     this.CurrentMoveOrder = state.MoveOrder;
                     return BehaviorState.Running;
                 }

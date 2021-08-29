@@ -19,6 +19,8 @@ namespace Start_a_Town_.PlayerControl
         Vector3 LastPainted = new(float.MinValue);
         readonly Keys KeyReplace = Keys.ShiftKey;
         readonly Keys KeyRemove = Keys.ControlKey;
+        public override bool TargetOnlyBlocks => true;
+
         public ToolBlockEdit()
         {
 

@@ -20,7 +20,7 @@ namespace Start_a_Town_
             this.FailOnRanOutOfPatienceWaiting(() => actor.GetVisitorProperties().BlacklistShop(task.ShopID));
 
             yield return BehaviorHelper.SetTarget(Counter, () => (map, map.GetFrontOfBlock(counter)));
-            yield return BehaviorHelper.MoveTo(Counter, PathingSync.FinishMode.Exact);
+            yield return BehaviorHelper.MoveTo(Counter, PathEndMode.Exact);
 
             // wait until innkeeper arrives behind counter, then take out money and drop it on counter
             yield return new BehaviorWait(tavern.IsInnkeeperServicing);

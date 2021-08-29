@@ -38,7 +38,8 @@ namespace Start_a_Town_.UI
             this.CurrentlySelectedGetter = currentlySelectedGetter;
             this.ItemsGetter = itemsGetter;
             this.Button = new Button(() =>
-                $"{label}: {(this.CurrentlySelectedGetter() is T item ? nameGetter(item) : "none")}", BtnPress, width);
+                //$"{label}: {(this.CurrentlySelectedGetter() is T item ? nameGetter(item) : "none")}", BtnPress, width);
+                $"{label}: {nameGetter(this.CurrentlySelectedGetter())}", BtnPress, width);
 
             var itemwidth = width - (int)this.Button.Font.MeasureString(label).X;
             this.ListControl = new ListBoxNoScroll<T, Button>(i => CreateButton(i, nameGetter, callBack, itemwidth));

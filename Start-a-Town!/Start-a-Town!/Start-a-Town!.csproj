@@ -675,7 +675,7 @@
     <Compile Include="Modules\Crafting\CraftOrderFinishMode.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderChangeMode.cs" />
     <Compile Include="Modules\Crafting\Packets\PacketCraftOrderToggleHaul.cs" />
-    <Compile Include="Modules\Crafting\Packets\PacketCraftingOrderSync.cs" />
+    <Compile Include="Modules\Crafting\Packets\PacketCraftOrderSync.cs" />
     <Compile Include="Modules\Crafting\Gui\CraftOrderDetailsGui.cs" />
     <Compile Include="Modules\Crafting\Gui\WorkstationGui.cs" />
     <Compile Include="AI\Components\AILog.cs" />

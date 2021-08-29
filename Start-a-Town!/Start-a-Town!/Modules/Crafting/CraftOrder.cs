@@ -26,6 +26,7 @@ namespace Start_a_Town_
         public bool HaulOnFinish;
         public bool Enabled;
         public Dictionary<string, IngredientRestrictions> Restrictions = new();
+        public Stockpile Input, Output;
 
         readonly Dictionary<string, HashSet<int>> ReagentRestrictions = new();
         CraftOrderDetailsGui DetailsGui;

@@ -36,7 +36,11 @@ namespace Start_a_Town_
             {
                 Location = this.PanelCollapsible.BottomLeft
             };
-            this.AddControls(this.ChkHaulOnFinish);
+            //this.AddControls(this.ChkHaulOnFinish);
+
+            var input = new ComboBoxNewNew<Stockpile>(200, "Input", s => s?.Name ?? "Any", s => PacketCraftOrderSync.Send(this.Order, s, this.Order.Output), () => this.Order?.Input, () => this.Order.Map.Town.ZoneManager.GetZones<Stockpile>().Prepend(null));
+            var output = new ComboBoxNewNew<Stockpile>(200, "Output", s => s?.Name ?? "Any", s => PacketCraftOrderSync.Send(this.Order, this.Order.Input, s), () => this.Order?.Output, () => this.Order.Map.Town.ZoneManager.GetZones<Stockpile>().Prepend(null));
+            this.AddControlsBottomLeft(input, output);
         }
         protected override void OnTagChanged()
         {

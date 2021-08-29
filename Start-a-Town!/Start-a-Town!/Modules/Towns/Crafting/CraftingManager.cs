@@ -4,7 +4,6 @@ using System.Linq;
 using System.IO;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
-using Start_a_Town_.Modules.Crafting;
 
 namespace Start_a_Town_
 {
@@ -20,7 +19,7 @@ namespace Start_a_Town_
 
             PacketOrderAdd.Init();
             //PacketOrderRemove.Init();
-            PacketCraftingOrderSync.Init();
+            //PacketCraftingOrderSync.Init();
             PacketCraftOrderToggleHaul.Init();
             PacketCraftOrderChangeMode.Init();
         }

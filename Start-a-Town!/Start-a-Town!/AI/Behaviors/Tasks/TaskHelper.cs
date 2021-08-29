@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
@@ -6,10 +7,11 @@ namespace Start_a_Town_
 {
     static class TaskHelper
     {
-        public static bool TryClearArea(Actor actor, IntVec3 global, out AITask clearTask)
+        public static bool TryClearArea(Actor actor, IntVec3 global, IEnumerable<GameObject> exclude, out AITask clearTask)
         {
+            var exclusions = new HashSet<GameObject>(exclude);
             clearTask = null;
-            var items = actor.Map.GetObjectsOccupyingCell(global);
+            var items = actor.Map.GetObjectsOccupyingCell(global).Except(exclusions);
             if (!items.Any()) 
                 return true;
             if (items.HasSingle(out var single) && single == actor)

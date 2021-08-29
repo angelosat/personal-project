@@ -35,8 +35,8 @@ namespace Start_a_Town_
         static void OnSkillIncrease(GameEvent a)
         {
             var actor = a.Parameters[0] as GameObject;
-            var skill = (string)a.Parameters[1];
-            FloatingText.Manager.Create(actor, $"{skill} increased!", ft => ft.Font = UIManager.FontBold);
+            var skill = (Skill)a.Parameters[1];
+            FloatingText.Manager.Create(actor, $"{skill.Def.Label} increased!", ft => ft.Font = UIManager.FontBold);
         }
         internal void Award(float v)
         {
@@ -60,7 +60,7 @@ namespace Start_a_Town_
             this.LvlProgress.Value = remaining;
             var actor = this.Container.Parent;
             actor.Net.ConsoleBox.Write(Log.Entry.Notification(actor, " has reached Level ", this.Level," in ", this, "!"));
-            actor.Net.EventOccured(Message.Types.SkillIncrease, actor, this.Def.Name);
+            actor.Net.EventOccured(Message.Types.SkillIncrease, actor, this);
         }
         static Skill()
         {

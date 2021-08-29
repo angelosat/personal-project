@@ -66,17 +66,18 @@ namespace Start_a_Town_
             {
                 InitAction = () =>
                 {
-                    this.Actor.Reserve(this.Task.Product, -1);
+                    var haulamount = this.Task.Product.Object.StackSize;
+                    this.Actor.Reserve(this.Task.Product, haulamount); // was using -1 to denote full stack, but want to phase it out
                     if (this.Task.Order.HaulOnFinish && StockpileAIHelper.GetAllValidStoragePlacesNoReserveCheckLazy(this.Actor, this.Task.Product.Object as Entity) is var places && places.Any())// ; Towns.StockpileManager.GetBestStoragePlace(this.Actor, this.Task.Product.Object as Entity, out TargetArgs target))
                     {
                         var target = places.First();
                         this.Task.SetTarget(WorkstationIndex, target);
-                        this.Task.SetTarget(IngredientIndex, this.Task.Product);
+                        this.Task.SetTarget(IngredientIndex, this.Task.Product, haulamount);
                     }
                     else if (HaulHelper.TryFindNearbyPlace(this.Actor, this.Task.Product.Object, this.Task.GetTarget(WorkstationIndex).Global, out TargetArgs nearby))
                     {
                         this.Task.SetTarget(WorkstationIndex, nearby);
-                        this.Task.SetTarget(IngredientIndex, this.Task.Product);
+                        this.Task.SetTarget(IngredientIndex, this.Task.Product, haulamount);
                     }
                     else
                         this.Actor.EndCurrentTask();

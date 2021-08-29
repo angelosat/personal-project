@@ -57,11 +57,7 @@ namespace Start_a_Town_.Crafting
             var product = this.Product;
             var reaction = this.Order.Reaction;
             var order = this.Order;
-            //var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
-            //var reaction = order.Reaction;
-            //var product = reaction.Products.First().Make(actor, reaction, ingr);
             var skillAwardAmount = 100;
-            //actor.AwardSkillXP(reaction.CraftSkill, skillAwardAmount);
             actor[reaction.CraftSkill].Award(skillAwardAmount);
 
             product.ConsumeMaterials();
@@ -84,7 +80,7 @@ namespace Start_a_Town_.Crafting
         protected override void AddSaveData(SaveTag tag)
         {
             tag.TrySaveRef(this.Order, "Order");
-            tag.Add(this.Progress.Save("CraftProgress"));
+            tag.Add(this._progress.Save("CraftProgress"));
             tag.Add(this.PlacedObjects.SaveNewBEST("PlacedItems"));
             this.Product.Save(tag, "Product");
         }

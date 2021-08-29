@@ -97,6 +97,7 @@ namespace Start_a_Town_
         };
         static public TaskDef Idle = new("Idleing", typeof(TaskBehaviorIdle)) { Idle = true };
         static public TaskDef Wander = new("Wandering", typeof(TaskBehaviorWander)) { Idle = true };
+        static public TaskDef Depart = new("Departing", typeof(TaskBehaviorDepart));
 
         static TaskDefOf()
         {

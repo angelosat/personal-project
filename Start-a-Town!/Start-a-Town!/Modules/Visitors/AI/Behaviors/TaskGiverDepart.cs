@@ -16,7 +16,7 @@ namespace Start_a_Town_
                 {
                     var exit = map.GetRandomEdgeCell().Above();
                     if (actor.CanReachNew(exit))
-                        return new AITask(typeof(TaskBehaviorDepart), (map, exit));
+                        return new AITask(TaskDefOf.Depart, (map, exit));
                 }
                 actor.Net.Report($"Failed to find a reachable exit for {actor.Name}'s departure");
             }

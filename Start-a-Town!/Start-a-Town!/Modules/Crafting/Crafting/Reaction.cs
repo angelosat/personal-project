@@ -87,7 +87,7 @@ namespace Start_a_Town_
         {
             return new Label(this.Label);
         }
-        int BaseWork = 100;
+        int BaseWork = 10;// 100;
         readonly List<(string name, WorkAmountGetter getter)> WorkGetters = new();
         internal delegate int WorkAmountGetter(int baseAmount, GameObject material);
         internal Reaction GetWorkRequiredFromMaterial(string materialName, WorkAmountGetter workGetter)
@@ -95,12 +95,28 @@ namespace Start_a_Town_
             this.WorkGetters.Add((materialName, workGetter));
             return this;
         }
-
+        internal Reaction ModWorkRequiredFromMaterials()
+        {
+            foreach (var r in this.Reagents)
+                this.WorkGetters.Add((r.Name, (w, i) => w *= i.PrimaryMaterial.Density));
+            return this;
+        }
+        internal Reaction ModWorkRequiredFromMaterial(string materialName)
+        {
+            this.WorkGetters.Add((materialName, (w, i) => w *= i.PrimaryMaterial.Density));
+            return this;
+        }
+        internal Reaction SetBaseWork(int baseWork)
+        {
+            this.BaseWork = baseWork;
+            return this;
+        }
         private int GetWorkAmount(Dictionary<string, ObjectAmount> ingredients)
         {
             var work = this.BaseWork;
             foreach (var (material, getter) in this.WorkGetters)
-                work = getter(work, ingredients[material].Object);
+                //work = getter(work, ingredients[material].Object);
+                work += getter(this.BaseWork, ingredients[material].Object);
             return work;
         }
 

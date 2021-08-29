@@ -89,7 +89,8 @@ namespace Start_a_Town_
                     reagents,
                     new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },
                     SkillDefOf.Crafting,
-                    JobDefOf.Craftsman);
+                    JobDefOf.Craftsman)
+                    .ModWorkRequiredFromMaterials();
 
                 Def.Register(reaction);
             }

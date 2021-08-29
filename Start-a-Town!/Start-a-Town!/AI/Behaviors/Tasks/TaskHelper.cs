@@ -10,9 +10,9 @@ namespace Start_a_Town_
         {
             clearTask = null;
             var items = actor.Map.GetObjectsOccupyingCell(global);
-            if (!items.Any())
+            if (!items.Any()) 
                 return true;
-            if (items.All(i => i == actor)) // HACK
+            if (items.HasSingle(out var single) && single == actor)
                 return true;
             foreach (var i in items)
             {

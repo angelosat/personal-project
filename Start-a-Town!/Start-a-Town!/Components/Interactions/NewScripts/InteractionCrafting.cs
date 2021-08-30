@@ -57,6 +57,7 @@ namespace Start_a_Town_.Crafting
             if (this.Order.Reaction.CreatesUnfinishedItem)
             {
                 this._progress = this.UnfinishedItem.GetComponent<UnfinishedItemComp>().Progress;
+                this.Order.UnfinishedItem = this.UnfinishedItem;
                 return;
             }
             var actor = this.Actor;

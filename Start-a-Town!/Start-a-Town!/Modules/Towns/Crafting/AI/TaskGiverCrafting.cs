@@ -16,8 +16,6 @@ namespace Start_a_Town_
 
             var allOrders = manager.ByWorkstationNew();
 
-            //var allObjects = map.GetEntities().OfType<Entity>().ToArray();
-
             var itemAmounts = new List<Dictionary<TargetArgs, int>>();
             var materialsUsed = new Dictionary<string, Entity>();
             foreach (var bench in allOrders)
@@ -46,30 +44,47 @@ namespace Start_a_Town_
                         continue;
                     if (actor.Def.OccupyingCellsStandingWithBase(operatingPos).Any(c => !actor.CanReserve(c)))
                         continue;
-                  
-                    if (order.IsActive && order.IsCompletable())
-                        if (TryFindAllIngredients(actor, ref itemAmounts, materialsUsed, order))
+                    if (!(order.IsActive && order.IsCompletable()))
+                        continue;
+                    if(order.UnfinishedItem is Entity unf && unf.GetComponent<UnfinishedItemComp>().Creator == actor)
+                    {
+                        if (!TaskHelper.TryClearArea(actor, benchglobal.Above, itemAmounts.SelectMany(d => d.Keys.Select(t => t.Object)).Distinct(), out var clearTask))
                         {
-                            /// clear workstation first and enqueue the crafting task?
-                            if (!TaskHelper.TryClearArea(actor, benchglobal.Above, itemAmounts.SelectMany(d => d.Keys.Select(t => t.Object)).Distinct(), out var clearTask))
-                            {
-                                if (clearTask is null)
-                                    continue;
-                                return clearTask;
-                            }
-
-                            var workstationTarget = new TargetArgs(map, benchglobal);
-                            var task = new AITask(TaskDefOf.Crafting);
-                            foreach (var dic in itemAmounts)
-                                foreach (var itemAmount in dic)
-                                    task.AddTarget(TaskBehaviorCrafting.IngredientIndex, itemAmount.Key, itemAmount.Value);
-                            task.SetTarget(TaskBehaviorCrafting.WorkstationIndex, workstationTarget);
-                            task.Order = order;
-                            if(order.Reaction.Labor is not null)
-                                task.Tool = FindTool(actor, order.Reaction.Labor);
-
-                            return task;
+                            if (clearTask is null)
+                                continue;
+                            return clearTask;
                         }
+                        var workstationTarget = new TargetArgs(map, benchglobal);
+                        var task = new AITask(TaskDefOf.Crafting);
+                        task.Order = order;
+                        task.AddTarget(TaskBehaviorCrafting.IngredientIndex, unf, 1);
+                        task.SetTarget(TaskBehaviorCrafting.WorkstationIndex, workstationTarget);
+                        if (order.Reaction.Labor is not null)
+                            task.Tool = FindTool(actor, order.Reaction.Labor);
+                        return task;
+                    }
+                    if (TryFindAllIngredients(actor, ref itemAmounts, materialsUsed, order))
+                    {
+                        /// clear workstation first and enqueue the crafting task?
+                        if (!TaskHelper.TryClearArea(actor, benchglobal.Above, itemAmounts.SelectMany(d => d.Keys.Select(t => t.Object)).Distinct(), out var clearTask))
+                        {
+                            if (clearTask is null)
+                                continue;
+                            return clearTask;
+                        }
+
+                        var workstationTarget = new TargetArgs(map, benchglobal);
+                        var task = new AITask(TaskDefOf.Crafting);
+                        foreach (var dic in itemAmounts)
+                            foreach (var itemAmount in dic)
+                                task.AddTarget(TaskBehaviorCrafting.IngredientIndex, itemAmount.Key, itemAmount.Value);
+                        task.SetTarget(TaskBehaviorCrafting.WorkstationIndex, workstationTarget);
+                        task.Order = order;
+                        if (order.Reaction.Labor is not null)
+                            task.Tool = FindTool(actor, order.Reaction.Labor);
+
+                        return task;
+                    }
                 }
             }
             return null;

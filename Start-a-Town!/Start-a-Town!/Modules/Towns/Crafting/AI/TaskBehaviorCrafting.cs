@@ -47,6 +47,11 @@ namespace Start_a_Town_
             /// create unfinished item
             yield return new BehaviorCustom(delegate
             {
+                if (order.UnfinishedItem is not null)
+                {
+                    this.Task.SetTarget(AuxiliaryIndex, order.UnfinishedItem);
+                    return;
+                }
                 if (!order.Reaction.CreatesUnfinishedItem)
                     return;
 

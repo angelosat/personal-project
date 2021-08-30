@@ -55,12 +55,7 @@ namespace Start_a_Town_
         {
             this.InteractionFactory = interactionFactory;
         }
-        public BehaviorInteractionNew(string targetVariableName, Interaction interaction)
-        {
-            this.Interaction = interaction;
-            this.TargetVariableName = targetVariableName;
-        }
-
+      
         public override BehaviorState Execute(Actor parent, AIState state)
         {
             this.Actor = parent;

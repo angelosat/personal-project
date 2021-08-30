@@ -75,7 +75,7 @@ namespace Start_a_Town_
             return tag;
         }
 
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             tag.TryGetTagValue<string>("CustomName", v => this.CustomName = v);
             tag.TryGetTagValue<string>("Quality", s => this.Quality = Def.GetDef<Quality>(s));

@@ -96,6 +96,5 @@ namespace Start_a_Town_
                 Def.Register(reaction);
             }
         }
-
     }
 }

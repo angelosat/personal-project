@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using Start_a_Town_.Components;
 using Start_a_Town_.Net;
-using Start_a_Town_.Components;
 using Start_a_Town_.UI;
+using System.Linq;
 
 namespace Start_a_Town_.AI
 {
@@ -11,7 +11,7 @@ namespace Start_a_Town_.AI
         {
             AITask.Initialize();
         }
-        
+
         public override void OnGameEvent(GameEvent e)
         {
             switch (e.Type)

@@ -9,7 +9,6 @@ using Start_a_Town_.Components;
 
 namespace Start_a_Town_
 {
-    //public enum ObjectSize { Immovable = -1, Inventoryable, Haulable }
     public enum ObjectSize { Inventoryable, Haulable, Immovable }
     public class PhysicsComponent : EntityComponent
     {
@@ -17,7 +16,6 @@ namespace Start_a_Town_
         public ObjectSize Size => this.Parent.Def.Size;
         public bool Solid;
         public float Height;
-        //public float Weight;
         float? _weight;
         public float Weight => this._weight ??= this.UpdateWeight();
         public bool Enabled = true;
@@ -38,15 +36,6 @@ namespace Start_a_Town_
             this.Height = toCopy.Height;
         }
        
-        //public PhysicsComponent Initialize(int size = 0, bool solid = false, float height = 1, float weight = 1)
-        //{
-        //    this.Size = (ObjectSize)size;
-        //    this.Solid = false;
-        //    this.Height = height;
-        //    this.Weight = weight;
-        //    return this;
-        //}
-
         public int Reach => (int)Math.Ceiling(this.Height) + 2;
 
         /// <summary>

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Start_a_Town_
 {
@@ -36,9 +36,9 @@ namespace Start_a_Town_
 
         GameObject InstantiateObject(GameObject obj);
         void Instantiator(GameObject o);
-        
+
         void SyncReport(string text);
-       
+
         bool LogStateChange(int netID);
 
         void PopLoot(GameObject loot, Vector3 startPosition, Vector3 startVelocity);

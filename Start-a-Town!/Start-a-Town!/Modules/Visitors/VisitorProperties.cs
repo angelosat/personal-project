@@ -302,10 +302,8 @@ namespace Start_a_Town_
             this.TownApprovalRating = r.ReadSingle();
             this.ShopBlacklist = new(r.ReadIntArray());
             this.RecentlyVisitedShops = new(r.ReadIntArray());
-            //this.Quests.Read(r);
             this.Discovered = r.ReadBoolean();
             this.Timer = TimeSpan.FromMilliseconds(r.ReadDouble());
-
             r.ReadIntArray().ToList().ForEach(i => this.Quests.Add(this.World.Map.Town.QuestManager.GetQuest(i)));
             return this;
         }

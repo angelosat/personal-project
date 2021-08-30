@@ -95,11 +95,11 @@ namespace Start_a_Town_
             return this;
         }
 
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.SkillsNew.SaveImmutable(tag, "Skills");
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             this.SkillsNew.TryLoadImmutable(tag, "Skills");
         }

@@ -60,11 +60,11 @@ namespace Start_a_Town_.Components
             return new ContextAction(new Equip()) { Shortcut = PlayerInput.ActivateHold };
         }
        
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
-            base.AddSaveData(tag);
+            base.SaveExtra(tag);
         }
-        internal override void Load(SaveTag save)
+        internal override void LoadExtra(SaveTag save)
         {
         }
 

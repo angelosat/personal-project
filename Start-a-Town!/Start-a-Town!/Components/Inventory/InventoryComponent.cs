@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.Net;
+using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_.Components
 {
@@ -13,7 +13,7 @@ namespace Start_a_Town_.Components
         class Packets
         {
             static int PacketSyncInsert, PacketSetHaulSlot;
-            static public void Init()
+            public static void Init()
             {
                 PacketSyncInsert = Network.RegisterPacketHandler(HandleSyncInsert);
 
@@ -31,7 +31,7 @@ namespace Start_a_Town_.Components
             {
                 var server = net as Server;
                 //if (net is Server server)
-                    actor.Inventory.Insert(item);
+                actor.Inventory.Insert(item);
                 server.OutgoingStreamTimestamped.Write(PacketSyncInsert, actor.RefID, item.RefID);
             }
             private static void HandleSyncInsert(INetwork net, BinaryReader r)
@@ -291,8 +291,8 @@ namespace Start_a_Town_.Components
                     var newobj = obj.Clone();
                     newobj.StackSize = amount;
                     if (parent.Net is Server server)
-                        server.Instantiate(newobj); 
-                        /// maybe i can also sync the new object here after it is locally instantiated by the client, to make sure its values are synced
+                        server.Instantiate(newobj);
+                    /// maybe i can also sync the new object here after it is locally instantiated by the client, to make sure its values are synced
                     else if (parent.Net is Client client)
                         client.InstantiateLocal(newobj);
                     obj.StackSize -= amount;
@@ -488,10 +488,10 @@ namespace Start_a_Town_.Components
 
             return data;
         }
-        internal override void Load(SaveTag data)
+        internal override void LoadExtra(SaveTag data)
         {
             var container = new Container(16);
-            if(!data.TryGetTag("Contents", t => this.Contents.Load(t)))
+            if (!data.TryGetTag("Contents", t => this.Contents.Load(t)))
             {
                 var tmpslots = new Container(16);
                 data.TryGetTag("Inventory", tag => tmpslots.Load(tag));

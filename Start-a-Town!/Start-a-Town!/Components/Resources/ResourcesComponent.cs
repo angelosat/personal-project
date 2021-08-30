@@ -95,7 +95,7 @@ namespace Start_a_Town_
             return text.TrimEnd('\n');
         }
 
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.Resources.SaveImmutable(tag, "Resources");
 

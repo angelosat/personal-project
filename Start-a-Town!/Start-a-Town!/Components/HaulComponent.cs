@@ -92,11 +92,11 @@ namespace Start_a_Town_.Components
             this.AnimationHaul.Read(r);
         }
         
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             tag.Add(this.AnimationHaul.Save("AnimationHaul"));
         }
-        internal override void Load(SaveTag save)
+        internal override void LoadExtra(SaveTag save)
         {
             save.TryGetTag("AnimationHaul", this.AnimationHaul.Load);
         }

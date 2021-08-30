@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Start_a_Town_.Components
 {
@@ -15,7 +15,11 @@ namespace Start_a_Town_.Components
         }
         public override string Label => this.Name;
         public abstract string Name { get; }
-        public override string ToString() => this.Label;
+        public override string ToString()
+        {
+            return this.Label;
+        }
+
         public virtual void OnNameplateCreated(GameObject parent, Nameplate plate) { }
         public virtual void OnHealthBarCreated(GameObject parent, Nameplate plate) { }
 
@@ -27,7 +31,7 @@ namespace Start_a_Town_.Components
         public EntityComponent(GameObject parent)
             : this()
         { }
-       
+
         public abstract object Clone();
 
         public virtual bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
@@ -40,7 +44,7 @@ namespace Start_a_Town_.Components
         public virtual void Instantiate(Action<GameObject> instantiator) { }
 
         public virtual void Tick() { }
-        
+
         public void Tick(MapBase map, IBlockEntityCompContainer entity, Vector3 global)
         {
             throw new NotImplementedException();
@@ -86,7 +90,7 @@ namespace Start_a_Town_.Components
             var t = new TargetArgs(parent);
             var a = parent.Net.GetPlayer().ControllingEntity;
             foreach (var i in list)
-                    actions.Add(new ContextAction(i.Key.ToString() + ": " + i.Value.Name, null) { Available = () => i.Value.Evaluate() });// () => true));
+                actions.Add(new ContextAction(i.Key.ToString() + ": " + i.Value.Name, null) { Available = () => i.Value.Evaluate() });// () => true));
         }
         public virtual void GetInteractions(GameObject parent, List<Interaction> actions) { }
         public virtual void GetRightClickActions(GameObject parent, List<ContextAction> actions) { }
@@ -98,14 +102,14 @@ namespace Start_a_Town_.Components
         internal SaveTag SaveAs(string name = "")
         {
             var tag = new SaveTag(SaveTag.Types.Compound, name);
-            this.AddSaveData(tag);
+            this.SaveExtra(tag);
             return tag.Value != null ? tag : null;
         }
         internal virtual List<SaveTag> Save()
         {
             return null;
         }
-        internal virtual void AddSaveData(SaveTag tag)
+        internal virtual void SaveExtra(SaveTag tag)
         {
             var list = this.Save();
             if (list != null)
@@ -114,9 +118,9 @@ namespace Start_a_Town_.Components
         }
         internal virtual void Load(GameObject parent, SaveTag tag)
         {
-            this.Load(tag);
+            this.LoadExtra(tag);
         }
-        internal virtual void Load(SaveTag tag)
+        internal virtual void LoadExtra(SaveTag tag)
         {
 
         }
@@ -127,7 +131,7 @@ namespace Start_a_Town_.Components
         {
 
         }
-        
+
         public virtual void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> actions)
         {
         }

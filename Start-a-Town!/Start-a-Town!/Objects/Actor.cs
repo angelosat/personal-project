@@ -3,7 +3,6 @@ using Start_a_Town_.AI;
 using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
-using Start_a_Town_.Core;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
@@ -19,15 +18,15 @@ namespace Start_a_Town_
 
         private NpcSkillsComponent _skills;
         [InspectorHidden]
-        internal NpcSkillsComponent Skills => _skills ??= this.GetComponent<NpcSkillsComponent>();
+        internal NpcSkillsComponent Skills => this._skills ??= this.GetComponent<NpcSkillsComponent>();
 
         private AttributesComponent _attributes;
         [InspectorHidden]
-        internal AttributesComponent Attributes => _attributes ??= this.GetComponent<AttributesComponent>();
+        internal AttributesComponent Attributes => this._attributes ??= this.GetComponent<AttributesComponent>();
 
         private NpcComponent _npc;
         [InspectorHidden]
-        internal NpcComponent Npc => _npc ??= this.GetComponent<NpcComponent>();
+        internal NpcComponent Npc => this._npc ??= this.GetComponent<NpcComponent>();
 
         PossessionsComponent _ownership;
         [InspectorHidden]
@@ -43,7 +42,7 @@ namespace Start_a_Town_
 
         private PersonalityComponent _personality;
         [InspectorHidden]
-        internal PersonalityComponent Personality => _personality ??= this.GetComponent<PersonalityComponent>();
+        internal PersonalityComponent Personality => this._personality ??= this.GetComponent<PersonalityComponent>();
 
         [InspectorHidden]
         public Skill this[SkillDef skill] => this.Skills.GetSkill(skill);
@@ -59,7 +58,7 @@ namespace Start_a_Town_
 
         private MoodComp _mood;
         [InspectorHidden]
-        public MoodComp Mood => _mood ??= this.GetComponent<MoodComp>();
+        public MoodComp Mood => this._mood ??= this.GetComponent<MoodComp>();
 
         public float MoodValue => this.Mood.Mood;
 
@@ -308,7 +307,6 @@ namespace Start_a_Town_
                    new BehaviorHandleResources(),
                    new BehaviorHandleOrders(),
                    new BehaviorHandleTasks()
-                   //new BehaviorIdle()
                    )));
             obj.AddComponent(new AttributesComponent(def).Randomize());
             obj.AddComponent(new NpcSkillsComponent(def).Randomize());
@@ -323,16 +321,7 @@ namespace Start_a_Town_
             obj.AddComponent(new InventoryComponent(16));
             obj.AddComponent(new StatsComponent());
             obj.AddComponent(new MobileComponent());
-            //obj.AddComponent(new WorkComponent());
             obj.AddComponent(new MoodComp());
-            //obj.AddComponent(new AIComponent().Initialize(
-            //   new BehaviorQueue(
-            //       new AIMemory(),
-            //       new BehaviorHandleResources(),
-            //       new BehaviorHandleOrders(),
-            //       new BehaviorHandleTasks(),
-            //       new BehaviorIdle()
-            //       )));
             obj.AddComponent(new SpriteComponent(def.Body));
             obj.AddComponent(new WorkComponent()); /// MOVED THIS HERE AFTER THE AICOMPONENT, so that when the ai starts an interaction, it gets ticked during the same frame
                                                    /// because when the interaction is received on the client, the packet is processed before the entity even ticks at all
@@ -380,8 +369,6 @@ namespace Start_a_Town_
             return this.GetComponent<MoodComp>().Contains(mdef);
         }
 
-        
-       
         readonly Button btnLog = new("Log");
         readonly Button btnSkills = new("Skills");
         readonly Button btnGear = new("Gear");
@@ -520,7 +507,7 @@ namespace Start_a_Town_
                 yield break;
             var givers = TaskGiver.CitizenTaskGivers.Concat(TaskGiver.EssentialTaskGivers);
             foreach (var giver in givers)
-                if (giver.CanGiveTask(this, target) is TaskDef taskDef) 
+                if (giver.CanGiveTask(this, target) is TaskDef taskDef)
                     yield return (taskDef, giver);
         }
 

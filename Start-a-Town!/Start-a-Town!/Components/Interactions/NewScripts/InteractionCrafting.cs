@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using Start_a_Town_.Net;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Crafting
 {
@@ -11,7 +11,9 @@ namespace Start_a_Town_.Crafting
         CraftOrder Order;
         Reaction.Product.ProductMaterialPair Product;
         readonly List<ObjectRefIDsAmount> PlacedObjects = new();
-        Entity UnfinishedItem;
+        int _unfinishedRefID;
+        Entity _unfinished;
+        Entity UnfinishedItem => this._unfinished ??= this.Actor.Net.GetNetworkObject<Entity>(this._unfinishedRefID);
         Progress _progress = new();
 
         protected override float Progress => this._progress.Percentage;
@@ -26,6 +28,13 @@ namespace Start_a_Town_.Crafting
         {
             this.Order = order;
             this.PlacedObjects = placedObjects.Select(o => new ObjectRefIDsAmount(o.Object, o.Amount)).ToList();
+        }
+        public InteractionCrafting(CraftOrder order, List<ObjectAmount> placedObjects, Entity unfinishedItem)
+           : this()
+        {
+            this.Order = order;
+            this.PlacedObjects = placedObjects.Select(o => new ObjectRefIDsAmount(o.Object, o.Amount)).ToList();
+            this._unfinished = unfinishedItem;
         }
         public InteractionCrafting(CraftOrder order, List<ObjectRefIDsAmount> placedObjects)
             : this()
@@ -45,38 +54,21 @@ namespace Start_a_Town_.Crafting
         }
         protected override void Init()
         {
+            if (this.Order.Reaction.CreatesUnfinishedItem)
+            {
+                this._progress = this.UnfinishedItem.GetComponent<UnfinishedItemComp>().Progress;
+                return;
+            }
             var actor = this.Actor;
             var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
             this.Product = this.Order.Reaction.Products.First().Make(actor, this.Order.Reaction, ingr);
             this._progress.Max = this.Product.WorkAmount;
-
-            if(this.Order.Reaction.CreatesUnfinishedItem)
-            {
-                this.Product.ConsumeMaterials();
-                if (actor.Net is Server server)
-                {
-                    var item = ItemDefOf.UnfinishedCraft.Create();
-                    item.GetComponent<UnfinishedItemComp>().SetProduct(this.Product, this.Product.WorkAmount, actor, this.Order);
-
-                    item.SyncInstantiate(server);
-                    actor.Map.SyncSpawn(item, this.Target.Global.Above(), Vector3.Zero);
-
-                //if (actor.Net is Client client)
-                //        client.InstantiateLocal(item);
-                //    else
-                //        actor.Net.Instantiate(item);
-
-                    actor.CurrentTask.SetTarget(TaskBehaviorCrafting.AuxiliaryIndex, item);
-                    actor.Reserve(item);
-                    this.UnfinishedItem = item;
-                }
-            }
         }
         GameObject ProduceWithMaterialsOnTopNew()
         {
             var global = this.Target.Global;
             var actor = this.Actor;
-            var product = this.Product;
+            var product = this.Product ?? this.UnfinishedItem.GetComponent<UnfinishedItemComp>().Product;
             var reaction = this.Order.Reaction;
             var order = this.Order;
             var skillAwardAmount = 100;
@@ -108,14 +100,17 @@ namespace Start_a_Town_.Crafting
             tag.TrySaveRef(this.Order, "Order");
             tag.Add(this._progress.Save("CraftProgress"));
             tag.Add(this.PlacedObjects.SaveNewBEST("PlacedItems"));
-            this.Product.Save(tag, "Product");
+            if (this.Product is not null)
+                this.Product.Save(tag, "Product");
+            tag.Add("Unfinished", this.UnfinishedItem?.RefID ?? -1);
         }
         public override void LoadData(SaveTag tag)
         {
             tag.TryLoadRef("Order", out this.Order);
             this._progress = new Progress(tag["CraftProgress"]);
             this.PlacedObjects.TryLoadMutable(tag, "PlacedItems");
-            this.Product = new Reaction.Product.ProductMaterialPair(tag["Product"]);
+            tag.TryGetTag("Product", t => this.Product = new Reaction.Product.ProductMaterialPair(t));
+            tag.TryGetTagValue("Unfinished", out this._unfinishedRefID);
         }
         protected override void WriteExtra(BinaryWriter w)
         {
@@ -125,6 +120,7 @@ namespace Start_a_Town_.Crafting
             w.Write(this.Product is not null);
             if (this.Product is not null)
                 this.Product.Write(w);
+            w.Write(this.UnfinishedItem?.RefID ?? -1);
         }
         protected override void ReadExtra(BinaryReader r)
         {
@@ -137,11 +133,13 @@ namespace Start_a_Town_.Crafting
             this.PlacedObjects.ReadMutable(r);
             if (r.ReadBoolean())
                 this.Product = new Reaction.Product.ProductMaterialPair(r);
+            this._unfinishedRefID = r.ReadInt32();
         }
 
         internal override void ResolveReferences()
         {
             this.Order = this.Actor.Map.GetBlockEntity(this.Target.Global).GetComp<BlockEntityCompWorkstation>().GetOrder(this.OrderID);
+            this._progress = this.UnfinishedItem.GetComponent<UnfinishedItemComp>().Progress;
         }
 
         protected override void ApplyWork(float workAmount)

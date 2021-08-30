@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Start_a_Town_.Components;
 using Start_a_Town_.Net;
 using Start_a_Town_.UI;
+using System.Collections.Generic;
 
 namespace Start_a_Town_
 {
@@ -38,7 +38,7 @@ namespace Start_a_Town_
         }
         public Entity(ItemDef def) : this()
         {
-            Def = def;
+            this.Def = def;
             this.AddComponent(new SpriteComponent(def));
         }
         internal GameObjectSlot GetEquipmentSlot(GearType.Types type)
@@ -111,7 +111,7 @@ namespace Start_a_Town_
 
         internal void SyncDispose()
         {
-            if(this.Net is Server server)
+            if (this.Net is Server server)
                 server.SyncDispose(this.RefID);
         }
 

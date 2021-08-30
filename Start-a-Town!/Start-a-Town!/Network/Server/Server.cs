@@ -20,7 +20,8 @@ namespace Start_a_Town_.Net
         {
             RegisterPacketHandler(PacketType.Acks, Instance.ReceiveAcks);
         }
-        string _name = "Server";
+
+        readonly string _name = "Server";
         public override string ToString()
         {
             return this._name;
@@ -63,7 +64,7 @@ namespace Start_a_Town_.Net
         }
 
         static readonly Dictionary<int, PacketHandler> PacketHandlersNewNewNew = new();
-        
+
         internal static void RegisterPacketHandler(int id, PacketHandler handler)
         {
             PacketHandlersNewNewNew.Add(id, handler);
@@ -828,7 +829,7 @@ namespace Start_a_Town_.Net
             a.Network = Instance;
             recipient.PostMessage(a);
         }
-      
+
         private static void SendSnapshots(TimeSpan gt)
         {
             if (Instance.ObjectsChangedSinceLastSnapshot.Count > 0)
@@ -861,7 +862,7 @@ namespace Start_a_Town_.Net
             float z = verticalForce * (float)Math.Cos(w);
 
             var direction = new Vector3(x, y, z);
-            var final = startVelocity +  direction;
+            var final = startVelocity + direction;
 
             obj.Global = startPosition;
             obj.Velocity = final;
@@ -1013,7 +1014,8 @@ namespace Start_a_Town_.Net
             Instance.Enqueue(PacketType.SetSaving, Network.Serialize(w => { w.Write(false); }));
         }
         public PlayerData CurrentPlayer => this.PlayerData;
-        PlayerData PlayerData;
+
+        readonly PlayerData PlayerData;
         public PlayerData GetPlayer()
         {
             return this.PlayerData;

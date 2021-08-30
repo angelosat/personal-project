@@ -39,11 +39,11 @@ namespace Start_a_Town_
             info.AddInfo(new Label() { TextFunc = () => string.Format("Grows into: {0}", this.Plant.Name) });
         }
 
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.Plant.Save(tag, "Plant");
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             this.Plant = tag.LoadDef<PlantProperties>("Plant");
         }

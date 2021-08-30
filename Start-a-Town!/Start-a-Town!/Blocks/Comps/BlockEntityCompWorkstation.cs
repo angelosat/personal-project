@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Start_a_Town_.UI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.UI;
 
 namespace Start_a_Town_
 {
@@ -58,10 +57,10 @@ namespace Start_a_Town_
             this.Orders.Insert(newIndex, order);
             return true;
         }
-        
+
         internal override void GetQuickButtons(SelectionManager uISelectedInfo, MapBase map, IntVec3 vector3)
         {
-            uISelectedInfo.AddTabAction("Orders", () => ShowUI(map, vector3));
+            uISelectedInfo.AddTabAction("Orders", () => this.ShowUI(map, vector3));
         }
 
         public void ShowUI(MapBase map, IntVec3 global)
@@ -100,7 +99,7 @@ namespace Start_a_Town_
             foreach (var ord in this._orders)
             {
                 ord.ResolveReferences(map);
-                //ord.Map = map;
+                map.Town.CraftingManager.RegisterOrder(ord);
             }
         }
         internal override void NeighborChanged()

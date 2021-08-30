@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Microsoft.Xna.Framework;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
@@ -29,8 +29,8 @@ namespace Start_a_Town_
             Reference
         }
 
-        static Dictionary<string, SaveTag> SaveReferences = new();
-        static Dictionary<string, ISaveable> LoadReferences = new();
+        static readonly Dictionary<string, SaveTag> SaveReferences = new();
+        static readonly Dictionary<string, ISaveable> LoadReferences = new();
 
         public byte Type;
         public string Name;
@@ -44,14 +44,14 @@ namespace Start_a_Town_
         }
         public T TagValueOrDefault<T>(string name, T def)
         {
-            if (!TryGetTag(name, out SaveTag tag))
+            if (!this.TryGetTag(name, out SaveTag tag))
                 return def;
             else
                 return (T)tag.Value;
         }
         public bool TryGetTag(string name, Action<SaveTag> action)
         {
-            if (!TryGetTag(name, out var tag))
+            if (!this.TryGetTag(name, out var tag))
             {
                 return false;
             }
@@ -100,7 +100,7 @@ namespace Start_a_Town_
         }
         public bool TryGetTag(string name, out SaveTag tag)
         {
-            if (Type != 10)
+            if (this.Type != 10)
             {
                 tag = null;
                 return false;
@@ -112,9 +112,9 @@ namespace Start_a_Town_
         {
             get
             {
-                if (Type != 10)
+                if (this.Type != 10)
                     return null;
-              
+
                 return (this.Value as Dictionary<string, SaveTag>)[name];
             }
         }
@@ -122,7 +122,7 @@ namespace Start_a_Town_
 
         public override string ToString()
         {
-            return Type + ": " + Name + ": " + Value.ToString();
+            return this.Type + ": " + this.Name + ": " + this.Value.ToString();
         }
 
         #region Constructors
@@ -142,45 +142,45 @@ namespace Start_a_Town_
                 case 9:
                     if (value is List<SaveTag>)
                     {
-                        ListType = (value as List<SaveTag>)[0].Type;
-                        Value = value;
+                        this.ListType = (value as List<SaveTag>)[0].Type;
+                        this.Value = value;
                     }
-                    else 
+                    else
                     {
-                        ListType = (byte)value;
-                        Value = new List<SaveTag>();
+                        this.ListType = (byte)value;
+                        this.Value = new List<SaveTag>();
                     }
                     break;
                 case 10:
                     if (value is Dictionary<string, SaveTag>)
-                        Value = value;
-                    else if(value is List<SaveTag>)
+                        this.Value = value;
+                    else if (value is List<SaveTag>)
                     {
                         // for backwards compatibility
-                        Value = (value as List<SaveTag>).ToDictionary(foo => foo.Name);
+                        this.Value = (value as List<SaveTag>).ToDictionary(foo => foo.Name);
                     }
                     else
                     {
                         if (value != null)
                             Console.WriteLine(name + " value dropped");
-                        Value = new Dictionary<string, SaveTag>();// { Value as Tag }; //when you create a compound tag with a value, it initializes a new list<tag> with the value as its first element
+                        this.Value = new Dictionary<string, SaveTag>();// { Value as Tag }; //when you create a compound tag with a value, it initializes a new list<tag> with the value as its first element
                     }
                     break;
 
                 default:
-                    Value = value;
+                    this.Value = value;
                     break;
             }
-            Type = type;
-            Name = name;
+            this.Type = type;
+            this.Name = name;
         }
         #endregion
 
         public void WriteTo(BinaryWriter w)
         {
-            w.Write(Type);
-            w.Write(Name);
-            Write(w);
+            w.Write(this.Type);
+            w.Write(this.Name);
+            this.Write(w);
         }
         public void WriteWithRefs(BinaryWriter w)
         {
@@ -195,7 +195,7 @@ namespace Start_a_Town_
         }
         void Write(BinaryWriter writer)
         {
-            switch (Type)
+            switch (this.Type)
             {
                 case 0:
                     break;
@@ -225,13 +225,13 @@ namespace Start_a_Town_
                     writer.Write((string)this.Value);
                     break;
                 case 9:
-                    writer.Write(ListType);
-                    writer.Write((Value as List<SaveTag>).Count);
-                    foreach (SaveTag tag in (List<SaveTag>)Value)
+                    writer.Write(this.ListType);
+                    writer.Write((this.Value as List<SaveTag>).Count);
+                    foreach (SaveTag tag in (List<SaveTag>)this.Value)
                         tag.Write(writer);
                     break;
                 case 10:
-                    Dictionary<string, SaveTag> Tags = (Dictionary<string, SaveTag>)Value;
+                    Dictionary<string, SaveTag> Tags = (Dictionary<string, SaveTag>)this.Value;
                     writer.Write(Tags.Count);
                     foreach (SaveTag tag in Tags.Values)
                     {
@@ -298,7 +298,7 @@ namespace Start_a_Town_
                         return listtype;
                 case 10:
                     int capacity = reader.ReadInt32();
-                    Dictionary<string, SaveTag> cmpdnlist = new Dictionary<string, SaveTag>(capacity + 1); 
+                    Dictionary<string, SaveTag> cmpdnlist = new Dictionary<string, SaveTag>(capacity + 1);
                     // initialize dictionary to capacity + 1 because we add an empty escape item in the dictionary at the end 
                     // can we avoid that? we already have the item count (capacity), so can we just iterate that many times? 
                     byte nexttype;
@@ -318,14 +318,14 @@ namespace Start_a_Town_
                     return reader.ReadUInt32();
                 case 13:
                     return reader.ReadBoolean();
-                case 14: 
+                case 14:
                     return reader.ReadVector3();
                 case 15: //references
                     return reader.ReadString();
             }
             return null;
         }
-        static public SaveTag ReadWithRefs(BinaryReader reader)
+        public static SaveTag ReadWithRefs(BinaryReader reader)
         {
             LoadReferences.Clear();
             int refCount = reader.ReadInt32();
@@ -344,7 +344,7 @@ namespace Start_a_Town_
             var s = Read(reader);
             return s;
         }
-        static public SaveTag Read(BinaryReader r)
+        public static SaveTag Read(BinaryReader r)
         {
             byte type = r.ReadByte();
             string name = r.ReadString();
@@ -363,9 +363,9 @@ namespace Start_a_Town_
         public void Add(SaveTag tag)
         {
             if (this.Type == 9)
-                (Value as List<SaveTag>).Add(tag);
+                (this.Value as List<SaveTag>).Add(tag);
             else if (this.Type == 10)
-                (Value as Dictionary<string, SaveTag>).Add(tag.Name, tag);
+                (this.Value as Dictionary<string, SaveTag>).Add(tag.Name, tag);
         }
         public int LoadInt(string name)
         {
@@ -383,7 +383,7 @@ namespace Start_a_Town_
         }
         public Vector3 LoadVector3()
         {
-            if(this.Value is Vector3)
+            if (this.Value is Vector3)
                 return (Vector3)this.Value;
             else
                 return new Vector3((float)this["X"].Value, (float)this["Y"].Value, (float)this["Z"].Value);
@@ -414,7 +414,7 @@ namespace Start_a_Town_
             c.A = this.GetValue<Byte>("A");
             return c;
         }
-        
+
         private static string RegisterRef(ILoadReferencable reference)
         {
             var refID = reference.GetUniqueLoadID();
@@ -448,17 +448,17 @@ namespace Start_a_Town_
             this.Add(tag);
             return true;
         }
-        static public SaveTag SaveRef(ILoadReferencable reference, string name)
+        public static SaveTag SaveRef(ILoadReferencable reference, string name)
         {
             if (reference == null)
                 throw new Exception();
             string refID = RegisterRef(reference);
             return new SaveTag(SaveTag.Types.Reference, name, refID);
         }
-        static public SaveTag SaveRefs<T>(List<T> refs, string name) where T : ILoadReferencable
+        public static SaveTag SaveRefs<T>(List<T> refs, string name) where T : ILoadReferencable
         {
             var tag = new SaveTag(Types.List, name, Types.Reference);
-            foreach(var item in refs)
+            foreach (var item in refs)
             {
                 var refID = RegisterRef(item);
                 tag.Add(new SaveTag(SaveTag.Types.Reference, "", refID));
@@ -490,7 +490,7 @@ namespace Start_a_Town_
         {
             var list = this[name].Value as List<SaveTag>;
             var itemList = new List<T>();
-            foreach(var tag in list)
+            foreach (var tag in list)
             {
                 var refID = (string)tag.Value;
                 itemList.Add(LoadReferences[refID] as T);

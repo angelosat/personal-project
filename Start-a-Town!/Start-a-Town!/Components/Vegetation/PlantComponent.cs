@@ -353,13 +353,13 @@ namespace Start_a_Town_.Components
             this.Progress.Read(r);
             this.Growth.Set(parent, r.ReadInt32());
         }
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.PlantProperties.Save(tag, "Plant");
             tag.Add(this.GrowthBody.Save("GrowthNew"));
             tag.Add(this.GrowthFruit.Save("FruitGrowth"));
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             this.PlantProperties = tag.LoadDef<PlantProperties>("Plant");
             tag.TryGetTag("GrowthNew", t => this.GrowthBody = new Progress(t));

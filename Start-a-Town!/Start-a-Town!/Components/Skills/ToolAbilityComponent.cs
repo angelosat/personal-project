@@ -79,12 +79,12 @@ namespace Start_a_Town_
                 this.Props = Def.GetDef<ToolProps>(r);
         }
 
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.Props?.Name.Save(tag, "Props");
         }
 
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             tag.TryLoadDef("Props", ref this.Props);
         }

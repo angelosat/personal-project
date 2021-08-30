@@ -106,11 +106,11 @@ namespace Start_a_Town_.Components
             this.NeedsNew.Clear();
             this.NeedsNew.InitializeAbstract(r, this.Parent);
         }
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.NeedsNew.SaveAbstract(tag, "Needs");
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             this.NeedsNew.Clear();
             this.NeedsNew.TryLoadVariableTypes(tag, "Needs", this.Parent);

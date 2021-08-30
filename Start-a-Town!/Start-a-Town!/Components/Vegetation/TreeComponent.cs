@@ -65,11 +65,11 @@ namespace Start_a_Town_.Components
         {
             this.GrowthNew.Read(r);
         }
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             tag.Add(this.GrowthNew.Save("GrowthNew"));
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             tag.TryGetTag("GrowthNew", t => this.GrowthNew = new Progress(t));
         }

@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Start_a_Town_.Components
 {
@@ -17,7 +17,7 @@ namespace Start_a_Town_.Components
 
         public override bool HandleMessage(GameObject parent, ObjectEventArgs e = null)
         {
-            switch(e.Type)
+            switch (e.Type)
             {
                 case Message.Types.Jumped:
                     this.Interrupt();
@@ -58,7 +58,7 @@ namespace Start_a_Town_.Components
             if (this.Task.HasFinished)
                 this.Task = null;
         }
-      
+
         public void End(bool success = false)
         {
             this.Interrupt(success);
@@ -124,7 +124,7 @@ namespace Start_a_Town_.Components
             //if (this.Task.Animation != null)
             //    this.Task.Animation.Read(r);
         }
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             var isInteracting = (this.Task != null);
             tag.Add(isInteracting.Save("IsInteracting"));
@@ -135,10 +135,9 @@ namespace Start_a_Town_.Components
             //if (this.Task.Animation != null)
             //    tag.Add(this.Task.Animation.Save("Animation"));
         }
-        internal override void Load(SaveTag save)
+        internal override void LoadExtra(SaveTag save)
         {
-            bool isInteracting;
-            if (!save.TryGetTagValue("IsInteracting", out isInteracting))
+            if (!save.TryGetTagValue("IsInteracting", out bool isInteracting))
                 return;
             if (!isInteracting)
                 return;

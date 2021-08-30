@@ -14,10 +14,10 @@ namespace Start_a_Town_
         }
         static public void Send(INetwork net, Actor actor, Entity item, OffsiteAreaDef area)
         {
-            if (net is Client)
+            if (net is not Server server)
                 throw new Exception();
 
-            var stream = net.GetOutgoingStream();
+            var stream = server.OutgoingStreamTimestamped;
             stream.Write(p);
             stream.Write(actor.RefID);
             stream.Write(item.RefID);

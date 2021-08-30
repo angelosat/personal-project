@@ -13,7 +13,7 @@ namespace Start_a_Town_
         }
         internal static void Send(INetwork net, int entityID)
         {
-            var w = net.GetOutgoingStream();
+            var w = net is Server server ? server.OutgoingStreamTimestamped : net.GetOutgoingStream();
             w.Write(p);
             w.Write(entityID);
         }

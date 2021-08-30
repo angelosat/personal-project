@@ -441,7 +441,7 @@ namespace Start_a_Town_.Components
             this.AnimationJump.Read(r);
         }
         
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             tag.Add(this.Moving.Save("Moving"));
             tag.Add(this.Acceleration.Save("Acceleration"));
@@ -451,7 +451,7 @@ namespace Start_a_Town_.Components
             tag.Add(this.AnimationJump.Save("Jumping"));
 
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             tag.TryGetTagValue<bool>("Moving", out this.Moving);
             tag.TryGetTagValue<float>("Acceleration", out this.Acceleration);

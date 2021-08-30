@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Start_a_Town_.Net;
+using System;
 using System.IO;
-using Start_a_Town_.Net;
 
 namespace Start_a_Town_
 {
@@ -12,7 +12,7 @@ namespace Start_a_Town_
         {
             PacketInteract = Network.RegisterPacketHandler(Receive);
         }
-        
+
         internal static void EndInteraction(INetwork net, GameObject entity, bool success)
         {
             var server = net as Server;
@@ -42,7 +42,7 @@ namespace Start_a_Town_
                 throw new Exception();
             var entity = net.GetNetworkObject<Actor>(r.ReadInt32());
             var map = net.Map;
-            if(!r.ReadBoolean())
+            if (!r.ReadBoolean())
             {
                 entity.Work.End(r.ReadBoolean());
                 return;

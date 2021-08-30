@@ -108,12 +108,12 @@ namespace Start_a_Town_
             //};
         }
 
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.Moodlets.SaveAsList(tag, "Moodlets");
             tag.Add(this.Mood.Save("Value"));
         }
-        internal override void Load(SaveTag save)
+        internal override void LoadExtra(SaveTag save)
         {
             this.Moodlets.LoadNewNew(save, "Moodlets");
             save.TryGetTagValueNew("Value", ref this.Mood);

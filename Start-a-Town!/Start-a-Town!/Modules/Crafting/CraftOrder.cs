@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace Start_a_Town_
 {
-    public partial class CraftOrder : ILoadReferencable<CraftOrder>, ILoadReferencable, ISerializable, IListable
+    public partial class CraftOrder : Inspectable, ILoadReferencable<CraftOrder>, ILoadReferencable, ISerializable, IListable
     {
         enum CraftMode { XTimes, UntilX, Forever }
-        
+
         static readonly Dictionary<int, CraftOrder> References = new();
         static ListCollapsibleNew DetailsUIReagents;
         static Control DetailsUIContainer;
@@ -35,7 +35,11 @@ namespace Start_a_Town_
 
         public string Name => this.Reaction.Name;
         public string Label => this.Reaction.Label;
-        public static CraftOrder GetOrder(int id) => References[id];
+        public static CraftOrder GetOrder(int id)
+        {
+            return References[id];
+        }
+
         public bool IsActive
         {
             get
@@ -51,10 +55,8 @@ namespace Start_a_Town_
         {
 
         }
-        //public CraftOrder(int id, int reactionID, MapBase map, IntVec3 workstation)
-        //    : this(Reaction.Dictionary[reactionID])
-         public CraftOrder(int id, Reaction reaction, MapBase map, IntVec3 workstation)
-            : this(reaction)
+        public CraftOrder(int id, Reaction reaction, MapBase map, IntVec3 workstation)
+           : this(reaction)
         {
             this.Map = map;
             this.Workstation = workstation;
@@ -64,9 +66,7 @@ namespace Start_a_Town_
         {
             this.Reaction = reaction;
             foreach (var r in this.Reaction.Reagents)
-            {
                 this.Restrictions.Add(r.Name, new IngredientRestrictions(r.Ingredient.DefaultRestrictions));
-            }
         }
 
         internal bool IsRestricted(string name, ItemDef i)
@@ -390,10 +390,10 @@ namespace Start_a_Town_
         }
         internal void Removed()
         {
-            if (DetailsGui is not null && DetailsGui.Tag == this)
-                DetailsGui.GetWindow()?.Hide();
+            if (this.DetailsGui is not null && this.DetailsGui.Tag == this)
+                this.DetailsGui.GetWindow()?.Hide();
         }
-        
+
         public Control GetListControlGui()
         {
             var box = new GroupBox
@@ -421,8 +421,8 @@ namespace Start_a_Town_
             var btnPlus = new Button("+", Plus, Button.DefaultHeight) { Location = btnMinus.TopRight };
             box.AddControls(btnMinus, btnPlus);
 
-            DetailsGui = DetailsGui ??= new CraftOrderDetailsGui(this);
-          
+            this.DetailsGui = this.DetailsGui ??= new CraftOrderDetailsGui(this);
+
             var btnDetails = new Button("Details", ToggleDetails);
             box.AddControls(btnDetails.AnchorToBottomRight());
 

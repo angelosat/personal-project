@@ -1,33 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Start_a_Town_.AI.Behaviors;
+﻿using Start_a_Town_.AI.Behaviors;
 using Start_a_Town_.Crafting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     class TaskBehaviorCrafting : BehaviorPerformTask
     {
-        TargetArgs Ingredient { get { return this.Task.GetTarget(IngredientIndex); } }
-        TargetArgs Workstation { get { return this.Task.GetTarget(WorkstationIndex); } }
-        TargetArgs AuxiliaryPosition { get { return this.Task.GetTarget(AuxiliaryIndex); } }
+        TargetArgs Workstation => this.Task.GetTarget(WorkstationIndex);
         public static TargetIndex AuxiliaryIndex = TargetIndex.C;
         public static TargetIndex IngredientIndex = TargetIndex.B;
         public static TargetIndex WorkstationIndex = TargetIndex.A;
-
-        IntVec3[] _CachedOperatingPositions;
-        IntVec3[] CachedOperatingPositions
-        {
-            get
-            {
-                if (this._CachedOperatingPositions == null)
-                {
-                    var benchglobal = this.Workstation.Global;
-                    var cell = this.Actor.Map.GetCell(benchglobal);
-                    this._CachedOperatingPositions = cell.Block.GetInteractionSpots(cell, benchglobal).ToArray();
-                }
-                return this._CachedOperatingPositions;
-            }
-        }
 
         protected override IEnumerable<Behavior> GetSteps()
         {
@@ -35,6 +18,8 @@ namespace Start_a_Town_
             var actor = this.Actor;
             /// TODO constantly check for operating positions? or let pathing fail when no free operating position found?
             //this.FailOn(noOperatingPositions);
+            var task = this.Task;
+            var order = task.Order;
 
             var nextIngredient = BehaviorHelper.ExtractNextTargetAmount(IngredientIndex);
             yield return nextIngredient;
@@ -51,15 +36,35 @@ namespace Start_a_Town_
                     this.Task.SetTarget(AuxiliaryIndex, new TargetArgs(this.Actor.Map, this.Workstation.Global.Above()))
             };
             yield return new BehaviorGetAtNewNew(WorkstationIndex, PathEndMode.InteractionSpot).FailOn(failOnInvalidWorkstation).FailOn(orderIncompletable).FailOn(noOperatingPositions);
-            yield return new BehaviorInteractionNew(AuxiliaryIndex, ()=>new UseHauledOnTarget()).FailOn(failOnInvalidWorkstation).FailOn(orderIncompletable).FailOn(noOperatingPositions);
+            yield return new BehaviorInteractionNew(AuxiliaryIndex, () => new UseHauledOnTarget()).FailOn(failOnInvalidWorkstation).FailOn(orderIncompletable).FailOn(noOperatingPositions);
             yield return BehaviorHelper.JumpIfMoreTargets(nextIngredient, IngredientIndex);
             ///NO!!!! if they collected more than one item in the same stack, this code will only add the last (disposed) target that was merged to the stack
             ///add code in usehauledontarget interaction instead
 
             yield return new BehaviorGrabTool();
             yield return new BehaviorGetAtNewNew(WorkstationIndex, PathEndMode.InteractionSpot).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
-            yield return new BehaviorInteractionNew(WorkstationIndex, () => new InteractionCrafting(this.Task.Order, this.Task.PlacedObjects)).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
-            if(this.Task.Tool?.Type != TargetType.Null) // dont unequip tool if not using any
+
+            /// create unfinished item
+            yield return new BehaviorCustom(delegate
+            {
+                if (!order.Reaction.CreatesUnfinishedItem)
+                    return;
+
+                //var ingr = this.Task.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
+                var product = order.Reaction.Products.First().Make(actor, order.Reaction, this.Task.PlacedObjects);
+                product.SyncConsumeMaterials(actor.Net);
+                var item = ItemDefOf.UnfinishedCraft.Create();
+                item.GetComponent<UnfinishedItemComp>().SetProduct(product, actor, order);
+
+                item.SyncInstantiate(actor.Net);
+                actor.Map.SyncSpawn(item, this.Workstation.Global.Above(), IntVec3.Zero);
+
+                task.SetTarget(AuxiliaryIndex, item);
+                actor.Reserve(item);
+            });
+
+            yield return new BehaviorInteractionNew(WorkstationIndex, () => new InteractionCrafting(task.Order, task.PlacedObjects, task.GetTarget(AuxiliaryIndex).Object as Entity)).FailOn(placedObjectsChanged).FailOn(orderIncompletable);
+            if (this.Task.Tool?.Type != TargetType.Null) // dont unequip tool if not using any
                 yield return new BehaviorInteractionNew(TargetIndex.Tool, () => new Equip()); // unequip the tool before hauling product // TODO dont do that if no tool equipped
             // assign a new haul behavior directly to the actor instead of adding the steps here?
             yield return new BehaviorCustom()
@@ -86,7 +91,7 @@ namespace Start_a_Town_
                         this.Actor.EndCurrentTask();
                 }
             };
-           
+
             yield return new BehaviorGetAtNewNew(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
             yield return BehaviorHaulHelper.StartCarrying(IngredientIndex).FailOn(deliverFail).FailOnUnavailableTarget(IngredientIndex);
             yield return new BehaviorGetAtNewNew(WorkstationIndex).FailOn(deliverFail);
@@ -110,7 +115,7 @@ namespace Start_a_Town_
                 else
                     return !this.IsValidStorage(this.Task.GetTarget(WorkstationIndex));
             };
-            bool noOperatingPositions() 
+            bool noOperatingPositions()
             {
                 /// TODO constantly check for operating positions? or let pathing fail when no free operating position found?
                 var map = this.Actor.Map;
@@ -131,7 +136,7 @@ namespace Start_a_Town_
                     else
                         return false;
                 }
-               
+
                 foreach (var t in this.Task.PlacedObjects)
                 {
                     if (t.Object.IsDisposed)

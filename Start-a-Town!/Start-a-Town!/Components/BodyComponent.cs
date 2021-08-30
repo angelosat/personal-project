@@ -57,7 +57,7 @@ namespace Start_a_Town_.Components
             return data;
         }
 
-        internal override void Load(SaveTag compTag)
+        internal override void LoadExtra(SaveTag compTag)
         {
             foreach (SaveTag tag in (compTag.Value as Dictionary<string, SaveTag>).Values)
                 if (tag.Value != null)

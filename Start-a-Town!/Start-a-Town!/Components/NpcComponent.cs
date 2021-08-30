@@ -142,16 +142,16 @@ namespace Start_a_Town_
             this.FirstName = r.ReadString();
             this.LastName = r.ReadString();
         }
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
-            base.AddSaveData(tag);
+            base.SaveExtra(tag);
             tag.Add(this.Possesions.Save("Possesions"));
             tag.Add(this.FirstName.Save("FirstName"));
             tag.Add(this.LastName.Save("LastName"));
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
-            base.Load(tag);
+            base.LoadExtra(tag);
             tag.TryGetTag("Possesions", t => this.Possesions = new HashSet<int>(new List<int>().Load(t)));
             tag.TryGetTagValue<string>("FirstName", v => this.FirstName = v);
             tag.TryGetTagValue<string>("LastName", v => this.LastName = v);

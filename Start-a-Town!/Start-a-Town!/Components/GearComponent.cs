@@ -98,7 +98,7 @@ namespace Start_a_Town_
             save.Add(new SaveTag(SaveTag.Types.Compound, "Equipment", this.Equipment.Save()));
             return save;
         }
-        internal override void Load(SaveTag compTag)
+        internal override void LoadExtra(SaveTag compTag)
         {
             compTag.TryGetTag("Equipment", tag => this.Equipment.Load(tag));
         }

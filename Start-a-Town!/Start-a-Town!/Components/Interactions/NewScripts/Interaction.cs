@@ -99,10 +99,10 @@ namespace Start_a_Town_
         {
             if (this.Animation is not null)
             {
-                if(CrossFadeAnimationLength == 0)
+                if (this.CrossFadeAnimationLength == 0)
                     this.Actor.AddAnimation(this.Animation);
                 else
-                    this.Actor.CrossFade(this.Animation, false, CrossFadeAnimationLength);
+                    this.Actor.CrossFade(this.Animation, false, this.CrossFadeAnimationLength);
             }
             this.Start();
         }
@@ -189,7 +189,7 @@ namespace Start_a_Town_
             InteractionBar.Draw(sb, barLoc, InteractionBar.DefaultWidth, this.Percentage);
             UIManager.DrawStringOutlined(sb, this.Verb, textLoc, HorizontalAlignment.Left, VerticalAlignment.Center, 0.5f);
         }
-        
+
         internal virtual void ResolveReferences()
         {
         }
@@ -205,7 +205,7 @@ namespace Start_a_Town_
             w.Write(this.CurrentTick);
             w.Write((int)this.State);
             w.Write(this.Animation is not null);
-            if(this.Animation is not null) // added this because InteractionSleepInBed doesn't have an animation
+            if (this.Animation is not null) // added this because InteractionSleepInBed doesn't have an animation
                 this.Animation.Write(w);
             this.WriteExtra(w);
         }
@@ -213,7 +213,7 @@ namespace Start_a_Town_
         {
             this.CurrentTick = r.ReadSingle();
             this.State = (States)r.ReadInt32();
-            if(r.ReadBoolean())
+            if (r.ReadBoolean())
                 this.Animation.Read(r);
             this.ReadExtra(r);
         }

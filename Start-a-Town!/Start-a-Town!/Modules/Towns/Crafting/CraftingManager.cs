@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Start_a_Town_.Components;
+﻿using Start_a_Town_.Components;
 using Start_a_Town_.Net;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Start_a_Town_
 {
     public class CraftingManager : TownComponent
     {
-        static int pReaget, pPriority, pQuantity, pRestrictions;
+        static readonly int pReaget, pPriority, pQuantity, pRestrictions;
         static CraftingManager()
         {
             pReaget = Network.RegisterPacketHandler(CraftingOrderToggleReagent);
@@ -23,7 +23,7 @@ namespace Start_a_Town_
             PacketCraftOrderToggleHaul.Init();
             PacketCraftOrderChangeMode.Init();
         }
-        
+
         internal IEnumerable<KeyValuePair<IntVec3, ICollection<CraftOrder>>> ByWorkstationNew()
         {
             return this.Map.GetBlockEntitiesCache()
@@ -44,7 +44,7 @@ namespace Start_a_Town_
         {
             this.Town = town;
         }
-        
+
         public static void SetOrderRestrictions(CraftOrder order, string reagent, ItemDef[] defs, MaterialDef[] mats, MaterialTypeDef[] matTypes)
         {
             var net = order.Map.Net;
@@ -66,7 +66,7 @@ namespace Start_a_Town_
             var mats = r.ReadStringArray().Select(Def.GetDef<MaterialDef>).ToArray();
             var matTypes = r.ReadStringArray().Select(Def.GetDef<MaterialTypeDef>).ToArray();
             order.ToggleReagentRestrictions(reagent, defs, mats, matTypes);
-            if(net is Server)
+            if (net is Server)
             {
                 SetOrderRestrictions(order, reagent, defs, mats, matTypes);
             }
@@ -101,6 +101,15 @@ namespace Start_a_Town_
             if (net is Server server)
                 WriteOrderModifyPriority(server.OutgoingStream, order, increase);
         }
+
+        internal void RegisterOrder(CraftOrder ord)
+        {
+            this.Registry.Add(ord.ID, ord);
+        }
+        public CraftOrder GetOrder(int orderID)
+        {
+            return this.Registry[orderID];
+        }
         static void CraftingOrderModifyQuantity(INetwork net, BinaryReader r)
         {
             var global = r.ReadIntVec3();
@@ -119,14 +128,14 @@ namespace Start_a_Town_
                 WriteOrderModifyQuantityParams(server.OutgoingStream, order, quantity);
         }
 
-        static public void WriteOrderModifyQuantityParams(BinaryWriter w, CraftOrder order, int quantity)
+        public static void WriteOrderModifyQuantityParams(BinaryWriter w, CraftOrder order, int quantity)
         {
             w.Write(pQuantity);
             w.Write(order.Workstation);
             w.Write(order.GetUniqueLoadID());
             w.Write(quantity);
         }
-        static public void WriteOrderToggleReagent(BinaryWriter w, CraftOrder order, string reagent, int item, bool add)
+        public static void WriteOrderToggleReagent(BinaryWriter w, CraftOrder order, string reagent, int item, bool add)
         {
             w.Write(pReaget);
             w.Write(order.Workstation);
@@ -143,25 +152,22 @@ namespace Start_a_Town_
             w.Write(order.ID);
             w.Write(increase);
         }
-       
-        internal bool RemoveOrder(IntVec3 station, string orderID)
-        {
-            var bench = this.GetWorkstation(station);
-            return bench.RemoveOrder(orderID);
-        }
+        readonly Dictionary<int, CraftOrder> Registry = new();
+
         internal CraftOrder RemoveOrder(IntVec3 station, int orderID)
         {
             var bench = this.GetWorkstation(station);
+            this.Registry.Remove(orderID);
             return bench.RemoveOrder(orderID);
         }
-       
+
         internal void AddOrder(IntVec3 station, Reaction reaction)// int reactionID)
         {
             var order = new CraftOrder(this.OrderSequence++, reaction, this.Town.Map, station);
             var benchEntity = this.Map.GetBlockEntity(station).GetComp<BlockEntityCompWorkstation>();
             benchEntity.Orders.Add(order);
+            this.Registry.Add(order.ID, order);
         }
-        
         internal bool OrderExists(CraftOrder craftOrderNew)
         {
             var orders = this.GetOrdersNew(craftOrderNew.Workstation);
@@ -169,7 +175,7 @@ namespace Start_a_Town_
                 return false;
             return orders.Contains(craftOrderNew);
         }
-       
+
         public CraftOrder GetOrder(IntVec3 benchGlobal, int orderIndex)
         {
             return this.GetWorkstation(benchGlobal).GetOrder(orderIndex);

@@ -139,12 +139,12 @@ namespace Start_a_Town_
             this.Favorites.Clear();
             this.Favorites.ReadDefs(r);
         }
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.Traits.SaveImmutable(tag, "Traits");
             this.Favorites.SaveDefs(tag, "Favorites");
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             this.Traits.TryLoadImmutable(tag, "Traits");
             this.Favorites.Clear();

@@ -13,8 +13,8 @@ namespace Start_a_Town_
             {
                 public GameObject Product;
                 public Reaction Reaction;
-                public Dictionary<string, ObjectAmount> RequirementsNew;
-                
+                public Dictionary<string, ObjectAmount> RequirementsNew = new();
+
                 public ProductMaterialPair(Reaction reaction, GameObject product, Dictionary<string, ObjectAmount> ingredients)
                 {
                     this.Reaction = reaction;
@@ -48,7 +48,15 @@ namespace Start_a_Town_
                         //throw new Exception("leftover materials in reaction"); 
                     }
                 }
-
+                public void SyncConsumeMaterials(INetwork net)
+                {
+                    if (net is not Net.Server)
+                        throw new Exception();
+                    this.ConsumeMaterials();
+                    var distinctItems = this.RequirementsNew.Values.Select(o => o.Object).Distinct();
+                    foreach (var o in distinctItems)
+                        PacketEntityRequestDispose.Send(net, o.RefID);
+                }
                 public int WorkAmount => this.Reaction.GetWorkAmount(this.RequirementsNew);
 
                 public SaveTag Save(string name = "")

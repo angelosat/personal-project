@@ -21,12 +21,12 @@ namespace Start_a_Town_
 
             public static void SendNotifyVisit(Actor actor)
             {
-                var w = Server.Instance.GetOutgoingStream();
+                var w = Server.Instance.OutgoingStreamTimestamped;
                 w.Write(PacketVisitorArrived, actor.RefID);
             }
             public static void SendNotifyAdventurerCreated(Actor actor)
             {
-                var w = Server.Instance.GetOutgoingStream();
+                var w = Server.Instance.OutgoingStreamTimestamped;
                 w.Write(PacketAdventurerCreated, actor.RefID);
             }
             private static void ReceiveNotifyAdventurerCreated(INetwork net, BinaryReader r)
@@ -183,7 +183,7 @@ namespace Start_a_Town_
                 filterAway = i => !i.Actor.Exists && i.Discovered;
 
             var filters = list.CreateFilters(("All", null), ("Visiting", filterVisiting), ("Away", filterAway), ("Unknown", filterUndiscovered));
-         
+
             list.Bind(this.ActorsAdventuring);
             box.AddControlsVertically(filters, list);
             return box;

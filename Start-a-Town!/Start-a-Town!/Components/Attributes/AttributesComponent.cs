@@ -136,7 +136,7 @@ namespace Start_a_Town_.Components
             }
             return this;
         }
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.Attributes.SaveNewBEST(tag, "Attributes");
         }

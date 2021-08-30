@@ -120,7 +120,7 @@ namespace Start_a_Town_
             };
             return save;
         }
-        internal override void Load(SaveTag save)
+        internal override void LoadExtra(SaveTag save)
         {
             save.TryGetTagValue<byte[]>("Guid", v => this.Guid = new Guid(v));
             this.State.Load(save["State"]);

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Globalization;
+using System.IO;
 
 namespace Start_a_Town_
 {
@@ -9,10 +9,13 @@ namespace Start_a_Town_
         public virtual float Min { get; set; }
         public virtual float Max { get; set; }
         float _Value;
-        public virtual float Value { get { return _Value; } set { this._Value = Math.Max(this.Min, Math.Min(this.Max, value)); } }
-        public virtual float Percentage { get { return this.Value / this.Max; } 
-            set { this.Value = this.Max * value; } }
-        public virtual bool IsFinished { get { return this.Value >= this.Max; } }
+        public virtual float Value { get => this._Value; set => this._Value = Math.Max(this.Min, Math.Min(this.Max, value)); }
+        public virtual float Percentage
+        {
+            get => this.Value / this.Max;
+            set => this.Value = this.Max * value;
+        }
+        public virtual bool IsFinished => this.Value >= this.Max;
         public void ModifyValue(float value)
         {
             this.Value += value;
@@ -111,7 +114,7 @@ namespace Start_a_Town_
         {
             return $"{this.Percentage.ToString("P0", CultureInfo.InvariantCulture)}";
         }
-        public UI.Bar GetGui(string text)
+        public UI.Bar GetGui(string text = "Progress")
         {
             return new UI.Bar(this)
             {

@@ -1,15 +1,14 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Start_a_Town_.Components;
+﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.AI;
+using Start_a_Town_.Components;
+using System;
 
 namespace Start_a_Town_
 {
     class BehaviorInteractionNew : Behavior
     {
-        readonly string TargetVariableName;
         readonly int TargetInd;
-        TargetArgs Target { get { return this.TargetGetter?.Invoke() ?? this.Actor.CurrentTask.GetTarget(this.TargetInd); } set { } }
+        TargetArgs Target { get => this.TargetGetter?.Invoke() ?? this.Actor.CurrentTask.GetTarget(this.TargetInd); set { } }
         Interaction _Interaction;
         public Func<Interaction> InteractionFactory;
         readonly Func<TargetArgs> TargetGetter;
@@ -21,13 +20,13 @@ namespace Start_a_Town_
                     this._Interaction = this.InteractionFactory();
                 return this._Interaction;
             }
-            set { this._Interaction = value; }
+            set => this._Interaction = value;
         }
         public BehaviorInteractionNew(TargetIndex targetInd, Interaction interaction) : this((int)targetInd, interaction)
         { }
         public BehaviorInteractionNew(TargetIndex targetInd, Func<Interaction> interactionFactory) : this((int)targetInd, interactionFactory)
         { }
-        public BehaviorInteractionNew(Func<TargetArgs> targetGetter, Func<Interaction> interactionFactory) 
+        public BehaviorInteractionNew(Func<TargetArgs> targetGetter, Func<Interaction> interactionFactory)
         {
             this.InteractionFactory = interactionFactory;
             this.TargetGetter = targetGetter;
@@ -61,7 +60,7 @@ namespace Start_a_Town_
             this.Interaction = interaction;
             this.TargetVariableName = targetVariableName;
         }
-        
+
         public override BehaviorState Execute(Actor parent, AIState state)
         {
             this.Actor = parent;
@@ -101,7 +100,7 @@ namespace Start_a_Town_
         internal override void ObjectLoaded(GameObject parent)
         {
             // TODO: don't replace fresh stored interaction with null, if parent isn't currently interacting? very hacky
-            this.Interaction = parent.GetComponent<WorkComponent>().Task ?? this.Interaction; 
+            this.Interaction = parent.GetComponent<WorkComponent>().Task ?? this.Interaction;
         }
         public override object Clone()
         {

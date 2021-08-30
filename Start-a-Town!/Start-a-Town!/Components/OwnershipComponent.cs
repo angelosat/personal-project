@@ -40,11 +40,11 @@ namespace Start_a_Town_
         {
             this.OwnerRef = r.ReadInt32();
         }
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             tag.Add(this.OwnerRef.Save("Owner"));
         }
-        internal override void Load(SaveTag tag)
+        internal override void LoadExtra(SaveTag tag)
         {
             tag.TryGetTagValue<int>("Owner", v => this.OwnerRef = v);
         }

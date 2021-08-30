@@ -21,8 +21,8 @@ namespace Start_a_Town_
         static readonly CraftOrderFinishMode XTimes = new CraftOrderFinishMode() { Mode = Modes.XTimes, GetString = c => string.Format("Do {0} times", c.Quantity), IsActive = c => c.Quantity > 0, OnComplete = c => c.Quantity-- };
         static readonly CraftOrderFinishMode UntilX = new CraftOrderFinishMode() { Mode = Modes.UntilX, GetString = c => string.Format("Do until {0}", c.Quantity), IsActive = c => false };
         static readonly CraftOrderFinishMode Forever = new CraftOrderFinishMode() { Mode = Modes.Forever, GetString = c => string.Format("Do forever", c.Quantity), IsActive = c => true };
-        static public readonly List<CraftOrderFinishMode> AllModes = new List<CraftOrderFinishMode>() { XTimes, UntilX, Forever };
-        static public readonly Dictionary<Modes, CraftOrderFinishMode> All = new Dictionary<Modes, CraftOrderFinishMode>() {
+        public static readonly List<CraftOrderFinishMode> AllModes = new List<CraftOrderFinishMode>() { XTimes, UntilX, Forever };
+        public static readonly Dictionary<Modes, CraftOrderFinishMode> All = new Dictionary<Modes, CraftOrderFinishMode>() {
             { Modes.XTimes, XTimes },
             { Modes.UntilX, UntilX },
             { Modes.Forever, Forever } };

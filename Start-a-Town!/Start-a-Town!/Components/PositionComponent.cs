@@ -42,13 +42,13 @@ namespace Start_a_Town_.Components
             return bounds;
         }
 
-        internal override void AddSaveData(SaveTag tag)
+        internal override void SaveExtra(SaveTag tag)
         {
             this.Global.Save(tag, "Global");
             this.Velocity.Save(tag, "Velocity");
             this.Direction.Save(tag, "Direction");
         }
-        internal override void Load(SaveTag data)
+        internal override void LoadExtra(SaveTag data)
         {
             data.TryGetTag("Global", t => this.Global = t.LoadVector3());
             data.TryGetTag("Velocity", t => this.Velocity = t.LoadVector3());

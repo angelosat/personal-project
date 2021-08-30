@@ -890,7 +890,10 @@ namespace Start_a_Town_
             this.EnumerateChildren();
             return this;
         }
-       
+        public void Save(SaveTag tag, string name)
+        {
+            tag.Add(this.Save(name));
+        }
         public SaveTag Save(string name = "")
         {
             return new SaveTag(SaveTag.Types.Compound, name, this.SaveInternal());
@@ -1519,7 +1522,7 @@ namespace Start_a_Town_
                 throw new Exception();
 
             net.Instantiate(this);
-            var w = server.GetOutgoingStream();
+            var w = server.OutgoingStreamTimestamped;
             w.Write(PacketSyncInstantiate);
             this.Write(w);
         }

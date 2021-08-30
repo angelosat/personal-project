@@ -109,11 +109,7 @@ namespace Start_a_Town_
             return this;
         }
 
-        internal void SyncDispose()
-        {
-            if (this.Net is Server server)
-                server.SyncDispose(this.RefID);
-        }
+        
 
         public GameObject Randomize(RandomThreaded random)
         {

@@ -648,7 +648,7 @@ namespace Start_a_Town_.Net
                     this.Instantiate(entity);
                     //entity.Spawn(this.Map, target.Global);
                     PacketEntityInstantiate.SendFromTemplate(this, templateID, entity);
-                    this.Map.SyncSpawn(entity);
+                    this.Map.SyncSpawnUntimestamped(entity);
                     break;
 
                 default:

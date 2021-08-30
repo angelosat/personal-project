@@ -34,6 +34,16 @@ namespace Start_a_Town_
                 w.Write(global);
                 w.Write(velocity);
             }
+            public static void SendSpawnEntityUntimestamped(INetwork net, GameObject entity, MapBase map, Vector3 global, Vector3 velocity)
+            {
+                if (net is not Server server)
+                    return;
+                var w = server.GetOutgoingStream();
+                w.Write(PacketSpawn);
+                w.Write(entity.RefID);
+                w.Write(global);
+                w.Write(velocity);
+            }
             static void ReceiveSpawnEntity(INetwork net, BinaryReader r)
             {
                 var client = net as Client;
@@ -990,7 +1000,11 @@ namespace Start_a_Town_
             obj.Spawn(this);
             Packets.SendSpawnEntity(this.Net, obj, this, obj.Global, obj.Velocity);
         }
-
+        internal void SyncSpawnUntimestamped(GameObject obj)
+        {
+            obj.Spawn(this);
+            Packets.SendSpawnEntityUntimestamped(this.Net, obj, this, obj.Global, obj.Velocity);
+        }
         internal virtual void OnHudCreated(Hud hud)
         {
         }

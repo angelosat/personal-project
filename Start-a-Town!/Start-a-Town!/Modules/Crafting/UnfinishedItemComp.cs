@@ -14,7 +14,7 @@ namespace Start_a_Town_
         Actor _creatorCached;
         public Actor Creator => this._creatorCached ??= this.Parent.Net.GetNetworkObject<Actor>(this._creator);
         CraftOrder _orderCached;
-        public CraftOrder Order => this._orderCached ??= this.Parent.Map.Town.CraftingManager.GetOrder(this._orderid);
+        public CraftOrder Order => this._orderCached ??= this.Parent.Net.Map.Town.CraftingManager.GetOrder(this._orderid);
         public override object Clone()
         {
             return new UnfinishedItemComp();
@@ -70,6 +70,10 @@ namespace Start_a_Town_
             this.Progress.Read(r);
             this._creator = r.ReadInt32();
             this._orderid = r.ReadInt32();
+        }
+        public override void OnDispose()
+        {
+            this.Order.UnfinishedItem = null;
         }
     }
 }

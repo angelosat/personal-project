@@ -46,7 +46,7 @@ namespace Start_a_Town_
                         continue;
                     if (!(order.IsActive && order.IsCompletable()))
                         continue;
-                    if(order.UnfinishedItem is Entity unf && unf.GetComponent<UnfinishedItemComp>().Creator == actor)
+                    if(order.UnfinishedItem is Entity unf && unf.IsSpawned && unf.GetComponent<UnfinishedItemComp>().Creator == actor && actor.CanReserve(unf))
                     {
                         if (!TaskHelper.TryClearArea(actor, benchglobal.Above, itemAmounts.SelectMany(d => d.Keys.Select(t => t.Object)).Distinct(), out var clearTask))
                         {

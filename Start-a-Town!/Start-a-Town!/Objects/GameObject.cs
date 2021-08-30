@@ -1048,9 +1048,15 @@ namespace Start_a_Town_
         public bool Dispose()
         {
             this.Net.EventOccured(Message.Types.ObjectDisposed, this);
+            foreach (var c in this.Components.Values)
+                c.OnDispose();
             return this.Net.DisposeObject(this);
         }
-
+        internal void SyncDispose()
+        {
+            if (this.Net is Server server)
+                server.SyncDispose(this.RefID);
+        }
         public GameObject Instantiate(Action<GameObject> instantiator)
         {
             instantiator(this);

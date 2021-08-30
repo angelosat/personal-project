@@ -11,6 +11,7 @@ namespace Start_a_Town_.Crafting
         CraftOrder Order;
         Reaction.Product.ProductMaterialPair Product;
         readonly List<ObjectRefIDsAmount> PlacedObjects = new();
+        Entity UnfinishedItem;
         Progress _progress = new();
 
         protected override float Progress => this._progress.Percentage;
@@ -48,7 +49,28 @@ namespace Start_a_Town_.Crafting
             var ingr = this.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
             this.Product = this.Order.Reaction.Products.First().Make(actor, this.Order.Reaction, ingr);
             this._progress.Max = this.Product.WorkAmount;
-            this._progress.Max.ToConsole();
+
+            if(this.Order.Reaction.CreatesUnfinishedItem)
+            {
+                this.Product.ConsumeMaterials();
+                if (actor.Net is Server server)
+                {
+                    var item = ItemDefOf.UnfinishedCraft.Create();
+                    item.GetComponent<UnfinishedItemComp>().SetProduct(this.Product, this.Product.WorkAmount, actor, this.Order);
+
+                    item.SyncInstantiate(server);
+                    actor.Map.SyncSpawn(item, this.Target.Global.Above(), Vector3.Zero);
+
+                //if (actor.Net is Client client)
+                //        client.InstantiateLocal(item);
+                //    else
+                //        actor.Net.Instantiate(item);
+
+                    actor.CurrentTask.SetTarget(TaskBehaviorCrafting.AuxiliaryIndex, item);
+                    actor.Reserve(item);
+                    this.UnfinishedItem = item;
+                }
+            }
         }
         GameObject ProduceWithMaterialsOnTopNew()
         {
@@ -60,7 +82,11 @@ namespace Start_a_Town_.Crafting
             var skillAwardAmount = 100;
             actor[reaction.CraftSkill].Award(skillAwardAmount);
 
-            product.ConsumeMaterials();
+            if (!order.Reaction.CreatesUnfinishedItem)
+                product.ConsumeMaterials();
+            else if (actor.Net is Server srv)
+                this.UnfinishedItem.SyncDispose();
+
             if (order.Reaction.Fuel > 0)
                 actor.Map.GetBlockEntity(global)?.GetComp<BlockEntityCompRefuelable>()?.ConsumePower(actor.Map, order.Reaction.Fuel);
 

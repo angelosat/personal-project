@@ -35,7 +35,7 @@ namespace Start_a_Town_
         }
         private void InitInvSlots(Actor actor)
         {
-            var inventory = actor.GetComponent<PersonalInventoryComponent>();
+            var inventory = actor.GetComponent<InventoryComponent>();
 
             var container = inventory.Contents;
 

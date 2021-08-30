@@ -124,6 +124,14 @@ namespace Start_a_Town_
             };
             bool placedObjectsChanged()
             {
+                if (this.Task.TargetC?.Object is Entity unf && unf.Def == ItemDefOf.UnfinishedCraft)
+                {
+                    if (unf.IsDisposed || unf.IsForbidden || unf.CellIfSpawned != this.Workstation.Global.Above())
+                        return true;
+                    else
+                        return false;
+                }
+               
                 foreach (var t in this.Task.PlacedObjects)
                 {
                     if (t.Object.IsDisposed)

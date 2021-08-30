@@ -37,7 +37,7 @@ namespace Start_a_Town_.Components
             this.Momentum = attacker.Velocity;
             this.CollisionType = collisionType;
             throw new Exception();
-            if (attacker.TryGetComponent<PersonalInventoryComponent>(c =>
+            if (attacker.TryGetComponent<InventoryComponent>(c =>
             {
                 GameObjectSlot holdSlot = null;
                 //this.Damage = WeaponComponent.GetDamage(holdSlot.Object) ?? WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);

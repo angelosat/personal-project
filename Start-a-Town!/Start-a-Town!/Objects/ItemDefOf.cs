@@ -94,11 +94,12 @@ namespace Start_a_Town_
 
         static ItemDefOf()
         {
-            Def.Register(Meat);
-            Def.Register(Fruit);
-            Def.Register(Seeds);
-            Def.Register(Coins);
-            Def.Register(Pie);
+        //    Def.Register(Meat);
+        //    Def.Register(Fruit);
+        //    Def.Register(Seeds);
+        //    Def.Register(Coins);
+        //    Def.Register(Pie);
+            Def.Register(typeof(ItemDefOf));
 
             GameObject.AddTemplate(ItemFactory.CreateItem(ItemDefOf.Coins).SetStackSize(100));
             GameObject.AddTemplates(Fruit.CreateFromAllMAterials());

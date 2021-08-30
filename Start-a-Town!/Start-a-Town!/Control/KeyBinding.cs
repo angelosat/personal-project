@@ -104,7 +104,7 @@ namespace Start_a_Town_
         }
         static Interaction GetSeathe(GameObject a, TargetArgs t)
         {
-            var inv = a.GetComponent<PersonalInventoryComponent>();
+            var inv = a.GetComponent<InventoryComponent>();
             var hauled = inv.GetHauling();
             if (hauled.Object != null)
                 return new InteractionStoreHauled();

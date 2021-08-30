@@ -442,9 +442,9 @@ namespace Start_a_Town_
         [InspectorHidden]
         public SpriteComponent SpriteComp => this._spriteCompCached ??= this.GetComponent<SpriteComponent>();
 
-        PersonalInventoryComponent _inventoryCached;
+        InventoryComponent _inventoryCached;
         [InspectorHidden]
-        public PersonalInventoryComponent Inventory => this._inventoryCached ??= this.GetComponent<PersonalInventoryComponent>();
+        public InventoryComponent Inventory => this._inventoryCached ??= this.GetComponent<InventoryComponent>();
 
         ResourcesComponent _resourcesCached;
         [InspectorHidden]

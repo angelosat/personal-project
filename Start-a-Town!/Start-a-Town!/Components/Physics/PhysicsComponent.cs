@@ -599,14 +599,20 @@ namespace Start_a_Town_
             };
             return w;
         }
-
-        //public override void Write(BinaryWriter w)
-        //{
-        //    w.Write(this.Weight);
-        //}
-        //public override void Read(BinaryReader r)
-        //{
-        //    this.Weight = r.ReadSingle();
-        //}
+        public void SetWeight(float value)
+        {
+            this._weight = value;
+        }
+        public override void Write(BinaryWriter w)
+        {
+            w.Write(this._weight.HasValue);
+            if (this._weight.HasValue)
+                w.Write(this._weight);
+        }
+        public override void Read(BinaryReader r)
+        {
+            if (r.ReadBoolean())
+                this._weight = r.ReadSingle();
+        }
     }
 }

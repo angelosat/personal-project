@@ -320,7 +320,7 @@ namespace Start_a_Town_
             obj.AddComponent(new HaulComponent());
             obj.AddComponent(new NpcComponent());
             obj.AddComponent(new SpriteComponent(def.Body));
-            obj.AddComponent(new PersonalInventoryComponent(16));
+            obj.AddComponent(new InventoryComponent(16));
             obj.AddComponent(new StatsComponent());
             obj.AddComponent(new MobileComponent());
             //obj.AddComponent(new WorkComponent());

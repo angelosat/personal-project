@@ -108,6 +108,13 @@ namespace Start_a_Town_
                     c.Initialize(this, quality);
             return this;
         }
+
+        internal void SyncDispose()
+        {
+            if(this.Net is Server server)
+                server.SyncDispose(this.RefID);
+        }
+
         public GameObject Randomize(RandomThreaded random)
         {
             if (this.Def.CraftingProperties is not null) // HACK

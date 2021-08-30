@@ -758,7 +758,11 @@ namespace Start_a_Town_.Net
                 this.DisposeObject(child);
             return true;
         }
-
+        public void SyncDispose(int refID)
+        {
+            this.DisposeObject(refID);
+            PacketEntityRequestDispose.Send(this, refID);
+        }
         public static void SetMap(MapBase map)
         {
             World = map.World;

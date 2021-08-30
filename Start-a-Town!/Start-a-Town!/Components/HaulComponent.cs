@@ -8,7 +8,7 @@ namespace Start_a_Town_.Components
     {
 
         public override string Name { get; } = "Haul"; 
-        PersonalInventoryComponent Inventory;
+        InventoryComponent Inventory;
         public GameObjectSlot GetSlot()
         {
             return this.Inventory.GetHauling();
@@ -22,7 +22,7 @@ namespace Start_a_Town_.Components
 
         public override void OnObjectCreated(GameObject parent)
         {
-            this.Inventory = parent.GetComponent<PersonalInventoryComponent>();
+            this.Inventory = parent.GetComponent<InventoryComponent>();
             if (this.Inventory == null || this.Inventory.Capacity == 0)
                 throw new Exception("HaulComponent requires a parent entity with PersonalInventoryComponent and an inventory of at least size 1");
             parent.AddResourceModifier(new ResourceRateModifier(ResourceRateModifierDef.HaulingStaminaDrain));

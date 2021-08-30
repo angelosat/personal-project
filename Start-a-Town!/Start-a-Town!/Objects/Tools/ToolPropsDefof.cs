@@ -90,6 +90,7 @@ namespace Start_a_Town_
                     new List<Reaction.Product>() { new Reaction.Product(toolDef.Create) },
                     SkillDefOf.Crafting,
                     JobDefOf.Craftsman)
+                { CreatesUnfinishedItem = true }
                     .ModWorkRequiredFromMaterials();
 
                 Def.Register(reaction);

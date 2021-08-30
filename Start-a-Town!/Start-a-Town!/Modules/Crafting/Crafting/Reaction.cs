@@ -12,6 +12,7 @@ namespace Start_a_Town_
         public SkillDef CraftSkill;
         public List<IsWorkstation.Types> ValidWorkshops = new();
         public JobDef Labor;
+        public bool CreatesUnfinishedItem;
 
         public Reaction(string name, List<IsWorkstation.Types> sites, List<Reagent> reagents, List<Product> products, SkillDef skill, JobDef labor = null) : base(name)
         {

@@ -772,7 +772,7 @@
     <Compile Include="Objects\Items\Materials\MaterialDef.cs" />
     <Compile Include="Objects\Items\Materials\MaterialTypeDef.cs" />
     <Compile Include="Components\MobileComponent.cs" />
-    <Compile Include="Components\Inventory\PersonalInventoryComponent.cs" />
+    <Compile Include="Components\Inventory\InventoryComponent.cs" />
     <Compile Include="Components\Resources\Stamina.cs" />
     <Compile Include="Components\Interactions\NewScripts\EquipFromInventory.cs" />
     <Compile Include="Components\Interactions\NewScripts\InteractionTilling.cs" />

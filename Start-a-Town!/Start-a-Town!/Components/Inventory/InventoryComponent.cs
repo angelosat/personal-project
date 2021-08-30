@@ -8,7 +8,7 @@ using Start_a_Town_.Net;
 
 namespace Start_a_Town_.Components
 {
-    public class PersonalInventoryComponent : EntityComponent
+    public class InventoryComponent : EntityComponent
     {
         class Packets
         {
@@ -53,7 +53,7 @@ namespace Start_a_Town_.Components
                 w.Write(item.RefID);
             }
         }
-        static PersonalInventoryComponent()
+        static InventoryComponent()
         {
             Packets.Init();
         }
@@ -118,14 +118,14 @@ namespace Start_a_Town_.Components
             list.Add(this.HaulContainer);
             //list.Add(this.Slots);
         }
-        public PersonalInventoryComponent()
+        public InventoryComponent()
             : base()
         {
             this.Parent = null;
             this.HaulContainer = new Container(1) { Name = "Hauling" };
             this.HaulSlot = this.HaulContainer.Slots.First();
         }
-        public PersonalInventoryComponent(byte capacity)
+        public InventoryComponent(byte capacity)
             : this()
         {
             this.Capacity = capacity;
@@ -455,7 +455,7 @@ namespace Start_a_Town_.Components
         }
         public override object Clone()
         {
-            var comp = new PersonalInventoryComponent((byte)this.Capacity);
+            var comp = new InventoryComponent((byte)this.Capacity);
 
             using BinaryWriter w = new(new MemoryStream());
             using BinaryReader r = new(w.BaseStream);

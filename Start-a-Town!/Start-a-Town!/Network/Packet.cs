@@ -16,7 +16,6 @@ namespace Start_a_Town_.Net
         MapData,
         WorldData, 
         Chunk,
-        InstantiateObject, 
         ObjectEvent,
         Ack,
         ServerBroadcast,
@@ -25,7 +24,6 @@ namespace Start_a_Town_.Net
         PlayerServerCommand,
         PlayerRemoteCall,
         EntityInventoryChange,
-        PlayerInventoryOperationNew,
         MergedPackets,
         SetSaving,
         Acks

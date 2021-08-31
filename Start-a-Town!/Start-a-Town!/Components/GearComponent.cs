@@ -69,7 +69,11 @@ namespace Start_a_Town_
             }
             return comp;
         }
-
+        public override IEnumerable<GameObject> GetChildren()
+        {
+            foreach (var o in this.Equipment.Slots.Where(s => s.HasValue).Select(s => s.Object))
+                yield return o;
+        }
         public override void GetContainers(List<Container> list)
         {
             list.Add(this.Equipment);

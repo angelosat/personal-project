@@ -595,14 +595,6 @@ namespace Start_a_Town_
             container.ID = this.ContainerSequence;
             container.Parent = this;
         }
-        public GameObjectSlot GetChild(byte childIndex)
-        {
-            return this.GetChild((int)childIndex);
-        }
-        public GameObjectSlot GetChild(int childIndex)
-        {
-            return this.GetChildren().FirstOrDefault(s => s.ID == childIndex);
-        }
         #endregion
 
         public GameObject EnumerateChildren()
@@ -1061,21 +1053,15 @@ namespace Start_a_Town_
             foreach (var c in this.Components.Values)
                 c.OnDispose();
         }
-        public GameObject Instantiate(Action<GameObject> instantiator)
+        public IEnumerable<GameObject> GetSelfAndChildren()
         {
-            instantiator(this);
-            var children = this.GetChildren();
-            (from slot in children
-             where slot.HasValue
-             select slot.Object).ToList()
-             .ForEach(c => c.Instantiate(instantiator));
-
-            foreach (var comp in this.Components.Values)
-                comp.Instantiate(instantiator);
-
-            return this;
+            yield return this;
+            foreach (var c in this.Components.Values)
+                foreach (var ch in c.GetChildren())
+                    foreach (var chch in ch.GetSelfAndChildren())
+                        yield return chch;
         }
-
+      
         internal void RemoteProcedureCall(Components.Message.Types type, BinaryReader r)
         {
             foreach (var comp in this.Components)

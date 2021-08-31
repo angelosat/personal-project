@@ -40,10 +40,7 @@ namespace Start_a_Town_
             var length = r.ReadInt32();
             var data = r.ReadBytes(length);
             var entity = Network.Deserialize(data, reader=> GameObject.CloneTemplate(templateID, reader));
-            entity.Instantiate(net.Instantiator); // move this to client class
-            //if (entity.Exists)// move this to client class
-            // TODO spawn it with a separate packet
-                //entity.Spawn(net.Map);// move this to client class
+            net.Instantiate(entity);
         }
         [Obsolete]
         static public void Send(INetwork net, IEnumerable<GameObject> entities)
@@ -74,7 +71,7 @@ namespace Start_a_Town_
                 var length = r.ReadInt32();
                 var data = r.ReadBytes(length);
                 var entity = Network.Deserialize<GameObject>(data, GameObject.Create);
-                entity.Instantiate(net.Instantiator);//.ObjectCreated();
+                net.Instantiate(entity);
                 if (entity.Exists)
                     entity.Spawn(net.Map);
             }

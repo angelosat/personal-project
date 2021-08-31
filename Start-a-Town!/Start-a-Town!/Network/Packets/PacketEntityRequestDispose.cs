@@ -13,16 +13,24 @@ namespace Start_a_Town_
         }
         internal static void Send(INetwork net, int entityID)
         {
-            var w = net is Server server ? server.OutgoingStreamTimestamped : net.GetOutgoingStream();
+            if (net is Server)
+                throw new System.Exception($"{nameof(PacketEntityRequestDispose)} is just for use by clients");
+            SendInternal(net, entityID);
+        }
+
+        private static void SendInternal(INetwork net, int entityID)
+        {
+            var w = net.GetOutgoingStream();
             w.Write(p);
             w.Write(entityID);
         }
+
         internal static void Receive(INetwork net, BinaryReader r)
         {
             var id = r.ReadInt32();
             net.DisposeObject(id);
             if (net is Server)
-                Send(net, id);
+                SendInternal(net, id);
         }
     }
 }

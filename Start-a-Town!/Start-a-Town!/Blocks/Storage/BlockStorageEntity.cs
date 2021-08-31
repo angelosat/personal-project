@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.Blocks;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -99,13 +98,7 @@ namespace Start_a_Town_
                     obj.Global = this.Global;
                 }
             }
-            public override void Instantiate(Vector3 global, Action<GameObject> instantiator)
-            {
-                foreach (var i in this.Contents)
-                {
-                    i.Instantiate(instantiator);
-                }
-            }
+
             protected override void WriteExtra(BinaryWriter w)
             {
                 w.Write(this.Global);

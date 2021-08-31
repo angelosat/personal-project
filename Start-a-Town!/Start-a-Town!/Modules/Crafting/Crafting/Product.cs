@@ -35,7 +35,7 @@ namespace Start_a_Town_
             }
             public ProductMaterialPair Make(Actor actor, Reaction reaction, List<ObjectAmount> materials)
             {
-                Dictionary<string, ObjectAmount> ingrs = CalculateIngredients(reaction, materials);
+                var ingrs = CalculateIngredients(reaction, materials);
                 return this.Make(actor, reaction, ingrs);
             }
             public ProductMaterialPair Make(Actor actor, Reaction reaction, Dictionary<string, ObjectAmount> ingrs)

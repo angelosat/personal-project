@@ -25,7 +25,6 @@ namespace Start_a_Town_.UI
             }
         }
 
-        //readonly Icon[] IconStack = new Icon[] { };
         readonly List<Icon> IconStack = new();
         public IconButton AddOverlay(Icon icon)
         {

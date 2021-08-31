@@ -568,19 +568,6 @@ namespace Start_a_Town_.Net
                     });
                     break;
 
-                case PacketType.PlayerInventoryOperationNew:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        var source = TargetArgs.Read(Instance, r);
-                        var destination = TargetArgs.Read(Instance, r);
-                        int amount = r.ReadInt32();
-                        Instance.InventoryOperation(source.Slot, destination.Slot, amount);
-                        Instance.SyncSlots(source, destination);
-                        return;
-                    });
-                    return;
-
-
                 case PacketType.PlayerSlotClick:
                     msg.Payload.Deserialize(r =>
                     {
@@ -690,7 +677,9 @@ namespace Start_a_Town_.Net
 
         public GameObject Instantiate(GameObject obj)
         {
-            obj.Instantiate(this.Instantiator);
+            //obj.Instantiate(this.Instantiator);
+            foreach (var o in obj.GetSelfAndChildren())
+                this.Instantiator(o);
             return obj;
         }
         public void Instantiator(GameObject obj)
@@ -709,23 +698,6 @@ namespace Start_a_Town_.Net
         }
 
         /// <summary>
-        /// Instantiates an object on the server and syncs it across the clients
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        [Obsolete]
-        public GameObject InstantiateObject(GameObject obj)
-        {
-            if (obj.RefID > 0)
-                throw new Exception("object already has a network id");
-            obj.Instantiate(this.Instantiator);
-            byte[] data = Network.Serialize(obj.Write);
-            foreach (var player in this.Players.GetList())
-                this.Enqueue(player, Packet.Create(player, PacketType.InstantiateObject, data, SendType.Ordered | SendType.Reliable));
-            return obj;
-        }
-
-        /// <summary>
         /// Releases the object's networkID.
         /// </summary>
         /// <param name="objNetID"></param>
@@ -741,15 +713,18 @@ namespace Start_a_Town_.Net
         {
             if (!this.NetworkObjects.TryGetValue(netID, out GameObject o))
                 return false;
-            Console.WriteLine($"{this} disposing {o.DebugName}");
-            o.OnDispose();
-            this.NetworkObjects.Remove(netID);
-            o.Net = null;
-            o.RefID = 0;
-            if (o.Exists)
-                o.Despawn();
-            foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)
-                this.DisposeObject(child);
+            foreach (var obj in o.GetSelfAndChildren())
+            {
+                Console.WriteLine($"{this} disposing {obj.DebugName}");
+                obj.OnDispose();
+                this.NetworkObjects.Remove(netID);
+                obj.Net = null;
+                obj.RefID = 0;
+                if (obj.IsSpawned)
+                    obj.Despawn();
+                //foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)
+                //    this.DisposeObject(child);
+            }
             return true;
         }
         public void SyncDispose(int refID)
@@ -782,7 +757,8 @@ namespace Start_a_Town_.Net
             {
                 var global = local.ToGlobal(chunk);
                 entity.ResolveReferences(Instance.Map, global);
-                entity.Instantiate(global, Instance.Instantiator);
+                foreach (var o in entity.GetChildren())
+                    Instance.Instantiate(o);
             }
         }
 
@@ -908,58 +884,7 @@ namespace Start_a_Town_.Net
                 Instance.Parser = new ServerCommandParser(Instance);
             Instance.Parser.Command(command);
         }
-        [Obsolete]
-        public void InventoryOperation(GameObjectSlot sourceSlot, GameObjectSlot targetSlot, int amount)
-        {
-            var sourceParent = sourceSlot.Parent;
-            var destinationParent = targetSlot.Parent;
-            if (targetSlot == sourceSlot)
-                return;
-            if (!targetSlot.Filter(sourceSlot.Object))
-                return;
-
-            // TODO: handle case where slots are blockentity's children (they don't have a gameobject parent)
-            if (sourceParent != null)
-                this.Map.GetChunk(sourceParent.Global).Invalidate();
-            if (destinationParent != null)
-                this.Map.GetChunk(destinationParent.Global).Invalidate();
-
-            var obj = sourceSlot.Object;
-            if (!targetSlot.HasValue) // if target slot empty, set object of target slot without swapping and return
-            {
-                if (amount < sourceSlot.StackSize) // if the amount moved is smaller than the source amount
-                {
-                    obj = sourceSlot.Object.Clone();
-                    obj.StackSize = amount;
-                    sourceSlot.Object.StackSize -= amount;
-                    this.InstantiateObject(obj);
-                }
-                else
-                    sourceSlot.Clear();
-                targetSlot.Object = obj;
-                return;
-            }
-            if (targetSlot.Object.CanAbsorb(sourceSlot.Object))
-            {
-                if (sourceSlot.StackSize + targetSlot.StackSize <= targetSlot.StackMax)
-                {
-                    targetSlot.StackSize += sourceSlot.StackSize;
-                    this.DisposeObject(sourceSlot.Object.RefID);
-                    sourceSlot.Clear();
-                    //merge slots
-                    return;
-                }
-            }
-            else
-                if (amount < sourceSlot.StackSize)
-                return;
-
-            if (targetSlot.Filter(obj))
-                if (sourceSlot.Filter(targetSlot.Object))
-                    targetSlot.Swap(sourceSlot);
-
-        }
-
+       
         public void SyncSlots(params TargetArgs[] slots)
         {
             byte[] data = Network.Serialize(w =>

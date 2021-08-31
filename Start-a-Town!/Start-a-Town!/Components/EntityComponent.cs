@@ -41,8 +41,6 @@ namespace Start_a_Town_.Components
         internal virtual void HandleRemoteCall(GameObject gameObject, ObjectEventArgs e) { }
         internal virtual void HandleRemoteCall(GameObject gameObject, Message.Types type, BinaryReader r) { }
 
-        public virtual void Instantiate(Action<GameObject> instantiator) { }
-
         public virtual void Tick() { }
 
         public void Tick(MapBase map, IBlockEntityCompContainer entity, Vector3 global)
@@ -72,7 +70,7 @@ namespace Start_a_Town_.Components
         public virtual void DrawMouseover(MySpriteBatch sb, Camera camera, GameObject parent) { }
         public virtual void DrawUI(SpriteBatch sb, Camera camera, GameObject parent) { }
         public virtual void DrawAfter(MySpriteBatch sb, Camera cam, GameObject parent) { }
-
+        public virtual IEnumerable<GameObject> GetChildren() { yield break; }
         public virtual void GetChildren(List<GameObjectSlot> list) { }
         public virtual void GetContainers(List<Container> list) { }
         public virtual void OnTooltipCreated(GameObject parent, Control tooltip) { }

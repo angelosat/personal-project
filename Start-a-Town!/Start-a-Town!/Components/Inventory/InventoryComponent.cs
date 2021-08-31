@@ -108,15 +108,16 @@ namespace Start_a_Town_.Components
         {
             return this.HaulSlot;
         }
-        //public static GameObjectSlot GetHauling(GameObject parent)
-        //{
-        //    return parent.GetComponent<PersonalInventoryComponent>().GetHauling();
-        //}
-
+        public override IEnumerable<GameObject> GetChildren()
+        {
+            if (this.HaulContainer.Slots[0].Object is GameObject obj)
+                yield return obj;
+            foreach (var o in this.Contents)
+                yield return o;
+        }
         public override void GetContainers(List<Container> list)
         {
             list.Add(this.HaulContainer);
-            //list.Add(this.Slots);
         }
         public InventoryComponent()
             : base()
@@ -528,10 +529,6 @@ namespace Start_a_Town_.Components
                 if (p(e))
                     yield return e;
             }
-        }
-        public override void Instantiate(Action<GameObject> instantiator)
-        {
-            this.Contents.Instantiate(instantiator);
         }
     }
 }

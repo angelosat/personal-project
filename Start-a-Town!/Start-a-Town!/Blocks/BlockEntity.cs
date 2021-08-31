@@ -60,7 +60,7 @@ namespace Start_a_Town_
         /// Convert to void return and accept the list as an argument so derived objects can add their children and then call the base method so the base class can add its own?
         /// </summary>
         /// <returns></returns>
-        public virtual List<GameObjectSlot> GetChildren() { return new List<GameObjectSlot>(); }
+        public virtual IEnumerable<GameObject> GetChildren() { yield break; }
 
         public bool HasComp<T>() where T : class, IBlockEntityComp
         {
@@ -140,14 +140,6 @@ namespace Start_a_Town_
         protected virtual void WriteExtra(BinaryWriter w) { }
         protected virtual void ReadExtra(BinaryReader r) { }
         internal virtual void HandleRemoteCall(MapBase map, Vector3 vector3, ObjectEventArgs e) { }
-
-        public virtual void Instantiate(Vector3 global, Action<GameObject> instantiator)
-        {
-            foreach (var entity in this.GetChildren())
-            {
-                entity.Instantiate(instantiator);
-            }
-        }
 
         public void Draw(Camera camera, MapBase map, IntVec3 global)
         {

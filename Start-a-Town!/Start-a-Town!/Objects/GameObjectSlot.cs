@@ -152,11 +152,6 @@ namespace Start_a_Town_
             return $"{this.ID}: {(!string.IsNullOrWhiteSpace(this.Name) ? this.Name + ":" : "")} + {(Object is not null ? Object.Name + $" ({StackSize})" : "<empty>")}";
         }
 
-        public void Instantiate(Action<GameObject> instantiator)
-        {
-            this.Object?.Instantiate(instantiator);
-        }
-
         public void Write(System.IO.BinaryWriter writer)
         {
             writer.Write(ID);

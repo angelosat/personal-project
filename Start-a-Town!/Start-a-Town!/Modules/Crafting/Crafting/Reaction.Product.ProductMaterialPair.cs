@@ -48,15 +48,7 @@ namespace Start_a_Town_
                         //throw new Exception("leftover materials in reaction"); 
                     }
                 }
-                public void SyncConsumeMaterials(INetwork net)
-                {
-                    if (net is not Net.Server)
-                        throw new Exception();
-                    this.ConsumeMaterials();
-                    var distinctItems = this.RequirementsNew.Values.Select(o => o.Object).Distinct();
-                    foreach (var o in distinctItems)
-                        PacketEntityRequestDispose.Send(net, o.RefID);
-                }
+              
                 public int WorkAmount => this.Reaction.GetWorkAmount(this.RequirementsNew);
 
                 public SaveTag Save(string name = "")
@@ -70,7 +62,6 @@ namespace Start_a_Town_
 
                 public ISaveable Load(SaveTag tag)
                 {
-                    //this.Product = GameObject.Load(tag["Product"));
                     this.Product = tag.LoadObject("Product");
                     this.Reaction = tag.LoadDef<Reaction>("Reaction");
                     this.RequirementsNew.LoadZip(tag["Materials"]);

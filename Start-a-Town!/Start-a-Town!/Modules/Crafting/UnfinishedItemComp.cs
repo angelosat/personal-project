@@ -132,10 +132,6 @@ namespace Start_a_Town_
             this._orderid = r.ReadInt32();
             this.Contents.Read(r);
         }
-        //public override void Instantiate(Action<GameObject> instantiator)
-        //{
-        //    this.Contents.Instantiate(instantiator);
-        //}
         public override void OnDispose()
         {
             this.Order.UnfinishedItem = null;

@@ -545,11 +545,6 @@ namespace Start_a_Town_.Net
                     });
                     return;
 
-                case PacketType.InstantiateObject: //register netID to list without spawning
-                    var ent = Network.Deserialize<GameObject>(msg.Payload, GameObject.Create);
-                    ent.Instantiate(Instance.Instantiator);
-                    return;
-
                 case PacketType.ServerBroadcast:
                     Network.Deserialize(msg.Payload, reader =>
                     {
@@ -573,17 +568,6 @@ namespace Start_a_Town_.Net
                             }
                             slot.StackSize = stacksize;
                         }
-                    });
-                    break;
-
-                case PacketType.PlayerInventoryOperationNew:
-                    msg.Payload.Deserialize(r =>
-                    {
-                        var source = TargetArgs.Read(Instance, r);
-                        var destination = TargetArgs.Read(Instance, r);
-                        int amount = r.ReadInt32();
-                        Instance.InventoryOperation(source.Slot, destination.Slot, amount);
-                        return;
                     });
                     break;
 
@@ -694,16 +678,19 @@ namespace Start_a_Town_.Net
         {
             if (!this.NetworkObjects.TryGetValue(netID, out GameObject o))
                 return false;
-            Console.WriteLine($"{this} disposing {o.DebugName}");
-            o.OnDispose();
-            this.NetworkObjects.Remove(netID);
-            this.ObjectsObservable.Remove(o);
-            o.Net = null;
-            o.RefID = 0;
-            if (o.IsSpawned)
-                o.Despawn();
-            foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)
-                this.DisposeObject(child);
+            foreach (var obj in o.GetSelfAndChildren())
+            {
+                Console.WriteLine($"{this} disposing {obj.DebugName}");
+                obj.OnDispose();
+                this.NetworkObjects.Remove(netID);
+                this.ObjectsObservable.Remove(obj);
+                obj.Net = null;
+                obj.RefID = 0;
+                if (obj.IsSpawned)
+                    obj.Despawn();
+                //foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)
+                //    this.DisposeObject(child);
+            }
             return true;
         }
 
@@ -714,13 +701,17 @@ namespace Start_a_Town_.Net
         /// <returns></returns>
         public GameObject Instantiate(GameObject ob)
         {
-            ob.Instantiate(this.Instantiator);
+            //ob.Instantiate(this.Instantiator);
+            foreach (var obj in ob.GetSelfAndChildren())
+                this.Instantiator(obj);
             return ob;
         }
         public GameObject InstantiateLocal(GameObject ob)
         {
             ob.RefID = _nextRefIdSequence++;
-            ob.Instantiate(this.Instantiator);
+            //ob.Instantiate(this.Instantiator);
+            foreach (var obj in ob.GetSelfAndChildren())
+                this.Instantiator(obj);
             return ob;
         }
         public void Instantiator(GameObject ob)
@@ -858,7 +849,8 @@ namespace Start_a_Town_.Net
 
             chunk.GetObjects().ForEach(obj =>
             {
-                obj.Instantiate(this.Instantiator);
+                //obj.Instantiate(this.Instantiator);
+                this.Instantiate(obj);
                 obj.MapLoaded(Instance.Map);
                 /// why here too? BECAUSE some things dont get initialized properly on client. like initializing sprites from defs
                 //obj.ObjectLoaded();
@@ -869,7 +861,9 @@ namespace Start_a_Town_.Net
             {
                 var global = local.ToGlobal(chunk);
                 entity.ResolveReferences(this.Map, global);
-                entity.Instantiate(global, Instance.Instantiator);
+                //entity.Instantiate(global, Instance.Instantiator);
+                foreach (var o in entity.GetChildren())
+                    Instance.Instantiate(o);
             }
 
             Instance.Map.AddChunk(chunk);
@@ -976,16 +970,6 @@ namespace Start_a_Town_.Net
             }
         }
 
-        [Obsolete]
-        public static void PlayerInventoryOperationNew(TargetArgs source, TargetArgs target, int amount)
-        {
-            Network.Serialize(w =>
-            {
-                source.Write(w);
-                target.Write(w);
-                w.Write(amount);
-            }).Send(Instance.PacketID, PacketType.PlayerInventoryOperationNew, Instance.Host, Instance.RemoteIP);
-        }
         [Obsolete]
         public static void PlayerSlotInteraction(GameObjectSlot slot)
         {

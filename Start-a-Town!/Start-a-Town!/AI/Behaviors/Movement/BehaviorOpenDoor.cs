@@ -78,6 +78,15 @@ namespace Start_a_Town_.AI.Behaviors
         {
             throw new NotImplementedException();
         }
+
+        protected override void AddSaveData(SaveTag tag)
+        {
+            this.OpenedDoors.Save(tag, "OpenedDoors");
+        }
+        internal override void Load(SaveTag tag)
+        {
+            this.OpenedDoors.Load(tag, "OpenedDoors");
+        }
     }
 
     //class BehaviorOpenDoor : Behavior

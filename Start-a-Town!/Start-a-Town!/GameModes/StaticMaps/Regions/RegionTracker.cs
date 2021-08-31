@@ -208,8 +208,7 @@ namespace Start_a_Town_
             var block = cell.Block;
             if (block is BlockDoor)
             {
-                var part = BlockDoor.GetPart(cell.BlockData);
-                if (part != 0)
+                if (cell.Origin != IntVec3.Zero) // only handle the base of the door
                     return;
                 var regionbelow = this.GetRegionAt(below);
                 if (regionbelow != null)

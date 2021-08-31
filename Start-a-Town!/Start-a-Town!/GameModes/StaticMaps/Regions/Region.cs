@@ -23,14 +23,14 @@ namespace Start_a_Town_
                 this.Room = newRoom;
             }
         }
-        internal int RegionID;
+        public int RegionID;
         internal RegionNodeCollection Nodes;
-
+        public int Count => this.Nodes.Count;
         internal Color Color => this.Room.Color;
         int Size = 1;
-        internal HashSet<Region> Neighbors = new();
+        public HashSet<Region> Neighbors = new();
         bool Validated;
-        internal RegionRoom Room;
+        public RegionRoom Room;
         internal Region(Chunk chunk)
         {
             this.Nodes = new RegionNodeCollection(this);
@@ -394,6 +394,7 @@ namespace Start_a_Town_
             {
                 doorRegion = new Region(this.Chunk);
                 doorRegion.Add(split);
+                MakeNeighborsNoPaint(this, doorRegion); // HOW WERE DOORS WORKING BEFORE WITHOUT THIS LINE???
                 this.Map.Regions.Add(doorRegion);
             }
             else
@@ -430,19 +431,19 @@ namespace Start_a_Town_
                 foreach (var neigh in neighbors)
                 {
                     UnLink(this, neigh);
-                    Link(newRegion, neigh);
+                    MakeNeighborsAndPaint(newRegion, neigh);
                 }
                 this.Map.Regions.Add(newRegion);
                 if (isBelowDoor)
-                    LinkNoPaint(newRegion, doorRegion);
+                    MakeNeighborsNoPaint(newRegion, doorRegion);
             }
         }
-        static void LinkNoPaint(Region master, Region slave)
+        static void MakeNeighborsNoPaint(Region master, Region slave)
         {
             master.Neighbors.Add(slave);
             slave.Neighbors.Add(master);
         }
-        static void Link(Region master, Region slave)
+        static void MakeNeighborsAndPaint(Region master, Region slave)
         {
             slave.Paint(master);
             master.Neighbors.Add(slave);

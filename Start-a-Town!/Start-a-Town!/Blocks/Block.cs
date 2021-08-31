@@ -224,6 +224,8 @@ namespace Start_a_Town_
         
         public IEnumerable<IntVec3> GetPartsNew(MapBase map, IntVec3 global)
         {
+            //var origin = Cell.GetOrigin(map, global);
+            //return this.GetPartsNew(map.GetCell(global).Orientation).Select(l => origin + l);
             return this.GetPartsNew(map.GetCell(global).Orientation).Select(l => global + l);
         }
         public IEnumerable<IntVec3> GetPartsNew(int ori)
@@ -453,10 +455,12 @@ namespace Start_a_Town_
        
         public static void Place(Block block, MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
-            block.Place(map, global, material, data, variation, orientation, notify);
+            block.Place(map, global, material, data, variation, orientation, false);// notify);
             var children = block.GetPartsWithSource(global, orientation);
             foreach (var (child, source) in children)
                 map.GetCell(child).Origin = source;
+            if (notify)
+                map.NotifyBlocksChanged(children.Select(c => c.global));
         }
         protected virtual void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {

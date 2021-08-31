@@ -28,7 +28,7 @@ namespace Start_a_Town_
             Orientations[2] = Atlas.Load("blocks/doors/doorn", ndepth, nnormals);
             Orientations[3] = Atlas.Load("blocks/doors/doorw", wdepth, wnormals);
             this.BuildProperties.Category = ConstructionCategoryDefOf.Doors;
-
+            this.BuildProperties.Dimension = 8;
             this.Size = new(1, 1, 2);
         }
 
@@ -74,11 +74,7 @@ namespace Start_a_Town_
         {
             return data & 0x3;
         }
-        public static byte GetData(int verticalPos)
-        {
-            return (byte)verticalPos;
-        }
-
+       
         protected override IEnumerable<IntVec3> GetParts(byte data)
         {
             var center = GetCenter(data);
@@ -178,19 +174,21 @@ namespace Start_a_Town_
 
         public static void Toggle(MapBase map, IntVec3 global)
         {
-            var children = BlockDefOf.Door.GetParts(map, global);
+            var children = BlockDefOf.Door.GetPartsNew(map, global);
             var chunk = map.GetChunk(global);
             foreach (var g in children)
             {
-                Cell cell = map.GetCell(g);
+                var cell = map.GetCell(g);
                 if (map.GetBlock(g) is not BlockDoor)
                     throw new Exception();
-                bool lastOpen = (cell.BlockData & 0x4) == 0x4;
+                var data = cell.BlockData;
+                bool lastOpen = IsOpen(data);
                 var open = !lastOpen;
                 if (open)
-                    cell.BlockData |= 0x4;
+                    cell.BlockData |= MaskOpen;
                 else
-                    cell.BlockData ^= 0x4;
+                    cell.BlockData ^= MaskOpen;
+
                 chunk.InvalidateSlice(g.Z);
                 $"[{map.Net}] door at {g} {(open ? "opened" : "closed")}".ToConsole();
             }

@@ -695,9 +695,11 @@ namespace Start_a_Town_.Net
             if (!this.NetworkObjects.TryGetValue(netID, out GameObject o))
                 return false;
             Console.WriteLine($"{this} disposing {o.DebugName}");
+            o.OnDispose();
             this.NetworkObjects.Remove(netID);
             this.ObjectsObservable.Remove(o);
             o.Net = null;
+            o.RefID = 0;
             if (o.IsSpawned)
                 o.Despawn();
             foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)
@@ -723,6 +725,11 @@ namespace Start_a_Town_.Net
         }
         public void Instantiator(GameObject ob)
         {
+            //if (Instance.NetworkObjects.TryGetValue(ob.RefID, out var existing))
+            //{
+            //    if (existing == ob) return;
+            //    else throw new Exception();
+            //}
             ob.Net = this;
             Instance.NetworkObjects.Add(ob.RefID, ob);
             _nextRefIdSequence = Math.Max(_nextRefIdSequence, ob.RefID + 1);

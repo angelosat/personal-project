@@ -77,7 +77,7 @@ namespace Start_a_Town_.Crafting
 
             if (!order.Reaction.CreatesUnfinishedItem)
                 product.ConsumeMaterials();
-            else if (actor.Net is Server srv)
+            else if (actor.Net is Server)
                 this.UnfinishedItem.SyncDispose();
 
             if (order.Reaction.Fuel > 0)

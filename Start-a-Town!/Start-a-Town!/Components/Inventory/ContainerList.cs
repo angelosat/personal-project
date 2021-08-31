@@ -79,6 +79,9 @@ namespace Start_a_Town_
             }
 
             ((ICollection<GameObject>)this.Contents).Add(item);
+            // despawn here???
+            if (item.IsSpawned)
+                item.Despawn();
             item.Container?.Remove(item);
             item.Slot?.Clear();
             item.Container = this;

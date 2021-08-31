@@ -57,11 +57,14 @@ namespace Start_a_Town_
 
                 //var ingr = this.Task.PlacedObjects.Select(o => new ObjectAmount(actor.Net.GetNetworkObject(o.Object), o.Amount)).ToList();
                 var product = order.Reaction.Products.First().Make(actor, order.Reaction, this.Task.PlacedObjects);
-                product.SyncConsumeMaterials(actor.Net);
+                //product.SyncConsumeMaterials(actor.Net);
+                foreach (var o in product.RequirementsNew.Values.Select(o => o.Object).Distinct())
+                    //PacketEntityRequestDispose.Send(actor.Net, o.RefID);
+                    o.SyncDispose();
                 var item = ItemDefOf.UnfinishedCraft.Create();
                 item.GetComponent<UnfinishedItemComp>().SetProduct(product, actor, order);
-
                 item.SyncInstantiate(actor.Net);
+
                 actor.Map.SyncSpawn(item, this.Workstation.Global.Above(), IntVec3.Zero);
 
                 task.SetTarget(AuxiliaryIndex, item);

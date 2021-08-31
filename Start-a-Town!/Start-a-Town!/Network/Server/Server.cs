@@ -646,7 +646,6 @@ namespace Start_a_Town_.Net
                 case TargetType.Position:
                     entity.Global = target.Global;
                     this.Instantiate(entity);
-                    //entity.Spawn(this.Map, target.Global);
                     PacketEntityInstantiate.SendFromTemplate(this, templateID, entity);
                     this.Map.SyncSpawnUntimestamped(entity);
                     break;
@@ -655,19 +654,6 @@ namespace Start_a_Town_.Net
                     break;
             }
         }
-
-        //public static Vector3 FindValidSpawnPosition(GameObject obj)
-        //{
-        //    // TODO: move to map
-        //    var xy = Vector3.Zero + (Vector3.UnitX + Vector3.UnitY) * (GameModes.StaticMaps.StaticMap.MapSize.Default.Blocks / 2);
-        //    int z = MapBase.MaxHeight - (int)Math.Ceiling(obj.Physics.Height);
-        //    while (!Instance.Map.IsSolid(xy + Vector3.UnitZ * z))
-        //        z--;
-
-        //    var zz = Vector3.UnitZ * (z + 1);
-        //    var spawnPosition = xy + zz;
-        //    return spawnPosition;
-        //}
 
         void SyncChild(GameObject obj, GameObject parent, int childIndex)
         {
@@ -713,6 +699,11 @@ namespace Start_a_Town_.Net
                 obj.RefID = GetNextObjID();
             else
                 _refIdSequence = Math.Max(_refIdSequence, obj.RefID + 1);
+            //if (Instance.NetworkObjects.TryGetValue(obj.RefID, out var existing))
+            //{
+            //    if (existing == obj) return;
+            //    else throw new Exception();
+            //}
             obj.Net = this;
             Instance.NetworkObjects.Add(obj.RefID, obj);
         }
@@ -751,8 +742,10 @@ namespace Start_a_Town_.Net
             if (!this.NetworkObjects.TryGetValue(netID, out GameObject o))
                 return false;
             Console.WriteLine($"{this} disposing {o.DebugName}");
+            o.OnDispose();
             this.NetworkObjects.Remove(netID);
             o.Net = null;
+            o.RefID = 0;
             if (o.Exists)
                 o.Despawn();
             foreach (var child in from slot in o.GetChildren() where slot.HasValue select slot.Object)

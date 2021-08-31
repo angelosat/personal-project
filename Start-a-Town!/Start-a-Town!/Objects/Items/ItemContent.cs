@@ -17,7 +17,7 @@ namespace Start_a_Town_
         static public readonly Sprite AxeHandle = new Sprite("axe/axeHandle") { OriginGround = new Vector2(16, 16) };
         static public readonly Sprite AxeHead = new Sprite("axe/axeHead") { OriginGround = new Vector2(16, 16) };
 
-        static public readonly Sprite HammerFull = new Sprite("axe") { OriginGround = new Vector2(16, 32) };
+        static public readonly Sprite HammerFull = new Sprite("hammer") { OriginGround = new Vector2(16, 32) };
         static public readonly Sprite HammerHandle = new Sprite("hammer/hammerHandle", 0.5f) { OriginGround = new Vector2(16, 16) };
         static public readonly Sprite HammerHead = new Sprite("hammer/hammerHead", 0.5f) { OriginGround = new Vector2(16, 16) };
 

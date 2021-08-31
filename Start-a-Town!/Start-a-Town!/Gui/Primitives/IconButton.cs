@@ -133,7 +133,11 @@ namespace Start_a_Town_.UI
         {
             base.Validate(cascade);
         }
-
+        public IconButton AddLabel(string text)
+        {
+            this.AddControls(new Label(text) { Location = this.BottomCenter, Anchor = new Vector2(.5f, 1), MouseThrough = true });
+            return this;
+        }
         public override void DrawSprite(SpriteBatch sb, Rectangle destRect, Rectangle? sourceRect, Color color, float opacity)
         {
             sb.Draw(this.BackgroundTexture, destRect, sourceRect, color * opacity, 0, Vector2.Zero, SpriteEffects.None, Depth);

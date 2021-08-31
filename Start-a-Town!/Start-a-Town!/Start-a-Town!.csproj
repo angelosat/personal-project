@@ -855,7 +855,7 @@
     <Compile Include="Network\Packets\PacketEntityWalkToggle.cs" />
     <Compile Include="Network\Packets\PacketEntityMoveToggle.cs" />
     <Compile Include="Network\Packets\PacketEntityRequestSpawn.cs" />
-    <Compile Include="Network\Packets\PacketEntityRequestDispose.cs" />
+    <Compile Include="Network\Packets\PacketEntityDispose.cs" />
     <Compile Include="Network\Packets\PacketEntityInteract.cs" />
     <Compile Include="Network\Packets\PacketEntityInstantiate.cs" />
     <Compile Include="Network\Packets\PacketMousePosition.cs" />

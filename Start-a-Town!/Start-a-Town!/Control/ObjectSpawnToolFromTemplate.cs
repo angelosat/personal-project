@@ -42,7 +42,7 @@ namespace Start_a_Town_
 
                 case TargetType.Entity:
                     if (InputState.IsKeyDown(System.Windows.Forms.Keys.ControlKey))
-                        PacketEntityRequestDispose.Send(Client.Instance, Target.Object.RefID);
+                        PacketEntityDispose.Send(Client.Instance, Target.Object.RefID, Client.Instance.GetPlayer());
                     else if (this.Target.Object.CanAbsorb(this.Entity))
                         IncreaseQuantity();
                     break;

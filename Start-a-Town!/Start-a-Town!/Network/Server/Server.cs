@@ -730,7 +730,7 @@ namespace Start_a_Town_.Net
         public void SyncDispose(int refID)
         {
             this.DisposeObject(refID);
-            PacketEntityRequestDispose.Send(this, refID);
+            PacketEntityDispose.Send(this, refID, null);
         }
         public static void SetMap(MapBase map)
         {

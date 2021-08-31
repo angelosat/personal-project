@@ -8,6 +8,8 @@ namespace Start_a_Town_.Net
 {
     public enum NetworkSideType { Local, Server }
     public delegate void PacketHandler(INetwork net, BinaryReader r);
+    public delegate void PacketHandlerServer(Server server, BinaryReader r); // in case i need to force packethandlers to only exist on server or client in the future
+    public delegate void PacketHandlerClient(Client client, BinaryReader r); // in case i need to force packethandlers to only exist on server or client in the future
     public class Network
     {
         public class Packets

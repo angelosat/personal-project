@@ -309,9 +309,9 @@ namespace Start_a_Town_
 
         internal void DrawNode(IntVec3 global, MySpriteBatch sb, Camera cam)
         {
-            cam.DrawGridCell(sb, Color.Lime, global.Above);
+            cam.DrawGridCell(sb, Color.Lime, global);
             var node = this.Nodes[global];//.ToLocal()];
-            cam.DrawGridCells(sb, Color.Lime, node.GetLinks().Select(link=> link.Global.Above));
+            cam.DrawGridCells(sb, Color.Lime, node.GetLinks().Select(link => link.Global));
         }
 
         internal void Add(Region r)

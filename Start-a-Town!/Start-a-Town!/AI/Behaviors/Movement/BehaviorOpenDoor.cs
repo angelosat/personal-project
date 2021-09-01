@@ -6,7 +6,7 @@ namespace Start_a_Town_.AI.Behaviors
 {
     class BehaviorOpenDoor : Behavior
     {
-        HashSet<IntVec3> OpenedDoors = new();
+        readonly HashSet<IntVec3> OpenedDoors = new();
 
         public override BehaviorState Execute(Actor parent, AIState state)
         {

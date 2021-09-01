@@ -56,7 +56,7 @@ namespace Start_a_Town_
                 foreach (var r in ch.Value.Regions.Where(r => r.RoomID == region.RoomID))
                 {
                     var color = region.Color * (r == region ? 1 : .5f);
-                    cam.DrawGridCells(sb, color, r.GetPositions().Select(p => p.Above));
+                    cam.DrawGridCells(sb, color, r.GetPositions());
                 }
             }
             region.DrawNode(global, sb, cam);

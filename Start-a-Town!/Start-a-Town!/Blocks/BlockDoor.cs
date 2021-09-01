@@ -75,13 +75,6 @@ namespace Start_a_Town_
             return data & 0x3;
         }
        
-        protected override IEnumerable<IntVec3> GetParts(byte data)
-        {
-            var center = GetCenter(data);
-            for (int i = 0; i < 2; i++)
-                yield return center + new IntVec3(0, 0, i);
-        }
-        
         public override bool IsOpaque(Cell cell)
         {
             return !IsOpen(cell.BlockData);
@@ -174,7 +167,7 @@ namespace Start_a_Town_
 
         public static void Toggle(MapBase map, IntVec3 global)
         {
-            var children = BlockDefOf.Door.GetPartsNew(map, global);
+            var children = BlockDefOf.Door.GetChildren(map, global);
             var chunk = map.GetChunk(global);
             foreach (var g in children)
             {
@@ -198,13 +191,13 @@ namespace Start_a_Town_
         {
             Read(cell.BlockData, out bool locked, out bool open, out int part);
             int ori = (cell.Orientation + (open ? 1 : 0)) % 4; // FASTER???
-            sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth, this);
+            sb.DrawBlock(Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth, this);
         }
         public override void Draw(MySpriteBatch sb, Rectangle screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float zoom, float depth, Cell cell)
         {
             Read(cell.BlockData, out bool locked, out bool open, out int part);
             int ori = (cell.Orientation + (open ? 1 : 0)) % 4; // FASTER???
-            sb.DrawBlock(Block.Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth);
+            sb.DrawBlock(Atlas.Texture, screenBounds, this.Variations[ori], zoom, fog, Color.White, sunlight, blocklight, depth);
         }
 
         public override MyVertex[] Draw(Canvas canvas, Chunk chunk, IntVec3 global, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
@@ -215,30 +208,14 @@ namespace Start_a_Town_
                 ori += 4;
             else
                 ori %= 4;
-            return canvas.Opaque.DrawBlock(Block.Atlas.Texture, screenBounds, Orientations[ori], camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, global);
+            return canvas.Opaque.DrawBlock(Atlas.Texture, screenBounds, Orientations[ori], camera.Zoom, fog, Color.White, sunlight, blocklight, depth, this, global);
         }
         public override void DrawPreview(MySpriteBatch sb, MapBase map, IntVec3 global, Camera cam, Color tint, byte data, MaterialDef material, int variation = 0, int orientation = 0)
         {
             var token = Orientations[orientation];
-            sb.DrawBlock(Block.Atlas.Texture, map, global, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
-            sb.DrawBlock(Block.Atlas.Texture, map, global + IntVec3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
-            sb.DrawBlock(Block.Atlas.Texture, map, global + IntVec3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
-        }
-
-        [Obsolete]
-        public static BoundingBox GetBoundingBox(MapBase map, Vector3 global)
-        {
-            var children = BlockDefOf.Door.GetParts(map, global);
-            var minx = children.Min(c => c.X);
-            var miny = children.Min(c => c.Y);
-            var minz = children.Min(c => c.Z);
-            var maxx = children.Max(c => c.X);
-            var maxy = children.Max(c => c.Y);
-            var maxz = children.Max(c => c.Z);
-            var min = new Vector3(minx, miny, minz);
-            var max = new Vector3(maxx, maxy, maxz);
-            var box = new BoundingBox(min - new Vector3(.5f, .5f, 0), max + new Vector3(.5f, .5f, 0));
-            return box;
+            sb.DrawBlock(Atlas.Texture, map, global, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
+            sb.DrawBlock(Atlas.Texture, map, global + IntVec3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
+            sb.DrawBlock(Atlas.Texture, map, global + IntVec3.UnitZ, token, cam, Color.Transparent, tint, Color.White, Vector4.One);
         }
     }
 }

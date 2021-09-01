@@ -89,7 +89,7 @@ namespace Start_a_Town_
             if (ismulti)
             {
                 //var parts = product.Block.GetParts(global, orientation);
-                var parts = product.Block.GetPartsWithSource(orientation).Select(c => (global + c.local, c.source));
+                var parts = product.Block.GetChildrenWithSource(orientation).Select(c => (global + c.local, c.source));
                 foreach (var p in parts)
                 {
                     var pos = p.Item1;

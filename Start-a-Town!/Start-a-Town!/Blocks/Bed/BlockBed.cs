@@ -61,37 +61,6 @@ namespace Start_a_Town_
             return table;
         }
       
-        protected override IEnumerable<IntVec3> GetParts(byte data)
-        {
-            GetState(data, out var part, out var ori);
-            IntVec3 top, bottom;
-            var global = IntVec3.Zero;
-            switch (ori)
-            {
-                case 1:
-                    bottom = part == Part.Bottom ? global : global + IntVec3.UnitY;
-                    top = bottom - IntVec3.UnitY;
-                    break;
-
-                case 2:
-                    bottom = part == Part.Bottom ? global : global - IntVec3.UnitX;
-                    top = bottom + IntVec3.UnitX;
-                    break;
-
-                case 3:
-                    bottom = part == Part.Bottom ? global : global - IntVec3.UnitY;
-                    top = bottom + IntVec3.UnitY;
-                    break;
-
-                default:
-                    bottom = part == Part.Bottom ? global : global + IntVec3.UnitX;
-                    top = bottom - IntVec3.UnitX;
-                    break;
-            }
-            yield return top;
-            yield return bottom;
-        }
-       
         public override AtlasDepthNormals.Node.Token GetToken(int variation, int orientation, int cameraRotation, byte data)
         {
             GetState(data, out var part, out var ori);
@@ -123,22 +92,6 @@ namespace Start_a_Town_
             return data;
         }
 
-        public static Dictionary<Part, Vector3> GetPartsDic(MapBase map, Vector3 global)
-        {
-            var parts = new Dictionary<Part, Vector3>();
-            var partslist = BlockDefOf.Bed.GetParts(map, global).ToList();
-            parts[Part.Top] = partslist[0];
-            parts[Part.Bottom] = partslist[1];
-            return parts;
-        }
-        public Dictionary<Part, IntVec3> GetPartsDic(byte data)
-        {
-            var parts = new Dictionary<Part, IntVec3>();
-            var partslist = this.GetParts(data).ToList();
-            parts[Part.Top] = partslist[0];
-            parts[Part.Bottom] = partslist[1];
-            return parts;
-        }
         public override FurnitureDef GetFurnitureRole(MapBase map, IntVec3 global)
         {
             return IsTop(map, global) ? this.Furniture : null;
@@ -165,10 +118,6 @@ namespace Start_a_Town_
             map.Town.AddUtility(Utility.Types.Sleeping, top);
         }
         
-        public override IntVec3 GetCenter(byte data, IntVec3 global)
-        {
-            return global + GetPartsDic(data)[Part.Top];
-        }
         public override bool IsValidPosition(MapBase map, IntVec3 global, int orientation)
         {
             var positions = new List<IntVec3> { global };
@@ -233,13 +182,13 @@ namespace Start_a_Town_
             var bottomd = bottom.GetDrawDepth(map, cam);
             if (topd > bottomd)
             {
-                sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
-                sb.DrawBlock(Block.Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+                sb.DrawBlock(Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+                sb.DrawBlock(Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
             }
             else
             {
-                sb.DrawBlock(Block.Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
-                sb.DrawBlock(Block.Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+                sb.DrawBlock(Atlas.Texture, map, bottom, bottomSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
+                sb.DrawBlock(Atlas.Texture, map, top, topSrc, cam, Color.Transparent, tint, Color.White, Vector4.One);
             }
         }
         public override BlockEntity CreateBlockEntity(IntVec3 originGlobal)
@@ -251,15 +200,7 @@ namespace Start_a_Town_
         {
             return map.GetBlockEntity<BlockBedEntity>(Cell.GetOrigin(map, global));
         }
-        public override List<Interaction> GetAvailableTasks(MapBase map, IntVec3 global)
-        {
-            var list = new List<Interaction>
-            {
-                new Blocks.Bed.InteractionStartSleep() // commented out until i figure out how to seperate ai planting job on farmlands and player planting anywher
-            };
-            return list;
-        }
-
+       
         internal override void GetSelectionInfo(IUISelection info, MapBase map, IntVec3 vector3)
         {
             var entity = GetEntity(map, vector3);

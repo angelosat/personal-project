@@ -20,8 +20,9 @@ namespace Start_a_Town_.Blocks.Bed
             var t = this.Target;
             var map = a.Map;
             this.PreviousStandingPosition = a.Global;
-            var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
-            a.SetPosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(a.Map, bedPos)));
+            //var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
+            var bedPos = t.Global; // the bed position passed should be the origin cell
+            a.SetPosition(bedPos + new Vector3(0, 0, Block.GetBlockHeight(a.Map, bedPos)));
             a.GetNeed(NeedDef.Energy).AddMod(NeedLetDefOf.Sleeping, 0, 1);
             a.GetNeed(NeedDef.Comfort).AddMod(NeedLetDefOf.Sleeping, 20, 0);
 

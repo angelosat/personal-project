@@ -417,7 +417,6 @@
     <Compile Include="Blocks\Bed\BlockBedEntity.cs" />
     <Compile Include="Blocks\Bed\InteractionSleepOnGround.cs" />
     <Compile Include="Blocks\Bed\InteractionSleepInBed.cs" />
-    <Compile Include="Blocks\Bed\InteractionToggleSleep.cs" />
     <Compile Include="Blocks\Storage\BlockStorage.cs" />
     <Compile Include="Blocks\Storage\BlockStorageEntity.cs" />
     <Compile Include="Blocks\Storage\StorageContentsUI.cs" />

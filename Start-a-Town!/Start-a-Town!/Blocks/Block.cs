@@ -206,53 +206,20 @@ namespace Start_a_Town_
         // TODO find a way to make this method required for blocks tha have entity
         public virtual BlockEntity CreateBlockEntity(IntVec3 originGlobal)
         { return null; }
-        
-        public IEnumerable<IntVec3> GetParts(MapBase map, IntVec3 global) 
+       
+        public IEnumerable<IntVec3> GetChildren(MapBase map, IntVec3 originGlobal)
         {
-            foreach (var part in this.GetParts(map.GetBlockData(global), global))
-                yield return part;
+            return this.GetChildren(map.GetCell(originGlobal).Orientation).Select(l => originGlobal + l);
         }
-        public IEnumerable<IntVec3> GetParts(byte data, IntVec3 global)
+        public IEnumerable<IntVec3> GetChildren(int ori)
         {
-            foreach (var part in this.GetParts(data))
-                yield return global + part;
+            return this.GetChildrenWithSource(ori).Select(i => i.local);
         }
-        protected virtual IEnumerable<IntVec3> GetParts(byte data)
+        public IEnumerable<(IntVec3 global, IntVec3 source)> GetChildrenWithSource(IntVec3 originGlobal, int ori)
         {
-            yield return IntVec3.Zero;
+            return this.GetChildrenWithSource(ori).Select(l => (originGlobal + l.local, l.source));
         }
-        
-        public IEnumerable<IntVec3> GetPartsNew(MapBase map, IntVec3 global)
-        {
-            //var origin = Cell.GetOrigin(map, global);
-            //return this.GetPartsNew(map.GetCell(global).Orientation).Select(l => origin + l);
-            return this.GetPartsNew(map.GetCell(global).Orientation).Select(l => global + l);
-        }
-        public IEnumerable<IntVec3> GetPartsNew(int ori)
-        {
-            return this.GetPartsWithSource(ori).Select(i => i.local);
-            //for (int i = 0; i < this.Size.X; i++)
-            //    for (int j = 0; j < this.Size.Y; j++)
-            //        for (int k = 0; k < this.Size.Z; k++)
-            //            yield return Coords.Rotate(new IntVec3(i, j, k), ori);
-        }
-        public IEnumerable<(IntVec3 global, IntVec3 source)> GetPartsWithSource(IntVec3 global, int ori)
-        {
-            return this.GetPartsWithSource(ori).Select(l => (global + l.local, l.source));
-        //    for (int i = 0; i < this.Size.X; i++)
-        //    {
-        //        for (int j = 0; j < this.Size.Y; j++)
-        //        {
-        //            for (int k = 0; k < this.Size.Z; k++)
-        //            {
-        //                var local = new IntVec3(i, j, k);
-        //                var parent = new IntVec3(i == 0 ? 0 : -1, j == 0 ? 0 : -1, k == 0 ? 0 : -1);
-        //                yield return (global + Coords.Rotate(local, ori), Coords.Rotate(parent, ori));
-        //            }
-        //        }
-        //    }
-        }
-        public IEnumerable<(IntVec3 local, IntVec3 source)> GetPartsWithSource(int ori)
+        public IEnumerable<(IntVec3 local, IntVec3 source)> GetChildrenWithSource(int ori)
         {
             for (int i = 0; i < this.Size.X; i++)
             {
@@ -267,9 +234,9 @@ namespace Start_a_Town_
                 }
             }
         }
-        public Dictionary<IntVec3, IntVec3> GetPartsWithSourceDic(IntVec3 global, int ori)
+        public Dictionary<IntVec3, IntVec3> GetChildrensWithSourceDic(IntVec3 originGlobal, int ori)
         {
-            return this.GetPartsWithSource(global, ori).ToDictionary(i => i.global, i => i.source);
+            return this.GetChildrenWithSource(originGlobal, ori).ToDictionary(i => i.global, i => i.source);
         }
 
         public IntVec3 Size = IntVec3.One;
@@ -329,8 +296,6 @@ namespace Start_a_Town_
         public LootTable LootTable { get; set; }
 
         public virtual FurnitureDef GetFurnitureRole(MapBase map, IntVec3 global) { return null; }
-        public virtual IntVec3 GetCenter(byte blockData, IntVec3 global) { return global; }
-
 
         public virtual bool IsTargetable(Vector3 global)
         {
@@ -456,7 +421,7 @@ namespace Start_a_Town_
         public static void Place(Block block, MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
         {
             block.Place(map, global, material, data, variation, orientation, false);// notify);
-            var children = block.GetPartsWithSource(global, orientation);
+            var children = block.GetChildrenWithSource(global, orientation);
             foreach (var (child, source) in children)
                 map.GetCell(child).Origin = source;
             if (notify)

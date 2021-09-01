@@ -136,6 +136,18 @@ namespace Start_a_Town_
             }
             return current;
         }
+        public static IEnumerable<IntVec3> GetBlockStructure(MapBase map, IntVec3 current)
+        {
+            var origin = GetOrigin(map, current);
+            var origincell = map.GetCell(origin);
+            var originblock = origincell.Block;
+            var parts = originblock.GetChildren(origincell.Orientation);
+            return parts.Select(p => origin + p);
+        }
+        public IEnumerable<IntVec3> GetParts(IntVec3 global)
+        {
+            return this.Block.GetChildren(this.Orientation).Select(v => v + global);
+        }
 
         public byte X; // 1 byte
         public byte Y; // 1 byte

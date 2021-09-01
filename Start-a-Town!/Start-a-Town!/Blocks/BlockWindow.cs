@@ -34,6 +34,7 @@ namespace Start_a_Town_
             this.Variations.Add(this.PartsSeparate.First().First().First());
             this.BuildProperties.Category = ConstructionCategoryDefOf.Doors;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
+            this.Size = new(1, 1, 2);
         }
 
         /// <summary>
@@ -58,21 +59,7 @@ namespace Start_a_Town_
             base.Place(map, global, material, GetData(0), variation, orientation);
             base.Place(map, global + IntVec3.UnitZ, material, GetData(1), variation, orientation, notify);
         }
-        protected override IEnumerable<IntVec3> GetParts(byte data)
-        {
-            yield return IntVec3.Zero;
-            switch (data)
-            {
-                case 0:
-                    yield return IntVec3.UnitZ;
-                    break;
-                case 1:
-                    yield return -IntVec3.UnitZ;
-                    break;
-                default:
-                    throw new Exception();
-            }
-        }
+     
         bool IsPositionValid(MapBase map, IntVec3 global)
         {
             if (map.GetBlock(global) != BlockDefOf.Air)

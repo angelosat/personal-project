@@ -246,23 +246,22 @@ namespace Start_a_Town_
             this.GetCell(global).BlockData = v;
             this.InvalidateCell(global);
         }
-        public void RemoveBlock(IntVec3 global, bool notify = true)
+        public void RemoveBlock(IntVec3 vec, bool notify = true)
         {
+            var global = Cell.GetOrigin(this, vec);
             var cell = this.GetCell(global);
             var block = cell.Block;
-            var data = cell.BlockData;
-            var center = block.GetCenter(data, global);
             foreach (var u in block.UtilitiesProvided)
-                this.Town.RemoveUtility(u, center);
+                this.Town.RemoveUtility(u, global);
             var blockentity = this.GetBlockEntity(global);
-            var parts = block.GetParts(data, global);
+
+            var parts = cell.GetParts(global);
+
             this.GetBlock(global).PreRemove(this, global); // preremove only center part or all parts?
             if (blockentity != null)
             {
-                parts = blockentity.CellsOccupied;
-                foreach (var g in parts)
-                    this.RemoveBlockEntity(g);
-                blockentity.OnRemoved(this, center);
+                this.RemoveBlockEntity(global);
+                blockentity.OnRemoved(this, global);
                 blockentity.Dispose();
                 if (notify)
                     this.Net.EventOccured(Message.Types.BlockEntityRemoved, blockentity, global);
@@ -307,11 +306,12 @@ namespace Start_a_Town_
 
         public BlockEntity RemoveBlockEntity(IntVec3 global)
         {
-            Chunk chunk = this.GetChunk(global);
+            var chunk = this.GetChunk(global);
             var local = global.ToLocal();
 
             if (chunk.TryRemoveBlockEntity(local, out var entity))
                 return entity;
+            throw new Exception(); // for debugging
             return null;
         }
         public void AddBlockEntity(IntVec3 global, BlockEntity entity)
@@ -695,24 +695,6 @@ namespace Start_a_Town_
             if (raiseEvent)
                 this.NotifyBlockChanged(global);
             return true;
-        }
-        public void PlaceBlockNew(IntVec3 global, Block block, MaterialDef material, byte data, int variation = 0, int orientation = 0, bool notify = true)
-        {
-            if (block.IsValidPosition(this, global, orientation))
-                return;
-            var parts = block.GetParts(data, global);
-            foreach (var pos in parts)
-            {
-                if (!this.SetBlock(pos, block, material, data, variation, orientation, notify))
-                    return;
-            }
-            var entity = block.CreateBlockEntity(global);
-            if (entity is not null)
-            {
-                this.AddBlockEntity(global, entity);
-                this.EventOccured(Message.Types.BlockEntityAdded, entity, global);
-            }
-            this.SetBlockLuminance(global, block.Luminance);
         }
 
         public void NotifyBlocksChanged(IEnumerable<IntVec3> positions)

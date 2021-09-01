@@ -8,7 +8,6 @@ namespace Start_a_Town_.Blocks.Bed
 {
     class InteractionSleepInBed : Interaction
     {
-        Vector3 PreviousStandingPosition;
         public InteractionSleepInBed()
             : base("Sleeping in bed")
         {
@@ -20,8 +19,6 @@ namespace Start_a_Town_.Blocks.Bed
             var a = this.Actor;
             var t = this.Target;
             var map = a.Map;
-            this.PreviousStandingPosition = a.Global;
-            //var bedPos = BlockBed.GetPartsDic(a.Map, t.Global)[BlockBed.Part.Top];
             var bedPos = t.Global; // the bed position passed should be the origin cell
             a.SetPosition(bedPos + new Vector3(0, 0, Block.GetBlockHeight(a.Map, bedPos)));
             a.GetNeed(NeedDef.Energy).AddMod(NeedLetDefOf.Sleeping, 0, 1);
@@ -65,27 +62,13 @@ namespace Start_a_Town_.Blocks.Bed
             body.SetEnabled(true, true);
             body.RestingFrame = new Keyframe(0, Vector2.Zero, 0);
             head.RestingFrame = new Keyframe(0, Vector2.Zero, 0);
-            a.SetPosition(this.PreviousStandingPosition);
+            var interactionSpots = Cell.GetFreeInteractionSpots(a.Map, t.Global, a);
+            if(interactionSpots.Any())
+                a.SetPosition(interactionSpots.First());
         }
         public override object Clone()
         {
             return new InteractionSleepInBed();
-        }
-        protected override void WriteExtra(System.IO.BinaryWriter w)
-        {
-            w.Write(this.PreviousStandingPosition);
-        }
-        protected override void ReadExtra(System.IO.BinaryReader r)
-        {
-            this.PreviousStandingPosition = r.ReadVector3();
-        }
-        protected override void AddSaveData(SaveTag tag)
-        {
-            tag.Add(this.PreviousStandingPosition.Save("PreviousStandingPosition"));
-        }
-        public override void LoadData(SaveTag tag)
-        {
-            this.PreviousStandingPosition = tag["PreviousStandingPosition"].LoadVector3();
         }
     }
 }

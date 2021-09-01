@@ -54,6 +54,7 @@ namespace Start_a_Town_.Components
             this.Interrupt();
             this.Task = task;
             this.Target = target;
+            parent.FaceTowards(this.Target);
             this.Task.InitAction();
             if (this.Task.HasFinished)
                 this.Task = null;
@@ -74,15 +75,17 @@ namespace Start_a_Town_.Components
 
             if (this.Task.State == Interaction.States.Running)
             {
-                if (this.Target.Global != parent.Global)
-                {
-                    var dir = this.Target.Type == TargetType.Direction ? new Vector3(this.Target.Direction, 0) : (this.Target.Global - parent.Global);
-                    dir.Normalize();
-                    parent.Direction = dir;
-                }
+                /// dont update direction here because it breaks orienting towards the bed's feet when sleeping (the bed's origin is the head part)
+                //if (this.Target.Global != parent.Global)
+                //{
+                //    var dir = this.Target.Type == TargetType.Direction ? new Vector3(this.Target.Direction, 0) : (this.Target.Global - parent.Global);
+                //    dir.Normalize();
+                //    parent.Direction = dir;
+                //}
                 // WARNING: i had to move this here because if the interaction target was this entity itself, then the direction vector became zero and its normal became NaN
                 return;
             }
+
             this.Task.FinishAction();
             this.Task = null;
             this.Target = null;

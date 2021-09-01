@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Components;
 using Start_a_Town_.Animations;
+using System.Linq;
 
 namespace Start_a_Town_.Blocks.Bed
 {
@@ -25,6 +26,9 @@ namespace Start_a_Town_.Blocks.Bed
             a.SetPosition(bedPos + new Vector3(0, 0, Block.GetBlockHeight(a.Map, bedPos)));
             a.GetNeed(NeedDef.Energy).AddMod(NeedLetDefOf.Sleeping, 0, 1);
             a.GetNeed(NeedDef.Comfort).AddMod(NeedLetDefOf.Sleeping, 20, 0);
+
+            var bedFeet = map.GetCell(bedPos).GetParts(bedPos).Skip(1).First();
+            a.FaceTowards(bedFeet);
 
             var body = a.Body;
             var headBone = a.Body.FindBone(BoneDefOf.Head);

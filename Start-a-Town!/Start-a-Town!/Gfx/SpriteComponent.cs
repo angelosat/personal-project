@@ -292,7 +292,7 @@ namespace Start_a_Town_.Components
 
             this.DrawShadow(camera, spriteBounds, parent);
         }
-
+      
         public override void MakeChildOf(GameObject parent)
         {
             Body.MakeChildOf(parent);

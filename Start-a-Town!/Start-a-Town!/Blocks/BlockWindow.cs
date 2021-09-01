@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
@@ -60,15 +59,6 @@ namespace Start_a_Town_
             base.Place(map, global + IntVec3.UnitZ, material, GetData(1), variation, orientation, notify);
         }
      
-        bool IsPositionValid(MapBase map, IntVec3 global)
-        {
-            if (map.GetBlock(global) != BlockDefOf.Air)
-                return false;
-            if (map.GetBlock(global.Above) != BlockDefOf.Air)
-                return false;
-            return true;
-        }
-
         public override void DrawPreview(MySpriteBatch sb, MapBase map, IntVec3 global, Camera cam, byte data, MaterialDef material, int variation = 0, int orientation = 0)
         {
             var orientationindex = (int)(orientation + cam.Rotation) % 2;

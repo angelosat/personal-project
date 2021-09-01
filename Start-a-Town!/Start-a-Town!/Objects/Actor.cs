@@ -174,11 +174,14 @@ namespace Start_a_Town_
 
         internal void FaceTowards(TargetArgs targetA)
         {
-            this.Direction = targetA.Global - this.Global;
+            this.FaceTowards(targetA.Global);
+        }
+        internal void FaceTowards(Vector3 global)
+        {
+            this.Direction = global - this.Global;
             this.Direction.Normalize();
             this.Net.LogStateChange(this.RefID);
         }
-
         internal void ForceTask(TaskGiver taskGiver, TargetArgs target)
         {
             var task = taskGiver.TryTaskOn(this, target, true);

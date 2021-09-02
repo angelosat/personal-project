@@ -21,6 +21,7 @@ namespace Start_a_Town_
         public BlockStairs()
             : base("Stairs", opaque: false)
         {
+            this.HidingAdjacent = false;
             this.Parts[0] = Block.Atlas.Load("blocks/stairs/stairs1", Depth1, Normal1);
             this.Parts[1] = Block.Atlas.Load("blocks/stairs/stairs2", Depth2, Normal2);
             this.Parts[2] = Block.Atlas.Load("blocks/stairs/stairs3", Depth3, Normal3);

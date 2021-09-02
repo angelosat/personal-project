@@ -200,6 +200,12 @@ namespace Start_a_Town_
                 c.OnCitizenRemoved(id);
         }
 
+        internal void OnCameraRotated(Camera camera)
+        {
+            foreach (var c in this.TownComponents)
+                c.OnCameraRotated(camera);
+        }
+
         internal void Tick()
         {
             foreach (var c in this.TownComponents)

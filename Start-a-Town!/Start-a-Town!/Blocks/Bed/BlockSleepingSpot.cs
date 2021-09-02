@@ -11,6 +11,7 @@ namespace Start_a_Town_
         public BlockSleepingSpot()
             : base("SleepingSpot", transparency: 1, density: 0, opaque: false, solid: false)
         {
+            this.HidingAdjacent = false;
             this.Furniture = FurnitureDefOf.Bed;
             this.BuildProperties.Category = ConstructionCategoryDefOf.Furniture;
             this.Variations.Add(Block.FaceHighlights[-IntVec3.UnitZ]);

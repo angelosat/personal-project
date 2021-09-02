@@ -10,6 +10,7 @@ namespace Start_a_Town_
         public BlockConstruction()
             : base("Construction", solid: false, opaque: false)
         {
+            this.HidingAdjacent = false;
             this.Variations.Add(Block.Atlas.Load("blocks/blockblueprint"));
         }
         public override bool IsStandableIn => false;

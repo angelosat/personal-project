@@ -14,8 +14,9 @@ namespace Start_a_Town_
         static readonly AtlasDepthNormals.Node.Token[] Orientations = new AtlasDepthNormals.Node.Token[4];
 
         public BlockDoor()
-            : base("Door", 0, 1, false, true)
+            : base("Door", 0, 1, true, true)
         {
+            this.HidingAdjacent = false;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
 
             var ndepth = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/doors/doorndepth");
@@ -75,10 +76,10 @@ namespace Start_a_Town_
             return data & 0x3;
         }
        
-        public override bool IsOpaque(Cell cell)
-        {
-            return !IsOpen(cell.BlockData);
-        }
+        //public override bool IsOpaque(Cell cell)
+        //{
+        //    return !IsOpen(cell.BlockData);
+        //}
         internal override bool IsPathable(Cell cell, IntVec3 blockCoords)
         {
             return !IsLocked(cell.BlockData);

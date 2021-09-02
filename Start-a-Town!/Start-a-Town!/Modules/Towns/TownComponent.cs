@@ -94,5 +94,7 @@ namespace Start_a_Town_
         internal virtual void OnBlocksChanged(IEnumerable<IntVec3> positions) { }
 
         internal virtual void OnHudCreated(Hud hud) { }
+
+        internal virtual void OnCameraRotated(Camera camera) { }
     }
 }

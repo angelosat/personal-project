@@ -136,6 +136,11 @@ namespace Start_a_Town_
             foreach (var s in this.Zones.Values)
                 s.DrawBeforeWorld(sb, map, cam);
         }
+        internal override void OnCameraRotated(Camera camera)
+        {
+            foreach (var z in this.Zones.Values)
+                z.OnCameraRotated(camera);
+        }
         protected override void AddSaveData(SaveTag tag)
         {
             this._zoneIDSequence.Save(tag, "IDSequence");

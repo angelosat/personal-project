@@ -103,7 +103,7 @@ namespace Start_a_Town_
                 if (slice.Key <= camera.DrawLevel)
                     slice.Value.Draw();
         }
-        void Invalidate()
+        internal void Invalidate()
         {
             foreach (var z in this.Slices.Keys)
                 this.InvalidatedSlices.Add(z);

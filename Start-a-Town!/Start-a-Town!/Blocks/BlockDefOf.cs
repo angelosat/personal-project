@@ -30,7 +30,6 @@
         static public readonly Block Designation = new BlockDesignation();
         static public readonly Block Slab = new BlockSlab();
         static public readonly Block Conveyor = new BlockConveyor();
-        static public readonly Block Prefab = new BlockPrefab();
         static public readonly Block Construction = new BlockConstruction();
         static public readonly Block ShopCounter = new BlockShopCounter();
         static public readonly Block Workbench = new BlockWorkstation("Workbench", typeof(BlockWorkbenchEntity));

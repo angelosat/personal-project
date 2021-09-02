@@ -16,6 +16,7 @@ namespace Start_a_Town_
         public BlockFluid()
             : base("Water", opaque: false, density: 0.2f, solid: false)
         {
+            this.HidingAdjacent = false;
             this.LoadVariations("water/water1", "water/water2", "water/water3", "water/water4");
             this.Assets = new AtlasDepthNormals.Node.Token[2][];
             this.Assets[(int)Fullness.Half] = new AtlasDepthNormals.Node.Token[1]{

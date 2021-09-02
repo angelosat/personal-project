@@ -382,32 +382,6 @@ namespace Start_a_Town_
             return this;
         }
 
-        public IEnumerable<IntVec3> GetFrontFacingWalls(int cameraRotation)
-        {
-            var map = this.Map;
-            var south = Coords.Rotate(IntVec3.UnitY, cameraRotation);
-            var east = Coords.Rotate(IntVec3.UnitX, cameraRotation);
-            foreach (var c in this.Border)
-            {
-                /// TODO maybe need to also check if outer cell is discovered?
-                if (map.GetCell(c + south).Block is BlockAir && map.GetCell(c + east).Block is BlockAir)
-                    yield return c;
-            }
-        }
-        public IEnumerable<IntVec3> GetFrontFacingWalls(int z, int cameraRotation)
-        {
-            var map = this.Map;
-            var south = Coords.Rotate(IntVec3.UnitY, cameraRotation);
-            var east = Coords.Rotate(IntVec3.UnitX, cameraRotation);
-            foreach (var c in this.Border)
-            {
-                if (c.Z != z)
-                    continue;
-                /// TODO maybe need to also check if outer cell is discovered?
-                if (map.GetCell(c + south).Block is BlockAir && map.GetCell(c + east).Block is BlockAir)
-                    yield return c;
-            }
-        }
         public bool IsWallHidable(IntVec3 global, int cameraRot)
         {
             if (!this.Border.Contains(global))
@@ -417,11 +391,14 @@ namespace Start_a_Town_
             var east = global + Coords.Rotate(IntVec3.UnitX, cameraRot);
             var scell = map.GetCell(south);
             var ecell = map.GetCell(east);
-            return 
-                map.GetCell(global.Above).Block is BlockAir && !this.Interior.Contains(global.Above) ||
+            var above = global.Above;
+            var aboveCell = map.GetCell(above);
+            return
+                aboveCell.Block is BlockAir && !this.Interior.Contains(above) ||
                 scell.Block is BlockAir && !this.Interior.Contains(south) ||
                 ecell.Block is BlockAir && !this.Interior.Contains(east);
         }
+
         internal void ShowGUI(IntVec3 global)
         {
             var gui = GUI ??= Create();

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Start_a_Town_.Blocks;
 using Start_a_Town_.Components;
 using Start_a_Town_.Terraforming;
 using System;
@@ -49,7 +48,7 @@ namespace Start_a_Town_
                         double gradient = grad.GetGradient(i, j, z);
                         gradientCache.Add(new IntVec3(i, j, z), gradient);
                         foreach (var m in mutators)
-                            m.Initialize(world, cell, (int)this.Start.X + i, (int)this.Start.Y + j, z, gradient);
+                            m.Initialize(world, cell, this.Start.X + i, this.Start.Y + j, z, gradient);
                         this.Cells[n++] = cell;
                         if (gradient < mingrad)
                             mingrad = gradient;
@@ -91,7 +90,7 @@ namespace Start_a_Town_
                     for (int j = 0; j < Size; j++)
                     {
                         var cell = this.Cells[n++];
-                        m.Initialize(this.Map.World, cell, (int)this.Start.X + i, (int)this.Start.Y + j, z, gradient[new IntVec3(i, j, z)]);
+                        m.Initialize(this.Map.World, cell, this.Start.X + i, this.Start.Y + j, z, gradient[new IntVec3(i, j, z)]);
                     }
             this.UpdateHeightMap();
 
@@ -163,7 +162,7 @@ namespace Start_a_Town_
         public bool IsQueuedForLight;
         public const int Size = 16;
         public IntVec2 Start;
-        public Vector2  bottomRight;
+        public Vector2 bottomRight;
         public void Invalidate()
         {
             foreach (var slice in this.Slices)
@@ -190,7 +189,7 @@ namespace Start_a_Town_
         {
             this.EdgesValid = false;
         }
-       
+
         #region Public Properties
         [InspectorHidden]
         public Cell this[int localx, int localy, int localz]
@@ -235,8 +234,8 @@ namespace Start_a_Town_
             get => new IntVec2(this.X, this.Y);
             set
             {
-                this.X = (int)value.X;
-                this.Y = (int)value.Y;
+                this.X = value.X;
+                this.Y = value.Y;
                 this.Start = this.MapCoords * Size;
             }
         }
@@ -429,9 +428,8 @@ namespace Start_a_Town_
                     }
                 }
                 if (found && (minVal < z && z <= maxVal)) // if a new heightmap value found, invalidate cells inbetween the old and the new one
-                {
                     this.InvalidateCell(cell); // why did i have this commented out? it caused slice meshes not getting updated light
-                }
+
                 z--;
             }
 
@@ -472,7 +470,7 @@ namespace Start_a_Town_
             if (light > 0)
                 this.HeightMap[localx][localy] = z;
         }
-       
+
         public Queue<Vector3> ResetHeightMapColumn(int localx, int localy)
         {
             Queue<Vector3> lightsourcesToHandle = new Queue<Vector3>();
@@ -662,8 +660,8 @@ namespace Start_a_Town_
             if (!map.TryGetChunk(global, out var chunk))
                 return false;
 
-            int x = (int)(global.X - chunk.Start.X);
-            int y = (int)(global.Y - chunk.Start.Y);
+            int x = global.X - chunk.Start.X;
+            int y = global.Y - chunk.Start.Y;
             sunlight = chunk.GetSunlight(x, y, global.Z);
             return true;
         }
@@ -708,12 +706,12 @@ namespace Start_a_Town_
             for (int i = 0; i < objCount; i++)
             {
                 var obj = objectList[i];
-                if(obj.IsSpawned) // BECAUSE obj might have been despawned or disposed as a result of a previous object's tick, for example an item stack absorbing another item stack in the physicscomponent
+                if (obj.IsSpawned) // BECAUSE obj might have been despawned or disposed as a result of a previous object's tick, for example an item stack absorbing another item stack in the physicscomponent
                     obj.Update(); // make an item stack merge itself to the other stack instead of the other way around? so that i don't have to do this check
             }
         }
 
-      
+
         #endregion
 
         #region Drawing
@@ -851,11 +849,11 @@ namespace Start_a_Town_
                     }
                     continue;
                 }
-                
+
                 // TODO when the last cell in the cell array is air, the air savetag isn't written
                 if (airLength > 0)
                 {
-                    foundAir = false; 
+                    foundAir = false;
                     saveAirTag(cellstag, airLength, airIsDiscovered);
                     airLength = 0;
                 }
@@ -1181,11 +1179,9 @@ namespace Start_a_Town_
                     writeAir(w, consecutiveAirblocks, lastDiscovered);
                     consecutiveAirblocks = 0;
                 }
-                //cell.Write(w);
                 w.Write(cell.Block);
                 w.Write(cell.Data.Data);
                 cell.Material.Write(w);
-                //w.Write(cell.Discovered);
             }
             if (consecutiveAirblocks > 0)
                 writeAir(w, consecutiveAirblocks, lastDiscovered);
@@ -1221,11 +1217,9 @@ namespace Start_a_Town_
                 else
                 {
                     var cell = this.Cells[cellIndex++];
-                    //cell.Read(r);
                     cell.Block = block;
                     cell.Data = new BitVector32(r.ReadInt32());
                     cell.Material = Def.GetDef<MaterialDef>(r);
-                    //cell.Discovered = r.ReadBoolean();
                 }
             } while (cellIndex < this.Cells.Length);
         }
@@ -1294,7 +1288,7 @@ namespace Start_a_Town_
 
         public string FullDirPath => this.Map.GetFullPath() + "/chunks/" + this.DirectoryName;
 
-        public string DirectoryName => (((int)(this.MapCoords.X)).ToString() + "." + ((int)(this.MapCoords.Y)).ToString()) + "/";
+        public string DirectoryName => (this.MapCoords.X.ToString() + "." + this.MapCoords.Y.ToString()) + "/";
 
 
         public Canvas Canvas;
@@ -1330,7 +1324,7 @@ namespace Start_a_Town_
                 var slice = this.Slices[i];
                 slice.Canvas.NonOpaque.Draw();
             }
-           
+
             if (cam.DrawTopSlice)
             {
                 if (cam.HideUnknownBlocks)
@@ -1340,7 +1334,7 @@ namespace Start_a_Town_
                     this.Slices[cam.MaxDrawZ].Unknown.Draw();
                 }
                 else
-                    this.Slices[cam.MaxDrawZ].TopCover.Opaque.Draw(); 
+                    this.Slices[cam.MaxDrawZ].TopCover.Opaque.Draw();
             }
             foreach (var blockentity in this.BlockEntitiesByPosition)
                 blockentity.Value.Draw(cam, this.Map, blockentity.Key.ToGlobal(this));
@@ -1465,7 +1459,7 @@ namespace Start_a_Town_
             this._RandomOrderedCells = chunktag.LoadArrayIntVec3("RandomOrderedCells");
             return this;
         }
-       
+
         internal bool IsSolid(IntVec3 local)
         {
             if (local.Z > this.Map.GetMaxHeight() - 1)
@@ -1521,8 +1515,6 @@ namespace Start_a_Town_
                             else // did i need visibleoutercells list afterall?
                                 visible.Add(cell);
                         }
-                        //if (cell.Block != BlockDefOf.Air && map.IsVisible(global)) // did i need visibleoutercells list afterall?
-                        //        visible.Add(cell);
                     }
                     else
                     {
@@ -1544,7 +1536,7 @@ namespace Start_a_Town_
 
             foreach (var cell in unknown)
             {
-                if(camera.HideUnknownBlocks)
+                if (camera.HideUnknownBlocks)
                     camera.DrawUnknown(unknownSlice, map, this, cell);
                 else
                     camera.DrawCell(topCover, map, this, cell);
@@ -1564,8 +1556,8 @@ namespace Start_a_Town_
         public void BuildFrontmostBlocksNewSlices(Camera camera)
         {
             //return;
-            var chunkX = (int)this.MapCoords.X;
-            var chunkY = (int)this.MapCoords.Y;
+            var chunkX = this.MapCoords.X;
+            var chunkY = this.MapCoords.Y;
             var mapSizeInChunks = this.Map.GetSizeInChunks();
             int edgeX = 0, edgeY = 0;
             switch ((int)camera.Rotation)

@@ -163,6 +163,17 @@ namespace Start_a_Town_
         }
 
         int RandomChunkIndex, RandomCellIndex;
+
+        internal void OnCameraRotated(Camera camera)
+        {
+            foreach (var chunk in this.GetActiveChunks())
+            {
+                chunk.Value.OnCameraRotated(camera);
+                chunk.Value.Invalidate();
+            }
+            this.Town.OnCameraRotated(camera);
+        }
+
         public IntVec3 GetNextRandomCell()
         {
             var randomChunk = this.ActiveChunks.Values.ElementAt(this.RandomOrderedChunkIndices[this.RandomChunkIndex]);
@@ -949,15 +960,17 @@ namespace Start_a_Town_
                 if (filter(o))
                     yield return o;
         }
-        internal bool IsVisible(Vector3 global)
+        internal bool IsVisible(IntVec3 global)
         {
             if (global.Z == MaxHeight - 1)
                 return true;
             var count = VectorHelper.Adjacent.Length;
             for (int i = 0; i < count; i++)
             {
-                var n = global + VectorHelper.Adjacent[i];
-                if (this.TryGetCell(n, out var ncell) && !ncell.Opaque)
+                var n = global + IntVec3.AdjacentIntVec3[i];
+                var ncell = this.GetCell(n);
+                //if (ncell is not null && !ncell.Opaque)
+                if (ncell is not null && !ncell.Block.HidingAdjacent)
                     return true;
             }
             return false;

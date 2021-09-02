@@ -7,6 +7,7 @@ namespace Start_a_Town_
         public BlockSlab()
             : base("Slab", opaque: false)
         {
+            this.HidingAdjacent = false;
             var txt = Block.Atlas.Load("blocks/slab", Block.QuarterBlockMapDepth, Block.QuarterBlockMapNormal);
             this.Variations.Add(txt);
             this.Ingredient = new Ingredient(RawMaterialDefOf.Ingots, null, null, 1);

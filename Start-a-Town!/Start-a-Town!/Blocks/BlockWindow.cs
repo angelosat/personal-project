@@ -12,6 +12,7 @@ namespace Start_a_Town_
         public BlockWindow()
             : base("Window", opaque: false)
         {
+            this.HidingAdjacent = false;
             this.PartsSeparate = 
                 new AtlasDepthNormals.Node.Token[][][] { 
                     new AtlasDepthNormals.Node.Token[][]{

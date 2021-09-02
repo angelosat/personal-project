@@ -8,6 +8,7 @@ namespace Start_a_Town_
 
         public BlockChair():base("Chair", opaque: false)
         {
+            this.HidingAdjacent = false;
             Orientations[0] = Atlas.Load("blocks/furniture/chair", Block.HalfBlockDepthMap, Block.NormalMap);
             Orientations[1] = Atlas.Load("blocks/furniture/chair2", Block.HalfBlockDepthMap, Block.NormalMap);
             Orientations[2] = Atlas.Load("blocks/furniture/chairback2", Block.HalfBlockDepthMap, Block.NormalMap);

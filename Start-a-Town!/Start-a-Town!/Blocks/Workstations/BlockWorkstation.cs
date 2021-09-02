@@ -14,6 +14,7 @@ namespace Start_a_Town_
         public BlockWorkstation(string name, Type blockEntityType)
             : base(name, opaque: false, solid: true)
         {
+            this.HidingAdjacent = false;
             this.BlockEntityType = blockEntityType;
             this.Variations.Add(this.Orientations.First());
             this.BuildProperties.Category = ConstructionCategoryDefOf.Production;

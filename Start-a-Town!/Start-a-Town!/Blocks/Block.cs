@@ -250,17 +250,25 @@ namespace Start_a_Town_
         public List<Sprite> Sprites = new();
 
         /// <summary>
+        /// Defines wether the block fully obscures adjanent block faces.
+        /// </summary>
+        public bool HidingAdjacent = true;
+
+        /// <summary>
         /// Defines the alpha channel of the block's sprite during drawing.
         /// </summary>
         public readonly float Transparency;
+
         /// <summary>
         /// Defines how fast the block can be dug?
         /// </summary>
         public readonly float Density;
+
         /// <summary>
         /// Defines how much light the block lets pass through it.
         /// </summary>
         public readonly bool Opaque;
+
         /// <summary>
         /// Defines whether the block can be walked upon (maybe combine this with density to make things like moving sand?)
         /// </summary>
@@ -425,10 +433,7 @@ namespace Start_a_Town_
             foreach (var (child, source) in children)
                 map.GetCell(child).Origin = source;
 
-            /// TESTING CALLING NOTIFYBLOCKSCHANGED ONE BY ONE AFTER ROOMMANAGER ADDS THE SAME ROOM TWICE WHEN PLACING A DOOR (which calls blockchanged for the 2 blocks that are part of the door)
             if (notify)
-                //foreach (var ch in children.Select(c => c.global))
-                //    map.NotifyBlockChanged(ch);
                 map.NotifyBlocksChanged(children.Select(c => c.global));
         }
         protected virtual void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
@@ -614,17 +619,12 @@ namespace Start_a_Town_
             var material = this.DrawMaterialColor ? mat.ColorVector : DefaultColorVector;// this.GetColorVector(data);
 
             var mesh = this.Opaque ? canvas.Opaque : canvas.NonOpaque;
-            if(this.IsRoomBorder)
-            {
-                if(chunk.Map.Town.RoomManager.GetRoomBorderAt(global) is Room room)
-                {
-                    var rot = - (int)camera.Rotation;
-                    if (rot < 0)
-                        rot = 4 + rot;
-                    if (room.IsWallHidable(global, rot))
-                        mesh = canvas.WallHidable;
-                }
-            }
+
+            if (this.IsRoomBorder && 
+                chunk.Map.Town.RoomManager.GetRoomBorderAt(global) is Room room && 
+                room.IsWallHidable(global, camera.RotationReverse))
+                mesh = canvas.WallHidable;
+
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return mesh.DrawBlock(Atlas.Texture, screenBounds,
                 token,

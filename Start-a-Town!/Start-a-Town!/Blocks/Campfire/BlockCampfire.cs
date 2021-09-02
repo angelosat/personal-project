@@ -8,6 +8,7 @@ namespace Start_a_Town_
         public BlockCampfire()
             : base("Campfire", opaque: false, solid: false)
         {
+            this.HidingAdjacent = false;
             this.BuildProperties = new BuildProperties(new Ingredient(item: RawMaterialDefOf.Logs), 0);
             this.Variations.Add(Block.Atlas.Load("blocks/campfire", Block.HalfBlockDepthMap, Block.HalfBlockNormalMap));
             this.BuildProperties.Complexity = 2;

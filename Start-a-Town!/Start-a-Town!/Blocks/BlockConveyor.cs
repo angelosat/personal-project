@@ -8,6 +8,7 @@ namespace Start_a_Town_
         public BlockConveyor()
             : base("Conveyor", opaque: false)
         {
+            this.HidingAdjacent = false;
             var txt = Block.Atlas.Load("blocks/slab", Block.QuarterBlockMapDepth, Block.QuarterBlockMapNormal);
             this.Variations.Add(txt);
         }

@@ -171,6 +171,10 @@ namespace Start_a_Town_
         {
             throw new NotImplementedException();
         }
+        internal void OnCameraRotated(Camera cam)
+        {
+            this.Positions.Invalidate();
+        }
         internal void DrawBeforeWorld(MySpriteBatch sb, MapBase map, Camera cam)
         {
             if (this.Hide)

@@ -170,6 +170,12 @@ namespace Start_a_Town_.UI
         {
             Instance.SelectInternal(cells.Select(c => new TargetArgs(map, c)));
         }
+
+        internal static void OnCameraRotated(Camera camera)
+        {
+            Renderer.Invalidate();
+        }
+
         internal static void SelectAllVisible(ItemDef def)
         {
             var objects = Ingame.Instance.Scene.ObjectsDrawn.Where(i => i.Def == def).Select(o => new TargetArgs(o));

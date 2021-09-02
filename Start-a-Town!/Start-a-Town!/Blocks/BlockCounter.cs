@@ -10,6 +10,7 @@ namespace Start_a_Town_
         public BlockCounter()
             : base("Counter", opaque: false)
         {
+            this.HidingAdjacent = false;
             this.Orientations[0] = Atlas.Load("blocks/counters/counter1");
             this.Orientations[1] = Atlas.Load("blocks/counters/counter4");
             this.Orientations[2] = Atlas.Load("blocks/counters/counter3");

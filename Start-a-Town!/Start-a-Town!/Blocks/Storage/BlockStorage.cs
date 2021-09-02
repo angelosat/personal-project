@@ -11,6 +11,7 @@ namespace Start_a_Town_
         public BlockStorage()
             : base("Bin", opaque: false)
         {
+            this.HidingAdjacent = false;
             var tex = Game1.Instance.Content.Load<Texture2D>("graphics/items/blocks/furniture/chest").ToGrayscale();
             this.Variations.Add(Atlas.Load("chestgrayscale", tex, BlockDepthMap, ChestNormalMap));
             this.BuildProperties.Category = ConstructionCategoryDefOf.Furniture;

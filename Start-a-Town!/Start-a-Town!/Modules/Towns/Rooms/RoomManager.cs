@@ -139,9 +139,9 @@ namespace Start_a_Town_
                     }
                     return; // temporary
                 }
-                else if(this.GetRoomBorderAt(global) is Room existingBorder)
+                else if (this.GetRoomBorderAt(global) is Room existingBorder)
                 {
-
+                    /// added this check here because the same room is detected twice when adding a door (which calls blockchanged for the 2 blocks that are part of the door)
                 }
                 else // the changed position wasn't part of a room, so no room has been split. check adjacent cells for newly formed rooms
                 {

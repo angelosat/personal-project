@@ -10,6 +10,7 @@ namespace Start_a_Town_
         public BlockDesignation()
             : base("Designation", 1, 0, false, false)
         {
+            this.HidingAdjacent = false;
             this.Variations.Add(Atlas.Load("blocks/blockblueprint"));
             this.DrawMaterialColor = false;
         }

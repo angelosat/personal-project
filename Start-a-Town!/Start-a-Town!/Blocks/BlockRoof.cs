@@ -15,6 +15,7 @@ namespace Start_a_Town_
         public BlockRoof() 
             : base("Roof", opaque: false)
         {
+            this.HidingAdjacent = false;
             this.Ingredient = new Ingredient(amount: 4).IsBuildingMaterial();
             this.Parts[0] = Atlas.Load("blocks/roof/roof1height19", Depth1, NormalMap);
             this.Parts[3] = Atlas.Load("blocks/roof/roof2height19", Depth2, NormalMap);

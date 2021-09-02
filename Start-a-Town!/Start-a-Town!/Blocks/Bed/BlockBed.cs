@@ -16,6 +16,7 @@ namespace Start_a_Town_
         public BlockBed() 
             : base("Bed", 0f, 1f, false, true)
         {
+            this.HidingAdjacent = false;
             this.Furniture = FurnitureDefOf.Bed;
             this.BuildProperties.ToolSensitivity = 1;
             this.BuildProperties.Dimension = 3;

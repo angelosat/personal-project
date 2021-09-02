@@ -118,6 +118,10 @@ namespace Start_a_Town_
                 if (this._rotation < 0)
                     this._rotation = 4 + value;
 
+                this.RotationReverse = -(int)this._rotation;
+                if (this.RotationReverse < 0)
+                    this.RotationReverse += 4;
+
                 this.RotCos = Math.Cos((Math.PI / 2f) * this._rotation);
                 this.RotSin = Math.Sin((Math.PI / 2f) * this._rotation);
 
@@ -129,6 +133,7 @@ namespace Start_a_Town_
                     this.OnRotationChanged();
             }
         }
+        public int RotationReverse { get; private set; }
         public Vector2 Coordinates
         {
             get => this._Coordinates;
@@ -170,19 +175,14 @@ namespace Start_a_Town_
 
         protected void OnRotationChanged()
         {
-            foreach (var chunk in Ingame.CurrentMap.GetActiveChunks())
-            {
-                chunk.Value.OnCameraRotated(this);
-                chunk.Value.Invalidate();
-            }
-            if (this.Center.HasValue)
-                this.CenterOn(this.Center.Value);
+            Ingame.CurrentMap.OnCameraRotated(this);
+            SelectionManager.OnCameraRotated(this);
+            //if (this.Center.HasValue)
+            //    this.CenterOn(this.Center.Value);
         }
 
         void gfx_DeviceReset(object sender, EventArgs e)
         {
-            //this.Width = (sender as GraphicsDeviceManager).PreferredBackBufferWidth;
-            //this.Height = (sender as GraphicsDeviceManager).PreferredBackBufferHeight;
             this.Width = Game1.Bounds.Width;
             this.Height = Game1.Bounds.Height;
             this.ViewPort = new Rectangle(0, 0, this.Width, this.Height);

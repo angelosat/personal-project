@@ -75,11 +75,12 @@ namespace Start_a_Town_
         {
             return data & 0x3;
         }
-       
-        //public override bool IsOpaque(Cell cell)
-        //{
-        //    return !IsOpen(cell.BlockData);
-        //}
+
+        public override bool IsOpaque(Cell cell)
+        {
+            return !IsOpen(cell.BlockData);
+        }
+
         internal override bool IsPathable(Cell cell, IntVec3 blockCoords)
         {
             return !IsLocked(cell.BlockData);
@@ -184,6 +185,7 @@ namespace Start_a_Town_
                     cell.BlockData ^= MaskOpen;
 
                 chunk.InvalidateSlice(g.Z);
+                chunk.InvalidateCell(cell); // to update light
                 $"[{map.Net}] door at {g} {(open ? "opened" : "closed")}".ToConsole();
             }
         }

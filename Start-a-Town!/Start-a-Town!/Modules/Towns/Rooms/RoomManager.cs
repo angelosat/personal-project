@@ -49,6 +49,11 @@ namespace Start_a_Town_
         bool Valid = true;
         internal void Init()
         {
+            var sw = Stopwatch.StartNew();
+            foreach(var r in this.Rooms.Values)
+                r.Validate();
+            sw.Stop();
+            $"rooms validated in {sw.ElapsedMilliseconds} ms".ToConsole();
             if (!this.Valid)
             {
                 this.Valid = true;

@@ -184,7 +184,7 @@ namespace Start_a_Town_
                 else
                     cell.BlockData ^= MaskOpen;
 
-                chunk.InvalidateSlice(g.Z);
+                //chunk.InvalidateSlice(g.Z); // this is called in invalidatecell right?
                 chunk.InvalidateCell(cell); // to update light
                 $"[{map.Net}] door at {g} {(open ? "opened" : "closed")}".ToConsole();
             }

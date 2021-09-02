@@ -277,7 +277,7 @@ namespace Start_a_Town_
             this.Cells.DrawBlocks(this.Map, cam);
         }
 
-        void Validate()
+        public void Validate()
         {
             this.Valid = true;
             this.value = 0;

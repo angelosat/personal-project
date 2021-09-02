@@ -45,9 +45,13 @@ namespace Start_a_Town_
         public HashSet<IntVec3> Border = new();
         public Color Color;
         public bool Exists => true;
+        static Control GUI;
+        private bool Valid;
 
         internal void Remove()
         {
+            this.InvalidateBorderCells(); /// invalidate wall cells to draw them normally again 
+
             if (GUI?.Tag == this && GUI.GetWindow() is Window win && win.IsOpen)
                 win.Hide();
         }
@@ -218,13 +222,17 @@ namespace Start_a_Town_
                 room.AddPosition(p);
             foreach (var p in edges)
                 room.AddEdge(p);
+            room.Validate();
             return room;
         }
         public bool Contains(Vector3 global)
         {
             return this.Interior.Contains(global);
         }
-
+        public bool ContainsBorder(Vector3 global)
+        {
+            return this.Border.Contains(global);
+        }
         internal bool TryRemovePosition(IntVec3 global, out List<Room> newRooms)
         {
             var map = this.Map;
@@ -295,11 +303,16 @@ namespace Start_a_Town_
                     this.RoomRole = null;
 
             this.Cells = new(this.Interior);
+            this.InvalidateBorderCells(); /// added for wall hiding, so that wall hidable blocks are drawn in a separate hidable mesh
         }
-       
+        void InvalidateBorderCells()
+        {
+            foreach (var b in this.Border)
+                this.Map.InvalidateCell(b);
+        }
         void DetectBorders(IntVec3 g)
         {
-            foreach(var n in g.GetAdjacentLazy())
+            foreach(var n in g.GetAdjacentCubeLazy())// g.GetAdjacentLazy())
                 if (this.Map.GetCell(n).IsRoomBorder)
                     this.Border.Add(n);
         }
@@ -369,15 +382,52 @@ namespace Start_a_Town_
             return this;
         }
 
+        public IEnumerable<IntVec3> GetFrontFacingWalls(int cameraRotation)
+        {
+            var map = this.Map;
+            var south = Coords.Rotate(IntVec3.UnitY, cameraRotation);
+            var east = Coords.Rotate(IntVec3.UnitX, cameraRotation);
+            foreach (var c in this.Border)
+            {
+                /// TODO maybe need to also check if outer cell is discovered?
+                if (map.GetCell(c + south).Block is BlockAir && map.GetCell(c + east).Block is BlockAir)
+                    yield return c;
+            }
+        }
+        public IEnumerable<IntVec3> GetFrontFacingWalls(int z, int cameraRotation)
+        {
+            var map = this.Map;
+            var south = Coords.Rotate(IntVec3.UnitY, cameraRotation);
+            var east = Coords.Rotate(IntVec3.UnitX, cameraRotation);
+            foreach (var c in this.Border)
+            {
+                if (c.Z != z)
+                    continue;
+                /// TODO maybe need to also check if outer cell is discovered?
+                if (map.GetCell(c + south).Block is BlockAir && map.GetCell(c + east).Block is BlockAir)
+                    yield return c;
+            }
+        }
+        public bool IsWallHidable(IntVec3 global, int cameraRot)
+        {
+            if (!this.Border.Contains(global))
+                throw new Exception();
+            var map = this.Map;
+            var south = global + Coords.Rotate(IntVec3.UnitY, cameraRot); // cache these 2
+            var east = global + Coords.Rotate(IntVec3.UnitX, cameraRot);
+            var scell = map.GetCell(south);
+            var ecell = map.GetCell(east);
+            return 
+                map.GetCell(global.Above).Block is BlockAir && !this.Interior.Contains(global.Above) ||
+                scell.Block is BlockAir && !this.Interior.Contains(south) ||
+                ecell.Block is BlockAir && !this.Interior.Contains(east);
+        }
         internal void ShowGUI(IntVec3 global)
         {
             var gui = GUI ??= Create();
             gui.GetData((this.Map, global));
             gui.GetWindow().Show();
         }
-
-        static Control GUI;
-        private bool Valid;
 
         static GroupBox Create()
         {

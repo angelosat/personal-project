@@ -4,13 +4,14 @@ namespace Start_a_Town_
 {
     public class Canvas
     {
-        public MySpriteBatch Opaque, NonOpaque, Transparent, Designations;
+        public MySpriteBatch Opaque, NonOpaque, Transparent, Designations, WallHidable;
         public Canvas(GraphicsDevice gd)
         {
             this.Opaque = new MySpriteBatch(gd);
             this.NonOpaque = new MySpriteBatch(gd);
             this.Transparent = new MySpriteBatch(gd);
             this.Designations = new MySpriteBatch(gd);
+            this.WallHidable = new MySpriteBatch(gd);
         }
         public Canvas(GraphicsDevice gd, int size)
         {
@@ -18,6 +19,7 @@ namespace Start_a_Town_
             this.NonOpaque = new MySpriteBatch(gd, size);
             this.Transparent = new MySpriteBatch(gd, size);
             this.Designations = new MySpriteBatch(gd, size);
+            this.WallHidable = new MySpriteBatch(gd, size);
         }
     }
 }

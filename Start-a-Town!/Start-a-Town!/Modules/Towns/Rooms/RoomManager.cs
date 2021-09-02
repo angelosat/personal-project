@@ -1,11 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Start_a_Town_.Net;
+﻿using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Start_a_Town_;
 
 namespace Start_a_Town_
 {
@@ -112,7 +110,7 @@ namespace Start_a_Town_
             room.Remove();
         }
 
-        void Handle(Vector3 global)
+        void Handle(IntVec3 global)
         {
             var map = this.Map;
             var block = map.GetBlock(global);
@@ -140,6 +138,10 @@ namespace Start_a_Town_
                             this.RemoveRoom(existing);
                     }
                     return; // temporary
+                }
+                else if(this.GetRoomBorderAt(global) is Room existingBorder)
+                {
+
                 }
                 else // the changed position wasn't part of a room, so no room has been split. check adjacent cells for newly formed rooms
                 {
@@ -223,7 +225,10 @@ namespace Start_a_Town_
         {
             return this.Rooms.Values.FirstOrDefault(r => r.Contains(global));
         }
-
+        public Room GetRoomBorderAt(IntVec3 global)
+        {
+            return this.Rooms.Values.FirstOrDefault(r => r.ContainsBorder(global));
+        }
         internal override void OnTooltipCreated(Control tooltip, TargetArgs targetArgs)
         {
             if (targetArgs.Type != TargetType.Position)

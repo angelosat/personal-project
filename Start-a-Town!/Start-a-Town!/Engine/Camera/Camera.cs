@@ -227,6 +227,8 @@ namespace Start_a_Town_
         }
 
         static int PreviousDrawLevel = -1;
+        internal bool HideWalls;
+
         public void SliceOn(int next)
         {
             var current = this.DrawLevel;

@@ -669,6 +669,10 @@ namespace Start_a_Town_
                 return false;
 
             var chunk = this.GetChunk(global);
+
+            if (cell.Block == BlockDefOf.Air && cell.Block == block) // if the cell is already air, dont do anything, ESPECIALLY DONT call notifyblockchanged
+                return false;
+
             cell.Block = block;
             cell.Material = material;
             cell.Variation = (byte)variation;
@@ -680,7 +684,7 @@ namespace Start_a_Town_
             chunk.InvalidateHeightmap(cell.X, cell.Y);
 
             // maybe i can refresh cell edges here on the spot?
-            this.InvalidateCell(global);
+            this.InvalidateCell(global); // do i need to invalidate the cell even after invalidating the heightmap in the line above?
             var neighbors = global.GetAdjacentCubeLazy(); // changed this to only get adjacent cells to get all cells (even diagonals) around a cell, in order to let workstations update their operatingpositionunreachable property
 
             foreach (var n in neighbors)
@@ -696,13 +700,13 @@ namespace Start_a_Town_
                 this.NotifyBlockChanged(global);
             return true;
         }
-
+       
         public void NotifyBlocksChanged(IEnumerable<IntVec3> positions)
         {
             this.Net.EventOccured(Components.Message.Types.BlocksChanged, this, positions);
             this.Town.OnBlocksChanged(positions);
         }
-        private void NotifyBlockChanged(IntVec3 pos)
+        public void NotifyBlockChanged(IntVec3 pos)
         {
             this.NotifyBlocksChanged(new[] { pos });
         }

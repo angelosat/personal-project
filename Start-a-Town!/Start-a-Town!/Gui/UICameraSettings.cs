@@ -23,7 +23,8 @@ namespace Start_a_Town_.UI
                 new CheckBoxNew("Map boundaries", () => camera.DrawTopSlice = !camera.DrawTopSlice, () => camera.DrawTopSlice) { HoverText = "Draws blocks at the boundaries of the map" },
                 new CheckBoxNew("Designations", () => camera.DrawZones = !camera.DrawZones, () => camera.DrawZones) { HoverText = "Toggles drawing of designated zones" },
                 new CheckBoxNew("Nameplates", () => NameplateManager.ToggleNameplates(), () => Ingame.Instance.NameplateManager.NameplatesEnabled) { HoverText = "Toggles entity nameplates" },
-                new CheckBoxNew("Rooms", () => Engine.DrawRooms = !Engine.DrawRooms, () => Engine.DrawRooms)
+                new CheckBoxNew("Rooms", () => Engine.DrawRooms = !Engine.DrawRooms, () => Engine.DrawRooms),
+                new CheckBoxNew("Hide Room Walls", () => camera.HideWalls = !camera.HideWalls, () => camera.HideWalls)
             );
         }
        

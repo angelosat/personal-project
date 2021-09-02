@@ -424,7 +424,11 @@ namespace Start_a_Town_
             var children = block.GetChildrenWithSource(global, orientation);
             foreach (var (child, source) in children)
                 map.GetCell(child).Origin = source;
+
+            /// TESTING CALLING NOTIFYBLOCKSCHANGED ONE BY ONE AFTER ROOMMANAGER ADDS THE SAME ROOM TWICE WHEN PLACING A DOOR (which calls blockchanged for the 2 blocks that are part of the door)
             if (notify)
+                //foreach (var ch in children.Select(c => c.global))
+                //    map.NotifyBlockChanged(ch);
                 map.NotifyBlocksChanged(children.Select(c => c.global));
         }
         protected virtual void Place(MapBase map, IntVec3 global, MaterialDef material, byte data, int variation, int orientation, bool notify = true)
@@ -610,6 +614,17 @@ namespace Start_a_Town_
             var material = this.DrawMaterialColor ? mat.ColorVector : DefaultColorVector;// this.GetColorVector(data);
 
             var mesh = this.Opaque ? canvas.Opaque : canvas.NonOpaque;
+            if(this.IsRoomBorder)
+            {
+                if(chunk.Map.Town.RoomManager.GetRoomBorderAt(global) is Room room)
+                {
+                    var rot = - (int)camera.Rotation;
+                    if (rot < 0)
+                        rot = 4 + rot;
+                    if (room.IsWallHidable(global, rot))
+                        mesh = canvas.WallHidable;
+                }
+            }
             var token = this.GetToken(variation, orientation, (int)camera.Rotation, data);// maybe change the method to accept double so i don't have to cast the camera rotation to int?
             return mesh.DrawBlock(Atlas.Texture, screenBounds,
                 token,

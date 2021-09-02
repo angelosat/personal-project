@@ -609,7 +609,6 @@ namespace Start_a_Town_
         }
         public bool InvalidateLight(Cell cell)
         {
-            //return this.LightCache2.Remove(cell.GetGlobalCoords(this));
             return this.InvalidateLight(cell.GetGlobalCoords(this));
         }
         public bool InvalidateLight(IntVec3 global)
@@ -1321,6 +1320,8 @@ namespace Start_a_Town_
             {
                 var slice = this.Slices[i];
                 slice.Canvas.Opaque.Draw();
+                if (!cam.HideWalls)
+                    slice.Canvas.WallHidable.Draw();
             }
             effectHideWalls.SetValue(false);
             effect.CurrentTechnique.Passes["Pass1"].Apply();

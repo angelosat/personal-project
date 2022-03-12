@@ -28,7 +28,7 @@ namespace Start_a_Town_
             foreach (var obj in this)
             {
                 var slot = new Slot(new Vector2(0, i * Slot.DefaultHeight)) { Tag = obj };
-                var label = new Label(slot.CenterRight, obj.HasValue ? obj.Object.Name : "<empty>", HorizontalAlignment.Left, VerticalAlignment.Center);
+                var label = new Label(slot.CenterRight, obj.HasValue ? obj.Object.Name : "<empty>", Alignment.Horizontal.Left, Alignment.Vertical.Center);
                 ui.Controls.Add(slot, label);
             }
         }

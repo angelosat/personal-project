@@ -40,7 +40,7 @@ namespace Start_a_Town_.Core
             terraformersTable.AddItems(terraformers.SelectMany(t => t.GetAdjustableParameters()));
             //winTerraformers = terraformers.Select(t => t.GetUI()).ToGroupBoxVertically().AddControlsBottomLeft(btnbox).ToPanel().ToWindow("Terraformers Properties", closable: false, movable: false);
             winTerraformers = new GroupBox()// { BackgroundColor = Color.Lime * .5f, Padding = 10 }
-                .AddControlsVertically(0, HorizontalAlignment.Center,
+                .AddControlsVertically(0, Alignment.Horizontal.Center,
                     terraformersTable.ToPanel(),//.ToPanel(BackgroundStyle.TickBox, opacity: .5f), 
                     //new GroupBox() { BackgroundColor = Color.Black * .5f, Padding = 5 }.AddControls(btnbox))//.ToPanel(BackgroundStyle.TickBox, opacity: .5f))
                     btnbox.ToPanel())//BackgroundStyle.TickBox, opacity: .5f))
@@ -56,7 +56,7 @@ namespace Start_a_Town_.Core
             var btn_create = new Button("Create", openActorCreationGui);
             var btn_cancel = new Button("Cancel", cancelAction);
 
-            this.AddControlsVertically(0, HorizontalAlignment.Right,
+            this.AddControlsVertically(0, Alignment.Horizontal.Right,
                 tab_World.ToPanel(),
                 UIHelper.Wrap(btn_create, btn_cancel)
                 );
@@ -68,7 +68,7 @@ namespace Start_a_Town_.Core
                 var actorsui = new GuiActorCreation(actors);
                 var btnstart = new Button("Start", () => this.CreateMap(txtboxname.Text, selectedSize, terraformers, actors.ToArray()));
                 var btnback = new Button("Back", () => { actorsui.GetWindow().Hide(); this.GetWindow().Show(); });
-                actorsCreateBox.AddControlsVertically(0, HorizontalAlignment.Right,
+                actorsCreateBox.AddControlsVertically(0, Alignment.Horizontal.Right,
                     actorsui,
                     UIHelper.Wrap(btnstart, btnback)
                     );

@@ -187,7 +187,7 @@ namespace Start_a_Town_
             var textLoc = new Vector2(barLoc.X, scrLoc.Y);
 
             InteractionBar.Draw(sb, barLoc, InteractionBar.DefaultWidth, this.Percentage);
-            UIManager.DrawStringOutlined(sb, this.Verb, textLoc, HorizontalAlignment.Left, VerticalAlignment.Center, 0.5f);
+            UIManager.DrawStringOutlined(sb, this.Verb, textLoc, Alignment.Horizontal.Left, Alignment.Vertical.Center, 0.5f);
         }
 
         internal virtual void ResolveReferences()

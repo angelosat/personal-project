@@ -69,14 +69,14 @@ namespace Start_a_Town_.UI
             var barLoc = scrLoc - new Vector2(InteractionBar.DefaultWidth / 2, InteractionBar.DefaultHeight / 2);
             var textLoc = new Vector2(barLoc.X, scrLoc.Y);
             InteractionBar.Draw(sb, barLoc, InteractionBar.DefaultWidth, percentage);
-            UIManager.DrawStringOutlined(sb, text, textLoc, HorizontalAlignment.Left, VerticalAlignment.Center, 0.5f);
+            UIManager.DrawStringOutlined(sb, text, textLoc, Alignment.Horizontal.Left, Alignment.Vertical.Center, 0.5f);
         }
         static public void Draw(SpriteBatch sb, Camera camera, Vector3 global, string text, float percentage, float scale)
         {
             text = camera.Zoom > 2 ? text : "";
             var scrLoc = camera.GetScreenPositionFloat(global);
             InteractionBar.Draw(sb, scrLoc, InteractionBar.DefaultWidth, percentage, scale);
-            UIManager.DrawStringOutlined(sb, text, scrLoc, Color.Black, Color.White, 1, HorizontalAlignment.Center, VerticalAlignment.Center, 0.5f);
+            UIManager.DrawStringOutlined(sb, text, scrLoc, Color.Black, Color.White, 1, Alignment.Horizontal.Center, Alignment.Vertical.Center, 0.5f);
         }
     }
 
@@ -150,14 +150,14 @@ namespace Start_a_Town_.UI
             var barLoc = scrLoc - new Vector2(InteractionBar.DefaultWidth / 2, InteractionBar.DefaultHeight / 2);
             var textLoc = new Vector2(barLoc.X, scrLoc.Y);
             InteractionBar.Draw(sb, barLoc, InteractionBar.DefaultWidth, percentage);
-            UIManager.DrawStringOutlined(sb, text, textLoc, HorizontalAlignment.Left, VerticalAlignment.Center, 0.5f);
+            UIManager.DrawStringOutlined(sb, text, textLoc, Alignment.Horizontal.Left, Alignment.Vertical.Center, 0.5f);
         }
         static public void Draw(SpriteBatch sb, Camera camera, Vector3 global, string text, float percentage, float scale)
         {
             text = camera.Zoom > 2 ? text : "";
             var scrLoc = camera.GetScreenPositionFloat(global);
             InteractionBar.Draw(sb, scrLoc, InteractionBar.DefaultWidth, percentage, scale);
-            UIManager.DrawStringOutlined(sb, text, scrLoc, Color.Black, Color.White, 1, HorizontalAlignment.Center, VerticalAlignment.Center, 0.5f);
+            UIManager.DrawStringOutlined(sb, text, scrLoc, Color.Black, Color.White, 1, Alignment.Horizontal.Center, Alignment.Vertical.Center, 0.5f);
         }
     }
 }

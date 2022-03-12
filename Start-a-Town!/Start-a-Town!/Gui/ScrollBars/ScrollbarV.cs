@@ -29,9 +29,9 @@ namespace Start_a_Town_.UI
             this.BackgroundColor = Color.Black * 0.5f;
             this.Tag = tag;
             this.AutoSize = true;
-            this.Up = new PictureBox(Vector2.Zero, UIManager.DefaultVScrollbarSprite, new Rectangle(0, 0, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
-            this.Down = new PictureBox(new Vector2(0, height - 16), UIManager.DefaultVScrollbarSprite, new Rectangle(0, 32, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
-            this.Thumb = new PictureBox(new Vector2(0, 16), UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
+            this.Up = new PictureBox(Vector2.Zero, UIManager.DefaultVScrollbarSprite, new Rectangle(0, 0, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
+            this.Down = new PictureBox(new Vector2(0, height - 16), UIManager.DefaultVScrollbarSprite, new Rectangle(0, 32, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
+            this.Thumb = new PictureBox(new Vector2(0, 16), UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
 
             this.Up.MouseLeftPress += this.Up_Click;
             this.Down.MouseLeftPress += this.Down_Click;

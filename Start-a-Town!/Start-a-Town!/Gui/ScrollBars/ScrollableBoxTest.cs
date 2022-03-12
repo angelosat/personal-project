@@ -110,7 +110,7 @@ namespace Start_a_Town_.UI
                 this.Width = DefaultWidth;
                 var areaheight = client.Height - 2 * DefaultWidth;
                 this.Up = new IconButton(Icon.ArrowUp) { BackgroundTexture = UIManager.Icon16Background, LeftClickAction = StepUp };
-                this.Thumb = new PictureBox(Vector2.Zero, UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
+                this.Thumb = new PictureBox(Vector2.Zero, UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
                 this.Area = new GroupBox() { MouseThrough = false, AutoSize = false, Size = new Rectangle(0, 0, this.Width, areaheight), Location = this.Up.BottomLeft };
                 this.Area.AddControls(this.Thumb);
                 this.Down = new IconButton(Icon.ArrowDown) { BackgroundTexture = UIManager.Icon16Background, Location = this.Area.BottomLeft, LeftClickAction = StepDown };
@@ -221,7 +221,7 @@ namespace Start_a_Town_.UI
                 this.Height = DefaultHeight;
                 var arealength = client.Width - 2 * DefaultHeight;
                 this.Left = new IconButton(Icon.ArrowUp) { BackgroundTexture = UIManager.Icon16Background, LeftClickAction = StepUp };
-                this.Thumb = new PictureBox(Vector2.Zero, UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
+                this.Thumb = new PictureBox(Vector2.Zero, UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
                 this.Area = new GroupBox() { MouseThrough = false, AutoSize = false, Size = new Rectangle(0, 0, arealength, this.Height), Location = this.Left.TopRight };
                 this.Area.AddControls(this.Thumb);
                 this.Right = new IconButton(Icon.ArrowDown) { BackgroundTexture = UIManager.Icon16Background, Location = this.Area.TopRight, LeftClickAction = StepDown };

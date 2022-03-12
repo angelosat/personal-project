@@ -242,6 +242,7 @@
     <Compile Include="Engine\Ticks.cs" />
     <Compile Include="GameModes\StaticMaps\SaveFileManager.cs" />
     <Compile Include="Gfx\ColorCustomization\CharacterColor.cs" />
+    <Compile Include="Gui\Alignment.cs" />
     <Compile Include="Gui\Element.cs" />
     <Compile Include="Gui\GuiLayer.cs" />
     <Compile Include="Gui\Hud\Chat\ConsoleEntry.cs" />

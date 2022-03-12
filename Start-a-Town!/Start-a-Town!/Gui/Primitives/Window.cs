@@ -6,6 +6,19 @@ namespace Start_a_Town_.UI
 {
     public class Window : Control
     {
+        struct OuterPadding
+        {
+            public static Rectangle
+                TopLeft = new(0, 0, 11, 11),
+                TopRight = new(12, 0, 11, 11),
+                BottomLeft = new(0, 12, 11, 11),
+                BottomRight = new(12, 12, 11, 11),
+                Top = new(12, 0, 1, 11),
+                Left = new(0, 12, 11, 1),
+                Right = new(12, 11, 11, 1),
+                Bottom = new(11, 12, 1, 11),
+                Center = new(11, 11, 1, 1);
+        }
         public override string ToString()
         {
             return "Window: " + this._title;

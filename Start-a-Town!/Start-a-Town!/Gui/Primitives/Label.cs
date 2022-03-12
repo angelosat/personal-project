@@ -10,13 +10,13 @@ namespace Start_a_Town_.UI
     {
         public static int DefaultHeight = UIManager.Font.LineSpacing + 2;
 
-        HorizontalAlignment _Halign;
-        public HorizontalAlignment Halign
+        Alignment.Horizontal _Halign;
+        public Alignment.Horizontal Halign
         {
             get => this._Halign;
             set => this._Halign = value;
         }
-        public VerticalAlignment Valign;
+        public Alignment.Vertical Valign;
         public Color TextBackground = Color.Transparent;
         public Func<Color> TextBackgroundFunc = () => Color.Transparent;
 
@@ -47,7 +47,7 @@ namespace Start_a_Town_.UI
         public override void OnPaint(SpriteBatch sb)
         {
             var pos = new Vector2((int)this.Halign * .5f, .5f);
-            var outlineOffset = this.Halign == HorizontalAlignment.Left ? 1 : (this.Halign == HorizontalAlignment.Right ? -1 : 0);
+            var outlineOffset = this.Halign == Alignment.Horizontal.Left ? 1 : (this.Halign == Alignment.Horizontal.Right ? -1 : 0);
             UIManager.DrawStringOutlined(
                 sb,
                 this.Text,
@@ -66,13 +66,13 @@ namespace Start_a_Town_.UI
 
             switch (this.Halign)
             {
-                case HorizontalAlignment.Left:
+                case Alignment.Horizontal.Left:
                     this.Origin.X = 0;
                     break;
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     this.Origin.X = this.Width / 2;
                     break;
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     this.Origin.X = this.Width;
                     break;
                 default:
@@ -80,13 +80,13 @@ namespace Start_a_Town_.UI
             }
             switch (this.Valign)
             {
-                case VerticalAlignment.Top:
+                case Alignment.Vertical.Top:
                     this.Origin.Y = 0;
                     break;
-                case VerticalAlignment.Center:
+                case Alignment.Vertical.Center:
                     this.Origin.Y = this.Height / 2;
                     break;
-                case VerticalAlignment.Bottom:
+                case Alignment.Vertical.Bottom:
                     this.Origin.Y = this.Height;
                     break;
                 default:
@@ -161,13 +161,13 @@ namespace Start_a_Town_.UI
             this.Font = font ?? UIManager.Font;
             this.Active = false;
         }
-        public Label(Vector2 location, string text, HorizontalAlignment halign)
+        public Label(Vector2 location, string text, Alignment.Horizontal halign)
             : base(location)
         {
             this.Halign = halign;
             this.Text = text;
         }
-        public Label(Vector2 location, string text, HorizontalAlignment halign, VerticalAlignment valign)
+        public Label(Vector2 location, string text, Alignment.Horizontal halign, Alignment.Vertical valign)
             : base(location)
         {
             this.Halign = halign;
@@ -175,13 +175,13 @@ namespace Start_a_Town_.UI
             this.Text = text;
             switch (halign)
             {
-                case HorizontalAlignment.Left:
+                case Alignment.Horizontal.Left:
                     this.Origin.X = 0;
                     break;
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     this.Origin.X = this.Width / 2;
                     break;
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     this.Origin.X = this.Width;
                     break;
                 default:
@@ -189,13 +189,13 @@ namespace Start_a_Town_.UI
             }
             switch (valign)
             {
-                case VerticalAlignment.Top:
+                case Alignment.Vertical.Top:
                     this.Origin.Y = 0;
                     break;
-                case VerticalAlignment.Center:
+                case Alignment.Vertical.Center:
                     this.Origin.Y = this.Height / 2;
                     break;
-                case VerticalAlignment.Bottom:
+                case Alignment.Vertical.Bottom:
                     this.Origin.Y = this.Height;
                     break;
                 default:
@@ -216,22 +216,22 @@ namespace Start_a_Town_.UI
             base.Draw(sb);
             this.DrawText(sb, this.ScreenLocation, null, this.MouseHover && this.Active ? Color.Lime : Color.White, this.Opacity); //Color.White
         }
-        public static void DrawText(SpriteBatch sb, Texture2D textSprite, Vector2 position, int width, Color color, float opacity, HorizontalAlignment hAlign)
+        public static void DrawText(SpriteBatch sb, Texture2D textSprite, Vector2 position, int width, Color color, float opacity, Alignment.Horizontal hAlign)
         {
             var c = color * opacity;
             // TODO: fix the origin so it's not always at the center
             Vector2 offset = new(1, 1), origin = Vector2.Zero;
             switch (hAlign)
             {
-                case HorizontalAlignment.Left:
+                case Alignment.Horizontal.Left:
                     offset = new Vector2(1, 1);
                     origin = Vector2.Zero;
                     break;
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     offset = new Vector2((float)Math.Floor(width * 0.5), 1);
                     origin = new Vector2(textSprite.Width / 2, 0);
                     break;
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     offset = new Vector2(width - 2, 1);
                     origin = new Vector2(textSprite.Width, 0);
                     break;
@@ -241,7 +241,7 @@ namespace Start_a_Town_.UI
 
             sb.Draw(textSprite, position + offset, null, c, 0, origin, 1, SpriteEffects.None, 0);
         }
-        public static void DrawText(SpriteBatch sb, Texture2D textSprite, Vector2 position, Rectangle? sourceRect, int width, Color color, float opacity, HorizontalAlignment hAlign)
+        public static void DrawText(SpriteBatch sb, Texture2D textSprite, Vector2 position, Rectangle? sourceRect, int width, Color color, float opacity, Alignment.Horizontal hAlign)
         {
             var c = color * opacity;
 
@@ -252,15 +252,15 @@ namespace Start_a_Town_.UI
             Vector2 offset = new(1, 1), origin = Vector2.Zero;
             switch (hAlign)
             {
-                case HorizontalAlignment.Left:
+                case Alignment.Horizontal.Left:
                     offset = new Vector2(1, 1);
                     origin = Vector2.Zero;
                     break;
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     offset = new Vector2((float)Math.Floor(width * 0.5), 1);
                     origin = new Vector2(textSprite.Width / 2, 0);
                     break;
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     offset = new Vector2(width - 2, 1);
                     origin = new Vector2(textSprite.Width, 0);
                     break;
@@ -283,7 +283,7 @@ namespace Start_a_Town_.UI
                 this.Invalidate();
         }
 
-        public HorizontalAlignment TextHAlign { get; set; }
+        public Alignment.Horizontal TextHAlign { get; set; }
 
         public override Control SetLeftClickAction(Action<ButtonBase> action)
         {

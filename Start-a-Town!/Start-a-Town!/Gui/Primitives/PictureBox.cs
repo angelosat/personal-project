@@ -45,12 +45,12 @@ namespace Start_a_Town_.UI
                 this.Width = this.SourceRect.Width;
                 this.Height = this.SourceRect.Height;
                 this.Invalidate();
-                switch (this.Alignment)
+                switch (this.HAlignment)
                 {
-                    case HorizontalAlignment.Center:
+                    case Alignment.Horizontal.Center:
                         this.PictureOrigin = new Vector2(this.SourceRect.Width / 2, this.SourceRect.Height / 2);
                         break;
-                    case HorizontalAlignment.Right:
+                    case Alignment.Horizontal.Right:
                         this.PictureOrigin.X = this.SourceRect.Width;
                         break;
                     default:
@@ -100,7 +100,7 @@ namespace Start_a_Town_.UI
             return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.SourceRect.Width, this.SourceRect.Height);
             //return new RenderTarget2D(Game1.Instance.GraphicsDevice, this.SourceRect.Width, this.SourceRect.Height, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
         }
-        public HorizontalAlignment Alignment;
+        public Alignment.Horizontal HAlignment;
 
         public PictureBox() { }
         public PictureBox(Rectangle bounds, float scale)
@@ -110,27 +110,27 @@ namespace Start_a_Town_.UI
             this.SourceRect = new Rectangle(0, 0, this.Width, this.Height);
             this.Sprite = this.CreateTexture(Game1.Instance.GraphicsDevice);
         }
-        public PictureBox(Vector2 size, Action<RenderTarget2D> renderer, HorizontalAlignment halign = HorizontalAlignment.Left, VerticalAlignment valign = VerticalAlignment.Top)
+        public PictureBox(Vector2 size, Action<RenderTarget2D> renderer, Alignment.Horizontal halign = Alignment.Horizontal.Left, Alignment.Vertical valign = Alignment.Vertical.Top)
         {
             this.SourceRect = new Rectangle(0, 0, (int)size.X, (int)size.Y);
             this.Width = this.SourceRect.Width;
             this.Height = this.SourceRect.Height;
             this.Renderer = renderer;
 
-            this.Alignment = halign;
+            this.HAlignment = halign;
             switch (halign)
             {
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     this.PictureOrigin = new Vector2(this.SourceRect.Width / 2, this.SourceRect.Height / 2);
                     break;
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     this.PictureOrigin.X = this.SourceRect.Width;
                     break;
                 default:
                     break;
             }
         }
-        public PictureBox(Vector2 location, Texture2D sprite, Rectangle? sourcerect, HorizontalAlignment halign = HorizontalAlignment.Left, VerticalAlignment valign = VerticalAlignment.Top)
+        public PictureBox(Vector2 location, Texture2D sprite, Rectangle? sourcerect, Alignment.Horizontal halign = Alignment.Horizontal.Left, Alignment.Vertical valign = Alignment.Vertical.Top)
             : base(location)
         {
             this.Sprite = sprite;
@@ -138,13 +138,13 @@ namespace Start_a_Town_.UI
             this.Width = this.SourceRect.Width;
             this.Height = this.SourceRect.Height;
 
-            this.Alignment = halign;
+            this.HAlignment = halign;
             switch (halign)
             {
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     this.PictureOrigin = new Vector2(this.SourceRect.Width / 2, this.SourceRect.Height / 2);
                     break;
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     this.PictureOrigin.X = this.SourceRect.Width;
                     break;
                 default:

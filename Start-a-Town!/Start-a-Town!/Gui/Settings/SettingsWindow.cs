@@ -32,7 +32,7 @@ namespace Start_a_Town_
             var btncancel = new Button("Cancel", cancel, 50);
             var btndefaults = new Button("Defaults", defaults, 50);
 
-            this.Client.AddControlsVertically(0, HorizontalAlignment.Right,
+            this.Client.AddControlsVertically(0, Alignment.Horizontal.Right,
                 tabs.ToPanel(),
                 panel,
                 UIHelper.Wrap(btnok, btnapply, btncancel, btndefaults));

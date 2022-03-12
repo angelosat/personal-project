@@ -93,7 +93,7 @@ namespace Start_a_Town_.UI
             this.Alpha = Color.Lerp(Color.Transparent, this.Blend, 0.5f);
             this.Width = UIManager.SlotSprite.Width;
             this.Height = UIManager.SlotSprite.Height;
-            this.BottomRightLabel = new Label(new Vector2(UIManager.SlotSprite.Width), "", HorizontalAlignment.Right, VerticalAlignment.Bottom);
+            this.BottomRightLabel = new Label(new Vector2(UIManager.SlotSprite.Width), "", Alignment.Horizontal.Right, Alignment.Vertical.Bottom);
             this.Controls.Add(this.BottomRightLabel);
             this.Tag = default;
             this.Text = "";

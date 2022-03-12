@@ -213,11 +213,11 @@ namespace Start_a_Town_.UI
             return this;
         }
 
-        public virtual void Reposition(UIScaleEventArgs e = null)
+        public virtual void OnUIScaleChanged(float oldScale, float newScale)
         {
             if (this.LocationFunc is not null)
                 return;
-            float ratio = e.NewScale / e.OldScale;
+            float ratio = newScale / oldScale;
             this.Location = this.Location / ratio - (new Vector2(this.Size.Width - this.Size.Width / ratio, this.Size.Height - this.Size.Height / ratio) * this.Anchor);
         }
 
@@ -231,11 +231,11 @@ namespace Start_a_Town_.UI
             this.Location = this.Location * ratio - (new Vector2(this.Size.Width - this.Size.Width * ratio.X, this.Size.Height - this.Size.Height * ratio.Y) * this.Anchor);
         }
 
-        public void AlignVertically(HorizontalAlignment alignment = HorizontalAlignment.Left)
+        public void AlignVertically(Alignment.Horizontal alignment = Alignment.Horizontal.Left)
         {
             switch (alignment)
             {
-                case HorizontalAlignment.Left:
+                case Alignment.Horizontal.Left:
                     Vector2 last = Vector2.Zero;
                     foreach (var current in this.Controls)
                     {
@@ -244,7 +244,7 @@ namespace Start_a_Town_.UI
                     }
                     break;
 
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     int maxw = 0, maxx = 0;
                     foreach (var current in this.Controls)
                     {
@@ -259,7 +259,7 @@ namespace Start_a_Town_.UI
                     }
                     break;
 
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     maxw = 0;
                     maxx = 0;
                     foreach (var current in this.Controls)
@@ -984,7 +984,7 @@ namespace Start_a_Town_.UI
             //this.AddControls(controls);
             //return this;
         }
-        public virtual Control AddControlsVertically(int spacing, HorizontalAlignment horAlignment, params Control[] controls)
+        public virtual Control AddControlsVertically(int spacing, Alignment.Horizontal horAlignment, params Control[] controls)
         {
             var y = 0;
             var maxWidth = this.AutoSize ? controls.Max(c => c.Width) : this.ClientSize.Width;
@@ -993,11 +993,11 @@ namespace Start_a_Town_.UI
                 var yy = y;
                 ctrl.LocationFunc = horAlignment switch
                 {
-                    HorizontalAlignment.Left => () => new(0, yy),//ctrl.Location = new Vector2(0, y);
+                    Alignment.Horizontal.Left => () => new(0, yy),//ctrl.Location = new Vector2(0, y);
 
-                    HorizontalAlignment.Center => () => new(maxWidth / 2 - ctrl.Width / 2, yy),//ctrl.Location = new Vector2(maxWidth / 2, y);
-                                                                                               //ctrl.Anchor = new(.5f, 0);
-                    HorizontalAlignment.Right => () => new(maxWidth - ctrl.Width, yy),//ctrl.Location = new Vector2(maxWidth, y);
+                    Alignment.Horizontal.Center => () => new(maxWidth / 2 - ctrl.Width / 2, yy),//ctrl.Location = new Vector2(maxWidth / 2, y);
+                                                                                                //ctrl.Anchor = new(.5f, 0);
+                    Alignment.Horizontal.Right => () => new(maxWidth - ctrl.Width, yy),//ctrl.Location = new Vector2(maxWidth, y);
                                                                                       //ctrl.Anchor = new(1, 0);
                     _ => throw new Exception(),
                 };

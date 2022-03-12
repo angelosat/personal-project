@@ -30,9 +30,9 @@ namespace Start_a_Town_.UI
             this.Tag = tag;
             this.AutoSize = true;
             TextureHeight = 16;
-            this.Btn_Left = new PictureBox(Vector2.Zero, UIManager.DefaultHScrollbarSprite, new Rectangle(0, 0, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
-            this.Btn_Right = new PictureBox(new Vector2(width - 16, 0), UIManager.DefaultHScrollbarSprite, new Rectangle(32, 0, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
-            this.Thumb = new PictureBox(new Vector2(16, 0), UIManager.DefaultHScrollbarSprite, new Rectangle(16, 0, 16, 16), HorizontalAlignment.Left, VerticalAlignment.Top);
+            this.Btn_Left = new PictureBox(Vector2.Zero, UIManager.DefaultHScrollbarSprite, new Rectangle(0, 0, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
+            this.Btn_Right = new PictureBox(new Vector2(width - 16, 0), UIManager.DefaultHScrollbarSprite, new Rectangle(32, 0, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
+            this.Thumb = new PictureBox(new Vector2(16, 0), UIManager.DefaultHScrollbarSprite, new Rectangle(16, 0, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
 
             this.Btn_Left.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Left_Click);
             this.Btn_Right.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Right_Click);

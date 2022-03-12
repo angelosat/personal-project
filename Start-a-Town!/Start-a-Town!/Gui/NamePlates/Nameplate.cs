@@ -24,7 +24,7 @@ namespace Start_a_Town_.UI
                 obj.OnNameplateCreated(plate);
             else
                 obj.OnNameplateCreated(plate);
-            plate.AlignVertically(HorizontalAlignment.Center);
+            plate.AlignVertically(Alignment.Horizontal.Center);
             plate.Tag = obj;
             plate.MouseThrough = false;
             return plate;

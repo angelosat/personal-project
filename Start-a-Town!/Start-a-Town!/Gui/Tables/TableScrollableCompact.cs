@@ -91,7 +91,7 @@ namespace Start_a_Town_.UI
                 {
                     var label = new Label(new Vector2(offset, 0), c.Label);
                     offset += c.Width;
-                    label.TextHAlign = HorizontalAlignment.Center;
+                    label.TextHAlign = Alignment.Horizontal.Center;
                     this.ColumnLabels.AddControls(label);
                 }
             }

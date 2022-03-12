@@ -7,43 +7,6 @@ using System.Linq;
 
 namespace Start_a_Town_.UI
 {
-    public class UIScaleEventArgs : EventArgs
-    {
-        public float NewScale, OldScale;
-        public UIScaleEventArgs(float oldScale, float newScale)
-        {
-            this.NewScale = newScale;
-            this.OldScale = oldScale;
-        }
-    }
-    public enum HorizontalAlignment { Left, Center, Right }
-    public enum VerticalAlignment { Top, Bottom, Center }
-    public struct OuterPadding
-    {
-        public static Rectangle
-            TopLeft = new(0, 0, 11, 11),
-            TopRight = new(12, 0, 11, 11),
-            BottomLeft = new(0, 12, 11, 11),
-            BottomRight = new(12, 12, 11, 11),
-            Top = new(12, 0, 1, 11),
-            Left = new(0, 12, 11, 1),
-            Right = new(12, 11, 11, 1),
-            Bottom = new(11, 12, 1, 11),
-            Center = new(11, 11, 1, 1);
-    }
-    public struct InnerPadding
-    {
-        public static Rectangle
-            TopLeft = new(0, 0, 19, 19),
-            TopRight = new(19, 0, 19, 19),
-            BottomLeft = new(0, 19, 19, 19),
-            BottomRight = new(19, 19, 19, 19),
-            Top = new(19, 0, 1, 19),
-            Left = new(0, 19, 19, 1),
-            Right = new(19, 19, 19, 1),
-            Bottom = new(19, 19, 1, 19),
-            Center = new(18, 18, 1, 1);
-    }
     public class UIManager : IDisposable, IKeyEventHandler
     {
         static float _scale = 1;
@@ -54,11 +17,10 @@ namespace Start_a_Town_.UI
             {
                 if (_scale == value)
                     return;
-                var e = new UIScaleEventArgs(_scale, value);
                 foreach (var manager in WindowManagers)
                     foreach (var layer in manager.Layers)
                         foreach (var ctrl in layer.Value)
-                            ctrl.Reposition(e);
+                            ctrl.OnUIScaleChanged(_scale, value);
                 _scale = value;
                 UITexture = new RenderTarget2D(Game1.Instance.GraphicsDevice, Width, Height);
             }
@@ -194,14 +156,11 @@ namespace Start_a_Town_.UI
         public static readonly Atlas.Node.Token MousePointerGrayscale = Atlas.Load("Graphics/cursor-default", true);
         public static readonly Atlas.Node.Token SpriteConstruction = Atlas.Load("Graphics/Icons/spr-constr");
 
-        public static readonly Texture2D UpArrow = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-up1");
-        public static readonly Texture2D DownArrow = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-down1");
-
         public static void LoadContent()
         {
             Cursor = Game1.Instance.Content.Load<Texture2D>("Graphics/cursor-default");
-            //LineHeight = (int)Font.MeasureString("(gA1,|)").Y;
-            LineHeight = Font.LineSpacing + 2; // 2 accounts for  1px text outline
+            var txtOutlinePixels = 1;
+            LineHeight = Font.LineSpacing + txtOutlinePixels * 2;
             SlotSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-frame1");
             frameSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-window2");
             defaultButtonSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/guiButton");
@@ -420,20 +379,20 @@ namespace Start_a_Town_.UI
         {
             DrawStringOutlined(sb, text, position, texOrigin, DefaultTextColor, Color.Black, font);
         }
-        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f, float depth = 0f)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Alignment.Horizontal hAlign = Alignment.Horizontal.Left, Alignment.Vertical vAlign = Alignment.Vertical.Top, float opacity = 1f, float depth = 0f)
         {
             DrawStringOutlined(sb, text, position, Color.Black, DefaultTextColor, hAlign, vAlign, opacity, depth);
         }
-        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f, float depth = 0)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, Alignment.Horizontal hAlign = Alignment.Horizontal.Left, Alignment.Vertical vAlign = Alignment.Vertical.Top, float opacity = 1f, float depth = 0)
         {
             var size = UIManager.Font.MeasureString(text);
             int xx = 0, yy = 0;
             switch (hAlign)
             {
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     xx = (int)size.X / 2;
                     break;
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     xx = (int)size.X;
                     break;
                 default:
@@ -441,10 +400,10 @@ namespace Start_a_Town_.UI
             }
             switch (vAlign)
             {
-                case VerticalAlignment.Center:
+                case Alignment.Vertical.Center:
                     yy = (int)size.Y / 2;
                     break;
-                case VerticalAlignment.Bottom:
+                case Alignment.Vertical.Bottom:
                     yy = (int)size.Y;
                     break;
                 default:
@@ -457,16 +416,16 @@ namespace Start_a_Town_.UI
 
             sb.DrawString(Font, text, position, new Color(1f, 1f, 1f, opacity), 0, origin, 1, SpriteEffects.None, depth);
         }
-        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, float scale, HorizontalAlignment hAlign = HorizontalAlignment.Left, VerticalAlignment vAlign = VerticalAlignment.Top, float opacity = 1f)
+        public static void DrawStringOutlined(SpriteBatch sb, string text, Vector2 position, Color outline, Color fill, float scale, Alignment.Horizontal hAlign = Alignment.Horizontal.Left, Alignment.Vertical vAlign = Alignment.Vertical.Top, float opacity = 1f)
         {
             Vector2 size = UIManager.Font.MeasureString(text);
             int xx = 0, yy = 0;
             switch (hAlign)
             {
-                case HorizontalAlignment.Center:
+                case Alignment.Horizontal.Center:
                     xx = (int)size.X / 2;
                     break;
-                case HorizontalAlignment.Right:
+                case Alignment.Horizontal.Right:
                     xx = (int)size.X;
                     break;
                 default:
@@ -474,10 +433,10 @@ namespace Start_a_Town_.UI
             }
             switch (vAlign)
             {
-                case VerticalAlignment.Center:
+                case Alignment.Vertical.Center:
                     yy = (int)size.Y / 2;
                     break;
-                case VerticalAlignment.Bottom:
+                case Alignment.Vertical.Bottom:
                     yy = (int)size.Y;
                     break;
                 default:

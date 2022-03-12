@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
 using Start_a_Town_.Net;
-using UI;
 
 namespace Start_a_Town_
 {

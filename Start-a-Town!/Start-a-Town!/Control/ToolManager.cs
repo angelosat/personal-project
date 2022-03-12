@@ -5,7 +5,6 @@ using Start_a_Town_.Net;
 using Start_a_Town_.UI;
 using System;
 using System.Collections.Generic;
-using UI;
 
 namespace Start_a_Town_
 {

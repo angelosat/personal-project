@@ -43,11 +43,6 @@ namespace Start_a_Town_.Components
             gui.ClearItems();
             gui.AddItems(StatDefOf.NpcStatPackage);
             box.AddControlsBottomLeft(gui);
-            return;
-
-            foreach (var stat in StatDefOf.NpcStatPackage)
-                box.AddControlsBottomLeft(stat.GetControl(gameObject));
-            
         }
         TableScrollableCompact<StatDef> GUITable;
         public override GroupBox GetGUI()

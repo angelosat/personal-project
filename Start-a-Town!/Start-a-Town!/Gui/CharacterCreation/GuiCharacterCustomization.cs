@@ -1,13 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Start_a_Town_.UI;
-using System;
-using System.Linq;
 
 namespace Start_a_Town_
 {
     class GuiCharacterCustomization : PanelLabeledNew
     {
-        static readonly int colorsListMaxVisibleItems = 8;
         readonly PictureBox BodyFrame;
         Actor Actor => this.Tag as Actor;
         public CharacterColors Colors => this.Actor.Sprite.Customization;

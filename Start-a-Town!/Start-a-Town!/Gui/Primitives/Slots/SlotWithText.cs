@@ -8,7 +8,7 @@ namespace Start_a_Town_.UI
         public Slot Slot;
         public Label SlotText;
 
-        static public new Texture2D DefaultSprite;
+        static public Texture2D DefaultSprite;
         public override void Initialize()
         {
             DefaultSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-sample-narrow");

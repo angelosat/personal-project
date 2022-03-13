@@ -931,12 +931,10 @@ namespace Start_a_Town_.Net
             Instance.IsSaving = false;
             Instance.Enqueue(PacketType.SetSaving, Network.Serialize(w => { w.Write(false); }));
         }
-        public PlayerData CurrentPlayer => this.PlayerData;
-
-        readonly PlayerData PlayerData;
+        public PlayerData CurrentPlayer => null; //placeholder until a server session supports a player and not just be dedicated
         public PlayerData GetPlayer()
         {
-            return this.PlayerData;
+            return this.CurrentPlayer;
         }
         public PlayerData GetPlayer(int id)
         {

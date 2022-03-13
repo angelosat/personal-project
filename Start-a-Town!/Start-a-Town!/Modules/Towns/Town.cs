@@ -377,7 +377,7 @@ namespace Start_a_Town_
             var actions = new List<Tuple<Func<string>, Action>>();
             foreach (var comp in this.TownComponents)
                 actions.AddRange(comp.OnQuickMenuCreated());
-            actions.Add(new Tuple<Func<string>, Action>(()=>"Debug commands", UIDebugCommands.Refresh));
+            actions.Add(new Tuple<Func<string>, Action>(()=>"Debug commands", UIDebugCommands.RefreshNew));
             actions.Add(new Tuple<Func<string>, Action>(()=>"Spawn objects", () => UI.Editor.ObjectTemplatesWindow.Instance.Show()));
             actions.Add(new Tuple<Func<string>, Action>(() => "Edit blocks", () => UI.Editor.TerrainWindow.Instance.Show()));
 

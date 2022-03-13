@@ -24,7 +24,7 @@ namespace Start_a_Town_
                 var allLocs = zone.GetSowingPositions(plant.PlantingSpacing);
                 if (!allLocs.Any())
                     continue;
-                if (!actor.CanReachNew(allLocs.First()))
+                if (!actor.CanReach(allLocs.First()))
                     continue;
 
                 var allSowablePositions = allLocs.Where(g => actor.CanReserve(g));

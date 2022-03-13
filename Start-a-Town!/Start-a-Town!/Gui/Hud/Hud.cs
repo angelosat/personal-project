@@ -154,21 +154,9 @@ namespace Start_a_Town_
                     floating.Show();
                     break;
 
-                case Message.Types.OutOfRange:
-                    var target = e.Parameters[0] as GameObject;
-                    FloatingText.Manager.Create(target, "Out of range", ft => ft.Font = UIManager.FontBold);
-                    break;
-
-                case Message.Types.InteractionInterrupted:
-                    target = e.Parameters[0] as GameObject;
-                    var interaction = e.Parameters[1] as Interaction;
-                    FloatingText.Manager.Create(target, interaction.Name + " interrupted!", ft => ft.Font = UIManager.FontBold);
-                    break;
-
                 case Message.Types.ChatPlayer:
                     var player = e.Parameters[0] as PlayerData;
                     var txt = (string)e.Parameters[1];
-                    //this.Chat.Write(new Log.Entry(Log.EntryTypes.ChatPlayer, name, txt));
                     Log.Chat(player, txt);
                     break;
 

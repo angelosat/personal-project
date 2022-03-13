@@ -81,11 +81,9 @@ namespace Start_a_Town_
         public static bool Fog = true;
         public bool HideUnderground;
         public bool BorderShading;
-        readonly Sprite GridSprite = Sprite.BlockFaceHighlights[Vector3.UnitZ];
         public float FogLevel = 0;
         public int MaxDrawZ;
         Vector2 CameraOffset;
-        Vector3 LastMouseover = new(float.MinValue);
         public int RenderIndex = 0;
         public RenderTarget2D MapRender,
           WaterRender, WaterDepth, WaterLight, WaterFog,
@@ -97,7 +95,6 @@ namespace Start_a_Town_
         double _rotation;
         public double RotCos, RotSin;
         public float LastZTarget;
-        bool RenderTargetsInvalid = true;
         float DepthFar, DepthNear;
         public MySpriteBatch SpriteBatch;
         public MySpriteBatch WaterSpriteBatch, // waterspritebatch is not used!?
@@ -176,8 +173,6 @@ namespace Start_a_Town_
         {
             Ingame.CurrentMap.OnCameraRotated(this);
             SelectionManager.OnCameraRotated(this);
-            //if (this.Center.HasValue)
-            //    this.CenterOn(this.Center.Value);
         }
 
         void gfx_DeviceReset(object sender, EventArgs e)
@@ -185,7 +180,6 @@ namespace Start_a_Town_
             this.Width = Game1.Bounds.Width;
             this.Height = Game1.Bounds.Height;
             this.ViewPort = new Rectangle(0, 0, this.Width, this.Height);
-            this.RenderTargetsInvalid = true;
             this.OnDeviceLost();
         }
 

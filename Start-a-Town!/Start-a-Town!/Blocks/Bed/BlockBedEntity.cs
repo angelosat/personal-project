@@ -58,9 +58,7 @@ namespace Start_a_Town_
                 body.SetEnabled(false, true);
                 headBone.SetEnabled(true, false);
                 headBone.RestingFrame = new Keyframe(0, Vector2.Zero, -(float)(Math.PI / 3f));
-                //var bedPos = BlockBed.GetPartsDic(agent.Map, bedGlobal)[BlockBed.Part.Top];
                 var bedPos = this.OriginGlobal;
-                //agent.SetPosition(bedPos + new Vector3(0, 0, BlockBed.GetBlockHeight(agent.Map, bedPos)));
                 var cell = agent.Map.GetCell(bedPos);
                 agent.SetPosition(bedPos + new IntVec3(0, 0, cell.Block.GetHeight(cell.BlockData, 0, 0)));
                 agent.GetNeed(NeedDef.Energy).Mod += 1;
@@ -72,9 +70,7 @@ namespace Start_a_Town_
             var room = map.GetRoomAt(vector3);
             if (room is not null)
                 room.GetSelectionInfo(info);
-            //info.AddInfo(new Label(() => $"Owner: {$"{room?.Owner} (from room)" ?? this.Owner?.Name ?? ""}"));
             var roomOwner = room?.Owner;
-            //info.AddInfo(new Label(() => $"Owner: {(roomOwner is not null ? (roomOwner.Name  + " (from room)") : (this.Owner?.Name ?? ""))}"));
             info.AddInfo(new ComboBoxNewNew<Actor>(128, "Owner", a => a?.Name ?? "none", setOwner, () => this.Owner, () => map.Town.GetAgents().Prepend(null)));
             info.AddInfo(new ComboBoxNewNew<Types>(128, "Type", t => t.ToString(), setType, () => this.Type, () => Enum.GetValues(typeof(Types)).Cast<Types>()));
 

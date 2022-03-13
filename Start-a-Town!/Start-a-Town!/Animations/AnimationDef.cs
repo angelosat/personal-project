@@ -167,6 +167,20 @@ namespace Start_a_Town_.Animations
                 ))
             .AddEvent(25, e => (e as Actor).Work.OnToolContact());
 
+        static public readonly AnimationDef DeliverAttack = new AnimationDef("AnimationDeliverAttack", 4)
+            .AddClip(BoneDefOf.RightHand, WarpMode.Once,
+                new Keyframe(0, Vector2.Zero, -4 * (float)Math.PI / 3f),
+                new Keyframe(10, Vector2.Zero, -5 * (float)Math.PI / 8f, Interpolation.Exp),
+                new Keyframe(20, Vector2.Zero, -5 * (float)Math.PI / 8f, Interpolation.Exp))
+            .AddClip(BoneDefOf.Mainhand, WarpMode.Once,
+                new Keyframe(0, Vector2.Zero, 0),
+                new Keyframe(10, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Exp),
+                new Keyframe(20, Vector2.Zero, (float)Math.PI / 2f, Interpolation.Exp))
+            .AddClip(BoneDefOf.Torso, WarpMode.Clamp,
+                new Keyframe(0, Vector2.Zero, -(float)Math.PI / 8f),
+                new Keyframe(10, Vector2.Zero, (float)Math.PI / 8f),
+                new Keyframe(20, Vector2.Zero, (float)Math.PI / 8f));
+
         static AnimationDef()
         {
             Register(Null);
@@ -177,6 +191,7 @@ namespace Start_a_Town_.Animations
             Register(Tool);
             Register(Haul);
             Register(Work);
+            Register(DeliverAttack);
         }
     }
 }

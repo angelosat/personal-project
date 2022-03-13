@@ -16,7 +16,7 @@
                 foreach (var plant in plants)
                 {
                     if (!actor.CanReserve(plant as GameObject) ||
-                        !actor.CanReachNew(plant))
+                        !actor.CanReach(plant))
                         continue;
                     if (plant.PlantComponent.PlantProperties.ProducesFruit)
                     {

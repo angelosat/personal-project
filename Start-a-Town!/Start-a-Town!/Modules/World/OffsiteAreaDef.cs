@@ -79,18 +79,6 @@ namespace Start_a_Town_
             return obj;
         }
 
-        readonly ItemDef[] LootTableEquipment;
-        //    = new[] { 
-        //    //ToolDefs.Axe,
-        //    //ToolDefs.Hammer,
-        //    //ToolDefs.Handsaw,
-        //    //ToolDefs.Hoe,
-        //    //ToolDefs.Shovel,
-        //};
-        internal GameObject GetRandomEquipment(Random rand)
-        {
-            return this.LootTableEquipment.SelectRandom(rand).CreateRandom();
-        }
         internal GameObject TryGenerate(ItemDef def, MaterialDef material, Random rand, float chance)
         {
             if (!this.ResourcesNew.TryGetValue(def, out var found))

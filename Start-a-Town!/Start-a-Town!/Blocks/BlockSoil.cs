@@ -5,15 +5,6 @@ namespace Start_a_Town_
 {
     class BlockSoil : Block
     {
-        public class Placer : BlockPlacer
-        {
-            protected override Block Block => BlockDefOf.Soil;
-            //public Placer()
-            //{
-            //    this.Material = 
-            //}
-        }
-
         public override bool IsMinable => true;
         public override Color DirtColor => Color.SaddleBrown;
            

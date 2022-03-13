@@ -181,7 +181,6 @@
     <Compile Include="Blocks\BlockDefOf.cs" />
     <Compile Include="Blocks\BlockDefOfNew.cs" />
     <Compile Include="Blocks\StructureDef.cs" />
-    <Compile Include="Blocks\BlockPlacer.cs" />
     <Compile Include="Blocks\BlockUsageDef.cs" />
     <Compile Include="Blocks\BlockUsageDefOf.cs" />
     <Compile Include="Blocks\Fluids\BlockFluidEntity.cs" />
@@ -704,7 +703,6 @@
     <Compile Include="Blocks\Chest\BlockChest.cs" />
     <Compile Include="Blocks\Chest\BlockChestEntity.cs" />
     <Compile Include="Blocks\BlockWoodPaneling.cs" />
-    <Compile Include="Components\Combat\AttackComponent.cs" />
     <Compile Include="Components\BloodComponent.cs" />
     <Compile Include="Components\BombComponent.cs" />
     <Compile Include="Components\Combat\BlockingComponent.cs" />
@@ -724,7 +722,6 @@
     <Compile Include="Components\Physics\Physics.cs" />
     <Compile Include="Components\Vegetation\TreeComponent.cs" />
     <Compile Include="GameModes\StaticMaps\CommandParser.cs" />
-    <Compile Include="Animations\AnimationDeliverAttack.cs" />
     <Compile Include="Gfx\AtlasDepthNormals.cs" />
     <Compile Include="Gfx\AtlasBase.cs" />
     <Compile Include="Gfx\IAtlasNodeToken.cs" />
@@ -770,7 +767,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Components\Interactions\NewScripts\InteractionThrow.cs" />
-    <Compile Include="Components\Interactions\NewScripts\DropCarried.cs" />
     <Compile Include="Components\Interactions\NewScripts\Equip.cs" />
     <Compile Include="Modules\Base\GameManager.cs" />
     <Compile Include="Components\Inventory\Container.cs" />
@@ -893,7 +889,6 @@
     <Compile Include="Gui\Primitives\Buttons\ButtonGridIcons.cs" />
     <Compile Include="Gui\Primitives\Buttons\ButtonGridGenericNew.cs" />
     <Compile Include="Interfaces\INamed.cs" />
-    <Compile Include="Gui\Primitives\Buttons\ButtonTogglable.cs" />
     <Compile Include="Gui\Primitives\Buttons\ButtonGrid.cs" />
     <Compile Include="Gui\Primitives\Buttons\ButtonIcon.cs" />
     <Compile Include="Gui\Primitives\Buttons\ButtonList.cs" />

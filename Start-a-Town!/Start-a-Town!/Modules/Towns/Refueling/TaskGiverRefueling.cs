@@ -63,7 +63,7 @@ namespace Start_a_Town_
                 foreach (var fuel in allObjects)
                 {
                     handled.Add(fuel);
-                    if (!actor.CanReachNew(fuel))
+                    if (!actor.CanReach(fuel))
                         continue;
                     if (!actor.CanReserve(fuel))
                         continue;

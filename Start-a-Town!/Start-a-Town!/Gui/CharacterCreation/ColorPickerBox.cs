@@ -20,9 +20,7 @@ namespace Start_a_Town_.UI
         readonly Button BtnOk, BtnCancel;
         readonly Panel PanelButtons, PanelHS, PanelV;
         Color DefaultColor;
-        Func<Color> ColorGetter;
         Action<Color> ColorSetter;
-        readonly bool RealtimeApply;
 
         public ColorPickerBoxNew()
         {
@@ -39,13 +37,11 @@ namespace Start_a_Town_.UI
             this.PanelHS.Controls.Add(this.ColorPick);
 
             this.PanelV = new Panel() { AutoSize = true, Location = this.PanelHS.TopRight };
-            //this.LightnessPick = new ColorLightnessPicker() { Callback = c => this.ColorChangedFunc(this.CurrentColor) };
             this.LightnessPick = new ColorLightnessPicker();// { Callback = ColorSetter };
             this.PanelV.Controls.Add(this.LightnessPick);
 
             this.Controls.Add(this.PanelHS, this.PanelV);
             this.BtnOk = new Button("Ok", ()=>this.TopLevelControl.Hide());
-            //this.BtnOk = new Button("Ok") { LeftClickAction = () => { this.Callback(this.CurrentColor); this.TopLevelControl.Hide(); } };
             this.BtnCancel = new Button("Cancel") { LeftClickAction = () => { this.Reset(); this.TopLevelControl.Hide(); } };
             this.PanelButtons = new Panel() { AutoSize = true, Location = this.PanelHS.BottomLeft };
             this.PanelButtons.AddControlsHorizontally(this.BtnOk, this.BtnCancel);
@@ -56,7 +52,6 @@ namespace Start_a_Town_.UI
         {
             this.DefaultColor = colorGetter();
             this.SelectColor(this.DefaultColor);
-            this.ColorGetter = colorGetter;
             this.ColorSetter = colorSetter;
             this.LightnessPick.Callback = colorSetter;
         }

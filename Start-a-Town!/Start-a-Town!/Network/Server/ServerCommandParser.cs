@@ -86,35 +86,12 @@ namespace Start_a_Town_.Net
                             Instance.Map.GenerateThumbnails();
                             break;
 
-                        case "set":
-                            Set(command);
-                            break;
-
                         default:
                             Server.ConsoleBox.Write("SERVER", "Unknown command " + command);
                             break;
                     }
                 }
                 catch (Exception) { Server.ConsoleBox.Write("SERVER", "Syntax error in: " + command); }
-            }
-
-            private void Set(string command)
-            {
-                var p = command.Split(' ');
-                var type = p[1];
-                switch (type)
-                {
-                    case "time":
-                        throw new NotImplementedException();
-                        int t = int.Parse(p[2]);
-                        foreach (var ch in this.Server.Map.GetActiveChunks())
-                            ch.Value.LightCache.Clear();
-
-                        this.Server.Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
-                        break;
-
-                    default: break;
-                }
             }
         }
     }

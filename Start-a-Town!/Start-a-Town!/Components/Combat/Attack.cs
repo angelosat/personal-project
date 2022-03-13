@@ -37,7 +37,7 @@ namespace Start_a_Town_.Components
             Charge = charge;
             if (attacker.TryGetComponent<InventoryComponent>(c =>
             {
-                GameObjectSlot holdSlot = null;
+                //GameObjectSlot holdSlot = null;
                 //this.Damage = WeaponComponent.GetDamage(holdSlot.Object) ?? WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);
             })) { }
             else

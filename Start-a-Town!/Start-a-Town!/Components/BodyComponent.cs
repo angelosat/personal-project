@@ -29,24 +29,6 @@ namespace Start_a_Town_.Components
             return comp;
         }
 
-        public override bool HandleMessage(GameObject parent, ObjectEventArgs e)
-        {
-            Message.Types msg = e.Type;
-            GameObject sender = e.Sender;
-            switch (msg)
-            {
-                case Message.Types.Death:
-                    foreach (BodyPart slot in this.BodyParts.Values)
-                        if (slot.Wearing.HasValue)
-                            e.Network.PopLoot(slot.Wearing.Take(), parent.Global, parent.Velocity);
-                    return true;
-
-                default:
-                    return false;
-
-            }
-        }
-
         internal override List<SaveTag> Save()
         {
             List<SaveTag> data = new List<SaveTag>();

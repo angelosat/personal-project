@@ -13,31 +13,19 @@ namespace Start_a_Town_
         public override void OnObjectLoaded(GameObject parent)
         {
             base.OnObjectLoaded(parent);
-            this.ResetBones(parent);
         }
         public override void OnObjectCreated(GameObject parent)
         {
             base.OnObjectCreated(parent);
-            this.ResetBones(parent);
         }
         public override void MakeChildOf(GameObject parent)
         {
             parent.RegisterContainer(this.Equipment);
         }
-        private void ResetBones(GameObject parent)
-        {
-            foreach (var gear in this.Equipment.Slots)
-            {
-                if (gear.Object == null)
-                    continue;
-                Attach(parent.Body, gear.Object.Body);
-            }
-        }
-
+      
         public override void OnSpawn()
         {
             base.OnSpawn();
-            this.ResetBones(this.Parent);
         }
 
         public Container Equipment = new() { Name = "Equipment" };
@@ -169,16 +157,7 @@ namespace Start_a_Town_
             actor.Net.EventOccured(Message.Types.ActorGearUpdated, actor, item, previousItem);
             return true;
         }
-        static void Attach(Bone body, Bone toattach)
-        {
-            return;
-            if (toattach == null)
-                return;
-            var found = body.GetAllBones(toattach.Def).FirstOrDefault();
-            if (found != null)
-                found.SetBone(toattach);
-        }
-
+      
         public void RefreshStats()
         {
             this.ArmorTotal = 0;

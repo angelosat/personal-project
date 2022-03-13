@@ -91,7 +91,7 @@ namespace Start_a_Town_
         protected override Color GetParticleColor()
         {
             return Color.White;
-            return this.Material.Color;
+            //return this.Material.Color;
         }
 
         protected override List<Rectangle> GetParticleRects()

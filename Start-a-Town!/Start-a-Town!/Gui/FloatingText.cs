@@ -6,23 +6,6 @@ namespace Start_a_Town_.UI
 {
     class FloatingText : Label
     {
-        public class Manager
-        {
-            [Obsolete]
-            static public FloatingText Create(GameObject entity, string text, Action<FloatingText> initializer = null)
-            {
-                return Create(() => entity.Global + entity.Physics.Height * Vector3.UnitZ, text, initializer);
-            }
-            [Obsolete]
-            static public FloatingText Create(Func<Vector3> global, string text, Action<FloatingText> initializer = null)
-            {
-                var ft = new FloatingText(global, text);
-                initializer?.Invoke(ft);
-                ft.Font = UIManager.FontBold;
-                ft.Show();
-                return ft;
-            }
-        }
         static public void Create(GameObject entity, string text, Action<FloatingText> initializer = null)
         {
             Create(entity.Map, () => entity.Global + entity.Physics.Height * Vector3.UnitZ, text, initializer);

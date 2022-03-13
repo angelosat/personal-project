@@ -20,7 +20,7 @@ namespace Start_a_Town_
                     continue; 
                 if (!actor.CanAcceptQuest(q))
                     continue;
-                if (!actor.CanReachNew(giver))
+                if (!actor.CanReach(giver))
                     continue;
                 if (!Decide(actor, q))
                     continue;

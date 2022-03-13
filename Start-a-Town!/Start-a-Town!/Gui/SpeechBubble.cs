@@ -8,7 +8,6 @@ namespace Start_a_Town_.UI
     class SpeechBubble : Control
     {
         Panel Graphic;
-        bool Paused;
         float Timer;
         float Duration;
         const float FadeSpeed = 10;
@@ -95,20 +94,13 @@ namespace Start_a_Town_.UI
                 (this.AttentionCountdown.Object as Progress).Value--;
             }
             
-            if (Paused)
-                {
-                    if (Timer > Duration / 2f)
-                        this.Timer -= 1;
-                }
-                else
-                    this.Timer -= 1;
-
+            this.Timer -= 1;
             
-                if (this.Timer < 0)
-                {
-                    this.Hide();
-                    return;
-                }
+            if (this.Timer < 0)
+            {
+                this.Hide();
+                return;
+            }
             Camera camera = ScreenManager.CurrentScreen.Camera;
             Rectangle rect = camera.GetScreenBounds(this.Owner.Global, (this.Owner.GetSprite().GetBounds()));
             Vector2 loc = new Vector2(rect.X + rect.Width / 2 - this.ClientSize.Width / 2, rect.Y - this.ClientSize.Height);

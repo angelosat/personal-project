@@ -10,9 +10,9 @@ namespace Start_a_Town_.UI
         readonly ScrollbarV VScroll;
         readonly ScrollbarH HScroll;
         public GroupBox Client;
-        GroupBox Container;
+        readonly GroupBox Container;
         public override Rectangle ClientSize => this.Client.ClientSize;
-        ScrollModes Mode;
+        readonly ScrollModes Mode;
         public override Control SetOpacity(float value, bool children, params Control[] exclude)
         {
             base.SetOpacity(value, children, exclude);
@@ -204,13 +204,12 @@ namespace Start_a_Town_.UI
         {
             public const int DefaultHeight = 16;
             readonly PictureBox Thumb;
-            readonly IconButton Left, Right;
+            readonly IconButton BtnLeft, BtnRight;
             readonly GroupBox Area;
             private int ThumbClickOrigin;
             bool ThumbMoving;
             public int SmallStep = Label.DefaultHeight;// 1;
-            public int LargeStep;
-            GroupBox Container, Client;
+            readonly GroupBox Container, Client;
 
             public ScrollbarH(GroupBox client, GroupBox container)
             {
@@ -220,12 +219,12 @@ namespace Start_a_Town_.UI
                 this.AutoSize = true;
                 this.Height = DefaultHeight;
                 var arealength = client.Width - 2 * DefaultHeight;
-                this.Left = new IconButton(Icon.ArrowUp) { BackgroundTexture = UIManager.Icon16Background, LeftClickAction = StepUp };
+                this.BtnLeft = new IconButton(Icon.ArrowUp) { BackgroundTexture = UIManager.Icon16Background, LeftClickAction = StepUp };
                 this.Thumb = new PictureBox(Vector2.Zero, UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
-                this.Area = new GroupBox() { MouseThrough = false, AutoSize = false, Size = new Rectangle(0, 0, arealength, this.Height), Location = this.Left.TopRight };
+                this.Area = new GroupBox() { MouseThrough = false, AutoSize = false, Size = new Rectangle(0, 0, arealength, this.Height), Location = this.BtnLeft.TopRight };
                 this.Area.AddControls(this.Thumb);
-                this.Right = new IconButton(Icon.ArrowDown) { BackgroundTexture = UIManager.Icon16Background, Location = this.Area.TopRight, LeftClickAction = StepDown };
-                this.AddControls(this.Left, this.Right, this.Area);
+                this.BtnRight = new IconButton(Icon.ArrowDown) { BackgroundTexture = UIManager.Icon16Background, Location = this.Area.TopRight, LeftClickAction = StepDown };
+                this.AddControls(this.BtnLeft, this.BtnRight, this.Area);
             }
 
             void StepUp()

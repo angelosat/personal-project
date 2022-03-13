@@ -30,41 +30,6 @@ namespace Start_a_Town_.Components
             parent.AddAnimation(this.AnimationHaul);
         }
         
-        bool Throw(INetwork net, Vector3 velocity, GameObject parent, bool all)
-        {
-            // throws hauled object, if hauling nothing throws equipped object, make it so it only throws hauled object?
-           
-            var slot = this.GetSlot();
-            GameObjectSlot hauling = slot;// this.Slot;
-            if (hauling.Object == null)
-                return false;
-
-            GameObject newobj = all ? hauling.Object : hauling.Take();
-
-
-            newobj.Global = parent.Global + new Vector3(0, 0, parent.Physics.Height);
-            newobj.Velocity = velocity;
-            newobj.Physics.Enabled = true;
-            newobj.Spawn(parent.Map);
-
-            if (all)
-                hauling.Clear();
-            return true;
-        }
-        public bool Throw(Vector3 velocity, GameObject parent, bool all = false)
-        {
-            return this.Throw(parent.Net, velocity, parent, all);
-        }
-        public bool Throw(GameObject parent, Vector3 direction, bool all = false)
-        {
-            Vector3 velocity = direction * 0.1f + parent.Velocity;
-            return this.Throw(parent.Net, velocity, parent, all);
-        }
-        static public bool ThrowHauled(GameObject parent, Vector3 direction, bool all = false)
-        {
-            var haulComp = parent.GetComponent<HaulComponent>();
-            return haulComp.Throw(parent, direction, all);
-        }
         static public GameObjectSlot GetHolding(GameObject parent)
         {
             return parent.GetComponent<HaulComponent>().Holding;

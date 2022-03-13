@@ -22,7 +22,7 @@ namespace Start_a_Town_
             var map = actor.Map;
             var reachableZones = map.Town.ZoneManager
                 .GetZones<GrowingZone>()
-                .Where(z => z.Tilling && z.GetTillingPositions() is var tilling && tilling.Any() && actor.CanReachNew(tilling.First()));
+                .Where(z => z.Tilling && z.GetTillingPositions() is var tilling && tilling.Any() && actor.CanReach(tilling.First()));
             var locs = reachableZones
                 .SelectMany(z => z.GetTillingPositions())
                 .Where(pos => actor.CanReserve(pos));

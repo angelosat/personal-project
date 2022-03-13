@@ -7,7 +7,7 @@ namespace Start_a_Town_
 {
     class UINpcFrame : ButtonBase
     {
-        readonly GroupBox BoxContainer, Box;
+        readonly GroupBox FrameContainer, Frame;
         readonly PictureBox Sprite;
         readonly Label Label;
         readonly GameObject Npc;
@@ -18,22 +18,22 @@ namespace Start_a_Town_
             this.MouseThrough = false;
             var padding = 8;// 5;
             this.AutoSize = true;
-            this.BoxContainer = new GroupBox(64) 
+            this.FrameContainer = new GroupBox(64) 
             {
                 //Location = new(padding),
                 MouseThrough = true, 
                 //BackgroundColorFunc = () => Color.Lerp(Color.Red * .5f, Color.Lime * .5f, actor.MoodValue / 100f) 
             };
 
-            this.Box = new GroupBox(this.BoxContainer.Width - padding - padding)
+            this.Frame = new GroupBox(this.FrameContainer.Width - padding - padding)
             {
                 MouseThrough = true,
                 Location = new(padding),
                 BackgroundColorFunc = () => Color.Lerp(Color.Red * .5f, Color.Lime * .5f, actor.MoodValue / 100f) 
             };
-            this.BoxContainer.AddControls(this.Box);
+            this.FrameContainer.AddControls(this.Frame);
 
-            this.Sprite = new PictureBox(actor.Body.RenderIcon(actor, 1)) { LocationFunc = () => this.BoxContainer.Center, Anchor = Vector2.One * .5f };
+            this.Sprite = new PictureBox(actor.Body.RenderIcon(actor, 1)) { LocationFunc = () => this.FrameContainer.Center, Anchor = Vector2.One * .5f };
             this.Sprite.MouseThrough = true;
 
             this.Npc = actor;
@@ -48,12 +48,12 @@ namespace Start_a_Town_
             {
                 MouseThrough = true,
                 LocationFunc = () =>
-                new Vector2(this.BoxContainer.Width / 2f, this.BoxContainer.Height),
+                new Vector2(this.FrameContainer.Width / 2f, this.FrameContainer.Height),
                 Anchor = new Vector2(.5f, .5f),
                 TextFunc = () => actor.Name.Split(' ').First(),
             };
             this.AddControls(
-                this.BoxContainer,
+                this.FrameContainer,
                 this.Sprite,
                 this.Label
                 );
@@ -62,7 +62,7 @@ namespace Start_a_Town_
         {
             base.Draw(sb, viewport);
             if (SelectionManager.IsSelected(this.Npc))
-                this.Box.DrawHighlightBorder(sb);
+                this.Frame.DrawHighlightBorder(sb);
         }
     }
 

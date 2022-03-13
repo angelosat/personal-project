@@ -5,7 +5,6 @@ namespace Start_a_Town_
 {
     public abstract class Element
     {
-        internal Func<Vector2> AnchorPoint;
         Func<Vector2> _LocationFunc = () => Vector2.Zero;
         public virtual Func<Vector2> LocationFunc
         {

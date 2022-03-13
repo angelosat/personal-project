@@ -40,14 +40,14 @@ namespace Start_a_Town_
                 throw new Exception();
             switch (target.Type)
             {
-                case TargetType.Position:
-                    // check if hauling and drop at target position
-                    GameObject held = actor.GetComponent<HaulComponent>().Holding.Take();
+                //case TargetType.Position:
+                //    // check if hauling and drop at target position
+                //    GameObject held = actor.GetComponent<HaulComponent>().Holding.Take();
 
-                    if (held == null)
-                        break;
-                    held.Spawn(actor.Net.Map, target.FinalGlobal);
-                    break;
+                //    if (held == null)
+                //        break;
+                //    held.Spawn(actor.Net.Map, target.FinalGlobal);
+                //    break;
 
                 // new: if inventoryable insert to inventory, if carryable carry
                 // dont carry inventoriables (test)

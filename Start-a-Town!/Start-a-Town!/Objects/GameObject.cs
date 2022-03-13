@@ -1174,25 +1174,7 @@ namespace Start_a_Town_
             return this.GetComponent<NeedsComponent>().NeedsNew.First(n => n.NeedDef.Name == needName);
         }
      
-        public bool CanReachNew(GameObject obj)
-        {
-            return this.Map.Regions.CanReach(this.GetCellStandingOn(), obj.Global.ToCell(), this as Actor);
-        }
-        internal bool CanReachNew(Vector3 global)
-        {
-            return this.Map.Regions.CanReach(this.GetCellStandingOn(), global.ToCell(), this as Actor);
-        }
-        [Obsolete]
-        internal bool CanReach(GameObject obj)
-        {
-            return this.Map.GetRegionDistance(this.GetCellStandingOn(), obj.Global.ToCell(), this as Actor) != -1;
-        }
-        [Obsolete]
-        internal bool CanReach(Vector3 global)
-        {
-            return this.Map.GetRegionDistance(this.GetCellStandingOn(), global.ToCell(), this as Actor) != -1;
-        }
-
+      
         internal BehaviorPerformTask GetLastBehavior()
         {
             return AIState.GetState(this).LastBehavior;

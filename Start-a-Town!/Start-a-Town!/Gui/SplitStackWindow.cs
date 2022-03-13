@@ -14,7 +14,6 @@ namespace Start_a_Town_.UI
         readonly TextBox Txt_Amount;
         readonly Button Btn_Split;
         public new GameObjectSlot Tag;
-        readonly GameObject Entity;
         GameObjectSlot Copy;
         SplitStackWindow()
         {
@@ -27,8 +26,10 @@ namespace Start_a_Town_.UI
             this.Title = "Split";
 
             float w = Math.Max(70, TitleLocation.X + UIManager.Font.MeasureString(this.Title).X);
-            this.Txt_Amount = new TextBox(Vector2.Zero, new Vector2(w, Label.DefaultHeight));
-            this.Txt_Amount.Text = "1";
+            this.Txt_Amount = new TextBox(Vector2.Zero, new Vector2(w, Label.DefaultHeight))
+            {
+                Text = "1"
+            };
             this.Txt_Amount.TextEntered += new EventHandler<TextEventArgs>(this.Txt_Amount_TextEntered);
             this.Panel_Input.Controls.Add(this.Txt_Amount);
 
@@ -59,7 +60,7 @@ namespace Start_a_Town_.UI
             this.SplitAction = (a) =>
             {
                 int count = short.Parse(this.Txt_Amount.Text);
-                DragDropManager.Create(new DragDropSlot(this.Entity, slotTarget, new TargetArgs(new GameObjectSlot(slotTarget.Slot.Object.Clone(), count)), DragDropEffects.Move | DragDropEffects.Link));
+                DragDropManager.Create(new DragDropSlot(null, slotTarget, new TargetArgs(new GameObjectSlot(slotTarget.Slot.Object.Clone(), count)), DragDropEffects.Move | DragDropEffects.Link));
             };
 
             this.Tag = slotTarget.Slot;
@@ -69,7 +70,6 @@ namespace Start_a_Town_.UI
             int w = (int)Math.Max(70, TitleLocation.X + UIManager.Font.MeasureString(this.Title).X);
             int amount = (int)(slotTarget.Slot.StackSize / 2f);
             this.Txt_Amount.Width = w;
-            //Txt_Amount.Text = amount.ToString();//"1";
             this.Txt_Amount.TextFunc = () => $"{amount}";
             this.Panel_Input.Controls.Remove(this.Txt_Amount);
             this.Panel_Input.Controls.Add(this.Txt_Amount);
@@ -77,7 +77,6 @@ namespace Start_a_Town_.UI
             this.Sldr_Amount = new SliderNew(() => amount, v => amount = (int)v, this.Panel_Input.Width, 1, slotTarget.Slot.StackSize, 1)
             {
                 Location = this.Panel_Input.BottomLeft,
-                //ValueChangedFunc = () => Txt_Amount.Text = Sldr_Amount.Value.ToString(),
                 HoverFunc = () => "Split to: " + this.Sldr_Amount.Value.ToString(),
             };
 

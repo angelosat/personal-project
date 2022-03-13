@@ -422,6 +422,18 @@ namespace Start_a_Town_
             return null;
         }
 
+        public bool CanReach(GameObject obj)
+        {
+            return this.Map.Regions.CanReach(this.GetCellStandingOn(), obj.Global.ToCell(), this as Actor);
+            //old
+            //return this.Map.GetRegionDistance(this.GetCellStandingOn(), obj.Global.ToCell(), this as Actor) != -1;
+        }
+        internal bool CanReach(Vector3 global)
+        {
+            return this.Map.Regions.CanReach(this.GetCellStandingOn(), global.ToCell(), this as Actor);
+            //old
+            //return this.Map.GetRegionDistance(this.GetCellStandingOn(), global.ToCell(), this as Actor) != -1;
+        }
         internal int GetHaulStackLimitFromEndurance(ItemDef def)
         {
             var maxHaulWeight = StatDefOf.MaxHaulWeight.GetValue(this);

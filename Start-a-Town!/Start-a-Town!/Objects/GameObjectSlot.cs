@@ -137,16 +137,6 @@ namespace Start_a_Town_
             return this;
         }
 
-        /// <summary>
-        /// Returns a new clone of the item and reduces stacksize by one, or the item itself if stacksize is one, or null if there's no item
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete]
-        public GameObject Take()
-        {
-            throw new Exception();
-        }
-
         public override string ToString()
         {
             return $"{this.ID}: {(!string.IsNullOrWhiteSpace(this.Name) ? this.Name + ":" : "")} + {(Object is not null ? Object.Name + $" ({StackSize})" : "<empty>")}";

@@ -26,7 +26,7 @@ namespace Start_a_Town_
                 var item = DecideItem(actor, items);
                 if (item == null)
                     continue;
-                if (!actor.CanReachNew(item))
+                if (!actor.CanReach(item))
                     continue;
                 if (!actor.CanReserve(item))
                     continue;

@@ -36,7 +36,7 @@ namespace Start_a_Town_
         {
             var actor = a.Parameters[0] as GameObject;
             var skill = (Skill)a.Parameters[1];
-            FloatingText.Manager.Create(actor, $"{skill.Def.Label} increased!", ft => ft.Font = UIManager.FontBold);
+            FloatingText.Create(actor, $"{skill.Def.Label} increased!", ft => ft.Font = UIManager.FontBold);
         }
         internal void Award(float v)
         {

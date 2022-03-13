@@ -7,7 +7,7 @@ namespace Start_a_Town_
 {
     class UIDebugCommands : Panel
     {
-        static UIDebugCommands Instance;
+        static readonly UIDebugCommands Instance;
         static UIDebugCommands()
         {
             Instance = new UIDebugCommands();
@@ -31,12 +31,11 @@ namespace Start_a_Town_
                 plant.Sync(Server.Instance);
             }
         }
-        internal static void Refresh()
+        internal static void RefreshNew()
         {
             var win = Instance.GetWindow();
             win.Show();
             win.Location = UIManager.Mouse;
         }
-
     }
 }

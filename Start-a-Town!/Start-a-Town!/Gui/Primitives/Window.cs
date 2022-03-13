@@ -169,19 +169,19 @@ namespace Start_a_Town_.UI
         private void DrawOuterPadding(SpriteBatch sb, Vector2 loc)
         {
             var color = this.Color;
-            sb.Draw(UIManager.frameSprite, loc, OuterPadding.TopLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, loc + new Vector2(-11 + this.Width, 0), OuterPadding.TopRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, loc + new Vector2(0, -11 + this.Height), OuterPadding.BottomLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, loc + new Vector2(-11 + this.Width, -11 + this.Height), OuterPadding.BottomRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, loc, OuterPadding.TopLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, loc + new Vector2(-11 + this.Width, 0), OuterPadding.TopRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, loc + new Vector2(0, -11 + this.Height), OuterPadding.BottomLeft, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, loc + new Vector2(-11 + this.Width, -11 + this.Height), OuterPadding.BottomRight, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0.01f);
 
             //top, left, right, bottom
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y, this.Width - 22, 11), OuterPadding.Top, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X, (int)loc.Y + 11, 11, this.Height - 22), OuterPadding.Left, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + this.Width - 11, (int)loc.Y + 11, 11, this.Height - 22), OuterPadding.Right, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y - 11 + this.Height, this.Width - 22, 11), OuterPadding.Bottom, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y, this.Width - 22, 11), OuterPadding.Top, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, new Rectangle((int)loc.X, (int)loc.Y + 11, 11, this.Height - 22), OuterPadding.Left, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, new Rectangle((int)loc.X + this.Width - 11, (int)loc.Y + 11, 11, this.Height - 22), OuterPadding.Right, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y - 11 + this.Height, this.Width - 22, 11), OuterPadding.Bottom, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
 
             //center
-            sb.Draw(UIManager.frameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y + 11, this.Width - 22, this.Height - 22), OuterPadding.Center, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
+            sb.Draw(UIManager.FrameSprite, new Rectangle((int)loc.X + 11, (int)loc.Y + 11, this.Width - 22, this.Height - 22), OuterPadding.Center, color, 0, new Vector2(0, 0), SpriteEffects.None, 0.01f);
         }
 
         internal Window SetTitle(string text)

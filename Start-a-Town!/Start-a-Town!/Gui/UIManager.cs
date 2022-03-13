@@ -41,8 +41,7 @@ namespace Start_a_Town_.UI
 
         public static Rectangle Bounds => new(0, 0, Width, Height);
         public static Vector2 Center => new Vector2(Game1.Bounds.Width, Game1.Bounds.Height) / (2 * Scale);
-        //public static int Width => (int)(Game1.Instance.graphics.PreferredBackBufferWidth / Scale);
-        //public static int Height => (int)(Game1.Instance.graphics.PreferredBackBufferHeight / Scale);
+        
         public static int Width => (int)(Game1.Bounds.Width / Scale);
         public static int Height => (int)(Game1.Bounds.Height / Scale);
 
@@ -58,14 +57,13 @@ namespace Start_a_Town_.UI
         public static readonly Color TintSecondaryDefault = Color.DarkSlateGray;
         public static Color TintPrimary = TintPrimaryDefault;
         public static Color TintSecondary = TintSecondaryDefault;
-
         static UIManager()
         {
             TintPrimary.PackedValue = uint.TryParse(InterfaceSettings.XTintPrimary.Value, System.Globalization.NumberStyles.HexNumber, null, out uint packed) ? packed : TintPrimaryDefault.PackedValue;
             TintSecondary.PackedValue = uint.TryParse(InterfaceSettings.XTintSecondary.Value, System.Globalization.NumberStyles.HexNumber, null, out packed) ? packed : TintSecondaryDefault.PackedValue;
         }
 
-        public static Texture2D frameSprite, SlotSprite, defaultButtonSprite, DefaultIconButtonSprite, ItemSheet, DefaultProgressBar, DefaultProgressBarStrip, ProgressBarBorder, DefaultDropdownSprite, DefaultLoadingSprite,
+        public static Texture2D FrameSprite, SlotSprite, DefaultButtonSprite, DefaultIconButtonSprite, ItemSheet, DefaultProgressBar, DefaultProgressBarStrip, ProgressBarBorder, DefaultDropdownSprite, DefaultLoadingSprite,
             DefaultVScrollbarSprite, DefaultHScrollbarSprite,
             DefaultTrackBarSprite, DefaultTrackBarThumbSprite, SampleButton, Icons16x16, LargeButton, Icons32, Icon16Background, TextureTickBox;
         public static int DefaultButtonHeight = 23, LineHeight;
@@ -162,8 +160,8 @@ namespace Start_a_Town_.UI
             var txtOutlinePixels = 1;
             LineHeight = Font.LineSpacing + txtOutlinePixels * 2;
             SlotSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-frame1");
-            frameSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-window2");
-            defaultButtonSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/guiButton");
+            FrameSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/gui-window2");
+            DefaultButtonSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/guiButton");
             DefaultDropdownSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/ui_dropdown_strip");
             ItemSheet = Game1.Instance.Content.Load<Texture2D>("Graphics/ItemSheet");
             DefaultProgressBar = Game1.Instance.Content.Load<Texture2D>("Graphics/progressbarBW");
@@ -259,7 +257,6 @@ namespace Start_a_Town_.UI
             set { Controller.Instance.Mouseover.Object = value; }
         }
 
-
         public void Screen_MouseMove()
         {
             MouseOverWindow = null;
@@ -311,7 +308,6 @@ namespace Start_a_Town_.UI
                 foreach (var ctrl in layer.Value)
                     ctrl.DrawOnCamera(sb, camera);
         }
-
         public void DrawWorld(MySpriteBatch sb, Camera camera)
         {
             foreach (var layer in this.Layers)
@@ -539,14 +535,11 @@ namespace Start_a_Town_.UI
             newtext += currentword;
             return newtext;
         }
-
-
         public void Dispose()
         {
             WindowManagers.Remove(this);
             Game1.Instance.graphics.DeviceReset -= this.graphics_DeviceReset;
         }
-
         public void Initialize()
         {
             foreach (var layer in this.Layers)

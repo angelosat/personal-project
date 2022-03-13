@@ -170,15 +170,15 @@ namespace Start_a_Town_.UI
         {
             SpriteEffects fx = button.Active ? sprFx : SpriteEffects.FlipVertically;
             Color c = Color.Lerp(Color.Transparent, color, opacity);
-            sb.Draw(UIManager.defaultButtonSprite, new Vector2(destRect.X, destRect.Y), Button.SpriteLeft, c, 0, Vector2.Zero, 1, fx, 0);
-            sb.Draw(UIManager.defaultButtonSprite,
+            sb.Draw(UIManager.DefaultButtonSprite, new Vector2(destRect.X, destRect.Y), Button.SpriteLeft, c, 0, Vector2.Zero, 1, fx, 0);
+            sb.Draw(UIManager.DefaultButtonSprite,
                 new Rectangle(
                     destRect.X + Button.SpriteLeft.Width,
                     destRect.Y,
                     destRect.Width - Button.SpriteLeft.Width - Button.SpriteRight.Width,
                     SpriteCenter.Height),
                 Button.SpriteCenter, c, 0, Vector2.Zero, fx, 0);
-            sb.Draw(UIManager.defaultButtonSprite, new Vector2(destRect.X + destRect.Width - Button.SpriteRight.Width, destRect.Y), Button.SpriteRight, c, 0, Vector2.Zero, 1, fx, 0);
+            sb.Draw(UIManager.DefaultButtonSprite, new Vector2(destRect.X + destRect.Width - Button.SpriteRight.Width, destRect.Y), Button.SpriteRight, c, 0, Vector2.Zero, 1, fx, 0);
         }
         public override void DrawText(SpriteBatch sb, Vector2 position, Rectangle? sourceRect, Color color, float opacity)
         {

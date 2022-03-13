@@ -40,7 +40,7 @@ namespace Start_a_Town_.UI
             Bottom = new Rectangle(11, 12, 1, 11),
             Center = new Rectangle(11, 11, 1, 1),
             Color = Color.White,
-            SpriteSheet = UIManager.frameSprite,
+            SpriteSheet = UIManager.FrameSprite,
             Border = 11,// 5;// 11;
             Name = "Window"
         };
@@ -56,7 +56,7 @@ namespace Start_a_Town_.UI
             Bottom = new Rectangle(11, 12, 1, 11),
             Center = new Rectangle(11, 11, 1, 1),
             Color = Color.White,
-            SpriteSheet = UIManager.frameSprite,
+            SpriteSheet = UIManager.FrameSprite,
             Border = 5,// 5;// 11;
             Name = "PanelNew"
         };
@@ -72,7 +72,7 @@ namespace Start_a_Town_.UI
             Bottom = new Rectangle(11, 12, 1, 11),
             Center = new Rectangle(11, 11, 1, 1),
             Color = Color.Black,
-            SpriteSheet = UIManager.frameSprite,
+            SpriteSheet = UIManager.FrameSprite,
             Border = 11,
             Name = "Tooltip"
         };
@@ -105,7 +105,7 @@ namespace Start_a_Town_.UI
             Bottom = new Rectangle(0, 0, 0, 0),
             Center = new(4, 0, 1, 23),
             Color = Color.White,
-            SpriteSheet = UIManager.defaultButtonSprite,
+            SpriteSheet = UIManager.DefaultButtonSprite,
             Name = "ButtonMedium"
         };
 

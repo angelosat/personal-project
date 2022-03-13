@@ -153,7 +153,7 @@ namespace Start_a_Town_
                 {
                     var state = AIState.GetState(actor);
                     var job = state.GetJob(labor);
-                    var btn = new Button(CheckBox.CheckedRegion.Width)
+                    var btn = new Button(CheckBoxNew.CheckedRegion.Width)
                     {
                         TextFunc = () => { var val = job.Priority; return job.Enabled ? val.ToString() : ""; },
                         LeftClickAction = () => Packets.SendPriorityModify(player, actor, job, job.Priority + 1), 

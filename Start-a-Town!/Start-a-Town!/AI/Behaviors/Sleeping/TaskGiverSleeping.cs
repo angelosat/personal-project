@@ -16,7 +16,7 @@ namespace Start_a_Town_.AI
             if (energyValue > 98)// need.Threshold)
                 return null;
 
-            var possibleBeds = actor.Ownership.GetOwned<BlockBedEntity>();
+            var possibleBeds = actor.Possessions.GetOwned<BlockBedEntity>();
             if(!possibleBeds.Any())
                 possibleBeds = map.GetBlockEntities<BlockBedEntity>().Where(b => b.Owner is null);// FindOrClaimBedNew(actor);
 

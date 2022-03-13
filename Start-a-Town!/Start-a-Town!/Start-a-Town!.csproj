@@ -905,7 +905,6 @@
     <Compile Include="Gui\Hud\UIGameSpeed.cs" />
     <Compile Include="Gui\Hud\SelectionManager.cs" />
     <Compile Include="Gui\ItemText\EntityTextManager.cs" />
-    <Compile Include="Gui\Lists\Collapsible\ListBoxCollapsible.cs" />
     <Compile Include="Gui\Lists\Collapsible\ListBoxCollapsibleNode.cs" />
     <Compile Include="Gui\Lists\IListSearchable.cs" />
     <Compile Include="Gui\Lists\SearchBar.cs" />
@@ -1053,7 +1052,6 @@
     <Compile Include="Gui\MenuStripItem.cs" />
     <Compile Include="Gui\NamePlates\Nameplate.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotGridCustom.cs" />
-    <Compile Include="Gui\Primitives\Slots\SlotGridNew.cs" />
     <Compile Include="Gui\SpeechBubble.cs" />
     <Compile Include="Gui\Tables\TableScrollableCompact.cs" />
     <Compile Include="Gui\Primitives\Slots\SlotGrid.cs" />
@@ -1090,7 +1088,6 @@
     <Compile Include="Terrain\PerlinArgs.cs" />
     <Compile Include="Gui\InteractionBar.cs" />
     <Compile Include="Gui\BackgroundStyle.cs" />
-    <Compile Include="Gui\Primitives\CheckBox\CheckBox.cs" />
     <Compile Include="Gui\Primitives\Icon.cs" />
     <Compile Include="Gui\DragDrop\DragDropManager.cs" />
     <Compile Include="Gui\DragDrop\IDropTarget.cs" />

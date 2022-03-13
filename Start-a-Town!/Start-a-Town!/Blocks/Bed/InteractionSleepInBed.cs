@@ -43,7 +43,7 @@ namespace Start_a_Town_.Blocks.Bed
             if (room is not null)
             {
                 if (room.Owner is null)
-                    a.Ownership.Claim(room);
+                    a.Possessions.Claim(room);
                 else if (room.Owner != a || room.Workplace != null)
                     throw new Exception();
             }

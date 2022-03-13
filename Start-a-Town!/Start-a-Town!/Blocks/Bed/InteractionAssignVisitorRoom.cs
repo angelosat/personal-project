@@ -19,7 +19,7 @@ namespace Start_a_Town_
             var t = this.Target;
             var roomOwner = t.Object as Actor;
             var room = a.Map.Town.RoomManager.GetRoom(this.RoomID);
-            roomOwner.Ownership.Claim(room);
+            roomOwner.Possessions.Claim(room);
         }
         public override object Clone()
         {

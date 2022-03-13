@@ -9,7 +9,7 @@
             foreach (var customer in customers.ToArray())
             {
                 if (customer.Bedroom is not null && 
-                    !customer.Customer.Ownership.Owns(customer.Bedroom))
+                    !customer.Customer.Possessions.Owns(customer.Bedroom))
                 {
                     return new AITask(typeof(TaskBehaviorInnKeeper), customer.Customer);
                 }

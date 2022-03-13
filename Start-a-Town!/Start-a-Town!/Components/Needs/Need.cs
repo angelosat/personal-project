@@ -34,7 +34,7 @@ namespace Start_a_Town_
             {
                 return this._Value + this.Mods.Sum(m => m.ValueMod);
             }
-            set
+            protected set
             {
                 this._Value = MathHelper.Clamp(value, 0, 100);
             }
@@ -100,7 +100,6 @@ namespace Start_a_Town_
         
         public virtual TaskGiver TaskGiver { get { return this.NeedDef.TaskGiver; } }
 
-        [Obsolete]
         public void SetValue(float newVal, GameObject parent)
         {
             float oldVal = Value;

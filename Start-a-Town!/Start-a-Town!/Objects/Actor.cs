@@ -28,9 +28,9 @@ namespace Start_a_Town_
         [InspectorHidden]
         internal NpcComponent Npc => this._npc ??= this.GetComponent<NpcComponent>();
 
-        PossessionsComponent _ownership;
+        PossessionsComponent _possessions;
         [InspectorHidden]
-        public PossessionsComponent Ownership => this._ownership ??= this.GetComponent<PossessionsComponent>();
+        public PossessionsComponent Possessions => this._possessions ??= this.GetComponent<PossessionsComponent>();
 
         WorkComponent _work;
         [InspectorHidden]
@@ -52,9 +52,6 @@ namespace Start_a_Town_
 
         [InspectorHidden]
         public Entity this[GearType slot] => this.GetEquipmentSlot(slot);
-
-        [InspectorHidden]
-        public AttributeStat this[AttributeDef attribute] => this.Attributes.GetAttribute(attribute);
 
         private MoodComp _mood;
         [InspectorHidden]
@@ -147,7 +144,8 @@ namespace Start_a_Town_
         {
             var need = this.GetNeed(def);
             var old = need.Value;
-            need.Value = modOldValue(need.Value);
+            //need.Value = modOldValue(need.Value);
+            need.SetValue(modOldValue(need.Value), this);
             this.Net?.EventOccured(Message.Types.NeedUpdated, this, need, need.Value - old);
         }
 

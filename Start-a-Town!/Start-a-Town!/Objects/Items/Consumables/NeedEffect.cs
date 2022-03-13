@@ -16,7 +16,8 @@
             var need = actor.GetNeed(this.Type);
             if (need == null)
                 return;
-            need.Value += this.Value;
+            //need.Value += this.Value;
+            need.SetValue(need.Value + this.Value, actor);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace Start_a_Town_
         public bool BorderShading;
         public float FogLevel = 0;
         public int MaxDrawZ;
-        Vector2 CameraOffset;
+        Vector2 CameraOffset = Vector2.Zero;
         public int RenderIndex = 0;
         public RenderTarget2D MapRender,
           WaterRender, WaterDepth, WaterLight, WaterFog,

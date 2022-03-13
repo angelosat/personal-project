@@ -6,7 +6,7 @@ namespace Start_a_Town_
     {
         protected override AITask TryAssignTask(Actor actor)
         {
-            if (actor.Ownership.Has(RoomRoleDefOf.Bedroom))
+            if (actor.Possessions.Has(RoomRoleDefOf.Bedroom))
                 return null;
             return SearchByTavern(actor);
         }

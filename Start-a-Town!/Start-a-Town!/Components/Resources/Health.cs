@@ -19,9 +19,7 @@ namespace Start_a_Town_.Components.Resources
 
         public float TickRate = Ticks.PerSecond / 2f;
 
-        static readonly float SpriteFlashFramesCount = Ticks.PerSecond / 10f;
         float SpriteFlashTimer;
-
 
         public override void Tick(GameObject parent, Resource values)
         {

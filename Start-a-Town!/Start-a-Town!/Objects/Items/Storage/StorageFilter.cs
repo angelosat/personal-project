@@ -7,7 +7,6 @@ namespace Start_a_Town_
     public class StorageFilter : Def, ILabeled
     {
         Func<Entity, bool> _Condition;
-        public virtual string Label { get; set; }
         public StorageFilter(string name):base(name)
         {
 
@@ -27,7 +26,7 @@ namespace Start_a_Town_
 
         static public StorageFilter CreateFromItemDef(ItemDef def)
         {
-            return new StorageFilter("StorageFilterFromItemDef:" + def.Name, item => item.Def== def) { Label = def.Name };
+            return new StorageFilter("StorageFilterFromItemDef:" + def.Name, item => item.Def == def);// { Label = def.Name };
         }
         static public HashSet<StorageFilter> CreateFilterSet()
         {

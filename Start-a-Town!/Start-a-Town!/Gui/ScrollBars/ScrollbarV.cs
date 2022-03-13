@@ -32,26 +32,37 @@ namespace Start_a_Town_.UI
             this.Up = new PictureBox(Vector2.Zero, UIManager.DefaultVScrollbarSprite, new Rectangle(0, 0, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
             this.Down = new PictureBox(new Vector2(0, height - 16), UIManager.DefaultVScrollbarSprite, new Rectangle(0, 32, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
             this.Thumb = new PictureBox(new Vector2(0, 16), UIManager.DefaultVScrollbarSprite, new Rectangle(0, 16, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
-
-            this.Up.MouseLeftPress += this.Up_Click;
-            this.Down.MouseLeftPress += this.Down_Click;
-            this.Thumb.MouseLeftPress += this.Thumb_Click;
             this.Area = new GroupBox() { Size = new Rectangle(0, 0, DefaultWidth, height - 32), Location = this.Up.BottomLeft, MouseThrough = false };
-            this.Area.MouseLeftPress += this.Area_MouseLeftPress;
+
+            //this.Up.MouseLeftPress += this.Up_Click;
+            //this.Down.MouseLeftPress += this.Down_Click;
+            //this.Thumb.MouseLeftPress += this.Thumb_Click;
+            //this.Area.MouseLeftPress += this.Area_MouseLeftPress;
+
+            this.Up.LeftClickAction = this.UpAction;
+            this.Down.LeftClickAction = this.DownAction;
+            this.Thumb.LeftClickAction = this.ThumbAction;
+            this.Area.MouseLBAction = this.AreaAction;
             this.Controls.Add(this.Up, this.Down, this.Area, this.Thumb);
         }
 
-        private void Thumb_MouseLeftPress(object sender, HandledMouseEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        //private void Thumb_MouseLeftPress(object sender, HandledMouseEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        private void Area_MouseLeftPress1(object sender, HandledMouseEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        //private void Area_MouseLeftPress1(object sender, HandledMouseEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        void Area_MouseLeftPress(object sender, HandledMouseEventArgs e)
+        //void Area_MouseLeftPress(object sender, HandledMouseEventArgs e)
+        //{
+        //    this.AreaAction();
+        //    e.Handled = true;
+
+        //}
+        void AreaAction()
         {
             Control scr = this.Tag as Control;
             if (this.Tag == null)
@@ -61,16 +72,13 @@ namespace Start_a_Town_.UI
             {
                 scr.ClientLocation.Y += scr.Size.Height;
                 scr.ClientLocation.Y = Math.Min(0, scr.ClientLocation.Y);
-                e.Handled = true;
             }
             else if (UIManager.Mouse.Y > this.Thumb.ScreenLocation.Y + this.Thumb.Height)
             {
                 scr.ClientLocation.Y -= scr.Size.Height;
                 scr.ClientLocation.Y = Math.Max(scr.Size.Height - scr.ClientSize.Height, scr.ClientLocation.Y);
-                e.Handled = true;
             }
         }
-
         public override void HandleLButtonUp(HandledMouseEventArgs e)
         {
             this.ThumbMoving = false;
@@ -107,34 +115,45 @@ namespace Start_a_Town_.UI
             this.Thumb.Location = Vector2.Zero;
         }
 
-        void Thumb_Click(object sender, HandledMouseEventArgs e)
+        //void Thumb_Click(object sender, HandledMouseEventArgs e)
+        //{
+        //    this.ThumbAction();
+        //    e.Handled = true;
+        //}
+        void ThumbAction()
         {
             if (this.Tag is null)
                 return;
             this.ThumbMoving = true;
             this.ThumbOffset = (int)(16 + UIManager.Mouse.Y - this.Thumb.Location.Y);
-            e.Handled = true;
         }
+        //void Down_Click(object sender, HandledMouseEventArgs e)
+        //{
+        //    DownAction();
+        //    e.Handled = true;
+        //}
 
-        void Down_Click(object sender, HandledMouseEventArgs e)
+        private void DownAction()
         {
             if (this.Tag is not Control scr)
                 return;
-
             scr.ClientLocation.Y -= this.Step;
             scr.ClientLocation.Y = Math.Max(scr.Size.Height - scr.ClientSize.Height, scr.ClientLocation.Y);
-
-            e.Handled = true;
         }
 
         void Up_Click(object sender, HandledMouseEventArgs e)
         {
+           
+            UpAction();
+            e.Handled = true;
+        }
+
+        private void UpAction()
+        {
             if (this.Tag is not Control scr)
                 return;
-
             scr.ClientLocation.Y += this.Step;
             scr.ClientLocation.Y = Math.Min(0, scr.ClientLocation.Y);
-            e.Handled = true;
         }
     }
 }

@@ -20,7 +20,6 @@ namespace Start_a_Town_
         public virtual void SetMaterial(MaterialDef mat) { }
 
         public readonly List<ResourceThreshold> Thresholds = new();
-        readonly ResourceThreshold Root;
         public ResourceWorker AddThreshold(string label, float value = 1)
         {
             var t = new ResourceThreshold(label, value);
@@ -28,17 +27,12 @@ namespace Start_a_Town_
             this.Thresholds.Sort((a, b) => a.Value.CompareTo(b.Value));
             return this;
         }
-        public ResourceThreshold GetThreshold(Resource res)
-        {
-            return this.Root.Get(res.Value);
-        }
+       
         public float GetThresholdValue(Resource res, int index)
         {
-            return this.Root?.GetThresholdValue(index) ?? 0;
-        }
-        public int GetThresholdDepth(Resource res)
-        {
-            return this.Root.GetDepth(res.Value);
+            return 
+                //this.Root?.GetThresholdValue(index) ?? 
+                0;
         }
 
         public string GetLabel(Resource res)

@@ -6,7 +6,7 @@ namespace Start_a_Town_.UI
 {
     public class CheckBoxNew : ButtonBase
     {
-        static Rectangle
+        public static Rectangle
             UnCheckedRegion = new(0, 0, 23, 23),
             CheckedRegion = new(0, 23, 23, 23);
 

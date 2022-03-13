@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Start_a_Town_.UI;
-using Start_a_Town_.Components.Crafting;
 using System.IO;
 
 namespace Start_a_Town_
@@ -18,7 +17,7 @@ namespace Start_a_Town_
                 //unrent rooms
                 foreach (var bedroom in this.GetRooms().Where(r => r.RoomRole == RoomRoleDefOf.Bedroom))
                 {
-                    bedroom.Owner?.Ownership.Unclaim(bedroom);
+                    bedroom.Owner?.Possessions.Unclaim(bedroom);
                 }
                 this.NoonPassed = true;
             }

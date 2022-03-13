@@ -433,7 +433,7 @@ namespace Start_a_Town_.UI
         internal bool isPressed = false, Active = true;
 
         [Obsolete]
-        public event EventHandler<HandledMouseEventArgs> MouseScroll, MouseLeftPress;
+        public event EventHandler<HandledMouseEventArgs> MouseLeftPress;
 
         public Control TopLevelControl
         {
@@ -570,9 +570,6 @@ namespace Start_a_Town_.UI
         protected virtual void OnMouseRightUp(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseLeftDown(HandledMouseEventArgs e)
-        {
-        }
         protected virtual void OnMouseMDown(HandledMouseEventArgs e)
         {
         }
@@ -582,10 +579,7 @@ namespace Start_a_Town_.UI
         protected virtual void OnMouseWheel(HandledMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseScroll(HandledMouseEventArgs e)
-        {
-            MouseScroll?.Invoke(this, e);
-        }
+       
         protected virtual void OnLButtonDblClk(HandledMouseEventArgs e)
         {
             this.OnMouseLeftPress(e);

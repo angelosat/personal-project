@@ -98,7 +98,6 @@ namespace Start_a_Town_.UI
             private int ThumbClickOrigin;
             bool ThumbMoving;
             public int SmallStep = Label.DefaultHeight;// 1;
-            public int LargeStep;
             GroupBox Container, Client;
 
             public ScrollbarV(GroupBox client, GroupBox container)

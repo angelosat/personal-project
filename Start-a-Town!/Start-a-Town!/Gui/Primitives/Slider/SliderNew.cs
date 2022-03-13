@@ -10,7 +10,6 @@ namespace Start_a_Town_.UI
        
         readonly Panel PanelValue;
         readonly Label LabelValue;
-        public bool DrawValueWhileDragging;
         public float NextValue, PrevValue;
         readonly Func<float> ValueGetter;
         readonly Action<float> ValueSetter;
@@ -153,14 +152,12 @@ namespace Start_a_Town_.UI
             base.Draw(sb, viewport);
             if (!this.SelectingValue)
                 return;
-            //var loc = new Vector2(this.Border + (this.Width - 2 * this.Border) * (this.NextValue - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width / 2, 0);
             var loc = new Vector2((int)(this.Border + (this.Width - 2 * this.Border) * (this.NextValue - this.Min) / (this.Max - this.Min) - UIManager.DefaultTrackBarThumbSprite.Width * .5f), 0);
 
             sb.Draw(UIManager.DefaultTrackBarThumbSprite,
                 this.ScreenLocation + loc,
                 Color.White * .5f);
-            if (this.DrawValueWhileDragging)
-                UIManager.DrawStringOutlined(sb, this.NextValue.ToString(this.Format), this.ScreenLocation + new Vector2(this.Width, 0));//, Vector2.One);
+            UIManager.DrawStringOutlined(sb, this.NextValue.ToString(this.Format), this.ScreenLocation + new Vector2(this.Width, 0));//, Vector2.One);
         }
 
         public static Control CreateWithLabel(string label, Func<float> valueGetter, Action<float> valueSetter, int width, float min = 0, float max = 1, float step = 0.1f, string format = null)

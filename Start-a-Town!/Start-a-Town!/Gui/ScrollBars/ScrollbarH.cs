@@ -34,17 +34,20 @@ namespace Start_a_Town_.UI
             this.Btn_Right = new PictureBox(new Vector2(width - 16, 0), UIManager.DefaultHScrollbarSprite, new Rectangle(32, 0, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
             this.Thumb = new PictureBox(new Vector2(16, 0), UIManager.DefaultHScrollbarSprite, new Rectangle(16, 0, 16, 16), Alignment.Horizontal.Left, Alignment.Vertical.Top);
 
-            this.Btn_Left.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Left_Click);
-            this.Btn_Right.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Right_Click);
-            this.Thumb.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Thumb_Click);
-            this.Thumb.MouseScroll += new EventHandler<HandledMouseEventArgs>(this.Thumb_MouseScroll);
+            //this.Btn_Left.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Left_Click);
+            //this.Btn_Right.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Right_Click);
+            //this.Thumb.MouseLeftPress += new EventHandler<HandledMouseEventArgs>(this.Thumb_Click);
+            this.Btn_Left.LeftClickAction = this.Left_Click;
+            this.Btn_Right.LeftClickAction = this.Right_Click;
+            this.Thumb.LeftClickAction = this.Thumb_Click;
 
             this.Area = new GroupBox() { Size = new Rectangle(0, 0, width - 32, TextureHeight), Location = this.Btn_Left.TopRight, MouseThrough = false };
-            this.Area.MouseLeftPress += this.Area_MouseLeftPress;
+            //this.Area.MouseLeftPress += this.Area_MouseLeftPress;
+            this.Area.MouseLBAction = this.Area_MouseLeftPress;
             this.Controls.Add(this.Btn_Left, this.Btn_Right, this.Area, this.Thumb);
         }
 
-        void Area_MouseLeftPress(object sender, HandledMouseEventArgs e)
+        void Area_MouseLeftPress()
         {
             Control scr = this.Tag as Control;
             if (this.Tag is null)
@@ -54,13 +57,11 @@ namespace Start_a_Town_.UI
             {
                 scr.ClientLocation.X += scr.Size.Width;
                 scr.ClientLocation.X = Math.Min(0, scr.ClientLocation.X);
-                e.Handled = true;
             }
             else if (UIManager.Mouse.X > this.Thumb.ScreenLocation.X + this.Thumb.Width)
             {
                 scr.ClientLocation.X -= scr.Size.Width;
                 scr.ClientLocation.X = Math.Max(scr.Size.Width - scr.ClientSize.Width, scr.ClientLocation.X);
-                e.Handled = true;
             }
         }
 
@@ -92,7 +93,7 @@ namespace Start_a_Town_.UI
             base.Update();
         }
 
-        void Thumb_Click(object sender, EventArgs e)
+        void Thumb_Click()
         {
             if (this.Tag is not null)
             {
@@ -101,7 +102,7 @@ namespace Start_a_Town_.UI
             }
         }
 
-        void Right_Click(object sender, EventArgs e)
+        void Right_Click()
         {
             Control scr = this.Tag as Control;
             if (this.Tag is null)
@@ -111,7 +112,7 @@ namespace Start_a_Town_.UI
             scr.ClientLocation.X = Math.Max(scr.Size.Width - scr.ClientSize.Width, scr.ClientLocation.X);
         }
 
-        void Left_Click(object sender, EventArgs e)
+        void Left_Click()
         {
             Control scr = this.Tag as Control;
             if (this.Tag is null)
@@ -119,10 +120,6 @@ namespace Start_a_Town_.UI
 
             scr.ClientLocation.X += this.Step;
             scr.ClientLocation.X = Math.Min(0, scr.ClientLocation.X);
-        }
-
-        void Thumb_MouseScroll(object sender, HandledMouseEventArgs e)
-        {
         }
     }
 }

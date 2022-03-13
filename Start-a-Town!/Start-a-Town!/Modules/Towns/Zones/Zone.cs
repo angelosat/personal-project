@@ -180,11 +180,6 @@ namespace Start_a_Town_
             if (this.Hide)
                 return;
             this.Positions.DrawBlocks(map, cam);
-            return;
-            var isselected = SelectionManager.IsSelected(this);
-            var col = Color.Lerp(this.Positions.Color, Color.White, isselected ? .5f : 0) * .5f;
-            var positions = this.Positions.Select(t => t + IntVec3.UnitZ);
-            cam.DrawGrid(sb, map, positions, col);
         }
 
         public SaveTag Save(string name = "")

@@ -381,23 +381,7 @@ namespace Start_a_Town_
         public int BuildComplexity => this.BuildProperties.Complexity;
         public ConstructionCategoryDef ConstructionCategory => this.BuildProperties.Category;
         public readonly bool HasData;
-
-        [Obsolete]
-        public static void UpdateBlocks()
-        {
-            foreach (var block in Registry.Values)
-                block.Update();
-        }
-        [Obsolete]
-        internal static void UpdateBlocks(MapBase map)
-        {
-            foreach (var block in Registry.Values)
-                block.Update(map);
-        }
-        [Obsolete]
-        public virtual void Update() { }
-        [Obsolete]
-        public virtual void Update(MapBase map) { }
+     
         /// <summary>
         /// TODO: maybe pass position of neighbor that changed?
         /// </summary>
@@ -695,10 +679,6 @@ namespace Start_a_Town_
             throw new NotImplementedException();
         }
 
-        public virtual void GetPlayerActionsWorld(GameObject player, IntVec3 global, Dictionary<PlayerInput, Interaction> list)
-        {
-            throw new NotImplementedException();
-        }
         public static float GetPathingCost(MapBase map, IntVec3 global)
         {
             var cell = map.GetCell(global);
@@ -737,7 +717,7 @@ namespace Start_a_Town_
         public virtual void OnDrop(GameObject actor, GameObject dropped, TargetArgs target, int amount = -1)
         {
             dropped.Global = target.Global + target.Face + target.Precise;
-            if (dropped.Slot != null)
+            if (dropped.Slot is not null)
             {
                 dropped.Slot.Clear(); // ugly
             }
@@ -751,13 +731,10 @@ namespace Start_a_Town_
         {
             var cell = map.GetCell(global);
             return cell.Material;
-            //var mat = cell.Block.GetMaterial(cell.BlockData);
-            //return mat;
         }
-        [Obsolete]
-        /// calling this doesnt check if cell exists
         public static float GetBlockHeight(MapBase map, Vector3 global)
         {
+            /// check if cell exists?
             var offset = global.ToBlock();
             var cell = map.GetCell(global);
             var h = cell.Block.GetHeight(cell.BlockData, offset.X, offset.Y);

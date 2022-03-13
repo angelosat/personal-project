@@ -42,9 +42,6 @@ namespace Start_a_Town_
         /// </summary>
         public int StemHealRate;
 
-        [Obsolete]
-        ///instead of using cutdowndifficulty, determine cutdown hitpoints by stem material density
-        public int CutDownDifficulty = 1;
         public int PlantingSpacing;
         [XmlIgnore]
         public MaterialDef StemMaterial;
@@ -83,7 +80,6 @@ namespace Start_a_Town_
             StemMaterial = MaterialDefOf.ShrubStem,
             FruitMaterial = MaterialDefOf.Berry,
             Growth = new GrowthProperties(ItemDefOf.Fruit, MaterialDefOf.Berry, 5, 6),
-            CutDownDifficulty = 3,
             PlantEntity = PlantDefOf.Bush,
         };
 
@@ -96,7 +92,6 @@ namespace Start_a_Town_
             StemMaterial = MaterialDefOf.LightWood,
             ProductCutDown = RawMaterialDefOf.Logs,
             MaxYieldCutDown = 5,
-            CutDownDifficulty = 10,
             GrowTicks = 6 * Ticks.PerSecond,
             PlantEntity = PlantDefOf.Tree,
             ToolToCut = ToolUseDefOf.Chopping,

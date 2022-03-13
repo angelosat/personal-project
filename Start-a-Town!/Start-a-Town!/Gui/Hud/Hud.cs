@@ -118,7 +118,6 @@ namespace Start_a_Town_
                 , this.Time
                 , this.UnitFrames
                 );
-            this.FloatingBars = new Dictionary<GameObject, FloatingBar>();
         }
 
         private void TogglePlayerList(INetwork net)
@@ -210,21 +209,6 @@ namespace Start_a_Town_
             floating.Show();
         }
 
-        readonly Dictionary<GameObject, FloatingBar> FloatingBars;
-        void Log_EntryAdded(object sender, LogEventArgs e)
-        {
-            switch (e.Entry.Type)
-            {
-                case Log.EntryTypes.Damage:
-                    GameObject target = e.Entry.Values[1] as GameObject;
-                    Attack attack = e.Entry.Values[2] as Attack;
-                    FloatingText floating = new FloatingText(target, attack.Value + " damage");
-                    this.Controls.Add(floating);
-                    break;
-                default:
-                    break;
-            }
-        }
         public void Initialize(GameObject obj)
         {
             this.Controls.Remove(this.PartyFrame);

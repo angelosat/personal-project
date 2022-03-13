@@ -125,12 +125,7 @@ namespace Start_a_Town_
             this.DayTimeNormal = Math.Max(0, Math.Min(1, (1 + nn) / 2f));
             this.SkyDarkness = 0;
         }
-        [Obsolete]
-        public void SetHour(int t)
-        {
-            throw new Exception();
-        }
-
+      
         internal void Despawn(Actor actor)
         {
             actor.Despawn();
@@ -152,7 +147,6 @@ namespace Start_a_Town_
                 chunk.Update();
 
             this.Town.Update();
-            Block.UpdateBlocks(this);
             this.ApplyLightChanges();
         }
 

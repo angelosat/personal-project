@@ -180,9 +180,6 @@ namespace Start_a_Town_.UI
             TextureTickBox = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/CheckBox");
             DefaultLoadingSprite = Game1.Instance.Content.Load<Texture2D>("Graphics/Gui/spinning3");
 
-            //Atlas.Initialize(); 
-            //Atlas.Bake(); /// initialize calls bake
-
             var scaleNode = Engine.Config.Descendants("Scale").FirstOrDefault();
             if (float.TryParse(scaleNode.Value, out float scale)) // do i need to check for scalenode == null?
                 Scale = scale;
@@ -489,52 +486,7 @@ namespace Start_a_Town_.UI
             }
             return false;
         }
-        /// <summary>
-        /// use extension stringhelper.wrap instead
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="maxwidth"></param>
-        /// <returns></returns>
-        [Obsolete]
-        public static string WrapText(string text, int maxwidth)
-        {
-            int pos = 0, linewidth = 0;
-            char currentchar;
-            string oldtext = text, newtext = "", currentword = "";
-            while (pos < oldtext.Length)
-            {
-                currentchar = text[pos];
-                linewidth += (int)(Font.MeasureString(currentchar.ToString())).X;
-                switch (currentchar.ToString())
-                {
-                    case " ":
-                        if (linewidth >= maxwidth)
-                        {
-                            newtext += "\n";
-                            linewidth = 0;
-                        }
-                        newtext += currentword + " ";
-                        currentword = "";
-                        break;
-                    case "\n":
-                        newtext += currentword + "\n";
-                        currentword = "";
-                        linewidth = 0;
-                        break;
-                    default:
-                        if (linewidth >= maxwidth)
-                        {
-                            newtext += "\n";
-                            linewidth = 0;
-                        }
-                        currentword += currentchar.ToString();
-                        break;
-                }
-                pos++;
-            }
-            newtext += currentword;
-            return newtext;
-        }
+  
         public void Dispose()
         {
             WindowManagers.Remove(this);

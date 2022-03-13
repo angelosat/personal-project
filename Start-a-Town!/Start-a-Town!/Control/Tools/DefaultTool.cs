@@ -19,42 +19,21 @@ namespace Start_a_Town_.PlayerControl
 
         protected virtual void SwitchTool()
         {
-            Client.PlayerStopMoving();
             this.StopWalking();
             ToolManager.SetTool(new ToolManagement());
             Client.Instance.ConsoleBox.Write("Switched to management mode");
         }
 
-        public void ChangeDirection(Vector3 direction)
-        {
-            Client.PlayerChangeDirection(direction);
-        }
-
-        public void StartWalking()
-        {
-            Client.PlayerStartMoving();
-        }
         protected void StopWalking()
         {
             if (!Walking)
                 return;
             if (MoveToggle)
                 return;
-            Client.PlayerStopMoving();
             Walking = false;
         }
 
-        internal override void Jump()
-        {
-            Client.PlayerJump();
-        }
         
-        private void ThrowNew(bool all = false)
-        {
-            var dir3d = GetDirection3(this.Actor);
-            Client.PlayerThrow(dir3d, all);
-        }
-       
         public override void Update()
         {
             base.Update();
@@ -107,9 +86,6 @@ namespace Start_a_Town_.PlayerControl
                 NextStep.Normalize();
                 var direction = new Vector3(NextStep.X, NextStep.Y, actor.Velocity.Z);
 
-                Client.PlayerChangeDirection(direction);
-                if(!Walking)
-                    StartWalking();
                 Walking = true;
 
             }
@@ -128,7 +104,6 @@ namespace Start_a_Town_.PlayerControl
         bool Up, Down, Left, Right;
         public override void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
-
             if (e.Handled)
                 return;
             if (e.KeyCode == GlobalVars.KeyBindings.North || e.KeyCode == System.Windows.Forms.Keys.Up)
@@ -139,15 +114,6 @@ namespace Start_a_Town_.PlayerControl
                 Left = true;
             if (e.KeyCode == GlobalVars.KeyBindings.East || e.KeyCode == System.Windows.Forms.Keys.Right)
                 Right = true;
-            if (e.KeyCode == GlobalVars.KeyBindings.Attack)
-                StartAttack();
-            if (e.KeyCode == GlobalVars.KeyBindings.Block)
-                StartBlock();
-
-            if (e.KeyCode == GlobalVars.KeyBindings.RunWalk)
-                Client.PlayerToggleWalk(true);
-            if (e.KeyCode == GlobalVars.KeyBindings.Sprint)
-                Client.PlayerToggleSprint(true);
         }
         public override void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
@@ -172,21 +138,14 @@ namespace Start_a_Town_.PlayerControl
                     Down = false;
                     break;
                 case System.Windows.Forms.Keys.Z:
-                    FinishAttack();
                     break;
                 case System.Windows.Forms.Keys.X:
-                    FinishBlock();
                     break;
                 default:
                     break;
             }
             if (!(Up || Down || Left || Right))
                 StopWalking();
-
-            if (e.KeyCode == GlobalVars.KeyBindings.RunWalk)
-                Client.PlayerToggleWalk(false);
-            if (e.KeyCode == GlobalVars.KeyBindings.Sprint)
-                Client.PlayerToggleSprint(false);
 
             if (e.KeyCode == System.Windows.Forms.Keys.M)
             {
@@ -195,32 +154,6 @@ namespace Start_a_Town_.PlayerControl
             }
 
             base.HandleKeyUp(e);
-        }
-
-        private void StartBlock()
-        {
-            if (Blocking)
-                return;
-            Blocking = true;
-            Client.PlayerStartBlocking();
-        }
-        private void FinishBlock()
-        {
-            Blocking = false;
-            Client.PlayerFinishBlocking();
-        }
-        bool Attacking, Blocking;
-        private void StartAttack()
-        {
-            if (Attacking)
-                return;
-            Attacking = true;
-            Client.PlayerAttack();
-        }
-        private void FinishAttack()
-        {
-            Client.PlayerFinishAttack(GetDirection3(this.Actor));
-            Attacking = false;
         }
 
         internal override void ManageEquipment()
@@ -244,10 +177,7 @@ namespace Start_a_Town_.PlayerControl
             if (this.MouseMove)
             {
                 MoveToggle = true;
-                StartWalking();
             }
-            else
-                this.StartAttack();
             return Messages.Default;
         }
 
@@ -258,16 +188,12 @@ namespace Start_a_Town_.PlayerControl
                 MoveToggle = false;
                 StopWalking();
             }
-            else
-                this.FinishAttack();
             return base.MouseLeftUp(e);
         }
 
         public void MoveMouse()
         {
             Walking = true;
-            Vector3 final = GetDirection3(this.Actor);
-            this.ChangeDirection(final);
         }
         public static Vector2 GetDirection2()
         {
@@ -318,12 +244,12 @@ namespace Start_a_Town_.PlayerControl
         
         private void RightClick()
         {
-            if (this.Target == null)
+            if (this.Target is null)
                 return;
             var action = this.Target.GetContextRB(this.Actor);
 
-            if (action != null)
-                if (action.Action != null)
+            if (action is not null)
+                if (action.Action is not null)
                 {
                     action.Action();
                     return;
@@ -342,19 +268,13 @@ namespace Start_a_Town_.PlayerControl
             var cam = map.Camera;
             base.DrawAfterWorld(sb, map);
             var haul = this.Actor.Inventory.HaulSlot.Object;
-            if (haul != null)
+            if (haul is not null)
             {
-                if (this.Target == null)
+                if (this.Target is null)
                     return;
                 var global = this.Target.Global + this.Target.Face + (!InputState.IsKeyDown(System.Windows.Forms.Keys.ShiftKey) ? Vector3.Zero : this.Target.Precise);
                 haul.DrawPreview(sb, cam, global);
             }
         }
-
-        internal override void SlotRightClick(GameObjectSlot slot)
-        {
-            Client.PlayerSlotInteraction(slot);
-        }
-
     }
 }

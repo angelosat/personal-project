@@ -105,7 +105,7 @@ namespace Start_a_Town_
 
         internal bool IsDeconstructible(IntVec3 global)
         {
-            return (this.GetBlockEntity(global)?.HasComp<BlockEntityCompDeconstructible>() ?? false) || this.GetBlock(global).IsDeconstructible;
+            return this.GetBlock(global).IsDeconstructible;
         }
 
         public Vector2 Coordinates;
@@ -323,7 +323,6 @@ namespace Start_a_Town_
             if (chunk.TryRemoveBlockEntity(local, out var entity))
                 return entity;
             throw new Exception(); // for debugging
-            return null;
         }
         public void AddBlockEntity(IntVec3 global, BlockEntity entity)
         {

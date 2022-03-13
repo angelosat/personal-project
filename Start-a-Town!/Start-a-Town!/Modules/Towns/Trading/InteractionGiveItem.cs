@@ -18,13 +18,7 @@ namespace Start_a_Town_
         public InteractionGiveItem() : this(false)
         {
         }
-        protected override void Start()
-        {
-            var a = this.Actor;
-            var t = this.Target;
-            return;
-            a.CrossFade(this.Animation, false, 25);
-        }
+       
         public override void Perform()
         {
             var a = this.Actor;

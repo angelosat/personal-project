@@ -116,11 +116,6 @@ namespace Start_a_Town_
         {
             var list = new ListCollapsibleObservable(this.RootNode, true);
             return list;
-
-            var table = new TableObservable<ItemMaterialAmount>()
-                .AddColumn("name", 96, i => i.GetListControlGui());
-            table.Bind(this.CacheObservable);
-            return table;
         }
         class StorageItemBranch : IListCollapsibleDataSourceObservable
         {

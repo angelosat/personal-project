@@ -63,27 +63,6 @@ namespace Start_a_Town_.Components.Resources
         {
             switch (e.Type)
             {
-                case Message.Types.Attacked:
-                    GameObject attacker = e.Parameters[0] as GameObject;
-                    Attack attack = e.Parameters[1] as Attack;
-                    float reduction = 1;// - StatsComponentNew.GetStatValueOrDefault(parent, Stat.Types.DmgReduction);
-
-                    int finalValue = (int)(attack.Value * reduction);
-                    this.Add(-finalValue, resource);
-                    e.Network.EventOccured(Message.Types.HealthLost, parent, finalValue);
-                    e.Network.EventOccured(Message.Types.EntityAttacked, attacker, parent, finalValue);
-
-                    this.SpriteFlashTimer = SpriteFlashFramesCount;
-                    parent.TryGetComponent<SpriteComponent>(t => t.Tint = Color.Red);
-                    if (resource.Value <= 0)
-                    {
-                        e.Network.PostLocalEvent(parent, Message.Types.Death);
-                        parent.Despawn();
-                        e.Network.DisposeObject(parent);// if i call syncdispose on the server, the entity might be disposed on the client before the attack message comes
-                    }
-                    resource.Rec.Value = resource.Rec.Max;
-                    return true;
-
                 case Message.Types.HitGround:
                     float zForce = (float)e.Parameters[0];
                     this.HitGround(resource, parent, zForce);
@@ -122,7 +101,6 @@ namespace Start_a_Town_.Components.Resources
 
         public override void OnHealthBarCreated(GameObject parent, UI.Nameplate plate, Resource values)
         {
-            return;
             plate.AlwaysShow = true;
             plate.Controls.Add(new Label()
             {

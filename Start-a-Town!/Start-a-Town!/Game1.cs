@@ -225,7 +225,6 @@ namespace Start_a_Town_
                 // if it's outside the loop, i had to do mousepicking in the camera draw method in order for it to work
                 Controller.Instance.Update(); 
 
-                Block.UpdateBlocks();
                 this.Network.Update(gameTime);
                 ScreenManager.Instance.Update(this, gameTime);
 

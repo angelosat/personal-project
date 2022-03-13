@@ -253,9 +253,6 @@ namespace Start_a_Town_
         {
             get
             {
-                var boxw = 250;
-                var boxh = 250;
-
                 return _ActorActiveQuestsGUI ??=
                     new ListBoxObservable<QuestDef, Label>(q => new Label(q.Name, q.ShowGUI))
                     { Name = "Active quests" }

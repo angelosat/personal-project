@@ -613,7 +613,6 @@ namespace Start_a_Town_
                     break;
 
                 case TargetType.Position:
-                    Dictionary<PlayerInput, Interaction> interactions = new Dictionary<PlayerInput, Interaction>();
                     var block = this.Network.Map.GetBlock(this.Global);
                     block.GetContextActions(playerEntity, this.Global, a);
                     // check if block is part of any town designations such as stockpiles or fields, and add corresponding actions
@@ -622,42 +621,6 @@ namespace Start_a_Town_
 
                 default:
                     break;
-            }
-        }
-
-        internal Interaction GetContextActionWorld(GameObject player, PlayerInput input)
-        {
-            switch (this.Type)
-            {
-                case TargetType.Entity:
-                    return this.Object.GetPlayerActionsWorld().FirstOrDefault(foo => foo.Key.Action == input.Action && foo.Key.Hold == input.Hold).Value;
-
-                case TargetType.Position:
-                    Dictionary<PlayerInput, Interaction> interactions = new Dictionary<PlayerInput, Interaction>();
-                    var block = player.Map.GetBlock(this.Global);
-                    block.GetPlayerActionsWorld(player, this.Global, interactions);
-                    return interactions.FirstOrDefault(foo => foo.Key.Action == input.Action && foo.Key.Hold == input.Hold).Value;
-
-                default:
-                    return null;
-            }
-        }
-        internal Dictionary<PlayerInput, Interaction> GetContextActionsWorld(GameObject player)
-        {
-            switch (this.Type)
-            {
-                case TargetType.Entity:
-                    return this.Object.GetPlayerActionsWorld();
-
-                case TargetType.Position:
-                    Dictionary<PlayerInput, Interaction> interactions = new Dictionary<PlayerInput, Interaction>();
-                    var block = player.Map.GetBlock(this.Global);
-                    if (block != null)
-                        block.GetPlayerActionsWorld(player, this.Global, interactions);
-                    return interactions;
-
-                default:
-                    return new Dictionary<PlayerInput, Interaction>();
             }
         }
 
@@ -733,9 +696,6 @@ namespace Start_a_Town_
             {
                 case TargetType.Entity:
                     throw new Exception();
-                    //foreach (var i in this.Object.GetInfoTabs())
-                    //    yield return i;
-                    break;
 
                 case TargetType.Position:
                     foreach (var i in this.Block.GetInfoTabs())

@@ -51,15 +51,6 @@ namespace Start_a_Town_.Components
             actions.Add(new EquipFromInventory());
         }
       
-        public override void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> list)
-        {
-            list.Add(PlayerInput.ActivateHold, new Equip());
-        }
-        internal override ContextAction GetContextActivate(GameObject parent, GameObject player)
-        {
-            return new ContextAction(new Equip()) { Shortcut = PlayerInput.ActivateHold };
-        }
-       
         internal override void SaveExtra(SaveTag tag)
         {
             base.SaveExtra(tag);

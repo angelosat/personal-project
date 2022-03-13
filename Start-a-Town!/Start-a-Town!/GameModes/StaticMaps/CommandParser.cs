@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Start_a_Town_.Net;
-using Start_a_Town_.Core;
 
 namespace Start_a_Town_
 {
@@ -21,7 +20,6 @@ namespace Start_a_Town_
                             case "time":
                             case "hour":
                                 int t = int.Parse(p[2]);
-                                (net.Map as StaticMap).SetHour(t);
                                 if (net is Server)
                                     (net as Server).Enqueue(PacketType.PlayerServerCommand, Network.Serialize(w => w.WriteASCII(command)), SendType.OrderedReliable);
                                 break;

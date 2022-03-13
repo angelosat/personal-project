@@ -210,7 +210,6 @@ List of available commands:
                
                 case "hour":
                 case "time":
-                    throw new Exception();
                     int t = int.Parse(words.Dequeue());
                     foreach (var ch in Engine.Map.GetActiveChunks())
                         ch.Value.LightCache.Clear();

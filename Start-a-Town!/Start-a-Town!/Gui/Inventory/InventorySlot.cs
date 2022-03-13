@@ -40,8 +40,6 @@ namespace Start_a_Town_.UI
                 var a = args as DragDropSlot;
                 if (a.Effects == DragDropEffects.None)
                     return DragDropEffects.None;
-                throw new NotImplementedException();
-                //Net.Client.PlayerInventoryOperationNew(a.SourceTarget, new TargetArgs(invSlot), a.DraggedTarget.Slot.StackSize);
                 return DragDropEffects.Move;
             };
         }

@@ -54,7 +54,6 @@ namespace Start_a_Town_.Components
                 return;
             this.State = Attack.States.Charging;
             this.AttackAnimation = Animation.RaiseRHand(parent);
-            throw new NotImplementedException();
             this.Charge = 0;
             this.ChargeMax = 80;
             parent.CrossFade(AttackAnimation, true, this.ChargeMax,
@@ -82,7 +81,6 @@ namespace Start_a_Town_.Components
             if (this.State != Attack.States.Charging)
                 return;
             this.State = Attack.States.Delivering;
-            throw new NotImplementedException();
 
             Attack attack = Attack.Create(parent, dir, Attack.Ray, this.ChargeFunc);
             float lunge = parent.Velocity.Z == 0 ? this.Lunge(this.ChargeFunc()) : 0;

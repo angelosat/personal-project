@@ -9,7 +9,6 @@ namespace Start_a_Town_
         public Func<bool> Action;
         public Func<bool> Available = () => true;
         public Action<ContextAction, Button> ControlInit = (act, btn) => { };
-        public PlayerInput Shortcut;
 
         public ContextAction(string name, Func<bool> action)
         {
@@ -29,10 +28,6 @@ namespace Start_a_Town_
         public ContextAction(Interaction interaction)
         {
             this.Name = () => interaction.Name;
-        }
-        public override string ToString()
-        {
-            return ((this.Shortcut!=null) ? this.Shortcut.ToString() + ": " : "") +  this.Name();
         }
     }
 }

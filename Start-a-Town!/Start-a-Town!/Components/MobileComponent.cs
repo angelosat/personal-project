@@ -217,53 +217,6 @@ namespace Start_a_Town_.Components
             this.JumpCooldown = 1; // added a jump cooldown because the way it was set up, the ai can't correct its direction between consecutive jumps in behaviorgetat
         }
 
-        //public override void Tick()
-        //{
-        //    var parent = this.Parent;
-        //    var midair = parent.Physics.MidAir;
-        //    if (this.JumpCooldown > 0)
-        //        this.JumpCooldown--;
-
-        //    this.AnimationJump.Weight = midair ? 1 : 0;
-
-        //    if (!this.Moving)
-        //        return;
-
-        //    //don't change direction midair, or change it by a smaller factor?
-        //    //if (parent.Velocity.Z != 0)
-        //    //    return; 
-
-        //    Vector2 direction = parent.Transform.Direction;
-        //    this.Acceleration = Math.Min(1, this.Acceleration + AccelerationStep);
-
-        //    var stamina = parent.GetResource(ResourceDef.Stamina);
-
-        //    var newwalk = StatDefOf.WalkSpeed.GetValue(parent);
-        //    var walkSpeed = newwalk * Acceleration * NormalWalkSpeed * (this.CurrentState.Speed + this.CurrentState.SprintSpeed * stamina.Percentage);
-
-        //    if (this.CurrentState.Type == State.Types.Sprinting)
-        //        stamina.Adjust(-0.01f);
-
-        //    //apply stamina
-        //    // TODO: make stamina resource change walkspeed instead of fetching stamina from here
-
-        //    if (walkSpeed == 0)
-        //        Log.Enqueue(Log.EntryTypes.System, "Warning! " + parent.Name + " is trying to move but their movement speed is zero!");
-
-        //    // if in mid-air, move at half speed
-        //    if (midair)
-        //    {
-        //        //walkSpeed *= 0.5f; // commenting this out because moving while mid-air should affect acceleration, not actual speed
-        //        this.AnimationJump.Weight = 1;
-        //    }
-
-        //    float walkX = direction.X * walkSpeed;
-        //    float walkY = direction.Y * walkSpeed;
-
-        //    PreventFall(parent, ref walkX, ref walkY);
-        //    var nextvelocity = new Vector3(walkX, walkY, parent.Velocity.Z);
-        //    parent.Velocity = nextvelocity;
-        //}
         public override void Tick()
         {
             var parent = this.Parent;
@@ -300,7 +253,6 @@ namespace Start_a_Town_.Components
             // if in mid-air, move at half speed
             if (midair)
             {
-                //walkSpeed *= 0.5f; // commenting this out because moving while mid-air should affect acceleration, not actual speed
                 this.AnimationJump.Weight = 1;
             }
 
@@ -309,9 +261,6 @@ namespace Start_a_Town_.Components
 
             PreventFall(parent, ref walkX, ref walkY);
             parent.Physics.Applyforce(new Vector3(walkX, walkY, 0)*.5f);
-            return;
-            var nextvelocity = new Vector3(walkX, walkY, parent.Velocity.Z);
-            parent.Velocity = nextvelocity;
         }
 
         /// <summary>

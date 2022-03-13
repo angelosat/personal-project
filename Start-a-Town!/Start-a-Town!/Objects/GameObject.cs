@@ -614,7 +614,7 @@ namespace Start_a_Town_
             return this;
         }
        
-        public IEnumerable<(string item, object value)> Inspect()
+        public override IEnumerable<(string item, object value)> Inspect()
         {
             foreach (var field in this.GetType().GetFields())
                 yield return (field.Name, field.GetValue(this));
@@ -943,14 +943,6 @@ namespace Start_a_Town_
             if (this.Def.GearType is not null)
                 yield return new ContextAction(() => "Equip", () => PacketInventoryEquip.Send(this.Net, actor.RefID, this.RefID));
             yield return new ContextAction(() => "Drop", () => PacketInventoryDrop.Send(this.Net, actor, this, this.StackSize));
-        }
-
-        public Dictionary<PlayerInput, Interaction> GetPlayerActionsWorld()
-        {
-            var list = new Dictionary<PlayerInput, Interaction>();
-            foreach (var item in this.Components)
-                item.Value.GetPlayerActionsWorld(this, list);
-            return list;
         }
 
         public List<ContextAction> GetRightClickActions()

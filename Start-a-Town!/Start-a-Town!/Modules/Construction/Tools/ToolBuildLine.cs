@@ -60,7 +60,6 @@ namespace Start_a_Town_
         }
         internal override void DrawAfterWorldRemote(MySpriteBatch sb, MapBase map, Camera camera, Net.PlayerData player)
         {
-            throw new NotImplementedException();
             if (!this.Enabled)
                 return;
             var targetArgs = player.Target;

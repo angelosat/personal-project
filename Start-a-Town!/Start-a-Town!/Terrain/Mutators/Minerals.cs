@@ -37,7 +37,7 @@ namespace Start_a_Town_.Terraforming.Mutators
         static readonly Template Coal = new("Coal", MaterialDefOf.Coal, 64, 40, 1, 128);
         static readonly Template Iron = new("Iron", MaterialDefOf.Iron, 32, 30, 1, 96);
         static readonly Template Gold = new("Gold", MaterialDefOf.Gold, 16, 20, 1, 64);
-        static new readonly Dictionary<string, Template> Dictionary = new Dictionary<string, Template>(){
+        static readonly Dictionary<string, Template> Dictionary = new Dictionary<string, Template>(){
             {Coal.Name, Coal},
             {Iron.Name, Iron},
             {Gold.Name, Gold}

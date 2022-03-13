@@ -85,12 +85,6 @@ namespace Start_a_Town_.Components
         }
         public virtual void GetClientActions(GameObject parent, List<ContextAction> actions)
         {
-            var list = new Dictionary<PlayerInput, Interaction>();
-            this.GetPlayerActionsWorld(parent, list);
-            var t = new TargetArgs(parent);
-            var a = parent.Net.GetPlayer().ControllingEntity;
-            foreach (var i in list)
-                actions.Add(new ContextAction(i.Key.ToString() + ": " + i.Value.Name, null) { Available = () => i.Value.Evaluate() });// () => true));
         }
         public virtual void GetInteractions(GameObject parent, List<Interaction> actions) { }
         public virtual void GetRightClickActions(GameObject parent, List<ContextAction> actions) { }
@@ -132,9 +126,6 @@ namespace Start_a_Town_.Components
 
         }
 
-        public virtual void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> actions)
-        {
-        }
         public virtual GroupBox GetGUI() { return null; }
         internal virtual void GetInterface(GameObject parent, UI.Control box) { }
         internal virtual void GetManagementInterface(GameObject gameObject, UI.Control box) { }

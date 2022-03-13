@@ -301,7 +301,7 @@
     <Compile Include="Gfx\MouseMap.cs" />
     <Compile Include="Helpers\GraphHelper.cs" />
     <Compile Include="Helpers\NetworkHelper.cs" />
-    <Compile Include="Helpers\PathingHelper.cs" />
+    <Compile Include="Pathing\PathingHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\FloodFill.cs" />
     <Compile Include="Log.Entry.cs" />
@@ -444,7 +444,6 @@
     <Compile Include="Blocks\Fluids\BlockFluid.cs" />
     <Compile Include="Blocks\BlockWindow.cs" />
     <Compile Include="Blocks\BlockWithEntity.cs" />
-    <Compile Include="Blocks\Comps\BlockEntityCompDeconstructible.cs" />
     <Compile Include="Blocks\Construction\BlockConstruction.cs" />
     <Compile Include="Blocks\Construction\BlockConstructionEntity.cs" />
     <Compile Include="Blocks\Construction\BlockDesignation.cs" />
@@ -796,7 +795,6 @@
     <Compile Include="Gfx\Shadow.cs" />
     <Compile Include="Components\Interactions\WorkComponent.cs" />
     <Compile Include="Control\ToolBlockEdit.cs" />
-    <Compile Include="Control\KeyBinding.cs" />
     <Compile Include="GameModes\GameMode.cs" />
     <Compile Include="Terrain\MapBase.cs" />
     <Compile Include="Terrain\Mutators\TerraformerDef.cs" />
@@ -1074,7 +1072,6 @@
     <Compile Include="Gui\Primitives\Slots\SlotWithText.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Gui\SpeechBubbleOld.cs" />
     <Compile Include="Gui\SplitStackWindow.cs" />
     <Compile Include="Helpers\VectorHelper.cs" />
     <Compile Include="WindowsHook.cs" />

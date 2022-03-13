@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Start_a_Town_.Components
@@ -12,7 +11,6 @@ namespace Start_a_Town_.Components
 
         public Vector3 Direction, Momentum;
         public GameObject Attacker;
-        public bool Critical;
         public float Charge;
         public Func<Vector3, Vector3, GameObject, bool> CollisionType;
 
@@ -36,7 +34,7 @@ namespace Start_a_Town_.Components
             this.Direction = direction;
             this.Momentum = attacker.Velocity;
             this.CollisionType = collisionType;
-            throw new Exception();
+            Charge = charge;
             if (attacker.TryGetComponent<InventoryComponent>(c =>
             {
                 GameObjectSlot holdSlot = null;
@@ -46,7 +44,6 @@ namespace Start_a_Town_.Components
             {
                 //this.Damage = WeaponComponent.GetDamage(attacker.GetComponent<BodyComponent>().BodyParts[Stat.Mainhand.Name].Base.Object);
             }
-            Charge = charge;
         }
 
         static public Func<Vector3, Vector3, GameObject, bool> Ray

@@ -7,7 +7,6 @@ namespace Start_a_Town_.Components.Crafting
         public partial class Product
         {
             public Block Block;
-            public Block.Data State;
             public List<Modifier> Modifiers;
             public Product(Block block, params Modifier[] modifiers)
             {

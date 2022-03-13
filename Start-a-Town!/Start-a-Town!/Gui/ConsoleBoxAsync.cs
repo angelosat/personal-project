@@ -53,7 +53,7 @@ namespace Start_a_Town_.UI
             {
                 if (this.TimeStamp)
                     text = text.Insert(0, DateTime.Now.ToString("[HH:mm:ss]"));
-                text = UIManager.WrapText(text, this.Client.Width);
+                text = StringHelper.Wrap(text, this.Client.Width);
 
                 if (this.Client.Controls.Count >= 16)
                     this.Client.RemoveControls(this.Client.Controls.First());
@@ -92,7 +92,7 @@ namespace Start_a_Town_.UI
             {
                 if (this.TimeStamp)
                     text = text.Insert(0, DateTime.Now.ToString("[HH:mm:ss]" + "[" + name + "]: "));
-                text = UIManager.WrapText(text, this.Client.Width);
+                text = StringHelper.Wrap(text, this.Client.Width);
                 var line = new Label(this.Client.Controls.BottomLeft, text) { TextColorFunc = () => c };
 
                 this.AddControls(line);

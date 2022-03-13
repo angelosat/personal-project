@@ -50,9 +50,7 @@ namespace Start_a_Town_
             var map = DrawServer? Server.Instance.Map : Client.Instance.Map;
             ToolManager.Update(map, this.Scene);
             map.Camera.Update(map);
-
             WindowManager.Update(game, gt);
-            SpeechBubbleOld.UpdateCollisions();
             this.NameplateManager.Update(this.Scene);
             NotificationArea.Update();
         }

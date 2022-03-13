@@ -13,7 +13,7 @@ namespace Start_a_Town_
 
         public TraitDef Def;
         public string Name => this.Def.Name;
-        public string Label => this.Value >= 0 ? this.Def.NamePositive : this.Def.NameNegative;
+        public override string Label => this.Value >= 0 ? this.Def.NamePositive : this.Def.NameNegative;
         public const float MinDefault = -100;
         public const float MaxDefault = 100;
         public const float ValueRange = 100;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Start_a_Town_.Graphics;
 
@@ -7,9 +6,6 @@ namespace Start_a_Town_
 {
     class BlockFluid : Block
     {
-        static readonly float AnimationSpeed = Ticks.PerSecond / 2f;
-        static float AnimationT = AnimationSpeed;
-        
         AtlasDepthNormals.Node.Token[][] Assets;
         enum Fullness { Half, Full };
        
@@ -62,24 +58,6 @@ namespace Start_a_Town_
             return (byte)depth;
         }
 
-        public override void Update()
-        {
-            return;
-            AnimationT--;
-            if (AnimationT <= 0)
-            {
-                AnimationT = AnimationSpeed;
-                AtlasDepthNormals.Node.Token[] newVariations = new AtlasDepthNormals.Node.Token[4];
-                newVariations[0] = this.Variations[1];
-                newVariations[1] = this.Variations[2];
-                newVariations[2] = this.Variations[3];
-                newVariations[3] = this.Variations[0];
-                
-                this.Variations = newVariations.ToList();
-            }
-            LiquidFlowProcess.UpdateProcesses();
-        }
-        
         //public override MyVertex[] Draw(MySpriteBatch sb, Vector3 blockcoords, Camera camera, Vector4 screenBounds, Color sunlight, Vector4 blocklight, Color fog, Color tint, float depth, int variation, int orientation, byte data, MaterialDef mat)
         //{
         //    return camera.WaterSpriteBatch.DrawBlock(Block.Atlas.Texture, screenBounds, this.Assets[data][0], camera.Zoom, fog, tint, Color.White, sunlight, blocklight, Color.Red.ToVector4(), depth, this, blockcoords);

@@ -32,7 +32,7 @@ namespace Start_a_Town_.UI
             this.Panel_Text = new Panel();
             this.Panel_Text.AutoSize = true;
 
-            Label label = new Label(new Vector2(0), UIManager.WrapText(text, width));
+            var label = new Label(new Vector2(0), StringHelper.Wrap(text, width));
             this.Panel_Text.Controls.Add(label);
             this.Panel_Text.ClientSize = new Rectangle(0, 0, width, Math.Max(label.Height, UIManager.SlotSprite.Height));
 
@@ -57,7 +57,7 @@ namespace Start_a_Town_.UI
             this.Panel_Text = new Panel();
             this.Panel_Text.AutoSize = true;
 
-            Label label = new Label(new Vector2(0), UIManager.WrapText(text, width));
+            var label = new Label(new Vector2(0), StringHelper.Wrap(text, width));
             this.Panel_Text.Controls.Add(label);
             this.Panel_Text.ClientSize = new Rectangle(0, 0, width, Math.Max(label.Height, UIManager.SlotSprite.Height));
 
@@ -79,7 +79,7 @@ namespace Start_a_Town_.UI
             int width = 200;
             this.Panel_Text = new Panel();
             this.Panel_Text.AutoSize = true;
-            Label label = new Label(new Vector2(0), UIManager.WrapText(text, width)) { Width = width };
+            var label = new Label(new Vector2(0), StringHelper.Wrap(text, width)) { Width = width };
             this.Panel_Text.Controls.Add(label);
             this.Panel_Buttons = new Panel(new Vector2(0, this.Panel_Text.Bottom)) { AutoSize = true };
 

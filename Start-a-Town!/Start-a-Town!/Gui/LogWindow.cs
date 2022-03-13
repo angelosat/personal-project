@@ -131,7 +131,7 @@ namespace Start_a_Town_.UI
                     break;
             }
             string fullText = DateTime.Now.ToString("[HH:mm:ss]") + text;
-            fullText = UIManager.WrapText(fullText, Instance.Box_Text.Client.Width);
+            fullText = StringHelper.Wrap(fullText, Instance.Box_Text.Client.Width);
             var line = new Label(fullText)
             {
 

@@ -430,16 +430,6 @@ namespace Start_a_Town_
             Message.Types msg = e.Type;
             switch (msg)
             {
-                case Message.Types.Attacked:
-                    GameObject attacker = e.Parameters[0] as GameObject;
-                    Attack attack = e.Parameters[1] as Attack;
-
-                    float knockResistance = 1;// - Math.Min(1, StatsComponent.GetStatOrDefault(parent, Stat.Types.KnockbackResistance, 0f));
-
-                    Vector3 knockback = attack.GetMomentum() * knockResistance;
-                    parent.Velocity += knockback * KnockbackMagnitude;
-                    return true;
-
                 case Message.Types.EntityCollision:
                     if (parent.Net is Server)
                     {
@@ -459,11 +449,11 @@ namespace Start_a_Town_
 
         public override object Clone()
         {
-            var phys = new PhysicsComponent(this);
-            //phys.Size = this.Size;
-            //phys.Weight = this.Weight;
-            phys.Height = this.Height;
-            phys.Solid = this.Solid;
+            var phys = new PhysicsComponent(this)
+            {
+                Height = this.Height,
+                Solid = this.Solid
+            };
             return phys;
         }
 
@@ -480,26 +470,7 @@ namespace Start_a_Town_
                     new Label(() => $"{this.Weight * parent.StackSize} kg ({this.Weight} kg x{parent.StackSize})") { TextColor = Color.LightGray })
                 );
         }
-        public override void GetPlayerActionsWorld(GameObject parent, Dictionary<PlayerInput, Interaction> list)
-        {
-            if (this.Size == ObjectSize.Immovable)
-            {
-                return;
-            }
-
-            list.Add(PlayerInput.RButton, new InteractionHaul());
-            list.Add(PlayerInput.Activate, new InteractionHaul());
-        }
-        internal override ContextAction GetContextRB(GameObject parent, GameObject player)
-        {
-            if (this.Size == ObjectSize.Immovable)
-            {
-                return null;
-            }
-
-            return new ContextAction(new InteractionHaul()) { Shortcut = PlayerInput.RButton, Available = () => this.Size != ObjectSize.Immovable };
-        }
-
+      
         public override string ToString()
         {
             return "Enabled: " + this.Enabled.ToString() + "\n" + base.ToString();

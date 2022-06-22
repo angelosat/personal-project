@@ -12,7 +12,7 @@ namespace Start_a_Town_.UI
         }
         static public void Create(MapBase map, Func<Vector3> global, string text, Action<FloatingText> initializer = null)
         {
-            if (Ingame.Net != map.Net)
+            if (map is null || map != Ingame.Net.Map)
                 return;
             var ft = new FloatingText(global, text);
             ft.Font = UIManager.FontBold;
